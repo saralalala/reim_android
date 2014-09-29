@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/userIDEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:ems="10"
+        android:inputType="text" />
+        <requestFocus />
+
+    <EditText
+        android:id="@+id/confirmPasswordEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/passwordEditText"
+        android:layout_alignRight="@+id/userIDEditText"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/confirmPasswordEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="49dp"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/userIDPromptTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="14dp"
+        android:text="@string/userIDPrompt" />
+
+    <TextView
+        android:id="@+id/passwordPromptTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/confirmPasswordEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="14dp"
+        android:text="@string/confirmpPasswordPrompt" />
+
+    <TextView
+        android:id="@+id/confirmPasswordPromptTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/userIDEditText"
+        android:layout_marginTop="17dp"
+        android:text="@string/passwordPrompt" />
+
+    <Button
+        android:id="@+id/signUpConfirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/userIDEditText"
+        android:layout_below="@+id/confirmPasswordEditText"
+        android:layout_marginTop="63dp"
+        android:text="@string/confirm" />
+
+    <Button
+        android:id="@+id/signUpCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/signUpConfirmButton"
+        android:layout_alignBottom="@+id/signUpConfirmButton"
+        android:layout_alignRight="@+id/passwordEditText"
+        android:text="@string/cancel" />
+    
+</RelativeLayout>

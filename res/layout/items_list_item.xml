@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/photoImageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"/>
+
+    <LinearLayout
+        android:layout_width="170dp"
+        android:layout_height="60dp"
+        android:orientation="vertical" >
+        
+         <TextView android:id="@+id/reportTextView"    
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"    
+            android:textColor="#FF000000"  
+            android:textSize="13sp" />  
+            
+        <TextView android:id="@+id/infoTextView"    
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"    
+            android:textColor="#FF000000"  
+            android:textSize="22sp" />  
+            
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="vertical" >
+        
+        <TextView android:id="@+id/categoryTextView"    
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"    
+            android:textColor="#FF000000"  
+            android:textSize="13sp" />  
+        <TextView android:id="@+id/amountTextView"    
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"    
+            android:textColor="#00000000"  
+            android:textSize="22sp" />  
+            
+    </LinearLayout>
+
+</LinearLayout>

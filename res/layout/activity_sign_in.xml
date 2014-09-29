@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/userIDEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:ems="10"
+        android:inputType="text" />
+
+    <requestFocus />
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/userIDEditText"
+        android:layout_below="@+id/confirmPasswordPromptTextView"
+        android:layout_marginTop="26dp"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/userIDPromptTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="14dp"
+        android:text="@string/userIDPrompt" />
+
+    <TextView
+        android:id="@+id/confirmPasswordPromptTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/userIDEditText"
+        android:layout_marginTop="17dp"
+        android:text="@string/passwordPrompt" />
+
+    <Button
+        android:id="@+id/signInConfirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="117dp"
+        android:layout_toRightOf="@+id/confirmPasswordPromptTextView"
+        android:text="@string/confirm" />
+
+    <Button
+        android:id="@+id/signInCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/signInConfirmButton"
+        android:layout_alignBottom="@+id/signInConfirmButton"
+        android:layout_alignRight="@+id/userIDEditText"
+        android:layout_marginRight="27dp"
+        android:text="@string/cancel" />
+
+</RelativeLayout>

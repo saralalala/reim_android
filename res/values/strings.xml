@@ -2,7 +2,24 @@
 <resources>
 
     <string name="app_name">Reim</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="background">Background</string>
+    <string name="action_settings">设置</string>
+    
+    <string name="sign_up">注册</string>
+    <string name="sign_in">登录</string>
+    <string name="userIDPrompt">请输入手机号/邮箱</string>
+    <string name="passwordPrompt">请输入密码</string>
+    <string name="confirmpPasswordPrompt">请确认密码</string>
+    
+    
+    <string name="reimbursement">报销!!</string>
+    <string name="report">报告</string>
+    <string name="statistics">统计</string>
+    <string name="me">我！</string>
+    <string name="add">添加</string>
+    
+    <string name="confirm">确定</string>
+    <string name="cancel">返回</string>
+    
 
 </resources>
