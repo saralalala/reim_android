@@ -1,16 +1,18 @@
-package com.rushucloud.reim;
+package com.rushucloud.reim.start;
+
+import com.rushucloud.reim.R;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
-public class SignUpActivity extends Activity
+public class SignInActivity extends Activity
 {
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_sign_up);
+		setContentView(R.layout.activity_start_sign_in);
 		buttonInitialise();
 	}
 	
@@ -18,7 +20,7 @@ public class SignUpActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			startActivity(new Intent(SignUpActivity.this, WelcomeActivity.class));
+			startActivity(new Intent(SignInActivity.this, WelcomeActivity.class));
 			finish();
 		}
 		return super.onKeyDown(keyCode, event);

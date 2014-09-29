@@ -1,4 +1,6 @@
-package com.rushucloud.reim;
+package com.rushucloud.reim.start;
+
+import com.rushucloud.reim.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +17,7 @@ public class WelcomeActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_welcome);
+		setContentView(R.layout.activity_start_welcome);
 		
 		exitTime=0;
 		buttonInitialise();
@@ -27,7 +29,7 @@ public class WelcomeActivity extends Activity
         {
         	if(System.currentTimeMillis()-exitTime>2000)
         	{
-        		Toast.makeText(WelcomeActivity.this, "再按一次返回健退出程序", Toast.LENGTH_LONG).show();
+        		Toast.makeText(WelcomeActivity.this, "再按一次返回键退出程序", Toast.LENGTH_LONG).show();
         		exitTime=System.currentTimeMillis();
         	}
         	else 

@@ -21,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/userIDEditText"
+        android:layout_alignRight="@+id/userIDEditText"
         android:layout_below="@+id/confirmPasswordPromptTextView"
         android:layout_marginTop="26dp"
         android:ems="10"
@@ -62,5 +63,14 @@
         android:layout_alignRight="@+id/userIDEditText"
         android:layout_marginRight="27dp"
         android:text="@string/cancel" />
+
+    <TextView
+        android:id="@+id/forgotTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/passwordEditText"
+        android:layout_below="@+id/passwordEditText"
+        android:layout_marginTop="22dp"
+        android:text="@string/forgotPassword" />
 
 </RelativeLayout>

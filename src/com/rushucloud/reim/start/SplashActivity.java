@@ -1,4 +1,6 @@
-package com.rushucloud.reim;
+package com.rushucloud.reim.start;
+
+import com.rushucloud.reim.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +13,7 @@ public class SplashActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_splash);
+		setContentView(R.layout.activity_start_splash);
 		
 		Thread splashThread = new Thread()
 		{

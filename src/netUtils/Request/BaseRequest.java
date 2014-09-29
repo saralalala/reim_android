@@ -339,7 +339,7 @@ public abstract class BaseRequest
 		{
 			AppPreference appPreference = AppPreference.getAppPreference();
 			JSONObject jObject = new JSONObject();
-			jObject.put(HttpConstant.EMAIL, appPreference.getEmail());
+			jObject.put(HttpConstant.USERNAME, appPreference.getUsername());
 			jObject.put(HttpConstant.PASSWORD, appPreference.getPassword());
 			jObject.put(HttpConstant.DEVICE_TYPE, HttpConstant.DEVICE_TYPE_ANDROID);
 			jObject.put(HttpConstant.DEVICE_TOKEN, appPreference.getDeviceToken());

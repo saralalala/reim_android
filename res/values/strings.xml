@@ -10,6 +10,7 @@
     <string name="userIDPrompt">请输入手机号/邮箱</string>
     <string name="passwordPrompt">请输入密码</string>
     <string name="confirmpPasswordPrompt">请确认密码</string>
+    <string name="forgotPassword">忘记密码</string>
     
     
     <string name="reimbursement">报销!!</string>

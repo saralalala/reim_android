@@ -5,7 +5,7 @@ public class HttpConstant
 	public static String USER_AGENT = "ReimApp";
 	public static String X_REIM_JWT = "X-reim-jwt";
 	
-	public static String EMAIL = "email";
+	public static String USERNAME = "email";
 	public static String PASSWORD = "password";
 	public static String DEVICE_TYPE = "device_type";
 	public static String DEVICE_TYPE_ANDROID = "android";

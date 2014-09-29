@@ -4,7 +4,7 @@ public class AppPreference
 {
 	private static AppPreference appPreference = null;
 	
-	private String email = "";
+	private String username = "";
 	private String password = "";
 	private String deviceToken = "";
 	private String serverToken = "";
@@ -24,14 +24,14 @@ public class AppPreference
 		return appPreference;
 	}
 	
-	public String getEmail()
+	public String getUsername()
 	{
-		return email;
+		return username;
 	}
 	
-	public void setEmail(String email)
+	public void setUsername(String username)
 	{
-		this.email = email;
+		this.username = username;
 	}
 	
 	public String getPassword()

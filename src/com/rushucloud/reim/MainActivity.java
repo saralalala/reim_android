@@ -4,16 +4,20 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 	
 public class MainActivity extends ActionBarActivity {
 
+	private long exitTime;
+	
 	private FragmentTabHost tabHost;
 	private int tabIndex;
 	
@@ -28,6 +32,28 @@ public class MainActivity extends ActionBarActivity {
 		tabHostInitialse();
 	}
 
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK) 
+        {
+        	if(System.currentTimeMillis()-exitTime>2000)
+        	{
+        		Toast.makeText(MainActivity.this, "再按一次返回键退出程序", Toast.LENGTH_LONG).show();
+        		exitTime=System.currentTimeMillis();
+        	}
+        	else 
+        	{
+				finish();
+				android.os.Process.killProcess(android.os.Process.myPid());
+			}
+            return true;
+        } 
+        else 
+        {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+    
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		getMenuInflater().inflate(R.menu.main, menu);

@@ -3,6 +3,7 @@ package classes;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.telephony.TelephonyManager;
 
 public class ReimApplication extends Application
 {
@@ -16,11 +17,17 @@ public class ReimApplication extends Application
 	{
 		SharedPreferences preferences = getSharedPreferences("ReimApplication", MODE_PRIVATE);
 		AppPreference appPreference = AppPreference.getAppPreference();
-		appPreference.setEmail(preferences.getString("email", ""));
+		appPreference.setUsername(preferences.getString("username", ""));
 		appPreference.setPassword(preferences.getString("password", ""));
 		appPreference.setDeviceToken(preferences.getString("deviceToken", ""));
 		appPreference.setServerToken(preferences.getString("serverToken", ""));
-		appPreference.setCacheDirectory(this.getCacheDir().getAbsolutePath());
+		appPreference.setCacheDirectory(this.getCacheDir().getAbsolutePath());	
+		
+		if (appPreference.getDeviceToken().equals(""))
+		{
+			TelephonyManager telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+			appPreference.setDeviceToken(telephonyManager.getDeviceId());
+		}
 	}
 	
 	public void saveAppPreference()
@@ -28,7 +35,7 @@ public class ReimApplication extends Application
 		SharedPreferences appPreference = getSharedPreferences("ReimApplication", MODE_PRIVATE);
 		AppPreference userInfo = AppPreference.getAppPreference();
 		Editor editor = appPreference.edit();
-		editor.putString("email", userInfo.getEmail());
+		editor.putString("username", userInfo.getUsername());
 		editor.putString("password", userInfo.getPassword());
 		editor.putString("deviceToken", userInfo.getDeviceToken());
 		editor.putString("serverToken", userInfo.getServerToken());

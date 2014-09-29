@@ -2,10 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:id="@+id/baseLayout" >
 
     <EditText
-        android:id="@+id/userIDEditText"
+        android:id="@+id/usernameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -14,16 +15,6 @@
         android:ems="10"
         android:inputType="text" />
         <requestFocus />
-
-    <EditText
-        android:id="@+id/confirmPasswordEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/passwordEditText"
-        android:layout_alignRight="@+id/userIDEditText"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -35,8 +26,18 @@
         android:ems="10"
         android:inputType="textPassword" />
 
+    <EditText
+        android:id="@+id/confirmPasswordEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/passwordEditText"
+        android:layout_alignRight="@+id/usernameEditText"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:inputType="textPassword" />
+
     <TextView
-        android:id="@+id/userIDPromptTextView"
+        android:id="@+id/usernameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -45,7 +46,7 @@
         android:text="@string/userIDPrompt" />
 
     <TextView
-        android:id="@+id/passwordPromptTextView"
+        android:id="@+id/passwordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/confirmPasswordEditText"
@@ -54,29 +55,29 @@
         android:text="@string/confirmpPasswordPrompt" />
 
     <TextView
-        android:id="@+id/confirmPasswordPromptTextView"
+        android:id="@+id/confirmPasswordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/userIDEditText"
+        android:layout_below="@+id/usernameEditText"
         android:layout_marginTop="17dp"
         android:text="@string/passwordPrompt" />
 
     <Button
-        android:id="@+id/signUpConfirmButton"
+        android:id="@+id/confirmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/userIDEditText"
+        android:layout_alignLeft="@+id/usernameEditText"
         android:layout_below="@+id/confirmPasswordEditText"
         android:layout_marginTop="63dp"
         android:text="@string/confirm" />
 
     <Button
-        android:id="@+id/signUpCancelButton"
+        android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/signUpConfirmButton"
-        android:layout_alignBottom="@+id/signUpConfirmButton"
+        android:layout_alignBaseline="@+id/confirmButton"
+        android:layout_alignBottom="@+id/confirmButton"
         android:layout_alignRight="@+id/passwordEditText"
         android:text="@string/cancel" />
     
