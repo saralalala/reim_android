@@ -88,45 +88,6 @@ public class ReimFragment extends Fragment {
 //					User user = new User();
 //					user.setEmail("y@rushucloud.com");
 //					user.setPassword("meiyoumima");
-//					InviteRequest request = new InviteRequest(HttpConstant.REQUEST_TYPE_EMAIL, "y@rushucloud.com");
-//					request.sendRequest(new HttpConnectionCallback()
-//					{
-//						public void execute(Object object)
-//						{
-//							InviteResponse response2 = new InviteResponse(object);
-//						}
-//					});
-					
-//					InviteReplyRequest request = new InviteReplyRequest(HttpConstant.INVITE_REPLY_AGREE, 1);
-//					request.sendRequest(new HttpConnectionCallback()
-//					{
-//						public void execute(Object object)
-//						{
-//							InviteReplyResponse response2 = new InviteReplyResponse(object);
-//						}
-//					});
-					
-//					ForgotPasswordRequest request = new ForgotPasswordRequest(0, "y@rushucloud.com");
-//					request.sendRequest(new HttpConnectionCallback()
-//					{
-//						
-//						@Override
-//						public void execute(Object httpResponse)
-//						{
-//							ForgotPasswordResponse response = new ForgotPasswordResponse(httpResponse);
-//						}
-//					});
-					
-//					ResetPasswordRequest request = new ResetPasswordRequest(user, 1, "dd1ccb");
-//					request.sendRequest(new HttpConnectionCallback()
-//					{
-//						
-//						@Override
-//						public void execute(Object httpResponse)
-//						{
-//							ResetPasswordResponse response = new ResetPasswordResponse(httpResponse);
-//						}
-//					});
 					
 //			        UserInfo userInfo = UserInfo.getUserInfo();
 //			        userInfo.("debug@rushucloud.com");
@@ -135,48 +96,29 @@ public class ReimFragment extends Fragment {
 
 					DBManager dbManager = DBManager.getDataBaseManager(getActivity().getApplicationContext());
 					dbManager.openDatabase();
+
+//					Tag tag = new Tag();
+//					tag.setName("Ticket");
+//					tag.setId(4);
+//					tag.setGroupID(2);
+//					tag.setLocalUpdatedDate(Utils.getCurrentTime());
+//					tag.setServerUpdatedDate(Utils.getCurrentTime());
+					
 //					Group group = new Group();
 //					group.setId(2);
 //					group.setName("MC");
 //					group.setServerUpdatedDate(Utils.getCurrentTime());
 //					group.setLocalUpdatedDate(Utils.getCurrentTime());
-//
-//					if (dbManager.insertGroup(group))
-//					{
-//						System.out.println("success");
-//					}
-//					else {
-//						System.out.println("fail");
 
 //					Category category = new Category();
-//					category.setName("aaa");
+//					category.setName("ddd");
 //					category.setParentID(0);
 //					category.setLimit(500);
 //					category.setGroupID(2);
 //					category.setIsProveAhead(true);
 //					category.setLocalUpdatedDate(Utils.getCurrentTime());
 //					category.setServerUpdatedDate(Utils.getCurrentTime());
-//					category.setId(13);						
-					
-//					CreateCategoryRequest request = new CreateCategoryRequest(category);
-//					request.sendRequest(new HttpConnectionCallback()
-//					{
-//						public void execute(Object object)
-//						{
-//							CreateCategoryResponse response2 = new CreateCategoryResponse(object);
-//						}
-//					});
-					
-//					CreateGroupRequest request = new CreateGroupRequest("rushu");
-//					request.sendRequest(new HttpConnectionCallback()
-//					{
-//						
-//						@Override
-//						public void execute(Object httpResponse)
-//						{
-//							CreateGroupResponse response = new CreateGroupResponse(httpResponse);
-//						}
-//					});
+//					category.setId(4);
 
 //					Item item=new Item();
 //					Category category = new Category();
@@ -196,25 +138,6 @@ public class ReimFragment extends Fragment {
 //					item.setBillable(true);
 //					item.setImageID(0);
 //					item.setConsumedDate(new Date());
-//					
-//					CreateItemRequest request = new CreateItemRequest(item);
-//					request.sendRequest(new HttpConnectionCallback()
-//					{
-//						public void execute(Object httpResponse)
-//						{
-//							CreateItemResponse response = new CreateItemResponse(httpResponse);
-//						}
-//					});
-
-//					SyncDataRequest request = new SyncDataRequest(0,0);
-//					request.sendRequest(new HttpConnectionCallback()
-//					{
-//						public void execute(String response)
-//						{
-//							SyncDataResponse response2 = new SyncDataResponse(response);
-//							System.out.println(response2.getCode());
-//						}
-//					});
 
 //					List<Item> itemList = new ArrayList<Item>();
 //					for (int i = 0; i < 4; i++)
@@ -230,30 +153,6 @@ public class ReimFragment extends Fragment {
 //					report.setId(2);
 //					report.setStatus(2);
 //					
-//					DeleteReportRequest request = new DeleteReportRequest(report);
-//					request.sendRequest(new HttpConnectionCallback()
-//					{
-//						
-//						@Override
-//						public void execute(Object httpResponse)
-//						{
-//							DeleteReportResponse response = new DeleteReportResponse(httpResponse);
-//						}
-//					});
-					
-//					Tag tag = new Tag();
-//					tag.setName("Tea");
-//					tag.setId(1);
-//					
-//					DeleteTagRequest request = new DeleteTagRequest(tag);
-//					request.sendRequest(new HttpConnectionCallback()
-//					{
-//						public void execute(Object httpResponse)
-//						{
-//							DeleteTagResponse response2 = new DeleteTagResponse(httpResponse);
-//						}
-//					});
-//					
 //					SubordinatesInfoRequest request = new SubordinatesInfoRequest(0,20);
 //					request.sendRequest(new HttpConnectionCallback()
 //					{
@@ -266,8 +165,6 @@ public class ReimFragment extends Fragment {
 //					UserInfoRequest request = new UserInfoRequest(1);
 //					request.sendRequest(new HttpConnectionCallback()
 //					{
-//						
-//						@Override
 //						public void execute(Object httpResponse)
 //						{
 //							UserInfoResponse response = new UserInfoResponse(httpResponse);

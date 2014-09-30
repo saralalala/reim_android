@@ -12,6 +12,7 @@ import classes.Category;
 import classes.Group;
 import classes.Item;
 import classes.Report;
+import classes.Tag;
 
 public class DBManager extends SQLiteOpenHelper
 {
@@ -49,12 +50,20 @@ public class DBManager extends SQLiteOpenHelper
 		return dbManager;
 	}
 
+	public void tempCommand()
+	{
+//		String sqlString = "UPDATE tbl_tag SET group_id=2";
+//		database.execSQL(sqlString);
+//		sqlString = "DROP TABLE IF EXISTS tbl_image";
+//		database.execSQL(sqlString);
+	}
+	
 	public Boolean openDatabase()
 	{
 		try
 		{
 			database = dbManager.getWritableDatabase();
-//			tempCommand();
+			tempCommand();
 			createTables();
 		}
 		catch (Exception e)
@@ -223,8 +232,8 @@ public class DBManager extends SQLiteOpenHelper
 		String createTagTable="CREATE TABLE IF NOT EXISTS tbl_tag ("
 								+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 								+ "server_id INT DEFAULT(0),"
+								+ "tag_name TEXT DEFAULT(''),"
 								+ "group_id INT DEFAULT(0),"
-								+ "name TEXT DEFAULT(''),"
 								+ "server_updatedt INT DEFAULT(0),"
 								+ "local_updatedt INT DEFAULT(0),"
 								+ "backup1 INT DEFAULT(0),"
@@ -353,8 +362,7 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + category.getParentID() + "'," +
 								"'" + prove_ahead + "'," +
 								"'" + category.getLocalUpdatedDate() + "'," +
-								"'" + category.getServerUpdatedDate() + "')";
-			
+								"'" + category.getServerUpdatedDate() + "')";			
 			database.execSQL(sqlString);
 			return true;
 		}
@@ -465,6 +473,117 @@ public class DBManager extends SQLiteOpenHelper
 			return categoryList;
 		}
 	}	
+
+	// Tag
+	public Boolean insertTag(Tag tag)
+	{
+		try
+		{
+			String sqlString = "INSERT INTO tbl_tag (server_id, tag_name, group_id, local_updatedt, server_updatedt) VALUES (" +
+								"'" + tag.getId() + "'," +
+								"'" + tag.getName() + "'," +
+								"'" + tag.getGroupID() + "'," +
+								"'" + tag.getLocalUpdatedDate() + "'," +
+								"'" + tag.getServerUpdatedDate() + "')";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean updateTag(Tag tag)
+	{
+		try
+		{
+			String sqlString = "UPDATE tbl_tag SET " +
+								"tag_name = '" + tag.getName() + "'," +
+								"group_id = '" + tag.getGroupID() + "'," +
+								"local_updatedt = '" + tag.getLocalUpdatedDate() + "'," +
+								"server_updatedt = '" + tag.getServerUpdatedDate() + "' " +
+								"WHERE server_id = '" + tag.getId() + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean deleteTag(int tagID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_tag WHERE server_id = '" + tagID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Tag getTag(int tagID)
+	{
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT server_id, tag_name, group_id, local_updatedt, server_updatedt " +
+					                          "FROM tbl_tag WHERE server_id = ?", new String[]{Integer.toString(tagID)});
+			if (cursor.moveToNext())
+			{
+				Tag tag = new Tag();
+				tag.setId(getIntFromCursor(cursor, "server_id"));
+				tag.setName(getStringFromCursor(cursor, "tag_name"));
+				tag.setGroupID(getIntFromCursor(cursor, "group_id"));
+				tag.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				tag.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				return tag;
+			}
+			else
+			{
+				return null;				
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());;
+			return null;
+		}
+	}
+	
+	public List<Tag> getGroupTags(int groupID)
+	{
+		List<Tag> tagList = new ArrayList<Tag>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT server_id, tag_name, group_id, local_updatedt, server_updatedt " +
+												"FROM tbl_tag WHERE group_id = ?", new String[]{Integer.toString(groupID)});
+			
+			while (cursor.moveToNext())
+			{
+				Tag tag = new Tag();
+				tag.setId(getIntFromCursor(cursor, "server_id"));
+				tag.setName(getStringFromCursor(cursor, "tag_name"));
+				tag.setGroupID(getIntFromCursor(cursor, "group_id"));
+				tag.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				tag.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				tagList.add(tag);
+			}
+			return tagList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return tagList;
+		}
+	}	
 	
 	// Group
 	public Boolean insertGroup(Group group)
@@ -548,15 +667,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	// Others
-	public void tempCommand()
-	{
-		String sqlString = "DROP TABLE IF EXISTS tbl_category";
-		database.execSQL(sqlString);
-//		sqlString = "DROP TABLE IF EXISTS tbl_image";
-//		database.execSQL(sqlString);
-	}
-	
+	// Others	
 	private double getDoubleFromCursor(Cursor cursor, String columnName)
 	{
 		return cursor.getDouble(cursor.getColumnIndex(columnName));
