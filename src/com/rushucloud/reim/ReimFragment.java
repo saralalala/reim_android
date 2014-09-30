@@ -5,6 +5,7 @@ import java.util.List;
 
 import netUtils.HttpConstant;
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.Request.CommonRequest;
 import netUtils.Request.Category.CreateCategoryRequest;
 import netUtils.Request.Group.CreateGroupRequest;
 import netUtils.Request.Group.DeleteGroupRequest;
@@ -25,6 +26,7 @@ import netUtils.Request.User.RegisterRequest;
 import netUtils.Request.User.ResetPasswordRequest;
 import netUtils.Request.User.SubordinatesInfoRequest;
 import netUtils.Request.User.UserInfoRequest;
+import netUtils.Response.CommonResponse;
 import netUtils.Response.Category.CreateCategoryResponse;
 import netUtils.Response.Group.CreateGroupResponse;
 import netUtils.Response.Group.DeleteGroupResponse;
@@ -94,8 +96,19 @@ public class ReimFragment extends Fragment {
 //			        ReimApplication reimApp = (ReimApplication)getActivity().getApplication();
 //			        reimApp.saveUserInfo();       
 
-					DBManager dbManager = DBManager.getDataBaseManager(getActivity().getApplicationContext());
-					dbManager.openDatabase();
+//					DBManager dbManager = DBManager.getDataBaseManager(getActivity().getApplicationContext());
+//					dbManager.openDatabase();
+					
+					CommonRequest request = new CommonRequest();
+					request.sendRequest(new HttpConnectionCallback()
+					{
+						
+						@Override
+						public void execute(Object httpResponse)
+						{
+							CommonResponse response = new CommonResponse(httpResponse);
+						}
+					});
 
 //					Tag tag = new Tag();
 //					tag.setName("Ticket");
