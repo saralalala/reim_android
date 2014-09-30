@@ -1,16 +1,15 @@
 package netUtils.Request.Category;
 
-import classes.Category;
 import netUtils.Request.BaseRequest;
 
 public class DeleteCategoryRequest extends BaseRequest
 {
-	public DeleteCategoryRequest(Category category)
+	public DeleteCategoryRequest(int categoryID)
 	{
 		super();
 
 		String requestUrl = getUrl();
-		requestUrl += "/category/" + category.getId();
+		requestUrl += "/category/" + categoryID;
 		setUrl(requestUrl);
 	}
 	

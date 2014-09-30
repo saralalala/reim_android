@@ -21,7 +21,7 @@ public class CreateCategoryRequest extends BaseRequest
 		params.add(new BasicNameValuePair("limit", Double.toString(category.getLimit())));
 		params.add(new BasicNameValuePair("pid", Integer.toString(category.getParentID())));
 		params.add(new BasicNameValuePair("gid", Integer.toString(category.getGroupID())));
-		params.add(new BasicNameValuePair("pb", category.getPreBillable().toString()));
+		params.add(new BasicNameValuePair("pb", category.isProveAhead().toString()));
 		setParams(params);
 
 		String requestUrl = getUrl();

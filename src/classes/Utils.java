@@ -1,5 +1,6 @@
 package classes;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +22,19 @@ public class Utils
 		cursor.moveToFirst();
 		int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
 		return cursor.getString(index);
+	}
+	
+	public static int getCurrentTime()
+	{
+		Date date = new Date();
+		long result = date.getTime() / 1000;
+		return (int)result;
+	}
+	
+	public static String secondToString(int second)
+	{
+		Date date = new Date((long)second * 1000);
+		return date.toString();
 	}
 	
 	public static Boolean isEmailOrPhone(String source)

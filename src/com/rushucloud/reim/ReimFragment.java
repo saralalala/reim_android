@@ -1,7 +1,6 @@
 package com.rushucloud.reim;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import netUtils.HttpConstant;
@@ -25,6 +24,7 @@ import netUtils.Request.User.InviteRequest;
 import netUtils.Request.User.RegisterRequest;
 import netUtils.Request.User.ResetPasswordRequest;
 import netUtils.Request.User.SubordinatesInfoRequest;
+import netUtils.Request.User.UserInfoRequest;
 import netUtils.Response.Category.CreateCategoryResponse;
 import netUtils.Response.Group.CreateGroupResponse;
 import netUtils.Response.Group.DeleteGroupResponse;
@@ -44,12 +44,16 @@ import netUtils.Response.User.InviteResponse;
 import netUtils.Response.User.RegisterResponse;
 import netUtils.Response.User.ResetPasswordResponse;
 import netUtils.Response.User.SubordinatesInfoResponse;
+import netUtils.Response.User.UserInfoResponse;
 import classes.Category;
+import classes.Group;
 import classes.Item;
 import classes.Report;
 import classes.Tag;
 import classes.User;
+import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
+import database.DBManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -81,9 +85,9 @@ public class ReimFragment extends Fragment {
 			{
 				try
 				{
-					User user = new User();
-					user.setEmail("y@rushucloud.com");
-					user.setPassword("meiyoumima");
+//					User user = new User();
+//					user.setEmail("y@rushucloud.com");
+//					user.setPassword("meiyoumima");
 //					InviteRequest request = new InviteRequest(HttpConstant.REQUEST_TYPE_EMAIL, "y@rushucloud.com");
 //					request.sendRequest(new HttpConnectionCallback()
 //					{
@@ -129,18 +133,30 @@ public class ReimFragment extends Fragment {
 //			        ReimApplication reimApp = (ReimApplication)getActivity().getApplication();
 //			        reimApp.saveUserInfo();       
 
-//					DBManager dbManager = DBManager.getDataBaseManager(getActivity().getApplicationContext());
-//					dbManager.openDatabase();
-//					dbManager.modifyItem(null, null);
-//					dbManager.findMyItems();
-					
+					DBManager dbManager = DBManager.getDataBaseManager(getActivity().getApplicationContext());
+					dbManager.openDatabase();
+//					Group group = new Group();
+//					group.setId(2);
+//					group.setName("MC");
+//					group.setServerUpdatedDate(Utils.getCurrentTime());
+//					group.setLocalUpdatedDate(Utils.getCurrentTime());
+//
+//					if (dbManager.insertGroup(group))
+//					{
+//						System.out.println("success");
+//					}
+//					else {
+//						System.out.println("fail");
+
 //					Category category = new Category();
-//					category.setName("bbb");
+//					category.setName("aaa");
 //					category.setParentID(0);
 //					category.setLimit(500);
 //					category.setGroupID(2);
-//					category.setPreBillable(true);
-//					category.setId(1);
+//					category.setIsProveAhead(true);
+//					category.setLocalUpdatedDate(Utils.getCurrentTime());
+//					category.setServerUpdatedDate(Utils.getCurrentTime());
+//					category.setId(13);						
 					
 //					CreateCategoryRequest request = new CreateCategoryRequest(category);
 //					request.sendRequest(new HttpConnectionCallback()
@@ -237,15 +253,26 @@ public class ReimFragment extends Fragment {
 //							DeleteTagResponse response2 = new DeleteTagResponse(httpResponse);
 //						}
 //					});
+//					
+//					SubordinatesInfoRequest request = new SubordinatesInfoRequest(0,20);
+//					request.sendRequest(new HttpConnectionCallback()
+//					{
+//						public void execute(Object httpResponse)
+//						{
+//							SubordinatesInfoResponse response2 = new SubordinatesInfoResponse(httpResponse);
+//						}
+//					});
 					
-					SubordinatesInfoRequest request = new SubordinatesInfoRequest(0,20);
-					request.sendRequest(new HttpConnectionCallback()
-					{
-						public void execute(Object httpResponse)
-						{
-							SubordinatesInfoResponse response2 = new SubordinatesInfoResponse(httpResponse);
-						}
-					});
+//					UserInfoRequest request = new UserInfoRequest(1);
+//					request.sendRequest(new HttpConnectionCallback()
+//					{
+//						
+//						@Override
+//						public void execute(Object httpResponse)
+//						{
+//							UserInfoResponse response = new UserInfoResponse(httpResponse);
+//						}
+//					});
 				}
 				catch (Exception e)
 				{

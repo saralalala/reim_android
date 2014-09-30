@@ -1,16 +1,15 @@
 package netUtils.Request.Tag;
 
-import classes.Tag;
 import netUtils.Request.BaseRequest;
 
 public class DeleteTagRequest extends BaseRequest
 {
-	public DeleteTagRequest(Tag tag)
+	public DeleteTagRequest(int tagID)
 	{
 		super();
 
 		String requestUrl = getUrl();
-		requestUrl += "/tags/" + tag.getId();
+		requestUrl += "/tags/" + tagID;
 		setUrl(requestUrl);
 	}
 

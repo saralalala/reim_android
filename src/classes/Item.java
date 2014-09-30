@@ -1,6 +1,5 @@
 package classes;
 
-import java.util.Date;
 import java.util.List;
 
 import android.graphics.Bitmap;
@@ -18,9 +17,9 @@ public class Item
 	private User consumer;
 	private List<User> relevantUsers = null;
 	private List<Tag> tag = null;
-	private Date serverUpdatedDate = null;
-	private Date localUpdatedDate = null;
-	private Date consumedDate = null;
+	private int serverUpdatedDate = -1;
+	private int localUpdatedDate = -1;
+	private int consumedDate = -1;
 	private String note = "";
 	private Boolean billable = false;
 	private int status = -1;
@@ -113,27 +112,27 @@ public class Item
 	{
 		this.tag = tag;
 	}
-	public Date getServerUpdatedDate()
+	public int getServerUpdatedDate()
 	{
 		return serverUpdatedDate;
 	}
-	public void setServerUpdatedDate(Date serverUpdatedDate)
+	public void setServerUpdatedDate(int serverUpdatedDate)
 	{
 		this.serverUpdatedDate = serverUpdatedDate;
 	}
-	public Date getLocalUpdatedDate()
+	public int getLocalUpdatedDate()
 	{
 		return localUpdatedDate;
 	}
-	public void setLocalUpdatedDate(Date localUpdatedDate)
+	public void setLocalUpdatedDate(int localUpdatedDate)
 	{
 		this.localUpdatedDate = localUpdatedDate;
 	}
-	public Date getConsumedDate()
+	public int getConsumedDate()
 	{
 		return consumedDate;
 	}
-	public void setConsumedDate(Date consumedDate)
+	public void setConsumedDate(int consumedDate)
 	{
 		this.consumedDate = consumedDate;
 	}

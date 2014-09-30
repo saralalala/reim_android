@@ -1,6 +1,5 @@
 package classes;
 
-import java.util.Date;
 import java.util.List;
 
 public class Package
@@ -8,7 +7,7 @@ public class Package
 	private int id;
 	private String name;
 	private int number;
-	private Date createdDate;
+	private int createdDate;
 	private double amount;
 	private int status;
 	private List<Item> includedItems;
@@ -37,11 +36,11 @@ public class Package
 	{
 		this.number = number;
 	}
-	public Date getCreatedDate()
+	public int getCreatedDate()
 	{
 		return createdDate;
 	}
-	public void setCreatedDate(Date createdDate)
+	public void setCreatedDate(int createdDate)
 	{
 		this.createdDate = createdDate;
 	}

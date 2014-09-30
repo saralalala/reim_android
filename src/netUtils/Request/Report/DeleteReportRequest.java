@@ -1,16 +1,15 @@
 package netUtils.Request.Report;
 
-import classes.Report;
 import netUtils.Request.BaseRequest;
 
 public class DeleteReportRequest extends BaseRequest
 {
-	public DeleteReportRequest(Report report)
+	public DeleteReportRequest(int reportID)
 	{
 		super();
 
 		String requestUrl = getUrl();
-		requestUrl += "/report/" + report.getId();
+		requestUrl += "/report/" + reportID;
 		setUrl(requestUrl);
 	}
 	

@@ -1,6 +1,5 @@
 package classes;
 
-import java.util.Date;
 import java.util.List;
 
 public class Report
@@ -8,9 +7,9 @@ public class Report
 	private String title = "";
 	private int id = -1;
 	private int itemCount = -1;
-	private Date createdDate = null;
-	private Date serverUpdatedDate = null;
-	private Date localUpdatedDate = null;
+	private int createdDate = -1;
+	private int serverUpdatedDate = -1;
+	private int localUpdatedDate = -1;
 	private double amount = -1;
 	private int status = -1;
 	private String itemIDs = "";
@@ -43,29 +42,29 @@ public class Report
 		this.itemCount = itemCount;
 	}
 	
-	public Date getCreatedDate()
+	public int getCreatedDate()
 	{
 		return createdDate;
 	}
-	public void setCreatedDate(Date createdDate)
+	public void setCreatedDate(int createdDate)
 	{
 		this.createdDate = createdDate;
 	}
 	
-	public Date getServerUpdatedDate()
+	public int getServerUpdatedDate()
 	{
 		return serverUpdatedDate;
 	}
-	public void setServerUpdatedDate(Date serverUpdatedDate)
+	public void setServerUpdatedDate(int serverUpdatedDate)
 	{
 		this.serverUpdatedDate = serverUpdatedDate;
 	}
 	
-	public Date getLocalUpdatedDate()
+	public int getLocalUpdatedDate()
 	{
 		return localUpdatedDate;
 	}
-	public void setLocalUpdatedDate(Date localUpdatedDate)
+	public void setLocalUpdatedDate(int localUpdatedDate)
 	{
 		this.localUpdatedDate = localUpdatedDate;
 	}

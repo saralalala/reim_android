@@ -31,7 +31,7 @@ public class SubordinatesReportResponse extends BaseResponse
 				JSONObject object = jsonArray.getJSONObject(i);
 				Report report = new Report();
 				report.setTitle(object.getString("title"));
-				report.setCreatedDate(new Date(Integer.valueOf(object.getString("createdt"))));
+				report.setCreatedDate(object.getInt("createdt"));
 //				report.setLastUpdatedDate(new Date(Integer.valueOf(object.getString("lastdt"))));
 				report.setStatus(Integer.valueOf(object.getString("status")));
 				reportList.add(report);

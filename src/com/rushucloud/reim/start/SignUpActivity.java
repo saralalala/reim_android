@@ -34,7 +34,7 @@ public class SignUpActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_start_sign_up);
+		setContentView(R.layout.start_sign_up);
 		viewIntialise();
 		buttonInitialise();
 	}
@@ -73,23 +73,24 @@ public class SignUpActivity extends Activity
 				final String username = usernameEditText.getText().toString();
 				final String password = passwordEditText.getText().toString();
 				final String confirmPassword = confirmPasswordEditText.getText().toString();
-				if (!Utils.isEmailOrPhone(username))
+				if (username.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this)
-													.setTitle("错误")
-													.setMessage("手机或邮箱格式不正确")
-													.setPositiveButton("确定", new OnClickListener()
+												.setTitle("错误")
+												.setMessage("手机或邮箱不能为空")
+												.setPositiveButton("确定", new OnClickListener()
+												{
+													public void onClick(
+															DialogInterface dialog,
+															int which)
 													{
-														public void onClick(
-																DialogInterface dialog,
-																int which)
-														{
-															dialog.dismiss();
-															usernameEditText.requestFocus();
-														}
-													})
-													.create();
+														dialog.dismiss();
+														usernameEditText.requestFocus();
+													}
+												})
+												.create();
 					alertDialog.show();
+					
 				}
 				else if (password.equals(""))
 				{
@@ -123,6 +124,24 @@ public class SignUpActivity extends Activity
 														{
 															dialog.dismiss();
 															confirmPasswordEditText.requestFocus();
+														}
+													})
+													.create();
+					alertDialog.show();
+				}
+				else if (!Utils.isEmailOrPhone(username))
+				{
+					AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this)
+													.setTitle("错误")
+													.setMessage("手机或邮箱格式不正确")
+													.setPositiveButton("确定", new OnClickListener()
+													{
+														public void onClick(
+																DialogInterface dialog,
+																int which)
+														{
+															dialog.dismiss();
+															usernameEditText.requestFocus();
 														}
 													})
 													.create();

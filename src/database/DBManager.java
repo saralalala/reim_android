@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import classes.Category;
+import classes.Group;
 import classes.Item;
 import classes.Report;
 
@@ -53,6 +54,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			database = dbManager.getWritableDatabase();
+//			tempCommand();
 			createTables();
 		}
 		catch (Exception e)
@@ -87,7 +89,7 @@ public class DBManager extends SQLiteOpenHelper
 								+ "category_id INT DEFAULT(0),"
 								+ "image_id INT DEFAULT(0),"
 								+ "user_id INT DEFAULT(0),"
-								+ "billable BOOLEAN DEFAULT(false),"
+								+ "billable INT DEFAULT(0),"
 								+ "group_id INT DEFAULT(0),"
 								+ "date INT DEFAULT(0),"
 								+ "note TEXT DEFAULT(''),"
@@ -99,7 +101,7 @@ public class DBManager extends SQLiteOpenHelper
 								+ ")";
 		database.execSQL(createItemTable);
 
-		String createItemMemberTable="CREATE TABLE IF NOT EXISTS tbl_item_member ("
+		String createItemUserTable="CREATE TABLE IF NOT EXISTS tbl_item_user ("
 										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 										+ "item_id INT DEFAULT(0),"
 										+ "user_id INT DEFAULT(0),"
@@ -109,7 +111,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "backup2 TEXT DEFAULT(''),"
 										+ "backup3 TEXT DEFAULT('')"
 										+ ")";
-		database.execSQL(createItemMemberTable);
+		database.execSQL(createItemUserTable);
 
 		String createItemTagTable="CREATE TABLE IF NOT EXISTS tbl_item_tag ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -125,7 +127,7 @@ public class DBManager extends SQLiteOpenHelper
 		String createImageTable="CREATE TABLE IF NOT EXISTS tbl_image ("
 								+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 								+ "server_id INT DEFAULT(0),"
-								+ "uid INT DEFAULT(0),"
+								+ "user_id INT DEFAULT(0),"
 								+ "path TEXT DEFAULT(''),"
 								+ "backup1 INT DEFAULT(0),"
 								+ "backup2 TEXT DEFAULT(''),"
@@ -133,7 +135,7 @@ public class DBManager extends SQLiteOpenHelper
 								+ ")";
 		database.execSQL(createImageTable);
 
-		String createMemberTable="CREATE TABLE IF NOT EXISTS tbl_member ("
+		String createUserTable="CREATE TABLE IF NOT EXISTS tbl_user ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
 									+ "email TEXT DEFAULT(''),"
@@ -148,7 +150,7 @@ public class DBManager extends SQLiteOpenHelper
 									+ "backup2 TEXT DEFAULT(''),"
 									+ "backup3 TEXT DEFAULT('')"
 									+ ")";
-		database.execSQL(createMemberTable);
+		database.execSQL(createUserTable);
 
 		String createGroupTable="CREATE TABLE IF NOT EXISTS tbl_group ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -164,19 +166,19 @@ public class DBManager extends SQLiteOpenHelper
 									+ ")";
 		database.execSQL(createGroupTable);
 
-		String createMemberGroupTable="CREATE TABLE IF NOT EXISTS tbl_member_group ("
+		String createUserGroupTable="CREATE TABLE IF NOT EXISTS tbl_user_group ("
 										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 										+ "server_id INT DEFAULT(0),"
 										+ "group_id INT DEFAULT(0),"
 										+ "user_id INT DEFAULT(0),"
-										+ "admin BOOLEAN DEFAULT(false),"
+										+ "admin INT DEFAULT(0),"
 										+ "server_updatedt INT DEFAULT(0),"
 										+ "local_updatedt INT DEFAULT(0),"
 										+ "backup1 INT DEFAULT(0),"
 										+ "backup2 TEXT DEFAULT(''),"
 										+ "backup3 TEXT DEFAULT('')"
 										+ ")";
-		database.execSQL(createMemberGroupTable);
+		database.execSQL(createUserGroupTable);
 
 		String createReportTable="CREATE TABLE IF NOT EXISTS tbl_report ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -238,6 +240,7 @@ public class DBManager extends SQLiteOpenHelper
 									+ "max_limit INT DEFAULT(0),"
 									+ "group_id INT DEFAULT(0),"
 									+ "parent_id INT DEFAULT(0),"
+									+ "prove_ahead INT DEFAULT(0),"
 									+ "server_updatedt INT DEFAULT(0),"
 									+ "local_updatedt INT DEFAULT(0),"
 									+ "backup1 INT DEFAULT(0),"
@@ -249,51 +252,43 @@ public class DBManager extends SQLiteOpenHelper
 		return true;
 	}
 	
+	// Item
 	public Boolean insertItem(Item item)
 	{
 		String sqlString = "DELETE FROM tbl_item";
 		database.execSQL(sqlString);
-		sqlString = "INSERT INTO tbl_item (server_id, amount, billable) VALUES ('333', '5.5', 'true')";
+		sqlString = "INSERT INTO tbl_item (server_id, amount, billable) VALUES ('333', '5.5', '1')";
 		database.execSQL(sqlString);
-		sqlString = "INSERT INTO tbl_item (server_id, amount, billable) VALUES ('444', '6', 'false')";
+		sqlString = "INSERT INTO tbl_item (server_id, amount, billable) VALUES ('444', '6', '0')";
 		database.execSQL(sqlString);
-		sqlString = "INSERT INTO tbl_item (server_id, amount, billable) VALUES ('555', '6', 'true')";
+		sqlString = "INSERT INTO tbl_item (server_id, amount, billable) VALUES ('555', '6', '1')";
 		database.execSQL(sqlString);
 		return true;
 	}
 
-	public Boolean insertReport(Report report)
-	{
-		return true;		
-	}
-	
-	public Boolean insertCategory(Category category)
-	{
-		return true;
-	}
-	
-	public Boolean modifyItem(Item oldItem, Item newItem)
+	public Boolean updateItem(Item oldItem, Item newItem)
 	{
 //		String sqlString = "UPDATE tbl_item SET amount = '6', billable = 'false' WHERE server_id = '333'";
 		String sqlString = "UPDATE tbl_item SET merchants = 'McDonalds'";
+		
+//		if (group.getServerUpdatedDate() != -1)
+//		{			
+//		}
+//		else
+//		{
+//			sqlString = "UPDATE tbl_group SET " +
+//					"group_name = '" + group.getName() + "'," +
+//					"local_updatedt = '" + group.getLocalUpdatedDate() + "' " +
+//					"WHERE server_id = '" + group.getId() + "'";	
+//		}
 		database.execSQL(sqlString);
 		return true;		
 	}
-	
-	public Boolean modifyReport(Report oldReport, Report newReport)
-	{
-		return true;
-	}
-	
+
 	public Boolean deleteItem(Item item)
 	{
 		String sqlString = "DELETE FROM tbl_item WHERE server_id = 'adf'";
 		database.execSQL(sqlString);
-		return true;
-	}
-	
-	public Boolean deleteReport(Report report)
-	{
 		return true;
 	}
 
@@ -316,12 +311,250 @@ public class DBManager extends SQLiteOpenHelper
 		return itemList;
 	}
 	
+	// Report
+	public Boolean insertReport(Report report)
+	{
+		return true;		
+	}
+	
+	public Boolean updateReport(Report oldReport, Report newReport)
+	{
+		
+//		if (group.getServerUpdatedDate() != -1)
+//		{			
+//		}
+//		else
+//		{
+//			sqlString = "UPDATE tbl_group SET " +
+//					"group_name = '" + group.getName() + "'," +
+//					"local_updatedt = '" + group.getLocalUpdatedDate() + "' " +
+//					"WHERE server_id = '" + group.getId() + "'";	
+//		}
+		return true;
+	}
+		
+	public Boolean deleteReport(Report report)
+	{
+		return true;
+	}
+
+	// Category
+	public Boolean insertCategory(Category category)
+	{
+		try
+		{
+			int prove_ahead = category.isProveAhead() ? 1 : 0;
+			String sqlString = "INSERT INTO tbl_category (server_id, category_name, max_limit, group_id, " +
+								"parent_id, prove_ahead, local_updatedt, server_updatedt) VALUES (" +
+								"'" + category.getId() + "'," +
+								"'" + category.getName() + "'," +
+								"'" + category.getLimit() + "'," +
+								"'" + category.getGroupID() + "'," +
+								"'" + category.getParentID() + "'," +
+								"'" + prove_ahead + "'," +
+								"'" + category.getLocalUpdatedDate() + "'," +
+								"'" + category.getServerUpdatedDate() + "')";
+			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean updateCategory(Category category)
+	{
+		try
+		{
+			int prove_ahead = category.isProveAhead() ? 1 : 0;
+			String sqlString = "UPDATE tbl_category SET " +
+								"category_name = '" + category.getName() + "'," +
+								"max_limit = '" + category.getLimit() + "'," +
+								"group_id = '" + category.getGroupID() + "'," +
+								"parent_id = '" + category.getParentID() + "'," +
+								"prove_ahead = '" + prove_ahead + "'," +
+								"local_updatedt = '" + category.getLocalUpdatedDate() + "'," +
+								"server_updatedt = '" + category.getServerUpdatedDate() + "' " +
+								"WHERE server_id = '" + category.getId() + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean deleteCategory(int categoryID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_category WHERE server_id = '" + categoryID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Category getCategory(int categoryID)
+	{
+		try
+		{	
+			Cursor cursor = database.rawQuery("SELECT server_id, category_name, max_limit, group_id, " +
+					                          "parent_id, prove_ahead, local_updatedt, server_updatedt " +
+					                          "FROM tbl_category WHERE server_id = ?", new String[]{Integer.toString(categoryID)});
+			if (cursor.moveToNext())
+			{
+				Category category = new Category();
+				category.setId(getIntFromCursor(cursor, "server_id"));
+				category.setName(getStringFromCursor(cursor, "category_name"));
+				category.setLimit(getDoubleFromCursor(cursor, "max_limit"));
+				category.setGroupID(getIntFromCursor(cursor, "group_id"));
+				category.setParentID(getIntFromCursor(cursor, "parent_id"));
+				category.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				return category;
+			}
+			else
+			{
+				return null;				
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());;
+			return null;
+		}
+	}
+	
+	public List<Category> getGroupCategories(int groupID)
+	{
+		List<Category> categoryList = new ArrayList<Category>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT server_id, category_name, max_limit, group_id, " +
+					                          "parent_id, prove_ahead, local_updatedt, server_updatedt " +
+					                          "FROM tbl_category WHERE group_id = ?", new String[]{Integer.toString(groupID)});
+			while (cursor.moveToNext())
+			{
+				Category category = new Category();
+				category.setId(getIntFromCursor(cursor, "server_id"));
+				category.setName(getStringFromCursor(cursor, "category_name"));
+				category.setLimit(getDoubleFromCursor(cursor, "max_limit"));
+				category.setGroupID(getIntFromCursor(cursor, "group_id"));
+				category.setParentID(getIntFromCursor(cursor, "parent_id"));
+				category.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				categoryList.add(category);
+			}
+			return categoryList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return categoryList;
+		}
+	}	
+	
+	// Group
+	public Boolean insertGroup(Group group)
+	{
+		try
+		{
+			String sqlString = "INSERT INTO tbl_group (server_id, group_name, local_updatedt, server_updatedt) VALUES (" +
+								"'" + group.getId() + "'," +
+								"'" + group.getName() + "'," +
+								"'" + group.getLocalUpdatedDate() + "'," +
+								"'" + group.getServerUpdatedDate() + "')";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean updateGroup(Group group)
+	{
+		try
+		{
+			String sqlString = "UPDATE tbl_group SET " +
+					"group_name = '" + group.getName() + "'," +
+					"local_updatedt = '" + group.getLocalUpdatedDate() + "'," +
+					"server_updatedt = '" + group.getServerUpdatedDate() + "' " +
+					"WHERE server_id = '" + group.getId() + "'";
+			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}		
+	}
+	
+	public Boolean deleteGroup(int groupID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_group WHERE server_id = '" + groupID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Group getGroup(int groupID)
+	{
+		try
+		{	
+			Cursor cursor = database.rawQuery("SELECT server_id, group_name, local_updatedt, server_updatedt" +
+											  " FROM tbl_group WHERE server_id = ?", new String[]{Integer.toString(groupID)});
+			if (cursor.moveToNext())
+			{
+				Group group = new Group();
+				group.setId(getIntFromCursor(cursor, "server_id"));
+				group.setName(getStringFromCursor(cursor, "group_name"));
+				group.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				group.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				return group;
+			}
+			else
+			{
+				return null;				
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	// Others
 	public void tempCommand()
 	{
-		String sqlString = "DROP TABLE tbl_company";
+		String sqlString = "DROP TABLE IF EXISTS tbl_category";
 		database.execSQL(sqlString);
-		sqlString = "DROP TABLE tbl_member_group";
-		database.execSQL(sqlString);
+//		sqlString = "DROP TABLE IF EXISTS tbl_image";
+//		database.execSQL(sqlString);
 	}
 	
 	private double getDoubleFromCursor(Cursor cursor, String columnName)
@@ -341,14 +574,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	private Boolean getBooleanFromCursor(Cursor cursor, String columnName)
 	{
-		String tempString=cursor.getString(cursor.getColumnIndex(columnName));
-		if (tempString.equals("true"))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		int temp=cursor.getInt(cursor.getColumnIndex(columnName));
+		return temp > 0 ? true : false;
 	}
 }

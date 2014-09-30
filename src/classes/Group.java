@@ -1,13 +1,17 @@
 package classes;
 
-public class Tag
+public class Group
 {
-	private int id;
-	private int groupID;
-	private String name;
+	private int id = -1;
+	private String name = "";
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 	
+	public Group()
+	{
+		
+	}
+
 	public int getId()
 	{
 		return id;
@@ -16,16 +20,7 @@ public class Tag
 	{
 		this.id = id;
 	}
-	
-	public int getGroupID()
-	{
-		return groupID;
-	}
-	public void setGroupID(int groupID)
-	{
-		this.groupID = groupID;
-	}
-	
+
 	public String getName()
 	{
 		return name;

@@ -33,7 +33,7 @@ public class ModifyItemRequest extends BaseRequest
 		params.add(new BasicNameValuePair("billable", Boolean.toString(item.getBillable())));
 		params.add(new BasicNameValuePair("image_id", Integer.toString(item.getImageID())));
 		params.add(new BasicNameValuePair("uids", uids));
-		params.add(new BasicNameValuePair("dt", Long.toString(item.getConsumedDate().getTime())));
+		params.add(new BasicNameValuePair("dt", Integer.toString(item.getConsumedDate())));
 		setParams(params);
 
 		String requestUrl = getUrl();

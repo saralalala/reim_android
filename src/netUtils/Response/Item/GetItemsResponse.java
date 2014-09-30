@@ -1,7 +1,6 @@
 package netUtils.Response.Item;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -38,8 +37,8 @@ public class GetItemsResponse extends BaseResponse
 				item.setAmount(object.getDouble("amount"));
 				item.setMerchant(object.getString("merchants"));
 				item.setNote(object.getString("note"));
-				item.setConsumedDate(new Date(object.getLong("dt")));
-				item.setServerUpdatedDate(new Date(object.getLong("lastdt")));
+				item.setConsumedDate(object.getInt("dt"));
+				item.setServerUpdatedDate(object.getInt("lastdt"));
 				
 //				item.setLocalUpdatedDate();
 				//TODO Check local time

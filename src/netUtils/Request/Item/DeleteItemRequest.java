@@ -1,16 +1,15 @@
 package netUtils.Request.Item;
 
-import classes.Item;
 import netUtils.Request.BaseRequest;
 
 public class DeleteItemRequest extends BaseRequest
 {
-	public DeleteItemRequest(Item item)
+	public DeleteItemRequest(int itemID)
 	{
 		super();
 		
 		String requestUrl = getUrl();
-		requestUrl += "/item/" + item.getId();
+		requestUrl += "/item/" + itemID;
 		setUrl(requestUrl);
 	}
 	

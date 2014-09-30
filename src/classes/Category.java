@@ -1,7 +1,5 @@
 package classes;
 
-import java.sql.Date;
-
 public class Category
 {
 	private int id;
@@ -9,8 +7,9 @@ public class Category
 	private double limit;
 	private int groupID;
 	private int parentID;
-	private Boolean preBillable;
-	private Date lastUpdatedDate;
+	private Boolean isProveAhead;
+	private int serverUpdatedDate = -1;
+	private int localUpdatedDate = -1;
 
 	public int getId()
 	{
@@ -56,22 +55,31 @@ public class Category
 	{
 		this.parentID = parentID;
 	}
-	
-	public Boolean getPreBillable()
-	{
-		return preBillable;
-	}
-	public void setPreBillable(Boolean pb)
-	{
-		this.preBillable = pb;
-	}
 
-	public Date getLastUpdatedDate()
+	public Boolean isProveAhead()
 	{
-		return lastUpdatedDate;
+		return isProveAhead;
 	}
-	public void setLastUpdatedDate(Date lastUpdatedDate)
+	public void setIsProveAhead(Boolean isProveAhead)
 	{
-		this.lastUpdatedDate = lastUpdatedDate;
+		this.isProveAhead = isProveAhead;
+	}
+	
+	public int getServerUpdatedDate()
+	{
+		return serverUpdatedDate;
+	}
+	public void setServerUpdatedDate(int serverUpdatedDate)
+	{
+		this.serverUpdatedDate = serverUpdatedDate;
+	}
+	
+	public int getLocalUpdatedDate()
+	{
+		return localUpdatedDate;
+	}
+	public void setLocalUpdatedDate(int localUpdatedDate)
+	{
+		this.localUpdatedDate = localUpdatedDate;
 	}
 }

@@ -1,7 +1,5 @@
 package classes;
 
-import java.util.Date;
-
 public class User
 {
 	private int id = -1;
@@ -14,8 +12,8 @@ public class User
 	private Boolean isAdmin = false;
 	private int groupID = -1;
 	private int defaultManagerID = -1;
-	private Date serverUpdatedDate = null;
-	private Date localUpdatedDate = null;
+	private int serverUpdatedDate = -1;
+	private int localUpdatedDate = -1;
 	
 	public int getId()
 	{
@@ -107,20 +105,20 @@ public class User
 		this.defaultManagerID = defaultManagerID;
 	}
 	
-	public Date getServerUpdatedDate()
+	public int getServerUpdatedDate()
 	{
 		return serverUpdatedDate;
 	}
-	public void setServerUpdatedDate(Date serverUpdatedDate)
+	public void setServerUpdatedDate(int serverUpdatedDate)
 	{
 		this.serverUpdatedDate = serverUpdatedDate;
 	}
 	
-	public Date getLocalUpdatedDate()
+	public int getLocalUpdatedDate()
 	{
 		return localUpdatedDate;
 	}
-	public void setLocalUpdatedDate(Date localUpdatedDate)
+	public void setLocalUpdatedDate(int localUpdatedDate)
 	{
 		this.localUpdatedDate = localUpdatedDate;
 	}

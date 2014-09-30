@@ -1,7 +1,6 @@
 package netUtils.Response;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -40,8 +39,8 @@ public class SyncDataResponse extends BaseResponse
 				item.setAmount(object.getDouble("amount"));
 				item.setMerchant(object.getString("merchants"));
 				item.setNote(object.getString("note"));
-				item.setConsumedDate(new Date(object.getLong("dt")));
-				item.setServerUpdatedDate(new Date(object.getLong("lastdt")));
+				item.setConsumedDate(object.getInt("dt"));
+				item.setServerUpdatedDate(object.getInt("lastdt"));
 				
 //				item.setLocalUpdatedDate();
 				//TODO Check local time
@@ -79,8 +78,8 @@ public class SyncDataResponse extends BaseResponse
 				Report report = new Report();
 				report.setId(object.getInt("id"));
 				report.setTitle(object.getString("title"));
-				report.setCreatedDate(new Date(object.getLong("createdt")));
-				report.setServerUpdatedDate(new Date(object.getLong("lastdt")));
+				report.setCreatedDate(object.getInt("createdt"));
+				report.setServerUpdatedDate(object.getInt("lastdt"));
 				report.setStatus(object.getInt("status"));
 				
 				User user = new User();
