@@ -1,11 +1,17 @@
 package com.rushucloud.reim.start;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import netUtils.HttpConstant;
 import netUtils.Request.CommonRequest;
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
 import netUtils.Response.CommonResponse;
 import classes.AppPreference;
-import classes.Group;
+import classes.Category;
 import classes.ReimApplication;
+import classes.Tag;
+import classes.User;
 import classes.Utils;
 
 import com.rushucloud.reim.MainActivity;
@@ -56,6 +62,10 @@ public class SignInActivity extends Activity
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
 		
+		
+		usernameEditText.setText(HttpConstant.DEBUG_EMAIL);
+		passwordEditText.setText(HttpConstant.DEBUG_PASSWORD);
+		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
     	{
@@ -63,8 +73,8 @@ public class SignInActivity extends Activity
 			{
 				hideSoftKeyboard();
 			}
-		});    
-	
+		});   
+    	
     	TextView forgorPasswordTextView = (TextView)findViewById(R.id.forgotTextView);
     	forgorPasswordTextView.setOnClickListener(new View.OnClickListener()
 		{
@@ -178,22 +188,37 @@ public class SignInActivity extends Activity
 					// save server token
 					AppPreference appPreference = AppPreference.getAppPreference();
 					appPreference.setServerToken(response.getServerToken());
+					User currentUser = response.getCurrentUser();
+					appPreference.setCurrentUserID(currentUser.getId());
+//					appPreference.setCurrentUserID(response.getCurrentUser().getId());
 					ReimApplication application = (ReimApplication)getApplication();
 					application.saveAppPreference();
 
 					DBManager dbManager = DBManager.getDataBaseManager(getApplicationContext());
 					
+					// update members
+					List<User> userList = new ArrayList<User>(response.getMemberList());
+					for (int i = 0; i < userList.size(); i++)
+					{
+						dbManager.syncUser(userList.get(i));
+					}
+					
+					// update category
+					List<Category> categoryList = new ArrayList<Category>(response.getCategoryList());
+					for (int i = 0; i < categoryList.size(); i++)
+					{
+						dbManager.syncCategory(categoryList.get(i));
+					}
+					
+					// update tag
+					List<Tag> tagList = new ArrayList<Tag>(response.getTagList());
+					for (int i = 0; i < tagList.size(); i++)
+					{
+						dbManager.syncTag(tagList.get(i));
+					}
+					
 					// update group info
-					Group serverGroup = response.getGroup();
-					Group localGroup = dbManager.getGroup(serverGroup.getId());
-					if (localGroup == null)
-					{
-						dbManager.insertGroup(serverGroup);
-					}
-					else if (serverGroup.getServerUpdatedDate() > localGroup.getLocalUpdatedDate())
-					{
-						dbManager.updateGroup(serverGroup);
-					}
+					dbManager.syncGroup(response.getGroup());
 					
 					// refresh UI
 					runOnUiThread(new Runnable()

@@ -7,7 +7,8 @@ public class User
 	private String password = "";
 	private String nickname = "";
 	private String phone = "";
-	private int privilege = -1;
+	private String avatarPath = "";
+	private int privilege = 0;
 	private Boolean isActive = false;
 	private Boolean isAdmin = false;
 	private int groupID = -1;
@@ -60,6 +61,15 @@ public class User
 		this.phone = phone;
 	}
 	
+	public String getAvatarPath()
+	{
+		return avatarPath;
+	}
+	public void setAvatarPath(String avatarPath)
+	{
+		this.avatarPath = avatarPath;
+	}
+	
 	public int getPrivilege()
 	{
 		return privilege;
@@ -69,7 +79,7 @@ public class User
 		this.privilege = privilege;
 	}
 	
-	public Boolean getIsActive()
+	public Boolean isActive()
 	{
 		return isActive;
 	}
@@ -78,7 +88,7 @@ public class User
 		this.isActive = isActive;
 	}
 	
-	public Boolean getIsAdmin()
+	public Boolean isAdmin()
 	{
 		return isAdmin;
 	}

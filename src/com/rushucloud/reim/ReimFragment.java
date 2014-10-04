@@ -15,6 +15,8 @@ import netUtils.Request.Item.GetItemsRequest;
 import netUtils.Request.Report.CreateReportRequest;
 import netUtils.Request.Report.DeleteReportRequest;
 import netUtils.Request.Report.ModifyReportRequest;
+import netUtils.Request.Report.SingleSubReportRequest;
+import netUtils.Request.Report.SubordinatesReportRequest;
 import netUtils.Request.Tag.CreateTagRequest;
 import netUtils.Request.Tag.DeleteTagRequest;
 import netUtils.Request.Tag.ModifyTagRequest;
@@ -36,6 +38,8 @@ import netUtils.Response.Item.GetItemsResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Response.Report.DeleteReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
+import netUtils.Response.Report.SingleSubReportResponse;
+import netUtils.Response.Report.SubordinatesReportResponse;
 import netUtils.Response.Tag.CreateTagResponse;
 import netUtils.Response.Tag.DeleteTagResponse;
 import netUtils.Response.Tag.ModifyTagResponse;
@@ -96,19 +100,28 @@ public class ReimFragment extends Fragment {
 //			        ReimApplication reimApp = (ReimApplication)getActivity().getApplication();
 //			        reimApp.saveUserInfo();       
 
-//					DBManager dbManager = DBManager.getDataBaseManager(getActivity().getApplicationContext());
-//					dbManager.openDatabase();
+					DBManager dbManager = DBManager.getDataBaseManager(getActivity().getApplicationContext());
+					dbManager.openDatabase();
 					
-					CommonRequest request = new CommonRequest();
-					request.sendRequest(new HttpConnectionCallback()
-					{
-						
-						@Override
-						public void execute(Object httpResponse)
-						{
-							CommonResponse response = new CommonResponse(httpResponse);
-						}
-					});
+//					CommonRequest request = new CommonRequest();
+//					request.sendRequest(new HttpConnectionCallback()
+//					{
+//						public void execute(Object httpResponse)
+//						{
+//							CommonResponse response = new CommonResponse(httpResponse);
+//						}
+//					});
+//					
+//					SingleSubReportRequest request = new SingleSubReportRequest(0, 20, 3, 0);
+//					request.sendRequest(new HttpConnectionCallback()
+//					{
+//						
+//						@Override
+//						public void execute(Object httpResponse)
+//						{
+//							SubordinatesReportResponse response = new SubordinatesReportResponse(httpResponse);
+//						}
+//					});
 
 //					Tag tag = new Tag();
 //					tag.setName("Ticket");

@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:id="@+id/baseLayout" >
 
     <EditText
         android:id="@+id/usernameEditText"
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/usernameEditText"
         android:layout_alignRight="@+id/usernameEditText"
-        android:layout_below="@+id/confirmPasswordTextView"
+        android:layout_below="@+id/passwordTextView"
         android:layout_marginTop="26dp"
         android:ems="10"
         android:inputType="textPassword" />
@@ -37,7 +38,7 @@
         android:text="@string/userIDPrompt" />
 
     <TextView
-        android:id="@+id/confirmPasswordTextView"
+        android:id="@+id/passwordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -46,20 +47,20 @@
         android:text="@string/passwordPrompt" />
 
     <Button
-        android:id="@+id/signInConfirmButton"
+        android:id="@+id/confirmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="117dp"
-        android:layout_toRightOf="@+id/confirmPasswordTextView"
+        android:layout_toRightOf="@+id/passwordTextView"
         android:text="@string/confirm" />
 
     <Button
-        android:id="@+id/signInCancelButton"
+        android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/signInConfirmButton"
-        android:layout_alignBottom="@+id/signInConfirmButton"
+        android:layout_alignBaseline="@+id/confirmButton"
+        android:layout_alignBottom="@+id/confirmButton"
         android:layout_alignRight="@+id/usernameEditText"
         android:layout_marginRight="27dp"
         android:text="@string/cancel" />

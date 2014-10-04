@@ -26,5 +26,4 @@ public class SubordinatesReportRequest extends BaseRequest
 	{
 		doGet(callback);
 	}
-
 }

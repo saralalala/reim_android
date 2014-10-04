@@ -11,6 +11,7 @@ import classes.Category;
 import classes.Group;
 import classes.Tag;
 import classes.User;
+import classes.Utils;
 
 public class CommonResponse extends BaseResponse
 {
@@ -31,6 +32,26 @@ public class CommonResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			
+			JSONObject profileObject = jObject.getJSONObject("profile");
+			
+			JSONObject groupObject = profileObject.getJSONObject("group");
+			group = new Group();
+			group.setId(groupObject.getInt("groupid"));
+			group.setName(groupObject.getString("group_name"));
+			group.setLocalUpdatedDate(groupObject.getInt("lastdt"));
+			group.setServerUpdatedDate(groupObject.getInt("lastdt"));
+			
+			currentUser = new User();
+			currentUser.setEmail(profileObject.getString("email"));
+			currentUser.setNickname(profileObject.getString("nickname"));
+			currentUser.setAvatarPath(profileObject.getString("path"));
+			currentUser.setId(profileObject.getInt("id"));
+			currentUser.setIsActive(profileObject.getInt("active") == 0 ? true : false);
+			currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
+			currentUser.setGroupID(group.getId());
+			currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
+			currentUser.setServerUpdatedDate(Utils.getCurrentTime());
+			
 			JSONArray categoryArray = jObject.getJSONArray("categories");
 			categoryList = new ArrayList<Category>();
 			for (int i = 0; i < categoryArray.length(); i++)
@@ -42,6 +63,7 @@ public class CommonResponse extends BaseResponse
 				category.setLimit(Double.valueOf(object.getString("max_limit")));
 				category.setGroupID(Integer.valueOf(object.getString("gid")));
 				category.setParentID(Integer.valueOf(object.getString("pid")));
+				category.setLocalUpdatedDate(object.getInt("lastdt"));
 				category.setServerUpdatedDate(object.getInt("lastdt"));
 				category.setIsProveAhead(object.getString("prove_before").equals("1") ? true : false);
 				categoryList.add(category);
@@ -56,6 +78,7 @@ public class CommonResponse extends BaseResponse
 				tag.setId(Integer.valueOf(object.getString("id")));
 				tag.setName(object.getString("name"));
 				tag.setGroupID(Integer.valueOf(object.getString("gid")));
+				tag.setLocalUpdatedDate(object.getInt("lastdt"));
 				tag.setServerUpdatedDate(object.getInt("lastdt"));
 				tagList.add(tag);
 			}
@@ -70,26 +93,14 @@ public class CommonResponse extends BaseResponse
 				user.setEmail(object.getString("email"));
 				user.setPhone(object.getString("phone"));
 				user.setNickname(object.getString("nickname"));
+				user.setIsAdmin(object.getString("admin").equals("1") ? true : false);
+				user.setDefaultManagerID(object.getInt("manager_id"));
+				user.setGroupID(group.getId());
+				user.setAvatarPath(object.getString("avatar"));
+				user.setLocalUpdatedDate(Utils.getCurrentTime());
+				user.setServerUpdatedDate(Utils.getCurrentTime());
 				memberList.add(user);
-			}						
-			
-			JSONObject profileObject = jObject.getJSONObject("profile");
-			currentUser = new User();
-			currentUser.setEmail(profileObject.getString("email"));
-			currentUser.setPhone(profileObject.getString("phone"));
-			currentUser.setNickname(profileObject.getString("nickname"));
-			currentUser.setId(profileObject.getInt("id"));
-			currentUser.setGroupID(profileObject.getInt("groupid"));
-			currentUser.setIsActive(Boolean.valueOf(profileObject.getString("active")));
-			currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
-			//TODO set user's avatar
-			
-			JSONObject groupObject = jObject.getJSONObject("group");
-			group = new Group();
-			group.setId(groupObject.getInt("groupid"));
-			group.setName(groupObject.getString("group_name"));
-			group.setLocalUpdatedDate(groupObject.getInt("lastdt"));
-			group.setServerUpdatedDate(groupObject.getInt("lastdt"));
+			}
 		}
 		catch (JSONException e)
 		{

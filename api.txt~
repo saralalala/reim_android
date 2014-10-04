@@ -30,7 +30,11 @@ Common:
             "device_type": "0",
             "nickname": "",
             "id": "1",
-            "groupid": "1"
+	    "group": {
+                "group_name": "测试族群",
+                "groupid": "1",
+                "lastdt": "1412085905"
+            }
         },
         "tags": [
             {
@@ -396,7 +400,7 @@ Report - delete:
 	"id":1
 
 ***********************************************************
-此项未实现
+
 Report - get report of single subordinate:
 
 1.URL:
@@ -410,10 +414,24 @@ Report - get report of single subordinate:
 	GET
 
 4.Return value:
-	"id":1
+	"data": [
+            {
+                "id": "15",
+                "uid": "3",
+                "title": "报表9618",
+                "status": "0"
+            },
+            {
+                "id": "16",
+                "uid": "3",
+                "title": "报表1838",
+                "status": "0"
+            }
+        ],
+        "total": 2
 
 ***********************************************************
-此项未实现
+
 Report - get reports of all subordinates:
 
 1.URL:
@@ -426,7 +444,21 @@ Report - get reports of all subordinates:
 	GET
 
 4.Return value:
-	"id":1
+	"data": [
+            {
+                "id": "15",
+                "uid": "3",
+                "title": "报表9618",
+                "status": "0"
+            },
+            {
+                "id": "16",
+                "uid": "3",
+                "title": "报表1838",
+                "status": "0"
+            }
+        ],
+        "total": 2
 
 ***********************************************************
 
@@ -597,11 +629,21 @@ User - subordinates info:
 4.Return value:
 	"data": [
             {
-                "id": "2",
-                "email": "y@rushucloud.com"
+                "id": "3",
+                "email": "0",
+                "phone": "18610104680",
+                "wx_token": "",
+                "nickname": "xkxkxkxkxkxkxkxkxkxxkxk"
+            },
+            {
+                "id": "4",
+                "email": "",
+                "phone": "",
+                "wx_token": "xkxkxkxkxkxkxkxkxkxxkxk",
+                "nickname": "呜哈哈"
             }
         ],
-        "total": 1
+        "total": 2
 
 ***********************************************************
 

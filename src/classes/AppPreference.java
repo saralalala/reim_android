@@ -4,6 +4,7 @@ public class AppPreference
 {
 	private static AppPreference appPreference = null;
 	
+	private int currentUserID = -1;
 	private String username = "";
 	private String password = "";
 	private String deviceToken = "";
@@ -23,6 +24,16 @@ public class AppPreference
 		}
 		return appPreference;
 	}
+
+	public int getCurrentUserID()
+	{
+		return currentUserID;
+	}
+
+	public void setCurrentUserID(int currentUserID)
+	{
+		this.currentUserID = currentUserID;
+	}	
 	
 	public String getUsername()
 	{
@@ -72,5 +83,5 @@ public class AppPreference
 	public void setCacheDirectory(String cacheDirectory)
 	{
 		this.cacheDirectory = cacheDirectory;
-	}	
+	}
 }

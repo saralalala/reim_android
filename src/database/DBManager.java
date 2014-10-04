@@ -13,6 +13,7 @@ import classes.Group;
 import classes.Item;
 import classes.Report;
 import classes.Tag;
+import classes.User;
 
 public class DBManager extends SQLiteOpenHelper
 {
@@ -52,7 +53,7 @@ public class DBManager extends SQLiteOpenHelper
 
 	public void tempCommand()
 	{
-//		String sqlString = "UPDATE tbl_tag SET group_id=2";
+//		String sqlString = "DROP TABLE IF EXISTS tbl_user";
 //		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_image";
 //		database.execSQL(sqlString);
@@ -152,7 +153,8 @@ public class DBManager extends SQLiteOpenHelper
 									+ "nickname TEXT DEFAULT(''),"
 									+ "privilege INT DEFAULT(0),"
 									+ "manager_id INT DEFAULT(0),"
-									+ "group_id INT DEFAULT(0),"							
+									+ "group_id INT DEFAULT(0),"
+									+ "admin INT DEFAULT(0),"
 									+ "server_updatedt INT DEFAULT(0),"
 									+ "local_updatedt INT DEFAULT(0),"
 									+ "backup1 INT DEFAULT(0),"
@@ -174,21 +176,7 @@ public class DBManager extends SQLiteOpenHelper
 									+ "backup3 TEXT DEFAULT('')"
 									+ ")";
 		database.execSQL(createGroupTable);
-
-		String createUserGroupTable="CREATE TABLE IF NOT EXISTS tbl_user_group ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "server_id INT DEFAULT(0),"
-										+ "group_id INT DEFAULT(0),"
-										+ "user_id INT DEFAULT(0),"
-										+ "admin INT DEFAULT(0),"
-										+ "server_updatedt INT DEFAULT(0),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-		database.execSQL(createUserGroupTable);
-
+		
 		String createReportTable="CREATE TABLE IF NOT EXISTS tbl_report ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
@@ -259,6 +247,167 @@ public class DBManager extends SQLiteOpenHelper
 		database.execSQL(createCategoryTable);
 		
 		return true;
+	}
+	
+	// User
+	public Boolean insertUser(User user)
+	{
+		try
+		{
+			int isAdmin = user.isAdmin() ? 1 : 0;
+			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, privilege, manager_id, " +
+								"group_id, admin, local_updatedt, server_updatedt) VALUES (" +
+								"'" + user.getId() + "'," +
+								"'" + user.getEmail() + "'," +
+								"'" + user.getPhone() + "'," +
+								"'" + user.getNickname() + "'," +
+								"'" + user.getPrivilege() + "'," +
+								"'" + user.getDefaultManagerID() + "'," +
+								"'" + user.getGroupID() + "'," +
+								"'" + isAdmin + "'," +
+								"'" + user.getLocalUpdatedDate() + "'," +
+								"'" + user.getServerUpdatedDate() + "')";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+			return false;
+		}
+	}
+
+	public Boolean updateUser(User user)
+	{
+		try
+		{
+			int isAdmin = user.isAdmin() ? 1 : 0;
+			String sqlString = "UPDATE tbl_user SET " +
+								"server_id = '" + user.getId() + "'," +
+								"email = '" + user.getEmail() + "'," +
+								"phone = '" + user.getPhone() + "'," +
+								"nickname = '" + user.getNickname() + "'," +
+								"manager_id = '" + user.getDefaultManagerID() + "'," +
+								"group_id = '" + user.getGroupID() + "'," +
+								"admin = '" + isAdmin + "'," +
+								"local_updatedt = '" + user.getLocalUpdatedDate() + "'," +
+								"server_updatedt = '" + user.getServerUpdatedDate() + "' " +
+								"WHERE server_id = '" + user.getId() + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public Boolean deleteUser(int userID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_user WHERE server_id = '" + userID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public Boolean syncUser(User user)
+	{
+		try
+		{
+			User localUser = dbManager.getUser(user.getId());
+			if (localUser == null)
+			{
+				return dbManager.insertUser(user);
+			}
+			else if (user.getServerUpdatedDate() > localUser.getLocalUpdatedDate())
+			{
+				return dbManager.updateUser(user);
+			}
+			else
+			{
+				return true;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public User getUser(int userID)
+	{
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, privilege, manager_id, " +
+											  "group_id, admin, local_updatedt, server_updatedt " +
+					                          "FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userID)});
+			if (cursor.moveToNext())
+			{
+				User user = new User();
+				user.setId(getIntFromCursor(cursor, "server_id"));
+				user.setEmail(getStringFromCursor(cursor, "email"));
+				user.setPhone(getStringFromCursor(cursor, "phone"));
+				user.setNickname(getStringFromCursor(cursor, "nickname"));
+				user.setPrivilege(getIntFromCursor(cursor, "privilege"));
+				user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
+				user.setGroupID(getIntFromCursor(cursor, "group_id"));
+				user.setIsAdmin(getBooleanFromCursor(cursor, "admin"));
+				user.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				user.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				return user;
+			}
+			else
+			{
+				return null;				
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());;
+			return null;
+		}
+	}
+	
+	public List<User> getGroupUsers(int groupID)
+	{
+		List<User> userList = new ArrayList<User>();
+		try
+		{
+
+			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, privilege, manager_id, " +
+											  "group_id, admin, local_updatedt, server_updatedt " +
+					                          "FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupID)});
+			while (cursor.moveToNext())
+			{
+				User user = new User();
+				user.setId(getIntFromCursor(cursor, "server_id"));
+				user.setEmail(getStringFromCursor(cursor, "email"));
+				user.setPhone(getStringFromCursor(cursor, "phone"));
+				user.setNickname(getStringFromCursor(cursor, "nickname"));
+				user.setPrivilege(getIntFromCursor(cursor, "privilege"));
+				user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
+				user.setGroupID(getIntFromCursor(cursor, "group_id"));
+				user.setIsAdmin(getBooleanFromCursor(cursor, "admin"));
+				user.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				user.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				userList.add(user);
+			}
+			return userList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return userList;
+		}
 	}
 	
 	// Item
@@ -412,6 +561,31 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
+	public Boolean syncCategory(Category category)
+	{
+		try
+		{
+			Category localCategory = dbManager.getCategory(category.getId());
+			if (localCategory == null)
+			{
+				return dbManager.insertCategory(category);
+			}
+			else if (category.getServerUpdatedDate() > localCategory.getLocalUpdatedDate())
+			{
+				return dbManager.updateCategory(category);
+			}
+			else
+			{
+				return true;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public Category getCategory(int categoryID)
 	{
 		try
@@ -473,7 +647,7 @@ public class DBManager extends SQLiteOpenHelper
 			return categoryList;
 		}
 	}	
-
+	
 	// Tag
 	public Boolean insertTag(Tag tag)
 	{
@@ -522,6 +696,31 @@ public class DBManager extends SQLiteOpenHelper
 			String sqlString = "DELETE FROM tbl_tag WHERE server_id = '" + tagID + "'";			
 			database.execSQL(sqlString);
 			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean syncTag(Tag tag)
+	{
+		try
+		{
+			Tag localTag = dbManager.getTag(tag.getId());
+			if (localTag == null)
+			{
+				return dbManager.insertTag(tag);
+			}
+			else if (tag.getServerUpdatedDate() > localTag.getLocalUpdatedDate())
+			{
+				return dbManager.updateTag(tag);
+			}
+			else
+			{
+				return true;
+			}
 		}
 		catch (Exception e)
 		{
@@ -640,6 +839,31 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
+	public Boolean syncGroup(Group group)
+	{
+		try
+		{
+			Group localGroup = dbManager.getGroup(group.getId());
+			if (localGroup == null)
+			{
+				return dbManager.insertGroup(group);
+			}
+			else if (group.getServerUpdatedDate() > localGroup.getLocalUpdatedDate())
+			{
+				return dbManager.updateGroup(group);
+			}
+			else
+			{
+				return true;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public Group getGroup(int groupID)
 	{
 		try
@@ -667,7 +891,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	// Others	
+	// Auxiliaries	
 	private double getDoubleFromCursor(Cursor cursor, String columnName)
 	{
 		return cursor.getDouble(cursor.getColumnIndex(columnName));

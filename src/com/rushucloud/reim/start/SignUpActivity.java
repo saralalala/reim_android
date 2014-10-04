@@ -56,8 +56,10 @@ public class SignUpActivity extends Activity
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
-    	baseLayout.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
+    	baseLayout.setOnClickListener(new View.OnClickListener()
+    	{
+			public void onClick(View v)
+			{
 				hideSoftKeyboard();
 			}
 		});    
@@ -196,6 +198,7 @@ public class SignUpActivity extends Activity
 					}
 					appPreference.setPassword(user.getPassword());
 					appPreference.setServerToken(response.getServerToken());
+					appPreference.setCurrentUserID(response.getUserID());
 					ReimApplication application = (ReimApplication)getApplication();
 					application.saveAppPreference();
 					

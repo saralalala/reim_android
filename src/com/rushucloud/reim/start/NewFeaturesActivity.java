@@ -1,13 +1,15 @@
 package com.rushucloud.reim.start;
 
+import com.rushucloud.reim.R;
+
 import android.app.Activity;
+import android.os.Bundle;
 
 public class NewFeaturesActivity extends Activity
 {
-
-	public NewFeaturesActivity()
+	protected void onCreate(Bundle savedInstanceState)
 	{
-		// TODO Auto-generated constructor stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.start_new_features);
 	}
-
 }
