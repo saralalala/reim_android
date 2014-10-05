@@ -30,7 +30,7 @@ public abstract class BaseResponse
 			if (status)
 			{
 				dataObject = object.getJSONObject("data");
-				constructData();
+				//this.constructData();
 			}
 			else 
 			{
@@ -45,6 +45,12 @@ public abstract class BaseResponse
 	}
 
 	protected abstract void constructData();
+	
+	public void forceConstructData(){
+		if(!this.getStatus()) return ;
+		this.constructData();
+		//return true;
+	}
 	
 	public Boolean getStatus()
 	{

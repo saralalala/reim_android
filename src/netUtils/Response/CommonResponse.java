@@ -20,13 +20,15 @@ public class CommonResponse extends BaseResponse
 	private List<User> memberList = null;
 	private User currentUser = null;
 	private Group group = null;
-	
 	public CommonResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		System.out.println("--------------  Call Init  -------------------");
+		this.constructData();
 	}
 
-	protected void constructData()
+	@Override
+	protected  void constructData()
 	{
 		try
 		{
@@ -41,16 +43,16 @@ public class CommonResponse extends BaseResponse
 			group.setLocalUpdatedDate(groupObject.getInt("lastdt"));
 			group.setServerUpdatedDate(groupObject.getInt("lastdt"));
 			
-			currentUser = new User();
-			currentUser.setEmail(profileObject.getString("email"));
-			currentUser.setNickname(profileObject.getString("nickname"));
-			currentUser.setAvatarPath(profileObject.getString("path"));
-			currentUser.setId(profileObject.getInt("id"));
-			currentUser.setIsActive(profileObject.getInt("active") == 0 ? true : false);
-			currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
-			currentUser.setGroupID(group.getId());
-			currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
-			currentUser.setServerUpdatedDate(Utils.getCurrentTime());
+			this.currentUser = new User();
+			this.currentUser.setEmail(profileObject.getString("email"));
+			this.currentUser.setNickname(profileObject.getString("nickname"));
+			this.currentUser.setAvatarPath(profileObject.getString("path"));
+			this.currentUser.setId(profileObject.getInt("id"));
+			this.currentUser.setIsActive(profileObject.getInt("active") == 0 ? true : false);
+			this.currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
+			this.currentUser.setGroupID(group.getId());
+			this.currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
+			this.currentUser.setServerUpdatedDate(Utils.getCurrentTime());
 			
 			JSONArray categoryArray = jObject.getJSONArray("categories");
 			categoryList = new ArrayList<Category>();
@@ -101,6 +103,7 @@ public class CommonResponse extends BaseResponse
 				user.setServerUpdatedDate(Utils.getCurrentTime());
 				memberList.add(user);
 			}
+			
 		}
 		catch (JSONException e)
 		{
@@ -125,7 +128,7 @@ public class CommonResponse extends BaseResponse
 
 	public User getCurrentUser()
 	{
-		return currentUser;
+		return this.currentUser;
 	}
 
 	public Group getGroup()

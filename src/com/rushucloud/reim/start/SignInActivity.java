@@ -1,8 +1,10 @@
 package com.rushucloud.reim.start;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import netUtils.BuildResponse;
 import netUtils.HttpConstant;
 import netUtils.Request.CommonRequest;
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
@@ -182,7 +184,23 @@ public class SignInActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				final CommonResponse response = new CommonResponse(httpResponse);
+				CommonResponse response = null;
+				try {
+					response = (CommonResponse) BuildResponse.get_repsonse(httpResponse, CommonResponse.class);
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				if (response.getStatus())
 				{
 					// save server token
@@ -250,7 +268,7 @@ public class SignInActivity extends Activity
 						{
 							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
 														.setTitle("错误")
-														.setMessage("登录失败！"+response.getErrorMessage())
+														.setMessage("登录失败！")
 														.setPositiveButton("确定", null)
 														.create();
 							alertDialog.show();	
