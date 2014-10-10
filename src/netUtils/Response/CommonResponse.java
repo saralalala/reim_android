@@ -1,3 +1,4 @@
+
 package netUtils.Response;
 
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ public class CommonResponse extends BaseResponse
 	private List<User> memberList = null;
 	private User currentUser = null;
 	private Group group = null;
-	
 	public CommonResponse(Object httpResponse)
 	{
 		super(httpResponse);
@@ -30,7 +30,8 @@ public class CommonResponse extends BaseResponse
 		}
 	}
 
-	protected void constructData()
+	@Override
+	protected  void constructData()
 	{
 		try
 		{
@@ -44,7 +45,7 @@ public class CommonResponse extends BaseResponse
 			group.setName(groupObject.getString("group_name"));
 			group.setLocalUpdatedDate(groupObject.getInt("lastdt"));
 			group.setServerUpdatedDate(groupObject.getInt("lastdt"));
-			
+
 			currentUser = new User();
 			currentUser.setEmail(profileObject.getString("email"));
 			currentUser.setNickname(profileObject.getString("nickname"));
@@ -105,6 +106,7 @@ public class CommonResponse extends BaseResponse
 				user.setServerUpdatedDate(Utils.getCurrentTime());
 				memberList.add(user);
 			}
+			
 		}
 		catch (JSONException e)
 		{
@@ -129,7 +131,7 @@ public class CommonResponse extends BaseResponse
 
 	public User getCurrentUser()
 	{
-		return currentUser;
+		return this.currentUser;
 	}
 
 	public Group getGroup()
