@@ -24,6 +24,10 @@ public class CommonResponse extends BaseResponse
 	public CommonResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()
@@ -44,9 +48,9 @@ public class CommonResponse extends BaseResponse
 			currentUser = new User();
 			currentUser.setEmail(profileObject.getString("email"));
 			currentUser.setNickname(profileObject.getString("nickname"));
-			currentUser.setAvatarPath(profileObject.getString("path"));
+			currentUser.setAvatarPath(profileObject.getString("avatar"));
 			currentUser.setId(profileObject.getInt("id"));
-			currentUser.setIsActive(profileObject.getInt("active") == 0 ? true : false);
+			currentUser.setIsActive(Utils.intToBoolean(profileObject.getInt("active")));
 			currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
 			currentUser.setGroupID(group.getId());
 			currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
@@ -65,7 +69,7 @@ public class CommonResponse extends BaseResponse
 				category.setParentID(Integer.valueOf(object.getString("pid")));
 				category.setLocalUpdatedDate(object.getInt("lastdt"));
 				category.setServerUpdatedDate(object.getInt("lastdt"));
-				category.setIsProveAhead(object.getString("prove_before").equals("1") ? true : false);
+				category.setIsProveAhead(Utils.intToBoolean(object.getInt("prove_before")));
 				categoryList.add(category);
 			}
 			

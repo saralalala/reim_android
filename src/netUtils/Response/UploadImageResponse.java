@@ -11,6 +11,10 @@ public class UploadImageResponse extends BaseResponse
 	public UploadImageResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/phoneBaseLayout" >
+
+    <EditText
+        android:id="@+id/phoneEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="21dp"
+        android:ems="10"
+        android:hint="@string/inputPhone"
+        android:inputType="text|phone" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/codeEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/phoneEditText"
+        android:layout_below="@+id/phoneEditText"
+        android:layout_marginTop="35dp"
+        android:ems="10"
+        android:hint="@string/inputCode"
+        android:inputType="textEmailAddress" />
+
+    <Button
+        android:id="@+id/acquireCodeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/phoneEditText"
+        android:layout_alignBottom="@+id/phoneEditText"
+        android:layout_toRightOf="@+id/phoneEditText"
+        android:text="@string/acquireCode" />
+
+    <Button
+        android:id="@+id/phoneConfirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/codeEditText"
+        android:layout_below="@+id/codeEditText"
+        android:layout_marginTop="38dp"
+        android:text="@string/confirm" />
+
+    <Button
+        android:id="@+id/phoneCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/phoneConfirmButton"
+        android:layout_alignBottom="@+id/phoneConfirmButton"
+        android:layout_toLeftOf="@+id/acquireCodeButton"
+        android:text="@string/cancel" />
+
+</RelativeLayout>

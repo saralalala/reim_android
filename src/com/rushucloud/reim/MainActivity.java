@@ -19,7 +19,7 @@ public class MainActivity extends ActionBarActivity {
 	private long exitTime;
 	
 	private FragmentTabHost tabHost;
-	private int tabIndex;
+	private int tabIndex = 0;
 	
 	private Class<?> fragmentList[] = {ReimFragment.class, ReportFragment.class, StatisticsFragment.class, MeFragment.class};
 	private int imageViewList[] = {R.drawable.tab_item_reim,R.drawable.tab_item_report,R.drawable.tab_item_statistics, R.drawable.tab_item_me};
@@ -29,6 +29,7 @@ public class MainActivity extends ActionBarActivity {
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		dataInitialise();
 		tabHostInitialse();
 	}
 
@@ -68,6 +69,15 @@ public class MainActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	private void dataInitialise()
+	{
+		Bundle bundle = this.getIntent().getExtras();
+		if (bundle != null)
+		{
+			tabIndex = bundle.getInt("tabIndex");			
+		}
+	}
 
 	private void tabHostInitialse()
     {		
@@ -92,7 +102,6 @@ public class MainActivity extends ActionBarActivity {
 			tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.selector_tab_background);
 		}
 
-		tabIndex=0;
 	    tabHost.setCurrentTab(tabIndex);		
     }
 }

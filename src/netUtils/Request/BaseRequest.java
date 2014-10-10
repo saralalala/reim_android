@@ -1,9 +1,6 @@
 package netUtils.Request;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -38,11 +35,6 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
 
 import classes.AppPreference;
 
@@ -91,26 +83,8 @@ public abstract class BaseRequest
 			{
 				MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 				builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-
-				AppPreference appPreference = AppPreference.getAppPreference();
-
-				Matrix matrix = new Matrix();
-				matrix.postScale((float)0.5, (float)0.5);
 				
-				Bitmap bitmap = BitmapFactory.decodeFile(params.get(1).getValue());
-				bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-				
-				File compressedBitmapFile = new File(appPreference.getCacheDirectory(), "compressedBitmapFile");
-				compressedBitmapFile.createNewFile();
-				
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-				bitmap.compress(CompressFormat.JPEG, 90, outputStream);
-				byte[] bitmapData = outputStream.toByteArray();
-				
-				FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
-				fileOutputStream.write(bitmapData);
-				fileOutputStream.flush();
-				fileOutputStream.close();
+				File compressedBitmapFile = new File(params.get(1).getValue());
 				
 				builder.addBinaryBody(params.get(1).getName(), compressedBitmapFile);
 				builder.addTextBody(params.get(0).getName(), params.get(0).getValue());	
@@ -125,16 +99,6 @@ public abstract class BaseRequest
 			doRequest(request, callback);
 		}
 		catch (UnsupportedEncodingException e)
-		{
-			e.printStackTrace();
-			return;
-		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-			return;
-		}
-		catch (IOException e)
 		{
 			e.printStackTrace();
 			return;

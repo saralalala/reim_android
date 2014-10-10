@@ -12,6 +12,10 @@ public class ModifyItemResponse extends BaseResponse
 	public ModifyItemResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

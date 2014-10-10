@@ -1,5 +1,6 @@
 package classes;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,10 +32,50 @@ public class Utils
 		return (int)result;
 	}
 	
-	public static String secondToString(int second)
+	public static String secondToStringUpToMinute(int second)
 	{
-		Date date = new Date((long)second * 1000);
-		return date.toString();
+		if (second == -1)
+		{
+			return "";
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis((long)second * 1000);
+		String result = "";
+		result += calendar.get(Calendar.YEAR) + "年";
+		result += calendar.get(Calendar.MONTH) + "月";
+		result += calendar.get(Calendar.DAY_OF_MONTH) + "日 ";
+		
+		if (calendar.get(Calendar.HOUR_OF_DAY) < 10)
+		{
+			result += "0";			
+		}
+		result += calendar.get(Calendar.HOUR_OF_DAY) + ":";
+		
+		if (calendar.get(Calendar.MINUTE) < 10)
+		{
+			result += "0";			
+		}
+		result += calendar.get(Calendar.MINUTE);
+		
+		return result;
+	}
+	
+	public static String secondToStringUpToDay(int second)
+	{
+		if (second == -1)
+		{
+			return "";
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis((long)second * 1000);
+		String result = "";
+		result += calendar.get(Calendar.YEAR) + "年";
+		result += calendar.get(Calendar.MONTH) + "月";
+		result += calendar.get(Calendar.DAY_OF_MONTH) + "日";
+		
+		return result;
 	}
 	
 	public static Boolean isEmailOrPhone(String source)
@@ -75,5 +116,15 @@ public class Utils
 		{
 			return false;
 		}
+	}
+
+	public static int booleanToInt(boolean b)
+	{
+		return b? 1 : 0;
+	}
+
+	public static Boolean intToBoolean(int i)
+	{
+		return i > 0? true : false;
 	}
 }

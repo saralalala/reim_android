@@ -12,6 +12,10 @@ public class ModifyCategoryResponse extends BaseResponse
 	public ModifyCategoryResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

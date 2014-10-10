@@ -1,17 +1,11 @@
 package com.rushucloud.reim.start;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import netUtils.HttpConstant;
 import netUtils.Request.CommonRequest;
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
 import netUtils.Response.CommonResponse;
 import classes.AppPreference;
-import classes.Category;
 import classes.ReimApplication;
-import classes.Tag;
-import classes.User;
 import classes.Utils;
 
 import com.rushucloud.reim.MainActivity;
@@ -62,7 +56,6 @@ public class SignInActivity extends Activity
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
 		
-		
 		usernameEditText.setText(HttpConstant.DEBUG_EMAIL);
 		passwordEditText.setText(HttpConstant.DEBUG_PASSWORD);
 		
@@ -112,7 +105,6 @@ public class SignInActivity extends Activity
 												})
 												.create();
 					alertDialog.show();
-					
 				}
 				else if (password.equals(""))
 				{
@@ -130,8 +122,7 @@ public class SignInActivity extends Activity
 													}
 												})
 												.create();
-					alertDialog.show();
-					
+					alertDialog.show();					
 				}
 				else if (!Utils.isEmailOrPhone(username))
 				{
@@ -159,6 +150,7 @@ public class SignInActivity extends Activity
 					ReimApplication reimApplication = (ReimApplication)getApplication();
 					reimApplication.saveAppPreference();
 					
+					hideSoftKeyboard();
 					signIn();
 				}
 			}
@@ -185,37 +177,27 @@ public class SignInActivity extends Activity
 				final CommonResponse response = new CommonResponse(httpResponse);
 				if (response.getStatus())
 				{
-					// save server token
+					int currentUserID = response.getCurrentUser().getId();
+					int currentGroupID = response.getGroup().getId();
+					
+					// update AppPreference
 					AppPreference appPreference = AppPreference.getAppPreference();
 					appPreference.setServerToken(response.getServerToken());
-					User currentUser = response.getCurrentUser();
-					appPreference.setCurrentUserID(currentUser.getId());
-//					appPreference.setCurrentUserID(response.getCurrentUser().getId());
+					appPreference.setCurrentUserID(currentUserID);
+					appPreference.setCurrentGroupID(currentGroupID);
 					ReimApplication application = (ReimApplication)getApplication();
 					application.saveAppPreference();
 
 					DBManager dbManager = DBManager.getDataBaseManager(getApplicationContext());
 					
 					// update members
-					List<User> userList = new ArrayList<User>(response.getMemberList());
-					for (int i = 0; i < userList.size(); i++)
-					{
-						dbManager.syncUser(userList.get(i));
-					}
+					dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
 					
-					// update category
-					List<Category> categoryList = new ArrayList<Category>(response.getCategoryList());
-					for (int i = 0; i < categoryList.size(); i++)
-					{
-						dbManager.syncCategory(categoryList.get(i));
-					}
+					// update categories
+					dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 					
-					// update tag
-					List<Tag> tagList = new ArrayList<Tag>(response.getTagList());
-					for (int i = 0; i < tagList.size(); i++)
-					{
-						dbManager.syncTag(tagList.get(i));
-					}
+					// update tags
+					dbManager.updateGroupTags(response.getTagList(), currentGroupID);
 					
 					// update group info
 					dbManager.syncGroup(response.getGroup());
@@ -233,7 +215,11 @@ public class SignInActivity extends Activity
 														public void onClick(DialogInterface dialog, int which)
 														{
 															dialog.dismiss();
-															startActivity(new Intent(SignInActivity.this, MainActivity.class));
+															Bundle bundle = new Bundle();
+															bundle.putInt("tabIndex", 0);
+															Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+															intent.putExtras(bundle);
+															startActivity(intent);
 															finish();
 														}
 													})

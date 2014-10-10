@@ -12,6 +12,10 @@ public class CreateTagResponse extends BaseResponse
 	public CreateTagResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

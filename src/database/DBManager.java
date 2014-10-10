@@ -7,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import classes.Category;
 import classes.Group;
@@ -14,6 +15,7 @@ import classes.Item;
 import classes.Report;
 import classes.Tag;
 import classes.User;
+import classes.Utils;
 
 public class DBManager extends SQLiteOpenHelper
 {
@@ -48,205 +50,198 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			dbManager = new DBManager(context);
 		}
+		dbManager.openDatabase();
 		return dbManager;
 	}
 
 	public void tempCommand()
 	{
-//		String sqlString = "DROP TABLE IF EXISTS tbl_user";
+//		String sqlString = "DROP TABLE IF EXISTS tbl_group";
 //		database.execSQL(sqlString);
-//		sqlString = "DROP TABLE IF EXISTS tbl_image";
+//		sqlString = "DROP TABLE IF EXISTS tbl_tag";
 //		database.execSQL(sqlString);
+//		sqlString = "DROP TABLE IF EXISTS tbl_item_user";
+//		database.execSQL(sqlString);		
 	}
 	
 	public Boolean openDatabase()
 	{
 		try
 		{
-			database = dbManager.getWritableDatabase();
+			if (database == null)
+			{
+				database = getWritableDatabase();				
+			}
 			tempCommand();
 			createTables();
+			return true;
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			return false;
 		}
-		return true;
 	}
 
 	public Boolean closeDatabase()
 	{
 		try
 		{
-			dbManager.close();
+			close();
+			return true;
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			return false;
 		}
-		return true;
 	}
 	
 	private Boolean createTables()
 	{
-		String createItemTable="CREATE TABLE IF NOT EXISTS tbl_item ("
-								+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-								+ "server_id INT DEFAULT(0),"
-								+ "amount FLOAT DEFAULT(0),"
-								+ "merchants TEXT DEFAULT(''),"
-								+ "category_id INT DEFAULT(0),"
-								+ "image_id INT DEFAULT(0),"
-								+ "user_id INT DEFAULT(0),"
-								+ "billable INT DEFAULT(0),"
-								+ "group_id INT DEFAULT(0),"
-								+ "date INT DEFAULT(0),"
-								+ "note TEXT DEFAULT(''),"
-								+ "server_updatedt INT DEFAULT(0),"
-								+ "local_updatedt INT DEFAULT(0),"
-								+ "backup1 INT DEFAULT(0),"
-								+ "backup2 TEXT DEFAULT(''),"
-								+ "backup3 TEXT DEFAULT('')"
-								+ ")";
-		database.execSQL(createItemTable);
-
-		String createItemUserTable="CREATE TABLE IF NOT EXISTS tbl_item_user ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "item_id INT DEFAULT(0),"
-										+ "user_id INT DEFAULT(0),"
-										+ "group_id INT DEFAULT(0),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-		database.execSQL(createItemUserTable);
-
-		String createItemTagTable="CREATE TABLE IF NOT EXISTS tbl_item_tag ("
-									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-									+ "item_id INT DEFAULT(0),"
-									+ "tag_id INT DEFAULT(0),"
-									+ "local_updatedt INT DEFAULT(0),"
-									+ "backup1 INT DEFAULT(0),"
-									+ "backup2 TEXT DEFAULT(''),"
-									+ "backup3 TEXT DEFAULT('')"
-									+ ")";
-		database.execSQL(createItemTagTable);
-
-		String createImageTable="CREATE TABLE IF NOT EXISTS tbl_image ("
-								+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-								+ "server_id INT DEFAULT(0),"
-								+ "user_id INT DEFAULT(0),"
-								+ "path TEXT DEFAULT(''),"
-								+ "backup1 INT DEFAULT(0),"
-								+ "backup2 TEXT DEFAULT(''),"
-								+ "backup3 TEXT DEFAULT('')"
-								+ ")";
-		database.execSQL(createImageTable);
-
-		String createUserTable="CREATE TABLE IF NOT EXISTS tbl_user ("
+		try
+		{
+			String createItemTable="CREATE TABLE IF NOT EXISTS tbl_item ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
-									+ "email TEXT DEFAULT(''),"
-									+ "phone TEXT DEFAULT(''),"
-									+ "nickname TEXT DEFAULT(''),"
-									+ "privilege INT DEFAULT(0),"
-									+ "manager_id INT DEFAULT(0),"
-									+ "group_id INT DEFAULT(0),"
-									+ "admin INT DEFAULT(0),"
-									+ "server_updatedt INT DEFAULT(0),"
-									+ "local_updatedt INT DEFAULT(0),"
-									+ "backup1 INT DEFAULT(0),"
-									+ "backup2 TEXT DEFAULT(''),"
-									+ "backup3 TEXT DEFAULT('')"
-									+ ")";
-		database.execSQL(createUserTable);
-
-		String createGroupTable="CREATE TABLE IF NOT EXISTS tbl_group ("
-									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-									+ "server_id INT DEFAULT(0),"
-									+ "group_name TEXT DEFAULT(''),"
-									+ "group_domain TEXT DEFAULT(''),"
-									+ "creator_id INT DEFAULT(0),"
-									+ "server_updatedt INT DEFAULT(0),"
-									+ "local_updatedt INT DEFAULT(0),"
-									+ "backup1 INT DEFAULT(0),"
-									+ "backup2 TEXT DEFAULT(''),"
-									+ "backup3 TEXT DEFAULT('')"
-									+ ")";
-		database.execSQL(createGroupTable);
-		
-		String createReportTable="CREATE TABLE IF NOT EXISTS tbl_report ("
-									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-									+ "server_id INT DEFAULT(0),"
-									+ "title TEXT DEFAULT(''),"
+									+ "image_id INT DEFAULT(0),"
+									+ "invoice_path TEXT DEFAULT(''),"
+									+ "merchant TEXT DEFAULT(''),"
+									+ "report_id INT DEFAULT(0),"
+									+ "category_id INT DEFAULT(0),"
+									+ "amount FLOAT DEFAULT(0),"
 									+ "user_id INT DEFAULT(0),"
-									+ "manager_id INT DEFAULT(0),"
-									+ "status INT DEFAULT(0),"
+									+ "consumed_date INT DEFAULT(0),"
+									+ "note TEXT DEFAULT(''),"
 									+ "server_updatedt INT DEFAULT(0),"
 									+ "local_updatedt INT DEFAULT(0),"
+									+ "prove_ahead INT DEFAULT(0),"
+									+ "need_reimbursed INT DEFAULT(0),"
 									+ "backup1 INT DEFAULT(0),"
 									+ "backup2 TEXT DEFAULT(''),"
 									+ "backup3 TEXT DEFAULT('')"
 									+ ")";
-		database.execSQL(createReportTable);
+			database.execSQL(createItemTable);
 
-		String createReportCommentTable="CREATE TABLE IF NOT EXISTS tbl_report_comment ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "server_id INT DEFAULT(0),"
-										+ "report_id INT DEFAULT(0),"
-										+ "user_id INT DEFAULT(0),"
-										+ "comment TEXT DEFAULT(''),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-		database.execSQL(createReportCommentTable);
+			String createItemUserTable="CREATE TABLE IF NOT EXISTS tbl_item_user ("
+											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+											+ "item_id INT DEFAULT(0),"
+											+ "user_id INT DEFAULT(0),"
+											+ "local_updatedt INT DEFAULT(0),"
+											+ "backup1 INT DEFAULT(0),"
+											+ "backup2 TEXT DEFAULT(''),"
+											+ "backup3 TEXT DEFAULT('')"
+											+ ")";
+			database.execSQL(createItemUserTable);
 
-		String createReportItemTable="CREATE TABLE IF NOT EXISTS tbl_report_item ("
+			String createItemTagTable="CREATE TABLE IF NOT EXISTS tbl_item_tag ("
 										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "server_id INT DEFAULT(0),"
-										+ "report_id INT DEFAULT(0),"
 										+ "item_id INT DEFAULT(0),"
+										+ "tag_id INT DEFAULT(0),"
 										+ "local_updatedt INT DEFAULT(0),"
 										+ "backup1 INT DEFAULT(0),"
 										+ "backup2 TEXT DEFAULT(''),"
 										+ "backup3 TEXT DEFAULT('')"
 										+ ")";
-		database.execSQL(createReportItemTable);
+			database.execSQL(createItemTagTable);
 
-		String createTagTable="CREATE TABLE IF NOT EXISTS tbl_tag ("
-								+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-								+ "server_id INT DEFAULT(0),"
-								+ "tag_name TEXT DEFAULT(''),"
-								+ "group_id INT DEFAULT(0),"
-								+ "server_updatedt INT DEFAULT(0),"
-								+ "local_updatedt INT DEFAULT(0),"
-								+ "backup1 INT DEFAULT(0),"
-								+ "backup2 TEXT DEFAULT(''),"
-								+ "backup3 TEXT DEFAULT('')"
-								+ ")";
-		database.execSQL(createTagTable);
+			String createUserTable="CREATE TABLE IF NOT EXISTS tbl_user ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "email TEXT DEFAULT(''),"
+										+ "phone TEXT DEFAULT(''),"
+										+ "nickname TEXT DEFAULT(''),"
+										+ "avatar_path TEXT DEFAULT(''),"
+										+ "privilege INT DEFAULT(0),"
+										+ "manager_id INT DEFAULT(0),"
+										+ "group_id INT DEFAULT(0),"
+										+ "admin INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			database.execSQL(createUserTable);
 
-		String createCategoryTable="CREATE TABLE IF NOT EXISTS tbl_category ("
+			String createGroupTable="CREATE TABLE IF NOT EXISTS tbl_group ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "group_name TEXT DEFAULT(''),"
+										+ "group_domain TEXT DEFAULT(''),"
+										+ "creator_id INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			database.execSQL(createGroupTable);
+			
+			String createReportTable="CREATE TABLE IF NOT EXISTS tbl_report ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "title TEXT DEFAULT(''),"
+										+ "user_id INT DEFAULT(0),"
+										+ "manager_id INT DEFAULT(0),"
+										+ "status INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			database.execSQL(createReportTable);
+
+			String createReportCommentTable="CREATE TABLE IF NOT EXISTS tbl_report_comment ("
+											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+											+ "server_id INT DEFAULT(0),"
+											+ "report_id INT DEFAULT(0),"
+											+ "user_id INT DEFAULT(0),"
+											+ "comment TEXT DEFAULT(''),"
+											+ "local_updatedt INT DEFAULT(0),"
+											+ "backup1 INT DEFAULT(0),"
+											+ "backup2 TEXT DEFAULT(''),"
+											+ "backup3 TEXT DEFAULT('')"
+											+ ")";
+			database.execSQL(createReportCommentTable);
+
+			String createTagTable="CREATE TABLE IF NOT EXISTS tbl_tag ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
-									+ "category_name TEXT DEFAULT(''),"
-									+ "max_limit INT DEFAULT(0),"
+									+ "tag_name TEXT DEFAULT(''),"
 									+ "group_id INT DEFAULT(0),"
-									+ "parent_id INT DEFAULT(0),"
-									+ "prove_ahead INT DEFAULT(0),"
 									+ "server_updatedt INT DEFAULT(0),"
 									+ "local_updatedt INT DEFAULT(0),"
 									+ "backup1 INT DEFAULT(0),"
 									+ "backup2 TEXT DEFAULT(''),"
 									+ "backup3 TEXT DEFAULT('')"
 									+ ")";
-		database.execSQL(createCategoryTable);
-		
-		return true;
+			database.execSQL(createTagTable);
+
+			String createCategoryTable="CREATE TABLE IF NOT EXISTS tbl_category ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "category_name TEXT DEFAULT(''),"
+										+ "max_limit INT DEFAULT(0),"
+										+ "group_id INT DEFAULT(0),"
+										+ "parent_id INT DEFAULT(0),"
+										+ "prove_ahead INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			database.execSQL(createCategoryTable);
+			
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	// User
@@ -254,7 +249,6 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			int isAdmin = user.isAdmin() ? 1 : 0;
 			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, privilege, manager_id, " +
 								"group_id, admin, local_updatedt, server_updatedt) VALUES (" +
 								"'" + user.getId() + "'," +
@@ -264,7 +258,7 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + user.getPrivilege() + "'," +
 								"'" + user.getDefaultManagerID() + "'," +
 								"'" + user.getGroupID() + "'," +
-								"'" + isAdmin + "'," +
+								"'" + Utils.booleanToInt(user.isAdmin()) + "'," +
 								"'" + user.getLocalUpdatedDate() + "'," +
 								"'" + user.getServerUpdatedDate() + "')";			
 			database.execSQL(sqlString);
@@ -281,7 +275,6 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			int isAdmin = user.isAdmin() ? 1 : 0;
 			String sqlString = "UPDATE tbl_user SET " +
 								"server_id = '" + user.getId() + "'," +
 								"email = '" + user.getEmail() + "'," +
@@ -289,7 +282,7 @@ public class DBManager extends SQLiteOpenHelper
 								"nickname = '" + user.getNickname() + "'," +
 								"manager_id = '" + user.getDefaultManagerID() + "'," +
 								"group_id = '" + user.getGroupID() + "'," +
-								"admin = '" + isAdmin + "'," +
+								"admin = '" + Utils.booleanToInt(user.isAdmin()) + "'," +
 								"local_updatedt = '" + user.getLocalUpdatedDate() + "'," +
 								"server_updatedt = '" + user.getServerUpdatedDate() + "' " +
 								"WHERE server_id = '" + user.getId() + "'";			
@@ -322,14 +315,14 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			User localUser = dbManager.getUser(user.getId());
+			User localUser = getUser(user.getId());
 			if (localUser == null)
 			{
-				return dbManager.insertUser(user);
+				return insertUser(user);
 			}
 			else if (user.getServerUpdatedDate() > localUser.getLocalUpdatedDate())
 			{
-				return dbManager.updateUser(user);
+				return updateUser(user);
 			}
 			else
 			{
@@ -338,7 +331,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			Log.i("reim", e.getMessage());
 			return false;
 		}
 	}
@@ -372,8 +365,38 @@ public class DBManager extends SQLiteOpenHelper
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());;
+			Log.i("reim", e.toString());
 			return null;
+		}
+	}
+	
+	public Boolean insertUserList(List<User> userList)
+	{
+		try
+		{
+			for (int i = 0; i < userList.size(); i++)
+			{
+				insertUser(userList.get(i));
+			}
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+
+	public Boolean updateGroupUsers(List<User> userList, int groupID)
+	{
+		try
+		{
+			deleteGroupUsers(groupID);
+			insertUserList(userList);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
 		}
 	}
 	
@@ -410,74 +433,335 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
+	public Boolean deleteGroupUsers(int groupID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_user WHERE group_id = '" + groupID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public Boolean insertRelevantUsers(Item item)
+	{
+		try
+		{
+			int count = item.getRelevantUsers().size();
+			for (int i = 0; i < count; i++)
+			{
+				String sqlString = "INSERT INTO tbl_item_user (item_id, user_id, local_updatedt) VALUES (" +
+									"'" + item.getLocalID() + "'," +
+									"'" + item.getRelevantUsers().get(i).getId() + "'," +
+									"'" + Utils.getCurrentTime() + "')";
+				database.execSQL(sqlString);
+			}			
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	public List<User> getRelevantUsers(int itemLocalID)
+	{
+		try
+		{
+			List<User> relevantUsers = new ArrayList<User>();			
+			Cursor userCursor = database.rawQuery("SELECT user_id FROM tbl_item_user WHERE item_id=?", 
+													new String[]{Integer.toString(itemLocalID)});
+			while (userCursor.moveToNext())
+			{
+				User user = getUser(getIntFromCursor(userCursor, "user_id"));
+				if (user != null)
+				{
+					relevantUsers.add(user);
+				}
+			}
+
+			return relevantUsers.size() > 0? relevantUsers : null;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Boolean deleteRelevantUsers(int itemLocalID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_item_user WHERE item_id = '" + itemLocalID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}	
+	
 	// Item
 	public Boolean insertItem(Item item)
 	{
-		String sqlString = "DELETE FROM tbl_item";
-		database.execSQL(sqlString);
-		sqlString = "INSERT INTO tbl_item (server_id, amount, billable) VALUES ('333', '5.5', '1')";
-		database.execSQL(sqlString);
-		sqlString = "INSERT INTO tbl_item (server_id, amount, billable) VALUES ('444', '6', '0')";
-		database.execSQL(sqlString);
-		sqlString = "INSERT INTO tbl_item (server_id, amount, billable) VALUES ('555', '6', '1')";
-		database.execSQL(sqlString);
-		return true;
-	}
-
-	public Boolean updateItem(Item oldItem, Item newItem)
-	{
-//		String sqlString = "UPDATE tbl_item SET amount = '6', billable = 'false' WHERE server_id = '333'";
-		String sqlString = "UPDATE tbl_item SET merchants = 'McDonalds'";
-		
-//		if (group.getServerUpdatedDate() != -1)
-//		{			
-//		}
-//		else
-//		{
-//			sqlString = "UPDATE tbl_group SET " +
-//					"group_name = '" + group.getName() + "'," +
-//					"local_updatedt = '" + group.getLocalUpdatedDate() + "' " +
-//					"WHERE server_id = '" + group.getId() + "'";	
-//		}
-		database.execSQL(sqlString);
-		return true;		
-	}
-
-	public Boolean deleteItem(Item item)
-	{
-		String sqlString = "DELETE FROM tbl_item WHERE server_id = 'adf'";
-		database.execSQL(sqlString);
-		return true;
-	}
-
-	public List<Item> findMyItems()
-	{
-		List<Item> itemList = new ArrayList<Item>();
-		Cursor cursor = database.rawQuery("SELECT server_id, amount, billable, merchants" +
-				"						   FROM tbl_item WHERE amount=? and billable=?", new String[]{"6","true"});
-
-		while (cursor.moveToNext())
+		try
 		{
-			Item item = new Item();
-			item.setId(getIntFromCursor(cursor, "server_id"));
-			item.setAmount(getDoubleFromCursor(cursor, "amount"));
-			item.setBillable(getBooleanFromCursor(cursor, "billable"));
-			item.setMerchant(getStringFromCursor(cursor, "merchants"));
-			itemList.add(item);
+			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getId();
+			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getId();			
+			String sqlString = "INSERT INTO tbl_item (server_id, image_id, invoice_path, merchant, report_id, " +
+							   							"category_id, amount, user_id, consumed_date, note, " +
+							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed) VALUES (" + 
+														"'" + item.getId() + "'," +
+														"'" + item.getImageID() + "'," +
+														"'" + item.getInvoicePath() + "'," +
+														"'" + item.getMerchant() + "'," +
+														"'" + reportID + "'," +
+														"'" + categoryID + "'," +
+														"'" + item.getAmount() + "'," +
+														"'" + item.getConsumer().getId() + "'," +
+														"'" + item.getConsumedDate() + "'," +
+														"'" + item.getNote() + "'," +
+														"'" + item.getServerUpdatedDate() + "'," +
+														"'" + item.getLocalUpdatedDate() + "'," +
+														"'" + Utils.booleanToInt(item.isProveAhead()) + "'," +
+														"'" + Utils.booleanToInt(item.needReimbursed()) + "')";
+			database.execSQL(sqlString);
+			
+			Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_item", null);
+			cursor.moveToFirst();
+			item.setLocalID(cursor.getInt(0));
+
+			insertItemTags(item);
+			insertRelevantUsers(item);
+			
+			return true;
 		}
-		
-		return itemList;
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public Boolean updateItem(Item item)
+	{
+		try
+		{
+			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getId();
+			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getId();
+			String sqlString = "UPDATE tbl_item SET " +
+								"server_id = '" + item.getId() + "'," +
+								"image_id = '" + item.getImageID() + "'," +
+								"invoice_path = '" + item.getInvoicePath() + "'," +
+								"merchant = '" + item.getMerchant() + "'," +
+								"report_id = '" + reportID + "'," +
+								"category_id = '" + categoryID + "'," +
+								"amount = '" + item.getAmount() + "'," +
+								"user_id = '" + item.getConsumer().getId() + "'," +
+								"consumed_date = '" + item.getConsumedDate() + "'," +
+								"note = '" + item.getNote() + "'," +
+								"server_updatedt = '" + item.getServerUpdatedDate() + "'," +
+								"local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
+								"prove_ahead = '" + Utils.booleanToInt(item.isProveAhead()) + "'," +
+								"need_reimbursed = '" + Utils.booleanToInt(item.needReimbursed()) + "' " +
+								"WHERE id = '" + item.getLocalID() + "'";			
+			database.execSQL(sqlString);
+			
+			deleteItemTags(item.getLocalID());
+			insertItemTags(item);
+			
+			deleteRelevantUsers(item.getLocalID());
+			insertRelevantUsers(item);
+
+			return true;		
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+
+	public Boolean deleteItem(int itemLocalID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_item WHERE id = '" + itemLocalID +"'";
+			database.execSQL(sqlString);
+
+			sqlString = "DELETE FROM tbl_item_tag WHERE item_id = '" + itemLocalID +"'";
+			database.execSQL(sqlString);
+			
+			sqlString = "DELETE FROM tbl_item_user WHERE item_id = '" + itemLocalID +"'";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+
+	public Boolean syncItem(Item item)
+	{
+		try
+		{
+			Item localItem = getItem(item.getLocalID());
+			if (localItem == null)
+			{
+				return insertItem(item);
+			}
+			else
+			{
+				return updateItem(item);
+			}
+		}
+		catch (Exception e)
+		{
+			Log.i("reim", e.getMessage());
+			return false;
+		}
+	}
+	
+	public Item getItem(int itemLocalID)
+	{
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE id=?", new String[]{Integer.toString(itemLocalID)});
+
+			if (cursor.moveToNext())
+			{
+				Item item = new Item();
+				item.setLocalID(getIntFromCursor(cursor, "id"));
+				item.setId(getIntFromCursor(cursor, "server_id"));
+				item.setImageID(getIntFromCursor(cursor, "image_id"));
+				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
+				item.setMerchant(getStringFromCursor(cursor, "merchant"));
+				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
+				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
+				item.setImage(BitmapFactory.decodeFile(item.getInvoicePath()));
+				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
+				item.setBelongReport(getReport(getIntFromCursor(cursor, "report_id")));
+				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));				
+				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
+				item.setTags(getItemTags(item.getLocalID()));
+				
+				return item;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Item> getUserItems(int userID)
+	{
+		try
+		{
+			List<Item> itemList = new ArrayList<Item>();
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id=?", new String[]{Integer.toString(userID)});
+
+			while (cursor.moveToNext())
+			{
+				Item item = new Item();
+				item.setLocalID(getIntFromCursor(cursor, "id"));
+				item.setId(getIntFromCursor(cursor, "server_id"));
+				item.setImageID(getIntFromCursor(cursor, "image_id"));
+				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
+				item.setMerchant(getStringFromCursor(cursor, "merchant"));
+				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
+				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
+				item.setImage(BitmapFactory.decodeFile(item.getInvoicePath()));
+				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
+				item.setBelongReport(getReport(getIntFromCursor(cursor, "report_id")));
+				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
+				item.setTags(getItemTags(item.getLocalID()));
+				
+				itemList.add(item);
+			}
+			
+			return itemList;
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+	}
+	
+	public List<Item> getReportItems(int reportID)
+	{
+		try
+		{
+			List<Item> itemList = new ArrayList<Item>();
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE report_id=?", new String[]{Integer.toString(reportID)});
+
+			while (cursor.moveToNext())
+			{
+				Item item = new Item();
+				item.setLocalID(getIntFromCursor(cursor, "id"));
+				item.setId(getIntFromCursor(cursor, "server_id"));
+				item.setImageID(getIntFromCursor(cursor, "image_id"));
+				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
+				item.setMerchant(getStringFromCursor(cursor, "merchant"));
+				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
+				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
+				item.setImage(BitmapFactory.decodeFile(item.getInvoicePath()));
+				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
+				item.setBelongReport(getReport(getIntFromCursor(cursor, "report_id")));
+				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
+				item.setTags(getItemTags(item.getLocalID()));
+				
+				itemList.add(item);
+			}
+			
+			return itemList;
+		}
+		catch (Exception e)
+		{
+			return null;
+		}		
 	}
 	
 	// Report
 	public Boolean insertReport(Report report)
 	{
+		// TODO
 		return true;		
 	}
 	
-	public Boolean updateReport(Report oldReport, Report newReport)
+	public Boolean updateReport(Report report)
 	{
-		
+		// TODO
 //		if (group.getServerUpdatedDate() != -1)
 //		{			
 //		}
@@ -493,15 +777,44 @@ public class DBManager extends SQLiteOpenHelper
 		
 	public Boolean deleteReport(Report report)
 	{
+		// TODO
 		return true;
 	}
 
+	public Report getReport(int reportID)
+	{
+		// TODO
+		return null;
+	}
+	
+	public List<Report> getUserReports(int userID)
+	{
+		// TODO implement
+		return null;
+	}
+	
+	public String getReportItemIDs(int reportID)
+	{
+		String itemIDString = "";
+		Cursor cursor = database.rawQuery("SELECT server_id FROM tbl_item WHERE report_id=?", 
+												new String[]{Integer.toString(reportID)});
+		while (cursor.moveToNext())
+		{
+			itemIDString += getIntFromCursor(cursor, "server_id") + ",";
+		}
+		
+		if (itemIDString.length() > 0)
+		{
+			itemIDString = itemIDString.substring(0, itemIDString.length()-1);
+		}
+		return itemIDString;
+	}
+	
 	// Category
 	public Boolean insertCategory(Category category)
 	{
 		try
 		{
-			int prove_ahead = category.isProveAhead() ? 1 : 0;
 			String sqlString = "INSERT INTO tbl_category (server_id, category_name, max_limit, group_id, " +
 								"parent_id, prove_ahead, local_updatedt, server_updatedt) VALUES (" +
 								"'" + category.getId() + "'," +
@@ -509,7 +822,7 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + category.getLimit() + "'," +
 								"'" + category.getGroupID() + "'," +
 								"'" + category.getParentID() + "'," +
-								"'" + prove_ahead + "'," +
+								"'" + Utils.booleanToInt(category.isProveAhead()) + "'," +
 								"'" + category.getLocalUpdatedDate() + "'," +
 								"'" + category.getServerUpdatedDate() + "')";			
 			database.execSQL(sqlString);
@@ -526,13 +839,12 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			int prove_ahead = category.isProveAhead() ? 1 : 0;
 			String sqlString = "UPDATE tbl_category SET " +
 								"category_name = '" + category.getName() + "'," +
 								"max_limit = '" + category.getLimit() + "'," +
 								"group_id = '" + category.getGroupID() + "'," +
 								"parent_id = '" + category.getParentID() + "'," +
-								"prove_ahead = '" + prove_ahead + "'," +
+								"prove_ahead = '" + Utils.booleanToInt(category.isProveAhead()) + "'," +
 								"local_updatedt = '" + category.getLocalUpdatedDate() + "'," +
 								"server_updatedt = '" + category.getServerUpdatedDate() + "' " +
 								"WHERE server_id = '" + category.getId() + "'";			
@@ -565,14 +877,14 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Category localCategory = dbManager.getCategory(category.getId());
+			Category localCategory = getCategory(category.getId());
 			if (localCategory == null)
 			{
-				return dbManager.insertCategory(category);
+				return insertCategory(category);
 			}
 			else if (category.getServerUpdatedDate() > localCategory.getLocalUpdatedDate())
 			{
-				return dbManager.updateCategory(category);
+				return updateCategory(category);
 			}
 			else
 			{
@@ -618,6 +930,36 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
+	public Boolean insertCategoryList(List<Category> categoryList)
+	{
+		try
+		{
+			for (int i = 0; i < categoryList.size(); i++)
+			{
+				insertCategory(categoryList.get(i));
+			}
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+
+	public Boolean updateGroupCategories(List<Category> categoryList, int groupID)
+	{
+		try
+		{
+			deleteGroupCategories(groupID);
+			insertCategoryList(categoryList);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
 	public List<Category> getGroupCategories(int groupID)
 	{
 		List<Category> categoryList = new ArrayList<Category>();
@@ -646,7 +988,22 @@ public class DBManager extends SQLiteOpenHelper
 			e.printStackTrace();
 			return categoryList;
 		}
-	}	
+	}
+	
+	public Boolean deleteGroupCategories(int groupID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_category WHERE group_id = '" + groupID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}	
+	}
 	
 	// Tag
 	public Boolean insertTag(Tag tag)
@@ -708,14 +1065,14 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Tag localTag = dbManager.getTag(tag.getId());
+			Tag localTag = getTag(tag.getId());
 			if (localTag == null)
 			{
-				return dbManager.insertTag(tag);
+				return insertTag(tag);
 			}
 			else if (tag.getServerUpdatedDate() > localTag.getLocalUpdatedDate())
 			{
-				return dbManager.updateTag(tag);
+				return updateTag(tag);
 			}
 			else
 			{
@@ -757,6 +1114,36 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
+	public Boolean insertTagList(List<Tag> tagList)
+	{
+		try
+		{
+			for (int i = 0; i < tagList.size(); i++)
+			{
+				insertTag(tagList.get(i));
+			}
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	public Boolean updateGroupTags(List<Tag> tagList, int groupID)
+	{
+		try
+		{
+			deleteGroupTags(groupID);
+			insertTagList(tagList);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
 	public List<Tag> getGroupTags(int groupID)
 	{
 		List<Tag> tagList = new ArrayList<Tag>();
@@ -782,7 +1169,83 @@ public class DBManager extends SQLiteOpenHelper
 			e.printStackTrace();
 			return tagList;
 		}
-	}	
+	}
+	
+	public Boolean deleteGroupTags(int groupID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_tag WHERE group_id = '" + groupID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}		
+	}
+
+	public Boolean insertItemTags(Item item)
+	{
+		try
+		{
+			int count = item.getTags().size();
+			for (int i = 0; i < count; i++)
+			{
+				String sqlString = "INSERT INTO tbl_item_tag (item_id, tag_id, local_updatedt) VALUES (" +
+									"'" + item.getLocalID() + "'," +
+									"'" + item.getTags().get(i).getId() + "'," +
+									"'" + Utils.getCurrentTime() + "')";
+				database.execSQL(sqlString);
+			}
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	public List<Tag> getItemTags(int itemLocalID)
+	{
+		try
+		{
+			List<Tag> tags = new ArrayList<Tag>();			
+			Cursor tagCursor = database.rawQuery("SELECT tag_id FROM tbl_item_tag WHERE item_id=?", 
+													new String[]{Integer.toString(itemLocalID)});
+			while (tagCursor.moveToNext())
+			{
+				Tag tag = getTag(getIntFromCursor(tagCursor, "tag_id"));
+				if (tag != null)
+				{
+					tags.add(tag);
+				}
+			}
+			
+			return tags.size() > 0? tags : null;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Boolean deleteItemTags(int itemLocalID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_item_tag WHERE item_id = '" + itemLocalID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 	// Group
 	public Boolean insertGroup(Group group)
@@ -843,14 +1306,14 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Group localGroup = dbManager.getGroup(group.getId());
+			Group localGroup = getGroup(group.getId());
 			if (localGroup == null)
 			{
-				return dbManager.insertGroup(group);
+				return insertGroup(group);
 			}
 			else if (group.getServerUpdatedDate() > localGroup.getLocalUpdatedDate())
 			{
-				return dbManager.updateGroup(group);
+				return updateGroup(group);
 			}
 			else
 			{

@@ -12,6 +12,10 @@ public class ModifyReportResponse extends BaseResponse
 	public ModifyReportResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

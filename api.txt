@@ -22,19 +22,22 @@ Common:
             }
         ],
         "profile": {
-            "path": "",
-            "email": "debug@rushucloud.com",
-            "manager_id": "0",
-            "active": "0",
-            "phone": "",
-            "device_type": "0",
-            "nickname": "",
-            "id": "1",
-	    "group": {
-                "group_name": "测试族群",
-                "groupid": "1",
-                "lastdt": "1412085905"
-            }
+	        id": "1",
+	        "wx_token": "0",
+	        "phone": "",
+	        "email": "debug@rushucloud.com",
+	        "nickname": "零食王1",
+	        "admin": "1",
+	        "device_type": "0",
+	        "manager_id": "0",
+	        "active": "0",
+		"group": {
+		    "group_name": "如数云科技",
+	            "lastdt": "1412415617",
+		    "groupid": "1"
+		},
+		"avatar": "/images/35",
+		"lastdt": "2014-10-08 13:00:47"
         },
         "tags": [
             {

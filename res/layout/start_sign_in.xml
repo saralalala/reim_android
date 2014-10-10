@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/baseLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:id="@+id/baseLayout" >
+    android:orientation="vertical" >
 
     <EditText
         android:id="@+id/usernameEditText"
@@ -13,6 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp"
         android:ems="10"
+        android:hint="@string/userIDPrompt"
         android:inputType="text" />
 
     <requestFocus />
@@ -23,47 +24,11 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/usernameEditText"
         android:layout_alignRight="@+id/usernameEditText"
-        android:layout_below="@+id/passwordTextView"
+        android:layout_below="@+id/usernameEditText"
         android:layout_marginTop="26dp"
         android:ems="10"
+        android:hint="@string/passwordPrompt"
         android:inputType="textPassword" />
-
-    <TextView
-        android:id="@+id/usernameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="14dp"
-        android:text="@string/userIDPrompt" />
-
-    <TextView
-        android:id="@+id/passwordTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/usernameEditText"
-        android:layout_marginTop="17dp"
-        android:text="@string/passwordPrompt" />
-
-    <Button
-        android:id="@+id/confirmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="117dp"
-        android:layout_toRightOf="@+id/passwordTextView"
-        android:text="@string/confirm" />
-
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/confirmButton"
-        android:layout_alignBottom="@+id/confirmButton"
-        android:layout_alignRight="@+id/usernameEditText"
-        android:layout_marginRight="27dp"
-        android:text="@string/cancel" />
 
     <TextView
         android:id="@+id/forgotTextView"
@@ -73,5 +38,23 @@
         android:layout_below="@+id/passwordEditText"
         android:layout_marginTop="22dp"
         android:text="@string/forgotPassword" />
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/passwordEditText"
+        android:layout_below="@+id/forgotTextView"
+        android:layout_marginTop="102dp"
+        android:text="@string/confirm" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/confirmButton"
+        android:layout_alignBottom="@+id/confirmButton"
+        android:layout_alignRight="@+id/forgotTextView"
+        android:text="@string/cancel" />
 
 </RelativeLayout>

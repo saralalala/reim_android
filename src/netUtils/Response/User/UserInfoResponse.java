@@ -14,6 +14,10 @@ public class UserInfoResponse extends BaseResponse
 	public UserInfoResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

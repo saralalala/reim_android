@@ -30,7 +30,6 @@ public abstract class BaseResponse
 			if (status)
 			{
 				dataObject = object.getJSONObject("data");
-				constructData();
 			}
 			else 
 			{

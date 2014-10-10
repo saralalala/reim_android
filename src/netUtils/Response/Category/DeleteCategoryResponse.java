@@ -12,6 +12,10 @@ public class DeleteCategoryResponse extends BaseResponse
 	public DeleteCategoryResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

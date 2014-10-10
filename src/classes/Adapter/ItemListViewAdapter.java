@@ -3,10 +3,12 @@ package classes.Adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.AppPreference;
 import classes.Item;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,6 @@ public class ItemListViewAdapter extends BaseAdapter
 		layoutInflater = LayoutInflater.from(context);
 	}
 
-	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		if (convertView == null)
@@ -39,32 +40,49 @@ public class ItemListViewAdapter extends BaseAdapter
 		TextView categoryTextView = (TextView)convertView.findViewById(R.id.categoryTextView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		
-		Item item = this.getItem(position);
+		AppPreference appPreference = AppPreference.getAppPreference();
 		
-		imageView.setImageBitmap(item.getImage());
-		reportTextView.setText(item.getBelongReport().getTitle());
-		infoTextView.setText(item.getNote());
-		categoryTextView.setText(item.getCategory().getName());
-		amountTextView.setText(Double.toString(item.getAmount()));
+		Item item = this.getItem(position);
+
+		Bitmap bitmap = item.getImage() == null ? appPreference.getDefaultInvoice() : item.getImage();
+		imageView.setImageBitmap(bitmap);
+		
+		amountTextView.setText("￥" + Double.toString(item.getAmount()));
+
+		String note = item.getNote().equals("") ? "N/A" : item.getNote();
+		infoTextView.setText(note);
+		
+		String reportTitle = item.getBelongReport() == null ? "N/A" : item.getBelongReport().getTitle();
+		reportTextView.setText(reportTitle);
+		
+		String categoryName = item.getCategory() == null ? "N/A" : item.getCategory().getName();
+		categoryTextView.setText(categoryName);
 		
 		return convertView;
 	}
 	
-	@Override
 	public int getCount()
 	{
 		return itemList.size();
 	}
 
-	@Override
 	public Item getItem(int position)
 	{
 		return itemList.get(position);
 	}
 
-	@Override
 	public long getItemId(int position)
 	{
 		return position;
+	}
+	
+	public void clear()
+	{
+		itemList.clear();
+	}
+	
+	public void set(List<Item> items)
+	{
+		itemList = new ArrayList<Item>(items);
 	}
 }

@@ -13,6 +13,10 @@ public class ForgotPasswordResponse extends BaseResponse
 	public ForgotPasswordResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

@@ -30,7 +30,7 @@ public class ModifyItemRequest extends BaseRequest
 		params.add(new BasicNameValuePair("amount", Double.toString(item.getAmount())));
 		params.add(new BasicNameValuePair("category", Integer.toString(item.getCategory().getId())));
 		params.add(new BasicNameValuePair("merchants", item.getMerchant()));
-		params.add(new BasicNameValuePair("billable", Boolean.toString(item.getBillable())));
+		params.add(new BasicNameValuePair("billable", Boolean.toString(item.isProveAhead())));
 		params.add(new BasicNameValuePair("image_id", Integer.toString(item.getImageID())));
 		params.add(new BasicNameValuePair("uids", uids));
 		params.add(new BasicNameValuePair("dt", Integer.toString(item.getConsumedDate())));
@@ -45,5 +45,4 @@ public class ModifyItemRequest extends BaseRequest
 	{
 		doPut(callback);
 	}
-
 }

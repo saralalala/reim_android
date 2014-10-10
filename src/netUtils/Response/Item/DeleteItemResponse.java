@@ -12,6 +12,10 @@ public class DeleteItemResponse extends BaseResponse
 	public DeleteItemResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

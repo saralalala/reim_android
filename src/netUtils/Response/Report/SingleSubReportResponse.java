@@ -15,7 +15,11 @@ public class SingleSubReportResponse extends BaseResponse
 	
 	public SingleSubReportResponse(Object httpResponse)
 	{
-		super(httpResponse);	
+		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

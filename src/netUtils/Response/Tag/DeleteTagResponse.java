@@ -12,6 +12,10 @@ public class DeleteTagResponse extends BaseResponse
 	public DeleteTagResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

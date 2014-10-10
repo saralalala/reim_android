@@ -12,6 +12,10 @@ public class CreateReportResponse extends BaseResponse
 	public CreateReportResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

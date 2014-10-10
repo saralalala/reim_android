@@ -1,8 +1,15 @@
 package classes;
 
+import java.io.File;
+
+import com.rushucloud.reim.R;
+
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.telephony.TelephonyManager;
 
 public class ReimApplication extends Application
@@ -11,6 +18,7 @@ public class ReimApplication extends Application
 	{
 		super.onCreate();
 		readAppPreference();
+		createDirectories();
 	}
 	
 	private void readAppPreference()
@@ -21,24 +29,57 @@ public class ReimApplication extends Application
 		appPreference.setPassword(preferences.getString("password", ""));
 		appPreference.setDeviceToken(preferences.getString("deviceToken", ""));
 		appPreference.setServerToken(preferences.getString("serverToken", ""));
-		appPreference.setCacheDirectory(this.getCacheDir().getAbsolutePath());	
+		appPreference.setSyncWithoutWifi(preferences.getBoolean("syncWithoutWifi", false));
+		
+		String path = Environment.getExternalStorageDirectory() + "/如数云报销";
+		appPreference.setProfileImageDirectory(path + "/images/profile");
+		appPreference.setInvoiceImageDirectory(path + "/images/invoice");
 		
 		if (appPreference.getDeviceToken().equals(""))
 		{
 			TelephonyManager telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
 			appPreference.setDeviceToken(telephonyManager.getDeviceId());
 		}
+		
+		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_invoice);
+		appPreference.setDefaultInvoice(bitmap);
 	}
 	
 	public void saveAppPreference()
 	{
-		SharedPreferences appPreference = getSharedPreferences("ReimApplication", MODE_PRIVATE);
-		AppPreference userInfo = AppPreference.getAppPreference();
-		Editor editor = appPreference.edit();
-		editor.putString("username", userInfo.getUsername());
-		editor.putString("password", userInfo.getPassword());
-		editor.putString("deviceToken", userInfo.getDeviceToken());
-		editor.putString("serverToken", userInfo.getServerToken());
+		SharedPreferences sharedPreference = getSharedPreferences("ReimApplication", MODE_PRIVATE);
+		AppPreference appPreference = AppPreference.getAppPreference();
+		Editor editor = sharedPreference.edit();
+		editor.putString("username", appPreference.getUsername());
+		editor.putString("password", appPreference.getPassword());
+		editor.putString("deviceToken", appPreference.getDeviceToken());
+		editor.putString("serverToken", appPreference.getServerToken());
+		editor.putBoolean("syncWithoutWifi", appPreference.syncWithoutWifi());
 		editor.commit();
+	}
+	
+	private void createDirectories()
+	{
+		String appDirectory = Environment.getExternalStorageDirectory() + "/如数云报销";
+		File dir = new File(appDirectory);
+		if (!dir.exists())
+		{
+			dir.mkdir();
+		}
+		dir = new File(appDirectory + "/images");
+		if (!dir.exists())
+		{
+			dir.mkdir();
+		}
+		dir = new File(appDirectory + "/images/profile");
+		if (!dir.exists())
+		{
+			dir.mkdir();
+		}
+		dir = new File(appDirectory + "/images/invoice");
+		if (!dir.exists())
+		{
+			dir.mkdir();
+		}		
 	}
 }

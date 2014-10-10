@@ -91,8 +91,7 @@ public class SignUpActivity extends Activity
 													}
 												})
 												.create();
-					alertDialog.show();
-					
+					alertDialog.show();					
 				}
 				else if (password.equals(""))
 				{
@@ -110,8 +109,7 @@ public class SignUpActivity extends Activity
 													}
 												})
 												.create();
-					alertDialog.show();
-					
+					alertDialog.show();					
 				}
 				else if (!password.equals(confirmPassword))
 				{
@@ -161,6 +159,8 @@ public class SignUpActivity extends Activity
 						user.setPhone(username);
 					}
 					user.setPassword(password);
+					
+					hideSoftKeyboard();
 					register(user);
 				}
 			}
@@ -214,7 +214,11 @@ public class SignUpActivity extends Activity
 														public void onClick(DialogInterface dialog, int which)
 														{
 															dialog.dismiss();
-															startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+															Bundle bundle = new Bundle();
+															bundle.putInt("tabIndex", 0);
+															Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+															intent.putExtras(bundle);
+															startActivity(intent);
 															finish();
 														}
 													})
@@ -236,7 +240,7 @@ public class SignUpActivity extends Activity
 														.create();
 							alertDialog.show();	
 						}
-					});								
+					});		
 				}
 			}
 		});		

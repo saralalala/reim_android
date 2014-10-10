@@ -12,6 +12,10 @@ public class RegisterResponse extends BaseResponse
 	public RegisterResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

@@ -12,6 +12,10 @@ public class ModifyGroupResponse extends BaseResponse
 	public ModifyGroupResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

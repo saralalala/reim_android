@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import classes.Category;
 import classes.Item;
 import classes.User;
+import classes.Utils;
 
 import netUtils.Response.BaseResponse;
 
@@ -19,6 +20,10 @@ public class GetItemsResponse extends BaseResponse
 	public GetItemsResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()
@@ -55,15 +60,8 @@ public class GetItemsResponse extends BaseResponse
 				user.setId(object.getInt("uid"));
 				//TODO get user
 				item.setConsumer(user);
-				
-				if (object.getInt("billable") > 0)
-				{
-					item.setBillable(true);
-				}
-				else
-				{
-					item.setBillable(false);
-				}
+
+				item.setIsProveAhead(Utils.intToBoolean(object.getInt("billable")));
 				
 				itemList.add(item);
 			}

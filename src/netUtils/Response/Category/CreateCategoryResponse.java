@@ -12,6 +12,10 @@ public class CreateCategoryResponse extends BaseResponse
 	public CreateCategoryResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

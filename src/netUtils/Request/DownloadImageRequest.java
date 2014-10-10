@@ -6,7 +6,9 @@ public class DownloadImageRequest extends BaseRequest
 	{
 		super();
 		
-		setUrl(url);
+		String requestUrl = getUrl();
+		requestUrl += url;
+		setUrl(requestUrl);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

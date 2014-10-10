@@ -5,22 +5,52 @@
     <string name="background">Background</string>
     <string name="action_settings">设置</string>
     
+    <string name="confirm">确定</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="add">添加</string>
+    <string name="warning">警告</string>
+    
     <string name="sign_up">注册</string>
     <string name="sign_in">登录</string>
     <string name="userIDPrompt">请输入手机号/邮箱</string>
     <string name="passwordPrompt">请输入密码</string>
-    <string name="confirmpPasswordPrompt">请确认密码</string>
+    <string name="confirmPasswordPrompt">请确认密码</string>
+    <string name="newPasswordPrompt">请输入新密码</string>
     <string name="forgotPassword">忘记密码</string>
+    <string name="findPasswordByPhone">用手机找回</string>
+    <string name="findPasswordByEmail">用邮箱找回</string>
+    <string name="inputEmail">请输入邮箱</string>
+    <string name="inputPhone">请输入手机号</string>
+    <string name="inputCode">请输入验证码</string>
+    <string name="acquireCode">获取验证码</string>
+    <string name="emailSentPrompt">邮件已发送，请查阅邮箱！</string>
+    <string name="errorCode">验证码输入错误！</string>
+    <string name="errorNoCode">未获取到任何验证码！</string>
     
-    
-    <string name="reimbursement">报销!!</string>
+    <string name="reimbursement">报销</string>
     <string name="report">报告</string>
     <string name="statistics">统计</string>
     <string name="me">我！</string>
-    <string name="add">添加</string>
+   
+    <string name="inputAmount">请输入金额</string>
+    <string name="invoice">发票</string>
+    <string name="proveAhead">预审批</string>
+    <string name="needReimburse">需报销</string>
+    <string name="chooseVendor">选择商家</string>
+    <string name="chooseCategory">选择类别</string>
+    <string name="chooseTag">选择标签</string>
+    <string name="chooseDate">选择日期</string>
+    <string name="chooseTime">选择时间</string>
+    <string name="member">参与人员</string>
+    <string name="inputVendor">请输入商家名或点击按钮选取</string>
+    <string name="inputNote">请输入备注</string>
+    <string name="notAvailable">N/A</string>
+    <string name="deleteItemWarning">是否要删除此条目？</string>
+    <string name="deleteSucceed">删除成功</string>
+    <string name="deleteFailed">删除失败</string> 
     
-    <string name="confirm">确定</string>
-    <string name="cancel">返回</string>
-    
+    <string name="inputReportTitle">请输入报告名称</string>
+    <string name="deleteReportWarning">是否要删除此报告？</string>
 
 </resources>

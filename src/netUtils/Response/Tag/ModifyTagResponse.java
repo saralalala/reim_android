@@ -12,6 +12,10 @@ public class ModifyTagResponse extends BaseResponse
 	public ModifyTagResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

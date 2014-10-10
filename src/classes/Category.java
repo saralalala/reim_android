@@ -1,5 +1,8 @@
 package classes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Category
 {
 	private int id;
@@ -81,5 +84,32 @@ public class Category
 	public void setLocalUpdatedDate(int localUpdatedDate)
 	{
 		this.localUpdatedDate = localUpdatedDate;
+	}
+
+	public static int getIndexOfCategory(List<Category> categoryList, Category category)
+	{
+		if (category == null)
+		{
+			return -1;
+		}
+		
+		for (int i = 0; i < categoryList.size(); i++)
+		{
+			if (category.getId() == categoryList.get(i).getId())
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public static String[] getCategoryNames(List<Category> categoryList)
+	{
+		List<String> names = new ArrayList<String>();
+		for (int i = 0; i < categoryList.size(); i++)
+		{
+			names.add(categoryList.get(i).getName());
+		}
+		return names.toArray(new String[names.size()]);
 	}
 }

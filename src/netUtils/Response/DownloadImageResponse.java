@@ -10,7 +10,10 @@ public class DownloadImageResponse extends BaseDownloadResponse
 	public DownloadImageResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		bitmap = BitmapFactory.decodeStream(getInputStream());
+		if (getInputStream() != null)
+		{
+			bitmap = BitmapFactory.decodeStream(getInputStream());			
+		}
 	}
 
 	public Bitmap getBitmap()

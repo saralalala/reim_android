@@ -30,7 +30,7 @@ public class SplashActivity extends Activity
 				}
 				catch (Exception e)
 				{
-					// TODO: handle exception
+					System.out.println(e);
 				}
 				finally
 				{

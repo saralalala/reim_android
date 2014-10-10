@@ -1,5 +1,8 @@
 package classes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User
 {
 	private int id = -1;
@@ -131,5 +134,67 @@ public class User
 	public void setLocalUpdatedDate(int localUpdatedDate)
 	{
 		this.localUpdatedDate = localUpdatedDate;
+	}
+
+	public static boolean[] getUsersCheck(List<User> userList, List<User> relevantUsers)
+	{
+		AppPreference appPreference = AppPreference.getAppPreference();
+		
+		boolean[] check = new boolean[userList.size()];
+		for (int i = 0; i < userList.size(); i++)
+		{
+			if (userList.get(i).getId() == appPreference.getCurrentUserID())
+			{
+				check[i] = true;
+			}
+			else
+			{
+				check[i] = false;				
+			}
+		}
+		
+		if (relevantUsers == null)
+		{
+			return check;
+		}
+		
+		for (int i = 0; i < userList.size(); i++)
+		{
+			check[i] = false;
+			User user = userList.get(i);
+			for (int j = 0; j < relevantUsers.size(); j++)
+			{
+				if (user.getId() == relevantUsers.get(j).getId())
+				{
+					check[i] = true;
+				}
+			}
+		}
+		return check;
+	}
+
+	public static String[] getUserNames(List<User> userList)
+	{
+		List<String> names = new ArrayList<String>();
+		for (int i = 0; i < userList.size(); i++)
+		{
+			names.add(userList.get(i).getNickname());
+		}
+		return names.toArray(new String[names.size()]);		
+	}
+
+	public static String userListToString(List<User> userList)
+	{
+		String result = "";
+		if (userList == null || userList.size() == 0)
+		{
+			return result;
+		}
+		
+		for (int i = 0; i < userList.size(); i++)
+		{
+			result += userList.get(i).getNickname() + ",";
+		}
+		return result.substring(0, result.length()-1);
 	}
 }

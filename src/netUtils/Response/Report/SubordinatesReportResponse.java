@@ -1,6 +1,5 @@
 package netUtils.Response.Report;
 
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -17,6 +16,10 @@ public class SubordinatesReportResponse extends BaseResponse
 	public SubordinatesReportResponse(Object httpResponse)
 	{
 		super(httpResponse);
+		if (getStatus())
+		{
+			constructData();
+		}
 	}
 
 	protected void constructData()

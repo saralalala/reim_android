@@ -1,19 +1,26 @@
 package classes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Report
 {
 	private String title = "";
 	private int id = -1;
-	private int itemCount = -1;
+	private int localID = -1;
+	private int itemCount = 0;
+	private double amount = 0.0;
+	private int status = 0;
+	private List<Integer> itemList = null;
+	private User user = null;
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
-	private double amount = -1;
-	private int status = -1;
-	private String itemIDs = "";
-	private User user = null;
+	
+	public Report()
+	{
+		itemList = new ArrayList<Integer>();
+	}
 	
 	public String getTitle()
 	{
@@ -33,6 +40,15 @@ public class Report
 		this.id = id;
 	}
 	
+	public int getLocalID()
+	{
+		return localID;
+	}
+	public void setLocalID(int localID)
+	{
+		this.localID = localID;
+	}
+	
 	public int getItemCount()
 	{
 		return itemCount;
@@ -42,6 +58,42 @@ public class Report
 		this.itemCount = itemCount;
 	}
 	
+	public double getAmount()
+	{
+		return amount;
+	}
+	public void setAmount(double amount)
+	{
+		this.amount = amount;
+	}
+	
+	public int getStatus()
+	{
+		return status;
+	}
+	public void setStatus(int status)
+	{
+		this.status = status;
+	}
+	
+	public List<Integer> getItemList()
+	{
+		return itemList;
+	}
+	public void setItemList(List<Integer> itemList)
+	{
+		this.itemList = itemList;
+	}
+	
+	public User getUser()
+	{
+		return user;
+	}
+	public void setUser(User user)
+	{
+		this.user = user;
+	}
+
 	public int getCreatedDate()
 	{
 		return createdDate;
@@ -68,51 +120,36 @@ public class Report
 	{
 		this.localUpdatedDate = localUpdatedDate;
 	}
-	
-	public double getAmount()
-	{
-		return amount;
-	}
-	public void setAmount(double amount)
-	{
-		this.amount = amount;
-	}
-	
-	public int getStatus()
-	{
-		return status;
-	}
-	public void setStatus(int status)
-	{
-		this.status = status;
-	}
-	
-	public String getItemIDs()
-	{
-		return itemIDs;
-	}
-	public void setItemIDs(List<Item> itemList)
-	{
-		String itemIDString = "";
-		int size = itemList.size();
-		for (int i = 0; i < size; i++)
-		{
-			itemIDString += itemList.get(i).getId() + ",";
-		}
-		if (itemIDString.length() > 0)
-		{
-			itemIDString = itemIDString.substring(0, itemIDString.length()-1);
-		}
 
-		this.itemIDs = itemIDString;
+	public void addItem(Item item)
+	{
+		itemCount++;
+		amount += item.getAmount();
+		itemList.add(item.getLocalID());
 	}
 	
-	public User getUser()
+	public void removeItem(Item item)
 	{
-		return user;
+		itemCount--;
+		amount -= item.getAmount();
+		itemList.remove(item.getLocalID());
 	}
-	public void setUser(User user)
+	
+	public String getStatusString()
 	{
-		this.user = user;
+		switch (status)
+		{
+			case 0:
+				return "草稿";
+			case 1:
+				return "已提交";
+			case 2:
+				return "审批未通过";
+			case 3:
+				return "审批通过";
+			default:
+				break;
+		}
+		return "N/A";
 	}
 }

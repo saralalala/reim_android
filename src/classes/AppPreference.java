@@ -1,15 +1,21 @@
 package classes;
 
+import android.graphics.Bitmap;
+
 public class AppPreference
 {
 	private static AppPreference appPreference = null;
 	
 	private int currentUserID = -1;
+	private int currentGroupID = -1;
 	private String username = "";
 	private String password = "";
 	private String deviceToken = "";
 	private String serverToken = "";
-	private String cacheDirectory = "";
+	private String profileImageDirectory = "";
+	private String invoiceImageDirectory = "";
+	private boolean syncWithoutWifi = false;
+	private Bitmap defaultInvoice = null;
 
 	private AppPreference()
 	{
@@ -34,6 +40,16 @@ public class AppPreference
 	{
 		this.currentUserID = currentUserID;
 	}	
+
+	public int getCurrentGroupID()
+	{
+		return currentGroupID;
+	}
+
+	public void setCurrentGroupID(int currentGroupID)
+	{
+		this.currentGroupID = currentGroupID;
+	}
 	
 	public String getUsername()
 	{
@@ -75,13 +91,43 @@ public class AppPreference
 		this.serverToken = serverToken;
 	}
 
-	public String getCacheDirectory()
+	public String getProfileImageDirectory()
 	{
-		return cacheDirectory;
+		return profileImageDirectory;
 	}
 
-	public void setCacheDirectory(String cacheDirectory)
+	public void setProfileImageDirectory(String profileImageDirectory)
 	{
-		this.cacheDirectory = cacheDirectory;
+		this.profileImageDirectory = profileImageDirectory;
+	}
+
+	public String getInvoiceImageDirectory()
+	{
+		return invoiceImageDirectory;
+	}
+
+	public void setInvoiceImageDirectory(String invoiceImageDirectory)
+	{
+		this.invoiceImageDirectory = invoiceImageDirectory;
+	}
+
+	public boolean syncWithoutWifi()
+	{
+		return syncWithoutWifi;
+	}
+
+	public void setSyncWithoutWifi(boolean syncWithoutWifi)
+	{
+		this.syncWithoutWifi = syncWithoutWifi;
+	}
+
+	public Bitmap getDefaultInvoice()
+	{
+		return defaultInvoice;
+	}
+
+	public void setDefaultInvoice(Bitmap defaultInvoice)
+	{
+		this.defaultInvoice = defaultInvoice;
 	}
 }
