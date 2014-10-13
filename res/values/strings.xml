@@ -53,5 +53,6 @@
     
     <string name="inputReportTitle">请输入报告名称</string>
     <string name="deleteReportWarning">是否要删除此报告？</string>
+    <string name="submit">提交</string>
 
 </resources>

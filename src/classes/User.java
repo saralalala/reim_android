@@ -1,10 +1,13 @@
 package classes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User
+public class User implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private int serverID = -1;
 	private String email = "";
 	private String password = "";

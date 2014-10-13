@@ -670,6 +670,7 @@ public class DBManager extends SQLiteOpenHelper
 						item.setLocalID(localItem.getLocalID());
 						updateItem(item);
 						itemExists = true;
+						break;
 					}
 				}
 				if (!itemExists)
@@ -912,14 +913,14 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean insertReportItems(int[] itemList, int reportLocalID)
+	public Boolean insertReportItems(ArrayList<Integer> itemIDList, int reportLocalID)
 	{
 		try
 		{
-			int count = itemList.length;
+			int count = itemIDList.size();
 			for (int i = 0; i < count; i++)
 			{
-				insertReportItem(reportLocalID, itemList[i]);
+				insertReportItem(reportLocalID, itemIDList.get(i));
 			}
 			return true;
 		}
@@ -930,12 +931,12 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateReportItems(int[] itemList, int reportLocalID)
+	public Boolean updateReportItems(ArrayList<Integer> itemIDList, int reportLocalID)
 	{
 		try
 		{
 			deleteReportItems(reportLocalID);
-			insertReportItems(itemList, reportLocalID);
+			insertReportItems(itemIDList, reportLocalID);
 			return true;
 		}
 		catch (Exception e)
@@ -1000,6 +1001,24 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			e.printStackTrace();
 			return itemList;	
+		}
+	}
+	
+	public List<Item> getItems(ArrayList<Integer> chosenItemIDList)
+	{
+		List<Item> itemList = new ArrayList<Item>();
+		try
+		{
+			for (int i = 0; i < chosenItemIDList.size(); i++)
+			{
+				itemList.add(getItemByLocalID(chosenItemIDList.get(i)));
+			}
+			return itemList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return itemList;
 		}
 	}
 	

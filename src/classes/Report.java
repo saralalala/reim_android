@@ -9,6 +9,12 @@ public class Report implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
+	public static final int STATUS_DRAFT = 0;
+	public static final int STATUS_SUBMITTED = 1;
+	public static final int STATUS_APPROVED = 2;
+	public static final int STATUS_REJECT = 3;
+	public static final int STATUS_FINISHED = 4;
+	
 	private int localID = -1;
 	private int serverID = -1;
 	private String title = "";
@@ -123,15 +129,15 @@ public class Report implements Serializable
 	{
 		switch (status)
 		{
-			case 0:
+			case STATUS_DRAFT:
 				return "草稿";
-			case 1:
+			case STATUS_SUBMITTED:
 				return "已提交";
-			case 2:
+			case STATUS_APPROVED:
 				return "审批通过";
-			case 3:
+			case STATUS_REJECT:
 				return "审批未通过";
-			case 4:
+			case STATUS_FINISHED:
 				return "报销完成";
 			default:
 				return "N/A";

@@ -1,16 +1,15 @@
 package com.rushucloud.reim;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Color;
-import classes.AppPreference;
 import classes.Item;
 import classes.Report;
-import classes.Adapter.ChooseItemListViewAdapter;
 import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,14 +23,13 @@ public class UnarchivedItemsActivity extends Activity
 	private static DBManager dbManager;
 	
 	private ListView itemListView;
-	private ChooseItemListViewAdapter adapter;
+	private ItemListViewAdapter adapter;
 	
-	private List<Item> itemList;
-	private int[] itemLocalIDList;
-	private int[] originalitemLocalIDList;
 	private Report report;
+	private List<Item> itemList;
+	private ArrayList<Integer> chosenItemIDList = null;
+	private ArrayList<Integer> remainingItemIDList = null;
 	private boolean[] checkList;
-	private boolean newReport;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -46,31 +44,38 @@ public class UnarchivedItemsActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("report", report);
+			bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
+			bundle.putIntegerArrayList("remainingItemIDList", remainingItemIDList);
+			Intent intent = new Intent(UnarchivedItemsActivity.this, EditReportActivity.class);
+			intent.putExtras(bundle);
+			startActivity(intent);
 			finish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 	
 	private void dataInitialise()
-	{
-		AppPreference appPreference = AppPreference.getAppPreference();
-		dbManager = DBManager.getDBManager();
-		itemList = dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID());
-		checkList = new boolean[itemList.size()];
-		for (int i = 0; i < itemList.size(); i++)
-		{
-			checkList[i] = false;
-		}
-		
+	{		
 		Bundle bundle = this.getIntent().getExtras();
 		report = (Report)bundle.getSerializable("report");
-		newReport = bundle.getBoolean("newReport");
-		itemLocalIDList = bundle.getIntArray("itemLocalIDList");
+		chosenItemIDList = bundle.getIntegerArrayList("chosenItemIDList");
+		remainingItemIDList = bundle.getIntegerArrayList("remainingItemIDList");
+
+		dbManager = DBManager.getDBManager();
+		itemList = dbManager.getItems(remainingItemIDList);
+		
+		checkList = new boolean[remainingItemIDList.size()];
+		for (int i = 0; i < checkList.length; i++)
+		{
+			checkList[i] = false;
+		}		
 	}
 	
 	private void viewInitialise()
 	{
-		adapter = new ChooseItemListViewAdapter(UnarchivedItemsActivity.this, itemList, checkList);
+		adapter = new ItemListViewAdapter(UnarchivedItemsActivity.this, itemList);
 		itemListView = (ListView)findViewById(R.id.itemListView);
 		itemListView.setAdapter(adapter);
 		itemListView.setOnItemClickListener(new OnItemClickListener()
@@ -79,7 +84,8 @@ public class UnarchivedItemsActivity extends Activity
 					int position, long id)
 			{
 				checkList[position] = checkList[position] ? false : true;
-				refreshItemList();
+				int color = checkList[position] ? Color.rgb(102, 204, 255) : Color.WHITE;
+				view.setBackgroundColor(color);
 			}
 		});
 	}
@@ -93,13 +99,15 @@ public class UnarchivedItemsActivity extends Activity
 			{
 				try
 				{
+					constructList();
 					Bundle bundle = new Bundle();
 					bundle.putSerializable("report", report);
-					bundle.putBoolean("newReport", newReport);
-					bundle.putIntArray("itemLocalIDList", itemLocalIDList);
+					bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
+					bundle.putIntegerArrayList("remainingItemIDList", remainingItemIDList);
 					Intent intent = new Intent(UnarchivedItemsActivity.this, EditReportActivity.class);
 					intent.putExtras(bundle);
 					startActivity(intent);
+					finish();
 				}
 				catch (Exception e)
 				{
@@ -115,16 +123,31 @@ public class UnarchivedItemsActivity extends Activity
 			{
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("report", report);
+				bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
+				bundle.putIntegerArrayList("remainingItemIDList", remainingItemIDList);
 				Intent intent = new Intent(UnarchivedItemsActivity.this, EditReportActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
+				finish();
 			}
 		});
 	}
 	
-	public void refreshItemList()
+	private void constructList()
 	{
-		adapter.setCheck(checkList);
-		adapter.notifyDataSetChanged();
+		ArrayList<Integer> newList = new ArrayList<Integer>();
+		for (int i = 0; i < checkList.length; i++)
+		{
+			if (checkList[i])
+			{
+				chosenItemIDList.add(remainingItemIDList.get(i));
+			}
+			else
+			{
+				newList.add(remainingItemIDList.get(i));
+			}
+		}
+		remainingItemIDList.clear();
+		remainingItemIDList.addAll(newList);
 	}
 }

@@ -67,7 +67,7 @@ public class ReportFragment extends Fragment {
 			case 0:
 				AlertDialog mDialog = new AlertDialog.Builder(getActivity())
 													.setTitle("警告")
-													.setMessage(R.string.deleteItemWarning)
+													.setMessage(R.string.deleteReportWarning)
 													.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 													{
 														public void onClick(DialogInterface dialog, int which)
@@ -125,7 +125,7 @@ public class ReportFragment extends Fragment {
 			{
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("report", reportList.get(position));
-				Intent intent = new Intent(getActivity(), EditItemActivity.class);
+				Intent intent = new Intent(getActivity(), EditReportActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
 			}

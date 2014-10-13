@@ -1,7 +1,9 @@
 package classes;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -127,4 +129,24 @@ public class Utils
 	{
 		return i > 0? true : false;
 	}
+	
+	public static int[] intListToArray(List<Integer> intList)
+	{
+		int[] intArray = new int[intList.size()];
+		for (int i = 0; i < intArray.length; i++)
+		{
+			intArray[i] = intList.get(i);
+		}
+		return intArray;
+	}
+
+    public static ArrayList<Integer> itemListToIDArray(List<Item> itemList)
+    {
+    	ArrayList<Integer> idArrayList = new ArrayList<Integer>();
+    	for (int i = 0; i < itemList.size(); i++)
+		{
+			idArrayList.add(itemList.get(i).getLocalID());
+		}
+    	return idArrayList;
+    }
 }
