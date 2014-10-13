@@ -105,6 +105,7 @@ public class MainActivity extends ActionBarActivity {
 			tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.selector_tab_background);
 		}
 
-	    tabHost.setCurrentTab(tabIndex);		
+	    //tabHost.setCurrentTab(tabIndex);
+		tabHost.setCurrentTab(2);		
     }
 }
