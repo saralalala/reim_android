@@ -167,9 +167,10 @@ public class StatisticsFragment extends Fragment
         HashMap<String, String> _ms = response.get_ms();
 
     	XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+    	if(_ms == null) return;
     	Set<String> keys = _ms.keySet();
     	int _size = keys.size();
-        for(int i = 0; i < keys.size(); i++){
+        for(int i = 0; i < _size; i++){
         	String _series_key = (String)((keys.toArray())[i]);
         	 XYSeries series = new XYSeries(_series_key);
         	 System.out.println("------------------->" + _series_key + "," + _ms.containsKey(_series_key) + ", " + _ms.get(_series_key));
