@@ -6,6 +6,7 @@ import java.util.List;
 import classes.AppPreference;
 import classes.Item;
 import classes.Report;
+import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
 
 import com.rushucloud.reim.R;
@@ -20,6 +21,7 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,11 +29,14 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class EditReportActivity extends Activity
 {
-	private static DBManager dbManager;
+	private AppPreference appPreference;
+	private DBManager dbManager;
 	
 	private EditText titleEditText;
 	private ListView itemListView;
@@ -39,8 +44,8 @@ public class EditReportActivity extends Activity
 	
 	private Report report;
 	private List<Item> itemList = null;
-	private int[] itemLocalIDList = null;
-	private boolean newReport;
+	private ArrayList<Integer> chosenItemIDList = null;
+	private ArrayList<Integer> remainingItemIDList = null;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -51,6 +56,12 @@ public class EditReportActivity extends Activity
 		buttonInitialise();
 	}
 	
+	protected void onResume()
+	{
+		super.onResume();
+		refreshListView();
+	}
+	
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
@@ -58,6 +69,23 @@ public class EditReportActivity extends Activity
 			finish();
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.report, menu);
+		return true;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		int id = item.getItemId();
+		if (id == R.id.action_submit_report)
+		{
+			Toast.makeText(EditReportActivity.this, "提交", Toast.LENGTH_SHORT).show();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
@@ -69,12 +97,27 @@ public class EditReportActivity extends Activity
 	
 	public boolean onContextItemSelected(MenuItem item)
 	{
+    	AdapterContextMenuInfo menuInfo=(AdapterContextMenuInfo)item.getMenuInfo();
+    	final int index = (int)itemListView.getAdapter().getItemId(menuInfo.position);
+    	switch (item.getItemId()) 
+    	{
+			case 0:
+				int id = chosenItemIDList.remove(index);
+				remainingItemIDList.add(id);
+				itemList.remove(index);
+				adapter.set(itemList);
+				adapter.notifyDataSetChanged();
+				break;
+			default:
+				break;
+		}    		
+		
 		return super.onContextItemSelected(item);
 	}
 	
 	private void dataInitialise()
 	{
-		AppPreference.getAppPreference();
+		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 		
 		Bundle bundle = this.getIntent().getExtras();
@@ -82,29 +125,28 @@ public class EditReportActivity extends Activity
 		{
 			// new report from ReportFragment
 			report = new Report();
-			newReport = true;
+			report.setStatus(Report.STATUS_DRAFT);
+			report.setUser(dbManager.getUser(appPreference.getCurrentUserID()));
+			chosenItemIDList = new ArrayList<Integer>();
+			remainingItemIDList = Utils.itemListToIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
+			itemList = new ArrayList<Item>();
 		}
 		else
 		{
 			report = (Report)bundle.getSerializable("report");
-			itemLocalIDList = (int[])bundle.getIntArray("itemLocalIDList");
-			if (itemLocalIDList == null)
+			chosenItemIDList = bundle.getIntegerArrayList("chosenItemIDList");
+			if (chosenItemIDList == null)
 			{
-				// modify a report from ReportFragment
+				// edit report from ReportFragment
 				itemList = dbManager.getReportItems(report.getLocalID());
-				newReport = false;
+				chosenItemIDList = Utils.itemListToIDArray(itemList);
+				remainingItemIDList = Utils.itemListToIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
 			}
 			else
 			{
-				// get chosen items from UnarchivedItemsActivity
-				newReport = bundle.getBoolean("newReport");
-				itemLocalIDList = bundle.getIntArray("itemLocalIDList");
-				itemList = new ArrayList<Item>();
-				for (int i = 0; i < itemLocalIDList.length; i++)
-				{
-					Item item = dbManager.getItemByLocalID(itemLocalIDList[i]);
-					itemList.add(item);
-				}
+				// edit report from UnarchivedActivity
+				remainingItemIDList = bundle.getIntegerArrayList("remainingItemIDList");	
+				itemList = dbManager.getItems(chosenItemIDList);
 			}
 		}
 	}
@@ -112,6 +154,7 @@ public class EditReportActivity extends Activity
 	private void viewInitialise()
 	{
 		titleEditText = (EditText)findViewById(R.id.titleEditText);
+		titleEditText.setText(report.getTitle());
 		
 		adapter = new ItemListViewAdapter(EditReportActivity.this, itemList);
 		itemListView = (ListView)findViewById(R.id.itemListView);
@@ -121,12 +164,24 @@ public class EditReportActivity extends Activity
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				Intent intent = new Intent(EditReportActivity.this, EditItemActivity.class);
-				intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
-				startActivity(intent);
+				if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
+				{
+					Intent intent = new Intent(EditReportActivity.this, ShowItemActivity.class);
+					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
+					startActivity(intent);	
+				}
+				else
+				{
+					Intent intent = new Intent(EditReportActivity.this, EditItemActivity.class);
+					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
+					startActivity(intent);					
+				}
 			}
 		});
-		registerForContextMenu(itemListView);
+		if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECT)
+		{
+			registerForContextMenu(itemListView);			
+		}
 	}
 	
 	private void buttonInitialise()
@@ -137,16 +192,22 @@ public class EditReportActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
+				report.setTitle(titleEditText.getText().toString());
+				
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("report", report);
-				bundle.putBoolean("newReport", newReport);
-				bundle.putIntArray("itemLocalIDList", itemLocalIDList);
+				bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
+				bundle.putIntegerArrayList("remainingItemIDList", remainingItemIDList);
 				Intent intent = new Intent(EditReportActivity.this, UnarchivedItemsActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
 				finish();
 			}
 		});
+		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
+		{
+			addButton.setVisibility(View.GONE);
+		}
 		
 		Button saveButton = (Button)findViewById(R.id.saveButton);
 		saveButton.setOnClickListener(new View.OnClickListener()
@@ -155,32 +216,47 @@ public class EditReportActivity extends Activity
 			{
 				try
 				{
-					dbManager.syncReport(report);
-					if (report.getLocalID() == -1)
+					if (report.getStatus() == 0 || report.getStatus() == 4)
 					{
-						report.setLocalID(dbManager.getLastInsertRowID());						
-					}
-					if (dbManager.updateReportItems(itemLocalIDList, report.getLocalID()))
-					{
-						AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-															.setTitle("保存成功")
-															.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
-															{
-																public void onClick(DialogInterface dialog, int which)
+						report.setLocalUpdatedDate(Utils.getCurrentTime());
+						report.setTitle(titleEditText.getText().toString());
+						if (report.getLocalID() == -1)
+						{
+							report.setCreatedDate(Utils.getCurrentTime());
+							dbManager.insertReport(report);
+							report.setLocalID(dbManager.getLastInsertRowID());								
+						}
+						else
+						{
+							dbManager.updateReport(report);
+						}
+						if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
+						{
+							AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
+																.setTitle("保存成功")
+																.setNegativeButton(R.string.confirm, 
+																		new DialogInterface.OnClickListener()
 																{
-																	finish();
-																}
-															})
-															.create();
-						mDialog.show();
+																	public void onClick(DialogInterface dialog, int which)
+																	{
+																		finish();
+																	}
+																})
+																.create();
+							mDialog.show();
+						}
+						else
+						{
+							AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
+																.setTitle("保存失败")
+																.setNegativeButton(R.string.confirm, null)
+																.create();
+							mDialog.show();
+						}
 					}
 					else
 					{
-						AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-															.setTitle("保存失败")
-															.setNegativeButton(R.string.confirm, null)
-															.create();
-						mDialog.show();
+						finish();
 					}
 				}
 				catch (Exception e)
@@ -199,6 +275,12 @@ public class EditReportActivity extends Activity
 			}
 		});
 	}
+	
+	private void refreshListView()
+	{
+		adapter.set(itemList);
+		adapter.notifyDataSetChanged();
+	}	
 	
     private void hideSoftKeyboard()
     {

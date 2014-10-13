@@ -161,14 +161,6 @@ public class EditItemActivity extends Activity
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 		
-		Intent intent = this.getIntent();
-		int itemLocalID = intent.getIntExtra("itemLocalID", -1);
-		item = dbManager.getItemByLocalID(itemLocalID);
-		if (item == null)
-		{
-			item = new Item();
-		}
-		
 		vendorList = new ArrayList<String>();
 		vendorList.add("肯德基");
 		vendorList.add("麦当劳");
@@ -179,6 +171,16 @@ public class EditItemActivity extends Activity
 		categoryList = dbManager.getGroupCategories(currentGroupID);
 		tagList = dbManager.getGroupTags(currentGroupID);
 		userList = dbManager.getGroupUsers(currentGroupID);
+		
+		Intent intent = this.getIntent();
+		int itemLocalID = intent.getIntExtra("itemLocalID", -1);
+		item = dbManager.getItemByLocalID(itemLocalID);
+		if (item == null)
+		{
+			item = new Item();
+			item.setCategory(categoryList.get(0));
+			item.setMerchant(vendorList.get(0));
+		}
 	}
 	
 	private void viewInitialise()

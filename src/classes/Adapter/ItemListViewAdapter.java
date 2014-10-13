@@ -47,7 +47,8 @@ public class ItemListViewAdapter extends BaseAdapter
 		Bitmap bitmap = item.getImage() == null ? appPreference.getDefaultInvoice() : item.getImage();
 		imageView.setImageBitmap(bitmap);
 		
-		amountTextView.setText("￥" + Double.toString(item.getAmount()));
+		String amount = "￥" + Double.toString(item.getAmount());
+		amountTextView.setText(amount);
 
 		String note = item.getNote().equals("") ? "N/A" : item.getNote();
 		infoTextView.setText(note);
