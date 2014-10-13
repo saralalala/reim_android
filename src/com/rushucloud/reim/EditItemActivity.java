@@ -88,12 +88,7 @@ public class EditItemActivity extends Activity
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{			
-			Bundle bundle = new Bundle();
-			bundle.putInt("tabIndex", 0);
-			Intent intent = new Intent(EditItemActivity.this, MainActivity.class);
-			intent.putExtras(bundle);
-			startActivity(intent);
+		{
 			finish();
 		}
 		return super.onKeyDown(keyCode, event);
@@ -164,11 +159,11 @@ public class EditItemActivity extends Activity
 	private void dataInitialise()
 	{
 		appPreference = AppPreference.getAppPreference();
-		dbManager = DBManager.getDataBaseManager(getApplicationContext());
+		dbManager = DBManager.getDBManager();
 		
 		Intent intent = this.getIntent();
 		int itemLocalID = intent.getIntExtra("itemLocalID", -1);
-		item = dbManager.getItem(itemLocalID);
+		item = dbManager.getItemByLocalID(itemLocalID);
 		if (item == null)
 		{
 			item = new Item();
@@ -403,7 +398,9 @@ public class EditItemActivity extends Activity
 				Calendar calendar = Calendar.getInstance();
 				if (item.getConsumedDate() == -1)
 				{
-					calendar.setTimeInMillis(System.currentTimeMillis());					
+					calendar.setTimeInMillis(System.currentTimeMillis());
+					int month = calendar.get(Calendar.MONTH);
+					calendar.set(Calendar.MONTH, month+1);
 				}
 				else
 				{
@@ -413,7 +410,7 @@ public class EditItemActivity extends Activity
 				final DatePicker datePicker = (DatePicker)view.findViewById(R.id.datePicker);
 				final TimePicker timePicker = (TimePicker)view.findViewById(R.id.timePicker);
 				
-				datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
+				datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)-1, calendar.get(Calendar.DAY_OF_MONTH), null);
 				
 				timePicker.setIs24HourView(true);
 				timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
@@ -427,7 +424,7 @@ public class EditItemActivity extends Activity
 														public void onClick(DialogInterface dialog, int which)
 														{
 															GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), 
-																	datePicker.getMonth(), datePicker.getDayOfMonth(), 
+																	datePicker.getMonth()+1, datePicker.getDayOfMonth(), 
 																	timePicker.getCurrentHour(), timePicker.getCurrentMinute());
 															item.setConsumedDate((int)(greCal.getTimeInMillis() / 1000));
 															timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
@@ -485,8 +482,6 @@ public class EditItemActivity extends Activity
 			{
 				try
 				{
-					AppPreference appPreference = AppPreference.getAppPreference();
-					DBManager dbManager = DBManager.getDataBaseManager(getApplicationContext());
 					item.setAmount(Double.valueOf(amountEditText.getText().toString()));
 					item.setConsumer(dbManager.getUser(appPreference.getCurrentUserID()));
 					item.setNote(noteEditText.getText().toString());
@@ -501,11 +496,6 @@ public class EditItemActivity extends Activity
 															{
 																public void onClick(DialogInterface dialog, int which)
 																{
-																	Bundle bundle = new Bundle();
-																	bundle.putInt("tabIndex", 0);
-																	Intent intent = new Intent(EditItemActivity.this, MainActivity.class);
-																	intent.putExtras(bundle);
-																	startActivity(intent);
 																	finish();
 																}
 															})
@@ -548,11 +538,6 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				Bundle bundle = new Bundle();
-				bundle.putInt("tabIndex", 0);
-				Intent intent = new Intent(EditItemActivity.this, MainActivity.class);
-				intent.putExtras(bundle);
-				startActivity(intent);
 				finish();
 			}
 		});
@@ -617,9 +602,7 @@ public class EditItemActivity extends Activity
     private Boolean saveBitmapToFile(Bitmap bitmap)
     {
     	try
-		{
-        	AppPreference appPreference = AppPreference.getAppPreference();
-    		
+		{    		
     		Matrix matrix = new Matrix();
     		matrix.postScale((float)0.5, (float)0.5);
     		

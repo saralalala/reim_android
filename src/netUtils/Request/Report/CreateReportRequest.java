@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import classes.Report;
+import database.DBManager;
 import netUtils.Request.BaseRequest;
 
 public class CreateReportRequest extends BaseRequest
@@ -15,9 +16,12 @@ public class CreateReportRequest extends BaseRequest
 	{
 		super();
 		
+		DBManager dbManager = DBManager.getDBManager();
+		String iids = dbManager.getReportItemIDs(report.getLocalID());
+		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("title", report.getTitle()));
-		params.add(new BasicNameValuePair("iids", report.getItemIDs()));
+		params.add(new BasicNameValuePair("iids", iids));
 		setParams(params);
 
 		String requestUrl = getUrl();

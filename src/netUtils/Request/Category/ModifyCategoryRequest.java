@@ -25,7 +25,7 @@ public class ModifyCategoryRequest extends BaseRequest
 		setParams(params);
 
 		String requestUrl = getUrl();
-		requestUrl += "/category/" + category.getId();
+		requestUrl += "/category/" + category.getServerID();
 		setUrl(requestUrl);
 	}
 

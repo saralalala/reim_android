@@ -5,7 +5,7 @@ import java.util.List;
 
 public class User
 {
-	private int id = -1;
+	private int serverID = -1;
 	private String email = "";
 	private String password = "";
 	private String nickname = "";
@@ -19,13 +19,13 @@ public class User
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 	
-	public int getId()
+	public int getServerID()
 	{
-		return id;
+		return serverID;
 	}
-	public void setId(int id)
+	public void setServerID(int serverID)
 	{
-		this.id = id;
+		this.serverID = serverID;
 	}
 	
 	public String getEmail()
@@ -143,7 +143,7 @@ public class User
 		boolean[] check = new boolean[userList.size()];
 		for (int i = 0; i < userList.size(); i++)
 		{
-			if (userList.get(i).getId() == appPreference.getCurrentUserID())
+			if (userList.get(i).getServerID() == appPreference.getCurrentUserID())
 			{
 				check[i] = true;
 			}
@@ -164,7 +164,7 @@ public class User
 			User user = userList.get(i);
 			for (int j = 0; j < relevantUsers.size(); j++)
 			{
-				if (user.getId() == relevantUsers.get(j).getId())
+				if (user.getServerID() == relevantUsers.get(j).getServerID())
 				{
 					check[i] = true;
 				}

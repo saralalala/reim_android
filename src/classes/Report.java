@@ -1,25 +1,40 @@
 package classes;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
-public class Report
+import database.DBManager;
+
+public class Report implements Serializable
 {
-	private String title = "";
-	private int id = -1;
+	private static final long serialVersionUID = 1L;
+	
 	private int localID = -1;
-	private int itemCount = 0;
-	private double amount = 0.0;
+	private int serverID = -1;
+	private String title = "";
 	private int status = 0;
-	private List<Integer> itemList = null;
+	private int managerID = -1;
 	private User user = null;
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 	
-	public Report()
+	public int getLocalID()
 	{
-		itemList = new ArrayList<Integer>();
+		return localID;
+	}
+	public void setLocalID(int localID)
+	{
+		this.localID = localID;
+	}
+	
+	public int getServerID()
+	{
+		return serverID;
+	}
+	public void setServerID(int serverID)
+	{
+		this.serverID = serverID;
 	}
 	
 	public String getTitle()
@@ -31,42 +46,6 @@ public class Report
 		this.title = title;
 	}
 	
-	public int getId()
-	{
-		return id;
-	}
-	public void setId(int id)
-	{
-		this.id = id;
-	}
-	
-	public int getLocalID()
-	{
-		return localID;
-	}
-	public void setLocalID(int localID)
-	{
-		this.localID = localID;
-	}
-	
-	public int getItemCount()
-	{
-		return itemCount;
-	}
-	public void setItemCount(int itemCount)
-	{
-		this.itemCount = itemCount;
-	}
-	
-	public double getAmount()
-	{
-		return amount;
-	}
-	public void setAmount(double amount)
-	{
-		this.amount = amount;
-	}
-	
 	public int getStatus()
 	{
 		return status;
@@ -76,15 +55,15 @@ public class Report
 		this.status = status;
 	}
 	
-	public List<Integer> getItemList()
+	public int getManagerID()
 	{
-		return itemList;
+		return managerID;
 	}
-	public void setItemList(List<Integer> itemList)
+	public void setManagerID(int managerID)
 	{
-		this.itemList = itemList;
+		this.managerID = managerID;
 	}
-	
+
 	public User getUser()
 	{
 		return user;
@@ -121,18 +100,23 @@ public class Report
 		this.localUpdatedDate = localUpdatedDate;
 	}
 
-	public void addItem(Item item)
+	public double getTotalAmount()
 	{
-		itemCount++;
-		amount += item.getAmount();
-		itemList.add(item.getLocalID());
+		DBManager dbManager = DBManager.getDBManager();
+		List<Item> itemList = dbManager.getReportItems(localID);
+		double amount = 0;
+		for (int i = 0; i < itemList.size(); i++)
+		{
+			amount += itemList.get(i).getAmount();
+		}
+		return amount;
 	}
 	
-	public void removeItem(Item item)
+	public int getItemCount()
 	{
-		itemCount--;
-		amount -= item.getAmount();
-		itemList.remove(item.getLocalID());
+		DBManager dbManager = DBManager.getDBManager();
+		List<Item> itemList = dbManager.getReportItems(localID);
+		return itemList.size();
 	}
 	
 	public String getStatusString()
@@ -144,12 +128,13 @@ public class Report
 			case 1:
 				return "已提交";
 			case 2:
-				return "审批未通过";
-			case 3:
 				return "审批通过";
+			case 3:
+				return "审批未通过";
+			case 4:
+				return "报销完成";
 			default:
-				break;
+				return "N/A";
 		}
-		return "N/A";
 	}
 }

@@ -21,7 +21,7 @@ public class ModifyTagRequest extends BaseRequest
 		setParams(params);
 
 		String requestUrl = getUrl();
-		requestUrl += "/tags/" + tag.getId();
+		requestUrl += "/tags/" + tag.getServerID();
 		setUrl(requestUrl);
 	}
 	

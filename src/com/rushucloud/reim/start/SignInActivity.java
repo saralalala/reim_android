@@ -1,12 +1,5 @@
 package com.rushucloud.reim.start;
 
-
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-
-import netUtils.BuildResponse;
 import netUtils.HttpConstant;
 import netUtils.Request.CommonRequest;
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
@@ -181,27 +174,11 @@ public class SignInActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				CommonResponse response = null;
-				try {
-					response = (CommonResponse) BuildResponse.get_repsonse(httpResponse, CommonResponse.class);
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
+				CommonResponse response = new CommonResponse(httpResponse);				
 				if (response.getStatus())
 				{
-					int currentUserID = response.getCurrentUser().getId();
-					int currentGroupID = response.getGroup().getId();
+					int currentUserID = response.getCurrentUser().getServerID();
+					int currentGroupID = response.getGroup().getServerID();
 					
 					// update AppPreference
 					AppPreference appPreference = AppPreference.getAppPreference();
@@ -211,7 +188,7 @@ public class SignInActivity extends Activity
 					ReimApplication application = (ReimApplication)getApplication();
 					application.saveAppPreference();
 
-					DBManager dbManager = DBManager.getDataBaseManager(getApplicationContext());
+					DBManager dbManager = DBManager.getDBManager();
 					
 					// update members
 					dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);

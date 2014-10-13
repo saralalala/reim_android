@@ -10,6 +10,7 @@
     <string name="cancel">取消</string>
     <string name="add">添加</string>
     <string name="warning">警告</string>
+    <string name="back">返回</string>
     
     <string name="sign_up">注册</string>
     <string name="sign_in">登录</string>

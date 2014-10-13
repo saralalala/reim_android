@@ -1,5 +1,6 @@
 package com.rushucloud.reim;
 
+import database.DBManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
 import android.graphics.drawable.Drawable;
@@ -45,6 +46,8 @@ public class MainActivity extends ActionBarActivity {
         	else 
         	{
 				finish();
+				DBManager dbManager = DBManager.getDBManager();
+				dbManager.close();
 				android.os.Process.killProcess(android.os.Process.myPid());
 			}
             return true;

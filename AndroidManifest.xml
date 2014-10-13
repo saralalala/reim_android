@@ -41,6 +41,10 @@
         <activity 
  			android:name="com.rushucloud.reim.start.SignInActivity"
             android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         
         <activity 
@@ -69,12 +73,18 @@
         </activity>
         
         <activity
+            android:name="com.rushucloud.reim.ShowItemActivity"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <activity
             android:name="com.rushucloud.reim.EditReportActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.rushucloud.reim.UnarchivedItemsActivity"
+            android:label="@string/app_name" >
         </activity>
         
         <activity

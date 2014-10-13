@@ -36,7 +36,7 @@ public class SubordinatesInfoResponse extends BaseResponse
 				JSONObject object = jsonArray.getJSONObject(i);
 				User user = new User();
 				user.setEmail(object.getString("email"));
-				user.setId(Integer.valueOf(object.getString("id")));
+				user.setServerID(Integer.valueOf(object.getString("id")));
 				userList.add(user);
 			}
 		}

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Category
 {
-	private int id;
+	private int serverID;
 	private String name;
 	private double limit;
 	private int groupID;
@@ -14,15 +14,15 @@ public class Category
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 
-	public int getId()
+	public int getServerID()
 	{
-		return id;
+		return serverID;
 	}
-	public void setId(int id)
+	public void setServerID(int serverID)
 	{
-		this.id = id;
+		this.serverID = serverID;
 	}
-
+	
 	public String getName()
 	{
 		return name;
@@ -95,7 +95,7 @@ public class Category
 		
 		for (int i = 0; i < categoryList.size(); i++)
 		{
-			if (category.getId() == categoryList.get(i).getId())
+			if (category.getServerID() == categoryList.get(i).getServerID())
 			{
 				return i;
 			}

@@ -2,6 +2,8 @@ package com.rushucloud.reim.start;
 
 import com.rushucloud.reim.R;
 
+import database.DBManager;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +37,8 @@ public class WelcomeActivity extends Activity
         	else 
         	{
 				finish();
+				DBManager dbManager = DBManager.getDBManager();
+				dbManager.close();
 				android.os.Process.killProcess(android.os.Process.myPid());
 			}
             return true;

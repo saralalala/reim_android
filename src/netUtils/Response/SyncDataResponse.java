@@ -40,7 +40,7 @@ public class SyncDataResponse extends BaseResponse
 			{
 				JSONObject object = jsonArray.getJSONObject(i);
 				Item item = new Item();
-				item.setId(object.getInt("id"));
+				item.setServerID(object.getInt("id"));
 				item.setAmount(object.getDouble("amount"));
 				item.setMerchant(object.getString("merchants"));
 				item.setNote(object.getString("note"));
@@ -54,12 +54,12 @@ public class SyncDataResponse extends BaseResponse
 				//TODO get image from server
 				
 				Category category = new Category();
-				category.setId(object.getInt("category"));
+				category.setServerID(object.getInt("category"));
 				//TODO request for common once again
 				item.setCategory(category);
 				
 				User user = new User();
-				user.setId(object.getInt("uid"));
+				user.setServerID(object.getInt("uid"));
 				//TODO get user
 				item.setConsumer(user);
 
@@ -74,14 +74,14 @@ public class SyncDataResponse extends BaseResponse
 			{
 				JSONObject object = jsonArray.getJSONObject(i);
 				Report report = new Report();
-				report.setId(object.getInt("id"));
+				report.setServerID(object.getInt("id"));
 				report.setTitle(object.getString("title"));
 				report.setCreatedDate(object.getInt("createdt"));
 				report.setServerUpdatedDate(object.getInt("lastdt"));
 				report.setStatus(object.getInt("status"));
 				
 				User user = new User();
-				user.setId(object.getInt("uid"));
+				user.setServerID(object.getInt("uid"));
 				// TODO get user information
 				
 				report.setUser(user);

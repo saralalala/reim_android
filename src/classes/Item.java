@@ -1,13 +1,16 @@
 package classes;
 
+import java.io.Serializable;
 import java.util.List;
 
 import android.graphics.Bitmap;
 
-public class Item
+public class Item implements Serializable
 {
-	private int id = -1;
+	private static final long serialVersionUID = 1L;
+	
 	private int localID = -1;
+	private int serverID = -1;
 	private Bitmap image = null;
 	private int imageID = -1;
 	private String invoicePath = "";
@@ -26,15 +29,6 @@ public class Item
 	private Boolean isProveAhead = false;
 	private Boolean needReimbursed = false;
 	
-	public int getId()
-	{
-		return id;
-	}
-	public void setId(int id)
-	{
-		this.id = id;
-	}
-	
 	public int getLocalID()
 	{
 		return localID;
@@ -42,6 +36,15 @@ public class Item
 	public void setLocalID(int localID)
 	{
 		this.localID = localID;
+	}
+	
+	public int getServerID()
+	{
+		return serverID;
+	}
+	public void setServerID(int serverID)
+	{
+		this.serverID = serverID;
 	}
 	
 	public Bitmap getImage()

@@ -5,20 +5,11 @@ import java.util.List;
 
 public class Tag
 {
-	private int id;
+	private int serverID;
 	private int groupID;
 	private String name;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
-	
-	public int getId()
-	{
-		return id;
-	}
-	public void setId(int id)
-	{
-		this.id = id;
-	}
 	
 	public int getGroupID()
 	{
@@ -74,7 +65,7 @@ public class Tag
 			Tag tag = tagList.get(i);
 			for (int j = 0; j < currentTags.size(); j++)
 			{
-				if (tag.getId() == currentTags.get(j).getId())
+				if (tag.getServerID() == currentTags.get(j).getServerID())
 				{
 					check[i] = true;
 				}
@@ -106,5 +97,13 @@ public class Tag
 			result += tagList.get(i).getName() + ",";
 		}
 		return result.substring(0, result.length()-1);
+	}
+	public int getServerID()
+	{
+		return serverID;
+	}
+	public void setServerID(int serverID)
+	{
+		this.serverID = serverID;
 	}
 }

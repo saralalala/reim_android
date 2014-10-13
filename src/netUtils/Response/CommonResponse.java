@@ -30,7 +30,6 @@ public class CommonResponse extends BaseResponse
 		}
 	}
 
-	@Override
 	protected  void constructData()
 	{
 		try
@@ -41,7 +40,7 @@ public class CommonResponse extends BaseResponse
 			
 			JSONObject groupObject = profileObject.getJSONObject("group");
 			group = new Group();
-			group.setId(groupObject.getInt("groupid"));
+			group.setServerID(groupObject.getInt("groupid"));
 			group.setName(groupObject.getString("group_name"));
 			group.setLocalUpdatedDate(groupObject.getInt("lastdt"));
 			group.setServerUpdatedDate(groupObject.getInt("lastdt"));
@@ -50,10 +49,10 @@ public class CommonResponse extends BaseResponse
 			currentUser.setEmail(profileObject.getString("email"));
 			currentUser.setNickname(profileObject.getString("nickname"));
 			currentUser.setAvatarPath(profileObject.getString("avatar"));
-			currentUser.setId(profileObject.getInt("id"));
+			currentUser.setServerID(profileObject.getInt("id"));
 			currentUser.setIsActive(Utils.intToBoolean(profileObject.getInt("active")));
 			currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
-			currentUser.setGroupID(group.getId());
+			currentUser.setGroupID(group.getServerID());
 			currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
 			currentUser.setServerUpdatedDate(Utils.getCurrentTime());
 			
@@ -63,7 +62,7 @@ public class CommonResponse extends BaseResponse
 			{
 				JSONObject object = categoryArray.getJSONObject(i);
 				Category category =new Category();
-				category.setId(Integer.valueOf(object.getString("id")));
+				category.setServerID(Integer.valueOf(object.getString("id")));
 				category.setName(object.getString("category_name"));
 				category.setLimit(Double.valueOf(object.getString("max_limit")));
 				category.setGroupID(Integer.valueOf(object.getString("gid")));
@@ -80,7 +79,7 @@ public class CommonResponse extends BaseResponse
 			{
 				JSONObject object = tagArray.getJSONObject(i);
 				Tag tag = new Tag();
-				tag.setId(Integer.valueOf(object.getString("id")));
+				tag.setServerID(Integer.valueOf(object.getString("id")));
 				tag.setName(object.getString("name"));
 				tag.setGroupID(Integer.valueOf(object.getString("gid")));
 				tag.setLocalUpdatedDate(object.getInt("lastdt"));
@@ -94,13 +93,13 @@ public class CommonResponse extends BaseResponse
 			{
 				JSONObject object = memberArray.getJSONObject(i);
 				User user = new User();
-				user.setId(Integer.valueOf(object.getString("id")));
+				user.setServerID(Integer.valueOf(object.getString("id")));
 				user.setEmail(object.getString("email"));
 				user.setPhone(object.getString("phone"));
 				user.setNickname(object.getString("nickname"));
 				user.setIsAdmin(object.getString("admin").equals("1") ? true : false);
 				user.setDefaultManagerID(object.getInt("manager_id"));
-				user.setGroupID(group.getId());
+				user.setGroupID(group.getServerID());
 				user.setAvatarPath(object.getString("avatar"));
 				user.setLocalUpdatedDate(Utils.getCurrentTime());
 				user.setServerUpdatedDate(Utils.getCurrentTime());

@@ -12,17 +12,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:ems="10"
-        android:hint="@string/inputReportTitle"
-        android:inputType="numberDecimal" />
-    
-    <Button
-        android:id="@+id/addButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="350dp"
-        android:background="@drawable/ic_launcher"
-        android:text="@string/add" />
+        android:hint="@string/inputReportTitle" />
 
     <ListView
         android:id="@+id/itemListView"
@@ -33,6 +23,16 @@
         android:layout_below="@+id/titleEditText" >
 
     </ListView>
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/ic_launcher"
+        android:text="@string/add" />
 
     <Button
         android:id="@+id/cancelButton"

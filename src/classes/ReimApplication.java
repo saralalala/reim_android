@@ -4,6 +4,8 @@ import java.io.File;
 
 import com.rushucloud.reim.R;
 
+import database.DBManager;
+
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -13,12 +15,13 @@ import android.os.Environment;
 import android.telephony.TelephonyManager;
 
 public class ReimApplication extends Application
-{
+{	
 	public void onCreate()
 	{
 		super.onCreate();
 		readAppPreference();
 		createDirectories();
+		DBManager.createDBManager(getApplicationContext());
 	}
 	
 	private void readAppPreference()

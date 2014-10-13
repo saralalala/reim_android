@@ -2,25 +2,20 @@ package classes;
 
 public class Group
 {
-	private int id = -1;
+	private int serverID = -1;
 	private String name = "";
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
+
+	public int getServerID()
+	{
+		return serverID;
+	}
+	public void setServerID(int serverID)
+	{
+		this.serverID = serverID;
+	}
 	
-	public Group()
-	{
-		
-	}
-
-	public int getId()
-	{
-		return id;
-	}
-	public void setId(int id)
-	{
-		this.id = id;
-	}
-
 	public String getName()
 	{
 		return name;

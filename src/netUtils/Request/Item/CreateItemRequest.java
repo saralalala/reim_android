@@ -20,7 +20,7 @@ public class CreateItemRequest extends BaseRequest
 		int count = item.getRelevantUsers().size();
 		for (int i = 0; i < count; i++)
 		{
-			uids += item.getRelevantUsers().get(i).getId() + ",";
+			uids += item.getRelevantUsers().get(i).getServerID() + ",";
 		}
 		if (uids.length() > 0)
 		{
@@ -29,7 +29,7 @@ public class CreateItemRequest extends BaseRequest
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("amount", Double.toString(item.getAmount())));
-		params.add(new BasicNameValuePair("category", Integer.toString(item.getCategory().getId())));
+		params.add(new BasicNameValuePair("category", Integer.toString(item.getCategory().getServerID())));
 		params.add(new BasicNameValuePair("merchants", item.getMerchant()));
 		params.add(new BasicNameValuePair("billable", Boolean.toString(item.isProveAhead())));
 		params.add(new BasicNameValuePair("image_id", Integer.toString(item.getImageID())));

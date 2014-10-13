@@ -45,6 +45,12 @@ public class ReimFragment extends Fragment {
         viewInitialise();
 	}
     
+	public void onResume()
+	{
+		super.onResume();
+		refreshItemListView();
+	}
+	
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
     {
     	super.onCreateContextMenu(menu, v, menuInfo);
@@ -94,7 +100,7 @@ public class ReimFragment extends Fragment {
     
     private void dataInitialise()
     {
-    	dbManager = DBManager.getDataBaseManager(getActivity());
+    	dbManager = DBManager.getDBManager();
 		itemList = readItemList();
     }
     
@@ -107,7 +113,6 @@ public class ReimFragment extends Fragment {
 			{
 				Intent intent = new Intent(getActivity(), EditItemActivity.class);
 				startActivity(intent);
-				getActivity().finish();
 			}
 		});
 
@@ -122,7 +127,6 @@ public class ReimFragment extends Fragment {
 				Intent intent = new Intent(getActivity(), EditItemActivity.class);
 				intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
 				startActivity(intent);
-				getActivity().finish();
 			}
 		});
 		registerForContextMenu(itemListView);
@@ -131,7 +135,7 @@ public class ReimFragment extends Fragment {
 	private List<Item> readItemList()
 	{
 		AppPreference appPreference = AppPreference.getAppPreference();
-		DBManager dbManager = DBManager.getDataBaseManager(getActivity());
+		DBManager dbManager = DBManager.getDBManager();
 		return dbManager.getUserItems(appPreference.getCurrentUserID());
 	}
 	

@@ -44,7 +44,13 @@ public class ReportFragment extends Fragment {
         dataInitialise();
         viewInitialise();
     }
-    
+	   
+	public void onResume()
+	{
+		super.onResume();
+		refreshReportListView();
+	}
+	
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
     {
     	super.onCreateContextMenu(menu, v, menuInfo);
@@ -66,8 +72,7 @@ public class ReportFragment extends Fragment {
 													{
 														public void onClick(DialogInterface dialog, int which)
 														{
-															int reportLocalID = reportList.get(index).getLocalID();
-															if (dbManager.deleteItem(reportLocalID))
+															if (dbManager.deleteReport(reportList.get(index).getLocalID()))
 															{
 																refreshReportListView();
 													            Toast.makeText(getActivity(),
@@ -94,7 +99,7 @@ public class ReportFragment extends Fragment {
     
     private void dataInitialise()
     {
-    	dbManager = DBManager.getDataBaseManager(getActivity());
+    	dbManager = DBManager.getDBManager();
     	reportList = readReportList();
     }
     
@@ -105,9 +110,8 @@ public class ReportFragment extends Fragment {
 		{
 			public void onClick(View v)
 			{
-				Intent intent = new Intent(getActivity(), EditItemActivity.class);
+				Intent intent = new Intent(getActivity(), EditReportActivity.class);
 				startActivity(intent);
-				getActivity().finish();
 			}
 		});
 
@@ -119,10 +123,11 @@ public class ReportFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("report", reportList.get(position));
 				Intent intent = new Intent(getActivity(), EditItemActivity.class);
-				intent.putExtra("reportLocalID", reportList.get(position).getLocalID());
+				intent.putExtras(bundle);
 				startActivity(intent);
-				getActivity().finish();
 			}
 		});
 		registerForContextMenu(reportListView);
@@ -131,7 +136,7 @@ public class ReportFragment extends Fragment {
 	private List<Report> readReportList()
 	{
 		AppPreference appPreference = AppPreference.getAppPreference();
-		DBManager dbManager = DBManager.getDataBaseManager(getActivity());
+		DBManager dbManager = DBManager.getDBManager();
 		return dbManager.getUserReports(appPreference.getCurrentUserID());
 	}
 	
