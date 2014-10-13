@@ -29,7 +29,7 @@ public class ReportListViewAdapter extends BaseAdapter
 	{
 		if (convertView == null)
 		{
-			convertView = layoutInflater.inflate(R.layout.reports_list_item, parent, false);
+			convertView = layoutInflater.inflate(R.layout.list_item_report, parent, false);
 		}
 		
 		TextView titleTextView = (TextView)convertView.findViewById(R.id.titleTextView);

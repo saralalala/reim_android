@@ -2,8 +2,9 @@
 <resources>
 
     <string name="app_name">Reim</string>
-    <string name="background">Background</string>
+    <string name="background">背景</string>
     <string name="action_settings">设置</string>
+    <string name="nullString"></string>
     
     <string name="confirm">确定</string>
     <string name="save">保存</string>
@@ -12,12 +13,12 @@
     <string name="warning">警告</string>
     <string name="back">返回</string>
     
-    <string name="sign_up">注册</string>
-    <string name="sign_in">登录</string>
+    <string name="signUp">注册</string>
+    <string name="signIn">登录</string>
     <string name="userIDPrompt">请输入手机号/邮箱</string>
     <string name="passwordPrompt">请输入密码</string>
-    <string name="confirmPasswordPrompt">请确认密码</string>
     <string name="newPasswordPrompt">请输入新密码</string>
+    <string name="confirmPasswordPrompt">请确认密码</string>
     <string name="forgotPassword">忘记密码</string>
     <string name="findPasswordByPhone">用手机找回</string>
     <string name="findPasswordByEmail">用邮箱找回</string>
@@ -54,5 +55,22 @@
     <string name="inputReportTitle">请输入报告名称</string>
     <string name="deleteReportWarning">是否要删除此报告？</string>
     <string name="submit">提交</string>
+    
+    <string name="avatar">头像</string>
+    <string name="enablePasswordProtection">开启密码保护</string>
+    <string name="syncWithoutWifi">仅Wi-Fi时上传云端</string>
+    <string name="share">分享</string>
+    <string name="preference">偏好设置</string>
+    <string name="feedback">意见反馈</string>
+    <string name="signOut">退出登录</string>
+    <string name="email">邮箱</string>
+    <string name="phone">手机</string>
+    <string name="companyName">公司名称</string>
+    <string name="nickname">昵称</string>
+    <string name="changePassword">修改密码</string>
+    <string name="inputCompanyName">请输入公司名称</string>
+    <string name="inputNickname">请输入昵称</string>
+    <string name="oldPasswordPrompt">请输入旧密码</string>
+    <string name="confirmNewPasswordPrompt">请确认新密码</string>
 
 </resources>

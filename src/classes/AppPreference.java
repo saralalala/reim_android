@@ -1,7 +1,5 @@
 package classes;
 
-import android.graphics.Bitmap;
-
 public class AppPreference
 {
 	private static AppPreference appPreference = null;
@@ -15,8 +13,8 @@ public class AppPreference
 	private String profileImageDirectory = "";
 	private String invoiceImageDirectory = "";
 	private boolean syncWithoutWifi = false;
-	private Bitmap defaultInvoice = null;
-
+	private boolean enablePasswordProtection = false;
+	
 	private AppPreference()
 	{
 		
@@ -121,13 +119,13 @@ public class AppPreference
 		this.syncWithoutWifi = syncWithoutWifi;
 	}
 
-	public Bitmap getDefaultInvoice()
+	public boolean passwordProtectionEnabled()
 	{
-		return defaultInvoice;
+		return enablePasswordProtection;
 	}
 
-	public void setDefaultInvoice(Bitmap defaultInvoice)
+	public void setEnablePasswordProtection(boolean enablePasswordProtection)
 	{
-		this.defaultInvoice = defaultInvoice;
+		this.enablePasswordProtection = enablePasswordProtection;
 	}
 }

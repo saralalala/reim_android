@@ -254,8 +254,14 @@ public class EditItemActivity extends Activity
 		});
 		registerForContextMenu(invoiceImageView);
 		
-		Bitmap bitmap = item.getImage() == null? appPreference.getDefaultInvoice() : item.getImage();
-		invoiceImageView.setImageBitmap(bitmap);
+		if (item.getImage() == null)
+		{
+			invoiceImageView.setImageResource(R.drawable.default_invoice);
+		}
+		else
+		{
+			invoiceImageView.setImageBitmap(item.getImage());			
+		}
 		
 		LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()

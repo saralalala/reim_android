@@ -3,12 +3,10 @@ package classes.Adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.AppPreference;
 import classes.Item;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +29,7 @@ public class ItemListViewAdapter extends BaseAdapter
 	{
 		if (convertView == null)
 		{
-			convertView = layoutInflater.inflate(R.layout.items_list_item, parent, false);
+			convertView = layoutInflater.inflate(R.layout.list_item_item, parent, false);
 		}
 		
 		ImageView imageView = (ImageView)convertView.findViewById(R.id.photoImageView);
@@ -40,12 +38,16 @@ public class ItemListViewAdapter extends BaseAdapter
 		TextView categoryTextView = (TextView)convertView.findViewById(R.id.categoryTextView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		
-		AppPreference appPreference = AppPreference.getAppPreference();
-		
 		Item item = this.getItem(position);
 
-		Bitmap bitmap = item.getImage() == null ? appPreference.getDefaultInvoice() : item.getImage();
-		imageView.setImageBitmap(bitmap);
+		if (item.getImage() == null)
+		{
+			imageView.setImageResource(R.drawable.default_invoice);
+		}
+		else
+		{
+			imageView.setImageBitmap(item.getImage());			
+		}
 		
 		String amount = "￥" + Double.toString(item.getAmount());
 		amountTextView.setText(amount);

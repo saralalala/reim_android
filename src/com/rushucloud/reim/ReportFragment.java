@@ -33,8 +33,8 @@ public class ReportFragment extends Fragment {
 	private DBManager dbManager;
 	private List<Report> reportList;
 	
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
 	    return inflater.inflate(R.layout.fragment_report, container, false);  
 	}
 	

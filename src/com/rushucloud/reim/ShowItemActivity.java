@@ -1,6 +1,5 @@
 package com.rushucloud.reim;
 
-import classes.AppPreference;
 import classes.Item;
 import classes.Tag;
 import classes.User;
@@ -12,7 +11,6 @@ import database.DBManager;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -99,9 +97,14 @@ public class ShowItemActivity extends Activity
 			}
 		});
 		
-		AppPreference appPreference = AppPreference.getAppPreference();
-		Bitmap bitmap = item.getImage() == null? appPreference.getDefaultInvoice() : item.getImage();
-		invoiceImageView.setImageBitmap(bitmap);
+		if (item.getImage() == null)
+		{
+			invoiceImageView.setImageResource(R.drawable.default_invoice);
+		}
+		else
+		{
+			invoiceImageView.setImageBitmap(item.getImage());			
+		}
 	}
 	
 	private void buttonInitialise()

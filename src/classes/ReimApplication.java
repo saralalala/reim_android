@@ -2,15 +2,11 @@ package classes;
 
 import java.io.File;
 
-import com.rushucloud.reim.R;
-
 import database.DBManager;
 
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 
@@ -44,8 +40,8 @@ public class ReimApplication extends Application
 			appPreference.setDeviceToken(telephonyManager.getDeviceId());
 		}
 		
-		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_invoice);
-		appPreference.setDefaultInvoice(bitmap);
+		appPreference.setSyncWithoutWifi(preferences.getBoolean("syncWithoutWifi", false));
+		appPreference.setEnablePasswordProtection(preferences.getBoolean("enablePasswordProtection", false));
 	}
 	
 	public void saveAppPreference()
@@ -58,6 +54,7 @@ public class ReimApplication extends Application
 		editor.putString("deviceToken", appPreference.getDeviceToken());
 		editor.putString("serverToken", appPreference.getServerToken());
 		editor.putBoolean("syncWithoutWifi", appPreference.syncWithoutWifi());
+		editor.putBoolean("enablePasswordProtection", appPreference.passwordProtectionEnabled());
 		editor.commit();
 	}
 	

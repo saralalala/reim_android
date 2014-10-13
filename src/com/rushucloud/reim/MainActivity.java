@@ -95,7 +95,7 @@ public class MainActivity extends ActionBarActivity {
 			Drawable drawableTop = getResources().getDrawable(imageViewList[i]);
 			drawableTop.setBounds(0, 5, drawableTop.getMinimumWidth(), drawableTop.getMinimumHeight()+5);
 			
-			TextView textView = (TextView) view.findViewById(R.id.textview);		
+			TextView textView = (TextView) view.findViewById(R.id.textView);		
 			textView.setText(getText(textviewList[i]));			
 			textView.setCompoundDrawablePadding(5);
 			textView.setCompoundDrawables(null, drawableTop, null, null);			

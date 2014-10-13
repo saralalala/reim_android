@@ -34,7 +34,7 @@ public class UnarchivedItemsActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.reim_unarchived_items);
+		setContentView(R.layout.report_unarchived_items);
 		dataInitialise();
 		viewInitialise();
 		buttonInitialise();

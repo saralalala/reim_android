@@ -33,8 +33,8 @@ public class ReimFragment extends Fragment {
 	private DBManager dbManager;
 	private List<Item> itemList;
 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
 		return inflater.inflate(R.layout.fragment_reimbursement, container, false);
 	}
 	

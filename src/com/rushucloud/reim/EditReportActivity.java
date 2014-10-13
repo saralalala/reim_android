@@ -50,7 +50,7 @@ public class EditReportActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.reim_edit_report);
+		setContentView(R.layout.report_edit);
 		dataInitialise();
 		viewInitialise();
 		buttonInitialise();
@@ -73,14 +73,16 @@ public class EditReportActivity extends Activity
 
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.report, menu);
+		getMenuInflater().inflate(R.menu.single_item, menu);
+		MenuItem item = menu.getItem(0);
+		item.setTitle(getResources().getString(R.string.submit));
 		return true;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
 		int id = item.getItemId();
-		if (id == R.id.action_submit_report)
+		if (id == R.id.action_item)
 		{
 			Toast.makeText(EditReportActivity.this, "提交", Toast.LENGTH_SHORT).show();
 			return true;
