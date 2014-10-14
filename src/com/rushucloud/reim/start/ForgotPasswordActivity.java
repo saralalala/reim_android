@@ -76,8 +76,6 @@ public class ForgotPasswordActivity extends Activity
         int screenWidth = dm.widthPixels;   
         tabHost.getTabWidget().getChildTabViewAt(0).setMinimumWidth(screenWidth / 2);  
         tabHost.getTabWidget().getChildTabViewAt(1).setMinimumWidth(screenWidth / 2);
-
-//        tabHost.setCurrentTab(0);
     }
 
     private void viewInitialise()

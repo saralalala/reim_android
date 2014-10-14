@@ -5,7 +5,6 @@ import netUtils.Request.CommonRequest;
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
 import netUtils.Response.CommonResponse;
 import classes.AppPreference;
-import classes.ReimApplication;
 import classes.Utils;
 
 import com.rushucloud.reim.MainActivity;
@@ -54,10 +53,13 @@ public class SignInActivity extends Activity
 	private void viewIntialise()
 	{
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
-		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
+		passwordEditText = (EditText)findViewById(R.id.phonePasswordEditText);
 		
 		usernameEditText.setText(HttpConstant.DEBUG_EMAIL);
 		passwordEditText.setText(HttpConstant.DEBUG_PASSWORD);
+
+		usernameEditText.setText("18610104680");
+		passwordEditText.setText("111111");
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
@@ -147,8 +149,7 @@ public class SignInActivity extends Activity
 					AppPreference appPreference = AppPreference.getAppPreference();
 					appPreference.setUsername(username);
 					appPreference.setPassword(password);
-					ReimApplication reimApplication = (ReimApplication)getApplication();
-					reimApplication.saveAppPreference();
+					appPreference.saveAppPreference();
 					
 					hideSoftKeyboard();
 					signIn();
@@ -174,33 +175,49 @@ public class SignInActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				CommonResponse response = new CommonResponse(httpResponse);				
+				final CommonResponse response = new CommonResponse(httpResponse);				
 				if (response.getStatus())
 				{
 					int currentUserID = response.getCurrentUser().getServerID();
-					int currentGroupID = response.getGroup().getServerID();
-					
-					// update AppPreference
+					int currentGroupID = -1;
+
+					DBManager dbManager = DBManager.getDBManager();
 					AppPreference appPreference = AppPreference.getAppPreference();
 					appPreference.setServerToken(response.getServerToken());
 					appPreference.setCurrentUserID(currentUserID);
-					appPreference.setCurrentGroupID(currentGroupID);
-					ReimApplication application = (ReimApplication)getApplication();
-					application.saveAppPreference();
-
-					DBManager dbManager = DBManager.getDBManager();
 					
-					// update members
-					dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-					
-					// update categories
-					dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-					
-					// update tags
-					dbManager.updateGroupTags(response.getTagList(), currentGroupID);
-					
-					// update group info
-					dbManager.syncGroup(response.getGroup());
+					if (response.getGroup() != null)
+					{
+						currentGroupID = response.getGroup().getServerID();
+						
+						// update AppPreference
+						appPreference.setCurrentGroupID(currentGroupID);
+						appPreference.saveAppPreference();
+						
+						// update members
+						dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+						
+						// update categories
+						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+						
+						// update tags
+						dbManager.updateGroupTags(response.getTagList(), currentGroupID);
+						
+						// update group info
+						dbManager.syncGroup(response.getGroup());
+					}
+					else
+					{						
+						// update AppPreference
+						appPreference.setCurrentGroupID(currentGroupID);
+						appPreference.saveAppPreference();
+						
+						// update current user
+						dbManager.syncUser(response.getCurrentUser());
+						
+						// update categories
+						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);						
+					}
 					
 					// refresh UI
 					runOnUiThread(new Runnable()
@@ -215,11 +232,7 @@ public class SignInActivity extends Activity
 														public void onClick(DialogInterface dialog, int which)
 														{
 															dialog.dismiss();
-															Bundle bundle = new Bundle();
-															bundle.putInt("tabIndex", 0);
-															Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-															intent.putExtras(bundle);
-															startActivity(intent);
+															startActivity(new Intent(SignInActivity.this, MainActivity.class));
 															finish();
 														}
 													})
@@ -236,7 +249,7 @@ public class SignInActivity extends Activity
 						{
 							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
 														.setTitle("错误")
-														.setMessage("登录失败！")
+														.setMessage("登录失败！" + response.getErrorMessage())
 														.setPositiveButton("确定", null)
 														.create();
 							alertDialog.show();	

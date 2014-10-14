@@ -178,8 +178,14 @@ public class EditItemActivity extends Activity
 		if (item == null)
 		{
 			item = new Item();
-			item.setCategory(categoryList.get(0));
-			item.setMerchant(vendorList.get(0));
+			if (categoryList.size() > 0)
+			{
+				item.setCategory(categoryList.get(0));				
+			}
+			if (vendorList.size() > 0)
+			{
+				item.setMerchant(vendorList.get(0));
+			}
 		}
 	}
 	

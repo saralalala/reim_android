@@ -38,7 +38,6 @@ public class StatisticsResponse extends BaseResponse
 		}
 	}
 
-	@Override
 	protected void constructData()
 	{
 		try
@@ -66,7 +65,7 @@ public class StatisticsResponse extends BaseResponse
 			}
 			JSONObject _month_data = jObject.getJSONObject("ms");
 			this._ms = new HashMap<String, String>();
-			for (Iterator iter = _month_data.keys(); iter.hasNext();)
+			for (Iterator<?> iter = _month_data.keys(); iter.hasNext();)
 			{
 				String str = (String) iter.next();
 				String val = String.valueOf(_month_data.getLong(str));
@@ -77,7 +76,6 @@ public class StatisticsResponse extends BaseResponse
 		{
 			e.printStackTrace();
 		}
-
 	}
 
 	public double get_total()

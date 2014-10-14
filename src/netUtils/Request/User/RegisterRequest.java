@@ -11,7 +11,7 @@ import classes.User;
 
 public class RegisterRequest extends BaseRequest
 {
-	public RegisterRequest(User user)
+	public RegisterRequest(User user, String verifyCode)
 	{
 		super();
 		
@@ -19,6 +19,7 @@ public class RegisterRequest extends BaseRequest
 		params.add(new BasicNameValuePair("email", user.getEmail()));
 		params.add(new BasicNameValuePair("phone", user.getPhone()));
 		params.add(new BasicNameValuePair("password", user.getPassword()));	
+		params.add(new BasicNameValuePair("code", verifyCode));	
 		setParams(params);
 
 		String requestUrl = getUrl();

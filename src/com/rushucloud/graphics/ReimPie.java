@@ -14,6 +14,7 @@ public class ReimPie extends View
 {
 	Paint paint = new Paint();
 	Path pat = new Path();
+	RectF oval = new RectF();
 	float _angle = 0;
 	float _start = 270;
 
@@ -35,11 +36,10 @@ public class ReimPie extends View
 	public void onDraw(Canvas canvas)
 	{
 		float width = 0;
-		float height = 0;
+//		float height = 0;
 		int cwidth = canvas.getWidth();
 		int cheight = canvas.getHeight();
-		int vertical = 0;
-		RectF oval = new RectF(); // RectF对象
+//		int vertical = 0;
 		float diff  = Math.abs(cwidth - cheight);
 		if(cwidth > cheight){
 			width = cheight;

@@ -20,7 +20,6 @@ public class MainActivity extends ActionBarActivity {
 	private long exitTime;
 	
 	private FragmentTabHost tabHost;
-	private int tabIndex = 0;
 	
 	private Class<?> fragmentList[] = {ReimFragment.class, ReportFragment.class, StatisticsFragment.class, MeFragment.class};
 	private int imageViewList[] = {R.drawable.tab_item_reim,R.drawable.tab_item_report,R.drawable.tab_item_statistics, R.drawable.tab_item_me};
@@ -75,11 +74,7 @@ public class MainActivity extends ActionBarActivity {
 	
 	private void dataInitialise()
 	{
-		Bundle bundle = this.getIntent().getExtras();
-		if (bundle != null)
-		{
-			tabIndex = bundle.getInt("tabIndex");			
-		}
+		
 	}
 
 	private void tabHostInitialse()
@@ -105,7 +100,6 @@ public class MainActivity extends ActionBarActivity {
 			tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.selector_tab_background);
 		}
 
-	    //tabHost.setCurrentTab(tabIndex);
-		tabHost.setCurrentTab(2);		
+	    tabHost.setCurrentTab(0);
     }
 }

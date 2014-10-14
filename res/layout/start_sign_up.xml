@@ -1,61 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/baseLayout" >
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/usernameEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp"
-        android:ems="10"
-        android:hint="@string/userIDPrompt"
-        android:inputType="text" />
-
-        <requestFocus />
-
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/confirmPasswordEditText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="49dp"
-        android:ems="10"
-        android:hint="@string/passwordPrompt"
-        android:inputType="textPassword" />
-
-    <EditText
-        android:id="@+id/confirmPasswordEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/passwordEditText"
-        android:layout_alignRight="@+id/usernameEditText"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="@string/confirmPasswordPrompt"
-        android:inputType="textPassword" />
-
-    <Button
-        android:id="@+id/confirmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/usernameEditText"
-        android:layout_below="@+id/confirmPasswordEditText"
-        android:layout_marginTop="63dp"
-        android:text="@string/confirm" />
-
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/confirmButton"
-        android:layout_alignBottom="@+id/confirmButton"
-        android:layout_alignRight="@+id/passwordEditText"
-        android:text="@string/cancel" />
-    
-</RelativeLayout>
+  	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" 
+	    android:orientation="vertical" >
+	        
+       	<TabWidget android:id="@android:id/tabs"
+        	android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+     	</TabWidget>
+     	        
+        <FrameLayout android:id="@android:id/tabcontent"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent">
+        </FrameLayout>        	    
+	
+	</LinearLayout>
+</TabHost>

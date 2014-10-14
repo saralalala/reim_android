@@ -1,6 +1,5 @@
 package classes;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class StatisticsCategory
@@ -39,8 +38,4 @@ public class StatisticsCategory
 	{
 		this.items = items;
 	}
-
-	
-
-
 }

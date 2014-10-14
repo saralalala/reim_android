@@ -2,7 +2,6 @@ package classes.Adapter;
 
 import classes.AppPreference;
 import classes.Group;
-import classes.ReimApplication;
 import classes.User;
 
 import com.rushucloud.reim.R;
@@ -78,8 +77,7 @@ public class MeListViewAdapater extends BaseAdapter
 					public void onClick(View v)
 					{
 						appPreference.setEnablePasswordProtection(toggleButton.isChecked());
-						ReimApplication reimApplication = (ReimApplication)activity.getApplication();
-						reimApplication.saveAppPreference();
+						appPreference.saveAppPreference();
 					}
 				});
 				break;
@@ -96,8 +94,7 @@ public class MeListViewAdapater extends BaseAdapter
 					public void onClick(View v)
 					{
 						appPreference.setSyncWithoutWifi(toggleButton.isChecked());
-						ReimApplication reimApplication = (ReimApplication)activity.getApplication();
-						reimApplication.saveAppPreference();
+						appPreference.saveAppPreference();
 					}
 				});
 				break;
@@ -136,8 +133,7 @@ public class MeListViewAdapater extends BaseAdapter
 						appPreference.setUsername("");
 						appPreference.setPassword("");
 						appPreference.setServerToken("");
-						ReimApplication reimApplication = (ReimApplication)activity.getApplication();
-						reimApplication.saveAppPreference();
+						appPreference.saveAppPreference();
 						activity.startActivity(new Intent(activity.getBaseContext(), SignInActivity.class));
 						activity.finish();
 					}

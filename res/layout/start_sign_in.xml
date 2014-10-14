@@ -13,13 +13,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp"
         android:ems="10"
-        android:hint="@string/userIDPrompt"
+        android:hint="@string/inputUsername"
         android:inputType="text" />
 
     <requestFocus />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/phonePasswordEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/usernameEditText"
@@ -27,15 +27,15 @@
         android:layout_below="@+id/usernameEditText"
         android:layout_marginTop="26dp"
         android:ems="10"
-        android:hint="@string/passwordPrompt"
+        android:hint="@string/inputPassword"
         android:inputType="textPassword" />
 
     <TextView
         android:id="@+id/forgotTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/passwordEditText"
-        android:layout_below="@+id/passwordEditText"
+        android:layout_alignRight="@+id/phonePasswordEditText"
+        android:layout_below="@+id/phonePasswordEditText"
         android:layout_marginTop="22dp"
         android:text="@string/forgotPassword" />
 
@@ -43,7 +43,7 @@
         android:id="@+id/confirmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/passwordEditText"
+        android:layout_alignLeft="@+id/phonePasswordEditText"
         android:layout_below="@+id/forgotTextView"
         android:layout_marginTop="102dp"
         android:text="@string/confirm" />

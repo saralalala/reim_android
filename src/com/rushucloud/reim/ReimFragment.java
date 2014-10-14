@@ -2,7 +2,6 @@ package com.rushucloud.reim;
 
 import java.util.List;
 
-
 import classes.AppPreference;
 import classes.Item;
 import classes.Adapter.ItemListViewAdapter;
@@ -25,7 +24,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
-public class ReimFragment extends Fragment {
+public class ReimFragment extends Fragment
+{
 
 	private ListView itemListView;
 	private ItemListViewAdapter adapter;
@@ -37,76 +37,73 @@ public class ReimFragment extends Fragment {
 	{
 		return inflater.inflate(R.layout.fragment_reimbursement, container, false);
 	}
-	
+
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
-        super.onActivityCreated(savedInstanceState);
-        dataInitialise();
-        viewInitialise();
+		super.onActivityCreated(savedInstanceState);
+		dataInitialise();
+		viewInitialise();
 	}
-    
+
 	public void onResume()
 	{
 		super.onResume();
 		refreshItemListView();
 	}
-	
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-    {
-    	super.onCreateContextMenu(menu, v, menuInfo);
-    	menu.setHeaderTitle("选项");
-    	menu.add(0,0,0,"删除");
-    }
 
-    public boolean onContextItemSelected(MenuItem item)
-    {
-    	AdapterContextMenuInfo menuInfo=(AdapterContextMenuInfo)item.getMenuInfo();
-    	final int index = (int)itemListView.getAdapter().getItemId(menuInfo.position);
-    	switch (item.getItemId()) 
-    	{
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
+	{
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.setHeaderTitle("选项");
+		menu.add(0, 0, 0, "删除");
+	}
+
+	public boolean onContextItemSelected(MenuItem item)
+	{
+		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
+		final int index = (int) itemListView.getAdapter().getItemId(menuInfo.position);
+		switch (item.getItemId())
+		{
 			case 0:
-				AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-													.setTitle("警告")
-													.setMessage(R.string.deleteItemWarning)
-													.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															int itemLocalID = itemList.get(index).getLocalID();
-															if (dbManager.deleteItem(itemLocalID))
-															{
-																refreshItemListView();
-													            Toast.makeText(getActivity(),
-													            		R.string.deleteSucceed, Toast.LENGTH_LONG).show();																
-															}
-															else
-															{
-													            Toast.makeText(getActivity(),
-													            		R.string.deleteFailed, Toast.LENGTH_LONG).show();
-															}
-															
-														}
-													})
-													.setNegativeButton(R.string.cancel, null)
-													.create();
+				AlertDialog mDialog = new AlertDialog.Builder(getActivity()).setTitle("警告")
+						.setMessage(R.string.deleteItemWarning)
+						.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+						{
+							public void onClick(DialogInterface dialog, int which)
+							{
+								int itemLocalID = itemList.get(index).getLocalID();
+								if (dbManager.deleteItem(itemLocalID))
+								{
+									refreshItemListView();
+									Toast.makeText(getActivity(), R.string.deleteSucceed,
+											Toast.LENGTH_LONG).show();
+								}
+								else
+								{
+									Toast.makeText(getActivity(), R.string.deleteFailed,
+											Toast.LENGTH_LONG).show();
+								}
+
+							}
+						}).setNegativeButton(R.string.cancel, null).create();
 				mDialog.show();
 				break;
 			default:
 				break;
-		}    		
-		
-    	return super.onContextItemSelected(item);
-    }
-    
-    private void dataInitialise()
-    {
-    	dbManager = DBManager.getDBManager();
+		}
+
+		return super.onContextItemSelected(item);
+	}
+
+	private void dataInitialise()
+	{
+		dbManager = DBManager.getDBManager();
 		itemList = readItemList();
-    }
-    
+	}
+
 	private void viewInitialise()
 	{
-		Button addButton = (Button)getActivity().findViewById(R.id.addButton);
+		Button addButton = (Button) getActivity().findViewById(R.id.addButton);
 		addButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -117,12 +114,11 @@ public class ReimFragment extends Fragment {
 		});
 
 		adapter = new ItemListViewAdapter(getActivity(), itemList);
-		itemListView = (ListView)getActivity().findViewById(R.id.itemListView);
+		itemListView = (ListView) getActivity().findViewById(R.id.itemListView);
 		itemListView.setAdapter(adapter);
 		itemListView.setOnItemClickListener(new OnItemClickListener()
 		{
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id)
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				Intent intent = new Intent(getActivity(), EditItemActivity.class);
 				intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
@@ -131,14 +127,14 @@ public class ReimFragment extends Fragment {
 		});
 		registerForContextMenu(itemListView);
 	}
-	
+
 	private List<Item> readItemList()
 	{
 		AppPreference appPreference = AppPreference.getAppPreference();
 		DBManager dbManager = DBManager.getDBManager();
 		return dbManager.getUserItems(appPreference.getCurrentUserID());
 	}
-	
+
 	private void refreshItemListView()
 	{
 		itemList.clear();

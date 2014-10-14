@@ -1,8 +1,16 @@
 package classes;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.os.Environment;
+import android.telephony.TelephonyManager;
+
 public class AppPreference
 {
 	private static AppPreference appPreference = null;
+	private Context context = null;
 	
 	private int currentUserID = -1;
 	private int currentGroupID = -1;
@@ -15,20 +23,63 @@ public class AppPreference
 	private boolean syncWithoutWifi = false;
 	private boolean enablePasswordProtection = false;
 	
-	private AppPreference()
+	private AppPreference(Context context)
 	{
-		
+		this.context = context;
+	}
+	
+	public static synchronized void createAppPreference(Context context)
+	{
+		if (appPreference == null)
+		{
+			appPreference = new AppPreference(context);
+			appPreference.readAppPreference();
+		}
 	}
 	
 	public static AppPreference getAppPreference()
 	{
-		if (appPreference == null)
-		{
-			appPreference = new AppPreference();
-		}
 		return appPreference;
 	}
 
+	public void readAppPreference()
+	{
+		SharedPreferences preferences = context.getSharedPreferences("ReimApplication", Application.MODE_PRIVATE);
+		AppPreference appPreference = AppPreference.getAppPreference();
+		appPreference.setUsername(preferences.getString("username", ""));
+		appPreference.setPassword(preferences.getString("password", ""));
+		appPreference.setDeviceToken(preferences.getString("deviceToken", ""));
+		appPreference.setServerToken(preferences.getString("serverToken", ""));
+		appPreference.setSyncWithoutWifi(preferences.getBoolean("syncWithoutWifi", false));
+		
+		String path = Environment.getExternalStorageDirectory() + "/如数云报销";
+		appPreference.setProfileImageDirectory(path + "/images/profile");
+		appPreference.setInvoiceImageDirectory(path + "/images/invoice");
+		
+		if (appPreference.getDeviceToken().equals(""))
+		{
+			TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Application.TELEPHONY_SERVICE);
+			appPreference.setDeviceToken(telephonyManager.getDeviceId());
+		}
+		
+		appPreference.setSyncWithoutWifi(preferences.getBoolean("syncWithoutWifi", false));
+		appPreference.setEnablePasswordProtection(preferences.getBoolean("enablePasswordProtection", false));
+	}
+	
+	public void saveAppPreference()
+	{
+		SharedPreferences sharedPreference = context.getSharedPreferences("ReimApplication", Application.MODE_PRIVATE);
+		AppPreference appPreference = AppPreference.getAppPreference();
+		Editor editor = sharedPreference.edit();
+		editor.putString("username", appPreference.getUsername());
+		editor.putString("password", appPreference.getPassword());
+		editor.putString("deviceToken", appPreference.getDeviceToken());
+		editor.putString("serverToken", appPreference.getServerToken());
+		editor.putBoolean("syncWithoutWifi", appPreference.syncWithoutWifi());
+		editor.putBoolean("enablePasswordProtection", appPreference.passwordProtectionEnabled());
+		editor.commit();
+	}
+	
 	public int getCurrentUserID()
 	{
 		return currentUserID;

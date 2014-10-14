@@ -64,8 +64,8 @@ public class DBManager extends SQLiteOpenHelper
 
 	public void tempCommand()
 	{
-//		String sqlString = "DROP TABLE IF EXISTS tbl_item";
-//		database.execSQL(sqlString);
+		String sqlString = "DELETE FROM TABLE tbl_group WHERE server_id = -1";
+		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_item_user";
 //		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_item_tag";

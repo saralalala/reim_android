@@ -37,7 +37,6 @@ import com.rushucloud.graphics.ReimPie;
 
 public class StatisticsFragment extends Fragment
 {
-
 	private GraphicalView mChart;
 	private static final int COMPLETED = 0;
 	private StatisticsResponse response = null;

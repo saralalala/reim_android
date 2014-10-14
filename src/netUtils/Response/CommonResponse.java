@@ -38,23 +38,31 @@ public class CommonResponse extends BaseResponse
 			
 			JSONObject profileObject = jObject.getJSONObject("profile");
 			
+			int groupID = -1;
 			JSONObject groupObject = profileObject.getJSONObject("group");
-			group = new Group();
-			group.setServerID(groupObject.getInt("groupid"));
-			group.setName(groupObject.getString("group_name"));
-			group.setLocalUpdatedDate(groupObject.getInt("lastdt"));
-			group.setServerUpdatedDate(groupObject.getInt("lastdt"));
+			if (groupObject.getInt("groupid") != -1)
+			{
+				group = new Group();
+				group.setServerID(groupObject.getInt("groupid"));
+				group.setName(groupObject.getString("group_name"));
+				group.setLocalUpdatedDate(groupObject.getInt("lastdt"));
+				group.setServerUpdatedDate(groupObject.getInt("lastdt"));
+				
+				groupID = group.getServerID();
+			}
 
 			currentUser = new User();
-			currentUser.setEmail(profileObject.getString("email"));
-			currentUser.setNickname(profileObject.getString("nickname"));
-			currentUser.setAvatarPath(profileObject.getString("avatar"));
 			currentUser.setServerID(profileObject.getInt("id"));
-			currentUser.setIsActive(Utils.intToBoolean(profileObject.getInt("active")));
+			currentUser.setNickname(profileObject.getString("nickname"));
+			currentUser.setEmail(profileObject.getString("email"));
+			currentUser.setPhone(profileObject.getString("phone"));
 			currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
-			currentUser.setGroupID(group.getServerID());
-			currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
-			currentUser.setServerUpdatedDate(Utils.getCurrentTime());
+			currentUser.setAvatarPath(profileObject.getString("avatar"));
+			currentUser.setIsAdmin(Utils.intToBoolean(profileObject.getInt("admin")));
+			currentUser.setIsActive(Utils.intToBoolean(profileObject.getInt("active")));
+			currentUser.setGroupID(groupID);
+			currentUser.setLocalUpdatedDate(profileObject.getInt("lastdt"));
+			currentUser.setServerUpdatedDate(profileObject.getInt("lastdt"));
 			
 			JSONArray categoryArray = jObject.getJSONArray("categories");
 			categoryList = new ArrayList<Category>();
@@ -97,9 +105,9 @@ public class CommonResponse extends BaseResponse
 				user.setEmail(object.getString("email"));
 				user.setPhone(object.getString("phone"));
 				user.setNickname(object.getString("nickname"));
-				user.setIsAdmin(object.getString("admin").equals("1") ? true : false);
+				user.setIsAdmin(Utils.intToBoolean(object.getInt("admin")));
 				user.setDefaultManagerID(object.getInt("manager_id"));
-				user.setGroupID(group.getServerID());
+				user.setGroupID(groupID);
 				user.setAvatarPath(object.getString("avatar"));
 				user.setLocalUpdatedDate(Utils.getCurrentTime());
 				user.setServerUpdatedDate(Utils.getCurrentTime());

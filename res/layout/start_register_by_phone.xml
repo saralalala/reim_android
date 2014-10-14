@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/phoneBaseLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/phoneEditText"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="@string/inputPhone"
+        android:inputType="text|phone" />
+        
+        <requestFocus />
+
+    <EditText
+        android:id="@+id/phonePasswordEditText"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/phoneEditText"
+        android:layout_alignRight="@+id/phoneEditText"
+        android:layout_below="@+id/phoneEditText"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="@string/inputPassword"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/acquireCodeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/codeEditText"
+        android:layout_alignRight="@+id/phonePasswordEditText"
+        android:text="@string/acquireCode" />
+
+    <EditText
+        android:id="@+id/codeEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/phonePasswordEditText"
+        android:layout_below="@+id/phonePasswordEditText"
+        android:layout_marginTop="52dp"
+        android:layout_toLeftOf="@+id/acquireCodeButton"
+        android:ems="10"
+        android:hint="@string/inputCode"
+        android:inputType="textEmailAddress" />
+
+    <Button
+        android:id="@+id/phoneConfirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/phoneCancelButton"
+        android:layout_alignBottom="@+id/phoneCancelButton"
+        android:layout_alignLeft="@+id/codeEditText"
+        android:layout_marginLeft="48dp"
+        android:text="@string/confirm" />
+
+    <Button
+        android:id="@+id/phoneCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/acquireCodeButton"
+        android:layout_marginLeft="43dp"
+        android:layout_marginTop="33dp"
+        android:layout_toRightOf="@+id/phoneConfirmButton"
+        android:text="@string/cancel" />
+
+</RelativeLayout>
