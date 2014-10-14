@@ -6,11 +6,10 @@
 
     <ImageView
         android:id="@+id/welcomeImageView"
-        android:contentDescription="@string/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:contentDescription="@string/background"
         android:scaleType="fitXY"
         android:src="@drawable/welcome" />
 

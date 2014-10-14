@@ -2,10 +2,12 @@ package com.rushucloud.reim;
 
 import com.rushucloud.reim.R;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -35,12 +37,20 @@ public class ImageActivity extends Activity
 	{
 		try
 		{
+			ActionBar actionBar = getActionBar();
+			actionBar.hide();
+			
 			String imagePath = getIntent().getStringExtra("imagePath");
 			Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
 			imageView = (ImageView)findViewById(R.id.imageView);
 			imageView.setImageBitmap(bitmap);
+
+			DisplayMetrics dm = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(dm);
 			LayoutParams params = imageView.getLayoutParams();
-			params.height = params.width;
+			params.height = dm.widthPixels;
+			params.width = dm.widthPixels;
+			
 			imageView.setLayoutParams(params);
 			imageView.setOnClickListener(new View.OnClickListener()
 			{
