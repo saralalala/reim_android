@@ -57,9 +57,6 @@ public class SignInActivity extends Activity
 		
 		usernameEditText.setText(HttpConstant.DEBUG_EMAIL);
 		passwordEditText.setText(HttpConstant.DEBUG_PASSWORD);
-
-		usernameEditText.setText("18610104680");
-		passwordEditText.setText("111111");
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()

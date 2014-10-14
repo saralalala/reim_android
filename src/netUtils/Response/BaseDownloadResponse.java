@@ -20,5 +20,4 @@ public class BaseDownloadResponse
 	{
 		this.inputStream = inputStream;
 	}
-
 }

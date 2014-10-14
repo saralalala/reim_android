@@ -13,14 +13,18 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
@@ -49,8 +53,37 @@ public class ReimFragment extends Fragment
 	{
 		super.onResume();
 		refreshItemListView();
+//		setHasOptionsMenu(true);
 	}
 
+	public void onPause()
+	{
+		super.onPause();
+//		setHasOptionsMenu(false);
+	}
+
+//	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+//	{
+//		super.onCreateOptionsMenu(menu, inflater);
+//		inflater.inflate(R.menu.searchview, menu);
+//		SearchView searchView = (SearchView)menu.findItem(R.id.search_item).getActionView();
+//		searchView.setQueryHint(getActivity().getString(R.string.inputKeyword));
+//		searchView.setOnQueryTextListener(new OnQueryTextListener()
+//		{
+//			public boolean onQueryTextSubmit(String query)
+//			{
+//				// TODO get from server
+//				return false;
+//			}
+//			
+//			public boolean onQueryTextChange(String newText)
+//			{
+//				// TODO filter local
+//				return false;
+//			}
+//		});
+//	}
+	
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
@@ -108,7 +141,8 @@ public class ReimFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-				Intent intent = new Intent(getActivity(), EditItemActivity.class);
+//				Intent intent = new Intent(getActivity(), EditItemActivity.class);
+				Intent intent = new Intent(getActivity(), SearchItemActivity.class);
 				startActivity(intent);
 			}
 		});

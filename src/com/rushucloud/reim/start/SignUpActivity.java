@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 public class SignUpActivity extends Activity
 {
@@ -390,8 +391,33 @@ public class SignUpActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				VerifyCodeResponse response = new VerifyCodeResponse(httpResponse);
-				code = response.getVerifyCode();
+				final VerifyCodeResponse response = new VerifyCodeResponse(httpResponse);
+				if (response.getStatus())
+				{
+					code = response.getVerifyCode();
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							Toast.makeText(SignUpActivity.this, "验证短信已发送", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+				else 
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this)
+														.setTitle("错误")
+														.setMessage("注册失败！"+response.getErrorMessage())
+														.setPositiveButton("确定", null)
+														.create();
+							alertDialog.show();	
+						}
+					});
+				}
 			}
 		});
     }

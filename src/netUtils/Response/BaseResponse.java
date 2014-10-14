@@ -1,7 +1,6 @@
 
 package netUtils.Response;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class BaseResponse
@@ -38,9 +37,14 @@ public abstract class BaseResponse
 				errorMessage = dataObject.getString("msg");
 			}
 		}
-		catch (JSONException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
+			status = false;
+			code = -1;
+			errorMessage = errorCodeToString(code);
+			serverToken = "";
+			dataObject = null;
 		}
 	}
 

@@ -1,108 +1,178 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rushucloud.reim"
-    android:versionCode="1"
-    android:versionName="1.0" >
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:versionCode="1" 
+    android:versionName="1.0" 
+    package="com.rushucloud.reim">
 
-    <uses-sdk
-        android:minSdkVersion="11"
+    <uses-sdk 
+        android:minSdkVersion="11" 
         android:targetSdkVersion="20" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>	    
+	<uses-permission android:name="android.permission.GET_TASKS"/>
+	<uses-permission android:name="android.permission.SET_DEBUG_APP"/>
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     
-    <application
-        android:name="classes.ReimApplication"
-        android:allowBackup="true"
+    <application 
+        android:allowBackup="true" 
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:label="@string/app_name" 
+        android:name="classes.ReimApplication" 
+        android:theme="@style/AppTheme">
         
         <activity 
-            android:name="com.rushucloud.reim.start.SplashActivity"
-            android:label="@string/app_name"
-	        android:theme="@android:style/Theme.NoTitleBar">
-        </activity>
-        
-        <activity 
-            android:name="com.rushucloud.reim.start.NewFeaturesActivity"
-            android:label="@string/app_name"
-	        android:theme="@android:style/Theme.NoTitleBar">
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.start.SplashActivity" 
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         
         <activity 
-            android:name="com.rushucloud.reim.start.WelcomeActivity"
-            android:label="@string/app_name"
-	        android:theme="@android:style/Theme.NoTitleBar" >	        
-	        <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.start.NewFeaturesActivity" 
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         
         <activity 
- 			android:name="com.rushucloud.reim.start.SignInActivity"
-            android:label="@string/app_name" >            
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.start.WelcomeActivity" 
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         
         <activity 
-            android:name="com.rushucloud.reim.start.SignUpActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.start.SignInActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>       
         </activity>
         
         <activity 
-            android:name="com.rushucloud.reim.start.ForgotPasswordActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.start.SignUpActivity">
         </activity>
         
         <activity 
-            android:name="com.rushucloud.reim.start.ResetPasswordActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.start.ForgotPasswordActivity">
         </activity>
         
-        <activity
-            android:name="com.rushucloud.reim.MainActivity"
-            android:label="@string/app_name" >
-          
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.start.ResetPasswordActivity">
         </activity>
         
-        <activity
-            android:name="com.rushucloud.reim.EditItemActivity"
-            android:label="@string/app_name" >
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.MainActivity">          
         </activity>
         
-        <activity
-            android:name="com.rushucloud.reim.ShowItemActivity"
-            android:label="@string/app_name" >
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.EditItemActivity">
         </activity>
         
-        <activity
-            android:name="com.rushucloud.reim.EditReportActivity"
-            android:label="@string/app_name" >
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.ShowItemActivity">
         </activity>
         
-        <activity
-            android:name="com.rushucloud.reim.UnarchivedItemsActivity"
-            android:label="@string/app_name" >
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.SearchItemActivity">
         </activity>
         
-        <activity
-            android:name="com.rushucloud.reim.ImageActivity"
-            android:label="@string/app_name" >
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.EditReportActivity">
         </activity>
         
-        <activity
-            android:name="com.rushucloud.reim.ProfileActivity"
-            android:label="@string/app_name" >
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.UnarchivedItemsActivity">
         </activity>
         
-        <activity
-            android:name="com.rushucloud.reim.ChangePasswordActivity"
-            android:label="@string/app_name" >
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.ImageActivity">
         </activity>
         
-    </application>
-    
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.ProfileActivity">
+        </activity>
+        
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.ChangePasswordActivity">
+        </activity>
+        
+        <!-- #######################  友盟UmengAppkey  ####################### -->
+	    <meta-data
+	        android:name="UMENG_APPKEY" 
+	        android:value="543bf20efd98c544b9002d11" >
+	    </meta-data>
+	    
+        <!-- ###################注册SDK使用的Activity###################### -->
+		<activity 
+		    android:configChanges="orientation|keyboard" 
+		    android:launchMode="singleTask" 
+		    android:name="com.umeng.socialize.view.ShareActivity" 
+		    android:noHistory="true" 
+		    android:theme="@style/Theme.UMDialog" 
+		    android:windowSoftInputMode="stateVisible|adjustResize" >
+        </activity>
+        
+		<activity 
+		    android:configChanges="keyboardHidden|orientation|screenSize" 
+		    android:exported="true" 
+		    android:name=".wxapi.WXEntryActivity" 
+		    android:screenOrientation="portrait" 
+		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        
+		<activity 
+		    android:configChanges="keyboardHidden|orientation|screenSize" 
+		    android:exported="true" 
+		    android:name=".yxapi.YXEntryActivity" 
+		    android:screenOrientation="portrait" 
+		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        
+		<activity 
+		    android:configChanges="orientation|navigation|keyboardHidden" 
+		    android:name="com.renn.rennsdk.oauth.OAuthActivity" >
+        </activity>
+        
+        <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
+		<activity 
+		    android:configChanges="orientation|keyboard" 
+		    android:launchMode="singleTask" 
+		    android:name="com.tencent.tauth.AuthActivity" 
+		    android:noHistory="true" >
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<category android:name="android.intent.category.BROWSABLE"/>
+				<data android:scheme="tencent添加你的App Id"/>
+			</intent-filter>
+		</activity>
+
+		<activity 
+		    android:name="com.tencent.connect.common.AssistActivity" 
+		    android:screenOrientation="portrait" 
+		    android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
+        
+	</application>
 </manifest>

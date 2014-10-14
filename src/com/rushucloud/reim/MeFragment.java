@@ -1,5 +1,8 @@
 package com.rushucloud.reim;
 
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+
 import classes.Adapter.MeListViewAdapater;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,6 +40,13 @@ public class MeFragment extends Fragment
 				if (position == 0)
 				{
 					startActivity(new Intent(getActivity(), ProfileActivity.class));
+				}
+				
+				if (position == 4)
+				{
+					final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
+					mController.setShareContent("报销姐");
+					mController.openShare(getActivity(), false);
 				}
 			}
 		});
