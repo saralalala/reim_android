@@ -1,6 +1,7 @@
 
 package netUtils.Response;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public abstract class BaseResponse
@@ -10,6 +11,7 @@ public abstract class BaseResponse
 	private String errorMessage;
 	private String serverToken;
 	private JSONObject dataObject;
+	private JSONArray dataArray;
 
 	public BaseResponse(Object httpResponse)
 	{
@@ -17,24 +19,28 @@ public abstract class BaseResponse
 		{
 			String string = (String)httpResponse;
 			JSONObject object = new JSONObject(string);
-			if (object.getInt("status") > 0)
-			{
-				status = true;
-			}
-			else
-			{
-				status = false;
-			}
+			status = object.getInt("status") > 0 ? true : false;
 			code = object.getInt("code");
 			serverToken = object.getString("server_token");
 			if (status)
 			{
-				dataObject = object.getJSONObject("data");
+				dataObject = object.optJSONObject("data");
+				if (dataObject == null)
+				{
+					setDataArray(object.getJSONArray("data"));
+				}
 			}
 			else 
 			{
-				dataObject = object.getJSONObject("data");
-				errorMessage = dataObject.getString("msg");
+				dataObject = object.optJSONObject("data");
+				if (dataObject == null)
+				{
+					setDataArray(object.getJSONArray("data"));
+				}
+				else
+				{
+					errorMessage = dataObject.getString("msg");					
+				}
 			}
 		}
 		catch (Exception e)
@@ -61,6 +67,11 @@ public abstract class BaseResponse
 		return status;
 	}
 
+	public void setStatus(Boolean status)
+	{
+		this.status = status;
+	}
+
 	public int getCode()
 	{
 		return code;
@@ -69,6 +80,11 @@ public abstract class BaseResponse
 	public String getErrorMessage()
 	{
 		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage)
+	{
+		this.errorMessage = errorMessage;
 	}
 	
 	public String getServerToken()
@@ -79,6 +95,16 @@ public abstract class BaseResponse
 	protected JSONObject getDataObject()
 	{
 		return dataObject;
+	}
+
+	public JSONArray getDataArray()
+	{
+		return dataArray;
+	}
+
+	public void setDataArray(JSONArray dataArray)
+	{
+		this.dataArray = dataArray;
 	}
 	
 	public static String errorCodeToString(int code)

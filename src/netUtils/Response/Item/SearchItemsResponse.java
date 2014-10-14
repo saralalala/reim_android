@@ -1,4 +1,4 @@
-package netUtils.Response;
+package netUtils.Response.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,17 +9,15 @@ import org.json.JSONObject;
 
 import classes.Category;
 import classes.Item;
-import classes.Report;
 import classes.User;
 import classes.Utils;
 
-public class SyncDataResponse extends BaseResponse
+import netUtils.Response.BaseResponse;
+
+public class SearchItemsResponse extends BaseResponse
 {
-	private List<Item> itemList = null;
-	
-	private List<Report> reportList = null;
-	
-	public SyncDataResponse(Object httpResponse)
+	List<Item> itemList = null;
+	public SearchItemsResponse(Object httpResponse)
 	{
 		super(httpResponse);
 		if (getStatus())
@@ -67,27 +65,6 @@ public class SyncDataResponse extends BaseResponse
 				
 				itemList.add(item);
 			}
-			
-			reportList = new ArrayList<Report>();
-			jsonArray = jObject.getJSONArray("reports");
-			for (int i = 0; i < jsonArray.length(); i++)
-			{
-				JSONObject object = jsonArray.getJSONObject(i);
-				Report report = new Report();
-				report.setServerID(object.getInt("id"));
-				report.setTitle(object.getString("title"));
-				report.setCreatedDate(object.getInt("createdt"));
-				report.setServerUpdatedDate(object.getInt("lastdt"));
-				report.setStatus(object.getInt("status"));
-				
-				User user = new User();
-				user.setServerID(object.getInt("uid"));
-				// TODO get user information
-				
-				report.setUser(user);
-				
-				reportList.add(report);
-			}
 		}
 		catch (JSONException e)
 		{
@@ -100,8 +77,8 @@ public class SyncDataResponse extends BaseResponse
 		return itemList;
 	}
 
-	public List<Report> getReportList()
+	public void setItemList(List<Item> itemList)
 	{
-		return reportList;
+		this.itemList = itemList;
 	}
 }

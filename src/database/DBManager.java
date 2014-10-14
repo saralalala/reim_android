@@ -465,15 +465,18 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			int count = item.getRelevantUsers().size();
-			for (int i = 0; i < count; i++)
+			if (item != null)
 			{
-				String sqlString = "INSERT INTO tbl_item_user (item_local_id, user_id, local_updatedt) VALUES (" +
-									"'" + item.getLocalID() + "'," +
-									"'" + item.getRelevantUsers().get(i).getServerID() + "'," +
-									"'" + Utils.getCurrentTime() + "')";
-				database.execSQL(sqlString);
-			}			
+				int count = item.getRelevantUsers().size();
+				for (int i = 0; i < count; i++)
+				{
+					String sqlString = "INSERT INTO tbl_item_user (item_local_id, user_id, local_updatedt) VALUES (" +
+										"'" + item.getLocalID() + "'," +
+										"'" + item.getRelevantUsers().get(i).getServerID() + "'," +
+										"'" + Utils.getCurrentTime() + "')";
+					database.execSQL(sqlString);
+				}				
+			}
 			return true;
 		}
 		catch (Exception e)
@@ -1022,6 +1025,13 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
+	public int getLastInsertItemID()
+	{
+		Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_item", null);
+		cursor.moveToFirst();
+		return cursor.getInt(0);
+	}
+	
 	// Report
 	public Boolean insertReport(Report report)
 	{	
@@ -1301,7 +1311,7 @@ public class DBManager extends SQLiteOpenHelper
 		return itemIDString;
 	}
 	
-	public int getLastInsertRowID()
+	public int getLastInsertReportID()
 	{
 		Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_report", null);
 		cursor.moveToFirst();
@@ -1825,14 +1835,17 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			int count = item.getTags().size();
-			for (int i = 0; i < count; i++)
+			if (item.getTags() != null)
 			{
-				String sqlString = "INSERT INTO tbl_item_tag (item_local_id, tag_id, local_updatedt) VALUES (" +
-									"'" + item.getLocalID() + "'," +
-									"'" + item.getTags().get(i).getServerID() + "'," +
-									"'" + Utils.getCurrentTime() + "')";
-				database.execSQL(sqlString);
+				int count = item.getTags().size();
+				for (int i = 0; i < count; i++)
+				{
+					String sqlString = "INSERT INTO tbl_item_tag (item_local_id, tag_id, local_updatedt) VALUES (" +
+										"'" + item.getLocalID() + "'," +
+										"'" + item.getTags().get(i).getServerID() + "'," +
+										"'" + Utils.getCurrentTime() + "')";
+					database.execSQL(sqlString);
+				}
 			}
 			return true;
 		}

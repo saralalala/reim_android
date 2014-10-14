@@ -25,13 +25,16 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,7 +96,7 @@ public abstract class BaseRequest
 			}
 			else
 			{
-				request.setEntity(new UrlEncodedFormEntity(params));
+				request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
 			}
 			
 			doRequest(request, callback);
@@ -108,11 +111,13 @@ public abstract class BaseRequest
 	protected void doPut(HttpConnectionCallback callback)
 	{
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-
+		
+		ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);
+		StringBody stringBody;
 		for (int i = 0; i < params.size(); i++)
 		{
-			builder.addTextBody(params.get(i).getName(), params.get(i).getValue());		
+			stringBody = new StringBody(params.get(i).getValue(), contentType);
+			builder.addPart(params.get(i).getName(), stringBody);	
 		}
 		
 		HttpPut request = new HttpPut(url);

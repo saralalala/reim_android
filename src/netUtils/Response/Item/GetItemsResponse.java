@@ -71,4 +71,14 @@ public class GetItemsResponse extends BaseResponse
 			e.printStackTrace();
 		}
 	}
+
+	public List<Item> getItemList()
+	{
+		return itemList;
+	}
+
+	public void setItemList(List<Item> itemList)
+	{
+		this.itemList = itemList;
+	}
 }

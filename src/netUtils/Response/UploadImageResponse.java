@@ -5,8 +5,8 @@ import org.json.JSONObject;
 
 public class UploadImageResponse extends BaseResponse
 {
-	private int imageID;
-	private String path;
+	private int imageID = -1;
+	private String path = "";
 	
 	public UploadImageResponse(Object httpResponse)
 	{
@@ -23,7 +23,7 @@ public class UploadImageResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			setImageID(Integer.valueOf(jObject.getString("id")));
-			setPath(jObject.getString("path"));
+			setPath(jObject.getString("avatar"));
 		}
 		catch (JSONException e)
 		{

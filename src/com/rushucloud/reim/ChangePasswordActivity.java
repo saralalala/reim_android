@@ -138,18 +138,24 @@ public class ChangePasswordActivity extends Activity
 							appPreference.setPassword(newPassword);
 							appPreference.saveAppPreference();
 
-							AlertDialog alertDialog = new AlertDialog.Builder(ChangePasswordActivity.this)
-														.setTitle("提示")
-														.setMessage("密码修改成功！")
-														.setPositiveButton("确定", new OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																dialog.dismiss();
-																finish();
-															}
-														}).create();
-							alertDialog.show();							
+							runOnUiThread(new Runnable()
+							{
+								public void run()
+								{
+									AlertDialog alertDialog = new AlertDialog.Builder(ChangePasswordActivity.this)
+																.setTitle("提示")
+																.setMessage("密码修改成功！")
+																.setPositiveButton("确定", new OnClickListener()
+																{
+																	public void onClick(DialogInterface dialog, int which)
+																	{
+																		dialog.dismiss();
+																		finish();
+																	}
+																}).create();
+									alertDialog.show();									
+								}
+							});					
 						}
 					}
 				});

@@ -3,6 +3,17 @@ package com.rushucloud.reim;
 import java.util.ArrayList;
 import java.util.List;
 
+import netUtils.HttpConstant;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.Request.Item.CreateItemRequest;
+import netUtils.Request.Report.CreateReportRequest;
+import netUtils.Request.Report.ModifyReportRequest;
+import netUtils.Response.UploadImageResponse;
+import netUtils.Response.Item.CreateItemResponse;
+import netUtils.Response.Report.CreateReportResponse;
+import netUtils.Response.Report.ModifyReportResponse;
+
 import classes.AppPreference;
 import classes.Item;
 import classes.Report;
@@ -47,6 +58,11 @@ public class EditReportActivity extends Activity
 	private ArrayList<Integer> chosenItemIDList = null;
 	private ArrayList<Integer> remainingItemIDList = null;
 	
+	private boolean needToSave = true;
+	private boolean needToSubmit = false;
+	
+	private static int taskCount;
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -73,10 +89,17 @@ public class EditReportActivity extends Activity
 
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.single_item, menu);
-		MenuItem item = menu.getItem(0);
-		item.setTitle(getResources().getString(R.string.submit));
-		return true;
+		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
+		{
+			return false;
+		}
+		else
+		{
+			getMenuInflater().inflate(R.menu.single_item, menu);
+			MenuItem item = menu.getItem(0);
+			item.setTitle(getResources().getString(R.string.submit));
+			return true;			
+		}
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) 
@@ -84,7 +107,8 @@ public class EditReportActivity extends Activity
 		int id = item.getItemId();
 		if (id == R.id.action_item)
 		{
-			Toast.makeText(EditReportActivity.this, "提交", Toast.LENGTH_SHORT).show();
+			needToSubmit = true;
+			saveReport();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -157,6 +181,10 @@ public class EditReportActivity extends Activity
 	{
 		titleEditText = (EditText)findViewById(R.id.titleEditText);
 		titleEditText.setText(report.getTitle());
+		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
+		{
+			titleEditText.setFocusable(false);
+		}
 		
 		adapter = new ItemListViewAdapter(EditReportActivity.this, itemList);
 		itemListView = (ListView)findViewById(R.id.itemListView);
@@ -226,7 +254,7 @@ public class EditReportActivity extends Activity
 						{
 							report.setCreatedDate(Utils.getCurrentTime());
 							dbManager.insertReport(report);
-							report.setLocalID(dbManager.getLastInsertRowID());								
+							report.setLocalID(dbManager.getLastInsertReportID());								
 						}
 						else
 						{
@@ -234,18 +262,7 @@ public class EditReportActivity extends Activity
 						}
 						if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
 						{
-							AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-																.setTitle("保存成功")
-																.setNegativeButton(R.string.confirm, 
-																		new DialogInterface.OnClickListener()
-																{
-																	public void onClick(DialogInterface dialog, int which)
-																	{
-																		finish();
-																	}
-																})
-																.create();
-							mDialog.show();
+							saveReport();
 						}
 						else
 						{
@@ -267,6 +284,10 @@ public class EditReportActivity extends Activity
 				}
 			}
 		});
+		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
+		{
+			saveButton.setEnabled(false);
+		}
 		
 		Button cancelButton = (Button)findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -288,5 +309,251 @@ public class EditReportActivity extends Activity
     {
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
+    }
+
+    private void saveReport()
+    {
+    	if (itemList == null || itemList.size() == 0)
+		{
+			if (report.getServerID() == -1)
+			{
+				sendCreateReportRequest();
+			}
+			else
+			{
+				sendUpdateReportRequest();
+			}
+		}    	
+
+    	taskCount = 0;
+    	boolean flag = false;
+    	for (Item item : itemList)
+		{
+			if (item.getServerID() == -1 && !item.getInvoicePath().equals(""))
+			{
+				flag = true;
+				taskCount++;
+				sendUploadImageRequest(item);
+			}
+			else if (item.getServerID() == -1)
+			{
+				flag = true;
+				taskCount++;
+				sendCreateItemRequest(item);
+			}
+		}
+    	if (!flag)
+		{
+			if (report.getServerID() == -1)
+			{
+				sendCreateReportRequest();
+			}
+			else
+			{
+				sendUpdateReportRequest();
+			}
+		}
+    }
+    
+    private void submitReport()
+    {
+    	ModifyReportRequest request = new ModifyReportRequest(report);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					dbManager.updateReport(report);
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
+													.setTitle("报告已提交！请等待审批！")
+													.setNegativeButton(R.string.confirm, 
+															new DialogInterface.OnClickListener()
+													{
+														public void onClick(DialogInterface dialog, int which)
+														{
+															finish();
+														}
+													})
+													.create();
+							mDialog.show();
+						}
+					});		
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
+													.setTitle("报告提交失败！" + response.getErrorMessage())
+													.setNegativeButton(R.string.confirm, null)
+													.create();
+							mDialog.show();
+						}
+					});		
+				}
+			}
+		});
+    }
+
+    private void sendCreateReportRequest()
+    {
+    	CreateReportRequest request = new CreateReportRequest(report);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				CreateReportResponse response = new CreateReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					report.setServerID(response.getReportID());
+					dbManager.updateReport(report);
+					if (needToSubmit)
+					{
+						report.setStatus(Report.STATUS_SUBMITTED);
+						submitReport();
+					}
+					else
+					{
+						runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								Toast.makeText(EditReportActivity.this, "报告上传成功", Toast.LENGTH_SHORT).show();
+							}
+						});						
+					}
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							Toast.makeText(EditReportActivity.this, "报告上传失败", Toast.LENGTH_SHORT).show();
+						}
+					});		
+				}
+			}
+		});
+    }
+
+    private void sendUpdateReportRequest()
+    {
+    	ModifyReportRequest request = new ModifyReportRequest(report);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				ModifyReportResponse response = new ModifyReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					dbManager.updateReport(report);
+					if (needToSubmit)
+					{
+						report.setStatus(Report.STATUS_SUBMITTED);
+						submitReport();
+					}
+					else
+					{
+						runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								Toast.makeText(EditReportActivity.this, "报告更新成功", Toast.LENGTH_SHORT).show();
+							}
+						});						
+					}
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							Toast.makeText(EditReportActivity.this, "报告更新失败", Toast.LENGTH_SHORT).show();	
+						}
+					});					
+				}
+			}
+		});
+    }
+    
+    private void sendUploadImageRequest(final Item item)
+    {
+		UploadImageRequest request = new UploadImageRequest(item.getInvoicePath(), HttpConstant.IMAGE_TYPE_INVOICE);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final UploadImageResponse response = new UploadImageResponse(httpResponse);
+				if (response.getStatus())
+				{
+					item.setImageID(response.getImageID());
+					dbManager.updateItem(item);
+					sendCreateItemRequest(item);
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							taskCount--;
+							needToSave = false;
+							Toast.makeText(EditReportActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+						}
+					});				
+				}
+			}
+		});
+    }
+    
+    private void sendCreateItemRequest(final Item item)
+    {
+		CreateItemRequest request = new CreateItemRequest(item);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final CreateItemResponse response = new CreateItemResponse(httpResponse);
+				if (response.getStatus())
+				{
+					item.setServerID(response.getItemID());
+					dbManager.updateItem(item);
+					taskCount--;
+					if (needToSave && taskCount == 0)
+					{
+						if (report.getServerID() == -1)
+						{
+							sendCreateReportRequest();
+						}
+						else
+						{
+							sendUpdateReportRequest();
+						}
+					}
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							taskCount--;
+							needToSave = false;
+							Toast.makeText(EditReportActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();					
+						}
+					});				
+				}
+			}
+		});
     }
 }

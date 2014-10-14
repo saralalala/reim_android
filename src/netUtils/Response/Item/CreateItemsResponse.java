@@ -8,16 +8,20 @@ import classes.Utils;
 
 import netUtils.Response.BaseResponse;
 
-public class ModifyItemResponse extends BaseResponse
+public class CreateItemsResponse extends BaseResponse
 {
-	private int itemID = -1;
+	private int itemID;
 	
-	public ModifyItemResponse(Object httpResponse)
+	public CreateItemsResponse(Object httpResponse)
 	{
 		super(httpResponse);
 		if (getStatus())
 		{
 			constructData();
+		}
+		else
+		{
+			constructErrorData();
 		}
 	}
 
@@ -27,15 +31,22 @@ public class ModifyItemResponse extends BaseResponse
 		{
 			JSONArray jsonArray = getDataArray();
 			JSONObject jObject = jsonArray.getJSONObject(0);
+			setItemID(Integer.valueOf(jObject.getString("id")));
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	protected void constructErrorData()
+	{
+		try
+		{
+			JSONArray jsonArray = getDataArray();
+			JSONObject jObject = jsonArray.getJSONObject(0);
 			setStatus(Utils.intToBoolean(jObject.getInt("status")));
-			if (getStatus())
-			{
-				setItemID(Integer.valueOf(jObject.getString("iid")));				
-			}
-			else
-			{
-				setErrorMessage(jObject.getString("msg"));				
-			}
+			setErrorMessage(jObject.getString("msg"));
 		}
 		catch (JSONException e)
 		{

@@ -8,8 +8,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.provider.MediaStore;
 
 public class Utils
@@ -17,6 +20,14 @@ public class Utils
 	private static String regexEmail = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
 			 
 	private static String regexPhone = "[1]+\\d{10}";
+	
+	public static boolean isWiFiActive(Context context)
+	{
+		WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+		int ipAddress = wifiInfo == null ? 0 : wifiInfo.getIpAddress();
+		return wifiManager.isWifiEnabled() && ipAddress != 0 ? true : false;
+	}
 	
 	public static String getPathFromUri(Activity activity, Uri uri)
 	{
@@ -122,12 +133,17 @@ public class Utils
 
 	public static int booleanToInt(boolean b)
 	{
-		return b? 1 : 0;
+		return b ? 1 : 0;
 	}
 
 	public static Boolean intToBoolean(int i)
 	{
-		return i > 0? true : false;
+		return i > 0 ? true : false;
+	}
+
+	public static int booleanToString(boolean b)
+	{
+		return b ? 1 : 0;
 	}
 	
 	public static int[] intListToArray(List<Integer> intList)

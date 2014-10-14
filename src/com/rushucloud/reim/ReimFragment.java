@@ -2,8 +2,13 @@ package com.rushucloud.reim;
 
 import java.util.List;
 
+import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.Request.Item.DeleteItemRequest;
+import netUtils.Response.Item.DeleteItemResponse;
+
 import classes.AppPreference;
 import classes.Item;
+import classes.Report;
 import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
 import android.app.AlertDialog;
@@ -21,10 +26,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
@@ -53,36 +56,34 @@ public class ReimFragment extends Fragment
 	{
 		super.onResume();
 		refreshItemListView();
-//		setHasOptionsMenu(true);
+		setHasOptionsMenu(true);
 	}
 
 	public void onPause()
 	{
 		super.onPause();
-//		setHasOptionsMenu(false);
+		setHasOptionsMenu(false);
 	}
 
-//	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-//	{
-//		super.onCreateOptionsMenu(menu, inflater);
-//		inflater.inflate(R.menu.searchview, menu);
-//		SearchView searchView = (SearchView)menu.findItem(R.id.search_item).getActionView();
-//		searchView.setQueryHint(getActivity().getString(R.string.inputKeyword));
-//		searchView.setOnQueryTextListener(new OnQueryTextListener()
-//		{
-//			public boolean onQueryTextSubmit(String query)
-//			{
-//				// TODO get from server
-//				return false;
-//			}
-//			
-//			public boolean onQueryTextChange(String newText)
-//			{
-//				// TODO filter local
-//				return false;
-//			}
-//		});
-//	}
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.single_item, menu);
+		MenuItem menuItem = menu.findItem(R.id.action_item);
+		menuItem.setIcon(R.drawable.ic_action_search);
+		menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		int id = item.getItemId();
+		if (id == R.id.action_item)
+		{
+			startActivity(new Intent(getActivity(), SearchItemActivity.class));
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 	
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
 	{
@@ -99,26 +100,15 @@ public class ReimFragment extends Fragment
 		{
 			case 0:
 				AlertDialog mDialog = new AlertDialog.Builder(getActivity()).setTitle("警告")
-						.setMessage(R.string.deleteItemWarning)
-						.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-						{
-							public void onClick(DialogInterface dialog, int which)
-							{
-								int itemLocalID = itemList.get(index).getLocalID();
-								if (dbManager.deleteItem(itemLocalID))
-								{
-									refreshItemListView();
-									Toast.makeText(getActivity(), R.string.deleteSucceed,
-											Toast.LENGTH_LONG).show();
-								}
-								else
-								{
-									Toast.makeText(getActivity(), R.string.deleteFailed,
-											Toast.LENGTH_LONG).show();
-								}
-
-							}
-						}).setNegativeButton(R.string.cancel, null).create();
+										.setMessage(R.string.deleteItemWarning)
+										.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+										{
+											public void onClick(DialogInterface dialog, int which)
+											{
+												Item item = itemList.get(index);
+												deleteItem(item);
+											}
+										}).setNegativeButton(R.string.cancel, null).create();
 				mDialog.show();
 				break;
 			default:
@@ -141,8 +131,7 @@ public class ReimFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-//				Intent intent = new Intent(getActivity(), EditItemActivity.class);
-				Intent intent = new Intent(getActivity(), SearchItemActivity.class);
+				Intent intent = new Intent(getActivity(), EditItemActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -154,9 +143,21 @@ public class ReimFragment extends Fragment
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				Intent intent = new Intent(getActivity(), EditItemActivity.class);
-				intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
-				startActivity(intent);
+				Item item = itemList.get(position);
+				if (item.getBelongReport() == null || 
+						item.getBelongReport().getStatus() == Report.STATUS_DRAFT || 
+						item.getBelongReport().getStatus() == Report.STATUS_REJECT)
+				{
+					Intent intent = new Intent(getActivity(), EditItemActivity.class);
+					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
+					startActivity(intent);					
+				}
+				else
+				{
+					Intent intent = new Intent(getActivity(), ShowItemActivity.class);
+					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
+					startActivity(intent);					
+				}
 			}
 		});
 		registerForContextMenu(itemListView);
@@ -175,5 +176,51 @@ public class ReimFragment extends Fragment
 		itemList.addAll(readItemList());
 		adapter.set(itemList);
 		adapter.notifyDataSetChanged();
+	}
+	
+	private void deleteItem(final Item item)
+	{
+		DeleteItemRequest request = new DeleteItemRequest(item.getServerID());
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final DeleteItemResponse response = new DeleteItemResponse(httpResponse);
+				if (response.getStatus())
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							if (dbManager.deleteItem(item.getLocalID()))
+							{								
+								refreshItemListView();
+								Toast.makeText(getActivity(), R.string.deleteSucceed,
+										Toast.LENGTH_LONG).show();
+							}
+							else
+							{
+								Toast.makeText(getActivity(), R.string.deleteFailed,
+										Toast.LENGTH_LONG).show();
+							}
+						}
+					});
+				}
+				else
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							AlertDialog mDialog = new AlertDialog.Builder(getActivity())
+													.setTitle("条目删除失败" + response.getErrorMessage())
+													.setNegativeButton(R.string.confirm, null)
+													.create();
+							mDialog.show();
+						}
+					});					
+				}
+			}
+		});
 	}
 }

@@ -10,6 +10,15 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import netUtils.HttpConstant;
+import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Request.Item.CreateItemRequest;
+import netUtils.Request.Item.ModifyItemRequest;
+import netUtils.Response.UploadImageResponse;
+import netUtils.Response.Item.CreateItemResponse;
+import netUtils.Response.Item.ModifyItemResponse;
+
 import classes.AppPreference;
 import classes.Category;
 import classes.Item;
@@ -18,7 +27,6 @@ import classes.User;
 import classes.Utils;
 
 import com.rushucloud.reim.R;
-
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -504,17 +512,29 @@ public class EditItemActivity extends Activity
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					if (dbManager.syncItem(item))
 					{
-						AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-															.setTitle("保存成功")
-															.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
-															{
-																public void onClick(DialogInterface dialog, int which)
-																{
-																	finish();
-																}
-															})
-															.create();
-						mDialog.show();
+						if(item.getLocalID() == -1)
+						{
+							item.setLocalID(dbManager.getLastInsertItemID());
+						}
+						
+						if (Utils.isWiFiActive(EditItemActivity.this))
+						{
+							if (!item.getInvoicePath().equals(""))
+							{
+								sendUploadImageRequest();								
+							}
+							else
+							{
+								if (item.getServerID() == - 1)
+								{
+									sendCreateItemRequest();
+								}
+								else
+								{
+									sendModifyItemRequest();
+								}
+							}
+						}
 					}
 					else
 					{
@@ -642,5 +662,154 @@ public class EditItemActivity extends Activity
 			e.printStackTrace();
 			return false;
 		}
+    }
+
+    private void sendUploadImageRequest()
+    {
+		UploadImageRequest request = new UploadImageRequest(item.getInvoicePath(), HttpConstant.IMAGE_TYPE_INVOICE);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final UploadImageResponse response = new UploadImageResponse(httpResponse);
+				if (response.getStatus())
+				{
+					item.setImageID(response.getImageID());
+					dbManager.updateItem(item);
+					if (item.getServerID() == - 1)
+					{
+						sendCreateItemRequest();
+					}
+					else
+					{
+						sendModifyItemRequest();
+					}
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+													.setTitle("上传失败" + response.getErrorMessage())
+													.setNegativeButton(R.string.confirm, 
+															new DialogInterface.OnClickListener()
+													{
+														public void onClick(DialogInterface dialog, int which)
+														{
+															finish();
+														}
+													})
+													.create();
+							mDialog.show();		
+						}
+					});				
+				}
+			}
+		});
+    }
+    
+    private void sendCreateItemRequest()
+    {
+		CreateItemRequest request = new CreateItemRequest(item);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final CreateItemResponse response = new CreateItemResponse(httpResponse);
+				if (response.getStatus())
+				{
+					item.setServerID(response.getItemID());
+					dbManager.updateItem(item);
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+																.setTitle("保存成功")
+																.setNegativeButton(R.string.confirm, 
+																		new DialogInterface.OnClickListener()
+																{
+																	public void onClick(DialogInterface dialog, int which)
+																	{
+																		finish();
+																	}
+																})
+																.create();
+							mDialog.show();
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+													.setTitle("上传失败" + response.getErrorMessage())
+													.setNegativeButton(R.string.confirm, 
+															new DialogInterface.OnClickListener()
+													{
+														public void onClick(DialogInterface dialog, int which)
+														{
+															finish();
+														}
+													})
+													.create();
+							mDialog.show();								
+						}
+					});				
+				}
+			}
+		});
+    }
+    
+    private void sendModifyItemRequest()
+    {
+		ModifyItemRequest request = new ModifyItemRequest(item);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final ModifyItemResponse response = new ModifyItemResponse(httpResponse);
+				if (response.getStatus())
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+																.setTitle("修改成功")
+																.setNegativeButton(R.string.confirm, 
+																		new DialogInterface.OnClickListener()
+																{
+																	public void onClick(DialogInterface dialog, int which)
+																	{
+																		finish();
+																	}
+																})
+																.create();
+							mDialog.show();
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+													.setTitle("上传失败" + response.getErrorMessage())
+													.setNegativeButton(R.string.confirm, null)
+													.create();
+							mDialog.show();								
+						}
+					});					
+				}
+			}
+		});
     }
 }

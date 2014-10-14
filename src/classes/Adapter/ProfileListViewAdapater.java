@@ -77,7 +77,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 			{
 				view = layoutInflater.inflate(R.layout.list_item_edittext, null);
 				TextView textView = (TextView)view.findViewById(R.id.textView);
-				textView.setText(activity.getString(R.string.email));
+				textView.setText(activity.getString(R.string.nickname));
 				EditText editText = (EditText)view.findViewById(R.id.editText);
 				editText.setText(user.getNickname());
 				editText.setHint(activity.getString(R.string.inputNickname));
