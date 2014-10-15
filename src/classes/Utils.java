@@ -165,4 +165,40 @@ public class Utils
 		}
     	return idArrayList;
     }
+
+    public static String getImageName()
+    {
+    	int time = Utils.getCurrentTime();
+    	
+    	Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis((long)time * 1000);
+		String result = "";
+		result += calendar.get(Calendar.YEAR);
+		
+		if (calendar.get(Calendar.MONTH) < 10)
+		{
+			result += "0";			
+		}
+		result += calendar.get(Calendar.MONTH);
+		
+		if (calendar.get(Calendar.DAY_OF_MONTH) < 10)
+		{
+			result += "0";			
+		}
+		result += calendar.get(Calendar.DAY_OF_MONTH);
+		
+		if (calendar.get(Calendar.HOUR_OF_DAY) < 10)
+		{
+			result += "0";			
+		}
+		result += calendar.get(Calendar.HOUR_OF_DAY);	
+		
+		if (calendar.get(Calendar.MINUTE) < 10)
+		{
+			result += "0";			
+		}
+		result += calendar.get(Calendar.MINUTE) + ".jpg";
+		
+		return result;
+    }
 }

@@ -11,11 +11,8 @@ public class StatisticsRequest extends BaseRequest
 		setUrl(requestUrl);
 	}
 
-	@Override
 	public void sendRequest(HttpConnectionCallback callback)
 	{
-		// TODO Auto-generated method stub
 		doGet(callback);
 	}
-
 }

@@ -262,12 +262,13 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, privilege, manager_id, " +
+			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, avatar_path, privilege, manager_id, " +
 								"group_id, admin, local_updatedt, server_updatedt) VALUES (" +
 								"'" + user.getServerID() + "'," +
 								"'" + user.getEmail() + "'," +
 								"'" + user.getPhone() + "'," +
 								"'" + user.getNickname() + "'," +
+								"'" + user.getAvatarPath() + "'," +
 								"'" + user.getPrivilege() + "'," +
 								"'" + user.getDefaultManagerID() + "'," +
 								"'" + user.getGroupID() + "'," +
@@ -293,6 +294,7 @@ public class DBManager extends SQLiteOpenHelper
 								"email = '" + user.getEmail() + "'," +
 								"phone = '" + user.getPhone() + "'," +
 								"nickname = '" + user.getNickname() + "'," +
+								"avatar_path = '" + user.getAvatarPath() + "'," +
 								"manager_id = '" + user.getDefaultManagerID() + "'," +
 								"group_id = '" + user.getGroupID() + "'," +
 								"admin = '" + Utils.booleanToInt(user.isAdmin()) + "'," +
@@ -353,7 +355,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, privilege, manager_id, " +
+			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_path, privilege, manager_id, " +
 											  "group_id, admin, local_updatedt, server_updatedt " +
 					                          "FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
 			if (cursor.moveToNext())
@@ -363,6 +365,7 @@ public class DBManager extends SQLiteOpenHelper
 				user.setEmail(getStringFromCursor(cursor, "email"));
 				user.setPhone(getStringFromCursor(cursor, "phone"));
 				user.setNickname(getStringFromCursor(cursor, "nickname"));
+				user.setAvatarPath(getStringFromCursor(cursor, "avatar_path"));
 				user.setPrivilege(getIntFromCursor(cursor, "privilege"));
 				user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
 				user.setGroupID(getIntFromCursor(cursor, "group_id"));
@@ -429,6 +432,7 @@ public class DBManager extends SQLiteOpenHelper
 				user.setEmail(getStringFromCursor(cursor, "email"));
 				user.setPhone(getStringFromCursor(cursor, "phone"));
 				user.setNickname(getStringFromCursor(cursor, "nickname"));
+				user.setAvatarPath(getStringFromCursor(cursor, "avatar_path"));
 				user.setPrivilege(getIntFromCursor(cursor, "privilege"));
 				user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
 				user.setGroupID(getIntFromCursor(cursor, "group_id"));

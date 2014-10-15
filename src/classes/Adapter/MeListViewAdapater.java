@@ -4,12 +4,11 @@ import classes.AppPreference;
 import classes.Group;
 import classes.User;
 
+import com.rushucloud.reim.ImageActivity;
+import com.rushucloud.reim.MeFragment;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.start.SignInActivity;
-import com.rushucloud.reim.MainActivity;
-
 import database.DBManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,14 +24,18 @@ import android.widget.ToggleButton;
 public class MeListViewAdapater extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
-	private MainActivity activity;
+	private MeFragment fragment;
 	private AppPreference appPreference;
+	private DBManager dbManager;
+	private User currentUser;
 	
-	public MeListViewAdapater(Context context)
+	public MeListViewAdapater(MeFragment fragment)
 	{
-		layoutInflater = LayoutInflater.from(context);
-		activity = (MainActivity)context;
-		appPreference = AppPreference.getAppPreference();
+		this.layoutInflater = LayoutInflater.from(fragment.getActivity());
+		this.fragment = (MeFragment)fragment;
+		this.appPreference = AppPreference.getAppPreference();
+		this.dbManager = DBManager.getDBManager();
+		this.currentUser = dbManager.getUser(appPreference.getCurrentUserID());
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -42,14 +45,12 @@ public class MeListViewAdapater extends BaseAdapter
 		{
 			case 0:
 			{
-				DBManager dbManager = DBManager.getDBManager();
-				User currentUser = dbManager.getUser(appPreference.getCurrentUserID());
 				Group group = dbManager.getGroup(appPreference.getCurrentGroupID());
 				
 				view = layoutInflater.inflate(R.layout.list_item_profile, null);
 				
 				ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
-				if (currentUser.getAvatarPath().equals(""))
+				if (currentUser.getAvatarPath().startsWith("/images"))
 				{
 					imageView.setImageResource(R.drawable.default_avatar);
 				}
@@ -58,6 +59,19 @@ public class MeListViewAdapater extends BaseAdapter
 					Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
 					imageView.setImageBitmap(bitmap);
 				}
+				imageView.setOnClickListener(new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						if (!currentUser.getAvatarPath().equals(""))
+						{
+							Intent intent = new Intent(fragment.getActivity(), ImageActivity.class);
+							intent.putExtra("imagePath", currentUser.getAvatarPath());
+							fragment.getActivity().startActivity(intent);
+						}
+					}
+				});
+				fragment.registerForContextMenu(imageView);
 				
 				TextView nicknameTextView = (TextView)view.findViewById(R.id.nicknameTextView);
 				nicknameTextView.setText(currentUser.getNickname());
@@ -69,7 +83,7 @@ public class MeListViewAdapater extends BaseAdapter
 			{
 				view = layoutInflater.inflate(R.layout.list_item_toggle, null);
 				TextView textView = (TextView)view.findViewById(R.id.textView);
-				textView.setText(activity.getString(R.string.enablePasswordProtection));
+				textView.setText(fragment.getString(R.string.enablePasswordProtection));
 				final ToggleButton toggleButton = (ToggleButton)view.findViewById(R.id.toggleButton);
 				toggleButton.setChecked(appPreference.passwordProtectionEnabled());
 				toggleButton.setOnClickListener(new View.OnClickListener()
@@ -103,28 +117,28 @@ public class MeListViewAdapater extends BaseAdapter
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
-				textView.setText(activity.getString(R.string.preference));
+				textView.setText(fragment.getString(R.string.preference));
 				break;
 			}
 			case 4:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
-				textView.setText(activity.getString(R.string.share));
+				textView.setText(fragment.getString(R.string.share));
 				break;
 			}
 			case 5:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
-				textView.setText(activity.getString(R.string.feedback));
+				textView.setText(fragment.getString(R.string.feedback));
 				break;
 			}
 			case 6:
 			{
 				view = layoutInflater.inflate(R.layout.list_item_button, null);
 				Button button = (Button)view.findViewById(R.id.button);
-				button.setText(activity.getString(R.string.signOut));
+				button.setText(fragment.getString(R.string.signOut));
 				button.setOnClickListener(new View.OnClickListener()
 				{
 					public void onClick(View v)
@@ -134,8 +148,9 @@ public class MeListViewAdapater extends BaseAdapter
 						appPreference.setPassword("");
 						appPreference.setServerToken("");
 						appPreference.saveAppPreference();
-						activity.startActivity(new Intent(activity.getBaseContext(), SignInActivity.class));
-						activity.finish();
+						
+						fragment.startActivity(new Intent(fragment.getActivity(), SignInActivity.class));
+						fragment.getActivity().finish();
 					}
 				});
 				break;

@@ -6,23 +6,24 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-public class UploadImageRequest extends BaseRequest
+public class FeedbackRequest extends BaseRequest
 {
-	public UploadImageRequest(String path, int type)
+	public FeedbackRequest(String content, String contactInfo, String appVersion)
 	{
 		super();
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("name", "filePath"));
-		params.add(new BasicNameValuePair("filePath", path));
-		params.add(new BasicNameValuePair("type", Integer.toString(type)));
+		params.add(new BasicNameValuePair("content", content));
+		params.add(new BasicNameValuePair("contact", contactInfo));
+		params.add(new BasicNameValuePair("version", appVersion));
+		params.add(new BasicNameValuePair("platform", Integer.toString(2)));
 		setParams(params);
 
 		String requestUrl = getUrl();
-		requestUrl += "/images";
+		requestUrl += "/feedback";
 		setUrl(requestUrl);
 	}
-
+	
 	public void sendRequest(HttpConnectionCallback callback)
 	{
 		doPost(callback);

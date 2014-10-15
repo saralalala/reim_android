@@ -75,5 +75,7 @@
     <string name="inputNickname">请输入昵称</string>
     <string name="inputOldPassword">请输入旧密码</string>
     <string name="confirmNewPasswordPrompt">请确认新密码</string>
+    <string name="inputFeedback">请输入您的意见或建议</string>
+    <string name="inputContactInfo">请输入您的联系方式</string>
 
 </resources>

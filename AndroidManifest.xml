@@ -117,6 +117,11 @@
             android:name="com.rushucloud.reim.ChangePasswordActivity">
         </activity>
         
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.FeedbackActivity">
+        </activity>
+        
         <!-- #######################  友盟UmengAppkey  ####################### -->
 	    <meta-data
 	        android:name="UMENG_APPKEY" 

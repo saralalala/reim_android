@@ -19,26 +19,39 @@ public class ReimApplication extends Application
 	
 	private void createDirectories()
 	{
-		String appDirectory = Environment.getExternalStorageDirectory() + "/如数云报销";
-		File dir = new File(appDirectory);
-		if (!dir.exists())
+		try
 		{
-			dir.mkdir();
+			String appDirectory = Environment.getExternalStorageDirectory() + "/如数云报销";
+			File dir = new File(appDirectory);
+			if (!dir.exists())
+			{
+				dir.mkdir();
+			}
+			dir = new File(appDirectory + "/images");
+			if (!dir.exists())
+			{
+				dir.mkdir();
+				File nomediaFile = new File(dir, ".nomedia");
+				nomediaFile.createNewFile();
+			}
+			dir = new File(appDirectory + "/images/profile");
+			if (!dir.exists())
+			{
+				dir.mkdir();
+				File nomediaFile = new File(dir, ".nomedia");
+				nomediaFile.createNewFile();
+			}
+			dir = new File(appDirectory + "/images/invoice");
+			if (!dir.exists())
+			{
+				dir.mkdir();
+				File nomediaFile = new File(dir, ".nomedia");
+				nomediaFile.createNewFile();
+			}		
 		}
-		dir = new File(appDirectory + "/images");
-		if (!dir.exists())
+		catch (Exception e)
 		{
-			dir.mkdir();
+			e.printStackTrace();
 		}
-		dir = new File(appDirectory + "/images/profile");
-		if (!dir.exists())
-		{
-			dir.mkdir();
-		}
-		dir = new File(appDirectory + "/images/invoice");
-		if (!dir.exists())
-		{
-			dir.mkdir();
-		}		
 	}
 }

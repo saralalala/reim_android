@@ -597,42 +597,6 @@ public class EditItemActivity extends Activity
     	startActivityForResult(intent, CROP_IMAGE);
     }
 
-    private String getInvoiceName()
-    {
-    	int time = Utils.getCurrentTime();
-    	
-    	Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis((long)time * 1000);
-		String result = "";
-		result += calendar.get(Calendar.YEAR);
-		
-		if (calendar.get(Calendar.MONTH) < 10)
-		{
-			result += "0";			
-		}
-		result += calendar.get(Calendar.MONTH);
-		
-		if (calendar.get(Calendar.DAY_OF_MONTH) < 10)
-		{
-			result += "0";			
-		}
-		result += calendar.get(Calendar.DAY_OF_MONTH);
-		
-		if (calendar.get(Calendar.HOUR_OF_DAY) < 10)
-		{
-			result += "0";			
-		}
-		result += calendar.get(Calendar.HOUR_OF_DAY);	
-		
-		if (calendar.get(Calendar.MINUTE) < 10)
-		{
-			result += "0";			
-		}
-		result += calendar.get(Calendar.MINUTE) + ".jpg";
-		
-		return result;
-    }
-
     private Boolean saveBitmapToFile(Bitmap bitmap)
     {
     	try
@@ -642,7 +606,7 @@ public class EditItemActivity extends Activity
     		
     		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     		
-    		File compressedBitmapFile = new File(appPreference.getInvoiceImageDirectory(), getInvoiceName());
+    		File compressedBitmapFile = new File(appPreference.getInvoiceImageDirectory(), Utils.getImageName());
     		compressedBitmapFile.createNewFile();
     		
     		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -654,7 +618,7 @@ public class EditItemActivity extends Activity
     		fileOutputStream.flush();
     		fileOutputStream.close();	
     		
-    		item.setInvoicePath(appPreference.getInvoiceImageDirectory() + "/" + getInvoiceName());
+    		item.setInvoicePath(appPreference.getInvoiceImageDirectory() + "/" + Utils.getImageName());
     		return true;
 		}
 		catch (IOException e)
