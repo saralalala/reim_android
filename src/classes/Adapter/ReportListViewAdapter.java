@@ -7,6 +7,8 @@ import classes.Report;
 import classes.Utils;
 
 import com.rushucloud.reim.R;
+
+import database.DBManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,7 @@ public class ReportListViewAdapter extends BaseAdapter
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		
 		Report report = this.getItem(position);
+		String[] reportInfo = DBManager.getDBManager().getReportInfo(report.getLocalID());
 
 		String title = report.getTitle().equals("") ? "N/A" : report.getTitle();
 		titleTextView.setText(title);
@@ -46,12 +49,12 @@ public class ReportListViewAdapter extends BaseAdapter
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
 		dateTextView.setText(date.equals("") ? "N/A" : date);
 		
-		countTextView.setText("#" + Integer.toString(report.getItemCount()));
+		countTextView.setText("#" + reportInfo[1]);
 
 		String status = report.getStatusString().equals("") ? "N/A" : report.getStatusString();
 		statusTextView.setText(status);
 		
-		amountTextView.setText("￥" + Double.toString(report.getTotalAmount()));
+		amountTextView.setText("￥" + reportInfo[0]);
 		
 		return convertView;
 	}

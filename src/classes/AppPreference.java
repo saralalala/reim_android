@@ -1,11 +1,12 @@
 package classes;
 
+import com.avos.avoscloud.AVInstallation;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Environment;
-import android.telephony.TelephonyManager;
 
 public class AppPreference
 {
@@ -55,11 +56,10 @@ public class AppPreference
 		String path = Environment.getExternalStorageDirectory() + "/如数云报销";
 		appPreference.setProfileImageDirectory(path + "/images/profile");
 		appPreference.setInvoiceImageDirectory(path + "/images/invoice");
-		
+
 		if (appPreference.getDeviceToken().equals(""))
 		{
-			TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Application.TELEPHONY_SERVICE);
-			appPreference.setDeviceToken(telephonyManager.getDeviceId());
+			appPreference.setDeviceToken(AVInstallation.getCurrentInstallation().getInstallationId());
 		}
 		
 		appPreference.setSyncWithoutWifi(preferences.getBoolean("syncWithoutWifi", false));

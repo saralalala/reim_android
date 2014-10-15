@@ -5,6 +5,7 @@ import netUtils.Request.CommonRequest;
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
 import netUtils.Response.CommonResponse;
 import classes.AppPreference;
+import classes.ReimApplication;
 import classes.Utils;
 
 import com.rushucloud.reim.MainActivity;
@@ -52,6 +53,8 @@ public class SignInActivity extends Activity
 	
 	private void viewIntialise()
 	{
+		ReimApplication.setProgressDialog(this);
+		
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
 		passwordEditText = (EditText)findViewById(R.id.phonePasswordEditText);
 		
@@ -167,6 +170,7 @@ public class SignInActivity extends Activity
 	
 	private void signIn()
 	{
+		ReimApplication.pDialog.show();
 		CommonRequest request = new CommonRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -221,6 +225,7 @@ public class SignInActivity extends Activity
 					{
 						public void run()
 						{
+							ReimApplication.pDialog.dismiss();
 							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
 													.setTitle("提示")
 													.setMessage("登录成功！")
@@ -244,6 +249,7 @@ public class SignInActivity extends Activity
 					{
 						public void run()
 						{
+							ReimApplication.pDialog.dismiss();
 							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
 														.setTitle("错误")
 														.setMessage("登录失败！" + response.getErrorMessage())

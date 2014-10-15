@@ -1,5 +1,6 @@
-package com.rushucloud.reim;
+package com.rushucloud.reim.me;
 
+import com.rushucloud.reim.R;
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
 import netUtils.Request.User.ChangePasswordRequest;
 import netUtils.Response.User.ChangePasswordResponse;

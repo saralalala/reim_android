@@ -656,7 +656,8 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setTitle("上传失败" + response.getErrorMessage())
+													.setTitle("上传失败")
+													.setMessage(response.getErrorMessage())
 													.setNegativeButton(R.string.confirm, 
 															new DialogInterface.OnClickListener()
 													{
@@ -712,15 +713,9 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setTitle("上传失败" + response.getErrorMessage())
-													.setNegativeButton(R.string.confirm, 
-															new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															finish();
-														}
-													})
+													.setTitle("上传失败")
+													.setMessage(response.getErrorMessage())
+													.setNegativeButton(R.string.confirm, null)
 													.create();
 							mDialog.show();								
 						}
@@ -766,7 +761,8 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setTitle("上传失败" + response.getErrorMessage())
+													.setTitle("上传失败")
+													.setMessage(response.getErrorMessage())
 													.setNegativeButton(R.string.confirm, null)
 													.create();
 							mDialog.show();								

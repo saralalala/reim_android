@@ -1,9 +1,6 @@
 package classes;
 
 import java.io.Serializable;
-import java.util.List;
-
-import database.DBManager;
 
 public class Report implements Serializable
 {
@@ -104,25 +101,6 @@ public class Report implements Serializable
 	public void setLocalUpdatedDate(int localUpdatedDate)
 	{
 		this.localUpdatedDate = localUpdatedDate;
-	}
-
-	public double getTotalAmount()
-	{
-		DBManager dbManager = DBManager.getDBManager();
-		List<Item> itemList = dbManager.getReportItems(localID);
-		double amount = 0;
-		for (int i = 0; i < itemList.size(); i++)
-		{
-			amount += itemList.get(i).getAmount();
-		}
-		return amount;
-	}
-	
-	public int getItemCount()
-	{
-		DBManager dbManager = DBManager.getDBManager();
-		List<Item> itemList = dbManager.getReportItems(localID);
-		return itemList.size();
 	}
 	
 	public String getStatusString()

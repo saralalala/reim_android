@@ -1,5 +1,6 @@
 package com.rushucloud.reim;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
@@ -8,6 +9,7 @@ import netUtils.Response.Item.DeleteItemResponse;
 
 import classes.AppPreference;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Report;
 import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
@@ -33,28 +35,33 @@ import android.support.v4.app.Fragment;
 
 public class ReimFragment extends Fragment
 {
-
+	private View view;
+	private Button addButton;
 	private ListView itemListView;
 	private ItemListViewAdapter adapter;
 
 	private DBManager dbManager;
-	private List<Item> itemList;
-
+	private List<Item> itemList = new ArrayList<Item>();
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		return inflater.inflate(R.layout.fragment_reimbursement, container, false);
-	}
-
-	public void onActivityCreated(Bundle savedInstanceState)
-	{
-		super.onActivityCreated(savedInstanceState);
-		dataInitialise();
-		viewInitialise();
+		if (view == null)
+		{
+			view = inflater.inflate(R.layout.fragment_reimbursement, container, false);
+		}
+		else
+		{
+			ViewGroup viewGroup = (ViewGroup)view.getParent();
+			viewGroup.removeView(view);
+		}
+		return view;
 	}
 
 	public void onResume()
 	{
 		super.onResume();
+		viewInitialise();
+		dataInitialise();
 		refreshItemListView();
 		setHasOptionsMenu(true);
 	}
@@ -96,20 +103,30 @@ public class ReimFragment extends Fragment
 	{
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
 		final int index = (int) itemListView.getAdapter().getItemId(menuInfo.position);
+		final Item localItem = itemList.get(index);
+		Report report = localItem.getBelongReport();
 		switch (item.getItemId())
 		{
 			case 0:
-				AlertDialog mDialog = new AlertDialog.Builder(getActivity()).setTitle("警告")
-										.setMessage(R.string.deleteItemWarning)
-										.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-										{
-											public void onClick(DialogInterface dialog, int which)
+				if (report != null && (report.getStatus() != Report.STATUS_DRAFT || 
+									   report.getStatus() != Report.STATUS_REJECT))
+				{
+					Toast.makeText(getActivity(), "条目已提交，不可删除", Toast.LENGTH_SHORT).show();
+					
+				}
+				else
+				{
+					AlertDialog mDialog = new AlertDialog.Builder(getActivity()).setTitle("警告")
+											.setMessage(R.string.deleteItemWarning)
+											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 											{
-												Item item = itemList.get(index);
-												deleteItem(item);
-											}
-										}).setNegativeButton(R.string.cancel, null).create();
-				mDialog.show();
+												public void onClick(DialogInterface dialog, int which)
+												{
+													deleteItem(localItem);
+												}
+											}).setNegativeButton(R.string.cancel, null).create();
+					mDialog.show();
+				}
 				break;
 			default:
 				break;
@@ -120,47 +137,59 @@ public class ReimFragment extends Fragment
 
 	private void dataInitialise()
 	{
-		dbManager = DBManager.getDBManager();
-		itemList = readItemList();
+		if (dbManager == null)
+		{
+			dbManager = DBManager.getDBManager();			
+		}
 	}
 
 	private void viewInitialise()
 	{
-		Button addButton = (Button) getActivity().findViewById(R.id.addButton);
-		addButton.setOnClickListener(new View.OnClickListener()
+		if (addButton == null)
 		{
-			public void onClick(View v)
+			addButton = (Button) getActivity().findViewById(R.id.addButton);
+			addButton.setOnClickListener(new View.OnClickListener()
 			{
-				Intent intent = new Intent(getActivity(), EditItemActivity.class);
-				startActivity(intent);
-			}
-		});
-
-		adapter = new ItemListViewAdapter(getActivity(), itemList);
-		itemListView = (ListView) getActivity().findViewById(R.id.itemListView);
-		itemListView.setAdapter(adapter);
-		itemListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				Item item = itemList.get(position);
-				if (item.getBelongReport() == null || 
-						item.getBelongReport().getStatus() == Report.STATUS_DRAFT || 
-						item.getBelongReport().getStatus() == Report.STATUS_REJECT)
+				public void onClick(View v)
 				{
 					Intent intent = new Intent(getActivity(), EditItemActivity.class);
-					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
-					startActivity(intent);					
+					startActivity(intent);
 				}
-				else
+			});
+		}
+
+		if (adapter == null)
+		{
+			adapter = new ItemListViewAdapter(getActivity(), itemList);
+		}
+		
+		if (itemListView == null)
+		{
+			itemListView = (ListView) getActivity().findViewById(R.id.itemListView);
+			itemListView.setAdapter(adapter);
+			itemListView.setOnItemClickListener(new OnItemClickListener()
+			{
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 				{
-					Intent intent = new Intent(getActivity(), ShowItemActivity.class);
-					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
-					startActivity(intent);					
+					Item item = itemList.get(position);
+					if (item.getBelongReport() == null || 
+							item.getBelongReport().getStatus() == Report.STATUS_DRAFT || 
+							item.getBelongReport().getStatus() == Report.STATUS_REJECT)
+					{
+						Intent intent = new Intent(getActivity(), EditItemActivity.class);
+						intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
+						startActivity(intent);					
+					}
+					else
+					{
+						Intent intent = new Intent(getActivity(), ShowItemActivity.class);
+						intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
+						startActivity(intent);					
+					}
 				}
-			}
-		});
-		registerForContextMenu(itemListView);
+			});
+			registerForContextMenu(itemListView);
+		}
 	}
 
 	private List<Item> readItemList()
@@ -172,10 +201,12 @@ public class ReimFragment extends Fragment
 
 	private void refreshItemListView()
 	{
+		ReimApplication.pDialog.show();
 		itemList.clear();
 		itemList.addAll(readItemList());
 		adapter.set(itemList);
 		adapter.notifyDataSetChanged();
+		ReimApplication.pDialog.dismiss();
 	}
 	
 	private void deleteItem(final Item item)
@@ -213,7 +244,8 @@ public class ReimFragment extends Fragment
 						public void run()
 						{
 							AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-													.setTitle("条目删除失败" + response.getErrorMessage())
+													.setTitle("条目删除失败")
+													.setMessage(response.getErrorMessage())
 													.setNegativeButton(R.string.confirm, null)
 													.create();
 							mDialog.show();

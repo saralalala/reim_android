@@ -422,7 +422,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 
-			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, privilege, manager_id, " +
+			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_path, privilege, manager_id, " +
 											  "group_id, admin, local_updatedt, server_updatedt " +
 					                          "FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
 			while (cursor.moveToNext())
@@ -1320,6 +1320,21 @@ public class DBManager extends SQLiteOpenHelper
 		Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_report", null);
 		cursor.moveToFirst();
 		return cursor.getInt(0);
+	}
+	
+	public String[] getReportInfo(int reportLocalID)
+	{
+		double amount = 0;
+		int count = 0;
+		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id=?", 
+												new String[]{Integer.toString(reportLocalID)});
+		while (cursor.moveToNext())
+		{
+			amount += getDoubleFromCursor(cursor, "amount");
+			count++;
+		}
+		
+		return new String[]{Double.toString(amount), Integer.toString(count)};
 	}
 	
 	// Comment

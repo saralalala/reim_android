@@ -1,9 +1,15 @@
 package com.rushucloud.reim;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.Request.Report.DeleteReportRequest;
+import netUtils.Response.Report.DeleteReportResponse;
 
 
 import classes.AppPreference;
+import classes.ReimApplication;
 import classes.Report;
 import classes.Adapter.ReportListViewAdapter;
 import database.DBManager;
@@ -25,29 +31,35 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.support.v4.app.Fragment;
 
-public class ReportFragment extends Fragment {
-
+public class ReportFragment extends Fragment
+{
+	private View view;
+	private Button addButton;
 	private ListView reportListView;
 	private ReportListViewAdapter adapter;
 	
 	private DBManager dbManager;
-	private List<Report> reportList;
+	private List<Report> reportList = new ArrayList<Report>();
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-	    return inflater.inflate(R.layout.fragment_report, container, false);  
+		if (view == null)
+		{
+			view = inflater.inflate(R.layout.fragment_report, container, false);
+		}
+		else
+		{
+			ViewGroup viewGroup = (ViewGroup)view.getParent();
+			viewGroup.removeView(view);
+		}
+	    return view;  
 	}
-	
-	public void onActivityCreated(Bundle savedInstanceState)
-	{  
-        super.onActivityCreated(savedInstanceState);
-        dataInitialise();
-        viewInitialise();
-    }
 	   
 	public void onResume()
 	{
 		super.onResume();
+        viewInitialise();
+        dataInitialise();
 		refreshReportListView();
 	}
 	
@@ -61,34 +73,32 @@ public class ReportFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item)
     {
     	AdapterContextMenuInfo menuInfo=(AdapterContextMenuInfo)item.getMenuInfo();
-    	final int index = (int)reportListView.getAdapter().getItemId(menuInfo.position);
+    	int index = (int)reportListView.getAdapter().getItemId(menuInfo.position);
+    	final Report report = reportList.get(index);
     	switch (item.getItemId()) 
     	{
 			case 0:
-				AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-													.setTitle("警告")
-													.setMessage(R.string.deleteReportWarning)
-													.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
+				if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECT)
+				{
+					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
+														.setTitle("警告")
+														.setMessage(R.string.deleteReportWarning)
+														.setPositiveButton(R.string.confirm, 
+																new DialogInterface.OnClickListener()
 														{
-															if (dbManager.deleteReport(reportList.get(index).getLocalID()))
+															public void onClick(DialogInterface dialog, int which)
 															{
-																refreshReportListView();
-													            Toast.makeText(getActivity(),
-													            		R.string.deleteSucceed, Toast.LENGTH_LONG).show();																
+																deleteReport(report);
 															}
-															else
-															{
-													            Toast.makeText(getActivity(),
-													            		R.string.deleteFailed, Toast.LENGTH_LONG).show();
-															}
-															
-														}
-													})
-													.setNegativeButton(R.string.cancel, null)
-													.create();
-				mDialog.show();
+														})
+														.setNegativeButton(R.string.cancel, null)
+														.create();
+					mDialog.show();
+				}
+				else
+				{
+					Toast.makeText(getActivity(), "报告已提交，不可删除", Toast.LENGTH_SHORT).show();
+				}
 				break;
 			default:
 				break;
@@ -99,38 +109,50 @@ public class ReportFragment extends Fragment {
     
     private void dataInitialise()
     {
-    	dbManager = DBManager.getDBManager();
-    	reportList = readReportList();
+		if (dbManager == null)
+		{
+			dbManager = DBManager.getDBManager();			
+		}
     }
     
 	private void viewInitialise()
 	{
-		Button addButton = (Button)getActivity().findViewById(R.id.addButton);
-		addButton.setOnClickListener(new View.OnClickListener()
+		if (addButton == null)
 		{
-			public void onClick(View v)
+			addButton = (Button)getActivity().findViewById(R.id.addButton);
+			addButton.setOnClickListener(new View.OnClickListener()
 			{
-				Intent intent = new Intent(getActivity(), EditReportActivity.class);
-				startActivity(intent);
-			}
-		});
+				public void onClick(View v)
+				{
+					Intent intent = new Intent(getActivity(), EditReportActivity.class);
+					startActivity(intent);
+				}
+			});			
+		}
 
-		adapter = new ReportListViewAdapter(getActivity(), reportList);
-		reportListView = (ListView)getActivity().findViewById(R.id.reportListView);
-		reportListView.setAdapter(adapter);
-		reportListView.setOnItemClickListener(new OnItemClickListener()
+		if (adapter == null)
 		{
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id)
+			adapter = new ReportListViewAdapter(getActivity(), reportList);			
+		}
+		
+		if (reportListView == null)
+		{
+			reportListView = (ListView)getActivity().findViewById(R.id.reportListView);
+			reportListView.setAdapter(adapter);
+			reportListView.setOnItemClickListener(new OnItemClickListener()
 			{
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("report", reportList.get(position));
-				Intent intent = new Intent(getActivity(), EditReportActivity.class);
-				intent.putExtras(bundle);
-				startActivity(intent);
-			}
-		});
-		registerForContextMenu(reportListView);
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id)
+				{
+					Bundle bundle = new Bundle();
+					bundle.putSerializable("report", reportList.get(position));
+					Intent intent = new Intent(getActivity(), EditReportActivity.class);
+					intent.putExtras(bundle);
+					startActivity(intent);
+				}
+			});
+			registerForContextMenu(reportListView);
+		}
 	}
 	
 	private List<Report> readReportList()
@@ -146,5 +168,70 @@ public class ReportFragment extends Fragment {
 		reportList.addAll(readReportList());
 		adapter.set(reportList);
 		adapter.notifyDataSetChanged();
+	}
+
+	private void deleteReport(final Report report)
+	{
+		ReimApplication.pDialog.show();
+		if (report.getServerID() != -1)
+		{
+			DeleteReportRequest request = new DeleteReportRequest(report.getServerID());
+			request.sendRequest(new HttpConnectionCallback()
+			{
+				public void execute(Object httpResponse)
+				{
+					DeleteReportResponse response = new DeleteReportResponse(httpResponse);
+					if (response.getStatus())
+					{
+						deleteReportFromLocal(report.getLocalID());
+					}
+					else
+					{
+						getActivity().runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								ReimApplication.pDialog.dismiss();
+					            Toast.makeText(getActivity(),
+					            		R.string.deleteFailed, Toast.LENGTH_LONG).show();
+							}
+						});		
+					}
+				}
+			});
+		}
+		else
+		{
+			deleteReportFromLocal(report.getLocalID());
+		}
+	}
+	
+	private void deleteReportFromLocal(int reportLocalID)
+	{
+		if (dbManager.deleteReport(reportLocalID))
+		{
+			getActivity().runOnUiThread(new Runnable()
+			{
+				public void run()
+				{
+					refreshReportListView();
+					ReimApplication.pDialog.dismiss();
+		            Toast.makeText(getActivity(),
+		            		R.string.deleteSucceed, Toast.LENGTH_LONG).show();
+				}
+			});															
+		}
+		else
+		{
+			getActivity().runOnUiThread(new Runnable()
+			{
+				public void run()
+				{
+					ReimApplication.pDialog.dismiss();
+		            Toast.makeText(getActivity(),
+		            		R.string.deleteFailed, Toast.LENGTH_LONG).show();
+				}
+			});		
+		}		
 	}
 }

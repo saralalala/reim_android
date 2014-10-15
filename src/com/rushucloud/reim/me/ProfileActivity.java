@@ -1,5 +1,6 @@
-package com.rushucloud.reim;
+package com.rushucloud.reim.me;
 
+import com.rushucloud.reim.R;
 import classes.Adapter.ProfileListViewAdapater;
 import android.app.Activity;
 import android.os.Bundle;

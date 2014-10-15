@@ -392,7 +392,8 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-													.setTitle("报告提交失败！" + response.getErrorMessage())
+													.setTitle("报告提交失败！")
+													.setMessage(response.getErrorMessage())
 													.setNegativeButton(R.string.confirm, null)
 													.create();
 							mDialog.show();

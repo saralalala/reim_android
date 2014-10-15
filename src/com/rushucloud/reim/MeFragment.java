@@ -13,6 +13,8 @@ import netUtils.Request.BaseRequest.HttpConnectionCallback;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.UploadImageResponse;
 
+import com.rushucloud.reim.me.FeedbackActivity;
+import com.rushucloud.reim.me.ProfileActivity;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 

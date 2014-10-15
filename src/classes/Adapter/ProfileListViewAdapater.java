@@ -3,9 +3,10 @@ package classes.Adapter;
 import classes.AppPreference;
 import classes.User;
 
-import com.rushucloud.reim.ChangePasswordActivity;
-import com.rushucloud.reim.ProfileActivity;
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.me.ChangePasswordActivity;
+import com.rushucloud.reim.me.ProfileActivity;
+
 import database.DBManager;
 import android.content.Context;
 import android.content.Intent;

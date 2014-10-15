@@ -1,5 +1,6 @@
 package com.rushucloud.reim;
 
+import classes.ReimApplication;
 import database.DBManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
@@ -27,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		dataInitialise();
+		ReimApplication.setProgressDialog(this);
 		tabHostInitialse();
 	}
 
@@ -54,11 +55,6 @@ public class MainActivity extends ActionBarActivity {
             return super.onKeyDown(keyCode, event);
         }
     }
-	
-	private void dataInitialise()
-	{
-		
-	}
 
 	private void tabHostInitialse()
     {		

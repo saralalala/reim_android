@@ -267,18 +267,15 @@ public abstract class BaseRequest
 				} 
 				catch (ClientProtocolException e)
 				{
-					resultString = e.getMessage().toString();
-					System.out.println(resultString);
+					e.printStackTrace();
 				}
 				catch (IOException e)
 				{
-					resultString = e.getMessage().toString();
-					System.out.println(resultString);
+					e.printStackTrace();
 				}
 				catch (Exception e)
 				{
-					resultString = e.getMessage().toString();
-					System.out.println(resultString);
+					e.printStackTrace();
 				}
 
 				callback.execute(resultString);
