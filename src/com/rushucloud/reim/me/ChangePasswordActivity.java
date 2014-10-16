@@ -1,6 +1,8 @@
 package com.rushucloud.reim.me;
 
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
 import netUtils.Request.User.ChangePasswordRequest;
 import netUtils.Response.User.ChangePasswordResponse;
@@ -29,6 +31,20 @@ public class ChangePasswordActivity extends Activity
 		setContentView(R.layout.profile_change_password);
 		appPreference = AppPreference.getAppPreference();
 		viewInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("ChangePasswordActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("ChangePasswordActivity");
+		MobclickAgent.onPause(this);
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event)

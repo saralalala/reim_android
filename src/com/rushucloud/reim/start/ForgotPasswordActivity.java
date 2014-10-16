@@ -7,6 +7,7 @@ import netUtils.Response.User.ForgotPasswordResponse;
 import classes.Utils;
 
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -43,6 +44,20 @@ public class ForgotPasswordActivity extends Activity
 		tabViewInitialse();
 		viewInitialise();
 		buttonInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("ForgotPasswordActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("ForgotPasswordActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)

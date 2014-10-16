@@ -3,6 +3,8 @@ package com.rushucloud.reim;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.umeng.analytics.MobclickAgent;
+
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
 import netUtils.Request.Report.DeleteReportRequest;
 import netUtils.Response.Report.DeleteReportResponse;
@@ -58,9 +60,16 @@ public class ReportFragment extends Fragment
 	public void onResume()
 	{
 		super.onResume();
+		MobclickAgent.onPageStart("ReportFragment");	
         viewInitialise();
         dataInitialise();
 		refreshReportListView();
+	}
+
+	public void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("ReportFragment");
 	}
 	
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)

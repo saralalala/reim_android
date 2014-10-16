@@ -3,6 +3,8 @@ package com.rushucloud.reim;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.umeng.analytics.MobclickAgent;
+
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
 import netUtils.Request.Item.DeleteItemRequest;
 import netUtils.Response.Item.DeleteItemResponse;
@@ -60,15 +62,17 @@ public class ReimFragment extends Fragment
 	public void onResume()
 	{
 		super.onResume();
+		MobclickAgent.onPageStart("ReimFragment");
 		viewInitialise();
 		dataInitialise();
 		refreshItemListView();
 		setHasOptionsMenu(true);
 	}
-
+	
 	public void onPause()
 	{
 		super.onPause();
+		MobclickAgent.onPageEnd("ReimFragment");
 		setHasOptionsMenu(false);
 	}
 

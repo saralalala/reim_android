@@ -3,6 +3,8 @@ package com.rushucloud.reim;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.umeng.analytics.MobclickAgent;
+
 import classes.Item;
 import classes.Report;
 import classes.Adapter.ItemListViewAdapter;
@@ -38,6 +40,20 @@ public class UnarchivedItemsActivity extends Activity
 		dataInitialise();
 		viewInitialise();
 		buttonInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("UnarchivedItemsActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("UnarchivedItemsActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)

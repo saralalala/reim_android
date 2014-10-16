@@ -34,6 +34,7 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
 import com.rushucloud.graphics.ReimPie;
+import com.umeng.analytics.MobclickAgent;
 
 public class StatisticsFragment extends Fragment
 {
@@ -53,6 +54,19 @@ public class StatisticsFragment extends Fragment
 			}
 		}
 	};
+
+	public void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("StatisticsFragment");
+		// refreshItemListView();
+	}
+	
+	public void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("StatisticsFragment");
+	}
 
 //	protected DefaultRenderer buildCategoryRenderer(int[] colors)
 //	{
@@ -214,12 +228,5 @@ public class StatisticsFragment extends Fragment
 
 			}
 		});
-	}
-
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-		// refreshItemListView();
 	}
 }

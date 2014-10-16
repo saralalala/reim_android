@@ -36,6 +36,10 @@
             android:label="@string/app_name" 
             android:name="com.rushucloud.reim.start.SplashActivity" 
             android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>       
         </activity>
         
         <activity 
@@ -53,10 +57,6 @@
         <activity 
             android:label="@string/app_name" 
             android:name="com.rushucloud.reim.start.SignInActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>       
         </activity>
         
         <activity 
@@ -130,6 +130,12 @@
 	        android:value="543bf20efd98c544b9002d11" >
 	    </meta-data>
 	    
+	    <!-- 推广渠道，Wandoujia之类的 
+	    <meta-data
+	        android:name="UMENG_CHANNEL" 
+	        android:value="Wandoujia" >
+	    </meta-data>-->
+	    
         <!-- ###################注册SDK使用的Activity###################### -->
 		<activity 
 		    android:configChanges="orientation|keyboard" 
@@ -182,7 +188,8 @@
         </activity>
         
         <service android:name="com.avos.avoscloud.PushService"/>
-        <receiver android:name="classes.ReimBroadcastReceiver">
+        <receiver 
+            android:name="classes.ReimBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />

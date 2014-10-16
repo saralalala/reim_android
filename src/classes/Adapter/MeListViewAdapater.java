@@ -27,7 +27,6 @@ public class MeListViewAdapater extends BaseAdapter
 	private MeFragment fragment;
 	private AppPreference appPreference;
 	private DBManager dbManager;
-	private User currentUser;
 	
 	public MeListViewAdapater(MeFragment fragment)
 	{
@@ -35,12 +34,12 @@ public class MeListViewAdapater extends BaseAdapter
 		this.fragment = (MeFragment)fragment;
 		this.appPreference = AppPreference.getAppPreference();
 		this.dbManager = DBManager.getDBManager();
-		this.currentUser = dbManager.getUser(appPreference.getCurrentUserID());
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View view = null;
+		final User currentUser = dbManager.getUser(appPreference.getCurrentUserID());
 		switch (position)
 		{
 			case 0:
@@ -49,7 +48,7 @@ public class MeListViewAdapater extends BaseAdapter
 				
 				view = layoutInflater.inflate(R.layout.list_item_profile, null);
 				
-				ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
+				ImageView imageView = (ImageView)view.findViewById(R.id.imageView);				
 				if (currentUser.getAvatarPath().startsWith("/images"))
 				{
 					imageView.setImageResource(R.drawable.default_avatar);

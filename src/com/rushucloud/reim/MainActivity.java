@@ -1,5 +1,7 @@
 package com.rushucloud.reim;
 
+import com.umeng.analytics.MobclickAgent;
+
 import classes.ReimApplication;
 import database.DBManager;
 import android.support.v4.app.FragmentTabHost;
@@ -30,6 +32,18 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 		ReimApplication.setProgressDialog(this);
 		tabHostInitialse();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();	
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
     public boolean onKeyDown(int keyCode, KeyEvent event)

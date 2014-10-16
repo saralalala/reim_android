@@ -5,6 +5,8 @@ import netUtils.Request.FeedbackRequest;
 import netUtils.Response.FeedbackResponse;
 
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -31,6 +33,20 @@ public class FeedbackActivity extends Activity
 		setContentView(R.layout.profile_feedback);
 		viewInitialise();
 		buttonInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("FeedbackActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("FeedbackActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)

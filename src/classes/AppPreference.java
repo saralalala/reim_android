@@ -57,6 +57,7 @@ public class AppPreference
 		appPreference.setProfileImageDirectory(path + "/images/profile");
 		appPreference.setInvoiceImageDirectory(path + "/images/invoice");
 
+		appPreference.setDeviceToken("");
 		if (appPreference.getDeviceToken().equals(""))
 		{
 			appPreference.setDeviceToken(AVInstallation.getCurrentInstallation().getInstallationId());

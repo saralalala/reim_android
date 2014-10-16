@@ -10,6 +10,7 @@ import classes.Utils;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 
@@ -39,6 +40,20 @@ public class SignInActivity extends Activity
 		setContentView(R.layout.start_sign_in);
 		viewIntialise();
 		buttonInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("SignInActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("SignInActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -226,20 +241,22 @@ public class SignInActivity extends Activity
 						public void run()
 						{
 							ReimApplication.pDialog.dismiss();
-							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-													.setTitle("提示")
-													.setMessage("登录成功！")
-													.setPositiveButton("确定", new OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															dialog.dismiss();
-															startActivity(new Intent(SignInActivity.this, MainActivity.class));
-															finish();
-														}
-													})
-													.create();
-							alertDialog.show();		
+							startActivity(new Intent(SignInActivity.this, MainActivity.class));
+							finish();
+//							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
+//													.setTitle("提示")
+//													.setMessage("登录成功！")
+//													.setPositiveButton("确定", new OnClickListener()
+//													{
+//														public void onClick(DialogInterface dialog, int which)
+//														{
+//															dialog.dismiss();
+//															startActivity(new Intent(SignInActivity.this, MainActivity.class));
+//															finish();
+//														}
+//													})
+//													.create();
+//							alertDialog.show();		
 						}
 					});
 				}

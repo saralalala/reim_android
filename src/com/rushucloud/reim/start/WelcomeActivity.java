@@ -1,6 +1,7 @@
 package com.rushucloud.reim.start;
 
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 
@@ -23,6 +24,20 @@ public class WelcomeActivity extends Activity
 		
 		exitTime=0;
 		buttonInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("WelcomActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("WelcomActivity");
+		MobclickAgent.onPause(this);
 	}
 	
     public boolean onKeyDown(int keyCode, KeyEvent event)

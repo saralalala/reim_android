@@ -21,6 +21,7 @@ import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
 
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 import android.app.Activity;
@@ -75,7 +76,16 @@ public class EditReportActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
+		MobclickAgent.onPageStart("EditReportActivity");		
+		MobclickAgent.onResume(this);
 		refreshListView();
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("EditReportActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)

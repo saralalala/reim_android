@@ -1,6 +1,7 @@
 package com.rushucloud.reim;
 
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -22,6 +23,20 @@ public class ImageActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reim_image);
 		viewInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("ImageActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("ImageActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)

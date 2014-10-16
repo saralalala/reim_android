@@ -2,6 +2,8 @@ package com.rushucloud.reim;
 
 import java.util.List;
 
+import com.umeng.analytics.MobclickAgent;
+
 import netUtils.Request.BaseRequest.HttpConnectionCallback;
 import netUtils.Request.Item.SearchItemsRequest;
 import netUtils.Response.Item.SearchItemsResponse;
@@ -40,6 +42,21 @@ public class SearchItemActivity extends Activity
 		setContentView(R.layout.reim_search);
 		dataInitialise();
 		viewInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("SearchItemActivity");		
+		MobclickAgent.onResume(this);
+		dataInitialise();
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("SearchItemActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -105,12 +122,6 @@ public class SearchItemActivity extends Activity
 		return true;
 	}
 	
-	protected void onResume()
-	{
-		super.onResume();
-		dataInitialise();
-	}
-
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
 		int id = item.getItemId();

@@ -13,6 +13,7 @@ import classes.Utils;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 
@@ -53,6 +54,20 @@ public class SignUpActivity extends Activity
 		tabViewInitialise();
 		viewIntialise();
 		buttonInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("SignUpActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("SignUpActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)

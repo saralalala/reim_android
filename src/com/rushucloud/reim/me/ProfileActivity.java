@@ -1,6 +1,8 @@
 package com.rushucloud.reim.me;
 
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
 import classes.Adapter.ProfileListViewAdapater;
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,6 +19,20 @@ public class ProfileActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile);
 		viewInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("ProfileActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("ProfileActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)

@@ -15,6 +15,7 @@ import netUtils.Response.UploadImageResponse;
 
 import com.rushucloud.reim.me.FeedbackActivity;
 import com.rushucloud.reim.me.ProfileActivity;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 
@@ -49,18 +50,26 @@ public class MeFragment extends Fragment
 	private static final int CROP_IMAGE = 2;
 	
 	private MeListViewAdapater adapter;
+	private ListView meListView;
 	private String avatarPath = "";
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 	    return inflater.inflate(R.layout.fragment_me, container, false);  
 	}
-	
-	public void onActivityCreated(Bundle savedInstanceState)
-	{  
-        super.onActivityCreated(savedInstanceState);
+
+	public void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("MeFragment");
         viewInitialise();
-    }
+	}
+
+	public void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("MeFragment");
+	}
 	
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
 	{
@@ -126,7 +135,7 @@ public class MeFragment extends Fragment
 	private void viewInitialise()
 	{
         adapter = new MeListViewAdapater(this); 
-        ListView meListView = (ListView)getActivity().findViewById(R.id.meListView);
+        meListView = (ListView)getActivity().findViewById(R.id.meListView);
         meListView.setAdapter(adapter);
         meListView.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -284,6 +293,7 @@ public class MeFragment extends Fragment
 					{
 						public void run()
 						{
+							meListView.setAdapter(adapter);
 							adapter.notifyDataSetChanged();
 						}
 					});

@@ -1,6 +1,7 @@
 package com.rushucloud.reim.start;
 
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -40,5 +41,19 @@ public class SplashActivity extends Activity
 			}
 		};
 		splashThread.start();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("SplashActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("SplashActivity");
+		MobclickAgent.onPause(this);
 	}
 }

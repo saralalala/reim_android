@@ -5,6 +5,7 @@ import netUtils.Request.User.ResetPasswordRequest;
 import netUtils.Response.User.ResetPasswordResponse;
 
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,6 +36,20 @@ public class ResetPasswordActivity extends Activity
 		dataInitialise();
 		viewInitialise();
 		buttonInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("ResetPasswordActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("ResetPasswordActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)

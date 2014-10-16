@@ -27,6 +27,8 @@ import classes.User;
 import classes.Utils;
 
 import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -91,6 +93,20 @@ public class EditItemActivity extends Activity
 		dataInitialise();
 		viewInitialise();
 		buttonInitialise();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("EditItemActivity");		
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("EditItemActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)
