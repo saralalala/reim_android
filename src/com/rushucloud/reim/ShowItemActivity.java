@@ -12,6 +12,8 @@ import database.DBManager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -112,13 +114,15 @@ public class ShowItemActivity extends Activity
 			}
 		});
 		
-		if (item.getImage() == null)
+
+		Bitmap bitmap = BitmapFactory.decodeFile(item.getInvoicePath());
+		if (bitmap != null)
 		{
-			invoiceImageView.setImageResource(R.drawable.default_invoice);
+			invoiceImageView.setImageBitmap(bitmap);
 		}
 		else
-		{
-			invoiceImageView.setImageBitmap(item.getImage());			
+		{			
+			invoiceImageView.setImageResource(R.drawable.default_invoice);
 		}
 	}
 	

@@ -15,6 +15,10 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 			{
 	            String channel = intent.getExtras().getString("com.avos.avoscloud.Channel");
 				System.out.println(action + "  " + channel);
+				
+				//TODO GET REPORT INFO
+				// REQUEST FOR REPORT
+				// SET ALERT
 			}
 			else if (action.equals("android.intent.action.BOOT_COMPLETED"))
 			{

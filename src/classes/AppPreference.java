@@ -19,10 +19,11 @@ public class AppPreference
 	private String password = "";
 	private String deviceToken = "";
 	private String serverToken = "";
+	private boolean syncOnlyWithWifi = true;
+	private boolean enablePasswordProtection = true;
+	private int lastSyncTime = 0;
 	private String profileImageDirectory = "";
 	private String invoiceImageDirectory = "";
-	private boolean syncWithoutWifi = false;
-	private boolean enablePasswordProtection = false;
 	
 	private AppPreference(Context context)
 	{
@@ -46,25 +47,22 @@ public class AppPreference
 	public void readAppPreference()
 	{
 		SharedPreferences preferences = context.getSharedPreferences("ReimApplication", Application.MODE_PRIVATE);
-		AppPreference appPreference = AppPreference.getAppPreference();
 		appPreference.setUsername(preferences.getString("username", ""));
 		appPreference.setPassword(preferences.getString("password", ""));
 		appPreference.setDeviceToken(preferences.getString("deviceToken", ""));
 		appPreference.setServerToken(preferences.getString("serverToken", ""));
-		appPreference.setSyncWithoutWifi(preferences.getBoolean("syncWithoutWifi", false));
+		appPreference.setSyncOnlyWithWifi(preferences.getBoolean("syncOnlyWithWifi", true));
+		appPreference.setEnablePasswordProtection(preferences.getBoolean("enablePasswordProtection", true));
+		appPreference.setLastSyncTime(preferences.getInt("lastSyncTime", 0));
 		
 		String path = Environment.getExternalStorageDirectory() + "/如数云报销";
 		appPreference.setProfileImageDirectory(path + "/images/profile");
 		appPreference.setInvoiceImageDirectory(path + "/images/invoice");
 
-		appPreference.setDeviceToken("");
 		if (appPreference.getDeviceToken().equals(""))
 		{
 			appPreference.setDeviceToken(AVInstallation.getCurrentInstallation().getInstallationId());
 		}
-		
-		appPreference.setSyncWithoutWifi(preferences.getBoolean("syncWithoutWifi", false));
-		appPreference.setEnablePasswordProtection(preferences.getBoolean("enablePasswordProtection", false));
 	}
 	
 	public void saveAppPreference()
@@ -76,7 +74,7 @@ public class AppPreference
 		editor.putString("password", appPreference.getPassword());
 		editor.putString("deviceToken", appPreference.getDeviceToken());
 		editor.putString("serverToken", appPreference.getServerToken());
-		editor.putBoolean("syncWithoutWifi", appPreference.syncWithoutWifi());
+		editor.putBoolean("syncOnlyWithWifi", appPreference.syncOnlyWithWifi());
 		editor.putBoolean("enablePasswordProtection", appPreference.passwordProtectionEnabled());
 		editor.commit();
 	}
@@ -141,6 +139,36 @@ public class AppPreference
 		this.serverToken = serverToken;
 	}
 
+	public boolean syncOnlyWithWifi()
+	{
+		return syncOnlyWithWifi;
+	}
+
+	public void setSyncOnlyWithWifi(boolean syncOnlyWithWifi)
+	{
+		this.syncOnlyWithWifi = syncOnlyWithWifi;
+	}
+
+	public boolean passwordProtectionEnabled()
+	{
+		return enablePasswordProtection;
+	}
+
+	public void setEnablePasswordProtection(boolean enablePasswordProtection)
+	{
+		this.enablePasswordProtection = enablePasswordProtection;
+	}
+	
+	public int getLastSyncTime()
+	{
+		return lastSyncTime;
+	}
+
+	public void setLastSyncTime(int lastSyncTime)
+	{
+		this.lastSyncTime = lastSyncTime;
+	}
+	
 	public String getProfileImageDirectory()
 	{
 		return profileImageDirectory;
@@ -161,23 +189,4 @@ public class AppPreference
 		this.invoiceImageDirectory = invoiceImageDirectory;
 	}
 
-	public boolean syncWithoutWifi()
-	{
-		return syncWithoutWifi;
-	}
-
-	public void setSyncWithoutWifi(boolean syncWithoutWifi)
-	{
-		this.syncWithoutWifi = syncWithoutWifi;
-	}
-
-	public boolean passwordProtectionEnabled()
-	{
-		return enablePasswordProtection;
-	}
-
-	public void setEnablePasswordProtection(boolean enablePasswordProtection)
-	{
-		this.enablePasswordProtection = enablePasswordProtection;
-	}
 }

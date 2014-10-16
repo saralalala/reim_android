@@ -3,15 +3,12 @@ package classes;
 import java.io.Serializable;
 import java.util.List;
 
-import android.graphics.Bitmap;
-
 public class Item implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	private int localID = -1;
 	private int serverID = -1;
-	private Bitmap image = null;
 	private int imageID = -1;
 	private String invoicePath = "";
 	private String merchant = "";
@@ -45,15 +42,6 @@ public class Item implements Serializable
 	public void setServerID(int serverID)
 	{
 		this.serverID = serverID;
-	}
-	
-	public Bitmap getImage()
-	{
-		return image;
-	}
-	public void setImage(Bitmap image)
-	{
-		this.image = image;
 	}
 	
 	public int getImageID()

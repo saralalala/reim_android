@@ -61,7 +61,7 @@
     
     <string name="avatar">头像</string>
     <string name="enablePasswordProtection">开启密码保护</string>
-    <string name="syncWithoutWifi">仅Wi-Fi时上传云端</string>
+    <string name="syncWithoutWifi">仅WiFi开启时上传云端</string>
     <string name="share">分享</string>
     <string name="preference">偏好设置</string>
     <string name="feedback">意见反馈</string>

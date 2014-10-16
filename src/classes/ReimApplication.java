@@ -1,7 +1,6 @@
 package classes;
 
 import java.io.File;
-
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.PushService;
@@ -19,21 +18,25 @@ import android.text.TextUtils;
 public class ReimApplication extends Application
 {
 	public static ProgressDialog pDialog;
-
+	
+	public static boolean needToSync = true;
+	
 	public void onCreate()
 	{
+		super.onCreate();
+		
 		AVOSCloud.initialize(this, "25tdcbg3l8kp6yeqa4iqju6g788saf4xlseat1dxma3pdzfc",
 				"yc9e5h624ch14cgavj0r6b5yxq7fmn3y2nlm3hliq763syr1");
-
-		super.onCreate();
 
 		createDirectories();
 		AppPreference.createAppPreference(getApplicationContext());
 		DBManager.createDBManager(getApplicationContext());
+		
 		PushService.setDefaultPushCallback(this, WelcomeActivity.class);
 		PushService.subscribe(this, "public", WelcomeActivity.class);
 		AVInstallation.getCurrentInstallation().saveInBackground();
 		MobclickAgent.openActivityDurationTrack(false);
+		
 //		System.out.println(getDeviceInfo(this));
 	}
 
@@ -62,6 +65,13 @@ public class ReimApplication extends Application
 				nomediaFile.createNewFile();
 			}
 			dir = new File(appDirectory + "/images/invoice");
+			if (!dir.exists())
+			{
+				dir.mkdir();
+				File nomediaFile = new File(dir, ".nomedia");
+				nomediaFile.createNewFile();
+			}
+			dir = new File(appDirectory + "/images/invoice/temp");
 			if (!dir.exists())
 			{
 				dir.mkdir();

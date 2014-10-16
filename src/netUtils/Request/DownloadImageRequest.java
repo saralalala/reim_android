@@ -1,5 +1,7 @@
 package netUtils.Request;
 
+import netUtils.HttpConnectionCallback;
+
 public class DownloadImageRequest extends BaseRequest
 {
 	public DownloadImageRequest(String url)
@@ -8,6 +10,15 @@ public class DownloadImageRequest extends BaseRequest
 		
 		String requestUrl = getUrl();
 		requestUrl += url;
+		setUrl(requestUrl);
+	}
+	
+	public DownloadImageRequest(int imageID)
+	{
+		super();
+		
+		String requestUrl = getUrl();
+		requestUrl += "/images/" + imageID;
 		setUrl(requestUrl);
 	}
 	

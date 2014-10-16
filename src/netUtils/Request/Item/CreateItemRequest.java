@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import classes.Item;
 import classes.Utils;
 
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 
 public class CreateItemRequest extends BaseRequest
@@ -34,7 +35,7 @@ public class CreateItemRequest extends BaseRequest
 				if (uids.length() > 0)
 				{
 					uids = uids.substring(0, uids.length()-1);			
-				}			
+				}
 			}
 			
 			String tags = "";

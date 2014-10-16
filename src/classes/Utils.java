@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.provider.MediaStore;
 
 public class Utils
@@ -20,13 +20,64 @@ public class Utils
 	private static String regexEmail = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
 			 
 	private static String regexPhone = "[1]+\\d{10}";
-	
-	public static boolean isWiFiActive(Context context)
+
+	public static boolean isWiFiConnected(Context context)
 	{
-		WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-		int ipAddress = wifiInfo == null ? 0 : wifiInfo.getIpAddress();
-		return wifiManager.isWifiEnabled() && ipAddress != 0 ? true : false;
+		ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		if (networkInfo != null)
+		{
+			return networkInfo.isConnected();			
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public static boolean isDataConnected(Context context)
+	{
+		ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		if (networkInfo != null)
+		{
+			return networkInfo.isConnected();			
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public static boolean isNetworkConnected(Context context)
+	{
+		ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+		if (networkInfo != null)
+		{
+			return networkInfo.isAvailable();			
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public static boolean canSyncToServer(Context context)
+	{
+		AppPreference appPreference = AppPreference.getAppPreference();
+		if (appPreference.syncOnlyWithWifi() && isWiFiConnected(context))
+		{
+			return true;
+		}
+		else if (!appPreference.syncOnlyWithWifi() && isDataConnected(context))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public static String getPathFromUri(Activity activity, Uri uri)
@@ -56,7 +107,7 @@ public class Utils
 		calendar.setTimeInMillis((long)second * 1000);
 		String result = "";
 		result += calendar.get(Calendar.YEAR) + "年";
-		result += calendar.get(Calendar.MONTH) + "月";
+		result += (calendar.get(Calendar.MONTH) + 1) + "月";
 		result += calendar.get(Calendar.DAY_OF_MONTH) + "日 ";
 		
 		if (calendar.get(Calendar.HOUR_OF_DAY) < 10)
@@ -85,12 +136,12 @@ public class Utils
 		calendar.setTimeInMillis((long)second * 1000);
 		String result = "";
 		result += calendar.get(Calendar.YEAR) + "年";
-		result += calendar.get(Calendar.MONTH) + "月";
+		result += (calendar.get(Calendar.MONTH) + 1) + "月";
 		result += calendar.get(Calendar.DAY_OF_MONTH) + "日";
 		
 		return result;
 	}
-	
+
 	public static Boolean isEmailOrPhone(String source)
 	{
 		if (isEmail(source) || isPhone(source))
@@ -175,11 +226,11 @@ public class Utils
 		String result = "";
 		result += calendar.get(Calendar.YEAR);
 		
-		if (calendar.get(Calendar.MONTH) < 10)
+		if (calendar.get(Calendar.MONTH)+1 < 10)
 		{
 			result += "0";			
 		}
-		result += calendar.get(Calendar.MONTH);
+		result += (calendar.get(Calendar.MONTH) + 1);
 		
 		if (calendar.get(Calendar.DAY_OF_MONTH) < 10)
 		{

@@ -2,6 +2,7 @@ package netUtils.Request;
 
 import java.sql.Date;
 
+import netUtils.HttpConnectionCallback;
 
 public class SyncDataRequest extends BaseRequest
 {

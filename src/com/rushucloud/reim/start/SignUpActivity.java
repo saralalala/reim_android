@@ -1,7 +1,7 @@
 package com.rushucloud.reim.start;
 
 import netUtils.Request.CommonRequest;
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.RegisterRequest;
 import netUtils.Request.User.VerifyCodeRequest;
 import netUtils.Response.CommonResponse;
@@ -270,7 +270,7 @@ public class SignUpActivity extends Activity
 					user.setPassword(password);
 					
 					hideSoftKeyboard();
-					register(user, inputCode);
+					sendRegisterRequest(user, inputCode);
 				}
 			}
 		});
@@ -337,7 +337,7 @@ public class SignUpActivity extends Activity
 					user.setPassword(password);
 					
 					hideSoftKeyboard();
-					register(user, "");
+					sendRegisterRequest(user, "");
 				}
 			}
 		});		
@@ -353,7 +353,7 @@ public class SignUpActivity extends Activity
 		});
 	}
 	
-	private void register(final User user, String verifyCode)
+	private void sendRegisterRequest(final User user, String verifyCode)
 	{
 		RegisterRequest request = new RegisterRequest(user, verifyCode);
 		request.sendRequest(new HttpConnectionCallback()

@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.umeng.analytics.MobclickAgent;
 
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
+import netUtils.SyncDataCallback;
+import netUtils.SyncUtils;
 import netUtils.Request.Item.DeleteItemRequest;
 import netUtils.Response.Item.DeleteItemResponse;
 
@@ -49,7 +51,7 @@ public class ReimFragment extends Fragment
 	{
 		if (view == null)
 		{
-			view = inflater.inflate(R.layout.fragment_reimbursement, container, false);
+			view = inflater.inflate(R.layout.fragment_reim, container, false);
 		}
 		else
 		{
@@ -126,7 +128,7 @@ public class ReimFragment extends Fragment
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
-													deleteItem(localItem);
+													sendDeleteItemRequest(localItem);
 												}
 											}).setNegativeButton(R.string.cancel, null).create();
 					mDialog.show();
@@ -144,6 +146,24 @@ public class ReimFragment extends Fragment
 		if (dbManager == null)
 		{
 			dbManager = DBManager.getDBManager();			
+		}
+		
+		if (ReimApplication.needToSync)
+		{
+			ReimApplication.needToSync = false;
+			SyncUtils.syncFromServer(new SyncDataCallback()
+			{
+				public void execute()
+				{					
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							adapter.notifyDataSetChanged();
+						}
+					});
+				}
+			});
 		}
 	}
 
@@ -213,7 +233,7 @@ public class ReimFragment extends Fragment
 		ReimApplication.pDialog.dismiss();
 	}
 	
-	private void deleteItem(final Item item)
+	private void sendDeleteItemRequest(final Item item)
 	{
 		DeleteItemRequest request = new DeleteItemRequest(item.getServerID());
 		request.sendRequest(new HttpConnectionCallback()

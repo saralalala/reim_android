@@ -1,5 +1,6 @@
 package netUtils.Request.Report;
 
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 
 public class DeleteReportRequest extends BaseRequest

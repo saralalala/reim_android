@@ -1,5 +1,6 @@
 package netUtils.Request.Tag;
 
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 
 public class DeleteTagRequest extends BaseRequest
@@ -17,5 +18,4 @@ public class DeleteTagRequest extends BaseRequest
 	{
 		doDelete(callback);
 	}
-
 }

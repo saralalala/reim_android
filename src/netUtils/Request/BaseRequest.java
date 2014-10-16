@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
 import netUtils.ReimJWT;
 import netUtils.URLDef;
@@ -70,11 +71,6 @@ public abstract class BaseRequest
 	}
 	
 	public abstract void sendRequest(HttpConnectionCallback callback);
-	
-	public interface HttpConnectionCallback
-	{
-		void execute(Object httpResponse);
-	}
 	
 	protected void doPost(HttpConnectionCallback callback)
 	{

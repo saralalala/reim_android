@@ -1,6 +1,6 @@
 package com.rushucloud.reim.start;
 
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.ResetPasswordRequest;
 import netUtils.Response.User.ResetPasswordResponse;
 
@@ -151,7 +151,7 @@ public class ResetPasswordActivity extends Activity
 				}
 				else
 				{
-					resetPassword(newPassword);
+					sendResetPasswordRequest(newPassword);
 				}
 			}
 		});
@@ -167,7 +167,7 @@ public class ResetPasswordActivity extends Activity
 		});
 	}
 	
-	private void resetPassword(String password)
+	private void sendResetPasswordRequest(String password)
 	{
 		ResetPasswordRequest request = new ResetPasswordRequest(password, cid, code);
 		request.sendRequest(new HttpConnectionCallback()

@@ -10,6 +10,8 @@ import classes.User;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +49,14 @@ public class ItemListViewAdapter extends BaseAdapter
 		
 		Item item = this.getItem(position);
 
-		if (item.getImage() == null)
+		Bitmap bitmap = BitmapFactory.decodeFile(item.getInvoicePath());
+		if (item.getImageID() != -1 || bitmap != null)
 		{
 			imageView.setImageResource(R.drawable.default_invoice);
 		}
 		else
 		{
-			imageView.setImageBitmap(item.getImage());			
+			imageView.setImageResource(R.drawable.default_avatar);	
 		}
 		
 		String amount = "￥" + Double.toString(item.getAmount());

@@ -7,6 +7,8 @@ import classes.Item;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,13 +54,14 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 		
 		Item item = this.getItem(position);
 
-		if (item.getImage() == null)
+		Bitmap bitmap = BitmapFactory.decodeFile(item.getInvoicePath());
+		if (item.getImageID() != -1 || bitmap != null)
 		{
 			imageView.setImageResource(R.drawable.default_invoice);
 		}
 		else
 		{
-			imageView.setImageBitmap(item.getImage());			
+			imageView.setImageResource(R.drawable.default_avatar);			
 		}
 		
 		amountTextView.setText("￥" + Double.toString(item.getAmount()));

@@ -9,7 +9,7 @@ import java.io.IOException;
 import netUtils.HttpConstant;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.UploadImageRequest;
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.UploadImageResponse;
 
@@ -161,7 +161,7 @@ public class MeFragment extends Fragment
 			}
 		});
         
-        downloadAvatar();
+        sendDownloadAvatarRequest();
 	}
 
     private void cropImage(Uri uri)
@@ -273,7 +273,7 @@ public class MeFragment extends Fragment
 		});
     }
 
-    private void downloadAvatar()
+    private void sendDownloadAvatarRequest()
     {
     	final DBManager dbManager = DBManager.getDBManager();
     	final User user = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());

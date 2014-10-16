@@ -1,5 +1,7 @@
 package netUtils.Request;
 
+import netUtils.HttpConnectionCallback;
+
 public class StatisticsRequest extends BaseRequest
 {
 

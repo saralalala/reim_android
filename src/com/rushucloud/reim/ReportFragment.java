@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.umeng.analytics.MobclickAgent;
 
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.Report.DeleteReportRequest;
 import netUtils.Response.Report.DeleteReportResponse;
 
@@ -97,7 +97,7 @@ public class ReportFragment extends Fragment
 														{
 															public void onClick(DialogInterface dialog, int which)
 															{
-																deleteReport(report);
+																sendDeleteReportRequest(report);
 															}
 														})
 														.setNegativeButton(R.string.cancel, null)
@@ -179,7 +179,7 @@ public class ReportFragment extends Fragment
 		adapter.notifyDataSetChanged();
 	}
 
-	private void deleteReport(final Report report)
+	private void sendDeleteReportRequest(final Report report)
 	{
 		ReimApplication.pDialog.show();
 		if (report.getServerID() != -1)

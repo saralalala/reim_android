@@ -8,6 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import classes.Tag;
 
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 
 public class CreateTagRequest extends BaseRequest
@@ -29,5 +30,4 @@ public class CreateTagRequest extends BaseRequest
 	{
 		doPost(callback);
 	}
-
 }

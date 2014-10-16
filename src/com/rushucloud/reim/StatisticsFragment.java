@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import netUtils.Request.CommonRequest;
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.StatisticsRequest;
 import netUtils.Response.CommonResponse;
 import netUtils.Response.StatisticsResponse;

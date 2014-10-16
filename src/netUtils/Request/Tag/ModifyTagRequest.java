@@ -8,6 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import classes.Tag;
 
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 
 public class ModifyTagRequest extends BaseRequest

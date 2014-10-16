@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import netUtils.HttpConstant;
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.UploadImageRequest;
 import netUtils.Request.Item.CreateItemRequest;
 import netUtils.Request.Item.ModifyItemRequest;
@@ -37,6 +37,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
@@ -80,6 +81,7 @@ public class EditItemActivity extends Activity
 	
 	private Item item;
 	private Uri imageUri;
+	private Bitmap bitmap;
 	
 	private List<String> vendorList = null;
 	private List<Category> categoryList = null;
@@ -152,16 +154,16 @@ public class EditItemActivity extends Activity
 			{
 				if (requestCode == PICK_IMAGE || requestCode == TAKE_PHOTO)
 				{
-					item.setImage(MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData()));
+					bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
 					cropImage(data.getData());
 				}
 				else
 				{
+					bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+					saveBitmapToFile(bitmap);	
+					invoiceImageView.setImageBitmap(bitmap);
 					imageUri = Uri.parse(data.getAction());
-					item.setImage(MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri));
-					saveBitmapToFile(item.getImage());
-					this.getContentResolver().delete(imageUri, null, null);		
-					invoiceImageView.setImageBitmap(item.getImage());
+					this.getContentResolver().delete(imageUri, null, null);	
 				}
 			}
 			catch (FileNotFoundException e)
@@ -283,14 +285,15 @@ public class EditItemActivity extends Activity
 			}
 		});
 		registerForContextMenu(invoiceImageView);
-		
-		if (item.getImage() == null)
+
+		bitmap = BitmapFactory.decodeFile(item.getInvoicePath());
+		if (bitmap != null)
 		{
-			invoiceImageView.setImageResource(R.drawable.default_invoice);
+			invoiceImageView.setImageBitmap(bitmap);
 		}
 		else
 		{
-			invoiceImageView.setImageBitmap(item.getImage());			
+			invoiceImageView.setImageResource(R.drawable.default_invoice);
 		}
 		
 		LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
@@ -434,7 +437,7 @@ public class EditItemActivity extends Activity
 				View view = View.inflate(EditItemActivity.this, R.layout.reim_date_time, null);
 				
 				Calendar calendar = Calendar.getInstance();
-				if (item.getConsumedDate() == -1)
+				if (item.getConsumedDate() == -1 || item.getConsumedDate() == 0)
 				{
 					calendar.setTimeInMillis(System.currentTimeMillis());
 					int month = calendar.get(Calendar.MONTH);
@@ -533,7 +536,7 @@ public class EditItemActivity extends Activity
 							item.setLocalID(dbManager.getLastInsertItemID());
 						}
 						
-						if (Utils.isWiFiActive(EditItemActivity.this))
+						if (Utils.canSyncToServer(EditItemActivity.this))
 						{
 							if (!item.getInvoicePath().equals(""))
 							{
@@ -607,8 +610,8 @@ public class EditItemActivity extends Activity
     	intent.putExtra("crop", "true");
     	intent.putExtra("aspectX", 1);
     	intent.putExtra("aspectY", 1);
-    	intent.putExtra("outputX", item.getImage().getHeight());
-    	intent.putExtra("outputY", item.getImage().getHeight());
+    	intent.putExtra("outputX", bitmap.getHeight());
+    	intent.putExtra("outputY", bitmap.getHeight());
     	intent.putExtra("return-data", false);
     	startActivityForResult(intent, CROP_IMAGE);
     }
@@ -634,7 +637,6 @@ public class EditItemActivity extends Activity
     		fileOutputStream.flush();
     		fileOutputStream.close();	
     		
-    		item.setInvoicePath(appPreference.getInvoiceImageDirectory() + "/" + Utils.getImageName());
     		return true;
 		}
 		catch (IOException e)
@@ -655,7 +657,7 @@ public class EditItemActivity extends Activity
 				if (response.getStatus())
 				{
 					item.setImageID(response.getImageID());
-					dbManager.updateItem(item);
+					dbManager.updateItemByLocalID(item);
 					if (item.getServerID() == - 1)
 					{
 						sendCreateItemRequest();
@@ -702,7 +704,7 @@ public class EditItemActivity extends Activity
 				if (response.getStatus())
 				{
 					item.setServerID(response.getItemID());
-					dbManager.updateItem(item);
+					dbManager.updateItemByLocalID(item);
 					runOnUiThread(new Runnable()
 					{
 						public void run()

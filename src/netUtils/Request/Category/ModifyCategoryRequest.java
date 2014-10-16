@@ -8,6 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import classes.Category;
 
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 
 public class ModifyCategoryRequest extends BaseRequest

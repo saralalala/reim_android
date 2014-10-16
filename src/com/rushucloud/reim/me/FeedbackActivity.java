@@ -1,6 +1,6 @@
 package com.rushucloud.reim.me;
 
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.FeedbackRequest;
 import netUtils.Response.FeedbackResponse;
 

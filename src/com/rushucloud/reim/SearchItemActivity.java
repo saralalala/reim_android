@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.umeng.analytics.MobclickAgent;
 
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.Item.SearchItemsRequest;
 import netUtils.Response.Item.SearchItemsResponse;
 

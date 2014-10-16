@@ -5,7 +5,7 @@ import java.util.List;
 
 import netUtils.HttpConstant;
 import netUtils.Request.UploadImageRequest;
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.Item.CreateItemRequest;
 import netUtils.Request.Report.CreateReportRequest;
 import netUtils.Request.Report.ModifyReportRequest;
@@ -232,16 +232,28 @@ public class EditReportActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				report.setTitle(titleEditText.getText().toString());
-				
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("report", report);
-				bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
-				bundle.putIntegerArrayList("remainingItemIDList", remainingItemIDList);
-				Intent intent = new Intent(EditReportActivity.this, UnarchivedItemsActivity.class);
-				intent.putExtras(bundle);
-				startActivity(intent);
-				finish();
+				if (remainingItemIDList.size() == 0)
+				{
+					AlertDialog alertDialog = new AlertDialog.Builder(EditReportActivity.this)
+												.setTitle("提示")
+												.setMessage("所有条目均已被添加到各个报告中")
+												.setNegativeButton(R.string.confirm, null)
+												.create();
+					alertDialog.show();
+				}
+				else
+				{
+					report.setTitle(titleEditText.getText().toString());
+					
+					Bundle bundle = new Bundle();
+					bundle.putSerializable("report", report);
+					bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
+					bundle.putIntegerArrayList("remainingItemIDList", remainingItemIDList);
+					Intent intent = new Intent(EditReportActivity.this, UnarchivedItemsActivity.class);
+					intent.putExtras(bundle);
+					startActivity(intent);
+					finish();					
+				}
 			}
 		});
 		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
@@ -268,7 +280,7 @@ public class EditReportActivity extends Activity
 						}
 						else
 						{
-							dbManager.updateReport(report);
+							dbManager.updateReportByLocalID(report);
 						}
 						if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
 						{
@@ -375,7 +387,7 @@ public class EditReportActivity extends Activity
 				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
 				if (response.getStatus())
 				{
-					dbManager.updateReport(report);
+					dbManager.updateReportByLocalID(report);
 					runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -425,7 +437,7 @@ public class EditReportActivity extends Activity
 				if (response.getStatus())
 				{
 					report.setServerID(response.getReportID());
-					dbManager.updateReport(report);
+					dbManager.updateReportByLocalID(report);
 					if (needToSubmit)
 					{
 						report.setStatus(Report.STATUS_SUBMITTED);
@@ -466,7 +478,7 @@ public class EditReportActivity extends Activity
 				ModifyReportResponse response = new ModifyReportResponse(httpResponse);
 				if (response.getStatus())
 				{
-					dbManager.updateReport(report);
+					dbManager.updateReportByLocalID(report);
 					if (needToSubmit)
 					{
 						report.setStatus(Report.STATUS_SUBMITTED);
@@ -508,7 +520,7 @@ public class EditReportActivity extends Activity
 				if (response.getStatus())
 				{
 					item.setImageID(response.getImageID());
-					dbManager.updateItem(item);
+					dbManager.updateItemByLocalID(item);
 					sendCreateItemRequest(item);
 				}
 				else
@@ -538,7 +550,7 @@ public class EditReportActivity extends Activity
 				if (response.getStatus())
 				{
 					item.setServerID(response.getItemID());
-					dbManager.updateItem(item);
+					dbManager.updateItemByLocalID(item);
 					taskCount--;
 					if (needToSave && taskCount == 0)
 					{

@@ -2,7 +2,7 @@ package com.rushucloud.reim.start;
 
 import netUtils.HttpConstant;
 import netUtils.Request.CommonRequest;
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Response.CommonResponse;
 import classes.AppPreference;
 import classes.ReimApplication;
@@ -105,19 +105,27 @@ public class SignInActivity extends Activity
 			{
 				final String username = usernameEditText.getText().toString();
 				final String password = passwordEditText.getText().toString();
-				if (username.equals(""))
+				if (!Utils.isNetworkConnected(SignInActivity.this))
+				{
+					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
+												.setTitle("错误")
+												.setMessage("未检测到网络连接")
+												.setNegativeButton(R.string.confirm, null)
+												.create();
+					alertDialog.show();
+				}
+				else if (username.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
 												.setTitle("错误")
 												.setMessage("用户名不能为空")
-												.setPositiveButton("确定", new OnClickListener()
+												.setNegativeButton(R.string.confirm, new OnClickListener()
 												{
 													public void onClick(
 															DialogInterface dialog,
 															int which)
 													{
-														dialog.dismiss();
-														passwordEditText.requestFocus();
+														usernameEditText.requestFocus();
 													}
 												})
 												.create();
@@ -128,13 +136,12 @@ public class SignInActivity extends Activity
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
 												.setTitle("错误")
 												.setMessage("密码不能为空")
-												.setPositiveButton("确定", new OnClickListener()
+												.setNegativeButton(R.string.confirm, new OnClickListener()
 												{
 													public void onClick(
 															DialogInterface dialog,
 															int which)
 													{
-														dialog.dismiss();
 														passwordEditText.requestFocus();
 													}
 												})
@@ -146,13 +153,12 @@ public class SignInActivity extends Activity
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
 													.setTitle("错误")
 													.setMessage("手机或邮箱格式不正确")
-													.setPositiveButton("确定", new OnClickListener()
+													.setNegativeButton("确定", new OnClickListener()
 													{
 														public void onClick(
 																DialogInterface dialog,
 																int which)
 														{
-															dialog.dismiss();
 															usernameEditText.requestFocus();
 														}
 													})
@@ -167,7 +173,7 @@ public class SignInActivity extends Activity
 					appPreference.saveAppPreference();
 					
 					hideSoftKeyboard();
-					signIn();
+					sendSignInRequest();
 				}
 			}
 		});
@@ -183,7 +189,7 @@ public class SignInActivity extends Activity
 		});
 	}
 	
-	private void signIn()
+	private void sendSignInRequest()
 	{
 		ReimApplication.pDialog.show();
 		CommonRequest request = new CommonRequest();
@@ -201,6 +207,8 @@ public class SignInActivity extends Activity
 					AppPreference appPreference = AppPreference.getAppPreference();
 					appPreference.setServerToken(response.getServerToken());
 					appPreference.setCurrentUserID(currentUserID);
+					appPreference.setSyncOnlyWithWifi(true);
+					appPreference.setEnablePasswordProtection(true);
 					
 					if (response.getGroup() != null)
 					{
@@ -243,20 +251,6 @@ public class SignInActivity extends Activity
 							ReimApplication.pDialog.dismiss();
 							startActivity(new Intent(SignInActivity.this, MainActivity.class));
 							finish();
-//							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-//													.setTitle("提示")
-//													.setMessage("登录成功！")
-//													.setPositiveButton("确定", new OnClickListener()
-//													{
-//														public void onClick(DialogInterface dialog, int which)
-//														{
-//															dialog.dismiss();
-//															startActivity(new Intent(SignInActivity.this, MainActivity.class));
-//															finish();
-//														}
-//													})
-//													.create();
-//							alertDialog.show();		
 						}
 					});
 				}
@@ -270,7 +264,7 @@ public class SignInActivity extends Activity
 							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
 														.setTitle("错误")
 														.setMessage("登录失败！" + response.getErrorMessage())
-														.setPositiveButton("确定", null)
+														.setNegativeButton("确定", null)
 														.create();
 							alertDialog.show();	
 						}

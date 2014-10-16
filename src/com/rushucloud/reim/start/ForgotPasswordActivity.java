@@ -1,6 +1,6 @@
 package com.rushucloud.reim.start;
 
-import netUtils.Request.BaseRequest.HttpConnectionCallback;
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.ForgotPasswordRequest;
 import netUtils.Response.User.ForgotPasswordResponse;
 

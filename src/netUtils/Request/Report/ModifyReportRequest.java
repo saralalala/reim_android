@@ -8,6 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import classes.Report;
 import database.DBManager;
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 
 public class ModifyReportRequest extends BaseRequest

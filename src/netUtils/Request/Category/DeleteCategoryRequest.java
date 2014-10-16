@@ -1,5 +1,6 @@
 package netUtils.Request.Category;
 
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 
 public class DeleteCategoryRequest extends BaseRequest

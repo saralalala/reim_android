@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import classes.Item;
 import classes.Utils;
 
+import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 
 public class CreateItemsRequest extends BaseRequest

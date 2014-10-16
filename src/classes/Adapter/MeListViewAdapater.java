@@ -101,12 +101,12 @@ public class MeListViewAdapater extends BaseAdapter
 				TextView textView = (TextView)view.findViewById(R.id.textView);
 				textView.setText(R.string.syncWithoutWifi);
 				final ToggleButton toggleButton = (ToggleButton)view.findViewById(R.id.toggleButton);
-				toggleButton.setChecked(appPreference.syncWithoutWifi());
+				toggleButton.setChecked(appPreference.syncOnlyWithWifi());
 				toggleButton.setOnClickListener(new View.OnClickListener()
 				{
 					public void onClick(View v)
 					{
-						appPreference.setSyncWithoutWifi(toggleButton.isChecked());
+						appPreference.setSyncOnlyWithWifi(toggleButton.isChecked());
 						appPreference.saveAppPreference();
 					}
 				});

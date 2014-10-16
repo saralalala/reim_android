@@ -16,7 +16,6 @@
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="350dp"
-        android:background="@drawable/ic_launcher"
-        android:text="@string/add" />
+        android:background="@drawable/add_button" />
 
 </RelativeLayout>

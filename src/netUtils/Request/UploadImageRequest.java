@@ -3,6 +3,8 @@ package netUtils.Request;
 import java.util.ArrayList;
 import java.util.List;
 
+import netUtils.HttpConnectionCallback;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
