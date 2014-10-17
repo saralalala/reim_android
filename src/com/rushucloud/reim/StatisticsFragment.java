@@ -1,17 +1,12 @@
 package com.rushucloud.reim;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
-import netUtils.Request.CommonRequest;
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.StatisticsRequest;
-import netUtils.Response.CommonResponse;
 import netUtils.Response.StatisticsResponse;
 
-import classes.Item;
-import database.DBManager;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.os.Bundle;
@@ -28,7 +23,6 @@ import org.achartengine.chart.BarChart.Type;
 import org.achartengine.model.CategorySeries;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
-import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
@@ -38,7 +32,7 @@ import com.umeng.analytics.MobclickAgent;
 
 public class StatisticsFragment extends Fragment
 {
-	private GraphicalView mChart;
+//	private GraphicalView mChart;
 	private static final int COMPLETED = 0;
 	private StatisticsResponse response = null;
 

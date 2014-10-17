@@ -58,16 +58,14 @@ public class ChangePasswordActivity extends Activity
 
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.single_item, menu);
-		MenuItem item = menu.getItem(0);
-		item.setTitle(getResources().getString(R.string.save));
+		getMenuInflater().inflate(R.menu.save, menu);
 		return true;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
-		if (id == R.id.action_item)
+		if (id == R.id.action_save_item)
 		{
 			final String oldPassword = oldPasswordEditText.getText().toString();
 			final String newPassword = newPasswordEditText.getText().toString();

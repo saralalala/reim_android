@@ -58,6 +58,8 @@
     <string name="inputReportTitle">请输入报告名称</string>
     <string name="deleteReportWarning">是否要删除此报告？</string>
     <string name="submit">提交</string>
+    <string name="approve">批准</string>
+    <string name="reject">拒绝</string>
     
     <string name="avatar">头像</string>
     <string name="enablePasswordProtection">开启密码保护</string>

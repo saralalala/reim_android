@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <EditText
-        android:id="@+id/phoneEditText"
+        android:id="@+id/mobileEditText"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -19,12 +19,12 @@
         <requestFocus />
 
     <EditText
-        android:id="@+id/phonePasswordEditText"
+        android:id="@+id/mobilePasswordEditText"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/phoneEditText"
-        android:layout_alignRight="@+id/phoneEditText"
-        android:layout_below="@+id/phoneEditText"
+        android:layout_alignLeft="@+id/mobileEditText"
+        android:layout_alignRight="@+id/mobileEditText"
+        android:layout_below="@+id/mobileEditText"
         android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="@string/inputPassword"
@@ -35,15 +35,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/codeEditText"
-        android:layout_alignRight="@+id/phonePasswordEditText"
+        android:layout_alignRight="@+id/mobilePasswordEditText"
         android:text="@string/acquireCode" />
 
     <EditText
         android:id="@+id/codeEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/phonePasswordEditText"
-        android:layout_below="@+id/phonePasswordEditText"
+        android:layout_alignLeft="@+id/mobilePasswordEditText"
+        android:layout_below="@+id/mobilePasswordEditText"
         android:layout_marginTop="52dp"
         android:layout_toLeftOf="@+id/acquireCodeButton"
         android:ems="10"
@@ -69,5 +69,14 @@
         android:layout_marginTop="33dp"
         android:layout_toRightOf="@+id/phoneConfirmButton"
         android:text="@string/cancel" />
+
+    <TextView
+        android:id="@+id/codeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/acquireCodeButton"
+        android:layout_alignLeft="@+id/acquireCodeButton"
+        android:layout_alignRight="@+id/mobilePasswordEditText"
+        android:layout_below="@+id/mobilePasswordEditText" />
 
 </RelativeLayout>

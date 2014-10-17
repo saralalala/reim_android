@@ -10,15 +10,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import netUtils.HttpConstant;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.Item.CreateItemRequest;
-import netUtils.Request.Item.ModifyItemRequest;
-import netUtils.Response.UploadImageResponse;
-import netUtils.Response.Item.CreateItemResponse;
-import netUtils.Response.Item.ModifyItemResponse;
-
+import netUtils.SyncUtils;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Response.DownloadImageResponse;
 import classes.AppPreference;
 import classes.Category;
 import classes.Item;
@@ -58,6 +53,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class EditItemActivity extends Activity
 {
@@ -80,8 +76,7 @@ public class EditItemActivity extends Activity
 	private TextView memberTextView;
 	
 	private Item item;
-	private Uri imageUri;
-	private Bitmap bitmap;
+	private Uri originalImageUri;
 	
 	private List<String> vendorList = null;
 	private List<Category> categoryList = null;
@@ -154,16 +149,26 @@ public class EditItemActivity extends Activity
 			{
 				if (requestCode == PICK_IMAGE || requestCode == TAKE_PHOTO)
 				{
-					bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-					cropImage(data.getData());
+					originalImageUri = data.getData();
+					cropImage();
 				}
 				else
 				{
-					bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-					saveBitmapToFile(bitmap);	
+					Uri newImageUri = Uri.parse(data.getAction());
+					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), newImageUri);
 					invoiceImageView.setImageBitmap(bitmap);
-					imageUri = Uri.parse(data.getAction());
-					this.getContentResolver().delete(imageUri, null, null);	
+					String invoicePath = saveBitmapToFile(bitmap);
+					if (!invoicePath.equals(""))
+					{
+						item.setInvoicePath(invoicePath);
+						item.setImageID(-1);
+					}
+					else
+					{
+						Toast.makeText(EditItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+					}
+					this.getContentResolver().delete(originalImageUri, null, null);	
+					this.getContentResolver().delete(newImageUri, null, null);	
 				}
 			}
 			catch (FileNotFoundException e)
@@ -195,13 +200,20 @@ public class EditItemActivity extends Activity
 
 		int currentGroupID = appPreference.getCurrentGroupID();
 		categoryList = dbManager.getGroupCategories(currentGroupID);
-		tagList = dbManager.getGroupTags(currentGroupID);
-		userList = dbManager.getGroupUsers(currentGroupID);
+		if (currentGroupID != -1)
+		{
+			tagList = dbManager.getGroupTags(currentGroupID);
+			userList = dbManager.getGroupUsers(currentGroupID);
+		}
+		else
+		{
+			tagList = new ArrayList<Tag>();
+			userList = new ArrayList<User>();
+		}
 		
 		Intent intent = this.getIntent();
 		int itemLocalID = intent.getIntExtra("itemLocalID", -1);
-		item = dbManager.getItemByLocalID(itemLocalID);
-		if (item == null)
+		if (itemLocalID == -1)
 		{
 			item = new Item();
 			if (categoryList.size() > 0)
@@ -212,6 +224,10 @@ public class EditItemActivity extends Activity
 			{
 				item.setMerchant(vendorList.get(0));
 			}
+		}
+		else
+		{
+			item = dbManager.getItemByLocalID(itemLocalID);			
 		}
 	}
 	
@@ -258,7 +274,10 @@ public class EditItemActivity extends Activity
 		tagTextView.setText(Tag.tagListToString(item.getTags()));
 		
 		timeTextView = (TextView)findViewById(R.id.timeTextView);
-		timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
+		if (item.getConsumedDate() != -1 && item.getConsumedDate() != 0)
+		{
+			timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));			
+		}
 		
 		memberTextView = (TextView)findViewById(R.id.memberTextView);
 		memberTextView.setText(User.userListToString(item.getRelevantUsers()));
@@ -286,7 +305,7 @@ public class EditItemActivity extends Activity
 		});
 		registerForContextMenu(invoiceImageView);
 
-		bitmap = BitmapFactory.decodeFile(item.getInvoicePath());
+		Bitmap bitmap = BitmapFactory.decodeFile(item.getInvoicePath());
 		if (bitmap != null)
 		{
 			invoiceImageView.setImageBitmap(bitmap);
@@ -294,6 +313,55 @@ public class EditItemActivity extends Activity
 		else
 		{
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
+			if (item.getImageID() != -1)
+			{
+				DownloadImageRequest request = new DownloadImageRequest(item.getImageID());
+				request.sendRequest(new HttpConnectionCallback()
+				{
+					public void execute(Object httpResponse)
+					{
+						DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+						if (response.getBitmap() != null)
+						{
+							final String invoicePath = saveBitmapToFile(response.getBitmap());
+							if (!invoicePath.equals(""))
+							{
+								item.setInvoicePath(invoicePath);
+								dbManager.updateItem(item);
+								
+								runOnUiThread(new Runnable()
+								{
+									public void run()
+									{
+										Bitmap bitmap = BitmapFactory.decodeFile(invoicePath);
+										invoiceImageView.setImageBitmap(bitmap);
+									}
+								});
+							}
+							else
+							{						
+								runOnUiThread(new Runnable()
+								{
+									public void run()
+									{
+										Toast.makeText(EditItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+									}
+								});						
+							}
+						}
+						else
+						{				
+							runOnUiThread(new Runnable()
+							{
+								public void run()
+								{
+									Toast.makeText(EditItemActivity.this, "图片下载失败", Toast.LENGTH_SHORT).show();
+								}
+							});								
+						}
+					}
+				});
+			}			
 		}
 		
 		LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
@@ -396,36 +464,43 @@ public class EditItemActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				final boolean[] check = Tag.getTagsCheck(tagList, item.getTags());
-				AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setTitle(R.string.chooseTag)
-													.setMultiChoiceItems(Tag.getTagNames(tagList), 
-															check, new DialogInterface.OnMultiChoiceClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which, boolean isChecked)
+				if (tagList.size() > 0)
+				{
+					final boolean[] check = Tag.getTagsCheck(tagList, item.getTags());
+					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+														.setTitle(R.string.chooseTag)
+														.setMultiChoiceItems(Tag.getTagNames(tagList), 
+																check, new DialogInterface.OnMultiChoiceClickListener()
 														{
-															check[which] = isChecked;
-														}
-													})
-													.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															List<Tag> tags = new ArrayList<Tag>();
-															for (int i = 0; i < tagList.size(); i++)
+															public void onClick(DialogInterface dialog, int which, boolean isChecked)
 															{
-																if (check[i])
-																{
-																	tags.add(tagList.get(i));
-																}
+																check[which] = isChecked;
 															}
-															item.setTags(tags);
-															tagTextView.setText(Tag.tagListToString(tags));
-														}
-													})
-													.setNegativeButton(R.string.cancel, null)
-													.create();
-				mDialog.show();															
+														})
+														.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+														{
+															public void onClick(DialogInterface dialog, int which)
+															{
+																List<Tag> tags = new ArrayList<Tag>();
+																for (int i = 0; i < tagList.size(); i++)
+																{
+																	if (check[i])
+																	{
+																		tags.add(tagList.get(i));
+																	}
+																}
+																item.setTags(tags);
+																tagTextView.setText(Tag.tagListToString(tags));
+															}
+														})
+														.setNegativeButton(R.string.cancel, null)
+														.create();
+					mDialog.show();	
+				}
+				else
+				{
+					Toast.makeText(EditItemActivity.this, "当前组无任何标签", Toast.LENGTH_SHORT).show();
+				}														
 			}
 		});
 		
@@ -440,8 +515,6 @@ public class EditItemActivity extends Activity
 				if (item.getConsumedDate() == -1 || item.getConsumedDate() == 0)
 				{
 					calendar.setTimeInMillis(System.currentTimeMillis());
-					int month = calendar.get(Calendar.MONTH);
-					calendar.set(Calendar.MONTH, month+1);
 				}
 				else
 				{
@@ -451,11 +524,20 @@ public class EditItemActivity extends Activity
 				final DatePicker datePicker = (DatePicker)view.findViewById(R.id.datePicker);
 				final TimePicker timePicker = (TimePicker)view.findViewById(R.id.timePicker);
 				
-				datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)-1, calendar.get(Calendar.DAY_OF_MONTH), null);
+				datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
 				
 				timePicker.setIs24HourView(true);
 				timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
 				timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+				
+				LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
+				baseLayout.setOnClickListener(new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						hideSoftKeyboard();
+					}
+				});
 
 				AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
 													.setView(view)
@@ -465,7 +547,7 @@ public class EditItemActivity extends Activity
 														public void onClick(DialogInterface dialog, int which)
 														{
 															GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), 
-																	datePicker.getMonth()+1, datePicker.getDayOfMonth(), 
+																	datePicker.getMonth(), datePicker.getDayOfMonth(), 
 																	timePicker.getCurrentHour(), timePicker.getCurrentMinute());
 															item.setConsumedDate((int)(greCal.getTimeInMillis() / 1000));
 															timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
@@ -483,36 +565,43 @@ public class EditItemActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				final boolean[] check = User.getUsersCheck(userList, item.getRelevantUsers());
-				AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setTitle(R.string.member)
-													.setMultiChoiceItems(User.getUserNames(userList), 
-															check, new DialogInterface.OnMultiChoiceClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which, boolean isChecked)
+				if (userList.size() > 0)
+				{
+					final boolean[] check = User.getUsersCheck(userList, item.getRelevantUsers());
+					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+														.setTitle(R.string.member)
+														.setMultiChoiceItems(User.getUserNames(userList), 
+																check, new DialogInterface.OnMultiChoiceClickListener()
 														{
-															check[which] = isChecked;
-														}
-													})
-													.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															List<User> users = new ArrayList<User>();
-															for (int i = 0; i < userList.size(); i++)
+															public void onClick(DialogInterface dialog, int which, boolean isChecked)
 															{
-																if (check[i])
-																{
-																	users.add(userList.get(i));
-																}
+																check[which] = isChecked;
 															}
-															item.setRelevantUsers(users);
-															memberTextView.setText(User.userListToString(users));
-														}
-													})
-													.setNegativeButton(R.string.cancel, null)
-													.create();
-				mDialog.show();
+														})
+														.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+														{
+															public void onClick(DialogInterface dialog, int which)
+															{
+																List<User> users = new ArrayList<User>();
+																for (int i = 0; i < userList.size(); i++)
+																{
+																	if (check[i])
+																	{
+																		users.add(userList.get(i));
+																	}
+																}
+																item.setRelevantUsers(users);
+																memberTextView.setText(User.userListToString(users));
+															}
+														})
+														.setNegativeButton(R.string.cancel, null)
+														.create();
+					mDialog.show();					
+				}
+				else
+				{
+					Toast.makeText(EditItemActivity.this, "当前组无任何其他成员", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 		
@@ -531,29 +620,11 @@ public class EditItemActivity extends Activity
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					if (dbManager.syncItem(item))
 					{
-						if(item.getLocalID() == -1)
-						{
-							item.setLocalID(dbManager.getLastInsertItemID());
-						}
-						
 						if (Utils.canSyncToServer(EditItemActivity.this))
 						{
-							if (!item.getInvoicePath().equals(""))
-							{
-								sendUploadImageRequest();								
-							}
-							else
-							{
-								if (item.getServerID() == - 1)
-								{
-									sendCreateItemRequest();
-								}
-								else
-								{
-									sendModifyItemRequest();
-								}
-							}
+							SyncUtils.syncAllToServer(null);							
 						}
+						finish();
 					}
 					else
 					{
@@ -603,20 +674,34 @@ public class EditItemActivity extends Activity
 		imm.hideSoftInputFromWindow(noteEditText.getWindowToken(), 0);  	
     }
 
-    private void cropImage(Uri uri)
+    private void cropImage()
     {
-    	Intent intent = new Intent("com.android.camera.action.CROP");
-    	intent.setDataAndType(uri, "image/*");
-    	intent.putExtra("crop", "true");
-    	intent.putExtra("aspectX", 1);
-    	intent.putExtra("aspectY", 1);
-    	intent.putExtra("outputX", bitmap.getHeight());
-    	intent.putExtra("outputY", bitmap.getHeight());
-    	intent.putExtra("return-data", false);
-    	startActivityForResult(intent, CROP_IMAGE);
+		try
+		{
+			Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), originalImageUri);
+	    	Intent intent = new Intent("com.android.camera.action.CROP");
+	    	intent.setDataAndType(originalImageUri, "image/*");
+	    	intent.putExtra("crop", "true");
+	    	intent.putExtra("aspectX", 1);
+	    	intent.putExtra("aspectY", 1);
+	    	intent.putExtra("outputX", bitmap.getHeight());
+	    	intent.putExtra("outputY", bitmap.getHeight());
+	    	intent.putExtra("return-data", false);
+	    	startActivityForResult(intent, CROP_IMAGE);
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+			Toast.makeText(EditItemActivity.this, "图片剪裁失败", Toast.LENGTH_SHORT).show();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			Toast.makeText(EditItemActivity.this, "图片剪裁失败", Toast.LENGTH_SHORT).show();
+		}
     }
 
-    private Boolean saveBitmapToFile(Bitmap bitmap)
+    private String saveBitmapToFile(Bitmap bitmap)
     {
     	try
 		{    		
@@ -625,7 +710,8 @@ public class EditItemActivity extends Activity
     		
     		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     		
-    		File compressedBitmapFile = new File(appPreference.getInvoiceImageDirectory(), Utils.getImageName());
+    		String path = appPreference.getInvoiceImageDirectory() + "/" + Utils.getImageName();
+    		File compressedBitmapFile = new File(path);
     		compressedBitmapFile.createNewFile();
     		
     		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -637,157 +723,12 @@ public class EditItemActivity extends Activity
     		fileOutputStream.flush();
     		fileOutputStream.close();	
     		
-    		return true;
+    		return path;
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
-			return false;
+			return "";
 		}
-    }
-
-    private void sendUploadImageRequest()
-    {
-		UploadImageRequest request = new UploadImageRequest(item.getInvoicePath(), HttpConstant.IMAGE_TYPE_INVOICE);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final UploadImageResponse response = new UploadImageResponse(httpResponse);
-				if (response.getStatus())
-				{
-					item.setImageID(response.getImageID());
-					dbManager.updateItemByLocalID(item);
-					if (item.getServerID() == - 1)
-					{
-						sendCreateItemRequest();
-					}
-					else
-					{
-						sendModifyItemRequest();
-					}
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setTitle("上传失败")
-													.setMessage(response.getErrorMessage())
-													.setNegativeButton(R.string.confirm, 
-															new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															finish();
-														}
-													})
-													.create();
-							mDialog.show();		
-						}
-					});				
-				}
-			}
-		});
-    }
-    
-    private void sendCreateItemRequest()
-    {
-		CreateItemRequest request = new CreateItemRequest(item);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final CreateItemResponse response = new CreateItemResponse(httpResponse);
-				if (response.getStatus())
-				{
-					item.setServerID(response.getItemID());
-					dbManager.updateItemByLocalID(item);
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-																.setTitle("保存成功")
-																.setNegativeButton(R.string.confirm, 
-																		new DialogInterface.OnClickListener()
-																{
-																	public void onClick(DialogInterface dialog, int which)
-																	{
-																		finish();
-																	}
-																})
-																.create();
-							mDialog.show();
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setTitle("上传失败")
-													.setMessage(response.getErrorMessage())
-													.setNegativeButton(R.string.confirm, null)
-													.create();
-							mDialog.show();								
-						}
-					});				
-				}
-			}
-		});
-    }
-    
-    private void sendModifyItemRequest()
-    {
-		ModifyItemRequest request = new ModifyItemRequest(item);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ModifyItemResponse response = new ModifyItemResponse(httpResponse);
-				if (response.getStatus())
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-																.setTitle("修改成功")
-																.setNegativeButton(R.string.confirm, 
-																		new DialogInterface.OnClickListener()
-																{
-																	public void onClick(DialogInterface dialog, int which)
-																	{
-																		finish();
-																	}
-																})
-																.create();
-							mDialog.show();
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setTitle("上传失败")
-													.setMessage(response.getErrorMessage())
-													.setNegativeButton(R.string.confirm, null)
-													.create();
-							mDialog.show();								
-						}
-					});					
-				}
-			}
-		});
     }
 }

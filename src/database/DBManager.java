@@ -63,9 +63,9 @@ public class DBManager extends SQLiteOpenHelper
 
 	public void tempCommand()
 	{
-//		String sqlString = "DELETE FROM tbl_group WHERE server_id = -1";
+//		String sqlString = "DELETE FROM tbl_category WHERE group_id = 1";
 //		database.execSQL(sqlString);
-//		String sqlString = "DROP TABLE IF EXISTS tbl_item";
+//		String sqlString = "DROP TABLE IF EXISTS tbl_user";
 //		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_item_tag";
 //		database.execSQL(sqlString);	
@@ -585,6 +585,18 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
+	public Boolean updateItem(Item item)
+	{
+		if (item.getLocalID() != -1)
+		{
+			return updateItemByLocalID(item);
+		}
+		else
+		{
+			return updateItemByServerID(item);
+		}
+	}
+	
 	public Boolean updateItemByLocalID(Item item)
 	{
 		try
@@ -697,7 +709,7 @@ public class DBManager extends SQLiteOpenHelper
 				{
 					return insertItem(item);
 				}
-				else if (item.getServerUpdatedDate() > localItem.getLocalID())
+				else if (item.getServerUpdatedDate() > localItem.getLocalUpdatedDate())
 				{
 					return updateItemByServerID(item);
 				}
@@ -879,7 +891,8 @@ public class DBManager extends SQLiteOpenHelper
 		List<Item> itemList = new ArrayList<Item>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id=? AND report_local_id = -1", 
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
+												"(report_local_id = -1 OR report_local_id = 0)", 
 													new String[]{Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())
@@ -920,8 +933,9 @@ public class DBManager extends SQLiteOpenHelper
 		List<Item> itemList = new ArrayList<Item>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE local_updatedt > server_updatedt " +
-					"OR (image_id = -1 AND invoice_path IS NOT NULL)", null);
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE (local_updatedt > server_updatedt " +
+											"OR (image_id = -1 AND invoice_path != '')) AND user_id = ?", 
+													new String[]{Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())
 			{
@@ -986,7 +1000,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_item SET " +
-								"report_local_id = '" + reportLocalID + "' " +
+								"report_local_id = '" + reportLocalID + "', " +
+								"local_updatedt = '" + Utils.getCurrentTime() + "' " +
 								"WHERE id = '" + itemLocalID + "'";			
 			database.execSQL(sqlString);
 			return true;
@@ -1003,7 +1018,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_item SET " +
-								"report_local_id = '" + -1 + "' " +
+								"report_local_id = '" + -1 + "', " +
+								"local_updatedt = '" + Utils.getCurrentTime() + "' " +
 								"WHERE id = '" + itemLocalID + "'";			
 			database.execSQL(sqlString);
 			return true;
@@ -1053,7 +1069,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_item SET " +
-								"report_local_id = '" + -1 + "' " +
+								"report_local_id = '" + -1 + "', " +
+								"local_updatedt = '" + Utils.getCurrentTime() + "' " +
 								"WHERE report_local_id = '" + reportLocalID + "'";			
 			database.execSQL(sqlString);
 			return true;
@@ -1302,7 +1319,7 @@ public class DBManager extends SQLiteOpenHelper
 				{
 					return insertReport(report);
 				}
-				else if (report.getServerUpdatedDate() > localReport.getLocalID())
+				else if (report.getServerUpdatedDate() > localReport.getLocalUpdatedDate())
 				{
 					return updateReportByServerID(report);
 				}
@@ -1361,7 +1378,9 @@ public class DBManager extends SQLiteOpenHelper
 		List<Report> reportList = new ArrayList<Report>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE local_updatedt > server_updatedt", null);
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE local_updatedt > server_updatedt AND " +
+												"(user_id = ? OR manager_id = ?)", 
+												new String[]{Integer.toString(userServerID), Integer.toString(userServerID)});
 			
 			while (cursor.moveToNext())
 			{
@@ -1417,8 +1436,8 @@ public class DBManager extends SQLiteOpenHelper
 		List<Report> reportList = new ArrayList<Report>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE user_id=? ", 
-														new String[]{Integer.toString(userServerID)});
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE user_id = ?", 
+											new String[]{Integer.toString(userServerID)});
 			
 			while (cursor.moveToNext())
 			{
@@ -1446,7 +1465,7 @@ public class DBManager extends SQLiteOpenHelper
 	public String getReportItemIDs(int reportLocalID)
 	{
 		String itemIDString = "";
-		Cursor cursor = database.rawQuery("SELECT server_id FROM tbl_item WHERE report_local_id=?", 
+		Cursor cursor = database.rawQuery("SELECT server_id FROM tbl_item WHERE report_local_id = ?", 
 												new String[]{Integer.toString(reportLocalID)});
 		while (cursor.moveToNext())
 		{
@@ -1746,9 +1765,9 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			for (int i = 0; i < categoryList.size(); i++)
+			for (Category category : categoryList)
 			{
-				insertCategory(categoryList.get(i));
+				insertCategory(category);
 			}
 			return true;
 		}
@@ -2103,10 +2122,10 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_group SET " +
-					"group_name = '" + group.getName() + "'," +
-					"local_updatedt = '" + group.getLocalUpdatedDate() + "'," +
-					"server_updatedt = '" + group.getServerUpdatedDate() + "' " +
-					"WHERE server_id = '" + group.getServerID() + "'";
+								"group_name = '" + group.getName() + "'," +
+								"local_updatedt = '" + group.getLocalUpdatedDate() + "'," +
+								"server_updatedt = '" + group.getServerUpdatedDate() + "' " +
+								"WHERE server_id = '" + group.getServerID() + "'";
 			
 			database.execSQL(sqlString);
 			return true;

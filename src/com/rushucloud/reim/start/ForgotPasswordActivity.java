@@ -96,7 +96,7 @@ public class ForgotPasswordActivity extends Activity
     private void viewInitialise()
     {
     	emailEditText = (EditText)findViewById(R.id.emailEditText);
-    	phoneEditText = (EditText)findViewById(R.id.phoneEditText);
+    	phoneEditText = (EditText)findViewById(R.id.mobileEditText);
     	codeEditText = (EditText)findViewById(R.id.codeEditText);
 		
     	RelativeLayout emailBaseLayout=(RelativeLayout)findViewById(R.id.emailBaseLayout);

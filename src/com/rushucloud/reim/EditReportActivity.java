@@ -3,17 +3,7 @@ package com.rushucloud.reim;
 import java.util.ArrayList;
 import java.util.List;
 
-import netUtils.HttpConstant;
-import netUtils.Request.UploadImageRequest;
-import netUtils.HttpConnectionCallback;
-import netUtils.Request.Item.CreateItemRequest;
-import netUtils.Request.Report.CreateReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
-import netUtils.Response.UploadImageResponse;
-import netUtils.Response.Item.CreateItemResponse;
-import netUtils.Response.Report.CreateReportResponse;
-import netUtils.Response.Report.ModifyReportResponse;
-
+import netUtils.SyncUtils;
 import classes.AppPreference;
 import classes.Item;
 import classes.Report;
@@ -27,7 +17,6 @@ import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -58,11 +47,6 @@ public class EditReportActivity extends Activity
 	private List<Item> itemList = null;
 	private ArrayList<Integer> chosenItemIDList = null;
 	private ArrayList<Integer> remainingItemIDList = null;
-	
-	private boolean needToSave = true;
-	private boolean needToSubmit = false;
-	
-	private static int taskCount;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -103,22 +87,37 @@ public class EditReportActivity extends Activity
 		{
 			return false;
 		}
+		else if (report.getStatus() == Report.STATUS_SUBMITTED && 
+				report.getUser().getServerID() != appPreference.getCurrentUserID())
+		{
+			getMenuInflater().inflate(R.menu.approve_reject, menu);
+			return true;	
+		}
 		else
 		{
-			getMenuInflater().inflate(R.menu.single_item, menu);
-			MenuItem item = menu.getItem(0);
-			item.setTitle(getResources().getString(R.string.submit));
-			return true;			
+			getMenuInflater().inflate(R.menu.submit, menu);
+			return true;
 		}
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
 		int id = item.getItemId();
-		if (id == R.id.action_item)
+		if (id == R.id.action_submit_item)
 		{
-			needToSubmit = true;
-			saveReport();
+			submitReport();
+			return true;
+		}
+		if (id == R.id.action_approve_item)
+		{
+			report.setStatus(Report.STATUS_APPROVED);
+			saveReport("报告已批准");
+			return true;
+		}
+		if (id == R.id.action_reject_item)
+		{
+			report.setStatus(Report.STATUS_REJECT);
+			saveReport("报告已拒绝");
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -266,44 +265,7 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				try
-				{
-					if (report.getStatus() == 0 || report.getStatus() == 4)
-					{
-						report.setLocalUpdatedDate(Utils.getCurrentTime());
-						report.setTitle(titleEditText.getText().toString());
-						if (report.getLocalID() == -1)
-						{
-							report.setCreatedDate(Utils.getCurrentTime());
-							dbManager.insertReport(report);
-							report.setLocalID(dbManager.getLastInsertReportID());								
-						}
-						else
-						{
-							dbManager.updateReportByLocalID(report);
-						}
-						if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
-						{
-							saveReport();
-						}
-						else
-						{
-							AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-																.setTitle("保存失败")
-																.setNegativeButton(R.string.confirm, null)
-																.create();
-							mDialog.show();
-						}
-					}
-					else
-					{
-						finish();
-					}
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
+				saveReport("报告保存成功");
 			}
 		});
 		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
@@ -332,251 +294,86 @@ public class EditReportActivity extends Activity
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
     }
-
-    private void saveReport()
+    
+    private void saveReport(String prompt)
     {
-    	if (itemList == null || itemList.size() == 0)
+    	hideSoftKeyboard();
+    	report.setLocalUpdatedDate(Utils.getCurrentTime());
+		report.setTitle(titleEditText.getText().toString());
+		if (report.getLocalID() == -1)
 		{
-			if (report.getServerID() == -1)
-			{
-				sendCreateReportRequest();
-			}
-			else
-			{
-				sendUpdateReportRequest();
-			}
-		}    	
-
-    	taskCount = 0;
-    	boolean flag = false;
-    	for (Item item : itemList)
+			report.setCreatedDate(Utils.getCurrentTime());
+			dbManager.insertReport(report);
+			report.setLocalID(dbManager.getLastInsertReportID());								
+		}
+		else
 		{
-			if (item.getServerID() == -1 && !item.getInvoicePath().equals(""))
+			dbManager.updateReportByLocalID(report);
+		}
+		if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
+		{
+			Toast.makeText(EditReportActivity.this, prompt, Toast.LENGTH_SHORT).show();
+			if (Utils.canSyncToServer(EditReportActivity.this))
 			{
-				flag = true;
-				taskCount++;
-				sendUploadImageRequest(item);
-			}
-			else if (item.getServerID() == -1)
-			{
-				flag = true;
-				taskCount++;
-				sendCreateItemRequest(item);
+				SyncUtils.syncAllToServer(null);
 			}
 		}
-    	if (!flag)
+		else
 		{
-			if (report.getServerID() == -1)
-			{
-				sendCreateReportRequest();
-			}
-			else
-			{
-				sendUpdateReportRequest();
-			}
+			AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
+												.setTitle("保存失败")
+												.setNegativeButton(R.string.confirm, null)
+												.create();
+			mDialog.show();
 		}
     }
-    
+
     private void submitReport()
     {
-    	ModifyReportRequest request = new ModifyReportRequest(report);
-    	request.sendRequest(new HttpConnectionCallback()
+    	hideSoftKeyboard();
+    	report.setLocalUpdatedDate(Utils.getCurrentTime());
+		report.setTitle(titleEditText.getText().toString());
+		if (report.getLocalID() == -1)
 		{
-			public void execute(Object httpResponse)
-			{
-				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
-				if (response.getStatus())
-				{
-					dbManager.updateReportByLocalID(report);
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-													.setTitle("报告已提交！请等待审批！")
-													.setNegativeButton(R.string.confirm, 
-															new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															finish();
-														}
-													})
-													.create();
-							mDialog.show();
-						}
-					});		
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-													.setTitle("报告提交失败！")
-													.setMessage(response.getErrorMessage())
-													.setNegativeButton(R.string.confirm, null)
-													.create();
-							mDialog.show();
-						}
-					});		
-				}
-			}
-		});
-    }
-
-    private void sendCreateReportRequest()
-    {
-    	CreateReportRequest request = new CreateReportRequest(report);
-    	request.sendRequest(new HttpConnectionCallback()
+			report.setCreatedDate(Utils.getCurrentTime());
+			dbManager.insertReport(report);
+			report.setLocalID(dbManager.getLastInsertReportID());								
+		}
+		else
 		{
-			public void execute(Object httpResponse)
-			{
-				CreateReportResponse response = new CreateReportResponse(httpResponse);
-				if (response.getStatus())
-				{
-					report.setServerID(response.getReportID());
-					dbManager.updateReportByLocalID(report);
-					if (needToSubmit)
-					{
-						report.setStatus(Report.STATUS_SUBMITTED);
-						submitReport();
-					}
-					else
-					{
-						runOnUiThread(new Runnable()
-						{
-							public void run()
-							{
-								Toast.makeText(EditReportActivity.this, "报告上传成功", Toast.LENGTH_SHORT).show();
-							}
-						});						
-					}
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							Toast.makeText(EditReportActivity.this, "报告上传失败", Toast.LENGTH_SHORT).show();
-						}
-					});		
-				}
-			}
-		});
-    }
-
-    private void sendUpdateReportRequest()
-    {
-    	ModifyReportRequest request = new ModifyReportRequest(report);
-    	request.sendRequest(new HttpConnectionCallback()
+			dbManager.updateReportByLocalID(report);
+		}
+		if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
 		{
-			public void execute(Object httpResponse)
+			boolean canBeSubmitted = report.canBeSubmitted();
+			if (!canBeSubmitted)
 			{
-				ModifyReportResponse response = new ModifyReportResponse(httpResponse);
-				if (response.getStatus())
-				{
-					dbManager.updateReportByLocalID(report);
-					if (needToSubmit)
-					{
-						report.setStatus(Report.STATUS_SUBMITTED);
-						submitReport();
-					}
-					else
-					{
-						runOnUiThread(new Runnable()
-						{
-							public void run()
-							{
-								Toast.makeText(EditReportActivity.this, "报告更新成功", Toast.LENGTH_SHORT).show();
-							}
-						});						
-					}
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							Toast.makeText(EditReportActivity.this, "报告更新失败", Toast.LENGTH_SHORT).show();	
-						}
-					});					
-				}
+				report.setStatus(Report.STATUS_DRAFT);
+				Toast.makeText(EditReportActivity.this, "部分条目信息未上传到服务器，无法提交报告", Toast.LENGTH_SHORT).show();
 			}
-		});
-    }
-    
-    private void sendUploadImageRequest(final Item item)
-    {
-		UploadImageRequest request = new UploadImageRequest(item.getInvoicePath(), HttpConstant.IMAGE_TYPE_INVOICE);
-		request.sendRequest(new HttpConnectionCallback()
+			else if (appPreference.getCurrentGroupID() == -1)
+			{
+				report.setStatus(Report.STATUS_FINISHED);
+				Toast.makeText(EditReportActivity.this, "报告提交成功", Toast.LENGTH_SHORT).show();
+			}
+			else
+			{
+				report.setStatus(Report.STATUS_SUBMITTED);		
+				Toast.makeText(EditReportActivity.this, "报告提交成功", Toast.LENGTH_SHORT).show();		
+			}
+			dbManager.updateReportByLocalID(report);
+			if (Utils.canSyncToServer(EditReportActivity.this))
+			{
+				SyncUtils.syncAllToServer(null);
+			}
+		}
+		else
 		{
-			public void execute(Object httpResponse)
-			{
-				final UploadImageResponse response = new UploadImageResponse(httpResponse);
-				if (response.getStatus())
-				{
-					item.setImageID(response.getImageID());
-					dbManager.updateItemByLocalID(item);
-					sendCreateItemRequest(item);
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							taskCount--;
-							needToSave = false;
-							Toast.makeText(EditReportActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
-						}
-					});				
-				}
-			}
-		});
-    }
-    
-    private void sendCreateItemRequest(final Item item)
-    {
-		CreateItemRequest request = new CreateItemRequest(item);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final CreateItemResponse response = new CreateItemResponse(httpResponse);
-				if (response.getStatus())
-				{
-					item.setServerID(response.getItemID());
-					dbManager.updateItemByLocalID(item);
-					taskCount--;
-					if (needToSave && taskCount == 0)
-					{
-						if (report.getServerID() == -1)
-						{
-							sendCreateReportRequest();
-						}
-						else
-						{
-							sendUpdateReportRequest();
-						}
-					}
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							taskCount--;
-							needToSave = false;
-							Toast.makeText(EditReportActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();					
-						}
-					});				
-				}
-			}
-		});
+			AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
+												.setTitle("保存失败")
+												.setNegativeButton(R.string.confirm, null)
+												.create();
+			mDialog.show();
+		}
     }
 }

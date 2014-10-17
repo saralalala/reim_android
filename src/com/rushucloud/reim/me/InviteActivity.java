@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class ProfileActivity extends Activity
+public class InviteActivity extends Activity
 {
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -56,7 +56,7 @@ public class ProfileActivity extends Activity
 		if (id == R.id.action_save_item)
 		{
 			// TODO SAVE DETAILS
-			Toast.makeText(ProfileActivity.this, "保存", Toast.LENGTH_SHORT).show();
+			Toast.makeText(InviteActivity.this, "保存", Toast.LENGTH_SHORT).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -66,7 +66,7 @@ public class ProfileActivity extends Activity
 	{
 		try
 		{
-			ProfileListViewAdapater adapter = new ProfileListViewAdapater(ProfileActivity.this);
+			ProfileListViewAdapater adapter = new ProfileListViewAdapater(InviteActivity.this);
 			ListView profileListView = (ListView)findViewById(R.id.profileListView);
 			profileListView.setAdapter(adapter);
 		}

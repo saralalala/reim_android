@@ -64,11 +64,9 @@ public class ResetPasswordActivity extends Activity
 	
 	private void dataInitialise()
 	{
-//		Bundle bundle = this.getIntent().getExtras();
-//		cid = bundle.getInt("cid");
-//		code = bundle.getString("code");
-		cid = 3;
-		code = "ffded0";
+		Bundle bundle = this.getIntent().getExtras();
+		cid = bundle.getInt("cid");
+		code = bundle.getString("code");
 	}
 	
 	private void viewInitialise()

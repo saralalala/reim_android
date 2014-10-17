@@ -6,7 +6,7 @@
     android:id="@+id/phoneBaseLayout" >
 
     <EditText
-        android:id="@+id/phoneEditText"
+        android:id="@+id/mobileEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -24,8 +24,8 @@
         android:id="@+id/codeEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/phoneEditText"
-        android:layout_below="@+id/phoneEditText"
+        android:layout_alignLeft="@+id/mobileEditText"
+        android:layout_below="@+id/mobileEditText"
         android:layout_marginTop="35dp"
         android:ems="10"
         android:hint="@string/inputCode"
@@ -35,9 +35,9 @@
         android:id="@+id/acquireCodeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/phoneEditText"
-        android:layout_alignBottom="@+id/phoneEditText"
-        android:layout_toRightOf="@+id/phoneEditText"
+        android:layout_alignBaseline="@+id/mobileEditText"
+        android:layout_alignBottom="@+id/mobileEditText"
+        android:layout_toRightOf="@+id/mobileEditText"
         android:text="@string/acquireCode" />
 
     <Button

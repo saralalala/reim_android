@@ -1,6 +1,9 @@
 package classes;
 
 import java.io.Serializable;
+import java.util.List;
+
+import database.DBManager;
 
 public class Report implements Serializable
 {
@@ -120,5 +123,18 @@ public class Report implements Serializable
 			default:
 				return "N/A";
 		}
+	}
+
+	public boolean canBeSubmitted()
+	{
+		List<Item> itemList = DBManager.getDBManager().getReportItems(localID);
+		for (Item item : itemList)
+		{
+			if (item.getServerID() == -1 || (!item.getInvoicePath().equals("") && item.getImageID() == -1))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

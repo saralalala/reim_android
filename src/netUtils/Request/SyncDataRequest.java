@@ -6,12 +6,12 @@ import netUtils.HttpConnectionCallback;
 
 public class SyncDataRequest extends BaseRequest
 {
-	public SyncDataRequest()
+	public SyncDataRequest(int timeStamp)
 	{
 		super();
 		
 		String requestUrl = getUrl();
-		requestUrl += "/sync/0";
+		requestUrl += "/sync/" + timeStamp;
 		setUrl(requestUrl);
 	}
 	

@@ -33,19 +33,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SignUpActivity extends Activity
 {
 	private TabHost tabHost;
 	
-	private String code = "";
-	
 	private EditText phoneEditText;
 	private EditText phonePasswordEditText;
 	private EditText codeEditText;
+	private TextView codeTextView;
 	private EditText emailEditText;
 	private EditText emailPasswordEditText;
+	private Button acquireCodeButton;
+	
+	private String code = "";
+	private int waitingTime;
+	private Thread thread;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -74,6 +79,7 @@ public class SignUpActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
+			waitingTime = -1;
 			startActivity(new Intent(SignUpActivity.this, WelcomeActivity.class));
 			finish();
 		}
@@ -105,9 +111,10 @@ public class SignUpActivity extends Activity
 	
 	private void viewIntialise()
 	{
-		phoneEditText = (EditText)findViewById(R.id.phoneEditText);
-		phonePasswordEditText = (EditText)findViewById(R.id.phonePasswordEditText);
+		phoneEditText = (EditText)findViewById(R.id.mobileEditText);
+		phonePasswordEditText = (EditText)findViewById(R.id.mobilePasswordEditText);
 		codeEditText = (EditText)findViewById(R.id.codeEditText);
+		codeTextView = (TextView)findViewById(R.id.codeTextView);
 		emailEditText = (EditText)findViewById(R.id.emailEditText);
 		emailPasswordEditText = (EditText)findViewById(R.id.emailPasswordEditText);
 		
@@ -132,11 +139,13 @@ public class SignUpActivity extends Activity
 	
 	private void buttonInitialise()
 	{
-		Button acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
+		acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
 		acquireCodeButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
+				hideSoftKeyboard();
+				
 				String phoneNumber = phoneEditText.getText().toString();
 				if (phoneNumber.equals(""))
 				{
@@ -176,7 +185,6 @@ public class SignUpActivity extends Activity
 				}
 				else 
 				{
-					hideSoftKeyboard();
 					getVerifyCode(phoneNumber);
 				}
 			}
@@ -187,6 +195,7 @@ public class SignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				hideSoftKeyboard();
 				String phoneNumber = phoneEditText.getText().toString();
 				String password = phonePasswordEditText.getText().toString();
 				String inputCode = codeEditText.getText().toString();
@@ -269,7 +278,6 @@ public class SignUpActivity extends Activity
 					user.setPhone(phoneNumber);
 					user.setPassword(password);
 					
-					hideSoftKeyboard();
 					sendRegisterRequest(user, inputCode);
 				}
 			}
@@ -280,6 +288,7 @@ public class SignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				waitingTime = -1;
 				startActivity(new Intent(SignUpActivity.this, WelcomeActivity.class));
 				finish();
 			}
@@ -290,6 +299,7 @@ public class SignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				hideSoftKeyboard();
 				String email = emailEditText.getText().toString();
 				String password = emailPasswordEditText.getText().toString();
 				code = "";
@@ -336,7 +346,6 @@ public class SignUpActivity extends Activity
 					user.setEmail(email);
 					user.setPassword(password);
 					
-					hideSoftKeyboard();
 					sendRegisterRequest(user, "");
 				}
 			}
@@ -347,6 +356,7 @@ public class SignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				waitingTime = -1;
 				startActivity(new Intent(SignUpActivity.this, WelcomeActivity.class));
 				finish();
 			}
@@ -401,6 +411,46 @@ public class SignUpActivity extends Activity
         
     private void getVerifyCode(String phoneNumber)
     {
+		waitingTime = 60;
+		acquireCodeButton.setEnabled(false);
+		codeTextView.setText(waitingTime + "秒后可重新获取验证码");
+		thread = new Thread(new Runnable()
+		{
+			public void run()
+			{
+				try
+				{
+					while (waitingTime > 0)
+					{
+						java.lang.Thread.sleep(1000);
+						waitingTime -= 1;
+						runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								codeTextView.setText(waitingTime + "秒后可重新获取验证码");
+							}
+						});	
+					}
+				}
+				catch (Exception e)
+				{
+					System.out.println(e);
+				}
+				finally
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							acquireCodeButton.setEnabled(true);	
+						}
+					});	
+				}
+			}
+		});
+		thread.start();
+		
 		VerifyCodeRequest request = new VerifyCodeRequest(phoneNumber);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -472,6 +522,7 @@ public class SignUpActivity extends Activity
 													{
 														public void onClick(DialogInterface dialog, int which)
 														{
+															waitingTime = -1;
 															dialog.dismiss();
 															startActivity(new Intent(SignUpActivity.this, MainActivity.class));
 															finish();

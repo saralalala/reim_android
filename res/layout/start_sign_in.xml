@@ -19,7 +19,7 @@
     <requestFocus />
 
     <EditText
-        android:id="@+id/phonePasswordEditText"
+        android:id="@+id/passwordEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/usernameEditText"
@@ -34,8 +34,8 @@
         android:id="@+id/forgotTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/phonePasswordEditText"
-        android:layout_below="@+id/phonePasswordEditText"
+        android:layout_alignRight="@+id/passwordEditText"
+        android:layout_below="@+id/passwordEditText"
         android:layout_marginTop="22dp"
         android:text="@string/forgotPassword" />
 
@@ -43,7 +43,7 @@
         android:id="@+id/confirmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/phonePasswordEditText"
+        android:layout_alignLeft="@+id/passwordEditText"
         android:layout_below="@+id/forgotTextView"
         android:layout_marginTop="102dp"
         android:text="@string/confirm" />

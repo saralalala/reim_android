@@ -15,6 +15,7 @@ import classes.AppPreference;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
+import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
 import android.app.AlertDialog;
@@ -81,16 +82,13 @@ public class ReimFragment extends Fragment
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.single_item, menu);
-		MenuItem menuItem = menu.findItem(R.id.action_item);
-		menuItem.setIcon(R.drawable.ic_action_search);
-		menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		inflater.inflate(R.menu.search, menu);;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
 		int id = item.getItemId();
-		if (id == R.id.action_item)
+		if (id == R.id.action_search_item)
 		{
 			startActivity(new Intent(getActivity(), SearchItemActivity.class));
 			return true;
@@ -128,7 +126,14 @@ public class ReimFragment extends Fragment
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
-													sendDeleteItemRequest(localItem);
+													if (localItem.getServerID() == -1)
+													{
+														deleteItemFromLocal(localItem.getLocalID());
+													}
+													else
+													{
+														sendDeleteItemRequest(localItem);														
+													}
 												}
 											}).setNegativeButton(R.string.cancel, null).create();
 					mDialog.show();
@@ -148,7 +153,7 @@ public class ReimFragment extends Fragment
 			dbManager = DBManager.getDBManager();			
 		}
 		
-		if (ReimApplication.needToSync)
+		if (ReimApplication.needToSync && Utils.canSyncToServer(getActivity()))
 		{
 			ReimApplication.needToSync = false;
 			SyncUtils.syncFromServer(new SyncDataCallback()
@@ -159,9 +164,11 @@ public class ReimFragment extends Fragment
 					{
 						public void run()
 						{
-							adapter.notifyDataSetChanged();
+							refreshItemListView();
 						}
 					});
+
+					SyncUtils.syncAllToServer(null);
 				}
 			});
 		}
@@ -235,6 +242,7 @@ public class ReimFragment extends Fragment
 	
 	private void sendDeleteItemRequest(final Item item)
 	{
+		ReimApplication.pDialog.show();
 		DeleteItemRequest request = new DeleteItemRequest(item.getServerID());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -247,17 +255,7 @@ public class ReimFragment extends Fragment
 					{
 						public void run()
 						{
-							if (dbManager.deleteItem(item.getLocalID()))
-							{								
-								refreshItemListView();
-								Toast.makeText(getActivity(), R.string.deleteSucceed,
-										Toast.LENGTH_LONG).show();
-							}
-							else
-							{
-								Toast.makeText(getActivity(), R.string.deleteFailed,
-										Toast.LENGTH_LONG).show();
-							}
+							deleteItemFromLocal(item.getLocalID());
 						}
 					});
 				}
@@ -267,16 +265,27 @@ public class ReimFragment extends Fragment
 					{
 						public void run()
 						{
-							AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-													.setTitle("条目删除失败")
-													.setMessage(response.getErrorMessage())
-													.setNegativeButton(R.string.confirm, null)
-													.create();
-							mDialog.show();
+							ReimApplication.pDialog.show();
+							Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
 						}
 					});					
 				}
 			}
 		});
+	}
+	
+	private void deleteItemFromLocal(int reportLocalID)
+	{
+		if (dbManager.deleteItem(reportLocalID))
+		{								
+			refreshItemListView();
+			ReimApplication.pDialog.show();
+			Toast.makeText(getActivity(), R.string.deleteSucceed, Toast.LENGTH_LONG).show();
+		}
+		else
+		{
+			ReimApplication.pDialog.show();
+			Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
+		}
 	}
 }

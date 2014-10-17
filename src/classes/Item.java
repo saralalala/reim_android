@@ -1,12 +1,9 @@
 package classes;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Item implements Serializable
-{
-	private static final long serialVersionUID = 1L;
-	
+public class Item
+{	
 	private int localID = -1;
 	private int serverID = -1;
 	private int imageID = -1;
@@ -186,5 +183,18 @@ public class Item implements Serializable
 	public void setNeedReimbursed(Boolean needReimbursed)
 	{
 		this.needReimbursed = needReimbursed;
+	}
+
+	public Boolean canBeSubmitWithReport()
+	{
+		if (imageID == -1 && !invoicePath.equals(""))
+		{
+			return false;
+		}
+		if (serverID == -1)
+		{
+			return false;
+		}
+		return true;
 	}
 }

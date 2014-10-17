@@ -49,7 +49,7 @@ public class MeListViewAdapater extends BaseAdapter
 				view = layoutInflater.inflate(R.layout.list_item_profile, null);
 				
 				ImageView imageView = (ImageView)view.findViewById(R.id.imageView);				
-				if (currentUser.getAvatarPath().startsWith("/images"))
+				if (currentUser.getAvatarPath().startsWith("/images") || currentUser.getAvatarPath().equals(""))
 				{
 					imageView.setImageResource(R.drawable.default_avatar);
 				}
@@ -75,7 +75,14 @@ public class MeListViewAdapater extends BaseAdapter
 				TextView nicknameTextView = (TextView)view.findViewById(R.id.nicknameTextView);
 				nicknameTextView.setText(currentUser.getNickname());
 				TextView companyTextView = (TextView)view.findViewById(R.id.companyTextView);
-				companyTextView.setText(group.getName());
+				if (group != null)
+				{
+					companyTextView.setText(group.getName());
+				}
+				else
+				{
+					companyTextView.setText(R.string.notAvailable);
+				}
 				break;
 			}
 			case 1:

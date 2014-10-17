@@ -73,7 +73,7 @@ public class CommonResponse extends BaseResponse
 				category.setServerID(Integer.valueOf(object.getString("id")));
 				category.setName(object.getString("category_name"));
 				category.setLimit(Double.valueOf(object.getString("max_limit")));
-				category.setGroupID(Integer.valueOf(object.getString("gid")));
+				category.setGroupID(Integer.valueOf(object.optInt("gid", -1)));
 				category.setParentID(Integer.valueOf(object.getString("pid")));
 				category.setLocalUpdatedDate(object.getInt("lastdt"));
 				category.setServerUpdatedDate(object.getInt("lastdt"));

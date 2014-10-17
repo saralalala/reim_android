@@ -188,5 +188,4 @@ public class AppPreference
 	{
 		this.invoiceImageDirectory = invoiceImageDirectory;
 	}
-
 }

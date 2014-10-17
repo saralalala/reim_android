@@ -13,11 +13,13 @@ import netUtils.Request.Report.ModifyReportRequest;
 import netUtils.Response.SyncDataResponse;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.Item.CreateItemResponse;
+import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
 import classes.AppPreference;
 import classes.Item;
 import classes.Report;
+import classes.Utils;
 import database.DBManager;
 
 public abstract class SyncUtils
@@ -27,7 +29,10 @@ public abstract class SyncUtils
 
 	public static void syncFromServer(final SyncDataCallback callback)
 	{
-		SyncDataRequest request = new SyncDataRequest();
+//		int lastSynctime = AppPreference.getAppPreference().getLastSyncTime();
+		int lastSynctime = 0;
+		final int currentTime = Utils.getCurrentTime();
+		SyncDataRequest request = new SyncDataRequest(lastSynctime);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -35,6 +40,10 @@ public abstract class SyncUtils
 				SyncDataResponse response = new SyncDataResponse(httpResponse);
 				if (response.getStatus())
 				{
+					AppPreference appPreference = AppPreference.getAppPreference();
+					appPreference.setLastSyncTime(currentTime);
+					appPreference.saveAppPreference();
+					
 					DBManager dbManager = DBManager.getDBManager();
 					SparseIntArray reportIDArray = new SparseIntArray();
 					for (Report report : response.getReportList())
@@ -51,6 +60,7 @@ public abstract class SyncUtils
 					
 					for (Item item : response.getItemList())
 					{
+						System.out.println(item.getServerID());
 						Report report = item.getBelongReport();
 						report.setLocalID(reportIDArray.get(report.getServerID()));
 						item.setBelongReport(report);
@@ -71,26 +81,25 @@ public abstract class SyncUtils
     	DBManager dbManager = DBManager.getDBManager();
     	List<Item> itemList = dbManager.getUnsyncedItems(appPreference.getCurrentUserID());
     	itemTaskCount = itemList.size();
-    	boolean flag = true;
-    	for (Item item : itemList)
+    	if (itemTaskCount > 0)
 		{
-			if (item.getImageID() == -1 && !item.getInvoicePath().equals(""))
-			{
-				flag = false;
-				sendUploadImageRequest(item, callback);
-			}
-			else if (item.getServerID() == -1)
-			{
-				flag = true;
-				sendCreateItemRequest(item, callback);
-			}
-			else
-			{
-				flag = true;
-				sendUpdateItemRequest(item, callback);
-			}
+        	for (Item item : itemList)
+    		{
+    			if (item.getImageID() == -1 && !item.getInvoicePath().equals(""))
+    			{
+    				sendUploadImageRequest(item, callback);
+    			}
+    			else if (item.getServerID() == -1)
+    			{
+    				sendCreateItemRequest(item, callback);
+    			}
+    			else
+    			{
+    				sendUpdateItemRequest(item, callback);
+    			}
+    		}			
 		}
-    	if (flag)
+    	else
 		{
     		syncReportsToServer(callback);
 		}
@@ -102,22 +111,32 @@ public abstract class SyncUtils
     	DBManager dbManager = DBManager.getDBManager();
     	List<Report> reportList = dbManager.getUnsyncedUserReports(appPreference.getCurrentUserID());
     	reportTaskCount = reportList.size();
-    	boolean flag = true;
-		for (Report report : reportList)
+    	if (reportTaskCount > 0)
 		{
-			flag = false;
-			if (report.getServerID() == -1)
-			{
-				sendCreateReportRequest(report, callback);
-			}
-			else
-			{
-				sendUpdateReportRequest(report, callback);
-			}
+    		for (Report report : reportList)
+    		{
+    			if (dbManager.getReportItemIDs(report.getLocalID()).length() == 0)
+				{
+					reportTaskCount--;
+					continue;
+				}
+    			
+    			if (report.getServerID() == -1)
+    			{
+    				sendCreateReportRequest(report, callback);
+    			}
+    			else
+    			{
+    				sendUpdateReportRequest(report, callback);
+    			}
+    		}			
 		}
-		if (flag)
+    	else
 		{
-			callback.execute();
+			if (callback != null)
+			{
+				callback.execute();				
+			}
 		}
     }
         
@@ -131,13 +150,17 @@ public abstract class SyncUtils
 				CreateReportResponse response = new CreateReportResponse(httpResponse);
 				if (response.getStatus())
 				{
+					report.setLocalUpdatedDate(Utils.getCurrentTime());
 					report.setServerUpdatedDate(report.getLocalUpdatedDate());
 					report.setServerID(response.getReportID());
 					DBManager.getDBManager().updateReportByLocalID(report);
 					reportTaskCount--;
 					if (reportTaskCount == 0)
 					{
-						callback.execute();
+						if (callback != null)
+						{
+							callback.execute();				
+						}
 					}
 				}
 				else
@@ -145,7 +168,10 @@ public abstract class SyncUtils
 					reportTaskCount--;
 					if (reportTaskCount == 0)
 					{
-						callback.execute();
+						if (callback != null)
+						{
+							callback.execute();				
+						}
 					}
 				}
 			}
@@ -162,12 +188,16 @@ public abstract class SyncUtils
 				ModifyReportResponse response = new ModifyReportResponse(httpResponse);
 				if (response.getStatus())
 				{
+					report.setLocalUpdatedDate(Utils.getCurrentTime());
 					report.setServerUpdatedDate(report.getLocalUpdatedDate());
 					DBManager.getDBManager().updateReportByLocalID(report);
 					reportTaskCount--;
 					if (reportTaskCount == 0)
 					{
-						callback.execute();
+						if (callback != null)
+						{
+							callback.execute();				
+						}
 					}
 				}
 				else
@@ -175,7 +205,10 @@ public abstract class SyncUtils
 					reportTaskCount--;
 					if (reportTaskCount == 0)
 					{
-						callback.execute();
+						if (callback != null)
+						{
+							callback.execute();				
+						}
 					}
 				}
 			}
@@ -192,6 +225,7 @@ public abstract class SyncUtils
 				final CreateItemResponse response = new CreateItemResponse(httpResponse);
 				if (response.getStatus())
 				{
+					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());
 					item.setServerID(response.getItemID());
 					DBManager.getDBManager().updateItemByLocalID(item);
@@ -220,9 +254,10 @@ public abstract class SyncUtils
 		{
 			public void execute(Object httpResponse)
 			{
-				final CreateItemResponse response = new CreateItemResponse(httpResponse);
+				final ModifyItemResponse response = new ModifyItemResponse(httpResponse);
 				if (response.getStatus())
 				{
+					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());
 					item.setServerID(response.getItemID());
 					DBManager.getDBManager().updateItemByLocalID(item);
@@ -257,7 +292,14 @@ public abstract class SyncUtils
 					item.setImageID(response.getImageID());
 					DBManager.getDBManager().updateItemByLocalID(item);
 				}
-				sendCreateItemRequest(item, callback);
+				if (item.getServerID() == -1)
+				{
+					sendCreateItemRequest(item, callback);
+				}
+				else
+				{
+					sendUpdateItemRequest(item, callback);
+				}
 			}
 		});
     }

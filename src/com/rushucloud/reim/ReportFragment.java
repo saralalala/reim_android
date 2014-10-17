@@ -97,7 +97,14 @@ public class ReportFragment extends Fragment
 														{
 															public void onClick(DialogInterface dialog, int which)
 															{
-																sendDeleteReportRequest(report);
+																if (report.getServerID() == -1)
+																{
+																	deleteReportFromLocal(report.getLocalID());
+																}
+																else
+																{
+																	sendDeleteReportRequest(report);
+																}
 															}
 														})
 														.setNegativeButton(R.string.cancel, null)
@@ -182,65 +189,49 @@ public class ReportFragment extends Fragment
 	private void sendDeleteReportRequest(final Report report)
 	{
 		ReimApplication.pDialog.show();
-		if (report.getServerID() != -1)
+		DeleteReportRequest request = new DeleteReportRequest(report.getServerID());
+		request.sendRequest(new HttpConnectionCallback()
 		{
-			DeleteReportRequest request = new DeleteReportRequest(report.getServerID());
-			request.sendRequest(new HttpConnectionCallback()
+			public void execute(Object httpResponse)
 			{
-				public void execute(Object httpResponse)
+				DeleteReportResponse response = new DeleteReportResponse(httpResponse);
+				if (response.getStatus())
 				{
-					DeleteReportResponse response = new DeleteReportResponse(httpResponse);
-					if (response.getStatus())
+					getActivity().runOnUiThread(new Runnable()
 					{
-						deleteReportFromLocal(report.getLocalID());
-					}
-					else
-					{
-						getActivity().runOnUiThread(new Runnable()
+						public void run()
 						{
-							public void run()
-							{
-								ReimApplication.pDialog.dismiss();
-					            Toast.makeText(getActivity(),
-					            		R.string.deleteFailed, Toast.LENGTH_LONG).show();
-							}
-						});		
-					}
+							deleteReportFromLocal(report.getLocalID());
+						}
+					});
 				}
-			});
-		}
-		else
-		{
-			deleteReportFromLocal(report.getLocalID());
-		}
+				else
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.pDialog.dismiss();
+				            Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
+						}
+					});		
+				}
+			}
+		});
 	}
 	
 	private void deleteReportFromLocal(int reportLocalID)
 	{
 		if (dbManager.deleteReport(reportLocalID))
 		{
-			getActivity().runOnUiThread(new Runnable()
-			{
-				public void run()
-				{
-					refreshReportListView();
-					ReimApplication.pDialog.dismiss();
-		            Toast.makeText(getActivity(),
-		            		R.string.deleteSucceed, Toast.LENGTH_LONG).show();
-				}
-			});															
+			refreshReportListView();
+			ReimApplication.pDialog.dismiss();
+            Toast.makeText(getActivity(), R.string.deleteSucceed, Toast.LENGTH_SHORT).show();														
 		}
 		else
 		{
-			getActivity().runOnUiThread(new Runnable()
-			{
-				public void run()
-				{
-					ReimApplication.pDialog.dismiss();
-		            Toast.makeText(getActivity(),
-		            		R.string.deleteFailed, Toast.LENGTH_LONG).show();
-				}
-			});		
+			ReimApplication.pDialog.dismiss();
+            Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
 		}		
 	}
 }

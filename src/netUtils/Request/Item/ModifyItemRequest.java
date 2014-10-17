@@ -51,10 +51,11 @@ public class ModifyItemRequest extends BaseRequest
 				}			
 			}
 			
+			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
 			JSONObject jObject = new JSONObject();
 			jObject.put("id", Integer.toString(item.getServerID()));
 			jObject.put("amount", item.getAmount());
-			jObject.put("category", item.getCategory().getServerID());
+			jObject.put("category", categoryID);
 			jObject.put("merchants", item.getMerchant());
 			jObject.put("uid", item.getConsumer().getServerID());
 			jObject.put("prove_ahead", Utils.booleanToString(item.isProveAhead()));

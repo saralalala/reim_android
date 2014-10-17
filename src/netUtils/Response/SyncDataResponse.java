@@ -67,7 +67,8 @@ public class SyncDataResponse extends BaseResponse
 				item.setConsumedDate(object.getInt("dt"));
 				item.setServerUpdatedDate(object.getInt("lastdt"));				
 				item.setLocalUpdatedDate(object.getInt("lastdt"));				
-				item.setImageID(object.getInt("image_id"));
+				item.setImageID(object.getInt("image_id"));		
+				item.setInvoicePath("");
 				item.setIsProveAhead(Utils.intToBoolean(object.getInt("prove_ahead")));
 				item.setNeedReimbursed(Utils.intToBoolean(object.getInt("reimbursed")));
 				

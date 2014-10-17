@@ -71,10 +71,13 @@ public class SignInActivity extends Activity
 		ReimApplication.setProgressDialog(this);
 		
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
-		passwordEditText = (EditText)findViewById(R.id.phonePasswordEditText);
+		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
 		
 		usernameEditText.setText(HttpConstant.DEBUG_EMAIL);
 		passwordEditText.setText(HttpConstant.DEBUG_PASSWORD);
+
+		usernameEditText.setText("y@rushucloud.com");
+		passwordEditText.setText("111111");
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
@@ -103,6 +106,7 @@ public class SignInActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				hideSoftKeyboard();
 				final String username = usernameEditText.getText().toString();
 				final String password = passwordEditText.getText().toString();
 				if (!Utils.isNetworkConnected(SignInActivity.this))
@@ -172,7 +176,6 @@ public class SignInActivity extends Activity
 					appPreference.setPassword(password);
 					appPreference.saveAppPreference();
 					
-					hideSoftKeyboard();
 					sendSignInRequest();
 				}
 			}
