@@ -29,6 +29,7 @@ public abstract class BaseResponse
 				{
 					setDataArray(object.getJSONArray("data"));
 				}
+				constructData();
 			}
 			else 
 			{

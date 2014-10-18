@@ -21,16 +21,17 @@ public class CommonResponse extends BaseResponse
 	private List<User> memberList = null;
 	private User currentUser = null;
 	private Group group = null;
+	
 	public CommonResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
+//		if (getStatus())
+//		{
+//			constructData();
+//		}
 	}
 
-	protected  void constructData()
+	protected void constructData()
 	{
 		try
 		{
