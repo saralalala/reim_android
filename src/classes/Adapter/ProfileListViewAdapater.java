@@ -24,15 +24,15 @@ public class ProfileListViewAdapater extends BaseAdapter
 	private ProfileActivity activity;
 	private AppPreference appPreference;
 	private DBManager dbManager;
-	private User user;
+	private User currentUser;
 	
 	public ProfileListViewAdapater(Context context)
 	{
 		layoutInflater = LayoutInflater.from(context);
 		activity = (ProfileActivity)context;
 		appPreference = AppPreference.getAppPreference();
-		dbManager = DBManager.getDBManager();
-		user = dbManager.getUser(appPreference.getCurrentUserID());				
+		dbManager = DBManager.getDBManager();	
+		currentUser = dbManager.getUser(appPreference.getCurrentUserID());
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -46,7 +46,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				TextView textView = (TextView)view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.email));
 				EditText editText = (EditText)view.findViewById(R.id.editText);
-				editText.setText(user.getEmail());
+				editText.setText(currentUser.getEmail());
 				editText.setHint(activity.getString(R.string.inputEmail));
 				break;
 			}
@@ -56,7 +56,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				TextView textView = (TextView)view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.phone));
 				EditText editText = (EditText)view.findViewById(R.id.editText);
-				editText.setText(user.getPhone());
+				editText.setText(currentUser.getPhone());
 				editText.setHint(activity.getString(R.string.inputPhone));
 				break;
 			}
@@ -68,7 +68,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				EditText editText = (EditText)view.findViewById(R.id.editText);
 				editText.setText(dbManager.getGroup(appPreference.getCurrentGroupID()).getName());
 				editText.setHint(activity.getString(R.string.inputCompanyName));
-				if (user.getPrivilege() == 0)
+				if (!currentUser.isAdmin())
 				{
 					editText.setEnabled(false);
 				}
@@ -80,7 +80,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				TextView textView = (TextView)view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.nickname));
 				EditText editText = (EditText)view.findViewById(R.id.editText);
-				editText.setText(user.getNickname());
+				editText.setText(currentUser.getNickname());
 				editText.setHint(activity.getString(R.string.inputNickname));
 				break;
 			}
@@ -98,6 +98,62 @@ public class ProfileListViewAdapater extends BaseAdapter
 				});
 				break;
 			}
+			case 5:
+			{
+				view = layoutInflater.inflate(R.layout.list_item_button, null);
+				Button button = (Button)view.findViewById(R.id.button);
+				button.setText(activity.getString(R.string.memberManagement));
+				button.setOnClickListener(new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						activity.startActivity(new Intent(activity.getBaseContext(), ChangePasswordActivity.class));
+					}
+				});
+				break;
+			}
+			case 6:
+			{
+				view = layoutInflater.inflate(R.layout.list_item_button, null);
+				Button button = (Button)view.findViewById(R.id.button);
+				button.setText(activity.getString(R.string.categoryManagement));
+				button.setOnClickListener(new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						activity.startActivity(new Intent(activity.getBaseContext(), ChangePasswordActivity.class));
+					}
+				});
+				break;
+			}
+			case 7:
+			{
+				view = layoutInflater.inflate(R.layout.list_item_button, null);
+				Button button = (Button)view.findViewById(R.id.button);
+				button.setText(activity.getString(R.string.tagManagement));
+				button.setOnClickListener(new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						activity.startActivity(new Intent(activity.getBaseContext(), ChangePasswordActivity.class));
+					}
+				});
+				break;
+			}
+			case 8:
+			{
+				view = layoutInflater.inflate(R.layout.list_item_button, null);
+				Button button = (Button)view.findViewById(R.id.button);
+				button.setText(activity.getString(R.string.subordinatesManagement));
+				button.setOnClickListener(new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						activity.startActivity(new Intent(activity.getBaseContext(), ChangePasswordActivity.class));
+					}
+				});
+				break;
+			}
 			default:
 				break;
 		}
@@ -106,7 +162,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 	
 	public int getCount()
 	{
-		return 5;
+		return currentUser.isAdmin() ? 9 : 5;
 	}
 
 	public Object getItem(int position)

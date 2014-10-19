@@ -16,19 +16,15 @@ import classes.Utils;
 
 public class CommonResponse extends BaseResponse
 {
-	private List<Category> categoryList = null;
-	private List<Tag> tagList = null;
-	private List<User> memberList = null;
-	private User currentUser = null;
-	private Group group = null;
+	private List<Category> categoryList;
+	private List<Tag> tagList;
+	private List<User> memberList;
+	private User currentUser;
+	private Group group;
 	
 	public CommonResponse(Object httpResponse)
 	{
 		super(httpResponse);
-//		if (getStatus())
-//		{
-//			constructData();
-//		}
 	}
 
 	protected void constructData()
@@ -58,12 +54,21 @@ public class CommonResponse extends BaseResponse
 			currentUser.setEmail(profileObject.getString("email"));
 			currentUser.setPhone(profileObject.getString("phone"));
 			currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
-			currentUser.setAvatarPath(profileObject.getString("avatar"));
+			currentUser.setAvatarPath("");
 			currentUser.setIsAdmin(Utils.intToBoolean(profileObject.getInt("admin")));
 			currentUser.setIsActive(Utils.intToBoolean(profileObject.getInt("active")));
 			currentUser.setGroupID(groupID);
 			currentUser.setLocalUpdatedDate(profileObject.getInt("lastdt"));
 			currentUser.setServerUpdatedDate(profileObject.getInt("lastdt"));
+			String imageID = profileObject.getString("avatar");
+			if (imageID.equals(""))
+			{
+				currentUser.setImageID(-1);					
+			}
+			else
+			{
+				currentUser.setImageID(Integer.valueOf(imageID));
+			}
 			
 			JSONArray categoryArray = jObject.getJSONArray("categories");
 			categoryList = new ArrayList<Category>();
@@ -109,9 +114,18 @@ public class CommonResponse extends BaseResponse
 				user.setIsAdmin(Utils.intToBoolean(object.getInt("admin")));
 				user.setDefaultManagerID(object.getInt("manager_id"));
 				user.setGroupID(groupID);
-				user.setAvatarPath(object.getString("avatar"));
-				user.setLocalUpdatedDate(Utils.getCurrentTime());
-				user.setServerUpdatedDate(Utils.getCurrentTime());
+				user.setAvatarPath("");
+				currentUser.setLocalUpdatedDate(profileObject.getInt("lastdt"));
+				currentUser.setServerUpdatedDate(profileObject.getInt("lastdt"));
+				imageID = object.getString("avatar");
+				if (imageID.equals(""))
+				{
+					user.setImageID(-1);					
+				}
+				else
+				{
+					user.setImageID(Integer.valueOf(imageID));
+				}
 				memberList.add(user);
 			}
 			

@@ -51,7 +51,9 @@ public class MeFragment extends Fragment
 	
 	private MeListViewAdapater adapter;
 	private ListView meListView;
-	private String avatarPath = "";
+	
+	private User currentUser;
+	private Uri originalImageUri;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -62,6 +64,7 @@ public class MeFragment extends Fragment
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("MeFragment");
+        currentUser = DBManager.getDBManager().getUser(AppPreference.getAppPreference().getCurrentUserID());
         viewInitialise();
 	}
 
@@ -105,15 +108,36 @@ public class MeFragment extends Fragment
 			{
 				if (requestCode == PICK_IMAGE || requestCode == TAKE_PHOTO)
 				{
+					originalImageUri = null;
 					cropImage(data.getData());
+				}
+				else if (requestCode == TAKE_PHOTO)
+				{
+					originalImageUri = data.getData();
+					cropImage(data.getData());					
 				}
 				else
 				{
-					Uri uri = Uri.parse(data.getAction());
-					Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-					saveBitmapToFile(bitmap);
-					getActivity().getContentResolver().delete(uri, null, null);
-					sendUploadAvatarRequest();
+					Uri newImageUri = Uri.parse(data.getAction());
+					Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), newImageUri);
+					String avatarPath = saveBitmapToFile(bitmap);
+					
+					if (!avatarPath.equals(""))
+					{
+						currentUser.setAvatarPath(avatarPath);
+						currentUser.setImageID(-1);
+						sendUploadAvatarRequest();
+					}
+					else
+					{
+						Toast.makeText(getActivity(), "头像保存失败", Toast.LENGTH_SHORT).show();
+					}					
+					
+					if (originalImageUri != null)
+					{
+						getActivity().getContentResolver().delete(originalImageUri, null, null);							
+					}
+					getActivity().getContentResolver().delete(newImageUri, null, null);	
 				}
 			}
 			catch (FileNotFoundException e)
@@ -161,7 +185,10 @@ public class MeFragment extends Fragment
 			}
 		});
         
-        sendDownloadAvatarRequest();
+        if (currentUser.getAvatarPath().equals("") && currentUser.getImageID() != -1)
+		{
+            sendDownloadAvatarRequest();			
+		}
 	}
 
     private void cropImage(Uri uri)
@@ -189,7 +216,7 @@ public class MeFragment extends Fragment
 		}
     }
 	
-    private Boolean saveBitmapToFile(Bitmap bitmap)
+    private String saveBitmapToFile(Bitmap bitmap)
     {
     	try
 		{    		
@@ -199,7 +226,8 @@ public class MeFragment extends Fragment
     		
     		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     		
-    		File compressedBitmapFile = new File(appPreference.getProfileImageDirectory(), Utils.getImageName());
+    		String path = appPreference.getProfileImageDirectory() + "/" + Utils.getImageName();
+    		File compressedBitmapFile = new File(path);
     		compressedBitmapFile.createNewFile();
     		
     		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -211,19 +239,18 @@ public class MeFragment extends Fragment
     		fileOutputStream.flush();
     		fileOutputStream.close();	
     		
-    		avatarPath = appPreference.getProfileImageDirectory() + "/" + Utils.getImageName();
-    		return true;
+    		return path;
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
-			return false;
+			return "";
 		}
     }
-
+    
     private void sendUploadAvatarRequest()
     {
-		UploadImageRequest request = new UploadImageRequest(avatarPath, HttpConstant.IMAGE_TYPE_AVATAR);
+		UploadImageRequest request = new UploadImageRequest(currentUser.getAvatarPath(), HttpConstant.IMAGE_TYPE_AVATAR);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -232,16 +259,16 @@ public class MeFragment extends Fragment
 				if (response.getStatus())
 				{
 					DBManager dbManager = DBManager.getDBManager();
-					User user = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());
-					user.setAvatarPath(avatarPath);
-					user.setLocalUpdatedDate(Utils.getCurrentTime());
-					user.setServerUpdatedDate(Utils.getCurrentTime());
-					if (dbManager.updateUser(user))
+					currentUser.setImageID(response.getImageID());
+					currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
+					currentUser.setServerUpdatedDate(Utils.getCurrentTime());
+					if (dbManager.updateUser(currentUser))
 					{
 						getActivity().runOnUiThread(new Runnable()
 						{
 							public void run()
 							{
+								meListView.setAdapter(adapter);
 								adapter.notifyDataSetChanged();
 								Toast.makeText(getActivity(), "头像上传成功", Toast.LENGTH_SHORT).show();
 							}
@@ -276,8 +303,7 @@ public class MeFragment extends Fragment
     private void sendDownloadAvatarRequest()
     {
     	final DBManager dbManager = DBManager.getDBManager();
-    	final User user = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());
-    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarPath());
+    	DownloadImageRequest request = new DownloadImageRequest(currentUser.getImageID());
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -285,18 +311,40 @@ public class MeFragment extends Fragment
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					saveBitmapToFile(response.getBitmap());
-					user.setAvatarPath(avatarPath);
-					dbManager.updateUser(user);
-					
+					String avatarPath = saveBitmapToFile(response.getBitmap());
+					currentUser.setAvatarPath(avatarPath);
+					currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
+					currentUser.setServerUpdatedDate(currentUser.getLocalUpdatedDate());
+					if (dbManager.updateUser(currentUser))
+					{
+						getActivity().runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								adapter.notifyDataSetChanged();
+							}
+						});						
+					}
+					else
+					{
+						getActivity().runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								Toast.makeText(getActivity(), "头像保存失败", Toast.LENGTH_SHORT).show();
+							}
+						});						
+					}
+				}
+				else
+				{
 					getActivity().runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
-							meListView.setAdapter(adapter);
-							adapter.notifyDataSetChanged();
+							Toast.makeText(getActivity(), "头像下载失败", Toast.LENGTH_SHORT).show();
 						}
-					});
+					});						
 				}
 			}
 		});

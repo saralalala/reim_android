@@ -223,6 +223,7 @@ public class SignInActivity extends Activity
 						
 						// update members
 						dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+						dbManager.updateUser(response.getCurrentUser());
 						
 						// update categories
 						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

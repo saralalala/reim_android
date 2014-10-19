@@ -13,6 +13,7 @@ public class User implements Serializable
 	private String password = "";
 	private String nickname = "";
 	private String phone = "";
+	private int imageID = -1;
 	private String avatarPath = "";
 	private int privilege = 0;
 	private Boolean isActive = false;
@@ -65,6 +66,15 @@ public class User implements Serializable
 	public void setPhone(String phone)
 	{
 		this.phone = phone;
+	}
+	
+	public int getImageID()
+	{
+		return imageID;
+	}
+	public void setImageID(int imageID)
+	{
+		this.imageID = imageID;
 	}
 	
 	public String getAvatarPath()

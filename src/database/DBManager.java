@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import classes.AppPreference;
 import classes.Category;
 import classes.Comment;
 import classes.Group;
@@ -160,6 +161,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "email TEXT DEFAULT(''),"
 										+ "phone TEXT DEFAULT(''),"
 										+ "nickname TEXT DEFAULT(''),"
+										+ "image_id INT DEFAULT(0),"
 										+ "avatar_path TEXT DEFAULT(''),"
 										+ "privilege INT DEFAULT(0),"
 										+ "manager_id INT DEFAULT(0),"
@@ -261,12 +263,13 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, avatar_path, privilege, manager_id, " +
+			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, image_id, avatar_path, privilege, manager_id, " +
 								"group_id, admin, local_updatedt, server_updatedt) VALUES (" +
 								"'" + user.getServerID() + "'," +
 								"'" + user.getEmail() + "'," +
 								"'" + user.getPhone() + "'," +
 								"'" + user.getNickname() + "'," +
+								"'" + user.getImageID() + "'," +
 								"'" + user.getAvatarPath() + "'," +
 								"'" + user.getPrivilege() + "'," +
 								"'" + user.getDefaultManagerID() + "'," +
@@ -293,6 +296,7 @@ public class DBManager extends SQLiteOpenHelper
 								"email = '" + user.getEmail() + "'," +
 								"phone = '" + user.getPhone() + "'," +
 								"nickname = '" + user.getNickname() + "'," +
+								"image_id = '" + user.getImageID() + "'," +
 								"avatar_path = '" + user.getAvatarPath() + "'," +
 								"manager_id = '" + user.getDefaultManagerID() + "'," +
 								"group_id = '" + user.getGroupID() + "'," +
@@ -354,8 +358,8 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_path, privilege, manager_id, " +
-											  "group_id, admin, local_updatedt, server_updatedt " +
+			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, image_id, avatar_path, privilege, " +
+											  "manager_id, group_id, admin, local_updatedt, server_updatedt " +
 					                          "FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
 			if (cursor.moveToNext())
 			{
@@ -364,6 +368,7 @@ public class DBManager extends SQLiteOpenHelper
 				user.setEmail(getStringFromCursor(cursor, "email"));
 				user.setPhone(getStringFromCursor(cursor, "phone"));
 				user.setNickname(getStringFromCursor(cursor, "nickname"));
+				user.setImageID(getIntFromCursor(cursor, "image_id"));
 				user.setAvatarPath(getStringFromCursor(cursor, "avatar_path"));
 				user.setPrivilege(getIntFromCursor(cursor, "privilege"));
 				user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
@@ -405,8 +410,25 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			deleteGroupUsers(groupServerID);
-			insertUserList(userList);
+			List<Integer> idArray = new ArrayList<Integer>();
+			for (User user : userList)
+			{
+				idArray.add(user.getServerID());
+			}
+
+			List<User> userLocalList = getGroupUsers(AppPreference.getAppPreference().getCurrentGroupID());
+			for (User user : userLocalList)
+			{
+				if (idArray.indexOf(user.getServerID()) == -1)
+				{
+					deleteUser(user.getServerID());
+				}
+			}
+			
+			for (User user : userList)
+			{
+				syncUser(user);
+			}
 			return true;
 		}
 		catch (Exception e)
@@ -421,7 +443,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 
-			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_path, privilege, manager_id, " +
+			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, image_id, avatar_path, privilege, manager_id, " +
 											  "group_id, admin, local_updatedt, server_updatedt " +
 					                          "FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
 			while (cursor.moveToNext())
@@ -431,6 +453,7 @@ public class DBManager extends SQLiteOpenHelper
 				user.setEmail(getStringFromCursor(cursor, "email"));
 				user.setPhone(getStringFromCursor(cursor, "phone"));
 				user.setNickname(getStringFromCursor(cursor, "nickname"));
+				user.setImageID(getIntFromCursor(cursor, "image_id"));
 				user.setAvatarPath(getStringFromCursor(cursor, "avatar_path"));
 				user.setPrivilege(getIntFromCursor(cursor, "privilege"));
 				user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));

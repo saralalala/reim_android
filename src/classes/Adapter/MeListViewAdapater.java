@@ -49,7 +49,7 @@ public class MeListViewAdapater extends BaseAdapter
 				view = layoutInflater.inflate(R.layout.list_item_profile, null);
 				
 				ImageView imageView = (ImageView)view.findViewById(R.id.imageView);				
-				if (currentUser.getAvatarPath().startsWith("/images") || currentUser.getAvatarPath().equals(""))
+				if (currentUser.getAvatarPath().equals(""))
 				{
 					imageView.setImageResource(R.drawable.default_avatar);
 				}

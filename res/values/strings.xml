@@ -73,6 +73,10 @@
     <string name="companyName">公司名称</string>
     <string name="nickname">昵称</string>
     <string name="changePassword">修改密码</string>
+    <string name="memberManagement">人员管理</string>
+    <string name="categoryManagement">类别管理</string>
+    <string name="tagManagement">标签管理</string>
+    <string name="subordinatesManagement">下属管理</string>
     <string name="inputCompanyName">请输入公司名称</string>
     <string name="inputNickname">请输入昵称</string>
     <string name="inputOldPassword">请输入旧密码</string>

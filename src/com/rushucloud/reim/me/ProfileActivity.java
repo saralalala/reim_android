@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 public class ProfileActivity extends Activity
 {
+	private ListView profileListView;
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -26,6 +28,7 @@ public class ProfileActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ProfileActivity");		
 		MobclickAgent.onResume(this);
+		refreshListView();
 	}
 
 	protected void onPause()
@@ -64,15 +67,12 @@ public class ProfileActivity extends Activity
 	
 	private void viewInitialise()
 	{
-		try
-		{
-			ProfileListViewAdapater adapter = new ProfileListViewAdapater(ProfileActivity.this);
-			ListView profileListView = (ListView)findViewById(R.id.profileListView);
-			profileListView.setAdapter(adapter);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		profileListView = (ListView)findViewById(R.id.profileListView);
+	}
+	
+	private void refreshListView()
+	{
+		ProfileListViewAdapater adapter = new ProfileListViewAdapater(ProfileActivity.this);
+		profileListView.setAdapter(adapter);
 	}
 }

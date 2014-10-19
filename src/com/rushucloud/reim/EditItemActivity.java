@@ -149,8 +149,13 @@ public class EditItemActivity extends Activity
 			{
 				if (requestCode == PICK_IMAGE || requestCode == TAKE_PHOTO)
 				{
+					originalImageUri = null;
+					cropImage(data.getData());
+				}
+				else if (requestCode == TAKE_PHOTO)
+				{
 					originalImageUri = data.getData();
-					cropImage();
+					cropImage(originalImageUri);
 				}
 				else
 				{
@@ -166,9 +171,13 @@ public class EditItemActivity extends Activity
 					else
 					{
 						Toast.makeText(EditItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+					}	
+					
+					if (originalImageUri != null)
+					{
+						getContentResolver().delete(originalImageUri, null, null);							
 					}
-					this.getContentResolver().delete(originalImageUri, null, null);	
-					this.getContentResolver().delete(newImageUri, null, null);	
+					getContentResolver().delete(newImageUri, null, null);	
 				}
 			}
 			catch (FileNotFoundException e)
@@ -674,13 +683,13 @@ public class EditItemActivity extends Activity
 		imm.hideSoftInputFromWindow(noteEditText.getWindowToken(), 0);  	
     }
 
-    private void cropImage()
+    private void cropImage(Uri uri)
     {
 		try
 		{
-			Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), originalImageUri);
+			Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
 	    	Intent intent = new Intent("com.android.camera.action.CROP");
-	    	intent.setDataAndType(originalImageUri, "image/*");
+	    	intent.setDataAndType(uri, "image/*");
 	    	intent.putExtra("crop", "true");
 	    	intent.putExtra("aspectX", 1);
 	    	intent.putExtra("aspectY", 1);
