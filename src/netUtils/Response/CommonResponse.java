@@ -115,8 +115,8 @@ public class CommonResponse extends BaseResponse
 				user.setDefaultManagerID(object.getInt("manager_id"));
 				user.setGroupID(groupID);
 				user.setAvatarPath("");
-				currentUser.setLocalUpdatedDate(profileObject.getInt("lastdt"));
-				currentUser.setServerUpdatedDate(profileObject.getInt("lastdt"));
+				user.setLocalUpdatedDate(object.getInt("dt"));
+				user.setServerUpdatedDate(object.getInt("dt"));
 				imageID = object.getString("avatar");
 				if (imageID.equals(""))
 				{

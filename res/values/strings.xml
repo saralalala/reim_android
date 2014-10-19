@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Reim</string>
+    <string name="app_name">如数云报销</string>
     <string name="background">背景</string>
     <string name="action_settings">设置</string>
     <string name="nullString"></string>
@@ -73,15 +73,18 @@
     <string name="companyName">公司名称</string>
     <string name="nickname">昵称</string>
     <string name="changePassword">修改密码</string>
-    <string name="memberManagement">人员管理</string>
-    <string name="categoryManagement">类别管理</string>
+    <string name="defaultManager">设置默认上级</string>
+    <string name="categoryManagement">分类管理</string>
     <string name="tagManagement">标签管理</string>
-    <string name="subordinatesManagement">下属管理</string>
     <string name="inputCompanyName">请输入公司名称</string>
     <string name="inputNickname">请输入昵称</string>
     <string name="inputOldPassword">请输入旧密码</string>
     <string name="confirmNewPasswordPrompt">请确认新密码</string>
     <string name="inputFeedback">请输入您的意见或建议</string>
     <string name="inputContactInfo">请输入您的联系方式</string>
+    <string name="inputCategoryName">请输入分类名称</string>
+    <string name="inputCategoryLimit">请输入分类限额</string>
+    <string name="subCategory">子分类</string>
+    <string name="inputTagName">请输入标签名称</string>
 
 </resources>

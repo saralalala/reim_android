@@ -1821,8 +1821,39 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			Cursor cursor = database.rawQuery("SELECT server_id, category_name, max_limit, group_id, " +
 					                          "parent_id, prove_ahead, local_updatedt, server_updatedt " +
-					                          "FROM tbl_category WHERE group_id = ?", 
+					                          "FROM tbl_category WHERE group_id = ? AND parent_id = 0", 
 					                          new String[]{Integer.toString(groupServerID)});
+			while (cursor.moveToNext())
+			{
+				Category category = new Category();
+				category.setServerID(getIntFromCursor(cursor, "server_id"));
+				category.setName(getStringFromCursor(cursor, "category_name"));
+				category.setLimit(getDoubleFromCursor(cursor, "max_limit"));
+				category.setGroupID(getIntFromCursor(cursor, "group_id"));
+				category.setParentID(getIntFromCursor(cursor, "parent_id"));
+				category.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				categoryList.add(category);
+			}
+			return categoryList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return categoryList;
+		}
+	}
+	
+	public List<Category> getSubCategories(int parentServerID, int groupServerID)
+	{
+		List<Category> categoryList = new ArrayList<Category>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT server_id, category_name, max_limit, group_id, " +
+					                          "parent_id, prove_ahead, local_updatedt, server_updatedt " +
+					                          "FROM tbl_category WHERE group_id = ? AND parent_id = ?", 
+					                          new String[]{Integer.toString(groupServerID), Integer.toString(parentServerID)});
 			while (cursor.moveToNext())
 			{
 				Category category = new Category();
@@ -1850,6 +1881,22 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "DELETE FROM tbl_category WHERE group_id = '" + groupServerID + "'";			
+			database.execSQL(sqlString);			
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}	
+	}	
+	
+	public Boolean deleteSubCategories(int categoryServerID, int groupServerID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_category WHERE group_id = '" + groupServerID + "' " +
+								"AND server_id = '" + categoryServerID + "'";			
 			database.execSQL(sqlString);
 			return true;
 		}
@@ -2096,7 +2143,7 @@ public class DBManager extends SQLiteOpenHelper
 				}
 			}
 			
-			return tags.size() > 0? tags : null;
+			return tags.size() > 0 ? tags : null;
 		}
 		catch (Exception e)
 		{

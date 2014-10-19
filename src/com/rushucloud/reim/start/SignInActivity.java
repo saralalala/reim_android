@@ -6,6 +6,7 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Response.CommonResponse;
 import classes.AppPreference;
 import classes.ReimApplication;
+import classes.User;
 import classes.Utils;
 
 import com.rushucloud.reim.MainActivity;
@@ -223,7 +224,19 @@ public class SignInActivity extends Activity
 						
 						// update members
 						dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-						dbManager.updateUser(response.getCurrentUser());
+						
+						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());						
+						if (localUser.getServerUpdatedDate() == response.getCurrentUser().getServerUpdatedDate())
+						{
+							if (localUser.getAvatarPath().equals(""))
+							{
+								dbManager.updateUser(response.getCurrentUser());								
+							}
+						}
+						else
+						{
+							dbManager.syncUser(response.getCurrentUser())	;
+						}
 						
 						// update categories
 						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

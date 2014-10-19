@@ -13,6 +13,7 @@ import netUtils.Response.Report.DeleteReportResponse;
 import classes.AppPreference;
 import classes.ReimApplication;
 import classes.Report;
+import classes.Utils;
 import classes.Adapter.ReportListViewAdapter;
 import database.DBManager;
 import android.app.AlertDialog;
@@ -87,7 +88,11 @@ public class ReportFragment extends Fragment
     	switch (item.getItemId()) 
     	{
 			case 0:
-				if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECT)
+				if (!Utils.isDataConnected(getActivity()))
+				{
+					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
+				}
+				else if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECT)
 				{
 					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
 														.setTitle("警告")

@@ -54,9 +54,11 @@ public class MeFragment extends Fragment
 	
 	private User currentUser;
 	private Uri originalImageUri;
+	private String avatarPath;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
+        currentUser = DBManager.getDBManager().getUser(AppPreference.getAppPreference().getCurrentUserID());
 	    return inflater.inflate(R.layout.fragment_me, container, false);  
 	}
 
@@ -64,7 +66,6 @@ public class MeFragment extends Fragment
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("MeFragment");
-        currentUser = DBManager.getDBManager().getUser(AppPreference.getAppPreference().getCurrentUserID());
         viewInitialise();
 	}
 
@@ -120,12 +121,10 @@ public class MeFragment extends Fragment
 				{
 					Uri newImageUri = Uri.parse(data.getAction());
 					Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), newImageUri);
-					String avatarPath = saveBitmapToFile(bitmap);
+					avatarPath = saveBitmapToFile(bitmap);
 					
 					if (!avatarPath.equals(""))
 					{
-						currentUser.setAvatarPath(avatarPath);
-						currentUser.setImageID(-1);
 						sendUploadAvatarRequest();
 					}
 					else
@@ -250,7 +249,7 @@ public class MeFragment extends Fragment
     
     private void sendUploadAvatarRequest()
     {
-		UploadImageRequest request = new UploadImageRequest(currentUser.getAvatarPath(), HttpConstant.IMAGE_TYPE_AVATAR);
+		UploadImageRequest request = new UploadImageRequest(avatarPath, HttpConstant.IMAGE_TYPE_AVATAR);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -260,31 +259,20 @@ public class MeFragment extends Fragment
 				{
 					DBManager dbManager = DBManager.getDBManager();
 					currentUser.setImageID(response.getImageID());
+					currentUser.setAvatarPath(avatarPath);
 					currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
 					currentUser.setServerUpdatedDate(Utils.getCurrentTime());
-					if (dbManager.updateUser(currentUser))
+					dbManager.updateUser(currentUser);
+					
+					getActivity().runOnUiThread(new Runnable()
 					{
-						getActivity().runOnUiThread(new Runnable()
+						public void run()
 						{
-							public void run()
-							{
-								meListView.setAdapter(adapter);
-								adapter.notifyDataSetChanged();
-								Toast.makeText(getActivity(), "头像上传成功", Toast.LENGTH_SHORT).show();
-							}
-						});		
-					}
-					else
-					{
-						getActivity().runOnUiThread(new Runnable()
-						{
-							public void run()
-							{
-								adapter.notifyDataSetChanged();
-								Toast.makeText(getActivity(), "头像上传失败", Toast.LENGTH_SHORT).show();
-							}
-						});	
-					}
+							meListView.setAdapter(adapter);
+							adapter.notifyDataSetChanged();
+							Toast.makeText(getActivity(), "头像上传成功", Toast.LENGTH_SHORT).show();
+						}
+					});	
 				}
 				else
 				{
@@ -311,7 +299,7 @@ public class MeFragment extends Fragment
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String avatarPath = saveBitmapToFile(response.getBitmap());
+					avatarPath = saveBitmapToFile(response.getBitmap());
 					currentUser.setAvatarPath(avatarPath);
 					currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
 					currentUser.setServerUpdatedDate(currentUser.getLocalUpdatedDate());

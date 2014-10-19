@@ -4,6 +4,7 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.CommonRequest;
 import netUtils.Response.CommonResponse;
 import classes.AppPreference;
+import classes.User;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -108,6 +109,19 @@ public class SplashActivity extends Activity
 						
 						// update members
 						dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+						
+						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());						
+						if (localUser.getServerUpdatedDate() == response.getCurrentUser().getServerUpdatedDate())
+						{
+							if (localUser.getAvatarPath().equals(""))
+							{
+								dbManager.updateUser(response.getCurrentUser());								
+							}
+						}
+						else
+						{
+							dbManager.syncUser(response.getCurrentUser())	;
+						}
 						
 						// update categories
 						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

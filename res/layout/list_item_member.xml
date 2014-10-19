@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:paddingTop="5dp"
         android:paddingLeft="5dp"
         android:paddingBottom="5dp"
@@ -15,21 +15,10 @@
         android:scaleType="fitXY"
         android:contentDescription="@string/avatar" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/nicknameTextView"
+        android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/nicknameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/companyTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

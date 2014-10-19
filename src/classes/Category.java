@@ -5,12 +5,12 @@ import java.util.List;
 
 public class Category
 {
-	private int serverID;
-	private String name;
-	private double limit;
-	private int groupID;
-	private int parentID;
-	private Boolean isProveAhead;
+	private int serverID = -1;
+	private String name = "";
+	private double limit = 0;
+	private int groupID = -1;
+	private int parentID = 0;
+	private Boolean isProveAhead = false;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 

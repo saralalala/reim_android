@@ -112,7 +112,11 @@ public class ReimFragment extends Fragment
 		switch (item.getItemId())
 		{
 			case 0:
-				if (report != null && (report.getStatus() != Report.STATUS_DRAFT || 
+				if (!Utils.isDataConnected(getActivity()))
+				{
+					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
+				}
+				else if (report != null && (report.getStatus() != Report.STATUS_DRAFT || 
 									   report.getStatus() != Report.STATUS_REJECT))
 				{
 					Toast.makeText(getActivity(), "条目已提交，不可删除", Toast.LENGTH_SHORT).show();
@@ -120,7 +124,8 @@ public class ReimFragment extends Fragment
 				}
 				else
 				{
-					AlertDialog mDialog = new AlertDialog.Builder(getActivity()).setTitle("警告")
+					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
+											.setTitle("警告")
 											.setMessage(R.string.deleteItemWarning)
 											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 											{

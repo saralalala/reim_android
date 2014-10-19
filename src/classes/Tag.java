@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Tag
 {
-	private int serverID;
-	private int groupID;
-	private String name;
+	private int serverID = -1;
+	private int groupID = -1;
+	private String name = "";
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 	

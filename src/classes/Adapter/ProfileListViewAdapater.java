@@ -4,8 +4,10 @@ import classes.AppPreference;
 import classes.User;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.me.CategoryActivity;
 import com.rushucloud.reim.me.ChangePasswordActivity;
 import com.rushucloud.reim.me.ProfileActivity;
+import com.rushucloud.reim.me.TagActivity;
 
 import database.DBManager;
 import android.content.Context;
@@ -102,12 +104,12 @@ public class ProfileListViewAdapater extends BaseAdapter
 			{
 				view = layoutInflater.inflate(R.layout.list_item_button, null);
 				Button button = (Button)view.findViewById(R.id.button);
-				button.setText(activity.getString(R.string.memberManagement));
+				button.setText(activity.getString(R.string.defaultManager));
 				button.setOnClickListener(new View.OnClickListener()
 				{
 					public void onClick(View v)
 					{
-						activity.startActivity(new Intent(activity.getBaseContext(), ChangePasswordActivity.class));
+						
 					}
 				});
 				break;
@@ -121,7 +123,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				{
 					public void onClick(View v)
 					{
-						activity.startActivity(new Intent(activity.getBaseContext(), ChangePasswordActivity.class));
+						activity.startActivity(new Intent(activity.getBaseContext(), CategoryActivity.class));
 					}
 				});
 				break;
@@ -135,21 +137,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				{
 					public void onClick(View v)
 					{
-						activity.startActivity(new Intent(activity.getBaseContext(), ChangePasswordActivity.class));
-					}
-				});
-				break;
-			}
-			case 8:
-			{
-				view = layoutInflater.inflate(R.layout.list_item_button, null);
-				Button button = (Button)view.findViewById(R.id.button);
-				button.setText(activity.getString(R.string.subordinatesManagement));
-				button.setOnClickListener(new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						activity.startActivity(new Intent(activity.getBaseContext(), ChangePasswordActivity.class));
+						activity.startActivity(new Intent(activity.getBaseContext(), TagActivity.class));
 					}
 				});
 				break;
@@ -162,7 +150,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 	
 	public int getCount()
 	{
-		return currentUser.isAdmin() ? 9 : 5;
+		return currentUser.isAdmin() && currentUser.getGroupID() != -1 ? 8 : 5;
 	}
 
 	public Object getItem(int position)
