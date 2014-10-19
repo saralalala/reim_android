@@ -58,7 +58,7 @@ public class DefaultManagerActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("CategoryActivity");		
+		MobclickAgent.onPageStart("DefaultManagerActivity");		
 		MobclickAgent.onResume(this);
 		refreshListView();
 	}
@@ -66,7 +66,7 @@ public class DefaultManagerActivity extends Activity
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("CategoryActivity");
+		MobclickAgent.onPageEnd("DefaultManagerActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -169,6 +169,8 @@ public class DefaultManagerActivity extends Activity
 	
 	private void viewInitialise()
 	{
+		ReimApplication.setProgressDialog(this);
+		
 		categoryListView = (ListView)findViewById(R.id.categoryListView);
 		categoryListView.setOnItemClickListener(new OnItemClickListener()
 		{

@@ -36,7 +36,7 @@ public class ReimApplication extends Application
 		PushService.subscribe(this, "public", WelcomeActivity.class);
 		AVInstallation.getCurrentInstallation().saveInBackground();
 		MobclickAgent.openActivityDurationTrack(false);
-		
+
 //		System.out.println(getDeviceInfo(this));
 	}
 

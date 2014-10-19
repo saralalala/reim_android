@@ -56,7 +56,7 @@ public class SubCategoryActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("CategoryActivity");		
+		MobclickAgent.onPageStart("SubCategoryActivity");		
 		MobclickAgent.onResume(this);
 		refreshListView();
 	}
@@ -64,7 +64,7 @@ public class SubCategoryActivity extends Activity
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("CategoryActivity");
+		MobclickAgent.onPageEnd("SubCategoryActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -169,6 +169,8 @@ public class SubCategoryActivity extends Activity
 	
 	private void viewInitialise()
 	{
+		ReimApplication.setProgressDialog(this);
+		
 		categoryListView = (ListView)findViewById(R.id.categoryListView);
 		registerForContextMenu(categoryListView);
 	}

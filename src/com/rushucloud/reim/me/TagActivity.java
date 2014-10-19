@@ -154,6 +154,8 @@ public class TagActivity extends Activity
 	
 	private void viewInitialise()
 	{
+		ReimApplication.setProgressDialog(this);
+		
 		tagListView = (ListView)findViewById(R.id.tagListView);
 		tagListView.setOnItemClickListener(new OnItemClickListener()
 		{

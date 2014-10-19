@@ -68,7 +68,10 @@ public class ProfileListViewAdapater extends BaseAdapter
 				TextView textView = (TextView)view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.companyName));
 				EditText editText = (EditText)view.findViewById(R.id.editText);
-				editText.setText(dbManager.getGroup(appPreference.getCurrentGroupID()).getName());
+				if (appPreference.getCurrentGroupID() != -1)
+				{
+					editText.setText(dbManager.getGroup(appPreference.getCurrentGroupID()).getName());					
+				}
 				editText.setHint(activity.getString(R.string.inputCompanyName));
 				if (!currentUser.isAdmin())
 				{

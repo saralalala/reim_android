@@ -8,6 +8,7 @@ import netUtils.Response.CommonResponse;
 import netUtils.Response.User.RegisterResponse;
 import netUtils.Response.User.VerifyCodeResponse;
 import classes.AppPreference;
+import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
 
@@ -111,6 +112,8 @@ public class SignUpActivity extends Activity
 	
 	private void viewIntialise()
 	{
+		ReimApplication.setProgressDialog(this);
+		
 		phoneEditText = (EditText)findViewById(R.id.mobileEditText);
 		phonePasswordEditText = (EditText)findViewById(R.id.mobilePasswordEditText);
 		codeEditText = (EditText)findViewById(R.id.codeEditText);
@@ -365,6 +368,7 @@ public class SignUpActivity extends Activity
 	
 	private void sendRegisterRequest(final User user, String verifyCode)
 	{
+		ReimApplication.pDialog.show();
 		RegisterRequest request = new RegisterRequest(user, verifyCode);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -510,6 +514,7 @@ public class SignUpActivity extends Activity
 					{
 						public void run()
 						{
+							ReimApplication.pDialog.dismiss();
 							String message = "注册成功！";
 							if (code.equals(""))
 							{

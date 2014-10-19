@@ -1,8 +1,9 @@
 package com.rushucloud.reim;
 
+import classes.ReimApplication;
+
 import com.umeng.analytics.MobclickAgent;
 
-import classes.ReimApplication;
 import database.DBManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
@@ -30,8 +31,8 @@ public class MainActivity extends ActionBarActivity {
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		ReimApplication.setProgressDialog(this);
 		tabHostInitialse();
+		ReimApplication.setProgressDialog(this);
 	}
 
 	protected void onResume()
