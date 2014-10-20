@@ -12,10 +12,6 @@ public class ModifyItemsResponse extends BaseResponse
 	public ModifyItemsResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()

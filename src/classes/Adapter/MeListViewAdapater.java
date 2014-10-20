@@ -2,6 +2,7 @@ package classes.Adapter;
 
 import classes.AppPreference;
 import classes.Group;
+import classes.ReimApplication;
 import classes.User;
 
 import com.rushucloud.reim.ImageActivity;
@@ -85,24 +86,24 @@ public class MeListViewAdapater extends BaseAdapter
 				}
 				break;
 			}
+//			case 1:
+//			{
+//				view = layoutInflater.inflate(R.layout.list_item_toggle, null);
+//				TextView textView = (TextView)view.findViewById(R.id.textView);
+//				textView.setText(fragment.getString(R.string.enablePasswordProtection));
+//				final ToggleButton toggleButton = (ToggleButton)view.findViewById(R.id.toggleButton);
+//				toggleButton.setChecked(appPreference.passwordProtectionEnabled());
+//				toggleButton.setOnClickListener(new View.OnClickListener()
+//				{
+//					public void onClick(View v)
+//					{
+//						appPreference.setEnablePasswordProtection(toggleButton.isChecked());
+//						appPreference.saveAppPreference();
+//					}
+//				});
+//				break;
+//			}
 			case 1:
-			{
-				view = layoutInflater.inflate(R.layout.list_item_toggle, null);
-				TextView textView = (TextView)view.findViewById(R.id.textView);
-				textView.setText(fragment.getString(R.string.enablePasswordProtection));
-				final ToggleButton toggleButton = (ToggleButton)view.findViewById(R.id.toggleButton);
-				toggleButton.setChecked(appPreference.passwordProtectionEnabled());
-				toggleButton.setOnClickListener(new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						appPreference.setEnablePasswordProtection(toggleButton.isChecked());
-						appPreference.saveAppPreference();
-					}
-				});
-				break;
-			}
-			case 2:
 			{
 				view = layoutInflater.inflate(R.layout.list_item_toggle, null);
 				TextView textView = (TextView)view.findViewById(R.id.textView);
@@ -119,11 +120,18 @@ public class MeListViewAdapater extends BaseAdapter
 				});
 				break;
 			}
-			case 3:
+			case 2:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
 				textView.setText(fragment.getString(R.string.preference));
+				break;
+			}
+			case 3:
+			{
+				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+				TextView textView = (TextView)view.findViewById(android.R.id.text1);
+				textView.setText(fragment.getString(R.string.invite));
 				break;
 			}
 			case 4:
@@ -155,6 +163,7 @@ public class MeListViewAdapater extends BaseAdapter
 						appPreference.setServerToken("");
 						appPreference.saveAppPreference();
 						
+						ReimApplication.needToSync = true;
 						fragment.startActivity(new Intent(fragment.getActivity(), SignInActivity.class));
 						fragment.getActivity().finish();
 					}

@@ -439,7 +439,7 @@ public class SignUpActivity extends Activity
 				}
 				catch (Exception e)
 				{
-					System.out.println(e);
+					e.printStackTrace();
 				}
 				finally
 				{

@@ -15,11 +15,7 @@ public class CreateItemsResponse extends BaseResponse
 	public CreateItemsResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
-		else
+		if (!getStatus())
 		{
 			constructErrorData();
 		}

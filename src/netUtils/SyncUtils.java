@@ -48,7 +48,7 @@ public abstract class SyncUtils
 					SparseIntArray reportIDArray = new SparseIntArray();
 					for (Report report : response.getReportList())
 					{
-						 if (dbManager.syncReport(report))
+						if (dbManager.syncReport(report))
 						{
 							Report tempReport = dbManager.getReportByServerID(report.getServerID());
 							if (tempReport != null)
@@ -58,11 +58,16 @@ public abstract class SyncUtils
 						}
 					}
 					
+					int i = 1;
 					for (Item item : response.getItemList())
 					{
-						System.out.println(item.getServerID());
 						Report report = item.getBelongReport();
 						report.setLocalID(reportIDArray.get(report.getServerID()));
+						System.out.println("-------------------------------------------");
+						System.out.println("item server id:" + item.getServerID());
+						System.out.println("report server id:" + report.getServerID() + "    report local id:"+report.getLocalID());
+						System.out.println("number: "+i);
+						i++;
 						item.setBelongReport(report);
 						dbManager.syncItem(item);
 					}

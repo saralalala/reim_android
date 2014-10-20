@@ -41,12 +41,18 @@
     <string name="invoice">发票</string>
     <string name="proveAhead">预审批</string>
     <string name="needReimburse">需报销</string>
+    <string name="vendor">商家:</string>
+    <string name="category">类别:</string>
+    <string name="tag">标签:</string>
+    <string name="member">参与人员:</string>
+    <string name="time">消费时间:</string>
+    <string name="note">备注:</string>
     <string name="chooseVendor">选择商家</string>
     <string name="chooseCategory">选择类别</string>
     <string name="chooseTag">选择标签</string>
     <string name="chooseDate">选择日期</string>
     <string name="chooseTime">选择时间</string>
-    <string name="member">参与人员</string>
+    <string name="chooseMember">参与人员</string>
     <string name="inputVendor">请输入商家名或点击按钮选取</string>
     <string name="inputNote">请输入备注</string>
     <string name="inputKeyword">请输入关键字</string>
@@ -64,6 +70,7 @@
     <string name="avatar">头像</string>
     <string name="enablePasswordProtection">开启密码保护</string>
     <string name="syncWithoutWifi">仅WiFi开启时上传云端</string>
+    <string name="invite">邀请</string>
     <string name="share">分享</string>
     <string name="preference">偏好设置</string>
     <string name="feedback">意见反馈</string>
@@ -86,5 +93,6 @@
     <string name="inputCategoryLimit">请输入分类限额</string>
     <string name="subCategory">子分类</string>
     <string name="inputTagName">请输入标签名称</string>
+    <string name="inputUserContact">请输入对方手机号或邮箱</string>
 
 </resources>

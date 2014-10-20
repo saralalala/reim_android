@@ -128,6 +128,10 @@ public class Report implements Serializable
 	public boolean canBeSubmitted()
 	{
 		List<Item> itemList = DBManager.getDBManager().getReportItems(localID);
+		if (itemList.size() == 0)
+		{
+			return false;
+		}
 		for (Item item : itemList)
 		{
 			if (item.getServerID() == -1 || (!item.getInvoicePath().equals("") && item.getImageID() == -1))

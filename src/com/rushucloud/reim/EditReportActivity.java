@@ -3,12 +3,19 @@ package com.rushucloud.reim;
 import java.util.ArrayList;
 import java.util.List;
 
+import netUtils.HttpConnectionCallback;
+import netUtils.HttpConstant;
+import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Response.DownloadImageResponse;
 import classes.AppPreference;
 import classes.Item;
 import classes.Report;
+import classes.User;
 import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
+import classes.Adapter.MemberListViewAdapater;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -17,6 +24,7 @@ import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -42,11 +50,17 @@ public class EditReportActivity extends Activity
 	private EditText titleEditText;
 	private ListView itemListView;
 	private ItemListViewAdapter adapter;
+	private MemberListViewAdapater memberAdapter;
 	
 	private Report report;
 	private List<Item> itemList = null;
 	private ArrayList<Integer> chosenItemIDList = null;
 	private ArrayList<Integer> remainingItemIDList = null;
+	
+	private List<User> userList;
+	private User currentUser;
+	private int lastIndex = -1;
+	private boolean[] checkList;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -105,7 +119,7 @@ public class EditReportActivity extends Activity
 		int id = item.getItemId();
 		if (id == R.id.action_submit_item)
 		{
-			submitReport();
+			showManagerDialog();
 			return true;
 		}
 		if (id == R.id.action_approve_item)
@@ -184,6 +198,10 @@ public class EditReportActivity extends Activity
 				itemList = dbManager.getItems(chosenItemIDList);
 			}
 		}
+
+    	currentUser = dbManager.getUser(appPreference.getCurrentUserID());
+    	userList = dbManager.getGroupUsers(appPreference.getCurrentGroupID());
+    	checkList = new boolean[userList.size()];
 	}
 	
 	private void viewInitialise()
@@ -193,6 +211,10 @@ public class EditReportActivity extends Activity
 		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
 		{
 			titleEditText.setFocusable(false);
+		}
+		if (!report.getTitle().equals(""))
+		{
+			hideSoftKeyboard();
 		}
 		
 		adapter = new ItemListViewAdapter(EditReportActivity.this, itemList);
@@ -265,6 +287,7 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				hideSoftKeyboard();
 				saveReport("报告保存成功");
 			}
 		});
@@ -295,6 +318,73 @@ public class EditReportActivity extends Activity
 		imm.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
     }
     
+    private void showManagerDialog()
+    {
+    	lastIndex = -1;
+    	for (int i = 0; i < checkList.length; i++)
+		{
+			if (currentUser.getDefaultManagerID() == userList.get(i).getServerID())
+			{
+				checkList[i] = true;
+				lastIndex = i;
+			}
+			else
+			{
+				checkList[i] = false;
+			}
+		}	
+    	
+    	memberAdapter = new MemberListViewAdapater(this, userList, checkList);
+    	View view = View.inflate(this, R.layout.profile_manager, null);
+    	ListView managerListView = (ListView) view.findViewById(R.id.managerListView);
+    	managerListView.setAdapter(memberAdapter);
+    	managerListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				if (lastIndex != -1)
+				{
+					checkList[lastIndex] = false;					
+				}
+				checkList[position] = true;
+				lastIndex = position;
+				memberAdapter.setCheck(checkList);
+				memberAdapter.notifyDataSetChanged();
+			}
+		});
+
+    	hideSoftKeyboard();
+    	AlertDialog mDialog = new AlertDialog.Builder(this)
+    							.setTitle("请选择汇报对象")
+    							.setView(view)
+    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										if (lastIndex == -1)
+										{
+											Toast.makeText(EditReportActivity.this, "未选择汇报对象", Toast.LENGTH_SHORT).show();
+										}
+										else
+										{
+											report.setManagerID(userList.get(lastIndex).getServerID());
+											submitReport();
+										}
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+    	mDialog.show();
+    	
+    	for (User user : userList)
+		{
+			if (user.getAvatarPath().equals("") && user.getImageID() != -1)
+			{
+				sendDownloadAvatarRequest(user);
+			}	
+		}
+    }
+    
     private void saveReport(String prompt)
     {
     	hideSoftKeyboard();
@@ -315,7 +405,13 @@ public class EditReportActivity extends Activity
 			Toast.makeText(EditReportActivity.this, prompt, Toast.LENGTH_SHORT).show();
 			if (Utils.canSyncToServer(EditReportActivity.this))
 			{
-				SyncUtils.syncAllToServer(null);
+				SyncUtils.syncAllToServer(new SyncDataCallback()
+				{
+					public void execute()
+					{
+						report = dbManager.getReportByLocalID(report.getLocalID());
+ 					}
+				});
 			}
 		}
 		else
@@ -330,7 +426,6 @@ public class EditReportActivity extends Activity
 
     private void submitReport()
     {
-    	hideSoftKeyboard();
     	report.setLocalUpdatedDate(Utils.getCurrentTime());
 		report.setTitle(titleEditText.getText().toString());
 		if (report.getLocalID() == -1)
@@ -349,17 +444,46 @@ public class EditReportActivity extends Activity
 			if (!canBeSubmitted)
 			{
 				report.setStatus(Report.STATUS_DRAFT);
-				Toast.makeText(EditReportActivity.this, "部分条目信息未上传到服务器，无法提交报告", Toast.LENGTH_SHORT).show();
+				AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
+											.setTitle("无法提交报告")
+											.setMessage("此报告为空报告或者部分条目信息未上传到服务器")
+											.setNegativeButton(R.string.confirm, null)
+											.create();
+				mDialog.show();
 			}
 			else if (appPreference.getCurrentGroupID() == -1)
 			{
 				report.setStatus(Report.STATUS_FINISHED);
-				Toast.makeText(EditReportActivity.this, "报告提交成功", Toast.LENGTH_SHORT).show();
+				AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
+											.setTitle("提示")
+											.setMessage("报告提交成功")
+											.setNegativeButton(R.string.confirm, 
+													new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													finish();
+												}
+											})
+											.create();
+				mDialog.show();
 			}
 			else
 			{
 				report.setStatus(Report.STATUS_SUBMITTED);		
-				Toast.makeText(EditReportActivity.this, "报告提交成功", Toast.LENGTH_SHORT).show();		
+				AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
+										.setTitle("提示")
+										.setMessage("报告提交成功")
+										.setNegativeButton(R.string.confirm, 
+												new DialogInterface.OnClickListener()
+										{
+											public void onClick(DialogInterface dialog, int which)
+											{
+												finish();
+											}
+										})
+										.create();
+				mDialog.show();	
 			}
 			dbManager.updateReportByLocalID(report);
 			if (Utils.canSyncToServer(EditReportActivity.this))
@@ -375,5 +499,35 @@ public class EditReportActivity extends Activity
 												.create();
 			mDialog.show();
 		}
+    }
+
+    private void sendDownloadAvatarRequest(final User user)
+    {
+    	final DBManager dbManager = DBManager.getDBManager();
+    	DownloadImageRequest request = new DownloadImageRequest(user.getImageID());
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
+					user.setAvatarPath(avatarPath);
+					user.setLocalUpdatedDate(Utils.getCurrentTime());
+					user.setServerUpdatedDate(user.getLocalUpdatedDate());
+					dbManager.updateUser(user);
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							List<User> managerList = dbManager.getGroupUsers(appPreference.getCurrentGroupID());
+							memberAdapter.setMember(managerList);
+							memberAdapter.notifyDataSetChanged();
+						}
+					});	
+				}
+			}
+		});
     }
 }

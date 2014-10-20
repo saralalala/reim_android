@@ -15,17 +15,13 @@ import classes.Utils;
 
 public class SyncDataResponse extends BaseResponse
 {
-	private List<Item> itemList = null;
+	private List<Item> itemList;
 	
-	private List<Report> reportList = null;
+	private List<Report> reportList;
 	
 	public SyncDataResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()

@@ -1,9 +1,6 @@
 package com.rushucloud.reim;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,6 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.HttpConstant;
 import netUtils.SyncUtils;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Response.DownloadImageResponse;
@@ -31,9 +29,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -162,7 +158,7 @@ public class EditItemActivity extends Activity
 					Uri newImageUri = Uri.parse(data.getAction());
 					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), newImageUri);
 					invoiceImageView.setImageBitmap(bitmap);
-					String invoicePath = saveBitmapToFile(bitmap);
+					String invoicePath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
 						item.setInvoicePath(invoicePath);
@@ -332,7 +328,8 @@ public class EditItemActivity extends Activity
 						DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 						if (response.getBitmap() != null)
 						{
-							final String invoicePath = saveBitmapToFile(response.getBitmap());
+							final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), 
+																			HttpConstant.IMAGE_TYPE_INVOICE);
 							if (!invoicePath.equals(""))
 							{
 								item.setInvoicePath(invoicePath);
@@ -707,37 +704,6 @@ public class EditItemActivity extends Activity
 		{
 			e.printStackTrace();
 			Toast.makeText(EditItemActivity.this, "图片剪裁失败", Toast.LENGTH_SHORT).show();
-		}
-    }
-
-    private String saveBitmapToFile(Bitmap bitmap)
-    {
-    	try
-		{    		
-    		Matrix matrix = new Matrix();
-    		matrix.postScale((float)0.5, (float)0.5);
-    		
-    		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-    		
-    		String path = appPreference.getInvoiceImageDirectory() + "/" + Utils.getImageName();
-    		File compressedBitmapFile = new File(path);
-    		compressedBitmapFile.createNewFile();
-    		
-    		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    		bitmap.compress(CompressFormat.JPEG, 90, outputStream);
-    		byte[] bitmapData = outputStream.toByteArray();
-    		
-    		FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
-    		fileOutputStream.write(bitmapData);
-    		fileOutputStream.flush();
-    		fileOutputStream.close();	
-    		
-    		return path;
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			return "";
 		}
     }
 }

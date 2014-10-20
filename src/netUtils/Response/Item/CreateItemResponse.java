@@ -10,15 +10,11 @@ import netUtils.Response.BaseResponse;
 
 public class CreateItemResponse extends BaseResponse
 {
-	private int itemID = -1;
+	private int itemID;
 	
 	public CreateItemResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()

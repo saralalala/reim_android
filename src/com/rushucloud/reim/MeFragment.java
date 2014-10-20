@@ -1,17 +1,16 @@
 package com.rushucloud.reim;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import netUtils.HttpConstant;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.UploadImageRequest;
+import netUtils.Request.User.InviteRequest;
 import netUtils.HttpConnectionCallback;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.UploadImageResponse;
+import netUtils.Response.User.InviteResponse;
 
 import com.rushucloud.reim.me.FeedbackActivity;
 import com.rushucloud.reim.me.ProfileActivity;
@@ -24,10 +23,10 @@ import classes.User;
 import classes.Utils;
 import classes.Adapter.MeListViewAdapater;
 import database.DBManager;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,6 +37,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -121,7 +121,7 @@ public class MeFragment extends Fragment
 				{
 					Uri newImageUri = Uri.parse(data.getAction());
 					Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), newImageUri);
-					avatarPath = saveBitmapToFile(bitmap);
+					avatarPath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_AVATAR);
 					
 					if (!avatarPath.equals(""))
 					{
@@ -162,24 +162,28 @@ public class MeFragment extends Fragment
         meListView.setAdapter(adapter);
         meListView.setOnItemClickListener(new OnItemClickListener()
 		{
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id)
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				if (position == 0)
+				switch (position)
 				{
-					startActivity(new Intent(getActivity(), ProfileActivity.class));
-				}
-				
-				if (position == 4)
-				{
-					final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
-					mController.setShareContent("报销姐");
-					mController.openShare(getActivity(), false);
-				}
-				
-				if (position == 5)
-				{
-					startActivity(new Intent(getActivity(), FeedbackActivity.class));
+					case 0:
+						startActivity(new Intent(getActivity(), ProfileActivity.class));
+						break;
+					case 3:
+						showInviteDialog();
+						break;
+					case 4:
+					{
+						final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
+						mController.setShareContent("报销姐");
+						mController.openShare(getActivity(), false);
+						break;
+					}
+					case 5:
+						startActivity(new Intent(getActivity(), FeedbackActivity.class));
+						break;
+					default:
+						break;
 				}
 			}
 		});
@@ -212,38 +216,6 @@ public class MeFragment extends Fragment
 		catch (IOException e)
 		{
 			e.printStackTrace();
-		}
-    }
-	
-    private String saveBitmapToFile(Bitmap bitmap)
-    {
-    	try
-		{    		
-    		AppPreference appPreference = AppPreference.getAppPreference();
-    		Matrix matrix = new Matrix();
-    		matrix.postScale((float)0.5, (float)0.5);
-    		
-    		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-    		
-    		String path = appPreference.getProfileImageDirectory() + "/" + Utils.getImageName();
-    		File compressedBitmapFile = new File(path);
-    		compressedBitmapFile.createNewFile();
-    		
-    		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    		bitmap.compress(CompressFormat.JPEG, 90, outputStream);
-    		byte[] bitmapData = outputStream.toByteArray();
-    		
-    		FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
-    		fileOutputStream.write(bitmapData);
-    		fileOutputStream.flush();
-    		fileOutputStream.close();	
-    		
-    		return path;
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			return "";
 		}
     }
     
@@ -299,7 +271,7 @@ public class MeFragment extends Fragment
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					avatarPath = saveBitmapToFile(response.getBitmap());
+					avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
 					currentUser.setAvatarPath(avatarPath);
 					currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
 					currentUser.setServerUpdatedDate(currentUser.getLocalUpdatedDate());
@@ -333,6 +305,71 @@ public class MeFragment extends Fragment
 							Toast.makeText(getActivity(), "头像下载失败", Toast.LENGTH_SHORT).show();
 						}
 					});						
+				}
+			}
+		});
+    }
+
+    private void showInviteDialog()
+    {
+		View view = View.inflate(getActivity(), R.layout.profile_invite_dialog, null);
+		final EditText usernameEditText = (EditText)view.findViewById(R.id.usernameEditText);
+		usernameEditText.requestFocus();
+		
+    	AlertDialog mDialog = new AlertDialog.Builder(getActivity())
+								.setTitle("邀请")
+								.setView(view)
+								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										String username = usernameEditText.getText().toString();
+										if (username.equals(""))
+										{
+											Toast.makeText(getActivity(), "手机号或邮箱不能为空", Toast.LENGTH_SHORT).show();
+										}
+										else if (!Utils.isEmailOrPhone(username))
+										{
+											Toast.makeText(getActivity(), "手机号或邮箱格式不正确", Toast.LENGTH_SHORT).show();
+										}
+										else
+										{
+											sendInviteRequest(username);
+										}
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+		mDialog.show();
+    }
+    
+    private void sendInviteRequest(String username)
+    {
+    	InviteRequest request = new InviteRequest(username);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final InviteResponse response = new InviteResponse(httpResponse);
+				if (response.getStatus())
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							Toast.makeText(getActivity(), "邀请已发送", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+				else
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							Toast.makeText(getActivity(), "邀请发送失败，" + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+						}
+					});
 				}
 			}
 		});

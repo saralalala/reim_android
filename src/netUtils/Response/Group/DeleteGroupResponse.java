@@ -12,10 +12,6 @@ public class DeleteGroupResponse extends BaseResponse
 	public DeleteGroupResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()

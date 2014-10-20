@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 
 public class DownloadImageResponse extends BaseDownloadResponse
 {
-	private Bitmap bitmap = null;
+	private Bitmap bitmap;
 	
 	public DownloadImageResponse(Object httpResponse)
 	{

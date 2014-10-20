@@ -88,7 +88,7 @@ public class ReportFragment extends Fragment
     	switch (item.getItemId()) 
     	{
 			case 0:
-				if (!Utils.isDataConnected(getActivity()))
+				if (!Utils.isNetworkConnected(getActivity()))
 				{
 					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
 				}

@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 public class BaseDownloadResponse
 {
-	private InputStream inputStream = null;
+	private InputStream inputStream;
 
 	public BaseDownloadResponse(Object httpResponse)
 	{

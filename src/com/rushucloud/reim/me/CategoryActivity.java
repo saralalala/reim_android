@@ -88,7 +88,7 @@ public class CategoryActivity extends Activity
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
 		int id = item.getItemId();
-		if (id == R.id.action_add)
+		if (id == R.id.action_add_item)
 		{
 			if (!Utils.isNetworkConnected(this))
 			{

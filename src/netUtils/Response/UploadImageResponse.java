@@ -5,16 +5,12 @@ import org.json.JSONObject;
 
 public class UploadImageResponse extends BaseResponse
 {
-	private int imageID = -1;
-	private String path = "";
+	private int imageID;
+	private String path;
 	
 	public UploadImageResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()
@@ -48,5 +44,4 @@ public class UploadImageResponse extends BaseResponse
 	{
 		this.path = path;
 	}
-
 }

@@ -12,10 +12,6 @@ public class InviteReplyResponse extends BaseResponse
 	public InviteReplyResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()

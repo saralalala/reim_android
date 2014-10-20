@@ -126,7 +126,7 @@
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.DefaultManagerActivity">
+            android:name="com.rushucloud.reim.me.ManagerActivity">
         </activity>
         
         <activity 

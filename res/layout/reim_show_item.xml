@@ -52,47 +52,131 @@
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/vendorTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+            
+	        <TextView
+	            android:id="@+id/vendorPrompt"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.01"
+	            android:text="@string/vendor"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+            
+	        <TextView
+	            android:id="@+id/vendorTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.13"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />            
+	        
+	    </LinearLayout>
 
-        <TextView
-            android:id="@+id/categoryTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+            
+	        <TextView
+	            android:id="@+id/categoryPrompt"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.01"
+	            android:text="@string/category"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+            
+	        <TextView
+	            android:id="@+id/categoryTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.13"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />         
+	        
+	    </LinearLayout>
 
-        <TextView
-            android:id="@+id/tagTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+            
+	        <TextView
+	            android:id="@+id/tagPrompt"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.01"
+	            android:text="@string/tag"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <TextView
-            android:id="@+id/timeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+	        <TextView
+	            android:id="@+id/tagTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.13"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />     
+	        
+	    </LinearLayout>
 
-        <TextView
-            android:id="@+id/memberTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+            
+	        <TextView
+	            android:id="@+id/timePrompt"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.01"
+	            android:text="@string/time"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <TextView
-            android:id="@+id/noteTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+	        <TextView
+	            android:id="@+id/timeTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.13"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />  
+	        
+	    </LinearLayout>
+
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+            
+	        <TextView
+	            android:id="@+id/memberPrompt"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.01"
+	            android:text="@string/member"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	        <TextView
+	            android:id="@+id/memberTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.13"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	        
+	    </LinearLayout>
+
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+            
+	        <TextView
+	            android:id="@+id/notePrompt"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.01"
+	            android:text="@string/note"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	        <TextView
+	            android:id="@+id/noteTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.13"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	        
+	    </LinearLayout>
 
         <Button
             android:id="@+id/backButton"

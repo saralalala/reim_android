@@ -45,7 +45,7 @@ public class SplashActivity extends Activity
 				}
 				catch (Exception e)
 				{
-					System.out.println(e);
+					e.printStackTrace();
 				}
 				finally
 				{

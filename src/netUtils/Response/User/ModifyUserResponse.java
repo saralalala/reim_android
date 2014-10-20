@@ -2,9 +2,9 @@ package netUtils.Response.User;
 
 import netUtils.Response.BaseResponse;
 
-public class ChangePasswordResponse extends BaseResponse
+public class ModifyUserResponse extends BaseResponse
 {
-	public ChangePasswordResponse(Object httpResponse)
+	public ModifyUserResponse(Object httpResponse)
 	{
 		super(httpResponse);
 	}

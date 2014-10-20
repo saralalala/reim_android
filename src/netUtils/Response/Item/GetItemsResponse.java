@@ -16,14 +16,11 @@ import netUtils.Response.BaseResponse;
 
 public class GetItemsResponse extends BaseResponse
 {
-	List<Item> itemList = null;
+	List<Item> itemList;
+	
 	public GetItemsResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()

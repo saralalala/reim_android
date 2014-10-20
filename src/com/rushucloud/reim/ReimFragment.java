@@ -47,7 +47,7 @@ public class ReimFragment extends Fragment
 
 	private DBManager dbManager;
 	private List<Item> itemList = new ArrayList<Item>();
-	
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		if (view == null)
@@ -56,7 +56,7 @@ public class ReimFragment extends Fragment
 		}
 		else
 		{
-			ViewGroup viewGroup = (ViewGroup)view.getParent();
+			ViewGroup viewGroup = (ViewGroup) view.getParent();
 			viewGroup.removeView(view);
 		}
 		return view;
@@ -71,7 +71,7 @@ public class ReimFragment extends Fragment
 		refreshItemListView();
 		setHasOptionsMenu(true);
 	}
-	
+
 	public void onPause()
 	{
 		super.onPause();
@@ -82,10 +82,10 @@ public class ReimFragment extends Fragment
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.search, menu);;
+		inflater.inflate(R.menu.search, menu);
 	}
 
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
 		if (id == R.id.action_search_item)
@@ -95,7 +95,7 @@ public class ReimFragment extends Fragment
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
@@ -112,35 +112,36 @@ public class ReimFragment extends Fragment
 		switch (item.getItemId())
 		{
 			case 0:
-				if (!Utils.isDataConnected(getActivity()))
+				if (!Utils.isNetworkConnected(getActivity()))
 				{
 					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
 				}
-				else if (report != null && (report.getStatus() != Report.STATUS_DRAFT || 
-									   report.getStatus() != Report.STATUS_REJECT))
+				else if (report != null
+						&& (report.getStatus() != Report.STATUS_DRAFT || report.getStatus() != Report.STATUS_REJECT))
 				{
 					Toast.makeText(getActivity(), "条目已提交，不可删除", Toast.LENGTH_SHORT).show();
-					
+
 				}
 				else
 				{
 					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-											.setTitle("警告")
-											.setMessage(R.string.deleteItemWarning)
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+							.setTitle("警告")
+							.setMessage(R.string.deleteItemWarning)
+							.setPositiveButton(R.string.confirm,
+									new DialogInterface.OnClickListener()
+									{
+										public void onClick(DialogInterface dialog, int which)
+										{
+											if (localItem.getServerID() == -1)
 											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													if (localItem.getServerID() == -1)
-													{
-														deleteItemFromLocal(localItem.getLocalID());
-													}
-													else
-													{
-														sendDeleteItemRequest(localItem);														
-													}
-												}
-											}).setNegativeButton(R.string.cancel, null).create();
+												deleteItemFromLocal(localItem.getLocalID());
+											}
+											else
+											{
+												sendDeleteItemRequest(localItem);
+											}
+										}
+									}).setNegativeButton(R.string.cancel, null).create();
 					mDialog.show();
 				}
 				break;
@@ -155,16 +156,16 @@ public class ReimFragment extends Fragment
 	{
 		if (dbManager == null)
 		{
-			dbManager = DBManager.getDBManager();			
+			dbManager = DBManager.getDBManager();
 		}
-		
+
 		if (ReimApplication.needToSync && Utils.canSyncToServer(getActivity()))
 		{
 			ReimApplication.needToSync = false;
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
 				public void execute()
-				{					
+				{
 					getActivity().runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -198,7 +199,7 @@ public class ReimFragment extends Fragment
 		{
 			adapter = new ItemListViewAdapter(getActivity(), itemList);
 		}
-		
+
 		if (itemListView == null)
 		{
 			itemListView = (ListView) getActivity().findViewById(R.id.itemListView);
@@ -208,19 +209,19 @@ public class ReimFragment extends Fragment
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 				{
 					Item item = itemList.get(position);
-					if (item.getBelongReport() == null || 
-							item.getBelongReport().getStatus() == Report.STATUS_DRAFT || 
-							item.getBelongReport().getStatus() == Report.STATUS_REJECT)
+					if (item.getBelongReport() == null
+							|| item.getBelongReport().getStatus() == Report.STATUS_DRAFT
+							|| item.getBelongReport().getStatus() == Report.STATUS_REJECT)
 					{
 						Intent intent = new Intent(getActivity(), EditItemActivity.class);
 						intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
-						startActivity(intent);					
+						startActivity(intent);
 					}
 					else
 					{
 						Intent intent = new Intent(getActivity(), ShowItemActivity.class);
 						intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
-						startActivity(intent);					
+						startActivity(intent);
 					}
 				}
 			});
@@ -244,7 +245,7 @@ public class ReimFragment extends Fragment
 		adapter.notifyDataSetChanged();
 		ReimApplication.pDialog.dismiss();
 	}
-	
+
 	private void sendDeleteItemRequest(final Item item)
 	{
 		ReimApplication.pDialog.show();
@@ -271,25 +272,26 @@ public class ReimFragment extends Fragment
 						public void run()
 						{
 							ReimApplication.pDialog.show();
-							Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
+							Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG)
+									.show();
 						}
-					});					
+					});
 				}
 			}
 		});
 	}
-	
-	private void deleteItemFromLocal(int reportLocalID)
+
+	private void deleteItemFromLocal(int itemLocalID)
 	{
-		if (dbManager.deleteItem(reportLocalID))
-		{								
+		if (dbManager.deleteItem(itemLocalID))
+		{
 			refreshItemListView();
-			ReimApplication.pDialog.show();
+			ReimApplication.pDialog.dismiss();
 			Toast.makeText(getActivity(), R.string.deleteSucceed, Toast.LENGTH_LONG).show();
 		}
 		else
 		{
-			ReimApplication.pDialog.show();
+			ReimApplication.pDialog.dismiss();
 			Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
 		}
 	}

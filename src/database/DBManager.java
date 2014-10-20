@@ -66,9 +66,9 @@ public class DBManager extends SQLiteOpenHelper
 	{
 //		String sqlString = "DELETE FROM tbl_category WHERE group_id = 1";
 //		database.execSQL(sqlString);
-//		String sqlString = "DROP TABLE IF EXISTS tbl_user";
+//		String sqlString = "DROP TABLE IF EXISTS tbl_item";
 //		database.execSQL(sqlString);
-//		sqlString = "DROP TABLE IF EXISTS tbl_item_tag";
+//		sqlString = "DROP TABLE IF EXISTS tbl_report";
 //		database.execSQL(sqlString);	
 //		sqlString = "DROP TABLE IF EXISTS tbl_comment";
 //		database.execSQL(sqlString);			
@@ -282,7 +282,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -1023,8 +1023,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_item SET " +
-								"report_local_id = '" + reportLocalID + "', " +
-								"local_updatedt = '" + Utils.getCurrentTime() + "' " +
+								"report_local_id = '" + reportLocalID + "' " +
 								"WHERE id = '" + itemLocalID + "'";			
 			database.execSQL(sqlString);
 			return true;
@@ -1041,8 +1040,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_item SET " +
-								"report_local_id = '" + -1 + "', " +
-								"local_updatedt = '" + Utils.getCurrentTime() + "' " +
+								"report_local_id = '" + -1 + "' " +
 								"WHERE id = '" + itemLocalID + "'";			
 			database.execSQL(sqlString);
 			return true;
@@ -1092,8 +1090,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_item SET " +
-								"report_local_id = '" + -1 + "', " +
-								"local_updatedt = '" + Utils.getCurrentTime() + "' " +
+								"report_local_id = '" + -1 + "' " +
 								"WHERE report_local_id = '" + reportLocalID + "'";			
 			database.execSQL(sqlString);
 			return true;
@@ -1779,7 +1776,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());;
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -2011,7 +2008,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());;
+			e.printStackTrace();
 			return null;
 		}
 	}

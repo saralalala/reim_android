@@ -10,15 +10,11 @@ import netUtils.Response.BaseResponse;
 
 public class ModifyItemResponse extends BaseResponse
 {
-	private int itemID = -1;
+	private int itemID;
 	
 	public ModifyItemResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()

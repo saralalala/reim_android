@@ -119,7 +119,7 @@
             android:layout_width="100dp"
             android:layout_height="0dp"
             android:layout_weight="0.13"
-            android:text="@string/member" />
+            android:text="@string/chooseMember" />
 
         <TextView
             android:id="@+id/memberTextView"

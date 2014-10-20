@@ -13,29 +13,15 @@ import classes.StatisticsCategory;
 public class StatisticsResponse extends BaseResponse
 {
 
-	private double _new_amount = 0;
-	private double _process_amount = 0;
-	private double _done_amount = 0;
-	private List<StatisticsCategory> _sc = null;
-	private HashMap<String, String> _ms = null;
-
-	public HashMap<String, String> get_ms()
-	{
-		return _ms;
-	}
-
-	public void set_ms(HashMap<String, String> _ms)
-	{
-		this._ms = _ms;
-	}
-
+	private double _new_amount;
+	private double _process_amount;
+	private double _done_amount;
+	private List<StatisticsCategory> _sc;
+	private HashMap<String, String> _ms;
+	
 	public StatisticsResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()
@@ -121,6 +107,16 @@ public class StatisticsResponse extends BaseResponse
 	public void set_sc(List<StatisticsCategory> _sc)
 	{
 		this._sc = _sc;
+	}
+
+	public HashMap<String, String> get_ms()
+	{
+		return _ms;
+	}
+
+	public void set_ms(HashMap<String, String> _ms)
+	{
+		this._ms = _ms;
 	}
 
 }

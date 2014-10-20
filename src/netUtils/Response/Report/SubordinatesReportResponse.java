@@ -16,10 +16,6 @@ public class SubordinatesReportResponse extends BaseResponse
 	public SubordinatesReportResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()

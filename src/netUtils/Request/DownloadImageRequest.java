@@ -18,7 +18,7 @@ public class DownloadImageRequest extends BaseRequest
 		super();
 		
 		String requestUrl = getUrl();
-		requestUrl += "/images/" + imageID;
+		requestUrl += "/images/" + imageID + "/0";
 		setUrl(requestUrl);
 	}
 	

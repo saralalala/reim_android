@@ -12,10 +12,6 @@ public class CreateGroupResponse extends BaseResponse
 	public CreateGroupResponse(Object httpResponse)
 	{
 		super(httpResponse);
-		if (getStatus())
-		{
-			constructData();
-		}
 	}
 
 	protected void constructData()

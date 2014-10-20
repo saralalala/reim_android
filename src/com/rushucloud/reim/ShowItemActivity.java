@@ -92,7 +92,14 @@ public class ShowItemActivity extends Activity
 		tagTextView.setText(Tag.tagListToString(item.getTags()));
 		
 		TextView timeTextView = (TextView)findViewById(R.id.timeTextView);
-		timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
+		if (item.getConsumedDate() != -1 && item.getConsumedDate() != 0)
+		{
+			timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));			
+		}
+		else
+		{
+			timeTextView.setText(R.string.notAvailable);
+		}
 		
 		TextView memberTextView = (TextView)findViewById(R.id.memberTextView);
 		memberTextView.setText(User.userListToString(item.getRelevantUsers()));

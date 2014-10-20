@@ -1,5 +1,9 @@
 package classes;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,9 +11,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import netUtils.HttpConstant;
+
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -251,5 +260,46 @@ public class Utils
 		result += calendar.get(Calendar.MINUTE) + ".jpg";
 		
 		return result;
+    }
+    
+    public static String saveBitmapToFile(Bitmap bitmap, int type)
+    {
+    	try
+		{    		
+    		AppPreference appPreference = AppPreference.getAppPreference();
+    		Matrix matrix = new Matrix();
+    		matrix.postScale((float)0.5, (float)0.5);
+    		
+    		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    		
+    		String path;
+    		if (type == HttpConstant.IMAGE_TYPE_AVATAR)
+			{
+				path = appPreference.getProfileImageDirectory() + "/" + getImageName();
+			}
+    		else
+    		{
+				path = appPreference.getInvoiceImageDirectory() + "/" + getImageName();    			
+    		}
+    		
+    		File compressedBitmapFile = new File(path);
+    		compressedBitmapFile.createNewFile();
+    		
+    		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    		bitmap.compress(CompressFormat.JPEG, 90, outputStream);
+    		byte[] bitmapData = outputStream.toByteArray();
+    		
+    		FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
+    		fileOutputStream.write(bitmapData);
+    		fileOutputStream.flush();
+    		fileOutputStream.close();	
+    		
+    		return path;
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			return "";
+		}
     }
 }

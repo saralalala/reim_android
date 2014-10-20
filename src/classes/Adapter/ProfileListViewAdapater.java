@@ -4,19 +4,13 @@ import classes.AppPreference;
 import classes.User;
 
 import com.rushucloud.reim.R;
-import com.rushucloud.reim.me.CategoryActivity;
-import com.rushucloud.reim.me.ChangePasswordActivity;
 import com.rushucloud.reim.me.ProfileActivity;
-import com.rushucloud.reim.me.TagActivity;
-
 import database.DBManager;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -26,15 +20,15 @@ public class ProfileListViewAdapater extends BaseAdapter
 	private ProfileActivity activity;
 	private AppPreference appPreference;
 	private DBManager dbManager;
-	private User currentUser;
+	private User user;
 	
-	public ProfileListViewAdapater(Context context)
+	public ProfileListViewAdapater(Context context, User user)
 	{
-		layoutInflater = LayoutInflater.from(context);
-		activity = (ProfileActivity)context;
-		appPreference = AppPreference.getAppPreference();
-		dbManager = DBManager.getDBManager();	
-		currentUser = dbManager.getUser(appPreference.getCurrentUserID());
+		this.layoutInflater = LayoutInflater.from(context);
+		this.activity = (ProfileActivity)context;
+		this.appPreference = AppPreference.getAppPreference();
+		this.dbManager = DBManager.getDBManager();	
+		this.user = user;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -48,7 +42,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				TextView textView = (TextView)view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.email));
 				EditText editText = (EditText)view.findViewById(R.id.editText);
-				editText.setText(currentUser.getEmail());
+				editText.setText(user.getEmail());
 				editText.setHint(activity.getString(R.string.inputEmail));
 				break;
 			}
@@ -58,11 +52,21 @@ public class ProfileListViewAdapater extends BaseAdapter
 				TextView textView = (TextView)view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.phone));
 				EditText editText = (EditText)view.findViewById(R.id.editText);
-				editText.setText(currentUser.getPhone());
+				editText.setText(user.getPhone());
 				editText.setHint(activity.getString(R.string.inputPhone));
 				break;
 			}
 			case 2:
+			{
+				view = layoutInflater.inflate(R.layout.list_item_edittext, null);
+				TextView textView = (TextView)view.findViewById(R.id.textView);
+				textView.setText(activity.getString(R.string.nickname));
+				EditText editText = (EditText)view.findViewById(R.id.editText);
+				editText.setText(user.getNickname());
+				editText.setHint(activity.getString(R.string.inputNickname));
+				break;
+			}
+			case 3:
 			{
 				view = layoutInflater.inflate(R.layout.list_item_edittext, null);
 				TextView textView = (TextView)view.findViewById(R.id.textView);
@@ -73,76 +77,38 @@ public class ProfileListViewAdapater extends BaseAdapter
 					editText.setText(dbManager.getGroup(appPreference.getCurrentGroupID()).getName());					
 				}
 				editText.setHint(activity.getString(R.string.inputCompanyName));
-				if (!currentUser.isAdmin())
+				if (!user.isAdmin())
 				{
 					editText.setEnabled(false);
 				}
 				break;
 			}
-			case 3:
-			{
-				view = layoutInflater.inflate(R.layout.list_item_edittext, null);
-				TextView textView = (TextView)view.findViewById(R.id.textView);
-				textView.setText(activity.getString(R.string.nickname));
-				EditText editText = (EditText)view.findViewById(R.id.editText);
-				editText.setText(currentUser.getNickname());
-				editText.setHint(activity.getString(R.string.inputNickname));
-				break;
-			}
 			case 4:
 			{
-				view = layoutInflater.inflate(R.layout.list_item_button, null);
-				Button button = (Button)view.findViewById(R.id.button);
-				button.setText(activity.getString(R.string.changePassword));
-				button.setOnClickListener(new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						activity.startActivity(new Intent(activity.getBaseContext(), ChangePasswordActivity.class));
-					}
-				});
+				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+				TextView textView = (TextView)view.findViewById(android.R.id.text1);
+				textView.setText(activity.getString(R.string.changePassword));
 				break;
 			}
 			case 5:
 			{
-				view = layoutInflater.inflate(R.layout.list_item_button, null);
-				Button button = (Button)view.findViewById(R.id.button);
-				button.setText(activity.getString(R.string.defaultManager));
-				button.setOnClickListener(new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						
-					}
-				});
+				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+				TextView textView = (TextView)view.findViewById(android.R.id.text1);
+				textView.setText(activity.getString(R.string.defaultManager));
 				break;
 			}
 			case 6:
 			{
-				view = layoutInflater.inflate(R.layout.list_item_button, null);
-				Button button = (Button)view.findViewById(R.id.button);
-				button.setText(activity.getString(R.string.categoryManagement));
-				button.setOnClickListener(new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						activity.startActivity(new Intent(activity.getBaseContext(), CategoryActivity.class));
-					}
-				});
+				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+				TextView textView = (TextView)view.findViewById(android.R.id.text1);
+				textView.setText(activity.getString(R.string.categoryManagement));
 				break;
 			}
 			case 7:
 			{
-				view = layoutInflater.inflate(R.layout.list_item_button, null);
-				Button button = (Button)view.findViewById(R.id.button);
-				button.setText(activity.getString(R.string.tagManagement));
-				button.setOnClickListener(new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						activity.startActivity(new Intent(activity.getBaseContext(), TagActivity.class));
-					}
-				});
+				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+				TextView textView = (TextView)view.findViewById(android.R.id.text1);
+				textView.setText(activity.getString(R.string.tagManagement));
 				break;
 			}
 			default:
@@ -153,7 +119,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 	
 	public int getCount()
 	{
-		return currentUser.isAdmin() && currentUser.getGroupID() != -1 ? 8 : 5;
+		return user.isAdmin() && user.getGroupID() != -1 ? 8 : 5;
 	}
 
 	public Object getItem(int position)
@@ -164,5 +130,10 @@ public class ProfileListViewAdapater extends BaseAdapter
 	public long getItemId(int position)
 	{
 		return 0;
+	}
+	
+	public void setUser(User user)
+	{
+		this.user = user;
 	}
 }
