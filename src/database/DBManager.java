@@ -1481,6 +1481,37 @@ public class DBManager extends SQLiteOpenHelper
 			return reportList;
 		}
 	}
+	
+	public List<Report> getApproveReports(int userServerID)
+	{
+		List<Report> reportList = new ArrayList<Report>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE manager_id = ?", 
+											new String[]{Integer.toString(userServerID)});
+			
+			while (cursor.moveToNext())
+			{
+				Report report = new Report();
+				report.setLocalID(getIntFromCursor(cursor, "id"));
+				report.setServerID(getIntFromCursor(cursor, "server_id"));
+				report.setTitle(getStringFromCursor(cursor, "title"));
+				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
+				report.setManagerID(getIntFromCursor(cursor, "manager_id"));
+				report.setStatus(getIntFromCursor(cursor, "status"));
+				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
+				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				
+				reportList.add(report);
+			}
+			return reportList;
+		}
+		catch (Exception e)
+		{
+			return reportList;
+		}
+	}
 		
 	public String getReportItemIDs(int reportLocalID)
 	{

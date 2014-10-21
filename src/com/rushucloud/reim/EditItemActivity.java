@@ -11,10 +11,13 @@ import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
 import netUtils.SyncUtils;
 import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Item.GetVendorsRequest;
 import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.Item.GetVendorsResponse;
 import classes.AppPreference;
 import classes.Category;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Tag;
 import classes.User;
 import classes.Utils;
@@ -30,6 +33,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -238,6 +245,8 @@ public class EditItemActivity extends Activity
 	
 	private void viewInitialise()
 	{
+		ReimApplication.setProgressDialog(this);
+		
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		amountEditText.setText(Double.toString(item.getAmount()));
 		
@@ -381,48 +390,7 @@ public class EditItemActivity extends Activity
 	}
 	
 	private void buttonInitialise()
-	{
-		Button vendorButton = (Button)findViewById(R.id.vendorButton);
-		vendorButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				final String vendor = item.getMerchant();
-				int index = vendorList.indexOf(vendor);
-				if (index == -1)
-				{
-					index = 0;
-				}
-				String[] vendors = vendorList.toArray(new String[vendorList.size()]);
-				AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setTitle(R.string.chooseVendor)
-													.setSingleChoiceItems(vendors, index, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															item.setMerchant(vendorList.get(which));
-														}
-													})
-													.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															vendorEditText.setText(item.getMerchant());
-														}
-													})
-													.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															item.setMerchant(vendor);
-														}
-													})
-													.create();
-				mDialog.show();
-			}
-		});
-		
+	{		
 		Button categoryButton = (Button)findViewById(R.id.categoryButton);
 		categoryButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -461,6 +429,23 @@ public class EditItemActivity extends Activity
 													})
 													.create();
 				mDialog.show();
+			}
+		});		
+
+		Button vendorButton = (Button)findViewById(R.id.vendorButton);
+		vendorButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				if (Utils.isLocalisationEnabled(EditItemActivity.this))
+				{
+					getLocation();
+				}
+				else
+				{
+					Toast.makeText(EditItemActivity.this, "定位服务不可用，请打开定位服务或手动输入商家名称", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 		
@@ -705,5 +690,113 @@ public class EditItemActivity extends Activity
 			e.printStackTrace();
 			Toast.makeText(EditItemActivity.this, "图片剪裁失败", Toast.LENGTH_SHORT).show();
 		}
+    }
+
+    private void getLocation()
+    {
+    	ReimApplication.pDialog.show();
+    	LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+    	Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    	if (location != null)
+		{
+			try
+			{
+				double latitude = location.getLatitude();
+				double longitude = location.getLongitude();
+				Geocoder coder = new Geocoder(this);
+				List<Address> address = coder.getFromLocation(latitude, longitude, 1);
+				String city = address.get(0).getLocality();
+				String category = item.getCategory() == null ? "" : item.getCategory().getName();
+				sendVendorsRequest(category, city, latitude, longitude);
+			}
+			catch (IOException e)
+			{	
+				ReimApplication.pDialog.dismiss();
+				Toast.makeText(EditItemActivity.this, "定位失败，无法获取附近商家，请手动输入商家名", Toast.LENGTH_SHORT).show();
+			}
+		}
+    	else
+    	{
+			ReimApplication.pDialog.dismiss();
+			Toast.makeText(EditItemActivity.this, "定位失败，无法获取附近商家，请手动输入商家名", Toast.LENGTH_SHORT).show();    		
+    	}
+    }
+    
+    private void sendVendorsRequest(String category, String city, double latitude, double longitude)
+    {
+		GetVendorsRequest request = new GetVendorsRequest(category, city, latitude, longitude);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				GetVendorsResponse response = new GetVendorsResponse(httpResponse);
+				if (response.getStatus())
+				{
+					vendorList = response.getVendorList();
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.pDialog.dismiss();
+							if (vendorList.size() > 0)
+							{
+								showVendorDialog();
+							}
+							else 
+							{
+								Toast.makeText(EditItemActivity.this, "未获取到任何商家, 请手动输入", Toast.LENGTH_SHORT).show();								
+							}
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.pDialog.dismiss();
+							Toast.makeText(EditItemActivity.this, "获取商家列表失败, 请手动输入", Toast.LENGTH_SHORT).show();
+						}
+					});					
+				}
+			}
+		});
+    }
+    
+    private void showVendorDialog()
+    {
+    	final String vendor = item.getMerchant();
+		int index = vendorList.indexOf(vendor);
+		if (index == -1)
+		{
+			index = 0;
+		}
+		String[] vendors = vendorList.toArray(new String[vendorList.size()]);
+		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+											.setTitle(R.string.chooseVendor)
+											.setSingleChoiceItems(vendors, index, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													item.setMerchant(vendorList.get(which));
+												}
+											})
+											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													vendorEditText.setText(item.getMerchant());
+												}
+											})
+											.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													item.setMerchant(vendor);
+												}
+											})
+											.create();
+		mDialog.show();
     }
 }

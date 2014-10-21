@@ -12,7 +12,6 @@ import classes.StatisticsCategory;
 
 public class StatisticsResponse extends BaseResponse
 {
-
 	private double _new_amount;
 	private double _process_amount;
 	private double _done_amount;
@@ -49,13 +48,16 @@ public class StatisticsResponse extends BaseResponse
 				object.setItems(_items);
 				this._sc.add(object);
 			}
-			JSONObject _month_data = jObject.getJSONObject("ms");
+			JSONObject _month_data = jObject.optJSONObject("ms");
 			this._ms = new HashMap<String, String>();
-			for (Iterator<?> iter = _month_data.keys(); iter.hasNext();)
+			if (_month_data != null)
 			{
-				String str = (String) iter.next();
-				String val = String.valueOf(_month_data.getLong(str));
-				this._ms.put(str, val);
+				for (Iterator<?> iter = _month_data.keys(); iter.hasNext();)
+				{
+					String str = (String) iter.next();
+					String val = String.valueOf(_month_data.getLong(str));
+					this._ms.put(str, val);
+				}				
 			}
 		}
 		catch (Exception e)
@@ -118,5 +120,4 @@ public class StatisticsResponse extends BaseResponse
 	{
 		this._ms = _ms;
 	}
-
 }

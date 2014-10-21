@@ -8,7 +8,6 @@ public class StatisticsCategory
 	private double amount = 0;
 	private List<Integer> items = null;
 
-
 	public int get_cateid()
 	{
 		return _cateid;

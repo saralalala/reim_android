@@ -10,7 +10,6 @@ import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
 import netUtils.Request.Item.DeleteItemRequest;
 import netUtils.Response.Item.DeleteItemResponse;
-
 import classes.AppPreference;
 import classes.Item;
 import classes.ReimApplication;

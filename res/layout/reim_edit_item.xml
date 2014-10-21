@@ -59,20 +59,6 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/vendorButton"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_weight="0.14"
-            android:text="@string/chooseVendor" />
-
-        <EditText
-            android:id="@+id/vendorEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/inputVendor" />
-
-        <Button
             android:id="@+id/categoryButton"
             android:layout_width="100dp"
             android:layout_height="0dp"
@@ -85,6 +71,20 @@
             android:layout_height="0dp"
             android:layout_weight="0.13"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/vendorButton"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.14"
+            android:text="@string/chooseVendor" />
+
+        <EditText
+            android:id="@+id/vendorEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/inputVendor" />
 
         <Button
             android:id="@+id/tagButton"

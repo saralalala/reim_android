@@ -19,6 +19,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Bitmap.CompressFormat;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -70,6 +71,15 @@ public class Utils
 		{
 			return false;
 		}
+	}
+	
+	public static boolean isLocalisationEnabled(Context context)
+	{
+		LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+		boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+		return gpsEnabled || networkEnabled ? true :false;
 	}
 	
 	public static boolean canSyncToServer(Context context)

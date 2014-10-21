@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -36,13 +38,17 @@ import android.support.v4.app.Fragment;
 
 public class ReportFragment extends Fragment
 {
+	private TabHost tabHost;
 	private View view;
 	private Button addButton;
-	private ListView reportListView;
-	private ReportListViewAdapter adapter;
+	private ListView mineListView;
+	private ListView approveListView;
+	private ReportListViewAdapter mineAdapter;
+	private ReportListViewAdapter approveAdapter;
 	
 	private DBManager dbManager;
-	private List<Report> reportList = new ArrayList<Report>();
+	private List<Report> mineList = new ArrayList<Report>();
+	private List<Report> approveList = new ArrayList<Report>();
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -83,8 +89,8 @@ public class ReportFragment extends Fragment
     public boolean onContextItemSelected(MenuItem item)
     {
     	AdapterContextMenuInfo menuInfo=(AdapterContextMenuInfo)item.getMenuInfo();
-    	int index = (int)reportListView.getAdapter().getItemId(menuInfo.position);
-    	final Report report = reportList.get(index);
+    	int index = (int)mineListView.getAdapter().getItemId(menuInfo.position);
+    	final Report report = mineList.get(index);
     	switch (item.getItemId()) 
     	{
 			case 0:
@@ -135,9 +141,32 @@ public class ReportFragment extends Fragment
 			dbManager = DBManager.getDBManager();			
 		}
     }
-    
+
 	private void viewInitialise()
 	{
+		if (tabHost == null)
+		{
+			tabHost = (TabHost)getActivity().findViewById(android.R.id.tabhost);
+			tabHost.setup();
+			LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+			layoutInflater.inflate(R.layout.report_mine, tabHost.getTabContentView());
+			layoutInflater.inflate(R.layout.report_approve, tabHost.getTabContentView());
+			
+			tabHost.addTab(tabHost.newTabSpec("myReport")
+					.setIndicator(getResources().getString(R.string.myReport))
+					.setContent(R.id.mineBaseLayout));
+			
+			tabHost.addTab(tabHost.newTabSpec("approveReport")
+					.setIndicator(getResources().getString(R.string.approveReport))
+					.setContent(R.id.approveBaseLayout));
+			
+			DisplayMetrics dm = new DisplayMetrics();
+			getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+			int screenWidth = dm.widthPixels;
+			tabHost.getTabWidget().getChildTabViewAt(0).setMinimumWidth(screenWidth / 2);
+			tabHost.getTabWidget().getChildTabViewAt(1).setMinimumWidth(screenWidth / 2);
+		}
+		
 		if (addButton == null)
 		{
 			addButton = (Button)getActivity().findViewById(R.id.addButton);
@@ -151,44 +180,79 @@ public class ReportFragment extends Fragment
 			});			
 		}
 
-		if (adapter == null)
+		if (mineAdapter == null)
 		{
-			adapter = new ReportListViewAdapter(getActivity(), reportList);			
+			mineAdapter = new ReportListViewAdapter(getActivity(), mineList);			
 		}
 		
-		if (reportListView == null)
+		if (mineListView == null)
 		{
-			reportListView = (ListView)getActivity().findViewById(R.id.reportListView);
-			reportListView.setAdapter(adapter);
-			reportListView.setOnItemClickListener(new OnItemClickListener()
+			mineListView = (ListView)getActivity().findViewById(R.id.mineListView);
+			mineListView.setAdapter(mineAdapter);
+			mineListView.setOnItemClickListener(new OnItemClickListener()
 			{
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id)
 				{
 					Bundle bundle = new Bundle();
-					bundle.putSerializable("report", reportList.get(position));
+					bundle.putSerializable("report", mineList.get(position));
 					Intent intent = new Intent(getActivity(), EditReportActivity.class);
 					intent.putExtras(bundle);
 					startActivity(intent);
 				}
 			});
-			registerForContextMenu(reportListView);
+			registerForContextMenu(mineListView);
+		}
+
+		if (approveAdapter == null)
+		{
+			approveAdapter = new ReportListViewAdapter(getActivity(), approveList);			
+		}
+		
+		if (approveListView == null)
+		{
+			approveListView = (ListView)getActivity().findViewById(R.id.approveReportListView);
+			approveListView.setAdapter(approveAdapter);
+			approveListView.setOnItemClickListener(new OnItemClickListener()
+			{
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id)
+				{
+					Bundle bundle = new Bundle();
+					bundle.putSerializable("report", approveList.get(position));
+					Intent intent = new Intent(getActivity(), EditReportActivity.class);
+					intent.putExtras(bundle);
+					startActivity(intent);
+				}
+			});
 		}
 	}
 	
-	private List<Report> readReportList()
+	private List<Report> readMineReportList()
 	{
 		AppPreference appPreference = AppPreference.getAppPreference();
 		DBManager dbManager = DBManager.getDBManager();
 		return dbManager.getUserReports(appPreference.getCurrentUserID());
 	}
 	
+	private List<Report> readApproveReportList()
+	{
+		AppPreference appPreference = AppPreference.getAppPreference();
+		DBManager dbManager = DBManager.getDBManager();
+		return dbManager.getApproveReports(appPreference.getCurrentUserID());
+	}
+	
 	private void refreshReportListView()
 	{
-		reportList.clear();
-		reportList.addAll(readReportList());
-		adapter.set(reportList);
-		adapter.notifyDataSetChanged();
+		mineList.clear();
+		mineList.addAll(readMineReportList());
+		mineAdapter.set(mineList);
+		mineAdapter.notifyDataSetChanged();
+		
+		approveList.clear();
+		approveList.addAll(readApproveReportList());
+		approveAdapter.set(approveList);
+		approveAdapter.notifyDataSetChanged();
 	}
 
 	private void sendDeleteReportRequest(final Report report)

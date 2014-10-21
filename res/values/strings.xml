@@ -10,8 +10,9 @@
     <string name="save">保存</string>
     <string name="cancel">取消</string>
     <string name="add">添加</string>
-    <string name="warning">警告</string>
     <string name="back">返回</string>
+    <string name="modify">修改</string>
+    <string name="warning">警告</string>
     
     <string name="signUp">注册</string>
     <string name="signUpByPhone">用手机注册</string>
@@ -61,6 +62,8 @@
     <string name="deleteSucceed">删除成功</string>
     <string name="deleteFailed">删除失败</string> 
     
+    <string name="myReport">我的报告</string>
+    <string name="approveReport">待审批报告</string>
     <string name="inputReportTitle">请输入报告名称</string>
     <string name="deleteReportWarning">是否要删除此报告？</string>
     <string name="submit">提交</string>
