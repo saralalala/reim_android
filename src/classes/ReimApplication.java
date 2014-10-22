@@ -35,6 +35,7 @@ public class ReimApplication extends Application
 		PushService.setDefaultPushCallback(this, WelcomeActivity.class);
 		PushService.subscribe(this, "public", WelcomeActivity.class);
 		AVInstallation.getCurrentInstallation().saveInBackground();
+		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
 		MobclickAgent.openActivityDurationTrack(false);
 
 //		System.out.println(getDeviceInfo(this));

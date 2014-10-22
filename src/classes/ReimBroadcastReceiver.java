@@ -23,6 +23,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 	private static NotificationManager manager = null;
 	private static int messageNumber = 0;
 	private static int type = 0;
+	
 	@SuppressWarnings("deprecation")
 	public void onReceive(Context context, Intent intent)
 	{
@@ -60,8 +61,9 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				notification.defaults = Notification.DEFAULT_ALL;
 				notification.flags |= Notification.FLAG_AUTO_CANCEL;
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 0);
-				notification.setLatestEventInfo(context, "如数云报销", "共收到"+messageNumber+"条信息", pendingIntent);
-				manager.notify(0, notification);
+				notification.setLatestEventInfo(context, "如数云报销", "您收到一条报告", pendingIntent);
+				manager.notify(messageNumber, notification);
+				System.out.println("push received");
 			}
 			else if (action.equals("com.rushucloud.reim.NOTIFICATION_CLICKED"))
 			{				
