@@ -97,5 +97,6 @@
     <string name="subCategory">子分类</string>
     <string name="inputTagName">请输入标签名称</string>
     <string name="inputUserContact">请输入对方手机号或邮箱</string>
+    <string name="agree">同意</string>
 
 </resources>

@@ -61,7 +61,7 @@ public abstract class BaseResponse
 		if(!this.getStatus()) return ;
 		this.constructData();
 		//return true;
-	}
+	}	
 	
 	public Boolean getStatus()
 	{

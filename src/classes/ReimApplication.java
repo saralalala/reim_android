@@ -4,6 +4,7 @@ import java.io.File;
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.PushService;
+import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.start.WelcomeActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -32,8 +33,8 @@ public class ReimApplication extends Application
 		AppPreference.createAppPreference(getApplicationContext());
 		DBManager.createDBManager(getApplicationContext());
 		
-		PushService.setDefaultPushCallback(this, WelcomeActivity.class);
-		PushService.subscribe(this, "public", WelcomeActivity.class);
+//		PushService.setDefaultPushCallback(this, MainActivity.class);
+		PushService.subscribe(this, "public", MainActivity.class);
 		AVInstallation.getCurrentInstallation().saveInBackground();
 		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
 		MobclickAgent.openActivityDurationTrack(false);

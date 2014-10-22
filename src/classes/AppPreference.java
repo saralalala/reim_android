@@ -49,7 +49,7 @@ public class AppPreference
 		SharedPreferences preferences = context.getSharedPreferences("ReimApplication", Application.MODE_PRIVATE);
 		appPreference.setUsername(preferences.getString("username", ""));
 		appPreference.setPassword(preferences.getString("password", ""));
-		appPreference.setDeviceToken(preferences.getString("deviceToken", ""));
+		appPreference.setDeviceToken(AVInstallation.getCurrentInstallation().getInstallationId());
 		appPreference.setServerToken(preferences.getString("serverToken", ""));
 		appPreference.setSyncOnlyWithWifi(preferences.getBoolean("syncOnlyWithWifi", true));
 		appPreference.setEnablePasswordProtection(preferences.getBoolean("enablePasswordProtection", true));
@@ -58,11 +58,6 @@ public class AppPreference
 		String path = Environment.getExternalStorageDirectory() + "/如数云报销";
 		appPreference.setProfileImageDirectory(path + "/images/profile");
 		appPreference.setInvoiceImageDirectory(path + "/images/invoice");
-
-		if (appPreference.getDeviceToken().equals(""))
-		{
-			appPreference.setDeviceToken(AVInstallation.getCurrentInstallation().getInstallationId());
-		}
 	}
 	
 	public void saveAppPreference()

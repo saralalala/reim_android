@@ -7,6 +7,7 @@ import com.umeng.analytics.MobclickAgent;
 import database.DBManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -22,6 +23,7 @@ public class MainActivity extends ActionBarActivity {
 	private long exitTime;
 	
 	private FragmentTabHost tabHost;
+	private int tabIndex;
 	
 	private Class<?> fragmentList[] = {ReimFragment.class, ReportFragment.class, StatisticsFragment.class, MeFragment.class};
 	private int imageViewList[] = {R.drawable.tab_item_reim,R.drawable.tab_item_report,R.drawable.tab_item_statistics, R.drawable.tab_item_me};
@@ -31,6 +33,8 @@ public class MainActivity extends ActionBarActivity {
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		Intent intent = getIntent();
+		tabIndex = intent.getIntExtra("tabIndex", 0);
 		tabHostInitialse();
 		ReimApplication.setProgressDialog(this);
 	}
@@ -94,6 +98,6 @@ public class MainActivity extends ActionBarActivity {
 			tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.selector_tab_background);
 		}
 
-	    tabHost.setCurrentTab(0);
+	    tabHost.setCurrentTab(tabIndex);
     }
 }

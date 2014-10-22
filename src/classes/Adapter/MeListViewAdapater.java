@@ -1,5 +1,8 @@
 package classes.Adapter;
 
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.User.SignOutRequest;
+import netUtils.Response.User.SignOutResponse;
 import classes.AppPreference;
 import classes.Group;
 import classes.ReimApplication;
@@ -20,6 +23,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MeListViewAdapater extends BaseAdapter
@@ -157,15 +161,7 @@ public class MeListViewAdapater extends BaseAdapter
 				{
 					public void onClick(View v)
 					{
-						AppPreference appPreference = AppPreference.getAppPreference();
-						appPreference.setUsername("");
-						appPreference.setPassword("");
-						appPreference.setServerToken("");
-						appPreference.saveAppPreference();
-						
-						ReimApplication.needToSync = true;
-						fragment.startActivity(new Intent(fragment.getActivity(), SignInActivity.class));
-						fragment.getActivity().finish();
+						sendSignOutRequest();
 					}
 				});
 				break;
@@ -189,5 +185,45 @@ public class MeListViewAdapater extends BaseAdapter
 	public long getItemId(int position)
 	{
 		return 0;
+	}
+	
+	private void sendSignOutRequest()
+	{
+		SignOutRequest request = new SignOutRequest();
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				SignOutResponse response = new SignOutResponse(httpResponse);
+				if (response.getStatus())
+				{
+					fragment.getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							AppPreference appPreference = AppPreference.getAppPreference();
+							appPreference.setUsername("");
+							appPreference.setPassword("");
+							appPreference.setServerToken("");
+							appPreference.saveAppPreference();
+							
+							ReimApplication.needToSync = true;
+							fragment.startActivity(new Intent(fragment.getActivity(), SignInActivity.class));
+							fragment.getActivity().finish();
+						}
+					});
+				}
+				else 
+				{
+					fragment.getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()	
+						{
+							Toast.makeText(fragment.getActivity(), "登出失败", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+			}
+		});
 	}
 }

@@ -11,13 +11,13 @@ import netUtils.Request.BaseRequest;
 
 public class InviteReplyRequest extends BaseRequest
 {
-	public InviteReplyRequest(int agree, int inviteID)
+	public InviteReplyRequest(int agree, int inviteCode)
 	{
 		super();
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("status", Integer.toString(agree)));
-		params.add(new BasicNameValuePair("invite_id", Integer.toString(inviteID)));
+		params.add(new BasicNameValuePair("code", Integer.toString(inviteCode)));
 		setParams(params);
 
 		String requestUrl = getUrl();
