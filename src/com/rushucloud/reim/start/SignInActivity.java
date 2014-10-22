@@ -77,7 +77,7 @@ public class SignInActivity extends Activity
 		usernameEditText.setText(HttpConstant.DEBUG_EMAIL);
 		passwordEditText.setText(HttpConstant.DEBUG_PASSWORD);
 
-		usernameEditText.setText("y@rushucloud.com");
+		usernameEditText.setText("tianyu.an@rushucloud.com");
 		passwordEditText.setText("111111");
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);

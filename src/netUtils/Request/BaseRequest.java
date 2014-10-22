@@ -154,7 +154,7 @@ public abstract class BaseRequest
 		{
 			url = url.substring(0, url.length()-1);
 		}
-
+		
 		HttpGet request = new HttpGet(url);		
 		doRequest(request, callback);
 	}
@@ -250,7 +250,7 @@ public abstract class BaseRequest
 				try
 				{
 					request.addHeader(HttpConstant.X_REIM_JWT, getJWTString());
-
+					
 					HttpResponse response = httpClient.execute(request);
 					if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 					{

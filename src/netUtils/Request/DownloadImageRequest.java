@@ -8,9 +8,7 @@ public class DownloadImageRequest extends BaseRequest
 	{
 		super();
 		
-		String requestUrl = getUrl();
-		requestUrl += url;
-		setUrl(requestUrl);
+		setUrl(url);
 	}
 	
 	public DownloadImageRequest(int imageID)

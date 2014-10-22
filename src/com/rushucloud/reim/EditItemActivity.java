@@ -33,8 +33,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -695,25 +693,16 @@ public class EditItemActivity extends Activity
     private void getLocation()
     {
     	ReimApplication.pDialog.show();
+    	
     	LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-    	Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-    	if (location != null)
+    	Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		
+		if (location != null)
 		{
-			try
-			{
-				double latitude = location.getLatitude();
-				double longitude = location.getLongitude();
-				Geocoder coder = new Geocoder(this);
-				List<Address> address = coder.getFromLocation(latitude, longitude, 1);
-				String city = address.get(0).getLocality();
-				String category = item.getCategory() == null ? "" : item.getCategory().getName();
-				sendVendorsRequest(category, city, latitude, longitude);
-			}
-			catch (IOException e)
-			{	
-				ReimApplication.pDialog.dismiss();
-				Toast.makeText(EditItemActivity.this, "定位失败，无法获取附近商家，请手动输入商家名", Toast.LENGTH_SHORT).show();
-			}
+			double latitude = location.getLatitude();
+			double longitude = location.getLongitude();
+			String category = item.getCategory() == null ? "" : item.getCategory().getName();
+			sendVendorsRequest(category, latitude, longitude);
 		}
     	else
     	{
@@ -722,9 +711,9 @@ public class EditItemActivity extends Activity
     	}
     }
     
-    private void sendVendorsRequest(String category, String city, double latitude, double longitude)
+    private void sendVendorsRequest(String category, double latitude, double longitude)
     {
-		GetVendorsRequest request = new GetVendorsRequest(category, city, latitude, longitude);
+		GetVendorsRequest request = new GetVendorsRequest(category, latitude, longitude);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

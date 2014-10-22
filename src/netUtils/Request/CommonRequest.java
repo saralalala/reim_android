@@ -4,7 +4,6 @@ import netUtils.HttpConnectionCallback;
 
 public class CommonRequest extends BaseRequest
 {
-
 	public CommonRequest()
 	{
 		super();
