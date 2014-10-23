@@ -17,6 +17,7 @@ import classes.Report;
 import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,8 +33,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
@@ -78,10 +82,15 @@ public class ReimFragment extends Fragment
 		setHasOptionsMenu(false);
 	}
 
+	@SuppressLint("NewApi") 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
+		inflater.inflate(R.menu.reim, menu);
+		Spinner spinner = (Spinner)menu.findItem(R.id.action_spinner_item).getActionView();
+		SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getActivity(), 
+				R.array.itemSpinner, android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(spinnerAdapter);
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.search, menu);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item)
