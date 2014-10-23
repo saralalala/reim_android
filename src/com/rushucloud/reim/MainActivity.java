@@ -33,16 +33,17 @@ public class MainActivity extends ActionBarActivity {
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Intent intent = getIntent();
-		tabIndex = intent.getIntExtra("tabIndex", 0);
 		tabHostInitialse();
-		ReimApplication.setProgressDialog(this);
 	}
 
 	protected void onResume()
 	{
 		super.onResume();	
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
+		Intent intent = getIntent();
+		tabIndex = intent.getIntExtra("tabIndex", 0);
+		tabHost.setCurrentTab(tabIndex);
 	}
 
 	protected void onPause()
@@ -97,7 +98,5 @@ public class MainActivity extends ActionBarActivity {
 			tabHost.addTab(tabSpec, fragmentList[i], null);
 			tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.selector_tab_background);
 		}
-
-	    tabHost.setCurrentTab(tabIndex);
     }
 }

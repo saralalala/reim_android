@@ -98,6 +98,7 @@ public class EditItemActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EditItemActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -242,9 +243,7 @@ public class EditItemActivity extends Activity
 	}
 	
 	private void viewInitialise()
-	{
-		ReimApplication.setProgressDialog(this);
-		
+	{		
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		amountEditText.setText(Double.toString(item.getAmount()));
 		

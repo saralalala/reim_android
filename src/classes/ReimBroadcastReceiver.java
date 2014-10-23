@@ -34,14 +34,10 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				JSONObject jObject = new JSONObject(intent.getExtras().getString("com.avos.avoscloud.Data"));
 				int type = jObject.getInt("type");
 				
-//				if (type == TYPE_MY_REPORT)
-//				{
-//					updateMyReport(jObject);
-//				}
-//				else if (type == TYPE_APPROVE_REPORT)
-//				{
-//					updateApproveReport(jObject);
-//				}
+				if (type == TYPE_REPORT)
+				{
+					updateReport(jObject);
+				}
 				
 				Intent notificationIntent = new Intent("com.rushucloud.reim.NOTIFICATION_CLICKED");
 				notificationIntent.putExtra("type", type);
@@ -52,7 +48,8 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				notification.tickerText = "您收到了一条消息!";
 				notification.defaults = Notification.DEFAULT_ALL;
 				notification.flags |= Notification.FLAG_AUTO_CANCEL;
-				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 
+																PendingIntent.FLAG_UPDATE_CURRENT);
 				notification.setLatestEventInfo(context, "如数云报销", "您收到一条报告", pendingIntent);
 
 				if (manager == null)
@@ -72,26 +69,19 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 						Toast.makeText(context, jObject.getString("message"), Toast.LENGTH_SHORT).show();
 						break;
 					}		
-//					case TYPE_MY_REPORT:
-//					{
-//						Intent newIntent = new Intent(context, MainActivity.class);
-//						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//						newIntent.putExtra("reportTabIndex", 0);
-//						context.startActivity(newIntent);
-//						break;
-//					}
-//					case TYPE_APPROVE_REPORT:
-//					{
-//						Intent newIntent = new Intent(context, MainActivity.class);
-//						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//						newIntent.putExtra("reportTabIndex", 1);
-//						context.startActivity(newIntent);
-//						break;
-//					}
+					case TYPE_REPORT:
+					{
+						Intent newIntent = new Intent(context, MainActivity.class);
+						newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						newIntent.putExtra("tabIndex", 2);
+						context.startActivity(newIntent);
+						break;
+					}
 					case TYPE_INVITE:
 					{
 						Intent newIntent = new Intent(context, InvitedActivity.class);
 						newIntent.putExtra("data", jObject.toString());
+						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						context.startActivity(newIntent);
 						break;
 					}
@@ -106,12 +96,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 		}
 	}
 	
-	private void updateMyReport(JSONObject jObject)
-	{
-		
-	}
-	
-	private void updateApproveReport(JSONObject jObject)
+	private void updateReport(JSONObject jObject)
 	{
 		
 	}

@@ -57,6 +57,7 @@ public class ManagerActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ManagerActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -133,9 +134,7 @@ public class ManagerActivity extends Activity
 	}
 	
 	private void viewInitialise()
-	{
-		ReimApplication.setProgressDialog(this);
-		
+	{		
 		adapter = new MemberListViewAdapater(this, userList, checkList);
 		managerListView = (ListView)findViewById(R.id.managerListView);
 		managerListView.setAdapter(adapter);

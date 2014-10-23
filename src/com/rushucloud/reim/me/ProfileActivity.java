@@ -48,6 +48,7 @@ public class ProfileActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ProfileActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		refreshListView();
 	}
 
@@ -91,9 +92,7 @@ public class ProfileActivity extends Activity
 	}
 	
 	private void viewInitialise()
-	{
-		ReimApplication.setProgressDialog(this);
-		
+	{		
 		profileListView = (ListView)findViewById(R.id.profileListView);
 		profileListView.setOnItemClickListener(new OnItemClickListener()
 		{

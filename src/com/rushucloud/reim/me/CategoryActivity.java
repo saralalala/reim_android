@@ -46,7 +46,7 @@ public class CategoryActivity extends Activity
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
-	
+
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -58,8 +58,9 @@ public class CategoryActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("CategoryActivity");		
+		MobclickAgent.onPageStart("CategoryActivity");
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		refreshListView();
 	}
 
@@ -69,7 +70,7 @@ public class CategoryActivity extends Activity
 		MobclickAgent.onPageEnd("CategoryActivity");
 		MobclickAgent.onPause(this);
 	}
-	
+
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
@@ -85,7 +86,7 @@ public class CategoryActivity extends Activity
 		return true;
 	}
 
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
 		if (id == R.id.action_add_item)
@@ -102,7 +103,7 @@ public class CategoryActivity extends Activity
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
@@ -136,20 +137,19 @@ public class CategoryActivity extends Activity
 				{
 					Toast.makeText(this, "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
 				}
-				else 
+				else
 				{
 					AlertDialog mDialog = new AlertDialog.Builder(CategoryActivity.this)
-											.setTitle("警告")
-											.setMessage(R.string.deleteItemWarning)
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													sendDeleteCategoryRequest(category);
-												}
-											})
-											.setNegativeButton(R.string.cancel, null)
-											.create();
+							.setTitle("警告")
+							.setMessage(R.string.deleteItemWarning)
+							.setPositiveButton(R.string.confirm,
+									new DialogInterface.OnClickListener()
+									{
+										public void onClick(DialogInterface dialog, int which)
+										{
+											sendDeleteCategoryRequest(category);
+										}
+									}).setNegativeButton(R.string.cancel, null).create();
 					mDialog.show();
 				}
 				break;
@@ -160,16 +160,16 @@ public class CategoryActivity extends Activity
 
 		return super.onContextItemSelected(item);
 	}
-	
+
 	private void dataInitialise()
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 	}
-	
+
 	private void viewInitialise()
 	{
-		categoryListView = (ListView)findViewById(R.id.categoryListView);
+		categoryListView = (ListView) findViewById(R.id.categoryListView);
 		categoryListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -181,71 +181,68 @@ public class CategoryActivity extends Activity
 		});
 		registerForContextMenu(categoryListView);
 	}
-	
+
 	private void refreshListView()
 	{
 		categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Category.getCategoryNames(categoryList));
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+				Category.getCategoryNames(categoryList));
 		categoryListView.setAdapter(adapter);
 	}
 
 	private void showCategoryDialog(final Category category)
 	{
-		final boolean isNewCategory = category.getServerID() == -1 ? true : false; 
+		final boolean isNewCategory = category.getServerID() == -1 ? true : false;
 		View view = View.inflate(this, R.layout.profile_category_dialog, null);
-		final EditText nameEditText = (EditText)view.findViewById(R.id.nameEditText);
-		final EditText limitEditText = (EditText)view.findViewById(R.id.limitEditText);
-		final CheckBox proveAheadCheckBox = (CheckBox)view.findViewById(R.id.proveAheadCheckBox);
-		
+		final EditText nameEditText = (EditText) view.findViewById(R.id.nameEditText);
+		final EditText limitEditText = (EditText) view.findViewById(R.id.limitEditText);
+		final CheckBox proveAheadCheckBox = (CheckBox) view.findViewById(R.id.proveAheadCheckBox);
+
 		if (!isNewCategory)
 		{
 			nameEditText.setText(category.getName());
 			limitEditText.setText(Double.toString(category.getLimit()));
 			proveAheadCheckBox.setChecked(category.isProveAhead());
 		}
-		
-		AlertDialog mDialog = new AlertDialog.Builder(this)
-											.setTitle("请输入分类信息")
-											.setView(view)
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													String name = nameEditText.getText().toString();
-													String limit = limitEditText.getText().toString();
-													if (name.equals(""))
-													{
-														Toast.makeText(CategoryActivity.this, "分类名称不能为空",
-																	Toast.LENGTH_SHORT).show();
-													}
-													else if (limit.equals(""))
-													{
-														Toast.makeText(CategoryActivity.this, "分类限额不能为空",
-																	Toast.LENGTH_SHORT).show();
-													}
-													else
-													{
-														category.setName(name);
-														category.setLimit(Double.valueOf(limit));
-														category.setParentID(0);
-														category.setGroupID(appPreference.getCurrentGroupID());
-														category.setIsProveAhead(proveAheadCheckBox.isChecked());
-														if (isNewCategory)
-														{
-															sendCreateCategoryRequest(category);															
-														}
-														else
-														{
-															sendUpdateCategoryRequest(category);
-														}
-													}
-												}
-											})
-											.setNegativeButton(R.string.cancel, null)
-											.create();
+
+		AlertDialog mDialog = new AlertDialog.Builder(this).setTitle("请输入分类信息").setView(view)
+				.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int which)
+					{
+						String name = nameEditText.getText().toString();
+						String limit = limitEditText.getText().toString();
+						if (name.equals(""))
+						{
+							Toast.makeText(CategoryActivity.this, "分类名称不能为空", Toast.LENGTH_SHORT)
+									.show();
+						}
+						else if (limit.equals(""))
+						{
+							Toast.makeText(CategoryActivity.this, "分类限额不能为空", Toast.LENGTH_SHORT)
+									.show();
+						}
+						else
+						{
+							category.setName(name);
+							category.setLimit(Double.valueOf(limit));
+							category.setParentID(0);
+							category.setGroupID(appPreference.getCurrentGroupID());
+							category.setIsProveAhead(proveAheadCheckBox.isChecked());
+							if (isNewCategory)
+							{
+								sendCreateCategoryRequest(category);
+							}
+							else
+							{
+								sendUpdateCategoryRequest(category);
+							}
+						}
+					}
+				}).setNegativeButton(R.string.cancel, null).create();
 		mDialog.show();
 	}
-	
+
 	private void sendCreateCategoryRequest(final Category category)
 	{
 		ReimApplication.pDialog.show();
@@ -267,7 +264,8 @@ public class CategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.pDialog.dismiss();
-							Toast.makeText(CategoryActivity.this, "分类创建成功", Toast.LENGTH_SHORT).show();
+							Toast.makeText(CategoryActivity.this, "分类创建成功", Toast.LENGTH_SHORT)
+									.show();
 						}
 					});
 				}
@@ -278,14 +276,15 @@ public class CategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.pDialog.dismiss();
-							Toast.makeText(CategoryActivity.this, "分类创建失败", Toast.LENGTH_SHORT).show();							
+							Toast.makeText(CategoryActivity.this, "分类创建失败", Toast.LENGTH_SHORT)
+									.show();
 						}
 					});
 				}
 			}
 		});
 	}
-	
+
 	private void sendUpdateCategoryRequest(final Category category)
 	{
 		ReimApplication.pDialog.show();
@@ -306,7 +305,8 @@ public class CategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.pDialog.dismiss();
-							Toast.makeText(CategoryActivity.this, "分类修改成功", Toast.LENGTH_SHORT).show();
+							Toast.makeText(CategoryActivity.this, "分类修改成功", Toast.LENGTH_SHORT)
+									.show();
 						}
 					});
 				}
@@ -317,14 +317,15 @@ public class CategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.pDialog.dismiss();
-							Toast.makeText(CategoryActivity.this, "分类修改失败", Toast.LENGTH_SHORT).show();							
+							Toast.makeText(CategoryActivity.this, "分类修改失败", Toast.LENGTH_SHORT)
+									.show();
 						}
 					});
 				}
 			}
 		});
 	}
-	
+
 	private void sendDeleteCategoryRequest(final Category category)
 	{
 		ReimApplication.pDialog.show();
@@ -337,14 +338,16 @@ public class CategoryActivity extends Activity
 				if (response.getStatus())
 				{
 					dbManager.deleteCategory(category.getServerID());
-					dbManager.deleteSubCategories(category.getServerID(), appPreference.getCurrentGroupID());
+					dbManager.deleteSubCategories(category.getServerID(),
+							appPreference.getCurrentGroupID());
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							refreshListView();
 							ReimApplication.pDialog.dismiss();
-							Toast.makeText(CategoryActivity.this, "分类删除成功", Toast.LENGTH_SHORT).show();
+							Toast.makeText(CategoryActivity.this, "分类删除成功", Toast.LENGTH_SHORT)
+									.show();
 						}
 					});
 				}
@@ -355,7 +358,8 @@ public class CategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.pDialog.dismiss();
-							Toast.makeText(CategoryActivity.this, "分类删除失败", Toast.LENGTH_SHORT).show();					
+							Toast.makeText(CategoryActivity.this, "分类删除失败", Toast.LENGTH_SHORT)
+									.show();
 						}
 					});
 				}

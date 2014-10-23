@@ -58,6 +58,7 @@ public class TagActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("TagActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		refreshListView();
 	}
 
@@ -153,9 +154,7 @@ public class TagActivity extends Activity
 	}
 	
 	private void viewInitialise()
-	{
-		ReimApplication.setProgressDialog(this);
-		
+	{		
 		tagListView = (ListView)findViewById(R.id.tagListView);
 		tagListView.setOnItemClickListener(new OnItemClickListener()
 		{

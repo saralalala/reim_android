@@ -67,6 +67,7 @@ public class SignUpActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("SignUpActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -111,9 +112,7 @@ public class SignUpActivity extends Activity
 	}
 	
 	private void viewIntialise()
-	{
-		ReimApplication.setProgressDialog(this);
-		
+	{		
 		phoneEditText = (EditText)findViewById(R.id.mobileEditText);
 		phonePasswordEditText = (EditText)findViewById(R.id.mobilePasswordEditText);
 		codeEditText = (EditText)findViewById(R.id.codeEditText);
