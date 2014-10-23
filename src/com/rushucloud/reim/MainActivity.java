@@ -47,6 +47,7 @@ public class MainActivity extends ActionBarActivity
 		ReimApplication.setProgressDialog(this);
 		Intent intent = getIntent();
 		tabIndex = intent.getIntExtra("tabIndex", 0);
+		System.out.println(tabIndex);
 		tabHost.setCurrentTab(tabIndex);
 	}
 

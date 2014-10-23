@@ -205,16 +205,15 @@ public class DBManager extends SQLiteOpenHelper
 										+ ")";
 			database.execSQL(createReportTable);
 			
-//			String createApproveReportTable="CREATE TABLE IF NOT EXISTS tbl_approve_report ("
-//												+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-//												+ "server_id INT DEFAULT(0),"
-//												+ "title TEXT DEFAULT(''),"
-//												+ "user_id INT DEFAULT(0),"
-//												+ "backup1 INT DEFAULT(0),"
-//												+ "backup2 TEXT DEFAULT(''),"
-//												+ "backup3 TEXT DEFAULT('')"
-//												+ ")";
-//			database.execSQL(createApproveReportTable);
+			String createApproveReportTable="CREATE TABLE IF NOT EXISTS tbl_approve_report ("
+												+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+												+ "report_server_id INT DEFAULT(0),"
+												+ "user_id INT DEFAULT(0),"
+												+ "backup1 INT DEFAULT(0),"
+												+ "backup2 TEXT DEFAULT(''),"
+												+ "backup3 TEXT DEFAULT('')"
+												+ ")";
+			database.execSQL(createApproveReportTable);
 
 			String createCommentTable="CREATE TABLE IF NOT EXISTS tbl_comment ("
 											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -1204,6 +1203,23 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
+	public Boolean insertApproveReport(int reportServerID, int userServerID)
+	{	
+		try
+		{
+			String sqlString = "INSERT INTO tbl_approve_report (report_server_id, user_id) VALUES (" + 
+														"'" + reportServerID + "'," +
+														"'" + userServerID + "')";
+			database.execSQL(sqlString);			
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public Boolean updateReportByLocalID(Report report)
 	{
 		try
@@ -1262,6 +1278,21 @@ public class DBManager extends SQLiteOpenHelper
 			deleteReportComments(reportLocalID);
 			deleteReportItems(reportLocalID);
 			
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean deleteApproveReport(int reportServerID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_approve_report WHERE report_serverid = '" + reportServerID +"'";
+			database.execSQL(sqlString);			
 			return true;
 		}
 		catch (Exception e)
@@ -1523,7 +1554,27 @@ public class DBManager extends SQLiteOpenHelper
 			return reportList;
 		}
 	}
-		
+	
+	public List<Integer> getApproveReportIDs(int userServerID)
+	{
+		List<Integer> idList = new ArrayList<Integer>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_approve_report WHERE user_id = ?", 
+											new String[]{Integer.toString(userServerID)});
+			
+			while (cursor.moveToNext())
+			{
+				idList.add(getIntFromCursor(cursor, "server_id"));
+			}
+			return idList;
+		}
+		catch (Exception e)
+		{
+			return idList;
+		}
+	}
+	
 	public String getReportItemIDs(int reportLocalID)
 	{
 		String itemIDString = "";

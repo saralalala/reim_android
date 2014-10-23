@@ -1,10 +1,13 @@
 package classes;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.InvitedActivity;
+
+import database.DBManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -33,6 +36,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				messageNumber++;
 				JSONObject jObject = new JSONObject(intent.getExtras().getString("com.avos.avoscloud.Data"));
 				int type = jObject.getInt("type");
+				String message = jObject.getString("msg");
 				
 				if (type == TYPE_REPORT)
 				{
@@ -45,12 +49,12 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				
 				Notification notification = new Notification();
 				notification.icon = R.drawable.default_avatar;
-				notification.tickerText = "您收到了一条消息!";
+				notification.tickerText = message;
 				notification.defaults = Notification.DEFAULT_ALL;
 				notification.flags |= Notification.FLAG_AUTO_CANCEL;
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 
 																PendingIntent.FLAG_UPDATE_CURRENT);
-				notification.setLatestEventInfo(context, "如数云报销", "您收到一条报告", pendingIntent);
+				notification.setLatestEventInfo(context, "如数云报销", message, pendingIntent);
 
 				if (manager == null)
 				{
@@ -98,6 +102,23 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 	
 	private void updateReport(JSONObject jObject)
 	{
-		
+		try
+		{
+			int status = Integer.valueOf(jObject.getString("status"));
+			if (status == 1)
+			{
+//				DBManager.getDBManager()
+			}
+		}
+		catch (NumberFormatException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
