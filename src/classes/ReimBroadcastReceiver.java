@@ -105,9 +105,10 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 		try
 		{
 			int status = Integer.valueOf(jObject.getString("status"));
+			int reportID = Integer.valueOf(jObject.getString("args"));
 			if (status == 1)
 			{
-//				DBManager.getDBManager()
+				DBManager.getDBManager().insertApproveReport(reportID, AppPreference.getAppPreference().getCurrentUserID());
 			}
 		}
 		catch (NumberFormatException e)

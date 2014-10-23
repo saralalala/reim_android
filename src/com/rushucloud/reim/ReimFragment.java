@@ -14,6 +14,7 @@ import classes.AppPreference;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
+import classes.Tag;
 import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
@@ -33,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -43,6 +45,14 @@ import android.support.v4.app.Fragment;
 
 public class ReimFragment extends Fragment
 {
+	private static final int LIST_FILTER_ALL = 0;
+	private static final int LIST_FILTER_PROVE_AHEAD = 1;
+	private static final int LIST_FILTER_CONSUMED = 2;
+	private static final int LIST_FILTER_FREE = 3;
+	private static final int LIST_FILTER_TAG = 4;	
+	private static final int LIST_SORT_AMOUNT = 5;	
+	private static final int LIST_SORT_DATE = 6;	
+	
 	private View view;
 	private Button addButton;
 	private ListView itemListView;
@@ -50,7 +60,11 @@ public class ReimFragment extends Fragment
 
 	private DBManager dbManager;
 	private List<Item> itemList = new ArrayList<Item>();
-
+	private List<Item> showList = new ArrayList<Item>();
+	
+	private int listType;
+	private Tag filterTag;
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		if (view == null)
@@ -86,10 +100,31 @@ public class ReimFragment extends Fragment
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		inflater.inflate(R.menu.reim, menu);
-		Spinner spinner = (Spinner)menu.findItem(R.id.action_spinner_item).getActionView();
+		Spinner spinner = (Spinner)menu.findItem(R.id.action_filter_item).getActionView();
 		SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getActivity(), 
-				R.array.itemSpinner, android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(spinnerAdapter);
+				R.array.itemSpinner, R.layout.spinner_drop_down_item);
+		spinner.setAdapter(spinnerAdapter);		
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener()
+		{
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+			{
+				listType = position;
+				if (position != 4)
+				{
+					Toast.makeText(getActivity(), "这是第"+position+"个", Toast.LENGTH_SHORT).show();
+					refreshItemListView();
+				}
+				else
+				{
+					//TODO alertdialog to let user choose
+				}
+			}
+
+			public void onNothingSelected(AdapterView<?> parent)
+			{
+				Toast.makeText(getActivity(), "Nothing selected", Toast.LENGTH_SHORT).show();
+			}
+		});
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -101,6 +136,11 @@ public class ReimFragment extends Fragment
 			startActivity(new Intent(getActivity(), SearchItemActivity.class));
 			return true;
 		}
+		else if (id == R.id.action_sort_item)
+		{
+			//TODO alertdialog to let user choose base
+		}
+			
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -249,7 +289,8 @@ public class ReimFragment extends Fragment
 		ReimApplication.pDialog.show();
 		itemList.clear();
 		itemList.addAll(readItemList());
-		adapter.set(itemList);
+		filterItemList();
+		adapter.set(showList);
 		adapter.notifyDataSetChanged();
 		ReimApplication.pDialog.dismiss();
 	}
@@ -301,6 +342,40 @@ public class ReimFragment extends Fragment
 		{
 			ReimApplication.pDialog.dismiss();
 			Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private void filterItemList()
+	{
+		showList.clear();
+		showList.addAll(itemList);		
+		//TODO add items to showList from itemList
+		switch (listType)
+		{
+			case LIST_FILTER_ALL:
+				
+				break;
+			case LIST_FILTER_PROVE_AHEAD:
+				
+				break;
+			case LIST_FILTER_CONSUMED:
+				
+				break;
+			case LIST_FILTER_FREE:
+				
+				break;
+			case LIST_FILTER_TAG:
+				
+				break;
+			case LIST_SORT_AMOUNT:
+				
+				break;
+			case LIST_SORT_DATE:
+				
+				break;
+
+			default:
+				break;
 		}
 	}
 }

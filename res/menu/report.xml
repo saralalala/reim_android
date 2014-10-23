@@ -3,13 +3,6 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto" >
     
     <item 
-        android:id="@+id/action_search_item"
-        android:title="@string/search"
-        android:icon="@drawable/ic_action_search"
-        app:showAsAction="always" >
-    </item>
-    
-    <item 
         android:id="@+id/action_sort_item"
         android:title="@string/sort"
         android:icon="@drawable/ic_action_filter"
