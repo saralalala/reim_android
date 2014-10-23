@@ -1,10 +1,11 @@
 package com.rushucloud.reim.start;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.CommonRequest;
-import netUtils.Response.CommonResponse;
+import netUtils.Request.User.SignInRequest;
+import netUtils.Response.User.SignInResponse;
 import classes.AppPreference;
 import classes.User;
+import classes.Utils;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -15,54 +16,19 @@ import database.DBManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class SplashActivity extends Activity
 {
-	private int splashTime = 2000;
-
+	private AppPreference appPreference;
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_splash);
 		
-		if (!AppPreference.getAppPreference().getUsername().equals(""))
-		{
-			sendCommonRequest();			
-		}
-		
-		Thread splashThread = new Thread()
-		{
-			public void run()
-			{
-				try
-				{
-					int waitingTime = 0;
-					while (waitingTime < splashTime)
-					{
-						sleep(100);
-						waitingTime += 100;						
-					}
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-				finally
-				{
-					if (!AppPreference.getAppPreference().getUsername().equals(""))
-					{
-						startActivity(new Intent(SplashActivity.this, MainActivity.class));
-						finish();			
-					}
-					else
-					{
-						startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
-						finish();						
-					}
-				}
-			}
-		};
-		splashThread.start();
+		appPreference = AppPreference.getAppPreference();
+		start();
 	}
 
 	protected void onResume()
@@ -79,14 +45,89 @@ public class SplashActivity extends Activity
 		MobclickAgent.onPause(this);
 	}
 	
-	private void sendCommonRequest()
+	private void start()
 	{
-		CommonRequest request = new CommonRequest();
+		if (appPreference.getUsername().equals(""))
+		{		
+			Thread splashThread = new Thread()
+			{
+				public void run()
+				{
+					try
+					{
+						int waitingTime = 0;
+						int splashTime = 2000;
+						while (waitingTime < splashTime)
+						{
+							sleep(100);
+							waitingTime += 100;						
+						}
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+					finally
+					{
+						startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+						finish();
+					}
+				}
+			};
+			splashThread.start();
+		}
+		else
+		{
+			if (Utils.isNetworkConnected(this))
+			{
+				sendSignInRequest();
+			}
+			else 
+			{
+				Thread splashThread = new Thread()
+				{
+					public void run()
+					{
+						try
+						{
+							int waitingTime = 0;
+							int splashTime = 2000;
+							while (waitingTime < splashTime)
+							{
+								sleep(100);
+								waitingTime += 100;						
+							}
+						}
+						catch (Exception e)
+						{
+							e.printStackTrace();
+						}
+						finally
+						{
+							Toast.makeText(SplashActivity.this, "网络未连接，请稍候重试", Toast.LENGTH_SHORT).show();
+							Bundle bundle = new Bundle();
+							bundle.putString("username", appPreference.getUsername());
+							bundle.putString("password", appPreference.getPassword());
+							Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
+							intent.putExtras(bundle);
+							startActivity(intent);
+							finish();
+						}
+					}
+				};
+				splashThread.start();
+			}
+		}		
+	}
+	
+	private void sendSignInRequest()
+	{
+		SignInRequest request = new SignInRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
-				final CommonResponse response = new CommonResponse(httpResponse);				
+				final SignInResponse response = new SignInResponse(httpResponse);				
 				if (response.getStatus())
 				{
 					int currentUserID = response.getCurrentUser().getServerID();
@@ -144,6 +185,31 @@ public class SplashActivity extends Activity
 						// update categories
 						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);						
 					}
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							startActivity(new Intent(SplashActivity.this, MainActivity.class));
+							finish();
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							Bundle bundle = new Bundle();
+							bundle.putString("username", appPreference.getUsername());
+							bundle.putString("password", appPreference.getPassword());
+							Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
+							intent.putExtras(bundle);
+							startActivity(intent);
+							finish();
+						}
+					});
 				}
 			}
 		});		

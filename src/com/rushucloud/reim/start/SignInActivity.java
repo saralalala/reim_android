@@ -1,9 +1,9 @@
 package com.rushucloud.reim.start;
 
 import netUtils.HttpConstant;
-import netUtils.Request.CommonRequest;
+import netUtils.Request.User.SignInRequest;
 import netUtils.HttpConnectionCallback;
-import netUtils.Response.CommonResponse;
+import netUtils.Response.User.SignInResponse;
 import classes.AppPreference;
 import classes.ReimApplication;
 import classes.User;
@@ -34,7 +34,7 @@ public class SignInActivity extends Activity
 {
 	private EditText usernameEditText;
 	private EditText passwordEditText;
-	
+
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -46,7 +46,7 @@ public class SignInActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("SignInActivity");		
+		MobclickAgent.onPageStart("SignInActivity");
 		MobclickAgent.onResume(this);
 		ReimApplication.setProgressDialog(this);
 	}
@@ -57,7 +57,7 @@ public class SignInActivity extends Activity
 		MobclickAgent.onPageEnd("SignInActivity");
 		MobclickAgent.onPause(this);
 	}
-	
+
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
@@ -67,29 +67,45 @@ public class SignInActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	private void viewIntialise()
-	{		
-		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
-		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
+	{
+		String username = null;
+		String password = null;
+		
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null)
+		{
+			username = bundle.getString("username");
+			password = bundle.getString("password");
+		}
+		
+		usernameEditText = (EditText) findViewById(R.id.usernameEditText);
+		passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+
+		if (username != null)
+		{
+			usernameEditText.setText(username);
+			passwordEditText.setText(password);
+		}
 		
 		usernameEditText.setText(HttpConstant.DEBUG_EMAIL);
 		passwordEditText.setText(HttpConstant.DEBUG_PASSWORD);
 
 		usernameEditText.setText("tianyu.an@rushucloud.com");
 		passwordEditText.setText("19901228");
-		
-    	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
-    	baseLayout.setOnClickListener(new View.OnClickListener()
-    	{
+
+		RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
+		baseLayout.setOnClickListener(new View.OnClickListener()
+		{
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
 			}
-		});   
-    	
-    	TextView forgorPasswordTextView = (TextView)findViewById(R.id.forgotTextView);
-    	forgorPasswordTextView.setOnClickListener(new View.OnClickListener()
+		});
+
+		TextView forgorPasswordTextView = (TextView) findViewById(R.id.forgotTextView);
+		forgorPasswordTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -98,10 +114,10 @@ public class SignInActivity extends Activity
 			}
 		});
 	}
-	
+
 	private void buttonInitialise()
 	{
-		Button confirmButton = (Button)findViewById(R.id.confirmButton);
+		Button confirmButton = (Button) findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -112,61 +128,47 @@ public class SignInActivity extends Activity
 				if (!Utils.isNetworkConnected(SignInActivity.this))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-												.setTitle("错误")
-												.setMessage("未检测到网络连接")
-												.setNegativeButton(R.string.confirm, null)
-												.create();
+							.setTitle("错误").setMessage("未检测到网络连接")
+							.setNegativeButton(R.string.confirm, null).create();
 					alertDialog.show();
 				}
 				else if (username.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-												.setTitle("错误")
-												.setMessage("用户名不能为空")
-												.setNegativeButton(R.string.confirm, new OnClickListener()
-												{
-													public void onClick(
-															DialogInterface dialog,
-															int which)
-													{
-														usernameEditText.requestFocus();
-													}
-												})
-												.create();
+							.setTitle("错误").setMessage("用户名不能为空")
+							.setNegativeButton(R.string.confirm, new OnClickListener()
+							{
+								public void onClick(DialogInterface dialog, int which)
+								{
+									usernameEditText.requestFocus();
+								}
+							}).create();
 					alertDialog.show();
 				}
 				else if (password.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-												.setTitle("错误")
-												.setMessage("密码不能为空")
-												.setNegativeButton(R.string.confirm, new OnClickListener()
-												{
-													public void onClick(
-															DialogInterface dialog,
-															int which)
-													{
-														passwordEditText.requestFocus();
-													}
-												})
-												.create();
-					alertDialog.show();					
+							.setTitle("错误").setMessage("密码不能为空")
+							.setNegativeButton(R.string.confirm, new OnClickListener()
+							{
+								public void onClick(DialogInterface dialog, int which)
+								{
+									passwordEditText.requestFocus();
+								}
+							}).create();
+					alertDialog.show();
 				}
 				else if (!Utils.isEmailOrPhone(username))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-													.setTitle("错误")
-													.setMessage("手机或邮箱格式不正确")
-													.setNegativeButton("确定", new OnClickListener()
-													{
-														public void onClick(
-																DialogInterface dialog,
-																int which)
-														{
-															usernameEditText.requestFocus();
-														}
-													})
-													.create();
+							.setTitle("错误").setMessage("手机或邮箱格式不正确")
+							.setNegativeButton("确定", new OnClickListener()
+							{
+								public void onClick(DialogInterface dialog, int which)
+								{
+									usernameEditText.requestFocus();
+								}
+							}).create();
 					alertDialog.show();
 				}
 				else
@@ -175,13 +177,13 @@ public class SignInActivity extends Activity
 					appPreference.setUsername(username);
 					appPreference.setPassword(password);
 					appPreference.saveAppPreference();
-					
+
 					sendSignInRequest();
 				}
 			}
 		});
-		
-		Button cancelbuButton= (Button)findViewById(R.id.cancelButton);
+
+		Button cancelbuButton = (Button) findViewById(R.id.cancelButton);
 		cancelbuButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -191,16 +193,16 @@ public class SignInActivity extends Activity
 			}
 		});
 	}
-	
+
 	private void sendSignInRequest()
 	{
 		ReimApplication.pDialog.show();
-		CommonRequest request = new CommonRequest();
+		SignInRequest request = new SignInRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
-				final CommonResponse response = new CommonResponse(httpResponse);				
+				final SignInResponse response = new SignInResponse(httpResponse);
 				if (response.getStatus())
 				{
 					int currentUserID = response.getCurrentUser().getServerID();
@@ -212,53 +214,54 @@ public class SignInActivity extends Activity
 					appPreference.setCurrentUserID(currentUserID);
 					appPreference.setSyncOnlyWithWifi(true);
 					appPreference.setEnablePasswordProtection(true);
-					
+
 					if (response.getGroup() != null)
 					{
 						currentGroupID = response.getGroup().getServerID();
-						
+
 						// update AppPreference
 						appPreference.setCurrentGroupID(currentGroupID);
 						appPreference.saveAppPreference();
-						
+
 						// update members
 						dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-						
-						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());						
-						if (localUser.getServerUpdatedDate() == response.getCurrentUser().getServerUpdatedDate())
+
+						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+						if (localUser.getServerUpdatedDate() == response.getCurrentUser()
+								.getServerUpdatedDate())
 						{
 							if (localUser.getAvatarPath().equals(""))
 							{
-								dbManager.updateUser(response.getCurrentUser());								
+								dbManager.updateUser(response.getCurrentUser());
 							}
 						}
 						else
 						{
-							dbManager.syncUser(response.getCurrentUser())	;
+							dbManager.syncUser(response.getCurrentUser());
 						}
-						
+
 						// update categories
 						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-						
+
 						// update tags
 						dbManager.updateGroupTags(response.getTagList(), currentGroupID);
-						
+
 						// update group info
 						dbManager.syncGroup(response.getGroup());
 					}
 					else
-					{						
+					{
 						// update AppPreference
 						appPreference.setCurrentGroupID(currentGroupID);
 						appPreference.saveAppPreference();
-						
+
 						// update current user
 						dbManager.syncUser(response.getCurrentUser());
-						
+
 						// update categories
-						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);						
+						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 					}
-					
+
 					// refresh UI
 					runOnUiThread(new Runnable()
 					{
@@ -278,22 +281,21 @@ public class SignInActivity extends Activity
 						{
 							ReimApplication.pDialog.dismiss();
 							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-														.setTitle("错误")
-														.setMessage("登录失败！" + response.getErrorMessage())
-														.setNegativeButton("确定", null)
-														.create();
-							alertDialog.show();	
+									.setTitle("错误")
+									.setMessage("登录失败！" + response.getErrorMessage())
+									.setNegativeButton("确定", null).create();
+							alertDialog.show();
 						}
-					});								
+					});
 				}
 			}
-		});		
+		});
 	}
-    
-    private void hideSoftKeyboard()
-    {
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);					
+
+	private void hideSoftKeyboard()
+	{
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
-    }
+	}
 }
