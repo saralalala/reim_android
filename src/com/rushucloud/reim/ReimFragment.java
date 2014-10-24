@@ -3,6 +3,7 @@ package com.rushucloud.reim;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import netUtils.HttpConnectionCallback;
@@ -18,7 +19,6 @@ import classes.Tag;
 import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,11 +58,13 @@ public class ReimFragment extends Fragment
 	private ListView itemListView;
 	private ItemListViewAdapter adapter;
 
+	private AppPreference appPreference;
 	private DBManager dbManager;
 	private List<Item> itemList = new ArrayList<Item>();
 	private List<Item> showList = new ArrayList<Item>();
 	
 	private int listType;
+	private int tagIndex;
 	private Tag filterTag;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -93,38 +95,66 @@ public class ReimFragment extends Fragment
 	{
 		super.onPause();
 		MobclickAgent.onPageEnd("ReimFragment");
-		setHasOptionsMenu(false);
 	}
 
-	@SuppressLint("NewApi") 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		inflater.inflate(R.menu.reim, menu);
-		Spinner spinner = (Spinner)menu.findItem(R.id.action_filter_item).getActionView();
-		SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getActivity(), 
-				R.array.itemSpinner, R.layout.spinner_drop_down_item);
-		spinner.setAdapter(spinnerAdapter);		
-		spinner.setOnItemSelectedListener(new OnItemSelectedListener()
-		{
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-			{
-				listType = position;
-				if (position != 4)
-				{
-					Toast.makeText(getActivity(), "这是第"+position+"个", Toast.LENGTH_SHORT).show();
-					refreshItemListView();
-				}
-				else
-				{
-					//TODO alertdialog to let user choose
-				}
-			}
-
-			public void onNothingSelected(AdapterView<?> parent)
-			{
-				Toast.makeText(getActivity(), "Nothing selected", Toast.LENGTH_SHORT).show();
-			}
-		});
+//		Spinner spinner = (Spinner)menu.findItem(R.id.action_filter_item).getActionView();
+//		SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getActivity(), 
+//				R.array.itemSpinner, R.layout.spinner_drop_down_item);
+//		spinner.setAdapter(spinnerAdapter);		
+//		spinner.setOnItemSelectedListener(new OnItemSelectedListener()
+//		{
+//			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+//			{
+//				listType = position;
+//				if (position != 4)
+//				{
+//					Toast.makeText(getActivity(), "这是第"+position+"个", Toast.LENGTH_SHORT).show();
+//					refreshItemListView();
+//				}
+//				else
+//				{
+//					final List<Tag> tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+//					if (tagList.size() == 0)
+//					{
+//						Toast.makeText(getActivity(), "无标签可供筛选", Toast.LENGTH_SHORT).show();
+//					}
+//					else
+//					{
+//						tagIndex = 0;
+//						String[] nameList = Tag.getTagNames(tagList);
+//						AlertDialog mDialog = new AlertDialog.Builder(getActivity())
+//														.setTitle("请选择一个标签")
+//														.setSingleChoiceItems(nameList, tagIndex, 
+//																new DialogInterface.OnClickListener()
+//																{
+//																	public void onClick(DialogInterface dialog, int which)
+//																	{
+//																		tagIndex = which;
+//																	}
+//																})											
+//														.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+//														{
+//															public void onClick(DialogInterface dialog, int which)
+//															{
+//																filterTag = tagList.get(tagIndex);
+//																refreshItemListView();
+//															}
+//														})
+//														.setNegativeButton(R.string.cancel, null)
+//														.create();					
+//						mDialog.show();
+//					}
+//				}
+//			}
+//
+//			public void onNothingSelected(AdapterView<?> parent)
+//			{
+//				Toast.makeText(getActivity(), "Nothing selected", Toast.LENGTH_SHORT).show();
+//			}
+//		});
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -165,7 +195,7 @@ public class ReimFragment extends Fragment
 					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
 				}
 				else if (report != null
-						&& (report.getStatus() != Report.STATUS_DRAFT || report.getStatus() != Report.STATUS_REJECT))
+						&& (report.getStatus() != Report.STATUS_DRAFT || report.getStatus() != Report.STATUS_REJECTED))
 				{
 					Toast.makeText(getActivity(), "条目已提交，不可删除", Toast.LENGTH_SHORT).show();
 
@@ -202,6 +232,11 @@ public class ReimFragment extends Fragment
 
 	private void dataInitialise()
 	{
+		if (appPreference == null)
+		{
+			appPreference = AppPreference.getAppPreference();
+		}
+		
 		if (dbManager == null)
 		{
 			dbManager = DBManager.getDBManager();
@@ -259,7 +294,7 @@ public class ReimFragment extends Fragment
 					Item item = itemList.get(position);
 					if (item.getBelongReport() == null
 							|| item.getBelongReport().getStatus() == Report.STATUS_DRAFT
-							|| item.getBelongReport().getStatus() == Report.STATUS_REJECT)
+							|| item.getBelongReport().getStatus() == Report.STATUS_REJECTED)
 					{
 						Intent intent = new Intent(getActivity(), EditItemActivity.class);
 						intent.putExtra("itemLocalID", itemList.get(position).getLocalID());

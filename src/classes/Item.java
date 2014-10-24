@@ -197,4 +197,8 @@ public class Item
 		}
 		return true;
 	}
+	
+//    public int compareTo(User arg0) {
+//        return this.getOrder().compareTo(arg0.getOrder());
+//    }
 }

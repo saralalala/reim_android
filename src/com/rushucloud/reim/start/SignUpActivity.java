@@ -376,6 +376,7 @@ public class SignUpActivity extends Activity
 				final RegisterResponse response = new RegisterResponse(httpResponse);
 				if (response.getStatus())
 				{
+					Toast.makeText(SignUpActivity.this, "注册成功!正在获取数据", Toast.LENGTH_SHORT).show();
 					AppPreference appPreference = AppPreference.getAppPreference();
 					if (!user.getEmail().equals(""))
 					{
@@ -399,6 +400,7 @@ public class SignUpActivity extends Activity
 					{
 						public void run()
 						{
+							ReimApplication.pDialog.dismiss();
 							AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this)
 														.setTitle("错误")
 														.setMessage("注册失败！"+response.getErrorMessage())
@@ -446,6 +448,7 @@ public class SignUpActivity extends Activity
 					{
 						public void run()
 						{
+							codeTextView.setText("");
 							acquireCodeButton.setEnabled(true);	
 						}
 					});	
@@ -543,6 +546,7 @@ public class SignUpActivity extends Activity
 					{
 						public void run()
 						{
+							ReimApplication.pDialog.dismiss();
 							AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this)
 														.setTitle("错误")
 														.setMessage("获取信息失败！" + response.getErrorMessage())

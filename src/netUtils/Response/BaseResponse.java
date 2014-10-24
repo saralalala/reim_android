@@ -57,12 +57,6 @@ public abstract class BaseResponse
 
 	protected abstract void constructData();
 	
-	public void forceConstructData(){
-		if(!this.getStatus()) return ;
-		this.constructData();
-		//return true;
-	}	
-	
 	public Boolean getStatus()
 	{
 		return status;

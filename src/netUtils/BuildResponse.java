@@ -19,7 +19,7 @@ public class BuildResponse {
 		Object obj=null;
 		obj = con.newInstance(resp);
 		BaseResponse _obj = (BaseResponse)obj;
-		_obj.forceConstructData();
+//		_obj.forceConstructData();
 		return (Object)_obj;
 	}
 }

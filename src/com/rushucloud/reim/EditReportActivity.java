@@ -90,14 +90,14 @@ public class EditReportActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+			goBackToMainActivity();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
+		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
 		{
 			return false;
 		}
@@ -105,7 +105,7 @@ public class EditReportActivity extends Activity
 				report.getUser().getServerID() != appPreference.getCurrentUserID())
 		{
 			getMenuInflater().inflate(R.menu.approve_reject, menu);
-			return true;	
+			return true;
 		}
 		else
 		{
@@ -130,7 +130,7 @@ public class EditReportActivity extends Activity
 		}
 		if (id == R.id.action_reject_item)
 		{
-			report.setStatus(Report.STATUS_REJECT);
+			report.setStatus(Report.STATUS_REJECTED);
 			saveReport("报告已拒绝");
 			return true;
 		}
@@ -208,7 +208,7 @@ public class EditReportActivity extends Activity
 	{
 		titleEditText = (EditText)findViewById(R.id.titleEditText);
 		titleEditText.setText(report.getTitle());
-		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
+		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
 		{
 			titleEditText.setFocusable(false);
 		}
@@ -225,7 +225,7 @@ public class EditReportActivity extends Activity
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
+				if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
 				{
 					Intent intent = new Intent(EditReportActivity.this, ShowItemActivity.class);
 					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
@@ -239,7 +239,7 @@ public class EditReportActivity extends Activity
 				}
 			}
 		});
-		if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECT)
+		if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECTED)
 		{
 			registerForContextMenu(itemListView);			
 		}
@@ -277,7 +277,7 @@ public class EditReportActivity extends Activity
 				}
 			}
 		});
-		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
+		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
 		{
 			addButton.setVisibility(View.GONE);
 		}
@@ -291,7 +291,7 @@ public class EditReportActivity extends Activity
 				saveReport("报告保存成功");
 			}
 		});
-		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECT)
+		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
 		{
 			saveButton.setEnabled(false);
 		}
@@ -301,7 +301,7 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+				goBackToMainActivity();
 			}
 		});
 	}
@@ -462,7 +462,7 @@ public class EditReportActivity extends Activity
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
-													finish();
+													goBackToMainActivity();
 												}
 											})
 											.create();
@@ -479,7 +479,7 @@ public class EditReportActivity extends Activity
 										{
 											public void onClick(DialogInterface dialog, int which)
 											{
-												finish();
+												goBackToMainActivity();
 											}
 										})
 										.create();
@@ -529,5 +529,17 @@ public class EditReportActivity extends Activity
 				}
 			}
 		});
+    }
+
+    private void goBackToMainActivity()
+    {
+    	Bundle bundle = new Bundle();
+    	bundle.putInt("tabIndex", 1);
+    	bundle.putInt("reportTabIndex", 0);
+    	Intent intent = new Intent(EditReportActivity.this, MainActivity.class);
+    	intent.putExtras(bundle);
+    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	startActivity(intent);
+    	finish();
     }
 }

@@ -324,7 +324,7 @@ public class EditItemActivity extends Activity
 		else
 		{
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
-			if (item.getImageID() != -1)
+			if (item.getImageID() != -1 && item.getImageID() != 0)
 			{
 				DownloadImageRequest request = new DownloadImageRequest(item.getImageID());
 				request.sendRequest(new HttpConnectionCallback()

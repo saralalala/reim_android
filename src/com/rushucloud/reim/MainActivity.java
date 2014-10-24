@@ -7,7 +7,6 @@ import com.umeng.analytics.MobclickAgent;
 import database.DBManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -20,7 +19,6 @@ import android.widget.TabHost.TabSpec;
 
 public class MainActivity extends ActionBarActivity
 {
-
 	private long exitTime;
 
 	private FragmentTabHost tabHost;
@@ -45,9 +43,8 @@ public class MainActivity extends ActionBarActivity
 		super.onResume();
 		MobclickAgent.onResume(this);
 		ReimApplication.setProgressDialog(this);
-		Intent intent = getIntent();
-		tabIndex = intent.getIntExtra("tabIndex", 0);
-		System.out.println(tabIndex);
+		Bundle bundle = getIntent().getExtras();
+		tabIndex = bundle == null ? 0 : bundle.getInt("tabIndex");
 		tabHost.setCurrentTab(tabIndex);
 	}
 

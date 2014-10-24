@@ -11,6 +11,15 @@ public class Tag
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 	
+	public int getServerID()
+	{
+		return serverID;
+	}
+	public void setServerID(int serverID)
+	{
+		this.serverID = serverID;
+	}
+	
 	public int getGroupID()
 	{
 		return groupID;
@@ -98,12 +107,14 @@ public class Tag
 		}
 		return result.substring(0, result.length()-1);
 	}
-	public int getServerID()
+	
+	public boolean equals(Object o)
 	{
-		return serverID;
-	}
-	public void setServerID(int serverID)
-	{
-		this.serverID = serverID;
-	}
+		if (o instanceof Tag)
+		{
+			Tag tag = (Tag)o;
+			return tag.getServerID() == this.getServerID();
+		}
+		return super.equals(o);
+	}	
 }

@@ -4,6 +4,7 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.FeedbackRequest;
 import netUtils.Response.FeedbackResponse;
 
+import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -11,6 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
@@ -53,7 +55,7 @@ public class FeedbackActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+			goBackToMainActivity();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -114,7 +116,7 @@ public class FeedbackActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				finish();
+				goBackToMainActivity();
 			}
 		});	
 	}
@@ -148,7 +150,7 @@ public class FeedbackActivity extends Activity
 																{
 																	public void onClick(DialogInterface dialog, int which)
 																	{
-																		finish();
+																		goBackToMainActivity();
 																	}
 																})
 																.create();
@@ -167,5 +169,16 @@ public class FeedbackActivity extends Activity
 				});
 			}
 		});
+    }
+
+    private void goBackToMainActivity()
+    {
+    	Bundle bundle = new Bundle();
+    	bundle.putInt("tabIndex", 3);
+    	Intent intent = new Intent(FeedbackActivity.this, MainActivity.class);
+    	intent.putExtras(bundle);
+    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	startActivity(intent);
+    	finish();
     }
 }

@@ -12,7 +12,7 @@ public class Report implements Serializable
 	public static final int STATUS_DRAFT = 0;
 	public static final int STATUS_SUBMITTED = 1;
 	public static final int STATUS_APPROVED = 2;
-	public static final int STATUS_REJECT = 3;
+	public static final int STATUS_REJECTED = 3;
 	public static final int STATUS_FINISHED = 4;
 	
 	private int localID = -1;
@@ -116,7 +116,7 @@ public class Report implements Serializable
 				return "已提交";
 			case STATUS_APPROVED:
 				return "审批通过";
-			case STATUS_REJECT:
+			case STATUS_REJECTED:
 				return "审批未通过";
 			case STATUS_FINISHED:
 				return "报销完成";

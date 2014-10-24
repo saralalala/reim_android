@@ -4,6 +4,7 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.ModifyUserRequest;
 import netUtils.Response.User.ModifyUserResponse;
 
+import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -63,7 +64,7 @@ public class ProfileActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+			goBackToMainActivity();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -190,4 +191,15 @@ public class ProfileActivity extends Activity
 			});
 		}
 	}
+
+    private void goBackToMainActivity()
+    {
+    	Bundle bundle = new Bundle();
+    	bundle.putInt("tabIndex", 3);
+    	Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+    	intent.putExtras(bundle);
+    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	startActivity(intent);
+    	finish();
+    }
 }

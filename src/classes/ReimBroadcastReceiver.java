@@ -3,6 +3,7 @@ package classes;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.rushucloud.reim.ApproveReportActivity;
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.InvitedActivity;
@@ -14,6 +15,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Toast;
 
 public class ReimBroadcastReceiver extends BroadcastReceiver
@@ -37,11 +39,6 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				JSONObject jObject = new JSONObject(intent.getExtras().getString("com.avos.avoscloud.Data"));
 				int type = jObject.getInt("type");
 				String message = jObject.getString("msg");
-				
-				if (type == TYPE_REPORT)
-				{
-					updateReport(jObject);
-				}
 				
 				Intent notificationIntent = new Intent("com.rushucloud.reim.NOTIFICATION_CLICKED");
 				notificationIntent.putExtra("type", type);
@@ -75,10 +72,23 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					}		
 					case TYPE_REPORT:
 					{
-						Intent newIntent = new Intent(context, MainActivity.class);
-						newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						newIntent.putExtra("tabIndex", 2);
-						context.startActivity(newIntent);
+						int status = jObject.getInt("status");
+						if (status == 1)
+						{
+							Intent newIntent = new Intent(context, ApproveReportActivity.class);
+							newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+							newIntent.putExtra("reportID", jObject.getInt("args"));
+							context.startActivity(newIntent);
+						}
+						else 
+						{
+							Bundle bundle = new Bundle();
+							bundle.putInt("tabIndex", 1);
+							Intent newIntent = new Intent(context, MainActivity.class);
+							newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							newIntent.putExtras(bundle);
+							context.startActivity(newIntent);							
+						}
 						break;
 					}
 					case TYPE_INVITE:

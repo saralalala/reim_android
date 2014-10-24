@@ -11,8 +11,10 @@ import netUtils.Response.Report.DeleteReportResponse;
 
 
 import classes.AppPreference;
+import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
+import classes.Tag;
 import classes.Utils;
 import classes.Adapter.ReportListViewAdapter;
 import database.DBManager;
@@ -23,21 +25,37 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TabHost;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.support.v4.app.Fragment;
 
 public class ReportFragment extends Fragment
 {
+	private static final int LIST_FILTER_ALL = 0;
+	private static final int LIST_FILTER_DRAFT = 1;
+	private static final int LIST_FILTER_SUBMITTED = 2;
+	private static final int LIST_FILTER_APPROVED = 3;
+	private static final int LIST_FILTER_REJECTED = 4;	
+	private static final int LIST_FILTER_FINISHED = 5;	
+	private static final int LIST_SORT_AMOUNT = 6;	
+	private static final int LIST_SORT_DATE = 7;	
+	private static final int LIST_SORT_ITEMS_NUMBER = 8;	
+	
 	private TabHost tabHost;
 	private View view;
 	private Button addButton;
@@ -49,6 +67,10 @@ public class ReportFragment extends Fragment
 	private DBManager dbManager;
 	private List<Report> mineList = new ArrayList<Report>();
 	private List<Report> approveList = new ArrayList<Report>();
+	private List<Report> showMineList = new ArrayList<Report>();
+	private List<Report> showApproveList = new ArrayList<Report>();
+	
+	private int listType;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -70,13 +92,57 @@ public class ReportFragment extends Fragment
 		MobclickAgent.onPageStart("ReportFragment");	
         viewInitialise();
         dataInitialise();
-		refreshReportListView();
+		refreshMineReportListView();
+		refreshApproveReportListView();
+//		setHasOptionsMenu(true);
 	}
 
 	public void onPause()
 	{
 		super.onPause();
 		MobclickAgent.onPageEnd("ReportFragment");
+	}
+	
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		inflater.inflate(R.menu.report, menu);
+		Spinner spinner = (Spinner)menu.findItem(R.id.action_filter_item).getActionView();
+		SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getActivity(), 
+				R.array.reportSpinner, R.layout.spinner_drop_down_item);
+		spinner.setAdapter(spinnerAdapter);		
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener()
+		{
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+			{
+				listType = position;
+//				if (position != 4)
+//				{
+//					Toast.makeText(getActivity(), "这是第"+position+"个", Toast.LENGTH_SHORT).show();
+//					refreshItemListView();
+//				}
+//				else
+//				{
+//					//TODO alertdialog to let user choose
+//				}
+			}
+
+			public void onNothingSelected(AdapterView<?> parent)
+			{
+				Toast.makeText(getActivity(), "Nothing selected", Toast.LENGTH_SHORT).show();
+			}
+		});
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		int id = item.getItemId();
+		if (id == R.id.action_sort_item)
+		{
+			//TODO alertdialog to let user choose base
+		}
+			
+		return super.onOptionsItemSelected(item);
 	}
 	
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
@@ -98,7 +164,7 @@ public class ReportFragment extends Fragment
 				{
 					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
 				}
-				else if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECT)
+				else if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECTED)
 				{
 					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
 														.setTitle("警告")
@@ -166,6 +232,9 @@ public class ReportFragment extends Fragment
 			tabHost.getTabWidget().getChildTabViewAt(0).setMinimumWidth(screenWidth / 2);
 			tabHost.getTabWidget().getChildTabViewAt(1).setMinimumWidth(screenWidth / 2);
 		}
+		Bundle bundle = getActivity().getIntent().getExtras();
+		int index = bundle == null ? 0 : bundle.getInt("reportTabIndex");
+		tabHost.setCurrentTab(index);
 		
 		if (addButton == null)
 		{
@@ -195,7 +264,7 @@ public class ReportFragment extends Fragment
 						int position, long id)
 				{
 					Bundle bundle = new Bundle();
-					bundle.putSerializable("report", mineList.get(position));
+					bundle.putSerializable("report", showMineList.get(position));
 					Intent intent = new Intent(getActivity(), EditReportActivity.class);
 					intent.putExtras(bundle);
 					startActivity(intent);
@@ -218,9 +287,18 @@ public class ReportFragment extends Fragment
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id)
 				{
+					Report report = showApproveList.get(position);
 					Bundle bundle = new Bundle();
-					bundle.putSerializable("report", approveList.get(position));
-					Intent intent = new Intent(getActivity(), EditReportActivity.class);
+					bundle.putSerializable("report", report);
+					Intent intent;
+					if (report.getStatus() == Report.STATUS_SUBMITTED)
+					{
+						intent = new Intent(getActivity(), ApproveReportActivity.class);
+					}
+					else
+					{
+						intent = new Intent(getActivity(), ShowReportActivity.class);
+					}
 					intent.putExtras(bundle);
 					startActivity(intent);
 				}
@@ -242,19 +320,66 @@ public class ReportFragment extends Fragment
 		return dbManager.getApproveReports(appPreference.getCurrentUserID());
 	}
 	
-	private void refreshReportListView()
+	private void refreshMineReportListView()
 	{
 		mineList.clear();
 		mineList.addAll(readMineReportList());
-		mineAdapter.set(mineList);
+		showMineList.clear();
+		showMineList.addAll(filterReportList(mineList));
+		mineAdapter.set(showMineList);
 		mineAdapter.notifyDataSetChanged();
-		
+	}
+	
+	private void refreshApproveReportListView()
+	{
 		approveList.clear();
 		approveList.addAll(readApproveReportList());
-		approveAdapter.set(approveList);
-		approveAdapter.notifyDataSetChanged();
+		showApproveList.clear();
+		showApproveList.addAll(filterReportList(approveList));
+		approveAdapter.set(showApproveList);
+		approveAdapter.notifyDataSetChanged();	
 	}
 
+	private List<Report> filterReportList(List<Report> reportList)
+	{
+//		List<Report> newReportList = new ArrayList<Report>();
+		List<Report> newReportList = new ArrayList<Report>(reportList);
+		//TODO add reports to newReportList from reportList
+		switch (listType)
+		{
+			case LIST_FILTER_ALL:
+				
+				break;
+			case LIST_FILTER_DRAFT:
+				
+				break;
+			case LIST_FILTER_SUBMITTED:
+				
+				break;
+			case LIST_FILTER_APPROVED:
+				
+				break;
+			case LIST_FILTER_REJECTED:
+				
+				break;
+			case LIST_FILTER_FINISHED:
+				
+				break;
+			case LIST_SORT_AMOUNT:
+				
+				break;
+			case LIST_SORT_DATE:
+				
+				break;
+			case LIST_SORT_ITEMS_NUMBER:
+				
+				break;
+			default:
+				break;
+		}
+		return newReportList;
+	}
+	
 	private void sendDeleteReportRequest(final Report report)
 	{
 		ReimApplication.pDialog.show();
@@ -293,7 +418,7 @@ public class ReportFragment extends Fragment
 	{
 		if (dbManager.deleteReport(reportLocalID))
 		{
-			refreshReportListView();
+			refreshMineReportListView();
 			ReimApplication.pDialog.dismiss();
             Toast.makeText(getActivity(), R.string.deleteSucceed, Toast.LENGTH_SHORT).show();														
 		}

@@ -1,5 +1,9 @@
 package com.rushucloud.reim;
 
+import netUtils.HttpConnectionCallback;
+import netUtils.HttpConstant;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Response.DownloadImageResponse;
 import classes.Item;
 import classes.Tag;
 import classes.User;
@@ -21,6 +25,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ShowItemActivity extends Activity
 {
@@ -107,7 +112,7 @@ public class ShowItemActivity extends Activity
 		TextView noteTextView = (TextView)findViewById(R.id.noteTextView);
 		noteTextView.setText(item.getNote());
 		
-		ImageView invoiceImageView = (ImageView)findViewById(R.id.invoiceImageView);
+		final ImageView invoiceImageView = (ImageView)findViewById(R.id.invoiceImageView);
 		invoiceImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -130,6 +135,56 @@ public class ShowItemActivity extends Activity
 		else
 		{			
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
+			if (item.getImageID() != -1 && item.getImageID() != 0)
+			{
+				DownloadImageRequest request = new DownloadImageRequest(item.getImageID());
+				request.sendRequest(new HttpConnectionCallback()
+				{
+					public void execute(Object httpResponse)
+					{
+						DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+						if (response.getBitmap() != null)
+						{
+							final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), 
+																			HttpConstant.IMAGE_TYPE_INVOICE);
+							if (!invoicePath.equals(""))
+							{
+								item.setInvoicePath(invoicePath);
+								DBManager.getDBManager().updateItem(item);
+								
+								runOnUiThread(new Runnable()
+								{
+									public void run()
+									{
+										Bitmap bitmap = BitmapFactory.decodeFile(invoicePath);
+										invoiceImageView.setImageBitmap(bitmap);
+									}
+								});
+							}
+							else
+							{						
+								runOnUiThread(new Runnable()
+								{
+									public void run()
+									{
+										Toast.makeText(ShowItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+									}
+								});						
+							}
+						}
+						else
+						{				
+							runOnUiThread(new Runnable()
+							{
+								public void run()
+								{
+									Toast.makeText(ShowItemActivity.this, "图片下载失败", Toast.LENGTH_SHORT).show();
+								}
+							});								
+						}
+					}
+				});
+			}	
 		}
 	}
 	
