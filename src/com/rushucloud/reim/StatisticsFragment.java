@@ -83,7 +83,7 @@ public class StatisticsFragment extends Fragment
 		
 		if (done_angle == 0 || Float.isNaN(done_angle))
 		{
-			ReimPie rp_done = new ReimPie(getActivity(), 360, 0, doneContainer.getWidth(), doneContainer.getHeight());
+			ReimPie rp_done = new ReimPie(getActivity(), 0, 0, doneContainer.getWidth(), doneContainer.getHeight());
 			doneContainer.addView(rp_done);			
 		}
 		else 
@@ -94,7 +94,7 @@ public class StatisticsFragment extends Fragment
 
 		if (new_angle == 0 || Float.isNaN(new_angle))
 		{
-			ReimPie rp_new = new ReimPie(getActivity(), 360, 0, newContainer.getWidth(), newContainer.getHeight());
+			ReimPie rp_new = new ReimPie(getActivity(), 0, 0, newContainer.getWidth(), newContainer.getHeight());
 			newContainer.addView(rp_new);
 		}
 		else 
@@ -105,7 +105,7 @@ public class StatisticsFragment extends Fragment
 
 		if (process_angle == 0 || Float.isNaN(process_angle))
 		{
-			ReimPie rp_new = new ReimPie(getActivity(), 360, 0,	processContainer.getWidth(), processContainer.getHeight());
+			ReimPie rp_new = new ReimPie(getActivity(), 0, 0,	processContainer.getWidth(), processContainer.getHeight());
 			processContainer.addView(rp_new);
 		}
 		else 

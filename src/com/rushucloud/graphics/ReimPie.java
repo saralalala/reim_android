@@ -57,15 +57,8 @@ public class ReimPie extends View
 			oval.right = width - 10; // 右边
 			oval.bottom -= diff / 2 + 10; // 下边	
 		}
-		
-		if (this._angle != 360)
-		{
-			canvas.drawArc(oval, this._start, this._angle, true, occupyPaint); // 绘制圆弧
-			canvas.drawArc(oval, this._start+this._angle, 360-this._angle, true, remainingPaint); // 绘制圆弧			
-		}
-		else
-		{
-			canvas.drawArc(oval, 0, 360, true, remainingPaint); // 绘制圆弧					
-		}
+
+		canvas.drawArc(oval, this._start, this._angle, true, occupyPaint); // 绘制圆弧
+		canvas.drawArc(oval, this._start+this._angle, 360-this._angle, true, remainingPaint); // 绘制圆弧
 	}
 }
