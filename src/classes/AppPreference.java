@@ -71,6 +71,7 @@ public class AppPreference
 		editor.putString("serverToken", appPreference.getServerToken());
 		editor.putBoolean("syncOnlyWithWifi", appPreference.syncOnlyWithWifi());
 		editor.putBoolean("enablePasswordProtection", appPreference.passwordProtectionEnabled());
+		editor.putInt("lastSyncTime", appPreference.getLastSyncTime());
 		editor.commit();
 	}
 	

@@ -29,8 +29,10 @@ public abstract class SyncUtils
 
 	public static void syncFromServer(final SyncDataCallback callback)
 	{
-//		int lastSynctime = AppPreference.getAppPreference().getLastSyncTime();
-		int lastSynctime = 0;
+		int lastSynctime = AppPreference.getAppPreference().getLastSyncTime();
+//		int lastSynctime = 0;
+		System.out.println("*************************************");
+		System.out.println("lastSynctime:"+lastSynctime);
 		final int currentTime = Utils.getCurrentTime();
 		SyncDataRequest request = new SyncDataRequest(lastSynctime);
 		request.sendRequest(new HttpConnectionCallback()

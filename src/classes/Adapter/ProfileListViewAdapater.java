@@ -206,7 +206,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 
 	public int getCount()
 	{
-		return user.isAdmin() && user.getGroupID() != -1 ? 8 : 5;
+		return user.isAdmin() && user.getGroupID() != -1 ? 8 : 6;
 	}
 
 	public Object getItem(int position)

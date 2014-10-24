@@ -88,6 +88,7 @@ public class ReimFragment extends Fragment
 		viewInitialise();
 		dataInitialise();
 		refreshItemListView();
+		syncItems();
 		setHasOptionsMenu(true);
 	}
 
@@ -241,26 +242,6 @@ public class ReimFragment extends Fragment
 		{
 			dbManager = DBManager.getDBManager();
 		}
-
-		if (ReimApplication.needToSync && Utils.canSyncToServer(getActivity()))
-		{
-			ReimApplication.needToSync = false;
-			SyncUtils.syncFromServer(new SyncDataCallback()
-			{
-				public void execute()
-				{
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							refreshItemListView();
-						}
-					});
-
-					SyncUtils.syncAllToServer(null);
-				}
-			});
-		}
 	}
 
 	private void viewInitialise()
@@ -411,6 +392,28 @@ public class ReimFragment extends Fragment
 
 			default:
 				break;
+		}
+	}
+
+	private void syncItems()
+	{
+		if (Utils.canSyncToServer(getActivity()))
+		{
+			SyncUtils.syncFromServer(new SyncDataCallback()
+			{
+				public void execute()
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							refreshItemListView();
+						}
+					});
+
+					SyncUtils.syncAllToServer(null);
+				}
+			});
 		}
 	}
 }

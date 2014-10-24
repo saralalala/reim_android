@@ -6,6 +6,8 @@ import java.util.List;
 import com.umeng.analytics.MobclickAgent;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.SyncDataCallback;
+import netUtils.SyncUtils;
 import netUtils.Request.Report.DeleteReportRequest;
 import netUtils.Response.Report.DeleteReportResponse;
 
@@ -94,6 +96,7 @@ public class ReportFragment extends Fragment
         dataInitialise();
 		refreshMineReportListView();
 		refreshApproveReportListView();
+		syncReports();
 //		setHasOptionsMenu(true);
 	}
 
@@ -427,5 +430,28 @@ public class ReportFragment extends Fragment
 			ReimApplication.pDialog.dismiss();
             Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
 		}		
+	}
+
+	private void syncReports()
+	{
+		if (Utils.canSyncToServer(getActivity()))
+		{
+			SyncUtils.syncFromServer(new SyncDataCallback()
+			{
+				public void execute()
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							refreshMineReportListView();
+							refreshApproveReportListView();
+						}
+					});
+
+					SyncUtils.syncAllToServer(null);
+				}
+			});
+		}
 	}
 }
