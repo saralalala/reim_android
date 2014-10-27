@@ -33,7 +33,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -245,7 +247,10 @@ public class EditItemActivity extends Activity
 	private void viewInitialise()
 	{		
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
-		amountEditText.setText(Double.toString(item.getAmount()));
+		if (item.getAmount() != 0)
+		{
+			amountEditText.setText(Double.toString(item.getAmount()));			
+		}
 		
 		vendorEditText = (EditText)findViewById(R.id.vendorEditText);
 		vendorEditText.addTextChangedListener(new TextWatcher()
@@ -298,11 +303,16 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				
 				if (!item.getInvoicePath().equals(""))
 				{
 					Intent intent = new Intent(EditItemActivity.this, ImageActivity.class);
 					intent.putExtra("imagePath", item.getInvoicePath());
 					startActivity(intent);
+				}
+				else
+				{
+					invoiceImageView.showContextMenu();
 				}
 			}
 		});
@@ -511,22 +521,15 @@ public class EditItemActivity extends Activity
 
 				final DatePicker datePicker = (DatePicker)view.findViewById(R.id.datePicker);
 				final TimePicker timePicker = (TimePicker)view.findViewById(R.id.timePicker);
-				
 				datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
 				
 				timePicker.setIs24HourView(true);
 				timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
 				timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
 				
-				LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
-				baseLayout.setOnClickListener(new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						hideSoftKeyboard();
-					}
-				});
-
+				datePicker.clearFocus();
+				timePicker.clearFocus();
+				
 				AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
 													.setView(view)
 													.setTitle(R.string.chooseTime)
@@ -606,8 +609,10 @@ public class EditItemActivity extends Activity
 					item.setIsProveAhead(proveAheadCheckBox.isChecked());
 					item.setNeedReimbursed(needReimCheckBox.isChecked());
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
+					
 					if (dbManager.syncItem(item))
 					{
+						Toast.makeText(EditItemActivity.this, "条目保存成功", Toast.LENGTH_SHORT);
 						if (Utils.canSyncToServer(EditItemActivity.this))
 						{
 							SyncUtils.syncAllToServer(null);							
@@ -705,8 +710,41 @@ public class EditItemActivity extends Activity
 		}
     	else
     	{
-			ReimApplication.pDialog.dismiss();
-			Toast.makeText(EditItemActivity.this, "定位失败，无法获取附近商家，请手动输入商家名", Toast.LENGTH_SHORT).show();    		
+    		Criteria criteria = new Criteria();
+    		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+    		criteria.setAltitudeRequired(false);
+    		criteria.setBearingRequired(false);
+    		criteria.setCostAllowed(false);
+    		criteria.setPowerRequirement(Criteria.POWER_LOW);
+    		String provider = locationManager.getBestProvider(criteria, true);
+    		location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+    		locationManager.requestLocationUpdates(provider, 5000, 0, new LocationListener()
+			{
+				public void onStatusChanged(String provider, int status, Bundle extras)
+				{
+					
+				}
+				
+				public void onProviderEnabled(String provider)
+				{
+					
+				}
+				
+				public void onProviderDisabled(String provider)
+				{
+					
+				}
+				
+				public void onLocationChanged(Location location)
+				{
+					double latitude = location.getLatitude();
+					double longitude = location.getLongitude();
+					String category = item.getCategory() == null ? "" : item.getCategory().getName();
+					sendVendorsRequest(category, latitude, longitude);
+				}
+			});
+//			ReimApplication.pDialog.dismiss();
+//			Toast.makeText(EditItemActivity.this, "定位失败，无法获取附近商家，请手动输入商家名", Toast.LENGTH_SHORT).show();    		
     	}
     }
     

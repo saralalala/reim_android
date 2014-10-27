@@ -10,6 +10,7 @@ import netUtils.Response.Item.SearchItemsResponse;
 
 import classes.AppPreference;
 import classes.Item;
+import classes.Report;
 import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
 import android.annotation.SuppressLint;
@@ -90,8 +91,26 @@ public class SearchItemActivity extends Activity
 						{
 							itemList.clear();
 							itemList.addAll(response.getItemList());
+							
+							DBManager dbManager = DBManager.getDBManager(); 
+							for (Item item : itemList)
+							{
+								int reportServerID = item.getBelongReport().getServerID();
+								Report report = dbManager.getReportByServerID(reportServerID);
+								item.setBelongReport(report);
+								dbManager.syncItem(item);
+								Item localItem = dbManager.getItemByServerID(item.getServerID());
+								item.setLocalID(localItem.getLocalID());
+							}
+							
 							adapter.set(itemList);
-							adapter.notifyDataSetChanged();
+							runOnUiThread(new Runnable()
+							{
+								public void run()
+								{
+									adapter.notifyDataSetChanged();
+								}
+							});
 						}
 						else
 						{
@@ -151,11 +170,22 @@ public class SearchItemActivity extends Activity
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				int itemLocalID = adapter.getItem(position).getLocalID();
-				Intent intent = new Intent(SearchItemActivity.this, EditItemActivity.class);
-				intent.putExtra("itemLocalID", itemLocalID);
-				startActivity(intent);
-			}			
+				Item item = itemList.get(position);
+				if (item.getBelongReport() == null
+						|| item.getBelongReport().getStatus() == Report.STATUS_DRAFT
+						|| item.getBelongReport().getStatus() == Report.STATUS_REJECTED)
+				{
+					Intent intent = new Intent(SearchItemActivity.this, EditItemActivity.class);
+					intent.putExtra("itemLocalID", item.getLocalID());
+					startActivity(intent);
+				}
+				else
+				{
+					Intent intent = new Intent(SearchItemActivity.this, ShowItemActivity.class);
+					intent.putExtra("itemLocalID", item.getLocalID());
+					startActivity(intent);
+				}
+			}
 		});
 	}
 }

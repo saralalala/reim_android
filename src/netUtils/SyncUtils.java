@@ -122,7 +122,7 @@ public abstract class SyncUtils
 		{
     		for (Report report : reportList)
     		{
-    			if (dbManager.getReportItemIDs(report.getLocalID()).length() == 0)
+    			if (!report.hasItems() || (report.getStatus() == Report.STATUS_SUBMITTED && !report.canBeSubmitted()))
 				{
 					reportTaskCount--;
 					continue;

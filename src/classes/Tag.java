@@ -3,6 +3,8 @@ package classes;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DBManager;
+
 public class Tag
 {
 	private int serverID = -1;
@@ -106,6 +108,28 @@ public class Tag
 			result += tagList.get(i).getName() + ",";
 		}
 		return result.substring(0, result.length()-1);
+	}
+	
+	public static List<Tag> stringToTagList(String idString)
+	{
+		List<Tag> tagList = new ArrayList<Tag>();
+		DBManager dbManager = DBManager.getDBManager();
+		while (idString.indexOf(',') != -1)
+		{
+			int index = idString.indexOf(',');
+			int serverID = Integer.valueOf(idString.substring(0, index));
+			Tag tag = dbManager.getTag(serverID);
+			tagList.add(tag);
+			idString = idString.substring(index+1);
+		}
+		
+		if (idString.length() != 0)
+		{
+			int serverID = Integer.valueOf(idString);
+			Tag tag = dbManager.getTag(serverID);
+			tagList.add(tag);
+		}
+		return tagList;
 	}
 	
 	public boolean equals(Object o)

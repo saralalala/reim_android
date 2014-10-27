@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 import classes.Category;
 import classes.Item;
+import classes.Report;
+import classes.Tag;
 import classes.User;
 import classes.Utils;
 
@@ -27,10 +29,9 @@ public class SearchItemsResponse extends BaseResponse
 	{
 		try
 		{
-			JSONObject jObject = getDataObject();
+			JSONArray jsonArray = getDataArray();
 			
 			itemList = new ArrayList<Item>();
-			JSONArray jsonArray = jObject.getJSONArray("items");
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
 				JSONObject object = jsonArray.getJSONObject(i);
@@ -40,25 +41,27 @@ public class SearchItemsResponse extends BaseResponse
 				item.setMerchant(object.getString("merchants"));
 				item.setNote(object.getString("note"));
 				item.setConsumedDate(object.getInt("dt"));
-				item.setServerUpdatedDate(object.getInt("lastdt"));
+				item.setServerUpdatedDate(object.getInt("lastdt"));				
+				item.setLocalUpdatedDate(object.getInt("lastdt"));				
+				item.setImageID(object.getInt("image_id"));		
+				item.setInvoicePath("");
+				item.setIsProveAhead(Utils.intToBoolean(object.getInt("prove_ahead")));
+				item.setNeedReimbursed(Utils.intToBoolean(object.getInt("reimbursed")));
 				
-//				item.setLocalUpdatedDate();
-				//TODO Check local time
-				
-				item.setImageID(object.getInt("image_id"));
-				//TODO get image from server
+				Report report = new Report();
+				report.setServerID(object.getInt("rid"));
+				item.setBelongReport(report);				
 				
 				Category category = new Category();
 				category.setServerID(object.getInt("category"));
-				//TODO request for common once again
 				item.setCategory(category);
+				
+				List<Tag> tagList = Tag.stringToTagList(object.getString("tags"));
+				item.setTags(tagList);
 				
 				User user = new User();
 				user.setServerID(object.getInt("uid"));
-				//TODO get user
 				item.setConsumer(user);
-
-				item.setIsProveAhead(Utils.intToBoolean(object.getInt("billable")));
 				
 				itemList.add(item);
 			}

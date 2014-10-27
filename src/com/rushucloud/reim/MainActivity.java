@@ -80,28 +80,31 @@ public class MainActivity extends ActionBarActivity
 
 	private void tabHostInitialse()
 	{
-		LayoutInflater layoutInflater = LayoutInflater.from(this);
-		tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-		tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-
-		for (int i = 0; i < 4; i++)
+		if (tabHost == null)
 		{
-			View view = layoutInflater.inflate(R.layout.tab_item, (ViewGroup) null, false);
+			LayoutInflater layoutInflater = LayoutInflater.from(this);
+			tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+			tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
 
-			Drawable drawableTop = getResources().getDrawable(imageViewList[i]);
-			drawableTop.setBounds(0, 5, drawableTop.getMinimumWidth(),
-					drawableTop.getMinimumHeight() + 5);
+			for (int i = 0; i < 4; i++)
+			{
+				View view = layoutInflater.inflate(R.layout.tab_item, (ViewGroup) null, false);
 
-			TextView textView = (TextView) view.findViewById(R.id.textView);
-			textView.setText(getText(textviewList[i]));
-			textView.setCompoundDrawablePadding(5);
-			textView.setCompoundDrawables(null, drawableTop, null, null);
+				Drawable drawableTop = getResources().getDrawable(imageViewList[i]);
+				drawableTop.setBounds(0, 5, drawableTop.getMinimumWidth(),
+						drawableTop.getMinimumHeight() + 5);
 
-			TabSpec tabSpec = tabHost.newTabSpec(getText(textviewList[i]).toString()).setIndicator(
-					view);
-			tabHost.addTab(tabSpec, fragmentList[i], null);
-			tabHost.getTabWidget().getChildAt(i)
-					.setBackgroundResource(R.drawable.selector_tab_background);
+				TextView textView = (TextView) view.findViewById(R.id.textView);
+				textView.setText(getText(textviewList[i]));
+				textView.setCompoundDrawablePadding(5);
+				textView.setCompoundDrawables(null, drawableTop, null, null);
+
+				TabSpec tabSpec = tabHost.newTabSpec(getText(textviewList[i]).toString()).setIndicator(
+						view);
+				tabHost.addTab(tabSpec, fragmentList[i], null);
+				tabHost.getTabWidget().getChildAt(i)
+						.setBackgroundResource(R.drawable.selector_tab_background);
+			}
 		}
 	}
 }

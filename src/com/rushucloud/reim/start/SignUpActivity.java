@@ -1,10 +1,10 @@
 package com.rushucloud.reim.start;
 
-import netUtils.Request.CommonRequest;
+import netUtils.Request.User.SignInRequest;
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.RegisterRequest;
 import netUtils.Request.User.VerifyCodeRequest;
-import netUtils.Response.CommonResponse;
+import netUtils.Response.User.SignInResponse;
 import netUtils.Response.User.RegisterResponse;
 import netUtils.Response.User.VerifyCodeResponse;
 import classes.AppPreference;
@@ -93,16 +93,16 @@ public class SignUpActivity extends Activity
 		tabHost = (TabHost)findViewById(android.R.id.tabhost);
 		tabHost.setup();
 		LayoutInflater layoutInflater = LayoutInflater.from(this);
-		layoutInflater.inflate(R.layout.start_register_by_phone, tabHost.getTabContentView());
 		layoutInflater.inflate(R.layout.start_register_by_email, tabHost.getTabContentView());
-		
-		tabHost.addTab(tabHost.newTabSpec("registerByPhone")
-				.setIndicator(getResources().getString(R.string.signUpByPhone))
-				.setContent(R.id.phoneBaseLayout));
+		layoutInflater.inflate(R.layout.start_register_by_phone, tabHost.getTabContentView());
 		
 		tabHost.addTab(tabHost.newTabSpec("registerByEmail")
 				.setIndicator(getResources().getString(R.string.signUpByEmail))
 				.setContent(R.id.emailBaseLayout));
+		
+		tabHost.addTab(tabHost.newTabSpec("registerByPhone")
+				.setIndicator(getResources().getString(R.string.signUpByPhone))
+				.setContent(R.id.phoneBaseLayout));
 		
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -376,7 +376,13 @@ public class SignUpActivity extends Activity
 				final RegisterResponse response = new RegisterResponse(httpResponse);
 				if (response.getStatus())
 				{
-					Toast.makeText(SignUpActivity.this, "注册成功!正在获取数据", Toast.LENGTH_SHORT).show();
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							Toast.makeText(SignUpActivity.this, "注册成功!正在获取数据", Toast.LENGTH_SHORT).show();
+						}
+					});
 					AppPreference appPreference = AppPreference.getAppPreference();
 					if (!user.getEmail().equals(""))
 					{
@@ -495,12 +501,12 @@ public class SignUpActivity extends Activity
     
     private void getCommonInfo()
     {
-		CommonRequest request = new CommonRequest();
+		SignInRequest request = new SignInRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
-				final CommonResponse response = new CommonResponse(httpResponse);				
+				final SignInResponse response = new SignInResponse(httpResponse);				
 				if (response.getStatus())
 				{
 					DBManager dbManager = DBManager.getDBManager();

@@ -48,7 +48,7 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 		
 		ImageView imageView = (ImageView)convertView.findViewById(R.id.photoImageView);
 		TextView reportTextView = (TextView)convertView.findViewById(R.id.reportTextView);
-		TextView infoTextView = (TextView)convertView.findViewById(R.id.infoTextView);
+		TextView vendorTextView = (TextView)convertView.findViewById(R.id.vendorTextView);
 		TextView categoryTextView = (TextView)convertView.findViewById(R.id.categoryTextView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		
@@ -66,8 +66,8 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 		
 		amountTextView.setText("￥" + Double.toString(item.getAmount()));
 
-		String note = item.getNote().equals("") ? "N/A" : item.getNote();
-		infoTextView.setText(note);
+		String vendor = item.getMerchant().equals("") ? "N/A" : item.getMerchant();
+		vendorTextView.setText(vendor);
 		
 		String reportTitle = item.getBelongReport() == null ? "N/A" : item.getBelongReport().getTitle();
 		reportTextView.setText(reportTitle);

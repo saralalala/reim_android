@@ -23,7 +23,7 @@
             android:textColor="#FF000000"  
             android:textSize="13sp" />  
             
-        <TextView android:id="@+id/infoTextView"    
+        <TextView android:id="@+id/vendorTextView"    
             android:layout_width="wrap_content"  
             android:layout_height="wrap_content"    
             android:textColor="#FF000000"  
@@ -44,7 +44,7 @@
         <TextView android:id="@+id/amountTextView"    
             android:layout_width="wrap_content"  
             android:layout_height="wrap_content"    
-            android:textColor="#00000000"  
+            android:textColor="#FF000000"  
             android:textSize="22sp" />  
             
     </LinearLayout>

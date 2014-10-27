@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import classes.Category;
 import classes.Item;
 import classes.Report;
+import classes.Tag;
 import classes.User;
 import classes.Utils;
 
@@ -75,6 +76,9 @@ public class SyncDataResponse extends BaseResponse
 				Category category = new Category();
 				category.setServerID(object.getInt("category"));
 				item.setCategory(category);
+				
+				List<Tag> tagList = Tag.stringToTagList(object.getString("tags"));
+				item.setTags(tagList);
 				
 				User user = new User();
 				user.setServerID(object.getInt("uid"));

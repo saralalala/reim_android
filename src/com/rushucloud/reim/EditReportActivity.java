@@ -402,7 +402,19 @@ public class EditReportActivity extends Activity
 		}
 		if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
 		{
-			Toast.makeText(EditReportActivity.this, prompt, Toast.LENGTH_SHORT).show();
+			AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
+									.setTitle("提示")
+									.setMessage(prompt)
+									.setNegativeButton(R.string.confirm, 
+											new DialogInterface.OnClickListener()
+									{
+										public void onClick(DialogInterface dialog, int which)
+										{
+											goBackToMainActivity();
+										}
+									})
+									.create();
+			mDialog.show();
 			if (Utils.canSyncToServer(EditReportActivity.this))
 			{
 				SyncUtils.syncAllToServer(new SyncDataCallback()
@@ -440,13 +452,12 @@ public class EditReportActivity extends Activity
 		}
 		if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
 		{
-			boolean canBeSubmitted = report.canBeSubmitted();
-			if (!canBeSubmitted)
+			if (!report.hasItems())
 			{
 				report.setStatus(Report.STATUS_DRAFT);
 				AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
 											.setTitle("无法提交报告")
-											.setMessage("此报告为空报告或者部分条目信息未上传到服务器")
+											.setMessage("此报告为空报告")
 											.setNegativeButton(R.string.confirm, null)
 											.create();
 				mDialog.show();
