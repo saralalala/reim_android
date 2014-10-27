@@ -156,7 +156,12 @@
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.InvitedActivity">
+            android:name="com.rushucloud.reim.me.InviteActivity">
+        </activity>
+        
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.me.InviteReplyActivity">
         </activity>
         
         <!-- #######################  友盟UmengAppkey  ####################### -->

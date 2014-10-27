@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.rushucloud.reim.ApproveReportActivity;
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
-import com.rushucloud.reim.me.InvitedActivity;
+import com.rushucloud.reim.me.InviteReplyActivity;
 
 import database.DBManager;
 import android.app.Notification;
@@ -93,8 +93,23 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					}
 					case TYPE_INVITE:
 					{
-						Intent newIntent = new Intent(context, InvitedActivity.class);
-						newIntent.putExtra("data", jObject.toString());
+						Invite invite = new Invite();
+						try
+						{
+							invite.setMessage(jObject.getString("msg"));
+							invite.setInviteCode(jObject.getInt("code"));
+						}
+						catch (JSONException e)
+						{
+							invite.setMessage("数据读取出错了！");
+							invite.setInviteCode(-1);
+						}
+						
+						Bundle bundle = new Bundle();
+						bundle.putSerializable("invite", invite);
+						
+						Intent newIntent = new Intent(context, InviteReplyActivity.class);
+						newIntent.putExtras(bundle);
 						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						context.startActivity(newIntent);
 						break;

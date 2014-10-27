@@ -1,8 +1,5 @@
 package com.rushucloud.reim.me;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.CommonRequest;
 import netUtils.Request.User.InviteReplyRequest;
@@ -18,18 +15,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import classes.AppPreference;
+import classes.Invite;
 import classes.ReimApplication;
 import classes.User;
 
+import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 
-public class InvitedActivity extends Activity
+public class InviteReplyActivity extends Activity
 {	
-	private int inviteCode;
-	private String message;
+	private Invite invite;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -43,7 +41,7 @@ public class InvitedActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("InvitedActivity");		
+		MobclickAgent.onPageStart("InviteReplyActivity");		
 		MobclickAgent.onResume(this);
 		ReimApplication.setProgressDialog(this);
 	}
@@ -51,7 +49,7 @@ public class InvitedActivity extends Activity
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("InvitedActivity");
+		MobclickAgent.onPageEnd("InviteReplyActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -59,31 +57,24 @@ public class InvitedActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+			goBackToInviteListActivity();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 	
 	private void dataInitialise()
 	{
-		Intent intent = getIntent();
-		try
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null)
 		{
-			JSONObject jObject = new JSONObject(intent.getStringExtra("data"));
-			message = jObject.getString("msg");
-			inviteCode = jObject.getInt("code");
-		}
-		catch (JSONException e)
-		{
-			message = "数据读取出错了！";
-			inviteCode = -1;
+			invite = (Invite)bundle.getSerializable("invite");
 		}
 	}
 	
 	private void viewInitialise()
 	{	
 		TextView textView = (TextView)findViewById(R.id.inviteTextView);
-		textView.setText(message);
+		textView.setText(invite.getMessage());
 	}
 	
 	private void buttonInitialise()
@@ -93,7 +84,7 @@ public class InvitedActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				sendInviteReplyRequest(1, inviteCode);
+				sendInviteReplyRequest(1, invite.getInviteCode());
 			}
 		});
 		
@@ -102,18 +93,18 @@ public class InvitedActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (inviteCode == -1)
+				if (invite.getInviteCode() == -1)
 				{
-					finish();					
+					goBackToInviteListActivity();					
 				}
 				else
 				{
-					sendInviteReplyRequest(0, inviteCode);
+					sendInviteReplyRequest(0, invite.getInviteCode());
 				}
 			}
 		});
 		
-		if (inviteCode == -1)
+		if (invite.getInviteCode() == -1)
 		{
 			confirmButton.setVisibility(View.GONE);
 			cancelButton.setText(R.string.cancel);
@@ -146,7 +137,7 @@ public class InvitedActivity extends Activity
 						public void run()
 						{
 					    	ReimApplication.pDialog.dismiss();
-							AlertDialog mDialog = new AlertDialog.Builder(InvitedActivity.this)
+							AlertDialog mDialog = new AlertDialog.Builder(InviteReplyActivity.this)
 														.setTitle("提示")
 														.setMessage("邀请回复发送失败")
 														.setNegativeButton(R.string.confirm, null)
@@ -232,7 +223,7 @@ public class InvitedActivity extends Activity
 					public void run()
 					{
 				    	ReimApplication.pDialog.dismiss();
-						AlertDialog mDialog = new AlertDialog.Builder(InvitedActivity.this)
+						AlertDialog mDialog = new AlertDialog.Builder(InviteReplyActivity.this)
 													.setTitle("提示")
 													.setMessage("邀请回复已发送成功！")
 													.setNegativeButton(R.string.confirm, 
@@ -240,7 +231,7 @@ public class InvitedActivity extends Activity
 													{
 														public void onClick(DialogInterface dialog, int which)
 														{
-															finish();
+															goBackToInviteListActivity();
 														}
 													})
 													.create();
@@ -249,5 +240,13 @@ public class InvitedActivity extends Activity
 				});
 			}
 		});
+    }
+
+    private void goBackToInviteListActivity()
+    {
+    	Intent intent = new Intent(InviteReplyActivity.this, MainActivity.class);
+    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	startActivity(intent);
+    	finish();
     }
 }

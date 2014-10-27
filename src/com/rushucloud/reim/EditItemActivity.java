@@ -714,7 +714,7 @@ public class EditItemActivity extends Activity
     		criteria.setAccuracy(Criteria.ACCURACY_FINE);
     		criteria.setAltitudeRequired(false);
     		criteria.setBearingRequired(false);
-    		criteria.setCostAllowed(false);
+    		criteria.setCostAllowed(true);
     		criteria.setPowerRequirement(Criteria.POWER_LOW);
     		String provider = locationManager.getBestProvider(criteria, true);
     		location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);

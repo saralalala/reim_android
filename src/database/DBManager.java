@@ -204,16 +204,6 @@ public class DBManager extends SQLiteOpenHelper
 										+ "backup3 TEXT DEFAULT('')"
 										+ ")";
 			database.execSQL(createReportTable);
-			
-			String createApproveReportTable="CREATE TABLE IF NOT EXISTS tbl_approve_report ("
-												+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-												+ "report_server_id INT DEFAULT(0),"
-												+ "user_id INT DEFAULT(0),"
-												+ "backup1 INT DEFAULT(0),"
-												+ "backup2 TEXT DEFAULT(''),"
-												+ "backup3 TEXT DEFAULT('')"
-												+ ")";
-			database.execSQL(createApproveReportTable);
 
 			String createCommentTable="CREATE TABLE IF NOT EXISTS tbl_comment ("
 											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
