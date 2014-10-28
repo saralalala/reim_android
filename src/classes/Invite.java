@@ -8,14 +8,14 @@ public class Invite implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
-	private int inviteCode = -1;
+	private String inviteCode = "";
 	private String message = "";
 	
-	public int getInviteCode()
+	public String getInviteCode()
 	{
 		return inviteCode;
 	}
-	public void setInviteCode(int inviteCode)
+	public void setInviteCode(String inviteCode)
 	{
 		this.inviteCode = inviteCode;
 	}

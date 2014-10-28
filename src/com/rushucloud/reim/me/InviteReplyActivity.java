@@ -93,7 +93,7 @@ public class InviteReplyActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (invite.getInviteCode() == -1)
+				if (invite.getInviteCode().equals(""))
 				{
 					goBackToInviteListActivity();					
 				}
@@ -104,14 +104,14 @@ public class InviteReplyActivity extends Activity
 			}
 		});
 		
-		if (invite.getInviteCode() == -1)
+		if (invite.getInviteCode().equals(""))
 		{
 			confirmButton.setVisibility(View.GONE);
 			cancelButton.setText(R.string.cancel);
 		}
 	}
 	
-    private void sendInviteReplyRequest(int agree, int inviteCode)
+    private void sendInviteReplyRequest(int agree, String inviteCode)
     {
     	ReimApplication.pDialog.show();
     	InviteReplyRequest request = new InviteReplyRequest(agree, inviteCode);

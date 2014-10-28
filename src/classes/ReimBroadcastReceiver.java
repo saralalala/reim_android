@@ -97,12 +97,12 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 						try
 						{
 							invite.setMessage(jObject.getString("msg"));
-							invite.setInviteCode(jObject.getInt("code"));
+							invite.setInviteCode(jObject.getString("code"));
 						}
 						catch (JSONException e)
 						{
 							invite.setMessage("数据读取出错了！");
-							invite.setInviteCode(-1);
+							invite.setInviteCode("");
 						}
 						
 						Bundle bundle = new Bundle();
