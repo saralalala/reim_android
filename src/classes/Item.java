@@ -1,5 +1,7 @@
 package classes;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Item
@@ -176,7 +178,7 @@ public class Item
 		this.isProveAhead = isProveAhead;
 	}
 	
-	public Boolean needReimbursed()
+	public Boolean needReimbursed()	
 	{
 		return needReimbursed;
 	}
@@ -198,7 +200,25 @@ public class Item
 		return true;
 	}
 	
-//    public int compareTo(User arg0) {
-//        return this.getOrder().compareTo(arg0.getOrder());
-//    }
+    public static void sortByAmount(List<Item> itemList)
+    {
+    	Collections.sort(itemList, new Comparator<Item>()
+		{
+			public int compare(Item item1, Item item2)
+			{
+				return (int)(item1.getAmount() - item2.getAmount());
+			}
+		});
+    }
+    
+    public static void sortByDate(List<Item> itemList)
+    {
+    	Collections.sort(itemList, new Comparator<Item>()
+		{
+			public int compare(Item item1, Item item2)
+			{
+				return (int)(item1.getConsumedDate() - item2.getConsumedDate());
+			}
+		});
+    }
 }

@@ -10,7 +10,7 @@ public class GetInvitesRequest extends BaseRequest
 		super();
 
 		String requestUrl = getUrl();
-		requestUrl += "/login";
+		requestUrl += "/invites";
 		setUrl(requestUrl);
 	}
 

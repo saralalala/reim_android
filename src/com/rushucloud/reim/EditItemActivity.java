@@ -22,6 +22,11 @@ import classes.Tag;
 import classes.User;
 import classes.Utils;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -33,10 +38,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -66,6 +67,8 @@ public class EditItemActivity extends Activity
 
 	private static AppPreference appPreference;
 	private static DBManager dbManager;
+	private LocationClient locationClient = null;
+	private BDLocationListener listener = new ReimLocationListener();
 	
 	private EditText amountEditText;
 	private EditText vendorEditText;
@@ -108,6 +111,7 @@ public class EditItemActivity extends Activity
 		super.onPause();
 		MobclickAgent.onPageEnd("EditItemActivity");
 		MobclickAgent.onPause(this);
+		locationClient.unRegisterLocationListener(listener);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -204,12 +208,10 @@ public class EditItemActivity extends Activity
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
+		locationClient = new LocationClient(getApplicationContext());
+		locationClient.registerLocationListener(listener);
 		
 		vendorList = new ArrayList<String>();
-		vendorList.add("肯德基");
-		vendorList.add("麦当劳");
-		vendorList.add("必胜客");
-		vendorList.add("羊蝎子");
 
 		int currentGroupID = appPreference.getCurrentGroupID();
 		categoryList = dbManager.getGroupCategories(currentGroupID);
@@ -693,59 +695,17 @@ public class EditItemActivity extends Activity
 			Toast.makeText(EditItemActivity.this, "图片剪裁失败", Toast.LENGTH_SHORT).show();
 		}
     }
-
+    
     private void getLocation()
     {
     	ReimApplication.pDialog.show();
-    	
-    	LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-    	Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		
-		if (location != null)
-		{
-			double latitude = location.getLatitude();
-			double longitude = location.getLongitude();
-			String category = item.getCategory() == null ? "" : item.getCategory().getName();
-			sendVendorsRequest(category, latitude, longitude);
-		}
-    	else
-    	{
-    		Criteria criteria = new Criteria();
-    		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-    		criteria.setAltitudeRequired(false);
-    		criteria.setBearingRequired(false);
-    		criteria.setCostAllowed(true);
-    		criteria.setPowerRequirement(Criteria.POWER_LOW);
-    		String provider = locationManager.getBestProvider(criteria, true);
-    		location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-    		locationManager.requestLocationUpdates(provider, 5000, 0, new LocationListener()
-			{
-				public void onStatusChanged(String provider, int status, Bundle extras)
-				{
-					
-				}
-				
-				public void onProviderEnabled(String provider)
-				{
-					
-				}
-				
-				public void onProviderDisabled(String provider)
-				{
-					
-				}
-				
-				public void onLocationChanged(Location location)
-				{
-					double latitude = location.getLatitude();
-					double longitude = location.getLongitude();
-					String category = item.getCategory() == null ? "" : item.getCategory().getName();
-					sendVendorsRequest(category, latitude, longitude);
-				}
-			});
-//			ReimApplication.pDialog.dismiss();
-//			Toast.makeText(EditItemActivity.this, "定位失败，无法获取附近商家，请手动输入商家名", Toast.LENGTH_SHORT).show();    		
-    	}
+    	LocationClientOption option = new LocationClientOption();
+    	option.setLocationMode(LocationMode.Hight_Accuracy);
+    	option.setScanSpan(5000);
+    	option.setIsNeedAddress(false);
+    	option.setNeedDeviceDirect(false);
+    	locationClient.setLocOption(option);
+    	locationClient.start();
     }
     
     private void sendVendorsRequest(String category, double latitude, double longitude)
@@ -797,6 +757,7 @@ public class EditItemActivity extends Activity
 		if (index == -1)
 		{
 			index = 0;
+			item.setMerchant(vendorList.get(0));
 		}
 		String[] vendors = vendorList.toArray(new String[vendorList.size()]);
 		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
@@ -824,5 +785,25 @@ public class EditItemActivity extends Activity
 											})
 											.create();
 		mDialog.show();
+    }
+
+    public class ReimLocationListener implements BDLocationListener
+    {
+    	public void onReceiveLocation(BDLocation location)
+    	{
+    		if (location != null)
+    		{
+    			double latitude = location.getLatitude();
+    			double longitude = location.getLongitude();
+    			String category = item.getCategory() == null ? "" : item.getCategory().getName();
+    			sendVendorsRequest(category, latitude, longitude);
+    			locationClient.stop();
+    		}
+    		else
+    		{
+    			ReimApplication.pDialog.dismiss();
+    			Toast.makeText(EditItemActivity.this, "定位失败，无法获取附近商家，请手动输入商家名", Toast.LENGTH_SHORT).show();    	
+    		}
+    	}
     }
 }

@@ -13,6 +13,7 @@ import netUtils.Response.UploadImageResponse;
 import netUtils.Response.User.InviteResponse;
 
 import com.rushucloud.reim.me.FeedbackActivity;
+import com.rushucloud.reim.me.InviteActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.controller.UMServiceFactory;
@@ -168,6 +169,9 @@ public class MeFragment extends Fragment
 				{
 					case 0:
 						startActivity(new Intent(getActivity(), ProfileActivity.class));
+						break;
+					case 2:
+						startActivity(new Intent(getActivity(), InviteActivity.class));
 						break;
 					case 3:
 						showInviteDialog();

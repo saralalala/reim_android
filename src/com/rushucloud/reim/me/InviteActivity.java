@@ -2,6 +2,7 @@ package com.rushucloud.reim.me;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.GetInvitesRequest;
@@ -21,15 +22,15 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 public class InviteActivity extends Activity
 {
 	private ListView inviteListView;
-	private ArrayAdapter<String> adapter;
+	private SimpleAdapter adapter;
 	private List<Invite> inviteList = new ArrayList<Invite>();
-	private List<String> messageList = new ArrayList<String>();
+	private List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -66,9 +67,10 @@ public class InviteActivity extends Activity
 	{	
 		ReimApplication.setProgressDialog(this);
 		
-		messageList = Invite.getMessageList(inviteList);
-		String[] list =  messageList.toArray(new String[messageList.size()]);
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, list);
+		mapList = Invite.getMessageList(null);
+		String[] columns = new String[]{"message", "time"};
+		int[] views = new int[]{android.R.id.text1, android.R.id.text2};
+		adapter = new SimpleAdapter(this, mapList, android.R.layout.simple_list_item_2, columns, views);
 		inviteListView = (ListView)findViewById(R.id.inviteListView);
 		inviteListView.setAdapter(adapter);
 		inviteListView.setOnItemClickListener(new OnItemClickListener()
@@ -92,17 +94,19 @@ public class InviteActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				GetInvitesResponse response = new GetInvitesResponse(httpResponse);
+				final GetInvitesResponse response = new GetInvitesResponse(httpResponse);
 				if (response.getStatus())
 				{
-					// TODO init list
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							ReimApplication.pDialog.dismiss();
-							String[] list =  messageList.toArray(new String[messageList.size()]);
-							adapter = new ArrayAdapter<String>(InviteActivity.this, android.R.layout.simple_list_item_2, list);
+							inviteList = response.getInviteList();
+							mapList = Invite.getMessageList(inviteList);
+							String[] columns = new String[]{"message", "time"};
+							int[] views = new int[]{android.R.id.text1, android.R.id.text2};
+							adapter = new SimpleAdapter(InviteActivity.this, mapList, android.R.layout.simple_list_item_2, columns, views);
 							inviteListView.setAdapter(adapter);
 						}						
 					});

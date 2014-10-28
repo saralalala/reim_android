@@ -76,9 +76,10 @@
     <string name="avatar">头像</string>
     <string name="enablePasswordProtection">开启密码保护</string>
     <string name="syncWithoutWifi">仅WiFi开启时上传云端</string>
-    <string name="invite">邀请</string>
-    <string name="share">分享</string>
     <string name="preference">偏好设置</string>
+    <string name="myInvites">收到的邀请</string>
+    <string name="invite">邀请好友</string>
+    <string name="share">分享</string>
     <string name="feedback">意见反馈</string>
     <string name="signOut">退出登录</string>
     <string name="email">邮箱</string>

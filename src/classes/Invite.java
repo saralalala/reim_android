@@ -2,7 +2,9 @@ package classes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Invite implements Serializable
 {
@@ -10,6 +12,7 @@ public class Invite implements Serializable
 	
 	private String inviteCode = "";
 	private String message = "";
+	private int inviteTime = -1;
 	
 	public String getInviteCode()
 	{
@@ -29,13 +32,28 @@ public class Invite implements Serializable
 		this.message = message;
 	}
 	
-	public static List<String> getMessageList(List<Invite> inviteList)
+	public int getInviteTime()
 	{
-		List<String> messageList = new ArrayList<String>();
-		for (Invite invite : inviteList)
+		return inviteTime;
+	}
+	public void setInviteTime(int inviteTime)
+	{
+		this.inviteTime = inviteTime;
+	}
+	
+	public static List<Map<String, String>> getMessageList(List<Invite> inviteList)
+	{
+		List<Map<String, String>> resultList = new ArrayList<Map<String,String>>();
+		if (inviteList != null)
 		{
-			messageList.add(invite.getMessage());
+			for (Invite invite : inviteList)
+			{
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("message", invite.getMessage());
+				map.put("time", Utils.secondToStringUpToMinute(invite.getInviteTime()));
+				resultList.add(map);
+			}
 		}
-		return messageList;
+		return resultList;
 	}
 }

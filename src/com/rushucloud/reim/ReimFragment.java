@@ -3,7 +3,6 @@ package com.rushucloud.reim;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import netUtils.HttpConnectionCallback;
@@ -34,24 +33,22 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
 public class ReimFragment extends Fragment
 {
-	private static final int LIST_FILTER_ALL = 0;
-	private static final int LIST_FILTER_PROVE_AHEAD = 1;
-	private static final int LIST_FILTER_CONSUMED = 2;
-	private static final int LIST_FILTER_FREE = 3;
-	private static final int LIST_FILTER_TAG = 4;	
-	private static final int LIST_SORT_AMOUNT = 5;	
-	private static final int LIST_SORT_DATE = 6;	
+	private static final int FILTER_TYPE_ALL = 0;
+	private static final int FILTER_TYPE_PROVE_AHEAD = 1;
+	private static final int FILTER_TYPE_CONSUMED = 2;
+	private static final int FILTER_STATUS_ALL = 0;
+	private static final int FILTER_STATUS_FREE = 1;
+	private static final int FILTER_STATUS_ADDED = 2;	
+	private static final int SORT_NULL = 0;	
+	private static final int SORT_AMOUNT = 1;	
+	private static final int SORT_DATE = 2;	
 	
 	private View view;
 	private Button addButton;
@@ -63,10 +60,11 @@ public class ReimFragment extends Fragment
 	private List<Item> itemList = new ArrayList<Item>();
 	private List<Item> showList = new ArrayList<Item>();
 	
-	private int listType;
-	private int tagIndex;
-	private Tag filterTag;
-	
+	private int currentFilterType;
+	private int currentFilterStatus;
+	private int currentSortType;
+	private List<Tag> tagList;
+		
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		if (view == null)
@@ -305,7 +303,7 @@ public class ReimFragment extends Fragment
 		ReimApplication.pDialog.show();
 		itemList.clear();
 		itemList.addAll(readItemList());
-		filterItemList();
+		filterItemList(currentSortType, currentFilterType, currentFilterStatus, tagList);
 		adapter.set(showList);
 		adapter.notifyDataSetChanged();
 		ReimApplication.pDialog.dismiss();
@@ -361,38 +359,10 @@ public class ReimFragment extends Fragment
 		}
 	}
 
-	private void filterItemList()
+	private void filterItemList(int sortType, int filterType, int filterStatus, List<Tag> tagList)
 	{
 		showList.clear();
-		showList.addAll(itemList);		
-		//TODO add items to showList from itemList
-		switch (listType)
-		{
-			case LIST_FILTER_ALL:
-				
-				break;
-			case LIST_FILTER_PROVE_AHEAD:
-				
-				break;
-			case LIST_FILTER_CONSUMED:
-				
-				break;
-			case LIST_FILTER_FREE:
-				
-				break;
-			case LIST_FILTER_TAG:
-				
-				break;
-			case LIST_SORT_AMOUNT:
-				
-				break;
-			case LIST_SORT_DATE:
-				
-				break;
-
-			default:
-				break;
-		}
+		
 	}
 
 	private void syncItems()

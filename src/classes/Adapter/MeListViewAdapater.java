@@ -128,7 +128,7 @@ public class MeListViewAdapater extends BaseAdapter
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
-				textView.setText(fragment.getString(R.string.preference));
+				textView.setText(fragment.getString(R.string.myInvites));
 				break;
 			}
 			case 3:
