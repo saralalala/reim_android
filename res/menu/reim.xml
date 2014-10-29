@@ -8,19 +8,12 @@
         android:icon="@drawable/ic_action_search"
         app:showAsAction="always" >
     </item>
-    <!--  
-    <item 
-        android:id="@+id/action_sort_item"
-        android:title="@string/sort"
-        android:icon="@drawable/ic_action_sort"
-        app:showAsAction="always" >
-    </item>
 
     <item
         android:id="@+id/action_filter_item"
         android:title="@string/filter"
-        app:showAsAction="always" 
-        app:actionViewClass="android.widget.Spinner">  
-    </item>-->
+        android:icon="@drawable/ic_action_filter"
+        app:showAsAction="always" >  
+    </item>
     
 </menu>

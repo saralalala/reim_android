@@ -1,8 +1,8 @@
 package com.rushucloud.reim;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
 import com.umeng.analytics.MobclickAgent;
 
 import netUtils.HttpConnectionCallback;
@@ -17,11 +17,15 @@ import classes.Report;
 import classes.Tag;
 import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
+import classes.Adapter.TagGridViewAdapter;
 import database.DBManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -30,11 +34,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
@@ -51,19 +61,29 @@ public class ReimFragment extends Fragment
 	private static final int SORT_DATE = 2;	
 	
 	private View view;
+	private View filterView;
 	private Button addButton;
 	private ListView itemListView;
 	private ItemListViewAdapter adapter;
 
+	private WindowManager windowManager;
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	private List<Item> itemList = new ArrayList<Item>();
 	private List<Item> showList = new ArrayList<Item>();
+	private List<Tag> tagList = new ArrayList<Tag>();
 	
-	private int currentFilterType;
-	private int currentFilterStatus;
-	private int currentSortType;
-	private List<Tag> tagList;
+	private int filterType = FILTER_TYPE_ALL;
+	private int filterStatus = FILTER_STATUS_ALL;
+	private int sortType = SORT_NULL;
+	private boolean sortReverse = false;
+	
+	private int tempFilterType = FILTER_TYPE_ALL;
+	private int tempFilterStatus = FILTER_STATUS_ALL;
+	private int tempSortType = SORT_NULL;
+	
+	private List<Tag> filterTagList = new ArrayList<Tag>();
+	private boolean[] tagCheck;
 		
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -76,6 +96,7 @@ public class ReimFragment extends Fragment
 			ViewGroup viewGroup = (ViewGroup) view.getParent();
 			viewGroup.removeView(view);
 		}
+		setHasOptionsMenu(true);
 		return view;
 	}
 
@@ -83,11 +104,12 @@ public class ReimFragment extends Fragment
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("ReimFragment");
-		viewInitialise();
+		ReimApplication.pDialog.show();
 		dataInitialise();
+		viewInitialise();
 		refreshItemListView();
+		ReimApplication.pDialog.dismiss();
 		syncItems();
-		setHasOptionsMenu(true);
 	}
 
 	public void onPause()
@@ -99,61 +121,6 @@ public class ReimFragment extends Fragment
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		inflater.inflate(R.menu.reim, menu);
-//		Spinner spinner = (Spinner)menu.findItem(R.id.action_filter_item).getActionView();
-//		SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getActivity(), 
-//				R.array.itemSpinner, R.layout.spinner_drop_down_item);
-//		spinner.setAdapter(spinnerAdapter);		
-//		spinner.setOnItemSelectedListener(new OnItemSelectedListener()
-//		{
-//			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-//			{
-//				listType = position;
-//				if (position != 4)
-//				{
-//					Toast.makeText(getActivity(), "这是第"+position+"个", Toast.LENGTH_SHORT).show();
-//					refreshItemListView();
-//				}
-//				else
-//				{
-//					final List<Tag> tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-//					if (tagList.size() == 0)
-//					{
-//						Toast.makeText(getActivity(), "无标签可供筛选", Toast.LENGTH_SHORT).show();
-//					}
-//					else
-//					{
-//						tagIndex = 0;
-//						String[] nameList = Tag.getTagNames(tagList);
-//						AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-//														.setTitle("请选择一个标签")
-//														.setSingleChoiceItems(nameList, tagIndex, 
-//																new DialogInterface.OnClickListener()
-//																{
-//																	public void onClick(DialogInterface dialog, int which)
-//																	{
-//																		tagIndex = which;
-//																	}
-//																})											
-//														.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-//														{
-//															public void onClick(DialogInterface dialog, int which)
-//															{
-//																filterTag = tagList.get(tagIndex);
-//																refreshItemListView();
-//															}
-//														})
-//														.setNegativeButton(R.string.cancel, null)
-//														.create();					
-//						mDialog.show();
-//					}
-//				}
-//			}
-//
-//			public void onNothingSelected(AdapterView<?> parent)
-//			{
-//				Toast.makeText(getActivity(), "Nothing selected", Toast.LENGTH_SHORT).show();
-//			}
-//		});
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -165,9 +132,9 @@ public class ReimFragment extends Fragment
 			startActivity(new Intent(getActivity(), SearchItemActivity.class));
 			return true;
 		}
-		else if (id == R.id.action_sort_item)
+		else if (id == R.id.action_filter_item)
 		{
-			//TODO alertdialog to let user choose base
+			showFilterView();
 		}
 			
 		return super.onOptionsItemSelected(item);
@@ -239,6 +206,20 @@ public class ReimFragment extends Fragment
 		if (dbManager == null)
 		{
 			dbManager = DBManager.getDBManager();
+//			tags = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+			
+			for (int i = 0; i < 6; i++)
+			{
+				Tag tag = new Tag();
+				tag.setName("Tag"+i);
+				tagList.add(tag);
+			}
+			
+			tagCheck = new boolean[tagList.size()];
+			for (int i = 0; i < tagCheck.length; i++)
+			{
+				tagCheck[i] = false;
+			}
 		}
 	}
 
@@ -289,6 +270,134 @@ public class ReimFragment extends Fragment
 			});
 			registerForContextMenu(itemListView);
 		}
+		
+		if (filterView == null)
+		{
+			DisplayMetrics dm = new DisplayMetrics();
+			getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+			
+			filterView = getActivity().getLayoutInflater().inflate(R.layout.reim_filter, (ViewGroup) null, false);
+			filterView.setBackgroundColor(Color.WHITE);
+			filterView.setMinimumHeight(dm.heightPixels);
+
+			final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
+			final RadioButton sortDateRadio = (RadioButton)filterView.findViewById(R.id.sortDateRadio);
+			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);			
+			RadioGroup sortRadioGroup = (RadioGroup)filterView.findViewById(R.id.sortRadioGroup);
+			sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+			{
+				public void onCheckedChanged(RadioGroup group, int checkedId)
+				{
+					if (checkedId == sortNullRadio.getId())
+					{
+						tempSortType = SORT_NULL;
+					}
+					else if (checkedId == sortDateRadio.getId())
+					{
+						tempSortType = SORT_DATE;
+					}
+					else if (checkedId == sortAmountRadio.getId())
+					{
+						tempSortType = SORT_AMOUNT;
+					}
+				}
+			});
+
+			final RadioButton filterTypeAllRadio = (RadioButton)filterView.findViewById(R.id.filterTypeAllRadio);
+			final RadioButton filterProveAheadRadio = (RadioButton)filterView.findViewById(R.id.filterProveAheadRadio);
+			final RadioButton filterConsumedRadio = (RadioButton)filterView.findViewById(R.id.filterConsumedRadio);			
+			RadioGroup filterTypeRadioGroup = (RadioGroup)filterView.findViewById(R.id.filterTypeRadioGroup);
+			filterTypeRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+			{
+				public void onCheckedChanged(RadioGroup group, int checkedId)
+				{
+					if (checkedId == filterTypeAllRadio.getId())
+					{
+						tempFilterType = FILTER_TYPE_ALL;
+					}
+					else if (checkedId == filterProveAheadRadio.getId())
+					{
+						tempFilterType = FILTER_TYPE_PROVE_AHEAD;
+					}
+					else if (checkedId == filterConsumedRadio.getId())
+					{
+						tempFilterType = FILTER_TYPE_CONSUMED;
+					}
+				}
+			});
+
+			final RadioButton filterStatusAllRadio = (RadioButton)filterView.findViewById(R.id.filterStatusAllRadio);
+			final RadioButton filterFreeRadio = (RadioButton)filterView.findViewById(R.id.filterFreeRadio);
+			final RadioButton filterAddedRadio = (RadioButton)filterView.findViewById(R.id.filterAddedRadio);			
+			RadioGroup filterStatusRadioGroup = (RadioGroup)filterView.findViewById(R.id.filterStatusRadioGroup);
+			filterStatusRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+			{
+				public void onCheckedChanged(RadioGroup group, int checkedId)
+				{
+					if (checkedId == filterStatusAllRadio.getId())
+					{
+						tempFilterStatus = FILTER_STATUS_ALL;
+					}
+					else if (checkedId == filterFreeRadio.getId())
+					{
+						tempFilterStatus = FILTER_STATUS_FREE;
+					}
+					else if (checkedId == filterAddedRadio.getId())
+					{
+						tempFilterStatus = FILTER_STATUS_ADDED;
+					}
+				}
+			});
+
+			final TagGridViewAdapter tagAdapter = new TagGridViewAdapter(getActivity(), tagList);
+			
+			GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
+			tagGridView.setAdapter(tagAdapter);
+			tagGridView.setOnItemClickListener(new OnItemClickListener()
+			{
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+				{
+					tagCheck[position] = !tagCheck[position];
+					tagAdapter.setSelection(position);
+					tagAdapter.notifyDataSetChanged();
+				}
+			});
+			
+			Button confirmButton = (Button)filterView.findViewById(R.id.confirmButton);
+			confirmButton.setOnClickListener(new View.OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					sortType = tempSortType;
+					filterType = tempFilterType;
+					filterStatus = tempFilterStatus;
+					filterTagList.clear();
+					for (int i = 0; i < tagCheck.length; i++)
+					{
+						if (tagCheck[i])
+						{
+							filterTagList.add(tagList.get(i));
+						}
+					}
+					
+					sortReverse = !sortReverse;
+					
+					windowManager.removeView(filterView);
+					ReimApplication.pDialog.show();
+					refreshItemListView();
+					ReimApplication.pDialog.dismiss();
+				}
+			});
+			
+			Button cancelButton = (Button)filterView.findViewById(R.id.cancelButton);
+			cancelButton.setOnClickListener(new View.OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					windowManager.removeView(filterView);
+				}
+			});
+		}
 	}
 
 	private List<Item> readItemList()
@@ -300,13 +409,11 @@ public class ReimFragment extends Fragment
 
 	private void refreshItemListView()
 	{
-		ReimApplication.pDialog.show();
 		itemList.clear();
 		itemList.addAll(readItemList());
-		filterItemList(currentSortType, currentFilterType, currentFilterStatus, tagList);
+		filterItemList();
 		adapter.set(showList);
 		adapter.notifyDataSetChanged();
-		ReimApplication.pDialog.dismiss();
 	}
 
 	private void sendDeleteItemRequest(final Item item)
@@ -334,9 +441,8 @@ public class ReimFragment extends Fragment
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.show();
-							Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG)
-									.show();
+							ReimApplication.pDialog.dismiss();
+							Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
 						}
 					});
 				}
@@ -359,10 +465,59 @@ public class ReimFragment extends Fragment
 		}
 	}
 
-	private void filterItemList(int sortType, int filterType, int filterStatus, List<Tag> tagList)
+	private void showFilterView()
+	{		
+		windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
+		LayoutParams params = new LayoutParams();
+		windowManager.addView(filterView, params);
+	}
+	
+	private void filterItemList()
 	{
 		showList.clear();
+		for (Item item : itemList)
+		{
+			if (filterType == FILTER_TYPE_PROVE_AHEAD && !item.isProveAhead())
+			{
+				continue;
+			}
+			if (filterType == FILTER_TYPE_CONSUMED && item.isProveAhead())
+			{
+				continue;
+			}
+			
+			if (filterStatus == FILTER_STATUS_FREE && item.getBelongReport() != null && item.getBelongReport().getLocalID() != -1)
+			{
+				continue;
+			}			
+			if (filterStatus == FILTER_STATUS_ADDED && (item.getBelongReport() == null || item.getBelongReport().getLocalID() == -1))
+			{
+				continue;
+			}
+			
+			if (filterTagList.size() > 0 && filterTagList.size() < tagList.size())
+			{
+				if (!item.containsSpecificTags(filterTagList))
+				{	
+					continue;
+				}
+			}
+			showList.add(item);
+		}
 		
+		if (sortType == SORT_AMOUNT)
+		{
+			Item.sortByAmount(showList);
+		}
+		if (sortType == SORT_DATE)
+		{
+			Item.sortByDate(showList);
+		}
+		
+		if (sortReverse)
+		{
+			Collections.reverse(showList);
+		}
 	}
 
 	private void syncItems()

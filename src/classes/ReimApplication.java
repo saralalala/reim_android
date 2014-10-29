@@ -19,8 +19,6 @@ public class ReimApplication extends Application
 {
 	public static ProgressDialog pDialog;
 	
-	public static boolean needToSync = true;
-	
 	public void onCreate()
 	{
 		super.onCreate();

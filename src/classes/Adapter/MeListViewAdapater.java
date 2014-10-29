@@ -5,7 +5,6 @@ import netUtils.Request.User.SignOutRequest;
 import netUtils.Response.User.SignOutResponse;
 import classes.AppPreference;
 import classes.Group;
-import classes.ReimApplication;
 import classes.User;
 
 import com.rushucloud.reim.ImageActivity;
@@ -205,9 +204,9 @@ public class MeListViewAdapater extends BaseAdapter
 							appPreference.setUsername("");
 							appPreference.setPassword("");
 							appPreference.setServerToken("");
+							appPreference.setLastSyncTime(0);
 							appPreference.saveAppPreference();
 							
-							ReimApplication.needToSync = true;
 							fragment.startActivity(new Intent(fragment.getActivity(), SignInActivity.class));
 							fragment.getActivity().finish();
 						}

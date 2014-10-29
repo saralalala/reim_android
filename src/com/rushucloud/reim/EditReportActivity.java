@@ -214,7 +214,7 @@ public class EditReportActivity extends Activity
 		}
 		if (!report.getTitle().equals(""))
 		{
-			hideSoftKeyboard();
+			titleEditText.clearFocus();
 		}
 		
 		adapter = new ItemListViewAdapter(EditReportActivity.this, itemList);

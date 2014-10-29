@@ -200,6 +200,26 @@ public class Item
 		return true;
 	}
 	
+	public Boolean containsSpecificTags(List<Tag> tagList)
+	{
+		if (tags == null)
+		{
+			return false;
+		}
+		
+		for (Tag tag : tags)
+		{
+			for (Tag targetTag : tagList)
+			{
+				if (tag.getName().equals(targetTag.getName()))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
     public static void sortByAmount(List<Item> itemList)
     {
     	Collections.sort(itemList, new Comparator<Item>()

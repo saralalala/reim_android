@@ -13,9 +13,7 @@
     <string name="back">返回</string>
     <string name="modify">修改</string>
     <string name="warning">警告</string>
-    <string name="search">搜索</string> 
-    <string name="sort">排序</string> 
-    <string name="filter">筛选</string> 
+    <string name="search">搜索</string>
     
     <string name="signUp">注册</string>
     <string name="signUpByPhone">用手机注册</string>
@@ -40,7 +38,19 @@
     <string name="report">报告</string>
     <string name="statistics">统计</string>
     <string name="me">我！</string>
-   
+    
+    <string name="sort">排序</string> 
+    <string name="sortNull">无</string>
+    <string name="sortDate">消费日期</string>
+    <string name="sortAmount">金额</string>
+    <string name="filter">筛选</string>
+    <string name="filterAll">全部</string>
+    <string name="filterProveAhead">预审批</string>
+    <string name="filterConsumed">已消费</string>
+    <string name="filterAdded">已添加到报告</string>
+    <string name="filterFree">未添加到报告</string>
+    <string name="filterTags">标签</string>
+    
     <string name="inputAmount">请输入金额</string>
     <string name="invoice">发票</string>
     <string name="proveAhead">预审批</string>

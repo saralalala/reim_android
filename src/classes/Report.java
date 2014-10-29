@@ -140,7 +140,7 @@ public class Report implements Serializable
 		List<Item> itemList = DBManager.getDBManager().getReportItems(localID);
 		for (Item item : itemList)
 		{
-			if (item.getServerID() == -1 || (!item.getInvoicePath().equals("") && item.getImageID() == -1))
+			if (!item.canBeSubmitWithReport())
 			{
 				return false;
 			}
