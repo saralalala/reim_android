@@ -13,17 +13,21 @@ import netUtils.Response.Report.DeleteReportResponse;
 
 
 import classes.AppPreference;
-import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
-import classes.Tag;
 import classes.Utils;
+import classes.XListView;
 import classes.Adapter.ReportListViewAdapter;
+import classes.Adapter.ReportTagGridViewAdapter;
+import classes.XListView.IXListViewListener;
 import database.DBManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -32,47 +36,52 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.GridView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.support.v4.app.Fragment;
 
-public class ReportFragment extends Fragment
-{
-	private static final int LIST_FILTER_ALL = 0;
-	private static final int LIST_FILTER_DRAFT = 1;
-	private static final int LIST_FILTER_SUBMITTED = 2;
-	private static final int LIST_FILTER_APPROVED = 3;
-	private static final int LIST_FILTER_REJECTED = 4;	
-	private static final int LIST_FILTER_FINISHED = 5;	
-	private static final int LIST_SORT_AMOUNT = 6;	
-	private static final int LIST_SORT_DATE = 7;	
-	private static final int LIST_SORT_ITEMS_NUMBER = 8;	
+public class ReportFragment extends Fragment implements IXListViewListener
+{	
+	private static final int SORT_NULL = 0;	
+	private static final int SORT_ITEMS_COUNT = 1;	
+	private static final int SORT_AMOUNT = 2;	
+	private static final int SORT_CREATE_DATE = 3;	
+	private static final int SORT_MODIFY_DATE = 4;	
 	
 	private TabHost tabHost;
 	private View view;
+	private View filterView;
 	private Button addButton;
-	private ListView mineListView;
-	private ListView approveListView;
+	private XListView mineListView;
+	private XListView approveListView;
 	private ReportListViewAdapter mineAdapter;
 	private ReportListViewAdapter approveAdapter;
-	
+
+	private WindowManager windowManager;
+	private LayoutParams params = new LayoutParams();
 	private DBManager dbManager;
 	private List<Report> mineList = new ArrayList<Report>();
 	private List<Report> approveList = new ArrayList<Report>();
 	private List<Report> showMineList = new ArrayList<Report>();
 	private List<Report> showApproveList = new ArrayList<Report>();
 	
-	private int listType;
+	private int sortType = SORT_NULL;
+	private boolean sortReverse = false;
+	
+	private int tempSortType = SORT_NULL;
+	
+	private List<Integer> filterStatusList = new ArrayList<Integer>();
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -85,6 +94,7 @@ public class ReportFragment extends Fragment
 			ViewGroup viewGroup = (ViewGroup)view.getParent();
 			viewGroup.removeView(view);
 		}
+		setHasOptionsMenu(true);
 	    return view;  
 	}
 	   
@@ -92,12 +102,13 @@ public class ReportFragment extends Fragment
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("ReportFragment");	
+		ReimApplication.pDialog.show();
         viewInitialise();
         dataInitialise();
 		refreshMineReportListView();
 		refreshApproveReportListView();
+		ReimApplication.pDialog.dismiss();
 		syncReports();
-//		setHasOptionsMenu(true);
 	}
 
 	public void onPause()
@@ -109,40 +120,15 @@ public class ReportFragment extends Fragment
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		inflater.inflate(R.menu.report, menu);
-		Spinner spinner = (Spinner)menu.findItem(R.id.action_filter_item).getActionView();
-		SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getActivity(), 
-				R.array.reportSpinner, R.layout.spinner_drop_down_item);
-		spinner.setAdapter(spinnerAdapter);		
-		spinner.setOnItemSelectedListener(new OnItemSelectedListener()
-		{
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-			{
-				listType = position;
-//				if (position != 4)
-//				{
-//					Toast.makeText(getActivity(), "这是第"+position+"个", Toast.LENGTH_SHORT).show();
-//					refreshItemListView();
-//				}
-//				else
-//				{
-//					//TODO alertdialog to let user choose
-//				}
-			}
-
-			public void onNothingSelected(AdapterView<?> parent)
-			{
-				Toast.makeText(getActivity(), "Nothing selected", Toast.LENGTH_SHORT).show();
-			}
-		});
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
-		if (id == R.id.action_sort_item)
-		{
-			//TODO alertdialog to let user choose base
+		if (id == R.id.action_filter_item)
+		{		
+			windowManager.addView(filterView, params);
 		}
 			
 		return super.onOptionsItemSelected(item);
@@ -259,8 +245,11 @@ public class ReportFragment extends Fragment
 		
 		if (mineListView == null)
 		{
-			mineListView = (ListView)getActivity().findViewById(R.id.mineListView);
+			mineListView = (XListView)getActivity().findViewById(R.id.mineListView);
 			mineListView.setAdapter(mineAdapter);
+			mineListView.setXListViewListener(this);
+			mineListView.setPullLoadEnable(true);
+			mineListView.setPullRefreshEnable(true);
 			mineListView.setOnItemClickListener(new OnItemClickListener()
 			{
 				public void onItemClick(AdapterView<?> parent, View view,
@@ -283,8 +272,11 @@ public class ReportFragment extends Fragment
 		
 		if (approveListView == null)
 		{
-			approveListView = (ListView)getActivity().findViewById(R.id.approveReportListView);
+			approveListView = (XListView)getActivity().findViewById(R.id.approveReportListView);
 			approveListView.setAdapter(approveAdapter);
+			approveListView.setXListViewListener(this);
+			approveListView.setPullLoadEnable(true);
+			approveListView.setPullRefreshEnable(true);
 			approveListView.setOnItemClickListener(new OnItemClickListener()
 			{
 				public void onItemClick(AdapterView<?> parent, View view,
@@ -304,6 +296,97 @@ public class ReportFragment extends Fragment
 					}
 					intent.putExtras(bundle);
 					startActivity(intent);
+				}
+			});
+		}
+		
+		if (filterView == null)
+		{
+			windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);	
+			
+			DisplayMetrics dm = new DisplayMetrics();
+			getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+			
+			filterView = getActivity().getLayoutInflater().inflate(R.layout.report_filter, (ViewGroup) null, false);
+			filterView.setBackgroundColor(Color.WHITE);
+			filterView.setMinimumHeight(dm.heightPixels);
+
+			final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
+			final RadioButton sortItemsCountRadio = (RadioButton)filterView.findViewById(R.id.sortItemsCountRadio);
+			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);	
+			final RadioButton sortCreateDateRadio = (RadioButton)filterView.findViewById(R.id.sortCreateDateRadio);
+			final RadioButton sortModifyDateRadio = (RadioButton)filterView.findViewById(R.id.sortModifyDateRadio);		
+			RadioGroup sortRadioGroup = (RadioGroup)filterView.findViewById(R.id.sortRadioGroup);
+			sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+			{
+				public void onCheckedChanged(RadioGroup group, int checkedId)
+				{
+					if (checkedId == sortNullRadio.getId())
+					{
+						tempSortType = SORT_NULL;
+					}
+					else if (checkedId == sortItemsCountRadio.getId())
+					{
+						tempSortType = SORT_ITEMS_COUNT;
+					}
+					else if (checkedId == sortAmountRadio.getId())
+					{
+						tempSortType = SORT_AMOUNT;
+					}
+					else if (checkedId == sortCreateDateRadio.getId())
+					{
+						tempSortType = SORT_CREATE_DATE;
+					}
+					else if (checkedId == sortModifyDateRadio.getId())
+					{
+						tempSortType = SORT_MODIFY_DATE;
+					}
+				}
+			});
+
+			final ReportTagGridViewAdapter tagAdapter = new ReportTagGridViewAdapter(getActivity());
+			
+			GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
+			tagGridView.setAdapter(tagAdapter);
+			tagGridView.setOnItemClickListener(new OnItemClickListener()
+			{
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+				{
+					tagAdapter.setSelection(position);
+					tagAdapter.notifyDataSetChanged();
+				}
+			});
+			
+			Button confirmButton = (Button)filterView.findViewById(R.id.confirmButton);
+			confirmButton.setOnClickListener(new View.OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					sortType = tempSortType;
+					filterStatusList.clear();
+					filterStatusList.addAll(tagAdapter.getFilterStatusList());					
+					sortReverse = !sortReverse;
+					
+					windowManager.removeView(filterView);
+					ReimApplication.pDialog.show();
+					if (tabHost.getCurrentTab() == 0)
+					{
+						refreshMineReportListView();						
+					}
+					else
+					{
+						refreshApproveReportListView();
+					}
+					ReimApplication.pDialog.dismiss();
+				}
+			});
+			
+			Button cancelButton = (Button)filterView.findViewById(R.id.cancelButton);
+			cancelButton.setOnClickListener(new View.OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					windowManager.removeView(filterView);
 				}
 			});
 		}
@@ -345,41 +428,7 @@ public class ReportFragment extends Fragment
 
 	private List<Report> filterReportList(List<Report> reportList)
 	{
-//		List<Report> newReportList = new ArrayList<Report>();
 		List<Report> newReportList = new ArrayList<Report>(reportList);
-		//TODO add reports to newReportList from reportList
-		switch (listType)
-		{
-			case LIST_FILTER_ALL:
-				
-				break;
-			case LIST_FILTER_DRAFT:
-				
-				break;
-			case LIST_FILTER_SUBMITTED:
-				
-				break;
-			case LIST_FILTER_APPROVED:
-				
-				break;
-			case LIST_FILTER_REJECTED:
-				
-				break;
-			case LIST_FILTER_FINISHED:
-				
-				break;
-			case LIST_SORT_AMOUNT:
-				
-				break;
-			case LIST_SORT_DATE:
-				
-				break;
-			case LIST_SORT_ITEMS_NUMBER:
-				
-				break;
-			default:
-				break;
-		}
 		return newReportList;
 	}
 	
@@ -453,5 +502,43 @@ public class ReportFragment extends Fragment
 				}
 			});
 		}
+	}
+
+	public void onRefresh()
+	{
+		new Handler().postDelayed(new Runnable()
+		{
+			public void run()
+			{
+				if (tabHost.getCurrentTab() == 0)
+				{
+					mineListView.stopRefresh();
+					mineListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+				}
+				else
+				{
+					approveListView.stopRefresh();
+					approveListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+				}
+			}
+		}, 2000);
+	}
+
+	public void onLoadMore()
+	{
+		new Handler().postDelayed(new Runnable()
+		{
+			public void run()
+			{
+				if (tabHost.getCurrentTab() == 0)
+				{
+					mineListView.stopLoadMore();
+				}
+				else
+				{
+					approveListView.stopLoadMore();
+				}
+			}
+		}, 2000);		
 	}
 }

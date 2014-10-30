@@ -1604,6 +1604,32 @@ public class DBManager extends SQLiteOpenHelper
 		return new String[]{Double.toString(amount), Integer.toString(count)};
 	}
 	
+	public int getReportItemsCount(int reportLocalID)
+	{
+		int count = 0;
+		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id=?", 
+												new String[]{Integer.toString(reportLocalID)});
+		while (cursor.moveToNext())
+		{
+			count++;
+		}
+		
+		return count;
+	}	
+	
+	public double getReportAmount(int reportLocalID)
+	{
+		double amount = 0;
+		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id=?", 
+												new String[]{Integer.toString(reportLocalID)});
+		while (cursor.moveToNext())
+		{
+			amount += getDoubleFromCursor(cursor, "amount");
+		}
+		
+		return amount;
+	}
+	
 	// Comment
 	public Boolean insertComment(Comment comment)
 	{

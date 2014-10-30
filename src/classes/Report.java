@@ -1,7 +1,12 @@
 package classes;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 
 import database.DBManager;
 
@@ -147,4 +152,64 @@ public class Report implements Serializable
 		}
 		return true;
 	}
+    
+    public static void sortByItemsCount(List<Report> reportList)
+    {
+    	DBManager dbManager = DBManager.getDBManager();
+    	final SparseIntArray countArray = new SparseIntArray();
+    	for (Report report : reportList)
+		{
+    		int count = dbManager.getReportItemsCount(report.getLocalID());
+			countArray.put(report.getLocalID(), count);
+		}
+    	
+    	Collections.sort(reportList, new Comparator<Report>()
+		{
+			public int compare(Report report1, Report report2)
+			{
+				return (int)(countArray.get(report1.getLocalID()) - countArray.get(report2.getLocalID()));
+			}
+		});
+    }
+    
+    public static void sortByAmount(List<Report> reportList)
+    {
+    	DBManager dbManager = DBManager.getDBManager();
+    	final SparseArray<Double> countArray = new SparseArray<Double>();
+    	for (Report report : reportList)
+		{
+    		double amount = dbManager.getReportAmount(report.getLocalID());
+			countArray.put(report.getLocalID(), amount);
+		}
+    	
+    	Collections.sort(reportList, new Comparator<Report>()
+		{
+			public int compare(Report report1, Report report2)
+			{
+				return (int)(countArray.get(report1.getLocalID()) - countArray.get(report2.getLocalID()));
+			}
+		});
+    }
+    
+    public static void sortByCreateDate(List<Report> reportList)
+    {
+    	Collections.sort(reportList, new Comparator<Report>()
+		{
+			public int compare(Report report1, Report report2)
+			{
+				return (int)(report1.getCreatedDate() - report2.getCreatedDate());
+			}
+		});
+    }
+    
+    public static void sortByModifyDate(List<Report> reportList)
+    {
+    	Collections.sort(reportList, new Comparator<Report>()
+		{
+			public int compare(Report report1, Report report2)
+			{
+				return (int)(report1.getLocalUpdatedDate() - report2.getLocalUpdatedDate());
+			}
+		});
+    }
 }

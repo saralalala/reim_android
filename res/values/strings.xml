@@ -43,6 +43,9 @@
     <string name="sortNull">无</string>
     <string name="sortDate">消费日期</string>
     <string name="sortAmount">金额</string>
+    <string name="sortItemsCount">条目数</string>
+    <string name="sortCreateDate">创建日期</string>
+    <string name="sortModifyDate">修改日期</string>
     <string name="filter">筛选</string>
     <string name="filterAll">全部</string>
     <string name="filterProveAhead">预审批</string>
@@ -112,21 +115,19 @@
     <string name="inputTagName">请输入标签名称</string>
     <string name="inputUserContact">请输入对方手机号或邮箱</string>
     <string name="agree">同意</string>
-
-    <string-array name="itemSpinner">
-        <item>全选</item>
-        <item>预审核</item>
-        <item>已消费</item>
-        <item>未添加进报告</item>
-        <item>标签</item>
-    </string-array>
-
-    <string-array name="reportSpinner">
-        <item>全选</item>
-        <item>待审核</item>
-        <item>已提交</item>
-        <item>已通过</item>
-        <item>已退回</item>
-        <item>已结束</item>
+    
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_loading">正在加载……</string>
+    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    
+    <string-array name="filterStatus">
+        <item>草稿</item>
+        <item>提交</item>
+        <item>通过</item>
+        <item>退回</item>
+        <item>结束</item>
     </string-array>
 </resources>

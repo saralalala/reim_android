@@ -16,8 +16,10 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.Tag;
 import classes.Utils;
+import classes.XListView;
+import classes.XListView.IXListViewListener;
 import classes.Adapter.ItemListViewAdapter;
-import classes.Adapter.TagGridViewAdapter;
+import classes.Adapter.ItemTagGridViewAdapter;
 import database.DBManager;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -25,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -41,14 +44,13 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
-public class ReimFragment extends Fragment
+public class ReimFragment extends Fragment implements IXListViewListener
 {
 	private static final int FILTER_TYPE_ALL = 0;
 	private static final int FILTER_TYPE_PROVE_AHEAD = 1;
@@ -63,10 +65,11 @@ public class ReimFragment extends Fragment
 	private View view;
 	private View filterView;
 	private Button addButton;
-	private ListView itemListView;
+	private XListView itemListView;
 	private ItemListViewAdapter adapter;
 
 	private WindowManager windowManager;
+	private LayoutParams params = new LayoutParams();
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	private List<Item> itemList = new ArrayList<Item>();
@@ -83,7 +86,6 @@ public class ReimFragment extends Fragment
 	private int tempSortType = SORT_NULL;
 	
 	private List<Tag> filterTagList = new ArrayList<Tag>();
-	private boolean[] tagCheck;
 		
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -134,7 +136,7 @@ public class ReimFragment extends Fragment
 		}
 		else if (id == R.id.action_filter_item)
 		{
-			showFilterView();
+			windowManager.addView(filterView, params);
 		}
 			
 		return super.onOptionsItemSelected(item);
@@ -214,12 +216,6 @@ public class ReimFragment extends Fragment
 				tag.setName("Tag"+i);
 				tagList.add(tag);
 			}
-			
-			tagCheck = new boolean[tagList.size()];
-			for (int i = 0; i < tagCheck.length; i++)
-			{
-				tagCheck[i] = false;
-			}
 		}
 	}
 
@@ -245,25 +241,28 @@ public class ReimFragment extends Fragment
 
 		if (itemListView == null)
 		{
-			itemListView = (ListView) getActivity().findViewById(R.id.itemListView);
+			itemListView = (XListView) getActivity().findViewById(R.id.itemListView);
 			itemListView.setAdapter(adapter);
+			itemListView.setXListViewListener(this);
+			itemListView.setPullLoadEnable(true);
+			itemListView.setPullRefreshEnable(true);
 			itemListView.setOnItemClickListener(new OnItemClickListener()
 			{
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 				{
-					Item item = itemList.get(position);
+					Item item = showList.get(position);
 					if (item.getBelongReport() == null
 							|| item.getBelongReport().getStatus() == Report.STATUS_DRAFT
 							|| item.getBelongReport().getStatus() == Report.STATUS_REJECTED)
 					{
 						Intent intent = new Intent(getActivity(), EditItemActivity.class);
-						intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
+						intent.putExtra("itemLocalID", showList.get(position).getLocalID());
 						startActivity(intent);
 					}
 					else
 					{
 						Intent intent = new Intent(getActivity(), ShowItemActivity.class);
-						intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
+						intent.putExtra("itemLocalID", showList.get(position).getLocalID());
 						startActivity(intent);
 					}
 				}
@@ -273,6 +272,8 @@ public class ReimFragment extends Fragment
 		
 		if (filterView == null)
 		{
+			windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
+			
 			DisplayMetrics dm = new DisplayMetrics();
 			getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
 			
@@ -349,7 +350,7 @@ public class ReimFragment extends Fragment
 				}
 			});
 
-			final TagGridViewAdapter tagAdapter = new TagGridViewAdapter(getActivity(), tagList);
+			final ItemTagGridViewAdapter tagAdapter = new ItemTagGridViewAdapter(getActivity(), tagList);
 			
 			GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
 			tagGridView.setAdapter(tagAdapter);
@@ -357,7 +358,6 @@ public class ReimFragment extends Fragment
 			{
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 				{
-					tagCheck[position] = !tagCheck[position];
 					tagAdapter.setSelection(position);
 					tagAdapter.notifyDataSetChanged();
 				}
@@ -372,9 +372,10 @@ public class ReimFragment extends Fragment
 					filterType = tempFilterType;
 					filterStatus = tempFilterStatus;
 					filterTagList.clear();
-					for (int i = 0; i < tagCheck.length; i++)
+					boolean[] check = tagAdapter.getCheckedTags();
+					for (int i = 0; i < check.length; i++)
 					{
-						if (tagCheck[i])
+						if (check[i])
 						{
 							filterTagList.add(tagList.get(i));
 						}
@@ -464,13 +465,6 @@ public class ReimFragment extends Fragment
 			Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
 		}
 	}
-
-	private void showFilterView()
-	{		
-		windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
-		LayoutParams params = new LayoutParams();
-		windowManager.addView(filterView, params);
-	}
 	
 	private void filterItemList()
 	{
@@ -540,5 +534,28 @@ public class ReimFragment extends Fragment
 				}
 			});
 		}
+	}
+
+	public void onRefresh()
+	{
+		new Handler().postDelayed(new Runnable()
+		{
+			public void run()
+			{
+				itemListView.stopRefresh();
+				itemListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+			}
+		}, 2000);
+	}
+
+	public void onLoadMore()
+	{
+		new Handler().postDelayed(new Runnable()
+		{
+			public void run()
+			{
+				itemListView.stopLoadMore();
+			}
+		}, 2000);	
 	}
 }

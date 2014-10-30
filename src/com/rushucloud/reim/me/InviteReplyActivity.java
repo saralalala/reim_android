@@ -57,7 +57,7 @@ public class InviteReplyActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			goBackToInviteListActivity();
+			goBackToMainActivity();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -95,7 +95,7 @@ public class InviteReplyActivity extends Activity
 			{
 				if (invite.getInviteCode().equals(""))
 				{
-					goBackToInviteListActivity();					
+					goBackToMainActivity();					
 				}
 				else
 				{
@@ -231,7 +231,7 @@ public class InviteReplyActivity extends Activity
 													{
 														public void onClick(DialogInterface dialog, int which)
 														{
-															goBackToInviteListActivity();
+															goBackToMainActivity();
 														}
 													})
 													.create();
@@ -242,9 +242,12 @@ public class InviteReplyActivity extends Activity
 		});
     }
 
-    private void goBackToInviteListActivity()
+    private void goBackToMainActivity()
     {
+    	Bundle bundle = new Bundle();
+    	bundle.putInt("tabIndex", 3);
     	Intent intent = new Intent(InviteReplyActivity.this, MainActivity.class);
+    	intent.putExtras(bundle);
     	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     	finish();

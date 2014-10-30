@@ -14,13 +14,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class TagGridViewAdapter extends BaseAdapter
+public class ItemTagGridViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
 	private List<Tag> tagList;
 	private boolean[] check;
 
-	public TagGridViewAdapter(Context context, List<Tag> tags)
+	public ItemTagGridViewAdapter(Context context, List<Tag> tags)
 	{
 		layoutInflater = LayoutInflater.from(context);
 		tagList = new ArrayList<Tag>(tags);
@@ -72,5 +72,10 @@ public class TagGridViewAdapter extends BaseAdapter
 	public void setSelection(int position)
 	{
 		check[position] = !check[position];
+	}
+	
+	public boolean[] getCheckedTags()
+	{
+		return check;
 	}
 }
