@@ -84,7 +84,7 @@ public class InviteReplyActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				sendInviteReplyRequest(1, invite.getInviteCode());
+				sendInviteReplyRequest(2, invite.getInviteCode());
 			}
 		});
 		
@@ -99,7 +99,7 @@ public class InviteReplyActivity extends Activity
 				}
 				else
 				{
-					sendInviteReplyRequest(0, invite.getInviteCode());
+					sendInviteReplyRequest(3, invite.getInviteCode());
 				}
 			}
 		});

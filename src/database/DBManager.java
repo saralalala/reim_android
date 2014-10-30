@@ -204,6 +204,25 @@ public class DBManager extends SQLiteOpenHelper
 										+ "backup3 TEXT DEFAULT('')"
 										+ ")";
 			database.execSQL(createReportTable);
+			
+			// TODO
+			String createOthersReportTable="CREATE TABLE IF NOT EXISTS tbl_others_report ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "title TEXT DEFAULT(''),"
+										+ "user_id INT DEFAULT(0),"
+										+ "manager_id INT DEFAULT(0),"
+										+ "status INT DEFAULT(0),"
+										+ "item_count INT DEFAULT(0),"
+										+ "amount INT DEFAULT(0),"
+										+ "created_date INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			database.execSQL(createReportTable);
 
 			String createCommentTable="CREATE TABLE IF NOT EXISTS tbl_comment ("
 											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"

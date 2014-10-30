@@ -24,10 +24,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class InviteActivity extends Activity
 {
 	private ListView inviteListView;
+	private TextView inviteTextView;
 	private SimpleAdapter adapter;
 	private List<Invite> inviteList = new ArrayList<Invite>();
 	private List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
@@ -66,7 +68,9 @@ public class InviteActivity extends Activity
 	private void viewInitialise()
 	{	
 		ReimApplication.setProgressDialog(this);
-		
+
+		inviteTextView = (TextView)findViewById(R.id.inviteTextView);
+
 		mapList = Invite.getMessageList(null);
 		String[] columns = new String[]{"message", "time"};
 		int[] views = new int[]{android.R.id.text1, android.R.id.text2};
@@ -103,11 +107,19 @@ public class InviteActivity extends Activity
 						{
 							ReimApplication.pDialog.dismiss();
 							inviteList = response.getInviteList();
-							mapList = Invite.getMessageList(inviteList);
-							String[] columns = new String[]{"message", "time"};
-							int[] views = new int[]{android.R.id.text1, android.R.id.text2};
-							adapter = new SimpleAdapter(InviteActivity.this, mapList, android.R.layout.simple_list_item_2, columns, views);
-							inviteListView.setAdapter(adapter);
+							if (inviteList.size() == 0)
+							{
+								inviteListView.setVisibility(View.GONE);
+							}
+							else
+							{
+								mapList = Invite.getMessageList(inviteList);
+								String[] columns = new String[]{"message", "time"};
+								int[] views = new int[]{android.R.id.text1, android.R.id.text2};
+								adapter = new SimpleAdapter(InviteActivity.this, mapList, android.R.layout.simple_list_item_2, columns, views);
+								inviteListView.setAdapter(adapter);
+								inviteTextView.setVisibility(View.GONE);
+							}
 						}						
 					});
 				}

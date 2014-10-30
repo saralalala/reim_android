@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity
 			StatisticsFragment.class, MeFragment.class };
 	private int imageViewList[] = { R.drawable.tab_item_reim, R.drawable.tab_item_report,
 			R.drawable.tab_item_statistics, R.drawable.tab_item_me };
-	private int textviewList[] = { R.string.reimbursement, R.string.report, R.string.statistics,
+	private int textViewList[] = { R.string.reimbursement, R.string.report, R.string.statistics,
 			R.string.me };
 
 	protected void onCreate(Bundle savedInstanceState)
@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity
 		{
 			LayoutInflater layoutInflater = LayoutInflater.from(this);
 			tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-			tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+			tabHost.setup(this, getSupportFragmentManager(), R.id.realTabContent);
 
 			for (int i = 0; i < 4; i++)
 			{
@@ -95,11 +95,11 @@ public class MainActivity extends ActionBarActivity
 						drawableTop.getMinimumHeight() + 5);
 
 				TextView textView = (TextView) view.findViewById(R.id.textView);
-				textView.setText(getText(textviewList[i]));
+				textView.setText(getText(textViewList[i]));
 				textView.setCompoundDrawablePadding(5);
 				textView.setCompoundDrawables(null, drawableTop, null, null);
 
-				TabSpec tabSpec = tabHost.newTabSpec(getText(textviewList[i]).toString()).setIndicator(
+				TabSpec tabSpec = tabHost.newTabSpec(getText(textViewList[i]).toString()).setIndicator(
 						view);
 				tabHost.addTab(tabSpec, fragmentList[i], null);
 				tabHost.getTabWidget().getChildAt(i)

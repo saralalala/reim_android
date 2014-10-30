@@ -79,7 +79,7 @@
     <string name="deleteFailed">删除失败</string>
     
     <string name="myReport">我的报告</string>
-    <string name="approveReport">待审批报告</string>
+    <string name="othersReport">其他人的报告</string>
     <string name="inputReportTitle">请输入报告名称</string>
     <string name="deleteReportWarning">是否要删除此报告？</string>
     <string name="submit">提交</string>
@@ -115,6 +115,7 @@
     <string name="inputTagName">请输入标签名称</string>
     <string name="inputUserContact">请输入对方手机号或邮箱</string>
     <string name="agree">同意</string>
+    <string name="noInvites">没有收到任何邀请</string>
     
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>

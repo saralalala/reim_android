@@ -29,6 +29,8 @@ public class Report implements Serializable
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
+	private int count;
+	private double amount;
 	
 	public int getLocalID()
 	{
@@ -109,6 +111,24 @@ public class Report implements Serializable
 	public void setLocalUpdatedDate(int localUpdatedDate)
 	{
 		this.localUpdatedDate = localUpdatedDate;
+	}
+	
+	public int getCount()
+	{
+		return count;
+	}
+	public void setCount(int count)
+	{
+		this.count = count;
+	}
+	
+	public double getAmount()
+	{
+		return amount;
+	}
+	public void setAmount(double amount)
+	{
+		this.amount = amount;
 	}
 	
 	public String getStatusString()

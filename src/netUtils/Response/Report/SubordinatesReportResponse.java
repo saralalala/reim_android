@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.Report;
+import classes.User;
 import netUtils.Response.BaseResponse;
 
 public class SubordinatesReportResponse extends BaseResponse
@@ -21,7 +22,7 @@ public class SubordinatesReportResponse extends BaseResponse
 	protected void constructData()
 	{
 		try
-		{
+		{			
 			JSONObject jObject = getDataObject();
 			JSONArray jsonArray = jObject.getJSONArray("data");
 			int count = Integer.valueOf(jObject.getString("total"));
@@ -30,9 +31,18 @@ public class SubordinatesReportResponse extends BaseResponse
 				JSONObject object = jsonArray.getJSONObject(i);
 				Report report = new Report();
 				report.setTitle(object.getString("title"));
-				report.setCreatedDate(object.getInt("createdt"));
-//				report.setLastUpdatedDate(new Date(Integer.valueOf(object.getString("lastdt"))));
+				report.setServerID(object.getInt("id"));
 				report.setStatus(Integer.valueOf(object.getString("status")));
+				report.setCreatedDate(object.getInt("createdt"));
+				report.setServerUpdatedDate(object.getInt("lastdt"));
+				report.setLocalUpdatedDate(object.getInt("lastdt"));
+				report.setCount(object.getInt("item_count"));
+				report.setAmount(object.getDouble("amount"));
+				
+				User user = new User();
+				user.setServerID(object.getInt("uid"));
+				report.setUser(user);
+				
 				reportList.add(report);
 			}
 		}
