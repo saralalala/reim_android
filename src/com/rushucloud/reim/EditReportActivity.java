@@ -97,21 +97,8 @@ public class EditReportActivity extends Activity
 
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
-		{
-			return false;
-		}
-		else if (report.getStatus() == Report.STATUS_SUBMITTED && 
-				report.getUser().getServerID() != appPreference.getCurrentUserID())
-		{
-			getMenuInflater().inflate(R.menu.approve_reject, menu);
-			return true;
-		}
-		else
-		{
-			getMenuInflater().inflate(R.menu.submit, menu);
-			return true;
-		}
+		getMenuInflater().inflate(R.menu.submit, menu);
+		return true;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) 
@@ -119,19 +106,8 @@ public class EditReportActivity extends Activity
 		int id = item.getItemId();
 		if (id == R.id.action_submit_item)
 		{
+			MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
 			showManagerDialog();
-			return true;
-		}
-		if (id == R.id.action_approve_item)
-		{
-			report.setStatus(Report.STATUS_APPROVED);
-			saveReport("报告已批准");
-			return true;
-		}
-		if (id == R.id.action_reject_item)
-		{
-			report.setStatus(Report.STATUS_REJECTED);
-			saveReport("报告已拒绝");
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

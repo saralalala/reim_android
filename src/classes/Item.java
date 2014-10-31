@@ -16,14 +16,16 @@ public class Item
 	private Category category = null;
 	private double amount = 0.0;
 	private User consumer;
-	private List<User> relevantUsers = null;
-	private List<Tag> tags = null;
-	private int serverUpdatedDate = -1;
-	private int localUpdatedDate = -1;
 	private int consumedDate = -1;
 	private String note = "";
 	private Boolean isProveAhead = false;
 	private Boolean needReimbursed = false;
+	private List<User> relevantUsers = null;
+	private List<Tag> tags = null;
+	private String relevantUsersID = "";
+	private String tagsID = "";
+	private int serverUpdatedDate = -1;
+	private int localUpdatedDate = -1;
 	
 	public int getLocalID()
 	{
@@ -187,6 +189,24 @@ public class Item
 		this.needReimbursed = needReimbursed;
 	}
 
+	public String getRelevantUsersID()
+	{
+		return relevantUsersID;
+	}
+	public void setRelevantUsersID(String relevantUsersID)
+	{
+		this.relevantUsersID = relevantUsersID;
+	}
+	
+	public String getTagsID()
+	{
+		return tagsID;
+	}
+	public void setTagsID(String tagsID)
+	{
+		this.tagsID = tagsID;
+	}
+	
 	public Boolean canBeSubmitWithReport()
 	{
 		if (imageID == -1 && !invoicePath.equals(""))

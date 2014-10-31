@@ -8,6 +8,7 @@ import netUtils.Request.Report.GetReportRequest;
 import netUtils.Request.Report.ModifyReportRequest;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
+import classes.AppPreference;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
@@ -40,9 +41,9 @@ public class ApproveReportActivity extends Activity
 	private ListView itemListView;
 	private ItemListViewAdapter adapter;
 	
-	private int reportID;
+	private int reportServerID;
 	private Report report;
-	private List<Item> itemList = null;
+	private List<Item> itemList = new ArrayList<Item>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -57,6 +58,7 @@ public class ApproveReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ApproveReportActivity");		
 		MobclickAgent.onResume(this);
+		refreshView();
 	}
 
 	protected void onPause()
@@ -86,11 +88,13 @@ public class ApproveReportActivity extends Activity
 		int id = item.getItemId();
 		if (id == R.id.action_approve_item)
 		{
+			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_PASS_REPORT_DETAIL");
 			saveReport(Report.STATUS_APPROVED);
 			return true;
 		}
 		if (id == R.id.action_reject_item)
 		{
+			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REJECT_REPORT_DETAIL");
 			saveReport(Report.STATUS_REJECTED);
 			return true;
 		}
@@ -101,9 +105,17 @@ public class ApproveReportActivity extends Activity
 	{
 		dbManager = DBManager.getDBManager();
 		
-		reportID = getIntent().getIntExtra("reportID", -1);
-		report = (Report)getIntent().getExtras().getSerializable("report");
-		itemList = new ArrayList<Item>();
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null)
+		{
+			report = (Report)getIntent().getExtras().getSerializable("report");
+			reportServerID = report.getServerID();
+		}
+		else
+		{
+			reportServerID = getIntent().getIntExtra("reportServerID", -1);
+		}
+		itemList = dbManager.getOthersReportItems(reportServerID);
 	}
 	
 	private void viewInitialise()
@@ -125,57 +137,58 @@ public class ApproveReportActivity extends Activity
 				startActivity(intent);	
 			}
 		});
-		
-		if (reportID == -1 && report == null)
+	}
+
+	private void refreshView()
+	{
+		if (Utils.isNetworkConnected(this))
 		{
-			Toast.makeText(this, "数据获取失败", Toast.LENGTH_SHORT).show();
-		}
-		else if (reportID != -1)
-		{
-			sendGetReportRequest(reportID);
+			if (reportServerID == -1 && report == null)
+			{
+				Toast.makeText(this, "数据获取失败", Toast.LENGTH_SHORT).show();
+			}
+			else if (itemList.size() == 0)
+			{
+				sendGetReportRequest(reportServerID);
+			}
+			else
+			{
+				titleTextView.setText(report.getTitle());
+				itemList = dbManager.getReportItems(report.getLocalID());
+				adapter.set(itemList);
+				adapter.notifyDataSetChanged();		
+			}			
 		}
 		else
 		{
-			titleTextView.setText(report.getTitle());
-			itemList = dbManager.getReportItems(report.getLocalID());
-			adapter.set(itemList);
-			adapter.notifyDataSetChanged();		
+			Toast.makeText(this, "网络未连接，无法获取数据", Toast.LENGTH_SHORT).show();
 		}
 	}
-
-    private void sendGetReportRequest(final int reportID)
+	
+    private void sendGetReportRequest(final int reportServerID)
     {
     	ReimApplication.pDialog.show();
-    	GetReportRequest request = new GetReportRequest(reportID);
+    	GetReportRequest request = new GetReportRequest(reportServerID);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
 				final GetReportResponse response = new GetReportResponse(httpResponse);
 				if (response.getStatus())
-				{
-					DBManager dbManager = DBManager.getDBManager();
+				{ 
+					int managerID = AppPreference.getAppPreference().getCurrentUserID();
 					report = response.getReport();
-					Report localReport = dbManager.getReportByServerID(reportID);
-					if (localReport == null)
-					{
-						dbManager.insertReport(report);
-						report.setLocalID(dbManager.getLastInsertReportID());								
-					}
-					else
-					{
-						dbManager.updateReportByServerID(report);
-						report = dbManager.getReportByServerID(reportID);
-					}
+					report.setManagerID(managerID);
 					
+					dbManager.deleteOthersReport(reportServerID, managerID);
+					dbManager.insertOthersReport(report);
+					
+					dbManager.deleteOthersReportItems(reportServerID);
 					for (Item item : response.getItemList())
 					{
-						Report itemReport = item.getBelongReport();
-						itemReport.setLocalID(report.getLocalID());
-						item.setBelongReport(report);
-						dbManager.syncItem(item);
+						dbManager.insertOthersItem(item);
 					}
-					itemList = dbManager.getReportItems(report.getLocalID());
+					itemList = dbManager.getOthersReportItems(reportServerID);
 					
 					runOnUiThread(new Runnable()
 					{
@@ -228,7 +241,10 @@ public class ApproveReportActivity extends Activity
 				{
 					report.setLocalUpdatedDate(Utils.getCurrentTime());
 					report.setServerUpdatedDate(report.getLocalUpdatedDate());
-					dbManager.updateReportByLocalID(report);
+
+					int managerID = AppPreference.getAppPreference().getCurrentUserID();
+					dbManager.deleteOthersReport(reportServerID, managerID);
+					dbManager.insertOthersReport(report);
 					
 					runOnUiThread(new Runnable()
 					{

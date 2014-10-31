@@ -87,6 +87,7 @@ public class ManagerActivity extends Activity
 		int id = item.getItemId();
 		if (id == R.id.action_save_item)
 		{
+			MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_CHANGE_USERINFO");
 			if (!Utils.isNetworkConnected(this))
 			{
 				Toast.makeText(this, "网络未连接，无法保存", Toast.LENGTH_SHORT).show();

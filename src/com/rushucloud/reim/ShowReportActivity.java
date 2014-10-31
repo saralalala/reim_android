@@ -33,6 +33,7 @@ public class ShowReportActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.report_approve_detail);
+		MobclickAgent.onEvent(ShowReportActivity.this, "UMENG_VIEW_REPORT");
 		dataInitialise();
 		viewInitialise();
 	}
@@ -62,8 +63,13 @@ public class ShowReportActivity extends Activity
 	
 	private void dataInitialise()
 	{
-		report = (Report)getIntent().getSerializableExtra("report");
-		itemList = DBManager.getDBManager().getReportItems(report.getLocalID());
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null)
+		{
+			report = (Report)bundle.getSerializable("report");
+			//TODO
+			itemList = DBManager.getDBManager().getReportItems(report.getLocalID());			
+		}
 	}
 	
 	private void viewInitialise()

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DBManager;
+
 public class User implements Serializable
 {
 	private static final long serialVersionUID = 1L;
@@ -209,5 +211,21 @@ public class User implements Serializable
 			result += userList.get(i).getNickname() + ",";
 		}
 		return result.substring(0, result.length()-1);
+	}
+
+	public static List<User> stringToUserList(String idString)
+	{
+		List<User> userList = new ArrayList<User>();
+		DBManager dbManager = DBManager.getDBManager();
+		List<Integer> idList = Utils.stringToIntList(idString);
+		for (Integer integer : idList)
+		{
+			User user = dbManager.getUser(integer);
+			if (user != null)
+			{
+				userList.add(user);				
+			}
+		}
+		return userList;
 	}
 }

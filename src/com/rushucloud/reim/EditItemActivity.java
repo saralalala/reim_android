@@ -48,9 +48,12 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -88,6 +91,8 @@ public class EditItemActivity extends Activity
 	private List<Category> categoryList = null;
 	private List<Tag> tagList = null;
 	private List<User> userList = null;
+	
+	private boolean newItem = false;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -230,6 +235,8 @@ public class EditItemActivity extends Activity
 		int itemLocalID = intent.getIntExtra("itemLocalID", -1);
 		if (itemLocalID == -1)
 		{
+			newItem = true;
+			MobclickAgent.onEvent(this, "UMENG_NEW_ITEM");
 			item = new Item();
 			if (categoryList.size() > 0)
 			{
@@ -242,6 +249,8 @@ public class EditItemActivity extends Activity
 		}
 		else
 		{
+			newItem = false;
+			MobclickAgent.onEvent(this, "UMENG_EDIT_ITEM");
 			item = dbManager.getItemByLocalID(itemLocalID);			
 		}
 	}
@@ -277,12 +286,54 @@ public class EditItemActivity extends Activity
 		
 		noteEditText = (EditText)findViewById(R.id.noteEditText);
 		noteEditText.setText(item.getNote());
+		noteEditText.setOnFocusChangeListener(new OnFocusChangeListener()
+		{
+			public void onFocusChange(View v, boolean hasFocus)
+			{
+				if (hasFocus && newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_NOTE");
+				}
+				if (hasFocus && !newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_NOTE");
+				}
+			}
+		});
 		
 		proveAheadCheckBox = (CheckBox)findViewById(R.id.proveAheadCheckBox);
 		proveAheadCheckBox.setChecked(item.isProveAhead());
+		proveAheadCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+			{
+				if (isChecked && newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_PROVEAHEAD");
+				}
+				if (isChecked && !newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_PROVEAHEAD");
+				}
+			}
+		});
 		
 		needReimCheckBox = (CheckBox)findViewById(R.id.needReimCheckBox);
 		needReimCheckBox.setChecked(item.needReimbursed());
+		needReimCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+			{
+				if (isChecked && newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_REIMBURSE");
+				}
+				if (isChecked && !newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_REIMBURSE");
+				}
+			}
+		});
 
 		String categoryName = item.getCategory() == null ? "N/A" : item.getCategory().getName();
 		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
@@ -405,6 +456,15 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				if (newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_CATEGORY");
+				}
+				if (!newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_CATEGORY");
+				}
+				
 				hideSoftKeyboard();
 				final Category category = item.getCategory();
 				int index = Category.getIndexOfCategory(categoryList, category);
@@ -446,6 +506,15 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				if (newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_MERCHANT");
+				}
+				if (!newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_MERCHANT");
+				}
+				
 				hideSoftKeyboard();
 				if (Utils.isLocalisationEnabled(EditItemActivity.this))
 				{
@@ -463,6 +532,15 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				if (newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_TAG");
+				}
+				if (!newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_TAG");
+				}
+				
 				hideSoftKeyboard();
 				if (tagList.size() > 0)
 				{
@@ -509,6 +587,15 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				if (newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_TIME");
+				}
+				if (!newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_TIME");
+				}
+				
 				View view = View.inflate(EditItemActivity.this, R.layout.reim_date_time, null);
 				
 				Calendar calendar = Calendar.getInstance();
@@ -557,6 +644,15 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				if (newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_MEMBER");
+				}
+				if (!newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_MEMBER");
+				}
+				
 				hideSoftKeyboard();
 				if (userList.size() > 0)
 				{

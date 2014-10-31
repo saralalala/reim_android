@@ -81,6 +81,7 @@ public class SearchItemActivity extends Activity
 		{
 			public boolean onQueryTextSubmit(String query)
 			{
+				MobclickAgent.onEvent(SearchItemActivity.this, "UMENG_SEARCH");
 				SearchItemsRequest request = new SearchItemsRequest(query);
 				request.sendRequest(new HttpConnectionCallback()
 				{

@@ -1,6 +1,7 @@
 package com.rushucloud.reim;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.umeng.analytics.MobclickAgent;
@@ -27,7 +28,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -121,6 +121,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		int id = item.getItemId();
 		if (id == R.id.action_filter_item)
 		{		
+			MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_REPORT_CLICK");
 			windowManager.addView(filterView, params);
 		}
 			
@@ -222,9 +223,18 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id)
 				{
+					Report report = showMineList.get(position-1);
 					Bundle bundle = new Bundle();
-					bundle.putSerializable("report", showMineList.get(position));
-					Intent intent = new Intent(getActivity(), EditReportActivity.class);
+					bundle.putSerializable("report", report);
+					Intent intent;
+					if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECTED)
+					{
+						intent = new Intent(getActivity(), EditReportActivity.class);
+					}
+					else
+					{
+						intent = new Intent(getActivity(), ShowReportActivity.class);						
+					}
 					intent.putExtras(bundle);
 					startActivity(intent);
 				}
@@ -259,18 +269,22 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 					}
 					else if (checkedId == sortItemsCountRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_ITEMS_COUNT");
 						tempSortType = SORT_ITEMS_COUNT;
 					}
 					else if (checkedId == sortAmountRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_AMOUNT");
 						tempSortType = SORT_AMOUNT;
 					}
 					else if (checkedId == sortCreateDateRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_CREATE_DATE");
 						tempSortType = SORT_CREATE_DATE;
 					}
 					else if (checkedId == sortModifyDateRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_MODIFY_DATE");
 						tempSortType = SORT_MODIFY_DATE;
 					}
 				}
@@ -284,6 +298,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 			{
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_TAG");
 					tagAdapter.setSelection(position);
 					tagAdapter.notifyDataSetChanged();
 				}
@@ -328,16 +343,47 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	{
 		mineList.clear();
 		mineList.addAll(readMineReportList());
-		showMineList.clear();
-		showMineList.addAll(filterReportList(mineList));
+		filterReportList();
 		mineAdapter.set(showMineList);
 		mineAdapter.notifyDataSetChanged();
 	}
-
-	private List<Report> filterReportList(List<Report> reportList)
+	
+	private void filterReportList()
 	{
-		List<Report> newReportList = new ArrayList<Report>(reportList);
-		return newReportList;
+		showMineList.clear();
+		for (Report report : mineList)
+		{
+			if (filterStatusList.size() > 0 && filterStatusList.size() < 5)
+			{
+				if (!report.isInSpecificStatus(filterStatusList))
+				{
+					continue;
+				}
+			}
+			showMineList.add(report);
+		}
+		
+		if (sortType == SORT_AMOUNT)
+		{
+			Report.sortByAmount(showMineList);
+		}
+		if (sortType == SORT_ITEMS_COUNT)
+		{
+			Report.sortByItemsCount(showMineList);
+		}
+		if (sortType == SORT_CREATE_DATE)
+		{
+			Report.sortByCreateDate(showMineList);
+		}
+		if (sortType == SORT_MODIFY_DATE)
+		{
+			Report.sortByModifyDate(showMineList);
+		}
+		
+		if (sortReverse)
+		{
+			Collections.reverse(showMineList);
+		}
 	}
 	
 	private void sendDeleteReportRequest(final Report report)
@@ -413,24 +459,71 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
 	public void onRefresh()
 	{
-		new Handler().postDelayed(new Runnable()
+		if (Utils.canSyncToServer(getActivity()))
 		{
-			public void run()
+			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
-				mineListView.stopRefresh();
-				mineListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-			}
-		}, 2000);
+				public void execute()
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							mineListView.stopRefresh();
+							mineListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+							refreshMineReportListView();
+						}
+					});
+
+					SyncUtils.syncAllToServer(null);
+				}
+			});
+		}
+		else
+		{
+			getActivity().runOnUiThread(new Runnable()
+			{
+				public void run()
+				{
+					mineListView.stopRefresh();
+					Toast.makeText(getActivity(), "未打开同步开关或未打开Wifi，无法刷新", Toast.LENGTH_SHORT).show();
+				}
+			});
+		}		
 	}
 
 	public void onLoadMore()
 	{
-		new Handler().postDelayed(new Runnable()
+		if (Utils.canSyncToServer(getActivity()))
 		{
-			public void run()
+			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
-				mineListView.stopLoadMore();
-			}
-		}, 2000);		
+				public void execute()
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							mineListView.stopLoadMore();
+							mineListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+							refreshMineReportListView();
+						}
+					});
+
+					SyncUtils.syncAllToServer(null);
+				}
+			});
+		}
+		else
+		{
+			getActivity().runOnUiThread(new Runnable()
+			{
+				public void run()
+				{
+					mineListView.stopLoadMore();
+					Toast.makeText(getActivity(), "未打开同步开关或未打开Wifi，无法刷新", Toast.LENGTH_SHORT).show();
+				}
+			});
+		}	
 	}
 }

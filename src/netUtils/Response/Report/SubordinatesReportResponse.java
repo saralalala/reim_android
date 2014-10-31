@@ -1,5 +1,6 @@
 package netUtils.Response.Report;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -23,6 +24,8 @@ public class SubordinatesReportResponse extends BaseResponse
 	{
 		try
 		{			
+			reportList = new ArrayList<Report>();
+			
 			JSONObject jObject = getDataObject();
 			JSONArray jsonArray = jObject.getJSONArray("data");
 			int count = Integer.valueOf(jObject.getString("total"));
@@ -36,8 +39,8 @@ public class SubordinatesReportResponse extends BaseResponse
 				report.setCreatedDate(object.getInt("createdt"));
 				report.setServerUpdatedDate(object.getInt("lastdt"));
 				report.setLocalUpdatedDate(object.getInt("lastdt"));
-				report.setCount(object.getInt("item_count"));
-				report.setAmount(object.getDouble("amount"));
+				report.setItemCount(object.getInt("item_count"));
+				report.setAmount(object.getString("amount"));
 				
 				User user = new User();
 				user.setServerID(object.getInt("uid"));
@@ -50,5 +53,15 @@ public class SubordinatesReportResponse extends BaseResponse
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public List<Report> getReportList()
+	{
+		return reportList;
+	}
+
+	public void setReportList(List<Report> reportList)
+	{
+		this.reportList = reportList;
 	}
 }

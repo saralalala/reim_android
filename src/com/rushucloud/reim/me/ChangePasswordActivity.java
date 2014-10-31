@@ -67,6 +67,7 @@ public class ChangePasswordActivity extends Activity
 		int id = item.getItemId();
 		if (id == R.id.action_save_item)
 		{
+			MobclickAgent.onEvent(ChangePasswordActivity.this, "UMENG_MINE_CHANGE_USERINFO");
 			final String oldPassword = oldPasswordEditText.getText().toString();
 			final String newPassword = newPasswordEditText.getText().toString();
 			final String confirmPassword = confirmPasswordEditText.getText().toString();

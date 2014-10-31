@@ -154,6 +154,30 @@ public class DBManager extends SQLiteOpenHelper
 										+ "backup3 TEXT DEFAULT('')"
 										+ ")";
 			database.execSQL(createItemTagTable);
+			
+			String createOthersItemTable="CREATE TABLE IF NOT EXISTS tbl_others_item ("
+									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+									+ "server_id INT DEFAULT(0),"
+									+ "image_id INT DEFAULT(0),"
+									+ "invoice_path TEXT DEFAULT(''),"
+									+ "merchant TEXT DEFAULT(''),"
+									+ "report_server_id INT DEFAULT(0),"
+									+ "category_id INT DEFAULT(0),"
+									+ "tags_id TEXT DEFAULT(''),"
+									+ "users_id TEXT DEFAULT(''),"
+									+ "amount FLOAT DEFAULT(0),"
+									+ "user_id INT DEFAULT(0),"
+									+ "consumed_date INT DEFAULT(0),"
+									+ "note TEXT DEFAULT(''),"
+									+ "server_updatedt INT DEFAULT(0),"
+									+ "local_updatedt INT DEFAULT(0),"
+									+ "prove_ahead INT DEFAULT(0),"
+									+ "need_reimbursed INT DEFAULT(0),"
+									+ "backup1 INT DEFAULT(0),"
+									+ "backup2 TEXT DEFAULT(''),"
+									+ "backup3 TEXT DEFAULT('')"
+									+ ")";
+			database.execSQL(createOthersItemTable);
 
 			String createUserTable="CREATE TABLE IF NOT EXISTS tbl_user ("
 										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -205,7 +229,6 @@ public class DBManager extends SQLiteOpenHelper
 										+ ")";
 			database.execSQL(createReportTable);
 			
-			// TODO
 			String createOthersReportTable="CREATE TABLE IF NOT EXISTS tbl_others_report ("
 										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 										+ "server_id INT DEFAULT(0),"
@@ -214,7 +237,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "manager_id INT DEFAULT(0),"
 										+ "status INT DEFAULT(0),"
 										+ "item_count INT DEFAULT(0),"
-										+ "amount INT DEFAULT(0),"
+										+ "amount TEXT DEFAULT(''),"
 										+ "created_date INT DEFAULT(0),"
 										+ "server_updatedt INT DEFAULT(0),"
 										+ "local_updatedt INT DEFAULT(0),"
@@ -222,7 +245,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "backup2 TEXT DEFAULT(''),"
 										+ "backup3 TEXT DEFAULT('')"
 										+ ")";
-			database.execSQL(createReportTable);
+			database.execSQL(createOthersReportTable);
 
 			String createCommentTable="CREATE TABLE IF NOT EXISTS tbl_comment ("
 											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -618,6 +641,40 @@ public class DBManager extends SQLiteOpenHelper
 			updateItemTags(item);
 			updateRelevantUsers(item);
 			
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean insertOthersItem(Item item)
+	{
+		try
+		{
+			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
+			String sqlString = "INSERT INTO tbl_item (server_id, image_id, invoice_path, merchant, report_server_id, " +
+							   							"category_id, tags_id, users_id, amount, user_id, consumed_date, note, " +
+							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed) VALUES (" + 
+														"'" + item.getServerID() + "'," +
+														"'" + item.getImageID() + "'," +
+														"'" + item.getInvoicePath() + "'," +
+														"'" + item.getMerchant() + "'," +
+														"'" + item.getBelongReport().getServerID() + "'," +
+														"'" + categoryID + "'," +
+														"'" + item.getTagsID() + "'," +
+														"'" + item.getRelevantUsersID() + "'," +
+														"'" + item.getAmount() + "'," +
+														"'" + item.getConsumer().getServerID() + "'," +
+														"'" + item.getConsumedDate() + "'," +
+														"'" + item.getNote() + "'," +
+														"'" + item.getServerUpdatedDate() + "'," +
+														"'" + item.getLocalUpdatedDate() + "'," +
+														"'" + Utils.booleanToInt(item.isProveAhead()) + "'," +
+														"'" + Utils.booleanToInt(item.needReimbursed()) + "')";
+			database.execSQL(sqlString);			
 			return true;
 		}
 		catch (Exception e)
@@ -1120,7 +1177,22 @@ public class DBManager extends SQLiteOpenHelper
 			return false;
 		}
 	}
-
+	
+	public Boolean deleteOthersReportItems(int reportServerID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_others_item WHERE report_server_id = '" + reportServerID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public List<Item> getReportItems(int reportLocalID)
 	{
 		List<Item> itemList = new ArrayList<Item>();
@@ -1149,6 +1221,47 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
 				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
 				item.setTags(getItemTags(item.getLocalID()));
+				
+				itemList.add(item);
+			}
+			
+			return itemList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return itemList;	
+		}
+	}
+	
+	public List<Item> getOthersReportItems(int reportServerID)
+	{
+		List<Item> itemList = new ArrayList<Item>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_item WHERE report_server_id=?", 
+													new String[]{Integer.toString(reportServerID)});
+			
+			while (cursor.moveToNext())
+			{
+				Item item = new Item();
+				item.setLocalID(getIntFromCursor(cursor, "id"));
+				item.setServerID(getIntFromCursor(cursor, "server_id"));
+				item.setImageID(getIntFromCursor(cursor, "image_id"));
+				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
+				item.setMerchant(getStringFromCursor(cursor, "merchant"));
+				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
+				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
+				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
+				item.setBelongReport(getOthersReport(reportServerID));
+				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setRelevantUsers(User.stringToUserList(getStringFromCursor(cursor, "users_id")));
+				item.setTags(Tag.stringToTagList(getStringFromCursor(cursor, "tags_id")));
 				
 				itemList.add(item);
 			}
@@ -1212,13 +1325,22 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean insertApproveReport(int reportServerID, int userServerID)
-	{	
+	public Boolean insertOthersReport(Report report)
+	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_approve_report (report_server_id, user_id) VALUES (" + 
-														"'" + reportServerID + "'," +
-														"'" + userServerID + "')";
+			String sqlString = "INSERT INTO tbl_others_report (server_id, title, user_id, status, manager_id, amount, item_count, " +
+									"created_date, server_updatedt, local_updatedt) VALUES (" + 
+								"'" + report.getServerID() + "'," +
+								"'" + report.getTitle() + "'," +
+								"'" + report.getUser().getServerID() + "'," +
+								"'" + report.getStatus() + "'," +
+								"'" + report.getManagerID() + "'," +
+								"'" + report.getAmount() + "'," +
+								"'" + report.getItemCount() + "'," +
+								"'" + report.getCreatedDate() + "'," +
+								"'" + report.getServerUpdatedDate() + "'," +
+								"'" + report.getLocalUpdatedDate() + "')";
 			database.execSQL(sqlString);			
 			return true;
 		}
@@ -1295,12 +1417,27 @@ public class DBManager extends SQLiteOpenHelper
 			return false;
 		}
 	}
-	
-	public Boolean deleteApproveReport(int reportServerID)
+
+	public Boolean deleteOthersReport(int reportServerID, int managerID)
 	{
 		try
 		{
-			String sqlString = "DELETE FROM tbl_approve_report WHERE report_serverid = '" + reportServerID +"'";
+			String sqlString = "DELETE FROM tbl_others_report WHERE server_id = '" + reportServerID +"' AND manager_id = '" + managerID + "'";
+			database.execSQL(sqlString);			
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean deleteOthersReports(int managerID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_others_report WHERE manager_id = '" + managerID +"'";
 			database.execSQL(sqlString);			
 			return true;
 		}
@@ -1357,6 +1494,38 @@ public class DBManager extends SQLiteOpenHelper
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerID(getIntFromCursor(cursor, "manager_id"));
 				report.setStatus(getIntFromCursor(cursor, "status"));
+				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
+				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				
+				return report;
+			}
+			return null;
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+	}
+	
+	public Report getOthersReport(int reportServerID)
+	{
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE server_id = ?", 
+											new String[]{Integer.toString(reportServerID)});
+			
+			if (cursor.moveToNext())
+			{
+				Report report = new Report();
+				report.setLocalID(getIntFromCursor(cursor, "id"));
+				report.setServerID(getIntFromCursor(cursor, "server_id"));
+				report.setTitle(getStringFromCursor(cursor, "title"));
+				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
+				report.setManagerID(getIntFromCursor(cursor, "manager_id"));
+				report.setStatus(getIntFromCursor(cursor, "status"));
+				report.setItemCount(getIntFromCursor(cursor, "item_count"));
+				report.setAmount(getStringFromCursor(cursor, "amount"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -1533,12 +1702,12 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public List<Report> getApproveReports(int userServerID)
+	public List<Report> getOthersReports(int userServerID)
 	{
 		List<Report> reportList = new ArrayList<Report>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE manager_id = ?", 
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE manager_id = ?", 
 											new String[]{Integer.toString(userServerID)});
 			
 			while (cursor.moveToNext())
@@ -1550,6 +1719,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerID(getIntFromCursor(cursor, "manager_id"));
 				report.setStatus(getIntFromCursor(cursor, "status"));
+				report.setItemCount(getIntFromCursor(cursor, "item_count"));
+				report.setAmount(getStringFromCursor(cursor, "amount"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -1563,27 +1734,7 @@ public class DBManager extends SQLiteOpenHelper
 			return reportList;
 		}
 	}
-	
-	public List<Integer> getApproveReportIDs(int userServerID)
-	{
-		List<Integer> idList = new ArrayList<Integer>();
-		try
-		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_approve_report WHERE user_id = ?", 
-											new String[]{Integer.toString(userServerID)});
-			
-			while (cursor.moveToNext())
-			{
-				idList.add(getIntFromCursor(cursor, "server_id"));
-			}
-			return idList;
-		}
-		catch (Exception e)
-		{
-			return idList;
-		}
-	}
-	
+		
 	public String getReportItemIDs(int reportLocalID)
 	{
 		String itemIDString = "";

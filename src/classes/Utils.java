@@ -236,6 +236,23 @@ public class Utils
     	return idArrayList;
     }
 
+    public static List<Integer> stringToIntList(String idString)
+    {
+    	List<Integer> resultList = new ArrayList<Integer>();
+    	while (idString.indexOf(",") != -1)
+		{
+    		int index = idString.indexOf(",");
+    		int id = Integer.valueOf(idString.substring(0, index));
+    		resultList.add(id);
+    		idString = idString.substring(index+1);
+		}
+    	if (idString.length() != 0)
+		{
+			resultList.add(Integer.valueOf(idString));
+		}
+    	return resultList;
+    }
+    
     public static String getImageName()
     {
     	int time = Utils.getCurrentTime();

@@ -3,6 +3,7 @@ package com.rushucloud.reim;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import com.umeng.analytics.MobclickAgent;
 
 import netUtils.HttpConnectionCallback;
@@ -131,11 +132,13 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		int id = item.getItemId();
 		if (id == R.id.action_search_item)
 		{
+			MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
 			startActivity(new Intent(getActivity(), SearchItemActivity.class));
 			return true;
 		}
 		else if (id == R.id.action_filter_item)
 		{
+			MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
 			windowManager.addView(filterView, params);
 		}
 			
@@ -250,19 +253,19 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			{
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 				{
-					Item item = showList.get(position);
+					Item item = showList.get(position-1);
 					if (item.getBelongReport() == null
 							|| item.getBelongReport().getStatus() == Report.STATUS_DRAFT
 							|| item.getBelongReport().getStatus() == Report.STATUS_REJECTED)
 					{
 						Intent intent = new Intent(getActivity(), EditItemActivity.class);
-						intent.putExtra("itemLocalID", showList.get(position).getLocalID());
+						intent.putExtra("itemLocalID", item.getLocalID());
 						startActivity(intent);
 					}
 					else
 					{
 						Intent intent = new Intent(getActivity(), ShowItemActivity.class);
-						intent.putExtra("itemLocalID", showList.get(position).getLocalID());
+						intent.putExtra("itemLocalID", item.getLocalID());
 						startActivity(intent);
 					}
 				}
@@ -295,10 +298,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					}
 					else if (checkedId == sortDateRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
 						tempSortType = SORT_DATE;
 					}
 					else if (checkedId == sortAmountRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_AMOUNT");
 						tempSortType = SORT_AMOUNT;
 					}
 				}
@@ -318,10 +323,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					}
 					else if (checkedId == filterProveAheadRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PROVE_AHEAD");
 						tempFilterType = FILTER_TYPE_PROVE_AHEAD;
 					}
 					else if (checkedId == filterConsumedRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_REIMBURSED");
 						tempFilterType = FILTER_TYPE_CONSUMED;
 					}
 				}
@@ -341,10 +348,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					}
 					else if (checkedId == filterFreeRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_NO_IN_REPORT");
 						tempFilterStatus = FILTER_STATUS_FREE;
 					}
 					else if (checkedId == filterAddedRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_IN_REPORT");
 						tempFilterStatus = FILTER_STATUS_ADDED;
 					}
 				}
@@ -358,6 +367,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			{
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TAG");
 					tagAdapter.setSelection(position);
 					tagAdapter.notifyDataSetChanged();
 				}

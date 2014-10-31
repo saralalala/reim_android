@@ -35,6 +35,7 @@ public class ShowItemActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reim_show_item);
+		MobclickAgent.onEvent(ShowItemActivity.this, "UMENG_VIEW_ITEM");
 		dataInitialise();
 		viewInitialise();
 		buttonInitialise();

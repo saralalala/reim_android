@@ -30,11 +30,10 @@ public class GetReportResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			report = new Report();
-			report.setServerID(jObject.getInt("id"));
+			report.setServerID(jObject.getInt("rid"));
 			report.setTitle(jObject.getString("title"));
 			report.setCreatedDate(jObject.getInt("createdt"));
 			report.setStatus(jObject.getInt("status"));
-			report.setManagerID(jObject.getInt("manager_id"));
 			report.setLocalUpdatedDate(jObject.getInt("lastdt"));
 			report.setServerUpdatedDate(jObject.getInt("lastdt"));
 
@@ -59,6 +58,8 @@ public class GetReportResponse extends BaseResponse
 				item.setInvoicePath("");
 				item.setIsProveAhead(Utils.intToBoolean(object.getInt("prove_ahead")));
 				item.setNeedReimbursed(Utils.intToBoolean(object.getInt("reimbursed")));
+				item.setTagsID(object.getString("tags"));
+				item.setRelevantUsersID(object.getString("users"));//TODO
 				
 				Report report = new Report();
 				report.setServerID(object.getInt("rid"));

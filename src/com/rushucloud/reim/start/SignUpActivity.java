@@ -197,6 +197,7 @@ public class SignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(SignUpActivity.this, "UMENG_REGIST_TEL");
 				hideSoftKeyboard();
 				String phoneNumber = phoneEditText.getText().toString();
 				String password = phonePasswordEditText.getText().toString();
@@ -301,6 +302,7 @@ public class SignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(SignUpActivity.this, "UMENG_REGIST_EMAIL");
 				hideSoftKeyboard();
 				String email = emailEditText.getText().toString();
 				String password = emailPasswordEditText.getText().toString();

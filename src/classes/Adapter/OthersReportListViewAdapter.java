@@ -8,7 +8,6 @@ import classes.Utils;
 
 import com.rushucloud.reim.R;
 
-import database.DBManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +15,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class ReportListViewAdapter extends BaseAdapter
+public class OthersReportListViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
 	private List<Report> reportList;
 
-	public ReportListViewAdapter(Context context, List<Report> reports)
+	public OthersReportListViewAdapter(Context context, List<Report> reports)
 	{
 		reportList = new ArrayList<Report>(reports);
 		layoutInflater = LayoutInflater.from(context);
@@ -40,8 +39,7 @@ public class ReportListViewAdapter extends BaseAdapter
 		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		
-		Report report = this.getItem(position);
-		String[] reportInfo = DBManager.getDBManager().getReportInfo(report.getLocalID());
+		Report report = reportList.get(position);
 
 		String title = report.getTitle().equals("") ? "N/A" : report.getTitle();
 		titleTextView.setText(title);
@@ -49,12 +47,12 @@ public class ReportListViewAdapter extends BaseAdapter
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
 		dateTextView.setText(date.equals("") ? "N/A" : date);
 		
-		countTextView.setText("#" + reportInfo[1]);
+		countTextView.setText("#" + report.getItemCount());
 
 		String status = report.getStatusString().equals("") ? "N/A" : report.getStatusString();
 		statusTextView.setText(status);
 		
-		amountTextView.setText("￥" + reportInfo[0]);
+		amountTextView.setText("￥" + report.getAmount());
 		
 		return convertView;
 	}
@@ -73,7 +71,7 @@ public class ReportListViewAdapter extends BaseAdapter
 	{
 		return position;
 	}
-
+	
 	public void set(List<Report> reports)
 	{
 		reportList = new ArrayList<Report>(reports);

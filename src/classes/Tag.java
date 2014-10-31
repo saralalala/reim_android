@@ -114,20 +114,14 @@ public class Tag
 	{
 		List<Tag> tagList = new ArrayList<Tag>();
 		DBManager dbManager = DBManager.getDBManager();
-		while (idString.indexOf(',') != -1)
+		List<Integer> idList = Utils.stringToIntList(idString);
+		for (Integer integer : idList)
 		{
-			int index = idString.indexOf(',');
-			int serverID = Integer.valueOf(idString.substring(0, index));
-			Tag tag = dbManager.getTag(serverID);
-			tagList.add(tag);
-			idString = idString.substring(index+1);
-		}
-		
-		if (idString.length() != 0)
-		{
-			int serverID = Integer.valueOf(idString);
-			Tag tag = dbManager.getTag(serverID);
-			tagList.add(tag);
+			Tag tag = dbManager.getTag(integer);
+			if (tag != null)
+			{
+				tagList.add(tag);				
+			}
 		}
 		return tagList;
 	}

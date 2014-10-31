@@ -122,6 +122,7 @@ public class SignInActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(SignInActivity.this, "UMENG_LOGIN");
 				hideSoftKeyboard();
 				final String username = usernameEditText.getText().toString();
 				final String password = passwordEditText.getText().toString();

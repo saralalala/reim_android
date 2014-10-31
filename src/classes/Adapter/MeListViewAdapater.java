@@ -11,6 +11,8 @@ import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.MeFragment;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.start.SignInActivity;
+import com.umeng.analytics.MobclickAgent;
+
 import database.DBManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -117,6 +119,10 @@ public class MeListViewAdapater extends BaseAdapter
 				{
 					public void onClick(View v)
 					{
+						if (toggleButton.isChecked())
+						{
+							MobclickAgent.onEvent(fragment.getActivity(), "UMENG_WIFI_UPLOAD");
+						}
 						appPreference.setSyncOnlyWithWifi(toggleButton.isChecked());
 						appPreference.saveAppPreference();
 					}

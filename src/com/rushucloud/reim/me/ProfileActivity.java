@@ -108,9 +108,11 @@ public class ProfileActivity extends Activity
 						startActivity(new Intent(ProfileActivity.this, ManagerActivity.class));
 						break;
 					case 6:
+						MobclickAgent.onEvent(ProfileActivity.this, "UMENG_MINE_CATEGORT_SETTING");
 						startActivity(new Intent(ProfileActivity.this, CategoryActivity.class));
 						break;
 					case 7:
+						MobclickAgent.onEvent(ProfileActivity.this, "UMENG_MINE_TAG_SETTING");
 						startActivity(new Intent(ProfileActivity.this, TagActivity.class));
 						break;
 					default:

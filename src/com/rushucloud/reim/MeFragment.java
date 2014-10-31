@@ -168,22 +168,26 @@ public class MeFragment extends Fragment
 				switch (position)
 				{
 					case 0:
+						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_CHANGE_USERINFO");
 						startActivity(new Intent(getActivity(), ProfileActivity.class));
 						break;
 					case 2:
 						startActivity(new Intent(getActivity(), InviteActivity.class));
 						break;
 					case 3:
+						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_INVITE");
 						showInviteDialog();
 						break;
 					case 4:
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
 						final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 						mController.setShareContent("报销姐");
 						mController.openShare(getActivity(), false);
 						break;
 					}
 					case 5:
+						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_FEEDBACK");
 						startActivity(new Intent(getActivity(), FeedbackActivity.class));
 						break;
 					default:

@@ -1,13 +1,12 @@
 package com.rushucloud.reim;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.umeng.analytics.MobclickAgent;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.SyncDataCallback;
-import netUtils.SyncUtils;
 import netUtils.Request.Report.SubordinatesReportRequest;
 import netUtils.Response.Report.SubordinatesReportResponse;
 import classes.AppPreference;
@@ -15,7 +14,7 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.Utils;
 import classes.XListView;
-import classes.Adapter.ReportListViewAdapter;
+import classes.Adapter.OthersReportListViewAdapter;
 import classes.Adapter.ReportTagGridViewAdapter;
 import classes.XListView.IXListViewListener;
 import database.DBManager;
@@ -23,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,6 +36,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.support.v4.app.Fragment;
@@ -53,10 +52,11 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 	private View view;
 	private View filterView;
 	private XListView othersListView;
-	private ReportListViewAdapter othersAdapter;
+	private OthersReportListViewAdapter othersAdapter;
 
 	private WindowManager windowManager;
 	private LayoutParams params = new LayoutParams();
+	private AppPreference appPreference;
 	private DBManager dbManager;
 	private List<Report> othersList = new ArrayList<Report>();
 	private List<Report> showOthersList = new ArrayList<Report>();
@@ -83,16 +83,23 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 	    return view;  
 	}
 	   
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+	}
+
 	public void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("OthersReportFragment");	
+		MobclickAgent.onPageStart("OthersReportFragment");
 		ReimApplication.pDialog.show();
-        viewInitialise();
         dataInitialise();
-		refreshApproveReportListView();
+        viewInitialise();
 		ReimApplication.pDialog.dismiss();
-		getSubordinatesReports();
+		if (Utils.isNetworkConnected(getActivity()))
+		{
+			getSubordinatesReports();
+		}
 	}
 
 	public void onPause()
@@ -111,7 +118,8 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 	{
 		int id = item.getItemId();
 		if (id == R.id.action_filter_item)
-		{		
+		{
+			MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_REPORT_CLICK");
 			windowManager.addView(filterView, params);
 		}
 			
@@ -124,13 +132,21 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		{
 			dbManager = DBManager.getDBManager();			
 		}
+		
+		if (appPreference == null)
+		{
+			appPreference = AppPreference.getAppPreference();
+		}
+		othersList.clear();
+		othersList.addAll(dbManager.getOthersReports(appPreference.getCurrentUserID()));
+		filterReportList();
     }
 
 	private void viewInitialise()
 	{
 		if (othersAdapter == null)
 		{
-			othersAdapter = new ReportListViewAdapter(getActivity(), othersList);			
+			othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);			
 		}
 		
 		if (othersListView == null)
@@ -145,7 +161,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id)
 				{
-					Report report = showOthersList.get(position);
+					Report report = showOthersList.get(position-1);
 					Bundle bundle = new Bundle();
 					bundle.putSerializable("report", report);
 					Intent intent;
@@ -190,18 +206,22 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 					}
 					else if (checkedId == sortItemsCountRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_ITEMS_COUNT");
 						tempSortType = SORT_ITEMS_COUNT;
 					}
 					else if (checkedId == sortAmountRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_AMOUNT");
 						tempSortType = SORT_AMOUNT;
 					}
 					else if (checkedId == sortCreateDateRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_CREATE_DATE");
 						tempSortType = SORT_CREATE_DATE;
 					}
 					else if (checkedId == sortModifyDateRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_MODIFY_DATE");
 						tempSortType = SORT_MODIFY_DATE;
 					}
 				}
@@ -215,6 +235,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 			{
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_TAG");
 					tagAdapter.setSelection(position);
 					tagAdapter.notifyDataSetChanged();
 				}
@@ -232,7 +253,13 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 					
 					windowManager.removeView(filterView);
 					ReimApplication.pDialog.show();
-					refreshApproveReportListView();
+
+					othersList.clear();
+					othersList.addAll(dbManager.getOthersReports(appPreference.getCurrentUserID()));
+					filterReportList();
+					othersAdapter.set(showOthersList);
+					othersAdapter.notifyDataSetChanged();	
+					
 					ReimApplication.pDialog.dismiss();
 				}
 			});
@@ -248,27 +275,42 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		}
 	}
 	
-	private List<Report> readApproveReportList()
+	private void filterReportList()
 	{
-		AppPreference appPreference = AppPreference.getAppPreference();
-		DBManager dbManager = DBManager.getDBManager();
-		return dbManager.getApproveReports(appPreference.getCurrentUserID());
-	}
-	
-	private void refreshApproveReportListView()
-	{
-		othersList.clear();
-		othersList.addAll(readApproveReportList());
 		showOthersList.clear();
-		showOthersList.addAll(filterReportList(othersList));
-		othersAdapter.set(showOthersList);
-		othersAdapter.notifyDataSetChanged();	
-	}
-
-	private List<Report> filterReportList(List<Report> reportList)
-	{
-		List<Report> newReportList = new ArrayList<Report>(reportList);
-		return newReportList;
+		for (Report report : othersList)
+		{
+			if (filterStatusList.size() > 0 && filterStatusList.size() < 5)
+			{
+				if (!report.isInSpecificStatus(filterStatusList))
+				{
+					continue;
+				}
+			}
+			showOthersList.add(report);
+		}
+		
+		if (sortType == SORT_AMOUNT)
+		{
+			Report.sortByAmount(showOthersList);
+		}
+		if (sortType == SORT_ITEMS_COUNT)
+		{
+			Report.sortByItemsCount(showOthersList);
+		}
+		if (sortType == SORT_CREATE_DATE)
+		{
+			Report.sortByCreateDate(showOthersList);
+		}
+		if (sortType == SORT_MODIFY_DATE)
+		{
+			Report.sortByModifyDate(showOthersList);
+		}
+		
+		if (sortReverse)
+		{
+			Collections.reverse(showOthersList);
+		}
 	}
 
 	private void getSubordinatesReports()
@@ -281,11 +323,28 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 				SubordinatesReportResponse response = new SubordinatesReportResponse(httpResponse);
 				if (response.getStatus())
 				{
+					int managerID = appPreference.getCurrentUserID();
+					List<Report> reportList = response.getReportList();
+					dbManager.deleteOthersReports(managerID);
+					
+					for (Report report : reportList)
+					{
+						report.setManagerID(managerID);
+						dbManager.insertOthersReport(report);
+					}
+					
+					othersList = dbManager.getOthersReports(appPreference.getCurrentUserID());
+					filterReportList();
+					othersAdapter.set(showOthersList);
+					
 					getActivity().runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
-							
+							othersListView.stopRefresh();
+							othersListView.stopLoadMore();
+							othersListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+							othersAdapter.notifyDataSetChanged();
 						}
 					});
 				}
@@ -295,24 +354,39 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 
 	public void onRefresh()
 	{
-		new Handler().postDelayed(new Runnable()
+		if (Utils.isNetworkConnected(getActivity()))
 		{
-			public void run()
+			getSubordinatesReports();
+		}
+		else
+		{
+			getActivity().runOnUiThread(new Runnable()
 			{
-				othersListView.stopRefresh();
-				othersListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-			}
-		}, 2000);
+				public void run()
+				{
+					othersListView.stopRefresh();
+					Toast.makeText(getActivity(), "网络未连接，无法刷新", Toast.LENGTH_SHORT).show();
+				}
+			});
+		}
 	}
 
 	public void onLoadMore()
 	{
-		new Handler().postDelayed(new Runnable()
+		if (Utils.isNetworkConnected(getActivity()))
 		{
-			public void run()
+			getSubordinatesReports();
+		}
+		else
+		{
+			getActivity().runOnUiThread(new Runnable()
 			{
-				othersListView.stopLoadMore();
-			}
-		}, 2000);		
+				public void run()
+				{
+					othersListView.stopLoadMore();
+					Toast.makeText(getActivity(), "网络未连接，无法刷新", Toast.LENGTH_SHORT).show();
+				}
+			});
+		}		
 	}
 }

@@ -8,7 +8,6 @@ import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.InviteReplyActivity;
 
-import database.DBManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -77,7 +76,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 						{
 							Intent newIntent = new Intent(context, ApproveReportActivity.class);
 							newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							newIntent.putExtra("reportID", jObject.getInt("args"));
+							newIntent.putExtra("reportServerID", jObject.getInt("args"));
 							context.startActivity(newIntent);
 						}
 						else 
@@ -121,29 +120,6 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-		}
-	}
-	
-	private void updateReport(JSONObject jObject)
-	{
-		try
-		{
-			int status = Integer.valueOf(jObject.getString("status"));
-			int reportID = Integer.valueOf(jObject.getString("args"));
-			if (status == 1)
-			{
-				DBManager.getDBManager().insertApproveReport(reportID, AppPreference.getAppPreference().getCurrentUserID());
-			}
-		}
-		catch (NumberFormatException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (JSONException e)
-		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

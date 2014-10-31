@@ -29,8 +29,8 @@ public class Report implements Serializable
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
-	private int count;
-	private double amount;
+	private int itemCount;
+	private String amount;
 	
 	public int getLocalID()
 	{
@@ -113,20 +113,20 @@ public class Report implements Serializable
 		this.localUpdatedDate = localUpdatedDate;
 	}
 	
-	public int getCount()
+	public int getItemCount()
 	{
-		return count;
+		return itemCount;
 	}
-	public void setCount(int count)
+	public void setItemCount(int count)
 	{
-		this.count = count;
+		this.itemCount = count;
 	}
 	
-	public double getAmount()
+	public String getAmount()
 	{
 		return amount;
 	}
-	public void setAmount(double amount)
+	public void setAmount(String amount)
 	{
 		this.amount = amount;
 	}
@@ -173,6 +173,18 @@ public class Report implements Serializable
 		return true;
 	}
     
+	public boolean isInSpecificStatus(List<Integer> statusList)
+	{
+		for (Integer integer : statusList)
+		{
+			if (getStatus() == integer)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
     public static void sortByItemsCount(List<Report> reportList)
     {
     	DBManager dbManager = DBManager.getDBManager();
