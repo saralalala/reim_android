@@ -1,6 +1,5 @@
 package com.rushucloud.reim.start;
 
-import netUtils.HttpConstant;
 import netUtils.Request.User.SignInRequest;
 import netUtils.HttpConnectionCallback;
 import netUtils.Response.User.SignInResponse;
@@ -88,12 +87,12 @@ public class SignInActivity extends Activity
 			usernameEditText.setText(username);
 			passwordEditText.setText(password);
 		}
-		
-		usernameEditText.setText(HttpConstant.DEBUG_EMAIL);
-		passwordEditText.setText(HttpConstant.DEBUG_PASSWORD);
 
 		usernameEditText.setText("tianyu.an@rushucloud.com");
 		passwordEditText.setText("111111");
+
+		usernameEditText.setText("alvayang@1in1.cn");
+		passwordEditText.setText("qqqqqq");
 		
 		RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
