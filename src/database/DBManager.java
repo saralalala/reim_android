@@ -66,7 +66,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 //		String sqlString = "DELETE FROM tbl_category WHERE group_id = 1";
 //		database.execSQL(sqlString);
-//		String sqlString = "DROP TABLE IF EXISTS tbl_item";
+//		String sqlString = "DROP TABLE IF EXISTS tbl_user";
 //		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_report";
 //		database.execSQL(sqlString);	
