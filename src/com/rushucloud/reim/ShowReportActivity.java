@@ -28,6 +28,7 @@ public class ShowReportActivity extends Activity
 	
 	private Report report;
 	private List<Item> itemList = null;
+	private boolean myReport;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -67,8 +68,15 @@ public class ShowReportActivity extends Activity
 		if (bundle != null)
 		{
 			report = (Report)bundle.getSerializable("report");
-			//TODO
-			itemList = DBManager.getDBManager().getReportItems(report.getLocalID());			
+			myReport = bundle.getBoolean("myReport");
+			if (myReport)
+			{
+				itemList = DBManager.getDBManager().getReportItems(report.getLocalID());				
+			}		
+			else
+			{
+				itemList = DBManager.getDBManager().getOthersReportItems(report.getServerID());
+			}
 		}
 	}
 	
@@ -88,7 +96,14 @@ public class ShowReportActivity extends Activity
 					int position, long id)
 			{
 				Intent intent = new Intent(ShowReportActivity.this, ShowItemActivity.class);
-				intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
+				if (myReport)
+				{
+					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());					
+				}
+				else
+				{
+					intent.putExtra("othersItemServerID", itemList.get(position).getServerID());					
+				}
 				startActivity(intent);	
 			}
 		});

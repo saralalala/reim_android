@@ -59,7 +59,7 @@ public class GetReportResponse extends BaseResponse
 				item.setIsProveAhead(Utils.intToBoolean(object.getInt("prove_ahead")));
 				item.setNeedReimbursed(Utils.intToBoolean(object.getInt("reimbursed")));
 				item.setTagsID(object.getString("tags"));
-				item.setRelevantUsersID(object.getString("users"));//TODO
+				item.setRelevantUsersID(object.getString("relates"));
 				
 				Report report = new Report();
 				report.setServerID(object.getInt("rid"));

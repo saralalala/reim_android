@@ -426,6 +426,7 @@ public class EditReportActivity extends Activity
 		{
 			dbManager.updateReportByLocalID(report);
 		}
+		
 		if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
 		{
 			if (!report.hasItems())

@@ -68,11 +68,23 @@ public class ShowItemActivity extends Activity
 	{
 		DBManager dbManager = DBManager.getDBManager();
 		Intent intent = this.getIntent();
-		int itemLocalID = intent.getIntExtra("itemLocalID", -1);
-		item = dbManager.getItemByLocalID(itemLocalID);
-		if (item == null)
+		int itemID = intent.getIntExtra("itemLocalID", -1);
+		if (itemID == -1)
 		{
-			item = new Item();
+			itemID = intent.getIntExtra("othersItemServerID", -1);
+			item = dbManager.getOthersItem(itemID);
+			if (item == null)
+			{
+				item = new Item();
+			}
+		}
+		else
+		{
+			item = dbManager.getItemByLocalID(itemID);
+			if (item == null)
+			{
+				item = new Item();
+			}			
 		}
 	}
 	

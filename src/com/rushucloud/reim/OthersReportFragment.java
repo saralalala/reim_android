@@ -82,11 +82,6 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		setHasOptionsMenu(true);
 	    return view;  
 	}
-	   
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-	}
 
 	public void onResume()
 	{
@@ -144,10 +139,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 
 	private void viewInitialise()
 	{
-		if (othersAdapter == null)
-		{
-			othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);			
-		}
+		othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);
 		
 		if (othersListView == null)
 		{
@@ -171,6 +163,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 					}
 					else
 					{
+						bundle.putBoolean("myReport", false);
 						intent = new Intent(getActivity(), ShowReportActivity.class);
 					}
 					intent.putExtras(bundle);
@@ -320,7 +313,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		{
 			public void execute(Object httpResponse)
 			{
-				SubordinatesReportResponse response = new SubordinatesReportResponse(httpResponse);
+				final SubordinatesReportResponse response = new SubordinatesReportResponse(httpResponse);
 				if (response.getStatus())
 				{
 					int managerID = appPreference.getCurrentUserID();
@@ -347,6 +340,18 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 							othersAdapter.notifyDataSetChanged();
 						}
 					});
+				}
+				else
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							othersListView.stopRefresh();
+							othersListView.stopLoadMore();
+							Toast.makeText(getActivity(), "获取数据失败" + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+						}
+					});					
 				}
 			}
 		});

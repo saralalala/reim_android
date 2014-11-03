@@ -233,6 +233,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 					}
 					else
 					{
+						bundle.putBoolean("myReport", true);
 						intent = new Intent(getActivity(), ShowReportActivity.class);						
 					}
 					intent.putExtras(bundle);

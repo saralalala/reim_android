@@ -18,6 +18,7 @@ import android.text.TextUtils;
 public class ReimApplication extends Application
 {
 	public static ProgressDialog pDialog;
+	private static Context context;
 	
 	public void onCreate()
 	{
@@ -34,6 +35,8 @@ public class ReimApplication extends Application
 		AVInstallation.getCurrentInstallation().saveInBackground();
 		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
 		MobclickAgent.openActivityDurationTrack(false);
+		
+		context = getApplicationContext();
 
 //		System.out.println(getDeviceInfo(this));
 	}
@@ -118,5 +121,10 @@ public class ReimApplication extends Application
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static Context getContext()
+	{
+		return context;
 	}
 }

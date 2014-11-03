@@ -109,11 +109,18 @@ public class ApproveReportActivity extends Activity
 		if (bundle != null)
 		{
 			report = (Report)getIntent().getExtras().getSerializable("report");
-			reportServerID = report.getServerID();
+			if (report == null)
+			{
+				reportServerID = getIntent().getIntExtra("reportServerID", -1);				
+			}
+			else
+			{
+				reportServerID = report.getServerID();				
+			}
 		}
 		else
 		{
-			reportServerID = getIntent().getIntExtra("reportServerID", -1);
+			reportServerID = -1;
 		}
 		itemList = dbManager.getOthersReportItems(reportServerID);
 	}
@@ -133,7 +140,7 @@ public class ApproveReportActivity extends Activity
 					int position, long id)
 			{
 				Intent intent = new Intent(ApproveReportActivity.this, ShowItemActivity.class);
-				intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
+				intent.putExtra("othersItemServerID", itemList.get(position).getServerID());
 				startActivity(intent);	
 			}
 		});
@@ -147,14 +154,18 @@ public class ApproveReportActivity extends Activity
 			{
 				Toast.makeText(this, "数据获取失败", Toast.LENGTH_SHORT).show();
 			}
-			else if (itemList.size() == 0)
+			else if (reportServerID != -1 && report == null)
+			{
+				sendGetReportRequest(reportServerID);
+			}
+			else if (report != null && itemList.size() == 0)
 			{
 				sendGetReportRequest(reportServerID);
 			}
 			else
 			{
 				titleTextView.setText(report.getTitle());
-				itemList = dbManager.getReportItems(report.getLocalID());
+				itemList = dbManager.getOthersReportItems(reportServerID);
 				adapter.set(itemList);
 				adapter.notifyDataSetChanged();		
 			}			
@@ -244,7 +255,7 @@ public class ApproveReportActivity extends Activity
 
 					int managerID = AppPreference.getAppPreference().getCurrentUserID();
 					dbManager.deleteOthersReport(reportServerID, managerID);
-					dbManager.insertOthersReport(report);
+					dbManager.deleteOthersReportItems(reportServerID);
 					
 					runOnUiThread(new Runnable()
 					{

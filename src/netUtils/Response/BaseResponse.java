@@ -4,6 +4,12 @@ package netUtils.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.rushucloud.reim.start.SignInActivity;
+
+import classes.ReimApplication;
+
+import android.content.Intent;
+
 public abstract class BaseResponse
 {
 	private Boolean status;
@@ -36,11 +42,19 @@ public abstract class BaseResponse
 				dataObject = object.optJSONObject("data");
 				if (dataObject == null)
 				{
-					setDataArray(object.getJSONArray("data"));
+					setDataArray(object.optJSONArray("data"));
 				}
 				else
 				{
 					errorMessage = dataObject.getString("msg");					
+				}
+				
+				if (code == -11)
+				{
+					Intent intent = new Intent(ReimApplication.getContext(), SignInActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+					ReimApplication.getContext().startActivity(intent);
 				}
 			}
 		}
