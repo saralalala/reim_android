@@ -16,10 +16,22 @@ import com.rushucloud.reim.me.FeedbackActivity;
 import com.rushucloud.reim.me.InviteActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
+import com.umeng.socialize.media.QQShareContent;
+import com.umeng.socialize.media.SinaShareContent;
+import com.umeng.socialize.sso.SinaSsoHandler;
+import com.umeng.socialize.sso.UMQQSsoHandler;
+import com.umeng.socialize.sso.UMSsoHandler;
+import com.umeng.socialize.weixin.controller.UMWXHandler;
+import com.umeng.socialize.weixin.media.CircleShareContent;
+import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 import classes.AppPreference;
+import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
 import classes.Adapter.MeListViewAdapater;
@@ -56,6 +68,8 @@ public class MeFragment extends Fragment
 	private User currentUser;
 	private Uri originalImageUri;
 	private String avatarPath;
+	
+	private UMSocialService mController;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -118,7 +132,7 @@ public class MeFragment extends Fragment
 					originalImageUri = data.getData();
 					cropImage(data.getData());					
 				}
-				else
+				else if (requestCode == CROP_IMAGE)
 				{
 					Uri newImageUri = Uri.parse(data.getAction());
 					Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), newImageUri);
@@ -154,6 +168,11 @@ public class MeFragment extends Fragment
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+		UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode);
+		if (ssoHandler != null)
+		{
+			ssoHandler.authorizeCallBack(requestCode, requestCode, data);
+		}		
 	}
 		
 	private void viewInitialise()
@@ -181,9 +200,7 @@ public class MeFragment extends Fragment
 					case 4:
 					{
 						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
-						final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
-						mController.setShareContent("报销姐");
-						mController.openShare(getActivity(), false);
+						showShareDialog();
 						break;
 					}
 					case 5:
@@ -200,6 +217,8 @@ public class MeFragment extends Fragment
 		{
             sendDownloadAvatarRequest();			
 		}
+        
+        mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 	}
 
     private void cropImage(Uri uri)
@@ -353,6 +372,7 @@ public class MeFragment extends Fragment
     
     private void sendInviteRequest(String username)
     {
+    	ReimApplication.pDialog.show();
     	InviteRequest request = new InviteRequest(username);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -365,6 +385,7 @@ public class MeFragment extends Fragment
 					{
 						public void run()
 						{
+					    	ReimApplication.pDialog.dismiss();
 							Toast.makeText(getActivity(), "邀请已发送", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -375,11 +396,79 @@ public class MeFragment extends Fragment
 					{
 						public void run()
 						{
+					    	ReimApplication.pDialog.dismiss();
 							Toast.makeText(getActivity(), "邀请发送失败，" + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
 			}
 		});
+    }
+
+    private void showShareDialog()
+    {
+    	String appID = "wx16afb8ec2cc4dc19";
+    	String appSecret = "2e97f0d75dd7f371803785172682893a";
+    	
+    	UMWXHandler wxHandler = new UMWXHandler(getActivity(), appID, appSecret);
+    	wxHandler.addToSocialSDK();
+    	
+    	UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(), appID, appSecret);
+    	wxCircleHandler.setToCircle(true);
+    	wxCircleHandler.addToSocialSDK();
+    	
+    	SinaSsoHandler sinaSsoHandler = new SinaSsoHandler();
+    	sinaSsoHandler.addToSocialSDK();
+    	
+    	UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(getActivity(), "1103305832", "l8eKHcEiAMCnhV50");
+    	qqSsoHandler.addToSocialSDK();
+
+    	WeiXinShareContent weiXinShareContent = new WeiXinShareContent();
+    	weiXinShareContent.setShareContent("这是来自XAndroid版的微信分享");
+    	weiXinShareContent.setTitle("微信分享");
+    	weiXinShareContent.setTargetUrl("http://www.rushucloud.com");    	
+    	mController.setShareMedia(weiXinShareContent);
+
+    	CircleShareContent circleShareContent = new CircleShareContent();
+    	circleShareContent.setShareContent("这是来自XAndroid版的朋友圈分享");
+    	circleShareContent.setTitle("朋友圈分享");
+    	circleShareContent.setTargetUrl("http://www.rushucloud.com");    
+    	mController.setShareMedia(circleShareContent);
+
+    	SinaShareContent sinaShareContent = new SinaShareContent();
+    	sinaShareContent.setShareContent("这是来自XAndroid版的新浪微博分享");
+    	sinaShareContent.setTitle("新浪微博分享");
+    	sinaShareContent.setTargetUrl("http://www.rushucloud.com");    
+    	mController.setShareMedia(sinaShareContent);
+
+    	QQShareContent qqShareContent = new QQShareContent();
+    	qqShareContent.setShareContent("这是来自XAndroid版的QQ分享");
+    	qqShareContent.setTitle("QQ分享");
+    	qqShareContent.setTargetUrl("http://www.rushucloud.com");    
+    	mController.setShareMedia(qqShareContent);
+    	
+    	mController.getConfig().removePlatform(SHARE_MEDIA.QZONE, SHARE_MEDIA.TENCENT);
+    	SnsPostListener listener = new SnsPostListener()
+    	{
+    		public void onStart()
+    		{
+		        Toast.makeText(getActivity(), "on Start", Toast.LENGTH_SHORT).show();
+    		}
+    		
+    		public void onComplete(SHARE_MEDIA platform, int stCode, SocializeEntity entity)
+    		{
+    			if (stCode == 200)
+    			{
+    		        Toast.makeText(getActivity(), "分享成功", Toast.LENGTH_SHORT).show();
+    		    }
+    			else
+    			{
+    		        Toast.makeText(getActivity(), "分享失败 : error code : " + stCode, Toast.LENGTH_SHORT).show();
+    		    }
+    		}
+    	};
+    	mController.getConfig().registerListener(listener);
+    	
+		mController.openShare(getActivity(), false);
     }
 }

@@ -10,12 +10,15 @@ import netUtils.HttpConnectionCallback;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
 import netUtils.Request.Report.DeleteReportRequest;
+import netUtils.Request.Report.ExportReportRequest;
 import netUtils.Response.Report.DeleteReportResponse;
+import netUtils.Response.Report.ExportReportResponse;
 
 
 import classes.AppPreference;
 import classes.ReimApplication;
 import classes.Report;
+import classes.User;
 import classes.Utils;
 import classes.XListView;
 import classes.Adapter.ReportListViewAdapter;
@@ -41,6 +44,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -133,6 +137,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
     	super.onCreateContextMenu(menu, v, menuInfo);
     	menu.setHeaderTitle("选项");
     	menu.add(0,0,0,"删除");
+    	menu.add(0,1,0,"导出");
     }
 
     public boolean onContextItemSelected(MenuItem item)
@@ -143,6 +148,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
     	switch (item.getItemId()) 
     	{
 			case 0:
+			{
 				if (!Utils.isNetworkConnected(getActivity()))
 				{
 					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
@@ -176,6 +182,23 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 					Toast.makeText(getActivity(), "报告已提交，不可删除", Toast.LENGTH_SHORT).show();
 				}
 				break;
+			}
+			case 1:
+			{
+				if (!Utils.isNetworkConnected(getActivity()))
+				{
+					Toast.makeText(getActivity(), "网络未连接，无法导出", Toast.LENGTH_SHORT).show();
+				}
+				else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
+				{
+					Toast.makeText(getActivity(), "报销未完成，不可导出", Toast.LENGTH_SHORT).show();					
+				}
+				else
+				{
+					showExportDialog(report.getServerID());
+				}
+				break;
+			}
 			default:
 				break;
 		}    		
@@ -349,6 +372,44 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		mineAdapter.notifyDataSetChanged();
 	}
 	
+	private void showExportDialog(final int reportID)
+    {
+		View view = View.inflate(getActivity(), R.layout.report_export_dialog, null);
+		final EditText emailEditText = (EditText)view.findViewById(R.id.emailEditText);
+		User user = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());
+		if (!user.getEmail().equals(""))
+		{
+			emailEditText.setText(user.getEmail());
+		}
+		emailEditText.requestFocus();
+		
+    	AlertDialog mDialog = new AlertDialog.Builder(getActivity())
+								.setTitle("导出报告")
+								.setView(view)
+								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										String email = emailEditText.getText().toString();
+										if (email.equals(""))
+										{
+											Toast.makeText(getActivity(), "邮箱不能为空", Toast.LENGTH_SHORT).show();
+										}
+										else if (!Utils.isEmail(email))
+										{
+											Toast.makeText(getActivity(), "邮箱格式不正确", Toast.LENGTH_SHORT).show();
+										}
+										else
+										{
+											sendExportReportRequest(reportID, email);
+										}
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+		mDialog.show();
+    }
+	
 	private void filterReportList()
 	{
 		showMineList.clear();
@@ -416,6 +477,41 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 				            Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
 						}
 					});		
+				}
+			}
+		});
+	}
+
+	private void sendExportReportRequest(int reportID, String email)
+	{
+    	ReimApplication.pDialog.show();
+		ExportReportRequest request = new ExportReportRequest(reportID, email);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				ExportReportResponse response = new ExportReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.pDialog.dismiss();
+							Toast.makeText(getActivity(), "报告导出成功", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+				else
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.pDialog.dismiss();
+							Toast.makeText(getActivity(), "报告导出失败", Toast.LENGTH_SHORT).show();
+						}
+					});
 				}
 			}
 		});
