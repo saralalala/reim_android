@@ -59,8 +59,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	private static final int SORT_NULL = 0;	
 	private static final int SORT_ITEMS_COUNT = 1;	
 	private static final int SORT_AMOUNT = 2;	
-	private static final int SORT_CREATE_DATE = 3;	
-	private static final int SORT_MODIFY_DATE = 4;	
+	private static final int SORT_CREATE_DATE = 3;
 	
 	private View view;
 	private View filterView;
@@ -281,7 +280,6 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 			final RadioButton sortItemsCountRadio = (RadioButton)filterView.findViewById(R.id.sortItemsCountRadio);
 			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);	
 			final RadioButton sortCreateDateRadio = (RadioButton)filterView.findViewById(R.id.sortCreateDateRadio);
-			final RadioButton sortModifyDateRadio = (RadioButton)filterView.findViewById(R.id.sortModifyDateRadio);		
 			RadioGroup sortRadioGroup = (RadioGroup)filterView.findViewById(R.id.sortRadioGroup);
 			sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 			{
@@ -289,6 +287,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 				{
 					if (checkedId == sortNullRadio.getId())
 					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_MODIFY_DATE");
 						tempSortType = SORT_NULL;
 					}
 					else if (checkedId == sortItemsCountRadio.getId())
@@ -305,11 +304,6 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 					{
 						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_CREATE_DATE");
 						tempSortType = SORT_CREATE_DATE;
-					}
-					else if (checkedId == sortModifyDateRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_MODIFY_DATE");
-						tempSortType = SORT_MODIFY_DATE;
 					}
 				}
 			});
@@ -424,7 +418,11 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 			}
 			showMineList.add(report);
 		}
-		
+
+		if (sortType == SORT_NULL)
+		{
+			Report.sortByModifyDate(showMineList);
+		}
 		if (sortType == SORT_AMOUNT)
 		{
 			Report.sortByAmount(showMineList);
@@ -436,10 +434,6 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		if (sortType == SORT_CREATE_DATE)
 		{
 			Report.sortByCreateDate(showMineList);
-		}
-		if (sortType == SORT_MODIFY_DATE)
-		{
-			Report.sortByModifyDate(showMineList);
 		}
 		
 		if (sortReverse)

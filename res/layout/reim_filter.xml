@@ -42,16 +42,16 @@
             android:text="@string/sortNull" />
 
         <RadioButton
-            android:id="@+id/sortDateRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sortDate" />
-
-        <RadioButton
             android:id="@+id/sortAmountRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sortAmount" />
+
+        <RadioButton
+            android:id="@+id/sortUpdateDateRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sortUpdateDate" />
     </RadioGroup>
 
     <TextView

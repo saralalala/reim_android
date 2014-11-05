@@ -61,7 +61,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	private static final int FILTER_STATUS_ADDED = 2;	
 	private static final int SORT_NULL = 0;	
 	private static final int SORT_AMOUNT = 1;	
-	private static final int SORT_DATE = 2;	
+	private static final int SORT_UPDATE_DATE = 2;	
 	
 	private View view;
 	private View filterView;
@@ -285,8 +285,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			filterView.setMinimumHeight(dm.heightPixels);
 
 			final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
-			final RadioButton sortDateRadio = (RadioButton)filterView.findViewById(R.id.sortDateRadio);
-			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);			
+			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		
+			final RadioButton sortUpdateDateRadio = (RadioButton)filterView.findViewById(R.id.sortUpdateDateRadio);	
 			RadioGroup sortRadioGroup = (RadioGroup)filterView.findViewById(R.id.sortRadioGroup);
 			sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 			{
@@ -296,15 +296,15 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					{
 						tempSortType = SORT_NULL;
 					}
-					else if (checkedId == sortDateRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
-						tempSortType = SORT_DATE;
-					}
 					else if (checkedId == sortAmountRadio.getId())
 					{
 						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_AMOUNT");
 						tempSortType = SORT_AMOUNT;
+					}
+					else if (checkedId == sortUpdateDateRadio.getId())
+					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
+						tempSortType = SORT_UPDATE_DATE;
 					}
 				}
 			});
@@ -508,14 +508,18 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			}
 			showList.add(item);
 		}
-		
+
+		if (sortType == SORT_NULL)
+		{
+			Item.sortByConsumedDate(showList);
+		}
 		if (sortType == SORT_AMOUNT)
 		{
 			Item.sortByAmount(showList);
 		}
-		if (sortType == SORT_DATE)
+		if (sortType == SORT_UPDATE_DATE)
 		{
-			Item.sortByDate(showList);
+			Item.sortByUpdateDate(showList);
 		}
 		
 		if (sortReverse)

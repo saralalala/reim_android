@@ -41,8 +41,8 @@
     
     <string name="sort">排序</string> 
     <string name="sortNull">无</string>
-    <string name="sortDate">消费日期</string>
     <string name="sortAmount">金额</string>
+    <string name="sortUpdateDate">修改时间</string>
     <string name="sortItemsCount">条目数</string>
     <string name="sortCreateDate">创建日期</string>
     <string name="sortModifyDate">修改日期</string>

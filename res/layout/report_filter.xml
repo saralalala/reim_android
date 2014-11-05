@@ -58,12 +58,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sortCreateDate" />
-
-        <RadioButton
-            android:id="@+id/sortModifyDateRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sortModifyDate" />
         
     </RadioGroup>
 

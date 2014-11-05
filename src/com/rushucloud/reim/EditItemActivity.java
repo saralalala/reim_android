@@ -707,6 +707,10 @@ public class EditItemActivity extends Activity
 					item.setIsProveAhead(proveAheadCheckBox.isChecked());
 					item.setNeedReimbursed(needReimCheckBox.isChecked());
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
+					if (newItem)
+					{
+						item.setCreatedDate(Utils.getCurrentTime());
+					}
 					
 					if (dbManager.syncItem(item))
 					{

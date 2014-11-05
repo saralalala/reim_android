@@ -30,7 +30,6 @@ public abstract class SyncUtils
 	public static void syncFromServer(final SyncDataCallback callback)
 	{
 		int lastSynctime = AppPreference.getAppPreference().getLastSyncTime();
-//		int lastSynctime = 0;
 		System.out.println("*************************************");
 		System.out.println("lastSynctime:"+lastSynctime);
 		final int currentTime = Utils.getCurrentTime();
@@ -235,7 +234,7 @@ public abstract class SyncUtils
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());
 					item.setServerID(response.getItemID());
-					DBManager.getDBManager().updateItemByLocalID(item);
+					DBManager.getDBManager().updateItem(item);
 					itemTaskCount--;
 					if (itemTaskCount == 0)
 					{
@@ -267,7 +266,7 @@ public abstract class SyncUtils
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());
 					item.setServerID(response.getItemID());
-					DBManager.getDBManager().updateItemByLocalID(item);
+					DBManager.getDBManager().updateItem(item);
 					itemTaskCount--;
 					if (itemTaskCount == 0)
 					{
@@ -297,7 +296,7 @@ public abstract class SyncUtils
 				if (response.getStatus())
 				{
 					item.setImageID(response.getImageID());
-					DBManager.getDBManager().updateItemByLocalID(item);
+					DBManager.getDBManager().updateItem(item);
 				}
 				if (item.getServerID() == -1)
 				{

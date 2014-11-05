@@ -24,6 +24,7 @@ public class Item
 	private List<Tag> tags = null;
 	private String relevantUsersID = "";
 	private String tagsID = "";
+	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 	
@@ -135,6 +136,15 @@ public class Item
 		this.tags = tag;
 	}
 	
+	public int getCreatedDate()
+	{
+		return createdDate;
+	}
+	public void setCreatedDate(int createdDate)
+	{
+		this.createdDate = createdDate;
+	}
+	
 	public int getServerUpdatedDate()
 	{
 		return serverUpdatedDate;
@@ -239,7 +249,18 @@ public class Item
 		}
 		return false;
 	}
-	
+    
+    public static void sortByConsumedDate(List<Item> itemList)
+    {
+    	Collections.sort(itemList, new Comparator<Item>()
+		{
+			public int compare(Item item1, Item item2)
+			{
+				return (int)(item1.getConsumedDate() - item2.getConsumedDate());
+			}
+		});
+    }
+    
     public static void sortByAmount(List<Item> itemList)
     {
     	Collections.sort(itemList, new Comparator<Item>()
@@ -251,13 +272,13 @@ public class Item
 		});
     }
     
-    public static void sortByDate(List<Item> itemList)
+    public static void sortByUpdateDate(List<Item> itemList)
     {
     	Collections.sort(itemList, new Comparator<Item>()
 		{
 			public int compare(Item item1, Item item2)
 			{
-				return (int)(item1.getConsumedDate() - item2.getConsumedDate());
+				return (int)(item1.getLocalUpdatedDate() - item2.getLocalUpdatedDate());
 			}
 		});
     }
