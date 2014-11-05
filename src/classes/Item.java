@@ -27,7 +27,7 @@ public class Item
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
-	
+
 	public int getLocalID()
 	{
 		return localID;

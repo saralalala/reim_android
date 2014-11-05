@@ -246,6 +246,7 @@ public class EditItemActivity extends Activity
 			{
 				item.setMerchant(vendorList.get(0));
 			}
+			item.setConsumedDate(Utils.getCurrentTime());
 		}
 		else
 		{
@@ -707,10 +708,6 @@ public class EditItemActivity extends Activity
 					item.setIsProveAhead(proveAheadCheckBox.isChecked());
 					item.setNeedReimbursed(needReimCheckBox.isChecked());
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
-					if (newItem)
-					{
-						item.setCreatedDate(Utils.getCurrentTime());
-					}
 					
 					if (dbManager.syncItem(item))
 					{
