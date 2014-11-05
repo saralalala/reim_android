@@ -197,19 +197,6 @@
 			android:screenOrientation="portrait" >
         </activity>
         
-		<activity 
-		    android:configChanges="keyboardHidden|orientation|screenSize" 
-		    android:exported="true" 
-		    android:name=".yxapi.YXEntryActivity" 
-		    android:screenOrientation="portrait" 
-		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
-        
-		<activity 
-		    android:configChanges="orientation|navigation|keyboardHidden" 
-		    android:name="com.renn.rennsdk.oauth.OAuthActivity" >
-        </activity>
-        
         <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
 		<activity 
 		    android:configChanges="orientation|keyboard" 
@@ -230,7 +217,7 @@
 		    android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
         
-		<!-- ################### 推送 ################### -->
+		<!-- ################### AVOS推送 ################### -->
         <service android:name="com.avos.avoscloud.PushService"/>
         <receiver 
             android:name="classes.ReimBroadcastReceiver">

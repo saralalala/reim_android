@@ -452,23 +452,27 @@ public class MeFragment extends Fragment
     	{
     		public void onStart()
     		{
-		        Toast.makeText(getActivity(), "on Start", Toast.LENGTH_SHORT).show();
+    			
     		}
     		
     		public void onComplete(SHARE_MEDIA platform, int stCode, SocializeEntity entity)
     		{
-    			if (stCode == 200)
-    			{
-    		        Toast.makeText(getActivity(), "分享成功", Toast.LENGTH_SHORT).show();
-    		    }
-    			else
-    			{
-    		        Toast.makeText(getActivity(), "分享失败 : error code : " + stCode, Toast.LENGTH_SHORT).show();
-    		    }
+    			goBackToMainActivity();
     		}
     	};
     	mController.getConfig().registerListener(listener);
     	
 		mController.openShare(getActivity(), false);
+    }
+
+    private void goBackToMainActivity()
+    {
+    	Bundle bundle = new Bundle();
+    	bundle.putInt("tabIndex", 3);
+    	Intent intent = new Intent(getActivity(), MainActivity.class);
+    	intent.putExtras(bundle);
+    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	startActivity(intent);
+    	getActivity().finish();    	
     }
 }
