@@ -25,28 +25,30 @@ public class SubordinatesReportResponse extends BaseResponse
 		try
 		{			
 			reportList = new ArrayList<Report>();
-			
 			JSONObject jObject = getDataObject();
-			JSONArray jsonArray = jObject.getJSONArray("data");
-			int count = Integer.valueOf(jObject.getString("total"));
-			for (int i = 0; i < count; i++)
+			if (jObject != null)
 			{
-				JSONObject object = jsonArray.getJSONObject(i);
-				Report report = new Report();
-				report.setTitle(object.getString("title"));
-				report.setServerID(object.getInt("id"));
-				report.setStatus(Integer.valueOf(object.getString("status")));
-				report.setCreatedDate(object.getInt("createdt"));
-				report.setServerUpdatedDate(object.getInt("lastdt"));
-				report.setLocalUpdatedDate(object.getInt("lastdt"));
-				report.setItemCount(object.getInt("item_count"));
-				report.setAmount(object.getString("amount"));
-				
-				User user = new User();
-				user.setServerID(object.getInt("uid"));
-				report.setUser(user);
-				
-				reportList.add(report);
+				JSONArray jsonArray = jObject.getJSONArray("data");
+				int count = Integer.valueOf(jObject.getString("total"));
+				for (int i = 0; i < count; i++)
+				{
+					JSONObject object = jsonArray.getJSONObject(i);
+					Report report = new Report();
+					report.setTitle(object.getString("title"));
+					report.setServerID(object.getInt("id"));
+					report.setStatus(Integer.valueOf(object.getString("status")));
+					report.setCreatedDate(object.getInt("createdt"));
+					report.setServerUpdatedDate(object.getInt("lastdt"));
+					report.setLocalUpdatedDate(object.getInt("lastdt"));
+					report.setItemCount(object.getInt("item_count"));
+					report.setAmount(object.getString("amount"));
+					
+					User user = new User();
+					user.setServerID(object.getInt("uid"));
+					report.setUser(user);
+					
+					reportList.add(report);
+				}
 			}
 		}
 		catch (JSONException e)

@@ -66,10 +66,10 @@ public class DBManager extends SQLiteOpenHelper
 	{
 //		String sqlString = "DELETE FROM tbl_category WHERE group_id = 1";
 //		database.execSQL(sqlString);
-		String sqlString = "DROP TABLE IF EXISTS tbl_item";
-		database.execSQL(sqlString);
-		sqlString = "DROP TABLE IF EXISTS tbl_others_item";
-		database.execSQL(sqlString);	
+//		String sqlString = "DROP TABLE IF EXISTS tbl_item";
+//		database.execSQL(sqlString);
+//		sqlString = "DROP TABLE IF EXISTS tbl_others_item";
+//		database.execSQL(sqlString);	
 //		sqlString = "DROP TABLE IF EXISTS tbl_comment";
 //		database.execSQL(sqlString);			
 	}
@@ -630,6 +630,7 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + item.getConsumer().getServerID() + "'," +
 														"'" + item.getConsumedDate() + "'," +
 														"'" + item.getNote() + "'," +
+														"'" + item.getCreatedDate() + "'," +
 														"'" + item.getServerUpdatedDate() + "'," +
 														"'" + item.getLocalUpdatedDate() + "'," +
 														"'" + Utils.booleanToInt(item.isProveAhead()) + "'," +
