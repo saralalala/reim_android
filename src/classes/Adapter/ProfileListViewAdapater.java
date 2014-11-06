@@ -128,7 +128,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 							}
 							else
 							{
-								ReimApplication.pDialog.show();
+								ReimApplication.showProgressDialog();
 								ModifyGroupRequest request = new ModifyGroupRequest(newName);
 								request.sendRequest(new HttpConnectionCallback()
 								{
@@ -144,7 +144,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 											{
 												public void run()
 												{
-													ReimApplication.pDialog.dismiss();
+													ReimApplication.dismissProgressDialog();
 													Toast.makeText(activity, "修改成功", Toast.LENGTH_SHORT)
 															.show();
 												}
@@ -156,7 +156,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 											{
 												public void run()
 												{
-													ReimApplication.pDialog.dismiss();
+													ReimApplication.showProgressDialog();
 													Toast.makeText(activity, "修改失败", Toast.LENGTH_SHORT)
 															.show();
 												}

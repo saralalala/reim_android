@@ -240,7 +240,7 @@ public class SubCategoryActivity extends Activity
 	
 	private void sendCreateCategoryRequest(final Category category)
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		CreateCategoryRequest request = new CreateCategoryRequest(category);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -258,7 +258,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(SubCategoryActivity.this, "分类创建成功", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -269,7 +269,7 @@ public class SubCategoryActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(SubCategoryActivity.this, "分类创建失败", Toast.LENGTH_SHORT).show();							
 						}
 					});
@@ -280,7 +280,7 @@ public class SubCategoryActivity extends Activity
 	
 	private void sendUpdateCategoryRequest(final Category category)
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		ModifyCategoryRequest request = new ModifyCategoryRequest(category);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -297,7 +297,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(SubCategoryActivity.this, "分类修改成功", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -308,7 +308,7 @@ public class SubCategoryActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(SubCategoryActivity.this, "分类修改失败", Toast.LENGTH_SHORT).show();							
 						}
 					});
@@ -319,7 +319,7 @@ public class SubCategoryActivity extends Activity
 	
 	private void sendDeleteCategoryRequest(final Category category)
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		DeleteCategoryRequest request = new DeleteCategoryRequest(category.getServerID());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -335,7 +335,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(SubCategoryActivity.this, "分类删除成功", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -346,7 +346,7 @@ public class SubCategoryActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(SubCategoryActivity.this, "分类删除失败", Toast.LENGTH_SHORT).show();					
 						}
 					});

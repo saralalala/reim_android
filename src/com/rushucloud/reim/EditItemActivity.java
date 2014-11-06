@@ -795,7 +795,7 @@ public class EditItemActivity extends Activity
     
     private void getLocation()
     {
-    	ReimApplication.pDialog.show();
+    	ReimApplication.showProgressDialog();
     	LocationClientOption option = new LocationClientOption();
     	option.setLocationMode(LocationMode.Hight_Accuracy);
     	option.setScanSpan(5000);
@@ -820,7 +820,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							if (vendorList.size() > 0)
 							{
 								showVendorDialog();
@@ -838,7 +838,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(EditItemActivity.this, "获取商家列表失败, 请手动输入", Toast.LENGTH_SHORT).show();
 						}
 					});					
@@ -898,7 +898,7 @@ public class EditItemActivity extends Activity
     		}
     		else
     		{
-    			ReimApplication.pDialog.dismiss();
+    			ReimApplication.dismissProgressDialog();
     			Toast.makeText(EditItemActivity.this, "定位失败，无法获取附近商家，请手动输入商家名", Toast.LENGTH_SHORT).show();    	
     		}
     	}

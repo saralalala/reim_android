@@ -99,11 +99,11 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("MyReportFragment");	
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
         viewInitialise();
         dataInitialise();
 		refreshMineReportListView();
-		ReimApplication.pDialog.dismiss();
+		ReimApplication.dismissProgressDialog();
 		syncReports();
 	}
 
@@ -333,9 +333,9 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 					sortReverse = !sortReverse;
 					
 					windowManager.removeView(filterView);
-					ReimApplication.pDialog.show();
+					ReimApplication.showProgressDialog();
 					refreshMineReportListView();
-					ReimApplication.pDialog.dismiss();
+					ReimApplication.dismissProgressDialog();
 				}
 			});
 			
@@ -444,7 +444,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	
 	private void sendDeleteReportRequest(final Report report)
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		DeleteReportRequest request = new DeleteReportRequest(report.getServerID());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -467,7 +467,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 				            Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
 						}
 					});		
@@ -478,7 +478,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
 	private void sendExportReportRequest(int reportID, String email)
 	{
-    	ReimApplication.pDialog.show();
+    	ReimApplication.showProgressDialog();
 		ExportReportRequest request = new ExportReportRequest(reportID, email);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -491,7 +491,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(getActivity(), "报告导出成功", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -502,7 +502,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(getActivity(), "报告导出失败", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -516,12 +516,12 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		if (dbManager.deleteReport(reportLocalID))
 		{
 			refreshMineReportListView();
-			ReimApplication.pDialog.dismiss();
+			ReimApplication.dismissProgressDialog();
             Toast.makeText(getActivity(), R.string.deleteSucceed, Toast.LENGTH_SHORT).show();														
 		}
 		else
 		{
-			ReimApplication.pDialog.dismiss();
+			ReimApplication.dismissProgressDialog();
             Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
 		}		
 	}

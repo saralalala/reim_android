@@ -4,6 +4,8 @@ import java.io.File;
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.PushService;
+import com.mechat.mechatlibrary.MCClient;
+import com.mechat.mechatlibrary.callback.OnInitCallback;
 import com.rushucloud.reim.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -17,72 +19,37 @@ import android.text.TextUtils;
 
 public class ReimApplication extends Application
 {
-	public static ProgressDialog pDialog;
+	private static ProgressDialog pDialog;
 	private static Context context;
 	
 	public void onCreate()
 	{
 		super.onCreate();
-		
-		AVOSCloud.initialize(this, "25tdcbg3l8kp6yeqa4iqju6g788saf4xlseat1dxma3pdzfc",
-				"yc9e5h624ch14cgavj0r6b5yxq7fmn3y2nlm3hliq763syr1");
 
 		createDirectories();
-		AppPreference.createAppPreference(getApplicationContext());
-		DBManager.createDBManager(getApplicationContext());
-		
-		PushService.subscribe(this, "public", MainActivity.class);
-		AVInstallation.getCurrentInstallation().saveInBackground();
-		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
+		initPushService();
+		initData();
+		initMeChat();
 		MobclickAgent.openActivityDurationTrack(false);
-		
-		context = getApplicationContext();
 
+		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
 //		System.out.println(getDeviceInfo(this));
-	}
-
-	private void createDirectories()
-	{
-		try
-		{
-			String appDirectory = Environment.getExternalStorageDirectory() + "/如数云报销";
-			File dir = new File(appDirectory);
-			if (!dir.exists())
-			{
-				dir.mkdir();
-			}
-			dir = new File(appDirectory + "/images");
-			if (!dir.exists())
-			{
-				dir.mkdir();
-				File nomediaFile = new File(dir, ".nomedia");
-				nomediaFile.createNewFile();
-			}
-			dir = new File(appDirectory + "/images/profile");
-			if (!dir.exists())
-			{
-				dir.mkdir();
-				File nomediaFile = new File(dir, ".nomedia");
-				nomediaFile.createNewFile();
-			}
-			dir = new File(appDirectory + "/images/invoice");
-			if (!dir.exists())
-			{
-				dir.mkdir();
-				File nomediaFile = new File(dir, ".nomedia");
-				nomediaFile.createNewFile();
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 
 	public static void setProgressDialog(Context context)
 	{
 		pDialog = new ProgressDialog(context);
 		pDialog.setMessage("读取数据中，请稍等……");
+	}
+	
+	public static void showProgressDialog()
+	{
+		pDialog.show();
+	}
+	
+	public static void dismissProgressDialog()
+	{
+		pDialog.dismiss();
 	}
 
 	public static String getDeviceInfo(Context context)
@@ -126,5 +93,75 @@ public class ReimApplication extends Application
 	public static Context getContext()
 	{
 		return context;
+	}
+	
+	private void createDirectories()
+	{
+		try
+		{
+			String appDirectory = Environment.getExternalStorageDirectory() + "/如数云报销";
+			File dir = new File(appDirectory);
+			if (!dir.exists())
+			{
+				dir.mkdir();
+			}
+			dir = new File(appDirectory + "/images");
+			if (!dir.exists())
+			{
+				dir.mkdir();
+				File nomediaFile = new File(dir, ".nomedia");
+				nomediaFile.createNewFile();
+			}
+			dir = new File(appDirectory + "/images/profile");
+			if (!dir.exists())
+			{
+				dir.mkdir();
+				File nomediaFile = new File(dir, ".nomedia");
+				nomediaFile.createNewFile();
+			}
+			dir = new File(appDirectory + "/images/invoice");
+			if (!dir.exists())
+			{
+				dir.mkdir();
+				File nomediaFile = new File(dir, ".nomedia");
+				nomediaFile.createNewFile();
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void initPushService()
+	{
+		AVOSCloud.initialize(this, "25tdcbg3l8kp6yeqa4iqju6g788saf4xlseat1dxma3pdzfc",
+				"yc9e5h624ch14cgavj0r6b5yxq7fmn3y2nlm3hliq763syr1");
+		
+		PushService.subscribe(this, "public", MainActivity.class);
+		AVInstallation.getCurrentInstallation().saveInBackground();		
+	}
+	
+	private void initData()
+	{
+		AppPreference.createAppPreference(getApplicationContext());
+		DBManager.createDBManager(getApplicationContext());
+		context = getApplicationContext();
+	}
+	
+	private void initMeChat()
+	{
+		MCClient.init(this, "545ae26f3baac95161000001", new OnInitCallback()
+		{
+			public void onSuccess(String arg0)
+			{
+
+			}
+			
+			public void onFailed(String arg0)
+			{
+				
+			}
+		});
 	}
 }

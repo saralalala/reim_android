@@ -173,7 +173,7 @@ public class ManagerActivity extends Activity
 	
 	private void sendDefaultManagerRequest(final int newManagerID)
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		DefaultManagerRequest request = new DefaultManagerRequest(newManagerID);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -190,7 +190,7 @@ public class ManagerActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							AlertDialog mDialog = new AlertDialog.Builder(ManagerActivity.this)
 																.setTitle("提示")
 																.setMessage("默认上级修改成功")
@@ -213,7 +213,7 @@ public class ManagerActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(ManagerActivity.this, "默认上级修改失败", Toast.LENGTH_SHORT).show();							
 						}
 					});

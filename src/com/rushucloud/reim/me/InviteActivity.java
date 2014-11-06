@@ -92,7 +92,7 @@ public class InviteActivity extends Activity
 	
     private void sendGetInvitesRequest()
     {
-    	ReimApplication.pDialog.show();
+    	ReimApplication.showProgressDialog();
     	GetInvitesRequest request = new GetInvitesRequest();
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -105,7 +105,7 @@ public class InviteActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							inviteList = response.getInviteList();
 							if (inviteList.size() == 0)
 							{
@@ -129,7 +129,7 @@ public class InviteActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.pDialog.dismiss();
+					    	ReimApplication.dismissProgressDialog();
 							AlertDialog mDialog = new AlertDialog.Builder(InviteActivity.this)
 														.setTitle("提示")
 														.setMessage("获取邀请列表失败")

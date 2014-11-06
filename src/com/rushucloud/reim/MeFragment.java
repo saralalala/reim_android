@@ -2,6 +2,8 @@ package com.rushucloud.reim;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import netUtils.HttpConstant;
 import netUtils.Request.DownloadImageRequest;
@@ -12,7 +14,9 @@ import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.User.InviteResponse;
 
-import com.rushucloud.reim.me.FeedbackActivity;
+import com.mechat.mechatlibrary.MCClient;
+import com.mechat.mechatlibrary.MCOnlineConfig;
+import com.mechat.mechatlibrary.MCUserConfig;
 import com.rushucloud.reim.me.InviteActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -39,8 +43,11 @@ import database.DBManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.ContextMenu;
@@ -205,7 +212,8 @@ public class MeFragment extends Fragment
 					}
 					case 5:
 						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_FEEDBACK");
-						startActivity(new Intent(getActivity(), FeedbackActivity.class));
+//						startActivity(new Intent(getActivity(), FeedbackActivity.class));
+						showFeedbackDialog();
 						break;
 					default:
 						break;
@@ -372,7 +380,7 @@ public class MeFragment extends Fragment
     
     private void sendInviteRequest(String username)
     {
-    	ReimApplication.pDialog.show();
+    	ReimApplication.showProgressDialog();
     	InviteRequest request = new InviteRequest(username);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -385,7 +393,7 @@ public class MeFragment extends Fragment
 					{
 						public void run()
 						{
-					    	ReimApplication.pDialog.dismiss();
+					    	ReimApplication.dismissProgressDialog();
 							Toast.makeText(getActivity(), "邀请已发送", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -396,7 +404,7 @@ public class MeFragment extends Fragment
 					{
 						public void run()
 						{
-					    	ReimApplication.pDialog.dismiss();
+					    	ReimApplication.dismissProgressDialog();
 							Toast.makeText(getActivity(), "邀请发送失败，" + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -465,6 +473,27 @@ public class MeFragment extends Fragment
 		mController.openShare(getActivity(), false);
     }
 
+    private void showFeedbackDialog()
+    {
+		try
+		{
+			PackageInfo info = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+	    	
+			MCOnlineConfig onlineConfig = new MCOnlineConfig();
+			MCClient.getInstance().startMCConversationActivity(onlineConfig);
+			
+			MCUserConfig mcUserConfig = new MCUserConfig();
+			Map<String, String> userInfoExtra = new HashMap<String, String>();
+			userInfoExtra.put("AndroidVersion",Integer.toString(Build.VERSION.SDK_INT));
+			userInfoExtra.put("AppVersion", info.versionName);
+			mcUserConfig.setUserInfo(getActivity(), null, userInfoExtra, null);
+		}
+		catch (NameNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+    }
+    
     private void goBackToMainActivity()
     {
     	Bundle bundle = new Bundle();

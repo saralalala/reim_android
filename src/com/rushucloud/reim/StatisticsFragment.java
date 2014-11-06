@@ -184,7 +184,7 @@ public class StatisticsFragment extends Fragment
 
 	private void dataInitialise()
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		StatisticsRequest request = new StatisticsRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -197,7 +197,7 @@ public class StatisticsFragment extends Fragment
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							openChart();
 						}
 					});

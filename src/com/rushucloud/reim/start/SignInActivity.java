@@ -196,7 +196,7 @@ public class SignInActivity extends Activity
 
 	private void sendSignInRequest()
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		SignInRequest request = new SignInRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -267,7 +267,7 @@ public class SignInActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							startActivity(new Intent(SignInActivity.this, MainActivity.class));
 							finish();
 						}
@@ -279,7 +279,7 @@ public class SignInActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
 									.setTitle("错误")
 									.setMessage("登录失败！" + response.getErrorMessage())

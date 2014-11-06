@@ -113,7 +113,7 @@ public class InviteReplyActivity extends Activity
 	
     private void sendInviteReplyRequest(int agree, String inviteCode)
     {
-    	ReimApplication.pDialog.show();
+    	ReimApplication.showProgressDialog();
     	InviteReplyRequest request = new InviteReplyRequest(agree, inviteCode);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -136,7 +136,7 @@ public class InviteReplyActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.pDialog.dismiss();
+					    	ReimApplication.dismissProgressDialog();
 							AlertDialog mDialog = new AlertDialog.Builder(InviteReplyActivity.this)
 														.setTitle("提示")
 														.setMessage("邀请回复发送失败")
@@ -222,7 +222,7 @@ public class InviteReplyActivity extends Activity
 				{
 					public void run()
 					{
-				    	ReimApplication.pDialog.dismiss();
+				    	ReimApplication.dismissProgressDialog();
 						AlertDialog mDialog = new AlertDialog.Builder(InviteReplyActivity.this)
 													.setTitle("提示")
 													.setMessage("邀请回复已发送成功！")

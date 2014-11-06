@@ -107,11 +107,11 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("ReimFragment");
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		dataInitialise();
 		viewInitialise();
 		refreshItemListView();
-		ReimApplication.pDialog.dismiss();
+		ReimApplication.dismissProgressDialog();
 		syncItems();
 	}
 
@@ -394,9 +394,9 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					sortReverse = !sortReverse;
 					
 					windowManager.removeView(filterView);
-					ReimApplication.pDialog.show();
+					ReimApplication.showProgressDialog();
 					refreshItemListView();
-					ReimApplication.pDialog.dismiss();
+					ReimApplication.dismissProgressDialog();
 				}
 			});
 			
@@ -429,7 +429,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 	private void sendDeleteItemRequest(final Item item)
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		DeleteItemRequest request = new DeleteItemRequest(item.getServerID());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -452,7 +452,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
 						}
 					});
@@ -466,12 +466,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		if (dbManager.deleteItem(itemLocalID))
 		{
 			refreshItemListView();
-			ReimApplication.pDialog.dismiss();
+			ReimApplication.dismissProgressDialog();
 			Toast.makeText(getActivity(), R.string.deleteSucceed, Toast.LENGTH_LONG).show();
 		}
 		else
 		{
-			ReimApplication.pDialog.dismiss();
+			ReimApplication.dismissProgressDialog();
 			Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
 		}
 	}

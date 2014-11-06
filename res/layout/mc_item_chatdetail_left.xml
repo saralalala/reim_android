@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="6dp" >
+
+    <RelativeLayout
+        android:id="@+id/chat_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/usname_tv" >
+
+        <TextView
+            android:id="@+id/content_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web|email|phone"
+            android:background="@drawable/mc_bg_message_left"
+            android:maxWidth="260dp"
+            android:singleLine="false"
+            android:text="I \ue32d emojicon"
+            android:textColor="@color/mc_chat_text"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:id="@+id/content_pic_rl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/content_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:maxWidth="130dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/content_pic"
+                android:layout_alignLeft="@+id/content_pic"
+                android:layout_alignRight="@+id/content_pic"
+                android:layout_alignTop="@+id/content_pic"
+                android:background="@drawable/mc_bg_msg_image_left" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/content_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mc_bg_message_left"
+            android:gravity="center"
+            android:maxWidth="270dp"
+            android:singleLine="false"
+            android:text="7s"
+            android:textColor="@color/mc_chat_text"
+            android:textSize="16sp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</RelativeLayout>

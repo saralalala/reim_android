@@ -151,7 +151,7 @@ public class ProfileActivity extends Activity
 		}
 		else
 		{
-			ReimApplication.pDialog.show();
+			ReimApplication.showProgressDialog();
 			final DBManager dbManager = DBManager.getDBManager();
 			currentUser.setEmail(email);
 			currentUser.setPhone(phone);
@@ -170,7 +170,7 @@ public class ProfileActivity extends Activity
 						{
 							public void run()
 							{
-								ReimApplication.pDialog.dismiss();
+								ReimApplication.dismissProgressDialog();
 								Toast.makeText(ProfileActivity.this, "用户信息修改成功", Toast.LENGTH_SHORT).show();
 								adapter.setUser(currentUser);
 								adapter.notifyDataSetChanged();
@@ -183,7 +183,7 @@ public class ProfileActivity extends Activity
 						{
 							public void run()
 							{
-								ReimApplication.pDialog.dismiss();
+								ReimApplication.dismissProgressDialog();
 								Toast.makeText(ProfileActivity.this, "用户信息修改失败", Toast.LENGTH_SHORT).show();
 								adapter.notifyDataSetChanged();
 							}

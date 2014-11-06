@@ -4,6 +4,8 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.ResetPasswordRequest;
 import netUtils.Response.User.ResetPasswordResponse;
 
+import classes.ReimApplication;
+
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -71,6 +73,8 @@ public class ResetPasswordActivity extends Activity
 	
 	private void viewInitialise()
 	{
+		ReimApplication.setProgressDialog(this);
+		
 		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
 		
@@ -167,6 +171,7 @@ public class ResetPasswordActivity extends Activity
 	
 	private void sendResetPasswordRequest(String password)
 	{
+		ReimApplication.showProgressDialog();
 		ResetPasswordRequest request = new ResetPasswordRequest(password, cid, code);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -179,6 +184,7 @@ public class ResetPasswordActivity extends Activity
 					{
 						public void run()
 						{
+							ReimApplication.dismissProgressDialog();
 							AlertDialog alertDialog = new AlertDialog.Builder(ResetPasswordActivity.this)
 														.setTitle("成功")
 														.setMessage("修改密码成功")
@@ -204,6 +210,7 @@ public class ResetPasswordActivity extends Activity
 					{
 						public void run()
 						{
+							ReimApplication.dismissProgressDialog();
 							AlertDialog alertDialog = new AlertDialog.Builder(ResetPasswordActivity.this)
 															.setTitle("错误")
 															.setMessage("修改密码失败！"+response.getErrorMessage())

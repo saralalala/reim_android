@@ -86,10 +86,10 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("OthersReportFragment");
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
         dataInitialise();
         viewInitialise();
-		ReimApplication.pDialog.dismiss();
+		ReimApplication.dismissProgressDialog();
 		if (Utils.isNetworkConnected(getActivity()))
 		{
 			getSubordinatesReports();
@@ -239,7 +239,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 					sortReverse = !sortReverse;
 					
 					windowManager.removeView(filterView);
-					ReimApplication.pDialog.show();
+					ReimApplication.showProgressDialog();
 
 					othersList.clear();
 					othersList.addAll(dbManager.getOthersReports(appPreference.getCurrentUserID()));
@@ -247,7 +247,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 					othersAdapter.set(showOthersList);
 					othersAdapter.notifyDataSetChanged();	
 					
-					ReimApplication.pDialog.dismiss();
+					ReimApplication.dismissProgressDialog();
 				}
 			});
 			

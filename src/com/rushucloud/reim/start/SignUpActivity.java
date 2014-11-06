@@ -369,7 +369,7 @@ public class SignUpActivity extends Activity
 	
 	private void sendRegisterRequest(final User user, String verifyCode)
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		RegisterRequest request = new RegisterRequest(user, verifyCode);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -408,7 +408,7 @@ public class SignUpActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this)
 														.setTitle("错误")
 														.setMessage("注册失败！"+response.getErrorMessage())
@@ -524,7 +524,7 @@ public class SignUpActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							String message = "注册成功！";
 							if (code.equals(""))
 							{
@@ -554,7 +554,7 @@ public class SignUpActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this)
 														.setTitle("错误")
 														.setMessage("获取信息失败！" + response.getErrorMessage())

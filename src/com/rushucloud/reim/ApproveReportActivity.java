@@ -178,7 +178,7 @@ public class ApproveReportActivity extends Activity
 	
     private void sendGetReportRequest(final int reportServerID)
     {
-    	ReimApplication.pDialog.show();
+    	ReimApplication.showProgressDialog();
     	GetReportRequest request = new GetReportRequest(reportServerID);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -205,7 +205,7 @@ public class ApproveReportActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.pDialog.dismiss();
+					    	ReimApplication.dismissProgressDialog();
 							titleTextView.setText(report.getTitle());
 							adapter.set(itemList);
 							adapter.notifyDataSetChanged();							
@@ -218,7 +218,7 @@ public class ApproveReportActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.pDialog.dismiss();
+					    	ReimApplication.dismissProgressDialog();
 							AlertDialog mDialog = new AlertDialog.Builder(ApproveReportActivity.this)
 												.setTitle("提示")
 												.setMessage("数据获取失败")

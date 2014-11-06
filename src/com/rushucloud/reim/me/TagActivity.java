@@ -220,7 +220,7 @@ public class TagActivity extends Activity
 	
 	private void sendCreateTagRequest(final Tag tag)
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		CreateTagRequest request = new CreateTagRequest(tag);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -238,7 +238,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(TagActivity.this, "标签创建成功", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -249,7 +249,7 @@ public class TagActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(TagActivity.this, "标签创建失败", Toast.LENGTH_SHORT).show();							
 						}
 					});
@@ -260,7 +260,7 @@ public class TagActivity extends Activity
 	
 	private void sendUpdateTagRequest(final Tag tag)
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		ModifyTagRequest request = new ModifyTagRequest(tag);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -277,7 +277,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(TagActivity.this, "标签修改成功", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -288,7 +288,7 @@ public class TagActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(TagActivity.this, "标签修改失败", Toast.LENGTH_SHORT).show();							
 						}
 					});
@@ -299,7 +299,7 @@ public class TagActivity extends Activity
 	
 	private void sendDeleteTagRequest(final Tag tag)
 	{
-		ReimApplication.pDialog.show();
+		ReimApplication.showProgressDialog();
 		DeleteTagRequest request = new DeleteTagRequest(tag.getServerID());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -314,7 +314,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(TagActivity.this, "标签删除成功", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -325,7 +325,7 @@ public class TagActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.pDialog.dismiss();
+							ReimApplication.dismissProgressDialog();
 							Toast.makeText(TagActivity.this, "标签删除失败", Toast.LENGTH_SHORT).show();					
 						}
 					});
