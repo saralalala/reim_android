@@ -49,8 +49,8 @@ public class SubCategoryActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_category);
-		dataInitialise();
-		viewInitialise();
+		initData();
+		initView();
 	}
 
 	protected void onResume()
@@ -160,7 +160,7 @@ public class SubCategoryActivity extends Activity
 		return super.onContextItemSelected(item);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
@@ -168,7 +168,7 @@ public class SubCategoryActivity extends Activity
 		parentID = this.getIntent().getIntExtra("parentID", -1);
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{		
 		categoryListView = (ListView)findViewById(R.id.categoryListView);
 		registerForContextMenu(categoryListView);

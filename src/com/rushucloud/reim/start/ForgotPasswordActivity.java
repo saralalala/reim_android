@@ -42,8 +42,8 @@ public class ForgotPasswordActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_forgot_password);
 		tabViewInitialse();
-		viewInitialise();
-		buttonInitialise();
+		initView();
+		initButton();
 	}
 
 	protected void onResume()
@@ -93,7 +93,7 @@ public class ForgotPasswordActivity extends Activity
         tabHost.getTabWidget().getChildTabViewAt(1).setMinimumWidth(screenWidth / 2);
     }
 
-    private void viewInitialise()
+    private void initView()
     {
     	emailEditText = (EditText)findViewById(R.id.emailEditText);
     	phoneEditText = (EditText)findViewById(R.id.mobileEditText);
@@ -118,7 +118,7 @@ public class ForgotPasswordActivity extends Activity
 		});
     }
     
-    private void buttonInitialise()
+    private void initButton()
     {
     	Button emailConfirmButton = (Button)findViewById(R.id.emailConfirmButton);
     	emailConfirmButton.setOnClickListener(new View.OnClickListener()

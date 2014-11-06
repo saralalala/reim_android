@@ -37,9 +37,9 @@ public class UnarchivedItemsActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.report_unarchived_items);
-		dataInitialise();
-		viewInitialise();
-		buttonInitialise();
+		initData();
+		initView();
+		initButton();
 	}
 
 	protected void onResume()
@@ -72,7 +72,7 @@ public class UnarchivedItemsActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{		
 		Bundle bundle = this.getIntent().getExtras();
 		report = (Report)bundle.getSerializable("report");
@@ -89,7 +89,7 @@ public class UnarchivedItemsActivity extends Activity
 		}		
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{
 		adapter = new ItemListViewAdapter(UnarchivedItemsActivity.this, itemList);
 		itemListView = (ListView)findViewById(R.id.itemListView);
@@ -106,7 +106,7 @@ public class UnarchivedItemsActivity extends Activity
 		});
 	}
 	
-	private void buttonInitialise()
+	private void initButton()
 	{
 		Button confirmButton = (Button)findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()

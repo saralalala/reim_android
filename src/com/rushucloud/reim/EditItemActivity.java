@@ -98,9 +98,9 @@ public class EditItemActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reim_edit_item);
-		dataInitialise();
-		viewInitialise();
-		buttonInitialise();
+		initData();
+		initView();
+		initButton();
 	}
 
 	protected void onResume()
@@ -209,7 +209,7 @@ public class EditItemActivity extends Activity
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
@@ -256,7 +256,7 @@ public class EditItemActivity extends Activity
 		}
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{		
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		if (item.getAmount() != 0)
@@ -450,7 +450,7 @@ public class EditItemActivity extends Activity
 		});
 	}
 	
-	private void buttonInitialise()
+	private void initButton()
 	{		
 		Button categoryButton = (Button)findViewById(R.id.categoryButton);
 		categoryButton.setOnClickListener(new View.OnClickListener()

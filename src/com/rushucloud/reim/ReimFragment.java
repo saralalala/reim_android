@@ -108,8 +108,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		super.onResume();
 		MobclickAgent.onPageStart("ReimFragment");
 		ReimApplication.showProgressDialog();
-		dataInitialise();
-		viewInitialise();
+		initData();
+		initView();
 		refreshItemListView();
 		ReimApplication.dismissProgressDialog();
 		syncItems();
@@ -201,7 +201,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		return super.onContextItemSelected(item);
 	}
 
-	private void dataInitialise()
+	private void initData()
 	{
 		if (appPreference == null)
 		{
@@ -222,7 +222,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		}
 	}
 
-	private void viewInitialise()
+	private void initView()
 	{
 		if (addButton == null)
 		{

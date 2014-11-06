@@ -49,8 +49,8 @@ public class ApproveReportActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.report_approve_detail);
-		dataInitialise();
-		viewInitialise();
+		initData();
+		initView();
 	}
 	
 	protected void onResume()
@@ -101,7 +101,7 @@ public class ApproveReportActivity extends Activity
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		dbManager = DBManager.getDBManager();
 		
@@ -125,7 +125,7 @@ public class ApproveReportActivity extends Activity
 		itemList = dbManager.getOthersReportItems(reportServerID);
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{
 		ReimApplication.setProgressDialog(this);
 		

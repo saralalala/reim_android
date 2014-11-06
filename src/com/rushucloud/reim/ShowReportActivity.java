@@ -35,8 +35,8 @@ public class ShowReportActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.report_approve_detail);
 		MobclickAgent.onEvent(ShowReportActivity.this, "UMENG_VIEW_REPORT");
-		dataInitialise();
-		viewInitialise();
+		initData();
+		initView();
 	}
 	
 	protected void onResume()
@@ -62,7 +62,7 @@ public class ShowReportActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null)
@@ -80,7 +80,7 @@ public class ShowReportActivity extends Activity
 		}
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{
 		ReimApplication.setProgressDialog(this);
 		

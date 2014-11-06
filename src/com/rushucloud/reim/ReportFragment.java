@@ -27,7 +27,7 @@ public class ReportFragment extends Fragment
 			viewGroup.removeView(view);
 		}
 		setHasOptionsMenu(true);
-		tabHostInitialise();
+		initTabHost();
 	    return view;  
 	}
 	   
@@ -43,7 +43,7 @@ public class ReportFragment extends Fragment
 		MobclickAgent.onPageEnd("ReportFragment");
 	}
 
-	private void tabHostInitialise()
+	private void initTabHost()
 	{
 		if (tabHost == null)
 		{

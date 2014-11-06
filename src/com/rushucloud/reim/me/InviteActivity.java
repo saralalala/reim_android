@@ -38,7 +38,7 @@ public class InviteActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_invite_list);
-		viewInitialise();
+		initView();
 	}
 
 	protected void onResume()
@@ -65,7 +65,7 @@ public class InviteActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{	
 		ReimApplication.setProgressDialog(this);
 

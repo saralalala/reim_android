@@ -57,9 +57,9 @@ public class SignUpActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_sign_up);
-		tabViewInitialise();
-		viewIntialise();
-		buttonInitialise();
+		initTabHost();
+		initView();
+		initButton();
 	}
 
 	protected void onResume()
@@ -88,7 +88,7 @@ public class SignUpActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void tabViewInitialise()
+	private void initTabHost()
 	{
 		tabHost = (TabHost)findViewById(android.R.id.tabhost);
 		tabHost.setup();
@@ -111,7 +111,7 @@ public class SignUpActivity extends Activity
 		tabHost.getTabWidget().getChildTabViewAt(1).setMinimumWidth(screenWidth / 2);
 	}
 	
-	private void viewIntialise()
+	private void initView()
 	{		
 		phoneEditText = (EditText)findViewById(R.id.mobileEditText);
 		phonePasswordEditText = (EditText)findViewById(R.id.mobilePasswordEditText);
@@ -139,7 +139,7 @@ public class SignUpActivity extends Activity
 		}); 
 	}
 	
-	private void buttonInitialise()
+	private void initButton()
 	{
 		acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
 		acquireCodeButton.setOnClickListener(new View.OnClickListener()

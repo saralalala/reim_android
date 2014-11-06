@@ -30,7 +30,7 @@ public class ChangePasswordActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_change_password);
 		appPreference = AppPreference.getAppPreference();
-		viewInitialise();
+		initView();
 	}
 
 	protected void onResume()
@@ -181,7 +181,7 @@ public class ChangePasswordActivity extends Activity
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void viewInitialise()
+	private void initView()
 	{
 		try
 		{

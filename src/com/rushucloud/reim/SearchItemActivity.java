@@ -41,8 +41,8 @@ public class SearchItemActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reim_search);
-		dataInitialise();
-		viewInitialise();
+		initData();
+		initView();
 	}
 
 	protected void onResume()
@@ -50,7 +50,7 @@ public class SearchItemActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("SearchItemActivity");		
 		MobclickAgent.onResume(this);
-		dataInitialise();
+		initData();
 	}
 
 	protected void onPause()
@@ -153,13 +153,13 @@ public class SearchItemActivity extends Activity
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		DBManager dbManager = DBManager.getDBManager();
 		itemList = dbManager.getUserItems(AppPreference.getAppPreference().getCurrentUserID());
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);

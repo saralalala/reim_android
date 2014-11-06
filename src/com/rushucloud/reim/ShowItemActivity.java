@@ -36,9 +36,9 @@ public class ShowItemActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reim_show_item);
 		MobclickAgent.onEvent(ShowItemActivity.this, "UMENG_VIEW_ITEM");
-		dataInitialise();
-		viewInitialise();
-		buttonInitialise();
+		initData();
+		initView();
+		initButton();
 	}
 
 	protected void onResume()
@@ -64,7 +64,7 @@ public class ShowItemActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		DBManager dbManager = DBManager.getDBManager();
 		Intent intent = this.getIntent();
@@ -88,7 +88,7 @@ public class ShowItemActivity extends Activity
 		}
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{		
 		CheckBox proveAheadCheckBox = (CheckBox)findViewById(R.id.proveAheadCheckBox);
 		proveAheadCheckBox.setChecked(item.isProveAhead());
@@ -201,7 +201,7 @@ public class ShowItemActivity extends Activity
 		}
 	}
 	
-	private void buttonInitialise()
+	private void initButton()
 	{		
 		Button backButton = (Button)findViewById(R.id.backButton);
 		backButton.setOnClickListener(new View.OnClickListener()

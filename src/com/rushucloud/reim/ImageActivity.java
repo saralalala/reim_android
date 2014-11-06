@@ -22,7 +22,7 @@ public class ImageActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reim_image);
-		viewInitialise();
+		initView();
 	}
 
 	protected void onResume()
@@ -48,7 +48,7 @@ public class ImageActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{
 		try
 		{

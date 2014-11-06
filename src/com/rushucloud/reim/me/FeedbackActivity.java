@@ -33,8 +33,8 @@ public class FeedbackActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_feedback);
-		viewInitialise();
-		buttonInitialise();
+		initView();
+		initButton();
 	}
 
 	protected void onResume()
@@ -60,7 +60,7 @@ public class FeedbackActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{
 		feedbackEditText = (EditText)findViewById(R.id.feedbackEditText);
 		contactEditText = (EditText)findViewById(R.id.contactEditText);
@@ -75,7 +75,7 @@ public class FeedbackActivity extends Activity
 		});
 	}
 	
-	private void buttonInitialise()
+	private void initButton()
 	{	
 		Button submitButton = (Button)findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new View.OnClickListener()

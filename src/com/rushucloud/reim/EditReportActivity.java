@@ -66,9 +66,9 @@ public class EditReportActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.report_edit);
-		dataInitialise();
-		viewInitialise();
-		buttonInitialise();
+		initData();
+		initView();
+		initButton();
 	}
 	
 	protected void onResume()
@@ -140,7 +140,7 @@ public class EditReportActivity extends Activity
 		return super.onContextItemSelected(item);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
@@ -180,7 +180,7 @@ public class EditReportActivity extends Activity
     	checkList = new boolean[userList.size()];
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{
 		titleEditText = (EditText)findViewById(R.id.titleEditText);
 		titleEditText.setText(report.getTitle());
@@ -221,7 +221,7 @@ public class EditReportActivity extends Activity
 		}
 	}
 	
-	private void buttonInitialise()
+	private void initButton()
 	{
 		Button addButton = (Button)findViewById(R.id.addButton);
 		addButton.setOnClickListener(new View.OnClickListener()

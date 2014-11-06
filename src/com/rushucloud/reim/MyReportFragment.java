@@ -100,8 +100,8 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		super.onResume();
 		MobclickAgent.onPageStart("MyReportFragment");	
 		ReimApplication.showProgressDialog();
-        viewInitialise();
-        dataInitialise();
+        initView();
+        initData();
 		refreshMineReportListView();
 		ReimApplication.dismissProgressDialog();
 		syncReports();
@@ -205,7 +205,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
     	return super.onContextItemSelected(item);
     }
     
-    private void dataInitialise()
+    private void initData()
     {
 		if (dbManager == null)
 		{
@@ -213,7 +213,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		}
     }
 
-	private void viewInitialise()
+	private void initView()
 	{		
 		if (addButton == null)
 		{

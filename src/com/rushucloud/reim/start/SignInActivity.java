@@ -39,7 +39,7 @@ public class SignInActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_sign_in);
 		viewIntialise();
-		buttonInitialise();
+		initButton();
 	}
 
 	protected void onResume()
@@ -114,7 +114,7 @@ public class SignInActivity extends Activity
 		});
 	}
 
-	private void buttonInitialise()
+	private void initButton()
 	{
 		Button confirmButton = (Button) findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()

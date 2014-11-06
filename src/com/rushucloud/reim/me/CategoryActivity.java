@@ -51,8 +51,8 @@ public class CategoryActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_category);
-		dataInitialise();
-		viewInitialise();
+		initData();
+		initView();
 	}
 
 	protected void onResume()
@@ -161,13 +161,13 @@ public class CategoryActivity extends Activity
 		return super.onContextItemSelected(item);
 	}
 
-	private void dataInitialise()
+	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 	}
 
-	private void viewInitialise()
+	private void initView()
 	{
 		categoryListView = (ListView) findViewById(R.id.categoryListView);
 		categoryListView.setOnItemClickListener(new OnItemClickListener()

@@ -40,8 +40,8 @@ public class ProfileActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile);
-		dataInitialise();
-		viewInitialise();
+		initData();
+		initView();
 	}
 
 	protected void onResume()
@@ -86,13 +86,13 @@ public class ProfileActivity extends Activity
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		dbManager = DBManager.getDBManager();
 		currentUser = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{		
 		profileListView = (ListView)findViewById(R.id.profileListView);
 		profileListView.setOnItemClickListener(new OnItemClickListener()

@@ -48,8 +48,8 @@ public class ManagerActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_manager);
-		dataInitialise();
-		viewInitialise();
+		initData();
+		initView();
 	}
 
 	protected void onResume()
@@ -113,7 +113,7 @@ public class ManagerActivity extends Activity
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
@@ -134,7 +134,7 @@ public class ManagerActivity extends Activity
 		}
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{		
 		adapter = new MemberListViewAdapater(this, userList, checkList);
 		managerListView = (ListView)findViewById(R.id.managerListView);

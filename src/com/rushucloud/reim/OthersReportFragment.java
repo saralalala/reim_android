@@ -87,8 +87,8 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		super.onResume();
 		MobclickAgent.onPageStart("OthersReportFragment");
 		ReimApplication.showProgressDialog();
-        dataInitialise();
-        viewInitialise();
+        initData();
+        initView();
 		ReimApplication.dismissProgressDialog();
 		if (Utils.isNetworkConnected(getActivity()))
 		{
@@ -120,7 +120,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		return super.onOptionsItemSelected(item);
 	}
     
-    private void dataInitialise()
+    private void initData()
     {
 		if (dbManager == null)
 		{
@@ -136,7 +136,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		filterReportList();
     }
 
-	private void viewInitialise()
+	private void initView()
 	{
 		othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);
 		

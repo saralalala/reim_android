@@ -23,7 +23,7 @@ public class WelcomeActivity extends Activity
 		setContentView(R.layout.start_welcome);
 		
 		exitTime=0;
-		buttonInitialise();
+		initButton();
 	}
 
 	protected void onResume()
@@ -64,7 +64,7 @@ public class WelcomeActivity extends Activity
         }
     }
 	
-	private void buttonInitialise()
+	private void initButton()
 	{
 		Button signInButton = (Button)findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()

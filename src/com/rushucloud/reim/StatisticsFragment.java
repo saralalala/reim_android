@@ -55,7 +55,7 @@ public class StatisticsFragment extends Fragment
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
-		dataInitialise();
+		initData();
 	}
 
 	protected CategorySeries buildCategoryDataset(String[] titles, double[] values)
@@ -182,7 +182,7 @@ public class StatisticsFragment extends Fragment
 		linear.addView(mChartView);
 	}
 
-	private void dataInitialise()
+	private void initData()
 	{
 		ReimApplication.showProgressDialog();
 		StatisticsRequest request = new StatisticsRequest();

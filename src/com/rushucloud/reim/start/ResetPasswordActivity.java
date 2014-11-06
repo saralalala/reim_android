@@ -35,9 +35,9 @@ public class ResetPasswordActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_reset_password);
-		dataInitialise();
-		viewInitialise();
-		buttonInitialise();
+		initData();
+		initView();
+		initButton();
 	}
 
 	protected void onResume()
@@ -64,14 +64,14 @@ public class ResetPasswordActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		Bundle bundle = this.getIntent().getExtras();
 		cid = bundle.getInt("cid");
 		code = bundle.getString("code");
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{
 		ReimApplication.setProgressDialog(this);
 		
@@ -88,7 +88,7 @@ public class ResetPasswordActivity extends Activity
 		});
 	}
 	
-	private void buttonInitialise()
+	private void initButton()
 	{
 		Button confirmButton = (Button)findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()

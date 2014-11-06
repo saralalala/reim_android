@@ -88,7 +88,7 @@ public class MeFragment extends Fragment
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("MeFragment");
-        viewInitialise();
+        initView();
 	}
 
 	public void onPause()
@@ -182,7 +182,7 @@ public class MeFragment extends Fragment
 		}		
 	}
 		
-	private void viewInitialise()
+	private void initView()
 	{
         adapter = new MeListViewAdapater(this); 
         meListView = (ListView)getActivity().findViewById(R.id.meListView);

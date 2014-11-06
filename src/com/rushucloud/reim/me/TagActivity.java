@@ -49,8 +49,8 @@ public class TagActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_tag);
-		dataInitialise();
-		viewInitialise();
+		initData();
+		initView();
 	}
 
 	protected void onResume()
@@ -147,13 +147,13 @@ public class TagActivity extends Activity
 		return super.onContextItemSelected(item);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{		
 		tagListView = (ListView)findViewById(R.id.tagListView);
 		tagListView.setOnItemClickListener(new OnItemClickListener()

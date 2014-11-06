@@ -33,9 +33,9 @@ public class InviteReplyActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_invited);
-		dataInitialise();
-		viewInitialise();
-		buttonInitialise();
+		initData();
+		initView();
+		initButton();
 	}
 
 	protected void onResume()
@@ -62,7 +62,7 @@ public class InviteReplyActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void dataInitialise()
+	private void initData()
 	{
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null)
@@ -71,13 +71,13 @@ public class InviteReplyActivity extends Activity
 		}
 	}
 	
-	private void viewInitialise()
+	private void initView()
 	{	
 		TextView textView = (TextView)findViewById(R.id.inviteTextView);
 		textView.setText(invite.getMessage());
 	}
 	
-	private void buttonInitialise()
+	private void initButton()
 	{	
 		Button confirmButton = (Button)findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
