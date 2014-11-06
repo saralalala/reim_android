@@ -240,7 +240,7 @@ public class Report implements Serializable
 		{
 			public int compare(Report report1, Report report2)
 			{
-				return (int)(report1.getLocalUpdatedDate() - report2.getLocalUpdatedDate());
+				return (int)(report2.getLocalUpdatedDate() - report1.getLocalUpdatedDate());
 			}
 		});
     }

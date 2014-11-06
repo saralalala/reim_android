@@ -278,7 +278,7 @@ public class Item
 		{
 			public int compare(Item item1, Item item2)
 			{
-				return (int)(item1.getLocalUpdatedDate() - item2.getLocalUpdatedDate());
+				return (int)(item2.getLocalUpdatedDate() - item1.getLocalUpdatedDate());
 			}
 		});
     }
