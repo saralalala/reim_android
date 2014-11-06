@@ -1,5 +1,7 @@
 package com.rushucloud.reim;
 
+import classes.ReimApplication;
+
 import com.umeng.analytics.MobclickAgent;
 
 import android.os.Bundle;
@@ -35,6 +37,8 @@ public class ReportFragment extends Fragment
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("ReportFragment");
+
+		tabHost.setCurrentTab(ReimApplication.getReportTabIndex());
 	}
 
 	public void onPause()
@@ -62,8 +66,5 @@ public class ReportFragment extends Fragment
 			tabHost.getTabWidget().getChildTabViewAt(0).setMinimumWidth(screenWidth / 2);
 			tabHost.getTabWidget().getChildTabViewAt(1).setMinimumWidth(screenWidth / 2);
 		}
-		Bundle bundle = getActivity().getIntent().getExtras();
-		int index = bundle == null ? 0 : bundle.getInt("reportTabIndex");
-		tabHost.setCurrentTab(index);
 	}
 }

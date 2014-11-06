@@ -32,11 +32,13 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -87,7 +89,19 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	private int tempSortType = SORT_NULL;
 	
 	private List<Tag> filterTagList = new ArrayList<Tag>();
-		
+	
+	private OnKeyListener listener = new OnKeyListener()
+	{
+		public boolean onKey(View v, int keyCode, KeyEvent event)
+		{
+			if (keyCode == KeyEvent.KEYCODE_BACK)
+			{
+				windowManager.removeView(filterView);
+			}
+			return false;
+		}
+	};
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		if (view == null)
@@ -133,7 +147,9 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		if (id == R.id.action_search_item)
 		{
 			MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
-			startActivity(new Intent(getActivity(), SearchItemActivity.class));
+			Intent intent = new Intent(getActivity(), SearchItemActivity.class);
+			intent.putExtra("fromReim", true);
+			startActivity(intent);
 			return true;
 		}
 		else if (id == R.id.action_filter_item)
@@ -260,12 +276,14 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					{
 						Intent intent = new Intent(getActivity(), EditItemActivity.class);
 						intent.putExtra("itemLocalID", item.getLocalID());
+						intent.putExtra("fromReim", true);
 						startActivity(intent);
 					}
 					else
 					{
 						Intent intent = new Intent(getActivity(), ShowItemActivity.class);
 						intent.putExtra("itemLocalID", item.getLocalID());
+						intent.putExtra("fromReim", true);
 						startActivity(intent);
 					}
 				}
@@ -283,6 +301,10 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			filterView = getActivity().getLayoutInflater().inflate(R.layout.reim_filter, (ViewGroup) null, false);
 			filterView.setBackgroundColor(Color.WHITE);
 			filterView.setMinimumHeight(dm.heightPixels);
+			
+			filterView.setFocusable(true);
+			filterView.setFocusableInTouchMode(true);
+			filterView.setOnKeyListener(listener);
 
 			final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
 			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		
@@ -453,7 +475,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
+							Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -467,12 +489,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			refreshItemListView();
 			ReimApplication.dismissProgressDialog();
-			Toast.makeText(getActivity(), R.string.deleteSucceed, Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), R.string.deleteSucceed, Toast.LENGTH_SHORT).show();
 		}
 		else
 		{
 			ReimApplication.dismissProgressDialog();
-			Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
 		}
 	}
 	

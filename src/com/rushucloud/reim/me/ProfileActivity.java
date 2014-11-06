@@ -196,10 +196,8 @@ public class ProfileActivity extends Activity
 
     private void goBackToMainActivity()
     {
-    	Bundle bundle = new Bundle();
-    	bundle.putInt("tabIndex", 3);
+    	ReimApplication.setTabIndex(3);
     	Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-    	intent.putExtras(bundle);
     	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     	finish();

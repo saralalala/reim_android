@@ -111,11 +111,16 @@ public class ShowReportActivity extends Activity
 
     private void goBackToMainActivity()
     {
-    	Bundle bundle = new Bundle();
-    	bundle.putInt("tabIndex", 1);
-    	bundle.putInt("reportTabIndex", 1);
+    	ReimApplication.setTabIndex(1);
+    	if (myReport)
+    	{
+        	ReimApplication.setReportTabIndex(0);    		
+    	}
+    	else
+    	{
+        	ReimApplication.setReportTabIndex(1);
+    	}
     	Intent intent = new Intent(ShowReportActivity.this, MainActivity.class);
-    	intent.putExtras(bundle);
     	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     	finish();

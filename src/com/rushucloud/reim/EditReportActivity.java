@@ -11,6 +11,7 @@ import netUtils.Request.DownloadImageRequest;
 import netUtils.Response.DownloadImageResponse;
 import classes.AppPreference;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Utils;
@@ -521,11 +522,9 @@ public class EditReportActivity extends Activity
 
     private void goBackToMainActivity()
     {
-    	Bundle bundle = new Bundle();
-    	bundle.putInt("tabIndex", 1);
-    	bundle.putInt("reportTabIndex", 0);
+    	ReimApplication.setTabIndex(1);
+    	ReimApplication.setReportTabIndex(0);
     	Intent intent = new Intent(EditReportActivity.this, MainActivity.class);
-    	intent.putExtras(bundle);
     	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     	finish();

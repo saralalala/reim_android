@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.View.OnKeyListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -66,6 +68,18 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 	private int tempSortType = SORT_NULL;
 	
 	private List<Integer> filterStatusList = new ArrayList<Integer>();
+
+	private OnKeyListener listener = new OnKeyListener()
+	{
+		public boolean onKey(View v, int keyCode, KeyEvent event)
+		{
+			if (keyCode == KeyEvent.KEYCODE_BACK)
+			{
+				windowManager.removeView(filterView);
+			}
+			return false;
+		}
+	};
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -181,6 +195,10 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 			filterView = getActivity().getLayoutInflater().inflate(R.layout.report_filter, (ViewGroup) null, false);
 			filterView.setBackgroundColor(Color.WHITE);
 			filterView.setMinimumHeight(dm.heightPixels);
+			
+			filterView.setFocusable(true);
+			filterView.setFocusableInTouchMode(true);
+			filterView.setOnKeyListener(listener);
 
 			final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
 			final RadioButton sortItemsCountRadio = (RadioButton)filterView.findViewById(R.id.sortItemsCountRadio);

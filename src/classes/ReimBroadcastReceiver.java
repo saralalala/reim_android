@@ -81,12 +81,10 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 						}
 						else 
 						{
-							Bundle bundle = new Bundle();
-							bundle.putInt("tabIndex", 1);
+							ReimApplication.setTabIndex(1);
 							Intent newIntent = new Intent(context, MainActivity.class);
 							newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 							newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							newIntent.putExtras(bundle);
 							context.startActivity(newIntent);							
 						}
 						break;

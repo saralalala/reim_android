@@ -22,7 +22,6 @@ public class MainActivity extends ActionBarActivity
 	private long exitTime;
 
 	private FragmentTabHost tabHost;
-	private int tabIndex;
 
 	private Class<?> fragmentList[] = { ReimFragment.class, ReportFragment.class,
 			StatisticsFragment.class, MeFragment.class };
@@ -43,9 +42,8 @@ public class MainActivity extends ActionBarActivity
 		super.onResume();
 		MobclickAgent.onResume(this);
 		ReimApplication.setProgressDialog(this);
-		Bundle bundle = getIntent().getExtras();
-		tabIndex = bundle == null ? 0 : bundle.getInt("tabIndex");
-		tabHost.setCurrentTab(tabIndex);
+
+		tabHost.setCurrentTab(ReimApplication.getTabIndex());
 	}
 
 	protected void onPause()
@@ -60,7 +58,7 @@ public class MainActivity extends ActionBarActivity
 		{
 			if (System.currentTimeMillis() - exitTime > 2000)
 			{
-				Toast.makeText(MainActivity.this, "再按一次返回键退出程序", Toast.LENGTH_LONG).show();
+				Toast.makeText(MainActivity.this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
 				exitTime = System.currentTimeMillis();
 			}
 			else

@@ -5,6 +5,7 @@ import netUtils.HttpConstant;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Response.DownloadImageResponse;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Tag;
 import classes.User;
 import classes.Utils;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 public class ShowItemActivity extends Activity
 {
 	private Item item;
+	private boolean fromReim;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -59,7 +61,7 @@ public class ShowItemActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+			goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -68,6 +70,7 @@ public class ShowItemActivity extends Activity
 	{
 		DBManager dbManager = DBManager.getDBManager();
 		Intent intent = this.getIntent();
+		fromReim = intent.getBooleanExtra("fromReim", false);
 		int itemID = intent.getIntExtra("itemLocalID", -1);
 		if (itemID == -1)
 		{
@@ -208,8 +211,24 @@ public class ShowItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+				goBack();
 			}
 		});
+	}
+	
+	private void goBack()
+	{
+		if (fromReim)
+		{
+	    	ReimApplication.setTabIndex(0);
+	    	Intent intent = new Intent(ShowItemActivity.this, MainActivity.class);
+	    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    	startActivity(intent);
+	    	finish();
+		}
+		else
+		{
+			finish();
+		}
 	}
 }

@@ -25,6 +25,7 @@ import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
+import com.umeng.socialize.controller.listener.SocializeListeners.UMShareBoardListener;
 import com.umeng.socialize.media.QQShareContent;
 import com.umeng.socialize.media.SinaShareContent;
 import com.umeng.socialize.sso.SinaSsoHandler;
@@ -51,11 +52,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -77,11 +80,25 @@ public class MeFragment extends Fragment
 	private String avatarPath;
 	
 	private UMSocialService mController;
+	private boolean isShareBoardShown = false;
+	private OnKeyListener listener = new OnKeyListener()
+	{
+		public boolean onKey(View v, int keyCode, KeyEvent event)
+		{
+			if (keyCode == KeyEvent.KEYCODE_BACK && isShareBoardShown)
+			{
+				mController.dismissShareBoard();
+			}
+			return false;
+		}
+	};
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
         currentUser = DBManager.getDBManager().getUser(AppPreference.getAppPreference().getCurrentUserID());
-	    return inflater.inflate(R.layout.fragment_me, container, false);  
+        View view = inflater.inflate(R.layout.fragment_me, container, false);
+        view.setOnKeyListener(listener);
+	    return view;
 	}
 
 	public void onResume()
@@ -125,6 +142,7 @@ public class MeFragment extends Fragment
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+		Toast.makeText(getActivity(), "onActivityResult", Toast.LENGTH_SHORT).show();
 		if(data != null)
 		{
 			try
@@ -178,6 +196,7 @@ public class MeFragment extends Fragment
 		UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode);
 		if (ssoHandler != null)
 		{
+			Toast.makeText(getActivity(), "ssoHandler", Toast.LENGTH_SHORT).show();
 			ssoHandler.authorizeCallBack(requestCode, requestCode, data);
 		}		
 	}
@@ -205,14 +224,14 @@ public class MeFragment extends Fragment
 						showInviteDialog();
 						break;
 					case 4:
-					{
 						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
+						ReimApplication.setTabIndex(3);
 						showShareDialog();
 						break;
-					}
 					case 5:
 						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_FEEDBACK");
 //						startActivity(new Intent(getActivity(), FeedbackActivity.class));
+						ReimApplication.setTabIndex(3);
 						showFeedbackDialog();
 						break;
 					default:
@@ -454,9 +473,9 @@ public class MeFragment extends Fragment
     	qqShareContent.setTitle("QQ分享");
     	qqShareContent.setTargetUrl("http://www.rushucloud.com");    
     	mController.setShareMedia(qqShareContent);
-    	
+
     	mController.getConfig().removePlatform(SHARE_MEDIA.QZONE, SHARE_MEDIA.TENCENT);
-    	SnsPostListener listener = new SnsPostListener()
+    	mController.getConfig().registerListener(new SnsPostListener()
     	{
     		public void onStart()
     		{
@@ -467,8 +486,19 @@ public class MeFragment extends Fragment
     		{
     			goBackToMainActivity();
     		}
-    	};
-    	mController.getConfig().registerListener(listener);
+    	});
+    	mController.setShareBoardListener(new UMShareBoardListener()
+		{
+			public void onShow()
+			{
+				isShareBoardShown = true;
+			}
+			
+			public void onDismiss()
+			{
+				isShareBoardShown = false;
+			}
+		});
     	
 		mController.openShare(getActivity(), false);
     }
@@ -496,10 +526,8 @@ public class MeFragment extends Fragment
     
     private void goBackToMainActivity()
     {
-    	Bundle bundle = new Bundle();
-    	bundle.putInt("tabIndex", 3);
+    	ReimApplication.setTabIndex(3);
     	Intent intent = new Intent(getActivity(), MainActivity.class);
-    	intent.putExtras(bundle);
     	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     	getActivity().finish();    	

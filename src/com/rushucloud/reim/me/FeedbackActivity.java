@@ -4,6 +4,8 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.FeedbackRequest;
 import netUtils.Response.FeedbackResponse;
 
+import classes.ReimApplication;
+
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -173,10 +175,8 @@ public class FeedbackActivity extends Activity
 
     private void goBackToMainActivity()
     {
-    	Bundle bundle = new Bundle();
-    	bundle.putInt("tabIndex", 3);
+    	ReimApplication.setTabIndex(3);
     	Intent intent = new Intent(FeedbackActivity.this, MainActivity.class);
-    	intent.putExtras(bundle);
     	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     	finish();

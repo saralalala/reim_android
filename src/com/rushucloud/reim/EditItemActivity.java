@@ -72,6 +72,7 @@ public class EditItemActivity extends Activity
 	private static DBManager dbManager;
 	private LocationClient locationClient = null;
 	private BDLocationListener listener = new ReimLocationListener();
+	private boolean fromReim;
 	
 	private EditText amountEditText;
 	private EditText vendorEditText;
@@ -123,7 +124,7 @@ public class EditItemActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+			goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -232,6 +233,7 @@ public class EditItemActivity extends Activity
 		}
 		
 		Intent intent = this.getIntent();
+		fromReim = intent.getBooleanExtra("fromReim", false);
 		int itemLocalID = intent.getIntExtra("itemLocalID", -1);
 		if (itemLocalID == -1)
 		{
@@ -716,7 +718,7 @@ public class EditItemActivity extends Activity
 						{
 							SyncUtils.syncAllToServer(null);							
 						}
-						finish();
+						goBack();
 					}
 					else
 					{
@@ -754,7 +756,7 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+				goBack();
 			}
 		});
 	}
@@ -884,6 +886,22 @@ public class EditItemActivity extends Activity
 		mDialog.show();
     }
 
+	private void goBack()
+	{
+		if (fromReim)
+		{
+	    	ReimApplication.setTabIndex(0);
+	    	Intent intent = new Intent(EditItemActivity.this, MainActivity.class);
+	    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    	startActivity(intent);
+	    	finish();
+		}
+		else
+		{
+			finish();
+		}
+	}
+    
     public class ReimLocationListener implements BDLocationListener
     {
     	public void onReceiveLocation(BDLocation location)

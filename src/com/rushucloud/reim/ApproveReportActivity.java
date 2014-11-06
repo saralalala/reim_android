@@ -206,9 +206,28 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							titleTextView.setText(report.getTitle());
-							adapter.set(itemList);
-							adapter.notifyDataSetChanged();							
+					    	if (report.getStatus() != Report.STATUS_SUBMITTED)
+							{
+								AlertDialog mDialog = new AlertDialog.Builder(ApproveReportActivity.this)
+													.setTitle("提示")
+													.setMessage("报告已被审批")
+													.setNegativeButton(R.string.confirm, 
+															new DialogInterface.OnClickListener()
+													{
+														public void onClick(DialogInterface dialog, int which)
+														{
+															goBackToMainActivity();
+														}
+													})
+													.create();
+								mDialog.show();
+							}
+					    	else
+					    	{
+								titleTextView.setText(report.getTitle());
+								adapter.set(itemList);
+								adapter.notifyDataSetChanged();						    		
+					    	}				
 						}
 					});
 				}
@@ -295,11 +314,9 @@ public class ApproveReportActivity extends Activity
 
     private void goBackToMainActivity()
     {
-    	Bundle bundle = new Bundle();
-    	bundle.putInt("tabIndex", 1);
-    	bundle.putInt("reportTabIndex", 1);
+    	ReimApplication.setTabIndex(1);
+    	ReimApplication.setReportTabIndex(1);
     	Intent intent = new Intent(ApproveReportActivity.this, MainActivity.class);
-    	intent.putExtras(bundle);
     	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     	finish();

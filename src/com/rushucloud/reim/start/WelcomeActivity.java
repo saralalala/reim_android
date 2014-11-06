@@ -46,7 +46,7 @@ public class WelcomeActivity extends Activity
         {
         	if(System.currentTimeMillis()-exitTime>2000)
         	{
-        		Toast.makeText(WelcomeActivity.this, "再按一次返回键退出程序", Toast.LENGTH_LONG).show();
+        		Toast.makeText(WelcomeActivity.this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
         		exitTime=System.currentTimeMillis();
         	}
         	else 

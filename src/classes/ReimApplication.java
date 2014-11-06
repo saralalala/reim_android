@@ -21,6 +21,8 @@ public class ReimApplication extends Application
 {
 	private static ProgressDialog pDialog;
 	private static Context context;
+	private static int tabIndex = 0;
+	private static int reportTabIndex = 0;
 	
 	public void onCreate()
 	{
@@ -36,22 +38,26 @@ public class ReimApplication extends Application
 //		System.out.println(getDeviceInfo(this));
 	}
 
-	public static void setProgressDialog(Context context)
+	public static int getTabIndex()
 	{
-		pDialog = new ProgressDialog(context);
-		pDialog.setMessage("读取数据中，请稍等……");
-	}
-	
-	public static void showProgressDialog()
-	{
-		pDialog.show();
-	}
-	
-	public static void dismissProgressDialog()
-	{
-		pDialog.dismiss();
+		return tabIndex;
 	}
 
+	public static void setTabIndex(int tabIndex)
+	{
+		ReimApplication.tabIndex = tabIndex;
+	}
+
+	public static int getReportTabIndex()
+	{
+		return reportTabIndex;
+	}
+
+	public static void setReportTabIndex(int reportTabIndex)
+	{
+		ReimApplication.reportTabIndex = reportTabIndex;
+	}
+	
 	public static String getDeviceInfo(Context context)
 	{
 		try
@@ -93,6 +99,22 @@ public class ReimApplication extends Application
 	public static Context getContext()
 	{
 		return context;
+	}
+	
+	public static void setProgressDialog(Context context)
+	{
+		pDialog = new ProgressDialog(context);
+		pDialog.setMessage("读取数据中，请稍等……");
+	}
+	
+	public static void showProgressDialog()
+	{
+		pDialog.show();
+	}
+	
+	public static void dismissProgressDialog()
+	{
+		pDialog.dismiss();
 	}
 	
 	private void createDirectories()
