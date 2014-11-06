@@ -12,11 +12,11 @@ import classes.StatisticsCategory;
 
 public class StatisticsResponse extends BaseResponse
 {
-	private double _new_amount;
-	private double _process_amount;
-	private double _done_amount;
-	private List<StatisticsCategory> _sc;
-	private HashMap<String, String> _ms;
+	private double newAmount;
+	private double processAmount;
+	private double doneAmount;
+	private List<StatisticsCategory> statCategoryList;
+	private HashMap<String, String> monthsData;
 	
 	public StatisticsResponse(Object httpResponse)
 	{
@@ -28,16 +28,16 @@ public class StatisticsResponse extends BaseResponse
 		try
 		{
 			JSONObject jObject = getDataObject();
-			this._done_amount = jObject.getDouble("done");
-			this._process_amount = jObject.getDouble("process");
-			this._new_amount = jObject.getDouble("new");
+			this.doneAmount = jObject.getDouble("done");
+			this.processAmount = jObject.getDouble("process");
+			this.newAmount = jObject.getDouble("new");
 			JSONArray cates = jObject.getJSONArray("cates");
-			this._sc = new LinkedList<StatisticsCategory>();
+			this.statCategoryList = new LinkedList<StatisticsCategory>();
 			for (int i = 0; i < cates.length(); i++)
 			{
 				JSONObject item = cates.getJSONObject(i);
 				StatisticsCategory object = new StatisticsCategory();
-				object.set_cateid(item.getInt("id"));
+				object.setCategoryID(item.getInt("id"));
 				object.setAmount(item.getDouble("amount"));
 				List<Integer> _items = new LinkedList<Integer>();
 				JSONArray iids = item.getJSONArray("items");
@@ -46,17 +46,17 @@ public class StatisticsResponse extends BaseResponse
 					_items.add(iids.getInt(j));
 				}
 				object.setItems(_items);
-				this._sc.add(object);
+				this.statCategoryList.add(object);
 			}
-			JSONObject _month_data = jObject.optJSONObject("ms");
-			this._ms = new HashMap<String, String>();
-			if (_month_data != null)
+			JSONObject months = jObject.optJSONObject("ms");
+			this.monthsData = new HashMap<String, String>();
+			if (months != null)
 			{
-				for (Iterator<?> iter = _month_data.keys(); iter.hasNext();)
+				for (Iterator<?> iterator = months.keys(); iterator.hasNext();)
 				{
-					String str = (String) iter.next();
-					String val = String.valueOf(_month_data.getLong(str));
-					this._ms.put(str, val);
+					String key = (String) iterator.next();
+					String value = String.valueOf(months.getLong(key));
+					this.monthsData.put(key, value);
 				}				
 			}
 		}
@@ -66,58 +66,58 @@ public class StatisticsResponse extends BaseResponse
 		}
 	}
 
-	public double get_total()
+	public double getTotal()
 	{
-		return this._done_amount + this._new_amount + this._process_amount;
+		return doneAmount + newAmount + processAmount;
 	}
 
-	public double get_new_amount()
+	public double getNewAmount()
 	{
-		return _new_amount;
+		return newAmount;
 	}
 
-	public void set_new_amount(double _new_amount)
+	public void setNewAmount(double newAmount)
 	{
-		this._new_amount = _new_amount;
+		this.newAmount = newAmount;
 	}
 
-	public double get_process_amount()
+	public double getProcessAmount()
 	{
-		return _process_amount;
+		return processAmount;
 	}
 
-	public void set_process_amount(double _process_amount)
+	public void setProcessAmount(double processAmount)
 	{
-		this._process_amount = _process_amount;
+		this.processAmount = processAmount;
 	}
 
-	public double get_done_amount()
+	public double getDoneAmount()
 	{
-		return _done_amount;
+		return doneAmount;
 	}
 
-	public void set_done_amount(double _done_amount)
+	public void setDoneAmount(double doneAmount)
 	{
-		this._done_amount = _done_amount;
+		this.doneAmount = doneAmount;
 	}
 
-	public List<StatisticsCategory> get_sc()
+	public List<StatisticsCategory> getStatCategoryList()
 	{
-		return _sc;
+		return statCategoryList;
 	}
 
-	public void set_sc(List<StatisticsCategory> _sc)
+	public void setStatCategoryList(List<StatisticsCategory> statCategoryList)
 	{
-		this._sc = _sc;
+		this.statCategoryList = statCategoryList;
 	}
 
-	public HashMap<String, String> get_ms()
+	public HashMap<String, String> getMonthsData()
 	{
-		return _ms;
+		return monthsData;
 	}
 
-	public void set_ms(HashMap<String, String> _ms)
+	public void setMonthsData(HashMap<String, String> monthsData)
 	{
-		this._ms = _ms;
+		this.monthsData = monthsData;
 	}
 }

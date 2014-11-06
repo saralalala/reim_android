@@ -4,18 +4,18 @@ import java.util.List;
 
 public class StatisticsCategory
 {
-	private int _cateid = -1;
+	private int categoryID = -1;
 	private double amount = 0;
 	private List<Integer> items = null;
 
-	public int get_cateid()
+	public int getCategoryID()
 	{
-		return _cateid;
+		return categoryID;
 	}
 
-	public void set_cateid(int _cateid)
+	public void setCategoryID(int categoryID)
 	{
-		this._cateid = _cateid;
+		this.categoryID = categoryID;
 	}
 
 	public double getAmount()
