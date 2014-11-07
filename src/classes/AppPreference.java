@@ -47,7 +47,10 @@ public class AppPreference
 	public void readAppPreference()
 	{
 		SharedPreferences preferences = context.getSharedPreferences("ReimApplication", Application.MODE_PRIVATE);
+		appPreference.setCurrentUserID(preferences.getInt("currentUserID", -1));
+		appPreference.setCurrentGroupID(preferences.getInt("currentGroupID", -1));
 		appPreference.setUsername(preferences.getString("username", ""));
+		appPreference.setPassword(preferences.getString("password", ""));
 		appPreference.setPassword(preferences.getString("password", ""));
 		appPreference.setDeviceToken(AVInstallation.getCurrentInstallation().getInstallationId());
 		appPreference.setServerToken(preferences.getString("serverToken", ""));
@@ -65,6 +68,8 @@ public class AppPreference
 		SharedPreferences sharedPreference = context.getSharedPreferences("ReimApplication", Application.MODE_PRIVATE);
 		AppPreference appPreference = AppPreference.getAppPreference();
 		Editor editor = sharedPreference.edit();
+		editor.putInt("currentUserID", appPreference.getCurrentUserID());
+		editor.putInt("currentGroupID", appPreference.getCurrentGroupID());
 		editor.putString("username", appPreference.getUsername());
 		editor.putString("password", appPreference.getPassword());
 		editor.putString("deviceToken", appPreference.getDeviceToken());

@@ -89,13 +89,27 @@ public class ApproveReportActivity extends Activity
 		if (id == R.id.action_approve_item)
 		{
 			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_PASS_REPORT_DETAIL");
-			saveReport(Report.STATUS_APPROVED);
+			if (Utils.isNetworkConnected(this))
+			{
+				Toast.makeText(this, "网络未连接，无法审批", Toast.LENGTH_SHORT).show();
+			}
+			else
+			{
+				saveReport(Report.STATUS_APPROVED);
+			}
 			return true;
 		}
 		if (id == R.id.action_reject_item)
 		{
 			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REJECT_REPORT_DETAIL");
-			saveReport(Report.STATUS_REJECTED);
+			if (Utils.isNetworkConnected(this))
+			{
+				Toast.makeText(this, "网络未连接，无法审批", Toast.LENGTH_SHORT).show();
+			}
+			else
+			{
+				saveReport(Report.STATUS_REJECTED);
+			}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

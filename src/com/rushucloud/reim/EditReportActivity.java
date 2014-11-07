@@ -108,7 +108,14 @@ public class EditReportActivity extends Activity
 		if (id == R.id.action_submit_item)
 		{
 			MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
-			showManagerDialog();
+			if (Utils.isNetworkConnected(this))
+			{
+				Toast.makeText(this, "网络未连接，无法提交", Toast.LENGTH_SHORT).show();
+			}
+			else
+			{
+				showManagerDialog();
+			}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -177,7 +184,17 @@ public class EditReportActivity extends Activity
 		}
 
     	currentUser = dbManager.getUser(appPreference.getCurrentUserID());
-    	userList = dbManager.getGroupUsers(appPreference.getCurrentGroupID());
+    	
+		int currentUserID = appPreference.getCurrentUserID();
+		userList = new ArrayList<User>();
+		List<User> tempList = dbManager.getGroupUsers(appPreference.getCurrentGroupID());
+		for (User user : tempList)
+		{
+			if (user.getServerID() != currentUserID)
+			{
+				userList.add(user);
+			}
+		}
     	checkList = new boolean[userList.size()];
 	}
 	

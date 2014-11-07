@@ -39,6 +39,10 @@
             android:label="@string/app_name" 
             android:name="com.rushucloud.reim.start.SplashActivity" 
             android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>      
         </activity>
         
         <activity 
@@ -56,10 +60,6 @@
         <activity 
             android:label="@string/app_name" 
             android:name="com.rushucloud.reim.start.SignInActivity"> 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>      
         </activity>
         
         <activity 

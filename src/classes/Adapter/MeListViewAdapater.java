@@ -207,6 +207,8 @@ public class MeListViewAdapater extends BaseAdapter
 						public void run()
 						{
 							AppPreference appPreference = AppPreference.getAppPreference();
+							appPreference.setCurrentUserID(-1);
+							appPreference.setCurrentGroupID(-1);
 							appPreference.setUsername("");
 							appPreference.setPassword("");
 							appPreference.setServerToken("");

@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
@@ -97,12 +98,25 @@ public class MainActivity extends ActionBarActivity
 				textView.setCompoundDrawablePadding(5);
 				textView.setCompoundDrawables(null, drawableTop, null, null);
 
-				TabSpec tabSpec = tabHost.newTabSpec(getText(textViewList[i]).toString()).setIndicator(
-						view);
+				TabSpec tabSpec = tabHost.newTabSpec(getText(textViewList[i]).toString()).setIndicator(view);
 				tabHost.addTab(tabSpec, fragmentList[i], null);
-				tabHost.getTabWidget().getChildAt(i)
-						.setBackgroundResource(R.drawable.selector_tab_background);
+				tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.selector_tab_background);
 			}
+			
+			View view = layoutInflater.inflate(R.layout.tab_item_button, (ViewGroup) null, false);
+			
+			Button button = (Button) view.findViewById(R.id.addButton);
+			button.setOnClickListener(new View.OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					Toast.makeText(MainActivity.this, "test", Toast.LENGTH_SHORT).show();
+				}
+			});
+			
+			TabSpec tabSpec = tabHost.newTabSpec("test").setIndicator(view);
+			tabHost.addTab(tabSpec, fragmentList[2], null);
+			tabHost.getTabWidget().getChildAt(4).setBackgroundResource(R.drawable.selector_tab_background);
 		}
 	}
 }

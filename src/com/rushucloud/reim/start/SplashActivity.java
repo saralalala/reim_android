@@ -104,13 +104,7 @@ public class SplashActivity extends Activity
 						}
 						finally
 						{
-							Toast.makeText(SplashActivity.this, "网络未连接，请稍候重试", Toast.LENGTH_SHORT).show();
-							Bundle bundle = new Bundle();
-							bundle.putString("username", appPreference.getUsername());
-							bundle.putString("password", appPreference.getPassword());
-							Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
-							intent.putExtras(bundle);
-							startActivity(intent);
+							startActivity(new Intent(SplashActivity.this, MainActivity.class));
 							finish();
 						}
 					}
@@ -201,6 +195,7 @@ public class SplashActivity extends Activity
 					{
 						public void run()
 						{
+							Toast.makeText(SplashActivity.this, "登录失败，请稍候重试", Toast.LENGTH_SHORT).show();
 							Bundle bundle = new Bundle();
 							bundle.putString("username", appPreference.getUsername());
 							bundle.putString("password", appPreference.getPassword());

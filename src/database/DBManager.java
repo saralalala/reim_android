@@ -66,8 +66,8 @@ public class DBManager extends SQLiteOpenHelper
 	{
 //		String sqlString = "DELETE FROM tbl_category WHERE group_id = 1";
 //		database.execSQL(sqlString);
-//		String sqlString = "DROP TABLE IF EXISTS tbl_item";
-//		database.execSQL(sqlString);
+		String sqlString = "DROP TABLE IF EXISTS tbl_report";
+		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_others_item";
 //		database.execSQL(sqlString);	
 //		sqlString = "DROP TABLE IF EXISTS tbl_comment";
@@ -220,7 +220,8 @@ public class DBManager extends SQLiteOpenHelper
 										+ "server_id INT DEFAULT(0),"
 										+ "title TEXT DEFAULT(''),"
 										+ "user_id INT DEFAULT(0),"
-										+ "manager_id INT DEFAULT(0),"
+										+ "manager_id TEXT DEFAULT(''),"
+										+ "cc_id TEXT DEFAULT(''),"
 										+ "status INT DEFAULT(0),"
 										+ "created_date INT DEFAULT(0),"
 										+ "server_updatedt INT DEFAULT(0),"
@@ -234,9 +235,11 @@ public class DBManager extends SQLiteOpenHelper
 			String createOthersReportTable="CREATE TABLE IF NOT EXISTS tbl_others_report ("
 										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 										+ "server_id INT DEFAULT(0),"
+										+ "owner_id INT DEFAULT(0),"
 										+ "title TEXT DEFAULT(''),"
 										+ "user_id INT DEFAULT(0),"
-										+ "manager_id INT DEFAULT(0),"
+										+ "manager_id TEXT DEFAULT(''),"
+										+ "cc_id TEXT DEFAULT(''),"
 										+ "status INT DEFAULT(0),"
 										+ "item_count INT DEFAULT(0),"
 										+ "amount TEXT DEFAULT(''),"
@@ -1361,13 +1364,14 @@ public class DBManager extends SQLiteOpenHelper
 	{	
 		try
 		{
-			String sqlString = "INSERT INTO tbl_report (server_id, title, user_id, status, manager_id, created_date, " +
+			String sqlString = "INSERT INTO tbl_report (server_id, title, user_id, status, manager_id, cc_id, created_date, " +
 							   							"server_updatedt, local_updatedt) VALUES (" + 
 														"'" + report.getServerID() + "'," +
 														"'" + report.getTitle() + "'," +
 														"'" + report.getUser().getServerID() + "'," +
 														"'" + report.getStatus() + "'," +
-														"'" + report.getManagerID() + "'," +
+														"'" + User.userListToString(report.getManagerList()) + "'," +
+														"'" + User.userListToString(report.getCCList()) + "'," +
 														"'" + report.getCreatedDate() + "'," +
 														"'" + report.getServerUpdatedDate() + "'," +
 														"'" + report.getLocalUpdatedDate() + "')";
@@ -1385,13 +1389,15 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_others_report (server_id, title, user_id, status, manager_id, amount, item_count, " +
-									"created_date, server_updatedt, local_updatedt) VALUES (" + 
+			String sqlString = "INSERT INTO tbl_others_report (server_id, owner_id, title, user_id, status, manager_id, cc_id, " +
+									"amount, item_count, created_date, server_updatedt, local_updatedt) VALUES (" + 
 								"'" + report.getServerID() + "'," +
+								"'" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
 								"'" + report.getTitle() + "'," +
 								"'" + report.getUser().getServerID() + "'," +
 								"'" + report.getStatus() + "'," +
-								"'" + report.getManagerID() + "'," +
+								"'" + User.userListToString(report.getManagerList()) + "'," +
+								"'" + User.userListToString(report.getCCList()) + "'," +
 								"'" + report.getAmount() + "'," +
 								"'" + report.getItemCount() + "'," +
 								"'" + report.getCreatedDate() + "'," +
@@ -1416,7 +1422,8 @@ public class DBManager extends SQLiteOpenHelper
 								"title = '" + report.getTitle() + "'," +
 								"user_id = '" + report.getUser().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
-								"manager_id = '" + report.getManagerID() + "'," +
+								"manager_id = '" + User.userListToString(report.getManagerList()) + "'," +
+								"cc_id = '" + User.userListToString(report.getCCList()) + "'," +
 								"created_date = '" + report.getCreatedDate() + "'," +
 								"server_updatedt = '" + report.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
@@ -1440,7 +1447,8 @@ public class DBManager extends SQLiteOpenHelper
 								"title = '" + report.getTitle() + "'," +
 								"user_id = '" + report.getUser().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
-								"manager_id = '" + report.getManagerID() + "'," +
+								"manager_id = '" + User.userListToString(report.getManagerList()) + "'," +
+								"cc_id = '" + User.userListToString(report.getCCList()) + "'," +
 								"created_date = '" + report.getCreatedDate() + "'," +
 								"server_updatedt = '" + report.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
@@ -1518,7 +1526,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerID(getIntFromCursor(cursor, "manager_id"));
+				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1548,7 +1557,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerID(getIntFromCursor(cursor, "manager_id"));
+				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1578,7 +1588,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerID(getIntFromCursor(cursor, "manager_id"));
+				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
 				report.setAmount(getStringFromCursor(cursor, "amount"));
@@ -1685,7 +1696,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerID(getIntFromCursor(cursor, "manager_id"));
+				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1742,7 +1754,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerID(getIntFromCursor(cursor, "manager_id"));
+				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1763,7 +1776,7 @@ public class DBManager extends SQLiteOpenHelper
 		List<Report> reportList = new ArrayList<Report>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE manager_id = ?", 
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE owner_id = ?", 
 											new String[]{Integer.toString(userServerID)});
 			
 			while (cursor.moveToNext())
@@ -1773,7 +1786,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerID(getIntFromCursor(cursor, "manager_id"));
+				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
 				report.setAmount(getStringFromCursor(cursor, "amount"));

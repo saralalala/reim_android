@@ -24,7 +24,8 @@ public class Report implements Serializable
 	private int serverID = -1;
 	private String title = "";
 	private int status = 0;
-	private int managerID = -1;
+	private List<User> managerList = null;
+	private List<User> ccList = null;
 	private User user = null;
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
@@ -68,13 +69,22 @@ public class Report implements Serializable
 		this.status = status;
 	}
 	
-	public int getManagerID()
+	public List<User> getManagerList()
 	{
-		return managerID;
+		return managerList;
 	}
-	public void setManagerID(int managerID)
+	public void setManagerList(List<User> managerList)
 	{
-		this.managerID = managerID;
+		this.managerList = managerList;
+	}
+	
+	public List<User> getCCList()
+	{
+		return ccList;
+	}
+	public void setCCList(List<User> ccList)
+	{
+		this.ccList = ccList;
 	}
 
 	public User getUser()
