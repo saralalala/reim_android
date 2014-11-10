@@ -157,7 +157,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
     {
     	AdapterContextMenuInfo menuInfo=(AdapterContextMenuInfo)item.getMenuInfo();
     	int index = (int)mineListView.getAdapter().getItemId(menuInfo.position);
-    	final Report report = mineList.get(index);
+    	final Report report = showMineList.get(index);
     	switch (item.getItemId()) 
     	{
 			case 0:

@@ -172,7 +172,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	{
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
 		final int index = (int) itemListView.getAdapter().getItemId(menuInfo.position);
-		final Item localItem = itemList.get(index);
+		final Item localItem = showList.get(index);
 		Report report = localItem.getBelongReport();
 		switch (item.getItemId())
 		{

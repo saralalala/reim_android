@@ -52,7 +52,6 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			dbManager = new DBManager(context);
 		}
-		tempCommand();
 	}
 	
 	public static synchronized DBManager getDBManager()
@@ -61,6 +60,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			dbManager.openDatabase();
 		}
+		tempCommand();
 		return dbManager;
 	}
 
@@ -68,10 +68,14 @@ public class DBManager extends SQLiteOpenHelper
 	{
 //		String sqlString = "DELETE FROM tbl_category WHERE group_id = 1";
 //		database.execSQL(sqlString);
-		String sqlString = "DROP TABLE IF EXISTS tbl_others_report";
-		database.execSQL(sqlString);
+//		String sqlString = "DROP TABLE IF EXISTS tbl_report";
+//		database.execSQL(sqlString);
+//		sqlString = "DROP TABLE IF EXISTS tbl_item";
+//		database.execSQL(sqlString);
+//		String sqlString = "DROP TABLE IF EXISTS tbl_others_report";
+//		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_others_item";
-//		database.execSQL(sqlString);	
+//		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_comment";
 //		database.execSQL(sqlString);			
 	}
@@ -1502,7 +1506,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "DELETE FROM tbl_others_report WHERE manager_id = '" + managerID +"'";
+			String sqlString = "DELETE FROM tbl_others_report WHERE owner_id = '" + managerID +"'";
 			database.execSQL(sqlString);			
 			return true;
 		}

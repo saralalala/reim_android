@@ -12,6 +12,7 @@ import classes.Item;
 import classes.Report;
 import classes.User;
 import classes.Utils;
+import database.DBManager;
 import netUtils.Response.BaseResponse;
 
 public class GetReportResponse extends BaseResponse
@@ -40,6 +41,28 @@ public class GetReportResponse extends BaseResponse
 			User user = new User();
 			user.setServerID(jObject.getInt("uid"));
 			report.setUser(user);
+			
+			DBManager dbManager = DBManager.getDBManager();
+
+			JSONObject receiverObject = jObject.getJSONObject("receivers");
+			
+			JSONArray managerArray = receiverObject.getJSONArray("managers");
+			List<User> managerList = new ArrayList<User>();
+			for (int i = 0; i < managerArray.length(); i++)
+			{
+				JSONObject object = managerArray.getJSONObject(i);
+				managerList.add(dbManager.getUser(object.getInt("id")));
+			}
+			report.setManagerList(managerList);
+			
+			JSONArray ccArray = receiverObject.getJSONArray("cc");
+			List<User> ccList = new ArrayList<User>();
+			for (int i = 0; i < ccArray.length(); i++)
+			{
+				JSONObject object = ccArray.getJSONObject(i);
+				ccList.add(dbManager.getUser(object.getInt("id")));
+			}
+			report.setCCList(ccList);
 			
 			itemList = new ArrayList<Item>();
 			JSONArray jsonArray = jObject.getJSONArray("items");

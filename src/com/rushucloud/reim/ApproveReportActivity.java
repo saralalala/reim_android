@@ -38,6 +38,8 @@ public class ApproveReportActivity extends Activity
 	private DBManager dbManager;
 	
 	private TextView titleTextView;
+	private TextView managerTextView;
+	private TextView ccTextView;
 	private ListView itemListView;
 	private ItemListViewAdapter adapter;
 	
@@ -89,7 +91,7 @@ public class ApproveReportActivity extends Activity
 		if (id == R.id.action_approve_item)
 		{
 			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_PASS_REPORT_DETAIL");
-			if (Utils.isNetworkConnected(this))
+			if (!Utils.isNetworkConnected(this))
 			{
 				Toast.makeText(this, "网络未连接，无法审批", Toast.LENGTH_SHORT).show();
 			}
@@ -102,7 +104,7 @@ public class ApproveReportActivity extends Activity
 		if (id == R.id.action_reject_item)
 		{
 			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REJECT_REPORT_DETAIL");
-			if (Utils.isNetworkConnected(this))
+			if (!Utils.isNetworkConnected(this))
 			{
 				Toast.makeText(this, "网络未连接，无法审批", Toast.LENGTH_SHORT).show();
 			}
@@ -145,10 +147,10 @@ public class ApproveReportActivity extends Activity
 		
 		titleTextView = (TextView)findViewById(R.id.titleTextView);
 		
-		TextView managerTextView = (TextView)findViewById(R.id.managerTextView);
+		managerTextView = (TextView)findViewById(R.id.managerTextView);
 		managerTextView.setText(report.getManagersName());		
 		
-		TextView ccTextView = (TextView)findViewById(R.id.ccTextView);
+		ccTextView = (TextView)findViewById(R.id.ccTextView);
 		ccTextView.setText(report.getCCsName());
 		
 		adapter = new ItemListViewAdapter(ApproveReportActivity.this, itemList);
@@ -209,7 +211,6 @@ public class ApproveReportActivity extends Activity
 				{ 
 					int managerID = AppPreference.getAppPreference().getCurrentUserID();
 					report = response.getReport();
-//					report.setManagerID(managerID);
 					
 					dbManager.deleteOthersReport(reportServerID, managerID);
 					dbManager.insertOthersReport(report);
@@ -245,6 +246,9 @@ public class ApproveReportActivity extends Activity
 					    	else
 					    	{
 								titleTextView.setText(report.getTitle());
+								managerTextView.setText(report.getManagersName());		
+								ccTextView.setText(report.getCCsName());
+								
 								adapter.set(itemList);
 								adapter.notifyDataSetChanged();						    		
 					    	}				

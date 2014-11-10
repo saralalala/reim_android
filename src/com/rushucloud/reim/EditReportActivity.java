@@ -111,7 +111,7 @@ public class EditReportActivity extends Activity
 		if (id == R.id.action_submit_item)
 		{
 			MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
-			if (Utils.isNetworkConnected(this))
+			if (!Utils.isNetworkConnected(this))
 			{
 				Toast.makeText(this, "网络未连接，无法提交", Toast.LENGTH_SHORT).show();
 			}

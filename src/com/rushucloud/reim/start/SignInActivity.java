@@ -112,6 +112,8 @@ public class SignInActivity extends Activity
 				finish();
 			}
 		});
+		
+		DBManager dbManager = DBManager.getDBManager();
 	}
 
 	private void initButton()
