@@ -24,6 +24,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 
 public class Utils
 {	
@@ -215,40 +216,14 @@ public class Utils
 	{
 		return b ? 1 : 0;
 	}
-	
-	public static int[] intListToArray(List<Integer> intList)
-	{
-		int[] intArray = new int[intList.size()];
-		for (int i = 0; i < intArray.length; i++)
-		{
-			intArray[i] = intList.get(i);
-		}
-		return intArray;
-	}
-
-    public static ArrayList<Integer> itemListToIDArray(List<Item> itemList)
-    {
-    	ArrayList<Integer> idArrayList = new ArrayList<Integer>();
-    	for (int i = 0; i < itemList.size(); i++)
-		{
-			idArrayList.add(itemList.get(i).getLocalID());
-		}
-    	return idArrayList;
-    }
 
     public static List<Integer> stringToIntList(String idString)
     {
     	List<Integer> resultList = new ArrayList<Integer>();
-    	while (idString.indexOf(",") != -1)
+    	String[] result = TextUtils.split(idString, ",");
+    	for (int i = 0; i < result.length; i++)
 		{
-    		int index = idString.indexOf(",");
-    		int id = Integer.valueOf(idString.substring(0, index));
-    		resultList.add(id);
-    		idString = idString.substring(index+1);
-		}
-    	if (idString.length() != 0)
-		{
-			resultList.add(Integer.valueOf(idString));
+    		resultList.add(Integer.valueOf(result[i]));
 		}
     	return resultList;
     }

@@ -91,8 +91,8 @@ public class SignInActivity extends Activity
 		usernameEditText.setText("tianyu.an@rushucloud.com");
 		passwordEditText.setText("111111");
 
-		usernameEditText.setText("alvayang@1in1.cn");
-		passwordEditText.setText("qqqqqq");
+//		usernameEditText.setText("alvayang@1in1.cn");
+//		passwordEditText.setText("qqqqqq");
 		
 		RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()

@@ -14,13 +14,55 @@
         android:ems="10"
         android:hint="@string/inputReportTitle" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/managerLayout"
+        android:layout_below="@id/titleEditText"  >
+
+        <TextView
+            android:id="@+id/managerTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+			android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/managerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chooseManager" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/ccLayout" 
+        android:layout_below="@id/managerLayout" >
+
+        <TextView
+            android:id="@+id/ccTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+			android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/ccButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chooseCC" />
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/itemListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/saveButton"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/titleEditText" >
+        android:layout_below="@+id/ccLayout" >
 
     </ListView>
 

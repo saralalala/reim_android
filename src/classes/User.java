@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.TextUtils;
+
 import database.DBManager;
 
 public class User implements Serializable
@@ -151,35 +153,25 @@ public class User implements Serializable
 		this.localUpdatedDate = localUpdatedDate;
 	}
 
-	public static boolean[] getUsersCheck(List<User> userList, List<User> relevantUsers)
-	{
-		AppPreference appPreference = AppPreference.getAppPreference();
-		
-		boolean[] check = new boolean[userList.size()];
-		for (int i = 0; i < userList.size(); i++)
+	public static boolean[] getUsersCheck(List<User> allUsers, List<User> targetUsers)
+	{		
+		boolean[] check = new boolean[allUsers.size()];
+		for (int i = 0; i < check.length; i++)
 		{
-			if (userList.get(i).getServerID() == appPreference.getCurrentUserID())
-			{
-				check[i] = true;
-			}
-			else
-			{
-				check[i] = false;				
-			}
+			check[i] = false;
 		}
 		
-		if (relevantUsers == null)
+		if (targetUsers == null)
 		{
 			return check;
 		}
 		
-		for (int i = 0; i < userList.size(); i++)
+		for (int i = 0; i < allUsers.size(); i++)
 		{
-			check[i] = false;
-			User user = userList.get(i);
-			for (int j = 0; j < relevantUsers.size(); j++)
+			User user = allUsers.get(i);
+			for (int j = 0; j < targetUsers.size(); j++)
 			{
-				if (user.getServerID() == relevantUsers.get(j).getServerID())
+				if (user.getServerID() == targetUsers.get(j).getServerID())
 				{
 					check[i] = true;
 				}
@@ -188,32 +180,43 @@ public class User implements Serializable
 		return check;
 	}
 
-	public static String[] getUserNames(List<User> userList)
+	public static String[] getUsersName(List<User> userList)
 	{
-		List<String> names = new ArrayList<String>();
+		String[] userNames = new String[userList.size()];
 		for (int i = 0; i < userList.size(); i++)
 		{
-			names.add(userList.get(i).getNickname());
+			userNames[i] = userList.get(i).getNickname();
 		}
-		return names.toArray(new String[names.size()]);		
+		return userNames;
 	}
 
-	public static String userListToString(List<User> userList)
+	public static String getUsersNameString(List<User> userList)
 	{
-		String result = "";
 		if (userList == null || userList.size() == 0)
 		{
-			return result;
+			return "";
 		}
 		
+		return TextUtils.join(",", getUsersName(userList));
+	}
+	
+	public static String getUsersIDString(List<User> userList)
+	{
+		if (userList == null || userList.size() == 0)
+		{
+			return "";
+		}
+		
+		Integer[] userIDs = new Integer[userList.size()];
 		for (int i = 0; i < userList.size(); i++)
 		{
-			result += userList.get(i).getNickname() + ",";
+			userIDs[i] = userList.get(i).getServerID();
 		}
-		return result.substring(0, result.length()-1);
+		
+		return TextUtils.join(",", userIDs);
 	}
 
-	public static List<User> stringToUserList(String idString)
+	public static List<User> idStringToUserList(String idString)
 	{
 		List<User> userList = new ArrayList<User>();
 		DBManager dbManager = DBManager.getDBManager();
@@ -227,5 +230,25 @@ public class User implements Serializable
 			}
 		}
 		return userList;
+	}
+
+	public static List<User> removeCurrentUserFromList(List<User> userList)
+	{
+		if (userList == null)
+		{
+			return new ArrayList<User>();
+		}
+		
+		int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
+		List<User> tempList = new ArrayList<User>();
+		for (User user : userList)
+		{
+			if (user.getServerID() != currentUserID)
+			{
+				tempList.add(user);
+			}
+		}
+		
+		return tempList;
 	}
 }

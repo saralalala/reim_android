@@ -1,5 +1,6 @@
 package classes;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -216,6 +217,16 @@ public class Item
 	{
 		this.tagsID = tagsID;
 	}
+	
+    public static ArrayList<Integer> getItemsIDArray(List<Item> itemList)
+    {
+    	ArrayList<Integer> idArrayList = new ArrayList<Integer>();
+    	for (int i = 0; i < itemList.size(); i++)
+		{
+			idArrayList.add(itemList.get(i).getLocalID());
+		}
+    	return idArrayList;
+    }
 	
 	public Boolean canBeSubmitWithReport()
 	{

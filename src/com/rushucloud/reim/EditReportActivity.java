@@ -39,6 +39,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -49,10 +50,12 @@ public class EditReportActivity extends Activity
 	private DBManager dbManager;
 	
 	private EditText titleEditText;
+	private TextView managerTextView;
+	private TextView ccTextView;
 	private ListView itemListView;
 	private ItemListViewAdapter adapter;
 	private MemberListViewAdapater memberAdapter;
-	
+
 	private Report report;
 	private List<Item> itemList = null;
 	private ArrayList<Integer> chosenItemIDList = null;
@@ -60,8 +63,8 @@ public class EditReportActivity extends Activity
 	
 	private List<User> userList;
 	private User currentUser;
-	private int lastIndex = -1;
-	private boolean[] checkList;
+	private boolean[] managerCheckList;
+	private boolean[] ccCheckList;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -112,9 +115,13 @@ public class EditReportActivity extends Activity
 			{
 				Toast.makeText(this, "网络未连接，无法提交", Toast.LENGTH_SHORT).show();
 			}
+			else if (report.getManagerList() == null || report.getManagerList().size() == 0)
+			{
+				Toast.makeText(EditReportActivity.this, "未选择汇报对象", Toast.LENGTH_SHORT).show();
+			}
 			else
 			{
-				showManagerDialog();
+				submitReport();
 			}
 			return true;
 		}
@@ -161,7 +168,7 @@ public class EditReportActivity extends Activity
 			report.setStatus(Report.STATUS_DRAFT);
 			report.setUser(dbManager.getUser(appPreference.getCurrentUserID()));
 			chosenItemIDList = new ArrayList<Integer>();
-			remainingItemIDList = Utils.itemListToIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
+			remainingItemIDList = Item.getItemsIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
 			itemList = new ArrayList<Item>();
 		}
 		else
@@ -172,8 +179,8 @@ public class EditReportActivity extends Activity
 			{
 				// edit report from ReportFragment
 				itemList = dbManager.getReportItems(report.getLocalID());
-				chosenItemIDList = Utils.itemListToIDArray(itemList);
-				remainingItemIDList = Utils.itemListToIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
+				chosenItemIDList = Item.getItemsIDArray(itemList);
+				remainingItemIDList = Item.getItemsIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
 			}
 			else
 			{
@@ -185,17 +192,8 @@ public class EditReportActivity extends Activity
 
     	currentUser = dbManager.getUser(appPreference.getCurrentUserID());
     	
-		int currentUserID = appPreference.getCurrentUserID();
-		userList = new ArrayList<User>();
-		List<User> tempList = dbManager.getGroupUsers(appPreference.getCurrentGroupID());
-		for (User user : tempList)
-		{
-			if (user.getServerID() != currentUserID)
-			{
-				userList.add(user);
-			}
-		}
-    	checkList = new boolean[userList.size()];
+    	int currentGroupID = appPreference.getCurrentGroupID();
+		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
 	}
 	
 	private void initView()
@@ -210,6 +208,12 @@ public class EditReportActivity extends Activity
 		{
 			titleEditText.clearFocus();
 		}
+		
+		managerTextView = (TextView)findViewById(R.id.managerTextView);
+		managerTextView.setText(report.getManagersName());
+		
+		ccTextView = (TextView)findViewById(R.id.ccTextView);
+		ccTextView.setText(report.getCCsName());
 		
 		adapter = new ItemListViewAdapter(EditReportActivity.this, itemList);
 		itemListView = (ListView)findViewById(R.id.itemListView);
@@ -241,6 +245,24 @@ public class EditReportActivity extends Activity
 	
 	private void initButton()
 	{
+		Button managerButton = (Button)findViewById(R.id.managerButton);
+		managerButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				showManagerDialog();
+			}
+		});
+		
+		Button ccButton = (Button)findViewById(R.id.ccButton);
+		ccButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				showCCDialog();
+			}
+		});
+		
 		Button addButton = (Button)findViewById(R.id.addButton);
 		addButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -314,40 +336,32 @@ public class EditReportActivity extends Activity
     
     private void showManagerDialog()
     {
-    	lastIndex = -1;
-    	for (int i = 0; i < checkList.length; i++)
+    	hideSoftKeyboard();
+		if (report.getManagerList() == null)
 		{
-			if (currentUser.getDefaultManagerID() == userList.get(i).getServerID())
-			{
-				checkList[i] = true;
-				lastIndex = i;
-			}
-			else
-			{
-				checkList[i] = false;
-			}
-		}	
-    	
-    	memberAdapter = new MemberListViewAdapater(this, userList, checkList);
-    	View view = View.inflate(this, R.layout.profile_manager, null);
-    	ListView managerListView = (ListView) view.findViewById(R.id.managerListView);
-    	managerListView.setAdapter(memberAdapter);
-    	managerListView.setOnItemClickListener(new OnItemClickListener()
+			List<User> tempList = new ArrayList<User>();
+			tempList.add(dbManager.getUser(currentUser.getDefaultManagerID()));
+			managerCheckList = User.getUsersCheck(userList, tempList);
+		}
+		else
+		{
+			managerCheckList = User.getUsersCheck(userList, report.getManagerList());
+		}
+		
+    	memberAdapter = new MemberListViewAdapater(this, userList, managerCheckList);
+    	View view = View.inflate(this, R.layout.profile_user, null);
+    	ListView userListView = (ListView) view.findViewById(R.id.userListView);
+    	userListView.setAdapter(memberAdapter);
+    	userListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				if (lastIndex != -1)
-				{
-					checkList[lastIndex] = false;					
-				}
-				checkList[position] = true;
-				lastIndex = position;
-				memberAdapter.setCheck(checkList);
+				managerCheckList[position] = !managerCheckList[position];
+				memberAdapter.setCheck(managerCheckList);
 				memberAdapter.notifyDataSetChanged();
 			}
 		});
 
-    	hideSoftKeyboard();
     	AlertDialog mDialog = new AlertDialog.Builder(this)
     							.setTitle("请选择汇报对象")
     							.setView(view)
@@ -355,15 +369,17 @@ public class EditReportActivity extends Activity
 								{
 									public void onClick(DialogInterface dialog, int which)
 									{
-										if (lastIndex == -1)
+										List<User> managerList = new ArrayList<User>();
+										for (int i = 0; i < managerCheckList.length; i++)
 										{
-											Toast.makeText(EditReportActivity.this, "未选择汇报对象", Toast.LENGTH_SHORT).show();
+											if (managerCheckList[i])
+											{
+												managerList.add(userList.get(i));
+											}
 										}
-										else
-										{
-											report.setManagerID(userList.get(lastIndex).getServerID());
-											submitReport();
-										}
+
+										report.setManagerList(managerList);
+										managerTextView.setText(report.getManagersName());
 									}
 								})
 								.setNegativeButton(R.string.cancel, null)
@@ -379,6 +395,58 @@ public class EditReportActivity extends Activity
 		}
     }
     
+    private void showCCDialog()
+    {
+    	hideSoftKeyboard();
+		ccCheckList = User.getUsersCheck(userList, report.getCCList());
+		
+    	memberAdapter = new MemberListViewAdapater(this, userList, ccCheckList);
+    	View view = View.inflate(this, R.layout.profile_user, null);
+    	ListView userListView = (ListView) view.findViewById(R.id.userListView);
+    	userListView.setAdapter(memberAdapter);
+    	userListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				ccCheckList[position] = !ccCheckList[position];
+				memberAdapter.setCheck(ccCheckList);
+				memberAdapter.notifyDataSetChanged();
+			}
+		});
+
+    	AlertDialog mDialog = new AlertDialog.Builder(this)
+    							.setTitle("请选择抄送对象")
+    							.setView(view)
+    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										List<User> ccList = new ArrayList<User>();
+										for (int i = 0; i < ccCheckList.length; i++)
+										{
+											if (ccCheckList[i])
+											{
+												ccList.add(userList.get(i));
+											}
+										}
+										
+										report.setCCList(ccList);
+										ccTextView.setText(report.getCCsName());
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+    	mDialog.show();
+    	
+    	for (User user : userList)
+		{
+			if (user.getAvatarPath().equals("") && user.getImageID() != -1)
+			{
+				sendDownloadAvatarRequest(user);
+			}	
+		}
+    }
+
     private void saveReport(String prompt)
     {
     	hideSoftKeyboard();
@@ -527,8 +595,8 @@ public class EditReportActivity extends Activity
 					{
 						public void run()
 						{
-							List<User> managerList = dbManager.getGroupUsers(appPreference.getCurrentGroupID());
-							memberAdapter.setMember(managerList);
+							List<User> memberList = dbManager.getGroupUsers(appPreference.getCurrentGroupID());
+							memberAdapter.setMember(User.removeCurrentUserFromList(memberList));
 							memberAdapter.notifyDataSetChanged();
 						}
 					});	

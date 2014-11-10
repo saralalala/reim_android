@@ -170,7 +170,7 @@ public class TagActivity extends Activity
 	private void refreshListView()
 	{
 		tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Tag.getTagNames(tagList));
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Tag.getTagsName(tagList));
 		tagListView.setAdapter(adapter);
 	}
 

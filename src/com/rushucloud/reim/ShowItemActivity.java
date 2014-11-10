@@ -110,7 +110,7 @@ public class ShowItemActivity extends Activity
 		categoryTextView.setText(categoryName);
 		
 		TextView tagTextView = (TextView)findViewById(R.id.tagTextView);
-		tagTextView.setText(Tag.tagListToString(item.getTags()));
+		tagTextView.setText(Tag.getTagsNameString(item.getTags()));
 		
 		TextView timeTextView = (TextView)findViewById(R.id.timeTextView);
 		if (item.getConsumedDate() != -1 && item.getConsumedDate() != 0)
@@ -123,7 +123,7 @@ public class ShowItemActivity extends Activity
 		}
 		
 		TextView memberTextView = (TextView)findViewById(R.id.memberTextView);
-		memberTextView.setText(User.userListToString(item.getRelevantUsers()));
+		memberTextView.setText(User.getUsersNameString(item.getRelevantUsers()));
 		
 		TextView noteTextView = (TextView)findViewById(R.id.noteTextView);
 		noteTextView.setText(item.getNote());

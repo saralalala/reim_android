@@ -334,7 +334,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 					
 					for (Report report : reportList)
 					{
-						report.setManagerID(managerID);
+//						report.setManagerID(managerID);
 						dbManager.insertOthersReport(report);
 					}
 					

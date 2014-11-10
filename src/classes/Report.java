@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.rushucloud.reim.R;
+
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
@@ -73,6 +75,17 @@ public class Report implements Serializable
 	{
 		return managerList;
 	}
+	public String getManagersName()
+	{
+		if (getManagerList() == null || getManagerList().size() == 0)
+		{
+			return ReimApplication.getContext().getString(R.string.noManager);
+		}
+		else
+		{
+			return User.getUsersNameString(getManagerList());
+		}
+	}
 	public void setManagerList(List<User> managerList)
 	{
 		this.managerList = managerList;
@@ -81,6 +94,17 @@ public class Report implements Serializable
 	public List<User> getCCList()
 	{
 		return ccList;
+	}
+	public String getCCsName()
+	{
+		if (getCCList() == null || getCCList().size() == 0)
+		{
+			return ReimApplication.getContext().getString(R.string.noCC);
+		}
+		else
+		{
+			return User.getUsersNameString(getCCList());
+		}
 	}
 	public void setCCList(List<User> ccList)
 	{

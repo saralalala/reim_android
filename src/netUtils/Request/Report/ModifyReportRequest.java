@@ -25,8 +25,8 @@ public class ModifyReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("title", report.getTitle()));
 		params.add(new BasicNameValuePair("iids", iids));
 		params.add(new BasicNameValuePair("status", Integer.toString(report.getStatus())));
-		params.add(new BasicNameValuePair("manager_id", User.userListToString(report.getManagerList())));
-		params.add(new BasicNameValuePair("cc", User.userListToString(report.getCCList())));
+		params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
+		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
 		setParams(params);
 
 		String requestUrl = getUrl();

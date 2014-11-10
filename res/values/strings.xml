@@ -81,6 +81,10 @@
     <string name="myReport">我的报告</string>
     <string name="othersReport">其他人的报告</string>
     <string name="inputReportTitle">请输入报告名称</string>
+    <string name="noManager">未选择经理</string>
+    <string name="noCC">未选择CC</string>
+    <string name="chooseManager">选择经理</string>
+    <string name="chooseCC">选择抄送</string>
     <string name="deleteReportWarning">是否要删除此报告？</string>
     <string name="submit">提交</string>
     <string name="approve">批准</string>

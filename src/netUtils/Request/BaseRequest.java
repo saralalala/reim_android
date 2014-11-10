@@ -40,6 +40,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.TextUtils;
+
 import classes.AppPreference;
 
 public abstract class BaseRequest
@@ -124,19 +126,17 @@ public abstract class BaseRequest
 
 	protected void doGet(HttpConnectionCallback callback)
 	{
-		if (url.indexOf("?") < 0)
-		{
-			url += "?";
-		}
 		if (params != null)
 		{
+			List<String> paramsList = new ArrayList<String>();
 			Iterator<NameValuePair> it = params.iterator();
 			while (it.hasNext())
 			{
 				try
 				{
 					NameValuePair pair = it.next();
-					url += "&" + pair.getName() + "=" + URLEncoder.encode(pair.getValue(), "UTF-8");
+					String parameter = pair.getName() + "=" + URLEncoder.encode(pair.getValue(), "UTF-8");
+					paramsList.add(parameter);
 				}
 				catch (UnsupportedEncodingException e)
 				{
@@ -144,15 +144,7 @@ public abstract class BaseRequest
 				}
 			}
 			
-			int index = url.indexOf("&");
-			if (index != -1)
-			{
-				url = url.substring(0, index) + url.substring(index+1);
-			}
-		}
-		else
-		{
-			url = url.substring(0, url.length()-1);
+			url += "?" + TextUtils.join("&", paramsList);
 		}
 		
 		HttpGet request = new HttpGet(url);		
@@ -161,18 +153,17 @@ public abstract class BaseRequest
 
 	protected void doDelete(HttpConnectionCallback callback)
 	{
-		if (url.indexOf("?") < 0)
-		{
-			url += "?";
-		}
 		if (params != null)
 		{
+			List<String> paramsList = new ArrayList<String>();
 			Iterator<NameValuePair> it = params.iterator();
 			while (it.hasNext())
 			{
 				try
 				{
-					url += "&" + it.next().getName() + "=" + URLEncoder.encode(it.next().getValue(), "UTF-8");
+					NameValuePair pair = it.next();
+					String parameter = pair.getName() + "=" + URLEncoder.encode(pair.getValue(), "UTF-8");
+					paramsList.add(parameter);
 				}
 				catch (UnsupportedEncodingException e)
 				{
@@ -180,15 +171,7 @@ public abstract class BaseRequest
 				}
 			}
 			
-			int index = url.indexOf("&");
-			if (index != -1)
-			{
-				url = url.substring(0, index) + url.substring(index+1);
-			}
-		}
-		else
-		{
-			url = url.substring(0, url.length()-1);
+			url += "?" + TextUtils.join("&", paramsList);
 		}
 
 		HttpDelete request = new HttpDelete(url);

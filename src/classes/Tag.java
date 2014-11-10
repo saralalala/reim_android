@@ -3,6 +3,8 @@ package classes;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.TextUtils;
+
 import database.DBManager;
 
 public class Tag
@@ -85,7 +87,7 @@ public class Tag
 		return check;
 	}
 
-	public static String[] getTagNames(List<Tag> tagList)
+	public static String[] getTagsName(List<Tag> tagList)
 	{
 		List<String> names = new ArrayList<String>();
 		for (int i = 0; i < tagList.size(); i++)
@@ -95,19 +97,35 @@ public class Tag
 		return names.toArray(new String[names.size()]);		
 	}
 
-	public static String tagListToString(List<Tag> tagList)
+	public static String getTagsNameString(List<Tag> tagList)
 	{
-		String result = "";
 		if (tagList == null || tagList.size() == 0)
 		{
-			return result;
+			return "";
 		}
 		
+		String[] tagNames = new String[tagList.size()];
 		for (int i = 0; i < tagList.size(); i++)
 		{
-			result += tagList.get(i).getName() + ",";
+			tagNames[i] = tagList.get(i).getName();
 		}
-		return result.substring(0, result.length()-1);
+		return TextUtils.join(",", tagNames);
+	}	
+	
+	public static String getTagsIDString(List<Tag> tagList)
+	{
+		if (tagList == null || tagList.size() == 0)
+		{
+			return "";
+		}
+		
+		Integer[] tagIDs = new Integer[tagList.size()];
+		for (int i = 0; i < tagList.size(); i++)
+		{
+			tagIDs[i] = tagList.get(i).getServerID();
+		}
+		
+		return TextUtils.join(",", tagIDs);
 	}
 	
 	public static List<Tag> stringToTagList(String idString)

@@ -21,11 +21,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ShowReportActivity extends Activity
-{	
-	private TextView titleTextView;
-	private ListView itemListView;
-	private ItemListViewAdapter adapter;
-	
+{
 	private Report report;
 	private List<Item> itemList = null;
 	private boolean myReport;
@@ -33,7 +29,7 @@ public class ShowReportActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.report_approve_detail);
+		setContentView(R.layout.report_show);
 		MobclickAgent.onEvent(ShowReportActivity.this, "UMENG_VIEW_REPORT");
 		initData();
 		initView();
@@ -84,11 +80,17 @@ public class ShowReportActivity extends Activity
 	{
 		ReimApplication.setProgressDialog(this);
 		
-		titleTextView = (TextView)findViewById(R.id.titleTextView);
+		TextView titleTextView = (TextView)findViewById(R.id.titleTextView);
 		titleTextView.setText(report.getTitle());
+		
+		TextView managerTextView = (TextView)findViewById(R.id.managerTextView);
+		managerTextView.setText(report.getManagersName());		
+		
+		TextView ccTextView = (TextView)findViewById(R.id.ccTextView);
+		ccTextView.setText(report.getCCsName());
 
-		adapter = new ItemListViewAdapter(ShowReportActivity.this, itemList);
-		itemListView = (ListView)findViewById(R.id.itemListView);
+		ItemListViewAdapter adapter = new ItemListViewAdapter(ShowReportActivity.this, itemList);
+		ListView itemListView = (ListView)findViewById(R.id.itemListView);
 		itemListView.setAdapter(adapter);
 		itemListView.setOnItemClickListener(new OnItemClickListener()
 		{

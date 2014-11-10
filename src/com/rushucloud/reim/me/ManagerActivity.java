@@ -47,7 +47,7 @@ public class ManagerActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.profile_manager);
+		setContentView(R.layout.profile_user);
 		initData();
 		initView();
 	}
@@ -117,8 +117,13 @@ public class ManagerActivity extends Activity
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
-		userList = dbManager.getGroupUsers(appPreference.getCurrentGroupID());
-		currentUser = dbManager.getUser(appPreference.getCurrentUserID());
+		
+		int currentUserID = appPreference.getCurrentUserID();
+		currentUser = dbManager.getUser(currentUserID);
+		
+    	int currentGroupID = appPreference.getCurrentGroupID();
+		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
+		
 		checkList = new boolean[userList.size()];
 		for (int i = 0; i < checkList.length; i++)
 		{
@@ -137,7 +142,7 @@ public class ManagerActivity extends Activity
 	private void initView()
 	{		
 		adapter = new MemberListViewAdapater(this, userList, checkList);
-		managerListView = (ListView)findViewById(R.id.managerListView);
+		managerListView = (ListView)findViewById(R.id.userListView);
 		managerListView.setAdapter(adapter);
 		managerListView.setOnItemClickListener(new OnItemClickListener()
 		{

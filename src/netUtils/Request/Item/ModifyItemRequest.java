@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import classes.Item;
+import classes.Tag;
+import classes.User;
 import classes.Utils;
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
@@ -22,35 +24,7 @@ public class ModifyItemRequest extends BaseRequest
 		try
 		{
 			JSONArray jsonArray = new JSONArray();
-			
-			String uids = "";
-			if (item.getRelevantUsers() != null)
-			{
-				int count = item.getRelevantUsers().size();
-				for (int i = 0; i < count; i++)
-				{
-					uids += item.getRelevantUsers().get(i).getServerID() + ",";
-				}
-				if (uids.length() > 0)
-				{
-					uids = uids.substring(0, uids.length()-1);			
-				}			
-			}
-			
-			String tags = "";
-			if (item.getTags() != null)
-			{
-				int count = item.getTags().size();
-				for (int i = 0; i < count; i++)
-				{
-					tags += item.getTags().get(i).getServerID() + ",";
-				}
-				if (tags.length() > 0)
-				{
-					tags = tags.substring(0, tags.length()-1);			
-				}			
-			}
-			
+						
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
 			JSONObject jObject = new JSONObject();
 			jObject.put("id", Integer.toString(item.getServerID()));
@@ -60,8 +34,8 @@ public class ModifyItemRequest extends BaseRequest
 			jObject.put("uid", item.getConsumer().getServerID());
 			jObject.put("prove_ahead", Utils.booleanToString(item.isProveAhead()));
 			jObject.put("image_id", item.getImageID());
-			jObject.put("uids", uids);
-			jObject.put("tags", tags);
+			jObject.put("uids", User.getUsersIDString(item.getRelevantUsers()));
+			jObject.put("tags", Tag.getTagsIDString(item.getTags()));
 			jObject.put("dt", item.getConsumedDate());
 			jObject.put("note", item.getNote());
 			jObject.put("reimbursed", Utils.booleanToString(item.needReimbursed()));

@@ -48,7 +48,7 @@ public class ApproveReportActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.report_approve_detail);
+		setContentView(R.layout.report_show);
 		initData();
 		initView();
 	}
@@ -145,6 +145,12 @@ public class ApproveReportActivity extends Activity
 		
 		titleTextView = (TextView)findViewById(R.id.titleTextView);
 		
+		TextView managerTextView = (TextView)findViewById(R.id.managerTextView);
+		managerTextView.setText(report.getManagersName());		
+		
+		TextView ccTextView = (TextView)findViewById(R.id.ccTextView);
+		ccTextView.setText(report.getCCsName());
+		
 		adapter = new ItemListViewAdapter(ApproveReportActivity.this, itemList);
 		itemListView = (ListView)findViewById(R.id.itemListView);
 		itemListView.setAdapter(adapter);
@@ -203,7 +209,7 @@ public class ApproveReportActivity extends Activity
 				{ 
 					int managerID = AppPreference.getAppPreference().getCurrentUserID();
 					report = response.getReport();
-					report.setManagerID(managerID);
+//					report.setManagerID(managerID);
 					
 					dbManager.deleteOthersReport(reportServerID, managerID);
 					dbManager.insertOthersReport(report);

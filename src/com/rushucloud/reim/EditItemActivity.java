@@ -343,7 +343,7 @@ public class EditItemActivity extends Activity
 		categoryTextView.setText(categoryName);
 		
 		tagTextView = (TextView)findViewById(R.id.tagTextView);
-		tagTextView.setText(Tag.tagListToString(item.getTags()));
+		tagTextView.setText(Tag.getTagsNameString(item.getTags()));
 		
 		timeTextView = (TextView)findViewById(R.id.timeTextView);
 		if (item.getConsumedDate() != -1 && item.getConsumedDate() != 0)
@@ -352,7 +352,7 @@ public class EditItemActivity extends Activity
 		}
 		
 		memberTextView = (TextView)findViewById(R.id.memberTextView);
-		memberTextView.setText(User.userListToString(item.getRelevantUsers()));
+		memberTextView.setText(User.getUsersNameString(item.getRelevantUsers()));
 		
 		invoiceImageView = (ImageView)findViewById(R.id.invoiceImageView);
 		invoiceImageView.setOnClickListener(new View.OnClickListener()
@@ -550,7 +550,7 @@ public class EditItemActivity extends Activity
 					final boolean[] check = Tag.getTagsCheck(tagList, item.getTags());
 					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
 														.setTitle(R.string.chooseTag)
-														.setMultiChoiceItems(Tag.getTagNames(tagList), 
+														.setMultiChoiceItems(Tag.getTagsName(tagList), 
 																check, new DialogInterface.OnMultiChoiceClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which, boolean isChecked)
@@ -571,7 +571,7 @@ public class EditItemActivity extends Activity
 																	}
 																}
 																item.setTags(tags);
-																tagTextView.setText(Tag.tagListToString(tags));
+																tagTextView.setText(Tag.getTagsNameString(tags));
 															}
 														})
 														.setNegativeButton(R.string.cancel, null)
@@ -662,7 +662,7 @@ public class EditItemActivity extends Activity
 					final boolean[] check = User.getUsersCheck(userList, item.getRelevantUsers());
 					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
 														.setTitle(R.string.member)
-														.setMultiChoiceItems(User.getUserNames(userList), 
+														.setMultiChoiceItems(User.getUsersName(userList), 
 																check, new DialogInterface.OnMultiChoiceClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which, boolean isChecked)
@@ -683,7 +683,7 @@ public class EditItemActivity extends Activity
 																	}
 																}
 																item.setRelevantUsers(users);
-																memberTextView.setText(User.userListToString(users));
+																memberTextView.setText(User.getUsersNameString(users));
 															}
 														})
 														.setNegativeButton(R.string.cancel, null)

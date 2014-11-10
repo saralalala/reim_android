@@ -7,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 import android.util.Log;
 import classes.AppPreference;
 import classes.Category;
@@ -51,6 +52,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			dbManager = new DBManager(context);
 		}
+		tempCommand();
 	}
 	
 	public static synchronized DBManager getDBManager()
@@ -62,11 +64,11 @@ public class DBManager extends SQLiteOpenHelper
 		return dbManager;
 	}
 
-	public void tempCommand()
+	public static void tempCommand()
 	{
 //		String sqlString = "DELETE FROM tbl_category WHERE group_id = 1";
 //		database.execSQL(sqlString);
-		String sqlString = "DROP TABLE IF EXISTS tbl_report";
+		String sqlString = "DROP TABLE IF EXISTS tbl_others_report";
 		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_others_item";
 //		database.execSQL(sqlString);	
@@ -82,7 +84,6 @@ public class DBManager extends SQLiteOpenHelper
 			{
 				database = getWritableDatabase();				
 			}
-			tempCommand();
 			createTables();
 			return true;
 		}
@@ -982,7 +983,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getOthersReport(getIntFromCursor(cursor, "report_server_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
-				item.setRelevantUsers(User.stringToUserList(getStringFromCursor(cursor, "users_id")));
+				item.setRelevantUsers(User.idStringToUserList(getStringFromCursor(cursor, "users_id")));
 				item.setTags(Tag.stringToTagList(getStringFromCursor(cursor, "tags_id")));
 				
 				return item;
@@ -1319,7 +1320,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getOthersReport(reportServerID));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
-				item.setRelevantUsers(User.stringToUserList(getStringFromCursor(cursor, "users_id")));
+				item.setRelevantUsers(User.idStringToUserList(getStringFromCursor(cursor, "users_id")));
 				item.setTags(Tag.stringToTagList(getStringFromCursor(cursor, "tags_id")));
 				
 				itemList.add(item);
@@ -1370,8 +1371,8 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + report.getTitle() + "'," +
 														"'" + report.getUser().getServerID() + "'," +
 														"'" + report.getStatus() + "'," +
-														"'" + User.userListToString(report.getManagerList()) + "'," +
-														"'" + User.userListToString(report.getCCList()) + "'," +
+														"'" + User.getUsersIDString(report.getManagerList()) + "'," +
+														"'" + User.getUsersIDString(report.getCCList()) + "'," +
 														"'" + report.getCreatedDate() + "'," +
 														"'" + report.getServerUpdatedDate() + "'," +
 														"'" + report.getLocalUpdatedDate() + "')";
@@ -1396,8 +1397,8 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + report.getTitle() + "'," +
 								"'" + report.getUser().getServerID() + "'," +
 								"'" + report.getStatus() + "'," +
-								"'" + User.userListToString(report.getManagerList()) + "'," +
-								"'" + User.userListToString(report.getCCList()) + "'," +
+								"'" + User.getUsersIDString(report.getManagerList()) + "'," +
+								"'" + User.getUsersIDString(report.getCCList()) + "'," +
 								"'" + report.getAmount() + "'," +
 								"'" + report.getItemCount() + "'," +
 								"'" + report.getCreatedDate() + "'," +
@@ -1422,8 +1423,8 @@ public class DBManager extends SQLiteOpenHelper
 								"title = '" + report.getTitle() + "'," +
 								"user_id = '" + report.getUser().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
-								"manager_id = '" + User.userListToString(report.getManagerList()) + "'," +
-								"cc_id = '" + User.userListToString(report.getCCList()) + "'," +
+								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
+								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
 								"created_date = '" + report.getCreatedDate() + "'," +
 								"server_updatedt = '" + report.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
@@ -1447,8 +1448,8 @@ public class DBManager extends SQLiteOpenHelper
 								"title = '" + report.getTitle() + "'," +
 								"user_id = '" + report.getUser().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
-								"manager_id = '" + User.userListToString(report.getManagerList()) + "'," +
-								"cc_id = '" + User.userListToString(report.getCCList()) + "'," +
+								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
+								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
 								"created_date = '" + report.getCreatedDate() + "'," +
 								"server_updatedt = '" + report.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
@@ -1526,8 +1527,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
-				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1557,8 +1558,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
-				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1588,8 +1589,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
-				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
 				report.setAmount(getStringFromCursor(cursor, "amount"));
@@ -1696,8 +1697,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
-				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1754,8 +1755,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
-				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1786,8 +1787,8 @@ public class DBManager extends SQLiteOpenHelper
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
 				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
-				report.setManagerList(User.stringToUserList(getStringFromCursor(cursor, "manager_id")));
-				report.setCCList(User.stringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
+				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
 				report.setAmount(getStringFromCursor(cursor, "amount"));
@@ -1807,19 +1808,15 @@ public class DBManager extends SQLiteOpenHelper
 		
 	public String getReportItemIDs(int reportLocalID)
 	{
-		String itemIDString = "";
+		List<Integer> idList = new ArrayList<Integer>();
 		Cursor cursor = database.rawQuery("SELECT server_id FROM tbl_item WHERE report_local_id = ?", 
 												new String[]{Integer.toString(reportLocalID)});
 		while (cursor.moveToNext())
 		{
-			itemIDString += getIntFromCursor(cursor, "server_id") + ",";
+			idList.add(getIntFromCursor(cursor, "server_id"));
 		}
 		
-		if (itemIDString.length() > 0)
-		{
-			itemIDString = itemIDString.substring(0, itemIDString.length()-1);
-		}
-		return itemIDString;
+		return TextUtils.join(",", idList);
 	}
 	
 	public int getLastInsertReportID()
