@@ -78,7 +78,7 @@ public class SplashActivity extends Activity
 		}
 		else
 		{
-			if (Utils.isNetworkConnected(this))
+			if (Utils.isNetworkConnected())
 			{
 				sendSignInRequest();
 			}

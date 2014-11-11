@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <EditText
-        android:id="@+id/nameEditText"
+        android:id="@+id/commentEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -14,6 +14,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:ems="10"
-        android:hint="@string/inputTagName" />
+        android:hint="@string/inputComment" />
 
 </RelativeLayout>

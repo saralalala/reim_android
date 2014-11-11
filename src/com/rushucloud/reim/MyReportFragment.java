@@ -162,7 +162,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
     	{
 			case 0:
 			{
-				if (!Utils.isNetworkConnected(getActivity()))
+				if (!Utils.isNetworkConnected())
 				{
 					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
 				}
@@ -198,7 +198,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 			}
 			case 1:
 			{
-				if (!Utils.isNetworkConnected(getActivity()))
+				if (!Utils.isNetworkConnected())
 				{
 					Toast.makeText(getActivity(), "网络未连接，无法导出", Toast.LENGTH_SHORT).show();
 				}
@@ -546,7 +546,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
 	private void syncReports()
 	{
-		if (Utils.canSyncToServer(getActivity()))
+		if (Utils.canSyncToServer())
 		{
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
@@ -568,7 +568,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
 	public void onRefresh()
 	{
-		if (Utils.canSyncToServer(getActivity()))
+		if (Utils.canSyncToServer())
 		{
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
@@ -603,7 +603,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
 	public void onLoadMore()
 	{
-		if (Utils.canSyncToServer(getActivity()))
+		if (Utils.canSyncToServer())
 		{
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{

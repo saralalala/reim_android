@@ -8,8 +8,15 @@ import netUtils.HttpConstant;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
 import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Report.CreateReportRequest;
+import netUtils.Request.Report.GetReportRequest;
+import netUtils.Request.Report.ModifyReportRequest;
 import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.Report.CreateReportResponse;
+import netUtils.Response.Report.GetReportResponse;
+import netUtils.Response.Report.ModifyReportResponse;
 import classes.AppPreference;
+import classes.Comment;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
@@ -73,6 +80,14 @@ public class EditReportActivity extends Activity
 		initData();
 		initView();
 		initButton();
+		if (report.getServerID() != -1 && Utils.isNetworkConnected())
+		{
+			sendGetReportRequest(report.getServerID());
+		}
+		else if (!Utils.isNetworkConnected())
+		{
+			
+		}
 	}
 	
 	protected void onResume()
@@ -101,7 +116,7 @@ public class EditReportActivity extends Activity
 
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.submit, menu);
+		getMenuInflater().inflate(R.menu.report_edit, menu);
 		return true;
 	}
 
@@ -111,7 +126,7 @@ public class EditReportActivity extends Activity
 		if (id == R.id.action_submit_item)
 		{
 			MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
-			if (!Utils.isNetworkConnected(this))
+			if (!Utils.isNetworkConnected())
 			{
 				Toast.makeText(this, "网络未连接，无法提交", Toast.LENGTH_SHORT).show();
 			}
@@ -198,6 +213,8 @@ public class EditReportActivity extends Activity
 	
 	private void initView()
 	{
+		ReimApplication.setProgressDialog(this);
+		
 		titleEditText = (EditText)findViewById(R.id.titleEditText);
 		titleEditText.setText(report.getTitle());
 		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
@@ -245,6 +262,33 @@ public class EditReportActivity extends Activity
 	
 	private void initButton()
 	{
+		Button addCommentButton = (Button)findViewById(R.id.addCommentButton);
+		addCommentButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (!Utils.isNetworkConnected())
+				{
+					Toast.makeText(EditReportActivity.this, "网络未连接，无法添加", Toast.LENGTH_SHORT).show();
+				}
+				else
+				{
+					showAddCommentDialog();
+				}
+			}
+		});
+
+		Button checkCommentButton = (Button)findViewById(R.id.checkCommentButton);
+		checkCommentButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				Intent intent = new Intent(EditReportActivity.this, CommentActivity.class);
+				intent.putExtra("reportLocalID", report.getLocalID());
+				startActivity(intent);
+			}
+		});
+		
 		Button managerButton = (Button)findViewById(R.id.managerButton);
 		managerButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -332,6 +376,42 @@ public class EditReportActivity extends Activity
     {
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
+    }
+
+    private void showAddCommentDialog()
+    {
+		View view = View.inflate(this, R.layout.report_comment_dialog, null);
+		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
+		commentEditText.requestFocus();
+		
+    	AlertDialog mDialog = new AlertDialog.Builder(this)
+								.setTitle("添加评论")
+								.setView(view)
+								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										String comment = commentEditText.getText().toString();
+										if (comment.equals(""))
+										{
+											Toast.makeText(EditReportActivity.this, "评论不能为空", Toast.LENGTH_SHORT).show();
+										}
+										else
+										{
+											if (report.getServerID() == -1)
+											{
+												sendCreateReportRequest(comment);
+											}
+											else
+											{
+												sendModifyReportRequest(comment);
+											}
+										}
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+		mDialog.show();
     }
     
     private void showManagerDialog()
@@ -477,7 +557,7 @@ public class EditReportActivity extends Activity
 									})
 									.create();
 			mDialog.show();
-			if (Utils.canSyncToServer(EditReportActivity.this))
+			if (Utils.canSyncToServer())
 			{
 				SyncUtils.syncAllToServer(new SyncDataCallback()
 				{
@@ -560,7 +640,7 @@ public class EditReportActivity extends Activity
 				mDialog.show();	
 			}
 			dbManager.updateReportByLocalID(report);
-			if (Utils.canSyncToServer(EditReportActivity.this))
+			if (Utils.canSyncToServer())
 			{
 				SyncUtils.syncAllToServer(null);
 			}
@@ -600,6 +680,171 @@ public class EditReportActivity extends Activity
 							memberAdapter.notifyDataSetChanged();
 						}
 					});	
+				}
+			}
+		});
+    }
+	
+    private void sendGetReportRequest(final int reportServerID)
+    {
+    	ReimApplication.showProgressDialog();
+    	GetReportRequest request = new GetReportRequest(reportServerID);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final GetReportResponse response = new GetReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					if (report.getLocalUpdatedDate() <= response.getReport().getServerUpdatedDate())
+					{
+						report.setManagerList(response.getReport().getManagerList());
+						report.setCCList(response.getReport().getCCList());
+						report.setCommentList(response.getReport().getCommentList());
+						dbManager.updateReportByLocalID(report);
+						
+						dbManager.deleteReportComments(report.getLocalID());
+						for (Comment comment : report.getCommentList())
+						{
+							comment.setReportID(report.getLocalID());
+							dbManager.insertComment(comment);
+						}
+					}
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							managerTextView.setText(report.getManagersName());		
+							ccTextView.setText(report.getCCsName());
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(EditReportActivity.this, "获取详细信息失败", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+			}
+		});
+    }
+    
+    private void sendCreateReportRequest(final String commentContent)
+    {
+    	ReimApplication.showProgressDialog();
+
+		report.setTitle(titleEditText.getText().toString());
+		report.setCreatedDate(Utils.getCurrentTime());
+		report.setLocalUpdatedDate(report.getCreatedDate());
+		dbManager.insertReport(report);
+		report.setLocalID(dbManager.getLastInsertReportID());
+		dbManager.updateReportItems(chosenItemIDList, report.getLocalID());    	
+    	
+    	CreateReportRequest request = new CreateReportRequest(report, commentContent);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final CreateReportResponse response = new CreateReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					int currentTime = Utils.getCurrentTime();
+					
+					report.setServerID(response.getReportID());
+					report.setServerUpdatedDate(currentTime);
+					report.setLocalUpdatedDate(currentTime);
+					dbManager.updateReportByLocalID(report);
+					
+					Comment comment = new Comment();
+					comment.setContent(commentContent);
+					comment.setCreatedDate(currentTime);
+					comment.setLocalUpdatedDate(currentTime);
+					comment.setServerUpdatedDate(currentTime);
+					comment.setReportID(report.getLocalID());
+					comment.setReviewer(currentUser);
+					dbManager.insertComment(comment);					
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{							
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(EditReportActivity.this, "评论发表成功", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(EditReportActivity.this, "评论发表失败, " + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+						}
+					});					
+				}
+			}
+		});
+    }
+    
+    private void sendModifyReportRequest(final String commentContent)
+    {
+    	ReimApplication.showProgressDialog();
+    	
+		report.setTitle(titleEditText.getText().toString());
+		dbManager.updateReportByLocalID(report);
+		dbManager.updateReportItems(chosenItemIDList, report.getLocalID());
+		
+    	ModifyReportRequest request = new ModifyReportRequest(report, commentContent);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					int currentTime = Utils.getCurrentTime();
+					
+					report.setServerUpdatedDate(currentTime);
+					report.setLocalUpdatedDate(currentTime);
+					dbManager.updateReportByLocalID(report);
+					
+					Comment comment = new Comment();
+					comment.setContent(commentContent);
+					comment.setCreatedDate(currentTime);
+					comment.setLocalUpdatedDate(currentTime);
+					comment.setServerUpdatedDate(currentTime);
+					comment.setReportID(report.getLocalID());
+					comment.setReviewer(currentUser);
+					dbManager.insertComment(comment);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(EditReportActivity.this, "评论发表成功", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(EditReportActivity.this, "评论发表失败, " + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+						}
+					});					
 				}
 			}
 		});

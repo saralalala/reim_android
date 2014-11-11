@@ -28,6 +28,7 @@ public class Report implements Serializable
 	private int status = 0;
 	private List<User> managerList = null;
 	private List<User> ccList = null;
+	private List<Comment> commentList = null;
 	private User user = null;
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
@@ -111,6 +112,15 @@ public class Report implements Serializable
 		this.ccList = ccList;
 	}
 
+	public List<Comment> getCommentList()
+	{
+		return commentList;
+	}
+	public void setCommentList(List<Comment> commentList)
+	{
+		this.commentList = commentList;
+	}
+	
 	public User getUser()
 	{
 		return user;

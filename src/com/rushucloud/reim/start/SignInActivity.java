@@ -38,7 +38,7 @@ public class SignInActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_sign_in);
-		viewIntialise();
+		initView();
 		initButton();
 	}
 
@@ -67,7 +67,7 @@ public class SignInActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private void viewIntialise()
+	private void initView()
 	{
 		String username = null;
 		String password = null;
@@ -94,6 +94,8 @@ public class SignInActivity extends Activity
 //		usernameEditText.setText("alvayang@1in1.cn");
 //		passwordEditText.setText("qqqqqq");
 		
+//		DBManager dbManager = DBManager.getDBManager();
+		
 		RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
 		{
@@ -112,8 +114,6 @@ public class SignInActivity extends Activity
 				finish();
 			}
 		});
-		
-		DBManager dbManager = DBManager.getDBManager();
 	}
 
 	private void initButton()
@@ -127,7 +127,7 @@ public class SignInActivity extends Activity
 				hideSoftKeyboard();
 				final String username = usernameEditText.getText().toString();
 				final String password = passwordEditText.getText().toString();
-				if (!Utils.isNetworkConnected(SignInActivity.this))
+				if (!Utils.isNetworkConnected())
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
 							.setTitle("错误").setMessage("未检测到网络连接")

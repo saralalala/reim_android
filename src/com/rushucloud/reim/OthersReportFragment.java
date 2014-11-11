@@ -104,7 +104,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
         initData();
         initView();
 		ReimApplication.dismissProgressDialog();
-		if (Utils.isNetworkConnected(getActivity()))
+		if (Utils.isNetworkConnected())
 		{
 			getSubordinatesReports();
 		}
@@ -371,7 +371,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 
 	public void onRefresh()
 	{
-		if (Utils.isNetworkConnected(getActivity()))
+		if (Utils.isNetworkConnected())
 		{
 			getSubordinatesReports();
 		}
@@ -390,7 +390,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 
 	public void onLoadMore()
 	{
-		if (Utils.isNetworkConnected(getActivity()))
+		if (Utils.isNetworkConnected())
 		{
 			getSubordinatesReports();
 		}

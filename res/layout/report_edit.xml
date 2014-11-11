@@ -15,55 +15,74 @@
         android:hint="@string/inputReportTitle" />
 
     <LinearLayout
+        android:id="@+id/commentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_below="@id/titleEditText" >
+
+        <Button
+            android:id="@+id/addCommentButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/addComment" />
+
+	    <Button
+	        android:id="@+id/checkCommentButton"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+            android:layout_weight="1"
+	        android:text="@string/checkComment" />
+        
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/managerLayout"
-        android:layout_below="@id/titleEditText"  >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/commentLayout"
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/managerTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-			android:layout_weight="1" />
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/managerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/chooseManager" />
-
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ccLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/ccLayout" 
-        android:layout_below="@id/managerLayout" >
+        android:layout_below="@id/managerLayout"
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/ccTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-			android:layout_weight="1" />
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/ccButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/chooseCC" />
-
     </LinearLayout>
 
     <ListView
         android:id="@+id/itemListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/saveButton"
+        android:layout_above="@+id/buttonLayout"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/ccLayout" >
-
     </ListView>
 
     <Button
@@ -75,20 +94,29 @@
         android:layout_marginBottom="60dp"
         android:background="@drawable/add_button" />
 
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="160dp"
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="@string/cancel" />
+        style="?android:attr/buttonBarStyle"
+        android:layout_alignParentBottom="true" >
 
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="@string/save" />
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/save" />
+        
+    </LinearLayout>
 
 </RelativeLayout>

@@ -72,12 +72,14 @@ public class DBManager extends SQLiteOpenHelper
 //		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_item";
 //		database.execSQL(sqlString);
+//		sqlString = "DROP TABLE IF EXISTS tbl_comment";
+//		database.execSQL(sqlString);	
 //		String sqlString = "DROP TABLE IF EXISTS tbl_others_report";
 //		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_others_item";
 //		database.execSQL(sqlString);
-//		sqlString = "DROP TABLE IF EXISTS tbl_comment";
-//		database.execSQL(sqlString);			
+//		sqlString = "DROP TABLE IF EXISTS tbl_others_comment";
+//		database.execSQL(sqlString);		
 	}
 	
 	public Boolean openDatabase()
@@ -271,6 +273,21 @@ public class DBManager extends SQLiteOpenHelper
 											+ "backup3 TEXT DEFAULT('')"
 											+ ")";
 			database.execSQL(createCommentTable);
+
+			String createOthersCommentTable="CREATE TABLE IF NOT EXISTS tbl_others_comment ("
+											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+											+ "server_id INT DEFAULT(0),"
+											+ "report_server_id INT DEFAULT(0),"
+											+ "user_id INT DEFAULT(0),"
+											+ "comment TEXT DEFAULT(''),"
+											+ "comment_date INT DEFAULT(0),"
+											+ "local_updatedt INT DEFAULT(0),"
+											+ "server_updatedt INT DEFAULT(0),"
+											+ "backup1 INT DEFAULT(0),"
+											+ "backup2 TEXT DEFAULT(''),"
+											+ "backup3 TEXT DEFAULT('')"
+											+ ")";
+			database.execSQL(createOthersCommentTable);
 
 			String createTagTable="CREATE TABLE IF NOT EXISTS tbl_tag ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -1433,7 +1450,7 @@ public class DBManager extends SQLiteOpenHelper
 								"server_updatedt = '" + report.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
 								"WHERE id = '" + report.getLocalID() + "'";			
-			database.execSQL(sqlString);			
+			database.execSQL(sqlString);
 			return true;
 		}
 		catch (Exception e)
@@ -1491,7 +1508,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "DELETE FROM tbl_others_report WHERE server_id = '" + reportServerID +"' AND manager_id = '" + managerID + "'";
+			String sqlString = "DELETE FROM tbl_others_report WHERE server_id = '" + reportServerID +"' AND owner_id = '" + managerID + "'";
 			database.execSQL(sqlString);			
 			return true;
 		}
@@ -1881,7 +1898,29 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + comment.getServerID() + "'," +
 								"'" + comment.getReportID() + "'," +
 								"'" + comment.getReviewer().getServerID() + "'," +
-								"'" + comment.getComment() + "'," +
+								"'" + comment.getContent() + "'," +
+								"'" + comment.getCreatedDate() + "'," +
+								"'" + comment.getServerUpdatedDate() + "'," +
+								"'" + comment.getLocalUpdatedDate() + "')";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	public Boolean insertOthersComment(Comment comment)
+	{
+		try
+		{
+			String sqlString = "INSERT INTO tbl_others_comment (server_id, report_server_id, user_id, comment, comment_date, " +
+								"server_updatedt, local_updatedt) VALUES (" + 
+								"'" + comment.getServerID() + "'," +
+								"'" + comment.getReportID() + "'," +
+								"'" + comment.getReviewer().getServerID() + "'," +
+								"'" + comment.getContent() + "'," +
 								"'" + comment.getCreatedDate() + "'," +
 								"'" + comment.getServerUpdatedDate() + "'," +
 								"'" + comment.getLocalUpdatedDate() + "')";
@@ -1902,7 +1941,7 @@ public class DBManager extends SQLiteOpenHelper
 								"server_id = '" + comment.getServerID() + "'," +
 								"report_local_id = '" + comment.getReportID() + "'," +
 								"user_id = '" + comment.getReviewer().getServerID() + "'," +
-								"comment = '" + comment.getComment() + "'," +
+								"comment = '" + comment.getContent() + "'," +
 								"comment_date = '" + comment.getCreatedDate() + "'," +
 								"server_updatedt = '" + comment.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + comment.getLocalUpdatedDate() + "' " +
@@ -1931,36 +1970,18 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Comment getComment(int commentLocalID)
+	public Boolean deleteOthersComment(int commentServerID)
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE id=?", 
-											new String[]{Integer.toString(commentLocalID)});
-
-			if (cursor.moveToNext())
-			{
-				Comment comment = new Comment();
-				comment.setLocalID(getIntFromCursor(cursor, "id"));
-				comment.setServerID(getIntFromCursor(cursor, "server_id"));
-				comment.setReviewer(getUser(getIntFromCursor(cursor, "user_id")));
-				comment.setReportID(getIntFromCursor(cursor, "report_local_id"));
-				comment.setComment(getStringFromCursor(cursor, "comment"));
-				comment.setCreatedDate(getIntFromCursor(cursor, "comment_date"));
-				comment.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
-				comment.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				
-				return comment;
-			}
-			else
-			{
-				return null;
-			}
+			String sqlString = "DELETE FROM tbl_others_comment WHERE server_id = '" + commentServerID +"'";
+			database.execSQL(sqlString);
+			return true;
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			return null;
+			return false;
 		}
 	}
 	
@@ -1979,13 +2000,27 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public List<Comment> getReportComments(int reportLocalID)
+	public Boolean deleteOthersReportComments(int reportServerID)
 	{
-		List<Comment> commentList = new ArrayList<Comment>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE report_local_id=?", 
-														new String[]{Integer.toString(reportLocalID)});
+			String sqlString = "DELETE FROM tbl_others_comment WHERE report_server_id = '" + reportServerID +"'";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Comment getComment(int commentLocalID)
+	{
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE id=?", 
+											new String[]{Integer.toString(commentLocalID)});
 
 			if (cursor.moveToNext())
 			{
@@ -1994,7 +2029,72 @@ public class DBManager extends SQLiteOpenHelper
 				comment.setServerID(getIntFromCursor(cursor, "server_id"));
 				comment.setReviewer(getUser(getIntFromCursor(cursor, "user_id")));
 				comment.setReportID(getIntFromCursor(cursor, "report_local_id"));
-				comment.setComment(getStringFromCursor(cursor, "comment"));
+				comment.setContent(getStringFromCursor(cursor, "comment"));
+				comment.setCreatedDate(getIntFromCursor(cursor, "comment_date"));
+				comment.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				comment.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				
+				return comment;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Comment> getReportComments(int reportLocalID)
+	{
+		List<Comment> commentList = new ArrayList<Comment>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE report_local_id=?", 
+														new String[]{Integer.toString(reportLocalID)});
+
+			while (cursor.moveToNext())
+			{
+				Comment comment = new Comment();
+				comment.setLocalID(getIntFromCursor(cursor, "id"));
+				comment.setServerID(getIntFromCursor(cursor, "server_id"));
+				comment.setReviewer(getUser(getIntFromCursor(cursor, "user_id")));
+				comment.setReportID(getIntFromCursor(cursor, "report_local_id"));
+				comment.setContent(getStringFromCursor(cursor, "comment"));
+				comment.setCreatedDate(getIntFromCursor(cursor, "comment_date"));
+				comment.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				comment.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				
+				commentList.add(comment);
+			}
+			return commentList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return commentList;
+		}		
+	}
+	
+	public List<Comment> getOthersReportComments(int reportServerID)
+	{
+		List<Comment> commentList = new ArrayList<Comment>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_comment WHERE report_server_id=?", 
+														new String[]{Integer.toString(reportServerID)});
+
+			while (cursor.moveToNext())
+			{
+				Comment comment = new Comment();
+				comment.setLocalID(getIntFromCursor(cursor, "id"));
+				comment.setServerID(getIntFromCursor(cursor, "server_id"));
+				comment.setReviewer(getUser(getIntFromCursor(cursor, "user_id")));
+				comment.setReportID(getIntFromCursor(cursor, "report_server_id"));
+				comment.setContent(getStringFromCursor(cursor, "comment"));
 				comment.setCreatedDate(getIntFromCursor(cursor, "comment_date"));
 				comment.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				comment.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));

@@ -11,6 +11,29 @@
         android:textSize="25sp"
         android:gravity="center_horizontal" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/buttonBarStyle" >
+
+        <Button
+            android:id="@+id/addCommentButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/addComment" />
+
+	    <Button
+	        android:id="@+id/checkCommentButton"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+	        android:text="@string/checkComment" />
+        
+    </LinearLayout>
+
     <TextView
         android:id="@+id/managerTextView"
         android:layout_width="match_parent"

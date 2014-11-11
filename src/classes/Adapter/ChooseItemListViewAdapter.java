@@ -34,7 +34,7 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 	{
 		if (convertView == null)
 		{
-			convertView = layoutInflater.inflate(R.layout.list_item_item, parent, false);
+			convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 		}
 
 		if (check[position])

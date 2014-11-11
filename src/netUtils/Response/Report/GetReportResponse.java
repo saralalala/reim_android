@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.Category;
+import classes.Comment;
 import classes.Item;
 import classes.Report;
 import classes.User;
@@ -63,6 +64,26 @@ public class GetReportResponse extends BaseResponse
 				ccList.add(dbManager.getUser(object.getInt("id")));
 			}
 			report.setCCList(ccList);
+			
+			JSONArray commentArray = jObject.getJSONObject("comments").getJSONArray("data");
+			List<Comment> commentList = new ArrayList<Comment>();
+			for (int i = 0; i < commentArray.length(); i++)
+			{
+				JSONObject object = commentArray.getJSONObject(i);
+				Comment comment = new Comment();
+				comment.setServerID(object.getInt("cid"));
+				comment.setContent(object.getString("comment"));
+				comment.setCreatedDate(object.getInt("lastdt"));
+				comment.setLocalUpdatedDate(object.getInt("lastdt"));
+				comment.setServerUpdatedDate(object.getInt("lastdt"));
+				
+				User reviewer = new User();
+				reviewer.setServerID(object.getInt("uid"));
+				comment.setReviewer(reviewer);
+				
+				commentList.add(comment);
+			}
+			report.setCommentList(commentList);
 			
 			itemList = new ArrayList<Item>();
 			JSONArray jsonArray = jObject.getJSONArray("items");

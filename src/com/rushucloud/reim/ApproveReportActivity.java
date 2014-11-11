@@ -9,9 +9,11 @@ import netUtils.Request.Report.ModifyReportRequest;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
 import classes.AppPreference;
+import classes.Comment;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
+import classes.User;
 import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
 import com.rushucloud.reim.R;
@@ -28,6 +30,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -91,7 +95,7 @@ public class ApproveReportActivity extends Activity
 		if (id == R.id.action_approve_item)
 		{
 			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_PASS_REPORT_DETAIL");
-			if (!Utils.isNetworkConnected(this))
+			if (!Utils.isNetworkConnected())
 			{
 				Toast.makeText(this, "网络未连接，无法审批", Toast.LENGTH_SHORT).show();
 			}
@@ -104,7 +108,7 @@ public class ApproveReportActivity extends Activity
 		if (id == R.id.action_reject_item)
 		{
 			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REJECT_REPORT_DETAIL");
-			if (!Utils.isNetworkConnected(this))
+			if (!Utils.isNetworkConnected())
 			{
 				Toast.makeText(this, "网络未连接，无法审批", Toast.LENGTH_SHORT).show();
 			}
@@ -144,6 +148,33 @@ public class ApproveReportActivity extends Activity
 	private void initView()
 	{
 		ReimApplication.setProgressDialog(this);
+
+		Button addCommentButton = (Button)findViewById(R.id.addCommentButton);
+		addCommentButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (!Utils.isNetworkConnected())
+				{
+					Toast.makeText(ApproveReportActivity.this, "网络未连接，无法添加", Toast.LENGTH_SHORT).show();
+				}
+				else
+				{
+					showAddCommentDialog();
+				}
+			}
+		});
+
+		Button checkCommentButton = (Button)findViewById(R.id.checkCommentButton);
+		checkCommentButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				Intent intent = new Intent(ApproveReportActivity.this, CommentActivity.class);
+				intent.putExtra("reportServerID", report.getServerID());	
+				startActivity(intent);
+			}
+		});
 		
 		titleTextView = (TextView)findViewById(R.id.titleTextView);
 		
@@ -170,7 +201,7 @@ public class ApproveReportActivity extends Activity
 
 	private void refreshView()
 	{
-		if (Utils.isNetworkConnected(this))
+		if (Utils.isNetworkConnected())
 		{
 			if (reportServerID == -1 && report == null)
 			{
@@ -209,10 +240,12 @@ public class ApproveReportActivity extends Activity
 				final GetReportResponse response = new GetReportResponse(httpResponse);
 				if (response.getStatus())
 				{ 
-					int managerID = AppPreference.getAppPreference().getCurrentUserID();
-					report = response.getReport();
+					int ownerID = AppPreference.getAppPreference().getCurrentUserID();
+					report.setManagerList(response.getReport().getManagerList());
+					report.setCCList(response.getReport().getCCList());
+					report.setCommentList(response.getReport().getCommentList());
 					
-					dbManager.deleteOthersReport(reportServerID, managerID);
+					dbManager.deleteOthersReport(reportServerID, ownerID);
 					dbManager.insertOthersReport(report);
 					
 					dbManager.deleteOthersReportItems(reportServerID);
@@ -221,6 +254,13 @@ public class ApproveReportActivity extends Activity
 						dbManager.insertOthersItem(item);
 					}
 					itemList = dbManager.getOthersReportItems(reportServerID);
+					
+					dbManager.deleteOthersReportComments(report.getServerID());
+					for (Comment comment : report.getCommentList())
+					{
+						comment.setReportID(report.getServerID());
+						dbManager.insertOthersComment(comment);
+					}
 					
 					runOnUiThread(new Runnable()
 					{
@@ -282,6 +322,84 @@ public class ApproveReportActivity extends Activity
 		});
     }
 
+    private void showAddCommentDialog()
+    {
+		View view = View.inflate(this, R.layout.report_comment_dialog, null);
+		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
+		commentEditText.requestFocus();
+		
+    	AlertDialog mDialog = new AlertDialog.Builder(this)
+								.setTitle("添加评论")
+								.setView(view)
+								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										String comment = commentEditText.getText().toString();
+										if (comment.equals(""))
+										{
+											Toast.makeText(ApproveReportActivity.this, "评论不能为空", Toast.LENGTH_SHORT).show();
+										}
+										else
+										{
+											sendModifyReportRequest(comment);
+										}
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+		mDialog.show();
+    }
+	
+    private void sendModifyReportRequest(final String commentContent)
+    {
+    	ReimApplication.showProgressDialog();
+		
+    	ModifyReportRequest request = new ModifyReportRequest(report, commentContent);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					User user = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());
+					int currentTime = Utils.getCurrentTime();
+					
+					Comment comment = new Comment();
+					comment.setContent(commentContent);
+					comment.setCreatedDate(currentTime);
+					comment.setLocalUpdatedDate(currentTime);
+					comment.setServerUpdatedDate(currentTime);
+					comment.setReportID(report.getServerID());
+					comment.setReviewer(user);
+					
+					dbManager.insertOthersComment(comment);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(ApproveReportActivity.this, "评论发表成功", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(ApproveReportActivity.this, "评论发表失败, " + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+						}
+					});					
+				}
+			}
+		});
+    }
+    
     private void saveReport(final int status)
     {
     	report.setStatus(status);

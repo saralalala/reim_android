@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp" >
+
+    <RelativeLayout
+        android:id="@+id/reviewerLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/avatarImageView"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:contentDescription="@string/avatar" />
+
+	    <TextView
+	        android:id="@+id/reviewerTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_toRightOf="@+id/avatarImageView"
+	        android:paddingLeft="5dp"
+	        android:textColor="#FF000000"
+	        android:textSize="13sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/commentTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/reviewerLayout"
+        android:layout_below="@+id/reviewerLayout"
+        android:paddingTop="5dp"
+        android:textColor="#FF000000"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/commentTextView"
+        android:textColor="#FF000000"
+        android:textSize="13sp" />
+
+</RelativeLayout>

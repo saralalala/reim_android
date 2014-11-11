@@ -519,7 +519,7 @@ public class EditItemActivity extends Activity
 				}
 				
 				hideSoftKeyboard();
-				if (Utils.isLocalisationEnabled(EditItemActivity.this))
+				if (Utils.isLocalisationEnabled())
 				{
 					getLocation();
 				}
@@ -714,7 +714,7 @@ public class EditItemActivity extends Activity
 					if (dbManager.syncItem(item))
 					{
 						Toast.makeText(EditItemActivity.this, "条目保存成功", Toast.LENGTH_SHORT);
-						if (Utils.canSyncToServer(EditItemActivity.this))
+						if (Utils.canSyncToServer())
 						{
 							SyncUtils.syncAllToServer(null);							
 						}

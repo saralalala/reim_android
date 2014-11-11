@@ -52,7 +52,7 @@ public class MeListViewAdapater extends BaseAdapter
 			{
 				Group group = dbManager.getGroup(appPreference.getCurrentGroupID());
 				
-				view = layoutInflater.inflate(R.layout.list_item_profile, null);
+				view = layoutInflater.inflate(R.layout.list_profile, null);
 				
 				ImageView imageView = (ImageView)view.findViewById(R.id.imageView);				
 				if (currentUser.getAvatarPath().equals(""))
@@ -110,7 +110,7 @@ public class MeListViewAdapater extends BaseAdapter
 //			}
 			case 1:
 			{
-				view = layoutInflater.inflate(R.layout.list_item_toggle, null);
+				view = layoutInflater.inflate(R.layout.list_toggle, null);
 				TextView textView = (TextView)view.findViewById(R.id.textView);
 				textView.setText(R.string.syncWithoutWifi);
 				final ToggleButton toggleButton = (ToggleButton)view.findViewById(R.id.toggleButton);
@@ -159,7 +159,7 @@ public class MeListViewAdapater extends BaseAdapter
 			}
 			case 6:
 			{
-				view = layoutInflater.inflate(R.layout.list_item_button, null);
+				view = layoutInflater.inflate(R.layout.list_button, null);
 				Button button = (Button)view.findViewById(R.id.button);
 				button.setText(fragment.getString(R.string.signOut));
 				button.setOnClickListener(new View.OnClickListener()

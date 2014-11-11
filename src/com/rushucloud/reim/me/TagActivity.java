@@ -89,7 +89,7 @@ public class TagActivity extends Activity
 		int id = item.getItemId();
 		if (id == R.id.action_add_item)
 		{
-			if (!Utils.isNetworkConnected(this))
+			if (!Utils.isNetworkConnected())
 			{
 				Toast.makeText(this, "网络未连接，无法添加", Toast.LENGTH_SHORT).show();
 			}
@@ -118,7 +118,7 @@ public class TagActivity extends Activity
 		{
 			case 0:
 			{
-				if (!Utils.isNetworkConnected(this))
+				if (!Utils.isNetworkConnected())
 				{
 					Toast.makeText(this, "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
 				}

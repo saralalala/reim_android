@@ -32,9 +32,9 @@ public class Utils
 			 
 	private static String regexPhone = "[1]+\\d{10}";
 
-	public static boolean isWiFiConnected(Context context)
+	public static boolean isWiFiConnected()
 	{
-		ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager manager = (ConnectivityManager)ReimApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		if (networkInfo != null)
 		{
@@ -46,9 +46,9 @@ public class Utils
 		}
 	}
 	
-	public static boolean isDataConnected(Context context)
+	public static boolean isDataConnected()
 	{
-		ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager manager = (ConnectivityManager)ReimApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 		if (networkInfo != null)
 		{
@@ -60,9 +60,9 @@ public class Utils
 		}
 	}
 	
-	public static boolean isNetworkConnected(Context context)
+	public static boolean isNetworkConnected()
 	{
-		ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager manager = (ConnectivityManager)ReimApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 		if (networkInfo != null)
 		{
@@ -74,23 +74,23 @@ public class Utils
 		}
 	}
 	
-	public static boolean isLocalisationEnabled(Context context)
+	public static boolean isLocalisationEnabled()
 	{
-		LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		LocationManager locationManager = (LocationManager)ReimApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
 		boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
 		return gpsEnabled || networkEnabled ? true :false;
 	}
 	
-	public static boolean canSyncToServer(Context context)
+	public static boolean canSyncToServer()
 	{
 		AppPreference appPreference = AppPreference.getAppPreference();
-		if (appPreference.syncOnlyWithWifi() && isWiFiConnected(context))
+		if (appPreference.syncOnlyWithWifi() && isWiFiConnected())
 		{
 			return true;
 		}
-		else if (!appPreference.syncOnlyWithWifi() && isDataConnected(context))
+		else if (!appPreference.syncOnlyWithWifi() && isDataConnected())
 		{
 			return true;
 		}

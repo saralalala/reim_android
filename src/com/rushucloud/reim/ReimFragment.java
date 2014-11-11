@@ -177,7 +177,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		switch (item.getItemId())
 		{
 			case 0:
-				if (!Utils.isNetworkConnected(getActivity()))
+				if (!Utils.isNetworkConnected())
 				{
 					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
 				}
@@ -552,7 +552,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 	private void syncItems()
 	{
-		if (Utils.canSyncToServer(getActivity()))
+		if (Utils.canSyncToServer())
 		{
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{

@@ -1,11 +1,15 @@
 package classes;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public class Comment
 {
 	private int localID = -1;
 	private int serverID = -1;
 	private int reportID = -1;
-	private String comment = "";
+	private String content = "";
 	private User reviewer = null;
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
@@ -38,13 +42,13 @@ public class Comment
 		this.reportID = reportID;
 	}
 	
-	public String getComment()
+	public String getContent()
 	{
-		return comment;
+		return content;
 	}
-	public void setComment(String comment)
+	public void setContent(String content)
 	{
-		this.comment = comment;
+		this.content = content;
 	}
 	
 	public User getReviewer()
@@ -82,4 +86,15 @@ public class Comment
 	{
 		this.localUpdatedDate = localUpdatedDate;
 	}
+    
+    public static void sortByCreateDate(List<Comment> commentList)
+    {
+    	Collections.sort(commentList, new Comparator<Comment>()
+		{
+			public int compare(Comment comment1, Comment comment2)
+			{
+				return (int)(comment2.getCreatedDate() - comment1.getCreatedDate());
+			}
+		});
+    }
 }

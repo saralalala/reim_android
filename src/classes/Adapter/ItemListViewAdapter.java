@@ -36,7 +36,7 @@ public class ItemListViewAdapter extends BaseAdapter
 	{
 		if (convertView == null)
 		{
-			convertView = layoutInflater.inflate(R.layout.list_item_item, parent, false);
+			convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 		}
 		
 		ImageView imageView = (ImageView)convertView.findViewById(R.id.photoImageView);

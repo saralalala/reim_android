@@ -46,7 +46,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 		{
 			case 0:
 			{
-				view = layoutInflater.inflate(R.layout.list_item_edittext, null);
+				view = layoutInflater.inflate(R.layout.list_edittext, null);
 				TextView textView = (TextView) view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.email));
 				EditText editText = (EditText) view.findViewById(R.id.editText);
@@ -56,7 +56,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 			}
 			case 1:
 			{
-				view = layoutInflater.inflate(R.layout.list_item_edittext, null);
+				view = layoutInflater.inflate(R.layout.list_edittext, null);
 				TextView textView = (TextView) view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.phone));
 				EditText editText = (EditText) view.findViewById(R.id.editText);
@@ -66,7 +66,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 			}
 			case 2:
 			{
-				view = layoutInflater.inflate(R.layout.list_item_edittext, null);
+				view = layoutInflater.inflate(R.layout.list_edittext, null);
 				TextView textView = (TextView) view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.nickname));
 				EditText editText = (EditText) view.findViewById(R.id.editText);
@@ -78,7 +78,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 			{
 				if (!user.isAdmin())
 				{
-					view = layoutInflater.inflate(R.layout.list_item_edittext, null);
+					view = layoutInflater.inflate(R.layout.list_edittext, null);
 					TextView textView = (TextView) view.findViewById(R.id.textView);
 					textView.setText(activity.getString(R.string.companyName));
 
@@ -97,7 +97,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				else
 				{
 					final Group group = dbManager.getGroup(appPreference.getCurrentGroupID());
-					view = layoutInflater.inflate(R.layout.list_item_text_button, null);
+					view = layoutInflater.inflate(R.layout.list_text_button, null);
 					TextView textView = (TextView) view.findViewById(R.id.textView);
 					textView.setText(activity.getString(R.string.companyName));
 
