@@ -71,6 +71,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
 	private WindowManager windowManager;
 	private LayoutParams params = new LayoutParams();
+	private AppPreference appPreference;
 	private DBManager dbManager;
 	private List<Report> mineList = new ArrayList<Report>();
 	private List<Report> showMineList = new ArrayList<Report>();
@@ -225,6 +226,11 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		{
 			dbManager = DBManager.getDBManager();			
 		}
+		
+		if (appPreference == null)
+		{
+			appPreference = AppPreference.getAppPreference();
+		}
     }
 
 	private void initView()
@@ -370,8 +376,6 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	
 	private List<Report> readMineReportList()
 	{
-		AppPreference appPreference = AppPreference.getAppPreference();
-		DBManager dbManager = DBManager.getDBManager();
 		return dbManager.getUserReports(appPreference.getCurrentUserID());
 	}
 	
@@ -388,7 +392,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
     {
 		View view = View.inflate(getActivity(), R.layout.report_export_dialog, null);
 		final EditText emailEditText = (EditText)view.findViewById(R.id.emailEditText);
-		User user = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());
+		User user = appPreference.getCurrentUser();
 		if (!user.getEmail().equals(""))
 		{
 			emailEditText.setText(user.getEmail());

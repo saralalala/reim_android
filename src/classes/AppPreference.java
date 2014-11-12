@@ -2,6 +2,8 @@ package classes;
 
 import com.avos.avoscloud.AVInstallation;
 
+import database.DBManager;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -90,6 +92,11 @@ public class AppPreference
 		this.currentUserID = currentUserID;
 	}	
 
+	public User getCurrentUser()
+	{
+		return DBManager.getDBManager().getUser(currentUserID);
+	}
+	
 	public int getCurrentGroupID()
 	{
 		return currentGroupID;

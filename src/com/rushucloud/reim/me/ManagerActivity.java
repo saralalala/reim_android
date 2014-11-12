@@ -118,8 +118,7 @@ public class ManagerActivity extends Activity
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 		
-		int currentUserID = appPreference.getCurrentUserID();
-		currentUser = dbManager.getUser(currentUserID);
+		currentUser = appPreference.getCurrentUser();
 		
     	int currentGroupID = appPreference.getCurrentGroupID();
 		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));

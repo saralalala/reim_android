@@ -25,7 +25,7 @@ public class Report implements Serializable
 	private int localID = -1;
 	private int serverID = -1;
 	private String title = "";
-	private int status = 0;
+	private int status = Report.STATUS_DRAFT;
 	private List<User> managerList = null;
 	private List<User> ccList = null;
 	private List<Comment> commentList = null;

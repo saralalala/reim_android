@@ -62,6 +62,8 @@ public class SyncDataResponse extends BaseResponse
 				item.setMerchant(object.getString("merchants"));
 				item.setNote(object.getString("note"));
 				item.setConsumedDate(object.getInt("dt"));
+				item.setStatus(object.getInt("status"));
+				item.setLocation(object.getString("location"));
 				item.setServerUpdatedDate(object.getInt("createdt"));		
 				item.setServerUpdatedDate(object.getInt("lastdt"));				
 				item.setLocalUpdatedDate(object.getInt("lastdt"));				

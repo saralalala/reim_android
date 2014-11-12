@@ -10,7 +10,6 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Comment;
-import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
 import classes.Adapter.CommentListViewAdapater;
@@ -44,7 +43,6 @@ public class CommentActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("CommentActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
 	}
 
 	protected void onPause()

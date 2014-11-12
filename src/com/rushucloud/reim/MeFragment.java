@@ -95,7 +95,7 @@ public class MeFragment extends Fragment
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-        currentUser = DBManager.getDBManager().getUser(AppPreference.getAppPreference().getCurrentUserID());
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         container.setOnKeyListener(listener);
 	    return view;

@@ -3,7 +3,9 @@ package com.rushucloud.reim;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.Request.Report.GetReportRequest;
 import netUtils.Request.Report.ModifyReportRequest;
+import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
 
 import classes.AppPreference;
@@ -36,6 +38,9 @@ import android.widget.AdapterView.OnItemClickListener;
 public class ShowReportActivity extends Activity
 {
 	private DBManager dbManager;
+
+	private TextView managerTextView;
+	private TextView ccTextView;
 	
 	private Report report;
 	private List<Item> itemList = null;
@@ -55,6 +60,7 @@ public class ShowReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ShowReportActivity");		
 		MobclickAgent.onResume(this);
+		refreshView();
 	}
 
 	protected void onPause()
@@ -134,10 +140,10 @@ public class ShowReportActivity extends Activity
 		TextView titleTextView = (TextView)findViewById(R.id.titleTextView);
 		titleTextView.setText(report.getTitle());
 		
-		TextView managerTextView = (TextView)findViewById(R.id.managerTextView);
+		managerTextView = (TextView)findViewById(R.id.managerTextView);
 		managerTextView.setText(report.getManagersName());		
 		
-		TextView ccTextView = (TextView)findViewById(R.id.ccTextView);
+		ccTextView = (TextView)findViewById(R.id.ccTextView);
 		ccTextView.setText(report.getCCsName());
 
 		ItemListViewAdapter adapter = new ItemListViewAdapter(ShowReportActivity.this, itemList);
@@ -162,6 +168,90 @@ public class ShowReportActivity extends Activity
 		});
 	}
 
+	private void refreshView()
+	{
+		if (Utils.isNetworkConnected())
+		{
+			sendGetReportRequest(report.getServerID());		
+		}
+		else
+		{
+			Toast.makeText(this, "网络未连接，无法获取详细信息", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+    private void sendGetReportRequest(final int reportServerID)
+    {
+    	ReimApplication.showProgressDialog();
+    	GetReportRequest request = new GetReportRequest(reportServerID);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final GetReportResponse response = new GetReportResponse(httpResponse);
+				if (response.getStatus())
+				{ 
+					int ownerID = AppPreference.getAppPreference().getCurrentUserID();
+					report.setManagerList(response.getReport().getManagerList());
+					report.setCCList(response.getReport().getCCList());
+					report.setCommentList(response.getReport().getCommentList());
+					
+					if (myReport)
+					{
+						dbManager.updateReportByLocalID(report);
+						
+						dbManager.deleteReportComments(report.getLocalID());
+						for (Comment comment : report.getCommentList())
+						{
+							comment.setReportID(report.getLocalID());
+							dbManager.insertComment(comment);
+						}
+					}
+					else
+					{
+						dbManager.deleteOthersReport(reportServerID, ownerID);
+						dbManager.insertOthersReport(report);
+						
+						dbManager.deleteOthersReportItems(reportServerID);
+						for (Item item : response.getItemList())
+						{
+							dbManager.insertOthersItem(item);
+						}
+						itemList = dbManager.getOthersReportItems(reportServerID);
+						
+						dbManager.deleteOthersReportComments(report.getServerID());
+						for (Comment comment : report.getCommentList())
+						{
+							comment.setReportID(report.getServerID());
+							dbManager.insertOthersComment(comment);
+						}						
+					}
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+					    	ReimApplication.dismissProgressDialog();
+							managerTextView.setText(report.getManagersName());
+							ccTextView.setText(report.getCCsName());
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+					    	ReimApplication.dismissProgressDialog();
+							Toast.makeText(ShowReportActivity.this, "获取详细信息失败", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+			}
+		});
+    }
+	
     private void showAddCommentDialog()
     {
 		View view = View.inflate(this, R.layout.report_comment_dialog, null);
@@ -182,7 +272,7 @@ public class ShowReportActivity extends Activity
 										}
 										else
 										{
-											sendModifyReportRequest(comment);
+											sendCommentRequest(comment);
 										}
 									}
 								})
@@ -191,7 +281,7 @@ public class ShowReportActivity extends Activity
 		mDialog.show();
     }
 	
-    private void sendModifyReportRequest(final String commentContent)
+    private void sendCommentRequest(final String commentContent)
     {
     	ReimApplication.showProgressDialog();
 		

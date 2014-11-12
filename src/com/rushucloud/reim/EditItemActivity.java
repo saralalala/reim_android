@@ -11,16 +11,24 @@ import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
 import netUtils.SyncUtils;
 import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Item.CreateItemRequest;
 import netUtils.Request.Item.GetVendorsRequest;
+import netUtils.Request.Item.ModifyItemRequest;
+import netUtils.Request.Report.CreateReportRequest;
 import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.Item.CreateItemResponse;
 import netUtils.Response.Item.GetVendorsResponse;
+import netUtils.Response.Item.ModifyItemResponse;
+import netUtils.Response.Report.CreateReportResponse;
 import classes.AppPreference;
 import classes.Category;
 import classes.Item;
 import classes.ReimApplication;
+import classes.Report;
 import classes.Tag;
 import classes.User;
 import classes.Utils;
+import classes.Adapter.MemberListViewAdapater;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -35,6 +43,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -53,11 +62,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -86,6 +98,7 @@ public class EditItemActivity extends Activity
 	private TextView memberTextView;
 	
 	private Item item;
+	private Report report;
 	private Uri originalImageUri;
 	
 	private List<String> vendorList = null;
@@ -260,6 +273,8 @@ public class EditItemActivity extends Activity
 	
 	private void initView()
 	{		
+		ReimApplication.setProgressDialog(this);
+		
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		if (item.getAmount() != 0)
 		{
@@ -320,6 +335,10 @@ public class EditItemActivity extends Activity
 				}
 			}
 		});
+		if (!fromReim)
+		{
+			proveAheadCheckBox.setEnabled(false);
+		}
 		
 		needReimCheckBox = (CheckBox)findViewById(R.id.needReimCheckBox);
 		needReimCheckBox.setChecked(item.needReimbursed());
@@ -703,30 +722,41 @@ public class EditItemActivity extends Activity
 			public void onClick(View v)
 			{
 				try
-				{
+				{			
+			    	hideSoftKeyboard();		
 					item.setAmount(Double.valueOf(amountEditText.getText().toString()));
-					item.setConsumer(dbManager.getUser(appPreference.getCurrentUserID()));
+					item.setConsumer(appPreference.getCurrentUser());
 					item.setNote(noteEditText.getText().toString());
 					item.setIsProveAhead(proveAheadCheckBox.isChecked());
 					item.setNeedReimbursed(needReimCheckBox.isChecked());
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					
-					if (dbManager.syncItem(item))
+					if (fromReim && item.isProveAhead())
 					{
-						Toast.makeText(EditItemActivity.this, "条目保存成功", Toast.LENGTH_SHORT);
-						if (Utils.canSyncToServer())
-						{
-							SyncUtils.syncAllToServer(null);							
-						}
-						goBack();
+						AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+											.setTitle("请选择操作")
+											.setMessage("这是一条预审批的条目，您是想仅保存此条目还是要直接发送给上级审批？")
+											.setPositiveButton(R.string.onlySave, new OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													saveItem();												
+												}
+											})
+											.setNeutralButton(R.string.sendToApprove, new OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													showManagerDialog();
+												}
+											})
+											.setNegativeButton(R.string.cancel, null)
+											.create();
+						mDialog.show();
 					}
 					else
 					{
-						AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-															.setTitle("保存失败")
-															.setNegativeButton(R.string.confirm, null)
-															.create();
-						mDialog.show();
+						saveItem();
 					}
 				}
 				catch (NumberFormatException e)
@@ -734,7 +764,7 @@ public class EditItemActivity extends Activity
 					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
 														.setTitle("保存失败")
 														.setMessage("数字输入格式不正确")
-														.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
+														.setNegativeButton(R.string.confirm, new OnClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which)
 															{
@@ -805,6 +835,207 @@ public class EditItemActivity extends Activity
     	option.setNeedDeviceDirect(false);
     	locationClient.setLocOption(option);
     	locationClient.start();
+    }
+    
+    private void saveItem()
+    {
+    	if (dbManager.syncItem(item))
+		{
+			Toast.makeText(EditItemActivity.this, "条目保存成功", Toast.LENGTH_SHORT).show();
+			if (Utils.canSyncToServer())
+			{
+				SyncUtils.syncAllToServer(null);							
+			}
+			goBack();
+		}
+		else
+		{
+			AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+												.setTitle("保存失败")
+												.setNegativeButton(R.string.confirm, null)
+												.create();
+			mDialog.show();
+		}
+    }
+    
+    private void showManagerDialog()
+    {
+		List<User> tempList = new ArrayList<User>();
+		User defaultManager = dbManager.getUser(appPreference.getCurrentUser().getDefaultManagerID());
+		if (defaultManager != null)
+		{
+			tempList.add(defaultManager);				
+		}
+		final List<User> memberList = User.removeCurrentUserFromList(userList);
+		final boolean[] managerCheckList = User.getUsersCheck(memberList, tempList);
+		
+		final MemberListViewAdapater memberAdapter = new MemberListViewAdapater(this, memberList, managerCheckList);
+    	View view = View.inflate(this, R.layout.profile_user, null);
+    	ListView userListView = (ListView) view.findViewById(R.id.userListView);
+    	userListView.setAdapter(memberAdapter);
+    	userListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				managerCheckList[position] = !managerCheckList[position];
+				memberAdapter.setCheck(managerCheckList);
+				memberAdapter.notifyDataSetChanged();
+			}
+		});
+
+    	AlertDialog mDialog = new AlertDialog.Builder(this)
+    							.setTitle("请选择汇报对象")
+    							.setView(view)
+    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										List<User> managerList = new ArrayList<User>();
+										for (int i = 0; i < managerCheckList.length; i++)
+										{
+											if (managerCheckList[i])
+											{
+												managerList.add(memberList.get(i));
+											}
+										}
+
+										if (managerList.size() == 0)
+										{
+											Toast.makeText(EditItemActivity.this, "未选择汇报对象", Toast.LENGTH_SHORT).show();
+										}
+										else
+										{
+											report = new Report();
+									    	report.setTitle("预审批的报告");
+									    	report.setStatus(Report.STATUS_SUBMITTED);
+									    	report.setUser(appPreference.getCurrentUser());
+									    	report.setCreatedDate(Utils.getCurrentTime());									    	
+											report.setManagerList(managerList);
+									    	dbManager.insertReport(report);
+									    	report.setLocalID(dbManager.getLastInsertReportID());					
+
+											ReimApplication.showProgressDialog();
+											if (newItem)
+											{
+												sendCreateItemRequest();
+											}
+											else
+											{
+												sendModifyItemRequest();
+											}											
+										}
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+    	mDialog.show();
+    }
+    
+    private void sendCreateItemRequest()
+    {
+    	CreateItemRequest request = new CreateItemRequest(item);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				CreateItemResponse response = new CreateItemResponse(httpResponse);
+				if (response.getStatus())
+				{
+					item.setLocalUpdatedDate(Utils.getCurrentTime());
+					item.setServerUpdatedDate(item.getLocalUpdatedDate());
+					item.setServerID(response.getItemID());
+					dbManager.insertItem(item);
+					item.setLocalID(dbManager.getLastInsertItemID());
+					sendApproveReportRequest();
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(EditItemActivity.this, "创建条目失败", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+			}
+		});
+    }
+    
+    private void sendModifyItemRequest()
+    {
+    	ModifyItemRequest request = new ModifyItemRequest(item);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				ModifyItemResponse response = new ModifyItemResponse(httpResponse);
+				if (response.getStatus())
+				{
+					item.setLocalUpdatedDate(Utils.getCurrentTime());
+					item.setServerUpdatedDate(item.getLocalUpdatedDate());
+					dbManager.updateItem(item);
+					sendApproveReportRequest();
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(EditItemActivity.this, "修改条目失败", Toast.LENGTH_SHORT).show();
+						}
+					});			
+				}
+			}
+		});
+    }
+    
+    private void sendApproveReportRequest()
+    {    	
+    	item.setBelongReport(report);
+    	dbManager.updateItem(item);    	
+    	
+    	CreateReportRequest request = new CreateReportRequest(report);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				CreateReportResponse response = new CreateReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					int currentTime = Utils.getCurrentTime();
+					report.setServerUpdatedDate(currentTime);
+					report.setLocalUpdatedDate(currentTime);
+					report.setServerID(response.getReportID());
+					dbManager.updateReportByLocalID(report);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(EditItemActivity.this, "创建审批报告成功", Toast.LENGTH_SHORT).show();
+							goBack();
+						}
+					});					
+				}
+				else
+				{
+					dbManager.deleteReport(report.getLocalID());
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(EditItemActivity.this, "创建审批报告失败", Toast.LENGTH_SHORT).show();
+						}
+					});								
+				}
+			}
+		});
     }
     
     private void sendVendorsRequest(String category, double latitude, double longitude)
@@ -885,22 +1116,6 @@ public class EditItemActivity extends Activity
 											.create();
 		mDialog.show();
     }
-
-	private void goBack()
-	{
-		if (fromReim)
-		{
-	    	ReimApplication.setTabIndex(0);
-	    	Intent intent = new Intent(EditItemActivity.this, MainActivity.class);
-	    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	    	startActivity(intent);
-	    	finish();
-		}
-		else
-		{
-			finish();
-		}
-	}
     
     public class ReimLocationListener implements BDLocationListener
     {
@@ -921,4 +1136,20 @@ public class EditItemActivity extends Activity
     		}
     	}
     }
+
+	private void goBack()
+	{
+		if (fromReim)
+		{
+	    	ReimApplication.setTabIndex(0);
+	    	Intent intent = new Intent(EditItemActivity.this, MainActivity.class);
+	    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    	startActivity(intent);
+	    	finish();
+		}
+		else
+		{
+			finish();
+		}
+	}
 }

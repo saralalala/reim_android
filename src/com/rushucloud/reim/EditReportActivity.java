@@ -80,14 +80,6 @@ public class EditReportActivity extends Activity
 		initData();
 		initView();
 		initButton();
-		if (report.getServerID() != -1 && Utils.isNetworkConnected())
-		{
-			sendGetReportRequest(report.getServerID());
-		}
-		else if (!Utils.isNetworkConnected())
-		{
-			
-		}
 	}
 	
 	protected void onResume()
@@ -95,7 +87,7 @@ public class EditReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EditReportActivity");		
 		MobclickAgent.onResume(this);
-		refreshListView();
+		refreshView();
 	}
 
 	protected void onPause()
@@ -181,7 +173,7 @@ public class EditReportActivity extends Activity
 			// new report from ReportFragment
 			report = new Report();
 			report.setStatus(Report.STATUS_DRAFT);
-			report.setUser(dbManager.getUser(appPreference.getCurrentUserID()));
+			report.setUser(appPreference.getCurrentUser());
 			chosenItemIDList = new ArrayList<Integer>();
 			remainingItemIDList = Item.getItemsIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
 			itemList = new ArrayList<Item>();
@@ -205,7 +197,7 @@ public class EditReportActivity extends Activity
 			}
 		}
 
-    	currentUser = dbManager.getUser(appPreference.getCurrentUserID());
+    	currentUser = appPreference.getCurrentUser();
     	
     	int currentGroupID = appPreference.getCurrentGroupID();
 		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
@@ -366,10 +358,15 @@ public class EditReportActivity extends Activity
 		});
 	}
 	
-	private void refreshListView()
+	private void refreshView()
 	{
 		adapter.set(itemList);
 		adapter.notifyDataSetChanged();
+		
+		if (report.getServerID() != -1 && Utils.isNetworkConnected())
+		{
+			sendGetReportRequest(report.getServerID());
+		}
 	}	
 	
     private void hideSoftKeyboard()
@@ -420,7 +417,11 @@ public class EditReportActivity extends Activity
 		if (report.getManagerList() == null)
 		{
 			List<User> tempList = new ArrayList<User>();
-			tempList.add(dbManager.getUser(currentUser.getDefaultManagerID()));
+			User defaultManager = dbManager.getUser(currentUser.getDefaultManagerID());
+			if (defaultManager != null)
+			{
+				tempList.add(defaultManager);				
+			}
 			managerCheckList = User.getUsersCheck(userList, tempList);
 		}
 		else
@@ -478,7 +479,7 @@ public class EditReportActivity extends Activity
     private void showCCDialog()
     {
     	hideSoftKeyboard();
-		ccCheckList = User.getUsersCheck(userList, report.getCCList());
+    	ccCheckList = User.getUsersCheck(userList, report.getCCList());
 		
     	memberAdapter = new MemberListViewAdapater(this, userList, ccCheckList);
     	View view = View.inflate(this, R.layout.profile_user, null);
@@ -597,7 +598,10 @@ public class EditReportActivity extends Activity
 		{
 			if (!report.hasItems())
 			{
-				report.setStatus(Report.STATUS_DRAFT);
+				if (report.getStatus() != Report.STATUS_REJECTED)
+				{
+					report.setStatus(Report.STATUS_DRAFT);					
+				}
 				AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
 											.setTitle("无法提交报告")
 											.setMessage("此报告为空报告")

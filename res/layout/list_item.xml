@@ -17,31 +17,36 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/photoImageView"
+        android:layout_toLeftOf="@+id/detailLayout"
         android:paddingLeft="10dp"
         android:orientation="vertical" 
         android:id="@+id/titleLayout" >
 
         <TextView
             android:id="@+id/reportTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#FF000000"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textSize="13sp" />
 
         <TextView
             android:id="@+id/vendorTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#FF000000"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textSize="22sp" />
     </LinearLayout>
 
     <LinearLayout
+       	android:id="@+id/detailLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/titleLayout"
         android:gravity="right"
         android:orientation="vertical" >
 

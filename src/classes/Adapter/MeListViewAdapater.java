@@ -45,7 +45,7 @@ public class MeListViewAdapater extends BaseAdapter
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View view = null;
-		final User currentUser = dbManager.getUser(appPreference.getCurrentUserID());
+		final User currentUser = appPreference.getCurrentUser();
 		switch (position)
 		{
 			case 0:

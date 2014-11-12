@@ -33,7 +33,6 @@ public class ProfileActivity extends Activity
 	private ListView profileListView;
 	private ProfileListViewAdapater adapter;
 
-	private DBManager dbManager;
 	private User currentUser;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -88,8 +87,7 @@ public class ProfileActivity extends Activity
 	
 	private void initData()
 	{
-		dbManager = DBManager.getDBManager();
-		currentUser = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());
+		currentUser = AppPreference.getAppPreference().getCurrentUser();
 	}
 	
 	private void initView()

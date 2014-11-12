@@ -66,7 +66,7 @@ public class DBManager extends SQLiteOpenHelper
 
 	public static void tempCommand()
 	{
-//		String sqlString = "DELETE FROM tbl_category WHERE group_id = 1";
+//		String sqlString = "DELETE FROM tbl_report WHERE id = 13";
 //		database.execSQL(sqlString);
 //		String sqlString = "DROP TABLE IF EXISTS tbl_report";
 //		database.execSQL(sqlString);
@@ -74,7 +74,7 @@ public class DBManager extends SQLiteOpenHelper
 //		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_comment";
 //		database.execSQL(sqlString);	
-//		String sqlString = "DROP TABLE IF EXISTS tbl_others_report";
+//		sqlString = "DROP TABLE IF EXISTS tbl_others_report";
 //		database.execSQL(sqlString);
 //		sqlString = "DROP TABLE IF EXISTS tbl_others_item";
 //		database.execSQL(sqlString);
@@ -130,11 +130,13 @@ public class DBManager extends SQLiteOpenHelper
 									+ "user_id INT DEFAULT(0),"
 									+ "consumed_date INT DEFAULT(0),"
 									+ "note TEXT DEFAULT(''),"
+									+ "prove_ahead INT DEFAULT(0),"
+									+ "need_reimbursed INT DEFAULT(0),"
+									+ "status INT DEFAULT(0),"
+									+ "location TEXT DEFAULT(''),"
 									+ "createdt INT DEFAULT(0),"
 									+ "server_updatedt INT DEFAULT(0),"
 									+ "local_updatedt INT DEFAULT(0),"
-									+ "prove_ahead INT DEFAULT(0),"
-									+ "need_reimbursed INT DEFAULT(0),"
 									+ "backup1 INT DEFAULT(0),"
 									+ "backup2 TEXT DEFAULT(''),"
 									+ "backup3 TEXT DEFAULT('')"
@@ -177,11 +179,13 @@ public class DBManager extends SQLiteOpenHelper
 									+ "user_id INT DEFAULT(0),"
 									+ "consumed_date INT DEFAULT(0),"
 									+ "note TEXT DEFAULT(''),"
+									+ "prove_ahead INT DEFAULT(0),"
+									+ "need_reimbursed INT DEFAULT(0),"
+									+ "status INT DEFAULT(0),"
+									+ "location TEXT DEFAULT(''),"
 									+ "createdt INT DEFAULT(0),"
 									+ "server_updatedt INT DEFAULT(0),"
 									+ "local_updatedt INT DEFAULT(0),"
-									+ "prove_ahead INT DEFAULT(0),"
-									+ "need_reimbursed INT DEFAULT(0),"
 									+ "backup1 INT DEFAULT(0),"
 									+ "backup2 TEXT DEFAULT(''),"
 									+ "backup3 TEXT DEFAULT('')"
@@ -642,8 +646,8 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
-			String sqlString = "INSERT INTO tbl_item (server_id, image_id, invoice_path, merchant, report_local_id, " +
-							   							"category_id, amount, user_id, consumed_date, note, createdt, " +
+			String sqlString = "INSERT INTO tbl_item (server_id, image_id, invoice_path, merchant, report_local_id, category_id, " +
+							   							"amount, user_id, consumed_date, note, status, location, createdt, " +
 							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed) VALUES (" + 
 														"'" + item.getServerID() + "'," +
 														"'" + item.getImageID() + "'," +
@@ -655,6 +659,8 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + item.getConsumer().getServerID() + "'," +
 														"'" + item.getConsumedDate() + "'," +
 														"'" + item.getNote() + "'," +
+														"'" + item.getStatus() + "'," +
+														"'" + item.getLocation() + "'," +
 														"'" + item.getCreatedDate() + "'," +
 														"'" + item.getServerUpdatedDate() + "'," +
 														"'" + item.getLocalUpdatedDate() + "'," +
@@ -683,8 +689,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
-			String sqlString = "INSERT INTO tbl_others_item (server_id, image_id, invoice_path, merchant, report_server_id, " +
-							   							"category_id, tags_id, users_id, amount, user_id, consumed_date, note, createdt, " +
+			String sqlString = "INSERT INTO tbl_others_item (server_id, image_id, invoice_path, merchant, report_server_id, category_id, " +
+							   							"tags_id, users_id, amount, user_id, consumed_date, note, status, location, createdt, " +
 							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed) VALUES (" + 
 														"'" + item.getServerID() + "'," +
 														"'" + item.getImageID() + "'," +
@@ -698,6 +704,8 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + item.getConsumer().getServerID() + "'," +
 														"'" + item.getConsumedDate() + "'," +
 														"'" + item.getNote() + "'," +
+														"'" + item.getStatus() + "'," +
+														"'" + item.getLocation() + "'," +
 														"'" + item.getCreatedDate() + "'," +
 														"'" + item.getServerUpdatedDate() + "'," +
 														"'" + item.getLocalUpdatedDate() + "'," +
@@ -742,6 +750,8 @@ public class DBManager extends SQLiteOpenHelper
 								"user_id = '" + item.getConsumer().getServerID() + "'," +
 								"consumed_date = '" + item.getConsumedDate() + "'," +
 								"note = '" + item.getNote() + "'," +
+								"status = '" + item.getStatus() + "'," +
+								"location = '" + item.getLocation() + "'," +
 								"createdt = '" + item.getCreatedDate() + "'," +
 								"server_updatedt = '" + item.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
@@ -778,6 +788,8 @@ public class DBManager extends SQLiteOpenHelper
 								"user_id = '" + item.getConsumer().getServerID() + "'," +
 								"consumed_date = '" + item.getConsumedDate() + "'," +
 								"note = '" + item.getNote() + "'," +
+								"status = '" + item.getStatus() + "'," +
+								"location = '" + item.getLocation() + "'," +
 								"createdt = '" + item.getCreatedDate() + "'," +
 								"server_updatedt = '" + item.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
@@ -910,6 +922,8 @@ public class DBManager extends SQLiteOpenHelper
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setStatus(getIntFromCursor(cursor, "status"));
+				item.setLocation(getStringFromCursor(cursor, "location"));
 				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -952,6 +966,8 @@ public class DBManager extends SQLiteOpenHelper
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setStatus(getIntFromCursor(cursor, "status"));
+				item.setLocation(getStringFromCursor(cursor, "location"));
 				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -995,6 +1011,8 @@ public class DBManager extends SQLiteOpenHelper
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setStatus(getIntFromCursor(cursor, "status"));
+				item.setLocation(getStringFromCursor(cursor, "location"));
 				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1038,6 +1056,8 @@ public class DBManager extends SQLiteOpenHelper
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setStatus(getIntFromCursor(cursor, "status"));
+				item.setLocation(getStringFromCursor(cursor, "location"));
 				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1068,7 +1088,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
-												"(report_local_id = -1 OR report_local_id = 0)", 
+												"(report_local_id = -1 OR report_local_id = 0) AND " +
+												"(prove_ahead = 0 OR (prove_ahead AND status = 5))", 
 													new String[]{Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())
@@ -1081,6 +1102,8 @@ public class DBManager extends SQLiteOpenHelper
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setStatus(getIntFromCursor(cursor, "status"));
+				item.setLocation(getStringFromCursor(cursor, "location"));
 				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1124,6 +1147,8 @@ public class DBManager extends SQLiteOpenHelper
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setStatus(getIntFromCursor(cursor, "status"));
+				item.setLocation(getStringFromCursor(cursor, "location"));
 				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1290,6 +1315,8 @@ public class DBManager extends SQLiteOpenHelper
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setStatus(getIntFromCursor(cursor, "status"));
+				item.setLocation(getStringFromCursor(cursor, "location"));
 				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1332,6 +1359,8 @@ public class DBManager extends SQLiteOpenHelper
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
+				item.setStatus(getIntFromCursor(cursor, "status"));
+				item.setLocation(getStringFromCursor(cursor, "location"));
 				item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));

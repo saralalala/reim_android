@@ -145,7 +145,96 @@ public abstract class SyncUtils
 			}
 		}
     }
-        
+    
+    private static void sendUploadImageRequest(final Item item, final SyncDataCallback callback)
+    {
+		UploadImageRequest request = new UploadImageRequest(item.getInvoicePath(), HttpConstant.IMAGE_TYPE_INVOICE);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final UploadImageResponse response = new UploadImageResponse(httpResponse);
+				if (response.getStatus())
+				{
+					item.setImageID(response.getImageID());
+					DBManager.getDBManager().updateItem(item);
+				}
+				if (item.getServerID() == -1)
+				{
+					sendCreateItemRequest(item, callback);
+				}
+				else
+				{
+					sendUpdateItemRequest(item, callback);
+				}
+			}
+		});
+    }
+    
+    private static void sendCreateItemRequest(final Item item, final SyncDataCallback callback)
+    {
+		CreateItemRequest request = new CreateItemRequest(item);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final CreateItemResponse response = new CreateItemResponse(httpResponse);
+				if (response.getStatus())
+				{
+					item.setLocalUpdatedDate(Utils.getCurrentTime());
+					item.setServerUpdatedDate(item.getLocalUpdatedDate());
+					item.setServerID(response.getItemID());
+					DBManager.getDBManager().updateItem(item);
+					itemTaskCount--;
+					if (itemTaskCount == 0)
+					{
+						syncReportsToServer(callback);
+					}
+				}
+				else
+				{
+					itemTaskCount--;
+					if (itemTaskCount == 0)
+					{
+						syncReportsToServer(callback);
+					}
+				}
+			}
+		});
+    }
+
+    private static void sendUpdateItemRequest(final Item item, final SyncDataCallback callback)
+    {
+		ModifyItemRequest request = new ModifyItemRequest(item);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final ModifyItemResponse response = new ModifyItemResponse(httpResponse);
+				if (response.getStatus())
+				{
+					item.setLocalUpdatedDate(Utils.getCurrentTime());
+					item.setServerUpdatedDate(item.getLocalUpdatedDate());
+					item.setServerID(response.getItemID());
+					DBManager.getDBManager().updateItem(item);
+					itemTaskCount--;
+					if (itemTaskCount == 0)
+					{
+						syncReportsToServer(callback);
+					}
+				}
+				else
+				{
+					itemTaskCount--;
+					if (itemTaskCount == 0)
+					{
+						syncReportsToServer(callback);
+					}		
+				}
+			}
+		});
+    }
+    
     private static void sendCreateReportRequest(final Report report, final SyncDataCallback callback)
     {
     	CreateReportRequest request = new CreateReportRequest(report);
@@ -216,95 +305,6 @@ public abstract class SyncUtils
 							callback.execute();				
 						}
 					}
-				}
-			}
-		});
-    }
-    
-    private static void sendCreateItemRequest(final Item item, final SyncDataCallback callback)
-    {
-		CreateItemRequest request = new CreateItemRequest(item);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final CreateItemResponse response = new CreateItemResponse(httpResponse);
-				if (response.getStatus())
-				{
-					item.setLocalUpdatedDate(Utils.getCurrentTime());
-					item.setServerUpdatedDate(item.getLocalUpdatedDate());
-					item.setServerID(response.getItemID());
-					DBManager.getDBManager().updateItem(item);
-					itemTaskCount--;
-					if (itemTaskCount == 0)
-					{
-						syncReportsToServer(callback);
-					}
-				}
-				else
-				{
-					itemTaskCount--;
-					if (itemTaskCount == 0)
-					{
-						syncReportsToServer(callback);
-					}
-				}
-			}
-		});
-    }
-
-    private static void sendUpdateItemRequest(final Item item, final SyncDataCallback callback)
-    {
-		ModifyItemRequest request = new ModifyItemRequest(item);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ModifyItemResponse response = new ModifyItemResponse(httpResponse);
-				if (response.getStatus())
-				{
-					item.setLocalUpdatedDate(Utils.getCurrentTime());
-					item.setServerUpdatedDate(item.getLocalUpdatedDate());
-					item.setServerID(response.getItemID());
-					DBManager.getDBManager().updateItem(item);
-					itemTaskCount--;
-					if (itemTaskCount == 0)
-					{
-						syncReportsToServer(callback);
-					}
-				}
-				else
-				{
-					itemTaskCount--;
-					if (itemTaskCount == 0)
-					{
-						syncReportsToServer(callback);
-					}		
-				}
-			}
-		});
-    }
-    
-    private static void sendUploadImageRequest(final Item item, final SyncDataCallback callback)
-    {
-		UploadImageRequest request = new UploadImageRequest(item.getInvoicePath(), HttpConstant.IMAGE_TYPE_INVOICE);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final UploadImageResponse response = new UploadImageResponse(httpResponse);
-				if (response.getStatus())
-				{
-					item.setImageID(response.getImageID());
-					DBManager.getDBManager().updateItem(item);
-				}
-				if (item.getServerID() == -1)
-				{
-					sendCreateItemRequest(item, callback);
-				}
-				else
-				{
-					sendUpdateItemRequest(item, callback);
 				}
 			}
 		});

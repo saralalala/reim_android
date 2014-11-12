@@ -248,6 +248,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				public void onClick(View v)
 				{
 					Intent intent = new Intent(getActivity(), EditItemActivity.class);
+					intent.putExtra("fromReim", true);
 					startActivity(intent);
 				}
 			});
@@ -435,8 +436,6 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 	private List<Item> readItemList()
 	{
-		AppPreference appPreference = AppPreference.getAppPreference();
-		DBManager dbManager = DBManager.getDBManager();
 		return dbManager.getUserItems(appPreference.getCurrentUserID());
 	}
 

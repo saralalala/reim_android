@@ -16,6 +16,7 @@ import classes.Report;
 import classes.User;
 import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
+
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -39,6 +40,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class ApproveReportActivity extends Activity
 {
+	private AppPreference appPreference;
 	private DBManager dbManager;
 	
 	private TextView titleTextView;
@@ -123,6 +125,7 @@ public class ApproveReportActivity extends Activity
 	
 	private void initData()
 	{
+		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 		
 		Bundle bundle = getIntent().getExtras();
@@ -240,7 +243,7 @@ public class ApproveReportActivity extends Activity
 				final GetReportResponse response = new GetReportResponse(httpResponse);
 				if (response.getStatus())
 				{ 
-					int ownerID = AppPreference.getAppPreference().getCurrentUserID();
+					int ownerID = appPreference.getCurrentUserID();
 					report.setManagerList(response.getReport().getManagerList());
 					report.setCCList(response.getReport().getCCList());
 					report.setCommentList(response.getReport().getCommentList());
@@ -342,7 +345,7 @@ public class ApproveReportActivity extends Activity
 										}
 										else
 										{
-											sendModifyReportRequest(comment);
+											sendCommentRequest(comment);
 										}
 									}
 								})
@@ -351,7 +354,7 @@ public class ApproveReportActivity extends Activity
 		mDialog.show();
     }
 	
-    private void sendModifyReportRequest(final String commentContent)
+    private void sendCommentRequest(final String commentContent)
     {
     	ReimApplication.showProgressDialog();
 		
@@ -363,7 +366,7 @@ public class ApproveReportActivity extends Activity
 				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
 				if (response.getStatus())
 				{
-					User user = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());
+					User user = appPreference.getCurrentUser();
 					int currentTime = Utils.getCurrentTime();
 					
 					Comment comment = new Comment();
@@ -402,7 +405,9 @@ public class ApproveReportActivity extends Activity
     
     private void saveReport(final int status)
     {
+    	ReimApplication.showProgressDialog();
     	report.setStatus(status);
+    	
     	ModifyReportRequest request = new ModifyReportRequest(report);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -414,7 +419,7 @@ public class ApproveReportActivity extends Activity
 					report.setLocalUpdatedDate(Utils.getCurrentTime());
 					report.setServerUpdatedDate(report.getLocalUpdatedDate());
 
-					int managerID = AppPreference.getAppPreference().getCurrentUserID();
+					int managerID = appPreference.getCurrentUserID();
 					dbManager.deleteOthersReport(reportServerID, managerID);
 					dbManager.deleteOthersReportItems(reportServerID);
 					

@@ -40,6 +40,8 @@ public class SearchItemsResponse extends BaseResponse
 				item.setAmount(object.getDouble("amount"));
 				item.setMerchant(object.getString("merchants"));
 				item.setNote(object.getString("note"));
+				item.setStatus(object.getInt("status"));
+				item.setLocation(object.getString("location"));
 				item.setConsumedDate(object.getInt("dt"));
 				item.setServerUpdatedDate(object.getInt("lastdt"));				
 				item.setLocalUpdatedDate(object.getInt("lastdt"));				

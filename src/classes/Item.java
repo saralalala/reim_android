@@ -6,7 +6,14 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Item
-{	
+{		
+	public static final int STATUS_DRAFT = 0;
+	public static final int STATUS_SUBMITTED = 1;
+	public static final int STATUS_APPROVED = 2;
+	public static final int STATUS_REJECTED = 3;
+	public static final int STATUS_FINISHED = 4;
+	public static final int STATUS_PROVE_AHEAD_APPROVED = 5;
+	
 	private int localID = -1;
 	private int serverID = -1;
 	private int imageID = -1;
@@ -21,6 +28,8 @@ public class Item
 	private String note = "";
 	private Boolean isProveAhead = false;
 	private Boolean needReimbursed = false;
+	private int status = STATUS_DRAFT;
+	private String location = "";
 	private List<User> relevantUsers = null;
 	private List<Tag> tags = null;
 	private String relevantUsersID = "";
@@ -200,6 +209,24 @@ public class Item
 		this.needReimbursed = needReimbursed;
 	}
 
+	public int getStatus()
+	{
+		return status;
+	}
+	public void setStatus(int status)
+	{
+		this.status = status;
+	}
+	
+	public String getLocation()
+	{
+		return location;
+	}
+	public void setLocation(String location)
+	{
+		this.location = location;
+	}
+	
 	public String getRelevantUsersID()
 	{
 		return relevantUsersID;
