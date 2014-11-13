@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" 
     android:id="@+id/baseLayout"
-    android:background="#f3f4f5" >
+    android:background="@color/list_background" >
 
     <classes.XListView
         android:id="@+id/itemListView"
