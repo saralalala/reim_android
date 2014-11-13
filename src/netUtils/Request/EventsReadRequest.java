@@ -10,6 +10,11 @@ import netUtils.HttpConnectionCallback;
 
 public class EventsReadRequest extends BaseRequest
 {
+	public final static int TYPE_REPORT = 0;
+	public final static int TYPE_INVITE = 1;
+	public final static int TYPE_MANAGER = 2;
+	public final static int TYPE_MEMBER = 3;
+	
 	public EventsReadRequest(int type)
 	{
 		super();

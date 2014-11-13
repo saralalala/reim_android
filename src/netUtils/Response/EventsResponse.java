@@ -7,8 +7,8 @@ import org.json.JSONObject;
 
 public class EventsResponse extends BaseResponse
 {
-	private JSONArray invitesArray;
-	private JSONArray reportsArray;
+	private int reportEventCount;
+	private int meEventCount;
 	
 	public EventsResponse(Object httpResponse)
 	{
@@ -20,8 +20,13 @@ public class EventsResponse extends BaseResponse
 		try
 		{
 			JSONObject jObject = getDataObject();
-			invitesArray = jObject.getJSONArray("invites");
-			reportsArray = jObject.getJSONArray("reports");			
+			JSONArray invitesArray = jObject.getJSONArray("invites");
+			JSONArray reportsArray = jObject.getJSONArray("reports");	
+			JSONArray membersArray = jObject.getJSONArray("members");
+			JSONArray managersArray = jObject.getJSONArray("managers");
+						
+			reportEventCount = reportsArray.length();
+			meEventCount = invitesArray.length() + membersArray.length() + managersArray.length();
 		}
 		catch (JSONException e)
 		{
@@ -29,23 +34,13 @@ public class EventsResponse extends BaseResponse
 		}
 	}
 
-	public JSONArray getInvitesArray()
+	public int getReportEventCount()
 	{
-		return invitesArray;
+		return reportEventCount;
 	}
 
-	public void setInvitesArray(JSONArray invitesArray)
+	public int getMeEventCount()
 	{
-		this.invitesArray = invitesArray;
-	}
-
-	public JSONArray getReportsArray()
-	{
-		return reportsArray;
-	}
-
-	public void setReportsArray(JSONArray reportsArray)
-	{
-		this.reportsArray = reportsArray;
+		return meEventCount;
 	}
 }

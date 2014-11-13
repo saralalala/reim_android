@@ -15,6 +15,6 @@ public class EventsRequest extends BaseRequest
 
 	public void sendRequest(HttpConnectionCallback callback)
 	{
-		doPost(callback);
+		doGet(callback);
 	}
 }

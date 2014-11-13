@@ -244,7 +244,7 @@ public class MeFragment extends Fragment
 		{
             sendDownloadAvatarRequest();			
 		}
-        
+
         mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 	}
 

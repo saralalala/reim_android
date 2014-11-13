@@ -132,6 +132,7 @@ public class MeListViewAdapater extends BaseAdapter
 			case 2:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+				view.setBackgroundResource(R.drawable.list_item_color);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
 				textView.setText(fragment.getString(R.string.myInvites));
 				break;
@@ -139,6 +140,7 @@ public class MeListViewAdapater extends BaseAdapter
 			case 3:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+				view.setBackgroundResource(R.drawable.list_item_color);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
 				textView.setText(fragment.getString(R.string.invite));
 				break;
@@ -146,6 +148,7 @@ public class MeListViewAdapater extends BaseAdapter
 			case 4:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+				view.setBackgroundResource(R.drawable.list_item_color);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
 				textView.setText(fragment.getString(R.string.share));
 				break;
@@ -153,6 +156,7 @@ public class MeListViewAdapater extends BaseAdapter
 			case 5:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+				view.setBackgroundResource(R.drawable.list_item_color);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
 				textView.setText(fragment.getString(R.string.feedback));
 				break;

@@ -1,5 +1,8 @@
 package com.rushucloud.reim;
 
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.EventsRequest;
+import netUtils.Response.EventsResponse;
 import classes.ReimApplication;
 
 import com.umeng.analytics.MobclickAgent;
@@ -14,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
@@ -45,6 +49,7 @@ public class MainActivity extends ActionBarActivity
 		ReimApplication.setProgressDialog(this);
 
 		tabHost.setCurrentTab(ReimApplication.getTabIndex());
+		sendGetEventsRequest();
 	}
 
 	protected void onPause()
@@ -89,6 +94,7 @@ public class MainActivity extends ActionBarActivity
 			for (int i = 0; i < 4; i++)
 			{
 				View view = layoutInflater.inflate(R.layout.tab_item, (ViewGroup) null, false);
+				view.setBackgroundColor(Color.WHITE);
 
 				Drawable drawableTop = getResources().getDrawable(imageViewList[i]);
 				drawableTop.setBounds(0, 5, drawableTop.getMinimumWidth(),
@@ -101,9 +107,23 @@ public class MainActivity extends ActionBarActivity
 
 				TabSpec tabSpec = tabHost.newTabSpec(getText(textViewList[i]).toString()).setIndicator(view);
 				tabHost.addTab(tabSpec, fragmentList[i], null);
-				tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.WHITE);
 			}
 			
+			tabHost.setOnTabChangedListener(new OnTabChangeListener()
+			{
+				public void onTabChanged(String tabId)
+				{
+					if (tabId.equals(getText(textViewList[1]).toString()))
+					{
+						setBadge(1, 0);
+					}
+					else if (tabId.equals(getText(textViewList[3]).toString()))
+					{
+						setBadge(3, 0);
+					}
+				}
+			});
+
 //			View view = layoutInflater.inflate(R.layout.tab_item_button, (ViewGroup) null, false);
 //			
 //			Button button = (Button) view.findViewById(R.id.addButton);
@@ -119,5 +139,53 @@ public class MainActivity extends ActionBarActivity
 //			tabHost.addTab(tabSpec, fragmentList[2], null);
 //			tabHost.getTabWidget().getChildAt(4).setBackgroundResource(R.drawable.selector_tab_background);
 		}
+	}
+	
+	private void setBadge(int tabIndex, int eventCount)
+	{
+		View view = tabHost.getTabWidget().getChildAt(tabIndex);
+		
+		TextView shortBadgeTextView = (TextView) view.findViewById(R.id.shortBadgeTextView);
+		TextView longBadgeTextView = (TextView) view.findViewById(R.id.longBadgeTextView);
+		if (eventCount > 99)
+		{
+			longBadgeTextView.setText("99+");
+			longBadgeTextView.setVisibility(View.VISIBLE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
+		else if (eventCount > 10)
+		{
+			longBadgeTextView.setText(Integer.toString(eventCount));
+			longBadgeTextView.setVisibility(View.VISIBLE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
+		else if (eventCount > 0)
+		{
+			shortBadgeTextView.setText(Integer.toString(eventCount));
+			shortBadgeTextView.setVisibility(View.VISIBLE);
+			longBadgeTextView.setVisibility(View.GONE);
+		}
+		else
+		{
+			shortBadgeTextView.setVisibility(View.GONE);
+			longBadgeTextView.setVisibility(View.GONE);
+		}
+	}
+
+	private void sendGetEventsRequest()
+	{
+		EventsRequest request = new EventsRequest();
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				EventsResponse response = new EventsResponse(httpResponse);
+				if (response.getStatus())
+				{
+					setBadge(1, response.getReportEventCount());
+					setBadge(3, response.getMeEventCount());
+				}
+			}
+		});
 	}
 }
