@@ -7,6 +7,7 @@ import com.umeng.analytics.MobclickAgent;
 import database.DBManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -83,6 +84,7 @@ public class MainActivity extends ActionBarActivity
 			LayoutInflater layoutInflater = LayoutInflater.from(this);
 			tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
 			tabHost.setup(this, getSupportFragmentManager(), R.id.realTabContent);
+			tabHost.getTabWidget().setDividerDrawable(null);
 
 			for (int i = 0; i < 4; i++)
 			{
@@ -99,7 +101,7 @@ public class MainActivity extends ActionBarActivity
 
 				TabSpec tabSpec = tabHost.newTabSpec(getText(textViewList[i]).toString()).setIndicator(view);
 				tabHost.addTab(tabSpec, fragmentList[i], null);
-				tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.selector_tab_background);
+				tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.WHITE);
 			}
 			
 //			View view = layoutInflater.inflate(R.layout.tab_item_button, (ViewGroup) null, false);

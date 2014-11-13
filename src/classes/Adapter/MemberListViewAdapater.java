@@ -11,7 +11,6 @@ import database.DBManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,8 +63,8 @@ public class MemberListViewAdapater extends BaseAdapter
 			nicknameTextView.setText(user.getNickname());			
 		}
 
-		int color = check[position] ? Color.rgb(102, 204, 255) : Color.WHITE;
-		convertView.setBackgroundColor(color);
+		int color = check[position] ? R.color.list_item_selected : R.color.list_item_not_selected;
+		convertView.setBackgroundResource(color);
 		
 		return convertView;
 	}

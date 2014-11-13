@@ -145,7 +145,11 @@ public class StatisticsFragment extends Fragment
 		
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 		if (monthsData.size() == 0)
-		{
+		{			
+			SimpleSeriesRenderer r = new SimpleSeriesRenderer();
+			r.setColor(Color.rgb(50, 143, 201));
+			renderer.addSeriesRenderer(r);
+			
 			String timeString = Utils.secondToStringUpToDay(Utils.getCurrentTime());
 			String currentMonth = timeString.substring(0, timeString.length()-3);
 			XYSeries series = new XYSeries(currentMonth);

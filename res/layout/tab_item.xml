@@ -6,6 +6,6 @@
     android:orientation="vertical"
     android:id="@+id/textView"
     android:textSize="12sp"
-    android:textColor="#ffffff" >
+    android:textColor="@color/tab_textview_color" >
 
 </TextView>
