@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="listview_background">#fff4f4f5</color>
+    <color name="list_item_selected">#ffff95c0</color>
+    <color name="list_item_not_selected">#00000000</color>
+    
+</resources>

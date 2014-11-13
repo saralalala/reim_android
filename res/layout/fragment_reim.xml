@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:id="@+id/baseLayout">
+    android:id="@+id/baseLayout"
+    android:background="#f3f4f5" >
 
     <classes.XListView
         android:id="@+id/itemListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:cacheColorHint="#00000000" >
     </classes.XListView>
 

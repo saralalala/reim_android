@@ -37,14 +37,9 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 			convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 		}
 
-		if (check[position])
-		{
-			convertView.setBackgroundColor(Color.rgb(102, 204, 255));
-		}
-		else
-		{
-			convertView.setBackgroundColor(Color.WHITE);			
-		}
+
+		int color = check[position] ? R.color.list_item_selected : R.color.list_item_not_selected;
+		convertView.setBackgroundResource(color);
 		
 		ImageView imageView = (ImageView)convertView.findViewById(R.id.photoImageView);
 		TextView reportTextView = (TextView)convertView.findViewById(R.id.reportTextView);

@@ -11,7 +11,6 @@ import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -100,8 +99,8 @@ public class UnarchivedItemsActivity extends Activity
 					int position, long id)
 			{
 				checkList[position] = checkList[position] ? false : true;
-				int color = checkList[position] ? Color.rgb(102, 204, 255) : Color.WHITE;
-				view.setBackgroundColor(color);
+				int color = checkList[position] ? R.color.list_item_selected : R.color.list_item_not_selected;
+				view.setBackgroundResource(color);
 			}
 		});
 	}
