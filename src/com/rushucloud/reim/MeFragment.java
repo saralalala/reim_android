@@ -163,14 +163,18 @@ public class MeFragment extends Fragment
 					Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), newImageUri);
 					avatarPath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_AVATAR);
 					
-					if (!avatarPath.equals(""))
+					if (!avatarPath.equals("") && Utils.isNetworkConnected())
 					{
 						sendUploadAvatarRequest();
 					}
+					else if (avatarPath.equals(""))
+					{
+						Toast.makeText(getActivity(), "头像保存失败", Toast.LENGTH_SHORT).show();						
+					}
 					else
 					{
-						Toast.makeText(getActivity(), "头像保存失败", Toast.LENGTH_SHORT).show();
-					}					
+						Toast.makeText(getActivity(), "网络未连接，无法上传头像", Toast.LENGTH_SHORT).show();
+					}				
 					
 					if (originalImageUri != null)
 					{
@@ -221,7 +225,14 @@ public class MeFragment extends Fragment
 						break;
 					case 3:
 						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_INVITE");
-						showInviteDialog();
+						if (Utils.isNetworkConnected())
+						{
+							showInviteDialog();		
+						}
+						else
+						{
+							Toast.makeText(getActivity(), "网络未连接，无法发送邀请", Toast.LENGTH_SHORT).show();
+						}
 						break;
 					case 4:
 						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
@@ -230,7 +241,6 @@ public class MeFragment extends Fragment
 						break;
 					case 5:
 						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_FEEDBACK");
-//						startActivity(new Intent(getActivity(), FeedbackActivity.class));
 						ReimApplication.setTabIndex(3);
 						showFeedbackDialog();
 						break;
@@ -240,7 +250,7 @@ public class MeFragment extends Fragment
 			}
 		});
         
-        if (currentUser.getAvatarPath().equals("") && currentUser.getImageID() != -1)
+        if (currentUser.getAvatarPath().equals("") && currentUser.getImageID() != -1 && Utils.isNetworkConnected())
 		{
             sendDownloadAvatarRequest();			
 		}

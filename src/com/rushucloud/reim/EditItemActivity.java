@@ -538,13 +538,17 @@ public class EditItemActivity extends Activity
 				}
 				
 				hideSoftKeyboard();
-				if (Utils.isLocalisationEnabled())
+				if (Utils.isLocalisationEnabled() && Utils.isNetworkConnected())
 				{
 					getLocation();
 				}
-				else
+				else if (!Utils.isLocalisationEnabled())
 				{
 					Toast.makeText(EditItemActivity.this, "定位服务不可用，请打开定位服务或手动输入商家名称", Toast.LENGTH_SHORT).show();
+				}
+				else
+				{
+					Toast.makeText(EditItemActivity.this, "网络未连接，无法联网获取商家，请手动输入商家名称", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -747,7 +751,14 @@ public class EditItemActivity extends Activity
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
-													showManagerDialog();
+													if (Utils.isNetworkConnected())
+													{
+														showManagerDialog();
+													}
+													else
+													{
+														Toast.makeText(EditItemActivity.this, "网络未连接，无法发送审批", Toast.LENGTH_SHORT).show();
+													}
 												}
 											})
 											.setNegativeButton(R.string.cancel, null)
@@ -781,7 +792,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 		
-		Button cancelButton = (Button)findViewById(R.id.cancelButton);
+		Button cancelButton = (Button)findViewById(R.id.rejectButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

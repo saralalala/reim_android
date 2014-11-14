@@ -47,7 +47,7 @@
         android:text="@string/submit" />
 
     <Button
-        android:id="@+id/cancelButton"
+        android:id="@+id/rejectButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/cancel" />

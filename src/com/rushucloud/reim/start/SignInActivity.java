@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SignInActivity extends Activity
 {
@@ -118,7 +119,7 @@ public class SignInActivity extends Activity
 
 	private void initButton()
 	{
-		Button confirmButton = (Button) findViewById(R.id.confirmButton);
+		Button confirmButton = (Button) findViewById(R.id.agreeButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -129,10 +130,7 @@ public class SignInActivity extends Activity
 				final String password = passwordEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-							.setTitle("错误").setMessage("未检测到网络连接")
-							.setNegativeButton(R.string.confirm, null).create();
-					alertDialog.show();
+					Toast.makeText(SignInActivity.this, "网络未连接，无法登录", Toast.LENGTH_SHORT).show();
 				}
 				else if (username.equals(""))
 				{
@@ -185,7 +183,7 @@ public class SignInActivity extends Activity
 			}
 		});
 
-		Button cancelbuButton = (Button) findViewById(R.id.cancelButton);
+		Button cancelbuButton = (Button) findViewById(R.id.rejectButton);
 		cancelbuButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

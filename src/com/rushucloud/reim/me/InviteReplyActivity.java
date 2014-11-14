@@ -14,10 +14,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import classes.AppPreference;
 import classes.Invite;
 import classes.ReimApplication;
 import classes.User;
+import classes.Utils;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -37,7 +39,7 @@ public class InviteReplyActivity extends Activity
 		initView();
 		initButton();
 	}
-
+  
 	protected void onResume()
 	{
 		super.onResume();
@@ -79,17 +81,24 @@ public class InviteReplyActivity extends Activity
 	
 	private void initButton()
 	{	
-		Button confirmButton = (Button)findViewById(R.id.confirmButton);
-		confirmButton.setOnClickListener(new View.OnClickListener()
+		Button agreeButton = (Button)findViewById(R.id.agreeButton);
+		agreeButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				sendInviteReplyRequest(2, invite.getInviteCode());
+				if (Utils.isNetworkConnected())
+				{
+					sendInviteReplyRequest(2, invite.getInviteCode());					
+				}
+				else
+				{
+					Toast.makeText(InviteReplyActivity.this, "网络未连接，无法发送回复", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 		
-		Button cancelButton = (Button)findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(new View.OnClickListener()
+		Button rejectButton = (Button)findViewById(R.id.rejectButton);
+		rejectButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -99,19 +108,26 @@ public class InviteReplyActivity extends Activity
 				}
 				else
 				{
-					sendInviteReplyRequest(3, invite.getInviteCode());
+					if (Utils.isNetworkConnected())
+					{
+						sendInviteReplyRequest(3, invite.getInviteCode());				
+					}
+					else
+					{
+						Toast.makeText(InviteReplyActivity.this, "网络未连接，无法发送回复", Toast.LENGTH_SHORT).show();
+					}
 				}
 			}
 		});
 		
 		if (invite.getInviteCode().equals(""))
 		{
-			confirmButton.setVisibility(View.GONE);
-			cancelButton.setText(R.string.cancel);
+			agreeButton.setVisibility(View.GONE);
+			rejectButton.setText(R.string.cancel);
 		}
 	}
 	
-    private void sendInviteReplyRequest(int agree, String inviteCode)
+    private void sendInviteReplyRequest(final int agree, String inviteCode)
     {
     	ReimApplication.showProgressDialog();
     	InviteReplyRequest request = new InviteReplyRequest(agree, inviteCode);
@@ -122,13 +138,33 @@ public class InviteReplyActivity extends Activity
 				InviteReplyResponse response = new InviteReplyResponse(httpResponse);
 				if (response.getStatus())
 				{
-					runOnUiThread(new Runnable()
+					if (agree == 2)
 					{
-						public void run()
+						sendCommonRequest();						
+					}
+					else
+					{
+						runOnUiThread(new Runnable()
 						{
-							sendCommonRequest();
-						}						
-					});
+							public void run()
+							{
+						    	ReimApplication.dismissProgressDialog();
+								AlertDialog mDialog = new AlertDialog.Builder(InviteReplyActivity.this)
+															.setTitle("提示")
+															.setMessage("邀请回复已发送成功！")
+															.setNegativeButton(R.string.confirm, 
+																	new DialogInterface.OnClickListener()
+															{
+																public void onClick(DialogInterface dialog, int which)
+																{
+																	goBackToMainActivity();
+																}
+															})
+															.create();
+								mDialog.show();
+							}
+						});
+					}
 				}
 				else
 				{

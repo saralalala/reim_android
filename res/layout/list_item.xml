@@ -2,68 +2,90 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp" 
+    android:orientation="horizontal"
+    android:baselineAligned="false"
+    android:padding="5dp" 
     android:background="@drawable/list_item_color">
-
-    <ImageView
-        android:id="@+id/photoImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerVertical="true"
-        android:background="@drawable/ic_launcher"
-        android:contentDescription="@string/invoice" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/photoImageView"
-        android:layout_toLeftOf="@+id/detailLayout"
-        android:paddingLeft="10dp"
-        android:orientation="vertical" 
-        android:id="@+id/titleLayout" >
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/pivotView"
+        android:gravity="left"
+    	android:padding="5dp" 
+        android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/reportTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/statusTextView"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:gravity="center"
             android:textColor="#FF000000"
-            android:singleLine="true"
-            android:ellipsize="end"
             android:textSize="13sp" />
+
+	    <TextView
+	        android:id="@+id/amountTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="#FF000000"
+	        android:textSize="30sp" />
+	    
+    </LinearLayout>
+
+    <View
+        android:id="@+id/pivotView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/pivotView"
+        android:layout_alignParentRight="true"
+    	android:padding="5dp" 
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right" >
+
+            <ImageView
+                android:id="@+id/photoImageView"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/camera"
+                android:contentDescription="@string/invoice" />
+
+            <TextView
+                android:id="@+id/reportTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@+id/photoImageView"
+                android:ellipsize="end"
+                android:paddingLeft="5dp"
+                android:singleLine="true"
+                android:textColor="#FF000000"
+                android:textSize="13sp" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/vendorTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FF000000"
-            android:singleLine="true"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:paddingTop="5dp"
             android:ellipsize="end"
-            android:textSize="22sp" />
-    </LinearLayout>
-
-    <LinearLayout
-       	android:id="@+id/detailLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:gravity="right"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/categoryTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:singleLine="true"
             android:textColor="#FF000000"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/amountTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FF000000"
-            android:textSize="22sp" />
+            android:textSize="17sp" />
     </LinearLayout>
 
 </RelativeLayout>

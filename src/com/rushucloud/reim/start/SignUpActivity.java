@@ -149,7 +149,11 @@ public class SignUpActivity extends Activity
 				hideSoftKeyboard();
 				
 				String phoneNumber = phoneEditText.getText().toString();
-				if (phoneNumber.equals(""))
+				if (!Utils.isNetworkConnected())
+				{
+					Toast.makeText(SignUpActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+				}
+				else if (phoneNumber.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this)
 												.setTitle("错误")
@@ -203,7 +207,11 @@ public class SignUpActivity extends Activity
 				String password = phonePasswordEditText.getText().toString();
 				String inputCode = codeEditText.getText().toString();
 				
-				if (phoneNumber.equals(""))
+				if (!Utils.isNetworkConnected())
+				{
+					Toast.makeText(SignUpActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+				}
+				else if (phoneNumber.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this)
 												.setTitle("错误")
@@ -308,7 +316,11 @@ public class SignUpActivity extends Activity
 				String password = emailPasswordEditText.getText().toString();
 				code = "";
 				
-				if (email.equals(""))
+				if (!Utils.isNetworkConnected())
+				{
+					Toast.makeText(SignUpActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+				}
+				else if (email.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this)
 												.setTitle("错误")

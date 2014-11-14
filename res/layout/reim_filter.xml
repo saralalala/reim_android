@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <Button
-        android:id="@+id/confirmButton"
+        android:id="@+id/agreeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -12,7 +12,7 @@
         android:text="@string/confirm" />
 
     <Button
-        android:id="@+id/cancelButton"
+        android:id="@+id/rejectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/confirmButton" 
+        android:layout_below="@+id/agreeButton" 
         android:text="@string/sort" />
 
     <RadioGroup

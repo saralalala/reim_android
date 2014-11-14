@@ -5,6 +5,7 @@ import netUtils.Request.User.ResetPasswordRequest;
 import netUtils.Response.User.ResetPasswordResponse;
 
 import classes.ReimApplication;
+import classes.Utils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -22,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class ResetPasswordActivity extends Activity
 {
@@ -90,14 +92,18 @@ public class ResetPasswordActivity extends Activity
 	
 	private void initButton()
 	{
-		Button confirmButton = (Button)findViewById(R.id.confirmButton);
+		Button confirmButton = (Button)findViewById(R.id.agreeButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
 				final String newPassword = newPasswordEditText.getText().toString();
 				final String confirmPassword = confirmPasswordEditText.getText().toString();
-				if (newPassword.equals(""))
+				if (!Utils.isNetworkConnected())
+				{
+					Toast.makeText(ResetPasswordActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+				}
+				else if (newPassword.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(ResetPasswordActivity.this)
 												.setTitle("错误")
@@ -158,7 +164,7 @@ public class ResetPasswordActivity extends Activity
 			}
 		});
 		
-		Button cancelbuButton= (Button)findViewById(R.id.cancelButton);
+		Button cancelbuButton= (Button)findViewById(R.id.rejectButton);
 		cancelbuButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

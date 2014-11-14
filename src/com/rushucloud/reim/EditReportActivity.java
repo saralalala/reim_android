@@ -261,7 +261,7 @@ public class EditReportActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(EditReportActivity.this, "网络未连接，无法添加", Toast.LENGTH_SHORT).show();
+					Toast.makeText(EditReportActivity.this, "网络未连接，无法添加评论", Toast.LENGTH_SHORT).show();
 				}
 				else
 				{
@@ -348,7 +348,7 @@ public class EditReportActivity extends Activity
 			saveButton.setEnabled(false);
 		}
 		
-		Button cancelButton = (Button)findViewById(R.id.cancelButton);
+		Button cancelButton = (Button)findViewById(R.id.rejectButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -518,13 +518,16 @@ public class EditReportActivity extends Activity
 								.setNegativeButton(R.string.cancel, null)
 								.create();
     	mDialog.show();
-    	
-    	for (User user : userList)
+		
+		if (Utils.isNetworkConnected())
 		{
-			if (user.getAvatarPath().equals("") && user.getImageID() != -1)
+	    	for (User user : userList)
 			{
-				sendDownloadAvatarRequest(user);
-			}	
+				if (user.getAvatarPath().equals("") && user.getImageID() != -1)
+				{
+					sendDownloadAvatarRequest(user);
+				}	
+			}		
 		}
     }
 

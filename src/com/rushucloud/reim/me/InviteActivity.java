@@ -9,6 +9,8 @@ import netUtils.Request.User.GetInvitesRequest;
 import netUtils.Response.User.GetInvitesResponse;
 import classes.Invite;
 import classes.ReimApplication;
+import classes.Utils;
+
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -25,6 +27,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class InviteActivity extends Activity
 {
@@ -46,7 +49,16 @@ public class InviteActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("InviteActivity");		
 		MobclickAgent.onResume(this);
-		sendGetInvitesRequest();
+		if (Utils.isNetworkConnected())
+		{
+			sendGetInvitesRequest();			
+		}
+		else
+		{
+			Toast.makeText(InviteActivity.this, "网络未连接，获取数据失败", Toast.LENGTH_SHORT).show();
+			inviteListView.setVisibility(View.GONE);
+			inviteTextView.setVisibility(View.VISIBLE);
+		}
 	}
 
 	protected void onPause()
@@ -110,6 +122,7 @@ public class InviteActivity extends Activity
 							if (inviteList.size() == 0)
 							{
 								inviteListView.setVisibility(View.GONE);
+								inviteTextView.setVisibility(View.VISIBLE);
 							}
 							else
 							{
@@ -119,6 +132,7 @@ public class InviteActivity extends Activity
 								adapter = new SimpleAdapter(InviteActivity.this, mapList, android.R.layout.simple_list_item_2, columns, views);
 								inviteListView.setAdapter(adapter);
 								inviteTextView.setVisibility(View.GONE);
+								inviteListView.setVisibility(View.VISIBLE);
 							}
 						}						
 					});

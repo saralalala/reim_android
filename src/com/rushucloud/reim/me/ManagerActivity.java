@@ -166,11 +166,14 @@ public class ManagerActivity extends Activity
 			}
 		});
 		
-		for (User user : userList)
+		if (Utils.isNetworkConnected())
 		{
-			if (user.getAvatarPath().equals("") && user.getImageID() != -1)
+			for (User user : userList)
 			{
-				sendDownloadAvatarRequest(user);
+				if (user.getAvatarPath().equals("") && user.getImageID() != -1)
+				{
+					sendDownloadAvatarRequest(user);
+				}
 			}
 		}
 	}

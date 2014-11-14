@@ -56,6 +56,7 @@
     
     <string name="inputAmount">请输入金额</string>
     <string name="invoice">发票</string>
+    <string name="itemApproved">已审批</string>
     <string name="proveAhead">预审批</string>
     <string name="needReimburse">需报销</string>
     <string name="vendor">商家:</string>
@@ -133,6 +134,8 @@
     <string name="xlistview_header_last_time">上次更新时间：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    
+    <string name="test">松开载入更多松开载入更多</string>
     
     <string-array name="filterStatus">
         <item>草稿</item>

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 public class ItemListViewAdapter extends BaseAdapter
 {
+	private Context context;
 	private LayoutInflater layoutInflater;
 	private ItemFilter itemFilter;
 	private List<Item> itemList;
@@ -28,8 +29,9 @@ public class ItemListViewAdapter extends BaseAdapter
 
 	public ItemListViewAdapter(Context context, List<Item> items)
 	{
-		itemList = new ArrayList<Item>(items);
-		layoutInflater = LayoutInflater.from(context);
+		this.context = context;
+		this.itemList = new ArrayList<Item>(items);
+		this.layoutInflater = LayoutInflater.from(context);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -39,21 +41,40 @@ public class ItemListViewAdapter extends BaseAdapter
 			convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 		}
 		
-		ImageView imageView = (ImageView)convertView.findViewById(R.id.photoImageView);
+		ImageView photoImageView = (ImageView)convertView.findViewById(R.id.photoImageView);
+		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
+		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		TextView reportTextView = (TextView)convertView.findViewById(R.id.reportTextView);
 		TextView vendorTextView = (TextView)convertView.findViewById(R.id.vendorTextView);
-		TextView categoryTextView = (TextView)convertView.findViewById(R.id.categoryTextView);
-		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		
 		Item item = this.getItem(position);
 
 		if (item.getImageID() != -1 || !item.getInvoicePath().equals(""))
 		{
-			imageView.setImageResource(R.drawable.default_invoice);
+			photoImageView.setVisibility(View.VISIBLE);
 		}
 		else
 		{
-			imageView.setImageResource(R.drawable.default_avatar);	
+			photoImageView.setVisibility(View.GONE);
+		}
+		
+		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
+		{
+			statusTextView.setText(context.getString(R.string.itemApproved));
+			statusTextView.setBackgroundResource(R.drawable.item_approved);
+			statusTextView.setTextColor(context.getResources().getColor(R.color.list_item_approved));
+			statusTextView.setVisibility(View.VISIBLE);
+		}
+		else if (item.isProveAhead())
+		{
+			statusTextView.setText(context.getString(R.string.proveAhead));
+			statusTextView.setBackgroundResource(R.drawable.item_prove_ahead);
+			statusTextView.setTextColor(context.getResources().getColor(R.color.list_item_prove_ahead));
+			statusTextView.setVisibility(View.VISIBLE);			
+		}
+		else
+		{
+			statusTextView.setVisibility(View.INVISIBLE);					
 		}
 		
 		String amount = "￥" + Double.toString(item.getAmount());
@@ -64,9 +85,6 @@ public class ItemListViewAdapter extends BaseAdapter
 		
 		String reportTitle = item.getBelongReport() == null ? "N/A" : item.getBelongReport().getTitle();
 		reportTextView.setText(reportTitle);
-		
-		String categoryName = item.getCategory() == null ? "N/A" : item.getCategory().getName();
-		categoryTextView.setText(categoryName);
 		
 		return convertView;
 	}

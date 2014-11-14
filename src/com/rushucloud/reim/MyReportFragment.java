@@ -346,7 +346,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 				}
 			});
 			
-			Button confirmButton = (Button)filterView.findViewById(R.id.confirmButton);
+			Button confirmButton = (Button)filterView.findViewById(R.id.agreeButton);
 			confirmButton.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
@@ -363,7 +363,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 				}
 			});
 			
-			Button cancelButton = (Button)filterView.findViewById(R.id.cancelButton);
+			Button cancelButton = (Button)filterView.findViewById(R.id.rejectButton);
 			cancelButton.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)

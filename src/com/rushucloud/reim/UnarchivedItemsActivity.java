@@ -107,7 +107,7 @@ public class UnarchivedItemsActivity extends Activity
 	
 	private void initButton()
 	{
-		Button confirmButton = (Button)findViewById(R.id.confirmButton);
+		Button confirmButton = (Button)findViewById(R.id.agreeButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -131,7 +131,7 @@ public class UnarchivedItemsActivity extends Activity
 			}
 		});
 		
-		Button cancelButton = (Button)findViewById(R.id.cancelButton);
+		Button cancelButton = (Button)findViewById(R.id.rejectButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

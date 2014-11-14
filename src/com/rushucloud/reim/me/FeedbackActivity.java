@@ -5,6 +5,7 @@ import netUtils.Request.FeedbackRequest;
 import netUtils.Response.FeedbackResponse;
 
 import classes.ReimApplication;
+import classes.Utils;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -85,34 +86,18 @@ public class FeedbackActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				final String feedback = feedbackEditText.getText().toString();
-				final String contactInfo = contactEditText.getText().toString();
-				if (feedback.equals("") && contactInfo.equals(""))
+				if (Utils.isNetworkConnected())
 				{
-					AlertDialog mDialog = new AlertDialog.Builder(FeedbackActivity.this)
-											.setTitle("错误")
-											.setMessage("意见或联系方式不能均为空")
-											.setNegativeButton(R.string.confirm, null)
-											.create();
-					mDialog.show();		
+					sendFeedBack();
 				}
 				else
 				{
-					try
-					{
-						PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
-				    	sendFeedbackRequest(feedback, contactInfo, info.versionName);
-					}
-					catch (NameNotFoundException e)
-					{
-						e.printStackTrace();
-						Toast.makeText(FeedbackActivity.this, "获取版本号失败", Toast.LENGTH_SHORT).show();
-					}
+					Toast.makeText(FeedbackActivity.this, "网络未连接，无法发送反馈", Toast.LENGTH_SHORT).show();					
 				}
 			}
 		});
 		
-		Button cancelButton = (Button)findViewById(R.id.cancelButton);
+		Button cancelButton = (Button)findViewById(R.id.rejectButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -128,6 +113,34 @@ public class FeedbackActivity extends Activity
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(feedbackEditText.getWindowToken(), 0);					
 		imm.hideSoftInputFromWindow(contactEditText.getWindowToken(), 0);  	
+    }
+    
+    private void sendFeedBack()
+    {
+		final String feedback = feedbackEditText.getText().toString();
+		final String contactInfo = contactEditText.getText().toString();
+		if (feedback.equals("") && contactInfo.equals(""))
+		{
+			AlertDialog mDialog = new AlertDialog.Builder(FeedbackActivity.this)
+									.setTitle("错误")
+									.setMessage("意见或联系方式不能均为空")
+									.setNegativeButton(R.string.confirm, null)
+									.create();
+			mDialog.show();		
+		}
+		else
+		{
+			try
+			{
+				PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
+		    	sendFeedbackRequest(feedback, contactInfo, info.versionName);
+			}
+			catch (NameNotFoundException e)
+			{
+				e.printStackTrace();
+				Toast.makeText(FeedbackActivity.this, "获取版本号失败", Toast.LENGTH_SHORT).show();
+			}
+		}    	
     }
     
     private void sendFeedbackRequest(String feedback, String contactInfo, String versionName)

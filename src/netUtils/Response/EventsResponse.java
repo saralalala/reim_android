@@ -8,7 +8,8 @@ import org.json.JSONObject;
 public class EventsResponse extends BaseResponse
 {
 	private int reportEventCount;
-	private int meEventCount;
+	private int inviteEventCount;
+	private boolean needToRefresh;
 	
 	public EventsResponse(Object httpResponse)
 	{
@@ -26,7 +27,8 @@ public class EventsResponse extends BaseResponse
 			JSONArray managersArray = jObject.getJSONArray("managers");
 						
 			reportEventCount = reportsArray.length();
-			meEventCount = invitesArray.length() + membersArray.length() + managersArray.length();
+			inviteEventCount = invitesArray.length();
+			needToRefresh = membersArray.length() + managersArray.length() > 0 ? true : false;
 		}
 		catch (JSONException e)
 		{
@@ -39,8 +41,13 @@ public class EventsResponse extends BaseResponse
 		return reportEventCount;
 	}
 
-	public int getMeEventCount()
+	public int getInviteEventCount()
 	{
-		return meEventCount;
+		return inviteEventCount;
+	}
+
+	public boolean isNeedToRefresh()
+	{
+		return needToRefresh;
 	}
 }

@@ -159,7 +159,7 @@ public class ApproveReportActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(ApproveReportActivity.this, "网络未连接，无法添加", Toast.LENGTH_SHORT).show();
+					Toast.makeText(ApproveReportActivity.this, "网络未连接，无法添加评论", Toast.LENGTH_SHORT).show();
 				}
 				else
 				{

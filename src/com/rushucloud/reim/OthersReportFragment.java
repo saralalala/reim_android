@@ -106,7 +106,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		ReimApplication.dismissProgressDialog();
 		if (Utils.isNetworkConnected())
 		{
-			getSubordinatesReports();
+			sendSubordinatesReportsRequest();
 		}
 	}
 
@@ -246,7 +246,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 				}
 			});
 			
-			Button confirmButton = (Button)filterView.findViewById(R.id.confirmButton);
+			Button confirmButton = (Button)filterView.findViewById(R.id.agreeButton);
 			confirmButton.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
@@ -269,7 +269,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 				}
 			});
 			
-			Button cancelButton = (Button)filterView.findViewById(R.id.cancelButton);
+			Button cancelButton = (Button)filterView.findViewById(R.id.rejectButton);
 			cancelButton.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
@@ -318,7 +318,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		}
 	}
 
-	private void getSubordinatesReports()
+	private void sendSubordinatesReportsRequest()
 	{
 		SubordinatesReportRequest request = new SubordinatesReportRequest(0, 9999, 1);
 		request.sendRequest(new HttpConnectionCallback()
@@ -373,7 +373,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 	{
 		if (Utils.isNetworkConnected())
 		{
-			getSubordinatesReports();
+			sendSubordinatesReportsRequest();
 		}
 		else
 		{
@@ -392,7 +392,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 	{
 		if (Utils.isNetworkConnected())
 		{
-			getSubordinatesReports();
+			sendSubordinatesReportsRequest();
 		}
 		else
 		{

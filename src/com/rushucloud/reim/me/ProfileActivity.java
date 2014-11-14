@@ -11,6 +11,7 @@ import com.umeng.analytics.MobclickAgent;
 import classes.AppPreference;
 import classes.ReimApplication;
 import classes.User;
+import classes.Utils;
 import classes.Adapter.ProfileListViewAdapater;
 import database.DBManager;
 import android.app.Activity;
@@ -79,7 +80,14 @@ public class ProfileActivity extends Activity
 		int id = item.getItemId();
 		if (id == R.id.action_save_item)
 		{
-			saveUserInfo();
+			if (Utils.isNetworkConnected())
+			{
+				saveUserInfo();				
+			}
+			else
+			{
+				Toast.makeText(ProfileActivity.this, "网络未连接，无法保存用户信息", Toast.LENGTH_SHORT).show();
+			}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

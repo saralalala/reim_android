@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 public class ForgotPasswordActivity extends Activity
 {	
@@ -125,29 +126,36 @@ public class ForgotPasswordActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				String emailAddress = emailEditText.getText().toString();
-				if (Utils.isEmail(emailAddress))
+				if (Utils.isNetworkConnected())
 				{
-					hideSoftKeyboard();
-					sendResetEmail();
+					String emailAddress = emailEditText.getText().toString();
+					if (Utils.isEmail(emailAddress))
+					{
+						hideSoftKeyboard();
+						sendResetEmail();
+					}
+					else
+					{
+						AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
+													.setTitle("错误")
+													.setMessage("邮箱格式不正确")
+													.setPositiveButton("确定", new OnClickListener()
+													{
+														public void onClick(
+																DialogInterface dialog,
+																int which)
+														{
+															dialog.dismiss();
+															emailEditText.requestFocus();
+														}
+													})
+													.create();
+						alertDialog.show();					
+					}					
 				}
 				else
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
-												.setTitle("错误")
-												.setMessage("邮箱格式不正确")
-												.setPositiveButton("确定", new OnClickListener()
-												{
-													public void onClick(
-															DialogInterface dialog,
-															int which)
-													{
-														dialog.dismiss();
-														emailEditText.requestFocus();
-													}
-												})
-												.create();
-					alertDialog.show();					
+					Toast.makeText(ForgotPasswordActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -167,30 +175,37 @@ public class ForgotPasswordActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				String phoneNumber = phoneEditText.getText().toString();
-				if (Utils.isPhone(phoneNumber))
+				if (Utils.isNetworkConnected())
 				{
-					hideSoftKeyboard();
-					sendTextMessage();
+					String phoneNumber = phoneEditText.getText().toString();
+					if (Utils.isPhone(phoneNumber))
+					{
+						hideSoftKeyboard();
+						sendTextMessage();
+					}
+					else
+					{
+						AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
+													.setTitle("错误")
+													.setMessage("手机号码格式不正确")
+													.setPositiveButton("确定", new OnClickListener()
+													{
+														public void onClick(
+																DialogInterface dialog,
+																int which)
+														{
+															dialog.dismiss();
+															phoneEditText.requestFocus();
+														}
+													})
+													.create();
+						alertDialog.show();					
+					}
 				}
 				else
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
-												.setTitle("错误")
-												.setMessage("手机号码格式不正确")
-												.setPositiveButton("确定", new OnClickListener()
-												{
-													public void onClick(
-															DialogInterface dialog,
-															int which)
-													{
-														dialog.dismiss();
-														phoneEditText.requestFocus();
-													}
-												})
-												.create();
-					alertDialog.show();					
-				}				
+					Toast.makeText(ForgotPasswordActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+				}			
 			}
 		});
 

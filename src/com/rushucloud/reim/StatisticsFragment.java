@@ -14,11 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
 import org.achartengine.*;
 import org.achartengine.chart.BarChart.Type;
-import org.achartengine.model.CategorySeries;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.SimpleSeriesRenderer;
@@ -39,6 +39,14 @@ public class StatisticsFragment extends Fragment
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("StatisticsFragment");
+		if (Utils.isNetworkConnected())
+		{
+			sendGetDataRequest();			
+		}
+		else
+		{
+			Toast.makeText(getActivity(), "网络未连接，无法获取数据", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	public void onPause()
@@ -50,23 +58,6 @@ public class StatisticsFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		return inflater.inflate(R.layout.fragment_statistics, container, false);
-	}
-
-	public void onActivityCreated(Bundle savedInstanceState)
-	{
-		super.onActivityCreated(savedInstanceState);
-		initData();
-	}
-
-	protected CategorySeries buildCategoryDataset(String[] titles, double[] values)
-	{
-		CategorySeries series = new CategorySeries("test");
-		int k = -1;
-		for (double value : values)
-		{
-			series.add(titles[++k], value);
-		}
-		return series;
 	}
 
 	private void drawPie()
@@ -182,7 +173,7 @@ public class StatisticsFragment extends Fragment
 		linear.addView(mChartView);
 	}
 
-	private void initData()
+	private void sendGetDataRequest()
 	{
 		ReimApplication.showProgressDialog();
 		StatisticsRequest request = new StatisticsRequest();

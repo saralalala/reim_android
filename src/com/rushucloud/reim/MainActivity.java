@@ -1,9 +1,13 @@
 package com.rushucloud.reim;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.Request.EventsReadRequest;
 import netUtils.Request.EventsRequest;
+import netUtils.Request.Group.GetGroupRequest;
 import netUtils.Response.EventsResponse;
+import netUtils.Response.Group.GetGroupResponse;
 import classes.ReimApplication;
+import classes.Utils;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -17,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +54,10 @@ public class MainActivity extends ActionBarActivity
 		ReimApplication.setProgressDialog(this);
 
 		tabHost.setCurrentTab(ReimApplication.getTabIndex());
-		sendGetEventsRequest();
+		if (Utils.isNetworkConnected())
+		{
+			sendGetEventsRequest();			
+		}
 	}
 
 	protected void onPause()
@@ -115,11 +123,19 @@ public class MainActivity extends ActionBarActivity
 				{
 					if (tabId.equals(getText(textViewList[1]).toString()))
 					{
-						setBadge(1, 0);
+						setReportBadge(0);
+						if (Utils.isNetworkConnected())
+						{
+							sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
+						}
 					}
 					else if (tabId.equals(getText(textViewList[3]).toString()))
 					{
-						setBadge(3, 0);
+						setMeBadge(0);
+						if (Utils.isNetworkConnected())
+						{
+							sendEventsReadRequest(EventsReadRequest.TYPE_INVITE);		
+						}
 					}
 				}
 			});
@@ -141,9 +157,9 @@ public class MainActivity extends ActionBarActivity
 		}
 	}
 	
-	private void setBadge(int tabIndex, int eventCount)
+	private void setReportBadge(int eventCount)
 	{
-		View view = tabHost.getTabWidget().getChildAt(tabIndex);
+		View view = tabHost.getTabWidget().getChildAt(1);
 		
 		TextView shortBadgeTextView = (TextView) view.findViewById(R.id.shortBadgeTextView);
 		TextView longBadgeTextView = (TextView) view.findViewById(R.id.longBadgeTextView);
@@ -171,6 +187,21 @@ public class MainActivity extends ActionBarActivity
 			longBadgeTextView.setVisibility(View.GONE);
 		}
 	}
+	
+	private void setMeBadge(int eventCount)
+	{
+		View view = tabHost.getTabWidget().getChildAt(3);
+		
+		ImageView tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
+		if (eventCount > 0)
+		{
+			tipImageView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			tipImageView.setVisibility(View.GONE);
+		}
+	}
 
 	private void sendGetEventsRequest()
 	{
@@ -179,11 +210,51 @@ public class MainActivity extends ActionBarActivity
 		{
 			public void execute(Object httpResponse)
 			{
-				EventsResponse response = new EventsResponse(httpResponse);
+				final EventsResponse response = new EventsResponse(httpResponse);
 				if (response.getStatus())
 				{
-					setBadge(1, response.getReportEventCount());
-					setBadge(3, response.getMeEventCount());
+					if (response.isNeedToRefresh() && Utils.isNetworkConnected())
+					{
+						sendGetGroupRequest();
+					}
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							setReportBadge(response.getReportEventCount());
+							setMeBadge(response.getInviteEventCount());
+						}
+					});
+				}
+			}
+		});
+	}
+
+	private void sendEventsReadRequest(int type)
+	{
+		EventsReadRequest request = new EventsReadRequest(type);
+		request.sendRequest(null);
+	}
+	
+	private void sendGetGroupRequest()
+	{
+		GetGroupRequest request = new GetGroupRequest();
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				GetGroupResponse response = new GetGroupResponse(httpResponse);
+				if (response.getStatus())
+				{
+					DBManager dbManager = DBManager.getDBManager();
+					int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
+					
+					// update members
+					dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+					// update group info
+					dbManager.syncGroup(response.getGroup());
 				}
 			}
 		});

@@ -257,7 +257,10 @@ public abstract class BaseRequest
 					e.printStackTrace();
 				}
 
-				callback.execute(resultString);
+				if (callback != null)
+				{
+					callback.execute(resultString);					
+				}
 			}
 		}).start();
 	}
