@@ -3,7 +3,6 @@ package com.rushucloud.reim;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -52,9 +51,6 @@ public class ImageActivity extends Activity
 	{
 		try
 		{
-			ActionBar actionBar = getActionBar();
-			actionBar.hide();
-			
 			String imagePath = getIntent().getStringExtra("imagePath");
 			Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
 			imageView = (ImageView)findViewById(R.id.imageView);
@@ -62,9 +58,21 @@ public class ImageActivity extends Activity
 
 			DisplayMetrics dm = new DisplayMetrics();
 			getWindowManager().getDefaultDisplay().getMetrics(dm);
+			
+			double imageRatio = ((double)bitmap.getHeight())/bitmap.getWidth();
+			double screenRatio = ((double)dm.heightPixels)/dm.widthPixels;
+			
 			LayoutParams params = imageView.getLayoutParams();
-			params.height = dm.widthPixels;
-			params.width = dm.widthPixels;
+			if (imageRatio > screenRatio)
+			{
+				params.height = dm.heightPixels;
+				params.width = (int) (dm.heightPixels / imageRatio);
+			}
+			else
+			{
+				params.height = (int) (dm.widthPixels * imageRatio);
+				params.width = dm.widthPixels;
+			}
 			
 			imageView.setLayoutParams(params);
 			imageView.setOnClickListener(new View.OnClickListener()

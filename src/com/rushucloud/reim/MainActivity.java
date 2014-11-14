@@ -58,6 +58,7 @@ public class MainActivity extends ActionBarActivity
 		{
 			sendGetEventsRequest();			
 		}
+		tabHost.setCurrentTab(3);
 	}
 
 	protected void onPause()

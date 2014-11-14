@@ -1,7 +1,5 @@
 package com.rushucloud.reim;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,12 +39,14 @@ import classes.User;
 import classes.Utils;
 import classes.Adapter.MeListViewAdapater;
 import database.DBManager;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -70,13 +70,11 @@ public class MeFragment extends Fragment
 {
 	private static final int PICK_IMAGE = 0;
 	private static final int TAKE_PHOTO = 1;
-	private static final int CROP_IMAGE = 2;
 	
 	private MeListViewAdapater adapter;
 	private ListView meListView;
 	
 	private User currentUser;
-	private Uri originalImageUri;
 	private String avatarPath;
 	
 	private UMSocialService mController;
@@ -126,8 +124,7 @@ public class MeFragment extends Fragment
 	{
 		if (item.getItemId() == 0)
 		{
-			Intent intent = new Intent();
-			intent.setAction(Intent.ACTION_PICK);
+			Intent intent = new Intent(Intent.ACTION_PICK, null);
 			intent.setType("image/*");
 			startActivityForResult(intent, PICK_IMAGE);
 		}
@@ -142,26 +139,15 @@ public class MeFragment extends Fragment
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-		Toast.makeText(getActivity(), "onActivityResult", Toast.LENGTH_SHORT).show();
-		if(data != null)
+		if(resultCode == Activity.RESULT_OK && data != null)
 		{
 			try
 			{
 				if (requestCode == PICK_IMAGE || requestCode == TAKE_PHOTO)
 				{
-					originalImageUri = null;
-					cropImage(data.getData());
-				}
-				else if (requestCode == TAKE_PHOTO)
-				{
-					originalImageUri = data.getData();
-					cropImage(data.getData());					
-				}
-				else if (requestCode == CROP_IMAGE)
-				{
-					Uri newImageUri = Uri.parse(data.getAction());
-					Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), newImageUri);
-					avatarPath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_AVATAR);
+					Uri uri = data.getData();
+			    	Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+					avatarPath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_AVATAR);					
 					
 					if (!avatarPath.equals("") && Utils.isNetworkConnected())
 					{
@@ -174,22 +160,8 @@ public class MeFragment extends Fragment
 					else
 					{
 						Toast.makeText(getActivity(), "网络未连接，无法上传头像", Toast.LENGTH_SHORT).show();
-					}				
-					
-					if (originalImageUri != null)
-					{
-						getActivity().getContentResolver().delete(originalImageUri, null, null);							
 					}
-					getActivity().getContentResolver().delete(newImageUri, null, null);	
 				}
-			}
-			catch (FileNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
 			}
 			catch (Exception e)
 			{
@@ -200,7 +172,6 @@ public class MeFragment extends Fragment
 		UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode);
 		if (ssoHandler != null)
 		{
-			Toast.makeText(getActivity(), "ssoHandler", Toast.LENGTH_SHORT).show();
 			ssoHandler.authorizeCallBack(requestCode, requestCode, data);
 		}		
 	}
@@ -250,38 +221,25 @@ public class MeFragment extends Fragment
 			}
 		});
         
-        if (currentUser.getAvatarPath().equals("") && currentUser.getImageID() != -1 && Utils.isNetworkConnected())
+        if (Utils.isNetworkConnected())
 		{
-            sendDownloadAvatarRequest();			
+            if (currentUser.getAvatarPath().equals("") && currentUser.getImageID() != -1)
+    		{
+                sendDownloadAvatarRequest();			
+    		}
+            
+            if (!currentUser.getAvatarPath().equals(""))
+			{
+				Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
+				if (bitmap == null)
+				{
+	                sendDownloadAvatarRequest();					
+				}				
+			}
 		}
 
         mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 	}
-
-    private void cropImage(Uri uri)
-    {
-		try
-		{
-	    	Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-	    	Intent intent = new Intent("com.android.camera.action.CROP");
-	    	intent.setDataAndType(uri, "image/*");
-	    	intent.putExtra("crop", "true");
-	    	intent.putExtra("aspectX", 1);
-	    	intent.putExtra("aspectY", 1);
-	    	intent.putExtra("outputX", bitmap.getWidth());
-	    	intent.putExtra("outputY", bitmap.getWidth());
-	    	intent.putExtra("return-data", false);
-	    	startActivityForResult(intent, CROP_IMAGE);
-		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-    }
     
     private void sendUploadAvatarRequest()
     {
@@ -293,11 +251,12 @@ public class MeFragment extends Fragment
 				final UploadImageResponse response = new UploadImageResponse(httpResponse);
 				if (response.getStatus())
 				{
+					int currentTime = Utils.getCurrentTime();
 					DBManager dbManager = DBManager.getDBManager();
 					currentUser.setImageID(response.getImageID());
 					currentUser.setAvatarPath(avatarPath);
-					currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
-					currentUser.setServerUpdatedDate(Utils.getCurrentTime());
+					currentUser.setLocalUpdatedDate(currentTime);
+					currentUser.setServerUpdatedDate(currentTime);
 					dbManager.updateUser(currentUser);
 					
 					getActivity().runOnUiThread(new Runnable()
@@ -335,10 +294,11 @@ public class MeFragment extends Fragment
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
+					int currentTime = Utils.getCurrentTime();
 					avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
 					currentUser.setAvatarPath(avatarPath);
-					currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
-					currentUser.setServerUpdatedDate(currentUser.getLocalUpdatedDate());
+					currentUser.setLocalUpdatedDate(currentTime);
+					currentUser.setServerUpdatedDate(currentTime);
 					if (dbManager.updateUser(currentUser))
 					{
 						getActivity().runOnUiThread(new Runnable()

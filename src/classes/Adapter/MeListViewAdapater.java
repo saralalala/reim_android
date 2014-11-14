@@ -62,7 +62,14 @@ public class MeListViewAdapater extends BaseAdapter
 				else
 				{
 					Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
-					imageView.setImageBitmap(bitmap);
+					if (bitmap != null)
+					{
+						imageView.setImageBitmap(bitmap);						
+					}
+					else
+					{
+						imageView.setImageResource(R.drawable.default_avatar);						
+					}
 				}
 				imageView.setOnClickListener(new View.OnClickListener()
 				{

@@ -227,8 +227,7 @@ public class SignInActivity extends Activity
 						dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
 
 						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-						if (localUser.getServerUpdatedDate() == response.getCurrentUser()
-								.getServerUpdatedDate())
+						if (localUser.getServerUpdatedDate() == response.getCurrentUser().getServerUpdatedDate())
 						{
 							if (localUser.getAvatarPath().equals(""))
 							{

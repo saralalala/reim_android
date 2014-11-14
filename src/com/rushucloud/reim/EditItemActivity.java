@@ -78,7 +78,6 @@ public class EditItemActivity extends Activity
 {
 	private static final int PICK_IMAGE = 0;
 	private static final int TAKE_PHOTO = 1;
-	private static final int CROP_IMAGE = 2;
 
 	private static AppPreference appPreference;
 	private static DBManager dbManager;
@@ -99,7 +98,6 @@ public class EditItemActivity extends Activity
 	
 	private Item item;
 	private Report report;
-	private Uri originalImageUri;
 	
 	private List<String> vendorList = null;
 	private List<Category> categoryList = null;
@@ -154,8 +152,7 @@ public class EditItemActivity extends Activity
 	{
 		if (item.getItemId() == 0)
 		{
-			Intent intent = new Intent();
-			intent.setAction(Intent.ACTION_PICK);
+			Intent intent = new Intent(Intent.ACTION_PICK, null);
 			intent.setType("image/*");
 			startActivityForResult(intent, PICK_IMAGE);
 		}
@@ -176,19 +173,10 @@ public class EditItemActivity extends Activity
 			{
 				if (requestCode == PICK_IMAGE || requestCode == TAKE_PHOTO)
 				{
-					originalImageUri = null;
-					cropImage(data.getData());
-				}
-				else if (requestCode == TAKE_PHOTO)
-				{
-					originalImageUri = data.getData();
-					cropImage(originalImageUri);
-				}
-				else
-				{
-					Uri newImageUri = Uri.parse(data.getAction());
-					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), newImageUri);
+					Uri uri = data.getData();
+					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
 					invoiceImageView.setImageBitmap(bitmap);
+					
 					String invoicePath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
@@ -198,13 +186,7 @@ public class EditItemActivity extends Activity
 					else
 					{
 						Toast.makeText(EditItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
-					}	
-					
-					if (originalImageUri != null)
-					{
-						getContentResolver().delete(originalImageUri, null, null);							
 					}
-					getContentResolver().delete(newImageUri, null, null);	
 				}
 			}
 			catch (FileNotFoundException e)
@@ -808,34 +790,7 @@ public class EditItemActivity extends Activity
 		imm.hideSoftInputFromWindow(amountEditText.getWindowToken(), 0);					
 		imm.hideSoftInputFromWindow(noteEditText.getWindowToken(), 0);  	
     }
-
-    private void cropImage(Uri uri)
-    {
-		try
-		{
-			Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-	    	Intent intent = new Intent("com.android.camera.action.CROP");
-	    	intent.setDataAndType(uri, "image/*");
-	    	intent.putExtra("crop", "true");
-	    	intent.putExtra("aspectX", 1);
-	    	intent.putExtra("aspectY", 1);
-	    	intent.putExtra("outputX", bitmap.getHeight());
-	    	intent.putExtra("outputY", bitmap.getHeight());
-	    	intent.putExtra("return-data", false);
-	    	startActivityForResult(intent, CROP_IMAGE);
-		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-			Toast.makeText(EditItemActivity.this, "图片剪裁失败", Toast.LENGTH_SHORT).show();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			Toast.makeText(EditItemActivity.this, "图片剪裁失败", Toast.LENGTH_SHORT).show();
-		}
-    }
-    
+ 
     private void getLocation()
     {
     	ReimApplication.showProgressDialog();
