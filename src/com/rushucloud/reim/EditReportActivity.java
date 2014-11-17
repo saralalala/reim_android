@@ -5,6 +5,7 @@ import java.util.List;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
+import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.Report.CreateReportRequest;
@@ -546,6 +547,17 @@ public class EditReportActivity extends Activity
 		}
 		if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
 		{
+			if (SyncUtils.canSyncToServer())
+			{
+				SyncUtils.isSyncOnGoing = true;
+				SyncUtils.syncAllToServer(new SyncDataCallback()
+				{
+					public void execute()
+					{
+						SyncUtils.isSyncOnGoing = false;
+					}
+				});
+			}
 			Toast.makeText(EditReportActivity.this, "报告保存成功", Toast.LENGTH_SHORT).show();
 			goBackToMainActivity();
 		}
@@ -620,9 +632,16 @@ public class EditReportActivity extends Activity
 				mDialog.show();	
 			}
 			dbManager.updateReportByLocalID(report);
-			if (Utils.canSyncToServer())
+			if (SyncUtils.canSyncToServer())
 			{
-				SyncUtils.syncAllToServer(null);
+				SyncUtils.isSyncOnGoing = true;
+				SyncUtils.syncAllToServer(new SyncDataCallback()
+				{
+					public void execute()
+					{
+						SyncUtils.isSyncOnGoing = false;
+					}
+				});
 			}
 		}
 		else

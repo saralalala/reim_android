@@ -109,7 +109,8 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 	
 	public void set(List<Item> items)
 	{
-		itemList = new ArrayList<Item>(items);
+		itemList.clear();
+		itemList.addAll(items);
 	}
 	
 	public void setCheck(boolean[] checkList)

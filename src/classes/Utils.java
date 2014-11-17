@@ -83,23 +83,6 @@ public class Utils
 		return gpsEnabled || networkEnabled ? true :false;
 	}
 	
-	public static boolean canSyncToServer()
-	{
-		AppPreference appPreference = AppPreference.getAppPreference();
-		if (appPreference.syncOnlyWithWifi() && isWiFiConnected())
-		{
-			return true;
-		}
-		else if (!appPreference.syncOnlyWithWifi() && isNetworkConnected())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
 	public static String getPathFromUri(Activity activity, Uri uri)
 	{
 		String[] projection = {MediaStore.Images.Media.DATA};

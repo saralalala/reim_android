@@ -24,9 +24,31 @@ import database.DBManager;
 
 public abstract class SyncUtils
 {
+	public static boolean isSyncOnGoing = false;
 	private static int itemTaskCount = 0;
 	private static int reportTaskCount = 0;
-
+	
+	public static boolean canSyncToServer()
+	{
+		AppPreference appPreference = AppPreference.getAppPreference();
+		if (isSyncOnGoing)
+		{
+			return false;
+		}
+		else if (appPreference.syncOnlyWithWifi() && Utils.isWiFiConnected())
+		{
+			return true;
+		}
+		else if (!appPreference.syncOnlyWithWifi() && Utils.isNetworkConnected())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public static void syncFromServer(final SyncDataCallback callback)
 	{
 		int lastSynctime = AppPreference.getAppPreference().getLastSyncTime();
@@ -85,6 +107,13 @@ public abstract class SyncUtils
 						callback.execute();						
 					}
 				}
+				else
+				{
+					if (isSyncOnGoing)
+					{
+						isSyncOnGoing = false;						
+					}
+				}
 			}
 		});
 	}
@@ -134,6 +163,10 @@ public abstract class SyncUtils
     			if (!report.hasItems() || (report.getStatus() == Report.STATUS_SUBMITTED && !report.canBeSubmitted()))
 				{
 					reportTaskCount--;
+					if (reportTaskCount == 0 && callback != null)
+					{
+						callback.execute();	
+					}
 					continue;
 				}
     			

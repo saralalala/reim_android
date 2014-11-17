@@ -28,7 +28,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -544,8 +543,9 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 	private void syncItems()
 	{
-		if (Utils.canSyncToServer())
+		if (SyncUtils.canSyncToServer())
 		{
+			SyncUtils.isSyncOnGoing = true;
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
 				public void execute()
@@ -557,8 +557,14 @@ public class ReimFragment extends Fragment implements IXListViewListener
 							refreshItemListView();
 						}
 					});
-					
-					SyncUtils.syncAllToServer(null);
+
+					SyncUtils.syncAllToServer(new SyncDataCallback()
+					{
+						public void execute()
+						{
+							SyncUtils.isSyncOnGoing = false;
+						}
+					});
 				}
 			});
 		}
@@ -566,24 +572,87 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 	public void onRefresh()
 	{
-		new Handler().postDelayed(new Runnable()
+		if (SyncUtils.canSyncToServer())
 		{
-			public void run()
+			SyncUtils.isSyncOnGoing = true;
+			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
-				itemListView.stopRefresh();
-				itemListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-			}
-		}, 2000);
+				public void execute()
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							itemListView.stopRefresh();
+							itemListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+							refreshItemListView();
+						}
+					});
+
+					SyncUtils.syncAllToServer(new SyncDataCallback()
+					{
+						public void execute()
+						{
+							SyncUtils.isSyncOnGoing = false;
+						}
+					});
+				}
+			});
+		}
+		else
+		{
+			getActivity().runOnUiThread(new Runnable()
+			{
+				public void run()
+				{
+					itemListView.stopRefresh();
+					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+					Toast.makeText(getActivity(), prompt, Toast.LENGTH_SHORT).show();
+				}
+			});
+		}		
 	}
 
 	public void onLoadMore()
 	{
-		new Handler().postDelayed(new Runnable()
+		if (SyncUtils.canSyncToServer())
 		{
-			public void run()
+			SyncUtils.isSyncOnGoing = true;
+			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
-				itemListView.stopLoadMore();
-			}
-		}, 2000);	
+				public void execute()
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							itemListView.stopLoadMore();
+							itemListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+							refreshItemListView();
+						}
+					});
+
+					SyncUtils.syncAllToServer(new SyncDataCallback()
+					{
+						public void execute()
+						{
+							SyncUtils.isSyncOnGoing = false;
+						}
+					});
+				}
+			});
+		}
+		else
+		{
+			getActivity().runOnUiThread(new Runnable()
+			{
+				public void run()
+				{
+					itemListView.stopLoadMore();
+					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+					Toast.makeText(getActivity(), prompt, Toast.LENGTH_SHORT).show();
+				}
+			});
+		}	
 	}
 }

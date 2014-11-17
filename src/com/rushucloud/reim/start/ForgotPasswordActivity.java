@@ -75,17 +75,17 @@ public class ForgotPasswordActivity extends Activity
     {
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
 		tabHost.setup();
-        LayoutInflater inflater = LayoutInflater.from(this);
-        inflater.inflate(R.layout.start_find_by_phone, tabHost.getTabContentView());    
+        LayoutInflater inflater = LayoutInflater.from(this);  
         inflater.inflate(R.layout.start_find_by_email, tabHost.getTabContentView());
-        
-        tabHost.addTab(tabHost.newTabSpec("findPasswordByPhone")
-            .setIndicator(getResources().getText(R.string.findPasswordByPhone))
-            .setContent(R.id.phoneBaseLayout));
+        inflater.inflate(R.layout.start_find_by_phone, tabHost.getTabContentView());  
 
         tabHost.addTab(tabHost.newTabSpec("findPasswordByEmail")
                 .setIndicator(getResources().getText(R.string.findPasswordByEmail))
                 .setContent(R.id.emailBaseLayout));
+        
+        tabHost.addTab(tabHost.newTabSpec("findPasswordByPhone")
+            .setIndicator(getResources().getText(R.string.findPasswordByPhone))
+            .setContent(R.id.phoneBaseLayout));
         
         DisplayMetrics dm = new DisplayMetrics();  
         getWindowManager().getDefaultDisplay().getMetrics(dm);  

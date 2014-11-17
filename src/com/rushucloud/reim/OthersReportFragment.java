@@ -338,9 +338,10 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 						dbManager.deleteOthersReportItems(report.getServerID());
 					}
 					
-					othersList = dbManager.getOthersReports(appPreference.getCurrentUserID());
+					othersList.clear();
+					othersList.addAll(dbManager.getOthersReports(appPreference.getCurrentUserID()));
 					filterReportList();
-					othersAdapter.set(showOthersList);
+					othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);
 					
 					getActivity().runOnUiThread(new Runnable()
 					{
@@ -349,7 +350,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 							othersListView.stopRefresh();
 							othersListView.stopLoadMore();
 							othersListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-							othersAdapter.notifyDataSetChanged();
+							othersListView.setAdapter(othersAdapter);
 						}
 					});
 				}

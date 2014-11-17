@@ -179,13 +179,16 @@ public class ApproveReportActivity extends Activity
 			}
 		});
 		
-		titleTextView = (TextView)findViewById(R.id.titleTextView);
-		
+		titleTextView = (TextView)findViewById(R.id.titleTextView);		
 		managerTextView = (TextView)findViewById(R.id.managerTextView);
-		managerTextView.setText(report.getManagersName());		
-		
 		ccTextView = (TextView)findViewById(R.id.ccTextView);
-		ccTextView.setText(report.getCCsName());
+		
+		if (report != null)
+		{
+			titleTextView.setText(report.getTitle());
+			managerTextView.setText(report.getManagersName());	
+			ccTextView.setText(report.getCCsName());		
+		}		
 		
 		adapter = new ItemListViewAdapter(ApproveReportActivity.this, itemList);
 		itemListView = (ListView)findViewById(R.id.itemListView);
@@ -244,9 +247,16 @@ public class ApproveReportActivity extends Activity
 				if (response.getStatus())
 				{ 
 					int ownerID = appPreference.getCurrentUserID();
-					report.setManagerList(response.getReport().getManagerList());
-					report.setCCList(response.getReport().getCCList());
-					report.setCommentList(response.getReport().getCommentList());
+					if (report == null)
+					{
+						report = response.getReport();
+					}
+					else
+					{
+						report.setManagerList(response.getReport().getManagerList());
+						report.setCCList(response.getReport().getCCList());
+						report.setCommentList(response.getReport().getCommentList());						
+					}
 					
 					dbManager.deleteOthersReport(reportServerID, ownerID);
 					dbManager.insertOthersReport(report);
@@ -427,6 +437,7 @@ public class ApproveReportActivity extends Activity
 					{
 						public void run()
 						{
+					    	ReimApplication.dismissProgressDialog();
 							String message = status == 2 ? "报告已通过" : "报告已退回";
 							AlertDialog mDialog = new AlertDialog.Builder(ApproveReportActivity.this)
 												.setTitle("提示")
@@ -450,6 +461,7 @@ public class ApproveReportActivity extends Activity
 					{
 						public void run()
 						{
+					    	ReimApplication.dismissProgressDialog();
 							Toast.makeText(ApproveReportActivity.this, "操作失败，" + 
 											response.getErrorMessage(), Toast.LENGTH_SHORT).show();
 						}

@@ -53,7 +53,6 @@ public class AppPreference
 		appPreference.setCurrentGroupID(preferences.getInt("currentGroupID", -1));
 		appPreference.setUsername(preferences.getString("username", ""));
 		appPreference.setPassword(preferences.getString("password", ""));
-		appPreference.setPassword(preferences.getString("password", ""));
 		appPreference.setDeviceToken(AVInstallation.getCurrentInstallation().getInstallationId());
 		appPreference.setServerToken(preferences.getString("serverToken", ""));
 		appPreference.setSyncOnlyWithWifi(preferences.getBoolean("syncOnlyWithWifi", true));

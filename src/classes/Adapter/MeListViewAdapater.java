@@ -223,19 +223,22 @@ public class MeListViewAdapater extends BaseAdapter
 				SignOutResponse response = new SignOutResponse(httpResponse);
 				if (response.getStatus())
 				{
+					AppPreference appPreference = AppPreference.getAppPreference();
+					appPreference.setCurrentUserID(-1);
+					appPreference.setCurrentGroupID(-1);
+					appPreference.setUsername("");
+					appPreference.setPassword("");
+					appPreference.setServerToken("");
+					appPreference.setLastSyncTime(0);
+					appPreference.saveAppPreference();
+					
+					ReimApplication.setTabIndex(0);
+					ReimApplication.setReportTabIndex(0);
+					
 					fragment.getActivity().runOnUiThread(new Runnable()
 					{
 						public void run()
-						{
-							AppPreference appPreference = AppPreference.getAppPreference();
-							appPreference.setCurrentUserID(-1);
-							appPreference.setCurrentGroupID(-1);
-							appPreference.setUsername("");
-							appPreference.setPassword("");
-							appPreference.setServerToken("");
-							appPreference.setLastSyncTime(0);
-							appPreference.saveAppPreference();
-							
+						{							
 							fragment.startActivity(new Intent(fragment.getActivity(), SignInActivity.class));
 							fragment.getActivity().finish();
 						}

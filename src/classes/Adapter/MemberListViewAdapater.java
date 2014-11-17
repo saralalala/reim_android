@@ -82,7 +82,8 @@ public class MemberListViewAdapater extends BaseAdapter
 	
 	public void setMember(List<User> userList)
 	{
-		memberList = new ArrayList<User>(userList);
+		memberList.clear();
+		memberList.addAll(userList);
 	}
 	
 	public void setCheck(boolean[] checkList)

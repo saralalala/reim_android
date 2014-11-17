@@ -85,6 +85,7 @@ public class CommentListViewAdapater extends BaseAdapter
 	
 	public void setComments(List<Comment> comments)
 	{
-		commentList = new ArrayList<Comment>(comments);
+		commentList.clear();
+		commentList.addAll(comments);
 	}
 }

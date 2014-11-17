@@ -1,11 +1,14 @@
 package classes;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Comment
+public class Comment implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private int localID = -1;
 	private int serverID = -1;
 	private int reportID = -1;

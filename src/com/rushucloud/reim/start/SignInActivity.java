@@ -89,16 +89,11 @@ public class SignInActivity extends Activity
 			passwordEditText.setText(password);
 		}
 
-		usernameEditText.setText("tianyu.an@rushucloud.com");
-		passwordEditText.setText("111111");
-
 		usernameEditText.setText("aty_3361@sina.com");
 		passwordEditText.setText("111111");
 
-//		usernameEditText.setText("alvayang@1in1.cn");
-//		passwordEditText.setText("qqqqqq");
-		
-//		DBManager dbManager = DBManager.getDBManager();
+		usernameEditText.setText("anty_promise@sina.com");
+		passwordEditText.setText("111111");
 		
 		RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()

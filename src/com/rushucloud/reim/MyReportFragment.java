@@ -550,8 +550,9 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
 	private void syncReports()
 	{
-		if (Utils.canSyncToServer())
+		if (SyncUtils.canSyncToServer())
 		{
+			SyncUtils.isSyncOnGoing = true;
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
 				public void execute()
@@ -564,7 +565,13 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 						}
 					});
 
-					SyncUtils.syncAllToServer(null);
+					SyncUtils.syncAllToServer(new SyncDataCallback()
+					{
+						public void execute()
+						{
+							SyncUtils.isSyncOnGoing = false;
+						}
+					});
 				}
 			});
 		}
@@ -572,8 +579,9 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
 	public void onRefresh()
 	{
-		if (Utils.canSyncToServer())
+		if (SyncUtils.canSyncToServer())
 		{
+			SyncUtils.isSyncOnGoing = true;
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
 				public void execute()
@@ -588,7 +596,13 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 						}
 					});
 
-					SyncUtils.syncAllToServer(null);
+					SyncUtils.syncAllToServer(new SyncDataCallback()
+					{
+						public void execute()
+						{
+							SyncUtils.isSyncOnGoing = false;
+						}
+					});
 				}
 			});
 		}
@@ -599,7 +613,8 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 				public void run()
 				{
 					mineListView.stopRefresh();
-					Toast.makeText(getActivity(), "未打开同步开关或未打开Wifi，无法刷新", Toast.LENGTH_SHORT).show();
+					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+					Toast.makeText(getActivity(), prompt, Toast.LENGTH_SHORT).show();
 				}
 			});
 		}		
@@ -607,8 +622,9 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
 	public void onLoadMore()
 	{
-		if (Utils.canSyncToServer())
+		if (SyncUtils.canSyncToServer())
 		{
+			SyncUtils.isSyncOnGoing = true;
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
 				public void execute()
@@ -623,7 +639,14 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 						}
 					});
 
-					SyncUtils.syncAllToServer(null);
+
+					SyncUtils.syncAllToServer(new SyncDataCallback()
+					{
+						public void execute()
+						{
+							SyncUtils.isSyncOnGoing = false;
+						}
+					});
 				}
 			});
 		}
@@ -634,7 +657,8 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 				public void run()
 				{
 					mineListView.stopLoadMore();
-					Toast.makeText(getActivity(), "未打开同步开关或未打开Wifi，无法刷新", Toast.LENGTH_SHORT).show();
+					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+					Toast.makeText(getActivity(), prompt, Toast.LENGTH_SHORT).show();
 				}
 			});
 		}	

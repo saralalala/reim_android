@@ -66,7 +66,7 @@ public class DBManager extends SQLiteOpenHelper
 
 	public static void tempCommand()
 	{
-//		String sqlString = "DELETE FROM tbl_report WHERE id = 13";
+//		String sqlString = "DELETE FROM tbl_report WHERE id = 7";
 //		database.execSQL(sqlString);
 //		String sqlString = "DROP TABLE IF EXISTS tbl_report";
 //		database.execSQL(sqlString);

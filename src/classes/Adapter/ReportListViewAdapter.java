@@ -76,6 +76,7 @@ public class ReportListViewAdapter extends BaseAdapter
 
 	public void set(List<Report> reports)
 	{
-		reportList = new ArrayList<Report>(reports);
+		reportList.clear();
+		reportList.addAll(reports);
 	}
 }
