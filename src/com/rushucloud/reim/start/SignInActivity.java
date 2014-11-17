@@ -227,20 +227,16 @@ public class SignInActivity extends Activity
 						appPreference.saveAppPreference();
 
 						// update members
+						User currentUser = response.getCurrentUser();
+						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+						if (currentUser.getImageID() == localUser.getImageID())
+						{
+							currentUser.setAvatarPath(localUser.getAvatarPath());
+						}
+						
 						dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
 
-						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-						if (localUser.getServerUpdatedDate() == response.getCurrentUser().getServerUpdatedDate())
-						{
-							if (localUser.getAvatarPath().equals(""))
-							{
-								dbManager.updateUser(response.getCurrentUser());
-							}
-						}
-						else
-						{
-							dbManager.syncUser(response.getCurrentUser());
-						}
+						dbManager.syncUser(response.getCurrentUser());
 
 						// update categories
 						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

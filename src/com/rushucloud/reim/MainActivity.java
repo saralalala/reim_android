@@ -1,12 +1,16 @@
 package com.rushucloud.reim;
 
+import java.util.List;
+
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.EventsReadRequest;
 import netUtils.Request.EventsRequest;
 import netUtils.Request.Group.GetGroupRequest;
 import netUtils.Response.EventsResponse;
 import netUtils.Response.Group.GetGroupResponse;
+import classes.AppPreference;
 import classes.ReimApplication;
+import classes.User;
 import classes.Utils;
 
 import com.umeng.analytics.MobclickAgent;
@@ -261,7 +265,28 @@ public class MainActivity extends ActionBarActivity
 					int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
 					
 					// update members
-					dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+					List<User> memberList = response.getMemberList();
+					User currentUser = AppPreference.getAppPreference().getCurrentUser();
+					
+					for (User user : memberList)
+					{
+						if (user.getServerID() == currentUser.getServerID())							
+						{
+							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+							{
+								if (user.getImageID() == currentUser.getImageID())
+								{
+									user.setAvatarPath(currentUser.getAvatarPath());								
+								}								
+							}
+							else
+							{
+								user = currentUser;
+							}
+						}
+					}
+					
+					dbManager.updateGroupUsers(memberList, currentGroupID);
 
 					// update group info
 					dbManager.syncGroup(response.getGroup());

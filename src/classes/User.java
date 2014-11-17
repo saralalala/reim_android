@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.text.TextUtils;
 
 import database.DBManager;
@@ -26,6 +29,45 @@ public class User implements Serializable
 	private int defaultManagerID = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
+	
+	public User()
+	{
+		
+	}
+	
+	public User(JSONObject jObject, int groupID)
+	{
+		try
+		{
+			setServerID(Integer.valueOf(jObject.getString("id")));
+			setEmail(jObject.getString("email"));
+			setPhone(jObject.getString("phone"));
+			setNickname(jObject.getString("nickname"));
+			setDefaultManagerID(jObject.getInt("manager_id"));
+			setAvatarPath("");
+			setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
+			setGroupID(groupID);
+			setLocalUpdatedDate(jObject.getInt("dt"));
+			setServerUpdatedDate(jObject.getInt("dt"));
+			String imageID = jObject.getString("avatar");
+			if (imageID.equals(""))
+			{
+				setImageID(-1);					
+			}
+			else
+			{
+				setImageID(Integer.valueOf(imageID));
+			}
+		}
+		catch (NumberFormatException e)
+		{
+			e.printStackTrace();
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}		
+	}
 	
 	public int getServerID()
 	{

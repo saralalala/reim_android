@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import classes.Group;
 import classes.User;
-import classes.Utils;
 
 import netUtils.Response.BaseResponse;
 
@@ -33,12 +32,7 @@ public class GetGroupResponse extends BaseResponse
 			JSONObject groupObject = jObject.getJSONObject("ginfo");
 			if (groupObject.getInt("groupid") != -1)
 			{
-				group = new Group();
-				group.setServerID(groupObject.getInt("groupid"));
-				group.setName(groupObject.getString("group_name"));
-				group.setLocalUpdatedDate(groupObject.getInt("lastdt"));
-				group.setServerUpdatedDate(groupObject.getInt("lastdt"));
-				
+				group = new Group(groupObject);
 				groupID = group.getServerID();
 			}
 			
@@ -46,27 +40,7 @@ public class GetGroupResponse extends BaseResponse
 			memberList = new ArrayList<User>();
 			for (int i = 0; i < memberArray.length(); i++)
 			{
-				JSONObject object = memberArray.getJSONObject(i);
-				User user = new User();
-				user.setServerID(Integer.valueOf(object.getString("id")));
-				user.setEmail(object.getString("email"));
-				user.setPhone(object.getString("phone"));
-				user.setNickname(object.getString("nickname"));
-				user.setIsAdmin(Utils.intToBoolean(object.getInt("admin")));
-				user.setDefaultManagerID(object.getInt("manager_id"));
-				user.setGroupID(groupID);
-				user.setAvatarPath("");
-				user.setLocalUpdatedDate(object.getInt("dt"));
-				user.setServerUpdatedDate(object.getInt("dt"));
-				String imageID = object.getString("avatar");
-				if (imageID.equals(""))
-				{
-					user.setImageID(-1);					
-				}
-				else
-				{
-					user.setImageID(Integer.valueOf(imageID));
-				}
+				User user = new User(memberArray.getJSONObject(i), groupID);
 				memberList.add(user);
 			}			
 		}

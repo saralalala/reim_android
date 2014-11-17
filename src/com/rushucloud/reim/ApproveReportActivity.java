@@ -463,9 +463,6 @@ public class ApproveReportActivity extends Activity
     {
     	ReimApplication.setTabIndex(1);
     	ReimApplication.setReportTabIndex(1);
-    	Intent intent = new Intent(ApproveReportActivity.this, MainActivity.class);
-    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	startActivity(intent);
     	finish();
     }
 }

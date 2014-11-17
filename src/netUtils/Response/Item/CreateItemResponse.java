@@ -11,6 +11,7 @@ import netUtils.Response.BaseResponse;
 public class CreateItemResponse extends BaseResponse
 {
 	private int itemID;
+	private int createDate;
 	
 	public CreateItemResponse(Object httpResponse)
 	{
@@ -26,7 +27,8 @@ public class CreateItemResponse extends BaseResponse
 			setStatus(Utils.intToBoolean(jObject.getInt("status")));
 			if (getStatus())
 			{
-				setItemID(Integer.valueOf(jObject.getString("iid")));				
+				itemID = jObject.getInt("iid");
+				setCreateDate(jObject.getInt("createdt"));
 			}
 			else
 			{
@@ -47,5 +49,15 @@ public class CreateItemResponse extends BaseResponse
 	public void setItemID(int itemID)
 	{
 		this.itemID = itemID;
+	}
+
+	public int getCreateDate()
+	{
+		return createDate;
+	}
+
+	public void setCreateDate(int createDate)
+	{
+		this.createDate = createDate;
 	}
 }

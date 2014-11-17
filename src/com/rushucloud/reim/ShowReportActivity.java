@@ -340,18 +340,9 @@ public class ShowReportActivity extends Activity
     
     private void goBackToMainActivity()
     {
+    	int reportTabIndex = myReport ? 0 : 1;
     	ReimApplication.setTabIndex(1);
-    	if (myReport)
-    	{
-        	ReimApplication.setReportTabIndex(0);    		
-    	}
-    	else
-    	{
-        	ReimApplication.setReportTabIndex(1);
-    	}
-    	Intent intent = new Intent(ShowReportActivity.this, MainActivity.class);
-    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	startActivity(intent);
+    	ReimApplication.setReportTabIndex(reportTabIndex);
     	finish();
     }
 }

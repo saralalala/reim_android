@@ -1,11 +1,34 @@
 package classes;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Group
 {
 	private int serverID = -1;
 	private String name = "";
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
+	
+	public Group()
+	{
+		
+	}
+	
+	public Group(JSONObject jObject)
+	{
+		try
+		{
+			setServerID(jObject.getInt("groupid"));
+			setName(jObject.getString("group_name"));
+			setLocalUpdatedDate(jObject.getInt("lastdt"));
+			setServerUpdatedDate(jObject.getInt("lastdt"));	
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}	
+	}
 
 	public int getServerID()
 	{

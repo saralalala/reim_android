@@ -78,7 +78,7 @@ public abstract class SyncUtils
 						remainingList.add(item.getServerID());
 					}
 					
-					dbManager.deleteTrashItems(remainingList, appPreference.getCurrentUserID());
+ 					dbManager.deleteTrashItems(remainingList, appPreference.getCurrentUserID());
 
 					if (callback != null)
 					{
@@ -194,6 +194,8 @@ public abstract class SyncUtils
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());
 					item.setServerID(response.getItemID());
+					item.setCreatedDate(response.getCreateDate());
+					
 					DBManager.getDBManager().updateItem(item);
 					itemTaskCount--;
 					if (itemTaskCount == 0)

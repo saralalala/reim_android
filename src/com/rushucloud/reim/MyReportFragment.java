@@ -555,7 +555,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
 				public void execute()
-				{
+				{					
 					getActivity().runOnUiThread(new Runnable()
 					{
 						public void run()

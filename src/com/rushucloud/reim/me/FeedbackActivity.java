@@ -7,7 +7,6 @@ import netUtils.Response.FeedbackResponse;
 import classes.ReimApplication;
 import classes.Utils;
 
-import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -15,7 +14,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
@@ -189,9 +187,6 @@ public class FeedbackActivity extends Activity
     private void goBackToMainActivity()
     {
     	ReimApplication.setTabIndex(3);
-    	Intent intent = new Intent(FeedbackActivity.this, MainActivity.class);
-    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	startActivity(intent);
     	finish();
     }
 }

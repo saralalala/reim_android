@@ -227,14 +227,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		if (dbManager == null)
 		{
 			dbManager = DBManager.getDBManager();
-//			tags = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-			
-			for (int i = 0; i < 6; i++)
-			{
-				Tag tag = new Tag();
-				tag.setName("Tag"+i);
-				tagList.add(tag);
-			}
+			tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
 		}
 	}
 
@@ -556,7 +549,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			SyncUtils.syncFromServer(new SyncDataCallback()
 			{
 				public void execute()
-				{
+				{					
 					getActivity().runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -564,7 +557,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 							refreshItemListView();
 						}
 					});
-
+					
 					SyncUtils.syncAllToServer(null);
 				}
 			});

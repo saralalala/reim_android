@@ -3,11 +3,9 @@ package classes.Adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.AppPreference;
 import classes.User;
 
 import com.rushucloud.reim.R;
-import database.DBManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,8 +25,6 @@ public class MemberListViewAdapater extends BaseAdapter
 	public MemberListViewAdapater(Context context, List<User> userList, boolean[] checkList)
 	{
 		layoutInflater = LayoutInflater.from(context);
-		AppPreference.getAppPreference();
-		DBManager.getDBManager();
 		memberList = new ArrayList<User>(userList);
 		check = checkList;
 	}

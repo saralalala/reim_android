@@ -901,6 +901,8 @@ public class EditItemActivity extends Activity
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());
 					item.setServerID(response.getItemID());
+					item.setCreatedDate(response.getCreateDate());
+					
 					dbManager.insertItem(item);
 					item.setLocalID(dbManager.getLastInsertItemID());
 					sendApproveReportRequest();

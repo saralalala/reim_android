@@ -171,7 +171,6 @@ public class EditReportActivity extends Activity
 		{
 			// new report from ReportFragment
 			report = new Report();
-			report.setStatus(Report.STATUS_DRAFT);
 			report.setUser(appPreference.getCurrentUser());
 			chosenItemIDList = new ArrayList<Integer>();
 			remainingItemIDList = Item.getItemsIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
@@ -413,7 +412,7 @@ public class EditReportActivity extends Activity
     private void showManagerDialog()
     {
     	hideSoftKeyboard();
-		if (report.getManagerList() == null)
+		if (report.getManagerList() == null || report.getManagerList().size() == 0)
 		{
 			List<User> tempList = new ArrayList<User>();
 			User defaultManager = dbManager.getUser(currentUser.getDefaultManagerID());
@@ -547,7 +546,7 @@ public class EditReportActivity extends Activity
 		}
 		if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
 		{
-			Toast.makeText(EditReportActivity.this, "条目保存成功", Toast.LENGTH_SHORT).show();
+			Toast.makeText(EditReportActivity.this, "报告保存成功", Toast.LENGTH_SHORT).show();
 			goBackToMainActivity();
 		}
 		else
@@ -835,9 +834,6 @@ public class EditReportActivity extends Activity
     {
     	ReimApplication.setTabIndex(1);
     	ReimApplication.setReportTabIndex(0);
-    	Intent intent = new Intent(EditReportActivity.this, MainActivity.class);
-    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	startActivity(intent);
     	finish();
     }
 }

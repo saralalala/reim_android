@@ -11,7 +11,6 @@ import classes.Invite;
 import classes.ReimApplication;
 import classes.Utils;
 
-import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -167,9 +166,6 @@ public class InviteActivity extends Activity
     private void goBackToMainActivity()
     {
     	ReimApplication.setTabIndex(3);
-    	Intent intent = new Intent(InviteActivity.this, MainActivity.class);
-    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	startActivity(intent);
     	finish();
     }
 }

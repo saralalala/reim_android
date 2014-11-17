@@ -5,8 +5,10 @@ import java.util.List;
 import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
 import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Group.GetGroupRequest;
 import netUtils.Request.User.DefaultManagerRequest;
 import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.Group.GetGroupResponse;
 import netUtils.Response.User.DefaultManagerResponse;
 
 import com.rushucloud.reim.R;
@@ -48,7 +50,6 @@ public class ManagerActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_user);
-		initData();
 		initView();
 	}
 
@@ -57,7 +58,15 @@ public class ManagerActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ManagerActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		if (Utils.isNetworkConnected())
+		{
+			sendGetGroupRequest();
+		}
+		else
+		{
+			initData();
+			refreshListView();
+		}
 	}
 
 	protected void onPause()
@@ -140,9 +149,9 @@ public class ManagerActivity extends Activity
 	
 	private void initView()
 	{		
-		adapter = new MemberListViewAdapater(this, userList, checkList);
+		ReimApplication.setProgressDialog(this);
+		
 		managerListView = (ListView)findViewById(R.id.userListView);
-		managerListView.setAdapter(adapter);
 		managerListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -164,7 +173,13 @@ public class ManagerActivity extends Activity
 				adapter.setCheck(checkList);
 				adapter.notifyDataSetChanged();
 			}
-		});
+		});	
+	}
+	
+	private void refreshListView()
+	{
+		adapter = new MemberListViewAdapater(this, userList, checkList);
+		managerListView.setAdapter(adapter);	
 		
 		if (Utils.isNetworkConnected())
 		{
@@ -175,7 +190,71 @@ public class ManagerActivity extends Activity
 					sendDownloadAvatarRequest(user);
 				}
 			}
-		}
+		}	
+	}
+
+	private void sendGetGroupRequest()
+	{
+		ReimApplication.showProgressDialog();
+		GetGroupRequest request = new GetGroupRequest();
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				GetGroupResponse response = new GetGroupResponse(httpResponse);
+				if (response.getStatus())
+				{
+					appPreference = AppPreference.getAppPreference();
+					dbManager = DBManager.getDBManager();
+					
+					List<User> memberList = response.getMemberList();
+					User currentUser = appPreference.getCurrentUser();
+					
+					for (User user : memberList)
+					{
+						if (user.getServerID() == currentUser.getServerID())							
+						{
+							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+							{
+								if (user.getImageID() == currentUser.getImageID())
+								{
+									user.setAvatarPath(currentUser.getAvatarPath());								
+								}								
+							}
+							else
+							{
+								user = currentUser;
+							}
+						}
+					}
+					
+					dbManager.updateGroupUsers(memberList, appPreference.getCurrentGroupID());
+
+					dbManager.syncGroup(response.getGroup());
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							initData();
+							refreshListView();
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(ManagerActivity.this, "刷新数据失败", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+			}
+		});
 	}
 	
 	private void sendDefaultManagerRequest(final int newManagerID)

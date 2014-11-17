@@ -79,8 +79,8 @@ public class Item
 			List<Tag> tagList = Tag.stringToTagList(jObject.getString("tags"));
 			setTags(tagList);
 			
-//			List<User> userList = User.idStringToUserList(jObject.getString("relates"));
-//			setRelevantUsers(userList);
+			List<User> userList = User.idStringToUserList(jObject.getString("relates"));
+			setRelevantUsers(userList);
 			
 			User user = new User();
 			user.setServerID(jObject.getInt("uid"));

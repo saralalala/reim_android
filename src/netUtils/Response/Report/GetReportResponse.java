@@ -89,13 +89,16 @@ public class GetReportResponse extends BaseResponse
 				item.setLocation(object.getString("location"));
 				item.setConsumedDate(object.getInt("dt"));
 				item.setServerUpdatedDate(object.getInt("lastdt"));				
-				item.setLocalUpdatedDate(object.getInt("lastdt"));				
-				item.setImageID(object.getInt("image_id"));		
+				item.setLocalUpdatedDate(object.getInt("lastdt"));
 				item.setInvoicePath("");
 				item.setIsProveAhead(Utils.intToBoolean(object.getInt("prove_ahead")));
 				item.setNeedReimbursed(Utils.intToBoolean(object.getInt("reimbursed")));
 				item.setTagsID(object.getString("tags"));
 				item.setRelevantUsersID(object.getString("relates"));
+				
+				List<Integer> idList = Utils.stringToIntList(object.getString("image_id"));
+				int imageID = idList.size() > 0 ? idList.get(0) : -1;
+				item.setImageID(imageID);
 				
 				Report report = new Report();
 				report.setServerID(object.getInt("rid"));

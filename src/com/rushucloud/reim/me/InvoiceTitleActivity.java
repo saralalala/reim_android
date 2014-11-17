@@ -3,14 +3,12 @@ package com.rushucloud.reim.me;
 import classes.AppPreference;
 import classes.Group;
 import classes.ReimApplication;
-import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.animation.Animation;
@@ -67,9 +65,6 @@ public class InvoiceTitleActivity extends Activity
     private void goBackToMainActivity()
     {
     	ReimApplication.setTabIndex(3);
-    	Intent intent = new Intent(InvoiceTitleActivity.this, MainActivity.class);
-    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	startActivity(intent);
     	finish();
     }
 }

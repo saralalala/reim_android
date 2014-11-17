@@ -1,5 +1,6 @@
 package com.rushucloud.reim;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
@@ -73,6 +74,10 @@ public class CommentActivity extends Activity
 			if (reportID != -1)
 			{
 				commentList = dbManager.getOthersReportComments(reportID);				
+			}
+			else
+			{
+				commentList = new ArrayList<Comment>();
 			}
 		}
 		else

@@ -4,7 +4,6 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.ModifyUserRequest;
 import netUtils.Response.User.ModifyUserResponse;
 
-import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -208,9 +207,6 @@ public class ProfileActivity extends Activity
     private void goBackToMainActivity()
     {
     	ReimApplication.setTabIndex(3);
-    	Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	startActivity(intent);
     	finish();
     }
 }

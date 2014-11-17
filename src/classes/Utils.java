@@ -90,7 +90,7 @@ public class Utils
 		{
 			return true;
 		}
-		else if (!appPreference.syncOnlyWithWifi() && isDataConnected())
+		else if (!appPreference.syncOnlyWithWifi() && isNetworkConnected())
 		{
 			return true;
 		}
@@ -223,7 +223,7 @@ public class Utils
     	String[] result = TextUtils.split(idString, ",");
     	for (int i = 0; i < result.length; i++)
 		{
-    		resultList.add(Integer.valueOf(result[i]));
+    		resultList.add(Integer.valueOf(result[i].trim()));
 		}
     	return resultList;
     } 
