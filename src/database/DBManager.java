@@ -836,7 +836,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String idString = TextUtils.join(",", remainingList) + ",-1";
+			String idString = remainingList.size() > 0 ? TextUtils.join(",", remainingList) + ",-1" : "-1";
 			String sqlString = "DELETE FROM tbl_item WHERE server_id NOT IN (" + idString +") AND user_id = " + userServerID;
 			database.execSQL(sqlString);
 			
@@ -1583,7 +1583,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String idString = TextUtils.join(",", remainingList) + ",-1";
+			String idString = remainingList.size() > 0 ? TextUtils.join(",", remainingList) + ",-1" : "-1";
 			String sqlString = "DELETE FROM tbl_report WHERE server_id NOT IN (" + idString +") AND user_id = " + userServerID;
 			database.execSQL(sqlString);
 			

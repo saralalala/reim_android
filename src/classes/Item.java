@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Item
 {		
 	public static final int STATUS_DRAFT = 0;
@@ -37,6 +40,57 @@ public class Item
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
+	
+	public Item()
+	{
+		
+	}
+	
+	public Item(JSONObject jObject)
+	{
+		try
+		{
+			setServerID(jObject.getInt("id"));
+			setAmount(jObject.getDouble("amount"));
+			setMerchant(jObject.getString("merchants"));
+			setNote(jObject.getString("note"));
+			setStatus(jObject.getInt("status"));
+			setLocation(jObject.getString("location"));
+			setConsumedDate(jObject.getInt("dt"));
+			setCreatedDate(jObject.getInt("createdt"));		
+			setServerUpdatedDate(jObject.getInt("lastdt"));				
+			setLocalUpdatedDate(jObject.getInt("lastdt"));		
+			setInvoicePath("");
+			setIsProveAhead(Utils.intToBoolean(jObject.getInt("prove_ahead")));
+			setNeedReimbursed(Utils.intToBoolean(jObject.getInt("reimbursed")));
+			
+			List<Integer> idList = Utils.stringToIntList(jObject.getString("image_id"));
+			int imageID = idList.size() > 0 ? idList.get(0) : -1;
+			setImageID(imageID);
+			
+			Report report = new Report();
+			report.setServerID(jObject.getInt("rid"));
+			setBelongReport(report);				
+			
+			Category category = new Category();
+			category.setServerID(jObject.getInt("category"));
+			setCategory(category);
+			
+			List<Tag> tagList = Tag.stringToTagList(jObject.getString("tags"));
+			setTags(tagList);
+			
+//			List<User> userList = User.idStringToUserList(jObject.getString("relates"));
+//			setRelevantUsers(userList);
+			
+			User user = new User();
+			user.setServerID(jObject.getInt("uid"));
+			setConsumer(user);
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	public int getLocalID()
 	{

@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import netUtils.HttpConstant;
+import netUtils.Request.CommonRequest;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.UploadImageRequest;
 import netUtils.Request.User.InviteRequest;
 import netUtils.HttpConnectionCallback;
+import netUtils.Response.CommonResponse;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.User.InviteResponse;
@@ -382,6 +384,66 @@ public class MeFragment extends Fragment
 				final InviteResponse response = new InviteResponse(httpResponse);
 				if (response.getStatus())
 				{
+					sendCommonRequest();
+				}
+				else
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+					    	ReimApplication.dismissProgressDialog();
+							Toast.makeText(getActivity(), "邀请发送失败，" + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+			}
+		});
+    }
+    
+    private void sendCommonRequest()
+    {
+    	ReimApplication.showProgressDialog();
+    	CommonRequest request = new CommonRequest();
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final CommonResponse response = new CommonResponse(httpResponse);
+				if (response.getStatus())
+				{
+					int currentGroupID = response.getGroup().getServerID();
+
+					// update AppPreference
+					AppPreference appPreference = AppPreference.getAppPreference();
+					appPreference.setCurrentGroupID(currentGroupID);
+					appPreference.saveAppPreference();
+
+					// update members
+					DBManager dbManager = DBManager.getDBManager();
+					dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+					User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+					if (localUser.getServerUpdatedDate() == response.getCurrentUser().getServerUpdatedDate())
+					{
+						if (localUser.getAvatarPath().equals(""))
+						{
+							dbManager.updateUser(response.getCurrentUser());
+						}
+					}
+					else
+					{
+						dbManager.syncUser(response.getCurrentUser());
+					}
+
+					// update categories
+					dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+
+					// update tags
+					dbManager.updateGroupTags(response.getTagList(), currentGroupID);
+
+					// update group info
+					dbManager.syncGroup(response.getGroup());
 					getActivity().runOnUiThread(new Runnable()
 					{
 						public void run()

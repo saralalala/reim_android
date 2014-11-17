@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.rushucloud.reim.R;
 
 import android.util.SparseArray;
@@ -35,6 +38,32 @@ public class Report implements Serializable
 	private int localUpdatedDate = -1;
 	private int itemCount;
 	private String amount;
+	
+	public Report()
+	{
+		
+	}
+
+	public Report(JSONObject jObject)
+	{
+		try
+		{
+			setServerID(jObject.getInt("id"));
+			setTitle(jObject.getString("title"));
+			setCreatedDate(jObject.getInt("createdt"));
+			setStatus(jObject.getInt("status"));
+			setLocalUpdatedDate(jObject.getInt("lastdt"));
+			setServerUpdatedDate(jObject.getInt("lastdt"));
+			
+			User user = new User();
+			user.setServerID(jObject.getInt("uid"));
+			setUser(user);
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}		
+	}
 	
 	public int getLocalID()
 	{

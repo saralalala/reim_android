@@ -31,17 +31,7 @@ public class GetReportResponse extends BaseResponse
 		try
 		{
 			JSONObject jObject = getDataObject();
-			report = new Report();
-			report.setServerID(jObject.getInt("rid"));
-			report.setTitle(jObject.getString("title"));
-			report.setCreatedDate(jObject.getInt("createdt"));
-			report.setStatus(jObject.getInt("status"));
-			report.setLocalUpdatedDate(jObject.getInt("lastdt"));
-			report.setServerUpdatedDate(jObject.getInt("lastdt"));
-
-			User user = new User();
-			user.setServerID(jObject.getInt("uid"));
-			report.setUser(user);
+			report = new Report(jObject);
 			
 			DBManager dbManager = DBManager.getDBManager();
 
@@ -115,9 +105,9 @@ public class GetReportResponse extends BaseResponse
 				category.setServerID(object.getInt("category"));
 				item.setCategory(category);
 				
-				User itemUser = new User();
-				itemUser.setServerID(object.getInt("uid"));
-				item.setConsumer(itemUser);
+				User consumser = new User();
+				consumser.setServerID(object.getInt("uid"));
+				item.setConsumer(consumser);
 				
 				itemList.add(item);
 			}

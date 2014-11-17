@@ -7,12 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.Category;
 import classes.Item;
 import classes.Report;
-import classes.Tag;
-import classes.User;
-import classes.Utils;
 
 public class SyncDataResponse extends BaseResponse
 {
@@ -35,19 +31,7 @@ public class SyncDataResponse extends BaseResponse
 			JSONArray jsonArray = jObject.getJSONArray("reports");
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
-				JSONObject object = jsonArray.getJSONObject(i);
-				Report report = new Report();
-				report.setServerID(object.getInt("id"));
-				report.setTitle(object.getString("title"));
-				report.setCreatedDate(object.getInt("createdt"));
-				report.setLocalUpdatedDate(object.getInt("lastdt"));
-				report.setServerUpdatedDate(object.getInt("lastdt"));
-				report.setStatus(object.getInt("status"));
-				
-				User user = new User();
-				user.setServerID(object.getInt("uid"));
-				report.setUser(user);
-				
+				Report report = new Report(jsonArray.getJSONObject(i));
 				reportList.add(report);
 			}
 			
@@ -55,38 +39,7 @@ public class SyncDataResponse extends BaseResponse
 			jsonArray = jObject.getJSONArray("items");
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
-				JSONObject object = jsonArray.getJSONObject(i);
-				Item item = new Item();
-				item.setServerID(object.getInt("id"));
-				item.setAmount(object.getDouble("amount"));
-				item.setMerchant(object.getString("merchants"));
-				item.setNote(object.getString("note"));
-				item.setConsumedDate(object.getInt("dt"));
-				item.setStatus(object.getInt("status"));
-				item.setLocation(object.getString("location"));
-				item.setServerUpdatedDate(object.getInt("createdt"));		
-				item.setServerUpdatedDate(object.getInt("lastdt"));				
-				item.setLocalUpdatedDate(object.getInt("lastdt"));				
-				item.setImageID(object.getInt("image_id"));		
-				item.setInvoicePath("");
-				item.setIsProveAhead(Utils.intToBoolean(object.getInt("prove_ahead")));
-				item.setNeedReimbursed(Utils.intToBoolean(object.getInt("reimbursed")));
-				
-				Report report = new Report();
-				report.setServerID(object.getInt("rid"));
-				item.setBelongReport(report);				
-				
-				Category category = new Category();
-				category.setServerID(object.getInt("category"));
-				item.setCategory(category);
-				
-				List<Tag> tagList = Tag.stringToTagList(object.getString("tags"));
-				item.setTags(tagList);
-				
-				User user = new User();
-				user.setServerID(object.getInt("uid"));
-				item.setConsumer(user);
-				
+				Item item = new Item(jsonArray.getJSONObject(i));				
 				itemList.add(item);
 			}
 		}
