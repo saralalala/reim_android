@@ -16,6 +16,7 @@ import com.mechat.mechatlibrary.MCClient;
 import com.mechat.mechatlibrary.MCOnlineConfig;
 import com.mechat.mechatlibrary.MCUserConfig;
 import com.rushucloud.reim.me.InviteActivity;
+import com.rushucloud.reim.me.InvoiceTitleActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -192,9 +193,12 @@ public class MeFragment extends Fragment
 						startActivity(new Intent(getActivity(), ProfileActivity.class));
 						break;
 					case 2:
-						startActivity(new Intent(getActivity(), InviteActivity.class));
+						startActivity(new Intent(getActivity(), InvoiceTitleActivity.class));
 						break;
 					case 3:
+						startActivity(new Intent(getActivity(), InviteActivity.class));
+						break;
+					case 4:
 						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_INVITE");
 						if (Utils.isNetworkConnected())
 						{
@@ -205,12 +209,12 @@ public class MeFragment extends Fragment
 							Toast.makeText(getActivity(), "网络未连接，无法发送邀请", Toast.LENGTH_SHORT).show();
 						}
 						break;
-					case 4:
+					case 5:
 						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
 						ReimApplication.setTabIndex(3);
 						showShareDialog();
 						break;
-					case 5:
+					case 6:
 						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_FEEDBACK");
 						ReimApplication.setTabIndex(3);
 						showFeedbackDialog();

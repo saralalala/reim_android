@@ -141,7 +141,7 @@ public class MeListViewAdapater extends BaseAdapter
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
 				view.setBackgroundResource(R.drawable.list_item_color);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
-				textView.setText(fragment.getString(R.string.myInvites));
+				textView.setText(fragment.getString(R.string.getInvoice));
 				break;
 			}
 			case 3:
@@ -149,7 +149,7 @@ public class MeListViewAdapater extends BaseAdapter
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
 				view.setBackgroundResource(R.drawable.list_item_color);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
-				textView.setText(fragment.getString(R.string.invite));
+				textView.setText(fragment.getString(R.string.myInvites));
 				break;
 			}
 			case 4:
@@ -157,7 +157,7 @@ public class MeListViewAdapater extends BaseAdapter
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
 				view.setBackgroundResource(R.drawable.list_item_color);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
-				textView.setText(fragment.getString(R.string.share));
+				textView.setText(fragment.getString(R.string.invite));
 				break;
 			}
 			case 5:
@@ -165,10 +165,18 @@ public class MeListViewAdapater extends BaseAdapter
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
 				view.setBackgroundResource(R.drawable.list_item_color);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
-				textView.setText(fragment.getString(R.string.feedback));
+				textView.setText(fragment.getString(R.string.share));
 				break;
 			}
 			case 6:
+			{
+				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+				view.setBackgroundResource(R.drawable.list_item_color);
+				TextView textView = (TextView)view.findViewById(android.R.id.text1);
+				textView.setText(fragment.getString(R.string.feedback));
+				break;
+			}
+			case 7:
 			{
 				view = layoutInflater.inflate(R.layout.list_button, null);
 				Button button = (Button)view.findViewById(R.id.button);
@@ -190,7 +198,7 @@ public class MeListViewAdapater extends BaseAdapter
 	
 	public int getCount()
 	{
-		return 7;
+		return 9;
 	}
 
 	public Object getItem(int position)

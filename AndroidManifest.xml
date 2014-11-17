@@ -135,6 +135,11 @@
         
         <activity 
             android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.me.InvoiceTitleActivity">
+        </activity>
+        
+        <activity 
+            android:label="@string/app_name" 
             android:name="com.rushucloud.reim.me.ChangePasswordActivity">
         </activity>
         

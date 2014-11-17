@@ -101,6 +101,7 @@
     <string name="enablePasswordProtection">开启密码保护</string>
     <string name="syncWithoutWifi">仅WiFi开启时上传云端</string>
     <string name="preference">偏好设置</string>
+    <string name="getInvoice">我要开发票</string>
     <string name="myInvites">收到的邀请</string>
     <string name="invite">邀请好友</string>
     <string name="share">分享</string>
@@ -127,6 +128,7 @@
     <string name="inputUserContact">请输入对方手机号或邮箱</string>
     <string name="agree">同意</string>
     <string name="noInvites">没有收到任何邀请</string>
+    <string name="getInvoicePrompt">发票抬头请开：</string>
     
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>

@@ -1,7 +1,7 @@
 package netUtils;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import android.util.SparseIntArray;
 
 import netUtils.Request.SyncDataRequest;
@@ -46,11 +46,13 @@ public abstract class SyncUtils
 					appPreference.saveAppPreference();
 					
 					DBManager dbManager = DBManager.getDBManager();
+					List<Integer> remainingList = new ArrayList<Integer>();
 					SparseIntArray reportIDArray = new SparseIntArray();
 					for (Report report : response.getReportList())
 					{
 						if (dbManager.syncReport(report))
 						{
+							remainingList.add(report.getServerID());
 							Report tempReport = dbManager.getReportByServerID(report.getServerID());
 							if (tempReport != null)
 							{
@@ -58,7 +60,9 @@ public abstract class SyncUtils
 							}
 						}
 					}
+					dbManager.deleteTrashReports(remainingList, appPreference.getCurrentUserID());
 					
+					remainingList.clear();
 					int i = 1;
 					for (Item item : response.getItemList())
 					{
@@ -71,8 +75,10 @@ public abstract class SyncUtils
 						i++;
 						item.setBelongReport(report);
 						dbManager.syncItem(item);
+						remainingList.add(item.getServerID());
 					}
 					
+					dbManager.deleteTrashItems(remainingList, appPreference.getCurrentUserID());
 					callback.execute();
 				}
 			}

@@ -832,6 +832,22 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
+	public Boolean deleteTrashItems(List<Integer> remainingList, int userServerID)
+	{
+		try
+		{
+			String idString = TextUtils.join(",", remainingList) + ",-1";
+			String sqlString = "DELETE FROM tbl_item WHERE server_id NOT IN (" + idString +") AND user_id = " + userServerID;
+			database.execSQL(sqlString);
+			
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
 	public Boolean syncItem(Item item)
 	{
 		try
@@ -1563,6 +1579,22 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
+	public Boolean deleteTrashReports(List<Integer> remainingList, int userServerID)
+	{
+		try
+		{
+			String idString = TextUtils.join(",", remainingList) + ",-1";
+			String sqlString = "DELETE FROM tbl_report WHERE server_id NOT IN (" + idString +") AND user_id = " + userServerID;
+			database.execSQL(sqlString);
+			
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
 	public Report getReportByLocalID(int reportLocalID)
 	{
 		try
