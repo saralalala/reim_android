@@ -97,7 +97,7 @@ public class FeedbackActivity extends Activity
 			}
 		});
 		
-		Button cancelButton = (Button)findViewById(R.id.rejectButton);
+		Button cancelButton = (Button)findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

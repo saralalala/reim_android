@@ -121,16 +121,26 @@ public class MainActivity extends ActionBarActivity
 			{
 				public void onTabChanged(String tabId)
 				{
-					if (tabId.equals(getText(textViewList[1]).toString()))
+					if (tabId.equals(getText(textViewList[0]).toString()))
 					{
+						ReimApplication.setTabIndex(0);
+					}
+					else if (tabId.equals(getText(textViewList[1]).toString()))
+					{
+						ReimApplication.setTabIndex(1);
 						setReportBadge(0);
 						if (Utils.isNetworkConnected())
 						{
 							sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
 						}
 					}
+					else if (tabId.equals(getText(textViewList[2]).toString()))
+					{
+						ReimApplication.setTabIndex(2);
+					}
 					else if (tabId.equals(getText(textViewList[3]).toString()))
 					{
+						ReimApplication.setTabIndex(3);
 						setMeBadge(0);
 						if (Utils.isNetworkConnected())
 						{

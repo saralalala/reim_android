@@ -79,7 +79,11 @@ public abstract class SyncUtils
 					}
 					
 					dbManager.deleteTrashItems(remainingList, appPreference.getCurrentUserID());
-					callback.execute();
+
+					if (callback != null)
+					{
+						callback.execute();						
+					}
 				}
 			}
 		});
@@ -256,23 +260,17 @@ public abstract class SyncUtils
 					report.setServerID(response.getReportID());
 					DBManager.getDBManager().updateReportByLocalID(report);
 					reportTaskCount--;
-					if (reportTaskCount == 0)
+					if (reportTaskCount == 0 && callback != null)
 					{
-						if (callback != null)
-						{
-							callback.execute();				
-						}
+						callback.execute();	
 					}
 				}
 				else
 				{
 					reportTaskCount--;
-					if (reportTaskCount == 0)
+					if (reportTaskCount == 0 && callback != null)
 					{
-						if (callback != null)
-						{
-							callback.execute();				
-						}
+						callback.execute();	
 					}
 				}
 			}
@@ -293,23 +291,17 @@ public abstract class SyncUtils
 					report.setServerUpdatedDate(report.getLocalUpdatedDate());
 					DBManager.getDBManager().updateReportByLocalID(report);
 					reportTaskCount--;
-					if (reportTaskCount == 0)
+					if (reportTaskCount == 0 && callback != null)
 					{
-						if (callback != null)
-						{
-							callback.execute();				
-						}
+						callback.execute();	
 					}
 				}
 				else
 				{
 					reportTaskCount--;
-					if (reportTaskCount == 0)
+					if (reportTaskCount == 0 && callback != null)
 					{
-						if (callback != null)
-						{
-							callback.execute();				
-						}
+						callback.execute();	
 					}
 				}
 			}

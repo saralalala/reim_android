@@ -33,12 +33,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class TagActivity extends Activity
 {
 	private ListView tagListView;
+	private TextView tagTextView;
 	private ArrayAdapter<String> adapter;
 	private List<Tag> tagList;
 
@@ -58,7 +60,6 @@ public class TagActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("TagActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
 		refreshListView();
 	}
 
@@ -155,6 +156,10 @@ public class TagActivity extends Activity
 	
 	private void initView()
 	{		
+		ReimApplication.setProgressDialog(this);
+		
+		tagTextView = (TextView)findViewById(R.id.tagTextView);
+		
 		tagListView = (ListView)findViewById(R.id.tagListView);
 		tagListView.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -172,6 +177,17 @@ public class TagActivity extends Activity
 		tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
 		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Tag.getTagsName(tagList));
 		tagListView.setAdapter(adapter);
+		
+		if (tagList.size() == 0)
+		{
+			tagListView.setVisibility(View.INVISIBLE);
+			tagTextView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			tagListView.setVisibility(View.VISIBLE);
+			tagTextView.setVisibility(View.INVISIBLE);			
+		}
 	}
 
 	private void showTagDialog(final Tag tag)

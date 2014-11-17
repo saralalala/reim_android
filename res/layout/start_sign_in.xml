@@ -39,22 +39,28 @@
         android:layout_marginTop="22dp"
         android:text="@string/forgotPassword" />
 
-    <Button
-        android:id="@+id/agreeButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/passwordEditText"
-        android:layout_below="@+id/forgotTextView"
-        android:layout_marginTop="102dp"
-        android:text="@string/confirm" />
+        style="?android:attr/buttonBarStyle"
+        android:layout_alignParentBottom="true" >
 
-    <Button
-        android:id="@+id/rejectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/agreeButton"
-        android:layout_alignBottom="@+id/agreeButton"
-        android:layout_alignRight="@+id/forgotTextView"
-        android:text="@string/cancel" />
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/confirm" />
+        
+    </LinearLayout>
 
 </RelativeLayout>

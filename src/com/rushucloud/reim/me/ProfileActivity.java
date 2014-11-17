@@ -49,8 +49,6 @@ public class ProfileActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ProfileActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
-		refreshListView();
 	}
 
 	protected void onPause()
@@ -100,7 +98,11 @@ public class ProfileActivity extends Activity
 	
 	private void initView()
 	{		
+		ReimApplication.setProgressDialog(this);
+
+		adapter = new ProfileListViewAdapater(ProfileActivity.this, currentUser);
 		profileListView = (ListView)findViewById(R.id.profileListView);
+		profileListView.setAdapter(adapter);
 		profileListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -111,8 +113,17 @@ public class ProfileActivity extends Activity
 						startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
 						break;
 					case 5:
-						startActivity(new Intent(ProfileActivity.this, ManagerActivity.class));
+					{
+						if (currentUser.getGroupID() == -1)
+						{
+							Toast.makeText(ProfileActivity.this, "你还没加入任何组", Toast.LENGTH_SHORT).show();			
+						}
+						else
+						{
+							startActivity(new Intent(ProfileActivity.this, ManagerActivity.class));
+						}
 						break;
+					}
 					case 6:
 						MobclickAgent.onEvent(ProfileActivity.this, "UMENG_MINE_CATEGORT_SETTING");
 						startActivity(new Intent(ProfileActivity.this, CategoryActivity.class));
@@ -126,12 +137,6 @@ public class ProfileActivity extends Activity
 				}
 			}
 		});
-	}
-	
-	private void refreshListView()
-	{
-		adapter = new ProfileListViewAdapater(ProfileActivity.this, currentUser);
-		profileListView.setAdapter(adapter);
 	}
 	
 	private void saveUserInfo()

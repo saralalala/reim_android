@@ -35,12 +35,14 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class CategoryActivity extends Activity
 {
 	private ListView categoryListView;
+	private TextView categoryTextView;
 	private ArrayAdapter<String> adapter;
 	private List<Category> categoryList;
 
@@ -60,7 +62,6 @@ public class CategoryActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("CategoryActivity");
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
 		refreshListView();
 	}
 
@@ -169,6 +170,10 @@ public class CategoryActivity extends Activity
 
 	private void initView()
 	{
+		ReimApplication.setProgressDialog(this);
+
+		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
+		
 		categoryListView = (ListView) findViewById(R.id.categoryListView);
 		categoryListView.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -188,6 +193,17 @@ public class CategoryActivity extends Activity
 		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
 				Category.getCategoryNames(categoryList));
 		categoryListView.setAdapter(adapter);
+		
+		if (categoryList.size() == 0)
+		{
+			categoryListView.setVisibility(View.INVISIBLE);
+			categoryTextView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			categoryListView.setVisibility(View.VISIBLE);
+			categoryTextView.setVisibility(View.INVISIBLE);			
+		}
 	}
 
 	private void showCategoryDialog(final Category category)

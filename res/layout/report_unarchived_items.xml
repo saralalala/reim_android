@@ -24,7 +24,7 @@
         android:layout_alignParentLeft="true" >
 
         <Button
-            android:id="@+id/rejectButton"
+            android:id="@+id/cancelButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:text="@string/cancel" />
 
         <Button
-            android:id="@+id/agreeButton"
+            android:id="@+id/confirmButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -92,6 +92,9 @@ public class SignInActivity extends Activity
 		usernameEditText.setText("tianyu.an@rushucloud.com");
 		passwordEditText.setText("111111");
 
+		usernameEditText.setText("aty_3361@sina.com");
+		passwordEditText.setText("111111");
+
 //		usernameEditText.setText("alvayang@1in1.cn");
 //		passwordEditText.setText("qqqqqq");
 		
@@ -119,7 +122,7 @@ public class SignInActivity extends Activity
 
 	private void initButton()
 	{
-		Button confirmButton = (Button) findViewById(R.id.agreeButton);
+		Button confirmButton = (Button) findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -183,7 +186,7 @@ public class SignInActivity extends Activity
 			}
 		});
 
-		Button cancelbuButton = (Button) findViewById(R.id.rejectButton);
+		Button cancelbuButton = (Button) findViewById(R.id.cancelButton);
 		cancelbuButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

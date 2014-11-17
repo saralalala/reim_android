@@ -5,6 +5,7 @@ import netUtils.Request.User.SignOutRequest;
 import netUtils.Response.User.SignOutResponse;
 import classes.AppPreference;
 import classes.Group;
+import classes.ReimApplication;
 import classes.User;
 
 import com.rushucloud.reim.ImageActivity;
@@ -77,6 +78,7 @@ public class MeListViewAdapater extends BaseAdapter
 					{
 						if (!currentUser.getAvatarPath().equals(""))
 						{
+							ReimApplication.setTabIndex(3);
 							Intent intent = new Intent(fragment.getActivity(), ImageActivity.class);
 							intent.putExtra("imagePath", currentUser.getAvatarPath());
 							fragment.getActivity().startActivity(intent);
@@ -198,7 +200,7 @@ public class MeListViewAdapater extends BaseAdapter
 	
 	public int getCount()
 	{
-		return 9;
+		return 8;
 	}
 
 	public Object getItem(int position)

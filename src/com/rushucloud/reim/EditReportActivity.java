@@ -5,7 +5,6 @@ import java.util.List;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
-import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.Report.CreateReportRequest;
@@ -348,7 +347,7 @@ public class EditReportActivity extends Activity
 			saveButton.setEnabled(false);
 		}
 		
-		Button cancelButton = (Button)findViewById(R.id.rejectButton);
+		Button cancelButton = (Button)findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -548,37 +547,12 @@ public class EditReportActivity extends Activity
 		}
 		if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
 		{
-			AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-									.setTitle("提示")
-									.setMessage(prompt)
-									.setNegativeButton(R.string.confirm, 
-											new DialogInterface.OnClickListener()
-									{
-										public void onClick(DialogInterface dialog, int which)
-										{
-											goBackToMainActivity();
-										}
-									})
-									.create();
-			mDialog.show();
-			if (Utils.canSyncToServer())
-			{
-				SyncUtils.syncAllToServer(new SyncDataCallback()
-				{
-					public void execute()
-					{
-						report = dbManager.getReportByLocalID(report.getLocalID());
- 					}
-				});
-			}
+			Toast.makeText(EditReportActivity.this, "条目保存成功", Toast.LENGTH_SHORT).show();
+			goBackToMainActivity();
 		}
 		else
 		{
-			AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-												.setTitle("保存失败")
-												.setNegativeButton(R.string.confirm, null)
-												.create();
-			mDialog.show();
+			Toast.makeText(EditReportActivity.this, "保存失败", Toast.LENGTH_SHORT).show();
 		}
     }
 

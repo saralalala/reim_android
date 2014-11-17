@@ -92,7 +92,7 @@ public class ResetPasswordActivity extends Activity
 	
 	private void initButton()
 	{
-		Button confirmButton = (Button)findViewById(R.id.agreeButton);
+		Button confirmButton = (Button)findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -164,7 +164,7 @@ public class ResetPasswordActivity extends Activity
 			}
 		});
 		
-		Button cancelbuButton= (Button)findViewById(R.id.rejectButton);
+		Button cancelbuButton= (Button)findViewById(R.id.cancelButton);
 		cancelbuButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

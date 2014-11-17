@@ -9,7 +9,6 @@ import java.util.List;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
-import netUtils.SyncUtils;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.Item.CreateItemRequest;
 import netUtils.Request.Item.GetVendorsRequest;
@@ -774,7 +773,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 		
-		Button cancelButton = (Button)findViewById(R.id.rejectButton);
+		Button cancelButton = (Button)findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -808,19 +807,11 @@ public class EditItemActivity extends Activity
     	if (dbManager.syncItem(item))
 		{
 			Toast.makeText(EditItemActivity.this, "条目保存成功", Toast.LENGTH_SHORT).show();
-			if (Utils.canSyncToServer())
-			{
-				SyncUtils.syncAllToServer(null);							
-			}
 			goBack();
 		}
 		else
 		{
-			AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-												.setTitle("保存失败")
-												.setNegativeButton(R.string.confirm, null)
-												.create();
-			mDialog.show();
+			Toast.makeText(EditItemActivity.this, "条目保存失败", Toast.LENGTH_SHORT).show();
 		}
     }
     

@@ -396,7 +396,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				}
 			});
 			
-			Button confirmButton = (Button)filterView.findViewById(R.id.agreeButton);
+			Button confirmButton = (Button)filterView.findViewById(R.id.confirmButton);
 			confirmButton.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
@@ -423,7 +423,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				}
 			});
 			
-			Button cancelButton = (Button)filterView.findViewById(R.id.rejectButton);
+			Button cancelButton = (Button)filterView.findViewById(R.id.cancelButton);
 			cancelButton.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
