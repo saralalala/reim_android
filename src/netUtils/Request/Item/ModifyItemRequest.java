@@ -31,6 +31,7 @@ public class ModifyItemRequest extends BaseRequest
 			jObject.put("amount", item.getAmount());
 			jObject.put("category", categoryID);
 			jObject.put("merchants", item.getMerchant());
+			jObject.put("location", item.getLocation());
 			jObject.put("uid", item.getConsumer().getServerID());
 			jObject.put("prove_ahead", Utils.booleanToString(item.isProveAhead()));
 			jObject.put("image_id", item.getImageID());
