@@ -10,11 +10,13 @@ import java.util.List;
 import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
 import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.UploadImageRequest;
 import netUtils.Request.Item.CreateItemRequest;
 import netUtils.Request.Item.GetVendorsRequest;
 import netUtils.Request.Item.ModifyItemRequest;
 import netUtils.Request.Report.CreateReportRequest;
 import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.UploadImageResponse;
 import netUtils.Response.Item.CreateItemResponse;
 import netUtils.Response.Item.GetVendorsResponse;
 import netUtils.Response.Item.ModifyItemResponse;
@@ -90,6 +92,7 @@ public class EditItemActivity extends Activity
 	private CheckBox proveAheadCheckBox;
 	private CheckBox needReimCheckBox;
 	private ImageView invoiceImageView;
+	private TextView paAmountTextView;
 	private TextView categoryTextView;
 	private TextView tagTextView;
 	private TextView timeTextView;
@@ -316,7 +319,7 @@ public class EditItemActivity extends Activity
 				}
 			}
 		});
-		if (!fromReim)
+		if (!fromReim || item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
 		{
 			proveAheadCheckBox.setEnabled(false);
 		}
@@ -337,6 +340,17 @@ public class EditItemActivity extends Activity
 				}
 			}
 		});
+		
+		paAmountTextView = (TextView)findViewById(R.id.paAmountTextView);
+		if (item.getPaAmount() != 0)
+		{
+			paAmountTextView.setText(getResources().getString(R.string.paAmount) + "¥" + Double.toString(item.getPaAmount()));
+			paAmountTextView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			paAmountTextView.setVisibility(View.GONE);
+		}
 
 		String categoryName = item.getCategory() == null ? "N/A" : item.getCategory().getName();
 		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
@@ -392,7 +406,7 @@ public class EditItemActivity extends Activity
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
 			if (item.getImageID() != -1 && item.getImageID() != 0)
 			{
-				DownloadImageRequest request = new DownloadImageRequest(item.getImageID());
+				DownloadImageRequest request = new DownloadImageRequest(item.getImageID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
 				request.sendRequest(new HttpConnectionCallback()
 				{
 					public void execute(Object httpResponse)
@@ -502,7 +516,8 @@ public class EditItemActivity extends Activity
 													.create();
 				mDialog.show();
 			}
-		});		
+		});	
+		categoryButton.setEnabled(item.getPaAmount() == 0);
 
 		Button vendorButton = (Button)findViewById(R.id.vendorButton);
 		vendorButton.setOnClickListener(new View.OnClickListener()
@@ -874,11 +889,25 @@ public class EditItemActivity extends Activity
 											ReimApplication.showProgressDialog();
 											if (newItem)
 											{
-												sendCreateItemRequest();
+												if (!item.getInvoicePath().equals("") && item.getServerID() == -1)
+												{
+													sendUploadImageRequest();
+												}
+												else
+												{
+													sendCreateItemRequest();													
+												}
 											}
 											else
 											{
-												sendModifyItemRequest();
+												if (!item.getInvoicePath().equals("") && item.getServerID() == -1)
+												{
+													sendUploadImageRequest();
+												}
+												else
+												{
+													sendModifyItemRequest();													
+												}
 											}											
 										}
 									}
@@ -886,6 +915,43 @@ public class EditItemActivity extends Activity
 								.setNegativeButton(R.string.cancel, null)
 								.create();
     	mDialog.show();
+    }
+    
+    private void sendUploadImageRequest()
+    {
+		UploadImageRequest request = new UploadImageRequest(item.getInvoicePath(), HttpConstant.IMAGE_TYPE_INVOICE);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final UploadImageResponse response = new UploadImageResponse(httpResponse);
+				if (response.getStatus())
+				{
+					item.setImageID(response.getImageID());
+					DBManager.getDBManager().updateItem(item);
+					
+					if (newItem)
+					{
+						sendCreateItemRequest();
+					}
+					else
+					{
+						sendModifyItemRequest();
+					}
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Toast.makeText(EditItemActivity.this, "上传图片失败", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+			}
+		});
     }
     
     private void sendCreateItemRequest()
@@ -957,7 +1023,7 @@ public class EditItemActivity extends Activity
     	item.setBelongReport(report);
     	dbManager.updateItem(item);    	
     	
-    	CreateReportRequest request = new CreateReportRequest(report);
+    	CreateReportRequest request = new CreateReportRequest(report, true);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

@@ -26,6 +26,7 @@ public class Item
 	private Package belongPackage = null;
 	private Category category = null;
 	private double amount = 0.0;
+	private double paAmount = 0.0;
 	private User consumer;
 	private int consumedDate = -1;
 	private String note = "";
@@ -52,6 +53,7 @@ public class Item
 		{
 			setServerID(jObject.getInt("id"));
 			setAmount(jObject.getDouble("amount"));
+			setPaAmount(jObject.getDouble("pa_amount"));
 			setMerchant(jObject.getString("merchants"));
 			setNote(jObject.getString("note"));
 			setStatus(jObject.getInt("status"));
@@ -173,6 +175,15 @@ public class Item
 		this.amount = amount;
 	}
 	
+	public double getPaAmount()
+	{
+		return paAmount;
+	}
+	public void setPaAmount(double paAmount)
+	{
+		this.paAmount = paAmount;
+	}
+
 	public User getConsumer()
 	{
 		return consumer;
