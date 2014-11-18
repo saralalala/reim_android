@@ -120,7 +120,7 @@ public class MainActivity extends ActionBarActivity
 				TabSpec tabSpec = tabHost.newTabSpec(getText(textViewList[i]).toString()).setIndicator(view);
 				tabHost.addTab(tabSpec, fragmentList[i], null);
 			}
-			
+
 			tabHost.setOnTabChangedListener(new OnTabChangeListener()
 			{
 				public void onTabChanged(String tabId)
