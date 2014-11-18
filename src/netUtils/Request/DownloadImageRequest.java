@@ -4,6 +4,12 @@ import netUtils.HttpConnectionCallback;
 
 public class DownloadImageRequest extends BaseRequest
 {
+	public static final int IMAGE_QUALITY_VERY_HIGH = 0;
+	public static final int IMAGE_QUALITY_LOW = 1;
+	public static final int IMAGE_QUALITY_MEDIUM = 2;
+	public static final int IMAGE_QUALITY_HIGH = 3;
+	public static final int INVOICE_QUALITY_ORIGINAL = 4;
+	
 	public DownloadImageRequest(String url)
 	{
 		super();
@@ -11,12 +17,12 @@ public class DownloadImageRequest extends BaseRequest
 		setUrl(url);
 	}
 	
-	public DownloadImageRequest(int imageID)
+	public DownloadImageRequest(int imageID, int type)
 	{
 		super();
 		
 		String requestUrl = getUrl();
-		requestUrl += "/images/" + imageID + "/0";
+		requestUrl += "/images/" + imageID + "/" + type;
 		setUrl(requestUrl);
 	}
 	

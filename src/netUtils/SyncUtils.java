@@ -282,7 +282,7 @@ public abstract class SyncUtils
     
     private static void sendCreateReportRequest(final Report report, final SyncDataCallback callback)
     {
-    	CreateReportRequest request = new CreateReportRequest(report);
+    	CreateReportRequest request = new CreateReportRequest(report, false);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

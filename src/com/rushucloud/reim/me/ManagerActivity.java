@@ -311,7 +311,7 @@ public class ManagerActivity extends Activity
     private void sendDownloadAvatarRequest(final User user)
     {
     	final DBManager dbManager = DBManager.getDBManager();
-    	DownloadImageRequest request = new DownloadImageRequest(user.getImageID());
+    	DownloadImageRequest request = new DownloadImageRequest(user.getImageID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

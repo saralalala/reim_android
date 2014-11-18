@@ -292,7 +292,7 @@ public class MeFragment extends Fragment
     private void sendDownloadAvatarRequest()
     {
     	final DBManager dbManager = DBManager.getDBManager();
-    	DownloadImageRequest request = new DownloadImageRequest(currentUser.getImageID());
+    	DownloadImageRequest request = new DownloadImageRequest(currentUser.getImageID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

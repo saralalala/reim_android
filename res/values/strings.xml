@@ -58,6 +58,7 @@
     <string name="invoice">发票</string>
     <string name="itemApproved">已审批</string>
     <string name="proveAhead">预审批</string>
+    <string name="paAmount">预审批金额：</string>
     <string name="needReimburse">需报销</string>
     <string name="vendor">商家:</string>
     <string name="category">类别:</string>

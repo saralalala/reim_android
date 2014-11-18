@@ -14,12 +14,14 @@ import netUtils.Request.BaseRequest;
 
 public class CreateReportRequest extends BaseRequest
 {
-	public CreateReportRequest(Report report)
+	public CreateReportRequest(Report report, boolean proveAhead)
 	{
 		super();
 		
 		DBManager dbManager = DBManager.getDBManager();
 		String iids = dbManager.getReportItemIDs(report.getLocalID());
+		
+		int paFlag = proveAhead ? 1 : 0;
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("title", report.getTitle()));
@@ -27,6 +29,7 @@ public class CreateReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("status", Integer.toString(report.getStatus())));
 		params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
 		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
+		params.add(new BasicNameValuePair("prove_ahead", Integer.toString(paFlag)));
 		setParams(params);
 
 		String requestUrl = getUrl();

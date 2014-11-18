@@ -102,6 +102,16 @@ public class ShowItemActivity extends Activity
 		TextView amountTextView = (TextView)findViewById(R.id.amountTextView);
 		amountTextView.setText(Double.toString(item.getAmount()));
 		
+		TextView paAmountTextView = (TextView)findViewById(R.id.paAmountTextView);
+		if (item.getPaAmount() != 0)
+		{
+			paAmountTextView.setText(getResources().getString(R.string.paAmount) + Double.toString(item.getPaAmount()));
+		}
+		else
+		{
+			paAmountTextView.setVisibility(View.GONE);
+		}
+		
 		TextView vendorTextView = (TextView)findViewById(R.id.vendorTextView);
 		vendorTextView.setText(item.getMerchant());
 
@@ -153,7 +163,7 @@ public class ShowItemActivity extends Activity
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
 			if (item.getImageID() != -1 && item.getImageID() != 0)
 			{
-				DownloadImageRequest request = new DownloadImageRequest(item.getImageID());
+				DownloadImageRequest request = new DownloadImageRequest(item.getImageID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
 				request.sendRequest(new HttpConnectionCallback()
 				{
 					public void execute(Object httpResponse)

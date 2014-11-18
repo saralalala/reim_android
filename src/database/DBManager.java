@@ -60,13 +60,12 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			dbManager.openDatabase();
 		}
-		tempCommand();
 		return dbManager;
 	}
 
-	public static void tempCommand()
+	public void executeTempCommand()
 	{
-//		String sqlString = "DELETE FROM tbl_report WHERE id = 7";
+//		String sqlString = "DELETE FROM tbl_report WHERE id = 9";
 //		database.execSQL(sqlString);
 //		String sqlString = "DROP TABLE IF EXISTS tbl_report";
 //		database.execSQL(sqlString);
@@ -127,6 +126,7 @@ public class DBManager extends SQLiteOpenHelper
 									+ "report_local_id INT DEFAULT(0),"
 									+ "category_id INT DEFAULT(0),"
 									+ "amount FLOAT DEFAULT(0),"
+									+ "pa_amount FLOAT DEFAULT(0),"
 									+ "user_id INT DEFAULT(0),"
 									+ "consumed_date INT DEFAULT(0),"
 									+ "note TEXT DEFAULT(''),"
@@ -176,6 +176,7 @@ public class DBManager extends SQLiteOpenHelper
 									+ "tags_id TEXT DEFAULT(''),"
 									+ "users_id TEXT DEFAULT(''),"
 									+ "amount FLOAT DEFAULT(0),"
+									+ "pa_amount FLOAT DEFAULT(0),"
 									+ "user_id INT DEFAULT(0),"
 									+ "consumed_date INT DEFAULT(0),"
 									+ "note TEXT DEFAULT(''),"
@@ -647,7 +648,7 @@ public class DBManager extends SQLiteOpenHelper
 			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
 			String sqlString = "INSERT INTO tbl_item (server_id, image_id, invoice_path, merchant, report_local_id, category_id, " +
-							   							"amount, user_id, consumed_date, note, status, location, createdt, " +
+							   							"amount, pa_amount, user_id, consumed_date, note, status, location, createdt, " +
 							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed) VALUES (" + 
 														"'" + item.getServerID() + "'," +
 														"'" + item.getImageID() + "'," +
@@ -656,6 +657,7 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + reportID + "'," +
 														"'" + categoryID + "'," +
 														"'" + item.getAmount() + "'," +
+														"'" + item.getPaAmount() + "'," +
 														"'" + item.getConsumer().getServerID() + "'," +
 														"'" + item.getConsumedDate() + "'," +
 														"'" + item.getNote() + "'," +
@@ -689,8 +691,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
-			String sqlString = "INSERT INTO tbl_others_item (server_id, image_id, invoice_path, merchant, report_server_id, category_id, " +
-							   							"tags_id, users_id, amount, user_id, consumed_date, note, status, location, createdt, " +
+			String sqlString = "INSERT INTO tbl_others_item (server_id, image_id, invoice_path, merchant, report_server_id, category_id, tags_id, " +
+							   							"users_id, amount, pa_amount, user_id, consumed_date, note, status, location, createdt, " +
 							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed) VALUES (" + 
 														"'" + item.getServerID() + "'," +
 														"'" + item.getImageID() + "'," +
@@ -701,6 +703,7 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + item.getTagsID() + "'," +
 														"'" + item.getRelevantUsersID() + "'," +
 														"'" + item.getAmount() + "'," +
+														"'" + item.getPaAmount() + "'," +
 														"'" + item.getConsumer().getServerID() + "'," +
 														"'" + item.getConsumedDate() + "'," +
 														"'" + item.getNote() + "'," +
@@ -747,6 +750,7 @@ public class DBManager extends SQLiteOpenHelper
 								"report_local_id = '" + reportID + "'," +
 								"category_id = '" + categoryID + "'," +
 								"amount = '" + item.getAmount() + "'," +
+								"pa_amount = '" + item.getPaAmount() + "'," +
 								"user_id = '" + item.getConsumer().getServerID() + "'," +
 								"consumed_date = '" + item.getConsumedDate() + "'," +
 								"note = '" + item.getNote() + "'," +
@@ -785,6 +789,7 @@ public class DBManager extends SQLiteOpenHelper
 								"report_local_id = '" + reportID + "'," +
 								"category_id = '" + categoryID + "'," +
 								"amount = '" + item.getAmount() + "'," +
+								"pa_amount = '" + item.getPaAmount() + "'," +
 								"user_id = '" + item.getConsumer().getServerID() + "'," +
 								"consumed_date = '" + item.getConsumedDate() + "'," +
 								"note = '" + item.getNote() + "'," +
@@ -941,6 +946,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -985,6 +991,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1030,6 +1037,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1075,6 +1083,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1121,6 +1130,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1166,6 +1176,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1334,6 +1345,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1378,6 +1390,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setMerchant(getStringFromCursor(cursor, "merchant"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
+				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
