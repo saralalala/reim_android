@@ -96,6 +96,20 @@
             android:hint="@string/inputVendor" />
 
         <Button
+            android:id="@+id/locationButton"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.14"
+            android:text="@string/chooseLocation" />
+
+        <EditText
+            android:id="@+id/locationEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/inputLocation" />
+
+        <Button
             android:id="@+id/tagButton"
             android:layout_width="100dp"
             android:layout_height="0dp"

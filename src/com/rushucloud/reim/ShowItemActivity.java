@@ -111,13 +111,17 @@ public class ShowItemActivity extends Activity
 		{
 			paAmountTextView.setVisibility(View.GONE);
 		}
-		
-		TextView vendorTextView = (TextView)findViewById(R.id.vendorTextView);
-		vendorTextView.setText(item.getMerchant());
 
 		String categoryName = item.getCategory() == null ? "N/A" : item.getCategory().getName();
 		TextView categoryTextView = (TextView)findViewById(R.id.categoryTextView);
 		categoryTextView.setText(categoryName);
+		
+		TextView vendorTextView = (TextView)findViewById(R.id.vendorTextView);
+		vendorTextView.setText(item.getMerchant());
+
+		String cityName = item.getLocation().equals("") ? "N/A" : item.getLocation();
+		TextView locationTextView = (TextView)findViewById(R.id.locationTextView);
+		locationTextView.setText(cityName);
 		
 		TextView tagTextView = (TextView)findViewById(R.id.tagTextView);
 		tagTextView.setText(Tag.getTagsNameString(item.getTags()));
