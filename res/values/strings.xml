@@ -137,6 +137,7 @@
     <string name="noCategories">当前没有任何分类</string>
     <string name="noTags">当前没有任何标签</string>
     <string name="getInvoicePrompt">发票抬头请开：</string>
+    <string name="invoiceInvalid">还没公司，开啥发票</string>
     
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>
