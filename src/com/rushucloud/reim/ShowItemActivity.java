@@ -165,55 +165,13 @@ public class ShowItemActivity extends Activity
 		else
 		{			
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
-			if (item.getImageID() != -1 && item.getImageID() != 0)
+			if (item.getImageID() != -1 && item.getImageID() != 0 && Utils.isNetworkConnected())
 			{
-				DownloadImageRequest request = new DownloadImageRequest(item.getImageID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
-				request.sendRequest(new HttpConnectionCallback()
-				{
-					public void execute(Object httpResponse)
-					{
-						DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-						if (response.getBitmap() != null)
-						{
-							final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), 
-																			HttpConstant.IMAGE_TYPE_INVOICE);
-							if (!invoicePath.equals(""))
-							{
-								item.setInvoicePath(invoicePath);
-								DBManager.getDBManager().updateItem(item);
-								
-								runOnUiThread(new Runnable()
-								{
-									public void run()
-									{
-										Bitmap bitmap = BitmapFactory.decodeFile(invoicePath);
-										invoiceImageView.setImageBitmap(bitmap);
-									}
-								});
-							}
-							else
-							{						
-								runOnUiThread(new Runnable()
-								{
-									public void run()
-									{
-										Toast.makeText(ShowItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
-									}
-								});						
-							}
-						}
-						else
-						{				
-							runOnUiThread(new Runnable()
-							{
-								public void run()
-								{
-									Toast.makeText(ShowItemActivity.this, "图片下载失败", Toast.LENGTH_SHORT).show();
-								}
-							});								
-						}
-					}
-				});
+				sendDownloadImageRequest(invoiceImageView);
+			}
+			else if (item.getImageID() != -1 && item.getImageID() != 0 && !Utils.isNetworkConnected())
+			{
+				Toast.makeText(ShowItemActivity.this, "网络未连接，无法下载图片", Toast.LENGTH_SHORT).show();				
 			}	
 		}
 	}
@@ -228,6 +186,57 @@ public class ShowItemActivity extends Activity
 				goBack();
 			}
 		});
+	}
+	
+	private void sendDownloadImageRequest(final ImageView invoiceImageView)
+	{
+		DownloadImageRequest request = new DownloadImageRequest(item.getImageID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), 
+																	HttpConstant.IMAGE_TYPE_INVOICE);
+					if (!invoicePath.equals(""))
+					{
+						item.setInvoicePath(invoicePath);
+						DBManager.getDBManager().updateItem(item);
+						
+						runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								Bitmap bitmap = BitmapFactory.decodeFile(invoicePath);
+								invoiceImageView.setImageBitmap(bitmap);
+							}
+						});
+					}
+					else
+					{						
+						runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								Toast.makeText(ShowItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+							}
+						});						
+					}
+				}
+				else
+				{				
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							Toast.makeText(ShowItemActivity.this, "图片下载失败", Toast.LENGTH_SHORT).show();
+						}
+					});								
+				}
+			}
+		});		
 	}
 	
 	private void goBack()

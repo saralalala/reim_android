@@ -176,11 +176,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		switch (item.getItemId())
 		{
 			case 0:
-				if (!Utils.isNetworkConnected())
-				{
-					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
-				}
-				else if (report != null
+				if (report != null
 						&& (report.getStatus() != Report.STATUS_DRAFT || report.getStatus() != Report.STATUS_REJECTED))
 				{
 					Toast.makeText(getActivity(), "条目已提交，不可删除", Toast.LENGTH_SHORT).show();
@@ -199,6 +195,10 @@ public class ReimFragment extends Fragment implements IXListViewListener
 											if (localItem.getServerID() == -1)
 											{
 												deleteItemFromLocal(localItem.getLocalID());
+											}
+											else if (!Utils.isNetworkConnected())
+											{
+												Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
 											}
 											else
 											{

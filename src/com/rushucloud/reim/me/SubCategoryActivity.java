@@ -130,29 +130,29 @@ public class SubCategoryActivity extends Activity
 				break;
 			}
 			case 1:
+			{
+				if (!Utils.isNetworkConnected())
 				{
-					if (!Utils.isNetworkConnected())
-					{
-						Toast.makeText(this, "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
-					}
-					else 
-					{
-						AlertDialog mDialog = new AlertDialog.Builder(SubCategoryActivity.this)
-												.setTitle("警告")
-												.setMessage(R.string.deleteItemWarning)
-												.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-												{
-													public void onClick(DialogInterface dialog, int which)
-													{
-														sendDeleteCategoryRequest(category);
-													}
-												})
-												.setNegativeButton(R.string.cancel, null)
-												.create();
-						mDialog.show();
-					}
-					break;
+					Toast.makeText(this, "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
 				}
+				else 
+				{
+					AlertDialog mDialog = new AlertDialog.Builder(SubCategoryActivity.this)
+											.setTitle("警告")
+											.setMessage(R.string.deleteItemWarning)
+											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													sendDeleteCategoryRequest(category);
+												}
+											})
+											.setNegativeButton(R.string.cancel, null)
+											.create();
+					mDialog.show();
+				}
+				break;
+			}
 			default:
 				break;
 		}

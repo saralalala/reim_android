@@ -7,6 +7,7 @@ import classes.AppPreference;
 import classes.Group;
 import classes.ReimApplication;
 import classes.User;
+import classes.Utils;
 
 import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.MeFragment;
@@ -187,7 +188,14 @@ public class MeListViewAdapater extends BaseAdapter
 				{
 					public void onClick(View v)
 					{
-						sendSignOutRequest();
+						if (Utils.isNetworkConnected())
+						{
+							sendSignOutRequest();							
+						}
+						else
+						{
+							Toast.makeText(fragment.getActivity(), "没有网络连接，无法登出", Toast.LENGTH_SHORT).show();							
+						}
 					}
 				});
 				break;

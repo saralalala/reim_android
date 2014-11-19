@@ -79,7 +79,7 @@ public class ProfileActivity extends Activity
 		{
 			if (Utils.isNetworkConnected())
 			{
-				saveUserInfo();				
+				sendModifyUserInfoRequest();				
 			}
 			else
 			{
@@ -138,7 +138,7 @@ public class ProfileActivity extends Activity
 		});
 	}
 	
-	private void saveUserInfo()
+	private void sendModifyUserInfoRequest()
 	{
 		EditText emailEditText = (EditText)profileListView.getChildAt(0).findViewById(R.id.editText);
 		EditText phoneEditText = (EditText)profileListView.getChildAt(1).findViewById(R.id.editText);

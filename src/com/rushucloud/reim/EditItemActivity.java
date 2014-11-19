@@ -443,56 +443,14 @@ public class EditItemActivity extends Activity
 		else
 		{
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
-			if (item.getImageID() != -1 && item.getImageID() != 0)
+			if (item.getImageID() != -1 && item.getImageID() != 0 && Utils.isNetworkConnected())
 			{
-				DownloadImageRequest request = new DownloadImageRequest(item.getImageID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
-				request.sendRequest(new HttpConnectionCallback()
-				{
-					public void execute(Object httpResponse)
-					{
-						DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-						if (response.getBitmap() != null)
-						{
-							final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), 
-																			HttpConstant.IMAGE_TYPE_INVOICE);
-							if (!invoicePath.equals(""))
-							{
-								item.setInvoicePath(invoicePath);
-								dbManager.updateItem(item);
-								
-								runOnUiThread(new Runnable()
-								{
-									public void run()
-									{
-										Bitmap bitmap = BitmapFactory.decodeFile(invoicePath);
-										invoiceImageView.setImageBitmap(bitmap);
-									}
-								});
-							}
-							else
-							{						
-								runOnUiThread(new Runnable()
-								{
-									public void run()
-									{
-										Toast.makeText(EditItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
-									}
-								});						
-							}
-						}
-						else
-						{				
-							runOnUiThread(new Runnable()
-							{
-								public void run()
-								{
-									Toast.makeText(EditItemActivity.this, "图片下载失败", Toast.LENGTH_SHORT).show();
-								}
-							});								
-						}
-					}
-				});
-			}			
+				sendDownloadImageRequest();
+			}
+			else if (item.getImageID() != -1 && item.getImageID() != 0 && !Utils.isNetworkConnected())
+			{
+				Toast.makeText(EditItemActivity.this, "网络未连接，无法下载图片", Toast.LENGTH_SHORT).show();				
+			}
 		}
 		
 		LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
@@ -573,7 +531,11 @@ public class EditItemActivity extends Activity
 				}
 				
 				hideSoftKeyboard();			
-				if (currentLocation != null)
+				if (!Utils.isNetworkConnected())
+				{
+					Toast.makeText(EditItemActivity.this, "网络未连接，无法联网获取商家，请手动输入商家名称", Toast.LENGTH_SHORT).show();
+				}
+				else if (currentLocation != null)
 				{
 	    			double latitude = currentLocation.getLatitude();
 	    			double longitude = currentLocation.getLongitude();
@@ -583,10 +545,6 @@ public class EditItemActivity extends Activity
 				else if (!Utils.isLocalisationEnabled())
 				{
 					Toast.makeText(EditItemActivity.this, "定位服务不可用，请打开定位服务或手动输入商家名称", Toast.LENGTH_SHORT).show();
-				}
-				else if (!Utils.isNetworkConnected())
-				{
-					Toast.makeText(EditItemActivity.this, "网络未连接，无法联网获取商家，请手动输入商家名称", Toast.LENGTH_SHORT).show();
 				}
 	    		else
 	    		{
@@ -970,6 +928,57 @@ public class EditItemActivity extends Activity
 								.setNegativeButton(R.string.cancel, null)
 								.create();
     	mDialog.show();
+    }
+    
+    private void sendDownloadImageRequest()
+    {
+		DownloadImageRequest request = new DownloadImageRequest(item.getImageID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), 
+																	HttpConstant.IMAGE_TYPE_INVOICE);
+					if (!invoicePath.equals(""))
+					{
+						item.setInvoicePath(invoicePath);
+						dbManager.updateItem(item);
+						
+						runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								Bitmap bitmap = BitmapFactory.decodeFile(invoicePath);
+								invoiceImageView.setImageBitmap(bitmap);
+							}
+						});
+					}
+					else
+					{						
+						runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								Toast.makeText(EditItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+							}
+						});						
+					}
+				}
+				else
+				{				
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							Toast.makeText(EditItemActivity.this, "图片下载失败", Toast.LENGTH_SHORT).show();
+						}
+					});								
+				}
+			}
+		});    	
     }
     
     private void sendUploadImageRequest()
