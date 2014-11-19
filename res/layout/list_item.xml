@@ -2,9 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:baselineAligned="false"
-    android:padding="5dp" 
+    android:padding="10dp" 
     android:background="@drawable/list_item_color">
 
     <LinearLayout
@@ -14,7 +12,6 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/pivotView"
         android:gravity="left"
-    	android:padding="5dp" 
         android:orientation="vertical" >
 
         <TextView
@@ -29,6 +26,8 @@
 	        android:id="@+id/amountTextView"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
 	        android:textColor="#FF000000"
 	        android:textSize="30sp" />
 	    
@@ -46,7 +45,6 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/pivotView"
         android:layout_alignParentRight="true"
-    	android:padding="5dp" 
         android:orientation="vertical" >
 
         <RelativeLayout
@@ -67,8 +65,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_toRightOf="@+id/photoImageView"
-                android:ellipsize="end"
                 android:paddingLeft="5dp"
+                android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="#FF000000"
                 android:textSize="13sp" />

@@ -21,7 +21,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:ems="10"
                 android:hint="@string/inputAmount"
                 android:inputType="numberDecimal" />
 
@@ -46,17 +45,6 @@
                 android:layout_marginTop="14dp"
                 android:text="@string/needReimburse" />
 
-            <ImageView
-                android:id="@+id/invoiceImageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:layout_toRightOf="@+id/amountEditText"
-                android:contentDescription="@string/invoice"
-                android:scaleType="fitXY"
-                android:src="@drawable/splash_image" />
-
             <TextView
                 android:id="@+id/paAmountTextView"
                 android:layout_width="wrap_content"
@@ -64,6 +52,17 @@
                 android:layout_alignLeft="@+id/proveAheadCheckBox"
                 android:layout_below="@+id/proveAheadCheckBox"
                 android:text="@string/paAmount" />
+
+            <ImageView
+                android:id="@+id/invoiceImageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/invoice"
+                android:paddingRight="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/splash_image" />
 
         </RelativeLayout>
 
@@ -92,7 +91,6 @@
             android:id="@+id/vendorEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/inputVendor" />
 
         <Button
@@ -106,7 +104,6 @@
             android:id="@+id/locationEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/inputLocation" />
 
         <Button
@@ -155,7 +152,6 @@
             android:id="@+id/noteEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/inputNote" >
         </EditText>
 

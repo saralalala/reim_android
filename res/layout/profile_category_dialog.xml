@@ -13,7 +13,6 @@
         android:layout_marginTop="25dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:ems="10"
         android:hint="@string/inputCategoryName" />
 
     <EditText
@@ -24,7 +23,6 @@
         android:layout_alignRight="@+id/nameEditText"
         android:layout_below="@+id/nameEditText"
         android:layout_marginTop="25dp"
-        android:ems="10"
         android:hint="@string/inputCategoryLimit"
         android:inputType="numberDecimal" />
 

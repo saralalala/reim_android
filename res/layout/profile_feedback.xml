@@ -24,7 +24,6 @@
                 android:layout_gravity="center"
                 android:background="@null"
                 android:gravity="top"
-                android:ems="10"
                 android:hint="@string/inputFeedback"
                 android:inputType="textMultiLine" 
                 android:minLines="8"/>
@@ -36,7 +35,6 @@
         android:id="@+id/contactEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:hint="@string/inputContactInfo"
         android:inputType="text" />
 
