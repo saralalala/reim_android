@@ -163,11 +163,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
     	{
 			case 0:
 			{
-				if (!Utils.isNetworkConnected())
-				{
-					Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
-				}
-				else if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECTED)
+				if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECTED)
 				{
 					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
 														.setTitle("警告")
@@ -181,9 +177,13 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 																{
 																	deleteReportFromLocal(report.getLocalID());
 																}
+																else if (!Utils.isNetworkConnected())
+																{
+																	Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
+																}
 																else
 																{
-																	sendDeleteReportRequest(report);
+																	sendDeleteReportRequest(report);																		
 																}
 															}
 														})

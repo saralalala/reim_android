@@ -466,12 +466,15 @@ public class EditReportActivity extends Activity
 								.create();
     	mDialog.show();
     	
-    	for (User user : userList)
+    	if (Utils.isNetworkConnected())
 		{
-			if (user.getAvatarPath().equals("") && user.getImageID() != -1)
-			{
-				sendDownloadAvatarRequest(user);
-			}	
+        	for (User user : userList)
+    		{
+    			if (user.getAvatarPath().equals("") && user.getImageID() != -1)
+    			{
+    				sendDownloadAvatarRequest(user);
+    			}	
+    		}			
 		}
     }
     

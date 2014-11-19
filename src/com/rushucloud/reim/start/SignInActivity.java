@@ -92,10 +92,10 @@ public class SignInActivity extends Activity
 		usernameEditText.setText("aty_3361@sina.com");
 		passwordEditText.setText("111111");
 
-		usernameEditText.setText("testem@testem.com");
+		usernameEditText.setText("testem@test.com");
 		passwordEditText.setText("rushu0915");
 
-//		usernameEditText.setText("testmgr@testmgr.com");
+//		usernameEditText.setText("testmgr@test.com");
 //		passwordEditText.setText("rushu0915");
 //
 //		usernameEditText.setText("anty_promise@sina.com");
@@ -133,8 +133,10 @@ public class SignInActivity extends Activity
 			{
 				MobclickAgent.onEvent(SignInActivity.this, "UMENG_LOGIN");
 				hideSoftKeyboard();
+				
 				final String username = usernameEditText.getText().toString();
 				final String password = passwordEditText.getText().toString();
+				
 				if (!Utils.isNetworkConnected())
 				{
 					Toast.makeText(SignInActivity.this, "网络未连接，无法登录", Toast.LENGTH_SHORT).show();

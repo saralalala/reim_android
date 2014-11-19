@@ -7,6 +7,7 @@ import classes.AppPreference;
 import classes.Group;
 import classes.ReimApplication;
 import classes.User;
+import classes.Utils;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.ProfileActivity;
@@ -118,7 +119,11 @@ public class ProfileListViewAdapater extends BaseAdapter
 							
 							String originalName = group.getName();
 							final String newName = editText.getText().toString();
-							if (newName.equals(originalName))
+							if (!Utils.isNetworkConnected())
+							{
+								Toast.makeText(activity, "没有网络连接，无法修改", Toast.LENGTH_SHORT).show();			
+							}
+							else if (newName.equals(originalName))
 							{
 								Toast.makeText(activity, "名称与原有相同，无需修改", Toast.LENGTH_SHORT).show();
 							}
