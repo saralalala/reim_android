@@ -9,9 +9,8 @@ public class DeleteCategoryRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/category/" + categoryID;
-		setUrl(requestUrl);
+		String urlSuffix = "/category/" + categoryID;
+		appendUrl(urlSuffix);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

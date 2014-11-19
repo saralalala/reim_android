@@ -16,10 +16,8 @@ public class SearchItemsRequest extends BaseRequest
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("keyword", keyword));
 		setParams(params);
-		
-		String requestUrl = getUrl();
-		requestUrl += "/search";
-		setUrl(requestUrl);
+
+		appendUrl("/search");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

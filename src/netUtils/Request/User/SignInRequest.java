@@ -9,9 +9,7 @@ public class SignInRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/login";
-		setUrl(requestUrl);
+		appendUrl("/login");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

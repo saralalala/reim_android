@@ -9,9 +9,7 @@ public class GetInvitesRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/invites";
-		setUrl(requestUrl);
+		appendUrl("/invites");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

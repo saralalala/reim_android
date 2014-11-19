@@ -20,9 +20,7 @@ public class UploadImageRequest extends BaseRequest
 		params.add(new BasicNameValuePair("type", Integer.toString(type)));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/images";
-		setUrl(requestUrl);
+		setUrl("/images");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

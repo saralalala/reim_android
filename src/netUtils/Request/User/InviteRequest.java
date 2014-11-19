@@ -19,9 +19,7 @@ public class InviteRequest extends BaseRequest
 		params.add(new BasicNameValuePair("name", username));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/invite";
-		setUrl(requestUrl);
+		appendUrl("/invite");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

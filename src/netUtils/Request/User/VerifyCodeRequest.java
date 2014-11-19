@@ -19,8 +19,7 @@ public class VerifyCodeRequest extends BaseRequest
 		params.add(new BasicNameValuePair("phone", phone));
 		setParams(params);
 		
-		String requestUrl = getUrl();
-		setUrl(requestUrl += "/vcode");
+		appendUrl("/vcode");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

@@ -20,9 +20,7 @@ public class ExportReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("email", email));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/exports";
-		setUrl(requestUrl);
+		appendUrl("/exports");
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

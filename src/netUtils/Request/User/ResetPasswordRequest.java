@@ -20,9 +20,8 @@ public class ResetPasswordRequest extends BaseRequest
 		params.add(new BasicNameValuePair("cid", Integer.toString(codeID)));
 		params.add(new BasicNameValuePair("code", code));
 		setParams(params);
-		
-		String requestUrl = getUrl();
-		setUrl(requestUrl += "/password");
+
+		appendUrl("/password");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

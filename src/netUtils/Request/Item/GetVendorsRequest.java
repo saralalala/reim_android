@@ -57,8 +57,7 @@ public class GetVendorsRequest extends BaseRequest
 		}
 		setParams(params);
 		
-		String requestUrl = "http://api.dianping.com/v1/business/find_businesses";
-		setUrl(requestUrl);
+		setUrl("http://api.dianping.com/v1/business/find_businesses");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

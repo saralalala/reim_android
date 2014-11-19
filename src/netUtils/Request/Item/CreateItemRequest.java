@@ -48,9 +48,7 @@ public class CreateItemRequest extends BaseRequest
 			params.add(new BasicNameValuePair("items", jsonArray.toString()));
 			setParams(params);
 
-			String requestUrl = getUrl();
-			requestUrl += "/item";
-			setUrl(requestUrl);
+			appendUrl("/item");
 		}
 		catch (Exception e)
 		{

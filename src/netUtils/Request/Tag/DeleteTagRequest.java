@@ -9,9 +9,8 @@ public class DeleteTagRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/tags/" + tagID;
-		setUrl(requestUrl);
+		String urlSuffix = "/tags/" + tagID;
+		appendUrl(urlSuffix);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

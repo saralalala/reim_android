@@ -25,9 +25,8 @@ public class ModifyCategoryRequest extends BaseRequest
 		params.add(new BasicNameValuePair("pb", category.isProveAhead().toString()));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/category/" + category.getServerID();
-		setUrl(requestUrl);
+		String urlSuffix = "/category/" + category.getServerID();
+		appendUrl(urlSuffix);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

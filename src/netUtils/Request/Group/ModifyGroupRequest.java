@@ -19,9 +19,7 @@ public class ModifyGroupRequest extends BaseRequest
 		params.add(new BasicNameValuePair("name", groupName));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/groups";
-		setUrl(requestUrl);
+		appendUrl("/groups");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

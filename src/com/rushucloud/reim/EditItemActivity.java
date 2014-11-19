@@ -1281,7 +1281,10 @@ public class EditItemActivity extends Activity
     		{
     			currentLocation = location;
     			locationClient.stop();
-    			sendLocationRequest(currentLocation.getLatitude(), currentLocation.getLongitude());
+    			if (Utils.isNetworkConnected())
+				{
+        			sendLocationRequest(currentLocation.getLatitude(), currentLocation.getLongitude());			
+				}
     		}
     	}
     }

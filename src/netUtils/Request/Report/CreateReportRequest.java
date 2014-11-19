@@ -32,9 +32,7 @@ public class CreateReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("prove_ahead", Integer.toString(paFlag)));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/report";
-		setUrl(requestUrl);
+		appendUrl("/report");
 	}
 	
 	public CreateReportRequest(Report report, String commentContent)

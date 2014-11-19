@@ -22,8 +22,7 @@ public class GetLocationRequest extends BaseRequest
 		params.add(new BasicNameValuePair("output", "json"));
 		setParams(params);
 		
-		String requestUrl = "http://api.map.baidu.com/geocoder/v2/";
-		setUrl(requestUrl);
+		setUrl("http://api.map.baidu.com/geocoder/v2/");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

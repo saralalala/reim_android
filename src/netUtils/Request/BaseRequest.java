@@ -67,7 +67,7 @@ public abstract class BaseRequest
 		this.url = url;
 	}
 	
-	protected void appendUril(String suffix)
+	protected void appendUrl(String suffix)
 	{
 		this.url += suffix;
 	}

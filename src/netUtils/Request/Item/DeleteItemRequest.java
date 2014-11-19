@@ -9,9 +9,8 @@ public class DeleteItemRequest extends BaseRequest
 	{
 		super();
 		
-		String requestUrl = getUrl();
-		requestUrl += "/item/" + itemID;
-		setUrl(requestUrl);
+		String urlSuffix = "/item/" + itemID;
+		appendUrl(urlSuffix);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

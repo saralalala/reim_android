@@ -7,9 +7,8 @@ public class GetItemsRequest extends BaseRequest
 {
 	public GetItemsRequest(int pageIndex, int pageSize)
 	{
-		String requestUrl = getUrl();
-		requestUrl += "/item/" + pageIndex + "/" + pageSize;
-		setUrl(requestUrl);
+		String urlSuffix = "/item/" + pageIndex + "/" + pageSize;
+		appendUrl(urlSuffix);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

@@ -29,9 +29,8 @@ public class ModifyReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/report/" + report.getServerID();
-		setUrl(requestUrl);
+		String urlSuffix = "/report/" + report.getServerID();
+		appendUrl(urlSuffix);
 	}
 	
 	public ModifyReportRequest(Report report, String commentContent)
