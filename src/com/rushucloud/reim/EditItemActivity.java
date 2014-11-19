@@ -213,6 +213,7 @@ public class EditItemActivity extends Activity
 			}
 			catch (Exception e)
 			{
+				Toast.makeText(EditItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
 				e.printStackTrace();
 			}
 		}

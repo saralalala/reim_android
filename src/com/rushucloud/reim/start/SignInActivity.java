@@ -91,6 +91,12 @@ public class SignInActivity extends Activity
 
 		usernameEditText.setText("aty_3361@sina.com");
 		passwordEditText.setText("111111");
+
+		usernameEditText.setText("testem@testem.com");
+		passwordEditText.setText("rushu0915");
+
+//		usernameEditText.setText("testmgr@testmgr.com");
+//		passwordEditText.setText("rushu0915");
 //
 //		usernameEditText.setText("anty_promise@sina.com");
 //		passwordEditText.setText("111111");

@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dp"
-        android:ems="10"
         android:hint="@string/inputEmail"
         android:inputType="textEmailAddress"
         android:focusable="true" 
@@ -26,7 +25,6 @@
         android:layout_alignRight="@+id/emailCancelButton"
         android:layout_below="@+id/emailEditText"
         android:layout_marginTop="50dp"
-        android:ems="10"
         android:hint="@string/inputPassword"
         android:inputType="textPassword" />
 

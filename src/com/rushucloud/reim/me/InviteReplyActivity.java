@@ -8,6 +8,7 @@ import netUtils.Response.User.InviteReplyResponse;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +21,7 @@ import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
 
+import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -279,6 +281,9 @@ public class InviteReplyActivity extends Activity
     private void goBackToMainActivity()
     {
     	ReimApplication.setTabIndex(3);
+    	Intent intent = new Intent(InviteReplyActivity.this, MainActivity.class);
+    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	startActivity(intent);
     	finish();
     }
 }

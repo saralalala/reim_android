@@ -12,7 +12,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:ems="10"
         android:hint="@string/inputPhone"
         android:inputType="text|phone"
         android:focusable="true" 
@@ -27,7 +26,6 @@
         android:layout_alignRight="@+id/mobileEditText"
         android:layout_below="@+id/mobileEditText"
         android:layout_marginTop="40dp"
-        android:ems="10"
         android:hint="@string/inputPassword"
         android:inputType="textPassword" />
 
@@ -47,7 +45,6 @@
         android:layout_below="@+id/mobilePasswordEditText"
         android:layout_marginTop="52dp"
         android:layout_toLeftOf="@+id/acquireCodeButton"
-        android:ems="10"
         android:hint="@string/inputCode"
         android:inputType="textEmailAddress" />
 

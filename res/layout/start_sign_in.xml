@@ -14,7 +14,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:ems="10"
         android:hint="@string/inputUsername"
         android:inputType="text" />
 
@@ -28,7 +27,6 @@
         android:layout_alignRight="@+id/usernameEditText"
         android:layout_below="@+id/usernameEditText"
         android:layout_marginTop="25dp"
-        android:ems="10"
         android:hint="@string/inputPassword"
         android:inputType="textPassword" />
 
