@@ -20,8 +20,7 @@ public class ForgotPasswordRequest extends BaseRequest
 		params.add(new BasicNameValuePair("name", arg));
 		setParams(params);
 		
-		String requestUrl = getUrl();
-		setUrl(requestUrl += "/password");
+		appendUrl("/password");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

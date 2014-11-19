@@ -23,9 +23,7 @@ public class ModifyUserRequest extends BaseRequest
 		params.add(new BasicNameValuePair("nickname", user.getNickname()));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/users";
-		setUrl(requestUrl);
+		appendUrl("/users");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

@@ -9,9 +9,8 @@ public class DeleteReportRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/report/" + reportID;
-		setUrl(requestUrl);
+		String urlSuffix = "/report/" + reportID;
+		appendUrl(urlSuffix);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

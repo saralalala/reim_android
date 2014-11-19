@@ -8,9 +8,7 @@ public class EventsRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/events";
-		setUrl(requestUrl);
+		appendUrl("/events");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

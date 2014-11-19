@@ -25,9 +25,7 @@ public class CreateCategoryRequest extends BaseRequest
 		params.add(new BasicNameValuePair("pb", category.isProveAhead().toString()));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/category";
-		setUrl(requestUrl);
+		appendUrl("/category");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

@@ -9,9 +9,7 @@ public class SignOutRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/logout";
-		setUrl(requestUrl);
+		appendUrl("/logout");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

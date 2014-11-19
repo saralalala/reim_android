@@ -23,9 +23,7 @@ public class EventsReadRequest extends BaseRequest
 		params.add(new BasicNameValuePair("type", Integer.toString(type)));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/events";
-		setUrl(requestUrl);
+		appendUrl("/events");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

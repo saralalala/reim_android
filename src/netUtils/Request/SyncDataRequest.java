@@ -10,18 +10,16 @@ public class SyncDataRequest extends BaseRequest
 	{
 		super();
 		
-		String requestUrl = getUrl();
-		requestUrl += "/sync/" + timeStamp;
-		setUrl(requestUrl);
+		String urlSuffix = "/sync/" + timeStamp;
+		appendUrl(urlSuffix);
 	}
 	
 	public SyncDataRequest(int pageIndex, int pageSize, Date startDate, Date endDate)
 	{
 		super();
 		
-		String requestUrl = getUrl();
-		requestUrl += "/item/" + startDate.getTime() + "/" + endDate.getTime() + "/" + pageIndex + "/" + pageSize;
-		setUrl(requestUrl);		
+		String urlSuffix = "/item/" + startDate.getTime() + "/" + endDate.getTime() + "/" + pageIndex + "/" + pageSize;
+		appendUrl(urlSuffix);	
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

@@ -18,9 +18,7 @@ public class DefaultManagerRequest extends BaseRequest
 		params.add(new BasicNameValuePair("manager_id", Integer.toString(defaultManagerID)));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/users";
-		setUrl(requestUrl);
+		appendUrl("/users");
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

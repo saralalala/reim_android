@@ -23,9 +23,7 @@ public class RegisterRequest extends BaseRequest
 		params.add(new BasicNameValuePair("code", verifyCode));	
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/users";
-		setUrl(requestUrl);
+		appendUrl("/users");
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

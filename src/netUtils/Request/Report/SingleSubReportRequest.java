@@ -20,9 +20,8 @@ public class SingleSubReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("status", Integer.toString(status)));
 		setParams(params);
 		
-		String requestUrl = getUrl();
-		requestUrl += "/subordinate_reports/" + pageIndex + "/" + pageSize;
-		setUrl(requestUrl);
+		String urlSuffix = "/subordinate_reports/" + pageIndex + "/" + pageSize;
+		appendUrl(urlSuffix);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

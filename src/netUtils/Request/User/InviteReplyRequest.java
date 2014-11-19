@@ -20,9 +20,7 @@ public class InviteReplyRequest extends BaseRequest
 		params.add(new BasicNameValuePair("code", inviteCode));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/invite";
-		setUrl(requestUrl);
+		appendUrl("/invite");
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

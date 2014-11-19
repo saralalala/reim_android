@@ -21,9 +21,8 @@ public class DownloadImageRequest extends BaseRequest
 	{
 		super();
 		
-		String requestUrl = getUrl();
-		requestUrl += "/images/" + imageID + "/" + type;
-		setUrl(requestUrl);
+		String urlSuffix = "/images/" + imageID + "/" + type;
+		appendUrl(urlSuffix);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

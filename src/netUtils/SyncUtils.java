@@ -55,7 +55,7 @@ public abstract class SyncUtils
 		System.out.println("*************************************");
 		System.out.println("lastSynctime:"+lastSynctime);
 		final int currentTime = Utils.getCurrentTime();
-		SyncDataRequest request = new SyncDataRequest(lastSynctime);
+		SyncDataRequest request = new SyncDataRequest(0);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

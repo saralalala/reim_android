@@ -21,9 +21,7 @@ public class FeedbackRequest extends BaseRequest
 		params.add(new BasicNameValuePair("platform", Integer.toString(2)));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/feedback";
-		setUrl(requestUrl);
+		appendUrl("/feedback");
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

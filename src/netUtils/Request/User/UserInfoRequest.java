@@ -9,9 +9,8 @@ public class UserInfoRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/users/" + userID;
-		setUrl(requestUrl);
+		String urlSuffix = "/users/" + userID;
+		appendUrl(urlSuffix);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

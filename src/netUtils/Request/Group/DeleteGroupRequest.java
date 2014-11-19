@@ -9,9 +9,7 @@ public class DeleteGroupRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/groups";
-		setUrl(requestUrl);
+		appendUrl("/groups");
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

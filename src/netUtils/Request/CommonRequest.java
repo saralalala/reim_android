@@ -8,9 +8,7 @@ public class CommonRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/common/0";
-		setUrl(requestUrl);
+		appendUrl("/common/0");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

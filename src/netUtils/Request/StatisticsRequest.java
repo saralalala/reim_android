@@ -8,9 +8,8 @@ public class StatisticsRequest extends BaseRequest
 	public StatisticsRequest()
 	{
 		super();
-		String requestUrl = getUrl();
-		requestUrl += "/stat";
-		setUrl(requestUrl);
+
+		appendUrl("/stat");
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

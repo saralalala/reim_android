@@ -21,9 +21,7 @@ public class CreateTagRequest extends BaseRequest
 		params.add(new BasicNameValuePair("name", tag.getName()));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/tags";
-		setUrl(requestUrl);
+		appendUrl("/tags");
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

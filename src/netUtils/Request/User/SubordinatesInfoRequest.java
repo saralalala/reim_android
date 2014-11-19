@@ -9,9 +9,8 @@ public class SubordinatesInfoRequest extends BaseRequest
 	{
 		super();
 
-		String requestUrl = getUrl();
-		requestUrl += "/subordinate/" + pageIndex + "/" + pageSize;
-		setUrl(requestUrl);
+		String urlSuffix = "/subordinate/" + pageIndex + "/" + pageSize;
+		appendUrl(urlSuffix);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)
