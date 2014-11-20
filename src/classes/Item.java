@@ -359,7 +359,7 @@ public class Item
 		{
 			public int compare(Item item1, Item item2)
 			{
-				return (int)(item1.getConsumedDate() - item2.getConsumedDate());
+				return (int)(item2.getConsumedDate() - item1.getConsumedDate());
 			}
 		});
     }
@@ -370,7 +370,7 @@ public class Item
 		{
 			public int compare(Item item1, Item item2)
 			{
-				return (int)(item1.getAmount() - item2.getAmount());
+				return (int)(item2.getAmount() - item1.getAmount());
 			}
 		});
     }

@@ -62,7 +62,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	private static final int FILTER_STATUS_ADDED = 2;	
 	private static final int SORT_NULL = 0;	
 	private static final int SORT_AMOUNT = 1;	
-	private static final int SORT_UPDATE_DATE = 2;	
+	private static final int SORT_CONSUMED_DATE = 2;	
 	
 	private View view;
 	private View filterView;
@@ -301,7 +301,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 			final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
 			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		
-			final RadioButton sortUpdateDateRadio = (RadioButton)filterView.findViewById(R.id.sortUpdateDateRadio);	
+			final RadioButton sortConsumedDateRadio = (RadioButton)filterView.findViewById(R.id.sortConsumedDateRadio);	
 			RadioGroup sortRadioGroup = (RadioGroup)filterView.findViewById(R.id.sortRadioGroup);
 			sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 			{
@@ -316,10 +316,10 @@ public class ReimFragment extends Fragment implements IXListViewListener
 						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_AMOUNT");
 						tempSortType = SORT_AMOUNT;
 					}
-					else if (checkedId == sortUpdateDateRadio.getId())
+					else if (checkedId == sortConsumedDateRadio.getId())
 					{
 						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
-						tempSortType = SORT_UPDATE_DATE;
+						tempSortType = SORT_CONSUMED_DATE;
 					}
 				}
 			});
@@ -393,6 +393,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			{
 				public void onClick(View v)
 				{
+					sortReverse = sortType == tempSortType ? !sortReverse : false;
 					sortType = tempSortType;
 					filterType = tempFilterType;
 					filterStatus = tempFilterStatus;
@@ -404,9 +405,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 						{
 							filterTagList.add(tagList.get(i));
 						}
-					}
-					
-					sortReverse = !sortReverse;
+					}					
 					
 					windowManager.removeView(filterView);
 					ReimApplication.showProgressDialog();
@@ -498,7 +497,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			{
 				continue;
 			}
-			if (filterType == FILTER_TYPE_CONSUMED && item.isProveAhead())
+			if (filterType == FILTER_TYPE_CONSUMED && item.needReimbursed())
 			{
 				continue;
 			}
@@ -524,15 +523,15 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 		if (sortType == SORT_NULL)
 		{
-			Item.sortByConsumedDate(showList);
+			Item.sortByUpdateDate(showList);
 		}
 		if (sortType == SORT_AMOUNT)
 		{
 			Item.sortByAmount(showList);
 		}
-		if (sortType == SORT_UPDATE_DATE)
+		if (sortType == SORT_CONSUMED_DATE)
 		{
-			Item.sortByUpdateDate(showList);
+			Item.sortByConsumedDate(showList);
 		}
 		
 		if (sortReverse)

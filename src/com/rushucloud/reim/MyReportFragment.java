@@ -351,10 +351,10 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 			{
 				public void onClick(View v)
 				{
+					sortReverse = sortType == tempSortType ? !sortReverse : false;
 					sortType = tempSortType;
 					filterStatusList.clear();
-					filterStatusList.addAll(tagAdapter.getFilterStatusList());					
-					sortReverse = !sortReverse;
+					filterStatusList.addAll(tagAdapter.getFilterStatusList());
 					
 					windowManager.removeView(filterView);
 					ReimApplication.showProgressDialog();
@@ -443,7 +443,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
 		if (sortType == SORT_NULL)
 		{
-			Report.sortByModifyDate(showMineList);
+			Report.sortByUpdateDate(showMineList);
 		}
 		if (sortType == SORT_AMOUNT)
 		{
