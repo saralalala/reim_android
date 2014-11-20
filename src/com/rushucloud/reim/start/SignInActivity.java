@@ -89,14 +89,14 @@ public class SignInActivity extends Activity
 			passwordEditText.setText(password);
 		}
 
-		usernameEditText.setText("aty_3361@sina.com");
-		passwordEditText.setText("111111");
-
-		usernameEditText.setText("testem@test.com");
-		passwordEditText.setText("rushu0915");
-
-		usernameEditText.setText("testmgr@test.com");
-		passwordEditText.setText("rushu0915");
+//		usernameEditText.setText("aty_3361@sina.com");
+//		passwordEditText.setText("111111");
+//
+//		usernameEditText.setText("testem@test.com");
+//		passwordEditText.setText("rushu0915");
+//
+//		usernameEditText.setText("testmgr@test.com");
+//		passwordEditText.setText("rushu0915");
 //
 //		usernameEditText.setText("anty_promise@sina.com");
 //		passwordEditText.setText("111111");
@@ -235,7 +235,7 @@ public class SignInActivity extends Activity
 						// update members
 						User currentUser = response.getCurrentUser();
 						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-						if (currentUser.getImageID() == localUser.getImageID())
+						if (localUser != null && currentUser.getImageID() == localUser.getImageID())
 						{
 							currentUser.setAvatarPath(localUser.getAvatarPath());
 						}

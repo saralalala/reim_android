@@ -53,7 +53,7 @@ public abstract class BaseRequest
 	protected BaseRequest()
 	{
 		this.httpClient = getHttpClient();
-		this.url = URLDef.TEST_URL_PREFIX;
+		this.url = URLDef.URL_PREFIX;
 		params = null;
 	}
 	

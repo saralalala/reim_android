@@ -1120,6 +1120,7 @@ public class EditItemActivity extends Activity
 						{
 							ReimApplication.dismissProgressDialog();
 							Toast.makeText(EditItemActivity.this, "创建审批报告失败", Toast.LENGTH_SHORT).show();
+							goBack();
 						}
 					});								
 				}

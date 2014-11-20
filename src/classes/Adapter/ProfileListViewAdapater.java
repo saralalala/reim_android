@@ -52,7 +52,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				TextView textView = (TextView) view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.email));
 				EditText editText = (EditText) view.findViewById(R.id.editText);
-				editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+				editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 				editText.setText(user.getEmail());
 				editText.setHint(activity.getString(R.string.inputEmail));
 				break;

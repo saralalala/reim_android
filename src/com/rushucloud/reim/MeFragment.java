@@ -444,6 +444,7 @@ public class MeFragment extends Fragment
 
 					// update group info
 					dbManager.syncGroup(response.getGroup());
+					
 					getActivity().runOnUiThread(new Runnable()
 					{
 						public void run()
