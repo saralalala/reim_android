@@ -272,7 +272,7 @@ public class Report implements Serializable
 		{
 			public int compare(Report report1, Report report2)
 			{
-				return (int)(countArray.get(report1.getLocalID()) - countArray.get(report2.getLocalID()));
+				return (int)(countArray.get(report2.getLocalID()) - countArray.get(report1.getLocalID()));
 			}
 		});
     }
@@ -291,7 +291,7 @@ public class Report implements Serializable
 		{
 			public int compare(Report report1, Report report2)
 			{
-				return (int)(countArray.get(report1.getLocalID()) - countArray.get(report2.getLocalID()));
+				return (int)(countArray.get(report2.getLocalID()) - countArray.get(report1.getLocalID()));
 			}
 		});
     }
@@ -302,12 +302,12 @@ public class Report implements Serializable
 		{
 			public int compare(Report report1, Report report2)
 			{
-				return (int)(report1.getCreatedDate() - report2.getCreatedDate());
+				return (int)(report2.getCreatedDate() - report1.getCreatedDate());
 			}
 		});
     }
     
-    public static void sortByModifyDate(List<Report> reportList)
+    public static void sortByUpdateDate(List<Report> reportList)
     {
     	Collections.sort(reportList, new Comparator<Report>()
 		{
