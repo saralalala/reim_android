@@ -209,7 +209,15 @@ public class TagActivity extends Activity
 												public void onClick(DialogInterface dialog, int which)
 												{
 													String name = nameEditText.getText().toString();
-													if (name.equals(""))
+													if (name.equals(tag.getName()))
+													{
+														return;
+													}
+													else if (Utils.isNetworkConnected())
+													{						
+														Toast.makeText(TagActivity.this, "网络未连接，无法修改", Toast.LENGTH_SHORT).show();										
+													}
+													else if (name.equals(""))
 													{
 														Toast.makeText(TagActivity.this, "标签名称不能为空",
 																	Toast.LENGTH_SHORT).show();

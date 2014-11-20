@@ -185,7 +185,7 @@ public class ManagerActivity extends Activity
 		{
 			for (User user : userList)
 			{
-				if (user.getAvatarPath().equals("") && user.getImageID() != -1)
+				if (user.hasUndownloadedAvatar())
 				{
 					sendDownloadAvatarRequest(user);
 				}

@@ -497,11 +497,10 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			{
 				continue;
 			}
-			if (filterType == FILTER_TYPE_CONSUMED && item.needReimbursed())
+			if (filterType == FILTER_TYPE_CONSUMED && !item.needReimbursed())
 			{
 				continue;
-			}
-			
+			}			
 			if (filterStatus == FILTER_STATUS_FREE && item.getBelongReport() != null && item.getBelongReport().getLocalID() != -1)
 			{
 				continue;
@@ -511,12 +510,9 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				continue;
 			}
 			
-			if (filterTagList.size() > 0 && filterTagList.size() < tagList.size())
+			if (filterTagList.size() > 0 && !item.containsSpecificTags(filterTagList))
 			{
-				if (!item.containsSpecificTags(filterTagList))
-				{	
-					continue;
-				}
+				continue;
 			}
 			showList.add(item);
 		}

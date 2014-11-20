@@ -23,8 +23,8 @@ public class User implements Serializable
 	private int imageID = -1;
 	private String avatarPath = "";
 	private int privilege = 0;
-	private Boolean isActive = false;
-	private Boolean isAdmin = false;
+	private boolean isActive = false;
+	private boolean isAdmin = false;
 	private int groupID = -1;
 	private int defaultManagerID = -1;
 	private int serverUpdatedDate = -1;
@@ -141,20 +141,20 @@ public class User implements Serializable
 		this.privilege = privilege;
 	}
 	
-	public Boolean isActive()
+	public boolean isActive()
 	{
 		return isActive;
 	}
-	public void setIsActive(Boolean isActive)
+	public void setIsActive(boolean isActive)
 	{
 		this.isActive = isActive;
 	}
 	
-	public Boolean isAdmin()
+	public boolean isAdmin()
 	{
 		return isAdmin;
 	}
-	public void setIsAdmin(Boolean isAdmin)
+	public void setIsAdmin(boolean isAdmin)
 	{
 		this.isAdmin = isAdmin;
 	}
@@ -195,6 +195,11 @@ public class User implements Serializable
 		this.localUpdatedDate = localUpdatedDate;
 	}
 
+	public boolean hasUndownloadedAvatar()
+	{
+		return getAvatarPath().equals("") && getImageID() != -1 && getImageID() != 0;
+	}
+	
 	public static boolean[] getUsersCheck(List<User> allUsers, List<User> targetUsers)
 	{		
 		boolean[] check = new boolean[allUsers.size()];

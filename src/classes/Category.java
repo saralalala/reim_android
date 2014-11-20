@@ -10,7 +10,7 @@ public class Category
 	private double limit = 0;
 	private int groupID = -1;
 	private int parentID = 0;
-	private Boolean isProveAhead = false;
+	private boolean isProveAhead = false;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 
@@ -59,11 +59,11 @@ public class Category
 		this.parentID = parentID;
 	}
 
-	public Boolean isProveAhead()
+	public boolean isProveAhead()
 	{
 		return isProveAhead;
 	}
-	public void setIsProveAhead(Boolean isProveAhead)
+	public void setIsProveAhead(boolean isProveAhead)
 	{
 		this.isProveAhead = isProveAhead;
 	}

@@ -466,16 +466,7 @@ public class EditReportActivity extends Activity
 								.create();
     	mDialog.show();
     	
-    	if (Utils.isNetworkConnected())
-		{
-        	for (User user : userList)
-    		{
-    			if (user.getAvatarPath().equals("") && user.getImageID() != -1)
-    			{
-    				sendDownloadAvatarRequest(user);
-    			}	
-    		}			
-		}
+    	downloadAvatars();
     }
     
     private void showCCDialog()
@@ -520,17 +511,8 @@ public class EditReportActivity extends Activity
 								.setNegativeButton(R.string.cancel, null)
 								.create();
     	mDialog.show();
-		
-		if (Utils.isNetworkConnected())
-		{
-	    	for (User user : userList)
-			{
-				if (user.getAvatarPath().equals("") && user.getImageID() != -1)
-				{
-					sendDownloadAvatarRequest(user);
-				}	
-			}		
-		}
+    	
+    	downloadAvatars();
     }
 
     private void saveReport(String prompt)
@@ -657,6 +639,20 @@ public class EditReportActivity extends Activity
 		}
     }
 
+    private void downloadAvatars()
+    {
+    	if (Utils.isNetworkConnected())
+		{
+        	for (User user : userList)
+    		{
+    			if (user.hasUndownloadedAvatar())
+    			{
+    				sendDownloadAvatarRequest(user);
+    			}	
+    		}			
+		}    	
+    }
+    
     private void sendDownloadAvatarRequest(final User user)
     {
     	final DBManager dbManager = DBManager.getDBManager();

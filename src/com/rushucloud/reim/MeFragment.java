@@ -229,7 +229,7 @@ public class MeFragment extends Fragment
         
         if (Utils.isNetworkConnected())
 		{
-            if (currentUser.getAvatarPath().equals("") && currentUser.getImageID() != -1)
+            if (currentUser.hasUndownloadedAvatar())
     		{
                 sendDownloadAvatarRequest();			
     		}

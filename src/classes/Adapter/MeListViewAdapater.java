@@ -194,7 +194,7 @@ public class MeListViewAdapater extends BaseAdapter
 						}
 						else
 						{
-							Toast.makeText(fragment.getActivity(), "没有网络连接，无法登出", Toast.LENGTH_SHORT).show();							
+							Toast.makeText(fragment.getActivity(), "网络未连接，无法登出", Toast.LENGTH_SHORT).show();							
 						}
 					}
 				});

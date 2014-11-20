@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public class GetVendorsResponse
 {
-	private Boolean status;
+	private boolean status;
 	private List<String> vendorList;
 	
 	public GetVendorsResponse(Object httpResponse)
@@ -36,12 +36,12 @@ public class GetVendorsResponse
 		}
 	}
 
-	public Boolean getStatus()
+	public boolean getStatus()
 	{
 		return status;
 	}
 
-	public void setStatus(Boolean status)
+	public void setStatus(boolean status)
 	{
 		this.status = status;
 	}

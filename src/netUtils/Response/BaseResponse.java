@@ -6,13 +6,14 @@ import org.json.JSONObject;
 
 import com.rushucloud.reim.start.SignInActivity;
 
+import classes.AppPreference;
 import classes.ReimApplication;
 
 import android.content.Intent;
 
 public abstract class BaseResponse
 {
-	private Boolean status;
+	private boolean status;
 	private int code;
 	private String errorMessage;
 	private String serverToken;
@@ -51,6 +52,18 @@ public abstract class BaseResponse
 				
 				if (code == -11)
 				{
+					AppPreference appPreference = AppPreference.getAppPreference();
+					appPreference.setCurrentUserID(-1);
+					appPreference.setCurrentGroupID(-1);
+					appPreference.setUsername("");
+					appPreference.setPassword("");
+					appPreference.setServerToken("");
+					appPreference.setLastSyncTime(0);
+					appPreference.saveAppPreference();
+					
+					ReimApplication.setTabIndex(0);
+					ReimApplication.setReportTabIndex(0);
+					
 					Intent intent = new Intent(ReimApplication.getContext(), SignInActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -71,12 +84,12 @@ public abstract class BaseResponse
 
 	protected abstract void constructData();
 	
-	public Boolean getStatus()
+	public boolean getStatus()
 	{
 		return status;
 	}
 
-	public void setStatus(Boolean status)
+	public void setStatus(boolean status)
 	{
 		this.status = status;
 	}

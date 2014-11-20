@@ -81,7 +81,7 @@ public class DBManager extends SQLiteOpenHelper
 //		database.execSQL(sqlString);		
 	}
 	
-	public Boolean openDatabase()
+	public boolean openDatabase()
 	{
 		try
 		{
@@ -99,7 +99,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean closeDatabase()
+	public boolean closeDatabase()
 	{
 		try
 		{
@@ -113,7 +113,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	private Boolean createTables()
+	private boolean createTables()
 	{
 		try
 		{
@@ -333,7 +333,7 @@ public class DBManager extends SQLiteOpenHelper
 	}
 		
 	// User
-	public Boolean insertUser(User user)
+	public boolean insertUser(User user)
 	{
 		try
 		{
@@ -361,7 +361,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean updateUser(User user)
+	public boolean updateUser(User user)
 	{
 		try
 		{
@@ -388,7 +388,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean deleteUser(int userServerID)
+	public boolean deleteUser(int userServerID)
 	{
 		try
 		{
@@ -403,7 +403,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean syncUser(User user)
+	public boolean syncUser(User user)
 	{
 		try
 		{
@@ -464,7 +464,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean insertUserList(List<User> userList)
+	public boolean insertUserList(List<User> userList)
 	{
 		try
 		{
@@ -480,7 +480,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean updateGroupUsers(List<User> userList, int groupServerID)
+	public boolean updateGroupUsers(List<User> userList, int groupServerID)
 	{
 		try
 		{
@@ -546,7 +546,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteGroupUsers(int groupServerID)
+	public boolean deleteGroupUsers(int groupServerID)
 	{
 		try
 		{
@@ -561,7 +561,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean insertRelevantUsers(Item item)
+	public boolean insertRelevantUsers(Item item)
 	{
 		try
 		{
@@ -585,7 +585,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateRelevantUsers(Item item)
+	public boolean updateRelevantUsers(Item item)
 	{
 		try
 		{
@@ -625,7 +625,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteRelevantUsers(int itemLocalID)
+	public boolean deleteRelevantUsers(int itemLocalID)
 	{
 		try
 		{
@@ -641,7 +641,7 @@ public class DBManager extends SQLiteOpenHelper
 	}	
 	
 	// Item
-	public Boolean insertItem(Item item)
+	public boolean insertItem(Item item)
 	{
 		try
 		{
@@ -686,7 +686,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean insertOthersItem(Item item)
+	public boolean insertOthersItem(Item item)
 	{
 		try
 		{
@@ -724,7 +724,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean updateItem(Item item)
+	public boolean updateItem(Item item)
 	{
 		if (item.getLocalID() != -1)
 		{
@@ -736,7 +736,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	private Boolean updateItemByLocalID(Item item)
+	private boolean updateItemByLocalID(Item item)
 	{
 		try
 		{
@@ -775,7 +775,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	private Boolean updateItemByServerID(Item item)
+	private boolean updateItemByServerID(Item item)
 	{
 		try
 		{
@@ -819,7 +819,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean deleteItem(int itemLocalID)
+	public boolean deleteItem(int itemLocalID)
 	{
 		try
 		{
@@ -837,7 +837,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean deleteTrashItems(List<Integer> remainingList, int userServerID)
+	public boolean deleteTrashItems(List<Integer> remainingList, int userServerID)
 	{
 		try
 		{
@@ -853,7 +853,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean syncItem(Item item)
+	public boolean syncItem(Item item)
 	{
 		try
 		{
@@ -897,7 +897,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean syncItemList(List<Item> itemList, int userServerID)
+	public boolean syncItemList(List<Item> itemList, int userServerID)
 	{
 		try
 		{
@@ -1229,7 +1229,7 @@ public class DBManager extends SQLiteOpenHelper
 		}		
 	}
 	
-	public Boolean insertReportItem(int reportLocalID, int itemLocalID)
+	public boolean insertReportItem(int reportLocalID, int itemLocalID)
 	{
 		try
 		{
@@ -1246,7 +1246,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteReportItem(int itemLocalID)
+	public boolean deleteReportItem(int itemLocalID)
 	{
 		try
 		{
@@ -1263,7 +1263,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean insertReportItems(ArrayList<Integer> itemIDList, int reportLocalID)
+	public boolean insertReportItems(ArrayList<Integer> itemIDList, int reportLocalID)
 	{
 		try
 		{
@@ -1281,7 +1281,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateReportItems(ArrayList<Integer> itemIDList, int reportLocalID)
+	public boolean updateReportItems(ArrayList<Integer> itemIDList, int reportLocalID)
 	{
 		try
 		{
@@ -1296,7 +1296,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteReportItems(int reportLocalID)
+	public boolean deleteReportItems(int reportLocalID)
 	{
 		try
 		{
@@ -1313,7 +1313,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteOthersReportItems(int reportServerID)
+	public boolean deleteOthersReportItems(int reportServerID)
 	{
 		try
 		{
@@ -1444,7 +1444,7 @@ public class DBManager extends SQLiteOpenHelper
 	}
 	
 	// Report
-	public Boolean insertReport(Report report)
+	public boolean insertReport(Report report)
 	{	
 		try
 		{
@@ -1469,7 +1469,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean insertOthersReport(Report report)
+	public boolean insertOthersReport(Report report)
 	{
 		try
 		{
@@ -1497,7 +1497,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateReportByLocalID(Report report)
+	public boolean updateReportByLocalID(Report report)
 	{
 		try
 		{
@@ -1522,7 +1522,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateReportByServerID(Report report)
+	public boolean updateReportByServerID(Report report)
 	{
 		try
 		{
@@ -1547,7 +1547,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean deleteReport(int reportLocalID)
+	public boolean deleteReport(int reportLocalID)
 	{
 		try
 		{
@@ -1566,7 +1566,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean deleteOthersReport(int reportServerID, int managerID)
+	public boolean deleteOthersReport(int reportServerID, int managerID)
 	{
 		try
 		{
@@ -1581,7 +1581,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteOthersReports(int managerID)
+	public boolean deleteOthersReports(int managerID)
 	{
 		try
 		{
@@ -1596,7 +1596,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean deleteTrashReports(List<Integer> remainingList, int userServerID)
+	public boolean deleteTrashReports(List<Integer> remainingList, int userServerID)
 	{
 		try
 		{
@@ -1707,7 +1707,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean syncReport(Report report)
+	public boolean syncReport(Report report)
 	{
 		try
 		{
@@ -1747,7 +1747,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean syncReportList(List<Report> reportList, int userServerID)
+	public boolean syncReportList(List<Report> reportList, int userServerID)
 	{
 		try
 		{
@@ -1967,7 +1967,7 @@ public class DBManager extends SQLiteOpenHelper
 	}
 	
 	// Comment
-	public Boolean insertComment(Comment comment)
+	public boolean insertComment(Comment comment)
 	{
 		try
 		{
@@ -1989,7 +1989,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean insertOthersComment(Comment comment)
+	public boolean insertOthersComment(Comment comment)
 	{
 		try
 		{
@@ -2011,7 +2011,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateComment(Comment comment)
+	public boolean updateComment(Comment comment)
 	{
 		try
 		{
@@ -2033,7 +2033,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteComment(int commentLocalID)
+	public boolean deleteComment(int commentLocalID)
 	{
 		try
 		{
@@ -2048,7 +2048,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteOthersComment(int commentServerID)
+	public boolean deleteOthersComment(int commentServerID)
 	{
 		try
 		{
@@ -2063,7 +2063,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteReportComments(int reportLocalID)
+	public boolean deleteReportComments(int reportLocalID)
 	{
 		try
 		{
@@ -2078,7 +2078,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteOthersReportComments(int reportServerID)
+	public boolean deleteOthersReportComments(int reportServerID)
 	{
 		try
 		{
@@ -2189,7 +2189,7 @@ public class DBManager extends SQLiteOpenHelper
 	}
 
 	// Category
-	public Boolean insertCategory(Category category)
+	public boolean insertCategory(Category category)
 	{
 		try
 		{
@@ -2213,7 +2213,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateCategory(Category category)
+	public boolean updateCategory(Category category)
 	{
 		try
 		{
@@ -2236,7 +2236,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteCategory(int categoryServerID)
+	public boolean deleteCategory(int categoryServerID)
 	{
 		try
 		{
@@ -2251,7 +2251,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean syncCategory(Category category)
+	public boolean syncCategory(Category category)
 	{
 		try
 		{
@@ -2309,7 +2309,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean insertCategoryList(List<Category> categoryList)
+	public boolean insertCategoryList(List<Category> categoryList)
 	{
 		try
 		{
@@ -2325,7 +2325,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public Boolean updateGroupCategories(List<Category> categoryList, int groupServerID)
+	public boolean updateGroupCategories(List<Category> categoryList, int groupServerID)
 	{
 		try
 		{
@@ -2401,7 +2401,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteGroupCategories(int groupServerID)
+	public boolean deleteGroupCategories(int groupServerID)
 	{
 		try
 		{
@@ -2416,7 +2416,7 @@ public class DBManager extends SQLiteOpenHelper
 		}	
 	}	
 	
-	public Boolean deleteSubCategories(int categoryServerID, int groupServerID)
+	public boolean deleteSubCategories(int categoryServerID, int groupServerID)
 	{
 		try
 		{
@@ -2433,7 +2433,7 @@ public class DBManager extends SQLiteOpenHelper
 	}
 	
 	// Tag
-	public Boolean insertTag(Tag tag)
+	public boolean insertTag(Tag tag)
 	{
 		try
 		{
@@ -2453,7 +2453,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateTag(Tag tag)
+	public boolean updateTag(Tag tag)
 	{
 		try
 		{
@@ -2473,7 +2473,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteTag(int tagServerID)
+	public boolean deleteTag(int tagServerID)
 	{
 		try
 		{
@@ -2488,7 +2488,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean syncTag(Tag tag)
+	public boolean syncTag(Tag tag)
 	{
 		try
 		{
@@ -2541,7 +2541,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean insertTagList(List<Tag> tagList)
+	public boolean insertTagList(List<Tag> tagList)
 	{
 		try
 		{
@@ -2557,7 +2557,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateGroupTags(List<Tag> tagList, int groupServerID)
+	public boolean updateGroupTags(List<Tag> tagList, int groupServerID)
 	{
 		try
 		{
@@ -2598,7 +2598,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteGroupTags(int groupServerID)
+	public boolean deleteGroupTags(int groupServerID)
 	{
 		try
 		{
@@ -2613,7 +2613,7 @@ public class DBManager extends SQLiteOpenHelper
 		}		
 	}
 
-	public Boolean insertItemTags(Item item)
+	public boolean insertItemTags(Item item)
 	{
 		try
 		{
@@ -2637,7 +2637,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateItemTags(Item item)
+	public boolean updateItemTags(Item item)
 	{
 		try
 		{
@@ -2677,7 +2677,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean deleteItemTags(int itemLocalID)
+	public boolean deleteItemTags(int itemLocalID)
 	{
 		try
 		{
@@ -2693,7 +2693,7 @@ public class DBManager extends SQLiteOpenHelper
 	}
 	
 	// Group
-	public Boolean insertGroup(Group group)
+	public boolean insertGroup(Group group)
 	{
 		try
 		{
@@ -2712,7 +2712,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean updateGroup(Group group)
+	public boolean updateGroup(Group group)
 	{
 		try
 		{
@@ -2732,7 +2732,7 @@ public class DBManager extends SQLiteOpenHelper
 		}		
 	}
 	
-	public Boolean deleteGroup(int groupServerID)
+	public boolean deleteGroup(int groupServerID)
 	{
 		try
 		{
@@ -2747,7 +2747,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Boolean syncGroup(Group group)
+	public boolean syncGroup(Group group)
 	{
 		try
 		{
@@ -2815,7 +2815,7 @@ public class DBManager extends SQLiteOpenHelper
 		return cursor.getString(cursor.getColumnIndex(columnName));
 	}
 	
-	private Boolean getBooleanFromCursor(Cursor cursor, String columnName)
+	private boolean getBooleanFromCursor(Cursor cursor, String columnName)
 	{
 		int temp=cursor.getInt(cursor.getColumnIndex(columnName));
 		return temp > 0 ? true : false;

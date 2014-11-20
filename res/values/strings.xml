@@ -93,7 +93,7 @@
     <string name="addComment">添加评论</string>
     <string name="checkComment">查看评论</string>
     <string name="inputComment">请输入评论</string>
-    <string name="noComment">没有任何评论</string>
+    <string name="noComment">当前没有任何评论</string>
     <string name="noManager">未选择经理</string>
     <string name="noCC">未选择CC</string>
     <string name="chooseManager">选择经理</string>
@@ -145,8 +145,6 @@
     <string name="xlistview_header_last_time">上次更新时间：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
-    
-    <string name="test">松开载入更多松开载入更多</string>
     
     <string-array name="filterStatus">
         <item>草稿</item>

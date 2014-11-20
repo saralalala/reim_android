@@ -440,7 +440,7 @@ public class EditItemActivity extends Activity
 		{
 			invoiceImageView.setImageBitmap(bitmap);
 		}
-		else
+		else // item has invoice path but the file was deleted
 		{
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
 			if (item.getImageID() != -1 && item.getImageID() != 0 && Utils.isNetworkConnected())

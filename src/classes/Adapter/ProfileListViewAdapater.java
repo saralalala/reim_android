@@ -121,7 +121,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 							final String newName = editText.getText().toString();
 							if (!Utils.isNetworkConnected())
 							{
-								Toast.makeText(activity, "没有网络连接，无法修改", Toast.LENGTH_SHORT).show();			
+								Toast.makeText(activity, "网络未连接，无法修改", Toast.LENGTH_SHORT).show();			
 							}
 							else if (newName.equals(originalName))
 							{

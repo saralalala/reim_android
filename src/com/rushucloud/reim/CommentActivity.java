@@ -111,7 +111,7 @@ public class CommentActivity extends Activity
 				for (Comment comment : commentList)
 				{
 					User user = comment.getReviewer();
-					if (user.getAvatarPath().equals("") && user.getImageID() != -1)
+					if (user.hasUndownloadedAvatar())
 					{
 						sendDownloadAvatarRequest(user);
 					}

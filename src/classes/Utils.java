@@ -145,7 +145,7 @@ public class Utils
 		return result;
 	}
 
-	public static Boolean isEmailOrPhone(String source)
+	public static boolean isEmailOrPhone(String source)
 	{
 		if (isEmail(source) || isPhone(source))
 		{
@@ -157,7 +157,7 @@ public class Utils
 		}
 	}
 	
-	public static Boolean isEmail(String source)
+	public static boolean isEmail(String source)
 	{
 		Pattern pattern = Pattern.compile(regexEmail);
 		Matcher matcher = pattern.matcher(source);
@@ -171,7 +171,7 @@ public class Utils
 		}
 	}
 	
-	public static Boolean isPhone(String source)
+	public static boolean isPhone(String source)
 	{
 		Pattern pattern = Pattern.compile(regexPhone);
 		Matcher matcher = pattern.matcher(source);
@@ -190,7 +190,7 @@ public class Utils
 		return b ? 1 : 0;
 	}
 
-	public static Boolean intToBoolean(int i)
+	public static boolean intToBoolean(int i)
 	{
 		return i > 0 ? true : false;
 	}

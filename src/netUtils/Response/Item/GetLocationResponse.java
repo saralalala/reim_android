@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class GetLocationResponse
 {
-	private Boolean status;
+	private boolean status;
 	private String city;
 	
 	public GetLocationResponse(Object httpResponse)
@@ -24,12 +24,12 @@ public class GetLocationResponse
 		}
 	}
 
-	public Boolean getStatus()
+	public boolean getStatus()
 	{
 		return status;
 	}
 
-	public void setStatus(Boolean status)
+	public void setStatus(boolean status)
 	{
 		this.status = status;
 	}

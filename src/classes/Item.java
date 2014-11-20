@@ -30,8 +30,8 @@ public class Item
 	private User consumer;
 	private int consumedDate = -1;
 	private String note = "";
-	private Boolean isProveAhead = false;
-	private Boolean needReimbursed = false;
+	private boolean isProveAhead = false;
+	private boolean needReimbursed = false;
 	private int status = STATUS_DRAFT;
 	private String location = "";
 	private List<User> relevantUsers = null;
@@ -256,20 +256,20 @@ public class Item
 		this.note = note;
 	}
 	
-	public Boolean isProveAhead()
+	public boolean isProveAhead()
 	{
 		return isProveAhead;
 	}
-	public void setIsProveAhead(Boolean isProveAhead)
+	public void setIsProveAhead(boolean isProveAhead)
 	{
 		this.isProveAhead = isProveAhead;
 	}
 	
-	public Boolean needReimbursed()	
+	public boolean needReimbursed()	
 	{
 		return needReimbursed;
 	}
-	public void setNeedReimbursed(Boolean needReimbursed)
+	public void setNeedReimbursed(boolean needReimbursed)
 	{
 		this.needReimbursed = needReimbursed;
 	}
@@ -320,7 +320,7 @@ public class Item
     	return idArrayList;
     }
 	
-	public Boolean canBeSubmitWithReport()
+	public boolean canBeSubmitWithReport()
 	{
 		if (imageID == -1 && !invoicePath.equals(""))
 		{
@@ -333,7 +333,7 @@ public class Item
 		return true;
 	}
 	
-	public Boolean containsSpecificTags(List<Tag> tagList)
+	public boolean containsSpecificTags(List<Tag> tagList)
 	{
 		if (tags == null)
 		{
@@ -353,6 +353,11 @@ public class Item
 		return false;
 	}
     
+	public boolean hasUndownloadedInvoice()
+	{
+		return getInvoicePath().equals("") && getImageID() != -1 && getImageID() != 0;
+	}
+	
     public static void sortByConsumedDate(List<Item> itemList)
     {
     	Collections.sort(itemList, new Comparator<Item>()
