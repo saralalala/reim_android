@@ -108,7 +108,8 @@ public class Category
 		List<String> names = new ArrayList<String>();
 		for (int i = 0; i < categoryList.size(); i++)
 		{
-			names.add(categoryList.get(i).getName() + "(MAX:￥" + categoryList.get(i).getLimit() + ")");
+			String max = categoryList.get(i).getLimit() == 0 ? "(MAX:Unlimited)" : "(MAX:￥" + categoryList.get(i).getLimit() + ")";
+			names.add(categoryList.get(i).getName() + max);	
 		}
 		return names.toArray(new String[names.size()]);
 	}

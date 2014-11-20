@@ -872,7 +872,7 @@ public class DBManager extends SQLiteOpenHelper
 				{
 					return insertItem(item);
 				}
-				else if (item.getServerUpdatedDate() >= localItem.getLocalUpdatedDate())
+				else if (item.getServerUpdatedDate() > localItem.getLocalUpdatedDate())
 				{
 					if (item.getImageID() == localItem.getImageID())
 					{

@@ -177,7 +177,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			case 0:
 				if (report != null
-						&& (report.getStatus() != Report.STATUS_DRAFT || report.getStatus() != Report.STATUS_REJECTED))
+						&& (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED))
 				{
 					Toast.makeText(getActivity(), "条目已提交，不可删除", Toast.LENGTH_SHORT).show();
 

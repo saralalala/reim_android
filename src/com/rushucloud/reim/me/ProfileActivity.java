@@ -1,5 +1,8 @@
 package com.rushucloud.reim.me;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.ModifyUserRequest;
 import netUtils.Response.User.ModifyUserResponse;
@@ -24,6 +27,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,9 +35,11 @@ import android.widget.Toast;
 public class ProfileActivity extends Activity
 {
 	private ListView profileListView;
-	private ProfileListViewAdapater adapter;
+	private ProfileListViewAdapater infoAdapter;
+	private ArrayAdapter<String> operationAdapter;
 
 	private User currentUser;
+	private List<String> operationList;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -93,25 +99,38 @@ public class ProfileActivity extends Activity
 	private void initData()
 	{
 		currentUser = AppPreference.getAppPreference().getCurrentUser();
+		
+		operationList = new ArrayList<String>();
+		operationList.add(getString(R.string.changePassword));
+		operationList.add(getString(R.string.defaultManager));
+		if (currentUser.isAdmin() && currentUser.getGroupID() != -1)
+		{
+			operationList.add(getString(R.string.categoryManagement));
+			operationList.add(getString(R.string.tagManagement));			
+		}
 	}
 	
 	private void initView()
 	{		
 		ReimApplication.setProgressDialog(this);
 
-		adapter = new ProfileListViewAdapater(ProfileActivity.this, currentUser);
+		infoAdapter = new ProfileListViewAdapater(ProfileActivity.this, currentUser);
 		profileListView = (ListView)findViewById(R.id.profileListView);
-		profileListView.setAdapter(adapter);
-		profileListView.setOnItemClickListener(new OnItemClickListener()
+		profileListView.setAdapter(infoAdapter);
+		
+		operationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, operationList);
+		ListView operationListView = (ListView)findViewById(R.id.operationListView);
+		operationListView.setAdapter(operationAdapter);
+		operationListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				switch (position)
 				{
-					case 4:
+					case 0:
 						startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
 						break;
-					case 5:
+					case 1:
 					{
 						if (currentUser.getGroupID() == -1)
 						{
@@ -123,11 +142,11 @@ public class ProfileActivity extends Activity
 						}
 						break;
 					}
-					case 6:
+					case 2:
 						MobclickAgent.onEvent(ProfileActivity.this, "UMENG_MINE_CATEGORT_SETTING");
 						startActivity(new Intent(ProfileActivity.this, CategoryActivity.class));
 						break;
-					case 7:
+					case 3:
 						MobclickAgent.onEvent(ProfileActivity.this, "UMENG_MINE_TAG_SETTING");
 						startActivity(new Intent(ProfileActivity.this, TagActivity.class));
 						break;
@@ -182,8 +201,8 @@ public class ProfileActivity extends Activity
 							{
 								ReimApplication.dismissProgressDialog();
 								Toast.makeText(ProfileActivity.this, "用户信息修改成功", Toast.LENGTH_SHORT).show();
-								adapter.setUser(currentUser);
-								adapter.notifyDataSetChanged();
+								infoAdapter.setUser(currentUser);
+								infoAdapter.notifyDataSetChanged();
 							}
 						});
 					}
@@ -195,7 +214,7 @@ public class ProfileActivity extends Activity
 							{
 								ReimApplication.dismissProgressDialog();
 								Toast.makeText(ProfileActivity.this, "用户信息修改失败", Toast.LENGTH_SHORT).show();
-								adapter.notifyDataSetChanged();
+								infoAdapter.notifyDataSetChanged();
 							}
 						});						
 					}

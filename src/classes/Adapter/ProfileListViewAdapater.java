@@ -13,6 +13,7 @@ import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.ProfileActivity;
 import database.DBManager;
 import android.content.Context;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				TextView textView = (TextView) view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.email));
 				EditText editText = (EditText) view.findViewById(R.id.editText);
+				editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 				editText.setText(user.getEmail());
 				editText.setHint(activity.getString(R.string.inputEmail));
 				break;
@@ -61,6 +63,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				TextView textView = (TextView) view.findViewById(R.id.textView);
 				textView.setText(activity.getString(R.string.phone));
 				EditText editText = (EditText) view.findViewById(R.id.editText);
+				editText.setInputType(InputType.TYPE_CLASS_PHONE);
 				editText.setText(user.getPhone());
 				editText.setHint(activity.getString(R.string.inputPhone));
 				break;
@@ -175,34 +178,6 @@ public class ProfileListViewAdapater extends BaseAdapter
 				}
 				break;
 			}
-			case 4:
-			{
-				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-				TextView textView = (TextView) view.findViewById(android.R.id.text1);
-				textView.setText(activity.getString(R.string.changePassword));
-				break;
-			}
-			case 5:
-			{
-				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-				TextView textView = (TextView) view.findViewById(android.R.id.text1);
-				textView.setText(activity.getString(R.string.defaultManager));
-				break;
-			}
-			case 6:
-			{
-				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-				TextView textView = (TextView) view.findViewById(android.R.id.text1);
-				textView.setText(activity.getString(R.string.categoryManagement));
-				break;
-			}
-			case 7:
-			{
-				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-				TextView textView = (TextView) view.findViewById(android.R.id.text1);
-				textView.setText(activity.getString(R.string.tagManagement));
-				break;
-			}
 			default:
 				break;
 		}
@@ -211,7 +186,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 
 	public int getCount()
 	{
-		return user.isAdmin() && user.getGroupID() != -1 ? 8 : 6;
+		return 4;
 	}
 
 	public Object getItem(int position)

@@ -210,18 +210,16 @@ public class SubCategoryActivity extends Activity
 														Toast.makeText(SubCategoryActivity.this, "分类名称不能为空",
 																	Toast.LENGTH_SHORT).show();
 													}
-													else if (limit.equals(""))
-													{
-														Toast.makeText(SubCategoryActivity.this, "分类限额不能为空",
-																	Toast.LENGTH_SHORT).show();
-													}
 													else
 													{
 														category.setName(name);
-														category.setLimit(Double.valueOf(limit));
 														category.setParentID(parentID);
 														category.setGroupID(appPreference.getCurrentGroupID());
 														category.setIsProveAhead(proveAheadCheckBox.isChecked());
+														if (!limit.equals(""))
+														{
+															category.setLimit(Double.valueOf(limit));
+														}
 														if (isNewCategory)
 														{
 															sendCreateCategoryRequest(category);															
