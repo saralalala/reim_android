@@ -308,8 +308,9 @@ public abstract class SyncUtils
 				if (response.getStatus())
 				{
 			    	System.out.println("create report：local id " + report.getLocalID() + " *Succeed*");
-					report.setLocalUpdatedDate(Utils.getCurrentTime());
-					report.setServerUpdatedDate(report.getLocalUpdatedDate());
+			    	int currentTime = Utils.getCurrentTime();
+					report.setLocalUpdatedDate(currentTime);
+					report.setServerUpdatedDate(currentTime);
 					report.setServerID(response.getReportID());
 					DBManager.getDBManager().updateReportByLocalID(report);
 					reportTaskCount--;

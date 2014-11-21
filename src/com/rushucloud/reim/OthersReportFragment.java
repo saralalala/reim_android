@@ -145,6 +145,10 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		{
 			appPreference = AppPreference.getAppPreference();
 		}
+		
+		ReimApplication.setTabIndex(1);
+		ReimApplication.setReportTabIndex(1);
+		
 		othersList.clear();
 		othersList.addAll(dbManager.getOthersReports(appPreference.getCurrentUserID()));
 		filterReportList();

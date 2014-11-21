@@ -650,6 +650,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
+			System.out.println("insert item: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
 			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
 			String sqlString = "INSERT INTO tbl_item (server_id, image_id, invoice_path, merchant, report_local_id, category_id, " +
@@ -746,6 +747,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
+			System.out.println("update item by local id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
 			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
 			String sqlString = "UPDATE tbl_item SET " +
@@ -785,6 +787,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
+			System.out.println("update item by server id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
 			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
 			String sqlString = "UPDATE tbl_item SET " +

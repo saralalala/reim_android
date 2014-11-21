@@ -113,7 +113,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	public void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("MyReportFragment");	
+		MobclickAgent.onPageStart("MyReportFragment");
 		ReimApplication.showProgressDialog();
         initView();
         initData();
@@ -231,6 +231,9 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		{
 			appPreference = AppPreference.getAppPreference();
 		}
+		
+		ReimApplication.setTabIndex(1);
+		ReimApplication.setReportTabIndex(0);
     }
 
 	private void initView()
