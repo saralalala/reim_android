@@ -1,5 +1,7 @@
 package com.rushucloud.reim;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,11 +74,13 @@ public class MeFragment extends Fragment
 {
 	private static final int PICK_IMAGE = 0;
 	private static final int TAKE_PHOTO = 1;
+	private static final int CROP_IMAGE = 2;
 	
 	private MeListViewAdapater adapter;
 	private ListView meListView;
 	
 	private User currentUser;
+	private Uri originalImageUri;
 	private String avatarPath;
 	
 	private UMSocialService mController;
@@ -145,11 +149,21 @@ public class MeFragment extends Fragment
 		{
 			try
 			{
-				if (requestCode == PICK_IMAGE || requestCode == TAKE_PHOTO)
+				if (requestCode == PICK_IMAGE)
 				{
-					Uri uri = data.getData();
-			    	Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-					avatarPath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_AVATAR);					
+					originalImageUri = null;
+					cropImage(data.getData());
+				}
+				else if (requestCode == TAKE_PHOTO)
+				{
+					originalImageUri = data.getData();
+					cropImage(data.getData());					
+				}
+				else if (requestCode == CROP_IMAGE)
+				{
+					Uri newImageUri = Uri.parse(data.getAction());
+					Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), newImageUri);
+					avatarPath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_AVATAR);
 					
 					if (!avatarPath.equals("") && Utils.isNetworkConnected())
 					{
@@ -162,7 +176,13 @@ public class MeFragment extends Fragment
 					else
 					{
 						Toast.makeText(getActivity(), "网络未连接，无法上传头像", Toast.LENGTH_SHORT).show();
+					}				
+					
+					if (originalImageUri != null)
+					{
+						getActivity().getContentResolver().delete(originalImageUri, null, null);							
 					}
+					getActivity().getContentResolver().delete(newImageUri, null, null);	
 				}
 			}
 			catch (Exception e)
@@ -236,6 +256,31 @@ public class MeFragment extends Fragment
 
         mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 	}
+
+    private void cropImage(Uri uri)
+    {
+		try
+		{
+	    	Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+	    	Intent intent = new Intent("com.android.camera.action.CROP");
+	    	intent.setDataAndType(uri, "image/*");
+	    	intent.putExtra("crop", "true");
+	    	intent.putExtra("aspectX", 1);
+	    	intent.putExtra("aspectY", 1);
+	    	intent.putExtra("outputX", bitmap.getWidth());
+	    	intent.putExtra("outputY", bitmap.getWidth());
+	    	intent.putExtra("return-data", false);
+	    	startActivityForResult(intent, CROP_IMAGE);
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+    }
     
     private void sendUploadAvatarRequest()
     {

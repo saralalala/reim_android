@@ -91,6 +91,7 @@ public class EditItemActivity extends Activity
 	private BDLocation currentLocation;
 	private String currentCity;
 	private String locationInvalid;
+	private int getLocationTryTimes = 2;
 	private boolean fromReim;
 	
 	private EditText amountEditText;
@@ -1177,7 +1178,7 @@ public class EditItemActivity extends Activity
 		});
     }
 
-    private void sendLocationRequest(double latitude, double longitude)
+    private void sendLocationRequest(final double latitude, final double longitude)
     {
 		GetLocationRequest request = new GetLocationRequest(latitude, longitude);
 		request.sendRequest(new HttpConnectionCallback()
@@ -1189,6 +1190,11 @@ public class EditItemActivity extends Activity
 				{
 					currentCity = getString(R.string.locationInvalid);
 					cityList.set(0, getString(R.string.currentLocation) + currentCity);
+				}
+				else if (getLocationTryTimes > 0)
+				{
+					getLocationTryTimes--;
+					sendLocationRequest(latitude, longitude);
 				}
 			}
 		});
