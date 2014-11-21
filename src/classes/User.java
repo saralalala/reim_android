@@ -7,6 +7,8 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
 import database.DBManager;
@@ -197,7 +199,20 @@ public class User implements Serializable
 
 	public boolean hasUndownloadedAvatar()
 	{
-		return getAvatarPath().equals("") && getImageID() != -1 && getImageID() != 0;
+		if (getAvatarPath().equals("") && getImageID() != -1 && getImageID() != 0)
+		{
+			return true;
+		}
+		
+		if (!getAvatarPath().equals(""))
+		{
+			Bitmap bitmap = BitmapFactory.decodeFile(getAvatarPath());
+			if (bitmap == null)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public static boolean[] getUsersCheck(List<User> allUsers, List<User> targetUsers)

@@ -1035,6 +1035,7 @@ public class EditItemActivity extends Activity
 					
 					dbManager.insertItem(item);
 					item.setLocalID(dbManager.getLastInsertItemID());
+					newItem = false;
 					sendApproveReportRequest();
 				}
 				else

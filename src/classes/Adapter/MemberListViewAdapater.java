@@ -43,11 +43,10 @@ public class MemberListViewAdapater extends BaseAdapter
 		if (!user.getAvatarPath().equals(""))
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
-			imageView.setImageBitmap(bitmap);
-		}
-		else
-		{
-			imageView.setImageResource(R.drawable.default_avatar);
+			if (bitmap != null)
+			{
+				imageView.setImageBitmap(bitmap);				
+			}
 		}
 		
 		if (user.getNickname().equals(""))

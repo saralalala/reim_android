@@ -57,20 +57,12 @@ public class MeListViewAdapater extends BaseAdapter
 				view = layoutInflater.inflate(R.layout.list_profile, null);
 				
 				ImageView imageView = (ImageView)view.findViewById(R.id.imageView);				
-				if (currentUser.getAvatarPath().equals(""))
-				{
-					imageView.setImageResource(R.drawable.default_avatar);
-				}
-				else
+				if (!currentUser.getAvatarPath().equals(""))
 				{
 					Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
 					if (bitmap != null)
 					{
 						imageView.setImageBitmap(bitmap);						
-					}
-					else
-					{
-						imageView.setImageResource(R.drawable.default_avatar);						
 					}
 				}
 				imageView.setOnClickListener(new View.OnClickListener()

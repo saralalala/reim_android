@@ -49,7 +49,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -233,15 +232,6 @@ public class MeFragment extends Fragment
     		{
                 sendDownloadAvatarRequest();			
     		}
-            
-            if (!currentUser.getAvatarPath().equals(""))
-			{
-				Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
-				if (bitmap == null)
-				{
-	                sendDownloadAvatarRequest();					
-				}				
-			}
 		}
 
         mController = UMServiceFactory.getUMSocialService("com.umeng.share");

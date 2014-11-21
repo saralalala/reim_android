@@ -89,7 +89,9 @@ public class Utils
 		Cursor cursor = activity.getContentResolver().query(uri, projection, null, null, null);
 		cursor.moveToFirst();
 		int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-		return cursor.getString(index);
+		String result = cursor.getString(index);
+		cursor.close();
+		return result;
 	}
 	
 	public static int getCurrentTime()

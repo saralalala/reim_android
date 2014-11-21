@@ -450,10 +450,13 @@ public class DBManager extends SQLiteOpenHelper
 				user.setIsAdmin(getBooleanFromCursor(cursor, "admin"));
 				user.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				user.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				
+				cursor.close();
 				return user;
 			}
 			else
 			{
+				cursor.close();
 				return null;				
 			}
 		}
@@ -537,6 +540,8 @@ public class DBManager extends SQLiteOpenHelper
 				user.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				userList.add(user);
 			}
+			
+			cursor.close();
 			return userList;
 		}
 		catch (Exception e)
@@ -676,7 +681,8 @@ public class DBManager extends SQLiteOpenHelper
 
 			updateItemTags(item);
 			updateRelevantUsers(item);
-			
+
+			cursor.close();
 			return true;
 		}
 		catch (Exception e)
@@ -726,13 +732,13 @@ public class DBManager extends SQLiteOpenHelper
 
 	public boolean updateItem(Item item)
 	{
-		if (item.getLocalID() != -1)
+		if (item.getServerID() != -1)
 		{
-			return updateItemByLocalID(item);
+			return updateItemByServerID(item);
 		}
 		else
 		{
-			return updateItemByServerID(item);
+			return updateItemByLocalID(item);
 		}
 	}
 	
@@ -961,11 +967,13 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));				
 				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
 				item.setTags(getItemTags(item.getLocalID()));
-				
+
+				cursor.close();
 				return item;
 			}
 			else
 			{
+				cursor.close();
 				return null;
 			}
 		}
@@ -1006,11 +1014,13 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));				
 				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
 				item.setTags(getItemTags(item.getLocalID()));
-				
+
+				cursor.close();
 				return item;
 			}
 			else
 			{
+				cursor.close();
 				return null;
 			}
 		}
@@ -1052,11 +1062,13 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
 				item.setRelevantUsers(User.idStringToUserList(getStringFromCursor(cursor, "users_id")));
 				item.setTags(Tag.stringToTagList(getStringFromCursor(cursor, "tags_id")));
-				
+
+				cursor.close();
 				return item;
 			}
 			else
 			{
+				cursor.close();
 				return null;
 			}
 		}
@@ -1101,7 +1113,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				itemList.add(item);
 			}
-			
+
+			cursor.close();
 			return itemList;
 		}
 		catch (Exception e)
@@ -1148,7 +1161,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				itemList.add(item);
 			}
-			
+
+			cursor.close();
 			return itemList;
 		}
 		catch (Exception e)
@@ -1194,7 +1208,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				itemList.add(item);
 			}
-			
+
+			cursor.close();
 			return itemList;
 		}
 		catch (Exception e)
@@ -1219,7 +1234,8 @@ public class DBManager extends SQLiteOpenHelper
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
 				itemList.add(item);
 			}
-			
+
+			cursor.close();
 			return itemList;
 		}
 		catch (Exception e)
@@ -1363,7 +1379,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				itemList.add(item);
 			}
-			
+
+			cursor.close();
 			return itemList;
 		}
 		catch (Exception e)
@@ -1408,7 +1425,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				itemList.add(item);
 			}
-			
+
+			cursor.close();
 			return itemList;
 		}
 		catch (Exception e)
@@ -1440,7 +1458,9 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_item", null);
 		cursor.moveToFirst();
-		return cursor.getInt(0);
+		int result = cursor.getInt(0);
+		cursor.close();
+		return result;
 	}
 	
 	// Report
@@ -1632,10 +1652,15 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				
+
+				cursor.close();
 				return report;
 			}
-			return null;
+			else
+			{
+				cursor.close();
+				return null;
+			}
 		}
 		catch (Exception e)
 		{
@@ -1663,10 +1688,15 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				
+
+				cursor.close();
 				return report;
 			}
-			return null;
+			else
+			{
+				cursor.close();
+				return null;
+			}
 		}
 		catch (Exception e)
 		{
@@ -1696,10 +1726,15 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				
+
+				cursor.close();
 				return report;
 			}
-			return null;
+			else
+			{
+				cursor.close();
+				return null;
+			}
 		}
 		catch (Exception e)
 		{
@@ -1805,6 +1840,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				reportList.add(report);
 			}
+			
+			cursor.close();
 			return reportList;
 		}
 		catch (Exception e)
@@ -1829,7 +1866,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				reportList.add(report);
 			}
-			
+
+			cursor.close();
 			return reportList;
 		}
 		catch (Exception e)
@@ -1863,6 +1901,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				reportList.add(report);
 			}
+			
+			cursor.close();
 			return reportList;
 		}
 		catch (Exception e)
@@ -1897,6 +1937,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				reportList.add(report);
 			}
+			
+			cursor.close();
 			return reportList;
 		}
 		catch (Exception e)
@@ -1914,7 +1956,8 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			idList.add(getIntFromCursor(cursor, "server_id"));
 		}
-		
+
+		cursor.close();
 		return TextUtils.join(",", idList);
 	}
 	
@@ -1922,7 +1965,9 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_report", null);
 		cursor.moveToFirst();
-		return cursor.getInt(0);
+		int result = cursor.getInt(0);
+		cursor.close();
+		return result;
 	}
 	
 	public String[] getReportInfo(int reportLocalID)
@@ -1949,7 +1994,8 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			count++;
 		}
-		
+
+		cursor.close();
 		return count;
 	}	
 	
@@ -1962,7 +2008,8 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			amount += getDoubleFromCursor(cursor, "amount");
 		}
-		
+
+		cursor.close();
 		return amount;
 	}
 	
@@ -2111,11 +2158,13 @@ public class DBManager extends SQLiteOpenHelper
 				comment.setCreatedDate(getIntFromCursor(cursor, "comment_date"));
 				comment.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				comment.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				
+
+				cursor.close();
 				return comment;
 			}
 			else
 			{
+				cursor.close();
 				return null;
 			}
 		}
@@ -2148,6 +2197,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				commentList.add(comment);
 			}
+			
+			cursor.close();
 			return commentList;
 		}
 		catch (Exception e)
@@ -2179,6 +2230,8 @@ public class DBManager extends SQLiteOpenHelper
 				
 				commentList.add(comment);
 			}
+			
+			cursor.close();
 			return commentList;
 		}
 		catch (Exception e)
@@ -2295,10 +2348,13 @@ public class DBManager extends SQLiteOpenHelper
 				category.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				
+				cursor.close();
 				return category;
 			}
 			else
 			{
+				cursor.close();
 				return null;				
 			}
 		}
@@ -2361,6 +2417,8 @@ public class DBManager extends SQLiteOpenHelper
 				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				categoryList.add(category);
 			}
+
+			cursor.close();
 			return categoryList;
 		}
 		catch (Exception e)
@@ -2392,6 +2450,8 @@ public class DBManager extends SQLiteOpenHelper
 				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				categoryList.add(category);
 			}
+			
+			cursor.close();
 			return categoryList;
 		}
 		catch (Exception e)
@@ -2527,10 +2587,13 @@ public class DBManager extends SQLiteOpenHelper
 				tag.setGroupID(getIntFromCursor(cursor, "group_id"));
 				tag.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				tag.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				
+				cursor.close();
 				return tag;
 			}
 			else
 			{
+				cursor.close();
 				return null;				
 			}
 		}
@@ -2589,6 +2652,8 @@ public class DBManager extends SQLiteOpenHelper
 				tag.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				tagList.add(tag);
 			}
+
+			cursor.close();
 			return tagList;
 		}
 		catch (Exception e)
@@ -2785,10 +2850,13 @@ public class DBManager extends SQLiteOpenHelper
 				group.setName(getStringFromCursor(cursor, "group_name"));
 				group.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				group.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+
+				cursor.close();
 				return group;
 			}
 			else
 			{
+				cursor.close();
 				return null;				
 			}
 		}

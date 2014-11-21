@@ -96,6 +96,7 @@
     <string name="noComment">当前没有任何评论</string>
     <string name="noManager">未选择经理</string>
     <string name="noCC">未选择CC</string>
+    <string name="sender">发送人:</string>
     <string name="chooseManager">选择经理</string>
     <string name="chooseCC">选择抄送</string>
     <string name="deleteReportWarning">是否要删除此报告？</string>

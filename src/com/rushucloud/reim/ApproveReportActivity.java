@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.HttpConstant;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Group.GetGroupRequest;
 import netUtils.Request.Report.GetReportRequest;
 import netUtils.Request.Report.ModifyReportRequest;
+import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.Group.GetGroupResponse;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
 import classes.AppPreference;
@@ -25,6 +30,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -33,6 +40,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +53,8 @@ public class ApproveReportActivity extends Activity
 	private DBManager dbManager;
 	
 	private TextView titleTextView;
+	private TextView senderTextView;
+	private ImageView senderImageView;
 	private TextView managerTextView;
 	private TextView ccTextView;
 	private ListView itemListView;
@@ -51,6 +62,8 @@ public class ApproveReportActivity extends Activity
 	
 	private int reportServerID;
 	private Report report;
+	private int senderID;
+	private User sender;
 	private List<Item> itemList = new ArrayList<Item>();
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -178,8 +191,13 @@ public class ApproveReportActivity extends Activity
 				startActivity(intent);
 			}
 		});
+
+		LinearLayout senderLayout = (LinearLayout)findViewById(R.id.senderLayout);
+		senderLayout.setVisibility(View.VISIBLE);
 		
-		titleTextView = (TextView)findViewById(R.id.titleTextView);		
+		titleTextView = (TextView)findViewById(R.id.titleTextView);
+		senderTextView = (TextView)findViewById(R.id.senderTextView);
+		senderImageView = (ImageView)findViewById(R.id.senderImageView);
 		managerTextView = (TextView)findViewById(R.id.managerTextView);
 		ccTextView = (TextView)findViewById(R.id.ccTextView);
 		
@@ -187,7 +205,33 @@ public class ApproveReportActivity extends Activity
 		{
 			titleTextView.setText(report.getTitle());
 			managerTextView.setText(report.getManagersName());	
-			ccTextView.setText(report.getCCsName());		
+			ccTextView.setText(report.getCCsName());
+			
+			if (report.getUser() != null)
+			{
+				senderID = report.getUser().getServerID();
+				sender = dbManager.getUser(senderID);
+				if (sender != null)
+				{
+					senderTextView.setText(sender.getNickname());
+					if (!sender.getAvatarPath().equals("")) 
+					{
+						Bitmap bitmap = BitmapFactory.decodeFile(sender.getAvatarPath());
+						if (bitmap != null)
+						{
+							senderImageView.setImageBitmap(bitmap);
+						}
+					}
+					if (sender.hasUndownloadedAvatar() && Utils.isNetworkConnected())
+					{
+						sendDownloadAvatarRequest(sender);
+					}
+				}
+				else
+				{
+					sendGetGroupRequest();
+				}
+			}
 		}		
 		
 		adapter = new ItemListViewAdapter(ApproveReportActivity.this, itemList);
@@ -335,6 +379,104 @@ public class ApproveReportActivity extends Activity
 		});
     }
 
+	private void sendGetGroupRequest()
+	{
+		GetGroupRequest request = new GetGroupRequest();
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				GetGroupResponse response = new GetGroupResponse(httpResponse);
+				if (response.getStatus())
+				{
+					DBManager dbManager = DBManager.getDBManager();
+					int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
+					
+					// update members
+					List<User> memberList = response.getMemberList();
+					User currentUser = AppPreference.getAppPreference().getCurrentUser();
+					
+					for (User user : memberList)
+					{
+						if (user.getServerID() == currentUser.getServerID())							
+						{
+							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+							{
+								if (user.getImageID() == currentUser.getImageID())
+								{
+									user.setAvatarPath(currentUser.getAvatarPath());								
+								}								
+							}
+							else
+							{
+								user = currentUser;
+							}
+						}
+					}
+					
+					dbManager.updateGroupUsers(memberList, currentGroupID);
+
+					// update group info
+					dbManager.syncGroup(response.getGroup());
+					
+					sender = dbManager.getUser(senderID);
+					if (sender != null)
+					{
+						senderTextView.setText(sender.getNickname());
+						if (!sender.getAvatarPath().equals("")) 
+						{
+							Bitmap bitmap = BitmapFactory.decodeFile(sender.getAvatarPath());
+							if (bitmap != null)
+							{
+								senderImageView.setImageBitmap(bitmap);
+							}
+						}
+						if (sender.hasUndownloadedAvatar() && Utils.isNetworkConnected())
+						{
+							sendDownloadAvatarRequest(sender);
+						}
+					}
+				}
+			}
+		});
+	}
+
+    private void sendDownloadAvatarRequest(final User user)
+    {
+    	final DBManager dbManager = DBManager.getDBManager();
+    	DownloadImageRequest request = new DownloadImageRequest(user.getImageID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
+					user.setAvatarPath(avatarPath);
+					int currentTime = Utils.getCurrentTime();
+					user.setLocalUpdatedDate(currentTime);
+					user.setServerUpdatedDate(currentTime);
+					dbManager.updateUser(user);
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							if (!user.getAvatarPath().equals("")) 
+							{
+								Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
+								if (bitmap != null)
+								{
+									senderImageView.setImageBitmap(bitmap);
+								}
+							}
+						}
+					});	
+				}
+			}
+		});
+    }
+    
     private void showAddCommentDialog()
     {
 		View view = View.inflate(this, R.layout.report_comment_dialog, null);

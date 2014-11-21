@@ -34,6 +34,38 @@
         
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/senderLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/senderPromptTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sender" />
+
+        <ImageView
+            android:id="@+id/senderImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:contentDescription="@string/avatar"
+            android:src="@drawable/default_avatar" />
+
+        <TextView
+            android:id="@+id/senderTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/notAvailable" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/managerTextView"
         android:layout_width="match_parent"

@@ -11,7 +11,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:scaleType="fitXY"
-        android:contentDescription="@string/avatar" />
+        android:contentDescription="@string/avatar"
+        android:src="@drawable/default_avatar" />
 
     <TextView
         android:id="@+id/nicknameTextView"

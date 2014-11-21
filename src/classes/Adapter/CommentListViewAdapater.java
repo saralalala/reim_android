@@ -46,11 +46,10 @@ public class CommentListViewAdapater extends BaseAdapter
 		if (!user.getAvatarPath().equals(""))
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
-			avatarImageView.setImageBitmap(bitmap);
-		}
-		else
-		{
-			avatarImageView.setImageResource(R.drawable.default_avatar);
+			if (bitmap != null)
+			{
+				avatarImageView.setImageBitmap(bitmap);				
+			}
 		}
 		
 		if (user.getNickname().equals(""))
