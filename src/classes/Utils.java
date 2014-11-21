@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -212,6 +213,12 @@ public class Utils
 		}
     	return resultList;
     } 
+    
+    public static String formatDouble(double arg)
+    {
+		DecimalFormat format = new DecimalFormat("#0.00");
+		return format.format(arg);
+    }
     
     public static String getImageName()
     {

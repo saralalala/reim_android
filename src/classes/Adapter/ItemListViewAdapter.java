@@ -1,6 +1,5 @@
 package classes.Adapter;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -8,6 +7,7 @@ import java.util.Locale;
 import classes.Item;
 import classes.Tag;
 import classes.User;
+import classes.Utils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
@@ -78,8 +78,7 @@ public class ItemListViewAdapter extends BaseAdapter
 			statusTextView.setVisibility(View.INVISIBLE);					
 		}
 
-		DecimalFormat format = new DecimalFormat("#.00");
-		String amount = "￥" + format.format(item.getAmount());
+		String amount = "￥" + Utils.formatDouble(item.getAmount());
 		amountTextView.setText(amount);
 
 		String vendor = item.getMerchant().equals("") ? "N/A" : item.getMerchant();

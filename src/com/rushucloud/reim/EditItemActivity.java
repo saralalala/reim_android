@@ -282,8 +282,7 @@ public class EditItemActivity extends Activity
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		if (item.getAmount() != 0)
 		{
-			DecimalFormat format = new DecimalFormat("#.00");
-			amountEditText.setText(format.format(item.getAmount()));			
+			amountEditText.setText(Utils.formatDouble(item.getAmount()));			
 		}
 		
 		vendorEditText = (EditText)findViewById(R.id.vendorEditText);
@@ -386,8 +385,7 @@ public class EditItemActivity extends Activity
 		paAmountTextView = (TextView)findViewById(R.id.paAmountTextView);
 		if (item.getPaAmount() != 0)
 		{
-			DecimalFormat format = new DecimalFormat("#.00");
-			paAmountTextView.setText(getResources().getString(R.string.paAmount) + "¥" + format.format(item.getPaAmount()));
+			paAmountTextView.setText(getResources().getString(R.string.paAmount) + "¥" + Utils.formatDouble(item.getAmount()));
 			paAmountTextView.setVisibility(View.VISIBLE);
 		}
 		else
@@ -743,7 +741,7 @@ public class EditItemActivity extends Activity
 				{			
 			    	hideSoftKeyboard();
 			    	double amount = Double.valueOf(amountEditText.getText().toString());
-					DecimalFormat format = new DecimalFormat("#.00");
+					DecimalFormat format = new DecimalFormat("#0.00");
 					item.setAmount(Double.valueOf(format.format(amount)));
 					item.setConsumer(appPreference.getCurrentUser());
 					item.setNote(noteEditText.getText().toString());

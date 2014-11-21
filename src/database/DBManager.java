@@ -1,6 +1,5 @@
 package database;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class DBManager extends SQLiteOpenHelper
 
 	public void executeTempCommand()
 	{
-//		String sqlString = "DELETE FROM tbl_report WHERE id = 6";
+//		String sqlString = "DELETE FROM tbl_report WHERE id = 23";
 //		database.execSQL(sqlString);
 //		String sqlString = "DROP TABLE IF EXISTS tbl_report";
 //		database.execSQL(sqlString);
@@ -1983,8 +1982,7 @@ public class DBManager extends SQLiteOpenHelper
 			count++;
 		}
 
-		DecimalFormat format = new DecimalFormat("#.00");
-		return new String[]{format.format(amount), Integer.toString(count)};
+		return new String[]{Utils.formatDouble(amount), Integer.toString(count)};
 	}
 	
 	public int getReportItemsCount(int reportLocalID)
