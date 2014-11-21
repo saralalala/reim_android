@@ -1,5 +1,6 @@
 package database;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class DBManager extends SQLiteOpenHelper
 
 	public void executeTempCommand()
 	{
-//		String sqlString = "DELETE FROM tbl_report WHERE id = 9";
+//		String sqlString = "DELETE FROM tbl_report WHERE id = 6";
 //		database.execSQL(sqlString);
 //		String sqlString = "DROP TABLE IF EXISTS tbl_report";
 //		database.execSQL(sqlString);
@@ -742,7 +743,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	private boolean updateItemByLocalID(Item item)
+	public boolean updateItemByLocalID(Item item)
 	{
 		try
 		{
@@ -781,7 +782,7 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	private boolean updateItemByServerID(Item item)
+	public boolean updateItemByServerID(Item item)
 	{
 		try
 		{
@@ -1981,8 +1982,9 @@ public class DBManager extends SQLiteOpenHelper
 			amount += getDoubleFromCursor(cursor, "amount");
 			count++;
 		}
-		
-		return new String[]{Double.toString(amount), Integer.toString(count)};
+
+		DecimalFormat format = new DecimalFormat("#.00");
+		return new String[]{format.format(amount), Integer.toString(count)};
 	}
 	
 	public int getReportItemsCount(int reportLocalID)

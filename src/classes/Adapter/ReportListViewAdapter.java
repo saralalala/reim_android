@@ -53,7 +53,7 @@ public class ReportListViewAdapter extends BaseAdapter
 
 		String status = report.getStatusString().equals("") ? "N/A" : report.getStatusString();
 		statusTextView.setText(status);
-		
+
 		amountTextView.setText("￥" + reportInfo[0]);
 		
 		return convertView;

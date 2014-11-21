@@ -1,5 +1,6 @@
 package netUtils.Request.Item;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +25,13 @@ public class ModifyItemRequest extends BaseRequest
 		try
 		{
 			JSONArray jsonArray = new JSONArray();
-						
+
+			DecimalFormat format = new DecimalFormat("#.00");
+			String amount = format.format(item.getAmount());
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
 			JSONObject jObject = new JSONObject();
 			jObject.put("id", Integer.toString(item.getServerID()));
-			jObject.put("amount", item.getAmount());
+			jObject.put("amount", amount);
 			jObject.put("category", categoryID);
 			jObject.put("merchants", item.getMerchant());
 			jObject.put("location", item.getLocation());

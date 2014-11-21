@@ -151,7 +151,7 @@ public abstract class BaseRequest
 			
 			url += "?" + TextUtils.join("&", paramsList);
 		}
-		
+
 		HttpGet request = new HttpGet(url);		
 		doRequest(request, callback);
 	}

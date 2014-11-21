@@ -47,42 +47,52 @@ public class MeListViewAdapater extends BaseAdapter
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View view = null;
-		final User currentUser = appPreference.getCurrentUser();
 		switch (position)
 		{
 			case 0:
 			{
+				final User currentUser = appPreference.getCurrentUser();
 				Group group = dbManager.getGroup(appPreference.getCurrentGroupID());
 				
 				view = layoutInflater.inflate(R.layout.list_profile, null);
 				
-				ImageView imageView = (ImageView)view.findViewById(R.id.imageView);				
-				if (!currentUser.getAvatarPath().equals(""))
+				ImageView imageView = (ImageView)view.findViewById(R.id.imageView);	
+				TextView nicknameTextView = (TextView)view.findViewById(R.id.nicknameTextView);
+				TextView companyTextView = (TextView)view.findViewById(R.id.companyTextView);		
+				
+				if (currentUser != null)
 				{
-					Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
-					if (bitmap != null)
+					if (!currentUser.getAvatarPath().equals(""))
 					{
-						imageView.setImageBitmap(bitmap);						
-					}
-				}
-				imageView.setOnClickListener(new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						if (!currentUser.getAvatarPath().equals(""))
+						Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
+						if (bitmap != null)
 						{
-							ReimApplication.setTabIndex(3);
-							Intent intent = new Intent(fragment.getActivity(), ImageActivity.class);
-							intent.putExtra("imagePath", currentUser.getAvatarPath());
-							fragment.getActivity().startActivity(intent);
+							imageView.setImageBitmap(bitmap);						
 						}
 					}
-				});
-				fragment.registerForContextMenu(imageView);
+					imageView.setOnClickListener(new View.OnClickListener()
+					{
+						public void onClick(View v)
+						{
+							if (currentUser != null && !currentUser.getAvatarPath().equals(""))
+							{
+								ReimApplication.setTabIndex(3);
+								Intent intent = new Intent(fragment.getActivity(), ImageActivity.class);
+								intent.putExtra("imagePath", currentUser.getAvatarPath());
+								fragment.getActivity().startActivity(intent);
+							}
+						}
+					});
+					fragment.registerForContextMenu(imageView);
+					
+					nicknameTextView.setText(currentUser.getNickname());					
+				}
+				else
+				{
+					imageView.setImageResource(R.drawable.default_avatar);
+					companyTextView.setText(R.string.notAvailable);
+				}
 				
-				TextView nicknameTextView = (TextView)view.findViewById(R.id.nicknameTextView);
-				nicknameTextView.setText(currentUser.getNickname());
-				TextView companyTextView = (TextView)view.findViewById(R.id.companyTextView);
 				if (group != null)
 				{
 					companyTextView.setText(group.getName());

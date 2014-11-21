@@ -227,6 +227,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			dbManager = DBManager.getDBManager();
 			tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+			dbManager.executeTempCommand();
 		}
 	}
 

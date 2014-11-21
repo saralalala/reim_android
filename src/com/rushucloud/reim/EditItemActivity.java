@@ -2,6 +2,7 @@ package com.rushucloud.reim;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -280,7 +281,8 @@ public class EditItemActivity extends Activity
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		if (item.getAmount() != 0)
 		{
-			amountEditText.setText(Double.toString(item.getAmount()));			
+			DecimalFormat format = new DecimalFormat("#.00");
+			amountEditText.setText(format.format(item.getAmount()));			
 		}
 		
 		vendorEditText = (EditText)findViewById(R.id.vendorEditText);
@@ -383,7 +385,8 @@ public class EditItemActivity extends Activity
 		paAmountTextView = (TextView)findViewById(R.id.paAmountTextView);
 		if (item.getPaAmount() != 0)
 		{
-			paAmountTextView.setText(getResources().getString(R.string.paAmount) + "¥" + Double.toString(item.getPaAmount()));
+			DecimalFormat format = new DecimalFormat("#.00");
+			paAmountTextView.setText(getResources().getString(R.string.paAmount) + "¥" + format.format(item.getPaAmount()));
 			paAmountTextView.setVisibility(View.VISIBLE);
 		}
 		else
@@ -737,8 +740,10 @@ public class EditItemActivity extends Activity
 			{
 				try
 				{			
-			    	hideSoftKeyboard();		
-					item.setAmount(Double.valueOf(amountEditText.getText().toString()));
+			    	hideSoftKeyboard();
+			    	double amount = Double.valueOf(amountEditText.getText().toString());
+					DecimalFormat format = new DecimalFormat("#.00");
+					item.setAmount(Double.valueOf(format.format(amount)));
 					item.setConsumer(appPreference.getCurrentUser());
 					item.setNote(noteEditText.getText().toString());
 					item.setIsProveAhead(proveAheadCheckBox.isChecked());
@@ -1086,7 +1091,7 @@ public class EditItemActivity extends Activity
     private void sendApproveReportRequest()
     {    	
     	item.setBelongReport(report);
-    	dbManager.updateItem(item);    	
+    	dbManager.updateItemByServerID(item);   	
     	
     	CreateReportRequest request = new CreateReportRequest(report, true);
     	request.sendRequest(new HttpConnectionCallback()

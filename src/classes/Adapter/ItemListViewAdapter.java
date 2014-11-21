@@ -1,5 +1,6 @@
 package classes.Adapter;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -76,8 +77,9 @@ public class ItemListViewAdapter extends BaseAdapter
 		{
 			statusTextView.setVisibility(View.INVISIBLE);					
 		}
-		
-		String amount = "￥" + Double.toString(item.getAmount());
+
+		DecimalFormat format = new DecimalFormat("#.00");
+		String amount = "￥" + format.format(item.getAmount());
 		amountTextView.setText(amount);
 
 		String vendor = item.getMerchant().equals("") ? "N/A" : item.getMerchant();

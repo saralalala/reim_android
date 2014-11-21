@@ -241,7 +241,7 @@ public abstract class SyncUtils
 					item.setServerID(response.getItemID());
 					item.setCreatedDate(response.getCreateDate());
 					
-					DBManager.getDBManager().updateItem(item);
+					DBManager.getDBManager().updateItemByLocalID(item);
 					itemTaskCount--;
 					if (itemTaskCount == 0)
 					{

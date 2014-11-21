@@ -29,7 +29,7 @@
             android:ellipsize="end"
             android:singleLine="true"
 	        android:textColor="#FF000000"
-	        android:textSize="30sp" />
+	        android:textSize="22sp" />
 	    
     </LinearLayout>
 

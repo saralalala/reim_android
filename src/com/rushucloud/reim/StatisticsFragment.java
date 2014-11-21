@@ -26,9 +26,9 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
 import classes.ReimApplication;
+import classes.ReimPie;
 import classes.Utils;
 
-import com.rushucloud.graphics.ReimPie;
 import com.umeng.analytics.MobclickAgent;
 
 public class StatisticsFragment extends Fragment

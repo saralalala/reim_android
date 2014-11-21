@@ -1,6 +1,5 @@
 package netUtils.Response.Item;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GetLocationResponse
@@ -12,11 +11,12 @@ public class GetLocationResponse
 	{
 		try
 		{
-			JSONObject jObject = new JSONObject((String)httpResponse);
+			String response = new String(((String)httpResponse).getBytes("GBK"), "UTF-8");
+			JSONObject jObject = new JSONObject(response);
 			status = jObject.getInt("status") == 0 ? true : false;
 			city = jObject.getJSONObject("result").getJSONObject("addressComponent").getString("city");			
 		}
-		catch (JSONException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			status = false;

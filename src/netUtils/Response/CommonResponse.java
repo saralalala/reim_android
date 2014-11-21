@@ -127,8 +127,7 @@ public class CommonResponse extends BaseResponse
 					user.setImageID(Integer.valueOf(imageID));
 				}
 				memberList.add(user);
-			}
-			
+			}			
 		}
 		catch (JSONException e)
 		{
