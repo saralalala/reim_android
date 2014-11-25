@@ -35,7 +35,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SignUpActivity extends Activity
 {
@@ -151,7 +150,7 @@ public class SignUpActivity extends Activity
 				String phoneNumber = phoneEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(SignUpActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+					Utils.showToast(SignUpActivity.this, "网络未连接，无法发送请求");
 				}
 				else if (phoneNumber.equals(""))
 				{
@@ -209,7 +208,7 @@ public class SignUpActivity extends Activity
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(SignUpActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+					Utils.showToast(SignUpActivity.this, "网络未连接，无法发送请求");
 				}
 				else if (phoneNumber.equals(""))
 				{
@@ -318,7 +317,7 @@ public class SignUpActivity extends Activity
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(SignUpActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+					Utils.showToast(SignUpActivity.this, "网络未连接，无法发送请求");
 				}
 				else if (email.equals(""))
 				{
@@ -394,7 +393,7 @@ public class SignUpActivity extends Activity
 					{
 						public void run()
 						{
-							Toast.makeText(SignUpActivity.this, "注册成功!正在获取数据", Toast.LENGTH_SHORT).show();
+							Utils.showToast(SignUpActivity.this, "注册成功!正在获取数据");
 						}
 					});
 					AppPreference appPreference = AppPreference.getAppPreference();
@@ -490,7 +489,7 @@ public class SignUpActivity extends Activity
 					{
 						public void run()
 						{
-							Toast.makeText(SignUpActivity.this, "验证短信已发送", Toast.LENGTH_SHORT).show();
+							Utils.showToast(SignUpActivity.this, "验证短信已发送");
 						}
 					});
 				}

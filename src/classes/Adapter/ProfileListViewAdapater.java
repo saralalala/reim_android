@@ -22,7 +22,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ProfileListViewAdapater extends BaseAdapter
 {
@@ -124,15 +123,15 @@ public class ProfileListViewAdapater extends BaseAdapter
 							final String newName = editText.getText().toString();
 							if (!Utils.isNetworkConnected())
 							{
-								Toast.makeText(activity, "网络未连接，无法修改", Toast.LENGTH_SHORT).show();			
+								Utils.showToast(activity, "网络未连接，无法修改");			
 							}
 							else if (newName.equals(originalName))
 							{
-								Toast.makeText(activity, "名称与原有相同，无需修改", Toast.LENGTH_SHORT).show();
+								Utils.showToast(activity, "名称与原有相同，无需修改");
 							}
 							else if (newName.equals(""))
 							{
-								Toast.makeText(activity, "新名称不可为空", Toast.LENGTH_SHORT).show();
+								Utils.showToast(activity, "新名称不可为空");
 							}
 							else
 							{
@@ -153,8 +152,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 												public void run()
 												{
 													ReimApplication.dismissProgressDialog();
-													Toast.makeText(activity, "修改成功", Toast.LENGTH_SHORT)
-															.show();
+													Utils.showToast(activity, "修改成功");
 												}
 											});
 										}
@@ -165,8 +163,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 												public void run()
 												{
 													ReimApplication.showProgressDialog();
-													Toast.makeText(activity, "修改失败", Toast.LENGTH_SHORT)
-															.show();
+													Utils.showToast(activity, "修改失败");
 												}
 											});
 										}

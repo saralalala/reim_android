@@ -34,7 +34,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class TagActivity extends Activity
@@ -92,7 +91,7 @@ public class TagActivity extends Activity
 		{
 			if (!Utils.isNetworkConnected())
 			{
-				Toast.makeText(this, "网络未连接，无法添加", Toast.LENGTH_SHORT).show();
+				Utils.showToast(this, "网络未连接，无法添加");
 			}
 			else
 			{
@@ -121,7 +120,7 @@ public class TagActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(this, "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
+					Utils.showToast(this, "网络未连接，无法删除");
 				}
 				else 
 				{
@@ -215,12 +214,11 @@ public class TagActivity extends Activity
 													}
 													else if (Utils.isNetworkConnected())
 													{						
-														Toast.makeText(TagActivity.this, "网络未连接，无法修改", Toast.LENGTH_SHORT).show();										
+														Utils.showToast(TagActivity.this, "网络未连接，无法修改");										
 													}
 													else if (name.equals(""))
 													{
-														Toast.makeText(TagActivity.this, "标签名称不能为空",
-																	Toast.LENGTH_SHORT).show();
+														Utils.showToast(TagActivity.this, "标签名称不能为空");
 													}
 													else
 													{
@@ -263,7 +261,7 @@ public class TagActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(TagActivity.this, "标签创建成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(TagActivity.this, "标签创建成功");
 						}
 					});
 				}
@@ -274,7 +272,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(TagActivity.this, "标签创建失败", Toast.LENGTH_SHORT).show();							
+							Utils.showToast(TagActivity.this, "标签创建失败");							
 						}
 					});
 				}
@@ -302,7 +300,7 @@ public class TagActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(TagActivity.this, "标签修改成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(TagActivity.this, "标签修改成功");
 						}
 					});
 				}
@@ -313,7 +311,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(TagActivity.this, "标签修改失败", Toast.LENGTH_SHORT).show();							
+							Utils.showToast(TagActivity.this, "标签修改失败");							
 						}
 					});
 				}
@@ -339,7 +337,7 @@ public class TagActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(TagActivity.this, "标签删除成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(TagActivity.this, "标签删除成功");
 						}
 					});
 				}
@@ -350,7 +348,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(TagActivity.this, "标签删除失败", Toast.LENGTH_SHORT).show();					
+							Utils.showToast(TagActivity.this, "标签删除失败");					
 						}
 					});
 				}

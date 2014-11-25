@@ -77,7 +77,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 public class EditItemActivity extends Activity
 {
@@ -201,7 +200,7 @@ public class EditItemActivity extends Activity
 					}
 					else
 					{
-						Toast.makeText(EditItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+						Utils.showToast(EditItemActivity.this, "图片保存失败");
 					}
 				}
 			}
@@ -215,7 +214,7 @@ public class EditItemActivity extends Activity
 			}
 			catch (Exception e)
 			{
-				Toast.makeText(EditItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+				Utils.showToast(EditItemActivity.this, "图片保存失败");
 				e.printStackTrace();
 			}
 		}
@@ -451,7 +450,7 @@ public class EditItemActivity extends Activity
 			}
 			else if (item.getImageID() != -1 && item.getImageID() != 0 && !Utils.isNetworkConnected())
 			{
-				Toast.makeText(EditItemActivity.this, "网络未连接，无法下载图片", Toast.LENGTH_SHORT).show();				
+				Utils.showToast(EditItemActivity.this, "网络未连接，无法下载图片");				
 			}
 		}
 		
@@ -535,7 +534,7 @@ public class EditItemActivity extends Activity
 				hideSoftKeyboard();			
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(EditItemActivity.this, "网络未连接，无法联网获取商家，请手动输入商家名称", Toast.LENGTH_SHORT).show();
+					Utils.showToast(EditItemActivity.this, "网络未连接，无法联网获取商家，请手动输入商家名称");
 				}
 				else if (currentLocation != null)
 				{
@@ -546,11 +545,11 @@ public class EditItemActivity extends Activity
 				}
 				else if (!Utils.isLocalisationEnabled())
 				{
-					Toast.makeText(EditItemActivity.this, "定位服务不可用，请打开定位服务或手动输入商家名称", Toast.LENGTH_SHORT).show();
+					Utils.showToast(EditItemActivity.this, "定位服务不可用，请打开定位服务或手动输入商家名称");
 				}
 	    		else
 	    		{
-	    			Toast.makeText(EditItemActivity.this, "未获取到定位信息，请手动输入商家名或稍后再试", Toast.LENGTH_SHORT).show();    	
+	    			Utils.showToast(EditItemActivity.this, "未获取到定位信息，请手动输入商家名或稍后再试");    	
 	    		}
 			}
 		});
@@ -615,7 +614,7 @@ public class EditItemActivity extends Activity
 				}
 				else
 				{
-					Toast.makeText(EditItemActivity.this, "当前组无任何标签", Toast.LENGTH_SHORT).show();
+					Utils.showToast(EditItemActivity.this, "当前组无任何标签");
 				}														
 			}
 		});
@@ -727,7 +726,7 @@ public class EditItemActivity extends Activity
 				}
 				else
 				{
-					Toast.makeText(EditItemActivity.this, "当前组无任何其他成员", Toast.LENGTH_SHORT).show();
+					Utils.showToast(EditItemActivity.this, "当前组无任何其他成员");
 				}
 			}
 		});
@@ -771,7 +770,7 @@ public class EditItemActivity extends Activity
 													}
 													else
 													{
-														Toast.makeText(EditItemActivity.this, "网络未连接，无法发送审批", Toast.LENGTH_SHORT).show();
+														Utils.showToast(EditItemActivity.this, "网络未连接，无法发送审批");
 													}
 												}
 											})
@@ -838,12 +837,12 @@ public class EditItemActivity extends Activity
     {
     	if (dbManager.syncItem(item))
 		{
-			Toast.makeText(EditItemActivity.this, "条目保存成功", Toast.LENGTH_SHORT).show();
+			Utils.showToast(EditItemActivity.this, "条目保存成功");
 			goBack();
 		}
 		else
 		{
-			Toast.makeText(EditItemActivity.this, "条目保存失败", Toast.LENGTH_SHORT).show();
+			Utils.showToast(EditItemActivity.this, "条目保存失败");
 		}
     }
     
@@ -890,7 +889,7 @@ public class EditItemActivity extends Activity
 
 										if (managerList.size() == 0)
 										{
-											Toast.makeText(EditItemActivity.this, "未选择汇报对象", Toast.LENGTH_SHORT).show();
+											Utils.showToast(EditItemActivity.this, "未选择汇报对象");
 										}
 										else
 										{
@@ -966,7 +965,7 @@ public class EditItemActivity extends Activity
 						{
 							public void run()
 							{
-								Toast.makeText(EditItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+								Utils.showToast(EditItemActivity.this, "图片保存失败");
 							}
 						});						
 					}
@@ -977,7 +976,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							Toast.makeText(EditItemActivity.this, "图片下载失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditItemActivity.this, "图片下载失败");
 						}
 					});								
 				}
@@ -1014,7 +1013,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditItemActivity.this, "上传图片失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditItemActivity.this, "上传图片失败");
 						}
 					});
 				}
@@ -1049,7 +1048,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditItemActivity.this, "创建条目失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditItemActivity.this, "创建条目失败");
 						}
 					});
 				}
@@ -1079,7 +1078,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditItemActivity.this, "修改条目失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditItemActivity.this, "修改条目失败");
 						}
 					});			
 				}
@@ -1111,7 +1110,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditItemActivity.this, "创建审批报告成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditItemActivity.this, "创建审批报告成功");
 							goBack();
 						}
 					});					
@@ -1124,7 +1123,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditItemActivity.this, "创建审批报告失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditItemActivity.this, "创建审批报告失败");
 							goBack();
 						}
 					});								
@@ -1156,7 +1155,7 @@ public class EditItemActivity extends Activity
 							}
 							else 
 							{
-								Toast.makeText(EditItemActivity.this, "未获取到任何商家, 请手动输入", Toast.LENGTH_SHORT).show();								
+								Utils.showToast(EditItemActivity.this, "未获取到任何商家, 请手动输入");								
 							}
 						}
 					});
@@ -1168,7 +1167,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditItemActivity.this, "获取商家列表失败, 请手动输入", Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditItemActivity.this, "获取商家列表失败, 请手动输入");
 						}
 					});					
 				}

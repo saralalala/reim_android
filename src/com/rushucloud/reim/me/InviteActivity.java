@@ -26,7 +26,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class InviteActivity extends Activity
 {
@@ -54,7 +53,7 @@ public class InviteActivity extends Activity
 		}
 		else
 		{
-			Toast.makeText(InviteActivity.this, "网络未连接，获取数据失败", Toast.LENGTH_SHORT).show();
+			Utils.showToast(InviteActivity.this, "网络未连接，获取数据失败");
 			inviteListView.setVisibility(View.GONE);
 			inviteTextView.setVisibility(View.VISIBLE);
 		}

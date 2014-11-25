@@ -44,7 +44,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ApproveReportActivity extends Activity
@@ -112,7 +111,7 @@ public class ApproveReportActivity extends Activity
 			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_PASS_REPORT_DETAIL");
 			if (!Utils.isNetworkConnected())
 			{
-				Toast.makeText(this, "网络未连接，无法审批", Toast.LENGTH_SHORT).show();
+				Utils.showToast(this, "网络未连接，无法审批");
 			}
 			else
 			{
@@ -125,7 +124,7 @@ public class ApproveReportActivity extends Activity
 			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REJECT_REPORT_DETAIL");
 			if (!Utils.isNetworkConnected())
 			{
-				Toast.makeText(this, "网络未连接，无法审批", Toast.LENGTH_SHORT).show();
+				Utils.showToast(this, "网络未连接，无法审批");
 			}
 			else
 			{
@@ -172,7 +171,7 @@ public class ApproveReportActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(ApproveReportActivity.this, "网络未连接，无法添加评论", Toast.LENGTH_SHORT).show();
+					Utils.showToast(ApproveReportActivity.this, "网络未连接，无法添加评论");
 				}
 				else
 				{
@@ -255,7 +254,7 @@ public class ApproveReportActivity extends Activity
 		{
 			if (reportServerID == -1 && report == null)
 			{
-				Toast.makeText(this, "数据获取失败", Toast.LENGTH_SHORT).show();
+				Utils.showToast(this, "数据获取失败");
 			}
 			else if (reportServerID != -1 && report == null)
 			{
@@ -275,7 +274,7 @@ public class ApproveReportActivity extends Activity
 		}
 		else
 		{
-			Toast.makeText(this, "网络未连接，无法获取数据", Toast.LENGTH_SHORT).show();
+			Utils.showToast(this, "网络未连接，无法获取数据");
 		}
 	}
 	
@@ -493,7 +492,7 @@ public class ApproveReportActivity extends Activity
 										String comment = commentEditText.getText().toString();
 										if (comment.equals(""))
 										{
-											Toast.makeText(ApproveReportActivity.this, "评论不能为空", Toast.LENGTH_SHORT).show();
+											Utils.showToast(ApproveReportActivity.this, "评论不能为空");
 										}
 										else
 										{
@@ -536,7 +535,7 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(ApproveReportActivity.this, "评论发表成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(ApproveReportActivity.this, "评论发表成功");
 						}
 					});
 				}
@@ -547,7 +546,7 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(ApproveReportActivity.this, "评论发表失败, " + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+							Utils.showToast(ApproveReportActivity.this, "评论发表失败, " + response.getErrorMessage());
 						}
 					});					
 				}
@@ -604,8 +603,8 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							Toast.makeText(ApproveReportActivity.this, "操作失败，" + 
-											response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+							Utils.showToast(ApproveReportActivity.this, "操作失败，" + 
+											response.getErrorMessage());
 						}
 					});
 				}

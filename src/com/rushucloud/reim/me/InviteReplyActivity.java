@@ -14,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import classes.AppPreference;
 import classes.Invite;
 import classes.ReimApplication;
@@ -92,7 +91,7 @@ public class InviteReplyActivity extends Activity
 				}
 				else
 				{
-					Toast.makeText(InviteReplyActivity.this, "网络未连接，无法发送回复", Toast.LENGTH_SHORT).show();
+					Utils.showToast(InviteReplyActivity.this, "网络未连接，无法发送回复");
 				}
 			}
 		});
@@ -114,7 +113,7 @@ public class InviteReplyActivity extends Activity
 					}
 					else
 					{
-						Toast.makeText(InviteReplyActivity.this, "网络未连接，无法发送回复", Toast.LENGTH_SHORT).show();
+						Utils.showToast(InviteReplyActivity.this, "网络未连接，无法发送回复");
 					}
 				}
 			}

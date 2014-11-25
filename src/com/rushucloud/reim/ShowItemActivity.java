@@ -26,7 +26,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ShowItemActivity extends Activity
 {
@@ -171,7 +170,7 @@ public class ShowItemActivity extends Activity
 			}
 			else if (item.getImageID() != -1 && item.getImageID() != 0 && !Utils.isNetworkConnected())
 			{
-				Toast.makeText(ShowItemActivity.this, "网络未连接，无法下载图片", Toast.LENGTH_SHORT).show();				
+				Utils.showToast(ShowItemActivity.this, "网络未连接，无法下载图片");				
 			}	
 		}
 	}
@@ -220,7 +219,7 @@ public class ShowItemActivity extends Activity
 						{
 							public void run()
 							{
-								Toast.makeText(ShowItemActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+								Utils.showToast(ShowItemActivity.this, "图片保存失败");
 							}
 						});						
 					}
@@ -231,7 +230,7 @@ public class ShowItemActivity extends Activity
 					{
 						public void run()
 						{
-							Toast.makeText(ShowItemActivity.this, "图片下载失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(ShowItemActivity.this, "图片下载失败");
 						}
 					});								
 				}

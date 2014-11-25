@@ -23,7 +23,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public class FeedbackActivity extends Activity
 {
@@ -90,7 +89,7 @@ public class FeedbackActivity extends Activity
 				}
 				else
 				{
-					Toast.makeText(FeedbackActivity.this, "网络未连接，无法发送反馈", Toast.LENGTH_SHORT).show();					
+					Utils.showToast(FeedbackActivity.this, "网络未连接，无法发送反馈");					
 				}
 			}
 		});
@@ -136,7 +135,7 @@ public class FeedbackActivity extends Activity
 			catch (NameNotFoundException e)
 			{
 				e.printStackTrace();
-				Toast.makeText(FeedbackActivity.this, "获取版本号失败", Toast.LENGTH_SHORT).show();
+				Utils.showToast(FeedbackActivity.this, "获取版本号失败");
 			}
 		}    	
     }

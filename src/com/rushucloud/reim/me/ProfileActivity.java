@@ -30,7 +30,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class ProfileActivity extends Activity
 {
@@ -89,7 +88,7 @@ public class ProfileActivity extends Activity
 			}
 			else
 			{
-				Toast.makeText(ProfileActivity.this, "网络未连接，无法保存用户信息", Toast.LENGTH_SHORT).show();
+				Utils.showToast(ProfileActivity.this, "网络未连接，无法保存用户信息");
 			}
 			return true;
 		}
@@ -134,7 +133,7 @@ public class ProfileActivity extends Activity
 					{
 						if (currentUser.getGroupID() == -1)
 						{
-							Toast.makeText(ProfileActivity.this, "你还没加入任何组", Toast.LENGTH_SHORT).show();			
+							Utils.showToast(ProfileActivity.this, "你还没加入任何组");			
 						}
 						else
 						{
@@ -176,7 +175,7 @@ public class ProfileActivity extends Activity
 		
 		if (email.equals("") && phone.equals(""))
 		{
-			Toast.makeText(this, "邮箱和手机号不能同时为空", Toast.LENGTH_SHORT).show();
+			Utils.showToast(this, "邮箱和手机号不能同时为空");
 		}
 		else
 		{
@@ -200,7 +199,7 @@ public class ProfileActivity extends Activity
 							public void run()
 							{
 								ReimApplication.dismissProgressDialog();
-								Toast.makeText(ProfileActivity.this, "用户信息修改成功", Toast.LENGTH_SHORT).show();
+								Utils.showToast(ProfileActivity.this, "用户信息修改成功");
 								infoAdapter.setUser(currentUser);
 								infoAdapter.notifyDataSetChanged();
 							}
@@ -213,7 +212,7 @@ public class ProfileActivity extends Activity
 							public void run()
 							{
 								ReimApplication.dismissProgressDialog();
-								Toast.makeText(ProfileActivity.this, "用户信息修改失败", Toast.LENGTH_SHORT).show();
+								Utils.showToast(ProfileActivity.this, "用户信息修改失败");
 								infoAdapter.notifyDataSetChanged();
 							}
 						});						

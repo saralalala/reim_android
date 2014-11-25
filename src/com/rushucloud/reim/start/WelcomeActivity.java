@@ -1,5 +1,7 @@
 package com.rushucloud.reim.start;
 
+import classes.Utils;
+
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -11,7 +13,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class WelcomeActivity extends Activity
 {
@@ -46,7 +47,7 @@ public class WelcomeActivity extends Activity
         {
         	if(System.currentTimeMillis()-exitTime>2000)
         	{
-        		Toast.makeText(WelcomeActivity.this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
+        		Utils.showToast(WelcomeActivity.this, "再按一次返回键退出程序");
         		exitTime=System.currentTimeMillis();
         	}
         	else 

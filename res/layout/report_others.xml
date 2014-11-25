@@ -5,10 +5,10 @@
     android:orientation="vertical"
     android:background="@color/list_background"  >
 
-    <classes.XListView
+    <classes.Widget.XListView
         android:id="@+id/othersReportListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-    </classes.XListView>
+    </classes.Widget.XListView>
 
 </RelativeLayout>

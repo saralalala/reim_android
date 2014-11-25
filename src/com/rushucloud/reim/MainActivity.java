@@ -1,5 +1,6 @@
 package com.rushucloud.reim;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
@@ -12,43 +13,37 @@ import classes.AppPreference;
 import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
+import classes.Widget.TabItem;
 
 import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
-import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBarActivity;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.TabHost.TabSpec;
+import android.widget.Button;
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends ActionBarActivity implements OnClickListener
 {
 	private long exitTime;
 
-	private FragmentTabHost tabHost;
+	private ViewPager viewPager;
 
-	private Class<?> fragmentList[] = { ReimFragment.class, ReportFragment.class,
-			StatisticsFragment.class, MeFragment.class };
-	private int imageViewList[] = { R.drawable.tab_item_reim, R.drawable.tab_item_report,
-			R.drawable.tab_item_statistics, R.drawable.tab_item_me };
-	private int textViewList[] = { R.string.reimbursement, R.string.report, R.string.statistics,
-			R.string.me };
+	private List<TabItem> tabItemList = new ArrayList<TabItem>();
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		tabHostInitialse();
+		initView();
 	}
 
 	protected void onResume()
@@ -57,7 +52,7 @@ public class MainActivity extends ActionBarActivity
 		MobclickAgent.onResume(this);
 		ReimApplication.setProgressDialog(this);
 
-		tabHost.setCurrentTab(ReimApplication.getTabIndex());
+		viewPager.setCurrentItem(ReimApplication.getTabIndex());
 		if (Utils.isNetworkConnected())
 		{
 			sendGetEventsRequest();			
@@ -76,7 +71,7 @@ public class MainActivity extends ActionBarActivity
 		{
 			if (System.currentTimeMillis() - exitTime > 2000)
 			{
-				Toast.makeText(MainActivity.this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
+				Utils.showToast(MainActivity.this, "再按一次返回键退出程序");
 				exitTime = System.currentTimeMillis();
 			}
 			else
@@ -94,127 +89,144 @@ public class MainActivity extends ActionBarActivity
 		}
 	}
 
-	private void tabHostInitialse()
+	private void initView()
 	{
-		if (tabHost == null)
+		final List<Fragment> fragmentList = new ArrayList<Fragment>();
+		
+		ReimFragment reimFragment = new ReimFragment();
+		ReportFragment reportFragment = new ReportFragment();
+		StatisticsFragment statisticsFragment = new StatisticsFragment();
+		MeFragment meFragment = new MeFragment();
+		
+		fragmentList.add(reimFragment);
+		fragmentList.add(reportFragment);
+		fragmentList.add(statisticsFragment);
+		fragmentList.add(meFragment);
+		
+		viewPager = (ViewPager)findViewById(R.id.viewPager);
+		viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager())
 		{
-			LayoutInflater layoutInflater = LayoutInflater.from(this);
-			tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-			tabHost.setup(this, getSupportFragmentManager(), R.id.realTabContent);
-			tabHost.getTabWidget().setDividerDrawable(null);
-
-			for (int i = 0; i < 4; i++)
+			public int getCount()
 			{
-				View view = layoutInflater.inflate(R.layout.tab_item, (ViewGroup) null, false);
-				view.setBackgroundColor(Color.WHITE);
-
-				Drawable drawableTop = getResources().getDrawable(imageViewList[i]);
-				drawableTop.setBounds(0, 5, drawableTop.getMinimumWidth(),
-						drawableTop.getMinimumHeight() + 5);
-
-				TextView textView = (TextView) view.findViewById(R.id.textView);
-				textView.setText(getText(textViewList[i]));
-				textView.setCompoundDrawablePadding(5);
-				textView.setCompoundDrawables(null, drawableTop, null, null);
-
-				TabSpec tabSpec = tabHost.newTabSpec(getText(textViewList[i]).toString()).setIndicator(view);
-				tabHost.addTab(tabSpec, fragmentList[i], null);
+				return fragmentList.size();
+			}
+			
+			public Fragment getItem(int arg0)
+			{
+				return fragmentList.get(arg0);
 			}
 
-			tabHost.setOnTabChangedListener(new OnTabChangeListener()
+			public void destroyItem(ViewGroup container, int position, Object object)
 			{
-				public void onTabChanged(String tabId)
+				
+			}
+		});
+		viewPager.setOnPageChangeListener(new OnPageChangeListener()
+		{
+			public void onPageSelected(int arg0)
+			{
+				
+			}
+			
+			public void onPageScrolled(int arg0, float arg1, int arg2)
+			{
+				if (arg1 > 0)
 				{
-					if (tabId.equals(getText(textViewList[0]).toString()))
-					{
-						ReimApplication.setTabIndex(0);
-					}
-					else if (tabId.equals(getText(textViewList[1]).toString()))
-					{
-						ReimApplication.setTabIndex(1);
-						setReportBadge(0);
-						if (Utils.isNetworkConnected())
-						{
-							sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
-						}
-					}
-					else if (tabId.equals(getText(textViewList[2]).toString()))
-					{
-						ReimApplication.setTabIndex(2);
-					}
-					else if (tabId.equals(getText(textViewList[3]).toString()))
-					{
-						ReimApplication.setTabIndex(3);
-						setMeBadge(0);
-						if (Utils.isNetworkConnected())
-						{
-							sendEventsReadRequest(EventsReadRequest.TYPE_INVITE);		
-						}
-					}
-				}
-			});
+					TabItem leftItem = tabItemList.get(arg0);
+					TabItem rightItem = tabItemList.get(arg0 + 1);
 
-//			View view = layoutInflater.inflate(R.layout.tab_item_button, (ViewGroup) null, false);
-//			
-//			Button button = (Button) view.findViewById(R.id.addButton);
-//			button.setOnClickListener(new View.OnClickListener()
-//			{
-//				public void onClick(View v)
-//				{
-//					Toast.makeText(MainActivity.this, "test", Toast.LENGTH_SHORT).show();
-//				}
-//			});
-//			
-//			TabSpec tabSpec = tabHost.newTabSpec("test").setIndicator(view);
-//			tabHost.addTab(tabSpec, fragmentList[2], null);
-//			tabHost.getTabWidget().getChildAt(4).setBackgroundResource(R.drawable.selector_tab_background);
-		}
+					leftItem.setIconAlpha(1 - arg1);
+					rightItem.setIconAlpha(arg1);
+				}
+			}
+			
+			public void onPageScrollStateChanged(int arg0)
+			{
+
+			}
+		});
+
+		TabItem tabItemReim = (TabItem)findViewById(R.id.tabItemReim);
+		TabItem tabItemReport = (TabItem)findViewById(R.id.tabItemReport);
+		TabItem tabItemStat = (TabItem)findViewById(R.id.tabItemStat);
+		TabItem tabItemMe = (TabItem)findViewById(R.id.tabItemMe);
+		
+		tabItemReim.setOnClickListener(this);
+		tabItemReport.setOnClickListener(this);
+		tabItemStat.setOnClickListener(this);
+		tabItemMe.setOnClickListener(this);
+		
+		tabItemList.add(tabItemReim);
+		tabItemList.add(tabItemReport);
+		tabItemList.add(tabItemStat);
+		tabItemList.add(tabItemMe);
+		
+		tabItemReim.setIconAlpha(1);
+		
+		Button addButton = (Button)findViewById(R.id.addButton);
+		addButton.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (viewPager.getCurrentItem() == 1)
+				{
+					Intent intent = new Intent(MainActivity.this, EditReportActivity.class);
+					startActivity(intent);
+				}
+				else
+				{
+					Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
+					intent.putExtra("fromReim", true);
+					startActivity(intent);
+				}
+			}
+		});
 	}
 	
 	private void setReportBadge(int eventCount)
 	{
-		View view = tabHost.getTabWidget().getChildAt(1);
-		
-		TextView shortBadgeTextView = (TextView) view.findViewById(R.id.shortBadgeTextView);
-		TextView longBadgeTextView = (TextView) view.findViewById(R.id.longBadgeTextView);
-		if (eventCount > 99)
-		{
-			longBadgeTextView.setText("99+");
-			longBadgeTextView.setVisibility(View.VISIBLE);
-			shortBadgeTextView.setVisibility(View.GONE);
-		}
-		else if (eventCount > 10)
-		{
-			longBadgeTextView.setText(Integer.toString(eventCount));
-			longBadgeTextView.setVisibility(View.VISIBLE);
-			shortBadgeTextView.setVisibility(View.GONE);
-		}
-		else if (eventCount > 0)
-		{
-			shortBadgeTextView.setText(Integer.toString(eventCount));
-			shortBadgeTextView.setVisibility(View.VISIBLE);
-			longBadgeTextView.setVisibility(View.GONE);
-		}
-		else
-		{
-			shortBadgeTextView.setVisibility(View.GONE);
-			longBadgeTextView.setVisibility(View.GONE);
-		}
+//		View view = tabHost.getTabWidget().getChildAt(1);
+//		
+//		TextView shortBadgeTextView = (TextView) view.findViewById(R.id.shortBadgeTextView);
+//		TextView longBadgeTextView = (TextView) view.findViewById(R.id.longBadgeTextView);
+//		if (eventCount > 99)
+//		{
+//			longBadgeTextView.setText("99+");
+//			longBadgeTextView.setVisibility(View.VISIBLE);
+//			shortBadgeTextView.setVisibility(View.GONE);
+//		}
+//		else if (eventCount > 10)
+//		{
+//			longBadgeTextView.setText(Integer.toString(eventCount));
+//			longBadgeTextView.setVisibility(View.VISIBLE);
+//			shortBadgeTextView.setVisibility(View.GONE);
+//		}
+//		else if (eventCount > 0)
+//		{
+//			shortBadgeTextView.setText(Integer.toString(eventCount));
+//			shortBadgeTextView.setVisibility(View.VISIBLE);
+//			longBadgeTextView.setVisibility(View.GONE);
+//		}
+//		else
+//		{
+//			shortBadgeTextView.setVisibility(View.GONE);
+//			longBadgeTextView.setVisibility(View.GONE);
+//		}
 	}
 	
 	private void setMeBadge(int eventCount)
 	{
-		View view = tabHost.getTabWidget().getChildAt(3);
-		
-		ImageView tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
-		if (eventCount > 0)
-		{
-			tipImageView.setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			tipImageView.setVisibility(View.GONE);
-		}
+//		View view = tabHost.getTabWidget().getChildAt(3);
+//		
+//		ImageView tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
+//		if (eventCount > 0)
+//		{
+//			tipImageView.setVisibility(View.VISIBLE);
+//		}
+//		else
+//		{
+//			tipImageView.setVisibility(View.GONE);
+//		}
 	}
 
 	private void sendGetEventsRequest()
@@ -293,5 +305,59 @@ public class MainActivity extends ActionBarActivity
 				}
 			}
 		});
+	}
+
+	public void onClick(View v)
+	{
+		resetTabItems();
+		
+		int position = 0;
+		switch (v.getId())
+		{
+			case R.id.tabItemReim:
+			{
+				position = 0;
+				break;
+			}
+			case R.id.tabItemReport:
+			{
+				position = 1;
+				setReportBadge(0);
+				if (Utils.isNetworkConnected())
+				{
+					sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
+				}
+				break;							
+			}
+			case R.id.tabItemStat:
+			{
+				position = 2;
+				break;							
+			}
+			case R.id.tabItemMe:
+			{
+				position = 3;
+				setMeBadge(0);
+				if (Utils.isNetworkConnected())
+				{
+					sendEventsReadRequest(EventsReadRequest.TYPE_INVITE);		
+				}
+				break;							
+			}
+			default:
+				break;
+		}
+
+		ReimApplication.setTabIndex(position);
+		viewPager.setCurrentItem(position, false);
+		tabItemList.get(position).setIconAlpha(1.0f);
+	}
+	
+	private void resetTabItems()
+	{
+		for (int i = 0; i < tabItemList.size(); i++)
+		{
+			tabItemList.get(i).setIconAlpha(0);
+		}
 	}
 }

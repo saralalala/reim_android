@@ -23,7 +23,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class ResetPasswordActivity extends Activity
 {
@@ -101,7 +100,7 @@ public class ResetPasswordActivity extends Activity
 				final String confirmPassword = confirmPasswordEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(ResetPasswordActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+					Utils.showToast(ResetPasswordActivity.this, "网络未连接，无法发送请求");
 				}
 				else if (newPassword.equals(""))
 				{

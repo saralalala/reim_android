@@ -15,7 +15,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 public class ReimBroadcastReceiver extends BroadcastReceiver
 {
@@ -66,7 +65,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				{
 					case TYPE_SYSTEM_MESSAGE:
 					{
-						Toast.makeText(context, jObject.getString("message"), Toast.LENGTH_SHORT).show();
+						Utils.showToast(context, jObject.getString("message"));
 						break;
 					}		
 					case TYPE_REPORT:

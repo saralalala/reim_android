@@ -13,10 +13,10 @@ import classes.AppPreference;
 import classes.ReimApplication;
 import classes.Report;
 import classes.Utils;
-import classes.XListView;
 import classes.Adapter.OthersReportListViewAdapter;
 import classes.Adapter.ReportTagGridViewAdapter;
-import classes.XListView.IXListViewListener;
+import classes.Widget.XListView;
+import classes.Widget.XListView.IXListViewListener;
 import database.DBManager;
 import android.content.Context;
 import android.content.Intent;
@@ -25,8 +25,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +36,6 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.support.v4.app.Fragment;
@@ -89,10 +86,12 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		}
 		else
 		{
-			ViewGroup viewGroup = (ViewGroup)view.getParent();
-			viewGroup.removeView(view);
+			ViewGroup viewGroup = (ViewGroup) view.getParent();
+			if (viewGroup != null)
+			{
+				viewGroup.removeView(view);
+			}
 		}
-		setHasOptionsMenu(true);
 	    return view;  
 	}
 
@@ -115,15 +114,10 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		super.onPause();
 		MobclickAgent.onPageEnd("OthersReportFragment");
 	}
-	
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-	{
-		inflater.inflate(R.menu.report, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
 
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
+		System.out.println("OthersReportFragment onOptionsItemSelected");
 		int id = item.getItemId();
 		if (id == R.id.action_filter_item)
 		{
@@ -366,7 +360,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 						{
 							othersListView.stopRefresh();
 							othersListView.stopLoadMore();
-							Toast.makeText(getActivity(), "获取数据失败" + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), "获取数据失败" + response.getErrorMessage());
 						}
 					});					
 				}
@@ -387,7 +381,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 				public void run()
 				{
 					othersListView.stopRefresh();
-					Toast.makeText(getActivity(), "网络未连接，无法刷新", Toast.LENGTH_SHORT).show();
+					Utils.showToast(getActivity(), "网络未连接，无法刷新");
 				}
 			});
 		}
@@ -406,7 +400,7 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 				public void run()
 				{
 					othersListView.stopLoadMore();
-					Toast.makeText(getActivity(), "网络未连接，无法刷新", Toast.LENGTH_SHORT).show();
+					Utils.showToast(getActivity(), "网络未连接，无法刷新");
 				}
 			});
 		}		

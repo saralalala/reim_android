@@ -25,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 import android.widget.SearchView.OnQueryTextListener;
 import android.support.v4.view.MenuItemCompat;
 import android.view.KeyEvent;
@@ -92,7 +91,7 @@ public class SearchItemActivity extends Activity
 				}
 				else
 				{
-					Toast.makeText(SearchItemActivity.this, "网络未连接，无法联网查找", Toast.LENGTH_SHORT).show();
+					Utils.showToast(SearchItemActivity.this, "网络未连接，无法联网查找");
 				}
 				return true;
 			}

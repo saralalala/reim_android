@@ -28,7 +28,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SignInActivity extends Activity
 {
@@ -80,8 +79,8 @@ public class SignInActivity extends Activity
 			password = bundle.getString("password");
 		}
 		
-		usernameEditText = (EditText) findViewById(R.id.usernameEditText);
-		passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
+		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
 
 		if (username != null)
 		{
@@ -89,7 +88,7 @@ public class SignInActivity extends Activity
 			passwordEditText.setText(password);
 		}
 		
-		RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
+		RelativeLayout baseLayout = (RelativeLayout)findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -98,7 +97,7 @@ public class SignInActivity extends Activity
 			}
 		});
 
-		TextView forgorPasswordTextView = (TextView) findViewById(R.id.forgotTextView);
+		TextView forgorPasswordTextView = (TextView)findViewById(R.id.forgotTextView);
 		forgorPasswordTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -111,7 +110,7 @@ public class SignInActivity extends Activity
 
 	private void initButton()
 	{
-		Button confirmButton = (Button) findViewById(R.id.confirmButton);
+		Button confirmButton = (Button)findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -124,7 +123,7 @@ public class SignInActivity extends Activity
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(SignInActivity.this, "网络未连接，无法登录", Toast.LENGTH_SHORT).show();
+					Utils.showToast(SignInActivity.this, "网络未连接，无法登录");
 				}
 				else if (username.equals(""))
 				{
@@ -177,7 +176,7 @@ public class SignInActivity extends Activity
 			}
 		});
 
-		Button cancelbuButton = (Button) findViewById(R.id.cancelButton);
+		Button cancelbuButton = (Button)findViewById(R.id.cancelButton);
 		cancelbuButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

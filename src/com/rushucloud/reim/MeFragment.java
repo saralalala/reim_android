@@ -65,7 +65,6 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.support.v4.app.Fragment;
@@ -171,11 +170,11 @@ public class MeFragment extends Fragment
 					}
 					else if (avatarPath.equals(""))
 					{
-						Toast.makeText(getActivity(), "头像保存失败", Toast.LENGTH_SHORT).show();						
+						Utils.showToast(getActivity(), "头像保存失败");						
 					}
 					else
 					{
-						Toast.makeText(getActivity(), "网络未连接，无法上传头像", Toast.LENGTH_SHORT).show();
+						Utils.showToast(getActivity(), "网络未连接，无法上传头像");
 					}				
 					
 					if (originalImageUri != null)
@@ -227,7 +226,7 @@ public class MeFragment extends Fragment
 						}
 						else
 						{
-							Toast.makeText(getActivity(), "网络未连接，无法发送邀请", Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), "网络未连接，无法发送邀请");
 						}
 						break;
 					case 5:
@@ -306,7 +305,7 @@ public class MeFragment extends Fragment
 						{
 							meListView.setAdapter(adapter);
 							adapter.notifyDataSetChanged();
-							Toast.makeText(getActivity(), "头像上传成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), "头像上传成功");
 						}
 					});	
 				}
@@ -316,7 +315,7 @@ public class MeFragment extends Fragment
 					{
 						public void run()
 						{
-							Toast.makeText(getActivity(), "头像上传失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), "头像上传失败");
 						}
 					});				
 				}
@@ -356,7 +355,7 @@ public class MeFragment extends Fragment
 						{
 							public void run()
 							{
-								Toast.makeText(getActivity(), "头像保存失败", Toast.LENGTH_SHORT).show();
+								Utils.showToast(getActivity(), "头像保存失败");
 							}
 						});						
 					}
@@ -367,7 +366,7 @@ public class MeFragment extends Fragment
 					{
 						public void run()
 						{
-							Toast.makeText(getActivity(), "头像下载失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), "头像下载失败");
 						}
 					});						
 				}
@@ -391,11 +390,11 @@ public class MeFragment extends Fragment
 										String username = usernameEditText.getText().toString();
 										if (username.equals(""))
 										{
-											Toast.makeText(getActivity(), "手机号或邮箱不能为空", Toast.LENGTH_SHORT).show();
+											Utils.showToast(getActivity(), "手机号或邮箱不能为空");
 										}
 										else if (!Utils.isEmailOrPhone(username))
 										{
-											Toast.makeText(getActivity(), "手机号或邮箱格式不正确", Toast.LENGTH_SHORT).show();
+											Utils.showToast(getActivity(), "手机号或邮箱格式不正确");
 										}
 										else
 										{
@@ -428,7 +427,7 @@ public class MeFragment extends Fragment
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							Toast.makeText(getActivity(), "邀请发送失败，" + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), "邀请发送失败，" + response.getErrorMessage());
 						}
 					});
 				}
@@ -485,7 +484,7 @@ public class MeFragment extends Fragment
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							Toast.makeText(getActivity(), "邀请已发送", Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), "邀请已发送");
 						}
 					});
 				}
@@ -496,7 +495,7 @@ public class MeFragment extends Fragment
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							Toast.makeText(getActivity(), "邀请发送失败，" + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), "邀请发送失败，" + response.getErrorMessage());
 						}
 					});
 				}

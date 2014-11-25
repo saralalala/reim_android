@@ -6,20 +6,11 @@
     android:id="@+id/baseLayout"
     android:background="@color/list_background" >
 
-    <classes.XListView
+    <classes.Widget.XListView
         android:id="@+id/itemListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:cacheColorHint="#00000000" >
-    </classes.XListView>
-
-    <Button
-        android:id="@+id/addButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/add_button" />
+    </classes.Widget.XListView>
 
 </RelativeLayout>

@@ -26,7 +26,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MeListViewAdapater extends BaseAdapter
@@ -196,7 +195,7 @@ public class MeListViewAdapater extends BaseAdapter
 						}
 						else
 						{
-							Toast.makeText(fragment.getActivity(), "网络未连接，无法登出", Toast.LENGTH_SHORT).show();							
+							Utils.showToast(fragment.getActivity(), "网络未连接，无法登出");							
 						}
 					}
 				});
@@ -260,7 +259,7 @@ public class MeListViewAdapater extends BaseAdapter
 					{
 						public void run()	
 						{
-							Toast.makeText(fragment.getActivity(), "登出失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(fragment.getActivity(), "登出失败");
 						}
 					});
 				}

@@ -47,7 +47,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -120,11 +119,11 @@ public class EditReportActivity extends Activity
 			MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
 			if (!Utils.isNetworkConnected())
 			{
-				Toast.makeText(this, "网络未连接，无法提交", Toast.LENGTH_SHORT).show();
+				Utils.showToast(this, "网络未连接，无法提交");
 			}
 			else if (report.getManagerList() == null || report.getManagerList().size() == 0)
 			{
-				Toast.makeText(EditReportActivity.this, "未选择汇报对象", Toast.LENGTH_SHORT).show();
+				Utils.showToast(EditReportActivity.this, "未选择汇报对象");
 			}
 			else
 			{
@@ -260,7 +259,7 @@ public class EditReportActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(EditReportActivity.this, "网络未连接，无法添加评论", Toast.LENGTH_SHORT).show();
+					Utils.showToast(EditReportActivity.this, "网络未连接，无法添加评论");
 				}
 				else
 				{
@@ -390,7 +389,7 @@ public class EditReportActivity extends Activity
 										String comment = commentEditText.getText().toString();
 										if (comment.equals(""))
 										{
-											Toast.makeText(EditReportActivity.this, "评论不能为空", Toast.LENGTH_SHORT).show();
+											Utils.showToast(EditReportActivity.this, "评论不能为空");
 										}
 										else
 										{
@@ -543,12 +542,12 @@ public class EditReportActivity extends Activity
 					}
 				});
 			}
-			Toast.makeText(EditReportActivity.this, "报告保存成功", Toast.LENGTH_SHORT).show();
+			Utils.showToast(EditReportActivity.this, "报告保存成功");
 			goBackToMainActivity();
 		}
 		else
 		{
-			Toast.makeText(EditReportActivity.this, "保存失败", Toast.LENGTH_SHORT).show();
+			Utils.showToast(EditReportActivity.this, "保存失败");
 		}
     }
 
@@ -726,7 +725,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditReportActivity.this, "获取详细信息失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditReportActivity.this, "获取详细信息失败");
 						}
 					});
 				}
@@ -774,7 +773,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{							
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditReportActivity.this, "评论发表成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditReportActivity.this, "评论发表成功");
 						}
 					});
 				}
@@ -785,7 +784,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditReportActivity.this, "评论发表失败, " + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditReportActivity.this, "评论发表失败, " + response.getErrorMessage());
 						}
 					});					
 				}
@@ -829,7 +828,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditReportActivity.this, "评论发表成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditReportActivity.this, "评论发表成功");
 						}
 					});
 				}
@@ -840,7 +839,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(EditReportActivity.this, "评论发表失败, " + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+							Utils.showToast(EditReportActivity.this, "评论发表失败, " + response.getErrorMessage());
 						}
 					});					
 				}

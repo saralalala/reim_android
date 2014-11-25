@@ -16,7 +16,6 @@ import database.DBManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 public class SplashActivity extends Activity
 {
@@ -195,7 +194,7 @@ public class SplashActivity extends Activity
 					{
 						public void run()
 						{
-							Toast.makeText(SplashActivity.this, "登录失败，请稍候重试", Toast.LENGTH_SHORT).show();
+							Utils.showToast(SplashActivity.this, "登录失败，请稍候重试");
 							Bundle bundle = new Bundle();
 							bundle.putString("username", appPreference.getUsername());
 							bundle.putString("password", appPreference.getPassword());

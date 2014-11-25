@@ -20,10 +20,10 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Utils;
-import classes.XListView;
 import classes.Adapter.ReportListViewAdapter;
 import classes.Adapter.ReportTagGridViewAdapter;
-import classes.XListView.IXListViewListener;
+import classes.Widget.XListView;
+import classes.Widget.XListView.IXListViewListener;
 import database.DBManager;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -35,8 +35,6 @@ import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +48,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -65,7 +62,6 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	
 	private View view;
 	private View filterView;
-	private Button addButton;
 	private XListView mineListView;
 	private ReportListViewAdapter mineAdapter;
 
@@ -97,22 +93,26 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
+		System.out.println("MyReportFragment onCreateView");
 		if (view == null)
 		{
 			view = inflater.inflate(R.layout.report_mine, container, false);
 		}
 		else
 		{
-			ViewGroup viewGroup = (ViewGroup)view.getParent();
-			viewGroup.removeView(view);
+			ViewGroup viewGroup = (ViewGroup) view.getParent();
+			if (viewGroup != null)
+			{
+				viewGroup.removeView(view);
+			}
 		}
-		setHasOptionsMenu(true);
 	    return view;  
 	}
 	   
 	public void onResume()
 	{
 		super.onResume();
+		System.out.println("MyReportFragment onResume");
 		MobclickAgent.onPageStart("MyReportFragment");
 		ReimApplication.showProgressDialog();
         initView();
@@ -127,15 +127,10 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		super.onPause();
 		MobclickAgent.onPageEnd("MyReportFragment");
 	}
-	
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-	{
-		inflater.inflate(R.menu.report, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
 
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
+		System.out.println("MyReportFragment onOptionsItemSelected");
 		int id = item.getItemId();
 		if (id == R.id.action_filter_item)
 		{		
@@ -179,7 +174,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 																}
 																else if (!Utils.isNetworkConnected())
 																{
-																	Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
+																	Utils.showToast(getActivity(), "网络未连接，无法删除");
 																}
 																else
 																{
@@ -193,7 +188,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 				}
 				else
 				{
-					Toast.makeText(getActivity(), "报告已提交，不可删除", Toast.LENGTH_SHORT).show();
+					Utils.showToast(getActivity(), "报告已提交，不可删除");
 				}
 				break;
 			}
@@ -201,11 +196,11 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(getActivity(), "网络未连接，无法导出", Toast.LENGTH_SHORT).show();
+					Utils.showToast(getActivity(), "网络未连接，无法导出");
 				}
 				else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
 				{
-					Toast.makeText(getActivity(), "报销未完成，不可导出", Toast.LENGTH_SHORT).show();					
+					Utils.showToast(getActivity(), "报销未完成，不可导出");					
 				}
 				else
 				{
@@ -237,20 +232,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
     }
 
 	private void initView()
-	{		
-		if (addButton == null)
-		{
-			addButton = (Button)getActivity().findViewById(R.id.addButton);
-			addButton.setOnClickListener(new View.OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					Intent intent = new Intent(getActivity(), EditReportActivity.class);
-					startActivity(intent);
-				}
-			});			
-		}
-
+	{
 		if (mineAdapter == null)
 		{
 			mineAdapter = new ReportListViewAdapter(getActivity(), mineList);			
@@ -412,11 +394,11 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 										String email = emailEditText.getText().toString();
 										if (email.equals(""))
 										{
-											Toast.makeText(getActivity(), "邮箱不能为空", Toast.LENGTH_SHORT).show();
+											Utils.showToast(getActivity(), "邮箱不能为空");
 										}
 										else if (!Utils.isEmail(email))
 										{
-											Toast.makeText(getActivity(), "邮箱格式不正确", Toast.LENGTH_SHORT).show();
+											Utils.showToast(getActivity(), "邮箱格式不正确");
 										}
 										else
 										{
@@ -493,7 +475,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-				            Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
+				            Utils.showToast(getActivity(), R.string.deleteFailed);
 						}
 					});		
 				}
@@ -517,7 +499,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(getActivity(), "报告导出成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), "报告导出成功");
 						}
 					});
 				}
@@ -528,7 +510,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(getActivity(), "报告导出失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), "报告导出失败");
 						}
 					});
 				}
@@ -542,12 +524,12 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		{
 			refreshMineReportListView();
 			ReimApplication.dismissProgressDialog();
-            Toast.makeText(getActivity(), R.string.deleteSucceed, Toast.LENGTH_SHORT).show();														
+            Utils.showToast(getActivity(), R.string.deleteSucceed);														
 		}
 		else
 		{
 			ReimApplication.dismissProgressDialog();
-            Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
+            Utils.showToast(getActivity(), R.string.deleteFailed);
 		}		
 	}
 
@@ -617,7 +599,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 				{
 					mineListView.stopRefresh();
 					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-					Toast.makeText(getActivity(), prompt, Toast.LENGTH_SHORT).show();
+					Utils.showToast(getActivity(), prompt);
 				}
 			});
 		}		
@@ -661,7 +643,7 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 				{
 					mineListView.stopLoadMore();
 					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-					Toast.makeText(getActivity(), prompt, Toast.LENGTH_SHORT).show();
+					Utils.showToast(getActivity(), prompt);
 				}
 			});
 		}	

@@ -31,7 +31,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class ManagerActivity extends Activity
 {
@@ -99,7 +98,7 @@ public class ManagerActivity extends Activity
 			MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_CHANGE_USERINFO");
 			if (!Utils.isNetworkConnected())
 			{
-				Toast.makeText(this, "网络未连接，无法保存", Toast.LENGTH_SHORT).show();
+				Utils.showToast(this, "网络未连接，无法保存");
 			}
 			else if (lastIndex == -1)
 			{
@@ -107,11 +106,11 @@ public class ManagerActivity extends Activity
 			}
 			else if (userList.get(lastIndex).getServerID() == currentUser.getServerID())
 			{
-				Toast.makeText(this, "不能选择自己作为上级", Toast.LENGTH_SHORT).show();				
+				Utils.showToast(this, "不能选择自己作为上级");				
 			}
 			else if (userList.get(lastIndex).getServerID() == currentUser.getDefaultManagerID())
 			{
-				Toast.makeText(this, "与原有默认上级相同，无需保存", Toast.LENGTH_SHORT).show();				
+				Utils.showToast(this, "与原有默认上级相同，无需保存");				
 			}
 			else
 			{
@@ -249,7 +248,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(ManagerActivity.this, "刷新数据失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(ManagerActivity.this, "刷新数据失败");
 						}
 					});
 				}
@@ -300,7 +299,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(ManagerActivity.this, "默认上级修改失败", Toast.LENGTH_SHORT).show();							
+							Utils.showToast(ManagerActivity.this, "默认上级修改失败");							
 						}
 					});
 				}

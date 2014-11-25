@@ -18,7 +18,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class ChangePasswordActivity extends Activity
 {
@@ -76,7 +75,7 @@ public class ChangePasswordActivity extends Activity
 			}
 			else
 			{
-				Toast.makeText(ChangePasswordActivity.this, "网络未连接，无法修改密码", Toast.LENGTH_SHORT).show();
+				Utils.showToast(ChangePasswordActivity.this, "网络未连接，无法修改密码");
 			}
 			return true;
 		}
@@ -87,9 +86,9 @@ public class ChangePasswordActivity extends Activity
 	{
 		try
 		{
-			oldPasswordEditText = (EditText) findViewById(R.id.oldPasswordEditText);
-			newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
-			confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
+			oldPasswordEditText = (EditText)findViewById(R.id.oldPasswordEditText);
+			newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
+			confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
 		}
 		catch (Exception e)
 		{

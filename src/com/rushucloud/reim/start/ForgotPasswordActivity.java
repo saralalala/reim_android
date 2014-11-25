@@ -25,7 +25,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 public class ForgotPasswordActivity extends Activity
 {	
@@ -155,7 +154,7 @@ public class ForgotPasswordActivity extends Activity
 				}
 				else
 				{
-					Toast.makeText(ForgotPasswordActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+					Utils.showToast(ForgotPasswordActivity.this, "网络未连接，无法发送请求");
 				}
 			}
 		});
@@ -204,7 +203,7 @@ public class ForgotPasswordActivity extends Activity
 				}
 				else
 				{
-					Toast.makeText(ForgotPasswordActivity.this, "网络未连接，无法发送请求", Toast.LENGTH_SHORT).show();
+					Utils.showToast(ForgotPasswordActivity.this, "网络未连接，无法发送请求");
 				}			
 			}
 		});

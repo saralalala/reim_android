@@ -26,6 +26,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 public class Utils
 {	
@@ -297,5 +298,15 @@ public class Utils
 			e.printStackTrace();
 			return "";
 		}
+    }
+
+    public static void showToast(Context context, String content)
+    {
+    	Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
+    }
+    
+    public static void showToast(Context context, int resID)
+    {
+    	Toast.makeText(context, resID, Toast.LENGTH_SHORT).show();
     }
 }

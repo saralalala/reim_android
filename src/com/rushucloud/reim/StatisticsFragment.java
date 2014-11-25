@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
 import org.achartengine.*;
@@ -26,18 +25,25 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
 import classes.ReimApplication;
-import classes.ReimPie;
 import classes.Utils;
+import classes.Widget.ReimPie;
 
 import com.umeng.analytics.MobclickAgent;
 
 public class StatisticsFragment extends Fragment
 {
 	private StatisticsResponse response = null;
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		System.out.println("StatisticsFragment onCreateView");
+		return inflater.inflate(R.layout.fragment_statistics, container, false);
+	}
 	
 	public void onResume()
 	{
 		super.onResume();
+		System.out.println("StatisticsFragment onResume");
 		MobclickAgent.onPageStart("StatisticsFragment");
 		if (Utils.isNetworkConnected())
 		{
@@ -45,7 +51,7 @@ public class StatisticsFragment extends Fragment
 		}
 		else
 		{
-			Toast.makeText(getActivity(), "网络未连接，无法获取数据", Toast.LENGTH_SHORT).show();
+			Utils.showToast(getActivity(), "网络未连接，无法获取数据");
 		}
 	}
 
@@ -53,11 +59,6 @@ public class StatisticsFragment extends Fragment
 	{
 		super.onPause();
 		MobclickAgent.onPageEnd("StatisticsFragment");
-	}
-
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		return inflater.inflate(R.layout.fragment_statistics, container, false);
 	}
 
 	private void drawPie()

@@ -1,4 +1,4 @@
-package classes;
+package classes.Widget;
 
 import com.rushucloud.reim.R;
 

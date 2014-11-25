@@ -32,7 +32,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ShowReportActivity extends Activity
@@ -110,7 +109,7 @@ public class ShowReportActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(ShowReportActivity.this, "网络未连接，无法添加", Toast.LENGTH_SHORT).show();
+					Utils.showToast(ShowReportActivity.this, "网络未连接，无法添加");
 				}
 				else
 				{
@@ -176,7 +175,7 @@ public class ShowReportActivity extends Activity
 		}
 		else
 		{
-			Toast.makeText(this, "网络未连接，无法获取详细信息", Toast.LENGTH_SHORT).show();
+			Utils.showToast(this, "网络未连接，无法获取详细信息");
 		}
 	}
 	
@@ -244,7 +243,7 @@ public class ShowReportActivity extends Activity
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							Toast.makeText(ShowReportActivity.this, "获取详细信息失败", Toast.LENGTH_SHORT).show();
+							Utils.showToast(ShowReportActivity.this, "获取详细信息失败");
 						}
 					});
 				}
@@ -268,7 +267,7 @@ public class ShowReportActivity extends Activity
 										String comment = commentEditText.getText().toString();
 										if (comment.equals(""))
 										{
-											Toast.makeText(ShowReportActivity.this, "评论不能为空", Toast.LENGTH_SHORT).show();
+											Utils.showToast(ShowReportActivity.this, "评论不能为空");
 										}
 										else
 										{
@@ -319,7 +318,7 @@ public class ShowReportActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(ShowReportActivity.this, "评论发表成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(ShowReportActivity.this, "评论发表成功");
 						}
 					});
 				}
@@ -330,7 +329,7 @@ public class ShowReportActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(ShowReportActivity.this, "评论发表失败, " + response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+							Utils.showToast(ShowReportActivity.this, "评论发表失败, " + response.getErrorMessage());
 						}
 					});					
 				}

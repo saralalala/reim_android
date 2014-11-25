@@ -32,7 +32,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class SubCategoryActivity extends Activity
@@ -91,7 +90,7 @@ public class SubCategoryActivity extends Activity
 		{
 			if (!Utils.isNetworkConnected())
 			{
-				Toast.makeText(this, "网络未连接，无法添加", Toast.LENGTH_SHORT).show();
+				Utils.showToast(this, "网络未连接，无法添加");
 			}
 			else
 			{
@@ -121,7 +120,7 @@ public class SubCategoryActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(this, "网络未连接，无法修改", Toast.LENGTH_SHORT).show();
+					Utils.showToast(this, "网络未连接，无法修改");
 				}
 				else
 				{
@@ -133,7 +132,7 @@ public class SubCategoryActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(this, "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
+					Utils.showToast(this, "网络未连接，无法删除");
 				}
 				else 
 				{
@@ -207,8 +206,7 @@ public class SubCategoryActivity extends Activity
 													String limit = limitEditText.getText().toString();
 													if (name.equals(""))
 													{
-														Toast.makeText(SubCategoryActivity.this, "分类名称不能为空",
-																	Toast.LENGTH_SHORT).show();
+														Utils.showToast(SubCategoryActivity.this, "分类名称不能为空");
 													}
 													else
 													{
@@ -257,7 +255,7 @@ public class SubCategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(SubCategoryActivity.this, "分类创建成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(SubCategoryActivity.this, "分类创建成功");
 						}
 					});
 				}
@@ -268,7 +266,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(SubCategoryActivity.this, "分类创建失败", Toast.LENGTH_SHORT).show();							
+							Utils.showToast(SubCategoryActivity.this, "分类创建失败");							
 						}
 					});
 				}
@@ -296,7 +294,7 @@ public class SubCategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(SubCategoryActivity.this, "分类修改成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(SubCategoryActivity.this, "分类修改成功");
 						}
 					});
 				}
@@ -307,7 +305,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(SubCategoryActivity.this, "分类修改失败", Toast.LENGTH_SHORT).show();							
+							Utils.showToast(SubCategoryActivity.this, "分类修改失败");							
 						}
 					});
 				}
@@ -334,7 +332,7 @@ public class SubCategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(SubCategoryActivity.this, "分类删除成功", Toast.LENGTH_SHORT).show();
+							Utils.showToast(SubCategoryActivity.this, "分类删除成功");
 						}
 					});
 				}
@@ -345,7 +343,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(SubCategoryActivity.this, "分类删除失败", Toast.LENGTH_SHORT).show();					
+							Utils.showToast(SubCategoryActivity.this, "分类删除失败");					
 						}
 					});
 				}

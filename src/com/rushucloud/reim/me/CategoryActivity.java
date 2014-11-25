@@ -36,7 +36,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class CategoryActivity extends Activity
@@ -94,7 +93,7 @@ public class CategoryActivity extends Activity
 		{
 			if (!Utils.isNetworkConnected())
 			{
-				Toast.makeText(this, "网络未连接，无法添加", Toast.LENGTH_SHORT).show();
+				Utils.showToast(this, "网络未连接，无法添加");
 			}
 			else
 			{
@@ -124,7 +123,7 @@ public class CategoryActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(this, "网络未连接，无法修改", Toast.LENGTH_SHORT).show();
+					Utils.showToast(this, "网络未连接，无法修改");
 				}
 				else
 				{
@@ -136,7 +135,7 @@ public class CategoryActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Toast.makeText(this, "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
+					Utils.showToast(this, "网络未连接，无法删除");
 				}
 				else
 				{
@@ -174,7 +173,7 @@ public class CategoryActivity extends Activity
 
 		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
 		
-		categoryListView = (ListView) findViewById(R.id.categoryListView);
+		categoryListView = (ListView)findViewById(R.id.categoryListView);
 		categoryListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -230,8 +229,7 @@ public class CategoryActivity extends Activity
 						String limit = limitEditText.getText().toString();
 						if (name.equals(""))
 						{
-							Toast.makeText(CategoryActivity.this, "分类名称不能为空", Toast.LENGTH_SHORT)
-									.show();
+							Utils.showToast(CategoryActivity.this, "分类名称不能为空");
 						}
 						else
 						{
@@ -278,8 +276,7 @@ public class CategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(CategoryActivity.this, "分类创建成功", Toast.LENGTH_SHORT)
-									.show();
+							Utils.showToast(CategoryActivity.this, "分类创建成功");
 						}
 					});
 				}
@@ -290,8 +287,7 @@ public class CategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(CategoryActivity.this, "分类创建失败", Toast.LENGTH_SHORT)
-									.show();
+							Utils.showToast(CategoryActivity.this, "分类创建失败");
 						}
 					});
 				}
@@ -319,8 +315,7 @@ public class CategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(CategoryActivity.this, "分类修改成功", Toast.LENGTH_SHORT)
-									.show();
+							Utils.showToast(CategoryActivity.this, "分类修改成功");
 						}
 					});
 				}
@@ -331,8 +326,7 @@ public class CategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(CategoryActivity.this, "分类修改失败", Toast.LENGTH_SHORT)
-									.show();
+							Utils.showToast(CategoryActivity.this, "分类修改失败");
 						}
 					});
 				}
@@ -360,8 +354,7 @@ public class CategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(CategoryActivity.this, "分类删除成功", Toast.LENGTH_SHORT)
-									.show();
+							Utils.showToast(CategoryActivity.this, "分类删除成功");
 						}
 					});
 				}
@@ -372,8 +365,7 @@ public class CategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(CategoryActivity.this, "分类删除失败", Toast.LENGTH_SHORT)
-									.show();
+							Utils.showToast(CategoryActivity.this, "分类删除失败");
 						}
 					});
 				}

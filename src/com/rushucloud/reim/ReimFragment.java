@@ -17,8 +17,8 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.Tag;
 import classes.Utils;
-import classes.XListView;
-import classes.XListView.IXListViewListener;
+import classes.Widget.XListView;
+import classes.Widget.XListView.IXListViewListener;
 import classes.Adapter.ItemListViewAdapter;
 import classes.Adapter.ItemTagGridViewAdapter;
 import database.DBManager;
@@ -49,7 +49,6 @@ import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
 public class ReimFragment extends Fragment implements IXListViewListener
@@ -66,7 +65,6 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	
 	private View view;
 	private View filterView;
-	private Button addButton;
 	private XListView itemListView;
 	private ItemListViewAdapter adapter;
 
@@ -89,7 +87,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	
 	private List<Tag> filterTagList = new ArrayList<Tag>();
 	
-	private OnKeyListener listener = new OnKeyListener()
+	private OnKeyListener listener = new OnKeyListener() 
 	{
 		public boolean onKey(View v, int keyCode, KeyEvent event)
 		{
@@ -100,9 +98,16 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			return false;
 		}
 	};
-	
+
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		initData();
+	}
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
+		System.out.println("ReimFragment onCreateView");
 		if (view == null)
 		{
 			view = inflater.inflate(R.layout.fragment_reim, container, false);
@@ -110,18 +115,20 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		else
 		{
 			ViewGroup viewGroup = (ViewGroup) view.getParent();
-			viewGroup.removeView(view);
+			if (viewGroup != null)
+			{
+				viewGroup.removeView(view);
+			}
 		}
-		setHasOptionsMenu(true);
 		return view;
 	}
 
 	public void onResume()
 	{
 		super.onResume();
+		System.out.println("ReimFragment onResume");
 		MobclickAgent.onPageStart("ReimFragment");
 		ReimApplication.showProgressDialog();
-		initData();
 		initView();
 		refreshItemListView();
 		ReimApplication.dismissProgressDialog();
@@ -134,8 +141,18 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		MobclickAgent.onPageEnd("ReimFragment");
 	}
 
+	public void setUserVisibleHint(boolean isVisibleToUser)
+	{
+		super.setUserVisibleHint(isVisibleToUser);
+		if (isVisibleToUser)
+		{
+			setHasOptionsMenu(true);			
+		}
+	}
+
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
+		System.out.println("ReimFragment onCreateOptionsMenu");
 		inflater.inflate(R.menu.reim, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -179,7 +196,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				if (report != null
 						&& (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED))
 				{
-					Toast.makeText(getActivity(), "条目已提交，不可删除", Toast.LENGTH_SHORT).show();
+					Utils.showToast(getActivity(), "条目已提交，不可删除");
 
 				}
 				else
@@ -198,7 +215,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 											}
 											else if (!Utils.isNetworkConnected())
 											{
-												Toast.makeText(getActivity(), "网络未连接，无法删除", Toast.LENGTH_SHORT).show();
+												Utils.showToast(getActivity(), "网络未连接，无法删除");
 											}
 											else
 											{
@@ -233,20 +250,6 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 	private void initView()
 	{
-		if (addButton == null)
-		{
-			addButton = (Button) getActivity().findViewById(R.id.addButton);
-			addButton.setOnClickListener(new View.OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					Intent intent = new Intent(getActivity(), EditItemActivity.class);
-					intent.putExtra("fromReim", true);
-					startActivity(intent);
-				}
-			});
-		}
-
 		if (adapter == null)
 		{
 			adapter = new ItemListViewAdapter(getActivity(), itemList);
@@ -466,7 +469,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
+							Utils.showToast(getActivity(), R.string.deleteFailed);
 						}
 					});
 				}
@@ -480,12 +483,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			refreshItemListView();
 			ReimApplication.dismissProgressDialog();
-			Toast.makeText(getActivity(), R.string.deleteSucceed, Toast.LENGTH_SHORT).show();
+			Utils.showToast(getActivity(), R.string.deleteSucceed);
 		}
 		else
 		{
 			ReimApplication.dismissProgressDialog();
-			Toast.makeText(getActivity(), R.string.deleteFailed, Toast.LENGTH_SHORT).show();
+			Utils.showToast(getActivity(), R.string.deleteFailed);
 		}
 	}
 	
@@ -603,7 +606,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				{
 					itemListView.stopRefresh();
 					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-					Toast.makeText(getActivity(), prompt, Toast.LENGTH_SHORT).show();
+					Utils.showToast(getActivity(), prompt);
 				}
 			});
 		}		
@@ -646,7 +649,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				{
 					itemListView.stopLoadMore();
 					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-					Toast.makeText(getActivity(), prompt, Toast.LENGTH_SHORT).show();
+					Utils.showToast(getActivity(), prompt);
 				}
 			});
 		}	

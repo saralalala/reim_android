@@ -1,25 +1,87 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <FrameLayout
-        android:id="@+id/realTabContent"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1" />
-
-    <android.support.v4.app.FragmentTabHost
-        android:id="@android:id/tabhost"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <FrameLayout
-            android:id="@android:id/tabcontent"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="0" />
-        
-    </android.support.v4.app.FragmentTabHost>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:reim="http://schemas.android.com/apk/res/com.rushucloud.reim"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
     
-</LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:gravity="bottom"
+        android:padding="5dp"
+        android:orientation="horizontal" >
+
+        <classes.Widget.TabItem
+            android:id="@+id/tabItemReim"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            reim:tab_icon_selected="@drawable/icon_reim_selected"
+            reim:tab_icon_not_selected="@drawable/icon_reim_not_selected"
+            reim:text="@string/reimbursement"
+            reim:text_size="10sp"
+            reim:text_color_selected="@color/tab_item_selected"
+            reim:text_color_not_selected="@color/tab_item_not_selected" />
+
+        <classes.Widget.TabItem
+            android:id="@+id/tabItemReport"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            reim:tab_icon_selected="@drawable/icon_report_selected"
+            reim:tab_icon_not_selected="@drawable/icon_report_not_selected"
+            reim:text="@string/report"
+            reim:text_size="10sp"
+            reim:text_color_selected="@color/tab_item_selected"
+            reim:text_color_not_selected="@color/tab_item_not_selected" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/addButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/add_button" />
+
+        </RelativeLayout>
+
+        <classes.Widget.TabItem
+            android:id="@+id/tabItemStat"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            reim:tab_icon_selected="@drawable/icon_stat_selected"
+            reim:tab_icon_not_selected="@drawable/icon_stat_not_selected"
+            reim:text="@string/statistics"
+            reim:text_size="10sp"
+            reim:text_color_selected="@color/tab_item_selected"
+            reim:text_color_not_selected="@color/tab_item_not_selected" />
+
+        <classes.Widget.TabItem
+            android:id="@+id/tabItemMe"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            reim:tab_icon_selected="@drawable/icon_me_selected"
+            reim:tab_icon_not_selected="@drawable/icon_me_not_selected"
+            reim:text="@string/me"
+            reim:text_size="10sp"
+            reim:text_color_selected="@color/tab_item_selected"
+            reim:text_color_not_selected="@color/tab_item_not_selected" />
+    </LinearLayout>
+    
+</RelativeLayout>
