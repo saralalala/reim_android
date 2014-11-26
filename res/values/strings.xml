@@ -19,10 +19,10 @@
     <string name="signUpByPhone">用手机注册</string>
     <string name="signUpByEmail">用邮箱注册</string>
     <string name="signIn">登录</string>
-    <string name="inputUsername">请输入手机号/邮箱</string>
-    <string name="inputPassword">请输入密码</string>
-    <string name="inputNewPassword">请输入新密码</string>
-    <string name="inputConfirmPassword">请确认密码</string>
+    <string name="inputUsername">手机/邮箱</string>
+    <string name="inputPassword">密码</string>
+    <string name="inputNewPassword">设置密码</string>
+    <string name="inputConfirmPassword">确认密码</string>
     <string name="forgotPassword">忘记密码</string>
     <string name="findPasswordByPhone">用手机找回</string>
     <string name="findPasswordByEmail">用邮箱找回</string>
@@ -103,6 +103,8 @@
     <string name="submit">提交</string>
     <string name="approve">批准</string>
     <string name="reject">拒绝</string>
+    <string name="reportOverFlow">99+</string>
+    
     
     <string name="avatar">头像</string>
     <string name="enablePasswordProtection">开启密码保护</string>

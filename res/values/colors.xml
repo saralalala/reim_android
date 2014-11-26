@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
+    <color name="major_dark">#ffff575b</color>
+    <color name="major_light">#ffffffff</color>
+    
+    <color name="hint_white">#ccff575b</color>
+    <color name="hint_grey">#ffff575b</color>
+    
     <color name="list_background">#fff4f4f5</color>
     <!-- <color name="list_background">#ffff0000</color> -->
     <color name="list_item_selected">#fffbe2e3</color>
     <color name="list_item_not_selected">#00000000</color>
     <color name="list_item_approved">#ff3cb798</color>
     <color name="list_item_prove_ahead">#ffff575b</color>
+    
     <color name="tab_item_selected">#ffff575b</color>
     <color name="tab_item_not_selected">#ff61686d</color>
+    
+    <color name="reim_pie_occupy">#ff0366c9</color>
+    <color name="reim_pie_remain">#ff03caca</color>
         
 </resources>

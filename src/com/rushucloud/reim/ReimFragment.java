@@ -63,6 +63,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	private static final int SORT_AMOUNT = 1;	
 	private static final int SORT_CONSUMED_DATE = 2;	
 	
+	private boolean hasInit = false;
+	
 	private View view;
 	private View filterView;
 	private XListView itemListView;
@@ -99,15 +101,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		}
 	};
 
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		initData();
-	}
-
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		System.out.println("ReimFragment onCreateView");
 		if (view == null)
 		{
 			view = inflater.inflate(R.layout.fragment_reim, container, false);
@@ -126,13 +121,18 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	public void onResume()
 	{
 		super.onResume();
-		System.out.println("ReimFragment onResume");
 		MobclickAgent.onPageStart("ReimFragment");
-		ReimApplication.showProgressDialog();
-		initView();
-		refreshItemListView();
-		ReimApplication.dismissProgressDialog();
-		syncItems();
+		if (!hasInit)
+		{
+			ReimApplication.showProgressDialog();
+ 			initData();
+   			initView();
+			setHasOptionsMenu(true);
+			hasInit = true;
+			refreshItemListView();
+			ReimApplication.dismissProgressDialog();
+			syncItems();		
+		}	
 	}
 
 	public void onPause()
@@ -143,16 +143,19 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
+		System.out.println("ReimFragment isVisibleToUser:"+isVisibleToUser);
 		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser)
+		if (isVisibleToUser && hasInit)
 		{
-			setHasOptionsMenu(true);			
+			ReimApplication.showProgressDialog();
+			refreshItemListView();
+			ReimApplication.dismissProgressDialog();
+			syncItems();
 		}
 	}
 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		System.out.println("ReimFragment onCreateOptionsMenu");
 		inflater.inflate(R.menu.reim, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -186,6 +189,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 	public boolean onContextItemSelected(MenuItem item)
 	{
+		System.out.println("ReimFragment onContextItemSelected, getUserVisibleHint:"+getUserVisibleHint());
+    	if (!getUserVisibleHint())
+		{
+			return false;
+		}
+    	
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
 		final int index = (int) itemListView.getAdapter().getItemId(menuInfo.position);
 		final Item localItem = showList.get(index);

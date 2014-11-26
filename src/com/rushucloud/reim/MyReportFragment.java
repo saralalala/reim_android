@@ -60,6 +60,8 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	private static final int SORT_AMOUNT = 2;	
 	private static final int SORT_CREATE_DATE = 3;
 	
+	private boolean hasInit = false;
+	
 	private View view;
 	private View filterView;
 	private XListView mineListView;
@@ -93,7 +95,6 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		System.out.println("MyReportFragment onCreateView");
 		if (view == null)
 		{
 			view = inflater.inflate(R.layout.report_mine, container, false);
@@ -112,14 +113,18 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 	public void onResume()
 	{
 		super.onResume();
-		System.out.println("MyReportFragment onResume");
 		MobclickAgent.onPageStart("MyReportFragment");
-		ReimApplication.showProgressDialog();
-        initView();
-        initData();
-		refreshMineReportListView();
-		ReimApplication.dismissProgressDialog();
-		syncReports();
+		System.out.println("MyReportFragment onResume");
+		if (!hasInit)
+		{
+			ReimApplication.showProgressDialog();
+	        initView();
+	        initData();
+	        hasInit = true;
+			refreshMineReportListView();
+			ReimApplication.dismissProgressDialog();
+			syncReports();			
+		}
 	}
 
 	public void onPause()
@@ -128,9 +133,21 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 		MobclickAgent.onPageEnd("MyReportFragment");
 	}
 
+	public void setUserVisibleHint(boolean isVisibleToUser)
+	{
+		System.out.println("MyReportFragment isVisibleToUser:"+isVisibleToUser);
+		super.setUserVisibleHint(isVisibleToUser);
+		if (isVisibleToUser && hasInit)
+		{
+			ReimApplication.showProgressDialog();
+			refreshMineReportListView();
+			ReimApplication.dismissProgressDialog();
+			syncReports();
+		}
+	}
+
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		System.out.println("MyReportFragment onOptionsItemSelected");
 		int id = item.getItemId();
 		if (id == R.id.action_filter_item)
 		{		
@@ -151,6 +168,12 @@ public class MyReportFragment extends Fragment implements IXListViewListener
 
     public boolean onContextItemSelected(MenuItem item)
     {
+		System.out.println("MyReportFragment onContextItemSelected, getUserVisibleHint:"+getUserVisibleHint());
+    	if (!getUserVisibleHint())
+		{
+			return false;
+		}
+    	
     	AdapterContextMenuInfo menuInfo=(AdapterContextMenuInfo)item.getMenuInfo();
     	int index = (int)mineListView.getAdapter().getItemId(menuInfo.position);
     	final Report report = showMineList.get(index);

@@ -120,7 +120,7 @@ public abstract class SyncUtils
 	
     public static void syncAllToServer(SyncDataCallback callback)
     {
-		System.out.println("*************************************");
+		System.out.println("------------- syncAllToServer ------------");
     	itemTaskCount = 0;
     	reportTaskCount = 0;
     	AppPreference appPreference = AppPreference.getAppPreference();

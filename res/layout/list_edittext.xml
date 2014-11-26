@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:background="@drawable/list_item_color" >
+    android:background="@drawable/list_item_drawable" >
 
     <TextView
         android:id="@+id/textView"

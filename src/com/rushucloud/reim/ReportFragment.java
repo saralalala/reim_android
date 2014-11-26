@@ -20,6 +20,8 @@ public class ReportFragment extends Fragment
 {
 	private FragmentTabHost tabHost;
 	private View view;
+
+	private boolean hasInit = false;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -37,27 +39,44 @@ public class ReportFragment extends Fragment
 		}
 		initTabHost();
 	    return view;  
-	}	
+	}
+	   
+	public void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("ReportFragment");
+		if (!hasInit)
+		{
+			setHasOptionsMenu(true);
+			tabHost.setCurrentTab(ReimApplication.getReportTabIndex());
+			hasInit = true;
+		}
+	}
+
+	public void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("ReportFragment");
+	}
 	
 	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
+		System.out.println("ReportFragment isVisibleToUser:"+isVisibleToUser);
 		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser && tabHost.getCurrentTab() == 0)
+		if (isVisibleToUser && hasInit)
 		{
-			setHasOptionsMenu(true);	
+			tabHost.setCurrentTab(ReimApplication.getReportTabIndex());
 		}
 	}
 	
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		System.out.println("ReportFragment onCreateOptionsMenu");
 		inflater.inflate(R.menu.report, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		System.out.println("ReportFragment onOptionsItemSelected");
 		int id = item.getItemId();
 		if (id == R.id.action_filter_item)
 		{
@@ -81,19 +100,37 @@ public class ReportFragment extends Fragment
 			
 		return super.onOptionsItemSelected(item);
 	}
-	   
-	public void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("ReportFragment");
 
-		tabHost.setCurrentTab(ReimApplication.getReportTabIndex());
-	}
-
-	public void onPause()
+	public boolean onContextItemSelected(MenuItem item)
 	{
-		super.onPause();
-		MobclickAgent.onPageEnd("ReportFragment");
+		System.out.println("ReportFragment onContextItemSelected");
+    	if (!getUserVisibleHint())
+		{
+			return false;
+		}
+    	
+		int id = item.getItemId();
+		if (id == R.id.action_filter_item)
+		{
+			if (tabHost.getCurrentTab() == 0)
+			{
+				MyReportFragment fragment = (MyReportFragment) getChildFragmentManager().findFragmentByTag("myReport");
+				if (fragment != null)
+				{
+					fragment.onContextItemSelected(item);
+				}				
+			}
+			else
+			{
+				OthersReportFragment fragment = (OthersReportFragment) getChildFragmentManager().findFragmentByTag("othersReport");
+				if (fragment != null)
+				{
+					fragment.onContextItemSelected(item);
+				}				
+			}
+		}
+		
+		return super.onContextItemSelected(item);
 	}
 
 	private void initTabHost()

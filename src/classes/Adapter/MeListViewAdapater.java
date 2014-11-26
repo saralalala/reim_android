@@ -8,6 +8,7 @@ import classes.Group;
 import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
+import classes.Widget.CircleImageView;
 
 import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.MeFragment;
@@ -24,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -55,7 +55,7 @@ public class MeListViewAdapater extends BaseAdapter
 				
 				view = layoutInflater.inflate(R.layout.list_profile, null);
 				
-				ImageView imageView = (ImageView)view.findViewById(R.id.imageView);	
+				CircleImageView imageView = (CircleImageView)view.findViewById(R.id.imageView);	
 				TextView nicknameTextView = (TextView)view.findViewById(R.id.nicknameTextView);
 				TextView companyTextView = (TextView)view.findViewById(R.id.companyTextView);		
 				
@@ -143,7 +143,7 @@ public class MeListViewAdapater extends BaseAdapter
 			case 2:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-				view.setBackgroundResource(R.drawable.list_item_color);
+				view.setBackgroundResource(R.drawable.list_item_drawable);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
 				textView.setText(fragment.getString(R.string.getInvoice));
 				break;
@@ -151,7 +151,7 @@ public class MeListViewAdapater extends BaseAdapter
 			case 3:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-				view.setBackgroundResource(R.drawable.list_item_color);
+				view.setBackgroundResource(R.drawable.list_item_drawable);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
 				textView.setText(fragment.getString(R.string.myInvites));
 				break;
@@ -159,7 +159,7 @@ public class MeListViewAdapater extends BaseAdapter
 			case 4:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-				view.setBackgroundResource(R.drawable.list_item_color);
+				view.setBackgroundResource(R.drawable.list_item_drawable);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
 				textView.setText(fragment.getString(R.string.invite));
 				break;
@@ -167,7 +167,7 @@ public class MeListViewAdapater extends BaseAdapter
 			case 5:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-				view.setBackgroundResource(R.drawable.list_item_color);
+				view.setBackgroundResource(R.drawable.list_item_drawable);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
 				textView.setText(fragment.getString(R.string.share));
 				break;
@@ -175,7 +175,7 @@ public class MeListViewAdapater extends BaseAdapter
 			case 6:
 			{
 				view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-				view.setBackgroundResource(R.drawable.list_item_color);
+				view.setBackgroundResource(R.drawable.list_item_drawable);
 				TextView textView = (TextView)view.findViewById(android.R.id.text1);
 				textView.setText(fragment.getString(R.string.feedback));
 				break;

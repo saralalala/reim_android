@@ -47,6 +47,8 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 	private static final int SORT_AMOUNT = 2;	
 	private static final int SORT_CREATE_DATE = 3;
 	
+	private boolean hasInit = false;
+	
 	private View view;
 	private View filterView;
 	private XListView othersListView;
@@ -99,13 +101,18 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("OthersReportFragment");
-		ReimApplication.showProgressDialog();
-        initData();
-        initView();
-		ReimApplication.dismissProgressDialog();
-		if (Utils.isNetworkConnected())
+		System.out.println("OthersReportFragment onResume");
+		if (!hasInit)
 		{
-			sendSubordinatesReportsRequest();
+			ReimApplication.showProgressDialog();
+	        initData();
+	        initView();
+	        hasInit = true;
+			ReimApplication.dismissProgressDialog();
+			if (Utils.isNetworkConnected())
+			{
+				sendSubordinatesReportsRequest();
+			}		
 		}
 	}
 
@@ -115,9 +122,18 @@ public class OthersReportFragment extends Fragment implements IXListViewListener
 		MobclickAgent.onPageEnd("OthersReportFragment");
 	}
 
+	public void setUserVisibleHint(boolean isVisibleToUser)
+	{
+		System.out.println("OthersReportFragment isVisibleToUser:"+isVisibleToUser);
+		super.setUserVisibleHint(isVisibleToUser);
+		if (isVisibleToUser && hasInit && Utils.isNetworkConnected())
+		{
+			sendSubordinatesReportsRequest();
+		}
+	}
+
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		System.out.println("OthersReportFragment onOptionsItemSelected");
 		int id = item.getItemId();
 		if (id == R.id.action_filter_item)
 		{

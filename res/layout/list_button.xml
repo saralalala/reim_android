@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
-    android:background="@drawable/list_item_color" >
+    android:background="@drawable/list_item_drawable" >
 
     <Button
         android:id="@+id/button"

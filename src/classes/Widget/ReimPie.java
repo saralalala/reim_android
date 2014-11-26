@@ -1,8 +1,9 @@
 package classes.Widget;
 
+import com.rushucloud.reim.R;
+
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
@@ -13,52 +14,65 @@ public class ReimPie extends View
 {
 	private Paint occupyPaint = new Paint();
 	private Paint remainingPaint = new Paint();
-	private RectF oval = new RectF();
-	private float _angle = 0;
-	private float _start = 0;
+	private RectF pieRect = new RectF();
+	private float occupyAngle = 0;
+	private float startAngle = 0;
 
 	public ReimPie(Context context, float angle, float start, int canvasWidth, int canvasHeight)
 	{
 		super(context);
-		occupyPaint.setColor(Color.rgb(46, 139, 87));
+		occupyPaint.setColor(getResources().getColor(R.color.reim_pie_occupy));
 		occupyPaint.setStyle(Style.FILL_AND_STROKE);
-		remainingPaint.setColor(Color.rgb(127, 255, 212));
+		remainingPaint.setColor(getResources().getColor(R.color.reim_pie_remain));
 		remainingPaint.setStyle(Style.FILL_AND_STROKE);
-		this._angle = angle;
-		this._start = start;
-		oval.left = 0;
-		oval.top = 0;
-		oval.right = canvasWidth;
-		oval.bottom = canvasHeight;		
+		occupyAngle = angle;
+		startAngle = start;
+		pieRect.left = 0;
+		pieRect.top = 0;
+		pieRect.right = canvasWidth;
+		pieRect.bottom = canvasHeight;
 	}
 
-	public ReimPie(Context con, AttributeSet atts)
+	public ReimPie(Context context, AttributeSet attrs)
 	{
-		super(con, atts);
+		super(context, attrs);
 	}
 
 	public void onDraw(Canvas canvas)
 	{
-		float width = oval.right;
-		float height = oval.bottom;
+		float width = pieRect.right;
+		float height = pieRect.bottom;
 		float diff  = Math.abs(width - height);
 		
 		if(width > height)
 		{
-			oval.left += diff / 2 + 10; // 左边
-			oval.top = 10; // 上边
-			oval.right -= diff / 2 + 10; // 右边
-			oval.bottom = height - 10; // 下边
+			pieRect.left += diff / 2 + 10; // 左边
+			pieRect.top = 10; // 上边
+			pieRect.right -= diff / 2 + 10; // 右边
+			pieRect.bottom = height - 10; // 下边
 		} 
 		else
 		{
-			oval.left = 10; // 左边
-			oval.top += diff / 2 + 10; // 上边
-			oval.right = width - 10; // 右边
-			oval.bottom -= diff / 2 + 10; // 下边	
+			pieRect.left = 10; // 左边
+			pieRect.top += diff / 2 + 10; // 上边
+			pieRect.right = width - 10; // 右边
+			pieRect.bottom -= diff / 2 + 10; // 下边	
 		}
 
-		canvas.drawArc(oval, this._start, this._angle, true, occupyPaint); // 绘制圆弧
-		canvas.drawArc(oval, this._start+this._angle, 360-this._angle, true, remainingPaint); // 绘制圆弧
+		occupyPaint.setAntiAlias(true);
+		canvas.drawArc(pieRect, startAngle, occupyAngle, true, occupyPaint); // 绘制圆弧
+
+		remainingPaint.setAntiAlias(true);
+		canvas.drawArc(pieRect, startAngle + occupyAngle, 360 - occupyAngle, true, remainingPaint); // 绘制圆弧
+	}
+	
+	public void setPieRect(float angle, float start, int canvasWidth, int canvasHeight)
+	{
+		occupyAngle = angle;
+		startAngle = start;
+		pieRect.left = 0;
+		pieRect.top = 0;
+		pieRect.right = canvasWidth;
+		pieRect.bottom = canvasHeight;
 	}
 }

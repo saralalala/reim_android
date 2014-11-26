@@ -30,12 +30,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener
 {
 	private long exitTime;
 
 	private ViewPager viewPager;
+	private TextView shortBadgeTextView;
+	private TextView mediumBadgeTextView;
+	private TextView longBadgeTextView;
+	private ImageView tipImageView;
 
 	private List<TabItem> tabItemList = new ArrayList<TabItem>();
 
@@ -142,7 +148,26 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			
 			public void onPageScrollStateChanged(int arg0)
 			{
-
+				if (arg0 == 2)
+				{
+					int currentIndex = viewPager.getCurrentItem();
+					if (currentIndex == 1)
+					{
+						setReportBadge(0);	
+						if (Utils.isNetworkConnected())
+						{
+							sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
+						}					
+					}
+					else if (currentIndex == 3)
+					{
+						setMeBadge(0);
+						if (Utils.isNetworkConnected())
+						{
+							sendEventsReadRequest(EventsReadRequest.TYPE_INVITE);		
+						}
+					}
+				}
 			}
 		});
 
@@ -162,6 +187,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		tabItemList.add(tabItemMe);
 		
 		tabItemReim.setIconAlpha(1);
+		
+		shortBadgeTextView = (TextView)findViewById(R.id.shortBadgeTextView);
+		mediumBadgeTextView = (TextView)findViewById(R.id.mediumBadgeTextView);
+		longBadgeTextView = (TextView)findViewById(R.id.longBadgeTextView);
+		tipImageView = (ImageView)findViewById(R.id.tipImageView);
 		
 		Button addButton = (Button)findViewById(R.id.addButton);
 		addButton.setOnClickListener(new OnClickListener()
@@ -185,48 +215,44 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	
 	private void setReportBadge(int eventCount)
 	{
-//		View view = tabHost.getTabWidget().getChildAt(1);
-//		
-//		TextView shortBadgeTextView = (TextView) view.findViewById(R.id.shortBadgeTextView);
-//		TextView longBadgeTextView = (TextView) view.findViewById(R.id.longBadgeTextView);
-//		if (eventCount > 99)
-//		{
-//			longBadgeTextView.setText("99+");
-//			longBadgeTextView.setVisibility(View.VISIBLE);
-//			shortBadgeTextView.setVisibility(View.GONE);
-//		}
-//		else if (eventCount > 10)
-//		{
-//			longBadgeTextView.setText(Integer.toString(eventCount));
-//			longBadgeTextView.setVisibility(View.VISIBLE);
-//			shortBadgeTextView.setVisibility(View.GONE);
-//		}
-//		else if (eventCount > 0)
-//		{
-//			shortBadgeTextView.setText(Integer.toString(eventCount));
-//			shortBadgeTextView.setVisibility(View.VISIBLE);
-//			longBadgeTextView.setVisibility(View.GONE);
-//		}
-//		else
-//		{
-//			shortBadgeTextView.setVisibility(View.GONE);
-//			longBadgeTextView.setVisibility(View.GONE);
-//		}
+		if (eventCount > 99)
+		{
+			longBadgeTextView.setVisibility(View.VISIBLE);
+			mediumBadgeTextView.setVisibility(View.GONE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
+		else if (eventCount > 10)
+		{
+			mediumBadgeTextView.setText(Integer.toString(eventCount));
+			longBadgeTextView.setVisibility(View.GONE);
+			mediumBadgeTextView.setVisibility(View.VISIBLE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
+		else if (eventCount > 0)
+		{
+			shortBadgeTextView.setText(Integer.toString(eventCount));
+			longBadgeTextView.setVisibility(View.GONE);
+			mediumBadgeTextView.setVisibility(View.GONE);
+			shortBadgeTextView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			longBadgeTextView.setVisibility(View.GONE);
+			mediumBadgeTextView.setVisibility(View.GONE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
 	}
 	
 	private void setMeBadge(int eventCount)
 	{
-//		View view = tabHost.getTabWidget().getChildAt(3);
-//		
-//		ImageView tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
-//		if (eventCount > 0)
-//		{
-//			tipImageView.setVisibility(View.VISIBLE);
-//		}
-//		else
-//		{
-//			tipImageView.setVisibility(View.GONE);
-//		}
+		if (eventCount > 0)
+		{
+			tipImageView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			tipImageView.setVisibility(View.GONE);
+		}
 	}
 
 	private void sendGetEventsRequest()
@@ -306,6 +332,14 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			}
 		});
 	}
+	
+	private void resetTabItems()
+	{
+		for (int i = 0; i < tabItemList.size(); i++)
+		{
+			tabItemList.get(i).setIconAlpha(0);
+		}
+	}
 
 	public void onClick(View v)
 	{
@@ -351,13 +385,5 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		ReimApplication.setTabIndex(position);
 		viewPager.setCurrentItem(position, false);
 		tabItemList.get(position).setIconAlpha(1.0f);
-	}
-	
-	private void resetTabItems()
-	{
-		for (int i = 0; i < tabItemList.size(); i++)
-		{
-			tabItemList.get(i).setIconAlpha(0);
-		}
 	}
 }

@@ -75,6 +75,8 @@ public class MeFragment extends Fragment
 	private static final int TAKE_PHOTO = 1;
 	private static final int CROP_IMAGE = 2;
 	
+	private boolean hasInit = false;
+	
 	private MeListViewAdapater adapter;
 	private ListView meListView;
 	
@@ -108,13 +110,27 @@ public class MeFragment extends Fragment
 	{
 		super.onResume();
 		MobclickAgent.onPageStart("MeFragment");
-        initView();
+		if (!hasInit)
+		{
+	        initView();
+			hasInit = true;
+		}
 	}
 
 	public void onPause()
 	{
 		super.onPause();
 		MobclickAgent.onPageEnd("MeFragment");
+	}
+
+	public void setUserVisibleHint(boolean isVisibleToUser)
+	{
+		System.out.println("MeFragment isVisibleToUser:"+isVisibleToUser);
+		super.setUserVisibleHint(isVisibleToUser);
+		if (isVisibleToUser && hasInit)
+		{
+	        initView();
+		}
 	}
 	
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
@@ -127,6 +143,12 @@ public class MeFragment extends Fragment
 	
 	public boolean onContextItemSelected(MenuItem item)
 	{
+		System.out.println("MeFragment onContextItemSelected, getUserVisibleHint:"+getUserVisibleHint());
+    	if (!getUserVisibleHint())
+		{
+			return false;
+		}
+    	
 		if (item.getItemId() == 0)
 		{
 			Intent intent = new Intent(Intent.ACTION_PICK, null);

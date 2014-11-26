@@ -34,6 +34,7 @@ public class ReimApplication extends Application
 		initMeChat();
 		MobclickAgent.openActivityDurationTrack(false);
 
+		System.out.println("**************** Application Started *****************");
 		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
 //		System.out.println(getDeviceInfo(this));
 	}
