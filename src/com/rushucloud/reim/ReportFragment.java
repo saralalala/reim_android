@@ -266,6 +266,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		if (othersTitleTextView == null)
 		{
 			othersTitleTextView = (TextView)getActivity().findViewById(R.id.othersTitleTextView);
+			othersTitleTextView.setOnClickListener(this);
 		}
 		
 		if (reportListView == null)
@@ -323,7 +324,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		
 		if (filterImageView == null)
 		{
-			filterImageView = (ImageView) getActivity().findViewById(R.id.filterImageView);
+			filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 			filterImageView.setOnClickListener(new OnClickListener()
 			{
 				public void onClick(View v)

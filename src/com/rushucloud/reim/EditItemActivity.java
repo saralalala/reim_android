@@ -413,7 +413,6 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				
 				if (!item.getInvoicePath().equals(""))
 				{
 					Intent intent = new Intent(EditItemActivity.this, ImageActivity.class);

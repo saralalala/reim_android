@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -97,6 +98,12 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 
 	private void initView()
 	{
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null)
+		{
+			actionBar.hide();
+		}
+		
 		final List<Fragment> fragmentList = new ArrayList<Fragment>();
 		
 		ReimFragment reimFragment = new ReimFragment();

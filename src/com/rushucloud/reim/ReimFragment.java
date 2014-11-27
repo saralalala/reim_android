@@ -273,7 +273,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		
 		if (filterImageView == null)
 		{
-			filterImageView = (ImageView) getActivity().findViewById(R.id.filterImageView);
+			filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 			filterImageView.setOnClickListener(new OnClickListener()
 			{
 				public void onClick(View v)
