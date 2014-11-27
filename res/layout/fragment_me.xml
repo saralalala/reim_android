@@ -5,6 +5,22 @@
     android:orientation="vertical"
     android:background="@color/list_background" >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <TextView
+            android:id="@+id/meTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/me"
+            android:textSize="20sp"
+            android:textColor="@color/major_light" />
+
+    </RelativeLayout>
+
 	<ListView
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"

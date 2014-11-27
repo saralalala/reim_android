@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/filter_background" >
 
     <Button
         android:id="@+id/confirmButton"
@@ -27,39 +28,44 @@
         android:layout_below="@+id/confirmButton"
         android:text="@string/sort" />
 
-    <RadioGroup
+    <classes.Widget.SegmentedGroup
         android:id="@+id/sortRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sortTextView" >
+		android:layout_centerHorizontal="true"
+        android:layout_below="@+id/sortTextView"
+    	android:orientation="horizontal" >
 
         <RadioButton
             android:id="@+id/sortNullRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/sortNull" />
+            android:text="@string/sortNull"
+            style="@style/RadioButton" />
 
         <RadioButton
             android:id="@+id/sortItemsCountRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sortItemsCount" />
+            android:text="@string/sortItemsCount"
+            style="@style/RadioButton" />
 
         <RadioButton
             android:id="@+id/sortAmountRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sortAmount" />
+            android:text="@string/sortAmount"
+            style="@style/RadioButton" />
 
         <RadioButton
             android:id="@+id/sortCreateDateRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sortCreateDate" />
+            android:text="@string/sortCreateDate"
+            style="@style/RadioButton" />
         
-    </RadioGroup>
+    </classes.Widget.SegmentedGroup>
 
     <TextView
         android:id="@+id/tagTextView"

@@ -7,6 +7,22 @@
     android:orientation="vertical"
     android:background="@color/list_background" >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <TextView
+            android:id="@+id/statTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/statistics"
+            android:textSize="20sp"
+            android:textColor="@color/major_light" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,6 +56,7 @@
             android:gravity="center"
             android:orientation="vertical" >
         </LinearLayout>
+        
     </LinearLayout>
     
     <LinearLayout 
@@ -57,6 +74,7 @@
             android:orientation="horizontal"
         	android:padding="5dp"  >
         </LinearLayout>
+        
     </LinearLayout>
 
 </LinearLayout>

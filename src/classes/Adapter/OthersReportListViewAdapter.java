@@ -38,8 +38,8 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		TextView countTextView = (TextView)convertView.findViewById(R.id.countTextView);
 		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
-		
-		Report report = reportList.get(position);
+
+		Report report = this.getItem(position);
 
 		String title = report.getTitle().equals("") ? "N/A" : report.getTitle();
 		titleTextView.setText(title);

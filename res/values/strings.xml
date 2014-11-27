@@ -4,6 +4,8 @@
     <string name="app_name">如数云报销</string>
     <string name="background">背景</string>
     <string name="action_settings">设置</string>
+    <string name="on">开</string>
+    <string name="off">关</string>
     <string name="nullString"></string>
     
     <string name="confirm">确定</string>
@@ -87,8 +89,8 @@
     <string name="deleteSucceed">删除成功</string>
     <string name="deleteFailed">删除失败</string>
     
-    <string name="myReport">我的报告</string>
-    <string name="othersReport">其他人的报告</string>
+    <string name="myReport">我的</string>
+    <string name="othersReport">需报销</string>
     <string name="inputReportTitle">请输入报告名称</string>
     <string name="addComment">添加评论</string>
     <string name="checkComment">查看评论</string>

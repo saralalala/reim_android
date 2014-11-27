@@ -33,10 +33,9 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -46,6 +45,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -67,6 +67,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	
 	private View view;
 	private View filterView;
+	private ImageView filterImageView;
+	private ImageView searchImageView;
 	private XListView itemListView;
 	private ItemListViewAdapter adapter;
 
@@ -124,13 +126,11 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		MobclickAgent.onPageStart("ReimFragment");
 		if (!hasInit)
 		{
-			ReimApplication.showProgressDialog();
  			initData();
    			initView();
 			setHasOptionsMenu(true);
 			hasInit = true;
 			refreshItemListView();
-			ReimApplication.dismissProgressDialog();
 			syncItems();		
 		}	
 	}
@@ -152,32 +152,6 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			ReimApplication.dismissProgressDialog();
 			syncItems();
 		}
-	}
-
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-	{
-		inflater.inflate(R.menu.reim, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		int id = item.getItemId();
-		if (id == R.id.action_search_item)
-		{
-			MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
-			Intent intent = new Intent(getActivity(), SearchItemActivity.class);
-			intent.putExtra("fromReim", true);
-			startActivity(intent);
-			return true;
-		}
-		else if (id == R.id.action_filter_item)
-		{
-			MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
-			windowManager.addView(filterView, params);
-		}
-			
-		return super.onOptionsItemSelected(item);
 	}
 
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
@@ -295,6 +269,34 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				}
 			});
 			registerForContextMenu(itemListView);
+		}
+		
+		if (filterImageView == null)
+		{
+			filterImageView = (ImageView) getActivity().findViewById(R.id.filterImageView);
+			filterImageView.setOnClickListener(new OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
+					windowManager.addView(filterView, params);
+				}
+			});
+		}
+		
+		if (searchImageView == null)
+		{
+			searchImageView = (ImageView) getActivity().findViewById(R.id.searchImageView);
+			searchImageView.setOnClickListener(new OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
+					Intent intent = new Intent(getActivity(), SearchItemActivity.class);
+					intent.putExtra("fromReim", true);
+					startActivity(intent);
+				}
+			});
 		}
 		
 		if (filterView == null)
