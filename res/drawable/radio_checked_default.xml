@@ -5,8 +5,8 @@
     <!-- you can use any color you want I used here gray color-->
     <solid android:color="@color/radio_button_selected_color" />
     <corners
-        android:bottomRightRadius="@dimen/radio_button_conner_radius"
-        android:bottomLeftRadius="@dimen/radio_button_conner_radius"
-        android:topLeftRadius="@dimen/radio_button_conner_radius"
-        android:topRightRadius="@dimen/radio_button_conner_radius" />
+        android:bottomRightRadius="@dimen/radio_button_corner_radius"
+        android:bottomLeftRadius="@dimen/radio_button_corner_radius"
+        android:topLeftRadius="@dimen/radio_button_corner_radius"
+        android:topRightRadius="@dimen/radio_button_corner_radius" />
 </shape>

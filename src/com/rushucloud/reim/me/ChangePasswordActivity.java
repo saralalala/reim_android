@@ -29,7 +29,7 @@ public class ChangePasswordActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.profile_change_password);
+		setContentView(R.layout.me_change_password);
 		appPreference = AppPreference.getAppPreference();
 		initView();
 	}

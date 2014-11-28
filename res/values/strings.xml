@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">如数云报销</string>
+    <string name="app_name">云报销</string>
     <string name="background">背景</string>
-    <string name="action_settings">设置</string>
+    <string name="settings">设置</string>
     <string name="on">开</string>
     <string name="off">关</string>
     <string name="nullString"></string>
@@ -59,8 +59,8 @@
     <string name="inputAmount">请输入金额</string>
     <string name="invoice">发票</string>
     <string name="itemApproved">已审批</string>
-    <string name="proveAhead">预审批</string>
-    <string name="paAmount">预审批金额：</string>
+    <string name="proveAhead">预申请</string>
+    <string name="paAmount">预申请金额：</string>
     <string name="needReimburse">需报销</string>
     <string name="category">类别:</string>
     <string name="vendor">商家:</string>
@@ -105,9 +105,9 @@
     <string name="submit">提交</string>
     <string name="approve">批准</string>
     <string name="reject">拒绝</string>
-    <string name="reportOverFlow">99+</string>
+    <string name="reportOverFlow">99+</string>    
     
-    
+    <string name="personalCenter">个人中心</string>
     <string name="avatar">头像</string>
     <string name="enablePasswordProtection">开启密码保护</string>
     <string name="syncWithoutWifi">仅WiFi开启时上传云端</string>
@@ -116,6 +116,7 @@
     <string name="myInvites">收到的邀请</string>
     <string name="invite">邀请好友</string>
     <string name="share">分享</string>
+    <string name="customService">联系客服</string>
     <string name="feedback">意见反馈</string>
     <string name="signOut">退出登录</string>
     <string name="email">邮箱</string>
@@ -123,7 +124,7 @@
     <string name="companyName">公司名称</string>
     <string name="nickname">昵称</string>
     <string name="changePassword">修改密码</string>
-    <string name="defaultManager">设置默认上级</string>
+    <string name="defaultManager">我的上级</string>
     <string name="categoryManagement">分类管理</string>
     <string name="tagManagement">标签管理</string>
     <string name="inputCompanyName">请输入公司名称</string>
@@ -143,6 +144,9 @@
     <string name="noTags">当前没有任何标签</string>
     <string name="getInvoicePrompt">发票抬头请开：</string>
     <string name="invoiceInvalid">还没公司，开啥发票</string>
+    <string name="aboutUs">关于我们</string>
+    <string name="currentVersion">当前版本：</string>
+    <string name="aboutContent">瞎看什么?!</string>
     
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>

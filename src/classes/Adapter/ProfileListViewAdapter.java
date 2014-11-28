@@ -23,7 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class ProfileListViewAdapater extends BaseAdapter
+public class ProfileListViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
 	private ProfileActivity activity;
@@ -31,7 +31,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 	private DBManager dbManager;
 	private User user;
 
-	public ProfileListViewAdapater(Context context, User user)
+	public ProfileListViewAdapter(Context context, User user)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
 		this.activity = (ProfileActivity) context;
@@ -100,7 +100,7 @@ public class ProfileListViewAdapater extends BaseAdapter
 				else
 				{
 					final Group group = dbManager.getGroup(appPreference.getCurrentGroupID());
-					view = layoutInflater.inflate(R.layout.list_text_button, null);
+					view = layoutInflater.inflate(R.layout.list_edittext_button, null);
 					TextView textView = (TextView) view.findViewById(R.id.textView);
 					textView.setText(activity.getString(R.string.companyName));
 

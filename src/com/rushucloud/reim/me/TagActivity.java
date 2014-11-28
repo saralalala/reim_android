@@ -49,7 +49,7 @@ public class TagActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.profile_tag);
+		setContentView(R.layout.me_tag);
 		initData();
 		initView();
 	}
@@ -192,7 +192,7 @@ public class TagActivity extends Activity
 	private void showTagDialog(final Tag tag)
 	{
 		final boolean isNewTag = tag.getServerID() == -1 ? true : false; 
-		View view = View.inflate(this, R.layout.profile_tag_dialog, null);
+		View view = View.inflate(this, R.layout.me_tag_dialog, null);
 		final EditText nameEditText = (EditText)view.findViewById(R.id.nameEditText);
 		
 		if (!isNewTag)

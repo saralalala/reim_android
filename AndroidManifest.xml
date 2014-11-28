@@ -133,22 +133,17 @@
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.ProfileActivity">
+            android:name="com.rushucloud.reim.me.ProfileActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.InvoiceTitleActivity">
+            android:name="com.rushucloud.reim.me.InvoiceTitleActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
             android:name="com.rushucloud.reim.me.ChangePasswordActivity">
-        </activity>
-        
-        <activity 
-            android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.FeedbackActivity">
         </activity>
         
         <activity 
@@ -179,6 +174,21 @@
         <activity 
             android:label="@string/app_name" 
             android:name="com.rushucloud.reim.me.InviteReplyActivity">
+        </activity>
+        
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.me.SettingsActivity" >
+        </activity>
+        
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.me.AboutActivity" >
+        </activity>
+        
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.me.FeedbackActivity" >
         </activity>
         
         <!-- #######################  友盟UmengAppkey  ####################### -->

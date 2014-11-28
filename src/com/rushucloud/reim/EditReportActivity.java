@@ -23,7 +23,7 @@ import classes.Report;
 import classes.User;
 import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
-import classes.Adapter.MemberListViewAdapater;
+import classes.Adapter.MemberListViewAdapter;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -60,7 +60,7 @@ public class EditReportActivity extends Activity
 	private TextView ccTextView;
 	private ListView itemListView;
 	private ItemListViewAdapter adapter;
-	private MemberListViewAdapater memberAdapter;
+	private MemberListViewAdapter memberAdapter;
 
 	private Report report;
 	private List<Item> itemList = null;
@@ -427,8 +427,8 @@ public class EditReportActivity extends Activity
 			managerCheckList = User.getUsersCheck(userList, report.getManagerList());
 		}
 		
-    	memberAdapter = new MemberListViewAdapater(this, userList, managerCheckList);
-    	View view = View.inflate(this, R.layout.profile_user, null);
+    	memberAdapter = new MemberListViewAdapter(this, userList, managerCheckList);
+    	View view = View.inflate(this, R.layout.me_user, null);
     	ListView userListView = (ListView) view.findViewById(R.id.userListView);
     	userListView.setAdapter(memberAdapter);
     	userListView.setOnItemClickListener(new OnItemClickListener()
@@ -473,8 +473,8 @@ public class EditReportActivity extends Activity
     	hideSoftKeyboard();
     	ccCheckList = User.getUsersCheck(userList, report.getCCList());
 		
-    	memberAdapter = new MemberListViewAdapater(this, userList, ccCheckList);
-    	View view = View.inflate(this, R.layout.profile_user, null);
+    	memberAdapter = new MemberListViewAdapter(this, userList, ccCheckList);
+    	View view = View.inflate(this, R.layout.me_user, null);
     	ListView userListView = (ListView) view.findViewById(R.id.userListView);
     	userListView.setAdapter(memberAdapter);
     	userListView.setOnItemClickListener(new OnItemClickListener()

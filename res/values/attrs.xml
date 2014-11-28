@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="tab_icon_selected" format="reference" />
-    <attr name="tab_icon_not_selected" format="reference" />
-    <attr name="text" format="string" />
-    <attr name="text_size" format="dimension" />
-    <attr name="text_color_selected" format="color" />
-    <attr name="text_color_not_selected" format="color" />
-
     <declare-styleable name="TabItemView">
-        <attr name="tab_icon_selected" />
-        <attr name="tab_icon_not_selected" />
-        <attr name="text" />
-        <attr name="text_size" />
-        <attr name="text_color_selected" />
-        <attr name="text_color_not_selected" />
+        <attr name="tab_icon_selected" format="reference"/>
+        <attr name="tab_icon_not_selected" format="reference"/>
+        <attr name="text" format="string" />
+        <attr name="text_size" format="dimension" />
+        <attr name="text_color_selected" format="color" />
+        <attr name="text_color_not_selected" format="color" />
     </declare-styleable>
     
     <declare-styleable name="CircleImageView">
         <attr name="border_width" format="dimension" />
         <attr name="border_color" format="color" />
+    </declare-styleable>
+    
+    <declare-styleable name="RotateTextView">
+        <attr name="rotate_degree" format="float" />
     </declare-styleable>
 
 </resources>

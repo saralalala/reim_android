@@ -13,7 +13,7 @@ import com.umeng.analytics.MobclickAgent;
 import classes.Comment;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.CommentListViewAdapater;
+import classes.Adapter.CommentListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 public class CommentActivity extends Activity
 {
-	private CommentListViewAdapater adapter;
+	private CommentListViewAdapter adapter;
 
 	private DBManager dbManager;
 	private List<Comment> commentList;
@@ -103,7 +103,7 @@ public class CommentActivity extends Activity
 		else
 		{
 			commentTextView.setVisibility(View.GONE);
-			adapter = new CommentListViewAdapater(this, commentList);
+			adapter = new CommentListViewAdapter(this, commentList);
 			commentListView.setAdapter(adapter);
 			
 			if (Utils.isNetworkConnected())

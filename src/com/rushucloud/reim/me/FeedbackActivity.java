@@ -14,8 +14,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,7 +30,7 @@ public class FeedbackActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.profile_feedback);
+		setContentView(R.layout.me_feedback);
 		initView();
 		initButton();
 	}
@@ -62,6 +60,8 @@ public class FeedbackActivity extends Activity
 	
 	private void initView()
 	{
+		getActionBar().hide();
+		
 		feedbackEditText = (EditText)findViewById(R.id.feedbackEditText);
 		contactEditText = (EditText)findViewById(R.id.contactEditText);
 		
@@ -127,16 +127,7 @@ public class FeedbackActivity extends Activity
 		}
 		else
 		{
-			try
-			{
-				PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
-		    	sendFeedbackRequest(feedback, contactInfo, info.versionName);
-			}
-			catch (NameNotFoundException e)
-			{
-				e.printStackTrace();
-				Utils.showToast(FeedbackActivity.this, "获取版本号失败");
-			}
+	    	sendFeedbackRequest(feedback, contactInfo, Utils.getCurrentVersion());
 		}    	
     }
     

@@ -18,7 +18,7 @@ import classes.AppPreference;
 import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.MemberListViewAdapater;
+import classes.Adapter.MemberListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,7 +35,7 @@ import android.widget.ListView;
 public class ManagerActivity extends Activity
 {
 	private ListView managerListView;
-	private MemberListViewAdapater adapter;
+	private MemberListViewAdapter adapter;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
@@ -48,7 +48,7 @@ public class ManagerActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.profile_user);
+		setContentView(R.layout.me_user);
 		initView();
 	}
 
@@ -177,7 +177,7 @@ public class ManagerActivity extends Activity
 	
 	private void refreshListView()
 	{
-		adapter = new MemberListViewAdapater(this, userList, checkList);
+		adapter = new MemberListViewAdapter(this, userList, checkList);
 		managerListView.setAdapter(adapter);	
 		
 		if (Utils.isNetworkConnected())

@@ -84,7 +84,7 @@ public class WelcomeActivity extends Activity
 		{
 			public void onGlobalLayout()
 			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_dark);
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_light);
 				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
 				ViewGroup.LayoutParams params = signUpButton.getLayoutParams();
 				params.height = (int)(signUpButton.getWidth() * ratio);;
@@ -106,7 +106,7 @@ public class WelcomeActivity extends Activity
 		{
 			public void onGlobalLayout()
 			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_light);
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_border);
 				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
 				ViewGroup.LayoutParams params = signInButton.getLayoutParams();
 				params.height = (int)(signInButton.getWidth() * ratio);;

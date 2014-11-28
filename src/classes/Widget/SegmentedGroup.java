@@ -19,7 +19,7 @@ import android.widget.RadioGroup;
 
 public class SegmentedGroup extends RadioGroup {
 
-    private int oneDP;
+    private int borderWidth;
     private Resources resources;
     private int mTintColor;
     private int mCheckedTextColor = Color.WHITE;
@@ -28,14 +28,14 @@ public class SegmentedGroup extends RadioGroup {
         super(context);
         resources = getResources();
         mTintColor = resources.getColor(R.color.radio_button_selected_color);
-        oneDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, resources.getDisplayMetrics());
+        borderWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float)1.5, resources.getDisplayMetrics());
     }
 
     public SegmentedGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
         resources = getResources();
         mTintColor = resources.getColor(R.color.radio_button_selected_color);
-        oneDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, resources.getDisplayMetrics());
+        borderWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float)1.5, resources.getDisplayMetrics());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SegmentedGroup extends RadioGroup {
             View child = getChildAt(0);
             LayoutParams initParams = (LayoutParams) child.getLayoutParams();
             LayoutParams params = new LayoutParams(initParams.width, initParams.height, initParams.weight);
-            params.setMargins(0, 0, -oneDP, 0);
+            params.setMargins(0, 0, -borderWidth, 0);
             child.setLayoutParams(params);
             updateBackground(getChildAt(0), R.drawable.radio_checked_left, R.drawable.radio_unchecked_left);
             for (int i = 1; i < count - 1; i++) {
@@ -70,7 +70,7 @@ public class SegmentedGroup extends RadioGroup {
                 View child2 = getChildAt(i);
                 initParams = (LayoutParams) child2.getLayoutParams();
                 params = new LayoutParams(initParams.width, initParams.height, initParams.weight);
-                params.setMargins(0, 0, -oneDP, 0);
+                params.setMargins(0, 0, -borderWidth, 0);
                 child2.setLayoutParams(params);
             }
             updateBackground(getChildAt(count - 1), R.drawable.radio_checked_right, R.drawable.radio_unchecked_right);
@@ -94,7 +94,7 @@ public class SegmentedGroup extends RadioGroup {
         Drawable checkedDrawable = resources.getDrawable(checked).mutate();
         Drawable uncheckedDrawable = resources.getDrawable(unchecked).mutate();
         ((GradientDrawable) checkedDrawable).setColor(mTintColor);
-        ((GradientDrawable) uncheckedDrawable).setStroke(oneDP, mTintColor);
+        ((GradientDrawable) uncheckedDrawable).setStroke(borderWidth, mTintColor);
 
         //Create drawable
         StateListDrawable stateListDrawable = new StateListDrawable();

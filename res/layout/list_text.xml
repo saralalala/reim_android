@@ -4,7 +4,7 @@
     android:layout_height="50dp"
     android:orientation="horizontal"
     android:background="@drawable/list_item_drawable" >
-
+	     
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -12,17 +12,17 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="16dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textColor="@color/font_major" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="103dp"
-        android:layout_height="30dp"
-        android:layout_centerVertical="true"
+    <ImageView
+        android:id="@+id/nextImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:background="@drawable/toggle_drawable"
-        android:textOn=""
-        android:textOff="" />
+        android:contentDescription="@string/nullString"
+        android:src="@drawable/next" />
 
 </RelativeLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/aboutUs"
+            android:textSize="20sp"
+            android:textColor="@color/major_light" />
+
+    </RelativeLayout>
+
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:padding="20dp" >
+
+	    <TextView
+	        android:id="@+id/appNameTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="20dp"
+	        android:text="@string/app_name"
+	        android:textColor="@color/major_dark"
+	        android:textSize="30sp" />
+
+	    <TextView
+	        android:id="@+id/currentVersionTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/appNameTextView"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="14dp"
+	        android:text="@string/currentVersion" />
+
+	    <TextView
+	        android:id="@+id/contentTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/currentVersionTextView"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="24dp"
+	        android:text="@string/aboutContent"
+	        android:textSize="20sp" />
+	
+	</RelativeLayout>
+
+</LinearLayout>

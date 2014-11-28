@@ -33,7 +33,7 @@ import classes.Report;
 import classes.Tag;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.MemberListViewAdapater;
+import classes.Adapter.MemberListViewAdapter;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -856,8 +856,8 @@ public class EditItemActivity extends Activity
 		final List<User> memberList = User.removeCurrentUserFromList(userList);
 		final boolean[] managerCheckList = User.getUsersCheck(memberList, tempList);
 		
-		final MemberListViewAdapater memberAdapter = new MemberListViewAdapater(this, memberList, managerCheckList);
-    	View view = View.inflate(this, R.layout.profile_user, null);
+		final MemberListViewAdapter memberAdapter = new MemberListViewAdapter(this, memberList, managerCheckList);
+    	View view = View.inflate(this, R.layout.me_user, null);
     	ListView userListView = (ListView) view.findViewById(R.id.userListView);
     	userListView.setAdapter(memberAdapter);
     	userListView.setOnItemClickListener(new OnItemClickListener()

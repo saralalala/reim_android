@@ -6,7 +6,7 @@
     <solid android:color="@color/radio_button_selected_color" />
     <corners
         android:bottomRightRadius="0.1dp"
-        android:bottomLeftRadius="@dimen/radio_button_conner_radius"
+        android:bottomLeftRadius="@dimen/radio_button_corner_radius"
         android:topLeftRadius="0.1dp"
-        android:topRightRadius="@dimen/radio_button_conner_radius" />
+        android:topRightRadius="@dimen/radio_button_corner_radius" />
 </shape>

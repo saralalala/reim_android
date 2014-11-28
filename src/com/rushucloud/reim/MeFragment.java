@@ -21,14 +21,15 @@ import com.mechat.mechatlibrary.MCOnlineConfig;
 import com.mechat.mechatlibrary.MCUserConfig;
 import com.rushucloud.reim.me.InviteActivity;
 import com.rushucloud.reim.me.InvoiceTitleActivity;
+import com.rushucloud.reim.me.ManagerActivity;
 import com.rushucloud.reim.me.ProfileActivity;
+import com.rushucloud.reim.me.SettingsActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
-import com.umeng.socialize.controller.listener.SocializeListeners.UMShareBoardListener;
 import com.umeng.socialize.media.QQShareContent;
 import com.umeng.socialize.media.SinaShareContent;
 import com.umeng.socialize.sso.SinaSsoHandler;
@@ -42,7 +43,8 @@ import classes.AppPreference;
 import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.MeListViewAdapater;
+import classes.Adapter.MeListViewAdapter;
+import classes.Adapter.OperationListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -56,13 +58,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.AdapterView.OnItemClickListener;
@@ -76,8 +76,9 @@ public class MeFragment extends Fragment
 	private static final int CROP_IMAGE = 2;
 	
 	private boolean hasInit = false;
-	
-	private MeListViewAdapater adapter;
+
+	private View view;
+	private MeListViewAdapter adapter;
 	private ListView meListView;
 	
 	private User currentUser;
@@ -85,24 +86,22 @@ public class MeFragment extends Fragment
 	private String avatarPath;
 	
 	private UMSocialService mController;
-	private boolean isShareBoardShown = false;
-	private OnKeyListener listener = new OnKeyListener()
-	{
-		public boolean onKey(View v, int keyCode, KeyEvent event)
-		{
-			if (keyCode == KeyEvent.KEYCODE_BACK && isShareBoardShown)
-			{
-				mController.dismissShareBoard();
-			}
-			return false;
-		}
-	};
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
+		if (view == null)
+		{
+			view = inflater.inflate(R.layout.fragment_me, container, false);
+		}
+		else
+		{
+			ViewGroup viewGroup = (ViewGroup) view.getParent();
+			if (viewGroup != null)
+			{
+				viewGroup.removeView(view);
+			}
+		}
         currentUser = AppPreference.getAppPreference().getCurrentUser();
-        View view = inflater.inflate(R.layout.fragment_me, container, false);
-        container.setOnKeyListener(listener);
 	    return view;
 	}
 
@@ -125,7 +124,6 @@ public class MeFragment extends Fragment
 
 	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
-		System.out.println("MeFragment isVisibleToUser:"+isVisibleToUser);
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit)
 		{
@@ -143,7 +141,6 @@ public class MeFragment extends Fragment
 	
 	public boolean onContextItemSelected(MenuItem item)
 	{
-		System.out.println("MeFragment onContextItemSelected, getUserVisibleHint:"+getUserVisibleHint());
     	if (!getUserVisibleHint())
 		{
 			return false;
@@ -221,49 +218,18 @@ public class MeFragment extends Fragment
 		
 	private void initView()
 	{
-        adapter = new MeListViewAdapater(this); 
+        View divider = getActivity().getLayoutInflater().inflate(R.layout.divider, null);
+        
+        adapter = new MeListViewAdapter(this); 
         meListView = (ListView)getActivity().findViewById(R.id.meListView);
+        meListView.addHeaderView(divider);
         meListView.setAdapter(adapter);
         meListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				switch (position)
-				{
-					case 0:
-						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_CHANGE_USERINFO");
-						startActivity(new Intent(getActivity(), ProfileActivity.class));
-						break;
-					case 2:
-						startActivity(new Intent(getActivity(), InvoiceTitleActivity.class));
-						break;
-					case 3:
-						startActivity(new Intent(getActivity(), InviteActivity.class));
-						break;
-					case 4:
-						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_INVITE");
-						if (Utils.isNetworkConnected())
-						{
-							showInviteDialog();		
-						}
-						else
-						{
-							Utils.showToast(getActivity(), "网络未连接，无法发送邀请");
-						}
-						break;
-					case 5:
-						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
-						ReimApplication.setTabIndex(3);
-						showShareDialog();
-						break;
-					case 6:
-						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_FEEDBACK");
-						ReimApplication.setTabIndex(3);
-						showFeedbackDialog();
-						break;
-					default:
-						break;
-				}
+				MobclickAgent.onEvent(getActivity(), "UMENG_MINE_CHANGE_USERINFO");
+				startActivity(new Intent(getActivity(), ProfileActivity.class));
 			}
 		});
         
@@ -274,6 +240,86 @@ public class MeFragment extends Fragment
                 sendDownloadAvatarRequest();			
     		}
 		}
+
+        int[] operationList = { R.string.defaultManager, R.string.invite, R.string.myInvites, R.string.getInvoice };
+        boolean[] checkList = { true, false, true, false };
+        
+        OperationListViewAdapter operationAdapter = new OperationListViewAdapter(getActivity(), operationList, checkList);
+        ListView operationListView = (ListView)getActivity().findViewById(R.id.operationListView);
+        operationListView.addHeaderView(divider);
+        operationListView.setAdapter(operationAdapter);
+        operationListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				switch (position - 1)
+				{
+					case 0:
+					{
+						if (currentUser.getGroupID() == -1)
+						{
+							Utils.showToast(getActivity(), "你还没加入任何组");			
+						}
+						else
+						{
+							startActivity(new Intent(getActivity(), ManagerActivity.class));
+						}
+						break;
+					}
+					case 1:
+					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_INVITE");
+						if (Utils.isNetworkConnected())
+						{
+							showInviteDialog();		
+						}
+						else
+						{
+							Utils.showToast(getActivity(), "网络未连接，无法发送邀请");
+						}
+						break;
+					}
+					case 2:
+						startActivity(new Intent(getActivity(), InviteActivity.class));
+						break;
+					case 3:
+						startActivity(new Intent(getActivity(), InvoiceTitleActivity.class));
+						break;
+//					case 4:
+//						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
+//						ReimApplication.setTabIndex(3);
+//						showShareDialog();
+//						break;
+					default:
+						break;
+				}
+			}
+		});
+
+        int[] otherList = { R.string.settings, R.string.customService };
+        boolean[] otherCheckList = { true, false };
+        
+        OperationListViewAdapter otherAdapter = new OperationListViewAdapter(getActivity(), otherList, otherCheckList);
+        ListView otherListView = (ListView)getActivity().findViewById(R.id.otherListView);
+        otherListView.addHeaderView(divider);
+        otherListView.setAdapter(otherAdapter);
+        otherListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				switch (position - 1)
+				{
+					case 0:
+						startActivity(new Intent(getActivity(), SettingsActivity.class));
+						break;
+					case 1:
+						showFeedbackDialog();
+						break;
+					default:
+						break;
+				}
+			}
+		});
 
         mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 	}
@@ -398,7 +444,7 @@ public class MeFragment extends Fragment
 
     private void showInviteDialog()
     {
-		View view = View.inflate(getActivity(), R.layout.profile_invite_dialog, null);
+		View view = View.inflate(getActivity(), R.layout.me_invite_dialog, null);
 		final EditText usernameEditText = (EditText)view.findViewById(R.id.usernameEditText);
 		usernameEditText.requestFocus();
 		
@@ -525,7 +571,8 @@ public class MeFragment extends Fragment
 		});
     }
 
-    private void showShareDialog()
+    @SuppressWarnings("unused")
+	private void showShareDialog()
     {
     	String appID = "wx16afb8ec2cc4dc19";
     	String appSecret = "2e97f0d75dd7f371803785172682893a";
@@ -580,18 +627,6 @@ public class MeFragment extends Fragment
     			goBackToMainActivity();
     		}
     	});
-    	mController.setShareBoardListener(new UMShareBoardListener()
-		{
-			public void onShow()
-			{
-				isShareBoardShown = true;
-			}
-			
-			public void onDismiss()
-			{
-				isShareBoardShown = false;
-			}
-		});
     	
 		mController.openShare(getActivity(), false);
     }

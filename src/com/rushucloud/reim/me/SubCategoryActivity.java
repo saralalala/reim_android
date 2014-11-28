@@ -47,7 +47,7 @@ public class SubCategoryActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.profile_category);
+		setContentView(R.layout.me_category);
 		initData();
 		initView();
 	}
@@ -183,7 +183,7 @@ public class SubCategoryActivity extends Activity
 	private void showCategoryDialog(final Category category)
 	{
 		final boolean isNewCategory = category.getServerID() == -1 ? true : false; 
-		View view = View.inflate(this, R.layout.profile_category_dialog, null);
+		View view = View.inflate(this, R.layout.me_category_dialog, null);
 		final EditText nameEditText = (EditText)view.findViewById(R.id.nameEditText);
 		final EditText limitEditText = (EditText)view.findViewById(R.id.limitEditText);
 		final CheckBox proveAheadCheckBox = (CheckBox)view.findViewById(R.id.proveAheadCheckBox);

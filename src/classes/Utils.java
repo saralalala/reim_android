@@ -16,6 +16,9 @@ import netUtils.HttpConstant;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -34,6 +37,22 @@ public class Utils
 			 
 	private static String regexPhone = "[1]+\\d{10}";
 
+	public static String getCurrentVersion()
+	{
+		try
+		{
+			Context context = ReimApplication.getContext();
+			PackageManager packageManager = context.getPackageManager();
+			PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+			return packageInfo.versionName;
+		}
+		catch (NameNotFoundException e)
+		{
+			e.printStackTrace();
+			return "获取版本号失败";
+		}
+	}
+	
 	public static boolean isWiFiConnected()
 	{
 		ConnectivityManager manager = (ConnectivityManager)ReimApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -87,7 +106,7 @@ public class Utils
 	
 	public static String getPathFromUri(Activity activity, Uri uri)
 	{
-		String[] projection = {MediaStore.Images.Media.DATA};
+		String[] projection = { MediaStore.Images.Media.DATA };
 		Cursor cursor = activity.getContentResolver().query(uri, projection, null, null, null);
 		cursor.moveToFirst();
 		int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);

@@ -18,12 +18,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CommentListViewAdapater extends BaseAdapter
+public class CommentListViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
 	private List<Comment> commentList;
 	
-	public CommentListViewAdapater(Context context, List<Comment> comments)
+	public CommentListViewAdapter(Context context, List<Comment> comments)
 	{
 		layoutInflater = LayoutInflater.from(context);
 		commentList = new ArrayList<Comment>(comments);

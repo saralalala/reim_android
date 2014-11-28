@@ -1,8 +1,5 @@
 package com.rushucloud.reim.me;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.ModifyUserRequest;
 import netUtils.Response.User.ModifyUserResponse;
@@ -14,7 +11,8 @@ import classes.AppPreference;
 import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.ProfileListViewAdapater;
+import classes.Adapter.OperationListViewAdapter;
+import classes.Adapter.ProfileListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Context;
@@ -27,23 +25,22 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
 public class ProfileActivity extends Activity
 {
 	private ListView profileListView;
-	private ProfileListViewAdapater infoAdapter;
-	private ArrayAdapter<String> operationAdapter;
+	private ProfileListViewAdapter infoAdapter;
 
 	private User currentUser;
-	private List<String> operationList;
+	private int[] operationList;
+	private boolean[] checkList;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.profile);
+		setContentView(R.layout.me_profile);
 		initData();
 		initView();
 	}
@@ -66,7 +63,7 @@ public class ProfileActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			goBackToMainActivity();
+	    	finish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -99,26 +96,32 @@ public class ProfileActivity extends Activity
 	{
 		currentUser = AppPreference.getAppPreference().getCurrentUser();
 		
-		operationList = new ArrayList<String>();
-		operationList.add(getString(R.string.changePassword));
-		operationList.add(getString(R.string.defaultManager));
 		if (currentUser.isAdmin() && currentUser.getGroupID() != -1)
 		{
-			operationList.add(getString(R.string.categoryManagement));
-			operationList.add(getString(R.string.tagManagement));			
+			operationList = new int[]{ R.string.changePassword, R.string.categoryManagement, R.string.tagManagement };
+			checkList = new boolean[]{ true, true, true };
+		}
+		else
+		{
+			operationList = new int[]{ R.string.changePassword };
+			checkList = new boolean[]{ true };			
 		}
 	}
 	
 	private void initView()
 	{		
 		ReimApplication.setProgressDialog(this);
+		
+        View divider = getLayoutInflater().inflate(R.layout.divider, null);
 
-		infoAdapter = new ProfileListViewAdapater(ProfileActivity.this, currentUser);
+		infoAdapter = new ProfileListViewAdapter(ProfileActivity.this, currentUser);
 		profileListView = (ListView)findViewById(R.id.profileListView);
+		profileListView.addHeaderView(divider);
 		profileListView.setAdapter(infoAdapter);
 		
-		operationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, operationList);
+		OperationListViewAdapter operationAdapter = new OperationListViewAdapter(this, operationList, checkList);
 		ListView operationListView = (ListView)findViewById(R.id.operationListView);
+		operationListView.addHeaderView(divider);
 		operationListView.setAdapter(operationAdapter);
 		operationListView.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -129,18 +132,6 @@ public class ProfileActivity extends Activity
 					case 0:
 						startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
 						break;
-					case 1:
-					{
-						if (currentUser.getGroupID() == -1)
-						{
-							Utils.showToast(ProfileActivity.this, "你还没加入任何组");			
-						}
-						else
-						{
-							startActivity(new Intent(ProfileActivity.this, ManagerActivity.class));
-						}
-						break;
-					}
 					case 2:
 						MobclickAgent.onEvent(ProfileActivity.this, "UMENG_MINE_CATEGORT_SETTING");
 						startActivity(new Intent(ProfileActivity.this, CategoryActivity.class));
@@ -221,10 +212,4 @@ public class ProfileActivity extends Activity
 			});
 		}
 	}
-
-    private void goBackToMainActivity()
-    {
-    	ReimApplication.setTabIndex(3);
-    	finish();
-    }
 }

@@ -51,7 +51,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.support.v4.app.Fragment;
 
-public class ReimFragment extends Fragment implements IXListViewListener
+public class ReimFragment extends Fragment implements OnKeyListener, IXListViewListener
 {
 	private static final int FILTER_TYPE_ALL = 0;
 	private static final int FILTER_TYPE_PROVE_AHEAD = 1;
@@ -143,7 +143,6 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
-		System.out.println("ReimFragment isVisibleToUser:"+isVisibleToUser);
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit)
 		{
@@ -163,7 +162,6 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 	public boolean onContextItemSelected(MenuItem item)
 	{
-		System.out.println("ReimFragment onContextItemSelected, getUserVisibleHint:"+getUserVisibleHint());
     	if (!getUserVisibleHint())
 		{
 			return false;
@@ -579,7 +577,16 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			});
 		}
 	}
-
+	
+	public boolean onKey(View v, int keyCode, KeyEvent event)
+	{
+		if (keyCode == KeyEvent.KEYCODE_BACK)
+		{
+			windowManager.removeView(filterView);
+		}
+		return false;
+	}
+	
 	public void onRefresh()
 	{
 		if (SyncUtils.canSyncToServer())

@@ -16,13 +16,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MemberListViewAdapater extends BaseAdapter
+public class MemberListViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
 	private List<User> memberList;
 	private boolean[] check;
 	
-	public MemberListViewAdapater(Context context, List<User> userList, boolean[] checkList)
+	public MemberListViewAdapter(Context context, List<User> userList, boolean[] checkList)
 	{
 		layoutInflater = LayoutInflater.from(context);
 		memberList = new ArrayList<User>(userList);

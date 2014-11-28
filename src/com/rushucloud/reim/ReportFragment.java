@@ -137,7 +137,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	
 	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
-		System.out.println("ReportFragment isVisibleToUser:"+isVisibleToUser);
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit)
 		{
@@ -156,7 +155,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 
     public boolean onContextItemSelected(MenuItem item)
     {
-		System.out.println("ReportFragment onContextItemSelected, getUserVisibleHint:"+getUserVisibleHint());
     	if (!getUserVisibleHint())
 		{
 			return false;
@@ -423,8 +421,8 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 				}
 			});
 			
-			Button confirmButton = (Button)filterView.findViewById(R.id.confirmButton);
-			confirmButton.setOnClickListener(new View.OnClickListener()
+			ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
+			confirmImageView.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
 				{
@@ -449,9 +447,9 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 					ReimApplication.dismissProgressDialog();
 				}
 			});
-			
-			Button cancelButton = (Button)filterView.findViewById(R.id.cancelButton);
-			cancelButton.setOnClickListener(new View.OnClickListener()
+
+			ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
+			cancelImageView.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
 				{

@@ -70,7 +70,6 @@ public class StatisticsFragment extends Fragment
 
 	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
-		System.out.println("StatisticsFragment isVisibleToUser:"+isVisibleToUser);
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit)
 		{

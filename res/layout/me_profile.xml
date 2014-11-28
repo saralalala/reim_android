@@ -8,17 +8,20 @@
 	<ListView
 	    android:id="@+id/profileListView" 
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+	    android:layout_height="203dp"
+        android:layout_marginTop="18dp"
 	    android:background="@android:color/white"
-	    android:descendantFocusability="beforeDescendants" />
+		android:divider="@color/divider"
+		android:dividerHeight="0.5dp"
+	    android:descendantFocusability="beforeDescendants" />	
 	    
     <ListView
         android:id="@+id/operationListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_height="152.5dp"
+        android:layout_marginTop="24dp"
 	    android:background="@android:color/white"
-        android:listSelector="@drawable/list_item_drawable" />
+		android:divider="@color/divider"
+		android:dividerHeight="0.5dp" />
 
 </LinearLayout>

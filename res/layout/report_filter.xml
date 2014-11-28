@@ -4,36 +4,59 @@
     android:layout_height="match_parent"
     android:background="@drawable/filter_background" >
 
-    <Button
-        android:id="@+id/confirmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/confirm" />
-
-    <Button
-        android:id="@+id/cancelButton"
+    <ImageView
+        android:id="@+id/confirmImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="@string/cancel" />
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="16dp"
+        android:contentDescription="@string/confirm"
+		android:src="@drawable/confirm" />
+
+    <ImageView
+        android:id="@+id/cancelImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="16dp"
+        android:contentDescription="@string/cancel"
+		android:src="@drawable/cancel" />
 
     <TextView
         android:id="@+id/sortTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/confirmButton"
-        android:text="@string/sort" />
+        android:layout_alignBottom="@+id/sortDivider"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="16dp"
+        android:text="@string/sort"
+        android:textColor="@color/hint_light_grey"
+        android:textSize="14sp" />
 
+    <include 
+        android:id="@+id/sortDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="124dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        layout="@layout/divider"/>
+    
     <classes.Widget.SegmentedGroup
         android:id="@+id/sortRadioGroup"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
-        android:layout_below="@+id/sortTextView"
+        android:layout_below="@+id/sortDivider"
+        android:layout_marginTop="22dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
     	android:orientation="horizontal" >
 
         <RadioButton
@@ -71,13 +94,28 @@
         android:id="@+id/tagTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sortRadioGroup"
-        android:text="@string/filterTags" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/filterDivider"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="16dp"
+        android:text="@string/filterTags"
+        android:textColor="@color/hint_light_grey"
+        android:textSize="14sp" />
+
+    <include 
+        android:id="@+id/filterDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+		android:layout_alignTop="@+id/sortDivider"
+        android:layout_marginTop="108dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        layout="@layout/divider"/>
 
     <GridView
         android:id="@+id/tagGridView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/tagTextView"
         android:numColumns="4" >
 
