@@ -25,11 +25,11 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             reim:tab_icon_selected="@drawable/icon_reim_selected"
-            reim:tab_icon_not_selected="@drawable/icon_reim_not_selected"
+            reim:tab_icon_unselected="@drawable/icon_reim_not_selected"
             reim:text="@string/reimbursement"
             reim:text_size="10sp"
             reim:text_color_selected="@color/tab_item_selected"
-            reim:text_color_not_selected="@color/tab_item_not_selected" />
+            reim:text_color_unselected="@color/tab_item_unselected" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -40,10 +40,10 @@
                 android:id="@+id/tabItemReport"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                reim:tab_icon_not_selected="@drawable/icon_report_not_selected"
+                reim:tab_icon_unselected="@drawable/icon_report_not_selected"
                 reim:tab_icon_selected="@drawable/icon_report_selected"
                 reim:text="@string/report"
-                reim:text_color_not_selected="@color/tab_item_not_selected"
+                reim:text_color_unselected="@color/tab_item_unselected"
                 reim:text_color_selected="@color/tab_item_selected"
                 reim:text_size="10sp" />
 
@@ -108,11 +108,11 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             reim:tab_icon_selected="@drawable/icon_stat_selected"
-            reim:tab_icon_not_selected="@drawable/icon_stat_not_selected"
+            reim:tab_icon_unselected="@drawable/icon_stat_not_selected"
             reim:text="@string/statistics"
             reim:text_size="10sp"
             reim:text_color_selected="@color/tab_item_selected"
-            reim:text_color_not_selected="@color/tab_item_not_selected" />
+            reim:text_color_unselected="@color/tab_item_unselected" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -123,10 +123,10 @@
                 android:id="@+id/tabItemMe"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                reim:tab_icon_not_selected="@drawable/icon_me_not_selected"
+                reim:tab_icon_unselected="@drawable/icon_me_not_selected"
                 reim:tab_icon_selected="@drawable/icon_me_selected"
                 reim:text="@string/me"
-                reim:text_color_not_selected="@color/tab_item_not_selected"
+                reim:text_color_unselected="@color/tab_item_unselected"
                 reim:text_color_selected="@color/tab_item_selected"
                 reim:text_size="10sp" />
 

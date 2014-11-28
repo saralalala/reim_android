@@ -58,7 +58,7 @@ public class MemberListViewAdapter extends BaseAdapter
 			nicknameTextView.setText(user.getNickname());			
 		}
 
-		int color = check[position] ? R.color.list_item_selected : R.color.list_item_not_selected;
+		int color = check[position] ? R.color.list_item_selected : R.color.list_item_unselected;
 		convertView.setBackgroundResource(color);
 		
 		return convertView;

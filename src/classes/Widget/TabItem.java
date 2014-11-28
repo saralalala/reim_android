@@ -64,7 +64,7 @@ public class TabItem extends View
 					iconSelected = drawable.getBitmap();
 					break;
 				}
-				case R.styleable.TabItemView_tab_icon_not_selected:
+				case R.styleable.TabItemView_tab_icon_unselected:
 				{
 					BitmapDrawable drawable = (BitmapDrawable) array.getDrawable(attr);
 					iconNotSelected = drawable.getBitmap().copy(Config.ARGB_8888, true);
@@ -86,9 +86,9 @@ public class TabItem extends View
 					textColorSelected = array.getColor(attr, getResources().getColor(R.color.tab_item_selected));
 					break;
 				}
-				case R.styleable.TabItemView_text_color_not_selected:
+				case R.styleable.TabItemView_text_color_unselected:
 				{
-					textColorNotSelected = array.getColor(attr, getResources().getColor(R.color.tab_item_not_selected));
+					textColorNotSelected = array.getColor(attr, getResources().getColor(R.color.tab_item_unselected));
 					break;
 				}
 			}

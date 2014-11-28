@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/filter_background" >
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/background"
+        android:src="@drawable/filter_background"
+        android:scaleType="fitXY" />
 
     <ImageView
         android:id="@+id/confirmImageView"
@@ -116,8 +124,13 @@
         android:id="@+id/tagGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tagTextView"
-        android:numColumns="4" >
+        android:layout_below="@+id/filterDivider"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:numColumns="4"
+        android:verticalSpacing="22dp"
+        android:horizontalSpacing="10dp" >
 
     </GridView>
 

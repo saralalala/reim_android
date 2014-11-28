@@ -16,7 +16,9 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
 	private String[] status;
-	private int[] colors;
+	private int[] fontColors;
+	private int[] selectedBackgrounds;
+	private int[] unselectedBackgrounds;
 	private boolean[] check;
 
 	public ReportTagGridViewAdapter(Context context)
@@ -29,16 +31,40 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 			check[i] = false;
 		}
 		
-		colors = new int[5];
-		colors[0] = Color.rgb(145,124,107);
-		colors[1] = Color.rgb(61,160,228);
-		colors[2] = Color.rgb(60,183,154);
-		colors[3] = Color.rgb(178,120,160);
-		colors[4] = Color.rgb(209,209,209);
+		fontColors = new int[]{ R.color.report_status_draft, R.color.report_status_submitted, R.color.report_status_approved, 
+							R.color.report_status_rejected, R.color.report_status_finished };
+		
+		selectedBackgrounds = new int[]{ R.drawable.report_tag_draft_selected, R.drawable.report_tag_submitted_selected, R.drawable.report_tag_approved_selected,
+										 R.drawable.report_tag_rejected_selected, R.drawable.report_tag_finished_selected };
+		
+		unselectedBackgrounds = new int[]{ R.drawable.report_tag_draft_unselected, R.drawable.report_tag_submitted_unselected, R.drawable.report_tag_approved_unselected,
+				 						   R.drawable.report_tag_rejected_unselected, R.drawable.report_tag_finished_unselected };
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
+		if (position == 0)
+		{
+
+			View view = layoutInflater.inflate(R.layout.grid_report_tag_draft, parent, false);
+			
+			TextView statusTextView = (TextView)view.findViewById(R.id.statusTextView);
+			statusTextView.setText(status[position]);
+			
+			if (check[position])
+			{
+				statusTextView.setTextColor(Color.WHITE);
+				statusTextView.setBackgroundResource(selectedBackgrounds[position]);
+			}
+			else
+			{
+				statusTextView.setTextColor(fontColors[position]);
+				statusTextView.setBackgroundResource(unselectedBackgrounds[position]);
+			}
+			
+			return view;
+		}
+		
 		if (convertView == null)
 		{
 			convertView = layoutInflater.inflate(R.layout.grid_report_tag, parent, false);
@@ -50,12 +76,12 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 		if (check[position])
 		{
 			statusTextView.setTextColor(Color.WHITE);
-			statusTextView.setBackgroundColor(colors[position]);
+			statusTextView.setBackgroundResource(selectedBackgrounds[position]);
 		}
 		else
 		{
-			statusTextView.setTextColor(colors[position]);
-			statusTextView.setBackgroundColor(Color.WHITE);
+			statusTextView.setTextColor(fontColors[position]);
+			statusTextView.setBackgroundResource(unselectedBackgrounds[position]);
 		}
 		
 		return convertView;

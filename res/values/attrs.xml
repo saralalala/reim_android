@@ -3,11 +3,11 @@
 
     <declare-styleable name="TabItemView">
         <attr name="tab_icon_selected" format="reference"/>
-        <attr name="tab_icon_not_selected" format="reference"/>
+        <attr name="tab_icon_unselected" format="reference"/>
         <attr name="text" format="string" />
         <attr name="text_size" format="dimension" />
         <attr name="text_color_selected" format="color" />
-        <attr name="text_color_not_selected" format="color" />
+        <attr name="text_color_unselected" format="color" />
     </declare-styleable>
     
     <declare-styleable name="CircleImageView">

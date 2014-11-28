@@ -99,7 +99,7 @@ public class UnarchivedItemsActivity extends Activity
 					int position, long id)
 			{
 				checkList[position] = checkList[position] ? false : true;
-				int color = checkList[position] ? R.color.list_item_selected : R.color.list_item_not_selected;
+				int color = checkList[position] ? R.color.list_item_selected : R.color.list_item_unselected;
 				view.setBackgroundResource(color);
 			}
 		});

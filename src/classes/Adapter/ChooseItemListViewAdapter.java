@@ -36,7 +36,7 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 			convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 		}
 
-		int color = check[position] ? R.color.list_item_selected : R.color.list_item_not_selected;
+		int color = check[position] ? R.color.list_item_selected : R.color.list_item_unselected;
 		convertView.setBackgroundResource(color);
 		
 		ImageView photoImageView = (ImageView)convertView.findViewById(R.id.photoImageView);
@@ -60,14 +60,14 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 		{
 			statusTextView.setText(context.getString(R.string.itemApproved));
 			statusTextView.setBackgroundResource(R.drawable.item_approved);
-			statusTextView.setTextColor(context.getResources().getColor(R.color.list_item_approved));
+			statusTextView.setTextColor(context.getResources().getColor(R.color.item_approved));
 			statusTextView.setVisibility(View.VISIBLE);
 		}
 		else if (item.isProveAhead())
 		{
 			statusTextView.setText(context.getString(R.string.proveAhead));
 			statusTextView.setBackgroundResource(R.drawable.item_prove_ahead);
-			statusTextView.setTextColor(context.getResources().getColor(R.color.list_item_prove_ahead));
+			statusTextView.setTextColor(context.getResources().getColor(R.color.item_prove_ahead));
 			statusTextView.setVisibility(View.VISIBLE);			
 		}
 		else
