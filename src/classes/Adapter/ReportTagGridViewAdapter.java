@@ -15,8 +15,9 @@ import android.widget.TextView;
 public class ReportTagGridViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
+	private Context context;
 	private String[] status;
-	private int[] fontColors;
+	private List<Integer> fontColors;
 	private int[] selectedBackgrounds;
 	private int[] unselectedBackgrounds;
 	private boolean[] check;
@@ -31,8 +32,12 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 			check[i] = false;
 		}
 		
-		fontColors = new int[]{ R.color.report_status_draft, R.color.report_status_submitted, R.color.report_status_approved, 
-							R.color.report_status_rejected, R.color.report_status_finished };
+		fontColors = new ArrayList<Integer>();
+		fontColors.add(context.getResources().getColor(R.color.report_status_draft));
+		fontColors.add(context.getResources().getColor(R.color.report_status_submitted));
+		fontColors.add(context.getResources().getColor(R.color.report_status_approved));
+		fontColors.add(context.getResources().getColor(R.color.report_status_rejected));
+		fontColors.add(context.getResources().getColor(R.color.report_status_finished));
 		
 		selectedBackgrounds = new int[]{ R.drawable.report_tag_draft_selected, R.drawable.report_tag_submitted_selected, R.drawable.report_tag_approved_selected,
 										 R.drawable.report_tag_rejected_selected, R.drawable.report_tag_finished_selected };
@@ -45,22 +50,21 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 	{
 		if (position == 0)
 		{
-
 			View view = layoutInflater.inflate(R.layout.grid_report_tag_draft, parent, false);
 			
-			TextView statusTextView = (TextView)view.findViewById(R.id.statusTextView);
-			statusTextView.setText(status[position]);
-			
-			if (check[position])
-			{
-				statusTextView.setTextColor(Color.WHITE);
-				statusTextView.setBackgroundResource(selectedBackgrounds[position]);
-			}
-			else
-			{
-				statusTextView.setTextColor(fontColors[position]);
-				statusTextView.setBackgroundResource(unselectedBackgrounds[position]);
-			}
+//			TextView statusTextView = (TextView)view.findViewById(R.id.statusTextView);
+//			statusTextView.setText(status[position]);
+//			
+//			if (check[position])
+//			{
+//				statusTextView.setTextColor(Color.WHITE);
+//				statusTextView.setBackgroundResource(selectedBackgrounds[position]);
+//			}
+//			else
+//			{
+//				statusTextView.setTextColor(fontColors[position]);
+//				statusTextView.setBackgroundResource(unselectedBackgrounds[position]);
+//			}
 			
 			return view;
 		}
@@ -80,7 +84,7 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 		}
 		else
 		{
-			statusTextView.setTextColor(fontColors[position]);
+			statusTextView.setTextColor(fontColors.get(position));
 			statusTextView.setBackgroundResource(unselectedBackgrounds[position]);
 		}
 		

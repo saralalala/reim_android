@@ -88,6 +88,9 @@ public class SignInActivity extends Activity
 			passwordEditText.setText(password);
 		}
 		
+		usernameEditText.setText("a@a.com");
+		passwordEditText.setText("111111");
+		
 		RelativeLayout baseLayout = (RelativeLayout)findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
 		{
@@ -123,12 +126,12 @@ public class SignInActivity extends Activity
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(SignInActivity.this, "网络未连接，无法登录");
+					Utils.showToast(SignInActivity.this, "缃戠粶鏈繛鎺ワ紝鏃犳硶鐧诲綍");
 				}
 				else if (username.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-							.setTitle("错误").setMessage("用户名不能为空")
+							.setTitle("閿欒").setMessage("鐢ㄦ埛鍚嶄笉鑳戒负绌�")
 							.setNegativeButton(R.string.confirm, new OnClickListener()
 							{
 								public void onClick(DialogInterface dialog, int which)
@@ -141,7 +144,7 @@ public class SignInActivity extends Activity
 				else if (password.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-							.setTitle("错误").setMessage("密码不能为空")
+							.setTitle("閿欒").setMessage("瀵嗙爜涓嶈兘涓虹┖")
 							.setNegativeButton(R.string.confirm, new OnClickListener()
 							{
 								public void onClick(DialogInterface dialog, int which)
@@ -154,8 +157,8 @@ public class SignInActivity extends Activity
 				else if (!Utils.isEmailOrPhone(username))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-							.setTitle("错误").setMessage("手机或邮箱格式不正确")
-							.setNegativeButton("确定", new OnClickListener()
+							.setTitle("閿欒").setMessage("鎵嬫満鎴栭偖绠辨牸寮忎笉姝ｇ‘")
+							.setNegativeButton("纭畾", new OnClickListener()
 							{
 								public void onClick(DialogInterface dialog, int which)
 								{
@@ -269,9 +272,9 @@ public class SignInActivity extends Activity
 						{
 							ReimApplication.dismissProgressDialog();
 							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-									.setTitle("错误")
-									.setMessage("登录失败！" + response.getErrorMessage())
-									.setNegativeButton("确定", null).create();
+									.setTitle("閿欒")
+									.setMessage("鐧诲綍澶辫触锛�" + response.getErrorMessage())
+									.setNegativeButton("纭畾", null).create();
 							alertDialog.show();
 						}
 					});
