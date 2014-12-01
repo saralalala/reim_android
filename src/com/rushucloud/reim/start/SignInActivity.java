@@ -69,6 +69,8 @@ public class SignInActivity extends Activity
 
 	private void initView()
 	{
+		getActionBar().hide();
+		
 		String username = null;
 		String password = null;
 		
@@ -126,45 +128,47 @@ public class SignInActivity extends Activity
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(SignInActivity.this, "缃戠粶鏈繛鎺ワ紝鏃犳硶鐧诲綍");
+					Utils.showToast(SignInActivity.this, "网络未连接，无法登录");
 				}
 				else if (username.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-							.setTitle("閿欒").setMessage("鐢ㄦ埛鍚嶄笉鑳戒负绌�")
-							.setNegativeButton(R.string.confirm, new OnClickListener()
-							{
-								public void onClick(DialogInterface dialog, int which)
-								{
-									usernameEditText.requestFocus();
-								}
-							}).create();
+												.setTitle("错误").setMessage("用户名不能为空")
+												.setNegativeButton(R.string.confirm, new OnClickListener()
+												{
+													public void onClick(DialogInterface dialog, int which)
+													{
+														usernameEditText.requestFocus();
+													}
+												}).create();
 					alertDialog.show();
 				}
 				else if (password.equals(""))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-							.setTitle("閿欒").setMessage("瀵嗙爜涓嶈兘涓虹┖")
-							.setNegativeButton(R.string.confirm, new OnClickListener()
-							{
-								public void onClick(DialogInterface dialog, int which)
-								{
-									passwordEditText.requestFocus();
-								}
-							}).create();
+												.setTitle("错误")
+												.setMessage("密码不能为空")
+												.setNegativeButton(R.string.confirm, new OnClickListener()
+												{
+													public void onClick(DialogInterface dialog, int which)
+													{
+														passwordEditText.requestFocus();
+													}
+												}).create();
 					alertDialog.show();
 				}
 				else if (!Utils.isEmailOrPhone(username))
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-							.setTitle("閿欒").setMessage("鎵嬫満鎴栭偖绠辨牸寮忎笉姝ｇ‘")
-							.setNegativeButton("纭畾", new OnClickListener()
-							{
-								public void onClick(DialogInterface dialog, int which)
-								{
-									usernameEditText.requestFocus();
-								}
-							}).create();
+													.setTitle("错误")
+													.setMessage("手机或邮箱格式不正确")
+													.setNegativeButton("确定", new OnClickListener()
+													{
+														public void onClick(DialogInterface dialog, int which)
+														{
+															usernameEditText.requestFocus();
+														}
+													}).create();
 					alertDialog.show();
 				}
 				else

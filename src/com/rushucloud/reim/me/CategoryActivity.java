@@ -20,6 +20,7 @@ import classes.Utils;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -139,18 +140,19 @@ public class CategoryActivity extends Activity
 				}
 				else
 				{
-					AlertDialog mDialog = new AlertDialog.Builder(CategoryActivity.this)
-							.setTitle("警告")
-							.setMessage(R.string.deleteItemWarning)
-							.setPositiveButton(R.string.confirm,
-									new DialogInterface.OnClickListener()
-									{
-										public void onClick(DialogInterface dialog, int which)
-										{
-											sendDeleteCategoryRequest(category);
-										}
-									}).setNegativeButton(R.string.cancel, null).create();
-					mDialog.show();
+					Builder builder = new Builder(CategoryActivity.this);
+					builder.setTitle(R.string.warning);
+					builder.setMessage(R.string.deleteItemWarning);
+					builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
+												{
+													public void onClick(DialogInterface dialog, int which)
+													{
+														sendDeleteCategoryRequest(category);
+													}
+												});
+					builder.setNegativeButton(R.string.cancel, null);
+					AlertDialog alertDialog = builder.create();
+					alertDialog.show();
 				}
 				break;
 			}
@@ -220,39 +222,44 @@ public class CategoryActivity extends Activity
 			proveAheadCheckBox.setChecked(category.isProveAhead());
 		}
 
-		AlertDialog mDialog = new AlertDialog.Builder(this).setTitle("请输入分类信息").setView(view)
-				.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-				{
-					public void onClick(DialogInterface dialog, int which)
-					{
-						String name = nameEditText.getText().toString();
-						String limit = limitEditText.getText().toString();
-						if (name.equals(""))
-						{
-							Utils.showToast(CategoryActivity.this, "分类名称不能为空");
-						}
-						else
-						{
-							category.setName(name);
-							category.setParentID(0);
-							category.setGroupID(appPreference.getCurrentGroupID());
-							category.setIsProveAhead(proveAheadCheckBox.isChecked());
-							if (!limit.equals(""))
-							{
-								category.setLimit(Double.valueOf(limit));
-							}
-							if (isNewCategory)
-							{
-								sendCreateCategoryRequest(category);
-							}
-							else
-							{
-								sendUpdateCategoryRequest(category);
-							}
-						}
-					}
-				}).setNegativeButton(R.string.cancel, null).create();
-		mDialog.show();
+
+		Builder builder = new Builder(this);
+		builder.setTitle("请输入分类信息");
+		builder.setView(view);
+		builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
+									{
+										public void onClick(DialogInterface dialog, int which)
+										{
+											String name = nameEditText.getText().toString();
+											String limit = limitEditText.getText().toString();
+											if (name.equals(""))
+											{
+												Utils.showToast(CategoryActivity.this, "分类名称不能为空");
+											}
+											else
+											{
+												category.setName(name);
+												category.setParentID(0);
+												category.setGroupID(appPreference.getCurrentGroupID());
+												category.setIsProveAhead(proveAheadCheckBox.isChecked());
+												if (!limit.equals(""))
+												{
+													category.setLimit(Double.valueOf(limit));
+												}
+												if (isNewCategory)
+												{
+													sendCreateCategoryRequest(category);
+												}
+												else
+												{
+													sendUpdateCategoryRequest(category);
+												}
+											}
+										}
+									});
+		builder.setNegativeButton(R.string.cancel, null);
+		AlertDialog alertDialog = builder.create();
+		alertDialog.show();
 	}
 
 	private void sendCreateCategoryRequest(final Category category)

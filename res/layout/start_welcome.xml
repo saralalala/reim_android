@@ -30,9 +30,9 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"        
-        android:background="@drawable/button_long_light"
+        android:background="@drawable/button_long_light_solid_drawable"
         android:text="@string/signUp"
-        android:textColor="@color/major_dark"
+        android:textColor="@color/button_text_color_dark"
         android:textSize="20sp" />
 
     <Button
@@ -43,9 +43,9 @@
         android:layout_marginRight="16dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="36dp"
-        android:background="@drawable/button_long_border"
+        android:background="@drawable/button_long_light_border_drawable"
         android:text="@string/signIn"
-        android:textColor="@color/major_light"
+        android:textColor="@color/button_text_color_light"
         android:textSize="20sp" />
 
 </RelativeLayout>

@@ -37,8 +37,7 @@
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.start.SplashActivity" 
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:name="com.rushucloud.reim.start.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -47,20 +46,17 @@
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.start.NewFeaturesActivity" 
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:name="com.rushucloud.reim.start.NewFeaturesActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.start.WelcomeActivity" 
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:name="com.rushucloud.reim.start.WelcomeActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.start.SignInActivity"
-            android:theme="@android:style/Theme.NoTitleBar"> 
+            android:name="com.rushucloud.reim.start.SignInActivity" > 
         </activity>
         
         <activity 

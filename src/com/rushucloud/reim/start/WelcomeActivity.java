@@ -28,7 +28,7 @@ public class WelcomeActivity extends Activity
 		setContentView(R.layout.start_welcome);
 		
 		exitTime=0;
-		initButton();
+		initView();
 	}
 
 	protected void onResume()
@@ -69,8 +69,10 @@ public class WelcomeActivity extends Activity
         }
     }
 	
-	private void initButton()
+	private void initView()
 	{
+		getActionBar().hide();
+		
 		final Button signUpButton = (Button)findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -84,7 +86,7 @@ public class WelcomeActivity extends Activity
 		{
 			public void onGlobalLayout()
 			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_light);
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_solid_light);
 				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
 				ViewGroup.LayoutParams params = signUpButton.getLayoutParams();
 				params.height = (int)(signUpButton.getWidth() * ratio);;
@@ -106,7 +108,7 @@ public class WelcomeActivity extends Activity
 		{
 			public void onGlobalLayout()
 			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_border);
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_border_light);
 				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
 				ViewGroup.LayoutParams params = signInButton.getLayoutParams();
 				params.height = (int)(signInButton.getWidth() * ratio);;

@@ -5,17 +5,21 @@ import java.util.List;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class ReportTagGridViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
-	private Context context;
+	private Resources resources;
 	private String[] status;
 	private List<Integer> fontColors;
 	private int[] selectedBackgrounds;
@@ -25,6 +29,7 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 	public ReportTagGridViewAdapter(Context context)
 	{
 		layoutInflater = LayoutInflater.from(context);
+		resources = context.getResources();
 		status = context.getResources().getStringArray(R.array.filterStatus);
 		check = new boolean[5];
 		for (int i = 0; i < 5; i++)
@@ -46,36 +51,26 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 				 						   R.drawable.report_tag_rejected_unselected, R.drawable.report_tag_finished_unselected };
 	}
 
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		if (position == 0)
-		{
-			View view = layoutInflater.inflate(R.layout.grid_report_tag_draft, parent, false);
-			
-//			TextView statusTextView = (TextView)view.findViewById(R.id.statusTextView);
-//			statusTextView.setText(status[position]);
-//			
-//			if (check[position])
-//			{
-//				statusTextView.setTextColor(Color.WHITE);
-//				statusTextView.setBackgroundResource(selectedBackgrounds[position]);
-//			}
-//			else
-//			{
-//				statusTextView.setTextColor(fontColors[position]);
-//				statusTextView.setBackgroundResource(unselectedBackgrounds[position]);
-//			}
-			
-			return view;
-		}
-		
+	public View getView(final int position, View convertView, ViewGroup parent)
+	{		
 		if (convertView == null)
 		{
 			convertView = layoutInflater.inflate(R.layout.grid_report_tag, parent, false);
 		}
 		
-		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
+		final TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
 		statusTextView.setText(status[position]);
+		statusTextView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				Bitmap bitmap = BitmapFactory.decodeResource(resources, selectedBackgrounds[position]);
+				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+				ViewGroup.LayoutParams params = statusTextView.getLayoutParams();
+				params.height = (int)(statusTextView.getWidth() * ratio);;
+				statusTextView.setLayoutParams(params);
+			}
+		});
 		
 		if (check[position])
 		{

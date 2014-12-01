@@ -11,8 +11,8 @@ import classes.Utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -103,72 +103,82 @@ public class ChangePasswordActivity extends Activity
 		final String confirmPassword = confirmPasswordEditText.getText().toString();
 		if (oldPassword.equals(""))
 		{
-			AlertDialog alertDialog = new AlertDialog.Builder(ChangePasswordActivity.this)
-										.setTitle("错误").setMessage("旧密码不能为空！请重新输入")
-										.setPositiveButton("确定", new OnClickListener()
+			Builder builder = new Builder(ChangePasswordActivity.this);
+			builder.setTitle(R.string.error);
+			builder.setMessage("旧密码不能为空！请重新输入");
+			builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
 										{
 											public void onClick(DialogInterface dialog, int which)
 											{
-												dialog.dismiss();
 												oldPasswordEditText.requestFocus();
 											}
-										}).create();
+										});
+			builder.setNegativeButton(R.string.cancel, null);
+			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
 		}
 		else if (newPassword.equals(""))
 		{
-			AlertDialog alertDialog = new AlertDialog.Builder(ChangePasswordActivity.this)
-										.setTitle("错误").setMessage("新密码不能为空！请重新输入")
-										.setPositiveButton("确定", new OnClickListener()
+			Builder builder = new Builder(ChangePasswordActivity.this);
+			builder.setTitle(R.string.error);
+			builder.setMessage("新密码不能为空！请重新输入");
+			builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
 										{
 											public void onClick(DialogInterface dialog, int which)
 											{
-												dialog.dismiss();
 												newPasswordEditText.requestFocus();
 											}
-										}).create();
+										});
+			builder.setNegativeButton(R.string.cancel, null);
+			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
 		}
 		else if (confirmPassword.equals(""))
 		{
-			AlertDialog alertDialog = new AlertDialog.Builder(ChangePasswordActivity.this)
-										.setTitle("错误").setMessage("确认密码不能为空！请重新输入")
-										.setPositiveButton("确定", new OnClickListener()
+			Builder builder = new Builder(ChangePasswordActivity.this);
+			builder.setTitle(R.string.error);
+			builder.setMessage("确认密码不能为空！请重新输入");
+			builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
 										{
 											public void onClick(DialogInterface dialog, int which)
 											{
-												dialog.dismiss();
 												confirmPasswordEditText.requestFocus();
 											}
-										}).create();
+										});
+			builder.setNegativeButton(R.string.cancel, null);
+			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
 		}
 		else if (!confirmPassword.equals(newPassword))
 		{
-			AlertDialog alertDialog = new AlertDialog.Builder(ChangePasswordActivity.this)
-										.setTitle("错误").setMessage("新密码两次输入不一致！请重新输入")
-										.setPositiveButton("确定", new OnClickListener()
+			Builder builder = new Builder(ChangePasswordActivity.this);
+			builder.setTitle(R.string.error);
+			builder.setMessage("新密码两次输入不一致！请重新输入");
+			builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
 										{
 											public void onClick(DialogInterface dialog, int which)
 											{
-												dialog.dismiss();
 												confirmPasswordEditText.requestFocus();
 											}
-										}).create();
+										});
+			builder.setNegativeButton(R.string.cancel, null);
+			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
 		}
 		else if (!oldPassword.equals(appPreference.getPassword()))
 		{
-			AlertDialog alertDialog = new AlertDialog.Builder(ChangePasswordActivity.this)
-										.setTitle("错误").setMessage("旧密码输入错误！请重新输入")
-										.setPositiveButton("确定", new OnClickListener()
+			Builder builder = new Builder(ChangePasswordActivity.this);
+			builder.setTitle(R.string.error);
+			builder.setMessage("旧密码输入错误！请重新输入");
+			builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
 										{
 											public void onClick(DialogInterface dialog, int which)
 											{
-												dialog.dismiss();
 												oldPasswordEditText.requestFocus();
 											}
-										}).create();
+										});
+			builder.setNegativeButton(R.string.cancel, null);
+			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
 		}
 		else
@@ -188,18 +198,19 @@ public class ChangePasswordActivity extends Activity
 						{
 							public void run()
 							{
-								AlertDialog alertDialog = new AlertDialog.Builder(ChangePasswordActivity.this)
-															.setTitle("提示")
-															.setMessage("密码修改成功！")
-															.setPositiveButton("确定", new OnClickListener()
+								Builder builder = new Builder(ChangePasswordActivity.this);
+								builder.setTitle(R.string.tip);
+								builder.setMessage("密码修改成功！");
+								builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
 															{
 																public void onClick(DialogInterface dialog, int which)
 																{
-																	dialog.dismiss();
 																	finish();
 																}
-															}).create();
-								alertDialog.show();									
+															});
+								builder.setNegativeButton(R.string.cancel, null);
+								AlertDialog alertDialog = builder.create();
+								alertDialog.show();
 							}
 						});					
 					}
