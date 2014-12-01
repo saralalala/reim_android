@@ -150,7 +150,7 @@ public class EditItemActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			goBack();
+			finish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -693,35 +693,43 @@ public class EditItemActivity extends Activity
 				if (userList.size() > 0)
 				{
 					final boolean[] check = User.getUsersCheck(userList, item.getRelevantUsers());
-					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-														.setTitle(R.string.member)
-														.setMultiChoiceItems(User.getUsersName(userList), 
-																check, new DialogInterface.OnMultiChoiceClickListener()
+					
+					final MemberListViewAdapter memberAdapter = new MemberListViewAdapter(EditItemActivity.this, userList, check);
+			    	View view = View.inflate(EditItemActivity.this, R.layout.me_member, null);
+			    	ListView userListView = (ListView) view.findViewById(R.id.userListView);
+			    	userListView.setAdapter(memberAdapter);
+			    	userListView.setOnItemClickListener(new OnItemClickListener()
+					{
+						public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+						{
+							check[position] = !check[position];
+							memberAdapter.setCheck(check);
+							memberAdapter.notifyDataSetChanged();
+						}
+					});
+
+			    	AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+			    							.setTitle(R.string.member)
+			    							.setView(view)
+			    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													List<User> users = new ArrayList<User>();
+													for (int i = 0; i < userList.size(); i++)
+													{
+														if (check[i])
 														{
-															public void onClick(DialogInterface dialog, int which, boolean isChecked)
-															{
-																check[which] = isChecked;
-															}
-														})
-														.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																List<User> users = new ArrayList<User>();
-																for (int i = 0; i < userList.size(); i++)
-																{
-																	if (check[i])
-																	{
-																		users.add(userList.get(i));
-																	}
-																}
-																item.setRelevantUsers(users);
-																memberTextView.setText(User.getUsersNameString(users));
-															}
-														})
-														.setNegativeButton(R.string.cancel, null)
-														.create();
-					mDialog.show();					
+															users.add(userList.get(i));
+														}
+													}
+													item.setRelevantUsers(users);
+													memberTextView.setText(User.getUsersNameString(users));
+												}
+											})
+											.setNegativeButton(R.string.cancel, null)
+											.create();
+			    	mDialog.show();
 				}
 				else
 				{
@@ -809,7 +817,7 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				goBack();
+				finish();
 			}
 		});
 	}
@@ -837,7 +845,7 @@ public class EditItemActivity extends Activity
     	if (dbManager.syncItem(item))
 		{
 			Utils.showToast(EditItemActivity.this, "条目保存成功");
-			goBack();
+			finish();
 		}
 		else
 		{
@@ -857,7 +865,7 @@ public class EditItemActivity extends Activity
 		final boolean[] managerCheckList = User.getUsersCheck(memberList, tempList);
 		
 		final MemberListViewAdapter memberAdapter = new MemberListViewAdapter(this, memberList, managerCheckList);
-    	View view = View.inflate(this, R.layout.me_user, null);
+    	View view = View.inflate(this, R.layout.me_member, null);
     	ListView userListView = (ListView) view.findViewById(R.id.userListView);
     	userListView.setAdapter(memberAdapter);
     	userListView.setOnItemClickListener(new OnItemClickListener()
@@ -1110,7 +1118,7 @@ public class EditItemActivity extends Activity
 						{
 							ReimApplication.dismissProgressDialog();
 							Utils.showToast(EditItemActivity.this, "创建审批报告成功");
-							goBack();
+							finish();
 						}
 					});					
 				}
@@ -1123,7 +1131,7 @@ public class EditItemActivity extends Activity
 						{
 							ReimApplication.dismissProgressDialog();
 							Utils.showToast(EditItemActivity.this, "创建审批报告失败");
-							goBack();
+							finish();
 						}
 					});								
 				}
@@ -1307,20 +1315,4 @@ public class EditItemActivity extends Activity
     		}
     	}
     }
-
-	private void goBack()
-	{
-		if (fromReim)
-		{
-	    	ReimApplication.setTabIndex(0);
-	    	Intent intent = new Intent(EditItemActivity.this, MainActivity.class);
-	    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	    	startActivity(intent);
-	    	finish();
-		}
-		else
-		{
-			finish();
-		}
-	}
 }

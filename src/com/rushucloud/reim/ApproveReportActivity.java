@@ -92,7 +92,7 @@ public class ApproveReportActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			goBackToMainActivity();
+			finish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -333,7 +333,7 @@ public class ApproveReportActivity extends Activity
 													{
 														public void onClick(DialogInterface dialog, int which)
 														{
-															goBackToMainActivity();
+															finish();
 														}
 													})
 													.create();
@@ -366,7 +366,7 @@ public class ApproveReportActivity extends Activity
 												{
 													public void onClick(DialogInterface dialog, int which)
 													{
-														goBackToMainActivity();
+														finish();
 													}
 												})
 												.create();
@@ -588,7 +588,7 @@ public class ApproveReportActivity extends Activity
 												{
 													public void onClick(DialogInterface dialog, int which)
 													{
-														goBackToMainActivity();
+														finish();
 													}
 												})
 												.create();
@@ -610,12 +610,5 @@ public class ApproveReportActivity extends Activity
 				}
 			}
 		});
-    }
-
-    private void goBackToMainActivity()
-    {
-    	ReimApplication.setTabIndex(1);
-    	ReimApplication.setReportTabIndex(1);
-    	finish();
     }
 }

@@ -100,7 +100,7 @@ public class EditReportActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			goBackToMainActivity();
+			finish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -351,7 +351,7 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				goBackToMainActivity();
+				finish();
 			}
 		});
 	}
@@ -428,7 +428,7 @@ public class EditReportActivity extends Activity
 		}
 		
     	memberAdapter = new MemberListViewAdapter(this, userList, managerCheckList);
-    	View view = View.inflate(this, R.layout.me_user, null);
+    	View view = View.inflate(this, R.layout.me_member, null);
     	ListView userListView = (ListView) view.findViewById(R.id.userListView);
     	userListView.setAdapter(memberAdapter);
     	userListView.setOnItemClickListener(new OnItemClickListener()
@@ -474,7 +474,7 @@ public class EditReportActivity extends Activity
     	ccCheckList = User.getUsersCheck(userList, report.getCCList());
 		
     	memberAdapter = new MemberListViewAdapter(this, userList, ccCheckList);
-    	View view = View.inflate(this, R.layout.me_user, null);
+    	View view = View.inflate(this, R.layout.me_member, null);
     	ListView userListView = (ListView) view.findViewById(R.id.userListView);
     	userListView.setAdapter(memberAdapter);
     	userListView.setOnItemClickListener(new OnItemClickListener()
@@ -543,7 +543,7 @@ public class EditReportActivity extends Activity
 				});
 			}
 			Utils.showToast(EditReportActivity.this, "报告保存成功");
-			goBackToMainActivity();
+			finish();
 		}
 		else
 		{
@@ -592,7 +592,7 @@ public class EditReportActivity extends Activity
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
-													goBackToMainActivity();
+													finish();
 												}
 											})
 											.create();
@@ -609,7 +609,7 @@ public class EditReportActivity extends Activity
 										{
 											public void onClick(DialogInterface dialog, int which)
 											{
-												goBackToMainActivity();
+												finish();
 											}
 										})
 										.create();
@@ -845,12 +845,5 @@ public class EditReportActivity extends Activity
 				}
 			}
 		});
-    }
-
-    private void goBackToMainActivity()
-    {
-    	ReimApplication.setTabIndex(1);
-    	ReimApplication.setReportTabIndex(0);
-    	finish();
     }
 }

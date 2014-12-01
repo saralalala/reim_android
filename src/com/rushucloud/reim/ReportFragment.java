@@ -235,9 +235,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 			appPreference = AppPreference.getAppPreference();
 		}
 		
-		ReimApplication.setTabIndex(1);
-		ReimApplication.setReportTabIndex(0);
-		
 		mineList.addAll(readMineReportList());
 		showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
     }

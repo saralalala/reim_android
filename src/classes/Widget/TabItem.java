@@ -1,5 +1,7 @@
 package classes.Widget;
 
+import classes.ReimApplication;
+
 import com.rushucloud.reim.R;
 
 import android.content.Context;
@@ -10,7 +12,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Looper;
@@ -24,11 +25,13 @@ public class TabItem extends View
 	private static final String INSTANCE_STATE = "instance_state";
 	private static final String STATE_ALPHA = "state_alpha";
 
-	private static final int leftPadding = 20;
-	private static final int rightadding = 20;
-	private static final int topPadding = 6;
-	private static final int centralPadding = 4;
-	private static final int bottomPadding = 0;
+	private final int leftPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
+	private final int rightPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
+	private final int topPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());;
+	private final int centralPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
+	private final int bottomPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
+	
+	private final int defaultTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics());
 
 	private float alpha = 0;
 	private Bitmap iconSelected;
@@ -36,7 +39,7 @@ public class TabItem extends View
 	private Paint iconPaint = new Paint();
 	private Rect iconRect = new Rect();
 	private String text;
-	private int textSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics());
+	private int textSize;
 	private int textColorSelected;
 	private int textColorNotSelected;
 	private Paint textPaint = new Paint();
@@ -77,8 +80,7 @@ public class TabItem extends View
 				}
 				case R.styleable.TabItemView_text_size:
 				{
-					textSize = (int) array.getDimension(attr, TypedValue.applyDimension(
-							TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
+					textSize = (int) array.getDimension(attr, defaultTextSize);
 					break;
 				}
 				case R.styleable.TabItemView_text_color_selected:
@@ -95,9 +97,8 @@ public class TabItem extends View
 		}
 		array.recycle();
 		
-		Typeface typeFace = Typeface.create("monospace",Typeface.NORMAL);
 		textPaint.setTextSize(textSize);
-		textPaint.setTypeface(typeFace);
+		textPaint.setTypeface(ReimApplication.getReimTypeface());
 		textPaint.setColor(textColorNotSelected);
 		textPaint.setAntiAlias(true);
 		textPaint.getTextBounds(text, 0, text.length(), textRect);
@@ -128,16 +129,34 @@ public class TabItem extends View
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//		int bitmapWidth = Math.min(getMeasuredWidth() - getPaddingLeft() - getPaddingRight() - 40, 
-//				getMeasuredHeight() - getPaddingTop() - getPaddingBottom() - textRect.height() - 20);
 
-		int bitmapWidth = Math.min(getMeasuredWidth() - leftPadding - rightadding, 
-									getMeasuredHeight() - textRect.height() - topPadding - centralPadding - bottomPadding);
+		int maxWidth = getMeasuredWidth() - leftPadding - rightPadding;
+		int maxHeight = getMeasuredHeight() - textRect.height() - topPadding - centralPadding - bottomPadding;
+		
+		if (maxWidth > maxHeight)
+		{
+			int sideLength = maxHeight;
+			int left = getMeasuredWidth() / 2 - sideLength / 2;
+			int top = topPadding;
 
-		int left = getMeasuredWidth() / 2 - bitmapWidth / 2;
-		int top = (getMeasuredHeight() - textRect.height()) / 2 - bitmapWidth / 2;
+			iconRect.set(left, top, left + sideLength, top + sideLength);
+		}
+		else
+		{
+			int sideLength = maxWidth;
+			int left = getMeasuredWidth() / 2 - sideLength / 2;
+			int top = topPadding + maxHeight / 2 - sideLength / 2;
 
-		iconRect.set(left + topPadding / 2, top + topPadding, left + bitmapWidth - topPadding / 2, top + bitmapWidth);
+			iconRect.set(left, top, left + sideLength, top + sideLength);
+		}
+		
+		int textWidth = textRect.width();
+		int textHeight = textRect.height();
+		
+		int left = getMeasuredWidth() / 2 - textWidth / 2;
+		int top = getMeasuredHeight() - bottomPadding - textHeight;
+		
+		textRect.set(left, top, left + textWidth, top + textHeight);		
 	}
 
 	protected void onDraw(Canvas canvas)
@@ -166,8 +185,8 @@ public class TabItem extends View
 		textPaint.setTextSize(textSize);
 		textPaint.setColor(textColorNotSelected);
 		textPaint.setAlpha(255 - alpha);
-		canvas.drawText(text, iconRect.left + iconRect.width() / 2 - textRect.width() / 2,
-				iconRect.bottom + centralPadding + textRect.height(), textPaint);
+		
+		canvas.drawText(text, textRect.left, textRect.bottom, textPaint);
 	}
 	
 	private void drawDstText(Canvas canvas, int alpha)
@@ -175,8 +194,7 @@ public class TabItem extends View
 		textPaint.setColor(textColorSelected);
 		textPaint.setAlpha(alpha);
 		
-		canvas.drawText(text, iconRect.left + iconRect.width() / 2 - textRect.width() / 2,
-				iconRect.bottom + centralPadding + textRect.height(), textPaint);		
+		canvas.drawText(text, textRect.left, textRect.bottom, textPaint);	
 	}
 
 	private void invalidateView()

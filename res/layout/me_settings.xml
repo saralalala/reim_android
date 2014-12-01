@@ -37,6 +37,7 @@
         android:layout_height="152.5dp"
         android:layout_marginTop="18dp"
 	    android:background="@android:color/white"
+		android:scrollbars="none"
 	    android:headerDividersEnabled="true"
 		android:footerDividersEnabled="true"
 		android:divider="@color/list_divider"

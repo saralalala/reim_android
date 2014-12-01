@@ -132,9 +132,21 @@ public class Utils
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis((long)second * 1000);
 		String result = "";
-		result += calendar.get(Calendar.YEAR) + "年";
-		result += (calendar.get(Calendar.MONTH) + 1) + "月";
-		result += calendar.get(Calendar.DAY_OF_MONTH) + "日 ";
+		result += calendar.get(Calendar.YEAR) + "-";
+		
+		int month = calendar.get(Calendar.MONTH) + 1;
+		if (month < 10)
+		{
+			result += "0";			
+		}
+		result += month + "-";
+		
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		if (day < 10)
+		{
+			result += "0";			
+		}
+		result += day + "  ";
 		
 		if (calendar.get(Calendar.HOUR_OF_DAY) < 10)
 		{
@@ -242,36 +254,6 @@ public class Utils
     
     public static String getImageName()
     {
-//    	int time = Utils.getCurrentTime();
-//    	
-//    	Calendar calendar = Calendar.getInstance();
-//		calendar.setTimeInMillis((long)time * 1000);
-//		String result = "";
-//		result += calendar.get(Calendar.YEAR);
-//		
-//		if (calendar.get(Calendar.MONTH)+1 < 10)
-//		{
-//			result += "0";			
-//		}
-//		result += (calendar.get(Calendar.MONTH) + 1);
-//		
-//		if (calendar.get(Calendar.DAY_OF_MONTH) < 10)
-//		{
-//			result += "0";			
-//		}
-//		result += calendar.get(Calendar.DAY_OF_MONTH);
-//		
-//		if (calendar.get(Calendar.HOUR_OF_DAY) < 10)
-//		{
-//			result += "0";			
-//		}
-//		result += calendar.get(Calendar.HOUR_OF_DAY);	
-//		
-//		if (calendar.get(Calendar.MINUTE) < 10)
-//		{
-//			result += "0";			
-//		}
-//		result += calendar.get(Calendar.MINUTE) + ".jpg";
 		
 		long currentTime = new Date().getTime();
 		

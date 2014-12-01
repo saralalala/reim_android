@@ -340,7 +340,6 @@ public class ShowReportActivity extends Activity
     private void goBackToMainActivity()
     {
     	int reportTabIndex = myReport ? 0 : 1;
-    	ReimApplication.setTabIndex(1);
     	ReimApplication.setReportTabIndex(reportTabIndex);
     	finish();
     }

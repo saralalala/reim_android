@@ -25,10 +25,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -48,7 +48,7 @@ public class ManagerActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_user);
+		setContentView(R.layout.me_default_manager);
 		initView();
 	}
 
@@ -83,43 +83,6 @@ public class ManagerActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.save, menu);
-		return true;
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-		int id = item.getItemId();
-		if (id == R.id.action_save_item)
-		{
-			MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_CHANGE_USERINFO");
-			if (!Utils.isNetworkConnected())
-			{
-				Utils.showToast(this, "网络未连接，无法保存");
-			}
-			else if (lastIndex == -1)
-			{
-				sendDefaultManagerRequest(-1);			
-			}
-			else if (userList.get(lastIndex).getServerID() == currentUser.getServerID())
-			{
-				Utils.showToast(this, "不能选择自己作为上级");				
-			}
-			else if (userList.get(lastIndex).getServerID() == currentUser.getDefaultManagerID())
-			{
-				Utils.showToast(this, "与原有默认上级相同，无需保存");				
-			}
-			else
-			{
-				sendDefaultManagerRequest(userList.get(lastIndex).getServerID());
-			}
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 	
 	private void initData()
 	{
@@ -148,7 +111,46 @@ public class ManagerActivity extends Activity
 	
 	private void initView()
 	{		
+		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
+		
+		TextView cancelTextView = (TextView)findViewById(R.id.cancelTextView);
+		cancelTextView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});
+		
+		TextView confirmTextView = (TextView)findViewById(R.id.confirmTextView);
+		confirmTextView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_CHANGE_USERINFO");
+				if (!Utils.isNetworkConnected())
+				{
+					Utils.showToast(ManagerActivity.this, "网络未连接，无法保存");
+				}
+				else if (lastIndex == -1)
+				{
+					sendDefaultManagerRequest(-1);			
+				}
+				else if (userList.get(lastIndex).getServerID() == currentUser.getServerID())
+				{
+					Utils.showToast(ManagerActivity.this, "不能选择自己作为上级");				
+				}
+				else if (userList.get(lastIndex).getServerID() == currentUser.getDefaultManagerID())
+				{
+					Utils.showToast(ManagerActivity.this, "与原有默认上级相同，无需保存");				
+				}
+				else
+				{
+					sendDefaultManagerRequest(userList.get(lastIndex).getServerID());
+				}
+			}
+		});
 		
 		managerListView = (ListView)findViewById(R.id.userListView);
 		managerListView.setOnItemClickListener(new OnItemClickListener()

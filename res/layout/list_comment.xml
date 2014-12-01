@@ -1,50 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:reim="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"
-    android:background="@drawable/list_item_drawable" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_item_drawable"
+    android:orientation="horizontal" >
 
     <RelativeLayout
         android:id="@+id/reviewerLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp" >
 
-        <ImageView
+        <classes.Widget.CircleImageView
             android:id="@+id/avatarImageView"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
             android:contentDescription="@string/avatar"
-            android:src="@drawable/default_avatar" />
+            android:src="@drawable/default_avatar"
+       	 	reim:border_width="0dp" />
 
-	    <TextView
-	        android:id="@+id/reviewerTextView"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerVertical="true"
-	        android:layout_toRightOf="@+id/avatarImageView"
-	        android:paddingLeft="5dp"
-	        android:textColor="#FF000000"
-	        android:textSize="13sp" />
+        <TextView
+            android:id="@+id/reviewerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/avatarImageView"
+			android:layout_marginTop="8dp"
+            android:textColor="@color/font_major_dark"
+            android:textSize="14sp" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/commentTextView"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/reviewerLayout"
-        android:layout_below="@+id/reviewerLayout"
-        android:paddingTop="5dp"
-        android:textColor="#FF000000"
-        android:textSize="22sp" />
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="16dp" >
 
-    <TextView
-        android:id="@+id/dateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/commentTextView"
-        android:textColor="#FF000000"
-        android:textSize="13sp" />
+        <TextView
+            android:id="@+id/commentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/commentTextView"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/hint_light_grey"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

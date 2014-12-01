@@ -21,12 +21,16 @@ public class MemberListViewAdapter extends BaseAdapter
 	private LayoutInflater layoutInflater;
 	private List<User> memberList;
 	private boolean[] check;
+	private int selectedColor;
+	private int unselectedColor;
 	
 	public MemberListViewAdapter(Context context, List<User> userList, boolean[] checkList)
 	{
 		layoutInflater = LayoutInflater.from(context);
 		memberList = new ArrayList<User>(userList);
 		check = checkList;
+		selectedColor = context.getResources().getColor(R.color.major_dark);
+		unselectedColor = context.getResources().getColor(R.color.font_major_dark);
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -58,8 +62,8 @@ public class MemberListViewAdapter extends BaseAdapter
 			nicknameTextView.setText(user.getNickname());			
 		}
 
-		int color = check[position] ? R.color.list_item_selected : R.color.list_item_unselected;
-		convertView.setBackgroundResource(color);
+		int color = check[position] ? selectedColor : unselectedColor;
+		nicknameTextView.setTextColor(color);
 		
 		return convertView;
 	}

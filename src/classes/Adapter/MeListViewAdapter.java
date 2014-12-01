@@ -2,7 +2,6 @@ package classes.Adapter;
 
 import classes.AppPreference;
 import classes.Group;
-import classes.ReimApplication;
 import classes.User;
 import classes.Widget.CircleImageView;
 
@@ -60,7 +59,6 @@ public class MeListViewAdapter extends BaseAdapter
 				{
 					if (currentUser != null && !currentUser.getAvatarPath().equals(""))
 					{
-						ReimApplication.setTabIndex(3);
 						Intent intent = new Intent(fragment.getActivity(), ImageActivity.class);
 						intent.putExtra("imagePath", currentUser.getAvatarPath());
 						fragment.getActivity().startActivity(intent);

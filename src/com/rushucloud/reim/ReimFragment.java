@@ -261,7 +261,6 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 					{
 						Intent intent = new Intent(getActivity(), ShowItemActivity.class);
 						intent.putExtra("itemLocalID", item.getLocalID());
-						intent.putExtra("fromReim", true);
 						startActivity(intent);
 					}
 				}
@@ -291,7 +290,6 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 				{
 					MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
 					Intent intent = new Intent(getActivity(), SearchItemActivity.class);
-					intent.putExtra("fromReim", true);
 					startActivity(intent);
 				}
 			});

@@ -138,7 +138,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			public void onPageSelected(int arg0)
 			{
-				
+				ReimApplication.setTabIndex(arg0);
 			}
 			
 			public void onPageScrolled(int arg0, float arg1, int arg2)

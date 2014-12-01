@@ -10,12 +10,10 @@ import netUtils.Response.Item.SearchItemsResponse;
 
 import classes.AppPreference;
 import classes.Item;
-import classes.ReimApplication;
 import classes.Report;
 import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -38,7 +36,6 @@ public class SearchItemActivity extends Activity
 	private ItemListViewAdapter adapter;
 	
 	private List<Item> itemList = null;
-	private boolean fromReim;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -67,12 +64,11 @@ public class SearchItemActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			goBack();
+			finish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@SuppressLint("NewApi") 
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		getMenuInflater().inflate(R.menu.searchview, menu);
@@ -110,7 +106,7 @@ public class SearchItemActivity extends Activity
 		int id = item.getItemId();
 		if (id == android.R.id.home)
 		{
-			goBack();
+			finish();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -120,7 +116,6 @@ public class SearchItemActivity extends Activity
 	{
 		DBManager dbManager = DBManager.getDBManager();
 		itemList = dbManager.getUserItems(AppPreference.getAppPreference().getCurrentUserID());
-		fromReim = getIntent().getBooleanExtra("fromReim", false);
 	}
 	
 	private void initView()
@@ -204,21 +199,5 @@ public class SearchItemActivity extends Activity
 				}
 			}
 		});
-	}
-	
-	private void goBack()
-	{
-		if (fromReim)
-		{
-	    	ReimApplication.setTabIndex(0);
-	    	Intent intent = new Intent(SearchItemActivity.this, MainActivity.class);
-	    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	    	startActivity(intent);
-	    	finish();
-		}
-		else
-		{
-			finish();
-		}
 	}
 }

@@ -49,6 +49,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				notification.flags |= Notification.FLAG_AUTO_CANCEL;
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 
 																PendingIntent.FLAG_UPDATE_CURRENT);
+				
 				notification.setLatestEventInfo(context, "如数云报销", message, pendingIntent);
 
 				if (manager == null)
@@ -70,9 +71,11 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					}		
 					case TYPE_REPORT:
 					{
+						ReimApplication.setTabIndex(1);
 						int status = jObject.getInt("status");
 						if (status == 1)
 						{
+							ReimApplication.setReportTabIndex(1);
 							Intent newIntent = new Intent(context, ApproveReportActivity.class);
 							newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 							newIntent.putExtra("reportServerID", jObject.getInt("args"));
@@ -80,7 +83,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 						}
 						else 
 						{
-							ReimApplication.setTabIndex(1);
+							ReimApplication.setReportTabIndex(1);
 							Intent newIntent = new Intent(context, MainActivity.class);
 							newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 							newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

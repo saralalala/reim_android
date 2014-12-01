@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import classes.Item;
+import classes.ReimApplication;
 import classes.Tag;
 import classes.User;
 import classes.Utils;
@@ -78,7 +79,9 @@ public class ItemListViewAdapter extends BaseAdapter
 			statusTextView.setVisibility(View.INVISIBLE);					
 		}
 
-		String amount = "￥" + Utils.formatDouble(item.getAmount());
+//		String amount = "￥" + Utils.formatDouble(item.getAmount());
+		String amount = Utils.formatDouble(item.getAmount());
+		amountTextView.setTypeface(ReimApplication.getTypefaceAleo());
 		amountTextView.setText(amount);
 
 		String vendor = item.getMerchant().equals("") ? "N/A" : item.getMerchant();

@@ -287,7 +287,6 @@ public class MeFragment extends Fragment
 						break;
 //					case 4:
 //						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
-//						ReimApplication.setTabIndex(3);
 //						showShareDialog();
 //						break;
 					default:
@@ -624,7 +623,7 @@ public class MeFragment extends Fragment
     		
     		public void onComplete(SHARE_MEDIA platform, int stCode, SocializeEntity entity)
     		{
-    			goBackToMainActivity();
+    			
     		}
     	});
     	
@@ -650,14 +649,5 @@ public class MeFragment extends Fragment
 		{
 			e.printStackTrace();
 		}
-    }
-    
-    private void goBackToMainActivity()
-    {
-    	ReimApplication.setTabIndex(3);
-    	Intent intent = new Intent(getActivity(), MainActivity.class);
-    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	startActivity(intent);
-    	getActivity().finish();    	
     }
 }

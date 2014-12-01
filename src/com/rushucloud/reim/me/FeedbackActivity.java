@@ -4,7 +4,6 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.FeedbackRequest;
 import netUtils.Response.FeedbackResponse;
 
-import classes.ReimApplication;
 import classes.Utils;
 
 import com.rushucloud.reim.R;
@@ -53,7 +52,7 @@ public class FeedbackActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			goBackToMainActivity();
+			finish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -100,7 +99,7 @@ public class FeedbackActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				goBackToMainActivity();
+				finish();
 			}
 		});	
 	}
@@ -153,7 +152,7 @@ public class FeedbackActivity extends Activity
 																{
 																	public void onClick(DialogInterface dialog, int which)
 																	{
-																		goBackToMainActivity();
+																		finish();
 																	}
 																})
 																.create();
@@ -172,11 +171,5 @@ public class FeedbackActivity extends Activity
 				});
 			}
 		});
-    }
-
-    private void goBackToMainActivity()
-    {
-    	ReimApplication.setTabIndex(3);
-    	finish();
     }
 }

@@ -1,6 +1,8 @@
 package classes;
 
 import java.io.File;
+import java.lang.reflect.Field;
+
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.PushService;
@@ -14,6 +16,7 @@ import database.DBManager;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Environment;
 import android.text.TextUtils;
 
@@ -21,6 +24,10 @@ public class ReimApplication extends Application
 {
 	private static ProgressDialog pDialog;
 	private static Context context;
+	
+	private static Typeface typefaceYaHei;
+	private static Typeface typefaceAleo;
+	
 	private static int tabIndex = 0;
 	private static int reportTabIndex = 0;
 	
@@ -37,6 +44,16 @@ public class ReimApplication extends Application
 		System.out.println("**************** Application Started *****************");
 		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
 //		System.out.println(getDeviceInfo(this));
+	}
+
+	public static Typeface getReimTypeface()
+	{
+		return typefaceYaHei;
+	}
+
+	public static Typeface getTypefaceAleo()
+	{
+		return typefaceAleo;
 	}
 
 	public static int getTabIndex()
@@ -170,6 +187,23 @@ public class ReimApplication extends Application
 		AppPreference.createAppPreference(getApplicationContext());
 		DBManager.createDBManager(getApplicationContext());
 		context = getApplicationContext();
+		typefaceYaHei = Typeface.createFromAsset(getAssets(), "fonts/YaHei.ttf");
+		typefaceAleo = Typeface.createFromAsset(getAssets(), "fonts/Aleo_Light.ttf");
+		
+		try
+		{
+			Field field = Typeface.class.getDeclaredField("DEFAULT");
+			field.setAccessible(true);
+			field.set(null, typefaceYaHei);
+		}
+		catch (NoSuchFieldException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	private void initMeChat()

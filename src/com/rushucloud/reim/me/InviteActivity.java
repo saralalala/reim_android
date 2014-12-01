@@ -70,7 +70,7 @@ public class InviteActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			goBackToMainActivity();
+			finish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -150,7 +150,7 @@ public class InviteActivity extends Activity
 														{
 															public void onClick(DialogInterface dialog, int which)
 															{
-																goBackToMainActivity();
+																finish();
 															}
 														})
 														.create();
@@ -160,11 +160,5 @@ public class InviteActivity extends Activity
 				}
 			}
 		});
-    }
-
-    private void goBackToMainActivity()
-    {
-    	ReimApplication.setTabIndex(3);
-    	finish();
     }
 }
