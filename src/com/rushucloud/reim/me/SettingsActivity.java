@@ -54,7 +54,7 @@ public class SettingsActivity extends Activity
 
 		getActionBar().hide();
 
-        View divider = getLayoutInflater().inflate(R.layout.divider, null);
+        View divider = getLayoutInflater().inflate(R.layout.list_divider, null);
         
 		SettingsListViewAdapter settingsAdapter = new SettingsListViewAdapter(this);
 		ListView settingsListView = (ListView)findViewById(R.id.settingsListView);

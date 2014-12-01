@@ -5,55 +5,133 @@
     android:orientation="vertical"
     android:id="@+id/phoneBaseLayout" >
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:contentDescription="@string/background"
+        android:scaleType="fitXY"
+        android:src="@drawable/start_background" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp" >
+
+        <ImageView
+            android:id="@+id/filterImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/filter"
+            android:src="@drawable/filter" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/findPasswordByPhone"
+            android:textSize="20sp"
+            android:textColor="@color/major_light" />
+
+    </RelativeLayout>
+
     <EditText
         android:id="@+id/mobileEditText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="190dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="21dp"
+        android:layout_marginRight="16dp"
         android:hint="@string/inputPhone"
-        android:inputType="text|phone" >
+        android:inputType="text|phone"
+        android:textColor="@color/font_major_light"
+        android:textColorHint="@color/hint_white" 
+        android:background="@null"
+        android:cursorVisible="true"
+        android:textCursorDrawable="@drawable/cursor" >
 
         <requestFocus />
     </EditText>
+
+    <include 
+        android:id="@+id/mobileDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/mobileEditText"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        layout="@layout/start_divider"/>
 
     <EditText
         android:id="@+id/codeEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/mobileEditText"
-        android:layout_below="@+id/mobileEditText"
-        android:layout_marginTop="35dp"
+        android:layout_alignRight="@+id/mobileEditText"
+        android:layout_below="@+id/mobileDivider"
+        android:layout_marginTop="12dp"
         android:hint="@string/inputCode"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress" 
+        android:textColor="@color/font_major_light"
+        android:textColorHint="@color/hint_white" 
+        android:background="@null"
+        android:cursorVisible="true"
+        android:textCursorDrawable="@drawable/cursor" />
 
     <Button
         android:id="@+id/acquireCodeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/mobileEditText"
-        android:layout_alignBottom="@+id/mobileEditText"
-        android:layout_toRightOf="@+id/mobileEditText"
-        android:text="@string/acquireCode" />
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/codeEditText"
+        android:layout_alignBottom="@+id/codeEditText"
+		android:layout_below="@+id/mobileDivider"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="-6dp"
+        android:layout_marginBottom="-6dp"
+        android:background="@drawable/button_short"
+        android:text="@string/acquireCode"
+        android:textColor="@color/major_dark" />
+
+    <include 
+        android:id="@+id/codeDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/codeEditText"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        layout="@layout/start_divider"/>
 
     <Button
         android:id="@+id/phoneConfirmButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/codeEditText"
-        android:layout_below="@+id/codeEditText"
-        android:layout_marginTop="38dp"
-        android:text="@string/confirm" />
+        android:layout_below="@+id/codeDivider"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/button_long_light_solid_drawable"
+        android:text="@string/confirm"
+        android:textColor="@color/start_button_text_color"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/phoneCancelButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/phoneConfirmButton"
-        android:layout_alignBottom="@+id/phoneConfirmButton"
-        android:layout_toLeftOf="@+id/acquireCodeButton"
-        android:text="@string/cancel" />
+        android:layout_below="@+id/phoneConfirmButton"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/button_long_light_border_drawable"
+        android:text="@string/cancel"
+        android:textColor="@color/button_text_color_light"
+        android:textSize="20sp"/>
 
 </RelativeLayout>

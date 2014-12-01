@@ -15,11 +15,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,7 +45,7 @@ public class ForgotPasswordActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_forgot_password);
-		tabViewInitialse();
+		initTabHost();
 		initView();
 		initButton();
 	}
@@ -70,7 +74,7 @@ public class ForgotPasswordActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 
-    private void tabViewInitialse()
+    private void initTabHost()
     {
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
 		tabHost.setup();
@@ -95,6 +99,8 @@ public class ForgotPasswordActivity extends Activity
 
     private void initView()
     {
+    	getActionBar().hide();
+    	
     	emailEditText = (EditText)findViewById(R.id.emailEditText);
     	phoneEditText = (EditText)findViewById(R.id.mobileEditText);
     	codeEditText = (EditText)findViewById(R.id.codeEditText);
@@ -169,7 +175,7 @@ public class ForgotPasswordActivity extends Activity
 			}
 		});
     	
-    	Button acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
+    	final Button acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
     	acquireCodeButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -207,8 +213,19 @@ public class ForgotPasswordActivity extends Activity
 				}			
 			}
 		});
-
-    	Button phoneConfirmButton = (Button)findViewById(R.id.phoneConfirmButton);
+		acquireCodeButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_short);
+				double ratio = ((double)bitmap.getWidth()) / bitmap.getHeight();
+				ViewGroup.LayoutParams params = acquireCodeButton.getLayoutParams();
+				params.width = (int)(acquireCodeButton.getHeight() * ratio);;
+				acquireCodeButton.setLayoutParams(params);
+			}
+		});    	
+    	
+    	final Button phoneConfirmButton = (Button)findViewById(R.id.phoneConfirmButton);
     	phoneConfirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -243,8 +260,19 @@ public class ForgotPasswordActivity extends Activity
 				}
 			}
 		});
+		phoneConfirmButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_solid_light);
+				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+				ViewGroup.LayoutParams params = phoneConfirmButton.getLayoutParams();
+				params.height = (int)(phoneConfirmButton.getWidth() * ratio);;
+				phoneConfirmButton.setLayoutParams(params);
+			}
+		});
 
-    	Button phoneCancelButton = (Button)findViewById(R.id.phoneCancelButton);
+		final Button phoneCancelButton = (Button)findViewById(R.id.phoneCancelButton);
     	phoneCancelButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -253,6 +281,17 @@ public class ForgotPasswordActivity extends Activity
 				finish();
 			}
 		});    	
+		phoneCancelButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_solid_light);
+				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+				ViewGroup.LayoutParams params = phoneCancelButton.getLayoutParams();
+				params.height = (int)(phoneCancelButton.getWidth() * ratio);;
+				phoneCancelButton.setLayoutParams(params);
+			}
+		});
     }
     
     private void sendResetEmail()

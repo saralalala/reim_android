@@ -218,7 +218,7 @@ public class MeFragment extends Fragment
 		
 	private void initView()
 	{
-        View divider = getActivity().getLayoutInflater().inflate(R.layout.divider, null);
+        View divider = getActivity().getLayoutInflater().inflate(R.layout.list_divider, null);
         
         adapter = new MeListViewAdapter(this); 
         meListView = (ListView)getActivity().findViewById(R.id.meListView);

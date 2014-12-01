@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <color name="font_major">#FF373737</color>
+    <color name="font_major_dark">#FF373737</color>
+    <color name="font_major_light">#CCFFFFFF</color>
+    <color name="start_font">#FFFE8888</color>
     
-    <color name="divider">#1A000000</color>
+    <color name="start_divider">#FFFE8888</color>
     
     <color name="major_dark">#FFFF575B</color>
     <color name="major_light">#FFFFFFFF</color>
@@ -16,6 +18,7 @@
     <color name="button_text_light">#FFFFFFFF</color>
     
     <color name="list_background">#FFF5F6F8</color>
+    <color name="list_divider">#1A000000</color>
     <color name="list_item_selected">#FFFBE2E3</color>
     <color name="list_item_unselected">#00000000</color>
     

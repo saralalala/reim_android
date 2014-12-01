@@ -157,12 +157,6 @@
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
     
-    <string name="report_status_draft">草稿</string>
-    <string name="report_status_submitted">提交</string>
-    <string name="report_status_approved">通过</string>
-    <string name="report_status_rejected">退回</string>
-    <string name="report_status_finished">结束</string>
-    
     <string-array name="filterStatus">
         <item>草稿</item>
         <item>提交</item>

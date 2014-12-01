@@ -54,7 +54,7 @@
         android:layout_marginTop="124dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        layout="@layout/divider"/>
+        layout="@layout/list_divider"/>
     
     <classes.Widget.SegmentedGroup
         android:id="@+id/sortRadioGroup"
@@ -118,7 +118,7 @@
         android:layout_marginTop="108dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        layout="@layout/divider"/>
+        layout="@layout/list_divider"/>
 
     <GridView
         android:id="@+id/tagGridView"

@@ -20,19 +20,27 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class SignInActivity extends Activity
+public class SignInActivity extends Activity implements View.OnClickListener
 {
 	private EditText usernameEditText;
 	private EditText passwordEditText;
+	private TextView forgorPasswordTextView;
+	private TextView signUpTextView;
+	private ImageView signUpImageView;
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -92,6 +100,15 @@ public class SignInActivity extends Activity
 		
 		usernameEditText.setText("a@a.com");
 		passwordEditText.setText("111111");
+
+		forgorPasswordTextView = (TextView)findViewById(R.id.forgotTextView);
+		forgorPasswordTextView.setOnClickListener(this);
+
+		signUpTextView = (TextView)findViewById(R.id.signUpTextView);
+		signUpTextView.setOnClickListener(this);
+		
+		signUpImageView = (ImageView)findViewById(R.id.signUpImageView);
+		signUpImageView.setOnClickListener(this);
 		
 		RelativeLayout baseLayout = (RelativeLayout)findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
@@ -101,21 +118,11 @@ public class SignInActivity extends Activity
 				hideSoftKeyboard();
 			}
 		});
-
-		TextView forgorPasswordTextView = (TextView)findViewById(R.id.forgotTextView);
-		forgorPasswordTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				startActivity(new Intent(SignInActivity.this, ForgotPasswordActivity.class));
-				finish();
-			}
-		});
 	}
 
 	private void initButton()
 	{
-		Button confirmButton = (Button)findViewById(R.id.confirmButton);
+		final Button confirmButton = (Button)findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -182,14 +189,15 @@ public class SignInActivity extends Activity
 				}
 			}
 		});
-
-		Button cancelbuButton = (Button)findViewById(R.id.cancelButton);
-		cancelbuButton.setOnClickListener(new View.OnClickListener()
+		confirmButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
 		{
-			public void onClick(View v)
+			public void onGlobalLayout()
 			{
-				startActivity(new Intent(SignInActivity.this, WelcomeActivity.class));
-				finish();
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_solid_light);
+				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+				ViewGroup.LayoutParams params = confirmButton.getLayoutParams();
+				params.height = (int)(confirmButton.getWidth() * ratio);;
+				confirmButton.setLayoutParams(params);
 			}
 		});
 	}
@@ -276,9 +284,9 @@ public class SignInActivity extends Activity
 						{
 							ReimApplication.dismissProgressDialog();
 							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-									.setTitle("閿欒")
-									.setMessage("鐧诲綍澶辫触锛�" + response.getErrorMessage())
-									.setNegativeButton("纭畾", null).create();
+														.setTitle("错误")
+														.setMessage("登录失败！" + response.getErrorMessage())
+														.setNegativeButton("确定", null).create();
 							alertDialog.show();
 						}
 					});
@@ -292,5 +300,20 @@ public class SignInActivity extends Activity
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+	}
+
+
+	public void onClick(View v)
+	{
+		if (v.equals(forgorPasswordTextView))
+		{
+			startActivity(new Intent(SignInActivity.this, ForgotPasswordActivity.class));
+			finish();
+		}
+		else if (v.equals(signUpTextView) || v.equals(signUpImageView))
+		{
+			startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+			finish();
+		}
 	}
 }

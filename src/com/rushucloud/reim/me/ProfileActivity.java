@@ -112,7 +112,7 @@ public class ProfileActivity extends Activity
 	{		
 		ReimApplication.setProgressDialog(this);
 		
-        View divider = getLayoutInflater().inflate(R.layout.divider, null);
+        View divider = getLayoutInflater().inflate(R.layout.list_divider, null);
 
 		infoAdapter = new ProfileListViewAdapter(ProfileActivity.this, currentUser);
 		profileListView = (ListView)findViewById(R.id.profileListView);
