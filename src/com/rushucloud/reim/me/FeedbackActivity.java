@@ -16,9 +16,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class FeedbackActivity extends Activity
@@ -60,6 +62,15 @@ public class FeedbackActivity extends Activity
 	private void initView()
 	{
 		getActionBar().hide();
+		
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});
 		
 		feedbackEditText = (EditText)findViewById(R.id.feedbackEditText);
 		contactEditText = (EditText)findViewById(R.id.contactEditText);

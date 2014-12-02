@@ -1,75 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"
+    android:layout_height="84dp"
+    android:orientation="horizontal"
+    android:baselineAligned="false"
     android:background="@drawable/list_item_drawable" >
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/countTextView"
-        android:gravity="left"
-        android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+		android:paddingLeft="16dp" >
 
-        <TextView
-            android:id="@+id/statusTextView"
+        <ImageView
+            android:id="@+id/statusImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textColor="#FF000000"
-            android:textSize="13sp" />
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="14dp"
+            android:contentDescription="@string/status" />
         
          <TextView android:id="@+id/titleTextView"    
             android:layout_width="wrap_content"  
-            android:layout_height="wrap_content"    
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/statusImageView"
+            android:layout_marginTop="6dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="#FF000000"  
-            android:textSize="22sp" />  
+            android:textColor="@color/font_major_dark"  
+            android:textSize="20sp" />  
             
-    </LinearLayout>
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/countTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/countTextView"
-        android:layout_alignParentRight="true"
-        android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+		android:paddingRight="16dp" >
             
         <TextView android:id="@+id/dateTextView"    
             android:layout_width="wrap_content"  
             android:layout_height="wrap_content"
-            android:layout_gravity="right" 
-            android:gravity="right"
+			android:layout_alignParentRight="true"
+			android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="#FF000000"  
-            android:textSize="13sp" />
+            android:textColor="@color/hint_light_grey"  
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/signTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/amountTextView"
+            android:layout_marginBottom="1dp"
+            android:text="@string/rmb"
+            android:textColor="@color/hint_black"  
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/amountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:gravity="right"
-            android:paddingTop="5dp"
+            android:layout_below="@+id/dateTextView"
+            android:layout_toLeftOf="@+id/signTextView"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="3dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="#FF000000"
+            android:textColor="@color/font_major_dark"
             android:textSize="22sp" />
-    </LinearLayout>
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

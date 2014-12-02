@@ -10,16 +10,15 @@
         android:layout_height="50dp"
         android:background="@color/major_dark" >
 
-        <TextView
-            android:id="@+id/cancelTextView"
+        <ImageView
+            android:id="@+id/backImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:text="@string/cancel"
-            android:textSize="16sp"
-            android:textColor="@color/major_light" />
+            android:contentDescription="@string/back"
+            android:src="@drawable/back" />
 
         <TextView
             android:id="@+id/titleTextView"

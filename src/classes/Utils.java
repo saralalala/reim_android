@@ -173,9 +173,21 @@ public class Utils
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis((long)second * 1000);
 		String result = "";
-		result += calendar.get(Calendar.YEAR) + "年";
-		result += (calendar.get(Calendar.MONTH) + 1) + "月";
-		result += calendar.get(Calendar.DAY_OF_MONTH) + "日";
+		result += calendar.get(Calendar.YEAR) + ".";
+		
+		int month = calendar.get(Calendar.MONTH) + 1;
+		if (month < 10)
+		{
+			result += "0";			
+		}
+		result += month + ".";
+		
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		if (day < 10)
+		{
+			result += "0";			
+		}
+		result += day;
 		
 		return result;
 	}
@@ -248,7 +260,7 @@ public class Utils
     
     public static String formatDouble(double arg)
     {
-		DecimalFormat format = new DecimalFormat("#0.00");
+		DecimalFormat format = new DecimalFormat("#0.0");
 		return format.format(arg);
     }
     

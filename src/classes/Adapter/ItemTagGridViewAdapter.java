@@ -41,11 +41,11 @@ public class ItemTagGridViewAdapter extends BaseAdapter
 		ImageView iconImageView = (ImageView)convertView.findViewById(R.id.iconImageView);
 		if (check[position])
 		{
-			iconImageView.setBackgroundResource(R.drawable.umeng_socialize_evernote);						
+			iconImageView.setImageResource(R.drawable.umeng_socialize_evernote);						
 		}
 		else
 		{
-			iconImageView.setBackgroundResource(R.drawable.ic_launcher);							
+			iconImageView.setImageResource(R.drawable.ic_launcher);							
 		}
 		
 		TextView nameTextView = (TextView)convertView.findViewById(R.id.nameTextView);

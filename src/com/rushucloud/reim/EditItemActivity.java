@@ -747,7 +747,7 @@ public class EditItemActivity extends Activity
 				{			
 			    	hideSoftKeyboard();
 			    	double amount = Double.valueOf(amountEditText.getText().toString());
-					DecimalFormat format = new DecimalFormat("#0.00");
+					DecimalFormat format = new DecimalFormat("#0.0");
 					item.setAmount(Double.valueOf(format.format(amount)));
 					item.setConsumer(appPreference.getCurrentUser());
 					item.setNote(noteEditText.getText().toString());

@@ -22,7 +22,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,7 +42,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	private TextView mediumBadgeTextView;
 	private TextView longBadgeTextView;
 	private ImageView tipImageView;
-
+	
+	private List<Fragment> fragmentList = new ArrayList<Fragment>();
 	private List<TabItem> tabItemList = new ArrayList<TabItem>();
 
 	protected void onCreate(Bundle savedInstanceState)
@@ -64,6 +64,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			sendGetEventsRequest();			
 		}
+		
+		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
 	}
 
 	protected void onPause()
@@ -98,13 +100,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 
 	private void initView()
 	{
-		ActionBar actionBar = getSupportActionBar();
-		if (actionBar != null)
-		{
-			actionBar.hide();
-		}
-		
-		final List<Fragment> fragmentList = new ArrayList<Fragment>();
+		getActionBar().hide();
 		
 		ReimFragment reimFragment = new ReimFragment();
 		ReportFragment reportFragment = new ReportFragment();

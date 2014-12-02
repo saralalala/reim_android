@@ -28,6 +28,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -114,8 +115,8 @@ public class ManagerActivity extends Activity
 		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
 		
-		TextView cancelTextView = (TextView)findViewById(R.id.cancelTextView);
-		cancelTextView.setOnClickListener(new OnClickListener()
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{

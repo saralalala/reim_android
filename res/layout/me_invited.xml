@@ -3,14 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/inviteTextView"
+    <RelativeLayout
+        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:maxLines="10"
-        android:padding="10dp" />
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/myInvites"
+            android:textColor="@color/major_light"
+            android:textSize="20sp" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/agreeButton"
@@ -27,5 +44,14 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/inviteTextView"
         android:text="@string/reject" />
+
+    <TextView
+        android:id="@+id/inviteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/titleLayout"
+        android:maxLines="10"
+        android:padding="10dp" />
 
 </RelativeLayout>

@@ -59,14 +59,14 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
 		{
 			statusTextView.setText(context.getString(R.string.itemApproved));
-			statusTextView.setBackgroundResource(R.drawable.item_approved);
+			statusTextView.setBackgroundResource(R.drawable.item_approved_list);
 			statusTextView.setTextColor(context.getResources().getColor(R.color.item_approved));
 			statusTextView.setVisibility(View.VISIBLE);
 		}
 		else if (item.isProveAhead())
 		{
 			statusTextView.setText(context.getString(R.string.proveAhead));
-			statusTextView.setBackgroundResource(R.drawable.item_prove_ahead);
+			statusTextView.setBackgroundResource(R.drawable.item_approved_list);
 			statusTextView.setTextColor(context.getResources().getColor(R.color.item_prove_ahead));
 			statusTextView.setVisibility(View.VISIBLE);			
 		}

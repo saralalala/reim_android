@@ -3,6 +3,7 @@ package classes.Adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.ReimApplication;
 import classes.Report;
 import classes.Utils;
 
@@ -13,17 +14,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class OthersReportListViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
 	private List<Report> reportList;
+	private int[] statusBackground;
 
 	public OthersReportListViewAdapter(Context context, List<Report> reports)
 	{
 		reportList = new ArrayList<Report>(reports);
 		layoutInflater = LayoutInflater.from(context);
+		statusBackground = new int[] { R.drawable.report_status_draft, R.drawable.report_status_submitted, R.drawable.report_status_approved, 
+				   					   R.drawable.report_status_rejected, R.drawable.report_status_finished };
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -35,24 +40,25 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		
 		TextView titleTextView = (TextView)convertView.findViewById(R.id.titleTextView);
 		TextView dateTextView = (TextView)convertView.findViewById(R.id.dateTextView);
-		TextView countTextView = (TextView)convertView.findViewById(R.id.countTextView);
-		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
+		ImageView statusImageView = (ImageView)convertView.findViewById(R.id.statusImageView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 
-		Report report = this.getItem(position);
+		Report report = reportList.get(position);
 
 		String title = report.getTitle().equals("") ? "N/A" : report.getTitle();
 		titleTextView.setText(title);
 		
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
 		dateTextView.setText(date.equals("") ? "N/A" : date);
-		
-		countTextView.setText("#" + report.getItemCount());
 
-		String status = report.getStatusString().equals("") ? "N/A" : report.getStatusString();
-		statusTextView.setText(status);
-		
-		amountTextView.setText("￥" + report.getAmount());
+		if (report.getStatus() >= 0 && report.getStatus() <= 4)
+		{
+			statusImageView.setBackgroundResource(statusBackground[report.getStatus()]);			
+		}
+
+		double amount = Double.valueOf(report.getAmount());
+		amountTextView.setText(Utils.formatDouble(amount));
+		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
 		return convertView;
 	}

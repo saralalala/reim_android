@@ -1,75 +1,308 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@color/list_background" >
+	xmlns:reim="http://schemas.android.com/apk/res-auto"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:background="@color/list_background" >
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/major_dark" >
+	    android:layout_width="match_parent"
+	    android:layout_height="50dp"
+	    android:background="@color/major_dark" >
 
-        <TextView
-            android:id="@+id/meTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/personalCenter"
-            android:textSize="20sp"
-            android:textColor="@color/major_light" />
+	<TextView
+        android:id="@+id/meTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/personalCenter"
+        android:textSize="20sp"
+        android:textColor="@color/major_light" />
 
     </RelativeLayout>
 
     <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" >
             
-			<ListView
-			    android:id="@+id/meListView"
-			    android:layout_width="match_parent"
-			    android:layout_height="99dp"
-			    android:layout_marginTop="18dp"
-			    android:background="@android:color/white"
-			    android:scrollbars="none"
-			    android:headerDividersEnabled="true"
-			    android:footerDividersEnabled="true"
-			    android:divider="@color/list_divider"
-			    android:dividerHeight="0.5dp" >	
-			</ListView>
-
-			<ListView
-			    android:id="@+id/operationListView"
-			    android:layout_width="match_parent"
-			    android:layout_height="203dp"
-			    android:layout_marginTop="24dp"
-			    android:background="@android:color/white"
-			    android:scrollbars="none"
-			    android:headerDividersEnabled="true"
-			    android:footerDividersEnabled="true"
-			    android:divider="@color/list_divider"
-			    android:dividerHeight="0.5dp" >	
-			</ListView>
-		
-			<ListView
-			    android:id="@+id/otherListView"
-			    android:layout_width="match_parent"
-			    android:layout_height="102dp"
-			    android:layout_marginTop="24dp"
-			    android:layout_marginBottom="24dp"
-			    android:background="@android:color/white"
-			    android:scrollbars="none"
-			    android:headerDividersEnabled="true"
-			    android:footerDividersEnabled="true"
-			    android:divider="@color/list_divider"
-			    android:dividerHeight="0.5dp" >		
-			</ListView>
+            <RelativeLayout
+	            android:id="@+id/profileLayout"
+				android:layout_width="match_parent"
+				android:layout_height="99dp"
+				android:layout_marginTop="18dp"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+            
+	            <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+					android:layout_alignParentTop="true"
+		        	layout="@layout/list_divider"/>
+			
+			    <classes.Widget.CircleImageView
+				    android:id="@+id/avatarImageView"
+				    android:layout_width="66dp"
+				    android:layout_height="66dp"
+				    android:layout_alignParentLeft="true"
+				    android:layout_centerVertical="true"
+				    android:layout_marginLeft="16dp"
+					android:clickable="true"
+				    android:contentDescription="@string/avatar"
+				    android:src="@drawable/default_avatar"
+				    reim:border_width="0dp" />
+			
+			    <RelativeLayout
+				    android:layout_width="match_parent"
+				    android:layout_height="match_parent"
+				    android:orientation="vertical"
+				    android:layout_toRightOf="@+id/avatarImageView"
+				    android:layout_toLeftOf="@+id/nextImageView"
+				    android:layout_marginLeft="10dp"
+				    android:layout_marginRight="10dp" >
+			
+				<TextView
+			        android:id="@+id/nicknameTextView"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginBottom="4dp"
+			        android:layout_above="@+id/pivotView"
+			        android:ellipsize="end"
+			        android:singleLine="true"
+				    android:textColor="@color/font_major_dark"
+				    android:textSize="16sp" />
+			
+				<View
+				    android:id="@+id/pivotView"
+				    android:layout_width="0dp"
+				    android:layout_height="0dp"
+				    android:layout_centerInParent="true" />
+			
+				<TextView
+			        android:id="@+id/companyTextView"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_below="@+id/pivotView"
+			        android:layout_marginTop="4dp"
+			        android:ellipsize="end"
+			        android:singleLine="true"
+				    android:textColor="@color/font_major_dark"
+				    android:textSize="16sp"  />
+			
+			    </RelativeLayout>
+			
+				<ImageView			        
+                	android:id="@+id/nextImageView"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_alignParentRight="true"
+				    android:layout_centerVertical="true"
+				    android:layout_marginRight="10dp"
+				    android:contentDescription="@string/nullString"
+				    android:src="@drawable/next" />
+            
+	            <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+					android:layout_alignParentBottom="true"
+		            layout="@layout/list_divider"/>
+			
+			</RelativeLayout>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginTop="24dp"
+	        	layout="@layout/list_divider"/>
+			
+            <RelativeLayout
+                android:id="@+id/defaultManagerLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50dp"
+				android:orientation="horizontal"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/defaultManager"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+				
+				<ImageView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_alignParentRight="true"
+				    android:layout_centerVertical="true"
+				    android:layout_marginRight="10dp"
+				    android:contentDescription="@string/nullString"
+				    android:src="@drawable/next" />
+				
+			</RelativeLayout>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+	        	layout="@layout/list_divider"/>
+			
+            <RelativeLayout
+                android:id="@+id/inviteLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50dp"
+				android:orientation="horizontal"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/invite"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+				
+			</RelativeLayout>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+	        	layout="@layout/list_divider"/>
+			
+            <RelativeLayout
+                android:id="@+id/myInvitesLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50dp"
+				android:orientation="horizontal"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/myInvites"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+				
+				<ImageView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_alignParentRight="true"
+				    android:layout_centerVertical="true"
+				    android:layout_marginRight="10dp"
+				    android:contentDescription="@string/nullString"
+				    android:src="@drawable/next" />
+				
+			</RelativeLayout>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+	        	layout="@layout/list_divider"/>
+			
+            <RelativeLayout
+                android:id="@+id/invoiceLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50dp"
+				android:orientation="horizontal"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/getInvoice"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+				
+			</RelativeLayout>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+	        	layout="@layout/list_divider"/>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginTop="24dp"
+	        	layout="@layout/list_divider"/>
+			
+            <RelativeLayout
+                android:id="@+id/settingsLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50dp"
+				android:orientation="horizontal"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/settings"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+				
+				<ImageView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_alignParentRight="true"
+				    android:layout_centerVertical="true"
+				    android:layout_marginRight="10dp"
+				    android:contentDescription="@string/nullString"
+				    android:src="@drawable/next" />
+				
+			</RelativeLayout>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+	        	layout="@layout/list_divider"/>
+			
+            <RelativeLayout
+                android:id="@+id/customServiceLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50dp"
+				android:orientation="horizontal"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/customService"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+				
+			</RelativeLayout>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginBottom="24dp"
+	        	layout="@layout/list_divider"/>
 			
         </LinearLayout>
         

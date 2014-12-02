@@ -1973,19 +1973,17 @@ public class DBManager extends SQLiteOpenHelper
 		return result;
 	}
 	
-	public String[] getReportInfo(int reportLocalID)
+	public double getReportAmount(int reportLocalID)
 	{
 		double amount = 0;
-		int count = 0;
 		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id=?", 
 												new String[]{Integer.toString(reportLocalID)});
 		while (cursor.moveToNext())
 		{
 			amount += getDoubleFromCursor(cursor, "amount");
-			count++;
 		}
 
-		return new String[]{Utils.formatDouble(amount), Integer.toString(count)};
+		return amount;
 	}
 	
 	public int getReportItemsCount(int reportLocalID)
@@ -2000,20 +1998,6 @@ public class DBManager extends SQLiteOpenHelper
 
 		cursor.close();
 		return count;
-	}	
-	
-	public double getReportAmount(int reportLocalID)
-	{
-		double amount = 0;
-		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id=?", 
-												new String[]{Integer.toString(reportLocalID)});
-		while (cursor.moveToNext())
-		{
-			amount += getDoubleFromCursor(cursor, "amount");
-		}
-
-		cursor.close();
-		return amount;
 	}
 	
 	// Comment

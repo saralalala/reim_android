@@ -12,12 +12,14 @@ import classes.Utils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ItemListViewAdapter extends BaseAdapter
@@ -44,10 +46,12 @@ public class ItemListViewAdapter extends BaseAdapter
 		}
 		
 		ImageView photoImageView = (ImageView)convertView.findViewById(R.id.photoImageView);
-		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
+		ImageView statusImageView = (ImageView)convertView.findViewById(R.id.statusImageView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		TextView reportTextView = (TextView)convertView.findViewById(R.id.reportTextView);
 		TextView vendorTextView = (TextView)convertView.findViewById(R.id.vendorTextView);
+		LinearLayout iconLayout = (LinearLayout)convertView.findViewById(R.id.iconLayout);
+		ImageView categoryImageView = (ImageView)convertView.findViewById(R.id.categoryImageView);
 		
 		Item item = this.getItem(position);
 
@@ -62,33 +66,45 @@ public class ItemListViewAdapter extends BaseAdapter
 		
 		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
 		{
-			statusTextView.setText(context.getString(R.string.itemApproved));
-			statusTextView.setBackgroundResource(R.drawable.item_approved);
-			statusTextView.setTextColor(context.getResources().getColor(R.color.item_approved));
-			statusTextView.setVisibility(View.VISIBLE);
+			statusImageView.setImageResource(R.drawable.item_approved_list);
+			statusImageView.setVisibility(View.VISIBLE);
 		}
 		else if (item.isProveAhead())
 		{
-			statusTextView.setText(context.getString(R.string.proveAhead));
-			statusTextView.setBackgroundResource(R.drawable.item_prove_ahead);
-			statusTextView.setTextColor(context.getResources().getColor(R.color.item_prove_ahead));
-			statusTextView.setVisibility(View.VISIBLE);			
+			statusImageView.setImageResource(R.drawable.item_prove_ahead_list);
+			statusImageView.setVisibility(View.VISIBLE);
 		}
 		else
 		{
-			statusTextView.setVisibility(View.INVISIBLE);					
+			statusImageView.setVisibility(View.INVISIBLE);					
 		}
 
-//		String amount = "￥" + Utils.formatDouble(item.getAmount());
-		String amount = Utils.formatDouble(item.getAmount());
-		amountTextView.setTypeface(ReimApplication.getTypefaceAleo());
-		amountTextView.setText(amount);
+		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
 		String vendor = item.getMerchant().equals("") ? "N/A" : item.getMerchant();
 		vendorTextView.setText(vendor);
 		
 		String reportTitle = item.getBelongReport() == null ? "N/A" : item.getBelongReport().getTitle();
 		reportTextView.setText(reportTitle);
+		
+		// category 和 tag 一共count个
+		categoryImageView.setImageResource(R.drawable.food);
+
+		iconLayout.removeAllViews();
+		int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, context.getResources().getDisplayMetrics());
+		int sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, context.getResources().getDisplayMetrics());
+		int count = (iconLayout.getWidth() + interval) / (sideLength + interval);
+		for (int i = 0; i < count; i++)
+		{
+			ImageView iconImageView = new ImageView(context);
+			iconImageView.setImageResource(R.drawable.category_logo);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
+			params.rightMargin = interval;
+			iconLayout.addView(iconImageView, params);
+		}
+
+		iconLayout.addView(categoryImageView);
 		
 		return convertView;
 	}
@@ -151,7 +167,6 @@ public class ItemListViewAdapter extends BaseAdapter
 			}
 			else
 			{
-				// TODO 如何优雅的筛选item
 				Locale locale = Locale.getDefault();
 				String constraintString = constraint.toString().toLowerCase(locale);
 				ArrayList<Item> newValues = new ArrayList<Item>();

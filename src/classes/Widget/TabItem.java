@@ -98,8 +98,8 @@ public class TabItem extends View
 		array.recycle();
 		
 		textPaint.setTextSize(textSize);
-		textPaint.setTypeface(ReimApplication.getReimTypeface());
 		textPaint.setColor(textColorNotSelected);
+		textPaint.setTypeface(ReimApplication.TypeFaceYaHei);
 		textPaint.setAntiAlias(true);
 		textPaint.getTextBounds(text, 0, text.length(), textRect);
 	}

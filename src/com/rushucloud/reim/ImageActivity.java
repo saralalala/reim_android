@@ -1,5 +1,7 @@
 package com.rushucloud.reim;
 
+import classes.Utils;
+
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -53,6 +55,13 @@ public class ImageActivity extends Activity
 		{
 			String imagePath = getIntent().getStringExtra("imagePath");
 			Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+			
+			if (bitmap == null)
+			{
+				Utils.showToast(this, "读取图片文件失败");
+				finish();
+			}
+			
 			imageView = (ImageView)findViewById(R.id.imageView);
 			imageView.setImageBitmap(bitmap);
 

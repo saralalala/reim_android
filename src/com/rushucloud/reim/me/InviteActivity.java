@@ -21,8 +21,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -77,12 +79,14 @@ public class InviteActivity extends Activity
 	
 	private void initView()
 	{	
+		getActionBar().hide();
+		
 		ReimApplication.setProgressDialog(this);
 
 		inviteTextView = (TextView)findViewById(R.id.inviteTextView);
 
 		mapList = Invite.getMessageList(null);
-		String[] columns = new String[]{"message", "time"};
+		String[] columns = new String[]{ "message", "time" };
 		int[] views = new int[]{android.R.id.text1, android.R.id.text2};
 		adapter = new SimpleAdapter(this, mapList, android.R.layout.simple_list_item_2, columns, views);
 		inviteListView = (ListView)findViewById(R.id.inviteListView);
@@ -96,6 +100,15 @@ public class InviteActivity extends Activity
 				Intent intent = new Intent(InviteActivity.this, InviteReplyActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
+			}
+		});
+		
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				finish();
 			}
 		});
 	}

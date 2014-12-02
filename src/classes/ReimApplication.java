@@ -22,11 +22,11 @@ import android.text.TextUtils;
 
 public class ReimApplication extends Application
 {
+	public static Typeface TypeFaceYaHei;
+	public static Typeface TypeFaceAleoLight;
+	
 	private static ProgressDialog pDialog;
 	private static Context context;
-	
-	private static Typeface typefaceYaHei;
-	private static Typeface typefaceAleo;
 	
 	private static int tabIndex = 0;
 	private static int reportTabIndex = 0;
@@ -44,16 +44,6 @@ public class ReimApplication extends Application
 		System.out.println("**************** Application Started *****************");
 		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
 //		System.out.println(getDeviceInfo(this));
-	}
-
-	public static Typeface getReimTypeface()
-	{
-		return typefaceYaHei;
-	}
-
-	public static Typeface getTypefaceAleo()
-	{
-		return typefaceAleo;
 	}
 
 	public static int getTabIndex()
@@ -187,14 +177,14 @@ public class ReimApplication extends Application
 		AppPreference.createAppPreference(getApplicationContext());
 		DBManager.createDBManager(getApplicationContext());
 		context = getApplicationContext();
-		typefaceYaHei = Typeface.createFromAsset(getAssets(), "fonts/YaHei.ttf");
-		typefaceAleo = Typeface.createFromAsset(getAssets(), "fonts/Aleo_Light.ttf");
+		TypeFaceYaHei = Typeface.createFromAsset(getAssets(), "fonts/YaHei.ttf");
+		TypeFaceAleoLight = Typeface.createFromAsset(getAssets(), "fonts/Aleo_Light.ttf");
 		
 		try
 		{
-			Field field = Typeface.class.getDeclaredField("DEFAULT");
+			Field field = Typeface.class.getDeclaredField("SERIF");
 			field.setAccessible(true);
-			field.set(null, typefaceYaHei);
+			field.set(null, TypeFaceYaHei);
 		}
 		catch (NoSuchFieldException e)
 		{

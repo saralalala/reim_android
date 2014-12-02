@@ -127,16 +127,16 @@ public class ProfileActivity extends Activity
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				switch (position)
+				switch (position - 1)
 				{
 					case 0:
 						startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
 						break;
-					case 2:
+					case 1:
 						MobclickAgent.onEvent(ProfileActivity.this, "UMENG_MINE_CATEGORT_SETTING");
 						startActivity(new Intent(ProfileActivity.this, CategoryActivity.class));
 						break;
-					case 3:
+					case 2:
 						MobclickAgent.onEvent(ProfileActivity.this, "UMENG_MINE_TAG_SETTING");
 						startActivity(new Intent(ProfileActivity.this, TagActivity.class));
 						break;

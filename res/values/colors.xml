@@ -10,6 +10,7 @@
     <color name="major_dark">#FFFF575B</color>
     <color name="major_light">#FFFFFFFF</color>
     
+    <color name="hint_black">#FF000000</color>
     <color name="hint_white">#CCFFFFFF</color>
     <color name="hint_dark_grey">#CC000000</color>
     <color name="hint_light_grey">#66000000</color>

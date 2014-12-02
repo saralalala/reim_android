@@ -26,15 +26,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -79,30 +80,6 @@ public class CategoryActivity extends Activity
 			finish();
 		}
 		return super.onKeyDown(keyCode, event);
-	}
-
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.add, menu);
-		return true;
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		int id = item.getItemId();
-		if (id == R.id.action_add_item)
-		{
-			if (!Utils.isNetworkConnected())
-			{
-				Utils.showToast(this, "网络未连接，无法添加");
-			}
-			else
-			{
-				showCategoryDialog(new Category());
-			}
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
@@ -171,6 +148,7 @@ public class CategoryActivity extends Activity
 
 	private void initView()
 	{
+		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
 
 		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
@@ -186,6 +164,31 @@ public class CategoryActivity extends Activity
 			}
 		});
 		registerForContextMenu(categoryListView);
+		
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});
+		
+		TextView addTextView = (TextView)findViewById(R.id.addTextView);
+		addTextView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (!Utils.isNetworkConnected())
+				{
+					Utils.showToast(CategoryActivity.this, "网络未连接，无法添加");
+				}
+				else
+				{
+					showCategoryDialog(new Category());
+				}
+			}
+		});
 	}
 
 	private void refreshListView()

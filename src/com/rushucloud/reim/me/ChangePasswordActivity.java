@@ -15,9 +15,11 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class ChangePasswordActivity extends Activity
 {
@@ -57,43 +59,39 @@ public class ChangePasswordActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.save, menu);
-		return true;
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		int id = item.getItemId();
-		if (id == R.id.action_save_item)
-		{
-			MobclickAgent.onEvent(ChangePasswordActivity.this, "UMENG_MINE_CHANGE_USERINFO");
-			if (Utils.isNetworkConnected())
-			{
-				changePassword();
-			}
-			else
-			{
-				Utils.showToast(ChangePasswordActivity.this, "网络未连接，无法修改密码");
-			}
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	private void initView()
 	{
-		try
+		getActionBar().hide();
+		
+		oldPasswordEditText = (EditText)findViewById(R.id.oldPasswordEditText);
+		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
+		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
+		
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new OnClickListener()
 		{
-			oldPasswordEditText = (EditText)findViewById(R.id.oldPasswordEditText);
-			newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
-			confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
-		}
-		catch (Exception e)
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});
+		
+		TextView saveTextView = (TextView)findViewById(R.id.saveTextView);
+		saveTextView.setOnClickListener(new OnClickListener()
 		{
-			e.printStackTrace();
-		}
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(ChangePasswordActivity.this, "UMENG_MINE_CHANGE_USERINFO");
+				if (Utils.isNetworkConnected())
+				{
+					changePassword();
+				}
+				else
+				{
+					Utils.showToast(ChangePasswordActivity.this, "网络未连接，无法修改密码");
+				}
+			}
+		});
 	}
 
 	private void changePassword()

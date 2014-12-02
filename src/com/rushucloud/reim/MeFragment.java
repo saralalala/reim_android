@@ -40,11 +40,11 @@ import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 import classes.AppPreference;
+import classes.Group;
 import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.MeListViewAdapter;
-import classes.Adapter.OperationListViewAdapter;
+import classes.Widget.CircleImageView;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -53,6 +53,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,10 +64,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.support.v4.app.Fragment;
 
 public class MeFragment extends Fragment
@@ -78,9 +78,13 @@ public class MeFragment extends Fragment
 	private boolean hasInit = false;
 
 	private View view;
-	private MeListViewAdapter adapter;
-	private ListView meListView;
 	
+	private TextView nicknameTextView;
+	private TextView companyTextView;	
+	private CircleImageView avatarImageView;
+	
+	private AppPreference appPreference;
+	private DBManager dbManager;
 	private User currentUser;
 	private Uri originalImageUri;
 	private String avatarPath;
@@ -111,7 +115,9 @@ public class MeFragment extends Fragment
 		MobclickAgent.onPageStart("MeFragment");
 		if (!hasInit)
 		{
+			initData();
 	        initView();
+	        loadProfileView();
 			hasInit = true;
 		}
 	}
@@ -215,24 +221,122 @@ public class MeFragment extends Fragment
 			ssoHandler.authorizeCallBack(requestCode, requestCode, data);
 		}		
 	}
-		
+	
+	private void initData()
+	{
+		appPreference = AppPreference.getAppPreference();
+		dbManager = DBManager.getDBManager();
+	}
+	
 	private void initView()
 	{
-        View divider = getActivity().getLayoutInflater().inflate(R.layout.list_divider, null);
-        
-        adapter = new MeListViewAdapter(this); 
-        meListView = (ListView)getActivity().findViewById(R.id.meListView);
-        meListView.addHeaderView(divider);
-        meListView.setAdapter(adapter);
-        meListView.setOnItemClickListener(new OnItemClickListener()
+		nicknameTextView = (TextView) getActivity().findViewById(R.id.nicknameTextView);
+		companyTextView = (TextView) getActivity().findViewById(R.id.companyTextView);	
+		
+		avatarImageView = (CircleImageView) getActivity().findViewById(R.id.avatarImageView);
+		avatarImageView.setOnClickListener(new View.OnClickListener()
 		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			public void onClick(View v)
+			{
+				if (currentUser != null && !currentUser.getAvatarPath().equals(""))
+				{
+					Intent intent = new Intent(getActivity(), ImageActivity.class);
+					intent.putExtra("imagePath", currentUser.getAvatarPath());
+					getActivity().startActivity(intent);
+				}
+			}
+		});
+		registerForContextMenu(avatarImageView);
+        
+        RelativeLayout profileLayout = (RelativeLayout) getActivity().findViewById(R.id.profileLayout);
+        profileLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(getActivity(), "UMENG_MINE_CHANGE_USERINFO");
 				startActivity(new Intent(getActivity(), ProfileActivity.class));
 			}
 		});
         
+        RelativeLayout defaultManagerLayout = (RelativeLayout) getActivity().findViewById(R.id.defaultManagerLayout);
+        defaultManagerLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (currentUser.getGroupID() == -1)
+				{
+					Utils.showToast(getActivity(), "你还没加入任何组");			
+				}
+				else
+				{
+					startActivity(new Intent(getActivity(), ManagerActivity.class));
+				}
+			}
+		});
+        
+        RelativeLayout inviteLayout = (RelativeLayout) getActivity().findViewById(R.id.inviteLayout);
+        inviteLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_MINE_INVITE");
+				if (Utils.isNetworkConnected())
+				{
+					showInviteDialog();		
+				}
+				else
+				{
+					Utils.showToast(getActivity(), "网络未连接，无法发送邀请");
+				}
+			}
+		});
+        
+        RelativeLayout myInvitesLayout = (RelativeLayout) getActivity().findViewById(R.id.myInvitesLayout);
+        myInvitesLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(getActivity(), InviteActivity.class));
+			}
+		});
+        
+        RelativeLayout invoiceLayout = (RelativeLayout) getActivity().findViewById(R.id.invoiceLayout);
+        invoiceLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(getActivity(), InvoiceTitleActivity.class));
+			}
+		});
+        
+        RelativeLayout settingsLayout = (RelativeLayout) getActivity().findViewById(R.id.settingsLayout);
+        settingsLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(getActivity(), SettingsActivity.class));
+			}
+		});
+        
+        RelativeLayout customServiceLayout = (RelativeLayout) getActivity().findViewById(R.id.customServiceLayout);
+        customServiceLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				showFeedbackDialog();
+			}
+		});        
+        
+//        RelativeLayout shareLayout = (RelativeLayout) getActivity().findViewById(R.id.shareLayout);
+//        shareLayout.setOnClickListener(new View.OnClickListener()
+//		{
+//			public void onClick(View v)
+//			{
+//				MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
+//				showShareDialog();
+//			}
+//		});
+                
         if (Utils.isNetworkConnected())
 		{
             if (currentUser.hasUndownloadedAvatar())
@@ -240,89 +344,44 @@ public class MeFragment extends Fragment
                 sendDownloadAvatarRequest();			
     		}
 		}
-
-        int[] operationList = { R.string.defaultManager, R.string.invite, R.string.myInvites, R.string.getInvoice };
-        boolean[] checkList = { true, false, true, false };
         
-        OperationListViewAdapter operationAdapter = new OperationListViewAdapter(getActivity(), operationList, checkList);
-        ListView operationListView = (ListView)getActivity().findViewById(R.id.operationListView);
-        operationListView.addHeaderView(divider);
-        operationListView.setAdapter(operationAdapter);
-        operationListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				switch (position - 1)
-				{
-					case 0:
-					{
-						if (currentUser.getGroupID() == -1)
-						{
-							Utils.showToast(getActivity(), "你还没加入任何组");			
-						}
-						else
-						{
-							startActivity(new Intent(getActivity(), ManagerActivity.class));
-						}
-						break;
-					}
-					case 1:
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_INVITE");
-						if (Utils.isNetworkConnected())
-						{
-							showInviteDialog();		
-						}
-						else
-						{
-							Utils.showToast(getActivity(), "网络未连接，无法发送邀请");
-						}
-						break;
-					}
-					case 2:
-						startActivity(new Intent(getActivity(), InviteActivity.class));
-						break;
-					case 3:
-						startActivity(new Intent(getActivity(), InvoiceTitleActivity.class));
-						break;
-//					case 4:
-//						MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
-//						showShareDialog();
-//						break;
-					default:
-						break;
-				}
-			}
-		});
-
-        int[] otherList = { R.string.settings, R.string.customService };
-        boolean[] otherCheckList = { true, false };
-        
-        OperationListViewAdapter otherAdapter = new OperationListViewAdapter(getActivity(), otherList, otherCheckList);
-        ListView otherListView = (ListView)getActivity().findViewById(R.id.otherListView);
-        otherListView.addHeaderView(divider);
-        otherListView.setAdapter(otherAdapter);
-        otherListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				switch (position - 1)
-				{
-					case 0:
-						startActivity(new Intent(getActivity(), SettingsActivity.class));
-						break;
-					case 1:
-						showFeedbackDialog();
-						break;
-					default:
-						break;
-				}
-			}
-		});
-
         mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 	}
 
+	private void loadProfileView()
+	{	
+		currentUser = appPreference.getCurrentUser();
+		Group group = dbManager.getGroup(appPreference.getCurrentGroupID());	
+		
+		if (currentUser != null)
+		{
+			if (!currentUser.getAvatarPath().equals(""))
+			{
+				Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
+				if (bitmap != null)
+				{
+					avatarImageView.setImageBitmap(bitmap);						
+				}
+			}
+			
+			nicknameTextView.setText(currentUser.getNickname());					
+		}
+		else
+		{
+			avatarImageView.setImageResource(R.drawable.default_avatar);
+			nicknameTextView.setText(R.string.notAvailable);
+		}
+		
+		if (group != null)
+		{
+			companyTextView.setText(group.getName());
+		}
+		else
+		{
+			companyTextView.setText(R.string.notAvailable);
+		}
+	}
+	
     private void cropImage(Uri uri)
     {
 		try
@@ -370,8 +429,7 @@ public class MeFragment extends Fragment
 					{
 						public void run()
 						{
-							meListView.setAdapter(adapter);
-							adapter.notifyDataSetChanged();
+							loadProfileView();
 							Utils.showToast(getActivity(), "头像上传成功");
 						}
 					});	
@@ -392,7 +450,6 @@ public class MeFragment extends Fragment
 
     private void sendDownloadAvatarRequest()
     {
-    	final DBManager dbManager = DBManager.getDBManager();
     	DownloadImageRequest request = new DownloadImageRequest(currentUser.getImageID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -412,7 +469,7 @@ public class MeFragment extends Fragment
 						{
 							public void run()
 							{
-								adapter.notifyDataSetChanged();
+								loadProfileView();
 							}
 						});						
 					}

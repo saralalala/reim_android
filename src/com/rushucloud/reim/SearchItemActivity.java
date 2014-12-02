@@ -18,6 +18,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -121,7 +122,8 @@ public class SearchItemActivity extends Activity
 	private void initView()
 	{
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);		
+		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.major_dark)));
 		
 		adapter = new ItemListViewAdapter(this, itemList);
 		ListView resultListView = (ListView)findViewById(R.id.resultListView);

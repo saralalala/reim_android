@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import classes.AppPreference;
 import classes.Invite;
@@ -74,6 +76,17 @@ public class InviteReplyActivity extends Activity
 	
 	private void initView()
 	{	
+		getActionBar().hide();		
+		
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});
+		
 		TextView textView = (TextView)findViewById(R.id.inviteTextView);
 		textView.setText(invite.getMessage());
 	}
