@@ -111,7 +111,7 @@ public class ManagerActivity extends Activity
 	}
 	
 	private void initView()
-	{		
+	{
 		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
 		

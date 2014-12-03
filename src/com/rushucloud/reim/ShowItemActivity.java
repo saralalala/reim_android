@@ -5,13 +5,13 @@ import netUtils.HttpConstant;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Response.DownloadImageResponse;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Tag;
 import classes.User;
 import classes.Utils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
-
 import database.DBManager;
 
 import android.app.Activity;
@@ -21,13 +21,12 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ShowItemActivity extends Activity
 {
+	private DBManager dbManager;
 	private Item item;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -37,7 +36,6 @@ public class ShowItemActivity extends Activity
 		MobclickAgent.onEvent(ShowItemActivity.this, "UMENG_VIEW_ITEM");
 		initData();
 		initView();
-		initButton();
 	}
 
 	protected void onResume()
@@ -65,7 +63,7 @@ public class ShowItemActivity extends Activity
 	
 	private void initData()
 	{
-		DBManager dbManager = DBManager.getDBManager();
+		dbManager = DBManager.getDBManager();
 		Intent intent = this.getIntent();
 		int itemID = intent.getIntExtra("itemLocalID", -1);
 		if (itemID == -1)
@@ -89,24 +87,44 @@ public class ShowItemActivity extends Activity
 	
 	private void initView()
 	{		
-		CheckBox proveAheadCheckBox = (CheckBox)findViewById(R.id.proveAheadCheckBox);
-		proveAheadCheckBox.setChecked(item.isProveAhead());
+		getActionBar().hide();
+		ReimApplication.setProgressDialog(this);
 		
-		CheckBox needReimCheckBox = (CheckBox)findViewById(R.id.needReimCheckBox);
-		needReimCheckBox.setChecked(item.needReimbursed());
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});
+
+		TextView actualCostTextView = (TextView)findViewById(R.id.actualCostTextView);
+		TextView budgetTextView = (TextView)findViewById(R.id.budgetTextView);
+		ImageView approvedImageView = (ImageView)findViewById(R.id.approvedImageView);
 		
 		TextView amountTextView = (TextView)findViewById(R.id.amountTextView);
-		amountTextView.setText(Double.toString(item.getAmount()));
+		amountTextView.setText(Utils.formatDouble(item.getAmount()));
+		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
-		TextView paAmountTextView = (TextView)findViewById(R.id.paAmountTextView);
-		if (item.getPaAmount() != 0)
+		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
 		{
-			paAmountTextView.setText(getResources().getString(R.string.paAmount) + Double.toString(item.getPaAmount()));
+			budgetTextView.setText(getString(R.string.budget) + " " + Utils.formatDouble(item.getPaAmount()));
 		}
 		else
 		{
-			paAmountTextView.setVisibility(View.GONE);
+			actualCostTextView.setVisibility(View.GONE);
+			budgetTextView.setVisibility(View.GONE);
+			approvedImageView.setVisibility(View.GONE);
 		}
+		
+		String temp = item.isProveAhead() ? getString(R.string.proveAhead) : getString(R.string.consumed);
+		if (item.needReimbursed())
+		{
+			temp += "/" + getString(R.string.needReimburse);
+		}
+		TextView typeTextView = (TextView)findViewById(R.id.typeTextView);
+		typeTextView.setText(temp);
 
 		String categoryName = item.getCategory() == null ? "N/A" : item.getCategory().getName();
 		TextView categoryTextView = (TextView)findViewById(R.id.categoryTextView);
@@ -158,6 +176,10 @@ public class ShowItemActivity extends Activity
 		{
 			invoiceImageView.setImageBitmap(bitmap);
 		}
+		else if (item.getImageID() == -1)
+		{
+			invoiceImageView.setVisibility(View.GONE);
+		}
 		else
 		{			
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
@@ -168,20 +190,8 @@ public class ShowItemActivity extends Activity
 			else if (item.getImageID() != -1 && item.getImageID() != 0 && !Utils.isNetworkConnected())
 			{
 				Utils.showToast(ShowItemActivity.this, "网络未连接，无法下载图片");				
-			}	
-		}
-	}
-	
-	private void initButton()
-	{		
-		Button backButton = (Button)findViewById(R.id.backButton);
-		backButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				finish();
 			}
-		});
+		}
 	}
 	
 	private void sendDownloadImageRequest(final ImageView invoiceImageView)
@@ -199,7 +209,7 @@ public class ShowItemActivity extends Activity
 					if (!invoicePath.equals(""))
 					{
 						item.setInvoicePath(invoicePath);
-						DBManager.getDBManager().updateItem(item);
+						dbManager.updateItem(item);
 						
 						runOnUiThread(new Runnable()
 						{

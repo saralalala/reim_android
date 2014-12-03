@@ -275,9 +275,93 @@ public class EditItemActivity extends Activity
 	}
 	
 	private void initView()
-	{		
+	{
+		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
 		
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});
+		
+		TextView saveTextView = (TextView)findViewById(R.id.saveTextView);
+		saveTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				try
+				{			
+			    	hideSoftKeyboard();
+			    	double amount = Double.valueOf(amountEditText.getText().toString());
+					DecimalFormat format = new DecimalFormat("#0.0");
+					item.setAmount(Double.valueOf(format.format(amount)));
+					item.setConsumer(appPreference.getCurrentUser());
+					item.setNote(noteEditText.getText().toString());
+					item.setIsProveAhead(proveAheadCheckBox.isChecked());
+					item.setNeedReimbursed(needReimCheckBox.isChecked());
+					item.setLocalUpdatedDate(Utils.getCurrentTime());
+					
+					if (fromReim && item.isProveAhead() && item.getPaAmount() == 0)
+					{
+						AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+											.setTitle("请选择操作")
+											.setMessage("这是一条预审批的条目，您是想仅保存此条目还是要直接发送给上级审批？")
+											.setPositiveButton(R.string.onlySave, new OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													saveItem();												
+												}
+											})
+											.setNeutralButton(R.string.sendToApprove, new OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													if (Utils.isNetworkConnected())
+													{
+														showManagerDialog();
+													}
+													else
+													{
+														Utils.showToast(EditItemActivity.this, "网络未连接，无法发送审批");
+													}
+												}
+											})
+											.setNegativeButton(R.string.cancel, null)
+											.create();
+						mDialog.show();
+					}
+					else
+					{
+						saveItem();
+					}
+				}
+				catch (NumberFormatException e)
+				{
+					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+														.setTitle("保存失败")
+														.setMessage("数字输入格式不正确")
+														.setNegativeButton(R.string.confirm, new OnClickListener()
+														{
+															public void onClick(DialogInterface dialog, int which)
+															{
+																amountEditText.requestFocus();
+															}
+														})
+														.create();
+					mDialog.show();
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		});
+				
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		if (item.getAmount() != 0)
 		{
@@ -384,7 +468,7 @@ public class EditItemActivity extends Activity
 		paAmountTextView = (TextView)findViewById(R.id.paAmountTextView);
 		if (item.getPaAmount() != 0)
 		{
-			paAmountTextView.setText(getResources().getString(R.string.paAmount) + "¥" + Utils.formatDouble(item.getAmount()));
+			paAmountTextView.setText(getResources().getString(R.string.budget) + "¥" + Utils.formatDouble(item.getAmount()));
 			paAmountTextView.setVisibility(View.VISIBLE);
 		}
 		else
@@ -735,89 +819,6 @@ public class EditItemActivity extends Activity
 				{
 					Utils.showToast(EditItemActivity.this, "当前组无任何其他成员");
 				}
-			}
-		});
-		
-		Button saveButton = (Button)findViewById(R.id.saveButton);
-		saveButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				try
-				{			
-			    	hideSoftKeyboard();
-			    	double amount = Double.valueOf(amountEditText.getText().toString());
-					DecimalFormat format = new DecimalFormat("#0.0");
-					item.setAmount(Double.valueOf(format.format(amount)));
-					item.setConsumer(appPreference.getCurrentUser());
-					item.setNote(noteEditText.getText().toString());
-					item.setIsProveAhead(proveAheadCheckBox.isChecked());
-					item.setNeedReimbursed(needReimCheckBox.isChecked());
-					item.setLocalUpdatedDate(Utils.getCurrentTime());
-					
-					if (fromReim && item.isProveAhead() && item.getPaAmount() == 0)
-					{
-						AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-											.setTitle("请选择操作")
-											.setMessage("这是一条预审批的条目，您是想仅保存此条目还是要直接发送给上级审批？")
-											.setPositiveButton(R.string.onlySave, new OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													saveItem();												
-												}
-											})
-											.setNeutralButton(R.string.sendToApprove, new OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													if (Utils.isNetworkConnected())
-													{
-														showManagerDialog();
-													}
-													else
-													{
-														Utils.showToast(EditItemActivity.this, "网络未连接，无法发送审批");
-													}
-												}
-											})
-											.setNegativeButton(R.string.cancel, null)
-											.create();
-						mDialog.show();
-					}
-					else
-					{
-						saveItem();
-					}
-				}
-				catch (NumberFormatException e)
-				{
-					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-														.setTitle("保存失败")
-														.setMessage("数字输入格式不正确")
-														.setNegativeButton(R.string.confirm, new OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																amountEditText.requestFocus();
-															}
-														})
-														.create();
-					mDialog.show();
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-		
-		Button cancelButton = (Button)findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				finish();
 			}
 		});
 	}

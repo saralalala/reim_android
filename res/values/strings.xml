@@ -20,6 +20,7 @@
     <string name="warning">警告</string>
     <string name="search">搜索</string>
     <string name="status">状态</string>
+    <string name="detail">详情</string>
     
     <string name="signUp">注册</string>
     <string name="signUpByPhone">用手机注册</string>
@@ -62,19 +63,24 @@
     
     <string name="inputAmount">请输入金额</string>
     <string name="invoice">发票</string>
-    <string name="itemApproved">已审批</string>
+    <string name="reimType">报销类型</string>
+    <string name="consumed">已消费</string>
     <string name="proveAhead">预申请</string>
-    <string name="paAmount">预申请金额：</string>
-    <string name="needReimburse">需报销</string>
-    <string name="category">类别</string>
-    <string name="vendor">商家</string>
-    <string name="location">城市</string>
+    <string name="itemApproved">已审批</string>
+    <string name="actualCost">实际消费</string>
+    <string name="budget">预算</string>
+    <string name="needReimburse">需要报销</string>
+    <string name="type">类&#160;&#160;&#160;&#8201;型</string>
+    <string name="photo">照&#160;&#160;&#160;&#8201;片</string>
+    <string name="category">类&#160;&#160;&#160;&#8201;别</string>
+    <string name="vendor">供应商</string>
+    <string name="location">地&#160;&#160;&#160;&#8201;点</string>
     <string name="currentLocation">当前城市:</string>
     <string name="locationInvalid">未获取到城市信息</string>
-    <string name="tag">标签</string>
-    <string name="member">参与人员:</string>
-    <string name="time">消费时间</string>
-    <string name="note">备注</string>
+    <string name="tag">标&#160;&#160;&#160;&#8201;签</string>
+    <string name="member">参与者</string>
+    <string name="time">日&#160;&#160;&#160;&#8201;期</string>
+    <string name="note">备&#160;&#160;&#160;&#8201;注</string>
     <string name="chooseCategory">选择类别</string>
     <string name="chooseVendor">选择商家</string>
     <string name="chooseLocation">选择城市</string>

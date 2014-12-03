@@ -1,172 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/baseLayout" >
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.13" >
-
-            <EditText
-                android:id="@+id/amountEditText"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:hint="@string/inputAmount"
-                android:inputType="numberDecimal" />
-
-            <requestFocus />
-
-            <CheckBox
-                android:id="@+id/proveAheadCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/amountEditText"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/proveAhead" />
-
-            <CheckBox
-                android:id="@+id/needReimCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/proveAheadCheckBox"
-                android:layout_below="@+id/proveAheadCheckBox"
-                android:layout_marginTop="14dp"
-                android:text="@string/needReimburse" />
-
-            <TextView
-                android:id="@+id/paAmountTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/proveAheadCheckBox"
-                android:layout_below="@+id/proveAheadCheckBox"
-                android:text="@string/paAmount" />
-
-            <ImageView
-                android:id="@+id/invoiceImageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:contentDescription="@string/invoice"
-                android:paddingRight="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/splash_image" />
-
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/categoryButton"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_weight="0.14"
-            android:text="@string/chooseCategory" />
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back" />
 
         <TextView
-            android:id="@+id/categoryTextView"
+            android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <Button
-            android:id="@+id/vendorButton"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_weight="0.14"
-            android:text="@string/chooseVendor" />
-
-        <EditText
-            android:id="@+id/vendorEditText"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/inputVendor" />
-
-        <Button
-            android:id="@+id/locationButton"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_weight="0.14"
-            android:text="@string/chooseLocation" />
-
-        <EditText
-            android:id="@+id/locationEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/inputLocation" />
-
-        <Button
-            android:id="@+id/tagButton"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:text="@string/chooseTag" />
+            android:layout_centerInParent="true"
+            android:text="@string/detail"
+            android:textSize="20sp"
+            android:textColor="@color/major_light" />
 
         <TextView
-            android:id="@+id/tagTextView"
+            android:id="@+id/saveTextView"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <Button
-            android:id="@+id/timeButton"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:text="@string/chooseTime" />
-
-        <TextView
-            android:id="@+id/timeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <Button
-            android:id="@+id/memberButton"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:text="@string/chooseMember" />
-
-        <TextView
-            android:id="@+id/memberTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.13"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <EditText
-            android:id="@+id/noteEditText"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/inputNote" >
-        </EditText>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:text="@string/save"
+            android:textSize="16sp"
+            android:textColor="@color/major_light" />
 
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save" />
+    </RelativeLayout>
 
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel" />
-
-    </LinearLayout>
-
-</ScrollView>
+	<ScrollView
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:id="@+id/baseLayout" >
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.13" >
+	
+	            <EditText
+	                android:id="@+id/amountEditText"
+	                android:layout_width="200dp"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_alignParentTop="true"
+	                android:hint="@string/inputAmount"
+	                android:inputType="numberDecimal" />
+	
+	            <requestFocus />
+	
+	            <CheckBox
+	                android:id="@+id/proveAheadCheckBox"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_below="@+id/amountEditText"
+	                android:layout_marginLeft="16dp"
+	                android:layout_marginTop="16dp"
+	                android:text="@string/proveAhead" />
+	
+	            <CheckBox
+	                android:id="@+id/needReimCheckBox"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignLeft="@+id/proveAheadCheckBox"
+	                android:layout_below="@+id/proveAheadCheckBox"
+	                android:layout_marginTop="14dp"
+	                android:text="@string/needReimburse" />
+	
+	            <TextView
+	                android:id="@+id/paAmountTextView"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignLeft="@+id/proveAheadCheckBox"
+	                android:layout_below="@+id/proveAheadCheckBox"
+	                android:text="@string/budget" />
+	
+	            <ImageView
+	                android:id="@+id/invoiceImageView"
+	                android:layout_width="100dp"
+	                android:layout_height="100dp"
+	                android:layout_alignParentRight="true"
+	                android:layout_centerVertical="true"
+	                android:contentDescription="@string/invoice"
+	                android:paddingRight="10dp"
+	                android:scaleType="fitXY"
+	                android:src="@drawable/splash_image" />
+	
+	        </RelativeLayout>
+	
+	        <Button
+	            android:id="@+id/categoryButton"
+	            android:layout_width="100dp"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.14"
+	            android:text="@string/chooseCategory" />
+	
+	        <TextView
+	            android:id="@+id/categoryTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.13"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <Button
+	            android:id="@+id/vendorButton"
+	            android:layout_width="100dp"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.14"
+	            android:text="@string/chooseVendor" />
+	
+	        <EditText
+	            android:id="@+id/vendorEditText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:hint="@string/inputVendor" />
+	
+	        <Button
+	            android:id="@+id/locationButton"
+	            android:layout_width="100dp"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.14"
+	            android:text="@string/chooseLocation" />
+	
+	        <EditText
+	            android:id="@+id/locationEditText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:hint="@string/inputLocation" />
+	
+	        <Button
+	            android:id="@+id/tagButton"
+	            android:layout_width="100dp"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.13"
+	            android:text="@string/chooseTag" />
+	
+	        <TextView
+	            android:id="@+id/tagTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.13"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <Button
+	            android:id="@+id/timeButton"
+	            android:layout_width="100dp"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.13"
+	            android:text="@string/chooseTime" />
+	
+	        <TextView
+	            android:id="@+id/timeTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.13"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <Button
+	            android:id="@+id/memberButton"
+	            android:layout_width="100dp"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.13"
+	            android:text="@string/chooseMember" />
+	
+	        <TextView
+	            android:id="@+id/memberTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="0dp"
+	            android:layout_weight="0.13"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <EditText
+	            android:id="@+id/noteEditText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:hint="@string/inputNote" >
+	        </EditText>
+	
+	    </LinearLayout>
+	
+	</ScrollView>
+	
+</LinearLayout>

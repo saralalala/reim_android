@@ -18,28 +18,32 @@
             android:layout_marginTop="9dp"
             android:contentDescription="@string/status" />
 
-        <TextView
-            android:id="@+id/amountTextView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/statusImageView"
-            android:layout_marginTop="4dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textColor="@color/font_major_dark"
-            android:textSize="24sp" />
+            android:gravity="bottom" >
 
-        <TextView
-            android:id="@+id/signTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/amountTextView"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="3dp"
-            android:layout_toRightOf="@+id/amountTextView"
-            android:text="@string/rmb"
-            android:textColor="@color/hint_black"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/amountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/font_major_dark"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/signTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:text="@string/rmb"
+                android:textColor="@color/hint_black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
     </RelativeLayout>
 
     <View

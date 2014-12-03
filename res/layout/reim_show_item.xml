@@ -1,218 +1,396 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.13" >
-
-            <TextView
-                android:id="@+id/amountTextView"
-                android:layout_width="wrap_content"                
-          		android:layout_height="wrap_content"
-            	android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <CheckBox
-                android:id="@+id/proveAheadCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/proveAhead" 
-                android:enabled="false"/>
-
-            <CheckBox
-                android:id="@+id/needReimCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/proveAheadCheckBox"
-                android:layout_below="@+id/proveAheadCheckBox"
-                android:layout_marginTop="14dp"
-                android:text="@string/needReimburse"
-                android:enabled="false" />
-
-            <ImageView
-                android:id="@+id/invoiceImageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:contentDescription="@string/invoice"
-                android:scaleType="fitXY"
-                android:src="@drawable/splash_image" />
-
-            <TextView
-                android:id="@+id/paAmountTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/proveAheadCheckBox"
-                android:layout_below="@+id/proveAheadCheckBox"
-                android:text="@string/paAmount" />
-
-        </RelativeLayout>
-
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
-            
-	        <TextView
-	            android:id="@+id/categoryPrompt"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.01"
-	            android:text="@string/category"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-            
-	        <TextView
-	            android:id="@+id/categoryTextView"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.13"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />         
-	        
-	    </LinearLayout>
-
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
-            
-	        <TextView
-	            android:id="@+id/vendorPrompt"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.01"
-	            android:text="@string/vendor"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-            
-	        <TextView
-	            android:id="@+id/vendorTextView"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.13"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />            
-	        
-	    </LinearLayout>
-
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
-            
-	        <TextView
-	            android:id="@+id/locationPrompt"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.01"
-	            android:text="@string/location"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-            
-	        <TextView
-	            android:id="@+id/locationTextView"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.13"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />            
-	        
-	    </LinearLayout>
-
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
-            
-	        <TextView
-	            android:id="@+id/tagPrompt"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.01"
-	            android:text="@string/tag"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-	        <TextView
-	            android:id="@+id/tagTextView"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.13"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />     
-	        
-	    </LinearLayout>
-
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
-            
-	        <TextView
-	            android:id="@+id/timePrompt"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.01"
-	            android:text="@string/time"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-	        <TextView
-	            android:id="@+id/timeTextView"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.13"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />  
-	        
-	    </LinearLayout>
-
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
-            
-	        <TextView
-	            android:id="@+id/memberPrompt"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.01"
-	            android:text="@string/member"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-	        <TextView
-	            android:id="@+id/memberTextView"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.13"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-	        
-	    </LinearLayout>
-
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
-            
-	        <TextView
-	            android:id="@+id/notePrompt"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.01"
-	            android:text="@string/note"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-	        <TextView
-	            android:id="@+id/noteTextView"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="0.13"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-	        
-	    </LinearLayout>
-
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/back" />
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/detail"
+            android:textSize="20sp"
+            android:textColor="@color/major_light" />
 
-</ScrollView>
+    </RelativeLayout>
+    
+	<ScrollView
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@color/background"
+	        android:orientation="vertical" >
+
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="108dp" >
+
+	            <TextView
+	                android:id="@+id/actualCostTextView"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="8dp"
+	                android:layout_marginLeft="16dp"
+	                android:text="@string/actualCost"
+	                android:textColor="@color/major_dark"
+	                android:textSize="14sp" />
+
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="24dp"
+	                android:layout_marginLeft="16dp"
+	                android:layout_marginRight="16dp" >
+
+	                <TextView
+	                    android:id="@+id/amountTextView"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:textColor="@color/font_reim_number"
+	                    android:textSize="54sp" />
+
+	                <TextView
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_marginLeft="6dp"
+	                    android:text="@string/rmb"
+	                    android:textColor="@color/major_dark"
+	                    android:textSize="18sp" />
+
+	            </LinearLayout>
+
+	            <TextView
+	                android:id="@+id/budgetTextView"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentRight="true"
+	                android:layout_marginTop="8dp"
+	                android:layout_marginRight="16dp"
+	                android:textColor="@color/font_budget"
+	                android:textSize="14sp" />
+	            
+	        </RelativeLayout>
+            
+		    <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+			  	layout="@layout/divider"/>
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="56dp" >
+
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentLeft="true"
+	                android:layout_marginLeft="16dp"
+	                android:text="@string/type"
+	                android:textColor="@color/hint_grey"
+	                android:textSize="14sp" />
+
+	            <TextView
+	                android:id="@+id/typeTextView"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_toLeftOf="@+id/approvedImageView"
+	                android:layout_marginLeft="80dp"
+	                android:layout_marginRight="10dp"
+	                android:textColor="@color/font_major_dark"
+	                android:textSize="18sp" />
+
+	            <ImageView
+	                android:id="@+id/approvedImageView"
+	                android:layout_width="55dp"
+	                android:layout_height="25dp"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentRight="true"
+	                android:layout_marginRight="10dp"
+	                android:contentDescription="@string/status"
+	                android:src="@drawable/item_approved_detail" />
+	
+	        </RelativeLayout>
+            
+		    <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginLeft="80dp"
+			  	layout="@layout/divider"/>
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="56dp" >
+
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentLeft="true"
+	                android:layout_marginLeft="16dp"
+	                android:text="@string/photo"
+	                android:textColor="@color/hint_grey"
+	                android:textSize="14sp" />
+	
+	            <ImageView
+	                android:id="@+id/invoiceImageView"
+	                android:layout_width="30dp"
+	                android:layout_height="30dp"
+	                android:layout_centerVertical="true"
+	                android:layout_marginLeft="80dp"
+	                android:contentDescription="@string/invoice"
+	                android:scaleType="fitXY"
+	                android:src="@drawable/default_invoice" />
+	
+	        </RelativeLayout>
+            
+		    <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginLeft="80dp"
+			  	layout="@layout/divider"/>
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="56dp" >
+
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentLeft="true"
+	                android:layout_marginLeft="16dp"
+	                android:text="@string/time"
+	                android:textColor="@color/hint_grey"
+	                android:textSize="14sp" />
+
+	            <TextView
+	                android:id="@+id/timeTextView"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_marginLeft="80dp"
+	                android:layout_marginRight="10dp"
+	                android:textColor="@color/font_major_dark"
+	                android:textSize="18sp" />
+	
+	        </RelativeLayout>
+            
+		    <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginLeft="80dp"
+			  	layout="@layout/divider"/>
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="56dp" >
+
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentLeft="true"
+	                android:layout_marginLeft="16dp"
+	                android:text="@string/vendor"
+	                android:textColor="@color/hint_grey"
+	                android:textSize="14sp" />
+
+	            <TextView
+	                android:id="@+id/vendorTextView"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_marginLeft="80dp"
+	                android:layout_marginRight="10dp"
+	                android:textColor="@color/font_major_dark"
+	                android:textSize="18sp" />
+	
+	        </RelativeLayout>
+            
+		    <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginLeft="80dp"
+			  	layout="@layout/divider"/>
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="56dp" >
+
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentLeft="true"
+	                android:layout_marginLeft="16dp"
+	                android:text="@string/location"
+	                android:textColor="@color/hint_grey"
+	                android:textSize="14sp" />
+
+	            <TextView
+	                android:id="@+id/locationTextView"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_marginLeft="80dp"
+	                android:layout_marginRight="10dp"
+	                android:textColor="@color/font_major_dark"
+	                android:textSize="18sp" />
+	
+	        </RelativeLayout>
+            
+		    <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginLeft="80dp"
+			  	layout="@layout/divider"/>
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="56dp" >
+
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentLeft="true"
+	                android:layout_marginLeft="16dp"
+	                android:text="@string/category"
+	                android:textColor="@color/hint_grey"
+	                android:textSize="14sp" />
+
+	            <TextView
+	                android:id="@+id/categoryTextView"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_marginLeft="80dp"
+	                android:layout_marginRight="10dp"
+	                android:textColor="@color/font_major_dark"
+	                android:textSize="18sp" />
+	
+	        </RelativeLayout>
+            
+		    <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginLeft="80dp"
+			  	layout="@layout/divider"/>
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="56dp" >
+
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentLeft="true"
+	                android:layout_marginLeft="16dp"
+	                android:text="@string/tag"
+	                android:textColor="@color/hint_grey"
+	                android:textSize="14sp" />
+
+	            <TextView
+	                android:id="@+id/tagTextView"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_marginLeft="80dp"
+	                android:layout_marginRight="10dp"
+	                android:textColor="@color/font_major_dark"
+	                android:textSize="18sp" />
+	
+	        </RelativeLayout>
+            
+		    <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginLeft="80dp"
+			  	layout="@layout/divider"/>
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="56dp" >
+
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentLeft="true"
+	                android:layout_marginLeft="16dp"
+	                android:text="@string/member"
+	                android:textColor="@color/hint_grey"
+	                android:textSize="14sp" />
+
+	            <TextView
+	                android:id="@+id/memberTextView"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_marginLeft="80dp"
+	                android:layout_marginRight="10dp"
+	                android:textColor="@color/font_major_dark"
+	                android:textSize="18sp" />
+	
+	        </RelativeLayout>
+            
+		    <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginLeft="80dp"
+			  	layout="@layout/divider"/>
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="56dp" >
+
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentLeft="true"
+	                android:layout_marginLeft="16dp"
+	                android:text="@string/note"
+	                android:textColor="@color/hint_grey"
+	                android:textSize="14sp" />
+
+	            <TextView
+	                android:id="@+id/noteTextView"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_marginLeft="80dp"
+	                android:layout_marginRight="10dp"
+	                android:textColor="@color/font_major_dark"
+	                android:textSize="18sp" />
+	
+	        </RelativeLayout>
+	
+	    </LinearLayout>
+	
+	</ScrollView>
+	
+</LinearLayout>

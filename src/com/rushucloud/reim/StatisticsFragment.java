@@ -205,7 +205,7 @@ public class StatisticsFragment extends Fragment
 		renderer.setAxisTitleTextSize(18);
 		renderer.setDisplayValues(true);
 		renderer.setShowGrid(true);
-		renderer.setMarginsColor(getResources().getColor(R.color.list_background));
+		renderer.setMarginsColor(getResources().getColor(R.color.background));
 		renderer.setLabelsColor(Color.BLACK);
 		renderer.setXLabelsColor(Color.BLACK);
 		renderer.setYLabelsColor(0, Color.BLACK);
