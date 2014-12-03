@@ -43,7 +43,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="0.5dp"
 					android:layout_alignParentTop="true"
-		        	layout="@layout/list_divider"/>
+		        	layout="@layout/divider"/>
 			
 			    <classes.Widget.CircleImageView
 				    android:id="@+id/avatarImageView"
@@ -66,33 +66,33 @@
 				    android:layout_marginLeft="10dp"
 				    android:layout_marginRight="10dp" >
 			
-				<TextView
-			        android:id="@+id/nicknameTextView"
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-			        android:layout_marginBottom="4dp"
-			        android:layout_above="@+id/pivotView"
-			        android:ellipsize="end"
-			        android:singleLine="true"
-				    android:textColor="@color/font_major_dark"
-				    android:textSize="16sp" />
-			
-				<View
-				    android:id="@+id/pivotView"
-				    android:layout_width="0dp"
-				    android:layout_height="0dp"
-				    android:layout_centerInParent="true" />
-			
-				<TextView
-			        android:id="@+id/companyTextView"
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-			        android:layout_below="@+id/pivotView"
-			        android:layout_marginTop="4dp"
-			        android:ellipsize="end"
-			        android:singleLine="true"
-				    android:textColor="@color/font_major_dark"
-				    android:textSize="16sp"  />
+					<TextView
+				        android:id="@+id/nicknameTextView"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_marginBottom="4dp"
+				        android:layout_above="@+id/pivotView"
+				        android:ellipsize="end"
+				        android:singleLine="true"
+					    android:textColor="@color/font_major_dark"
+					    android:textSize="16sp" />
+				
+					<View
+					    android:id="@+id/pivotView"
+					    android:layout_width="0dp"
+					    android:layout_height="0dp"
+					    android:layout_centerInParent="true" />
+				
+					<TextView
+				        android:id="@+id/companyTextView"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_below="@+id/pivotView"
+				        android:layout_marginTop="4dp"
+				        android:ellipsize="end"
+				        android:singleLine="true"
+					    android:textColor="@color/font_major_dark"
+					    android:textSize="16sp"  />
 			
 			    </RelativeLayout>
 			
@@ -110,7 +110,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="0.5dp"
 					android:layout_alignParentBottom="true"
-		            layout="@layout/list_divider"/>
+		            layout="@layout/divider"/>
 			
 			</RelativeLayout>
             
@@ -118,13 +118,12 @@
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
 				android:layout_marginTop="24dp"
-	        	layout="@layout/list_divider"/>
+	        	layout="@layout/divider"/>
 			
             <RelativeLayout
                 android:id="@+id/defaultManagerLayout"
 				android:layout_width="match_parent"
 				android:layout_height="50dp"
-				android:orientation="horizontal"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable" >
 					     
@@ -152,13 +151,12 @@
 	        <include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
-	        	layout="@layout/list_divider"/>
+	        	layout="@layout/divider"/>
 			
             <RelativeLayout
                 android:id="@+id/inviteLayout"
 				android:layout_width="match_parent"
 				android:layout_height="50dp"
-				android:orientation="horizontal"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable" >
 					     
@@ -177,13 +175,12 @@
 	        <include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
-	        	layout="@layout/list_divider"/>
+	        	layout="@layout/divider"/>
 			
             <RelativeLayout
                 android:id="@+id/myInvitesLayout"
 				android:layout_width="match_parent"
 				android:layout_height="50dp"
-				android:orientation="horizontal"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable" >
 					     
@@ -211,13 +208,12 @@
 	        <include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
-	        	layout="@layout/list_divider"/>
+	        	layout="@layout/divider"/>
 			
             <RelativeLayout
                 android:id="@+id/invoiceLayout"
 				android:layout_width="match_parent"
 				android:layout_height="50dp"
-				android:orientation="horizontal"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable" >
 					     
@@ -236,19 +232,18 @@
 	        <include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
-	        	layout="@layout/list_divider"/>
+	        	layout="@layout/divider"/>
             
 	        <include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
 				android:layout_marginTop="24dp"
-	        	layout="@layout/list_divider"/>
+	        	layout="@layout/divider"/>
 			
             <RelativeLayout
                 android:id="@+id/settingsLayout"
 				android:layout_width="match_parent"
 				android:layout_height="50dp"
-				android:orientation="horizontal"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable" >
 					     
@@ -276,13 +271,12 @@
 	        <include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
-	        	layout="@layout/list_divider"/>
+	        	layout="@layout/divider"/>
 			
             <RelativeLayout
                 android:id="@+id/customServiceLayout"
 				android:layout_width="match_parent"
 				android:layout_height="50dp"
-				android:orientation="horizontal"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable" >
 					     
@@ -302,7 +296,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
 				android:layout_marginBottom="24dp"
-	        	layout="@layout/list_divider"/>
+	        	layout="@layout/divider"/>
 			
         </LinearLayout>
         

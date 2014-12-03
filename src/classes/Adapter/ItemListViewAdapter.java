@@ -12,6 +12,7 @@ import classes.Utils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,9 @@ public class ItemListViewAdapter extends BaseAdapter
 	private ItemFilter itemFilter;
 	private List<Item> itemList;
 	private List<Item> originalList;
+	private int interval;
+	private int sideLength;
+	private int iconCount;
 	private final Object mLock = new Object();
 
 	public ItemListViewAdapter(Context context, List<Item> items)
@@ -36,6 +40,13 @@ public class ItemListViewAdapter extends BaseAdapter
 		this.context = context;
 		this.itemList = new ArrayList<Item>(items);
 		this.layoutInflater = LayoutInflater.from(context);
+		
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+
+		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
+		sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);	
+		iconCount = (metrics.widthPixels - padding * 2 + interval) / (sideLength + interval);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -88,14 +99,13 @@ public class ItemListViewAdapter extends BaseAdapter
 		String reportTitle = item.getBelongReport() == null ? "N/A" : item.getBelongReport().getTitle();
 		reportTextView.setText(reportTitle);
 		
-		// category 和 tag 一共count个
+		// category 和 tag 一共iconCount个
 		categoryImageView.setImageResource(R.drawable.food);
 
 		iconLayout.removeAllViews();
-		int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, context.getResources().getDisplayMetrics());
-		int sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, context.getResources().getDisplayMetrics());
-		int count = (iconLayout.getWidth() + interval) / (sideLength + interval);
-		for (int i = 0; i < count; i++)
+		
+		iconCount = 1;
+		for (int i = 0; i < iconCount; i++)
 		{
 			ImageView iconImageView = new ImageView(context);
 			iconImageView.setImageResource(R.drawable.category_logo);

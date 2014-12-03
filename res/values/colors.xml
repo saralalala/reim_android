@@ -2,6 +2,7 @@
 <resources>
     
     <color name="font_major_dark">#FF373737</color>
+    <color name="font_minor_dark">#FF333333</color>
     <color name="font_major_light">#CCFFFFFF</color>
     <color name="start_font">#FFFE8888</color>
     

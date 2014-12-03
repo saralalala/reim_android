@@ -7,7 +7,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import classes.Item;
 import classes.Report;
-import classes.Adapter.ItemListViewAdapter;
+import classes.Adapter.ReportItemListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Intent;
@@ -24,7 +24,7 @@ public class UnarchivedItemsActivity extends Activity
 	private static DBManager dbManager;
 	
 	private ListView itemListView;
-	private ItemListViewAdapter adapter;
+	private ReportItemListViewAdapter adapter;
 	
 	private Report report;
 	private List<Item> itemList;
@@ -90,7 +90,7 @@ public class UnarchivedItemsActivity extends Activity
 	
 	private void initView()
 	{
-		adapter = new ItemListViewAdapter(UnarchivedItemsActivity.this, itemList);
+		adapter = new ReportItemListViewAdapter(UnarchivedItemsActivity.this, itemList);
 		itemListView = (ListView)findViewById(R.id.itemListView);
 		itemListView.setAdapter(adapter);
 		itemListView.setOnItemClickListener(new OnItemClickListener()

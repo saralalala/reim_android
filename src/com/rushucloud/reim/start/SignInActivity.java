@@ -302,7 +302,6 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
 	}
 
-
 	public void onClick(View v)
 	{
 		if (v.equals(forgorPasswordTextView))

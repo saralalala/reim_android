@@ -5,25 +5,337 @@
     android:orientation="vertical"
     android:background="@color/list_background" >
 
-	<ListView
-	    android:id="@+id/profileListView" 
-	    android:layout_width="match_parent"
-	    android:layout_height="203dp"
-        android:layout_marginTop="18dp"
-	    android:background="@android:color/white"
-		android:scrollbars="none"
-		android:divider="@color/list_divider"
-		android:dividerHeight="0.5dp"
-	    android:descendantFocusability="beforeDescendants" />	
-	    
-    <ListView
-        android:id="@+id/operationListView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="152.5dp"
-        android:layout_marginTop="24dp"
-	    android:background="@android:color/white"
-		android:scrollbars="none"
-		android:divider="@color/list_divider"
-		android:dividerHeight="0.5dp" />
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/personalInfo"
+            android:textSize="20sp"
+            android:textColor="@color/major_light" />
+
+        <TextView
+            android:id="@+id/saveTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:text="@string/save"
+            android:textSize="16sp"
+            android:textColor="@color/major_light" />
+
+    </RelativeLayout>
+
+    <ScrollView
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+
+        <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" >
+	        
+			<RelativeLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="50.5dp"
+			    android:layout_marginTop="18dp"
+			    android:background="@drawable/me_item_drawable" >
+            
+		        <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+		        	layout="@layout/divider"/>
+			
+			    <TextView
+			        android:id="@+id/emailTextView"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_marginLeft="16dp"
+			        android:text="@string/email"
+			    	android:gravity="center_vertical" />
+			
+			    <EditText
+			        android:id="@+id/emailEditText"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_alignParentRight="true"
+			        android:layout_toRightOf="@+id/emailTextView"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginRight="16dp" 
+        			android:background="@null"
+			        android:inputType="textEmailAddress"
+			        android:hint="@string/inputEmail"
+			        android:textSize="14sp" />
+			
+			</RelativeLayout>
+	        
+			<RelativeLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="50.5dp"
+			    android:background="@drawable/me_item_drawable" >
+            
+		        <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+		        	layout="@layout/divider"/>
+			
+			    <TextView
+			        android:id="@+id/phoneTextView"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_marginLeft="16dp"
+			        android:text="@string/phone"
+			    	android:gravity="center_vertical" />
+			
+			    <EditText
+			        android:id="@+id/phoneEditText"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_alignParentRight="true"
+			        android:layout_toRightOf="@+id/phoneTextView"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginRight="16dp" 
+        			android:background="@null"
+			        android:inputType="phone"
+			        android:hint="@string/inputPhone"
+			        android:textSize="14sp" />
+			
+			</RelativeLayout>
+	        
+			<RelativeLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="50.5dp"
+			    android:background="@drawable/me_item_drawable" >
+            
+		        <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+		        	layout="@layout/divider"/>
+			
+			    <TextView
+			        android:id="@+id/nicknameTextView"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_marginLeft="16dp"
+			        android:text="@string/nickname"
+			    	android:gravity="center_vertical" />
+			
+			    <EditText
+			        android:id="@+id/nicknameEditText"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_alignParentRight="true"
+			        android:layout_toRightOf="@+id/nicknameTextView"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginRight="16dp" 
+        			android:background="@null"
+			        android:hint="@string/inputNickname"
+			        android:textSize="14sp" />
+			
+			</RelativeLayout>
+	        
+			<RelativeLayout
+			    android:id="@+id/showCompanyLayout"
+			    android:layout_width="match_parent"
+			    android:layout_height="50.5dp"
+			    android:background="@drawable/me_item_drawable" >
+            
+		        <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+		        	layout="@layout/divider"/>
+			
+			    <TextView
+			        android:id="@+id/companyTextView1"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_marginLeft="16dp"
+			        android:text="@string/company"
+			    	android:gravity="center_vertical" />
+			
+			    <TextView
+			        android:id="@+id/companyTextView"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_alignParentRight="true"
+			        android:layout_toRightOf="@+id/companyTextView1"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginRight="16dp" />
+			
+			</RelativeLayout>
+	        
+			<RelativeLayout
+			    android:id="@+id/editCompanyLayout"
+			    android:layout_width="match_parent"
+			    android:layout_height="50.5dp"
+			    android:background="@drawable/me_item_drawable" >
+            
+		        <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+		        	layout="@layout/divider"/>
+			
+			    <TextView
+			        android:id="@+id/companyTextView2"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_marginLeft="16dp"
+			        android:text="@string/company"
+			    	android:gravity="center_vertical" />
+			
+			    <EditText
+			        android:id="@+id/companyEditText"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_toRightOf="@+id/companyTextView2"
+			        android:layout_toLeftOf="@+id/companyButton"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginRight="10dp" 
+        			android:background="@null"
+			        android:hint="@string/inputCompanyName"
+			        android:textSize="14sp" />
+
+			    <Button
+			        android:id="@+id/companyButton"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_centerVertical="true"
+			        android:layout_alignParentRight="true"
+			        android:layout_marginRight="16dp" 
+			        android:text="@string/modify" />
+			
+			</RelativeLayout>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+	        	layout="@layout/divider"/>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_marginTop="24dp"
+	        	layout="@layout/divider"/>
+			
+            <RelativeLayout
+                android:id="@+id/passwordLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50dp"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/changePassword"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+				
+				<ImageView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_alignParentRight="true"
+				    android:layout_centerVertical="true"
+				    android:layout_marginRight="10dp"
+				    android:contentDescription="@string/nullString"
+				    android:src="@drawable/next" />
+				
+			</RelativeLayout>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+	        	layout="@layout/divider"/>
+			
+            <RelativeLayout
+                android:id="@+id/categoryLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50.5dp"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/categoryManagement"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+				
+				<ImageView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_alignParentRight="true"
+				    android:layout_centerVertical="true"
+				    android:layout_marginRight="10dp"
+				    android:contentDescription="@string/nullString"
+				    android:src="@drawable/next" />
+            
+		        <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+					android:layout_alignParentBottom="true"
+		        	layout="@layout/divider"/>
+				
+			</RelativeLayout>
+			
+            <RelativeLayout
+                android:id="@+id/tagLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50.5dp"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/tagManagement"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+				
+				<ImageView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_alignParentRight="true"
+				    android:layout_centerVertical="true"
+				    android:layout_marginRight="10dp"
+				    android:contentDescription="@string/nullString"
+				    android:src="@drawable/next" />
+            
+		        <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+					android:layout_alignParentBottom="true"
+		        	layout="@layout/divider"/>
+				
+			</RelativeLayout>
+			
+        </LinearLayout>
+        
+    </ScrollView>
 
 </LinearLayout>

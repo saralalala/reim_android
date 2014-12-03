@@ -22,8 +22,8 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.ItemListViewAdapter;
 import classes.Adapter.MemberListViewAdapter;
+import classes.Adapter.ReportItemListViewAdapter;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -59,7 +59,7 @@ public class EditReportActivity extends Activity
 	private TextView managerTextView;
 	private TextView ccTextView;
 	private ListView itemListView;
-	private ItemListViewAdapter adapter;
+	private ReportItemListViewAdapter adapter;
 	private MemberListViewAdapter memberAdapter;
 
 	private Report report;
@@ -86,6 +86,7 @@ public class EditReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EditReportActivity");		
 		MobclickAgent.onResume(this);
+		initData();
 		refreshView();
 	}
 
@@ -222,7 +223,7 @@ public class EditReportActivity extends Activity
 		ccTextView = (TextView)findViewById(R.id.ccTextView);
 		ccTextView.setText(report.getCCsName());
 		
-		adapter = new ItemListViewAdapter(EditReportActivity.this, itemList);
+		adapter = new ReportItemListViewAdapter(EditReportActivity.this, itemList);
 		itemListView = (ListView)findViewById(R.id.itemListView);
 		itemListView.setAdapter(adapter);
 		itemListView.setOnItemClickListener(new OnItemClickListener()

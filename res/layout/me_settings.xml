@@ -30,17 +30,98 @@
             android:textColor="@color/major_light" />
 
     </RelativeLayout>
-	    
-    <ListView
-        android:id="@+id/settingsListView"
-        android:layout_width="match_parent"
-        android:layout_height="152.5dp"
-        android:layout_marginTop="18dp"
-	    android:background="@android:color/white"
-		android:scrollbars="none"
-	    android:headerDividersEnabled="true"
-		android:footerDividersEnabled="true"
-		android:divider="@color/list_divider"
-		android:dividerHeight="0.5dp" />
+
+    <ScrollView
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+
+        <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" >
+			
+            <RelativeLayout
+                android:id="@+id/aboutLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50.5dp"
+				android:layout_marginTop="24dp"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+            
+		        <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+		        	layout="@layout/divider"/>
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/aboutUs"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+				
+			</RelativeLayout>
+            
+	        <include                 
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+	        	layout="@layout/divider"/>
+			
+            <RelativeLayout
+                android:id="@+id/feedbackLayout"
+				android:layout_width="match_parent"
+				android:layout_height="50.5dp"
+				android:clickable="true"
+				android:background="@drawable/me_item_drawable" >
+					     
+				<TextView
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentLeft="true"
+				    android:layout_marginLeft="16dp"
+				    android:text="@string/feedback"
+				    android:textSize="16sp"
+				    android:textColor="@color/font_major_dark" />
+            
+		        <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+					android:layout_alignParentBottom="true"
+		        	layout="@layout/divider"/>
+				
+			</RelativeLayout>
+			
+            <RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="50.5dp"
+				android:background="@drawable/me_item_drawable" >
+
+			    <Button
+			        android:id="@+id/signOutButton"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginTop="5dp"
+			        android:layout_marginBottom="5dp"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginRight="10dp"
+			        android:background="@drawable/button_long_dark_drawable"
+			        android:text="@string/signOut"
+			        android:textColor="@color/button_text_color_light" />
+            
+		        <include                 
+					android:layout_width="match_parent"
+					android:layout_height="0.5dp"
+					android:layout_alignParentBottom="true"
+		        	layout="@layout/divider"/>
+				
+			</RelativeLayout>
+			
+        </LinearLayout>
+        
+    </ScrollView>
 
 </LinearLayout>

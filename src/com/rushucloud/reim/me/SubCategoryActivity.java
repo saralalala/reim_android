@@ -59,7 +59,6 @@ public class SubCategoryActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("SubCategoryActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
 		refreshListView();
 	}
 
@@ -148,6 +147,7 @@ public class SubCategoryActivity extends Activity
 	private void initView()
 	{		
 		getActionBar().hide();
+		ReimApplication.setProgressDialog(this);
 		
 		categoryListView = (ListView)findViewById(R.id.categoryListView);
 		registerForContextMenu(categoryListView);

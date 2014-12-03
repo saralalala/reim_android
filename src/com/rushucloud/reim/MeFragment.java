@@ -133,7 +133,7 @@ public class MeFragment extends Fragment
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit)
 		{
-	        initView();
+	        loadProfileView();
 		}
 	}
 	
@@ -263,7 +263,7 @@ public class MeFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-				if (currentUser.getGroupID() == -1)
+				if (currentUser.getGroupID() <= 0)
 				{
 					Utils.showToast(getActivity(), "你还没加入任何组");			
 				}

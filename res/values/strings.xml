@@ -123,9 +123,10 @@
     <string name="customService">联系客服</string>
     <string name="feedback">意见反馈</string>
     <string name="signOut">退出登录</string>
+    <string name="personalInfo">个人信息</string>
     <string name="email">邮箱</string>
     <string name="phone">手机</string>
-    <string name="companyName">公司名称</string>
+    <string name="company">公司</string>
     <string name="nickname">昵称</string>
     <string name="changePassword">修改密码</string>
     <string name="defaultManager">我的上级</string>
