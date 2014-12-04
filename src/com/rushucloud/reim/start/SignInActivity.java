@@ -234,7 +234,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 						// update members
 						User currentUser = response.getCurrentUser();
 						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-						if (localUser != null && currentUser.getImageID() == localUser.getImageID())
+						if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
 						{
 							currentUser.setAvatarPath(localUser.getAvatarPath());
 						}

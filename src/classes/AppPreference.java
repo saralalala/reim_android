@@ -26,6 +26,7 @@ public class AppPreference
 	private int lastSyncTime = 0;
 	private String profileImageDirectory = "";
 	private String invoiceImageDirectory = "";
+	private String iconImageDirectory = "";
 	
 	private AppPreference(Context context)
 	{
@@ -62,6 +63,7 @@ public class AppPreference
 		String path = Environment.getExternalStorageDirectory() + "/如数云报销";
 		appPreference.setProfileImageDirectory(path + "/images/profile");
 		appPreference.setInvoiceImageDirectory(path + "/images/invoice");
+		appPreference.setIconImageDirectory(path + "/images/icon");
 	}
 	
 	public void saveAppPreference()
@@ -194,5 +196,15 @@ public class AppPreference
 	public void setInvoiceImageDirectory(String invoiceImageDirectory)
 	{
 		this.invoiceImageDirectory = invoiceImageDirectory;
+	}
+
+	public String getIconImageDirectory()
+	{
+		return iconImageDirectory;
+	}
+
+	public void setIconImageDirectory(String iconImageDirectory)
+	{
+		this.iconImageDirectory = iconImageDirectory;
 	}
 }

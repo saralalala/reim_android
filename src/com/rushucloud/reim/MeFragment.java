@@ -419,7 +419,7 @@ public class MeFragment extends Fragment
 				{
 					int currentTime = Utils.getCurrentTime();
 					DBManager dbManager = DBManager.getDBManager();
-					currentUser.setImageID(response.getImageID());
+					currentUser.setAvatarID(response.getImageID());
 					currentUser.setAvatarPath(avatarPath);
 					currentUser.setLocalUpdatedDate(currentTime);
 					currentUser.setServerUpdatedDate(currentTime);
@@ -450,7 +450,7 @@ public class MeFragment extends Fragment
 
     private void sendDownloadAvatarRequest()
     {
-    	DownloadImageRequest request = new DownloadImageRequest(currentUser.getImageID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
+    	DownloadImageRequest request = new DownloadImageRequest(currentUser.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

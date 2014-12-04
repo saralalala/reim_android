@@ -19,9 +19,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ShowItemActivity extends Activity
@@ -32,7 +35,7 @@ public class ShowItemActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.reim_show_item);
+		setContentView(R.layout.reim_show);
 		MobclickAgent.onEvent(ShowItemActivity.this, "UMENG_VIEW_ITEM");
 		initData();
 		initView();
@@ -125,36 +128,6 @@ public class ShowItemActivity extends Activity
 		}
 		TextView typeTextView = (TextView)findViewById(R.id.typeTextView);
 		typeTextView.setText(temp);
-
-		String categoryName = item.getCategory() == null ? "N/A" : item.getCategory().getName();
-		TextView categoryTextView = (TextView)findViewById(R.id.categoryTextView);
-		categoryTextView.setText(categoryName);
-		
-		TextView vendorTextView = (TextView)findViewById(R.id.vendorTextView);
-		vendorTextView.setText(item.getMerchant());
-
-		String cityName = item.getLocation().equals("") ? "N/A" : item.getLocation();
-		TextView locationTextView = (TextView)findViewById(R.id.locationTextView);
-		locationTextView.setText(cityName);
-		
-		TextView tagTextView = (TextView)findViewById(R.id.tagTextView);
-		tagTextView.setText(Tag.getTagsNameString(item.getTags()));
-		
-		TextView timeTextView = (TextView)findViewById(R.id.timeTextView);
-		if (item.getConsumedDate() != -1 && item.getConsumedDate() != 0)
-		{
-			timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));			
-		}
-		else
-		{
-			timeTextView.setText(R.string.notAvailable);
-		}
-		
-		TextView memberTextView = (TextView)findViewById(R.id.memberTextView);
-		memberTextView.setText(User.getUsersNameString(item.getRelevantUsers()));
-		
-		TextView noteTextView = (TextView)findViewById(R.id.noteTextView);
-		noteTextView.setText(item.getNote());
 		
 		final ImageView invoiceImageView = (ImageView)findViewById(R.id.invoiceImageView);
 		invoiceImageView.setOnClickListener(new View.OnClickListener()
@@ -170,33 +143,112 @@ public class ShowItemActivity extends Activity
 			}
 		});
 		
-
-		Bitmap bitmap = BitmapFactory.decodeFile(item.getInvoicePath());
-		if (bitmap != null)
+		Bitmap invoice = BitmapFactory.decodeFile(item.getInvoicePath());
+		if (invoice != null)
 		{
-			invoiceImageView.setImageBitmap(bitmap);
+			invoiceImageView.setImageBitmap(invoice);
 		}
-		else if (item.getImageID() == -1)
+		else if (item.getInvoiceID() == -1)
 		{
 			invoiceImageView.setVisibility(View.GONE);
 		}
 		else
 		{			
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
-			if (item.getImageID() != -1 && item.getImageID() != 0 && Utils.isNetworkConnected())
+			if (item.getInvoiceID() != -1 && item.getInvoiceID() != 0 && Utils.isNetworkConnected())
 			{
 				sendDownloadImageRequest(invoiceImageView);
 			}
-			else if (item.getImageID() != -1 && item.getImageID() != 0 && !Utils.isNetworkConnected())
+			else if (item.getInvoiceID() != -1 && item.getInvoiceID() != 0 && !Utils.isNetworkConnected())
 			{
 				Utils.showToast(ShowItemActivity.this, "网络未连接，无法下载图片");				
 			}
 		}
+		
+		TextView timeTextView = (TextView)findViewById(R.id.timeTextView);
+		if (item.getConsumedDate() != -1 && item.getConsumedDate() != 0)
+		{
+			timeTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));			
+		}
+		else
+		{
+			timeTextView.setText(R.string.notAvailable);
+		}
+		
+		TextView vendorTextView = (TextView)findViewById(R.id.vendorTextView);
+		vendorTextView.setText(item.getMerchant());
+
+		String cityName = item.getLocation().equals("") ? "N/A" : item.getLocation();
+		TextView locationTextView = (TextView)findViewById(R.id.locationTextView);
+		locationTextView.setText(cityName);
+
+		ImageView categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
+		TextView categoryTextView = (TextView)findViewById(R.id.categoryTextView);
+		if (item.getCategory() != null)
+		{
+			Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+			if (categoryIcon != null)
+			{
+				categoryImageView.setImageBitmap(categoryIcon);
+			}
+			categoryTextView.setText(item.getCategory().getName());
+		}
+		
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
+		int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		int tagWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, metrics);
+		int tagCountPerRow = (metrics.widthPixels - padding + interval) / (tagWidth + interval);
+		RelativeLayout tagLayout = (RelativeLayout) findViewById(R.id.tagLayout);
+		tagLayout.removeAllViews();
+		
+		int maxHeight = 0;
+		int topMargin = 0;
+		int tagCount = item.getTags().size();
+		for (int i = 0; i < tagCount; i++)
+		{
+			Tag tag = item.getTags().get(i);
+			Bitmap tagIcon = BitmapFactory.decodeFile(tag.getIconPath());
+			
+			View tagView = View.inflate(this, R.layout.grid_tag, null);
+			
+			ImageView iconImageView = (ImageView) tagView.findViewById(R.id.iconImageView);
+			if (tagIcon != null)
+			{
+				iconImageView.setImageBitmap(tagIcon);				
+			}
+			
+			TextView nameTextView = (TextView) tagView.findViewById(R.id.nameTextView);
+			nameTextView.setText(tag.getName());			
+			
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(tagWidth, RelativeLayout.LayoutParams.WRAP_CONTENT);
+			params.topMargin = topMargin;
+			params.leftMargin = (tagWidth + interval) * (i % tagCountPerRow);
+			
+			tagLayout.addView(tagView, params);	
+			
+			if (tagView.getMeasuredHeight() > maxHeight)
+			{
+				maxHeight = tagView.getMeasuredHeight();
+			}
+			
+			if ((i + 1) % tagCountPerRow == 0)
+			{
+				topMargin += maxHeight;
+				maxHeight = 0;
+			}
+		}		
+		
+		TextView memberTextView = (TextView)findViewById(R.id.memberTextView);
+		memberTextView.setText(User.getUsersNameString(item.getRelevantUsers()));
+		
+		TextView noteTextView = (TextView)findViewById(R.id.noteTextView);
+		noteTextView.setText(item.getNote());		
 	}
 	
 	private void sendDownloadImageRequest(final ImageView invoiceImageView)
 	{
-		DownloadImageRequest request = new DownloadImageRequest(item.getImageID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
+		DownloadImageRequest request = new DownloadImageRequest(item.getInvoiceID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

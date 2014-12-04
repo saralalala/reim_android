@@ -3,9 +3,11 @@ package com.rushucloud.reim.me;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.Category.CreateCategoryRequest;
 import netUtils.Request.Category.DeleteCategoryRequest;
 import netUtils.Request.Category.ModifyCategoryRequest;
+import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Category.CreateCategoryResponse;
 import netUtils.Response.Category.DeleteCategoryResponse;
 import netUtils.Response.Category.ModifyCategoryResponse;
@@ -17,6 +19,7 @@ import classes.AppPreference;
 import classes.Category;
 import classes.ReimApplication;
 import classes.Utils;
+import classes.Adapter.CategoryListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -32,7 +35,6 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -44,7 +46,7 @@ public class CategoryActivity extends Activity
 {
 	private ListView categoryListView;
 	private TextView categoryTextView;
-	private ArrayAdapter<String> adapter;
+	private CategoryListViewAdapter adapter;
 	private List<Category> categoryList;
 
 	private AppPreference appPreference;
@@ -53,7 +55,7 @@ public class CategoryActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_category);
+		setContentView(R.layout.me_category_management);
 		initData();
 		initView();
 	}
@@ -150,20 +152,6 @@ public class CategoryActivity extends Activity
 	{
 		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
-
-		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
-		
-		categoryListView = (ListView)findViewById(R.id.categoryListView);
-		categoryListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				Intent intent = new Intent(CategoryActivity.this, SubCategoryActivity.class);
-				intent.putExtra("parentID", categoryList.get(position).getServerID());
-				startActivity(intent);
-			}
-		});
-		registerForContextMenu(categoryListView);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
@@ -189,13 +177,26 @@ public class CategoryActivity extends Activity
 				}
 			}
 		});
+
+		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
+		
+		categoryListView = (ListView)findViewById(R.id.categoryListView);
+		categoryListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				Intent intent = new Intent(CategoryActivity.this, SubCategoryActivity.class);
+				intent.putExtra("parentID", categoryList.get(position).getServerID());
+				startActivity(intent);
+			}
+		});
+		registerForContextMenu(categoryListView);
 	}
 
 	private void refreshListView()
 	{
 		categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
-				Category.getCategoryNames(categoryList));
+		adapter = new CategoryListViewAdapter(this, categoryList, null);
 		categoryListView.setAdapter(adapter);
 		
 		if (categoryList.size() == 0)
@@ -207,7 +208,18 @@ public class CategoryActivity extends Activity
 		{
 			categoryListView.setVisibility(View.VISIBLE);
 			categoryTextView.setVisibility(View.INVISIBLE);			
-		}
+		}	
+		
+		if (Utils.isNetworkConnected())
+		{
+			for (Category category : categoryList)
+			{
+				if (category.hasUndownloadedIcon())
+				{
+					sendDownloadIconRequest(category);
+				}
+			}
+		}	
 	}
 
 	private void showCategoryDialog(final Category category)
@@ -356,8 +368,7 @@ public class CategoryActivity extends Activity
 				if (response.getStatus())
 				{
 					dbManager.deleteCategory(category.getServerID());
-					dbManager.deleteSubCategories(category.getServerID(),
-							appPreference.getCurrentGroupID());
+					dbManager.deleteSubCategories(category.getServerID(), appPreference.getCurrentGroupID());
 					runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -382,4 +393,34 @@ public class CategoryActivity extends Activity
 			}
 		});
 	}
+
+    private void sendDownloadIconRequest(final Category category)
+    {
+    	DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
+					category.setIconPath(iconPath);
+					category.setLocalUpdatedDate(Utils.getCurrentTime());
+					category.setServerUpdatedDate(category.getLocalUpdatedDate());
+					dbManager.updateCategory(category);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+							adapter.setCategory(categoryList);
+							adapter.notifyDataSetChanged();
+						}
+					});	
+				}
+			}
+		});
+    }
 }

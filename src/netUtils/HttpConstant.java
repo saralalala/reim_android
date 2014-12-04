@@ -21,6 +21,7 @@ public class HttpConstant
 	
 	public static int IMAGE_TYPE_AVATAR = 0;
 	public static int IMAGE_TYPE_INVOICE = 1;
+	public static int IMAGE_TYPE_ICON = 2;
 	
 	public static int INVITE_REPLY_DISAGREE = 0;
 	public static int INVITE_REPLY_AGREE = 1;

@@ -3,6 +3,12 @@ package classes;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 public class Category
 {
 	private int serverID = -1;
@@ -10,10 +16,39 @@ public class Category
 	private double limit = 0;
 	private int groupID = -1;
 	private int parentID = 0;
+	private int iconID = -1;
+	private String iconPath = "";
 	private boolean isProveAhead = false;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 
+	public Category()
+	{
+		
+	}
+	
+	public Category(JSONObject jObject)
+	{
+		try
+		{
+			setServerID(jObject.optInt("id", -1));
+			setName(jObject.getString("category_name"));
+			setLimit(jObject.getDouble("max_limit"));
+			setGroupID(jObject.optInt("gid", -1));
+			setParentID(jObject.optInt("pid", -1));
+			setLocalUpdatedDate(jObject.getInt("lastdt"));
+			setServerUpdatedDate(jObject.getInt("lastdt"));
+			setIsProveAhead(Utils.intToBoolean(jObject.getInt("prove_before")));
+			int iconID = jObject.optInt("avatar", -1);
+			setIconID(iconID);
+			setIconPath(Utils.getIconFilePath(iconID));
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public int getServerID()
 	{
 		return serverID;
@@ -59,6 +94,24 @@ public class Category
 		this.parentID = parentID;
 	}
 
+	public int getIconID()
+	{
+		return iconID;
+	}
+	public void setIconID(int iconID)
+	{
+		this.iconID = iconID;
+	}
+	
+	public String getIconPath()
+	{
+		return iconPath;
+	}
+	public void setIconPath(String iconPath)
+	{
+		this.iconPath = iconPath;
+	}
+	
 	public boolean isProveAhead()
 	{
 		return isProveAhead;
@@ -86,21 +139,19 @@ public class Category
 		this.localUpdatedDate = localUpdatedDate;
 	}
 
-	public static int getIndexOfCategory(List<Category> categoryList, Category category)
-	{
-		if (category == null)
+	public static boolean[] getCategoryCheck(List<Category> categoryList, Category category)
+	{	
+		if (categoryList == null)
 		{
-			return -1;
+			return null;
 		}
 		
+		boolean[] check = new boolean[categoryList.size()];
 		for (int i = 0; i < categoryList.size(); i++)
 		{
-			if (category.getServerID() == categoryList.get(i).getServerID())
-			{
-				return i;
-			}
+			check[i] = category != null &&  category.getServerID() == categoryList.get(i).getServerID();
 		}
-		return -1;
+		return check;
 	}
 	
 	public static String[] getCategoryNames(List<Category> categoryList)
@@ -112,5 +163,23 @@ public class Category
 			names.add(categoryList.get(i).getName() + max);	
 		}
 		return names.toArray(new String[names.size()]);
+	}
+
+	public boolean hasUndownloadedIcon()
+	{
+		if (getIconPath().equals("") && getIconID() != -1 && getIconID() != 0)
+		{
+			return true;
+		}	
+		
+		if (!getIconPath().equals(""))
+		{
+			Bitmap bitmap = BitmapFactory.decodeFile(getIconPath());
+			if (bitmap == null)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

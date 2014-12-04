@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:reim="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="66dp"
+    android:layout_height="56dp"
     android:background="@drawable/list_item_drawable" >
 
-    <classes.Widget.CircleImageView
-        android:id="@+id/imageView"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+    <ImageView
+        android:id="@+id/iconImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="16dp"
-        android:contentDescription="@string/avatar"
-        android:src="@drawable/default_avatar"
-        reim:border_width="0dp" />
+        android:layout_marginLeft="20dp"
+        android:contentDescription="@string/icon"
+        android:src="@drawable/default_icon" />
 
     <TextView
-        android:id="@+id/nicknameTextView"
+        android:id="@+id/nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/imageView"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/iconImageView"
         android:textColor="@color/font_major_dark"
         android:textSize="16sp" />
 

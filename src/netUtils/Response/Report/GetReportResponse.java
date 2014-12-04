@@ -98,7 +98,7 @@ public class GetReportResponse extends BaseResponse
 				
 				List<Integer> idList = Utils.stringToIntList(object.getString("image_id"));
 				int imageID = idList.size() > 0 ? idList.get(0) : -1;
-				item.setImageID(imageID);
+				item.setInvoiceID(imageID);
 				
 				Report report = new Report();
 				report.setServerID(object.getInt("rid"));

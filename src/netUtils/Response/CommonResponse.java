@@ -63,27 +63,18 @@ public class CommonResponse extends BaseResponse
 			String imageID = profileObject.getString("avatar");
 			if (imageID.equals(""))
 			{
-				currentUser.setImageID(-1);					
+				currentUser.setAvatarID(-1);					
 			}
 			else
 			{
-				currentUser.setImageID(Integer.valueOf(imageID));
+				currentUser.setAvatarID(Integer.valueOf(imageID));
 			}
 			
 			JSONArray categoryArray = jObject.getJSONArray("categories");
 			categoryList = new ArrayList<Category>();
 			for (int i = 0; i < categoryArray.length(); i++)
 			{
-				JSONObject object = categoryArray.getJSONObject(i);
-				Category category =new Category();
-				category.setServerID(Integer.valueOf(object.getString("id")));
-				category.setName(object.getString("category_name"));
-				category.setLimit(Double.valueOf(object.getString("max_limit")));
-				category.setGroupID(Integer.valueOf(object.optInt("gid", -1)));
-				category.setParentID(Integer.valueOf(object.getString("pid")));
-				category.setLocalUpdatedDate(object.getInt("lastdt"));
-				category.setServerUpdatedDate(object.getInt("lastdt"));
-				category.setIsProveAhead(Utils.intToBoolean(object.getInt("prove_before")));
+				Category category =new Category(categoryArray.getJSONObject(i));
 				categoryList.add(category);
 			}
 			
@@ -91,13 +82,7 @@ public class CommonResponse extends BaseResponse
 			tagList = new ArrayList<Tag>();
 			for (int i = 0; i < tagArray.length(); i++)
 			{
-				JSONObject object = tagArray.getJSONObject(i);
-				Tag tag = new Tag();
-				tag.setServerID(Integer.valueOf(object.getString("id")));
-				tag.setName(object.getString("name"));
-				tag.setGroupID(Integer.valueOf(object.getString("gid")));
-				tag.setLocalUpdatedDate(object.getInt("lastdt"));
-				tag.setServerUpdatedDate(object.getInt("lastdt"));
+				Tag tag = new Tag(tagArray.getJSONObject(i));
 				tagList.add(tag);
 			}
 			
@@ -120,11 +105,11 @@ public class CommonResponse extends BaseResponse
 				imageID = object.getString("avatar");
 				if (imageID.equals(""))
 				{
-					user.setImageID(-1);					
+					user.setAvatarID(-1);					
 				}
 				else
 				{
-					user.setImageID(Integer.valueOf(imageID));
+					user.setAvatarID(Integer.valueOf(imageID));
 				}
 				memberList.add(user);
 			}			

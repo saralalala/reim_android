@@ -33,7 +33,9 @@ import classes.Report;
 import classes.Tag;
 import classes.User;
 import classes.Utils;
+import classes.Adapter.CategoryListViewAdapter;
 import classes.Adapter.MemberListViewAdapter;
+import classes.Adapter.TagListViewAdapter;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -115,12 +117,16 @@ public class EditItemActivity extends Activity
 	private List<Tag> tagList = null;
 	private List<User> userList = null;
 	
+	private CategoryListViewAdapter categoryAdapter;
+	private TagListViewAdapter tagAdapter;
+	private MemberListViewAdapter memberAdapter;
+	
 	private boolean newItem = false;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.reim_edit_item);
+		setContentView(R.layout.reim_edit);
 		initData();
 		initView();
 		initButton();
@@ -196,7 +202,7 @@ public class EditItemActivity extends Activity
 					if (!invoicePath.equals(""))
 					{
 						item.setInvoicePath(invoicePath);
-						item.setImageID(-1);
+						item.setInvoiceID(-1);
 					}
 					else
 					{
@@ -367,6 +373,10 @@ public class EditItemActivity extends Activity
 		{
 			amountEditText.setText(Utils.formatDouble(item.getAmount()));			
 		}
+		else
+		{
+			amountEditText.requestFocus();
+		}
 		
 		vendorEditText = (EditText)findViewById(R.id.vendorEditText);
 		vendorEditText.addTextChangedListener(new TextWatcher()
@@ -527,11 +537,11 @@ public class EditItemActivity extends Activity
 		else // item has invoice path but the file was deleted
 		{
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
-			if (item.getImageID() != -1 && item.getImageID() != 0 && Utils.isNetworkConnected())
+			if (item.getInvoiceID() != -1 && item.getInvoiceID() != 0 && Utils.isNetworkConnected())
 			{
 				sendDownloadImageRequest();
 			}
-			else if (item.getImageID() != -1 && item.getImageID() != 0 && !Utils.isNetworkConnected())
+			else if (item.getInvoiceID() != -1 && item.getInvoiceID() != 0 && !Utils.isNetworkConnected())
 			{
 				Utils.showToast(EditItemActivity.this, "网络未连接，无法下载图片");				
 			}
@@ -564,38 +574,7 @@ public class EditItemActivity extends Activity
 				}
 				
 				hideSoftKeyboard();
-				final Category category = item.getCategory();
-				int index = Category.getIndexOfCategory(categoryList, category);
-				if (index == -1)
-				{
-					index = 0;
-				}
-				AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setTitle(R.string.chooseCategory)
-													.setSingleChoiceItems(Category.getCategoryNames(categoryList), 
-															index, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															item.setCategory(categoryList.get(which));
-														}
-													})
-													.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															categoryTextView.setText(item.getCategory().getName());
-														}
-													})
-													.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															item.setCategory(category);
-														}
-													})
-													.create();
-				mDialog.show();
+				showCategoryDialog();
 			}
 		});	
 		categoryButton.setEnabled(item.getPaAmount() == 0);
@@ -664,36 +643,7 @@ public class EditItemActivity extends Activity
 				hideSoftKeyboard();
 				if (tagList.size() > 0)
 				{
-					final boolean[] check = Tag.getTagsCheck(tagList, item.getTags());
-					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-														.setTitle(R.string.chooseTag)
-														.setMultiChoiceItems(Tag.getTagsName(tagList), 
-																check, new DialogInterface.OnMultiChoiceClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which, boolean isChecked)
-															{
-																check[which] = isChecked;
-															}
-														})
-														.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																List<Tag> tags = new ArrayList<Tag>();
-																for (int i = 0; i < tagList.size(); i++)
-																{
-																	if (check[i])
-																	{
-																		tags.add(tagList.get(i));
-																	}
-																}
-																item.setTags(tags);
-																tagTextView.setText(Tag.getTagsNameString(tags));
-															}
-														})
-														.setNegativeButton(R.string.cancel, null)
-														.create();
-					mDialog.show();	
+					showTagDialog();
 				}
 				else
 				{
@@ -707,55 +657,7 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (newItem)
-				{
-					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_TIME");
-				}
-				if (!newItem)
-				{
-					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_TIME");
-				}
-				
-				View view = View.inflate(EditItemActivity.this, R.layout.reim_date_time, null);
-				
-				Calendar calendar = Calendar.getInstance();
-				if (item.getConsumedDate() == -1 || item.getConsumedDate() == 0)
-				{
-					calendar.setTimeInMillis(System.currentTimeMillis());
-				}
-				else
-				{
-					calendar.setTimeInMillis((long)item.getConsumedDate() * 1000);
-				}
-
-				final DatePicker datePicker = (DatePicker)view.findViewById(R.id.datePicker);
-				final TimePicker timePicker = (TimePicker)view.findViewById(R.id.timePicker);
-				datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
-				
-				timePicker.setIs24HourView(true);
-				timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
-				timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
-				
-				datePicker.clearFocus();
-				timePicker.clearFocus();
-				
-				AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-													.setView(view)
-													.setTitle(R.string.chooseTime)
-													.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), 
-																	datePicker.getMonth(), datePicker.getDayOfMonth(), 
-																	timePicker.getCurrentHour(), timePicker.getCurrentMinute());
-															item.setConsumedDate((int)(greCal.getTimeInMillis() / 1000));
-															timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
-														}
-													})
-													.setNegativeButton(R.string.cancel, null)
-													.create();
-				mDialog.show();
+				showTimeDialog();
 			}
 		});
 		
@@ -776,44 +678,7 @@ public class EditItemActivity extends Activity
 				hideSoftKeyboard();
 				if (userList.size() > 0)
 				{
-					final boolean[] check = User.getUsersCheck(userList, item.getRelevantUsers());
-					
-					final MemberListViewAdapter memberAdapter = new MemberListViewAdapter(EditItemActivity.this, userList, check);
-			    	View view = View.inflate(EditItemActivity.this, R.layout.me_member, null);
-			    	ListView userListView = (ListView) view.findViewById(R.id.userListView);
-			    	userListView.setAdapter(memberAdapter);
-			    	userListView.setOnItemClickListener(new OnItemClickListener()
-					{
-						public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-						{
-							check[position] = !check[position];
-							memberAdapter.setCheck(check);
-							memberAdapter.notifyDataSetChanged();
-						}
-					});
-
-			    	AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-			    							.setTitle(R.string.member)
-			    							.setView(view)
-			    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													List<User> users = new ArrayList<User>();
-													for (int i = 0; i < userList.size(); i++)
-													{
-														if (check[i])
-														{
-															users.add(userList.get(i));
-														}
-													}
-													item.setRelevantUsers(users);
-													memberTextView.setText(User.getUsersNameString(users));
-												}
-											})
-											.setNegativeButton(R.string.cancel, null)
-											.create();
-			    	mDialog.show();
+					showMemberDialog();
 				}
 				else
 				{
@@ -853,19 +718,320 @@ public class EditItemActivity extends Activity
 			Utils.showToast(EditItemActivity.this, "条目保存失败");
 		}
     }
+
+    private void showTimeDialog()
+    {
+		if (newItem)
+		{
+			MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_TIME");
+		}
+		if (!newItem)
+		{
+			MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_TIME");
+		}
+		
+		View view = View.inflate(EditItemActivity.this, R.layout.reim_date_time, null);
+		
+		Calendar calendar = Calendar.getInstance();
+		if (item.getConsumedDate() == -1 || item.getConsumedDate() == 0)
+		{
+			calendar.setTimeInMillis(System.currentTimeMillis());
+		}
+		else
+		{
+			calendar.setTimeInMillis((long)item.getConsumedDate() * 1000);
+		}
+
+		final DatePicker datePicker = (DatePicker)view.findViewById(R.id.datePicker);
+		final TimePicker timePicker = (TimePicker)view.findViewById(R.id.timePicker);
+		datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
+		
+		timePicker.setIs24HourView(true);
+		timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+		timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+		
+		datePicker.clearFocus();
+		timePicker.clearFocus();
+		
+		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+											.setView(view)
+											.setTitle(R.string.chooseTime)
+											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), 
+															datePicker.getMonth(), datePicker.getDayOfMonth(), 
+															timePicker.getCurrentHour(), timePicker.getCurrentMinute());
+													item.setConsumedDate((int)(greCal.getTimeInMillis() / 1000));
+													timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
+												}
+											})
+											.setNegativeButton(R.string.cancel, null)
+											.create();
+		mDialog.show();
+    }
+
+    private void showVendorDialog()
+    {
+    	final String vendor = item.getMerchant();
+		int index = vendorList.indexOf(vendor);
+		if (index == -1)
+		{
+			index = 0;
+			item.setMerchant(vendorList.get(0));
+		}
+		String[] vendors = vendorList.toArray(new String[vendorList.size()]);
+		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+											.setTitle(R.string.chooseVendor)
+											.setSingleChoiceItems(vendors, index, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													item.setMerchant(vendorList.get(which));
+												}
+											})
+											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													vendorEditText.setText(item.getMerchant());
+												}
+											})
+											.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													item.setMerchant(vendor);
+												}
+											})
+											.create();
+		mDialog.show();
+    }
+
+    private void showLocationDialog()
+    {
+    	final String location = item.getLocation();
+		int index = cityList.indexOf(location);
+		if (index == -1)
+		{
+			if (currentCity.equals("") || currentCity.equals(locationInvalid))
+			{
+				index = 1;
+				item.setLocation(cityList.get(1));
+			}
+			else
+			{
+				index = 0;
+				item.setLocation(cityList.get(0));				
+			}
+		}
+		String[] cities = cityList.toArray(new String[cityList.size()]);
+		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+											.setTitle(R.string.chooseLocation)
+											.setSingleChoiceItems(cities, index, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													if (which == 0)
+													{
+														if (currentCity.equals("") || currentCity.equals(locationInvalid))
+														{
+															item.setLocation("");
+														}
+														else
+														{
+															item.setLocation(currentCity);
+														}														
+													}
+													else
+													{
+														item.setLocation(cityList.get(which));														
+													}
+												}
+											})
+											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													locationEditText.setText(item.getLocation());
+												}
+											})
+											.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													item.setLocation(location);
+												}
+											})
+											.create();
+		mDialog.show();
+    }
+
+    private void showCategoryDialog()
+    {
+		final boolean[] check = Category.getCategoryCheck(categoryList, item.getCategory());
+		
+		categoryAdapter = new CategoryListViewAdapter(this, categoryList, check);
+    	View view = View.inflate(this, R.layout.me_category, null);
+    	ListView categoryListView = (ListView) view.findViewById(R.id.categoryListView);
+    	categoryListView.setAdapter(categoryAdapter);
+    	categoryListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{				
+				for (int i = 0; i < check.length; i++)
+				{
+					check[i] = false;
+				}
+				check[position] = true;
+				categoryAdapter.setCheck(check);
+				categoryAdapter.notifyDataSetChanged();
+			}
+		});
+
+    	AlertDialog mDialog = new AlertDialog.Builder(this)
+    							.setTitle("请选择汇报对象")
+    							.setView(view)
+    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										boolean flag = false;
+										for (int i = 0; i < check.length; i++)
+										{
+											if (check[i])
+											{
+												item.setCategory(categoryList.get(i));
+												flag = true;
+												break;
+											}
+										}
+										if (!flag)
+										{
+											item.setCategory(null);
+										}
+
+										categoryTextView.setText(item.getCategory().getName());
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+    	mDialog.show(); 	
+		
+		if (Utils.isNetworkConnected())
+		{
+			for (Category category : categoryList)
+			{
+				if (category.hasUndownloadedIcon())
+				{
+					sendDownloadCategoryIconRequest(category);
+				}
+			}
+		}
+    }
+    
+    private void showTagDialog()
+    {
+		final boolean[] check = Tag.getTagsCheck(tagList, item.getTags());
+		
+		tagAdapter = new TagListViewAdapter(this, tagList, check);
+    	View view = View.inflate(this, R.layout.me_tag, null);
+    	ListView tagListView = (ListView) view.findViewById(R.id.tagListView);
+    	tagListView.setAdapter(tagAdapter);
+    	tagListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				check[position] = !check[position];
+				tagAdapter.setCheck(check);
+				tagAdapter.notifyDataSetChanged();
+			}
+		});
+
+    	AlertDialog mDialog = new AlertDialog.Builder(this)
+    							.setTitle("请选择汇报对象")
+    							.setView(view)
+    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										List<Tag> tags = new ArrayList<Tag>();
+										for (int i = 0; i < tagList.size(); i++)
+										{
+											if (check[i])
+											{
+												tags.add(tagList.get(i));
+											}
+										}
+										item.setTags(tags);
+										tagTextView.setText(Tag.getTagsNameString(tags));
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+    	mDialog.show(); 	
+		
+		if (Utils.isNetworkConnected())
+		{
+			for (Tag tag : tagList)
+			{
+				if (tag.hasUndownloadedIcon())
+				{
+					sendDownloadTagIconRequest(tag);
+				}
+			}
+		}
+    }
+    
+    private void showMemberDialog()
+    {
+		final boolean[] check = User.getUsersCheck(userList, item.getRelevantUsers());
+		
+		memberAdapter = new MemberListViewAdapter(EditItemActivity.this, userList, check);
+    	View view = View.inflate(EditItemActivity.this, R.layout.me_member, null);
+    	ListView userListView = (ListView) view.findViewById(R.id.userListView);
+    	userListView.setAdapter(memberAdapter);
+    	userListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				check[position] = !check[position];
+				memberAdapter.setCheck(check);
+				memberAdapter.notifyDataSetChanged();
+			}
+		});
+
+    	AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
+    							.setTitle(R.string.member)
+    							.setView(view)
+    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										List<User> users = new ArrayList<User>();
+										for (int i = 0; i < userList.size(); i++)
+										{
+											if (check[i])
+											{
+												users.add(userList.get(i));
+											}
+										}
+										item.setRelevantUsers(users);
+										memberTextView.setText(User.getUsersNameString(users));
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+    	mDialog.show();
+    }
     
     private void showManagerDialog()
     {
-		List<User> tempList = new ArrayList<User>();
-		User defaultManager = dbManager.getUser(appPreference.getCurrentUser().getDefaultManagerID());
-		if (defaultManager != null)
-		{
-			tempList.add(defaultManager);				
-		}
 		final List<User> memberList = User.removeCurrentUserFromList(userList);
-		final boolean[] managerCheckList = User.getUsersCheck(memberList, tempList);
+		final boolean[] check = User.getUsersCheck(memberList, appPreference.getCurrentUser().constructListWithManager());
 		
-		final MemberListViewAdapter memberAdapter = new MemberListViewAdapter(this, memberList, managerCheckList);
+		final MemberListViewAdapter memberAdapter = new MemberListViewAdapter(this, memberList, check);
     	View view = View.inflate(this, R.layout.me_member, null);
     	ListView userListView = (ListView) view.findViewById(R.id.userListView);
     	userListView.setAdapter(memberAdapter);
@@ -873,8 +1039,8 @@ public class EditItemActivity extends Activity
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				managerCheckList[position] = !managerCheckList[position];
-				memberAdapter.setCheck(managerCheckList);
+				check[position] = !check[position];
+				memberAdapter.setCheck(check);
 				memberAdapter.notifyDataSetChanged();
 			}
 		});
@@ -887,9 +1053,9 @@ public class EditItemActivity extends Activity
 									public void onClick(DialogInterface dialog, int which)
 									{
 										List<User> managerList = new ArrayList<User>();
-										for (int i = 0; i < managerCheckList.length; i++)
+										for (int i = 0; i < check.length; i++)
 										{
-											if (managerCheckList[i])
+											if (check[i])
 											{
 												managerList.add(memberList.get(i));
 											}
@@ -940,10 +1106,10 @@ public class EditItemActivity extends Activity
 								.create();
     	mDialog.show();
     }
-    
+
     private void sendDownloadImageRequest()
     {
-		DownloadImageRequest request = new DownloadImageRequest(item.getImageID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
+		DownloadImageRequest request = new DownloadImageRequest(item.getInvoiceID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -1002,7 +1168,7 @@ public class EditItemActivity extends Activity
 				final UploadImageResponse response = new UploadImageResponse(httpResponse);
 				if (response.getStatus())
 				{
-					item.setImageID(response.getImageID());
+					item.setInvoiceID(response.getImageID());
 					DBManager.getDBManager().updateItem(item);
 					
 					if (newItem)
@@ -1204,101 +1370,65 @@ public class EditItemActivity extends Activity
 			}
 		});
     }
-    
-    private void showVendorDialog()
+
+    private void sendDownloadCategoryIconRequest(final Category category)
     {
-    	final String vendor = item.getMerchant();
-		int index = vendorList.indexOf(vendor);
-		if (index == -1)
+    	DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
+    	request.sendRequest(new HttpConnectionCallback()
 		{
-			index = 0;
-			item.setMerchant(vendorList.get(0));
-		}
-		String[] vendors = vendorList.toArray(new String[vendorList.size()]);
-		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-											.setTitle(R.string.chooseVendor)
-											.setSingleChoiceItems(vendors, index, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													item.setMerchant(vendorList.get(which));
-												}
-											})
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													vendorEditText.setText(item.getMerchant());
-												}
-											})
-											.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													item.setMerchant(vendor);
-												}
-											})
-											.create();
-		mDialog.show();
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
+					category.setIconPath(iconPath);
+					category.setLocalUpdatedDate(Utils.getCurrentTime());
+					category.setServerUpdatedDate(category.getLocalUpdatedDate());
+					dbManager.updateCategory(category);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+							categoryAdapter.setCategory(categoryList);
+							categoryAdapter.notifyDataSetChanged();
+						}
+					});	
+				}
+			}
+		});
     }
     
-    private void showLocationDialog()
+    private void sendDownloadTagIconRequest(final Tag tag)
     {
-    	final String location = item.getLocation();
-		int index = cityList.indexOf(location);
-		if (index == -1)
+    	DownloadImageRequest request = new DownloadImageRequest(tag.getIconID());
+    	request.sendRequest(new HttpConnectionCallback()
 		{
-			if (currentCity.equals("") || currentCity.equals(locationInvalid))
+			public void execute(Object httpResponse)
 			{
-				index = 1;
-				item.setLocation(cityList.get(1));
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String iconPath = Utils.saveIconToFile(response.getBitmap(), tag.getIconID());
+					tag.setIconPath(iconPath);
+					tag.setLocalUpdatedDate(Utils.getCurrentTime());
+					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
+					dbManager.updateTag(tag);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+							tagAdapter.setTag(tagList);
+							tagAdapter.notifyDataSetChanged();
+						}
+					});	
+				}
 			}
-			else
-			{
-				index = 0;
-				item.setLocation(cityList.get(0));				
-			}
-		}
-		String[] cities = cityList.toArray(new String[cityList.size()]);
-		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-											.setTitle(R.string.chooseLocation)
-											.setSingleChoiceItems(cities, index, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													if (which == 0)
-													{
-														if (currentCity.equals("") || currentCity.equals(locationInvalid))
-														{
-															item.setLocation("");
-														}
-														else
-														{
-															item.setLocation(currentCity);
-														}														
-													}
-													else
-													{
-														item.setLocation(cityList.get(which));														
-													}
-												}
-											})
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													locationEditText.setText(item.getLocation());
-												}
-											})
-											.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													item.setLocation(location);
-												}
-											})
-											.create();
-		mDialog.show();
+		});
     }
     
     public class ReimLocationListener implements BDLocationListener

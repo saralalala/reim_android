@@ -3,9 +3,11 @@ package com.rushucloud.reim.me;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.Category.CreateCategoryRequest;
 import netUtils.Request.Category.DeleteCategoryRequest;
 import netUtils.Request.Category.ModifyCategoryRequest;
+import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Category.CreateCategoryResponse;
 import netUtils.Response.Category.DeleteCategoryResponse;
 import netUtils.Response.Category.ModifyCategoryResponse;
@@ -17,6 +19,7 @@ import classes.AppPreference;
 import classes.Category;
 import classes.ReimApplication;
 import classes.Utils;
+import classes.Adapter.CategoryListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,7 +41,8 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 public class SubCategoryActivity extends Activity
 {
 	private ListView categoryListView;
-	private ArrayAdapter<String> adapter;
+	private TextView categoryTextView;
+	private CategoryListViewAdapter adapter;
 	private List<Category> categoryList;
 	private int parentID;
 
@@ -49,7 +52,7 @@ public class SubCategoryActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_category);
+		setContentView(R.layout.me_category_management);
 		initData();
 		initView();
 	}
@@ -149,9 +152,6 @@ public class SubCategoryActivity extends Activity
 		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
 		
-		categoryListView = (ListView)findViewById(R.id.categoryListView);
-		registerForContextMenu(categoryListView);
-		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
 		{
@@ -179,13 +179,40 @@ public class SubCategoryActivity extends Activity
 				}
 			}
 		});
+
+		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
+		
+		categoryListView = (ListView)findViewById(R.id.categoryListView);
+		registerForContextMenu(categoryListView);
 	}
 	
 	private void refreshListView()
 	{
 		categoryList = dbManager.getSubCategories(parentID, appPreference.getCurrentGroupID());
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Category.getCategoryNames(categoryList));
+		adapter = new CategoryListViewAdapter(this, categoryList, null);
 		categoryListView.setAdapter(adapter);
+		
+		if (categoryList.size() == 0)
+		{
+			categoryListView.setVisibility(View.INVISIBLE);
+			categoryTextView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			categoryListView.setVisibility(View.VISIBLE);
+			categoryTextView.setVisibility(View.INVISIBLE);			
+		}	
+		
+		if (Utils.isNetworkConnected())
+		{
+			for (Category category : categoryList)
+			{
+				if (category.hasUndownloadedIcon())
+				{
+					sendDownloadIconRequest(category);
+				}
+			}
+		}
 	}
 
 	private void showCategoryDialog(final Category category)
@@ -358,4 +385,34 @@ public class SubCategoryActivity extends Activity
 			}
 		});
 	}
+
+    private void sendDownloadIconRequest(final Category category)
+    {
+    	DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
+					category.setIconPath(iconPath);
+					category.setLocalUpdatedDate(Utils.getCurrentTime());
+					category.setServerUpdatedDate(category.getLocalUpdatedDate());
+					dbManager.updateCategory(category);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+							adapter.setCategory(categoryList);
+							adapter.notifyDataSetChanged();
+						}
+					});	
+				}
+			}
+		});
+    }
 }

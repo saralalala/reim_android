@@ -1,0 +1,99 @@
+package classes.Adapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.Tag;
+
+import com.rushucloud.reim.R;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class TagListViewAdapter extends BaseAdapter
+{
+	private LayoutInflater layoutInflater;
+	private List<Tag> tagList;
+	private boolean[] check;
+	private int selectedColor;
+	private int unselectedColor;
+	
+	public TagListViewAdapter(Context context, List<Tag> tags, boolean[] checkList)
+	{
+		layoutInflater = LayoutInflater.from(context);
+		tagList = new ArrayList<Tag>(tags);
+		check = checkList;
+		selectedColor = context.getResources().getColor(R.color.major_dark);
+		unselectedColor = context.getResources().getColor(R.color.font_major_dark);
+	}
+	
+	public View getView(int position, View convertView, ViewGroup parent)
+	{
+		if (convertView == null)
+		{
+			convertView = layoutInflater.inflate(R.layout.list_tag, parent, false);
+		}
+
+		ImageView iconImageView = (ImageView)convertView.findViewById(R.id.iconImageView);
+		TextView nameTextView = (TextView)convertView.findViewById(R.id.nameTextView);
+		
+		Tag tag = tagList.get(position);
+		if (!tag.getIconPath().equals(""))
+		{
+			Bitmap bitmap = BitmapFactory.decodeFile(tag.getIconPath());
+			if (bitmap != null)
+			{
+				iconImageView.setImageBitmap(bitmap);				
+			}
+		}
+		
+		if (tag.getName().equals(""))
+		{
+			nameTextView.setText(R.string.notAvailable);
+		}
+		else
+		{
+			nameTextView.setText(tag.getName());			
+		}
+
+		if (check != null)
+		{
+			int color = check[position] ? selectedColor : unselectedColor;
+			nameTextView.setTextColor(color);			
+		}
+		
+		return convertView;
+	}
+	
+	public int getCount()
+	{
+		return tagList.size();
+	}
+
+	public Tag getItem(int position)
+	{
+		return tagList.get(position);
+	}
+
+	public long getItemId(int position)
+	{
+		return position;
+	}
+	
+	public void setTag(List<Tag> tags)
+	{
+		tagList.clear();
+		tagList.addAll(tags);
+	}
+	
+	public void setCheck(boolean[] checkList)
+	{
+		check = checkList;
+	}
+}

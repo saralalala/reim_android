@@ -156,6 +156,13 @@ public class ReimApplication extends Application
 				File nomediaFile = new File(dir, ".nomedia");
 				nomediaFile.createNewFile();
 			}
+			dir = new File(appDirectory + "/images/icon");
+			if (!dir.exists())
+			{
+				dir.mkdir();
+				File nomediaFile = new File(dir, ".nomedia");
+				nomediaFile.createNewFile();
+			}
 		}
 		catch (Exception e)
 		{

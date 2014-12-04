@@ -95,19 +95,8 @@ public class ManagerActivity extends Activity
     	int currentGroupID = appPreference.getCurrentGroupID();
 		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
 		
-		checkList = new boolean[userList.size()];
-		for (int i = 0; i < checkList.length; i++)
-		{
-			if (currentUser.getDefaultManagerID() == userList.get(i).getServerID())
-			{
-				checkList[i] = true;
-				lastIndex = i;
-			}
-			else
-			{
-				checkList[i] = false;
-			}
-		}
+		checkList = User.getUsersCheck(userList, currentUser.constructListWithManager());
+		lastIndex = User.getIndexOfUser(userList, dbManager.getUser(currentUser.getDefaultManagerID()));
 	}
 	
 	private void initView()
@@ -218,7 +207,7 @@ public class ManagerActivity extends Activity
 						{
 							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
 							{
-								if (user.getImageID() == currentUser.getImageID())
+								if (user.getAvatarID() == currentUser.getAvatarID())
 								{
 									user.setAvatarPath(currentUser.getAvatarPath());								
 								}								
@@ -312,8 +301,7 @@ public class ManagerActivity extends Activity
 
     private void sendDownloadAvatarRequest(final User user)
     {
-    	final DBManager dbManager = DBManager.getDBManager();
-    	DownloadImageRequest request = new DownloadImageRequest(user.getImageID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
+    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -326,6 +314,7 @@ public class ManagerActivity extends Activity
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
 					dbManager.updateUser(user);
+					
 					runOnUiThread(new Runnable()
 					{
 						public void run()

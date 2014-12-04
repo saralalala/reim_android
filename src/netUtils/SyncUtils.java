@@ -132,7 +132,7 @@ public abstract class SyncUtils
 		{
         	for (Item item : itemList)
     		{
-    			if (item.getImageID() == -1 && !item.getInvoicePath().equals(""))
+    			if (item.getInvoiceID() == -1 && !item.getInvoicePath().equals(""))
     			{
     				sendUploadImageRequest(item, callback);
     			}
@@ -205,7 +205,7 @@ public abstract class SyncUtils
 				if (response.getStatus())
 				{
 			    	System.out.println("upload image for item：local id " + item.getLocalID() + " *Succeed*");
-					item.setImageID(response.getImageID());
+					item.setInvoiceID(response.getImageID());
 					DBManager.getDBManager().updateItem(item);
 				}
 				else

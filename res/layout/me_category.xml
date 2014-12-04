@@ -3,57 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <RelativeLayout
-        android:id="@+id/titleLayout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/major_dark" >
-
-        <ImageView
-            android:id="@+id/backImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:contentDescription="@string/back"
-            android:src="@drawable/back" />
-
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/categoryManagement"
-            android:textColor="@color/major_light"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/addTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:text="@string/add"
-            android:textColor="@color/major_light"
-            android:textSize="16sp" />
-    </RelativeLayout>
-
     <ListView
         android:id="@+id/categoryListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/titleLayout"
         android:listSelector="@drawable/list_item_drawable" >
     </ListView>
-
-    <TextView
-        android:id="@+id/categoryTextView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/titleLayout"
-        android:gravity="center"
-        android:text="@string/noCategories" />
 
 </RelativeLayout>

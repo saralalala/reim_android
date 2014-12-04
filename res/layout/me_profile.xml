@@ -55,9 +55,11 @@
 			    android:layout_width="match_parent"
 			    android:layout_height="50.5dp"
 			    android:layout_marginTop="18dp"
-			    android:background="@drawable/me_item_drawable" >
+			    android:background="@drawable/me_item_drawable"
+			    android:focusable="true"
+			    android:focusableInTouchMode="true" >
             
-		        <include                 
+		        <include
 					android:layout_width="match_parent"
 					android:layout_height="0.5dp"
 		        	layout="@layout/divider"/>
@@ -176,7 +178,8 @@
 			        android:layout_alignParentRight="true"
 			        android:layout_toRightOf="@+id/companyTextView1"
 			        android:layout_marginLeft="10dp"
-			        android:layout_marginRight="16dp" />
+			        android:layout_marginRight="16dp"
+			    	android:gravity="center_vertical" />
 			
 			</RelativeLayout>
 	        

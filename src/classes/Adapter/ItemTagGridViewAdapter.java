@@ -35,7 +35,7 @@ public class ItemTagGridViewAdapter extends BaseAdapter
 	{
 		if (convertView == null)
 		{
-			convertView = layoutInflater.inflate(R.layout.grid_item_tag, parent, false);
+			convertView = layoutInflater.inflate(R.layout.grid_tag, parent, false);
 		}
 
 		ImageView iconImageView = (ImageView)convertView.findViewById(R.id.iconImageView);

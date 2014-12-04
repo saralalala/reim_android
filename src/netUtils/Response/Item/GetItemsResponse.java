@@ -47,7 +47,7 @@ public class GetItemsResponse extends BaseResponse
 //				item.setLocalUpdatedDate();
 				//TODO Check local time
 				
-				item.setImageID(object.getInt("image_id"));
+				item.setInvoiceID(object.getInt("image_id"));
 				//TODO get image from server
 				
 				Category category = new Category();

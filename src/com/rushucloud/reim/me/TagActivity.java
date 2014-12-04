@@ -3,9 +3,11 @@ package com.rushucloud.reim.me;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.Tag.CreateTagRequest;
 import netUtils.Request.Tag.DeleteTagRequest;
 import netUtils.Request.Tag.ModifyTagRequest;
+import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Tag.CreateTagResponse;
 import netUtils.Response.Tag.DeleteTagResponse;
 import netUtils.Response.Tag.ModifyTagResponse;
@@ -17,6 +19,7 @@ import classes.AppPreference;
 import classes.Tag;
 import classes.ReimApplication;
 import classes.Utils;
+import classes.Adapter.TagListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,7 +33,6 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -41,7 +43,7 @@ public class TagActivity extends Activity
 {
 	private ListView tagListView;
 	private TextView tagTextView;
-	private ArrayAdapter<String> adapter;
+	private TagListViewAdapter adapter;
 	private List<Tag> tagList;
 
 	private AppPreference appPreference;
@@ -50,7 +52,7 @@ public class TagActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_tag);
+		setContentView(R.layout.me_tag_management);
 		initData();
 		initView();
 	}
@@ -177,7 +179,7 @@ public class TagActivity extends Activity
 	private void refreshListView()
 	{
 		tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Tag.getTagsName(tagList));
+		adapter = new TagListViewAdapter(this, tagList, null);
 		tagListView.setAdapter(adapter);
 		
 		if (tagList.size() == 0)
@@ -189,6 +191,17 @@ public class TagActivity extends Activity
 		{
 			tagListView.setVisibility(View.VISIBLE);
 			tagTextView.setVisibility(View.INVISIBLE);			
+		}
+		
+		if (Utils.isNetworkConnected())
+		{
+			for (Tag tag : tagList)
+			{
+				if (tag.hasUndownloadedIcon())
+				{
+					sendDownloadIconRequest(tag);
+				}
+			}
 		}
 	}
 
@@ -358,4 +371,34 @@ public class TagActivity extends Activity
 			}
 		});
 	}
+
+    private void sendDownloadIconRequest(final Tag tag)
+    {
+    	DownloadImageRequest request = new DownloadImageRequest(tag.getIconID());
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String iconPath = Utils.saveIconToFile(response.getBitmap(), tag.getIconID());
+					tag.setIconPath(iconPath);
+					tag.setLocalUpdatedDate(Utils.getCurrentTime());
+					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
+					dbManager.updateTag(tag);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+							adapter.setTag(tagList);
+							adapter.notifyDataSetChanged();
+						}
+					});	
+				}
+			}
+		});
+    }
 }

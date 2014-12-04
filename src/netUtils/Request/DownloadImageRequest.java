@@ -17,6 +17,14 @@ public class DownloadImageRequest extends BaseRequest
 		setUrl(url);
 	}
 	
+	public DownloadImageRequest(int iconID)
+	{
+		super();
+		
+		String urlSuffix = "/static/" + iconID + ".png";
+		appendUrl(urlSuffix);
+	}
+	
 	public DownloadImageRequest(int imageID, int type)
 	{
 		super();

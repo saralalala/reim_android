@@ -37,7 +37,7 @@ public class CreateItemsRequest extends BaseRequest
 				jObject.put("location", item.getLocation());
 				jObject.put("uid", item.getConsumer().getServerID());
 				jObject.put("prove_ahead", Utils.booleanToString(item.isProveAhead()));
-				jObject.put("image_id", item.getImageID());
+				jObject.put("image_id", item.getInvoiceID());
 				jObject.put("uids", User.getUsersIDString(item.getRelevantUsers()));
 				jObject.put("tags", Tag.getTagsIDString(item.getTags()));
 				jObject.put("dt", item.getConsumedDate());

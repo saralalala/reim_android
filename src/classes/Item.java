@@ -8,6 +8,9 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 public class Item
 {		
 	public static final int STATUS_DRAFT = 0;
@@ -19,7 +22,7 @@ public class Item
 	
 	private int localID = -1;
 	private int serverID = -1;
-	private int imageID = -1;
+	private int invoiceID = -1;
 	private String invoicePath = "";
 	private String merchant = "";
 	private Report belongReport = null;
@@ -68,7 +71,7 @@ public class Item
 			
 			List<Integer> idList = Utils.stringToIntList(jObject.getString("image_id"));
 			int imageID = idList.size() > 0 ? idList.get(0) : -1;
-			setImageID(imageID);
+			setInvoiceID(imageID);
 			
 			Report report = new Report();
 			report.setServerID(jObject.getInt("rid"));
@@ -112,13 +115,13 @@ public class Item
 		this.serverID = serverID;
 	}
 	
-	public int getImageID()
+	public int getInvoiceID()
 	{
-		return imageID;
+		return invoiceID;
 	}
-	public void setImageID(int imageID)
+	public void setInvoiceID(int invoiceID)
 	{
-		this.imageID = imageID;
+		this.invoiceID = invoiceID;
 	}
 	
 	public String getInvoicePath()
@@ -322,7 +325,7 @@ public class Item
 	
 	public boolean canBeSubmitWithReport()
 	{
-		if (imageID == -1 && !invoicePath.equals(""))
+		if (invoiceID == -1 && !invoicePath.equals(""))
 		{
 			return false;
 		}
@@ -353,9 +356,27 @@ public class Item
 		return false;
 	}
     
+	public boolean hasInvoice()
+	{
+		return getInvoiceID() != -1 || !getInvoicePath().equals("");
+	}
+	
 	public boolean hasUndownloadedInvoice()
 	{
-		return getInvoicePath().equals("") && getImageID() != -1 && getImageID() != 0;
+		if (getInvoicePath().equals("") && getInvoiceID() != -1 && getInvoiceID() != 0)
+		{
+			return true;
+		}	
+		
+		if (!getInvoicePath().equals(""))
+		{
+			Bitmap bitmap = BitmapFactory.decodeFile(getInvoicePath());
+			if (bitmap == null)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
     public static void sortByConsumedDate(List<Item> itemList)

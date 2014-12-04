@@ -3,6 +3,11 @@ package classes;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
 import database.DBManager;
@@ -12,8 +17,34 @@ public class Tag
 	private int serverID = -1;
 	private int groupID = -1;
 	private String name = "";
+	private int iconID = -1;
+	private String iconPath = "";
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
+
+	public Tag()
+	{
+		
+	}
+	
+	public Tag(JSONObject jObject)
+	{
+		try
+		{
+			setServerID(jObject.optInt("id", -1));
+			setName(jObject.getString("name"));
+			setGroupID(jObject.optInt("gid", -1));
+			setLocalUpdatedDate(jObject.getInt("lastdt"));
+			setServerUpdatedDate(jObject.getInt("lastdt"));
+			int iconID = jObject.optInt("avatar", -1);
+			setIconID(iconID);
+			setIconPath(Utils.getIconFilePath(iconID));
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+	}
 	
 	public int getServerID()
 	{
@@ -42,6 +73,24 @@ public class Tag
 		this.name = name;
 	}
 
+	public int getIconID()
+	{
+		return iconID;
+	}
+	public void setIconID(int iconID)
+	{
+		this.iconID = iconID;
+	}
+	
+	public String getIconPath()
+	{
+		return iconPath;
+	}
+	public void setIconPath(String iconPath)
+	{
+		this.iconPath = iconPath;
+	}
+	
 	public int getServerUpdatedDate()
 	{
 		return serverUpdatedDate;
@@ -62,6 +111,11 @@ public class Tag
 
 	public static boolean[] getTagsCheck(List<Tag> tagList, List<Tag> currentTags)
 	{
+		if (tagList == null)
+		{
+			return null;
+		}
+		
 		boolean[] check = new boolean[tagList.size()];
 		if (currentTags == null)
 		{
@@ -142,6 +196,24 @@ public class Tag
 			}
 		}
 		return tagList;
+	}
+
+	public boolean hasUndownloadedIcon()
+	{
+		if (getIconPath().equals("") && getIconID() != -1 && getIconID() != 0)
+		{
+			return true;
+		}	
+		
+		if (!getIconPath().equals(""))
+		{
+			Bitmap bitmap = BitmapFactory.decodeFile(getIconPath());
+			if (bitmap == null)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean equals(Object o)

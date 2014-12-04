@@ -265,11 +265,15 @@ public class Utils
     }
     
     public static String getImageName()
-    {
-		
+    {		
 		long currentTime = new Date().getTime();
 		
 		return Long.toString(currentTime) + ".jpg";
+    }
+    
+    public static String getIconFilePath(int iconID)
+    {
+    	return AppPreference.getAppPreference().getInvoiceImageDirectory() + "/" + iconID + ".png";  
     }
     
     public static String saveBitmapToFile(Bitmap bitmap, int type)
@@ -289,14 +293,46 @@ public class Utils
 			}
     		else
     		{
-				path = appPreference.getInvoiceImageDirectory() + "/" + getImageName();    			
+				path = appPreference.getIconImageDirectory() + "/" + getImageName();    			
     		}
     		
     		File compressedBitmapFile = new File(path);
     		compressedBitmapFile.createNewFile();
     		
     		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    		bitmap.compress(CompressFormat.JPEG, 90, outputStream);
+    		bitmap.compress(CompressFormat.JPEG, 90, outputStream);	
+    		byte[] bitmapData = outputStream.toByteArray();
+    		
+    		FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
+    		fileOutputStream.write(bitmapData);
+    		fileOutputStream.flush();
+    		fileOutputStream.close();	
+    		
+    		return path;
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			return "";
+		}
+    }
+    
+    public static String saveIconToFile(Bitmap bitmap, int iconID)
+    {
+    	try
+		{
+    		Matrix matrix = new Matrix();
+    		matrix.postScale((float)0.5, (float)0.5);
+    		
+    		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    		
+    		String path = getIconFilePath(iconID);
+    		
+    		File compressedBitmapFile = new File(path);
+    		compressedBitmapFile.createNewFile();
+    		
+    		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    		bitmap.compress(CompressFormat.PNG, 90, outputStream);
     		byte[] bitmapData = outputStream.toByteArray();
     		
     		FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);

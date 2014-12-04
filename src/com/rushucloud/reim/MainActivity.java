@@ -315,7 +315,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 						{
 							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
 							{
-								if (user.getImageID() == currentUser.getImageID())
+								if (user.getAvatarID() == currentUser.getAvatarID())
 								{
 									user.setAvatarPath(currentUser.getAvatarPath());								
 								}								

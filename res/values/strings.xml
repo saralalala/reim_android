@@ -146,6 +146,7 @@
     <string name="inputContactInfo">请输入您的联系方式</string>
     <string name="inputCategoryName">请输入分类名称</string>
     <string name="inputCategoryLimit">请输入分类限额</string>
+    <string name="icon">图标</string>
     <string name="subCategory">子分类</string>
     <string name="inputTagName">请输入标签名称</string>
     <string name="inputUserContact">请输入对方手机号或邮箱</string>

@@ -22,7 +22,7 @@ public class User implements Serializable
 	private String password = "";
 	private String nickname = "";
 	private String phone = "";
-	private int imageID = -1;
+	private int avatarID = -1;
 	private String avatarPath = "";
 	private int privilege = 0;
 	private boolean isActive = false;
@@ -54,11 +54,11 @@ public class User implements Serializable
 			String imageID = jObject.getString("avatar");
 			if (imageID.equals(""))
 			{
-				setImageID(-1);					
+				setAvatarID(-1);					
 			}
 			else
 			{
-				setImageID(Integer.valueOf(imageID));
+				setAvatarID(Integer.valueOf(imageID));
 			}
 		}
 		catch (NumberFormatException e)
@@ -116,13 +116,13 @@ public class User implements Serializable
 		this.phone = phone;
 	}
 	
-	public int getImageID()
+	public int getAvatarID()
 	{
-		return imageID;
+		return avatarID;
 	}
-	public void setImageID(int imageID)
+	public void setAvatarID(int avatarID)
 	{
-		this.imageID = imageID;
+		this.avatarID = avatarID;
 	}
 	
 	public String getAvatarPath()
@@ -199,7 +199,7 @@ public class User implements Serializable
 
 	public boolean hasUndownloadedAvatar()
 	{
-		if (getAvatarPath().equals("") && getImageID() != -1 && getImageID() != 0)
+		if (getAvatarPath().equals("") && getAvatarID() != -1 && getAvatarID() != 0)
 		{
 			return true;
 		}
@@ -215,8 +215,24 @@ public class User implements Serializable
 		return false;
 	}
 	
+	public List<User> constructListWithManager()
+	{
+		List<User> tempList = new ArrayList<User>();
+		User defaultManager = DBManager.getDBManager().getUser(getDefaultManagerID());
+		if (defaultManager != null)
+		{
+			tempList.add(defaultManager);				
+		}
+		return tempList;
+	}
+	
 	public static boolean[] getUsersCheck(List<User> allUsers, List<User> targetUsers)
 	{		
+		if (allUsers == null)
+		{
+			return null;
+		}
+		
 		boolean[] check = new boolean[allUsers.size()];
 		for (int i = 0; i < check.length; i++)
 		{
@@ -242,6 +258,23 @@ public class User implements Serializable
 		return check;
 	}
 
+	public static int getIndexOfUser(List<User> userList, User user)
+	{
+		if (user == null)
+		{
+			return -1;
+		}
+		
+		for (int i = 0; i < userList.size(); i++)
+		{
+			if (user.getServerID() == userList.get(i).getServerID())
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	public static String[] getUsersName(List<User> userList)
 	{
 		String[] userNames = new String[userList.size()];

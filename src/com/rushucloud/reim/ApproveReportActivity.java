@@ -401,7 +401,7 @@ public class ApproveReportActivity extends Activity
 						{
 							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
 							{
-								if (user.getImageID() == currentUser.getImageID())
+								if (user.getAvatarID() == currentUser.getAvatarID())
 								{
 									user.setAvatarPath(currentUser.getAvatarPath());								
 								}								
@@ -443,7 +443,7 @@ public class ApproveReportActivity extends Activity
     private void sendDownloadAvatarRequest(final User user)
     {
     	final DBManager dbManager = DBManager.getDBManager();
-    	DownloadImageRequest request = new DownloadImageRequest(user.getImageID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
+    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

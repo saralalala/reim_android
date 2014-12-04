@@ -66,7 +66,7 @@ public class ItemListViewAdapter extends BaseAdapter
 		
 		Item item = this.getItem(position);
 
-		if (item.getImageID() != -1 || !item.getInvoicePath().equals(""))
+		if (item.hasInvoice())
 		{
 			photoImageView.setVisibility(View.VISIBLE);
 		}

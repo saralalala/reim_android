@@ -415,13 +415,7 @@ public class EditReportActivity extends Activity
     	hideSoftKeyboard();
 		if (report.getManagerList() == null || report.getManagerList().size() == 0)
 		{
-			List<User> tempList = new ArrayList<User>();
-			User defaultManager = dbManager.getUser(currentUser.getDefaultManagerID());
-			if (defaultManager != null)
-			{
-				tempList.add(defaultManager);				
-			}
-			managerCheckList = User.getUsersCheck(userList, tempList);
+			managerCheckList = User.getUsersCheck(userList, currentUser.constructListWithManager());
 		}
 		else
 		{
@@ -656,7 +650,7 @@ public class EditReportActivity extends Activity
     private void sendDownloadAvatarRequest(final User user)
     {
     	final DBManager dbManager = DBManager.getDBManager();
-    	DownloadImageRequest request = new DownloadImageRequest(user.getImageID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
+    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

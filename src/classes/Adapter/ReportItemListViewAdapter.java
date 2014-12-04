@@ -72,7 +72,8 @@ public class ReportItemListViewAdapter extends BaseAdapter
 
 		// category 和 tag 一共iconCount个
 		iconCount = (screenWidth - amountTextView.getMeasuredWidth() - padding * 3 + interval) / (sideLength + interval);
-		for (int i = 0; i < iconCount - 1; i++)
+		iconCount = 1;
+		for (int i = 0; i < iconCount; i++)
 		{
 			ImageView iconImageView = new ImageView(context);
 			iconImageView.setImageResource(R.drawable.category_logo);
