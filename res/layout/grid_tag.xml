@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="40dp"
+    android:layout_width="50dp"
     android:layout_height="wrap_content" >
 
     <ImageView
         android:id="@+id/iconImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/tag"
@@ -20,6 +20,6 @@
         android:layout_marginTop="5dp"
         android:gravity="center"
 	    android:textColor="@color/font_major_dark"
-	    android:textSize="14sp"/>
+	    android:textSize="12sp"/>
 
 </RelativeLayout>

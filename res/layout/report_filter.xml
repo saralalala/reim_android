@@ -58,7 +58,7 @@
     
     <classes.Widget.SegmentedGroup
         android:id="@+id/sortRadioGroup"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
         android:layout_below="@+id/sortDivider"
@@ -71,6 +71,7 @@
             android:id="@+id/sortNullRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:checked="true"
             android:text="@string/sortNull"
             style="@style/RadioButton" />
@@ -79,6 +80,7 @@
             android:id="@+id/sortItemsCountRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/sortItemsCount"
             style="@style/RadioButton" />
 
@@ -86,6 +88,7 @@
             android:id="@+id/sortAmountRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/sortAmount"
             style="@style/RadioButton" />
 
@@ -93,6 +96,7 @@
             android:id="@+id/sortCreateDateRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/sortCreateDate"
             style="@style/RadioButton" />
         
@@ -103,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignBottom="@+id/filterDivider"
+        android:layout_alignBottom="@+id/tagDivider"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="16dp"
         android:text="@string/filterTags"
@@ -111,7 +115,7 @@
         android:textSize="14sp" />
 
     <include 
-        android:id="@+id/filterDivider"
+        android:id="@+id/tagDivider"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
 		android:layout_alignTop="@+id/sortDivider"
@@ -124,15 +128,14 @@
         android:id="@+id/tagGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/filterDivider"
+        android:layout_below="@+id/tagDivider"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:listSelector="@android:color/transparent"
         android:numColumns="4"
         android:verticalSpacing="22dp"
-        android:horizontalSpacing="10dp" >
-
-    </GridView>
-
+        android:horizontalSpacing="10dp" />
+    
 </RelativeLayout>

@@ -199,7 +199,7 @@ public class User implements Serializable
 
 	public boolean hasUndownloadedAvatar()
 	{
-		if (getAvatarPath().equals("") && getAvatarID() != -1 && getAvatarID() != 0)
+		if (getAvatarPath().equals("") && getAvatarID() > 0)
 		{
 			return true;
 		}

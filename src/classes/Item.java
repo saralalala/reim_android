@@ -358,7 +358,7 @@ public class Item
     
 	public boolean hasInvoice()
 	{
-		return getInvoiceID() != -1 || !getInvoicePath().equals("");
+		return getInvoiceID() > 0 || !getInvoicePath().equals("");
 	}
 	
 	public boolean hasUndownloadedInvoice()

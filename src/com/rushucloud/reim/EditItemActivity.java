@@ -539,7 +539,7 @@ public class EditItemActivity extends Activity
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
 			if (item.getInvoiceID() != -1 && item.getInvoiceID() != 0 && Utils.isNetworkConnected())
 			{
-				sendDownloadImageRequest();
+				sendDownloadInvoiceRequest();
 			}
 			else if (item.getInvoiceID() != -1 && item.getInvoiceID() != 0 && !Utils.isNetworkConnected())
 			{
@@ -917,7 +917,7 @@ public class EditItemActivity extends Activity
 								})
 								.setNegativeButton(R.string.cancel, null)
 								.create();
-    	mDialog.show(); 	
+    	mDialog.show();
 		
 		if (Utils.isNetworkConnected())
 		{
@@ -970,7 +970,7 @@ public class EditItemActivity extends Activity
 								})
 								.setNegativeButton(R.string.cancel, null)
 								.create();
-    	mDialog.show(); 	
+    	mDialog.show();
 		
 		if (Utils.isNetworkConnected())
 		{
@@ -1107,7 +1107,7 @@ public class EditItemActivity extends Activity
     	mDialog.show();
     }
 
-    private void sendDownloadImageRequest()
+    private void sendDownloadInvoiceRequest()
     {
 		DownloadImageRequest request = new DownloadImageRequest(item.getInvoiceID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
 		request.sendRequest(new HttpConnectionCallback()
@@ -1156,8 +1156,68 @@ public class EditItemActivity extends Activity
 				}
 			}
 		});    	
+    }    
+
+    private void sendDownloadCategoryIconRequest(final Category category)
+    {
+    	DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
+					category.setIconPath(iconPath);
+					category.setLocalUpdatedDate(Utils.getCurrentTime());
+					category.setServerUpdatedDate(category.getLocalUpdatedDate());
+					dbManager.updateCategory(category);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+							categoryAdapter.setCategory(categoryList);
+							categoryAdapter.notifyDataSetChanged();
+						}
+					});	
+				}
+			}
+		});
     }
     
+    private void sendDownloadTagIconRequest(final Tag tag)
+    {
+    	DownloadImageRequest request = new DownloadImageRequest(tag.getIconID());
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String iconPath = Utils.saveIconToFile(response.getBitmap(), tag.getIconID());
+					tag.setIconPath(iconPath);
+					tag.setLocalUpdatedDate(Utils.getCurrentTime());
+					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
+					dbManager.updateTag(tag);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+							tagAdapter.setTag(tagList);
+							tagAdapter.notifyDataSetChanged();
+						}
+					});	
+				}
+			}
+		});
+    }
+        
     private void sendUploadImageRequest()
     {
 		UploadImageRequest request = new UploadImageRequest(item.getInvoicePath(), HttpConstant.IMAGE_TYPE_INVOICE);
@@ -1371,66 +1431,6 @@ public class EditItemActivity extends Activity
 		});
     }
 
-    private void sendDownloadCategoryIconRequest(final Category category)
-    {
-    	DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-				if (response.getBitmap() != null)
-				{
-					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
-					category.setIconPath(iconPath);
-					category.setLocalUpdatedDate(Utils.getCurrentTime());
-					category.setServerUpdatedDate(category.getLocalUpdatedDate());
-					dbManager.updateCategory(category);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
-							categoryAdapter.setCategory(categoryList);
-							categoryAdapter.notifyDataSetChanged();
-						}
-					});	
-				}
-			}
-		});
-    }
-    
-    private void sendDownloadTagIconRequest(final Tag tag)
-    {
-    	DownloadImageRequest request = new DownloadImageRequest(tag.getIconID());
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-				if (response.getBitmap() != null)
-				{
-					String iconPath = Utils.saveIconToFile(response.getBitmap(), tag.getIconID());
-					tag.setIconPath(iconPath);
-					tag.setLocalUpdatedDate(Utils.getCurrentTime());
-					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
-					dbManager.updateTag(tag);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-							tagAdapter.setTag(tagList);
-							tagAdapter.notifyDataSetChanged();
-						}
-					});	
-				}
-			}
-		});
-    }
-    
     public class ReimLocationListener implements BDLocationListener
     {
     	public void onReceiveLocation(BDLocation location)

@@ -34,7 +34,7 @@
     <color name="reim_pie_occupy">#FF0366C9</color>
     <color name="reim_pie_remain">#FF03CACA</color>
     
-    <color name="radio_button_selected_color">#FF33B5E5</color>
+    <color name="radio_button_selected_color">#FFFF575B</color>
     <color name="radio_button_unselected_color">@android:color/transparent</color>
     
     <color name="item_approved">#FF3CB798</color>

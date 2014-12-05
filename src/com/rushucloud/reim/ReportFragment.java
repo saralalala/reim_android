@@ -349,7 +349,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);	
 			final RadioButton sortCreateDateRadio = (RadioButton)filterView.findViewById(R.id.sortCreateDateRadio);
 			SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
-			sortRadioGroup.setTintColor(getResources().getColor(R.color.major_dark));
 			sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 			{
 				public void onCheckedChanged(RadioGroup group, int checkedId)

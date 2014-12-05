@@ -170,7 +170,7 @@ public class ManagerActivity extends Activity
 	private void refreshListView()
 	{
 		adapter = new MemberListViewAdapter(this, userList, checkList);
-		managerListView.setAdapter(adapter);	
+		managerListView.setAdapter(adapter);
 		
 		if (Utils.isNetworkConnected())
 		{
@@ -181,7 +181,7 @@ public class ManagerActivity extends Activity
 					sendDownloadAvatarRequest(user);
 				}
 			}
-		}	
+		}
 	}
 
 	private void sendGetGroupRequest()

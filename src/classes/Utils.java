@@ -332,7 +332,7 @@ public class Utils
     		compressedBitmapFile.createNewFile();
     		
     		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    		bitmap.compress(CompressFormat.PNG, 90, outputStream);
+    		bitmap.compress(CompressFormat.PNG, 100, outputStream);
     		byte[] bitmapData = outputStream.toByteArray();
     		
     		FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);

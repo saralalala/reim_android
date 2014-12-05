@@ -4,6 +4,7 @@ import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Response.DownloadImageResponse;
+import classes.Category;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Tag;
@@ -24,13 +25,22 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 public class ShowItemActivity extends Activity
 {
+	private ImageView invoiceImageView;
+	private ImageView categoryImageView;
+	private LinearLayout tagLayout;
+	private LinearLayout memberLayout;
+	
 	private DBManager dbManager;
 	private Item item;
+	private int iconWidth;
+	private int iconInterval;
+	private int iconMaxCount;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -102,6 +112,7 @@ public class ShowItemActivity extends Activity
 			}
 		});
 
+		// init status part
 		TextView actualCostTextView = (TextView)findViewById(R.id.actualCostTextView);
 		TextView budgetTextView = (TextView)findViewById(R.id.budgetTextView);
 		ImageView approvedImageView = (ImageView)findViewById(R.id.approvedImageView);
@@ -121,6 +132,7 @@ public class ShowItemActivity extends Activity
 			approvedImageView.setVisibility(View.GONE);
 		}
 		
+		// init type
 		String temp = item.isProveAhead() ? getString(R.string.proveAhead) : getString(R.string.consumed);
 		if (item.needReimbursed())
 		{
@@ -129,7 +141,8 @@ public class ShowItemActivity extends Activity
 		TextView typeTextView = (TextView)findViewById(R.id.typeTextView);
 		typeTextView.setText(temp);
 		
-		final ImageView invoiceImageView = (ImageView)findViewById(R.id.invoiceImageView);
+		// init invoice photo
+		invoiceImageView = (ImageView)findViewById(R.id.invoiceImageView);
 		invoiceImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -148,23 +161,24 @@ public class ShowItemActivity extends Activity
 		{
 			invoiceImageView.setImageBitmap(invoice);
 		}
-		else if (item.getInvoiceID() == -1)
+		else if (!item.hasInvoice())
 		{
 			invoiceImageView.setVisibility(View.GONE);
 		}
 		else
 		{			
 			invoiceImageView.setImageResource(R.drawable.default_invoice);
-			if (item.getInvoiceID() != -1 && item.getInvoiceID() != 0 && Utils.isNetworkConnected())
+			if (item.hasUndownloadedInvoice() && Utils.isNetworkConnected())
 			{
-				sendDownloadImageRequest(invoiceImageView);
+				sendDownloadInvoiceRequest();
 			}
-			else if (item.getInvoiceID() != -1 && item.getInvoiceID() != 0 && !Utils.isNetworkConnected())
+			else if (item.hasUndownloadedInvoice() && !Utils.isNetworkConnected())
 			{
 				Utils.showToast(ShowItemActivity.this, "网络未连接，无法下载图片");				
 			}
 		}
 		
+		// init time
 		TextView timeTextView = (TextView)findViewById(R.id.timeTextView);
 		if (item.getConsumedDate() != -1 && item.getConsumedDate() != 0)
 		{
@@ -175,14 +189,17 @@ public class ShowItemActivity extends Activity
 			timeTextView.setText(R.string.notAvailable);
 		}
 		
+		// init vendor		
 		TextView vendorTextView = (TextView)findViewById(R.id.vendorTextView);
 		vendorTextView.setText(item.getMerchant());
 
+		// init location
 		String cityName = item.getLocation().equals("") ? "N/A" : item.getLocation();
 		TextView locationTextView = (TextView)findViewById(R.id.locationTextView);
 		locationTextView.setText(cityName);
 
-		ImageView categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
+		// init category
+		categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
 		TextView categoryTextView = (TextView)findViewById(R.id.categoryTextView);
 		if (item.getCategory() != null)
 		{
@@ -192,21 +209,78 @@ public class ShowItemActivity extends Activity
 				categoryImageView.setImageBitmap(categoryIcon);
 			}
 			categoryTextView.setText(item.getCategory().getName());
+			
+			if (item.getCategory().hasUndownloadedIcon() && Utils.isNetworkConnected())
+			{
+				sendDownloadCategoryIconRequest(item.getCategory());
+			}
+		}
+		else
+		{
+			categoryImageView.setVisibility(View.GONE);
 		}
 		
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
-		int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
-		int tagWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, metrics);
-		int tagCountPerRow = (metrics.widthPixels - padding + interval) / (tagWidth + interval);
-		RelativeLayout tagLayout = (RelativeLayout) findViewById(R.id.tagLayout);
-		tagLayout.removeAllViews();
+		iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
+		iconInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		iconMaxCount = (metrics.widthPixels - padding + iconInterval) / (iconWidth + iconInterval);
+
+		// init tag
+		refreshTagView();
 		
-		int maxHeight = 0;
-		int topMargin = 0;
-		int tagCount = item.getTags().size();
+		if (item.getTags() != null && Utils.isNetworkConnected())
+		{
+			for (Tag tag : item.getTags())
+			{
+				if (tag.hasUndownloadedIcon())
+				{
+					sendDownloadTagIconRequest(tag);
+				}
+			}
+		}
+		
+		// init member
+		refreshMemberView();
+		
+		if (item.getRelevantUsers() != null && Utils.isNetworkConnected())
+		{
+			for (User user : item.getRelevantUsers())
+			{
+				if (user.hasUndownloadedAvatar())
+				{
+					sendDownloadAvatarRequest(user);
+				}
+			}
+		}
+		
+		// init note;
+		TextView noteTextView = (TextView)findViewById(R.id.noteTextView);
+		noteTextView.setText(item.getNote());		
+	}
+	
+	private void refreshTagView()
+	{
+		initData();
+
+		tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
+		tagLayout.removeAllViews();
+
+		LinearLayout layout = new LinearLayout(this);
+		int tagCount = item.getTags() != null ? item.getTags().size() : 0;
 		for (int i = 0; i < tagCount; i++)
 		{
+			if (i % iconMaxCount == 0)
+			{
+				layout = new LinearLayout(this);
+				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				params.topMargin = iconInterval;
+				layout.setLayoutParams(params);
+				layout.setOrientation(LinearLayout.HORIZONTAL);
+				
+				tagLayout.addView(layout);
+			}
+			
 			Tag tag = item.getTags().get(i);
 			Bitmap tagIcon = BitmapFactory.decodeFile(tag.getIconPath());
 			
@@ -215,45 +289,70 @@ public class ShowItemActivity extends Activity
 			ImageView iconImageView = (ImageView) tagView.findViewById(R.id.iconImageView);
 			if (tagIcon != null)
 			{
-				iconImageView.setImageBitmap(tagIcon);				
+				iconImageView.setImageBitmap(tagIcon);		
 			}
 			
 			TextView nameTextView = (TextView) tagView.findViewById(R.id.nameTextView);
-			nameTextView.setText(tag.getName());			
+			nameTextView.setText(tag.getName());
 			
-			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(tagWidth, RelativeLayout.LayoutParams.WRAP_CONTENT);
-			params.topMargin = topMargin;
-			params.leftMargin = (tagWidth + interval) * (i % tagCountPerRow);
+			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
+			params.rightMargin = iconInterval;
 			
-			tagLayout.addView(tagView, params);	
-			
-			if (tagView.getMeasuredHeight() > maxHeight)
+			layout.addView(tagView, params);
+		}
+	}	
+	
+	private void refreshMemberView()
+	{
+		initData();
+		
+		memberLayout = (LinearLayout) findViewById(R.id.memberLayout);
+		memberLayout.removeAllViews();
+
+		LinearLayout layout = new LinearLayout(this);
+		int memberCount = item.getRelevantUsers() != null ? item.getRelevantUsers().size() : 0;
+		for (int i = 0; i < memberCount; i++)
+		{
+			if (i % iconMaxCount == 0)
 			{
-				maxHeight = tagView.getMeasuredHeight();
+				layout = new LinearLayout(this);
+				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				params.topMargin = iconInterval;
+				layout.setLayoutParams(params);
+				layout.setOrientation(LinearLayout.HORIZONTAL);
+				
+				memberLayout.addView(layout);
 			}
 			
-			if ((i + 1) % tagCountPerRow == 0)
+			User user = item.getRelevantUsers().get(i);
+			Bitmap memberAvatar = BitmapFactory.decodeFile(user.getAvatarPath());
+			
+			View memberView = View.inflate(this, R.layout.grid_member, null);
+			
+			ImageView iconImageView = (ImageView) memberView.findViewById(R.id.iconImageView);
+			if (memberAvatar != null)
 			{
-				topMargin += maxHeight;
-				maxHeight = 0;
+				iconImageView.setImageBitmap(memberAvatar);		
 			}
-		}		
-		
-		TextView memberTextView = (TextView)findViewById(R.id.memberTextView);
-		memberTextView.setText(User.getUsersNameString(item.getRelevantUsers()));
-		
-		TextView noteTextView = (TextView)findViewById(R.id.noteTextView);
-		noteTextView.setText(item.getNote());		
+			
+			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
+			nameTextView.setText(user.getNickname());
+			
+			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
+			params.rightMargin = iconInterval;
+			
+			layout.addView(memberView, params);
+		}
 	}
 	
-	private void sendDownloadImageRequest(final ImageView invoiceImageView)
+	private void sendDownloadInvoiceRequest()
 	{
 		DownloadImageRequest request = new DownloadImageRequest(item.getInvoiceID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
 					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), 
@@ -267,8 +366,7 @@ public class ShowItemActivity extends Activity
 						{
 							public void run()
 							{
-								Bitmap bitmap = BitmapFactory.decodeFile(invoicePath);
-								invoiceImageView.setImageBitmap(bitmap);
+								invoiceImageView.setImageBitmap(response.getBitmap());
 							}
 						});
 					}
@@ -278,7 +376,7 @@ public class ShowItemActivity extends Activity
 						{
 							public void run()
 							{
-								Utils.showToast(ShowItemActivity.this, "图片保存失败");
+								Utils.showToast(ShowItemActivity.this, "发票图片下载失败");
 							}
 						});						
 					}
@@ -296,4 +394,88 @@ public class ShowItemActivity extends Activity
 			}
 		});		
 	}
+
+    private void sendDownloadCategoryIconRequest(final Category category)
+    {
+    	DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
+					category.setIconPath(iconPath);
+					category.setLocalUpdatedDate(Utils.getCurrentTime());
+					category.setServerUpdatedDate(category.getLocalUpdatedDate());
+					dbManager.updateCategory(category);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							categoryImageView.setImageBitmap(response.getBitmap());
+						}
+					});	
+				}
+			}
+		});
+    }
+    
+    private void sendDownloadTagIconRequest(final Tag tag)
+    {
+    	DownloadImageRequest request = new DownloadImageRequest(tag.getIconID());
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String iconPath = Utils.saveIconToFile(response.getBitmap(), tag.getIconID());
+					tag.setIconPath(iconPath);
+					tag.setLocalUpdatedDate(Utils.getCurrentTime());
+					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
+					dbManager.updateTag(tag);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							refreshTagView();
+						}
+					});	
+				}
+			}
+		});
+    }
+
+    private void sendDownloadAvatarRequest(final User user)
+    {
+    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
+					user.setAvatarPath(avatarPath);
+					user.setLocalUpdatedDate(Utils.getCurrentTime());
+					user.setServerUpdatedDate(user.getLocalUpdatedDate());
+					dbManager.updateUser(user);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							refreshMemberView();
+						}
+					});	
+				}
+			}
+		});
+    }
 }

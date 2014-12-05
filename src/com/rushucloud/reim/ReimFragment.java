@@ -17,6 +17,7 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.Tag;
 import classes.Utils;
+import classes.Widget.SegmentedGroup;
 import classes.Widget.XListView;
 import classes.Widget.XListView.IXListViewListener;
 import classes.Adapter.ItemListViewAdapter;
@@ -29,6 +30,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -43,7 +45,6 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -313,7 +314,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 			final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
 			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		
 			final RadioButton sortConsumedDateRadio = (RadioButton)filterView.findViewById(R.id.sortConsumedDateRadio);	
-			RadioGroup sortRadioGroup = (RadioGroup)filterView.findViewById(R.id.sortRadioGroup);
+			SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
 			sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 			{
 				public void onCheckedChanged(RadioGroup group, int checkedId)
@@ -338,7 +339,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 			final RadioButton filterTypeAllRadio = (RadioButton)filterView.findViewById(R.id.filterTypeAllRadio);
 			final RadioButton filterProveAheadRadio = (RadioButton)filterView.findViewById(R.id.filterProveAheadRadio);
 			final RadioButton filterConsumedRadio = (RadioButton)filterView.findViewById(R.id.filterConsumedRadio);			
-			RadioGroup filterTypeRadioGroup = (RadioGroup)filterView.findViewById(R.id.filterTypeRadioGroup);
+			SegmentedGroup filterTypeRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterTypeRadioGroup);
 			filterTypeRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 			{
 				public void onCheckedChanged(RadioGroup group, int checkedId)
@@ -363,7 +364,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 			final RadioButton filterStatusAllRadio = (RadioButton)filterView.findViewById(R.id.filterStatusAllRadio);
 			final RadioButton filterFreeRadio = (RadioButton)filterView.findViewById(R.id.filterFreeRadio);
 			final RadioButton filterAddedRadio = (RadioButton)filterView.findViewById(R.id.filterAddedRadio);			
-			RadioGroup filterStatusRadioGroup = (RadioGroup)filterView.findViewById(R.id.filterStatusRadioGroup);
+			SegmentedGroup filterStatusRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterStatusRadioGroup);
 			filterStatusRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 			{
 				public void onCheckedChanged(RadioGroup group, int checkedId)
@@ -385,10 +386,18 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 				}
 			});
 
+			DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+			int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+			int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+			int tagWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);	
+			int tagMaxCount = (metrics.widthPixels - padding * 2 + interval) / (tagWidth + interval);
+			
 			final ItemTagGridViewAdapter tagAdapter = new ItemTagGridViewAdapter(getActivity(), tagList);
 			
 			GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
 			tagGridView.setAdapter(tagAdapter);
+			tagGridView.setNumColumns(tagMaxCount);
 			tagGridView.setOnItemClickListener(new OnItemClickListener()
 			{
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -398,9 +407,9 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 					tagAdapter.notifyDataSetChanged();
 				}
 			});
-			
-			Button confirmButton = (Button)filterView.findViewById(R.id.confirmButton);
-			confirmButton.setOnClickListener(new View.OnClickListener()
+
+			ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
+			confirmImageView.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
 				{
@@ -424,9 +433,9 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 					ReimApplication.dismissProgressDialog();
 				}
 			});
-			
-			Button cancelButton = (Button)filterView.findViewById(R.id.cancelButton);
-			cancelButton.setOnClickListener(new View.OnClickListener()
+
+			ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
+			cancelImageView.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
 				{

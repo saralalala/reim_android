@@ -5,12 +5,12 @@
 
     <ImageView
         android:id="@+id/iconImageView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:contentDescription="@string/member"
-        android:src="@drawable/default_avatar" />
+        android:contentDescription="@string/tag"
+        android:src="@drawable/default_icon" />
     
     <TextView
         android:id="@+id/nameTextView"

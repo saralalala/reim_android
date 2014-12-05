@@ -52,13 +52,13 @@
     <string name="sortItemsCount">条目数</string>
     <string name="sortUpdateDate">修改时间</string>
     <string name="sortCreateDate">创建时间</string>
-    <string name="sortConsumedDate">消费时间</string>
+    <string name="sortConsumedDate">时间</string>
     <string name="filter">筛选</string>
     <string name="filterAll">全部</string>
-    <string name="filterProveAhead">预审批</string>
+    <string name="filterProveAhead">预申请</string>
     <string name="filterConsumed">已消费</string>
-    <string name="filterAdded">已添加到报告</string>
-    <string name="filterFree">未添加到报告</string>
+    <string name="filterAdded">已加入报告</string>
+    <string name="filterFree">未加入报告</string>
     <string name="filterTags">标签</string>    
     
     <string name="inputAmount">请输入金额</string>
