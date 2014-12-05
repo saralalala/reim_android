@@ -26,5 +26,10 @@
         <item name="android:paddingLeft">5dp</item>
         <item name="android:paddingRight">5dp</item>
     </style>
+    
+    <style name="TypeWindowAnimation" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/type_window_in</item>  
+        <item name="android:windowExitAnimation">@anim/type_window_out</item>
+    </style>
 
 </resources>

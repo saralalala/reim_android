@@ -54,6 +54,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -61,10 +62,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -77,6 +81,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.ToggleButton;
+import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -507,16 +515,18 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (!item.getInvoicePath().equals(""))
-				{
-					Intent intent = new Intent(EditItemActivity.this, ImageActivity.class);
-					intent.putExtra("imagePath", item.getInvoicePath());
-					startActivity(intent);
-				}
-				else
-				{
-					invoiceImageView.showContextMenu();
-				}
+//				if (!item.getInvoicePath().equals(""))
+//				{
+//					Intent intent = new Intent(EditItemActivity.this, ImageActivity.class);
+//					intent.putExtra("imagePath", item.getInvoicePath());
+//					startActivity(intent);
+//				}
+//				else
+//				{
+//					invoiceImageView.showContextMenu();
+//				}
+				hideSoftKeyboard();
+				showTypeDialog();
 			}
 		});
 		invoiceImageView.setOnLongClickListener(new View.OnLongClickListener()
@@ -719,6 +729,46 @@ public class EditItemActivity extends Activity
 		}
     }
 
+    private void showTypeDialog()
+    {
+		int backgroundColor = getResources().getColor(R.color.hint_dark_grey);
+		
+		final View typeView = View.inflate(this, R.layout.reim_type_window, null);
+		final RadioButton consumedRadio = (RadioButton)typeView.findViewById(R.id.consumedRadio);
+		final RadioButton proveAheadRadio = (RadioButton)typeView.findViewById(R.id.proveAheadRadio);
+		
+		consumedRadio.setChecked(!item.isProveAhead());
+		proveAheadRadio.setChecked(item.isProveAhead());		
+		
+		final ToggleButton needReimToggleButton = (ToggleButton)typeView.findViewById(R.id.needReimToggleButton);
+		needReimToggleButton.setChecked(item.needReimbursed());
+		
+		PopupWindow typePopupWindow = new PopupWindow(this);
+		
+		typePopupWindow.setWidth(LayoutParams.MATCH_PARENT);
+		typePopupWindow.setHeight(LayoutParams.WRAP_CONTENT);
+		typePopupWindow.setContentView(typeView);
+		typePopupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+		typePopupWindow.setFocusable(true);
+		typePopupWindow.setOutsideTouchable(true);
+		typePopupWindow.setAnimationStyle(R.style.TypeWindowAnimation);
+		typePopupWindow.setOnDismissListener(new OnDismissListener()
+		{
+			public void onDismiss()
+			{
+				WindowManager.LayoutParams params = getWindow().getAttributes();
+				params.alpha = (float) 1;
+				getWindow().setAttributes(params);
+			}
+		});
+		typePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		typePopupWindow.update();
+		
+		WindowManager.LayoutParams params = getWindow().getAttributes();
+		params.alpha = (float) 0.4;
+		getWindow().setAttributes(params);
+    }
+    
     private void showTimeDialog()
     {
 		if (newItem)
