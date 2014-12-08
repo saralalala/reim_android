@@ -28,13 +28,8 @@ public class ItemTagGridViewAdapter extends BaseAdapter
 	{
 		layoutInflater = LayoutInflater.from(context);
 		tagList = new ArrayList<Tag>(tags);
-//		check = new boolean[tagList.size()];
-//		for (int i = 0; i < tags.size(); i++)
-//		{
-//			check[i] = false;
-//		}
-		check = new boolean[10];
-		for (int i = 0; i < 10; i++)
+		check = new boolean[tagList.size()];
+		for (int i = 0; i < tags.size(); i++)
 		{
 			check[i] = false;
 		}
@@ -52,7 +47,7 @@ public class ItemTagGridViewAdapter extends BaseAdapter
 		ImageView iconImageView = (ImageView)convertView.findViewById(R.id.iconImageView);
 		TextView nameTextView = (TextView)convertView.findViewById(R.id.nameTextView);
 		
-		Tag tag = tagList.get(0);
+		Tag tag = tagList.get(position);
 		
 		if (check[position])
 		{
@@ -76,14 +71,12 @@ public class ItemTagGridViewAdapter extends BaseAdapter
 	
 	public int getCount()
 	{
-		return 10;
-//		return tagList.size();
+		return tagList.size();
 	}
 
 	public Tag getItem(int position)
 	{
-		return null;
-//		return tagList.get(position);
+		return tagList.get(position);
 	}
 
 	public long getItemId(int position)

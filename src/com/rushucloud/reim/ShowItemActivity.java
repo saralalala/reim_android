@@ -180,7 +180,7 @@ public class ShowItemActivity extends Activity
 		
 		// init time
 		TextView timeTextView = (TextView)findViewById(R.id.timeTextView);
-		if (item.getConsumedDate() != -1 && item.getConsumedDate() != 0)
+		if (item.getConsumedDate() > 0)
 		{
 			timeTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));			
 		}
@@ -194,7 +194,7 @@ public class ShowItemActivity extends Activity
 		vendorTextView.setText(item.getMerchant());
 
 		// init location
-		String cityName = item.getLocation().equals("") ? "N/A" : item.getLocation();
+		String cityName = item.getLocation().equals("") ? getString(R.string.notAvailable) : item.getLocation();
 		TextView locationTextView = (TextView)findViewById(R.id.locationTextView);
 		locationTextView.setText(cityName);
 
@@ -300,7 +300,7 @@ public class ShowItemActivity extends Activity
 			
 			layout.addView(tagView, params);
 		}
-	}	
+	}
 	
 	private void refreshMemberView()
 	{
@@ -329,10 +329,10 @@ public class ShowItemActivity extends Activity
 			
 			View memberView = View.inflate(this, R.layout.grid_member, null);
 			
-			ImageView iconImageView = (ImageView) memberView.findViewById(R.id.iconImageView);
+			ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
 			if (memberAvatar != null)
 			{
-				iconImageView.setImageBitmap(memberAvatar);		
+				avatarImageView.setImageBitmap(memberAvatar);		
 			}
 			
 			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);

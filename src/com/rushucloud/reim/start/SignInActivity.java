@@ -47,7 +47,6 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_sign_in);
 		initView();
-		initButton();
 	}
 
 	protected void onResume()
@@ -101,29 +100,9 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		usernameEditText.setText("a@a.com");
 		passwordEditText.setText("111111");
 
-		forgorPasswordTextView = (TextView)findViewById(R.id.forgotTextView);
-		forgorPasswordTextView.setOnClickListener(this);
 
-		signUpTextView = (TextView)findViewById(R.id.signUpTextView);
-		signUpTextView.setOnClickListener(this);
-		
-		signUpImageView = (ImageView)findViewById(R.id.signUpImageView);
-		signUpImageView.setOnClickListener(this);
-		
-		RelativeLayout baseLayout = (RelativeLayout)findViewById(R.id.baseLayout);
-		baseLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});
-	}
-
-	private void initButton()
-	{
-		final Button confirmButton = (Button)findViewById(R.id.confirmButton);
-		confirmButton.setOnClickListener(new View.OnClickListener()
+		final Button signInButton = (Button)findViewById(R.id.signInButton);
+		signInButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -189,19 +168,37 @@ public class SignInActivity extends Activity implements View.OnClickListener
 				}
 			}
 		});
-		confirmButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		signInButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
 		{
 			public void onGlobalLayout()
 			{
 				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_solid_light);
 				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
-				ViewGroup.LayoutParams params = confirmButton.getLayoutParams();
-				params.height = (int)(confirmButton.getWidth() * ratio);;
-				confirmButton.setLayoutParams(params);
+				ViewGroup.LayoutParams params = signInButton.getLayoutParams();
+				params.height = (int)(signInButton.getWidth() * ratio);;
+				signInButton.setLayoutParams(params);
+			}
+		});
+		
+		forgorPasswordTextView = (TextView)findViewById(R.id.forgotTextView);
+		forgorPasswordTextView.setOnClickListener(this);
+
+		signUpTextView = (TextView)findViewById(R.id.signUpTextView);
+		signUpTextView.setOnClickListener(this);
+		
+		signUpImageView = (ImageView)findViewById(R.id.signUpImageView);
+		signUpImageView.setOnClickListener(this);
+		
+		RelativeLayout baseLayout = (RelativeLayout)findViewById(R.id.baseLayout);
+		baseLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
 			}
 		});
 	}
-
+	
 	private void sendSignInRequest()
 	{
 		ReimApplication.showProgressDialog();

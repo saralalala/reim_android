@@ -50,43 +50,38 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.text.Selection;
+import android.text.Spannable;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.ToggleButton;
-import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 public class EditItemActivity extends Activity
 {
@@ -95,26 +90,27 @@ public class EditItemActivity extends Activity
 
 	private static AppPreference appPreference;
 	private static DBManager dbManager;
-	private LocationClient locationClient = null;
-	private BDLocationListener listener = new ReimLocationListener();
-	private BDLocation currentLocation;
-	private String currentCity;
-	private String locationInvalid;
-	private int getLocationTryTimes = 2;
-	private boolean fromReim;
 	
 	private EditText amountEditText;
-	private EditText vendorEditText;
-	private EditText locationEditText;
-	private EditText noteEditText;
-	private CheckBox proveAheadCheckBox;
-	private CheckBox needReimCheckBox;
+	private PopupWindow typePopupWindow;
+	private TextView typeTextView;
+	private LinearLayout invoiceLayout;
 	private ImageView invoiceImageView;
-	private TextView paAmountTextView;
-	private TextView categoryTextView;
-	private TextView tagTextView;
+	private ImageView addInvoiceImageView;
+	private ImageView removeImageView;
+	private PopupWindow picturePopupWindow;
 	private TextView timeTextView;
-	private TextView memberTextView;
+	private PopupWindow timePopupWindow;
+	private DatePicker datePicker;
+	private TextView vendorTextView;
+	private TextView locationTextView;
+	private ImageView categoryImageView;
+	private TextView categoryTextView;
+	private LinearLayout tagLayout;
+	private View addTagView;
+	private LinearLayout memberLayout;
+	private View addMemberView;
+	private EditText noteEditText;
 	
 	private Item item;
 	private Report report;
@@ -128,8 +124,20 @@ public class EditItemActivity extends Activity
 	private CategoryListViewAdapter categoryAdapter;
 	private TagListViewAdapter tagAdapter;
 	private MemberListViewAdapter memberAdapter;
-	
+
+	private boolean fromReim;
 	private boolean newItem = false;
+	
+	private int iconWidth;
+	private int iconInterval;
+	private int iconMaxCount;
+	
+	private LocationClient locationClient = null;
+	private BDLocationListener listener = new ReimLocationListener();
+	private BDLocation currentLocation;
+	private String currentCity;
+	private String locationInvalid;
+	private int getLocationTryTimes = 2;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -137,7 +145,6 @@ public class EditItemActivity extends Activity
 		setContentView(R.layout.reim_edit);
 		initData();
 		initView();
-		initButton();
 	}
 
 	protected void onResume()
@@ -162,36 +169,15 @@ public class EditItemActivity extends Activity
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
+		if (keyCode == KeyEvent.KEYCODE_BACK && removeImageView.getVisibility() == View.VISIBLE)
 		{
-			finish();
+			removeImageView.setVisibility(View.INVISIBLE);
+		}
+		else if (keyCode == KeyEvent.KEYCODE_BACK)
+		{
+			finish();			
 		}
 		return super.onKeyDown(keyCode, event);
-	}
-	
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle(null);
-		menu.add(0, 0, 0, "从图库选取");
-		menu.add(0, 1, 0, "用相机拍摄");
-	}
-	
-	public boolean onContextItemSelected(MenuItem item)
-	{
-		if (item.getItemId() == 0)
-		{
-			Intent intent = new Intent(Intent.ACTION_PICK, null);
-			intent.setType("image/*");
-			startActivityForResult(intent, PICK_IMAGE);
-		}
-		else
-		{
-			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-			startActivityForResult(intent, TAKE_PHOTO);
-		}
-			
-		return super.onContextItemSelected(item);
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -216,6 +202,8 @@ public class EditItemActivity extends Activity
 					{
 						Utils.showToast(EditItemActivity.this, "图片保存失败");
 					}
+					
+					refreshInvoiceView();
 				}
 			}
 			catch (FileNotFoundException e)
@@ -315,8 +303,6 @@ public class EditItemActivity extends Activity
 					item.setAmount(Double.valueOf(format.format(amount)));
 					item.setConsumer(appPreference.getCurrentUser());
 					item.setNote(noteEditText.getText().toString());
-					item.setIsProveAhead(proveAheadCheckBox.isChecked());
-					item.setNeedReimbursed(needReimCheckBox.isChecked());
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					
 					if (fromReim && item.isProveAhead() && item.getPaAmount() == 0)
@@ -324,14 +310,14 @@ public class EditItemActivity extends Activity
 						AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
 											.setTitle("请选择操作")
 											.setMessage("这是一条预审批的条目，您是想仅保存此条目还是要直接发送给上级审批？")
-											.setPositiveButton(R.string.onlySave, new OnClickListener()
+											.setPositiveButton(R.string.onlySave, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
 													saveItem();												
 												}
 											})
-											.setNeutralButton(R.string.sendToApprove, new OnClickListener()
+											.setNeutralButton(R.string.sendToApprove, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
@@ -359,7 +345,7 @@ public class EditItemActivity extends Activity
 					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
 														.setTitle("保存失败")
 														.setMessage("数字输入格式不正确")
-														.setNegativeButton(R.string.confirm, new OnClickListener()
+														.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which)
 															{
@@ -375,79 +361,67 @@ public class EditItemActivity extends Activity
 				}
 			}
 		});
-				
+		
+		// init status part
+		TextView actualCostTextView = (TextView)findViewById(R.id.actualCostTextView);
+		TextView budgetTextView = (TextView)findViewById(R.id.budgetTextView);
+		ImageView approvedImageView = (ImageView)findViewById(R.id.approvedImageView);
+
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
-		if (item.getAmount() != 0)
+		amountEditText.setText(Utils.formatDouble(item.getAmount()));
+		amountEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
+		amountEditText.setOnFocusChangeListener(new OnFocusChangeListener()
 		{
-			amountEditText.setText(Utils.formatDouble(item.getAmount()));			
-		}
-		else
+			public void onFocusChange(View v, boolean hasFocus)
+			{
+				if (hasFocus)
+				{
+					Spannable spanText = amountEditText.getText();
+					Selection.setSelection(spanText, spanText.length());
+				}
+			}
+		});
+		if (item.getAmount() == 0)
 		{
 			amountEditText.requestFocus();
 		}
 		
-		vendorEditText = (EditText)findViewById(R.id.vendorEditText);
-		vendorEditText.addTextChangedListener(new TextWatcher()
+		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
 		{
-			public void onTextChanged(CharSequence s, int start, int before, int count)
-			{
-				item.setMerchant(s.toString());
-			}
-			
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after)
-			{
-				
-			}
-			
-			public void afterTextChanged(Editable s)
-			{
-				
-			}
-		});
-		vendorEditText.setText(item.getMerchant());
+			budgetTextView.setText(getString(R.string.budget) + " " + Utils.formatDouble(item.getPaAmount()));
+		}
+		else
+		{
+			actualCostTextView.setVisibility(View.GONE);
+			budgetTextView.setVisibility(View.GONE);
+			approvedImageView.setVisibility(View.GONE);
+		}
 		
-		locationEditText = (EditText)findViewById(R.id.locationEditText);
-		locationEditText.addTextChangedListener(new TextWatcher()
+		// init type
+		String temp = item.isProveAhead() ? getString(R.string.proveAhead) : getString(R.string.consumed);
+		if (item.needReimbursed())
 		{
-			public void onTextChanged(CharSequence s, int start, int before, int count)
-			{
-				item.setLocation(s.toString());
-			}
-			
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after)
-			{
-				
-			}
-			
-			public void afterTextChanged(Editable s)
-			{
-				
-			}
-		});
-		locationEditText.setText(item.getLocation());
+			temp += "/" + getString(R.string.needReimburse);
+		}
 		
-		noteEditText = (EditText)findViewById(R.id.noteEditText);
-		noteEditText.setText(item.getNote());
-		noteEditText.setOnFocusChangeListener(new OnFocusChangeListener()
+		typeTextView = (TextView)findViewById(R.id.typeTextView);
+		typeTextView.setText(temp);
+		typeTextView.setOnClickListener(new View.OnClickListener()
 		{
-			public void onFocusChange(View v, boolean hasFocus)
+			public void onClick(View v)
 			{
-				if (hasFocus && newItem)
+				if (fromReim && item.getStatus() != Item.STATUS_PROVE_AHEAD_APPROVED)
 				{
-					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_NOTE");
-				}
-				if (hasFocus && !newItem)
-				{
-					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_NOTE");
+					showTypeDialog();
 				}
 			}
 		});
 		
-		proveAheadCheckBox = (CheckBox)findViewById(R.id.proveAheadCheckBox);
-		proveAheadCheckBox.setChecked(item.isProveAhead());
-		proveAheadCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		// init type window
+		View typeView = View.inflate(this, R.layout.reim_type_window, null);
+		RadioButton consumedRadio = (RadioButton)typeView.findViewById(R.id.consumedRadio);
+		final RadioButton proveAheadRadio = (RadioButton)typeView.findViewById(R.id.proveAheadRadio);
+		proveAheadRadio.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
@@ -461,14 +435,13 @@ public class EditItemActivity extends Activity
 				}
 			}
 		});
-		if (!fromReim || item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
-		{
-			proveAheadCheckBox.setEnabled(false);
-		}
 		
-		needReimCheckBox = (CheckBox)findViewById(R.id.needReimCheckBox);
-		needReimCheckBox.setChecked(item.needReimbursed());
-		needReimCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		consumedRadio.setChecked(!item.isProveAhead());
+		proveAheadRadio.setChecked(item.isProveAhead());		
+		
+		final ToggleButton needReimToggleButton = (ToggleButton)typeView.findViewById(R.id.needReimToggleButton);
+		needReimToggleButton.setChecked(item.needReimbursed());
+		needReimToggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
@@ -482,128 +455,205 @@ public class EditItemActivity extends Activity
 				}
 			}
 		});
-		
-		paAmountTextView = (TextView)findViewById(R.id.paAmountTextView);
-		if (item.getPaAmount() != 0)
-		{
-			paAmountTextView.setText(getResources().getString(R.string.budget) + "¥" + Utils.formatDouble(item.getAmount()));
-			paAmountTextView.setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			paAmountTextView.setVisibility(View.GONE);
-		}
 
-		String categoryName = item.getCategory() == null ? "N/A" : item.getCategory().getName();
-		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
-		categoryTextView.setText(categoryName);
-		
-		tagTextView = (TextView)findViewById(R.id.tagTextView);
-		tagTextView.setText(Tag.getTagsNameString(item.getTags()));
-		
-		timeTextView = (TextView)findViewById(R.id.timeTextView);
-		if (item.getConsumedDate() != -1 && item.getConsumedDate() != 0)
+		TextView confirmTextView = (TextView) typeView.findViewById(R.id.confirmTextView);
+		confirmTextView.setOnClickListener(new View.OnClickListener()
 		{
-			timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));			
-		}
+			public void onClick(View v)
+			{
+				item.setIsProveAhead(proveAheadRadio.isChecked());
+				item.setNeedReimbursed(needReimToggleButton.isChecked());
+				typePopupWindow.dismiss();
+				
+				String temp = item.isProveAhead() ? getString(R.string.proveAhead) : getString(R.string.consumed);
+				if (item.needReimbursed())
+				{
+					temp += "/" + getString(R.string.needReimburse);
+				}
+				typeTextView.setText(temp);
+			}
+		});
+
+		typePopupWindow = Utils.constructPopupWindow(this, typeView);
 		
-		memberTextView = (TextView)findViewById(R.id.memberTextView);
-		memberTextView.setText(User.getUsersNameString(item.getRelevantUsers()));
+		// init invoice		
+		invoiceLayout = (LinearLayout)findViewById(R.id.invoiceLayout);
 		
-		invoiceImageView = (ImageView)findViewById(R.id.invoiceImageView);
+		invoiceImageView = new ImageView(this);
 		invoiceImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-//				if (!item.getInvoicePath().equals(""))
-//				{
-//					Intent intent = new Intent(EditItemActivity.this, ImageActivity.class);
-//					intent.putExtra("imagePath", item.getInvoicePath());
-//					startActivity(intent);
-//				}
-//				else
-//				{
-//					invoiceImageView.showContextMenu();
-//				}
 				hideSoftKeyboard();
-				showTypeDialog();
+				Intent intent = new Intent(EditItemActivity.this, ImageActivity.class);
+				intent.putExtra("imagePath", item.getInvoicePath());
+				startActivity(intent);
 			}
-		});
+		});		
 		invoiceImageView.setOnLongClickListener(new View.OnLongClickListener()
 		{
 			public boolean onLongClick(View v)
 			{
-				hideSoftKeyboard();
+				removeImageView.setVisibility(View.VISIBLE);
 				return false;
 			}
 		});
-		registerForContextMenu(invoiceImageView);
-
-		Bitmap bitmap = BitmapFactory.decodeFile(item.getInvoicePath());
-		if (bitmap != null)
-		{
-			invoiceImageView.setImageBitmap(bitmap);
-		}
-		else // item has invoice path but the file was deleted
-		{
-			invoiceImageView.setImageResource(R.drawable.default_invoice);
-			if (item.getInvoiceID() != -1 && item.getInvoiceID() != 0 && Utils.isNetworkConnected())
-			{
-				sendDownloadInvoiceRequest();
-			}
-			else if (item.getInvoiceID() != -1 && item.getInvoiceID() != 0 && !Utils.isNetworkConnected())
-			{
-				Utils.showToast(EditItemActivity.this, "网络未连接，无法下载图片");				
-			}
-		}
 		
-		LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
-		baseLayout.setOnClickListener(new View.OnClickListener()
+		addInvoiceImageView = new ImageView(this);
+		addInvoiceImageView.setImageResource(R.drawable.add_photo_button);
+		addInvoiceImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
+				showPictureDialog();
 			}
 		});
-	}
-	
-	private void initButton()
-	{		
-		Button categoryButton = (Button)findViewById(R.id.categoryButton);
-		categoryButton.setOnClickListener(new View.OnClickListener()
+
+		removeImageView = (ImageView) findViewById(R.id.removeImageView);
+		removeImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				if (newItem)
-				{
-					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_CATEGORY");
-				}
-				if (!newItem)
-				{
-					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_CATEGORY");
-				}
-				
-				hideSoftKeyboard();
-				showCategoryDialog();
+				removeImageView.setVisibility(View.INVISIBLE);
+				item.setInvoiceID(-1);
+				item.setInvoicePath("");
+				refreshInvoiceView();
 			}
-		});	
-		categoryButton.setEnabled(item.getPaAmount() == 0);
+		});
 		
-		Button vendorButton = (Button)findViewById(R.id.vendorButton);
-		vendorButton.setOnClickListener(new View.OnClickListener()
+		refreshInvoiceView();
+		
+		// init picture view
+		final View pictureView = View.inflate(this, R.layout.window_picture, null); 
+
+		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.window_button_unselected);
+		final double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+		
+		final Button cameraButton = (Button) pictureView.findViewById(R.id.cameraButton);
+		cameraButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
+				picturePopupWindow.dismiss();
+				
+				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+				startActivityForResult(intent, TAKE_PHOTO);
+			}
+		});
+		cameraButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				ViewGroup.LayoutParams params = cameraButton.getLayoutParams();
+				params.height = (int)(cameraButton.getWidth() * ratio);;
+				cameraButton.setLayoutParams(params);
+			}
+		});
+		
+		final Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
+		galleryButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				picturePopupWindow.dismiss();
+				
+				Intent intent = new Intent(Intent.ACTION_PICK, null);
+				intent.setType("image/*");
+				startActivityForResult(intent, PICK_IMAGE);
+			}
+		});
+		galleryButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				ViewGroup.LayoutParams params = galleryButton.getLayoutParams();
+				params.height = (int)(galleryButton.getWidth() * ratio);;
+				galleryButton.setLayoutParams(params);
+			}
+		});
+		
+		final Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				picturePopupWindow.dismiss();
+			}
+		});
+		cancelButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				ViewGroup.LayoutParams params = cancelButton.getLayoutParams();
+				params.height = (int)(cancelButton.getWidth() * ratio);;
+				cancelButton.setLayoutParams(params);
+			}
+		});
+		
+		picturePopupWindow = Utils.constructPopupWindow(this, pictureView);
+		
+		// init time
+		int time = item.getConsumedDate() > 0 ? item.getConsumedDate() : Utils.getCurrentTime();
+		timeTextView = (TextView)findViewById(R.id.timeTextView);
+		timeTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				showTimeDialog();
+			}
+		});
+		timeTextView.setText(Utils.secondToStringUpToDay(time));
+		
+		// init time view
+		final View timeView = View.inflate(this, R.layout.window_date, null);
+		
+		final Button confirmButton = (Button) timeView.findViewById(R.id.confirmButton);
+		confirmButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				timePopupWindow.dismiss();
+				GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), 
+						datePicker.getMonth(), datePicker.getDayOfMonth());
+				item.setConsumedDate((int)(greCal.getTimeInMillis() / 1000));
+				timeTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));
+			}
+		});
+		confirmButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_short_solid_dark);
+				double ratio = ((double)bitmap.getWidth()) / bitmap.getHeight();
+				ViewGroup.LayoutParams params = confirmButton.getLayoutParams();
+				params.width = (int)(confirmButton.getHeight() * ratio);;
+				confirmButton.setLayoutParams(params);
+			}
+		});
+		
+		datePicker = (DatePicker) timeView.findViewById(R.id.datePicker);
+		
+		timePopupWindow = Utils.constructPopupWindow(this, timeView);
+		
+		// init vendor		
+		vendorTextView = (TextView)findViewById(R.id.vendorTextView);
+		vendorTextView.setText(item.getMerchant());
+		vendorTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				
 				if (newItem)
 				{
 					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_MERCHANT");
 				}
-				if (!newItem)
+				else
 				{
 					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_MERCHANT");
 				}
-				
-				hideSoftKeyboard();			
+						
 				if (!Utils.isNetworkConnected())
 				{
 					Utils.showToast(EditItemActivity.this, "网络未连接，无法联网获取商家，请手动输入商家名称");
@@ -625,9 +675,12 @@ public class EditItemActivity extends Activity
 	    		}
 			}
 		});
-		
-		Button locationButton = (Button)findViewById(R.id.locationButton);
-		locationButton.setOnClickListener(new View.OnClickListener()
+
+		// init location
+		String cityName = item.getLocation().equals("") ? getString(R.string.notAvailable) : item.getLocation();
+		locationTextView = (TextView)findViewById(R.id.locationTextView);
+		locationTextView.setText(cityName);
+		locationTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -636,8 +689,82 @@ public class EditItemActivity extends Activity
 			}
 		});
 		
-		Button tagButton = (Button)findViewById(R.id.tagButton);
-		tagButton.setOnClickListener(new View.OnClickListener()
+		// init category
+		categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
+		categoryImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (item.getStatus() != Item.STATUS_PROVE_AHEAD_APPROVED)
+				{
+					if (newItem)
+					{
+						MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_CATEGORY");
+					}
+					else
+					{
+						MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_CATEGORY");
+					}
+					
+					hideSoftKeyboard();
+					showCategoryDialog();
+				}				
+			}
+		});
+		
+		String categoryName = item.getCategory() == null ? "N/A" : item.getCategory().getName();
+		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
+		categoryTextView.setText(categoryName);
+		categoryTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (item.getStatus() != Item.STATUS_PROVE_AHEAD_APPROVED)
+				{
+					if (newItem)
+					{
+						MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_CATEGORY");
+					}
+					else
+					{
+						MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_CATEGORY");
+					}
+					
+					hideSoftKeyboard();
+					showCategoryDialog();
+				}				
+			}
+		});
+		if (item.getCategory() != null)
+		{
+			Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+			if (categoryIcon != null)
+			{
+				categoryImageView.setImageBitmap(categoryIcon);
+			}
+			categoryTextView.setText(item.getCategory().getName());
+			
+			if (item.getCategory().hasUndownloadedIcon() && Utils.isNetworkConnected())
+			{
+				sendDownloadCategoryIconRequest(item.getCategory());
+			}
+		}
+		else
+		{
+			categoryImageView.setVisibility(View.GONE);
+		}
+		
+		// init tag		
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
+		iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
+		iconInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		iconMaxCount = (metrics.widthPixels - padding + iconInterval) / (iconWidth + iconInterval);
+		
+		tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
+		
+		addTagView = View.inflate(this, R.layout.grid_tag, null);
+		addTagView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -645,7 +772,7 @@ public class EditItemActivity extends Activity
 				{
 					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_TAG");
 				}
-				if (!newItem)
+				else
 				{
 					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_TAG");
 				}
@@ -662,17 +789,16 @@ public class EditItemActivity extends Activity
 			}
 		});
 		
-		Button timeButton = (Button)findViewById(R.id.timeButton);
-		timeButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				showTimeDialog();
-			}
-		});
+		ImageView iconImageView = (ImageView) addTagView.findViewById(R.id.iconImageView);
+		iconImageView.setImageResource(R.drawable.add_tag_button);
 		
-		Button memberButton = (Button)findViewById(R.id.memberButton);
-		memberButton.setOnClickListener(new View.OnClickListener()
+		refreshTagView();
+		
+		// init member		
+		memberLayout = (LinearLayout) findViewById(R.id.memberLayout);
+		
+		addMemberView = View.inflate(this, R.layout.grid_member, null);
+		addMemberView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -680,7 +806,7 @@ public class EditItemActivity extends Activity
 				{
 					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_MEMBER");
 				}
-				if (!newItem)
+				else
 				{
 					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_MEMBER");
 				}
@@ -693,9 +819,203 @@ public class EditItemActivity extends Activity
 				else
 				{
 					Utils.showToast(EditItemActivity.this, "当前组无任何其他成员");
+				}											
+			}
+		});
+		
+		ImageView avatarImageView = (ImageView) addMemberView.findViewById(R.id.avatarImageView);
+		avatarImageView.setImageResource(R.drawable.add_tag_button);
+		
+		refreshMemberView();
+		
+		// init note
+		noteEditText = (EditText)findViewById(R.id.noteEditText);
+		noteEditText.setText(item.getNote());
+		noteEditText.setOnFocusChangeListener(new OnFocusChangeListener()
+		{
+			public void onFocusChange(View v, boolean hasFocus)
+			{
+				if (hasFocus && newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_NOTE");
+				}
+				if (hasFocus && !newItem)
+				{
+					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_NOTE");
 				}
 			}
 		});
+		
+		LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
+		baseLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+			}
+		});
+	}
+	
+	private void refreshInvoiceView()
+	{
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+		int sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, metrics);
+		
+		invoiceLayout.removeAllViews();
+		
+		if (!item.hasInvoice())
+		{
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
+			invoiceLayout.addView(addInvoiceImageView, params);
+		}
+		else
+		{
+			Bitmap bitmap = BitmapFactory.decodeFile(item.getInvoicePath());
+			if (bitmap != null)
+			{
+				invoiceImageView.setImageBitmap(bitmap);
+			}			
+			else // item has invoice path but the file was deleted
+			{
+				invoiceImageView.setImageResource(R.drawable.default_invoice);
+				if (item.hasUndownloadedInvoice() && Utils.isNetworkConnected())
+				{
+					sendDownloadInvoiceRequest();
+				}
+				else if (item.hasUndownloadedInvoice() && !Utils.isNetworkConnected())
+				{
+					Utils.showToast(EditItemActivity.this, "网络未连接，无法下载图片");				
+				}
+			}
+			
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
+			params.rightMargin = padding;
+			invoiceLayout.addView(invoiceImageView, params);
+			
+			params = new LinearLayout.LayoutParams(sideLength, sideLength);
+			invoiceLayout.addView(addInvoiceImageView, params);			
+		}
+	}
+
+	private void refreshTagView()
+	{
+		tagLayout.removeAllViews();
+
+		LinearLayout layout = new LinearLayout(this);
+		int tagCount = item.getTags() != null ? item.getTags().size() : 0;
+		for (int i = 0; i < tagCount; i++)
+		{
+			if (i % iconMaxCount == 0)
+			{
+				layout = new LinearLayout(this);
+				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				params.topMargin = iconInterval;
+				layout.setLayoutParams(params);
+				layout.setOrientation(LinearLayout.HORIZONTAL);
+				
+				tagLayout.addView(layout);
+			}
+			
+			Tag tag = item.getTags().get(i);
+			Bitmap tagIcon = BitmapFactory.decodeFile(tag.getIconPath());
+			
+			View tagView = View.inflate(this, R.layout.grid_tag, null);
+			
+			ImageView iconImageView = (ImageView) tagView.findViewById(R.id.iconImageView);
+			if (tagIcon != null)
+			{
+				iconImageView.setImageBitmap(tagIcon);		
+			}
+			
+			TextView nameTextView = (TextView) tagView.findViewById(R.id.nameTextView);
+			nameTextView.setText(tag.getName());
+			
+			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
+			params.rightMargin = iconInterval;
+			
+			layout.addView(tagView, params);
+		}
+		
+		// add addTagView
+		if (tagCount % iconMaxCount == 0)
+		{
+			layout = new LinearLayout(this);
+			LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			params.topMargin = iconInterval;
+			layout.setLayoutParams(params);
+			layout.setOrientation(LinearLayout.HORIZONTAL);
+			
+			tagLayout.addView(layout);			
+		}
+
+		ViewGroup viewGroup = (ViewGroup) addTagView.getParent();
+		if (viewGroup != null)
+		{
+			viewGroup.removeView(addTagView);
+		}
+		LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);		
+		layout.addView(addTagView, params);		
+	}
+
+	private void refreshMemberView()
+	{
+		memberLayout.removeAllViews();
+
+		LinearLayout layout = new LinearLayout(this);
+		int memberCount = item.getRelevantUsers() != null ? item.getRelevantUsers().size() : 0;
+		for (int i = 0; i < memberCount; i++)
+		{
+			if (i % iconMaxCount == 0)
+			{
+				layout = new LinearLayout(this);
+				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				params.topMargin = iconInterval;
+				layout.setLayoutParams(params);
+				layout.setOrientation(LinearLayout.HORIZONTAL);
+				
+				memberLayout.addView(layout);
+			}
+			
+			User user = item.getRelevantUsers().get(i);
+			Bitmap avatar = BitmapFactory.decodeFile(user.getAvatarPath());
+			
+			View memberView = View.inflate(this, R.layout.grid_member, null);
+			
+			ImageView iconImageView = (ImageView) memberView.findViewById(R.id.iconImageView);
+			if (avatar != null)
+			{
+				iconImageView.setImageBitmap(avatar);		
+			}
+			
+			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
+			nameTextView.setText(user.getNickname());
+			
+			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
+			params.rightMargin = iconInterval;
+			
+			layout.addView(memberView, params);
+		}
+		
+		// add addMemberView
+		if (memberCount % iconMaxCount == 0)
+		{
+			layout = new LinearLayout(this);
+			LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			params.topMargin = iconInterval;
+			layout.setLayoutParams(params);
+			layout.setOrientation(LinearLayout.HORIZONTAL);
+			
+			memberLayout.addView(layout);			
+		}
+
+		ViewGroup viewGroup = (ViewGroup) addMemberView.getParent();
+		if (viewGroup != null)
+		{
+			viewGroup.removeView(addMemberView);
+		}
+		LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);		
+		layout.addView(addMemberView, params);		
 	}
 	
     private void hideSoftKeyboard()
@@ -728,45 +1048,21 @@ public class EditItemActivity extends Activity
 			Utils.showToast(EditItemActivity.this, "条目保存失败");
 		}
     }
-
+    
     private void showTypeDialog()
-    {
-		int backgroundColor = getResources().getColor(R.color.hint_dark_grey);
-		
-		final View typeView = View.inflate(this, R.layout.reim_type_window, null);
-		final RadioButton consumedRadio = (RadioButton)typeView.findViewById(R.id.consumedRadio);
-		final RadioButton proveAheadRadio = (RadioButton)typeView.findViewById(R.id.proveAheadRadio);
-		
-		consumedRadio.setChecked(!item.isProveAhead());
-		proveAheadRadio.setChecked(item.isProveAhead());		
-		
-		final ToggleButton needReimToggleButton = (ToggleButton)typeView.findViewById(R.id.needReimToggleButton);
-		needReimToggleButton.setChecked(item.needReimbursed());
-		
-		PopupWindow typePopupWindow = new PopupWindow(this);
-		
-		typePopupWindow.setWidth(LayoutParams.MATCH_PARENT);
-		typePopupWindow.setHeight(LayoutParams.WRAP_CONTENT);
-		typePopupWindow.setContentView(typeView);
-		typePopupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
-		typePopupWindow.setFocusable(true);
-		typePopupWindow.setOutsideTouchable(true);
-		typePopupWindow.setAnimationStyle(R.style.TypeWindowAnimation);
-		typePopupWindow.setOnDismissListener(new OnDismissListener()
-		{
-			public void onDismiss()
-			{
-				WindowManager.LayoutParams params = getWindow().getAttributes();
-				params.alpha = (float) 1;
-				getWindow().setAttributes(params);
-			}
-		});
+    {	
 		typePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		typePopupWindow.update();
 		
-		WindowManager.LayoutParams params = getWindow().getAttributes();
-		params.alpha = (float) 0.4;
-		getWindow().setAttributes(params);
+		Utils.dimBackground(this);
+    }
+    
+    private void showPictureDialog()
+    {
+		picturePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		picturePopupWindow.update();
+
+		Utils.dimBackground(this);
     }
     
     private void showTimeDialog()
@@ -775,15 +1071,13 @@ public class EditItemActivity extends Activity
 		{
 			MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_TIME");
 		}
-		if (!newItem)
+		else
 		{
 			MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_TIME");
 		}
 		
-		View view = View.inflate(EditItemActivity.this, R.layout.reim_date_time, null);
-		
 		Calendar calendar = Calendar.getInstance();
-		if (item.getConsumedDate() == -1 || item.getConsumedDate() == 0)
+		if (item.getConsumedDate() <= 0)
 		{
 			calendar.setTimeInMillis(System.currentTimeMillis());
 		}
@@ -792,34 +1086,12 @@ public class EditItemActivity extends Activity
 			calendar.setTimeInMillis((long)item.getConsumedDate() * 1000);
 		}
 
-		final DatePicker datePicker = (DatePicker)view.findViewById(R.id.datePicker);
-		final TimePicker timePicker = (TimePicker)view.findViewById(R.id.timePicker);
 		datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
 		
-		timePicker.setIs24HourView(true);
-		timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
-		timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
-		
-		datePicker.clearFocus();
-		timePicker.clearFocus();
-		
-		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-											.setView(view)
-											.setTitle(R.string.chooseTime)
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), 
-															datePicker.getMonth(), datePicker.getDayOfMonth(), 
-															timePicker.getCurrentHour(), timePicker.getCurrentMinute());
-													item.setConsumedDate((int)(greCal.getTimeInMillis() / 1000));
-													timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
-												}
-											})
-											.setNegativeButton(R.string.cancel, null)
-											.create();
-		mDialog.show();
+		timePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		timePopupWindow.update();
+
+		Utils.dimBackground(this);
     }
 
     private void showVendorDialog()
@@ -845,7 +1117,7 @@ public class EditItemActivity extends Activity
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
-													vendorEditText.setText(item.getMerchant());
+													vendorTextView.setText(item.getMerchant());
 												}
 											})
 											.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
@@ -904,7 +1176,7 @@ public class EditItemActivity extends Activity
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
-													locationEditText.setText(item.getLocation());
+													locationTextView.setText(item.getLocation());
 												}
 											})
 											.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
@@ -1015,7 +1287,7 @@ public class EditItemActivity extends Activity
 											}
 										}
 										item.setTags(tags);
-										tagTextView.setText(Tag.getTagsNameString(tags));
+										refreshTagView();
 									}
 								})
 								.setNegativeButton(R.string.cancel, null)
@@ -1068,7 +1340,7 @@ public class EditItemActivity extends Activity
 											}
 										}
 										item.setRelevantUsers(users);
-										memberTextView.setText(User.getUsersNameString(users));
+										refreshMemberView();
 									}
 								})
 								.setNegativeButton(R.string.cancel, null)
@@ -1231,6 +1503,16 @@ public class EditItemActivity extends Activity
 							categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
 							categoryAdapter.setCategory(categoryList);
 							categoryAdapter.notifyDataSetChanged();
+							
+							if (item.getCategory() != null && item.getCategory().getServerID() == category.getServerID())
+							{
+								item.setCategory(category);
+								Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+								if (categoryIcon != null)
+								{
+									categoryImageView.setImageBitmap(categoryIcon);
+								}
+							}
 						}
 					});	
 				}

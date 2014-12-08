@@ -217,7 +217,7 @@ public class ForgotPasswordActivity extends Activity
 		{
 			public void onGlobalLayout()
 			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_short);
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_short_solid_light);
 				double ratio = ((double)bitmap.getWidth()) / bitmap.getHeight();
 				ViewGroup.LayoutParams params = acquireCodeButton.getLayoutParams();
 				params.width = (int)(acquireCodeButton.getHeight() * ratio);;

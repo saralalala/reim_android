@@ -68,7 +68,7 @@
         android:textCursorDrawable="@drawable/cursor" />
 
     <Button
-        android:id="@+id/confirmButton"
+        android:id="@+id/signInButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -85,7 +85,7 @@
         android:id="@+id/forgotTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/confirmButton"
+        android:layout_alignLeft="@+id/signInButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="14dp"

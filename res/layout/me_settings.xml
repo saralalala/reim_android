@@ -110,7 +110,7 @@
 			        android:layout_marginRight="10dp"
 			        android:background="@drawable/button_long_dark_drawable"
 			        android:text="@string/signOut"
-			        android:textColor="@color/button_text_color_light" />
+			        android:textColor="@color/button_text_light_color" />
             
 		        <include                 
 					android:layout_width="match_parent"

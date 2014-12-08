@@ -43,7 +43,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				notificationIntent.putExtra("data", jObject.toString());
 				
 				Notification notification = new Notification();
-				notification.icon = R.drawable.default_avatar;
+				notification.icon = R.drawable.ic_launcher;
 				notification.tickerText = message;
 				notification.defaults = Notification.DEFAULT_ALL;
 				notification.flags |= Notification.FLAG_AUTO_CANCEL;

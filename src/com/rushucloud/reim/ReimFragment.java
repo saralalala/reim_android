@@ -92,18 +92,6 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 	
 	private List<Tag> filterTagList = new ArrayList<Tag>();
 	
-	private OnKeyListener listener = new OnKeyListener() 
-	{
-		public boolean onKey(View v, int keyCode, KeyEvent event)
-		{
-			if (keyCode == KeyEvent.KEYCODE_BACK)
-			{
-				windowManager.removeView(filterView);
-			}
-			return false;
-		}
-	};
-
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		if (view == null)
@@ -309,7 +297,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 			
 			filterView.setFocusable(true);
 			filterView.setFocusableInTouchMode(true);
-			filterView.setOnKeyListener(listener);
+			filterView.setOnKeyListener(this);
 
 			final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
 			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		

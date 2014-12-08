@@ -58,13 +58,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
@@ -76,15 +77,16 @@ public class MeFragment extends Fragment
 	private static final int CROP_IMAGE = 2;
 	
 	private boolean hasInit = false;
-
-	private View view;
-	
-	private TextView nicknameTextView;
-	private TextView companyTextView;	
-	private CircleImageView avatarImageView;
 	
 	private AppPreference appPreference;
 	private DBManager dbManager;
+
+	private View view;	
+	private TextView nicknameTextView;
+	private TextView companyTextView;	
+	private CircleImageView avatarImageView;
+	private PopupWindow picturePopupWindow;
+	
 	private User currentUser;
 	private Uri originalImageUri;
 	private String avatarPath;
@@ -135,36 +137,6 @@ public class MeFragment extends Fragment
 		{
 	        loadProfileView();
 		}
-	}
-	
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle(null);
-		menu.add(0, 0, 0, "从图库选取");
-		menu.add(0, 1, 0, "用相机拍摄");
-	}
-	
-	public boolean onContextItemSelected(MenuItem item)
-	{
-    	if (!getUserVisibleHint())
-		{
-			return false;
-		}
-    	
-		if (item.getItemId() == 0)
-		{
-			Intent intent = new Intent(Intent.ACTION_PICK, null);
-			intent.setType("image/*");
-			startActivityForResult(intent, PICK_IMAGE);
-		}
-		else
-		{
-			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-			startActivityForResult(intent, TAKE_PHOTO);
-		}
-			
-		return super.onContextItemSelected(item);
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -246,7 +218,82 @@ public class MeFragment extends Fragment
 				}
 			}
 		});
-		registerForContextMenu(avatarImageView);
+		avatarImageView.setOnLongClickListener(new View.OnLongClickListener()
+		{
+			public boolean onLongClick(View v)
+			{
+				showPictureDialog();
+				return false;
+			}
+		});
+		
+		final View pictureView = View.inflate(getActivity(), R.layout.window_picture, null); 
+
+		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.window_button_unselected);
+		final double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+		
+		final Button cameraButton = (Button) pictureView.findViewById(R.id.cameraButton);
+		cameraButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				picturePopupWindow.dismiss();
+				
+				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+				startActivityForResult(intent, TAKE_PHOTO);
+			}
+		});
+		cameraButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				ViewGroup.LayoutParams params = cameraButton.getLayoutParams();
+				params.height = (int)(cameraButton.getWidth() * ratio);;
+				cameraButton.setLayoutParams(params);
+			}
+		});
+		
+		final Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
+		galleryButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				picturePopupWindow.dismiss();
+				
+				Intent intent = new Intent(Intent.ACTION_PICK, null);
+				intent.setType("image/*");
+				startActivityForResult(intent, PICK_IMAGE);
+			}
+		});
+		galleryButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				ViewGroup.LayoutParams params = galleryButton.getLayoutParams();
+				params.height = (int)(galleryButton.getWidth() * ratio);;
+				galleryButton.setLayoutParams(params);
+			}
+		});
+		
+		final Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				picturePopupWindow.dismiss();
+			}
+		});
+		cancelButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				ViewGroup.LayoutParams params = cancelButton.getLayoutParams();
+				params.height = (int)(cameraButton.getWidth() * ratio);;
+				cancelButton.setLayoutParams(params);
+			}
+		});
+		
+		picturePopupWindow = Utils.constructPopupWindow(getActivity(), pictureView);
         
         RelativeLayout profileLayout = (RelativeLayout) getActivity().findViewById(R.id.profileLayout);
         profileLayout.setOnClickListener(new View.OnClickListener()
@@ -405,6 +452,14 @@ public class MeFragment extends Fragment
 		{
 			e.printStackTrace();
 		}
+    }
+
+    private void showPictureDialog()
+    {
+		picturePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		picturePopupWindow.update();
+
+		Utils.dimBackground(getActivity());
     }
     
     private void sendUploadAvatarRequest()

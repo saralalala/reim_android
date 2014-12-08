@@ -32,7 +32,7 @@
         android:layout_marginRight="16dp"        
         android:background="@drawable/button_long_light_solid_drawable"
         android:text="@string/signUp"
-        android:textColor="@color/button_text_color_dark"
+        android:textColor="@color/button_text_dark_color"
         android:textSize="20sp" />
 
     <Button
@@ -45,7 +45,7 @@
         android:layout_marginBottom="36dp"
         android:background="@drawable/button_long_light_border_drawable"
         android:text="@string/signIn"
-        android:textColor="@color/button_text_color_light"
+        android:textColor="@color/button_text_light_color"
         android:textSize="20sp" />
 
 </RelativeLayout>

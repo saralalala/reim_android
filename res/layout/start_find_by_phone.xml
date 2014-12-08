@@ -94,7 +94,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="-6dp"
         android:layout_marginBottom="-6dp"
-        android:background="@drawable/button_short"
+        android:background="@drawable/button_short_solid_light"
         android:text="@string/acquireCode"
         android:textColor="@color/major_dark" />
 
@@ -131,7 +131,7 @@
         android:layout_marginRight="16dp"
         android:background="@drawable/button_long_light_border_drawable"
         android:text="@string/cancel"
-        android:textColor="@color/button_text_color_light"
+        android:textColor="@color/button_text_light_color"
         android:textSize="20sp"/>
 
 </RelativeLayout>

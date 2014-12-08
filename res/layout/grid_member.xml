@@ -4,7 +4,7 @@
     android:layout_height="wrap_content" >
 
     <ImageView
-        android:id="@+id/iconImageView"
+        android:id="@+id/avatarImageView"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_centerHorizontal="true"
@@ -16,7 +16,7 @@
         android:id="@+id/nameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/iconImageView"
+        android:layout_below="@+id/avatarImageView"
         android:layout_marginTop="5dp"
         android:gravity="center"
 	    android:textColor="@color/font_major_dark"

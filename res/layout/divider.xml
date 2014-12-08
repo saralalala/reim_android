@@ -3,6 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="0.5dp"
     android:orientation="vertical"
-    android:background="@color/list_divider" >    
+    android:background="@color/divider" >    
 
 </LinearLayout>

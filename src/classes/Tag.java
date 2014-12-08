@@ -141,31 +141,6 @@ public class Tag
 		return check;
 	}
 
-	public static String[] getTagsName(List<Tag> tagList)
-	{
-		List<String> names = new ArrayList<String>();
-		for (int i = 0; i < tagList.size(); i++)
-		{
-			names.add(tagList.get(i).getName());
-		}
-		return names.toArray(new String[names.size()]);		
-	}
-
-	public static String getTagsNameString(List<Tag> tagList)
-	{
-		if (tagList == null || tagList.size() == 0)
-		{
-			return "";
-		}
-		
-		String[] tagNames = new String[tagList.size()];
-		for (int i = 0; i < tagList.size(); i++)
-		{
-			tagNames[i] = tagList.get(i).getName();
-		}
-		return TextUtils.join(",", tagNames);
-	}	
-	
 	public static String getTagsIDString(List<Tag> tagList)
 	{
 		if (tagList == null || tagList.size() == 0)

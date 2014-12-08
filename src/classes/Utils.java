@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.rushucloud.reim.R;
+
 import netUtils.HttpConstant;
 
 import android.app.Activity;
@@ -23,13 +25,19 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.PopupWindow.OnDismissListener;
 
 public class Utils
 {	
@@ -358,4 +366,41 @@ public class Utils
     {
     	Toast.makeText(context, resID, Toast.LENGTH_SHORT).show();
     }
+
+	public static PopupWindow constructPopupWindow(final Activity activity, View view)
+	{
+		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
+		
+		PopupWindow popupWindow = new PopupWindow(activity);
+		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
+		popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
+		popupWindow.setContentView(view);
+		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+		popupWindow.setFocusable(true);
+		popupWindow.setOutsideTouchable(true);
+		popupWindow.setAnimationStyle(R.style.WindowAnimation);
+		popupWindow.setOnDismissListener(new OnDismissListener()
+		{
+			public void onDismiss()
+			{
+				recoverBackground(activity);
+			}
+		});
+		
+		return popupWindow;
+	}
+	
+	public static void dimBackground(Activity activity)
+	{
+		WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+		params.alpha = (float) 0.4;
+		activity.getWindow().setAttributes(params);		
+	}
+	
+	public static void recoverBackground(Activity activity)
+	{
+		WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+		params.alpha = (float) 1;
+		activity.getWindow().setAttributes(params);
+	}
 }
