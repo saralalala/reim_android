@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -14,14 +13,12 @@ import netUtils.HttpConstant;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.UploadImageRequest;
 import netUtils.Request.Item.CreateItemRequest;
-import netUtils.Request.Item.GetLocationRequest;
 import netUtils.Request.Item.GetVendorsRequest;
 import netUtils.Request.Item.ModifyItemRequest;
 import netUtils.Request.Report.CreateReportRequest;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.Item.CreateItemResponse;
-import netUtils.Response.Item.GetLocationResponse;
 import netUtils.Response.Item.GetVendorsResponse;
 import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
@@ -34,8 +31,11 @@ import classes.Tag;
 import classes.User;
 import classes.Utils;
 import classes.Adapter.CategoryListViewAdapter;
+import classes.Adapter.LocationListViewAdapter;
 import classes.Adapter.MemberListViewAdapter;
 import classes.Adapter.TagListViewAdapter;
+
+import cn.beecloud.BCLocation;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -48,6 +48,7 @@ import com.umeng.analytics.MobclickAgent;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -104,6 +105,7 @@ public class EditItemActivity extends Activity
 	private DatePicker datePicker;
 	private TextView vendorTextView;
 	private TextView locationTextView;
+	private AlertDialog locationDialog;
 	private ImageView categoryImageView;
 	private TextView categoryTextView;
 	private LinearLayout tagLayout;
@@ -116,11 +118,11 @@ public class EditItemActivity extends Activity
 	private Report report;
 	
 	private List<String> vendorList = null;
-	private List<String> cityList = null;
 	private List<Category> categoryList = null;
 	private List<Tag> tagList = null;
 	private List<User> userList = null;
-	
+
+	private LocationListViewAdapter locationAdapter;
 	private CategoryListViewAdapter categoryAdapter;
 	private TagListViewAdapter tagAdapter;
 	private MemberListViewAdapter memberAdapter;
@@ -135,9 +137,8 @@ public class EditItemActivity extends Activity
 	private LocationClient locationClient = null;
 	private BDLocationListener listener = new ReimLocationListener();
 	private BDLocation currentLocation;
-	private String currentCity;
 	private String locationInvalid;
-	private int getLocationTryTimes = 2;
+	private boolean[] locationCheck;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -231,11 +232,7 @@ public class EditItemActivity extends Activity
 		
 		vendorList = new ArrayList<String>();
 		
-		cityList = new ArrayList<String>();
 		locationInvalid = getString(R.string.locationInvalid);
-		currentCity = locationInvalid;
-		cityList.add(getString(R.string.currentLocation) + currentCity);
-		cityList.addAll(Arrays.asList(getResources().getStringArray(R.array.cityArray)));
 
 		int currentGroupID = appPreference.getCurrentGroupID();
 		categoryList = dbManager.getGroupCategories(currentGroupID);
@@ -524,7 +521,7 @@ public class EditItemActivity extends Activity
 		
 		refreshInvoiceView();
 		
-		// init picture view
+		// init picture window
 		final View pictureView = View.inflate(this, R.layout.window_picture, null); 
 
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.window_button_unselected);
@@ -605,7 +602,7 @@ public class EditItemActivity extends Activity
 		});
 		timeTextView.setText(Utils.secondToStringUpToDay(time));
 		
-		// init time view
+		// init time window
 		final View timeView = View.inflate(this, R.layout.window_date, null);
 		
 		final Button confirmButton = (Button) timeView.findViewById(R.id.confirmButton);
@@ -685,9 +682,58 @@ public class EditItemActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				showLocationDialog(); 
+				locationDialog.show();
 			}
 		});
+		
+		// init location dialog
+		locationAdapter = new LocationListViewAdapter(this, item.getLocation());
+		locationCheck = locationAdapter.getCheck();
+		
+    	View locationView = View.inflate(this, R.layout.reim_location, null);
+    	final EditText locationEditText = (EditText) locationView.findViewById(R.id.locationEditText);
+    	if (!item.getLocation().equals(""))
+		{
+        	locationEditText.setText(item.getLocation());			
+		}
+
+    	ListView locationListView = (ListView) locationView.findViewById(R.id.locationListView);
+    	locationListView.setAdapter(locationAdapter);
+    	locationListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				if (position == 0 && !locationAdapter.getCurrentCity().equals(locationInvalid))
+				{
+					locationEditText.setText(locationAdapter.getCurrentCity());
+				}
+				else if (position > 1)
+				{
+					locationEditText.setText(locationAdapter.getCityList().get(position - 2));
+					for (int i = 0; i < locationCheck.length; i++)
+					{
+						locationCheck[i] = false;
+					}
+					locationCheck[position - 2] = true;
+					locationAdapter.setCheck(locationCheck);
+					locationAdapter.notifyDataSetChanged();
+				}
+			}
+		});
+    	
+		Builder builder = new Builder(EditItemActivity.this);
+		builder.setTitle(R.string.chooseLocation);
+		builder.setView(locationView);
+		builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
+									{
+										public void onClick(DialogInterface dialog, int which)
+										{
+											item.setLocation(locationEditText.getText().toString());
+											locationTextView.setText(item.getLocation());
+										}
+									});
+		builder.setNegativeButton(R.string.cancel, null);
+		locationDialog = builder.create();
 		
 		// init category
 		categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
@@ -1131,65 +1177,6 @@ public class EditItemActivity extends Activity
 		mDialog.show();
     }
 
-    private void showLocationDialog()
-    {
-    	final String location = item.getLocation();
-		int index = cityList.indexOf(location);
-		if (index == -1)
-		{
-			if (currentCity.equals("") || currentCity.equals(locationInvalid))
-			{
-				index = 1;
-				item.setLocation(cityList.get(1));
-			}
-			else
-			{
-				index = 0;
-				item.setLocation(cityList.get(0));				
-			}
-		}
-		String[] cities = cityList.toArray(new String[cityList.size()]);
-		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-											.setTitle(R.string.chooseLocation)
-											.setSingleChoiceItems(cities, index, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													if (which == 0)
-													{
-														if (currentCity.equals("") || currentCity.equals(locationInvalid))
-														{
-															item.setLocation("");
-														}
-														else
-														{
-															item.setLocation(currentCity);
-														}														
-													}
-													else
-													{
-														item.setLocation(cityList.get(which));														
-													}
-												}
-											})
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													locationTextView.setText(item.getLocation());
-												}
-											})
-											.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													item.setLocation(location);
-												}
-											})
-											.create();
-		mDialog.show();
-    }
-
     private void showCategoryDialog()
     {
 		final boolean[] check = Category.getCategoryCheck(categoryList, item.getCategory());
@@ -1501,8 +1488,11 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
-							categoryAdapter.setCategory(categoryList);
-							categoryAdapter.notifyDataSetChanged();
+							if (categoryAdapter != null)
+							{
+								categoryAdapter.setCategory(categoryList);
+								categoryAdapter.notifyDataSetChanged();								
+							}
 							
 							if (item.getCategory() != null && item.getCategory().getServerID() == category.getServerID())
 							{
@@ -1743,24 +1733,21 @@ public class EditItemActivity extends Activity
 
     private void sendLocationRequest(final double latitude, final double longitude)
     {
-		GetLocationRequest request = new GetLocationRequest(latitude, longitude);
-		request.sendRequest(new HttpConnectionCallback()
+    	final BCLocation address = BCLocation.locationWithLatitude(latitude, longitude);
+    	new Thread(new Runnable()
 		{
-			public void execute(Object httpResponse)
+			public void run()
 			{
-				GetLocationResponse response = new GetLocationResponse(httpResponse);
-				if (response.getStatus())
+		    	locationAdapter.setCurrentCity(address.getCity());
+		    	runOnUiThread(new Runnable()
 				{
-					currentCity = getString(R.string.locationInvalid);
-					cityList.set(0, getString(R.string.currentLocation) + currentCity);
-				}
-				else if (getLocationTryTimes > 0)
-				{
-					getLocationTryTimes--;
-					sendLocationRequest(latitude, longitude);
-				}
+					public void run()
+					{
+				    	locationAdapter.notifyDataSetChanged();						
+					}
+				});
 			}
-		});
+		}).start();
     }
 
     public class ReimLocationListener implements BDLocationListener

@@ -3,6 +3,8 @@ package classes;
 import java.io.File;
 import java.lang.reflect.Field;
 
+import cn.beecloud.BeeCloud;
+
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.PushService;
@@ -25,7 +27,7 @@ public class ReimApplication extends Application
 	public static Typeface TypeFaceYaHei;
 	public static Typeface TypeFaceAleoLight;
 	
-	private static ProgressDialog pDialog;
+	private static ProgressDialog progressDialog;
 	private static Context context;
 	
 	private static int tabIndex = 0;
@@ -39,6 +41,7 @@ public class ReimApplication extends Application
 		initPushService();
 		initData();
 		initMeChat();
+		initBeeCloud();
 		MobclickAgent.openActivityDurationTrack(false);
 
 		System.out.println("**************** Application Started *****************");
@@ -111,18 +114,18 @@ public class ReimApplication extends Application
 	
 	public static void setProgressDialog(Context context)
 	{
-		pDialog = new ProgressDialog(context);
-		pDialog.setMessage("读取数据中，请稍等……");
+		progressDialog = new ProgressDialog(context);
+		progressDialog.setMessage("读取数据中，请稍等……");
 	}
 	
 	public static void showProgressDialog()
 	{
-		pDialog.show();
+		progressDialog.show();
 	}
 	
 	public static void dismissProgressDialog()
 	{
-		pDialog.dismiss();
+		progressDialog.dismiss();
 	}
 	
 	private void createDirectories()
@@ -217,5 +220,10 @@ public class ReimApplication extends Application
 				
 			}
 		});
+	}
+	
+	private void initBeeCloud()
+	{
+		BeeCloud.setAppKey("02c6af87-8d5b-4d74-b086-d38359c297f3", this);
 	}
 }

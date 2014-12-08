@@ -10,6 +10,7 @@
     <color name="font_major_light">#CCFFFFFF</color>
     <color name="font_reim_number">#FFFF5353</color>
     <color name="font_budget">#FF3CB798</color>
+    <color name="font_list_item_header">#FFA9A9A9</color>
     <color name="start_font">#FFFE8888</color>
     
     <color name="start_divider">#FFFE8888</color>
@@ -26,6 +27,7 @@
     <color name="button_text_dark">#FFFF898C</color>
     <color name="button_text_light">#FFFFFFFF</color>
     
+    <color name="list_item_header">#FFE7E7E9</color>
     <color name="list_item_selected">#FFFBE2E3</color>
     <color name="list_item_unselected">#00000000</color>
     
