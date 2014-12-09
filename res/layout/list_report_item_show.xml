@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:gravity="center"
+        android:textColor="@color/font_major_dark"
         android:textSize="22sp" />
 
     <LinearLayout
@@ -45,8 +46,10 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:contentDescription="@string/tag"
-                android:src="@drawable/category_logo" />
+                android:src="@drawable/default_icon" />
+            
         </LinearLayout>
+        
     </LinearLayout>
 
 </LinearLayout>

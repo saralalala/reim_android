@@ -13,7 +13,7 @@
         android:layout_marginTop="25dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:hint="@string/inputCategoryName" />
+        android:hint="@string/input_category_name" />
 
     <EditText
         android:id="@+id/limitEditText"
@@ -23,7 +23,7 @@
         android:layout_alignRight="@+id/nameEditText"
         android:layout_below="@+id/nameEditText"
         android:layout_marginTop="25dp"
-        android:hint="@string/inputCategoryLimit"
+        android:hint="@string/input_category_limit"
         android:inputType="numberDecimal" />
 
     <CheckBox
@@ -34,7 +34,7 @@
         android:layout_alignRight="@+id/limitEditText"
         android:layout_below="@+id/limitEditText"
         android:layout_marginTop="25dp"
-        android:text="@string/proveAhead" />
+        android:text="@string/prove_ahead" />
 
 </RelativeLayout>
 

@@ -26,11 +26,12 @@ public class MemberListViewAdapter extends BaseAdapter
 	
 	public MemberListViewAdapter(Context context, List<User> userList, boolean[] checkList)
 	{
-		layoutInflater = LayoutInflater.from(context);
-		memberList = new ArrayList<User>(userList);
-		check = checkList;
-		selectedColor = context.getResources().getColor(R.color.major_dark);
-		unselectedColor = context.getResources().getColor(R.color.font_major_dark);
+		this.layoutInflater = LayoutInflater.from(context);
+		
+		this.memberList = new ArrayList<User>(userList);
+		this.check = checkList;
+		this.selectedColor = context.getResources().getColor(R.color.major_dark);
+		this.unselectedColor = context.getResources().getColor(R.color.font_major_dark);
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)

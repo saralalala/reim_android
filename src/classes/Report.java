@@ -8,8 +8,6 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.rushucloud.reim.R;
-
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
@@ -32,7 +30,7 @@ public class Report implements Serializable
 	private List<User> managerList = null;
 	private List<User> ccList = null;
 	private List<Comment> commentList = null;
-	private User user = null;
+	private User sender = null;
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
@@ -57,7 +55,7 @@ public class Report implements Serializable
 			
 			User user = new User();
 			user.setServerID(jObject.getInt("uid"));
-			setUser(user);
+			setSender(user);
 		}
 		catch (JSONException e)
 		{
@@ -109,7 +107,7 @@ public class Report implements Serializable
 	{
 		if (getManagerList() == null || getManagerList().size() == 0)
 		{
-			return ReimApplication.getContext().getString(R.string.noManager);
+			return "";
 		}
 		else
 		{
@@ -129,7 +127,7 @@ public class Report implements Serializable
 	{
 		if (getCCList() == null || getCCList().size() == 0)
 		{
-			return ReimApplication.getContext().getString(R.string.noCC);
+			return "";
 		}
 		else
 		{
@@ -150,13 +148,13 @@ public class Report implements Serializable
 		this.commentList = commentList;
 	}
 	
-	public User getUser()
+	public User getSender()
 	{
-		return user;
+		return sender;
 	}
-	public void setUser(User user)
+	public void setSender(User sender)
 	{
-		this.user = user;
+		this.sender = sender;
 	}
 
 	public int getCreatedDate()

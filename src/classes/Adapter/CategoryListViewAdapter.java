@@ -26,11 +26,12 @@ public class CategoryListViewAdapter extends BaseAdapter
 	
 	public CategoryListViewAdapter(Context context, List<Category> categories, boolean[] checkList)
 	{
-		layoutInflater = LayoutInflater.from(context);
-		categoryList = new ArrayList<Category>(categories);
-		check = checkList;
-		selectedColor = context.getResources().getColor(R.color.major_dark);
-		unselectedColor = context.getResources().getColor(R.color.font_major_dark);
+		this.layoutInflater = LayoutInflater.from(context);
+		
+		this.categoryList = new ArrayList<Category>(categories);
+		this.check = checkList;
+		this.selectedColor = context.getResources().getColor(R.color.major_dark);
+		this.unselectedColor = context.getResources().getColor(R.color.font_major_dark);
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)

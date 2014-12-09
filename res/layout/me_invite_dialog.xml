@@ -13,6 +13,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:hint="@string/inputUserContact" />
+        android:hint="@string/input_user_contact" />
 
 </RelativeLayout>

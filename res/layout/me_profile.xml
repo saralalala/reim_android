@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/personalInfo"
+            android:text="@string/personal_info"
             android:textSize="20sp"
             android:textColor="@color/major_light" />
 
@@ -82,7 +82,7 @@
 			        android:layout_marginRight="16dp" 
         			android:background="@null"
 			        android:inputType="textEmailAddress"
-			        android:hint="@string/inputEmail"
+			        android:hint="@string/input_email"
 			        android:textSize="14sp" />
 			
 			</RelativeLayout>
@@ -115,7 +115,7 @@
 			        android:layout_marginRight="16dp" 
         			android:background="@null"
 			        android:inputType="phone"
-			        android:hint="@string/inputPhone"
+			        android:hint="@string/input_phone"
 			        android:textSize="14sp" />
 			
 			</RelativeLayout>
@@ -147,7 +147,7 @@
 			        android:layout_marginLeft="10dp"
 			        android:layout_marginRight="16dp" 
         			android:background="@null"
-			        android:hint="@string/inputNickname"
+			        android:hint="@string/input_nickname"
 			        android:textSize="14sp" />
 			
 			</RelativeLayout>
@@ -211,7 +211,7 @@
 			        android:layout_marginLeft="10dp"
 			        android:layout_marginRight="10dp" 
         			android:background="@null"
-			        android:hint="@string/inputCompanyName"
+			        android:hint="@string/input_company_name"
 			        android:textSize="14sp" />
 
 			    <Button
@@ -249,7 +249,7 @@
 				    android:layout_centerVertical="true"
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
-				    android:text="@string/changePassword"
+				    android:text="@string/change_password"
 				    android:textSize="16sp"
 				    android:textColor="@color/font_major_dark" />
 				
@@ -259,7 +259,7 @@
 				    android:layout_alignParentRight="true"
 				    android:layout_centerVertical="true"
 				    android:layout_marginRight="10dp"
-				    android:contentDescription="@string/nullString"
+				    android:contentDescription="@string/next"
 				    android:src="@drawable/next" />
 				
 			</RelativeLayout>
@@ -282,7 +282,7 @@
 				    android:layout_centerVertical="true"
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
-				    android:text="@string/categoryManagement"
+				    android:text="@string/category_management"
 				    android:textSize="16sp"
 				    android:textColor="@color/font_major_dark" />
 				
@@ -292,7 +292,7 @@
 				    android:layout_alignParentRight="true"
 				    android:layout_centerVertical="true"
 				    android:layout_marginRight="10dp"
-				    android:contentDescription="@string/nullString"
+				    android:contentDescription="@string/next"
 				    android:src="@drawable/next" />
             
 		        <include                 
@@ -316,7 +316,7 @@
 				    android:layout_centerVertical="true"
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
-				    android:text="@string/tagManagement"
+				    android:text="@string/tag_management"
 				    android:textSize="16sp"
 				    android:textColor="@color/font_major_dark" />
 				
@@ -326,7 +326,7 @@
 				    android:layout_alignParentRight="true"
 				    android:layout_centerVertical="true"
 				    android:layout_marginRight="10dp"
-				    android:contentDescription="@string/nullString"
+				    android:contentDescription="@string/next"
 				    android:src="@drawable/next" />
             
 		        <include                 

@@ -170,7 +170,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 				{
 					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
 														.setTitle("警告")
-														.setMessage(R.string.deleteReportWarning)
+														.setMessage(R.string.delete_report_warning)
 														.setPositiveButton(R.string.confirm, 
 																new DialogInterface.OnClickListener()
 														{
@@ -628,7 +628,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-				            Utils.showToast(getActivity(), R.string.deleteFailed);
+				            Utils.showToast(getActivity(), R.string.delete_failed);
 						}
 					});		
 				}
@@ -724,12 +724,12 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		{
 			refreshReportListView();
 			ReimApplication.dismissProgressDialog();
-            Utils.showToast(getActivity(), R.string.deleteSucceed);														
+            Utils.showToast(getActivity(), R.string.delete_succeed);														
 		}
 		else
 		{
 			ReimApplication.dismissProgressDialog();
-            Utils.showToast(getActivity(), R.string.deleteFailed);
+            Utils.showToast(getActivity(), R.string.delete_failed);
 		}		
 	}
 

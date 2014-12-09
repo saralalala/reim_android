@@ -15,7 +15,8 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.ItemListViewAdapter;
+import classes.Adapter.ReportShowListViewAdapter;
+
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -28,8 +29,8 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -38,8 +39,7 @@ public class ShowReportActivity extends Activity
 {
 	private DBManager dbManager;
 
-	private TextView managerTextView;
-	private TextView ccTextView;
+	private ReportShowListViewAdapter adapter;
 	
 	private Report report;
 	private List<Item> itemList = null;
@@ -100,26 +100,19 @@ public class ShowReportActivity extends Activity
 	
 	private void initView()
 	{
-		ReimApplication.setProgressDialog(this);
-
-		Button addCommentButton = (Button)findViewById(R.id.addCommentButton);
-		addCommentButton.setOnClickListener(new View.OnClickListener()
+		getActionBar().hide();
+		
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				if (!Utils.isNetworkConnected())
-				{
-					Utils.showToast(ShowReportActivity.this, "网络未连接，无法添加");
-				}
-				else
-				{
-					showAddCommentDialog();
-				}
+				finish();
 			}
 		});
-
-		Button checkCommentButton = (Button)findViewById(R.id.checkCommentButton);
-		checkCommentButton.setOnClickListener(new View.OnClickListener()
+		
+		TextView commentTextView = (TextView)findViewById(R.id.commentTextView);
+		commentTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -136,39 +129,45 @@ public class ShowReportActivity extends Activity
 			}
 		});
 		
-		TextView titleTextView = (TextView)findViewById(R.id.titleTextView);
-		titleTextView.setText(report.getTitle());
-		
-		managerTextView = (TextView)findViewById(R.id.managerTextView);
-		managerTextView.setText(report.getManagersName());		
-		
-		ccTextView = (TextView)findViewById(R.id.ccTextView);
-		ccTextView.setText(report.getCCsName());
-
-		ItemListViewAdapter adapter = new ItemListViewAdapter(ShowReportActivity.this, itemList);
-		ListView itemListView = (ListView)findViewById(R.id.itemListView);
-		itemListView.setAdapter(adapter);
-		itemListView.setOnItemClickListener(new OnItemClickListener()
+		adapter = new ReportShowListViewAdapter(ShowReportActivity.this, report, itemList);
+		ListView detailListView = (ListView)findViewById(R.id.detailListView);
+		detailListView.setAdapter(adapter);
+		detailListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				Intent intent = new Intent(ShowReportActivity.this, ShowItemActivity.class);
-				if (myReport)
+				if (position > 2)
 				{
-					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());					
+					Intent intent = new Intent(ShowReportActivity.this, ShowItemActivity.class);
+					if (myReport)
+					{
+						intent.putExtra("itemLocalID", itemList.get(position - 3).getLocalID());					
+					}
+					else
+					{
+						intent.putExtra("othersItemServerID", itemList.get(position - 3).getServerID());					
+					}
+					startActivity(intent);	
 				}
-				else
-				{
-					intent.putExtra("othersItemServerID", itemList.get(position).getServerID());					
-				}
-				startActivity(intent);	
 			}
 		});
+		
+
+//		if (!Utils.isNetworkConnected())
+//		{
+//			Utils.showToast(ShowReportActivity.this, "网络未连接，无法添加");
+//		}
+//		else
+//		{
+//			showAddCommentDialog();
+//		}
 	}
 
 	private void refreshView()
 	{
+		ReimApplication.setProgressDialog(this);
+		
 		if (Utils.isNetworkConnected())
 		{
 			sendGetReportRequest(report.getServerID());		
@@ -231,8 +230,8 @@ public class ShowReportActivity extends Activity
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							managerTextView.setText(report.getManagersName());
-							ccTextView.setText(report.getCCsName());
+					    	adapter.setReport(report);
+					    	adapter.notifyDataSetChanged();
 						}
 					});
 				}

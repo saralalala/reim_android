@@ -292,7 +292,7 @@ public class User implements Serializable
 			return "";
 		}
 		
-		return TextUtils.join(",", getUsersName(userList));
+		return TextUtils.join("、", getUsersName(userList));
 	}
 	
 	public static String getUsersIDString(List<User> userList)

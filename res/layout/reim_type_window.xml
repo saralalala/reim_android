@@ -23,7 +23,7 @@
 	        android:layout_centerVertical="true"
 	        android:layout_alignParentLeft="true"
 	        android:layout_marginLeft="16dp"
-	        android:text="@string/reimType"
+	        android:text="@string/reim_type"
 	        android:textColor="@color/font_major_dark"
 	        android:textSize="16sp" />
     
@@ -48,7 +48,7 @@
 	            android:id="@+id/proveAheadRadio"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/proveAhead"
+	            android:text="@string/prove_ahead"
 	            style="@style/RadioButton" />
 	        
 	    </classes.Widget.SegmentedGroup>
@@ -73,7 +73,7 @@
 	        android:layout_centerVertical="true"
 	        android:layout_alignParentLeft="true"
 	        android:layout_marginLeft="16dp"
-	        android:text="@string/needReimburse"
+	        android:text="@string/need_reimburse"
 	        android:textColor="@color/font_major_dark"
 	        android:textSize="16sp" />
 	

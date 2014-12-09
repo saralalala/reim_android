@@ -4,13 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Group.GetGroupRequest;
 import netUtils.Request.Report.GetReportRequest;
 import netUtils.Request.Report.ModifyReportRequest;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Group.GetGroupResponse;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
 import classes.AppPreference;
@@ -20,7 +15,7 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.ItemListViewAdapter;
+import classes.Adapter.ReportShowListViewAdapter;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -30,18 +25,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -51,24 +41,16 @@ public class ApproveReportActivity extends Activity
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
-	private TextView titleTextView;
-	private TextView senderTextView;
-	private ImageView senderImageView;
-	private TextView managerTextView;
-	private TextView ccTextView;
-	private ListView itemListView;
-	private ItemListViewAdapter adapter;
+	private ReportShowListViewAdapter adapter;
 	
 	private int reportServerID;
 	private Report report;
-	private int senderID;
-	private User sender;
 	private List<Item> itemList = new ArrayList<Item>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.report_show);
+		setContentView(R.layout.report_approve);
 		initData();
 		initView();
 	}
@@ -96,44 +78,6 @@ public class ApproveReportActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.approve_reject, menu);
-		return true;
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-		int id = item.getItemId();
-		if (id == R.id.action_approve_item)
-		{
-			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_PASS_REPORT_DETAIL");
-			if (!Utils.isNetworkConnected())
-			{
-				Utils.showToast(this, "网络未连接，无法审批");
-			}
-			else
-			{
-				saveReport(Report.STATUS_APPROVED);
-			}
-			return true;
-		}
-		if (id == R.id.action_reject_item)
-		{
-			MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REJECT_REPORT_DETAIL");
-			if (!Utils.isNetworkConnected())
-			{
-				Utils.showToast(this, "网络未连接，无法审批");
-			}
-			else
-			{
-				saveReport(Report.STATUS_REJECTED);
-			}
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 	
 	private void initData()
 	{
@@ -157,31 +101,29 @@ public class ApproveReportActivity extends Activity
 		{
 			reportServerID = -1;
 		}
+		
+		if (report == null)
+		{
+			report = new Report();
+		}
 		itemList = dbManager.getOthersReportItems(reportServerID);
 	}
 	
 	private void initView()
 	{
-		ReimApplication.setProgressDialog(this);
-
-		Button addCommentButton = (Button)findViewById(R.id.addCommentButton);
-		addCommentButton.setOnClickListener(new View.OnClickListener()
+		getActionBar().hide();
+		
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				if (!Utils.isNetworkConnected())
-				{
-					Utils.showToast(ApproveReportActivity.this, "网络未连接，无法添加评论");
-				}
-				else
-				{
-					showAddCommentDialog();
-				}
+				finish();
 			}
 		});
-
-		Button checkCommentButton = (Button)findViewById(R.id.checkCommentButton);
-		checkCommentButton.setOnClickListener(new View.OnClickListener()
+		
+		TextView commentTextView = (TextView)findViewById(R.id.commentTextView);
+		commentTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -191,65 +133,71 @@ public class ApproveReportActivity extends Activity
 			}
 		});
 
-		LinearLayout senderLayout = (LinearLayout)findViewById(R.id.senderLayout);
-		senderLayout.setVisibility(View.VISIBLE);
-		
-		titleTextView = (TextView)findViewById(R.id.titleTextView);
-		senderTextView = (TextView)findViewById(R.id.senderTextView);
-		senderImageView = (ImageView)findViewById(R.id.senderImageView);
-		managerTextView = (TextView)findViewById(R.id.managerTextView);
-		ccTextView = (TextView)findViewById(R.id.ccTextView);
-		
-		if (report != null)
+		Button approveButton = (Button)findViewById(R.id.approveButton);
+		approveButton.setOnClickListener(new View.OnClickListener()
 		{
-			titleTextView.setText(report.getTitle());
-			managerTextView.setText(report.getManagersName());	
-			ccTextView.setText(report.getCCsName());
-			
-			if (report.getUser() != null)
+			public void onClick(View v)
 			{
-				senderID = report.getUser().getServerID();
-				sender = dbManager.getUser(senderID);
-				if (sender != null)
+				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_PASS_REPORT_DETAIL");
+				if (!Utils.isNetworkConnected())
 				{
-					senderTextView.setText(sender.getNickname());
-					if (!sender.getAvatarPath().equals("")) 
-					{
-						Bitmap bitmap = BitmapFactory.decodeFile(sender.getAvatarPath());
-						if (bitmap != null)
-						{
-							senderImageView.setImageBitmap(bitmap);
-						}
-					}
-					if (sender.hasUndownloadedAvatar() && Utils.isNetworkConnected())
-					{
-						sendDownloadAvatarRequest(sender);
-					}
+					Utils.showToast(ApproveReportActivity.this, "网络未连接，无法审批");
 				}
 				else
 				{
-					sendGetGroupRequest();
+					saveReport(Report.STATUS_APPROVED);
 				}
 			}
-		}		
-		
-		adapter = new ItemListViewAdapter(ApproveReportActivity.this, itemList);
-		itemListView = (ListView)findViewById(R.id.itemListView);
-		itemListView.setAdapter(adapter);
-		itemListView.setOnItemClickListener(new OnItemClickListener()
+		});
+
+		Button rejectButton = (Button)findViewById(R.id.rejectButton);
+		rejectButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REJECT_REPORT_DETAIL");
+				if (!Utils.isNetworkConnected())
+				{
+					Utils.showToast(ApproveReportActivity.this, "网络未连接，无法审批");
+				}
+				else
+				{
+					saveReport(Report.STATUS_REJECTED);
+				}
+			}
+		});
+
+		adapter = new ReportShowListViewAdapter(ApproveReportActivity.this, report, itemList);
+		ListView detailListView = (ListView)findViewById(R.id.detailListView);
+		detailListView.setAdapter(adapter);
+		detailListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				Intent intent = new Intent(ApproveReportActivity.this, ShowItemActivity.class);
-				intent.putExtra("othersItemServerID", itemList.get(position).getServerID());
-				startActivity(intent);	
+				if (position > 2)
+				{
+					Intent intent = new Intent(ApproveReportActivity.this, ShowItemActivity.class);
+					intent.putExtra("othersItemServerID", itemList.get(position - 3).getServerID());
+					startActivity(intent);	
+				}
 			}
 		});
+	
+//		if (!Utils.isNetworkConnected())
+//		{
+//			Utils.showToast(ApproveReportActivity.this, "网络未连接，无法添加评论");
+//		}
+//		else
+//		{
+//			showAddCommentDialog();
+//		}
 	}
 
 	private void refreshView()
 	{
+		ReimApplication.setProgressDialog(this);
+		
 		if (Utils.isNetworkConnected())
 		{
 			if (reportServerID == -1 && report == null)
@@ -266,9 +214,8 @@ public class ApproveReportActivity extends Activity
 			}
 			else
 			{
-				titleTextView.setText(report.getTitle());
 				itemList = dbManager.getOthersReportItems(reportServerID);
-				adapter.set(itemList);
+				adapter.setItemList(itemList);
 				adapter.notifyDataSetChanged();		
 			}			
 		}
@@ -290,7 +237,7 @@ public class ApproveReportActivity extends Activity
 				if (response.getStatus())
 				{ 
 					int ownerID = appPreference.getCurrentUserID();
-					if (report == null)
+					if (report.getServerID() == -1)
 					{
 						report = response.getReport();
 					}
@@ -326,7 +273,7 @@ public class ApproveReportActivity extends Activity
 					    	if (report.getStatus() != Report.STATUS_SUBMITTED)
 							{
 								AlertDialog mDialog = new AlertDialog.Builder(ApproveReportActivity.this)
-													.setTitle("提示")
+													.setTitle(R.string.tip)
 													.setMessage("报告已被审批")
 													.setNegativeButton(R.string.confirm, 
 															new DialogInterface.OnClickListener()
@@ -341,11 +288,8 @@ public class ApproveReportActivity extends Activity
 							}
 					    	else
 					    	{
-								titleTextView.setText(report.getTitle());
-								managerTextView.setText(report.getManagersName());		
-								ccTextView.setText(report.getCCsName());
-								
-								adapter.set(itemList);
+					    		adapter.setReport(report);
+								adapter.setItemList(itemList);
 								adapter.notifyDataSetChanged();						    		
 					    	}				
 						}
@@ -373,104 +317,6 @@ public class ApproveReportActivity extends Activity
 							mDialog.show();
 						}
 					});
-				}
-			}
-		});
-    }
-
-	private void sendGetGroupRequest()
-	{
-		GetGroupRequest request = new GetGroupRequest();
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				GetGroupResponse response = new GetGroupResponse(httpResponse);
-				if (response.getStatus())
-				{
-					DBManager dbManager = DBManager.getDBManager();
-					int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
-					
-					// update members
-					List<User> memberList = response.getMemberList();
-					User currentUser = AppPreference.getAppPreference().getCurrentUser();
-					
-					for (User user : memberList)
-					{
-						if (user.getServerID() == currentUser.getServerID())							
-						{
-							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
-							{
-								if (user.getAvatarID() == currentUser.getAvatarID())
-								{
-									user.setAvatarPath(currentUser.getAvatarPath());								
-								}								
-							}
-							else
-							{
-								user = currentUser;
-							}
-						}
-					}
-					
-					dbManager.updateGroupUsers(memberList, currentGroupID);
-
-					// update group info
-					dbManager.syncGroup(response.getGroup());
-					
-					sender = dbManager.getUser(senderID);
-					if (sender != null)
-					{
-						senderTextView.setText(sender.getNickname());
-						if (!sender.getAvatarPath().equals("")) 
-						{
-							Bitmap bitmap = BitmapFactory.decodeFile(sender.getAvatarPath());
-							if (bitmap != null)
-							{
-								senderImageView.setImageBitmap(bitmap);
-							}
-						}
-						if (sender.hasUndownloadedAvatar() && Utils.isNetworkConnected())
-						{
-							sendDownloadAvatarRequest(sender);
-						}
-					}
-				}
-			}
-		});
-	}
-
-    private void sendDownloadAvatarRequest(final User user)
-    {
-    	final DBManager dbManager = DBManager.getDBManager();
-    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-				if (response.getBitmap() != null)
-				{
-					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
-					user.setAvatarPath(avatarPath);
-					int currentTime = Utils.getCurrentTime();
-					user.setLocalUpdatedDate(currentTime);
-					user.setServerUpdatedDate(currentTime);
-					dbManager.updateUser(user);
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							if (!user.getAvatarPath().equals("")) 
-							{
-								Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
-								if (bitmap != null)
-								{
-									senderImageView.setImageBitmap(bitmap);
-								}
-							}
-						}
-					});	
 				}
 			}
 		});

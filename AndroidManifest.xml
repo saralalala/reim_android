@@ -153,7 +153,7 @@
         </activity>
         
         <activity 
-            android:label="@string/subCategory" 
+            android:label="@string/sub_category" 
             android:name="com.rushucloud.reim.me.SubCategoryActivity">
         </activity>
         

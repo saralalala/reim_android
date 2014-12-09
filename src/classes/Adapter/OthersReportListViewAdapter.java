@@ -19,16 +19,18 @@ import android.widget.TextView;
 
 public class OthersReportListViewAdapter extends BaseAdapter
 {
+	private Context context;
 	private LayoutInflater layoutInflater;
 	private List<Report> reportList;
 	private int[] statusBackground;
 
 	public OthersReportListViewAdapter(Context context, List<Report> reports)
 	{
-		reportList = new ArrayList<Report>(reports);
-		layoutInflater = LayoutInflater.from(context);
-		statusBackground = new int[] { R.drawable.report_status_draft, R.drawable.report_status_submitted, R.drawable.report_status_approved, 
-				   					   R.drawable.report_status_rejected, R.drawable.report_status_finished };
+		this.context = context;
+		this.layoutInflater = LayoutInflater.from(context);
+		
+		this.reportList = new ArrayList<Report>(reports);
+		this.statusBackground = Utils.getReportStatusBackground();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -45,11 +47,11 @@ public class OthersReportListViewAdapter extends BaseAdapter
 
 		Report report = reportList.get(position);
 
-		String title = report.getTitle().equals("") ? "N/A" : report.getTitle();
+		String title = report.getTitle().equals("") ? context.getString(R.string.notAvailable) : report.getTitle();
 		titleTextView.setText(title);
 		
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
-		dateTextView.setText(date.equals("") ? "N/A" : date);
+		dateTextView.setText(date.equals("") ? context.getString(R.string.notAvailable) : date);
 
 		if (report.getStatus() >= 0 && report.getStatus() <= 4)
 		{

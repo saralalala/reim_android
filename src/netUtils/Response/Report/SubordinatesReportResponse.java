@@ -45,7 +45,7 @@ public class SubordinatesReportResponse extends BaseResponse
 					
 					User user = new User();
 					user.setServerID(object.getInt("uid"));
-					report.setUser(user);
+					report.setSender(user);
 					
 					reportList.add(report);
 				}

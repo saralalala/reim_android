@@ -26,11 +26,12 @@ public class TagListViewAdapter extends BaseAdapter
 	
 	public TagListViewAdapter(Context context, List<Tag> tags, boolean[] checkList)
 	{
-		layoutInflater = LayoutInflater.from(context);
-		tagList = new ArrayList<Tag>(tags);
-		check = checkList;
-		selectedColor = context.getResources().getColor(R.color.major_dark);
-		unselectedColor = context.getResources().getColor(R.color.font_major_dark);
+		this.layoutInflater = LayoutInflater.from(context);
+		
+		this.tagList = new ArrayList<Tag>(tags);
+		this.check = checkList;
+		this.selectedColor = context.getResources().getColor(R.color.major_dark);
+		this.unselectedColor = context.getResources().getColor(R.color.font_major_dark);
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)

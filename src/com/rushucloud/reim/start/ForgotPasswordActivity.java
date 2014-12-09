@@ -83,11 +83,11 @@ public class ForgotPasswordActivity extends Activity
         inflater.inflate(R.layout.start_find_by_phone, tabHost.getTabContentView());  
 
         tabHost.addTab(tabHost.newTabSpec("findPasswordByEmail")
-                .setIndicator(getResources().getText(R.string.findPasswordByEmail))
+                .setIndicator(getResources().getText(R.string.find_password_by_email))
                 .setContent(R.id.emailBaseLayout));
         
         tabHost.addTab(tabHost.newTabSpec("findPasswordByPhone")
-            .setIndicator(getResources().getText(R.string.findPasswordByPhone))
+            .setIndicator(getResources().getText(R.string.find_password_by_phone))
             .setContent(R.id.phoneBaseLayout));
         
         DisplayMetrics dm = new DisplayMetrics();  
@@ -234,7 +234,7 @@ public class ForgotPasswordActivity extends Activity
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
 												.setTitle("错误")
-												.setMessage(getResources().getString(R.string.errorNoCode))
+												.setMessage(getResources().getString(R.string.error_no_code))
 												.setPositiveButton("确定", null)
 												.create();
 					alertDialog.show();
@@ -243,7 +243,7 @@ public class ForgotPasswordActivity extends Activity
 				{
 					AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
 												.setTitle("错误")
-												.setMessage(getResources().getString(R.string.errorCode))
+												.setMessage(getResources().getString(R.string.error_code))
 												.setPositiveButton("确定", null)
 												.create();
 					alertDialog.show();					
@@ -310,7 +310,7 @@ public class ForgotPasswordActivity extends Activity
 						{
 							AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
 														.setTitle("提示")
-														.setMessage(getResources().getString(R.string.emailSentPrompt))
+														.setMessage(getResources().getString(R.string.email_sent_prompt))
 														.setPositiveButton("确定", null)
 														.create();
 							alertDialog.show();

@@ -96,11 +96,11 @@ public class SignUpActivity extends Activity
 		layoutInflater.inflate(R.layout.start_register_by_phone, tabHost.getTabContentView());
 		
 		tabHost.addTab(tabHost.newTabSpec("registerByEmail")
-				.setIndicator(getResources().getString(R.string.signUpByEmail))
+				.setIndicator(getResources().getString(R.string.sign_up_by_email))
 				.setContent(R.id.emailBaseLayout));
 		
 		tabHost.addTab(tabHost.newTabSpec("registerByPhone")
-				.setIndicator(getResources().getString(R.string.signUpByPhone))
+				.setIndicator(getResources().getString(R.string.sign_up_by_phone))
 				.setContent(R.id.phoneBaseLayout));
 		
 		DisplayMetrics dm = new DisplayMetrics();

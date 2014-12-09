@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dp"
-        android:hint="@string/inputEmail"
+        android:hint="@string/input_email"
         android:inputType="textEmailAddress" >
         <requestFocus />
     </EditText>

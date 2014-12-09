@@ -36,15 +36,36 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
             android:text="@string/comment"
-            android:textSize="16sp"
-            android:textColor="@color/major_light" />
-
+            android:textColor="@color/major_light"
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <ListView
         android:id="@+id/detailListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/rejectButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/reject" />
+
+        <Button
+            android:id="@+id/approveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/approve" />
+    </LinearLayout>
 
 </LinearLayout>

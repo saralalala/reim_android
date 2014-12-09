@@ -133,10 +133,10 @@ public class ShowItemActivity extends Activity
 		}
 		
 		// init type
-		String temp = item.isProveAhead() ? getString(R.string.proveAhead) : getString(R.string.consumed);
+		String temp = item.isProveAhead() ? getString(R.string.prove_ahead) : getString(R.string.consumed);
 		if (item.needReimbursed())
 		{
-			temp += "/" + getString(R.string.needReimburse);
+			temp += "/" + getString(R.string.need_reimburse);
 		}
 		TextView typeTextView = (TextView)findViewById(R.id.typeTextView);
 		typeTextView.setText(temp);

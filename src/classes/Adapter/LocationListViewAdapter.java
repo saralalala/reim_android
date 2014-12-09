@@ -22,13 +22,14 @@ public class LocationListViewAdapter extends BaseAdapter
 	
 	public LocationListViewAdapter(Context context, String city)
 	{
-		layoutInflater = LayoutInflater.from(context);
-		currentCity = context.getString(R.string.locationInvalid);
-		selectedColor = context.getResources().getColor(R.color.major_dark);
-		unselectedColor = context.getResources().getColor(R.color.font_major_dark);
+		this.layoutInflater = LayoutInflater.from(context);
+		
+		this.currentCity = context.getString(R.string.location_invalid);
+		this.selectedColor = context.getResources().getColor(R.color.major_dark);
+		this.unselectedColor = context.getResources().getColor(R.color.font_major_dark);
 
-		cityList = Arrays.asList(context.getResources().getStringArray(R.array.cityArray));
-		check = new boolean[cityList.size()];
+		this.cityList = Arrays.asList(context.getResources().getStringArray(R.array.cityArray));
+		this.check = new boolean[cityList.size()];
 		for (int i = 0; i < cityList.size(); i++)
 		{
 			check[i] = city.equals(cityList.get(i));
@@ -53,7 +54,7 @@ public class LocationListViewAdapter extends BaseAdapter
 				view = layoutInflater.inflate(R.layout.list_header, parent, false);
 				
 				TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
-				headerTextView.setText(R.string.allCities);				
+				headerTextView.setText(R.string.all_cities);				
 				break;
 			}
 			default:

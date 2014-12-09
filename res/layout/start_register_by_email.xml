@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dp"
-        android:hint="@string/inputEmail"
+        android:hint="@string/input_email"
         android:inputType="textEmailAddress"
         android:focusable="true" 
         android:focusableInTouchMode="true">
@@ -25,7 +25,7 @@
         android:layout_alignRight="@+id/emailCancelButton"
         android:layout_below="@+id/emailEditText"
         android:layout_marginTop="50dp"
-        android:hint="@string/inputPassword"
+        android:hint="@string/input_password"
         android:inputType="textPassword" />
 
     <Button

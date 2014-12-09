@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checked="true"
-            android:text="@string/sortNull"
+            android:text="@string/sort_null"
             style="@style/RadioButton" />
 
         <RadioButton
@@ -81,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/sortItemsCount"
+            android:text="@string/sort_item_count"
             style="@style/RadioButton" />
 
         <RadioButton
@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/sortAmount"
+            android:text="@string/sort_amount"
             style="@style/RadioButton" />
 
         <RadioButton
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/sortCreateDate"
+            android:text="@string/sort_create_date"
             style="@style/RadioButton" />
         
     </classes.Widget.SegmentedGroup>
@@ -110,7 +110,7 @@
         android:layout_alignBottom="@+id/tagDivider"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="16dp"
-        android:text="@string/filterTags"
+        android:text="@string/filter_tags"
         android:textColor="@color/hint_light_grey"
         android:textSize="14sp" />
 

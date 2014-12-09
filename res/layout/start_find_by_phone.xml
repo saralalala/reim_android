@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/findPasswordByPhone"
+            android:text="@string/find_password_by_phone"
             android:textSize="20sp"
             android:textColor="@color/major_light" />
 
@@ -46,7 +46,7 @@
         android:layout_marginTop="190dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:hint="@string/inputPhone"
+        android:hint="@string/input_phone"
         android:inputType="text|phone"
         android:textColor="@color/font_major_light"
         android:textColorHint="@color/hint_white" 
@@ -75,7 +75,7 @@
         android:layout_alignRight="@+id/mobileEditText"
         android:layout_below="@+id/mobileDivider"
         android:layout_marginTop="12dp"
-        android:hint="@string/inputCode"
+        android:hint="@string/input_code"
         android:inputType="textEmailAddress" 
         android:textColor="@color/font_major_light"
         android:textColorHint="@color/hint_white" 
@@ -95,7 +95,7 @@
         android:layout_marginTop="-6dp"
         android:layout_marginBottom="-6dp"
         android:background="@drawable/button_short_solid_light"
-        android:text="@string/acquireCode"
+        android:text="@string/acquire_code"
         android:textColor="@color/major_dark" />
 
     <include 

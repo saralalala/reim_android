@@ -28,21 +28,21 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 
 	public ReportTagGridViewAdapter(Context context)
 	{
-		layoutInflater = LayoutInflater.from(context);
-		resources = context.getResources();
-		status = context.getResources().getStringArray(R.array.filterStatus);
-		check = new boolean[5];
+		this.layoutInflater = LayoutInflater.from(context);
+		this.resources = context.getResources();
+		this.status = context.getResources().getStringArray(R.array.filterStatus);
+		this.check = new boolean[5];
 		for (int i = 0; i < 5; i++)
 		{
 			check[i] = false;
 		}
 		
-		fontColors = new ArrayList<Integer>();
-		fontColors.add(context.getResources().getColor(R.color.report_status_draft));
-		fontColors.add(context.getResources().getColor(R.color.report_status_submitted));
-		fontColors.add(context.getResources().getColor(R.color.report_status_approved));
-		fontColors.add(context.getResources().getColor(R.color.report_status_rejected));
-		fontColors.add(context.getResources().getColor(R.color.report_status_finished));
+		this.fontColors = new ArrayList<Integer>();
+		this.fontColors.add(context.getResources().getColor(R.color.report_status_draft));
+		this.fontColors.add(context.getResources().getColor(R.color.report_status_submitted));
+		this.fontColors.add(context.getResources().getColor(R.color.report_status_approved));
+		this.fontColors.add(context.getResources().getColor(R.color.report_status_rejected));
+		this.fontColors.add(context.getResources().getColor(R.color.report_status_finished));
 		
 		selectedBackgrounds = new int[]{ R.drawable.report_tag_draft_selected, R.drawable.report_tag_submitted_selected, R.drawable.report_tag_approved_selected,
 										 R.drawable.report_tag_rejected_selected, R.drawable.report_tag_finished_selected };

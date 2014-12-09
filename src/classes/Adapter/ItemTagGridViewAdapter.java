@@ -26,15 +26,16 @@ public class ItemTagGridViewAdapter extends BaseAdapter
 
 	public ItemTagGridViewAdapter(Context context, List<Tag> tags)
 	{
-		layoutInflater = LayoutInflater.from(context);
-		tagList = new ArrayList<Tag>(tags);
-		check = new boolean[tagList.size()];
+		this.layoutInflater = LayoutInflater.from(context);
+		
+		this.tagList = new ArrayList<Tag>(tags);
+		this.check = new boolean[tagList.size()];
 		for (int i = 0; i < tags.size(); i++)
 		{
 			check[i] = false;
 		}
-		selectedColor = context.getResources().getColor(R.color.major_dark);
-		unselectedColor = context.getResources().getColor(R.color.font_major_dark);
+		this.selectedColor = context.getResources().getColor(R.color.major_dark);
+		this.unselectedColor = context.getResources().getColor(R.color.font_major_dark);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)

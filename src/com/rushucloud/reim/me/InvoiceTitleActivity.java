@@ -58,7 +58,7 @@ public class InvoiceTitleActivity extends Activity
 //		animation = AnimationUtils.loadAnimation(this, R.anim.rotate_right_center);
 		Group group = DBManager.getDBManager().getGroup(AppPreference.getAppPreference().getCurrentGroupID());
 		TextView titleTextView = (TextView)findViewById(R.id.titleTextView);
-		String title = group == null ? getString(R.string.invoiceInvalid) : group.getName();
+		String title = group == null ? getString(R.string.invoice_invalid) : group.getName();
 		titleTextView.setText(title);
 //		titleTextView.setAnimation(animation);
 	}

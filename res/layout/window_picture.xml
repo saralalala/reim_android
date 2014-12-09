@@ -14,7 +14,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/window_button_drawable"
-        android:text="@string/chooseFromCamera"
+        android:text="@string/choose_from_camera"
         android:textColor="@color/window_button_text_dark_color"
         android:textSize="20sp" />
 
@@ -26,7 +26,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/window_button_drawable"
-        android:text="@string/chooseFromGallery"
+        android:text="@string/choose_from_gallery"
         android:textColor="@color/window_button_text_dark_color"
         android:textSize="20sp" />
 

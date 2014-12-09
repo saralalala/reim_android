@@ -51,7 +51,7 @@
 	                android:layout_height="wrap_content"
 	                android:layout_marginTop="8dp"
 	                android:layout_marginLeft="16dp"
-	                android:text="@string/actualCost"
+	                android:text="@string/actual_cost"
 	                android:textColor="@color/major_dark"
 	                android:textSize="14sp" />
 

@@ -118,7 +118,7 @@ public class SubCategoryActivity extends Activity
 				{
 					AlertDialog mDialog = new AlertDialog.Builder(SubCategoryActivity.this)
 											.setTitle("警告")
-											.setMessage(R.string.deleteItemWarning)
+											.setMessage(R.string.delete_item_warning)
 											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
@@ -162,7 +162,7 @@ public class SubCategoryActivity extends Activity
 		});
 		
 		TextView titleTextView = (TextView)findViewById(R.id.titleTextView);
-		titleTextView.setText(R.string.subCategory);
+		titleTextView.setText(R.string.sub_category);
 		
 		TextView addTextView = (TextView)findViewById(R.id.addTextView);
 		addTextView.setOnClickListener(new OnClickListener()

@@ -20,7 +20,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="72dp"
-        android:contentDescription="@string/nullString"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/start_icon" />
 
     <EditText
@@ -31,7 +31,7 @@
         android:layout_marginTop="190dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:hint="@string/inputUsername"
+        android:hint="@string/input_username"
         android:inputType="text"
         android:textColor="@color/font_major_light"
         android:textColorHint="@color/hint_white" 
@@ -59,7 +59,7 @@
         android:layout_alignRight="@+id/usernameEditText"
         android:layout_below="@+id/signInDivider"
         android:layout_marginTop="12dp"
-        android:hint="@string/inputPassword"
+        android:hint="@string/input_password"
         android:inputType="textPassword"
         android:textColor="@color/font_major_light"
         android:textColorHint="@color/hint_white" 
@@ -77,7 +77,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/button_long_light_solid_drawable"
-        android:text="@string/signIn"
+        android:text="@string/sign_in"
         android:textColor="@color/start_button_text_color"
         android:textSize="20sp" />
 
@@ -90,7 +90,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="14dp"
         android:layout_marginLeft="16dp"
-        android:text="@string/forgotPassword"
+        android:text="@string/forgot_password"
         android:textSize="14sp"
         android:textColor="@color/start_font" />
 
@@ -102,7 +102,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
 		android:layout_marginRight="16dp"
-        android:contentDescription="@string/signUp"
+        android:contentDescription="@string/sign_up"
         android:src="@drawable/jump" />
 
     <TextView
@@ -113,7 +113,7 @@
         android:layout_toLeftOf="@+id/signUpImageView"
         android:layout_marginBottom="14dp"
         android:layout_marginRight="6dp"        
-        android:text="@string/signUp"
+        android:text="@string/sign_up"
         android:textSize="14sp" 
         android:textColor="@color/start_font" />
 

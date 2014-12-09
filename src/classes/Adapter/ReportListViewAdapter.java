@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 public class ReportListViewAdapter extends BaseAdapter
 {
+	private Context context;
 	private LayoutInflater layoutInflater;
 	private List<Report> reportList;
 	private DBManager dbManager;
@@ -27,11 +28,12 @@ public class ReportListViewAdapter extends BaseAdapter
 
 	public ReportListViewAdapter(Context context, List<Report> reports)
 	{
-		reportList = new ArrayList<Report>(reports);
-		layoutInflater = LayoutInflater.from(context);
-		dbManager = DBManager.getDBManager();
-		statusBackground = new int[] { R.drawable.report_status_draft, R.drawable.report_status_submitted, R.drawable.report_status_approved, 
-									   R.drawable.report_status_rejected, R.drawable.report_status_finished };
+		this.context = context;
+		this.layoutInflater = LayoutInflater.from(context);
+		
+		this.reportList = new ArrayList<Report>(reports);
+		this.dbManager = DBManager.getDBManager();
+		this.statusBackground = Utils.getReportStatusBackground();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -48,11 +50,11 @@ public class ReportListViewAdapter extends BaseAdapter
 		
 		Report report = reportList.get(position);
 
-		String title = report.getTitle().equals("") ? "N/A" : report.getTitle();
+		String title = report.getTitle().equals("") ? context.getString(R.string.notAvailable) : report.getTitle();
 		titleTextView.setText(title);
 		
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
-		dateTextView.setText(date.equals("") ? "N/A" : date);
+		dateTextView.setText(date.equals("") ? context.getString(R.string.notAvailable) : date);
 
 		if (report.getStatus() >= 0 && report.getStatus() <= 4)
 		{

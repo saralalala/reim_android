@@ -24,9 +24,10 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 	public ChooseItemListViewAdapter(Context context, List<Item> items, boolean[] checkList)
 	{
 		this.context = context;
+		this.layoutInflater = LayoutInflater.from(context);
+		
 		this.itemList = new ArrayList<Item>(items);
 		this.check = checkList;
-		this.layoutInflater = LayoutInflater.from(context);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -58,14 +59,14 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 		
 		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
 		{
-			statusTextView.setText(context.getString(R.string.itemApproved));
+			statusTextView.setText(context.getString(R.string.item_approved));
 			statusTextView.setBackgroundResource(R.drawable.item_approved_list);
 			statusTextView.setTextColor(context.getResources().getColor(R.color.item_approved));
 			statusTextView.setVisibility(View.VISIBLE);
 		}
 		else if (item.isProveAhead())
 		{
-			statusTextView.setText(context.getString(R.string.proveAhead));
+			statusTextView.setText(context.getString(R.string.prove_ahead));
 			statusTextView.setBackgroundResource(R.drawable.item_approved_list);
 			statusTextView.setTextColor(context.getResources().getColor(R.color.item_prove_ahead));
 			statusTextView.setVisibility(View.VISIBLE);			
@@ -75,13 +76,13 @@ public class ChooseItemListViewAdapter extends BaseAdapter
 			statusTextView.setVisibility(View.INVISIBLE);					
 		}
 		
-		String amount = "￥" + Double.toString(item.getAmount());
+		String amount = context.getString(R.string.rmb) + Double.toString(item.getAmount());
 		amountTextView.setText(amount);
 
-		String vendor = item.getMerchant().equals("") ? "N/A" : item.getMerchant();
+		String vendor = item.getMerchant().equals("") ? context.getString(R.string.notAvailable) : item.getMerchant();
 		vendorTextView.setText(vendor);
 		
-		String reportTitle = item.getBelongReport() == null ? "N/A" : item.getBelongReport().getTitle();
+		String reportTitle = item.getBelongReport() == null ? context.getString(R.string.notAvailable) : item.getBelongReport().getTitle();
 		reportTextView.setText(reportTitle);
 		
 		return convertView;

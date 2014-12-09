@@ -18,7 +18,7 @@
             android:layout_marginRight="16dp"
             android:background="@null"
             android:ems="10"
-            android:hint="@string/inputLocation"
+            android:hint="@string/input_location"
             android:inputType="text" >
 
             <requestFocus />

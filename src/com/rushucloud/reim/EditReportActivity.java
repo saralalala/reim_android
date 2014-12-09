@@ -23,6 +23,7 @@ import classes.Report;
 import classes.User;
 import classes.Utils;
 import classes.Adapter.MemberListViewAdapter;
+import classes.Adapter.ReportEditListViewAdapter;
 import classes.Adapter.ReportItemListViewAdapter;
 
 import com.rushucloud.reim.R;
@@ -45,6 +46,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -55,11 +57,7 @@ public class EditReportActivity extends Activity
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
-	private EditText titleEditText;
-	private TextView managerTextView;
-	private TextView ccTextView;
-	private ListView itemListView;
-	private ReportItemListViewAdapter adapter;
+	private ReportEditListViewAdapter adapter;
 	private MemberListViewAdapter memberAdapter;
 
 	private Report report;
@@ -145,14 +143,14 @@ public class EditReportActivity extends Activity
 	public boolean onContextItemSelected(MenuItem item)
 	{
     	AdapterContextMenuInfo menuInfo=(AdapterContextMenuInfo)item.getMenuInfo();
-    	final int index = (int)itemListView.getAdapter().getItemId(menuInfo.position);
+    	final int index = (int) adapter.getItemId(menuInfo.position);
     	switch (item.getItemId()) 
     	{
 			case 0:
 				int id = chosenItemIDList.remove(index);
 				remainingItemIDList.add(id);
 				itemList.remove(index);
-				adapter.set(itemList);
+				adapter.setItemList(itemList);
 				adapter.notifyDataSetChanged();
 				break;
 			default:
@@ -172,7 +170,7 @@ public class EditReportActivity extends Activity
 		{
 			// new report from ReportFragment
 			report = new Report();
-			report.setUser(appPreference.getCurrentUser());
+			report.setSender(appPreference.getCurrentUser());
 			chosenItemIDList = new ArrayList<Integer>();
 			remainingItemIDList = Item.getItemsIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
 			itemList = new ArrayList<Item>();
@@ -203,30 +201,32 @@ public class EditReportActivity extends Activity
 	}
 	
 	private void initView()
-	{
-		ReimApplication.setProgressDialog(this);
+	{		
+		getActionBar().hide();
 		
-		titleEditText = (EditText)findViewById(R.id.titleEditText);
-		titleEditText.setText(report.getTitle());
-		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
 		{
-			titleEditText.setFocusable(false);
-		}
-		if (!report.getTitle().equals(""))
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});
+		
+		TextView saveTextView = (TextView)findViewById(R.id.saveTextView);
+		saveTextView.setOnClickListener(new View.OnClickListener()
 		{
-			titleEditText.clearFocus();
-		}
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				saveReport("报告保存成功");
+			}
+		});
 		
-		managerTextView = (TextView)findViewById(R.id.managerTextView);
-		managerTextView.setText(report.getManagersName());
-		
-		ccTextView = (TextView)findViewById(R.id.ccTextView);
-		ccTextView.setText(report.getCCsName());
-		
-		adapter = new ReportItemListViewAdapter(EditReportActivity.this, itemList);
-		itemListView = (ListView)findViewById(R.id.itemListView);
-		itemListView.setAdapter(adapter);
-		itemListView.setOnItemClickListener(new OnItemClickListener()
+		adapter = new ReportEditListViewAdapter(EditReportActivity.this, report, itemList);
+		ListView detailListView = (ListView)findViewById(R.id.detailListView);
+		detailListView.setAdapter(adapter);
+		detailListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
@@ -245,10 +245,7 @@ public class EditReportActivity extends Activity
 				}
 			}
 		});
-		if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECTED)
-		{
-			registerForContextMenu(itemListView);			
-		}
+		registerForContextMenu(detailListView);
 	}
 	
 	private void initButton()
@@ -332,34 +329,13 @@ public class EditReportActivity extends Activity
 		{
 			addButton.setVisibility(View.GONE);
 		}
-		
-		Button saveButton = (Button)findViewById(R.id.saveButton);
-		saveButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				saveReport("报告保存成功");
-			}
-		});
-		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
-		{
-			saveButton.setEnabled(false);
-		}
-		
-		Button cancelButton = (Button)findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				finish();
-			}
-		});
 	}
 	
 	private void refreshView()
 	{
-		adapter.set(itemList);
+		ReimApplication.setProgressDialog(this);
+		
+		adapter.setItemList(itemList);
 		adapter.notifyDataSetChanged();
 		
 		if (report.getServerID() != -1 && Utils.isNetworkConnected())
@@ -453,7 +429,8 @@ public class EditReportActivity extends Activity
 										}
 
 										report.setManagerList(managerList);
-										managerTextView.setText(report.getManagersName());
+										adapter.setReport(report);
+										adapter.notifyDataSetChanged();
 									}
 								})
 								.setNegativeButton(R.string.cancel, null)
@@ -499,7 +476,8 @@ public class EditReportActivity extends Activity
 										}
 										
 										report.setCCList(ccList);
-										ccTextView.setText(report.getCCsName());
+										adapter.setReport(report);
+										adapter.notifyDataSetChanged();
 									}
 								})
 								.setNegativeButton(R.string.cancel, null)

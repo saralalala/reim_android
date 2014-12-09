@@ -8,6 +8,8 @@ import classes.Utils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -22,7 +24,9 @@ public class ReportItemListViewAdapter extends BaseAdapter
 {
 	private Context context;
 	private LayoutInflater layoutInflater;
+	
 	private List<Item> itemList;
+	
 	private int screenWidth;
 	private int interval;
 	private int padding;
@@ -32,8 +36,9 @@ public class ReportItemListViewAdapter extends BaseAdapter
 	public ReportItemListViewAdapter(Context context, List<Item> items)
 	{
 		this.context = context;
-		this.itemList = new ArrayList<Item>(items);
 		this.layoutInflater = LayoutInflater.from(context);
+		
+		this.itemList = new ArrayList<Item>(items);
 		
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		
@@ -47,7 +52,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
 	{
 		if (convertView == null)
 		{
-			convertView = layoutInflater.inflate(R.layout.list_report_item, parent, false);
+			convertView = layoutInflater.inflate(R.layout.list_report_item_show, parent, false);
 		}
 		
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
@@ -60,12 +65,16 @@ public class ReportItemListViewAdapter extends BaseAdapter
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-		String vendor = item.getMerchant().equals("") ? "N/A" : item.getMerchant();
+		String vendor = item.getMerchant().equals("") ? context.getString(R.string.notAvailable) : item.getMerchant();
 		vendorTextView.setText(vendor);
 		
 		// category 和 tag 一共iconCount个
-		categoryImageView.setImageResource(R.drawable.food);
-
+		Bitmap bitmap = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+		if (bitmap != null)
+		{
+			categoryImageView.setImageBitmap(bitmap);				
+		}
+		
 		iconLayout.removeAllViews();
 		
 		amountTextView.measure(0,0);
@@ -76,7 +85,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
 		for (int i = 0; i < iconCount; i++)
 		{
 			ImageView iconImageView = new ImageView(context);
-			iconImageView.setImageResource(R.drawable.category_logo);
+			iconImageView.setImageResource(R.drawable.food);
 			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
 			params.rightMargin = interval;
 			iconLayout.addView(iconImageView, params);
@@ -94,7 +103,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
 
 	public Item getItem(int position)
 	{
-		return itemList.get(position);
+		return null;
 	}
 
 	public long getItemId(int position)

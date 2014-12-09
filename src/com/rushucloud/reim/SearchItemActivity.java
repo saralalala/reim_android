@@ -76,7 +76,7 @@ public class SearchItemActivity extends Activity
 		MenuItem menuItem = menu.getItem(0);
 		menuItem.expandActionView();
 		searchView = (SearchView)MenuItemCompat.getActionView(menuItem);
-		searchView.setQueryHint(getString(R.string.inputKeyword));
+		searchView.setQueryHint(getString(R.string.input_keyword));
 		searchView.setOnQueryTextListener(new OnQueryTextListener()
 		{
 			public boolean onQueryTextSubmit(String query)

@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/categoryManagement"
+            android:text="@string/category_management"
             android:textColor="@color/major_light"
             android:textSize="20sp" />
 
@@ -54,6 +54,6 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/titleLayout"
         android:gravity="center"
-        android:text="@string/noCategories" />
+        android:text="@string/no_categories" />
 
 </RelativeLayout>

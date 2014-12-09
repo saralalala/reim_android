@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/personalCenter"
+        android:text="@string/personal_center"
         android:textSize="20sp"
         android:textColor="@color/major_light" />
 
@@ -104,7 +104,7 @@
 				    android:layout_alignParentRight="true"
 				    android:layout_centerVertical="true"
 				    android:layout_marginRight="10dp"
-				    android:contentDescription="@string/nullString"
+				    android:contentDescription="@string/next"
 				    android:src="@drawable/next" />
             
 	            <include                 
@@ -134,7 +134,7 @@
 				    android:layout_centerVertical="true"
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
-				    android:text="@string/defaultManager"
+				    android:text="@string/default_manager"
 				    android:textSize="16sp"
 				    android:textColor="@color/font_major_dark" />
 				
@@ -144,7 +144,7 @@
 				    android:layout_alignParentRight="true"
 				    android:layout_centerVertical="true"
 				    android:layout_marginRight="10dp"
-				    android:contentDescription="@string/nullString"
+				    android:contentDescription="@string/next"
 				    android:src="@drawable/next" />
 				
 			</RelativeLayout>
@@ -191,7 +191,7 @@
 				    android:layout_centerVertical="true"
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
-				    android:text="@string/myInvites"
+				    android:text="@string/my_invites"
 				    android:textSize="16sp"
 				    android:textColor="@color/font_major_dark" />
 				
@@ -201,7 +201,7 @@
 				    android:layout_alignParentRight="true"
 				    android:layout_centerVertical="true"
 				    android:layout_marginRight="10dp"
-				    android:contentDescription="@string/nullString"
+				    android:contentDescription="@string/next"
 				    android:src="@drawable/next" />
 				
 			</RelativeLayout>
@@ -224,7 +224,7 @@
 				    android:layout_centerVertical="true"
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
-				    android:text="@string/getInvoice"
+				    android:text="@string/get_invoice"
 				    android:textSize="16sp"
 				    android:textColor="@color/font_major_dark" />
 				
@@ -264,7 +264,7 @@
 				    android:layout_alignParentRight="true"
 				    android:layout_centerVertical="true"
 				    android:layout_marginRight="10dp"
-				    android:contentDescription="@string/nullString"
+				    android:contentDescription="@string/next"
 				    android:src="@drawable/next" />
 				
 			</RelativeLayout>
@@ -287,7 +287,7 @@
 				    android:layout_centerVertical="true"
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
-				    android:text="@string/customService"
+				    android:text="@string/custom_service"
 				    android:textSize="16sp"
 				    android:textColor="@color/font_major_dark" />
 				

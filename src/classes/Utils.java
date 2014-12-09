@@ -367,6 +367,18 @@ public class Utils
     	Toast.makeText(context, resID, Toast.LENGTH_SHORT).show();
     }
 
+    public static int[] getReportStatusBackground()
+    {
+		int[] statusBackground = new int[5];
+		statusBackground[0] = R.drawable.report_status_draft;
+		statusBackground[1] = R.drawable.report_status_submitted;
+		statusBackground[2] = R.drawable.report_status_approved;
+		statusBackground[3] = R.drawable.report_status_rejected;
+		statusBackground[4] = R.drawable.report_status_finished;
+		
+		return statusBackground;
+    }
+    
 	public static PopupWindow constructPopupWindow(final Activity activity, View view)
 	{
 		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);

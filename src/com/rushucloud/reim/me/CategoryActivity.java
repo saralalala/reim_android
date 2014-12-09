@@ -121,7 +121,7 @@ public class CategoryActivity extends Activity
 				{
 					Builder builder = new Builder(CategoryActivity.this);
 					builder.setTitle(R.string.warning);
-					builder.setMessage(R.string.deleteItemWarning);
+					builder.setMessage(R.string.delete_item_warning);
 					builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
 												{
 													public void onClick(DialogInterface dialog, int which)

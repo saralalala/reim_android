@@ -27,7 +27,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/pivotView"
             android:layout_marginRight="13dp"
-            android:text="@string/myReport"
+            android:text="@string/my_report"
             android:textSize="20sp"
             android:textColor="@color/major_light" />
 
@@ -44,7 +44,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/pivotView"
             android:layout_marginLeft="13dp"
-            android:text="@string/othersReport"
+            android:text="@string/others_report"
             android:textSize="20sp"
             android:textColor="@color/hint_white" />
 

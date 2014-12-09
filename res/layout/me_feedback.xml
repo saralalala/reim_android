@@ -52,7 +52,7 @@
                 android:layout_gravity="center"
                 android:background="@null"
                 android:gravity="top"
-                android:hint="@string/inputFeedback"
+                android:hint="@string/input_feedback"
                 android:inputType="textMultiLine" 
                 android:minLines="8"/>
 
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:hint="@string/inputContactInfo"
+        android:hint="@string/input_contact_info"
         android:inputType="text" />
 
     <Button

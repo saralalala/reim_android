@@ -25,8 +25,8 @@ public class CommentListViewAdapter extends BaseAdapter
 	
 	public CommentListViewAdapter(Context context, List<Comment> comments)
 	{
-		layoutInflater = LayoutInflater.from(context);
-		commentList = new ArrayList<Comment>(comments);
+		this.layoutInflater = LayoutInflater.from(context);
+		this.commentList = new ArrayList<Comment>(comments);
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)

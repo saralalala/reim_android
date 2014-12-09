@@ -232,7 +232,7 @@ public class EditItemActivity extends Activity
 		
 		vendorList = new ArrayList<String>();
 		
-		locationInvalid = getString(R.string.locationInvalid);
+		locationInvalid = getString(R.string.location_invalid);
 
 		int currentGroupID = appPreference.getCurrentGroupID();
 		categoryList = dbManager.getGroupCategories(currentGroupID);
@@ -307,14 +307,14 @@ public class EditItemActivity extends Activity
 						AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
 											.setTitle("请选择操作")
 											.setMessage("这是一条预审批的条目，您是想仅保存此条目还是要直接发送给上级审批？")
-											.setPositiveButton(R.string.onlySave, new DialogInterface.OnClickListener()
+											.setPositiveButton(R.string.only_save, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
 													saveItem();												
 												}
 											})
-											.setNeutralButton(R.string.sendToApprove, new DialogInterface.OnClickListener()
+											.setNeutralButton(R.string.send_to_approve, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
@@ -395,10 +395,10 @@ public class EditItemActivity extends Activity
 		}
 		
 		// init type
-		String temp = item.isProveAhead() ? getString(R.string.proveAhead) : getString(R.string.consumed);
+		String temp = item.isProveAhead() ? getString(R.string.prove_ahead) : getString(R.string.consumed);
 		if (item.needReimbursed())
 		{
-			temp += "/" + getString(R.string.needReimburse);
+			temp += "/" + getString(R.string.need_reimburse);
 		}
 		
 		typeTextView = (TextView)findViewById(R.id.typeTextView);
@@ -462,10 +462,10 @@ public class EditItemActivity extends Activity
 				item.setNeedReimbursed(needReimToggleButton.isChecked());
 				typePopupWindow.dismiss();
 				
-				String temp = item.isProveAhead() ? getString(R.string.proveAhead) : getString(R.string.consumed);
+				String temp = item.isProveAhead() ? getString(R.string.prove_ahead) : getString(R.string.consumed);
 				if (item.needReimbursed())
 				{
-					temp += "/" + getString(R.string.needReimburse);
+					temp += "/" + getString(R.string.need_reimburse);
 				}
 				typeTextView.setText(temp);
 			}
@@ -722,7 +722,7 @@ public class EditItemActivity extends Activity
 		});
     	
 		Builder builder = new Builder(EditItemActivity.this);
-		builder.setTitle(R.string.chooseLocation);
+		builder.setTitle(R.string.choose_location);
 		builder.setView(locationView);
 		builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
 									{
@@ -1151,7 +1151,7 @@ public class EditItemActivity extends Activity
 		}
 		String[] vendors = vendorList.toArray(new String[vendorList.size()]);
 		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-											.setTitle(R.string.chooseVendor)
+											.setTitle(R.string.choose_vendor)
 											.setSingleChoiceItems(vendors, index, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
@@ -1200,7 +1200,7 @@ public class EditItemActivity extends Activity
 		});
 
     	AlertDialog mDialog = new AlertDialog.Builder(this)
-    							.setTitle("请选择汇报对象")
+    							.setTitle(R.string.choose_category)
     							.setView(view)
     							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 								{
@@ -1259,7 +1259,7 @@ public class EditItemActivity extends Activity
 		});
 
     	AlertDialog mDialog = new AlertDialog.Builder(this)
-    							.setTitle("请选择汇报对象")
+    							.setTitle(R.string.choose_tag)
     							.setView(view)
     							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 								{
@@ -1312,7 +1312,7 @@ public class EditItemActivity extends Activity
 		});
 
     	AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-    							.setTitle(R.string.member)
+    							.setTitle(R.string.choose_member)
     							.setView(view)
     							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 								{
@@ -1355,7 +1355,7 @@ public class EditItemActivity extends Activity
 		});
 
     	AlertDialog mDialog = new AlertDialog.Builder(this)
-    							.setTitle("请选择汇报对象")
+    							.setTitle(R.string.choose_manager)
     							.setView(view)
     							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 								{
@@ -1379,7 +1379,7 @@ public class EditItemActivity extends Activity
 											report = new Report();
 									    	report.setTitle("预审批的报告");
 									    	report.setStatus(Report.STATUS_SUBMITTED);
-									    	report.setUser(appPreference.getCurrentUser());
+									    	report.setSender(appPreference.getCurrentUser());
 									    	report.setCreatedDate(Utils.getCurrentTime());									    	
 											report.setManagerList(managerList);
 									    	dbManager.insertReport(report);

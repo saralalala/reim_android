@@ -18,7 +18,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="72dp"
-        android:contentDescription="@string/nullString"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/start_icon" />
 
     <Button
@@ -31,7 +31,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"        
         android:background="@drawable/button_long_light_solid_drawable"
-        android:text="@string/signUp"
+        android:text="@string/sign_up"
         android:textColor="@color/button_text_dark_color"
         android:textSize="20sp" />
 
@@ -44,7 +44,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="36dp"
         android:background="@drawable/button_long_light_border_drawable"
-        android:text="@string/signIn"
+        android:text="@string/sign_in"
         android:textColor="@color/button_text_light_color"
         android:textSize="20sp" />
 

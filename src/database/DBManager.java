@@ -1483,7 +1483,7 @@ public class DBManager extends SQLiteOpenHelper
 							   							"server_updatedt, local_updatedt) VALUES (" + 
 														"'" + report.getServerID() + "'," +
 														"'" + report.getTitle() + "'," +
-														"'" + report.getUser().getServerID() + "'," +
+														"'" + report.getSender().getServerID() + "'," +
 														"'" + report.getStatus() + "'," +
 														"'" + User.getUsersIDString(report.getManagerList()) + "'," +
 														"'" + User.getUsersIDString(report.getCCList()) + "'," +
@@ -1509,7 +1509,7 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + report.getServerID() + "'," +
 								"'" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
 								"'" + report.getTitle() + "'," +
-								"'" + report.getUser().getServerID() + "'," +
+								"'" + report.getSender().getServerID() + "'," +
 								"'" + report.getStatus() + "'," +
 								"'" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"'" + User.getUsersIDString(report.getCCList()) + "'," +
@@ -1535,7 +1535,7 @@ public class DBManager extends SQLiteOpenHelper
 			String sqlString = "UPDATE tbl_report SET " +
 								"server_id = '" + report.getServerID() + "'," +
 								"title = '" + report.getTitle() + "'," +
-								"user_id = '" + report.getUser().getServerID() + "'," +
+								"user_id = '" + report.getSender().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
 								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
@@ -1560,7 +1560,7 @@ public class DBManager extends SQLiteOpenHelper
 			String sqlString = "UPDATE tbl_report SET " +
 								"server_id = '" + report.getServerID() + "'," +
 								"title = '" + report.getTitle() + "'," +
-								"user_id = '" + report.getUser().getServerID() + "'," +
+								"user_id = '" + report.getSender().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
 								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
@@ -1656,7 +1656,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setLocalID(getIntFromCursor(cursor, "id"));
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
-				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
+				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
@@ -1692,7 +1692,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setLocalID(getIntFromCursor(cursor, "id"));
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
-				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
+				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
@@ -1728,7 +1728,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setLocalID(getIntFromCursor(cursor, "id"));
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
-				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
+				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
@@ -1841,7 +1841,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setLocalID(getIntFromCursor(cursor, "id"));
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
-				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
+				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
@@ -1902,7 +1902,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setLocalID(getIntFromCursor(cursor, "id"));
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
-				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
+				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
@@ -1936,7 +1936,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setLocalID(getIntFromCursor(cursor, "id"));
 				report.setServerID(getIntFromCursor(cursor, "server_id"));
 				report.setTitle(getStringFromCursor(cursor, "title"));
-				report.setUser(getUser(getIntFromCursor(cursor, "user_id")));
+				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));

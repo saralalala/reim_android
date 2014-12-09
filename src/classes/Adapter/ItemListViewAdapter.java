@@ -12,6 +12,8 @@ import classes.Utils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -38,15 +40,16 @@ public class ItemListViewAdapter extends BaseAdapter
 	public ItemListViewAdapter(Context context, List<Item> items)
 	{
 		this.context = context;
-		this.itemList = new ArrayList<Item>(items);
 		this.layoutInflater = LayoutInflater.from(context);
+		
+		this.itemList = new ArrayList<Item>(items);
 		
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 
 		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-		interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
-		sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);	
-		iconCount = (metrics.widthPixels - padding * 2 + interval) / (sideLength + interval);
+		this.interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
+		this.sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);	
+		this.iconCount = (metrics.widthPixels - padding * 2 + interval) / (sideLength + interval);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -93,14 +96,18 @@ public class ItemListViewAdapter extends BaseAdapter
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-		String vendor = item.getMerchant().equals("") ? "N/A" : item.getMerchant();
+		String vendor = item.getMerchant().equals("") ? context.getString(R.string.notAvailable) : item.getMerchant();
 		vendorTextView.setText(vendor);
 		
-		String reportTitle = item.getBelongReport() == null ? "N/A" : item.getBelongReport().getTitle();
+		String reportTitle = item.getBelongReport() == null ? context.getString(R.string.notAvailable) : item.getBelongReport().getTitle();
 		reportTextView.setText(reportTitle);
 		
 		// category 和 tag 一共iconCount个
-		categoryImageView.setImageResource(R.drawable.food);
+		Bitmap bitmap = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+		if (bitmap != null)
+		{
+			categoryImageView.setImageBitmap(bitmap);				
+		}
 
 		iconLayout.removeAllViews();
 		
@@ -108,7 +115,7 @@ public class ItemListViewAdapter extends BaseAdapter
 		for (int i = 0; i < iconCount; i++)
 		{
 			ImageView iconImageView = new ImageView(context);
-			iconImageView.setImageResource(R.drawable.category_logo);
+			iconImageView.setImageResource(R.drawable.food);
 			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
 			params.rightMargin = interval;
 			iconLayout.addView(iconImageView, params);
