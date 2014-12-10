@@ -250,9 +250,9 @@ public class Utils
 		return i > 0 ? true : false;
 	}
 
-	public static int booleanToString(boolean b)
+	public static String booleanToString(boolean b)
 	{
-		return b ? 1 : 0;
+		return b ? "1" : "0";
 	}
 
     public static List<Integer> stringToIntList(String idString)

@@ -28,6 +28,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
 	private LayoutInflater layoutInflater;
 	
 	private List<Item> itemList;
+	private boolean[] check;
 	
 	private int screenWidth;
 	private int interval;
@@ -35,19 +36,20 @@ public class ReportItemListViewAdapter extends BaseAdapter
 	private int sideLength;
 	private int iconCount;
 
-	public ReportItemListViewAdapter(Context context, List<Item> items)
+	public ReportItemListViewAdapter(Context context, List<Item> items, boolean[] checkList)
 	{
 		this.context = context;
 		this.layoutInflater = LayoutInflater.from(context);
 		
 		this.itemList = new ArrayList<Item>(items);
+		this.check = checkList;
 		
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		
-		screenWidth = metrics.widthPixels;
-		padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-		interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
-		sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		this.screenWidth = metrics.widthPixels;
+		this.padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		this.interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
+		this.sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -55,6 +57,12 @@ public class ReportItemListViewAdapter extends BaseAdapter
 		if (convertView == null)
 		{
 			convertView = layoutInflater.inflate(R.layout.list_report_item_edit, parent, false);
+		}
+		
+		if (check != null)
+		{
+			int color = check[position] ? R.color.list_item_selected : R.color.list_item_unselected;
+			convertView.setBackgroundResource(color);
 		}
 		
 		TextView amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
@@ -122,9 +130,16 @@ public class ReportItemListViewAdapter extends BaseAdapter
 		return position;
 	}
 	
-	public void set(List<Item> items)
+	public void set(List<Item> items, boolean[] checkList)
 	{
 		itemList.clear();
 		itemList.addAll(items);
+		
+		check = checkList;
+	}
+	
+	public void setSelection(int position)
+	{
+		check[position] = !check[position];
 	}
 }

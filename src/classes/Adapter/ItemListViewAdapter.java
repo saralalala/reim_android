@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import classes.Category;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Tag;
@@ -103,10 +104,14 @@ public class ItemListViewAdapter extends BaseAdapter
 		reportTextView.setText(reportTitle);
 		
 		// category 和 tag 一共iconCount个
-		Bitmap bitmap = BitmapFactory.decodeFile(item.getCategory().getIconPath());
-		if (bitmap != null)
+		Category category = item.getCategory();
+		if (category != null)
 		{
-			categoryImageView.setImageBitmap(bitmap);				
+			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
+			if (bitmap != null)
+			{
+				categoryImageView.setImageBitmap(bitmap);				
+			}
 		}
 
 		iconLayout.removeAllViews();

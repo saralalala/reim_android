@@ -24,14 +24,10 @@ import classes.Report;
 import classes.User;
 import classes.Utils;
 import classes.Adapter.MemberListViewAdapter;
-import classes.Adapter.ReportItemListViewAdapter;
-
 import com.rushucloud.reim.R;
-import com.tencent.a.b.l;
 import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
-import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -40,16 +36,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
@@ -62,10 +51,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class EditReportActivity extends Activity
@@ -87,7 +74,6 @@ public class EditReportActivity extends Activity
 	private Report report;
 	private List<Item> itemList = null;
 	private ArrayList<Integer> chosenItemIDList = null;
-	private ArrayList<Integer> remainingItemIDList = null;
 	
 	private List<User> userList;
 	private User currentUser;
@@ -144,7 +130,6 @@ public class EditReportActivity extends Activity
 			report = new Report();
 			report.setSender(appPreference.getCurrentUser());
 			chosenItemIDList = new ArrayList<Integer>();
-			remainingItemIDList = Item.getItemsIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
 			itemList = new ArrayList<Item>();
 		}
 		else
@@ -156,12 +141,10 @@ public class EditReportActivity extends Activity
 				// edit report from ReportFragment
 				itemList = dbManager.getReportItems(report.getLocalID());
 				chosenItemIDList = Item.getItemsIDArray(itemList);
-				remainingItemIDList = Item.getItemsIDArray(dbManager.getUnarchivedUserItems(appPreference.getCurrentUserID()));
 			}
 			else
 			{
 				// edit report from UnarchivedActivity
-				remainingItemIDList = bundle.getIntegerArrayList("remainingItemIDList");	
 				itemList = dbManager.getItems(chosenItemIDList);
 			}
 		}
@@ -228,28 +211,15 @@ public class EditReportActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				if (remainingItemIDList.size() == 0)
-				{
-					AlertDialog alertDialog = new AlertDialog.Builder(EditReportActivity.this)
-												.setTitle("提示")
-												.setMessage("所有条目均已被添加到各个报告中")
-												.setNegativeButton(R.string.confirm, null)
-												.create();
-					alertDialog.show();
-				}
-				else
-				{
-					report.setTitle(titleEditText.getText().toString());
-					
-					Bundle bundle = new Bundle();
-					bundle.putSerializable("report", report);
-					bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
-					bundle.putIntegerArrayList("remainingItemIDList", remainingItemIDList);
-					Intent intent = new Intent(EditReportActivity.this, UnarchivedItemsActivity.class);
-					intent.putExtras(bundle);
-					startActivity(intent);
-					finish();					
-				}
+				report.setTitle(titleEditText.getText().toString());
+				
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("report", report);
+				bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
+				Intent intent = new Intent(EditReportActivity.this, UnarchivedItemsActivity.class);
+				intent.putExtras(bundle);
+				startActivity(intent);
+				finish();
 			}
 		});
 		
@@ -350,8 +320,6 @@ public class EditReportActivity extends Activity
 				}
 			});
 			
-			itemLayout.addView(view);
-			
 			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
 			TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
 			LinearLayout iconLayout = (LinearLayout) view.findViewById(R.id.iconLayout);
@@ -383,12 +351,11 @@ public class EditReportActivity extends Activity
 			
 			// category 和 tag 一共iconCount个
 
-			DisplayMetrics metrics = getResources().getDisplayMetrics();
-			
-			int screenWidth = metrics.widthPixels;
-			int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, metrics);
-			int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
-			int sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+//			DisplayMetrics metrics = getResources().getDisplayMetrics();
+//			int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, metrics);
+//			int screenWidth = metrics.widthPixels;
+//			int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
+//			int sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
 			
 //			int iconCount = (screenWidth - amountTextView.getMeasuredWidth() - padding * 3 + interval) / (sideLength + interval);
 //			iconCount = 1;
@@ -402,13 +369,9 @@ public class EditReportActivity extends Activity
 //			}
 
 			iconLayout.addView(categoryImageView);
-
-			LayoutParams dividerParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			View divider = inflater.inflate(R.layout.list_report_item_edit, null);
-			dividerParams.leftMargin = padding;
-			dividerParams.rightMargin = padding;
-			itemLayout.addView(divider, dividerParams);
 			
+			itemLayout.addView(view);
+
 			amount += item.getAmount();
 		}
 		amountTextView.setText(Utils.formatDouble(amount));
@@ -439,8 +402,7 @@ public class EditReportActivity extends Activity
     		{
     			public void onClick(View v)
     			{
-    				int id = chosenItemIDList.remove(itemIndex);
-    				remainingItemIDList.add(id);
+    				chosenItemIDList.remove(itemIndex);
     				itemList.remove(itemIndex);
     				
     				deletePopupWindow.dismiss();

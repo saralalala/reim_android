@@ -149,7 +149,7 @@ public class Category
 		boolean[] check = new boolean[categoryList.size()];
 		for (int i = 0; i < categoryList.size(); i++)
 		{
-			check[i] = category != null &&  category.getServerID() == categoryList.get(i).getServerID();
+			check[i] = category != null && category.getServerID() == categoryList.get(i).getServerID();
 		}
 		return check;
 	}

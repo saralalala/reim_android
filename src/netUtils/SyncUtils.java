@@ -299,7 +299,7 @@ public abstract class SyncUtils
     private static void sendCreateReportRequest(final Report report, final SyncDataCallback callback)
     {
     	System.out.println("create report：local id " + report.getLocalID());
-    	CreateReportRequest request = new CreateReportRequest(report, false);
+    	CreateReportRequest request = new CreateReportRequest(report);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

@@ -228,30 +228,31 @@ public class User implements Serializable
 	
 	public static boolean[] getUsersCheck(List<User> allUsers, List<User> targetUsers)
 	{		
-		if (allUsers == null)
+		if (allUsers == null || allUsers.size() == 0)
 		{
 			return null;
 		}
 		
 		boolean[] check = new boolean[allUsers.size()];
-		for (int i = 0; i < check.length; i++)
-		{
-			check[i] = false;
-		}
-		
 		if (targetUsers == null)
 		{
+			for (int i = 0; i < check.length; i++)
+			{
+				check[i] = false;
+			}
 			return check;
 		}
 		
 		for (int i = 0; i < allUsers.size(); i++)
 		{
+			check[i] = false;
 			User user = allUsers.get(i);
 			for (int j = 0; j < targetUsers.size(); j++)
 			{
 				if (user.getServerID() == targetUsers.get(j).getServerID())
 				{
 					check[i] = true;
+					break;
 				}
 			}
 		}

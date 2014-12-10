@@ -5,39 +5,91 @@
     android:orientation="vertical" 
     android:background="@color/background" >
 
+    <RelativeLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/consumedTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/pivotView"
+            android:layout_marginRight="13dp"
+            android:text="@string/consumed"
+            android:textSize="20sp"
+            android:textColor="@color/major_light" />
+
+        <View
+            android:id="@+id/pivotView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:id="@+id/proveAheadTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/pivotView"
+            android:layout_marginLeft="13dp"
+            android:text="@string/prove_ahead"
+            android:textSize="20sp"
+            android:textColor="@color/hint_white" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:gravity="right|bottom" >
+
+	        <TextView
+	            android:id="@+id/itemCountTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textColor="@color/major_light"
+	            android:textSize="16sp" />
+	
+	        <TextView
+	            android:id="@+id/confirmTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/confirm"
+	            android:textSize="16sp"
+	            android:textColor="@color/major_light" />
+        
+        </LinearLayout>
+
+    </RelativeLayout>
+
     <ListView
         android:id="@+id/itemListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonLayout"
-        android:layout_alignParentTop="true"
-        android:cacheColorHint="#00000000" >
+        android:layout_below="@+id/titleLayout"
+        android:divider="@null"
+        android:cacheColorHint="#00000000" />
 
-    </ListView>
-
-    <LinearLayout
-        android:id="@+id/buttonLayout"
-        style="?android:attr/buttonBarStyle"
+    <TextView
+        android:id="@+id/warningTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" >
-
-        <Button
-            android:id="@+id/cancelButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/cancel" />
-
-        <Button
-            android:id="@+id/confirmButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/confirm" />
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titleLayout"
+        android:gravity="center"
+        android:text="@string/no_unarchived_items" />
 
 </RelativeLayout>

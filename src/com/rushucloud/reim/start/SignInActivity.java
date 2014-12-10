@@ -100,7 +100,6 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		usernameEditText.setText("a@a.com");
 		passwordEditText.setText("111111");
 
-
 		final Button signInButton = (Button)findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()
 		{

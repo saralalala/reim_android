@@ -33,6 +33,7 @@ public class Report implements Serializable
 	private List<User> ccList = null;
 	private List<Comment> commentList = null;
 	private User sender = null;
+	private boolean isProveAhead = false;
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
@@ -159,6 +160,15 @@ public class Report implements Serializable
 		this.sender = sender;
 	}
 
+	public boolean isProveAhead()
+	{
+		return isProveAhead;
+	}
+	public void setIsProveAhead(boolean isProveAhead)
+	{
+		this.isProveAhead = isProveAhead;
+	}
+	
 	public int getCreatedDate()
 	{
 		return createdDate;

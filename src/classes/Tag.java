@@ -109,32 +109,33 @@ public class Tag
 		this.localUpdatedDate = localUpdatedDate;
 	}
 
-	public static boolean[] getTagsCheck(List<Tag> tagList, List<Tag> currentTags)
+	public static boolean[] getTagsCheck(List<Tag> allTags, List<Tag> targetTags)
 	{
-		if (tagList == null)
+		if (allTags == null || allTags.size() == 0)
 		{
 			return null;
 		}
 		
-		boolean[] check = new boolean[tagList.size()];
-		if (currentTags == null)
+		boolean[] check = new boolean[allTags.size()];
+		if (targetTags == null)
 		{
-			for (int i = 0; i < tagList.size(); i++)
+			for (int i = 0; i < allTags.size(); i++)
 			{
 				check[i] = false;
 			}
 			return check;
 		}
 		
-		for (int i = 0; i < tagList.size(); i++)
+		for (int i = 0; i < allTags.size(); i++)
 		{
 			check[i] = false;
-			Tag tag = tagList.get(i);
-			for (int j = 0; j < currentTags.size(); j++)
+			Tag tag = allTags.get(i);
+			for (int j = 0; j < targetTags.size(); j++)
 			{
-				if (tag.getServerID() == currentTags.get(j).getServerID())
+				if (tag.getServerID() == targetTags.get(j).getServerID())
 				{
 					check[i] = true;
+					break;
 				}
 			}
 		}

@@ -365,7 +365,6 @@ public class EditItemActivity extends Activity
 		ImageView approvedImageView = (ImageView)findViewById(R.id.approvedImageView);
 
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
-		amountEditText.setText(Utils.formatDouble(item.getAmount()));
 		amountEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
 		amountEditText.setOnFocusChangeListener(new OnFocusChangeListener()
 		{
@@ -381,6 +380,10 @@ public class EditItemActivity extends Activity
 		if (item.getAmount() == 0)
 		{
 			amountEditText.requestFocus();
+		}
+		else
+		{
+			amountEditText.setText(Utils.formatDouble(item.getAmount()));
 		}
 		
 		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
@@ -1382,6 +1385,7 @@ public class EditItemActivity extends Activity
 									    	report.setSender(appPreference.getCurrentUser());
 									    	report.setCreatedDate(Utils.getCurrentTime());									    	
 											report.setManagerList(managerList);
+											report.setIsProveAhead(true);
 									    	dbManager.insertReport(report);
 									    	report.setLocalID(dbManager.getLastInsertReportID());					
 
@@ -1647,7 +1651,7 @@ public class EditItemActivity extends Activity
     	item.setBelongReport(report);
     	dbManager.updateItemByServerID(item);   	
     	
-    	CreateReportRequest request = new CreateReportRequest(report, true);
+    	CreateReportRequest request = new CreateReportRequest(report);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

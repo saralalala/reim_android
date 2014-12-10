@@ -119,6 +119,7 @@
     <string name="choose_manager">选择经理</string>
     <string name="choose_cc">选择抄送</string>
     <string name="delete_report_warning">是否要删除此报告？</string>
+    <string name="no_unarchived_items">没有可使用的条目</string>
     <string name="submit">提交</string>
     <string name="approve">批准</string>
     <string name="reject">拒绝</string>
@@ -171,5 +172,8 @@
     <string name="xlistview_header_last_time">上次更新时间：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    
+    
+    <string name="versionControl">夏</string>
     
 </resources>

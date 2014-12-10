@@ -379,6 +379,39 @@ public class Item
 		return false;
 	}
 	
+	public static boolean[] getItemsCheck(List<Item> allItems, List<Item> targetItems)
+	{		
+		if (allItems == null || allItems.size() == 0)
+		{
+			return null;
+		}
+		
+		boolean[] check = new boolean[allItems.size()];		
+		if (targetItems == null)
+		{
+			for (int i = 0; i < check.length; i++)
+			{
+				check[i] = false;
+			}
+			return check;
+		}
+		
+		for (int i = 0; i < allItems.size(); i++)
+		{
+			check[i] = false;
+			Item item = allItems.get(i);
+			for (int j = 0; j < targetItems.size(); j++)
+			{
+				if (item.getLocalID() == targetItems.get(j).getLocalID())
+				{
+					check[i] = true;
+					break;
+				}
+			}
+		}
+		return check;
+	}
+
     public static void sortByConsumedDate(List<Item> itemList)
     {
     	Collections.sort(itemList, new Comparator<Item>()
