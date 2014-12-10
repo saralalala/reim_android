@@ -2,6 +2,8 @@ package classes.Adapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import classes.Category;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Utils;
@@ -52,13 +54,14 @@ public class ReportItemListViewAdapter extends BaseAdapter
 	{
 		if (convertView == null)
 		{
-			convertView = layoutInflater.inflate(R.layout.list_report_item_show, parent, false);
+			convertView = layoutInflater.inflate(R.layout.list_report_item_edit, parent, false);
 		}
 		
-		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
-		TextView vendorTextView = (TextView)convertView.findViewById(R.id.vendorTextView);
-		LinearLayout iconLayout = (LinearLayout)convertView.findViewById(R.id.iconLayout);
-		ImageView categoryImageView = (ImageView)convertView.findViewById(R.id.categoryImageView);
+		TextView amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
+		TextView vendorTextView = (TextView) convertView.findViewById(R.id.vendorTextView);
+		LinearLayout iconLayout = (LinearLayout) convertView.findViewById(R.id.iconLayout);
+		ImageView categoryImageView = (ImageView) convertView.findViewById(R.id.categoryImageView);
+		ImageView warningImageView = (ImageView) convertView.findViewById(R.id.warningImageView);
 		
 		Item item = this.getItem(position);
 
@@ -69,10 +72,18 @@ public class ReportItemListViewAdapter extends BaseAdapter
 		vendorTextView.setText(vendor);
 		
 		// category 和 tag 一共iconCount个
-		Bitmap bitmap = BitmapFactory.decodeFile(item.getCategory().getIconPath());
-		if (bitmap != null)
+		Category category = item.getCategory();
+		if (category == null)
 		{
-			categoryImageView.setImageBitmap(bitmap);				
+			warningImageView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
+			if (bitmap != null)
+			{
+				categoryImageView.setImageBitmap(bitmap);				
+			}					
 		}
 		
 		iconLayout.removeAllViews();
@@ -103,7 +114,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
 
 	public Item getItem(int position)
 	{
-		return null;
+		return itemList.get(position);
 	}
 
 	public long getItemId(int position)

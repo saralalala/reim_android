@@ -8,6 +8,8 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.rushucloud.reim.R;
+
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
@@ -201,25 +203,25 @@ public class Report implements Serializable
 	{
 		this.amount = amount;
 	}
-	
-	public String getStatusString()
-	{
-		switch (status)
+		
+	public int getStatusBackground()
+    {
+    	switch (getStatus())
 		{
 			case STATUS_DRAFT:
-				return "草稿";
+				return R.drawable.report_status_draft;
 			case STATUS_SUBMITTED:
-				return "已提交";
+				return R.drawable.report_status_submitted;
 			case STATUS_APPROVED:
-				return "审批通过";
+				return R.drawable.report_status_approved;
 			case STATUS_REJECTED:
-				return "审批未通过";
+				return R.drawable.report_status_rejected;
 			case STATUS_FINISHED:
-				return "报销完成";
+				return R.drawable.report_status_rejected;
 			default:
-				return "N/A";
-		}
-	}
+				return 0;
+		}		
+    }
 	
 	public boolean hasItems()
 	{
@@ -254,6 +256,25 @@ public class Report implements Serializable
 			}
 		}
 		return false;
+	}
+
+	public static String getStatusString(int status)
+	{
+		switch (status)
+		{
+			case STATUS_DRAFT:
+				return "草稿";
+			case STATUS_SUBMITTED:
+				return "提交";
+			case STATUS_APPROVED:
+				return "通过";
+			case STATUS_REJECTED:
+				return "退回";
+			case STATUS_FINISHED:
+				return "结束";
+			default:
+				return "N/A";
+		}
 	}
 	
     public static void sortByItemsCount(List<Report> reportList)

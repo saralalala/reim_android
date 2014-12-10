@@ -24,7 +24,6 @@ public class ReportListViewAdapter extends BaseAdapter
 	private LayoutInflater layoutInflater;
 	private List<Report> reportList;
 	private DBManager dbManager;
-	private int[] statusBackground;
 
 	public ReportListViewAdapter(Context context, List<Report> reports)
 	{
@@ -33,7 +32,6 @@ public class ReportListViewAdapter extends BaseAdapter
 		
 		this.reportList = new ArrayList<Report>(reports);
 		this.dbManager = DBManager.getDBManager();
-		this.statusBackground = Utils.getReportStatusBackground();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -58,7 +56,7 @@ public class ReportListViewAdapter extends BaseAdapter
 
 		if (report.getStatus() >= 0 && report.getStatus() <= 4)
 		{
-			statusImageView.setBackgroundResource(statusBackground[report.getStatus()]);
+			statusImageView.setImageResource(report.getStatusBackground());
 		}
 
 		double amount = dbManager.getReportAmount(report.getLocalID());

@@ -15,7 +15,7 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.ReportShowListViewAdapter;
+import classes.Adapter.ReportDetailListViewAdapter;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -39,7 +39,7 @@ public class ShowReportActivity extends Activity
 {
 	private DBManager dbManager;
 
-	private ReportShowListViewAdapter adapter;
+	private ReportDetailListViewAdapter adapter;
 	
 	private Report report;
 	private List<Item> itemList = null;
@@ -129,7 +129,7 @@ public class ShowReportActivity extends Activity
 			}
 		});
 		
-		adapter = new ReportShowListViewAdapter(ShowReportActivity.this, report, itemList);
+		adapter = new ReportDetailListViewAdapter(ShowReportActivity.this, report, itemList);
 		ListView detailListView = (ListView)findViewById(R.id.detailListView);
 		detailListView.setAdapter(adapter);
 		detailListView.setOnItemClickListener(new OnItemClickListener()
@@ -153,7 +153,6 @@ public class ShowReportActivity extends Activity
 			}
 		});
 		
-
 //		if (!Utils.isNetworkConnected())
 //		{
 //			Utils.showToast(ShowReportActivity.this, "网络未连接，无法添加");

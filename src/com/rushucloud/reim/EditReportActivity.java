@@ -16,6 +16,7 @@ import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
 import classes.AppPreference;
+import classes.Category;
 import classes.Comment;
 import classes.Item;
 import classes.ReimApplication;
@@ -23,30 +24,45 @@ import classes.Report;
 import classes.User;
 import classes.Utils;
 import classes.Adapter.MemberListViewAdapter;
-import classes.Adapter.ReportEditListViewAdapter;
 import classes.Adapter.ReportItemListViewAdapter;
 
 import com.rushucloud.reim.R;
+import com.tencent.a.b.l;
 import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -57,8 +73,16 @@ public class EditReportActivity extends Activity
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
-	private ReportEditListViewAdapter adapter;
+	private EditText titleEditText;
+	private TextView timeTextView;
+	private ImageView statusImageView;
+	private TextView managerTextView;
+	private TextView ccTextView;
+	private TextView amountTextView;
+	private TextView itemCountTextView;
+	private LinearLayout itemLayout;
 	private MemberListViewAdapter memberAdapter;
+	private PopupWindow deletePopupWindow;
 
 	private Report report;
 	private List<Item> itemList = null;
@@ -74,9 +98,7 @@ public class EditReportActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.report_edit);
-		initData();
 		initView();
-		initButton();
 	}
 	
 	protected void onResume()
@@ -103,67 +125,17 @@ public class EditReportActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.report_edit, menu);
-		return true;
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-		int id = item.getItemId();
-		if (id == R.id.action_submit_item)
-		{
-			MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
-			if (!Utils.isNetworkConnected())
-			{
-				Utils.showToast(this, "网络未连接，无法提交");
-			}
-			else if (report.getManagerList() == null || report.getManagerList().size() == 0)
-			{
-				Utils.showToast(EditReportActivity.this, "未选择汇报对象");
-			}
-			else
-			{
-				submitReport();
-			}
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle("选项");
-		menu.add(0, 0, 0, "删除");
-	}
-	
-	public boolean onContextItemSelected(MenuItem item)
-	{
-    	AdapterContextMenuInfo menuInfo=(AdapterContextMenuInfo)item.getMenuInfo();
-    	final int index = (int) adapter.getItemId(menuInfo.position);
-    	switch (item.getItemId()) 
-    	{
-			case 0:
-				int id = chosenItemIDList.remove(index);
-				remainingItemIDList.add(id);
-				itemList.remove(index);
-				adapter.setItemList(itemList);
-				adapter.notifyDataSetChanged();
-				break;
-			default:
-				break;
-		}    		
-		
-		return super.onContextItemSelected(item);
-	}
 	
 	private void initData()
 	{
-		appPreference = AppPreference.getAppPreference();
-		dbManager = DBManager.getDBManager();
+		if (appPreference == null)
+		{
+			appPreference = AppPreference.getAppPreference();
+		}
+		if (dbManager == null)
+		{
+			dbManager = DBManager.getDBManager();
+		}
 		
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle == null)
@@ -201,7 +173,7 @@ public class EditReportActivity extends Activity
 	}
 	
 	private void initView()
-	{		
+	{
 		getActionBar().hide();
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -223,71 +195,22 @@ public class EditReportActivity extends Activity
 			}
 		});
 		
-		adapter = new ReportEditListViewAdapter(EditReportActivity.this, report, itemList);
-		ListView detailListView = (ListView)findViewById(R.id.detailListView);
-		detailListView.setAdapter(adapter);
-		detailListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id)
-			{
-				if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
-				{
-					Intent intent = new Intent(EditReportActivity.this, ShowItemActivity.class);
-					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
-					startActivity(intent);	
-				}
-				else
-				{
-					Intent intent = new Intent(EditReportActivity.this, EditItemActivity.class);
-					intent.putExtra("itemLocalID", itemList.get(position).getLocalID());
-					startActivity(intent);					
-				}
-			}
-		});
-		registerForContextMenu(detailListView);
-	}
-	
-	private void initButton()
-	{
-		Button addCommentButton = (Button)findViewById(R.id.addCommentButton);
-		addCommentButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (!Utils.isNetworkConnected())
-				{
-					Utils.showToast(EditReportActivity.this, "网络未连接，无法添加评论");
-				}
-				else
-				{
-					showAddCommentDialog();
-				}
-			}
-		});
-
-		Button checkCommentButton = (Button)findViewById(R.id.checkCommentButton);
-		checkCommentButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				Intent intent = new Intent(EditReportActivity.this, CommentActivity.class);
-				intent.putExtra("reportLocalID", report.getLocalID());
-				startActivity(intent);
-			}
-		});
+		itemLayout = (LinearLayout) findViewById(R.id.itemLayout);
 		
-		Button managerButton = (Button)findViewById(R.id.managerButton);
-		managerButton.setOnClickListener(new View.OnClickListener()
+		titleEditText = (EditText) findViewById(R.id.titleEditText);
+		timeTextView = (TextView) findViewById(R.id.timeTextView);
+		statusImageView = (ImageView) findViewById(R.id.statusImageView);
+		
+		managerTextView = (TextView) findViewById(R.id.managerTextView);
+		managerTextView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
 				showManagerDialog();
 			}
 		});
-		
-		Button ccButton = (Button)findViewById(R.id.ccButton);
-		ccButton.setOnClickListener(new View.OnClickListener()
+		ccTextView = (TextView) findViewById(R.id.ccTextView);
+		ccTextView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -295,8 +218,12 @@ public class EditReportActivity extends Activity
 			}
 		});
 		
-		Button addButton = (Button)findViewById(R.id.addButton);
-		addButton.setOnClickListener(new View.OnClickListener()
+		amountTextView = (TextView) findViewById(R.id.amountTextView);
+		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		itemCountTextView = (TextView) findViewById(R.id.itemCountTextView);
+		
+		ImageView addImageView = (ImageView) findViewById(R.id.addImageView);
+		addImageView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -325,18 +252,166 @@ public class EditReportActivity extends Activity
 				}
 			}
 		});
-		if (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED)
+		
+		TextView submitTextView = (TextView) findViewById(R.id.submitTextView);
+		submitTextView.setOnClickListener(new OnClickListener()
 		{
-			addButton.setVisibility(View.GONE);
-		}
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
+				if (!Utils.isNetworkConnected())
+				{
+					Utils.showToast(EditReportActivity.this, "网络未连接，无法提交");
+				}
+				else if (report.getManagerList() == null || report.getManagerList().size() == 0)
+				{
+					Utils.showToast(EditReportActivity.this, "未选择汇报对象");
+				}
+				else
+				{
+					submitReport();
+				}
+			}
+		});
+		
+		Button addCommentButton = (Button)findViewById(R.id.addCommentButton);
+		addCommentButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (!Utils.isNetworkConnected())
+				{
+					Utils.showToast(EditReportActivity.this, "网络未连接，无法添加评论");
+				}
+				else
+				{
+					showAddCommentDialog();
+				}
+			}
+		});
+
+		Button checkCommentButton = (Button)findViewById(R.id.checkCommentButton);
+		checkCommentButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				Intent intent = new Intent(EditReportActivity.this, CommentActivity.class);
+				intent.putExtra("reportLocalID", report.getLocalID());
+				startActivity(intent);
+			}
+		});		
 	}
 	
 	private void refreshView()
 	{
-		ReimApplication.setProgressDialog(this);
+		ReimApplication.setProgressDialog(this);	
 		
-		adapter.setItemList(itemList);
-		adapter.notifyDataSetChanged();
+		titleEditText.setText(report.getTitle());
+		if (report.getTitle().equals(""))
+		{
+			titleEditText.requestFocus();
+		}
+		
+		String createDate = report.getCreatedDate() == -1 ? getString(R.string.notAvailable) : Utils.secondToStringUpToMinute(report.getCreatedDate());
+		timeTextView.setText(createDate);
+		
+		statusImageView.setImageResource(report.getStatusBackground());
+		
+		managerTextView.setText(report.getManagersName());		
+		ccTextView.setText(report.getCCsName());
+		
+		int itemCount = itemList.size();
+		itemCountTextView.setText(itemCount + getString(R.string.item_count));
+
+		itemLayout.removeAllViews();
+		
+		double amount = 0;
+		for (int i = 0; i < itemList.size(); i++)
+		{
+			LayoutInflater inflater = LayoutInflater.from(this);
+			final Item item = itemList.get(i);
+			final int itemIndex = i;
+			View view = inflater.inflate(R.layout.list_report_item_edit, null);
+			view.setOnClickListener(new OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					Intent intent = new Intent(EditReportActivity.this, EditItemActivity.class);
+					intent.putExtra("itemLocalID", item.getLocalID());
+					startActivity(intent);
+				}
+			});
+			view.setOnLongClickListener(new OnLongClickListener()
+			{
+				public boolean onLongClick(View v)
+				{
+					showDeleteDialog(itemIndex);
+					return false;
+				}
+			});
+			
+			itemLayout.addView(view);
+			
+			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+			TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
+			LinearLayout iconLayout = (LinearLayout) view.findViewById(R.id.iconLayout);
+			ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
+			ImageView warningImageView = (ImageView) view.findViewById(R.id.warningImageView);
+			
+			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+			amountTextView.setText(Utils.formatDouble(item.getAmount()));
+
+			String vendor = item.getMerchant().equals("") ? getString(R.string.notAvailable) : item.getMerchant();
+			vendorTextView.setText(vendor);
+			
+			// category 和 tag 一共iconCount个
+			Category category = item.getCategory();
+			if (category == null)
+			{
+				warningImageView.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
+				if (bitmap != null)
+				{
+					categoryImageView.setImageBitmap(bitmap);				
+				}					
+			}
+			
+			iconLayout.removeAllViews();
+			
+			// category 和 tag 一共iconCount个
+
+			DisplayMetrics metrics = getResources().getDisplayMetrics();
+			
+			int screenWidth = metrics.widthPixels;
+			int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, metrics);
+			int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
+			int sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+			
+//			int iconCount = (screenWidth - amountTextView.getMeasuredWidth() - padding * 3 + interval) / (sideLength + interval);
+//			iconCount = 1;
+//			for (int i = 0; i < iconCount; i++)
+//			{
+//				ImageView iconImageView = new ImageView(this);
+//				iconImageView.setImageResource(R.drawable.food);
+//				LayoutParams params = new LayoutParams(sideLength, sideLength);
+//				params.rightMargin = interval;
+//				iconLayout.addView(iconImageView, params);
+//			}
+
+			iconLayout.addView(categoryImageView);
+
+			LayoutParams dividerParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			View divider = inflater.inflate(R.layout.list_report_item_edit, null);
+			dividerParams.leftMargin = padding;
+			dividerParams.rightMargin = padding;
+			itemLayout.addView(divider, dividerParams);
+			
+			amount += item.getAmount();
+		}
+		amountTextView.setText(Utils.formatDouble(amount));
 		
 		if (report.getServerID() != -1 && Utils.isNetworkConnected())
 		{
@@ -350,6 +425,65 @@ public class EditReportActivity extends Activity
 		imm.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
     }
 
+    private void showDeleteDialog(final int itemIndex)
+    {	
+    	if (deletePopupWindow == null)
+		{
+    		final View deleteView = View.inflate(this, R.layout.window_delete, null); 
+
+    		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.window_button_unselected);
+    		final double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+    		
+    		final Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
+    		deleteButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				int id = chosenItemIDList.remove(itemIndex);
+    				remainingItemIDList.add(id);
+    				itemList.remove(itemIndex);
+    				
+    				deletePopupWindow.dismiss();
+    				refreshView();
+    			}
+    		});
+    		deleteButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+    		{
+    			public void onGlobalLayout()
+    			{
+    				ViewGroup.LayoutParams params = deleteButton.getLayoutParams();
+    				params.height = (int)(deleteButton.getWidth() * ratio);;
+    				deleteButton.setLayoutParams(params);
+    			}
+    		});
+    		
+    		final Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
+    		cancelButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				deletePopupWindow.dismiss();
+    			}
+    		});
+    		cancelButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+    		{
+    			public void onGlobalLayout()
+    			{
+    				ViewGroup.LayoutParams params = cancelButton.getLayoutParams();
+    				params.height = (int)(cancelButton.getWidth() * ratio);;
+    				cancelButton.setLayoutParams(params);
+    			}
+    		});
+    		
+    		deletePopupWindow = Utils.constructPopupWindow(this, deleteView);
+		}
+    	
+		deletePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		deletePopupWindow.update();
+		
+		Utils.dimBackground(this);
+    }
+    
     private void showAddCommentDialog()
     {
 		View view = View.inflate(this, R.layout.report_comment_dialog, null);
@@ -429,8 +563,7 @@ public class EditReportActivity extends Activity
 										}
 
 										report.setManagerList(managerList);
-										adapter.setReport(report);
-										adapter.notifyDataSetChanged();
+										managerTextView.setText(report.getManagersName());
 									}
 								})
 								.setNegativeButton(R.string.cancel, null)
@@ -476,8 +609,7 @@ public class EditReportActivity extends Activity
 										}
 										
 										report.setCCList(ccList);
-										adapter.setReport(report);
-										adapter.notifyDataSetChanged();
+										ccTextView.setText(report.getCCsName());
 									}
 								})
 								.setNegativeButton(R.string.cancel, null)

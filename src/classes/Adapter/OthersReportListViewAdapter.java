@@ -22,7 +22,6 @@ public class OthersReportListViewAdapter extends BaseAdapter
 	private Context context;
 	private LayoutInflater layoutInflater;
 	private List<Report> reportList;
-	private int[] statusBackground;
 
 	public OthersReportListViewAdapter(Context context, List<Report> reports)
 	{
@@ -30,7 +29,6 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		this.layoutInflater = LayoutInflater.from(context);
 		
 		this.reportList = new ArrayList<Report>(reports);
-		this.statusBackground = Utils.getReportStatusBackground();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -55,7 +53,7 @@ public class OthersReportListViewAdapter extends BaseAdapter
 
 		if (report.getStatus() >= 0 && report.getStatus() <= 4)
 		{
-			statusImageView.setBackgroundResource(statusBackground[report.getStatus()]);			
+			statusImageView.setImageResource(report.getStatusBackground());		
 		}
 
 		double amount = Double.valueOf(report.getAmount());

@@ -3,6 +3,8 @@ package classes.Adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.Report;
+
 import com.rushucloud.reim.R;
 import android.content.Context;
 import android.content.res.Resources;
@@ -20,7 +22,6 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
 	private Resources resources;
-	private String[] status;
 	private List<Integer> fontColors;
 	private int[] selectedBackgrounds;
 	private int[] unselectedBackgrounds;
@@ -30,7 +31,6 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 	{
 		this.layoutInflater = LayoutInflater.from(context);
 		this.resources = context.getResources();
-		this.status = context.getResources().getStringArray(R.array.filterStatus);
 		this.check = new boolean[5];
 		for (int i = 0; i < 5; i++)
 		{
@@ -59,7 +59,7 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 		}
 		
 		final TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
-		statusTextView.setText(status[position]);
+		statusTextView.setText(Report.getStatusString(position));
 		statusTextView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
 		{
 			public void onGlobalLayout()

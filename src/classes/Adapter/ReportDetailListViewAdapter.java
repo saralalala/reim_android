@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class ReportShowListViewAdapter extends BaseAdapter
+public class ReportDetailListViewAdapter extends BaseAdapter
 {
 	private Context context;
 	private LayoutInflater layoutInflater;
@@ -29,14 +29,13 @@ public class ReportShowListViewAdapter extends BaseAdapter
 	private Report report;
 	private List<Item> itemList;
 	
-	private int[] statusBackground;
 	private int screenWidth;
 	private int interval;
 	private int padding;
 	private int sideLength;
 	private int iconCount;
 
-	public ReportShowListViewAdapter(Context context, Report report, List<Item> items)
+	public ReportDetailListViewAdapter(Context context, Report report, List<Item> items)
 	{
 		this.context = context;
 		this.layoutInflater = LayoutInflater.from(context);
@@ -50,8 +49,6 @@ public class ReportShowListViewAdapter extends BaseAdapter
 		this.padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
 		this.interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
 		this.sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-		
-		this.statusBackground = Utils.getReportStatusBackground();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -61,7 +58,7 @@ public class ReportShowListViewAdapter extends BaseAdapter
 		{
 			case 0:
 			{
-				view = layoutInflater.inflate(R.layout.list_report_title_show, parent, false);
+				view = layoutInflater.inflate(R.layout.list_report_title, parent, false);
 				
 				TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
 				TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
@@ -71,14 +68,14 @@ public class ReportShowListViewAdapter extends BaseAdapter
 				titleTextView.setText(title);
 				
 				timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
-				
-				statusImageView.setImageResource(statusBackground[report.getStatus()]);
+
+				statusImageView.setImageResource(report.getStatusBackground());
 				
 				break;
 			}
 			case 1:
 			{
-				view = layoutInflater.inflate(R.layout.list_report_user_show, parent, false);
+				view = layoutInflater.inflate(R.layout.list_report_user, parent, false);
 				
 				TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);
 				TextView managerTextView = (TextView) view.findViewById(R.id.managerTextView);
@@ -96,18 +93,17 @@ public class ReportShowListViewAdapter extends BaseAdapter
 			}
 			case 2:
 			{
-				view = layoutInflater.inflate(R.layout.list_report_detail_show, parent, false);
+				view = layoutInflater.inflate(R.layout.list_report_detail, parent, false);
 				
 				TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
 				TextView itemCountTextView = (TextView) view.findViewById(R.id.itemCountTextView);
 				
 				double amount = 0;
-				int itemCount = 0;
+				int itemCount = itemList.size();
 				
 				for (Item item : itemList)
 				{
 					amount += item.getAmount();
-					itemCount++;
 				}
 
 				amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);

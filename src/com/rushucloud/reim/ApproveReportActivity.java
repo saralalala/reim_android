@@ -15,7 +15,7 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Utils;
-import classes.Adapter.ReportShowListViewAdapter;
+import classes.Adapter.ReportDetailListViewAdapter;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -41,7 +41,7 @@ public class ApproveReportActivity extends Activity
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
-	private ReportShowListViewAdapter adapter;
+	private ReportDetailListViewAdapter adapter;
 	
 	private int reportServerID;
 	private Report report;
@@ -167,7 +167,7 @@ public class ApproveReportActivity extends Activity
 			}
 		});
 
-		adapter = new ReportShowListViewAdapter(ApproveReportActivity.this, report, itemList);
+		adapter = new ReportDetailListViewAdapter(ApproveReportActivity.this, report, itemList);
 		ListView detailListView = (ListView)findViewById(R.id.detailListView);
 		detailListView.setAdapter(adapter);
 		detailListView.setOnItemClickListener(new OnItemClickListener()

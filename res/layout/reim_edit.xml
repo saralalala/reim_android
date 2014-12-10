@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
 	android:focusable="true"
-	android:focusableInTouchMode="true" 
+	android:focusableInTouchMode="true"
     android:id="@+id/containerLayout" >
 
     <RelativeLayout
@@ -184,7 +184,7 @@
 	                android:layout_height="20dp"
 	                android:layout_marginTop="3dp"
 	                android:layout_marginLeft="100dp"
-	                android:contentDescription="@string/remove"
+	                android:contentDescription="@string/delete"
 	                android:src="@drawable/remove"
 	                android:visibility="invisible" />
 	

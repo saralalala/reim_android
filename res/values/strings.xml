@@ -16,7 +16,7 @@
     <string name="back">返回</string>
     <string name="next">下一步</string>
     <string name="modify">修改</string>
-    <string name="remove">删除</string>
+    <string name="delete">删除</string>
     <string name="tip">提示</string>
     <string name="error">错误</string>
     <string name="warning">警告</string>
@@ -171,13 +171,5 @@
     <string name="xlistview_header_last_time">上次更新时间：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
-    
-    <string-array name="filterStatus">
-        <item>草稿</item>
-        <item>提交</item>
-        <item>通过</item>
-        <item>退回</item>
-        <item>结束</item>
-    </string-array>
     
 </resources>
