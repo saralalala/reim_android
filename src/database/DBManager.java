@@ -1192,7 +1192,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
 												"(report_local_id = -1 OR report_local_id = 0) AND " +
-												"(prove_ahead = 1 AND (status = 0 AND status = 3))", 
+												"(prove_ahead = 1 AND (status = 0 OR status = 3))", 
 													new String[]{Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())

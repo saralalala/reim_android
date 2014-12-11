@@ -24,7 +24,6 @@ public class GetVendorsRequest extends BaseRequest
 		
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("format", "json");
-		paramMap.put("category", category);
 		paramMap.put("latitude", Double.toString(latitude));  
 		paramMap.put("longitude", Double.toString(longitude));
 		paramMap.put("sort", "1");
@@ -32,6 +31,10 @@ public class GetVendorsRequest extends BaseRequest
 		paramMap.put("offset_type", "1");
 		paramMap.put("out_offset_type", "1");
 		paramMap.put("platform", "2");
+//		if (!category.equals(""))
+//		{
+//			paramMap.put("category", category);			
+//		}
 		
 		String[] keyArray = paramMap.keySet().toArray(new String[0]);
 		Arrays.sort(keyArray);

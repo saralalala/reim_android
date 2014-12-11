@@ -9,6 +9,7 @@ import classes.AppPreference;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
+import classes.Utils;
 import classes.Adapter.ReportItemListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
@@ -99,6 +100,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		proveAheadItemList = dbManager.getUnarchivedProveAheadItems(appPreference.getCurrentUserID());
 
 		isProveAhead = report.isProveAhead();
+		tabIndex = Utils.booleanToInt(isProveAhead);
 		
 		List<Item> items = dbManager.getReportItems(report.getLocalID());
 		if (items.size() > 0)
@@ -153,7 +155,9 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		proveAheadTextView = (TextView)findViewById(R.id.proveAheadTextView);
 		proveAheadTextView.setOnClickListener(this);
 		
+		int itemCount = isProveAhead ? checkCount(proveAheadCheck) : checkCount(consumedCheck);
 		itemCountTextView = (TextView)findViewById(R.id.itemCountTextView);
+		itemCountTextView.setText(Integer.toString(itemCount));
 		
 		TextView confirmTextView = (TextView)findViewById(R.id.confirmTextView);
 		confirmTextView.setOnClickListener(new View.OnClickListener()
@@ -200,15 +204,17 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 					consumedCheck[position] = !consumedCheck[position];
 					isProveAhead = false;
 					itemCountTextView.setText(Integer.toString(checkCount(consumedCheck)));
+					adapter.setCheck(consumedCheck);
 				}
 				else
 				{
 					proveAheadCheck[position] = !proveAheadCheck[position];
 					isProveAhead = true;
 					itemCountTextView.setText(Integer.toString(checkCount(proveAheadCheck)));
+					adapter.setCheck(proveAheadCheck);
 				}
 				resetCheck();
-				adapter.setSelection(position);
+				adapter.notifyDataSetChanged();
 			}
 		});
 	}
@@ -217,9 +223,6 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 	{
 		ReimApplication.setProgressDialog(this);
 		ReimApplication.showProgressDialog();
-		
-		int itemCount = isProveAhead ? checkCount(proveAheadCheck) : checkCount(consumedCheck);
-		itemCountTextView.setText(Integer.toString(itemCount));
 		
 		if (tabIndex == 0)
 		{
@@ -266,19 +269,6 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		chosenItemIDList.clear();
 		if (isProveAhead)
 		{
-			if (consumedCheck != null)
-			{
-				for (int i = 0; i < consumedCheck.length; i++)
-				{
-					if (consumedCheck[i])
-					{
-						chosenItemIDList.add(consumedItemList.get(i).getLocalID());
-					}
-				}
-			}
-		}
-		else
-		{
 			if (proveAheadCheck != null)
 			{
 				for (int i = 0; i < proveAheadCheck.length; i++)
@@ -286,6 +276,19 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 					if (proveAheadCheck[i])
 					{
 						chosenItemIDList.add(proveAheadItemList.get(i).getLocalID());
+					}
+				}
+			}
+		}
+		else
+		{
+			if (consumedCheck != null)
+			{
+				for (int i = 0; i < consumedCheck.length; i++)
+				{
+					if (consumedCheck[i])
+					{
+						chosenItemIDList.add(consumedItemList.get(i).getLocalID());
 					}
 				}
 			}

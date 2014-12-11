@@ -193,7 +193,7 @@ public class ProfileActivity extends Activity
 		phoneEditText.setText(currentUser.getPhone());
 		nicknameEditText.setText(currentUser.getNickname());
 		
-		String companyName = currentGroup != null ? currentGroup.getName() : getString(R.string.notAvailable);	
+		String companyName = currentGroup != null ? currentGroup.getName() : getString(R.string.not_available);	
 		
         if (!currentUser.isAdmin() || currentUser.getGroupID() <= 0)
 		{

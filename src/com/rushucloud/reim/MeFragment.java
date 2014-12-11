@@ -416,7 +416,7 @@ public class MeFragment extends Fragment
 		else
 		{
 			avatarImageView.setImageResource(R.drawable.default_avatar);
-			nicknameTextView.setText(R.string.notAvailable);
+			nicknameTextView.setText(R.string.not_available);
 		}
 		
 		if (group != null)
@@ -425,7 +425,7 @@ public class MeFragment extends Fragment
 		}
 		else
 		{
-			companyTextView.setText(R.string.notAvailable);
+			companyTextView.setText(R.string.not_available);
 		}
 	}
 	

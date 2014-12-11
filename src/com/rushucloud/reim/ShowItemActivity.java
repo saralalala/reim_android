@@ -186,7 +186,7 @@ public class ShowItemActivity extends Activity
 		}
 		else
 		{
-			timeTextView.setText(R.string.notAvailable);
+			timeTextView.setText(R.string.not_available);
 		}
 		
 		// init vendor		
@@ -194,7 +194,7 @@ public class ShowItemActivity extends Activity
 		vendorTextView.setText(item.getMerchant());
 
 		// init location
-		String cityName = item.getLocation().equals("") ? getString(R.string.notAvailable) : item.getLocation();
+		String cityName = item.getLocation().equals("") ? getString(R.string.not_available) : item.getLocation();
 		TextView locationTextView = (TextView)findViewById(R.id.locationTextView);
 		locationTextView.setText(cityName);
 

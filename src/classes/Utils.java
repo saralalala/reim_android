@@ -388,6 +388,22 @@ public class Utils
 		});
 		
 		return popupWindow;
+	}    
+	
+	public static PopupWindow constructFullPopupWindow(final Activity activity, View view)
+	{
+		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
+		
+		PopupWindow popupWindow = new PopupWindow(activity);
+		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
+		popupWindow.setHeight(LayoutParams.MATCH_PARENT);
+		popupWindow.setContentView(view);
+		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+		popupWindow.setFocusable(true);
+		popupWindow.setOutsideTouchable(true);
+		popupWindow.setAnimationStyle(R.style.FullWindowAnimation);
+		
+		return popupWindow;
 	}
 	
 	public static void dimBackground(Activity activity)

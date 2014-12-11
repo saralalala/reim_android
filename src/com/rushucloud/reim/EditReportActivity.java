@@ -282,7 +282,7 @@ public class EditReportActivity extends Activity
 			titleEditText.requestFocus();
 		}
 		
-		String createDate = report.getCreatedDate() == -1 ? getString(R.string.notAvailable) : Utils.secondToStringUpToMinute(report.getCreatedDate());
+		String createDate = report.getCreatedDate() == -1 ? getString(R.string.not_available) : Utils.secondToStringUpToMinute(report.getCreatedDate());
 		timeTextView.setText(createDate);
 		
 		statusImageView.setImageResource(report.getStatusBackground());
@@ -329,7 +329,7 @@ public class EditReportActivity extends Activity
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-			String vendor = item.getMerchant().equals("") ? getString(R.string.notAvailable) : item.getMerchant();
+			String vendor = item.getMerchant().equals("") ? getString(R.string.not_available) : item.getMerchant();
 			vendorTextView.setText(vendor);
 			
 			// category 和 tag 一共iconCount个

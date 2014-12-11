@@ -80,6 +80,7 @@
 		                android:id="@+id/amountEditText"
 		                android:layout_width="wrap_content"
 		                android:layout_height="wrap_content"
+		                android:minWidth="10dp"
 		                android:inputType="numberDecimal"
 		                android:background="@null"
 	                    android:textColor="@color/font_reim_number"
@@ -324,7 +325,7 @@
 	                android:layout_toRightOf="@+id/categoryImageView"
 	                android:layout_marginLeft="10dp"
 	                android:layout_marginRight="16dp"
-	                android:text="@string/notAvailable"
+	                android:text="@string/not_available"
 	                android:textColor="@color/font_major_dark"
 	                android:textSize="18sp" />
 	

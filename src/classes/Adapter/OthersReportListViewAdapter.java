@@ -45,11 +45,11 @@ public class OthersReportListViewAdapter extends BaseAdapter
 
 		Report report = reportList.get(position);
 
-		String title = report.getTitle().equals("") ? context.getString(R.string.notAvailable) : report.getTitle();
+		String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
 		titleTextView.setText(title);
 		
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
-		dateTextView.setText(date.equals("") ? context.getString(R.string.notAvailable) : date);
+		dateTextView.setText(date.equals("") ? context.getString(R.string.not_available) : date);
 
 		if (report.getStatus() >= 0 && report.getStatus() <= 4)
 		{

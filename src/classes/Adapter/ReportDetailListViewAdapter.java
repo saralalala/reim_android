@@ -64,7 +64,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 				TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
 				ImageView statusImageView = (ImageView) view.findViewById(R.id.statusImageView);
 
-				String title = report.getTitle().equals("") ? context.getString(R.string.notAvailable) : report.getTitle();
+				String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
 				titleTextView.setText(title);
 				
 				timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
@@ -126,7 +126,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 				amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 				amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-				String vendor = item.getMerchant().equals("") ? context.getString(R.string.notAvailable) : item.getMerchant();
+				String vendor = item.getMerchant().equals("") ? context.getString(R.string.not_available) : item.getMerchant();
 				vendorTextView.setText(vendor);
 				
 				// category 和 tag 一共iconCount个

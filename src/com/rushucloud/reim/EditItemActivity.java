@@ -30,10 +30,12 @@ import classes.Report;
 import classes.Tag;
 import classes.User;
 import classes.Utils;
+import classes.Vendor;
 import classes.Adapter.CategoryListViewAdapter;
 import classes.Adapter.LocationListViewAdapter;
 import classes.Adapter.MemberListViewAdapter;
 import classes.Adapter.TagListViewAdapter;
+import classes.Adapter.VendorListViewAdapter;
 
 import cn.beecloud.BCLocation;
 
@@ -104,6 +106,7 @@ public class EditItemActivity extends Activity
 	private PopupWindow timePopupWindow;
 	private DatePicker datePicker;
 	private TextView vendorTextView;
+	private PopupWindow vendorPopupWindow;
 	private TextView locationTextView;
 	private AlertDialog locationDialog;
 	private ImageView categoryImageView;
@@ -117,13 +120,14 @@ public class EditItemActivity extends Activity
 	private Item item;
 	private Report report;
 	
-	private List<String> vendorList = null;
+	private List<Vendor> vendorList = null;
 	private List<Category> categoryList = null;
 	private List<Tag> tagList = null;
 	private List<User> userList = null;
 
 	private LocationListViewAdapter locationAdapter;
 	private CategoryListViewAdapter categoryAdapter;
+	private VendorListViewAdapter vendorAdapter;
 	private TagListViewAdapter tagAdapter;
 	private MemberListViewAdapter memberAdapter;
 
@@ -230,8 +234,6 @@ public class EditItemActivity extends Activity
 		dbManager = DBManager.getDBManager();
 		locationClient = new LocationClient(getApplicationContext());
 		
-		vendorList = new ArrayList<String>();
-		
 		locationInvalid = getString(R.string.location_invalid);
 
 		int currentGroupID = appPreference.getCurrentGroupID();
@@ -259,10 +261,6 @@ public class EditItemActivity extends Activity
 			{
 				item.setCategory(categoryList.get(0));				
 			}
-			if (vendorList.size() > 0)
-			{
-				item.setMerchant(vendorList.get(0));
-			}
 			item.setConsumedDate(Utils.getCurrentTime());
 		}
 		else
@@ -277,6 +275,12 @@ public class EditItemActivity extends Activity
 	{
 		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
+
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
+		iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
+		iconInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		iconMaxCount = (metrics.widthPixels - padding + iconInterval) / (iconWidth + iconInterval);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
@@ -358,8 +362,30 @@ public class EditItemActivity extends Activity
 				}
 			}
 		});
+
+		LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
+		baseLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+			}
+		});
 		
-		// init status part
+		initStatusView();
+		initTypeView();
+		initInvoiceView();
+		initTimeView();
+		initVendorView();
+		initLocationView();
+		initCategoryView();
+		initTagView();
+		initMemberView();
+		initNoteView();		
+	}
+	
+	private void initStatusView()
+	{
 		TextView actualCostTextView = (TextView)findViewById(R.id.actualCostTextView);
 		TextView budgetTextView = (TextView)findViewById(R.id.budgetTextView);
 		ImageView approvedImageView = (ImageView)findViewById(R.id.approvedImageView);
@@ -396,7 +422,10 @@ public class EditItemActivity extends Activity
 			budgetTextView.setVisibility(View.GONE);
 			approvedImageView.setVisibility(View.GONE);
 		}
-		
+	}
+	
+	private void initTypeView()
+	{
 		// init type
 		String temp = item.isProveAhead() ? getString(R.string.prove_ahead) : getString(R.string.consumed);
 		if (item.needReimbursed())
@@ -412,13 +441,14 @@ public class EditItemActivity extends Activity
 			{
 				if (fromReim && item.getStatus() != Item.STATUS_PROVE_AHEAD_APPROVED)
 				{
-					showTypeDialog();
+					hideSoftKeyboard();
+					showTypeWindow();
 				}
 			}
 		});
 		
 		// init type window
-		View typeView = View.inflate(this, R.layout.reim_type_window, null);
+		View typeView = View.inflate(this, R.layout.reim_type, null);
 		RadioButton consumedRadio = (RadioButton)typeView.findViewById(R.id.consumedRadio);
 		final RadioButton proveAheadRadio = (RadioButton)typeView.findViewById(R.id.proveAheadRadio);
 		proveAheadRadio.setOnCheckedChangeListener(new OnCheckedChangeListener()
@@ -475,7 +505,10 @@ public class EditItemActivity extends Activity
 		});
 
 		typePopupWindow = Utils.constructPopupWindow(this, typeView);
-		
+	}
+	
+	private void initInvoiceView()
+	{		
 		// init invoice		
 		invoiceLayout = (LinearLayout)findViewById(R.id.invoiceLayout);
 		
@@ -506,7 +539,7 @@ public class EditItemActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				showPictureDialog();
+				showPictureWindow();
 			}
 		});
 
@@ -591,8 +624,11 @@ public class EditItemActivity extends Activity
 			}
 		});
 		
-		picturePopupWindow = Utils.constructPopupWindow(this, pictureView);
-		
+		picturePopupWindow = Utils.constructPopupWindow(this, pictureView);		
+	}
+	
+	private void initTimeView()
+	{
 		// init time
 		int time = item.getConsumedDate() > 0 ? item.getConsumedDate() : Utils.getCurrentTime();
 		timeTextView = (TextView)findViewById(R.id.timeTextView);
@@ -600,7 +636,7 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				showTimeDialog();
+				showTimeWindow();
 			}
 		});
 		timeTextView.setText(Utils.secondToStringUpToDay(time));
@@ -635,7 +671,10 @@ public class EditItemActivity extends Activity
 		datePicker = (DatePicker) timeView.findViewById(R.id.datePicker);
 		
 		timePopupWindow = Utils.constructPopupWindow(this, timeView);
-		
+	}
+	
+	private void initVendorView()
+	{
 		// init vendor		
 		vendorTextView = (TextView)findViewById(R.id.vendorTextView);
 		vendorTextView.setText(item.getMerchant());
@@ -653,31 +692,57 @@ public class EditItemActivity extends Activity
 				{
 					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_MERCHANT");
 				}
-						
-				if (!Utils.isNetworkConnected())
-				{
-					Utils.showToast(EditItemActivity.this, "网络未连接，无法联网获取商家，请手动输入商家名称");
-				}
-				else if (currentLocation != null)
-				{
-	    			double latitude = currentLocation.getLatitude();
-	    			double longitude = currentLocation.getLongitude();
-	    			String category = item.getCategory() == null ? "" : item.getCategory().getName();
-	    			sendVendorsRequest(category, latitude, longitude);
-				}
-				else if (!Utils.isLocalisationEnabled())
-				{
-					Utils.showToast(EditItemActivity.this, "定位服务不可用，请打开定位服务或手动输入商家名称");
-				}
-	    		else
-	    		{
-	    			Utils.showToast(EditItemActivity.this, "未获取到定位信息，请手动输入商家名或稍后再试");    	
-	    		}
+				
+				showVendorWindow();
+			}
+		});
+		
+		// init vendor window
+		View vendorView = View.inflate(this, R.layout.reim_vendor, null);
+		
+		final EditText vendorEditText = (EditText) vendorView.findViewById(R.id.vendorEditText);
+		vendorEditText.setText(item.getMerchant());
+		
+		vendorAdapter = new VendorListViewAdapter(this);
+		ListView vendorListView = (ListView) vendorView.findViewById(R.id.vendorListView);
+		vendorListView.setAdapter(vendorAdapter);
+		vendorListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				Vendor vendor = vendorAdapter.getItem(position);
+				vendorEditText.setText(vendor.getName());
+			}
+		});
+		
+		ImageView vendorBackImageView = (ImageView) vendorView.findViewById(R.id.backImageView);
+		vendorBackImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				vendorPopupWindow.dismiss();
+			}
+		});
+		
+		TextView vendorConfirmTextView = (TextView) vendorView.findViewById(R.id.confirmTextView);
+		vendorConfirmTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				item.setMerchant(vendorEditText.getText().toString());
+				vendorTextView.setText(item.getMerchant());
+				vendorPopupWindow.dismiss();
 			}
 		});
 
+		vendorPopupWindow = Utils.constructFullPopupWindow(this, vendorView);
+	}
+	
+	private void initLocationView()
+	{		
 		// init location
-		String cityName = item.getLocation().equals("") ? getString(R.string.notAvailable) : item.getLocation();
+		String cityName = item.getLocation().equals("") ? getString(R.string.not_available) : item.getLocation();
 		locationTextView = (TextView)findViewById(R.id.locationTextView);
 		locationTextView.setText(cityName);
 		locationTextView.setOnClickListener(new View.OnClickListener()
@@ -737,7 +802,10 @@ public class EditItemActivity extends Activity
 									});
 		builder.setNegativeButton(R.string.cancel, null);
 		locationDialog = builder.create();
-		
+	}
+	
+	private void initCategoryView()
+	{		
 		// init category
 		categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
 		categoryImageView.setOnClickListener(new View.OnClickListener()
@@ -801,15 +869,11 @@ public class EditItemActivity extends Activity
 		else
 		{
 			categoryImageView.setVisibility(View.GONE);
-		}
-		
-		// init tag		
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
-		iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
-		iconInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
-		iconMaxCount = (metrics.widthPixels - padding + iconInterval) / (iconWidth + iconInterval);
-		
+		}		
+	}
+	
+	private void initTagView()
+	{		
 		tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
 		
 		addTagView = View.inflate(this, R.layout.grid_tag, null);
@@ -842,8 +906,10 @@ public class EditItemActivity extends Activity
 		iconImageView.setImageResource(R.drawable.add_tag_button);
 		
 		refreshTagView();
-		
-		// init member		
+	}
+	
+	private void initMemberView()
+	{	
 		memberLayout = (LinearLayout) findViewById(R.id.memberLayout);
 		
 		addMemberView = View.inflate(this, R.layout.grid_member, null);
@@ -875,9 +941,11 @@ public class EditItemActivity extends Activity
 		ImageView avatarImageView = (ImageView) addMemberView.findViewById(R.id.avatarImageView);
 		avatarImageView.setImageResource(R.drawable.add_tag_button);
 		
-		refreshMemberView();
-		
-		// init note
+		refreshMemberView();		
+	}
+	
+	private void initNoteView()
+	{
 		noteEditText = (EditText)findViewById(R.id.noteEditText);
 		noteEditText.setText(item.getNote());
 		noteEditText.setOnFocusChangeListener(new OnFocusChangeListener()
@@ -892,15 +960,6 @@ public class EditItemActivity extends Activity
 				{
 					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_NOTE");
 				}
-			}
-		});
-		
-		LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
-		baseLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
 			}
 		});
 	}
@@ -1098,15 +1157,15 @@ public class EditItemActivity extends Activity
 		}
     }
     
-    private void showTypeDialog()
-    {	
+    private void showTypeWindow()
+    {
 		typePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		typePopupWindow.update();
 		
 		Utils.dimBackground(this);
     }
     
-    private void showPictureDialog()
+    private void showPictureWindow()
     {
 		picturePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		picturePopupWindow.update();
@@ -1114,7 +1173,7 @@ public class EditItemActivity extends Activity
 		Utils.dimBackground(this);
     }
     
-    private void showTimeDialog()
+    private void showTimeWindow()
     {
 		if (newItem)
 		{
@@ -1143,41 +1202,30 @@ public class EditItemActivity extends Activity
 		Utils.dimBackground(this);
     }
 
-    private void showVendorDialog()
+    private void showVendorWindow()
     {
-    	final String vendor = item.getMerchant();
-		int index = vendorList.indexOf(vendor);
-		if (index == -1)
+    	vendorPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+    	vendorPopupWindow.update();
+		
+		if (!Utils.isNetworkConnected())
 		{
-			index = 0;
-			item.setMerchant(vendorList.get(0));
+			Utils.showToast(EditItemActivity.this, "网络未连接，无法联网获取商家，请手动输入商家名称");
 		}
-		String[] vendors = vendorList.toArray(new String[vendorList.size()]);
-		AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-											.setTitle(R.string.choose_vendor)
-											.setSingleChoiceItems(vendors, index, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													item.setMerchant(vendorList.get(which));
-												}
-											})
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													vendorTextView.setText(item.getMerchant());
-												}
-											})
-											.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													item.setMerchant(vendor);
-												}
-											})
-											.create();
-		mDialog.show();
+		else if (currentLocation != null)
+		{
+			double latitude = currentLocation.getLatitude();
+			double longitude = currentLocation.getLongitude();
+			String category = item.getCategory() == null ? "" : item.getCategory().getName();
+			sendVendorsRequest(category, latitude, longitude);
+		}
+		else if (!Utils.isLocalisationEnabled())
+		{
+			Utils.showToast(EditItemActivity.this, "定位服务不可用，请打开定位服务或手动输入商家名称");
+		}
+		else
+		{
+			Utils.showToast(EditItemActivity.this, "未获取到定位信息，请手动输入商家名或稍后再试");    	
+		}
     }
 
     private void showCategoryDialog()
@@ -1513,7 +1561,32 @@ public class EditItemActivity extends Activity
 			}
 		});
     }
-    
+
+	private void sendDownloadVendorImageRequest(int index)
+	{
+		final Vendor vendor = vendorList.get(index);
+		DownloadImageRequest request = new DownloadImageRequest(vendor.getPhotoURL());
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					vendor.setPhoto(response.getBitmap());
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							vendorAdapter.setVendorList(vendorList);
+							vendorAdapter.notifyDataSetChanged();
+						}
+					});
+				}
+			}
+		});
+	}
+	
     private void sendDownloadTagIconRequest(final Tag tag)
     {
     	DownloadImageRequest request = new DownloadImageRequest(tag.getIconID());
@@ -1694,24 +1767,33 @@ public class EditItemActivity extends Activity
     
     private void sendVendorsRequest(String category, double latitude, double longitude)
     {
-    	ReimApplication.showProgressDialog();
 		GetVendorsRequest request = new GetVendorsRequest(category, latitude, longitude);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
-				GetVendorsResponse response = new GetVendorsResponse(httpResponse);
+				final GetVendorsResponse response = new GetVendorsResponse(httpResponse);
 				if (response.getStatus())
 				{
-					vendorList = response.getVendorList();
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							vendorList = response.getVendorList();
+							
 							if (vendorList.size() > 0)
 							{
-								showVendorDialog();
+								vendorAdapter.setVendorList(vendorList);
+								vendorAdapter.notifyDataSetChanged();
+								
+								for (int i = 0 ; i < vendorList.size(); i++)
+								{
+									Vendor vendor = vendorList.get(i);
+									if (vendor.getPhoto() == null && !vendor.getPhotoURL().equals(""))
+									{
+										sendDownloadVendorImageRequest(i);
+									}
+								}
 							}
 							else 
 							{

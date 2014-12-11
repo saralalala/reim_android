@@ -56,7 +56,7 @@ public class MemberListViewAdapter extends BaseAdapter
 		
 		if (user.getNickname().equals(""))
 		{
-			nicknameTextView.setText(R.string.notAvailable);
+			nicknameTextView.setText(R.string.not_available);
 		}
 		else
 		{

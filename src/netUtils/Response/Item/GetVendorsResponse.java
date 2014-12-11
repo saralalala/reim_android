@@ -7,10 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import classes.Vendor;
+
 public class GetVendorsResponse
 {
 	private boolean status;
-	private List<String> vendorList;
+	private List<Vendor> vendorList;
 	
 	public GetVendorsResponse(Object httpResponse)
 	{
@@ -19,13 +21,12 @@ public class GetVendorsResponse
 			JSONObject jObject = new JSONObject((String)httpResponse);
 			status = jObject.getString("status").equals("OK") ? true : false;
 			JSONArray jsonArray = jObject.getJSONArray("businesses");
-			vendorList = new ArrayList<String>();
+			vendorList = new ArrayList<Vendor>();
 
 			int count = jsonArray.length();
 			for (int i = 0; i < count; i++)
 			{
-				JSONObject object = jsonArray.getJSONObject(i);
-				vendorList.add(object.getString("name")); 
+				vendorList.add(new Vendor(jsonArray.getJSONObject(i))); 
 			}
 		}
 		catch (JSONException e)
@@ -46,12 +47,12 @@ public class GetVendorsResponse
 		this.status = status;
 	}
 
-	public List<String> getVendorList()
+	public List<Vendor> getVendorList()
 	{
 		return vendorList;
 	}
 
-	public void setVendorList(List<String> vendorList)
+	public void setVendorList(List<Vendor> vendorList)
 	{
 		this.vendorList = vendorList;
 	}

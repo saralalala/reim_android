@@ -54,7 +54,7 @@ public class CommentListViewAdapter extends BaseAdapter
 		
 		if (user.getNickname().equals(""))
 		{
-			reviewerTextView.setText(R.string.notAvailable);
+			reviewerTextView.setText(R.string.not_available);
 		}
 		else
 		{

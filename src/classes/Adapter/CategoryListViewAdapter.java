@@ -56,7 +56,7 @@ public class CategoryListViewAdapter extends BaseAdapter
 		
 		if (category.getName().equals(""))
 		{
-			nameTextView.setText(R.string.notAvailable);
+			nameTextView.setText(R.string.not_available);
 		}
 		else
 		{
