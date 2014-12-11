@@ -24,7 +24,7 @@ public class Item
 	private int serverID = -1;
 	private int invoiceID = -1;
 	private String invoicePath = "";
-	private String merchant = "";
+	private String vendor = "";
 	private Report belongReport = null;
 	private Package belongPackage = null;
 	private Category category = null;
@@ -57,7 +57,7 @@ public class Item
 			setServerID(jObject.getInt("id"));
 			setAmount(jObject.getDouble("amount"));
 			setPaAmount(jObject.getDouble("pa_amount"));
-			setMerchant(jObject.getString("merchants"));
+			setVendor(jObject.getString("merchants"));
 			setNote(jObject.getString("note"));
 			setStatus(jObject.getInt("status"));
 			setLocation(jObject.getString("location"));
@@ -133,13 +133,13 @@ public class Item
 		this.invoicePath = invoicePath;
 	}
 	
-	public String getMerchant()
+	public String getVendor()
 	{
-		return merchant;
+		return vendor;
 	}
-	public void setMerchant(String merchant)
+	public void setVendor(String vendor)
 	{
-		this.merchant = merchant;
+		this.vendor = vendor;
 	}
 	
 	public Report getBelongReport()

@@ -30,7 +30,7 @@ public class CreateItemRequest extends BaseRequest
 			JSONObject jObject = new JSONObject();
 			jObject.put("amount", item.getAmount());
 			jObject.put("category", categoryID);
-			jObject.put("merchants", item.getMerchant());
+			jObject.put("merchants", item.getVendor());
 			jObject.put("location", item.getLocation());
 			jObject.put("uid", item.getConsumer().getServerID());
 			jObject.put("prove_ahead", Utils.booleanToString(item.isProveAhead()));

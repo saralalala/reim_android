@@ -329,7 +329,7 @@ public class EditReportActivity extends Activity
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-			String vendor = item.getMerchant().equals("") ? getString(R.string.not_available) : item.getMerchant();
+			String vendor = item.getVendor().equals("") ? getString(R.string.not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
 			// category 和 tag 一共iconCount个

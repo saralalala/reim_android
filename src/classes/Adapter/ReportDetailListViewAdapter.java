@@ -2,6 +2,8 @@ package classes.Adapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import classes.Category;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
@@ -53,115 +55,106 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		View view = null;
-		switch (position)
+		if (position == 0)
 		{
-			case 0:
+			View view = layoutInflater.inflate(R.layout.list_report_detail, parent, false);
+			
+			// init title, time and status
+			TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
+			TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
+			ImageView statusImageView = (ImageView) view.findViewById(R.id.statusImageView);
+
+			String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
+			titleTextView.setText(title);
+			
+			timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
+
+			statusImageView.setImageResource(report.getStatusBackground());
+
+			// init sender, manager and cc			
+			TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);
+			TextView managerTextView = (TextView) view.findViewById(R.id.managerTextView);
+			TextView ccTextView = (TextView) view.findViewById(R.id.ccTextView);
+
+			if (report.getSender() != null)
 			{
-				view = layoutInflater.inflate(R.layout.list_report_title, parent, false);
-				
-				TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-				TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
-				ImageView statusImageView = (ImageView) view.findViewById(R.id.statusImageView);
-
-				String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
-				titleTextView.setText(title);
-				
-				timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
-
-				statusImageView.setImageResource(report.getStatusBackground());
-				
-				break;
+				senderTextView.setText(report.getSender().getNickname());					
 			}
-			case 1:
+			
+			managerTextView.setText(report.getManagersName());
+			ccTextView.setText(report.getCCsName());
+			
+			// init amount and item count
+			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+			TextView itemCountTextView = (TextView) view.findViewById(R.id.itemCountTextView);
+			
+			double amount = 0;
+			int itemCount = itemList.size();
+			
+			for (Item item : itemList)
 			{
-				view = layoutInflater.inflate(R.layout.list_report_user, parent, false);
-				
-				TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);
-				TextView managerTextView = (TextView) view.findViewById(R.id.managerTextView);
-				TextView ccTextView = (TextView) view.findViewById(R.id.ccTextView);
-
-				if (report.getSender() != null)
-				{
-					senderTextView.setText(report.getSender().getNickname());					
-				}
-				
-				managerTextView.setText(report.getManagersName());
-				ccTextView.setText(report.getCCsName());
-				
-				break;
+				amount += item.getAmount();
 			}
-			case 2:
+
+			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+			amountTextView.setText(Utils.formatDouble(amount));
+			itemCountTextView.setText(itemCount + context.getString(R.string.item_count));
+			
+			return view;
+
+		}
+		else 
+		{
+			View view = layoutInflater.inflate(R.layout.list_report_item_show, parent, false);
+			
+			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+			TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
+			LinearLayout iconLayout = (LinearLayout) view.findViewById(R.id.iconLayout);
+			ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
+			
+			Item item = itemList.get(position - 1);
+
+			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+			amountTextView.setText(Utils.formatDouble(item.getAmount()));
+
+			String vendor = item.getVendor().equals("") ? context.getString(R.string.not_available) : item.getVendor();
+			vendorTextView.setText(vendor);
+			
+			// category 和 tag 一共iconCount个
+			Category category = item.getCategory();
+			if (category != null)
 			{
-				view = layoutInflater.inflate(R.layout.list_report_detail, parent, false);
-				
-				TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-				TextView itemCountTextView = (TextView) view.findViewById(R.id.itemCountTextView);
-				
-				double amount = 0;
-				int itemCount = itemList.size();
-				
-				for (Item item : itemList)
-				{
-					amount += item.getAmount();
-				}
-
-				amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-				amountTextView.setText(Utils.formatDouble(amount));
-				itemCountTextView.setText(itemCount + context.getString(R.string.item_count));
-				
-				break;
-			}
-			default:
-			{
-				view = layoutInflater.inflate(R.layout.list_report_item_show, parent, false);
-				
-				TextView amountTextView = (TextView)view.findViewById(R.id.amountTextView);
-				TextView vendorTextView = (TextView)view.findViewById(R.id.vendorTextView);
-				LinearLayout iconLayout = (LinearLayout)view.findViewById(R.id.iconLayout);
-				ImageView categoryImageView = (ImageView)view.findViewById(R.id.categoryImageView);
-				
-				Item item = itemList.get(position - 3);
-
-				amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-				amountTextView.setText(Utils.formatDouble(item.getAmount()));
-
-				String vendor = item.getMerchant().equals("") ? context.getString(R.string.not_available) : item.getMerchant();
-				vendorTextView.setText(vendor);
-				
-				// category 和 tag 一共iconCount个
-				Bitmap bitmap = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+				Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
 				if (bitmap != null)
 				{
 					categoryImageView.setImageBitmap(bitmap);				
 				}
-
-				iconLayout.removeAllViews();
-				
-				amountTextView.measure(0,0);
-
-				// category 和 tag 一共iconCount个
-				iconCount = (screenWidth - amountTextView.getMeasuredWidth() - padding * 3 + interval) / (sideLength + interval);
-				iconCount = 1;
-				for (int i = 0; i < iconCount; i++)
-				{
-					ImageView iconImageView = new ImageView(context);
-					iconImageView.setImageResource(R.drawable.food);
-					LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
-					params.rightMargin = interval;
-					iconLayout.addView(iconImageView, params);
-				}
-
-				iconLayout.addView(categoryImageView);
-				break;
 			}
+
+			iconLayout.removeAllViews();
+			
+			amountTextView.measure(0,0);
+
+			// category 和 tag 一共iconCount个
+			iconCount = (screenWidth - amountTextView.getMeasuredWidth() - padding * 3 + interval) / (sideLength + interval);
+			iconCount = 1;
+			for (int i = 0; i < iconCount; i++)
+			{
+				ImageView iconImageView = new ImageView(context);
+				iconImageView.setImageResource(R.drawable.food);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
+				params.rightMargin = interval;
+				iconLayout.addView(iconImageView, params);
+			}
+
+			iconLayout.addView(categoryImageView);
+			return view;
 		}
-		return view;
 	}
 	
 	public int getCount()
 	{
-		return itemList.size() + 3;
+		return itemList.size() + 1;
 	}
 
 	public Item getItem(int position)

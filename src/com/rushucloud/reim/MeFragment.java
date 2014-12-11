@@ -383,14 +383,6 @@ public class MeFragment extends Fragment
 //				showShareDialog();
 //			}
 //		});
-                
-        if (Utils.isNetworkConnected())
-		{
-            if (currentUser.hasUndownloadedAvatar())
-    		{
-                sendDownloadAvatarRequest();			
-    		}
-		}
         
         mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 	}
@@ -426,6 +418,14 @@ public class MeFragment extends Fragment
 		else
 		{
 			companyTextView.setText(R.string.not_available);
+		}
+        
+		if (Utils.isNetworkConnected())
+		{
+		    if (currentUser.hasUndownloadedAvatar())
+			{
+		        sendDownloadAvatarRequest();			
+			}
 		}
 	}
 	

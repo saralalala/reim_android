@@ -51,50 +51,45 @@ public class ImageActivity extends Activity
 	
 	private void initView()
 	{
-		try
+		getActionBar().hide();
+		
+		String imagePath = getIntent().getStringExtra("imagePath");
+		Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+		
+		if (bitmap == null)
 		{
-			String imagePath = getIntent().getStringExtra("imagePath");
-			Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-			
-			if (bitmap == null)
+			Utils.showToast(this, "读取图片文件失败");
+			finish();
+		}
+		
+		imageView = (ImageView)findViewById(R.id.imageView);
+		imageView.setImageBitmap(bitmap);
+
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		
+		double imageRatio = ((double)bitmap.getHeight())/bitmap.getWidth();
+		double screenRatio = ((double)dm.heightPixels)/dm.widthPixels;
+		
+		LayoutParams params = imageView.getLayoutParams();
+		if (imageRatio > screenRatio)
+		{
+			params.height = dm.heightPixels;
+			params.width = (int) (dm.heightPixels / imageRatio);
+		}
+		else
+		{
+			params.height = (int) (dm.widthPixels * imageRatio);
+			params.width = dm.widthPixels;
+		}
+		
+		imageView.setLayoutParams(params);
+		imageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
 			{
-				Utils.showToast(this, "读取图片文件失败");
 				finish();
 			}
-			
-			imageView = (ImageView)findViewById(R.id.imageView);
-			imageView.setImageBitmap(bitmap);
-
-			DisplayMetrics dm = new DisplayMetrics();
-			getWindowManager().getDefaultDisplay().getMetrics(dm);
-			
-			double imageRatio = ((double)bitmap.getHeight())/bitmap.getWidth();
-			double screenRatio = ((double)dm.heightPixels)/dm.widthPixels;
-			
-			LayoutParams params = imageView.getLayoutParams();
-			if (imageRatio > screenRatio)
-			{
-				params.height = dm.heightPixels;
-				params.width = (int) (dm.heightPixels / imageRatio);
-			}
-			else
-			{
-				params.height = (int) (dm.widthPixels * imageRatio);
-				params.width = dm.widthPixels;
-			}
-			
-			imageView.setLayoutParams(params);
-			imageView.setOnClickListener(new View.OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					finish();
-				}
-			});
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		});
 	}
 }

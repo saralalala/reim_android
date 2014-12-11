@@ -97,7 +97,7 @@ public class ItemListViewAdapter extends BaseAdapter
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-		String vendor = item.getMerchant().equals("") ? context.getString(R.string.not_available) : item.getMerchant();
+		String vendor = item.getVendor().equals("") ? context.getString(R.string.not_available) : item.getVendor();
 		vendorTextView.setText(vendor);
 		
 		String reportTitle = item.getBelongReport() == null ? context.getString(R.string.not_available) : item.getBelongReport().getTitle();
@@ -199,7 +199,7 @@ public class ItemListViewAdapter extends BaseAdapter
 						newValues.add(item);
 						continue;
 					}
-					if (item.getMerchant().contains(constraintString))
+					if (item.getVendor().contains(constraintString))
 					{
 						newValues.add(item);
 						continue;

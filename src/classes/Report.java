@@ -63,7 +63,7 @@ public class Report implements Serializable
 		catch (JSONException e)
 		{
 			e.printStackTrace();
-		}		
+		}
 	}
 	
 	public int getLocalID()

@@ -76,7 +76,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-		String vendor = item.getMerchant().equals("") ? context.getString(R.string.not_available) : item.getMerchant();
+		String vendor = item.getVendor().equals("") ? context.getString(R.string.not_available) : item.getVendor();
 		vendorTextView.setText(vendor);
 		
 		// category 和 tag 一共iconCount个

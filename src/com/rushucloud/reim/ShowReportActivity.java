@@ -137,16 +137,16 @@ public class ShowReportActivity extends Activity
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				if (position > 2)
+				if (position > 0)
 				{
 					Intent intent = new Intent(ShowReportActivity.this, ShowItemActivity.class);
 					if (myReport)
 					{
-						intent.putExtra("itemLocalID", itemList.get(position - 3).getLocalID());					
+						intent.putExtra("itemLocalID", itemList.get(position - 1).getLocalID());					
 					}
 					else
 					{
-						intent.putExtra("othersItemServerID", itemList.get(position - 3).getServerID());					
+						intent.putExtra("othersItemServerID", itemList.get(position - 1).getServerID());					
 					}
 					startActivity(intent);	
 				}

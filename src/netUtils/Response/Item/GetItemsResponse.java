@@ -37,7 +37,7 @@ public class GetItemsResponse extends BaseResponse
 				Item item = new Item();
 				item.setServerID(object.getInt("id"));
 				item.setAmount(object.getDouble("amount"));
-				item.setMerchant(object.getString("merchants"));
+				item.setVendor(object.getString("merchants"));
 				item.setNote(object.getString("note"));
 				item.setStatus(object.getInt("status"));
 				item.setLocation(object.getString("location"));

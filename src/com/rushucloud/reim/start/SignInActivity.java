@@ -15,11 +15,8 @@ import com.umeng.analytics.MobclickAgent;
 import database.DBManager;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -77,6 +74,16 @@ public class SignInActivity extends Activity implements View.OnClickListener
 	private void initView()
 	{
 		getActionBar().hide();
+
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(SignInActivity.this, WelcomeActivity.class));
+				finish();
+			}
+		});
 		
 		String username = null;
 		String password = null;
@@ -117,44 +124,18 @@ public class SignInActivity extends Activity implements View.OnClickListener
 				}
 				else if (username.equals(""))
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-												.setTitle("错误").setMessage("用户名不能为空")
-												.setNegativeButton(R.string.confirm, new OnClickListener()
-												{
-													public void onClick(DialogInterface dialog, int which)
-													{
-														usernameEditText.requestFocus();
-													}
-												}).create();
-					alertDialog.show();
+					Utils.showToast(SignInActivity.this, "用户名不能为空");
+					usernameEditText.requestFocus();
 				}
 				else if (password.equals(""))
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-												.setTitle("错误")
-												.setMessage("密码不能为空")
-												.setNegativeButton(R.string.confirm, new OnClickListener()
-												{
-													public void onClick(DialogInterface dialog, int which)
-													{
-														passwordEditText.requestFocus();
-													}
-												}).create();
-					alertDialog.show();
+					Utils.showToast(SignInActivity.this, "密码不能为空");
+					passwordEditText.requestFocus();
 				}
 				else if (!Utils.isEmailOrPhone(username))
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-													.setTitle("错误")
-													.setMessage("手机或邮箱格式不正确")
-													.setNegativeButton("确定", new OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															usernameEditText.requestFocus();
-														}
-													}).create();
-					alertDialog.show();
+					Utils.showToast(SignInActivity.this, "手机或邮箱格式不正确");
+					usernameEditText.requestFocus();
 				}
 				else
 				{
@@ -279,11 +260,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity.this)
-														.setTitle("错误")
-														.setMessage("登录失败！" + response.getErrorMessage())
-														.setNegativeButton("确定", null).create();
-							alertDialog.show();
+							Utils.showToast(SignInActivity.this, "登录失败！" + response.getErrorMessage());
 						}
 					});
 				}
@@ -307,7 +284,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		}
 		else if (v.equals(signUpTextView) || v.equals(signUpImageView))
 		{
-			startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+			startActivity(new Intent(SignInActivity.this, WelcomeActivity.class));
 			finish();
 		}
 	}

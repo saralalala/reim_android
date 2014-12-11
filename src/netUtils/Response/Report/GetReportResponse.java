@@ -42,7 +42,11 @@ public class GetReportResponse extends BaseResponse
 			for (int i = 0; i < managerArray.length(); i++)
 			{
 				JSONObject object = managerArray.getJSONObject(i);
-				managerList.add(dbManager.getUser(object.getInt("id")));
+				User user = dbManager.getUser(object.getInt("id"));
+				if (user != null)
+				{
+					managerList.add(user);					
+				}
 			}
 			report.setManagerList(managerList);
 			
@@ -51,7 +55,11 @@ public class GetReportResponse extends BaseResponse
 			for (int i = 0; i < ccArray.length(); i++)
 			{
 				JSONObject object = ccArray.getJSONObject(i);
-				ccList.add(dbManager.getUser(object.getInt("id")));
+				User user = dbManager.getUser(object.getInt("id"));
+				if (user != null)
+				{
+					ccList.add(user);					
+				}
 			}
 			report.setCCList(ccList);
 			
@@ -83,7 +91,7 @@ public class GetReportResponse extends BaseResponse
 				Item item = new Item();
 				item.setServerID(object.getInt("id"));
 				item.setAmount(object.getDouble("amount"));
-				item.setMerchant(object.getString("merchants"));
+				item.setVendor(object.getString("merchants"));
 				item.setNote(object.getString("note"));
 				item.setStatus(object.getInt("status"));
 				item.setLocation(object.getString("location"));

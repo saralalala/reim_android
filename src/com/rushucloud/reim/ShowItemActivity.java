@@ -191,7 +191,7 @@ public class ShowItemActivity extends Activity
 		
 		// init vendor		
 		TextView vendorTextView = (TextView)findViewById(R.id.vendorTextView);
-		vendorTextView.setText(item.getMerchant());
+		vendorTextView.setText(item.getVendor());
 
 		// init location
 		String cityName = item.getLocation().equals("") ? getString(R.string.not_available) : item.getLocation();
@@ -214,10 +214,6 @@ public class ShowItemActivity extends Activity
 			{
 				sendDownloadCategoryIconRequest(item.getCategory());
 			}
-		}
-		else
-		{
-			categoryImageView.setVisibility(View.GONE);
 		}
 		
 		DisplayMetrics metrics = getResources().getDisplayMetrics();

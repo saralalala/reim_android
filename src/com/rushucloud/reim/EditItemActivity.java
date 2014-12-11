@@ -677,7 +677,7 @@ public class EditItemActivity extends Activity
 	{
 		// init vendor		
 		vendorTextView = (TextView)findViewById(R.id.vendorTextView);
-		vendorTextView.setText(item.getMerchant());
+		vendorTextView.setText(item.getVendor());
 		vendorTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -701,7 +701,7 @@ public class EditItemActivity extends Activity
 		View vendorView = View.inflate(this, R.layout.reim_vendor, null);
 		
 		final EditText vendorEditText = (EditText) vendorView.findViewById(R.id.vendorEditText);
-		vendorEditText.setText(item.getMerchant());
+		vendorEditText.setText(item.getVendor());
 		
 		vendorAdapter = new VendorListViewAdapter(this);
 		ListView vendorListView = (ListView) vendorView.findViewById(R.id.vendorListView);
@@ -730,8 +730,8 @@ public class EditItemActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				item.setMerchant(vendorEditText.getText().toString());
-				vendorTextView.setText(item.getMerchant());
+				item.setVendor(vendorEditText.getText().toString());
+				vendorTextView.setText(item.getVendor());
 				vendorPopupWindow.dismiss();
 			}
 		});

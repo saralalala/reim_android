@@ -12,9 +12,7 @@ import com.umeng.analytics.MobclickAgent;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -141,21 +139,8 @@ public class ForgotPasswordActivity extends Activity
 					}
 					else
 					{
-						AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
-													.setTitle("错误")
-													.setMessage("邮箱格式不正确")
-													.setPositiveButton("确定", new OnClickListener()
-													{
-														public void onClick(
-																DialogInterface dialog,
-																int which)
-														{
-															dialog.dismiss();
-															emailEditText.requestFocus();
-														}
-													})
-													.create();
-						alertDialog.show();					
+						Utils.showToast(ForgotPasswordActivity.this, "邮箱格式不正确");
+						emailEditText.requestFocus();	
 					}					
 				}
 				else
@@ -190,21 +175,8 @@ public class ForgotPasswordActivity extends Activity
 					}
 					else
 					{
-						AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
-													.setTitle("错误")
-													.setMessage("手机号码格式不正确")
-													.setPositiveButton("确定", new OnClickListener()
-													{
-														public void onClick(
-																DialogInterface dialog,
-																int which)
-														{
-															dialog.dismiss();
-															phoneEditText.requestFocus();
-														}
-													})
-													.create();
-						alertDialog.show();					
+						Utils.showToast(ForgotPasswordActivity.this, "手机号码格式不正确");
+						phoneEditText.requestFocus();			
 					}
 				}
 				else
@@ -232,21 +204,11 @@ public class ForgotPasswordActivity extends Activity
 			{
 				if (code.equals(""))
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
-												.setTitle("错误")
-												.setMessage(getResources().getString(R.string.error_no_code))
-												.setPositiveButton("确定", null)
-												.create();
-					alertDialog.show();
+					Utils.showToast(ForgotPasswordActivity.this, getResources().getString(R.string.error_no_code));
 				}
 				else if (!codeEditText.getText().toString().equals(code))
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this)
-												.setTitle("错误")
-												.setMessage(getResources().getString(R.string.error_code))
-												.setPositiveButton("确定", null)
-												.create();
-					alertDialog.show();					
+					Utils.showToast(ForgotPasswordActivity.this, getResources().getString(R.string.error_code));
 				}
 				else
 				{

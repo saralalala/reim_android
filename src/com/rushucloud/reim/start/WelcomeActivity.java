@@ -20,6 +20,7 @@ import android.widget.Button;
 
 public class WelcomeActivity extends Activity
 {
+	private int buttonHeight;
 	private long exitTime;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -73,27 +74,6 @@ public class WelcomeActivity extends Activity
 	{
 		getActionBar().hide();
 		
-		final Button signUpButton = (Button)findViewById(R.id.signUpButton);
-		signUpButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				startActivity(new Intent(WelcomeActivity.this, SignUpActivity.class));
-				finish();
-			}			
-		});
-		signUpButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_solid_light);
-				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
-				ViewGroup.LayoutParams params = signUpButton.getLayoutParams();
-				params.height = (int)(signUpButton.getWidth() * ratio);;
-				signUpButton.setLayoutParams(params);
-			}
-		});
-		
 		final Button signInButton = (Button)findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -113,6 +93,46 @@ public class WelcomeActivity extends Activity
 				ViewGroup.LayoutParams params = signInButton.getLayoutParams();
 				params.height = (int)(signInButton.getWidth() * ratio);;
 				signInButton.setLayoutParams(params);
+				
+				buttonHeight = params.height;
+			}
+		});
+		
+		final Button phoneSignUpButton = (Button)findViewById(R.id.phoneSignUpButton);
+		phoneSignUpButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(WelcomeActivity.this, PhoneSignUpActivity.class));
+				finish();
+			}			
+		});
+		phoneSignUpButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				ViewGroup.LayoutParams params = phoneSignUpButton.getLayoutParams();
+				params.height = buttonHeight;
+				phoneSignUpButton.setLayoutParams(params);
+			}
+		});
+		
+		final Button emailSignUpButton = (Button)findViewById(R.id.emailSignUpButton);
+		emailSignUpButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(WelcomeActivity.this, EmailSignUpActivity.class));
+				finish();
+			}			
+		});
+		emailSignUpButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			public void onGlobalLayout()
+			{
+				ViewGroup.LayoutParams params = emailSignUpButton.getLayoutParams();
+				params.height = buttonHeight;
+				emailSignUpButton.setLayoutParams(params);
 			}
 		});
 	}

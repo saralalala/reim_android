@@ -175,10 +175,10 @@ public class ApproveReportActivity extends Activity
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				if (position > 2)
+				if (position > 0)
 				{
 					Intent intent = new Intent(ApproveReportActivity.this, ShowItemActivity.class);
-					intent.putExtra("othersItemServerID", itemList.get(position - 3).getServerID());
+					intent.putExtra("othersItemServerID", itemList.get(position - 1).getServerID());
 					startActivity(intent);	
 				}
 			}

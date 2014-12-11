@@ -74,6 +74,7 @@ public class ResetPasswordActivity extends Activity
 	
 	private void initView()
 	{
+		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
 		
 		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
@@ -98,63 +99,25 @@ public class ResetPasswordActivity extends Activity
 			{
 				final String newPassword = newPasswordEditText.getText().toString();
 				final String confirmPassword = confirmPasswordEditText.getText().toString();
+				
 				if (!Utils.isNetworkConnected())
 				{
 					Utils.showToast(ResetPasswordActivity.this, "网络未连接，无法发送请求");
 				}
 				else if (newPassword.equals(""))
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(ResetPasswordActivity.this)
-												.setTitle("错误")
-												.setMessage("新密码不能为空")
-												.setPositiveButton("确定", new OnClickListener()
-												{
-													public void onClick(
-															DialogInterface dialog,
-															int which)
-													{
-														dialog.dismiss();
-														newPasswordEditText.requestFocus();
-													}
-												})
-												.create();
-					alertDialog.show();
+					Utils.showToast(ResetPasswordActivity.this, "新密码不能为空");
+					newPasswordEditText.requestFocus();
 				}
 				else if (confirmPassword.equals(""))
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(ResetPasswordActivity.this)
-												.setTitle("错误")
-												.setMessage("确认密码不能为空")
-												.setPositiveButton("确定", new OnClickListener()
-												{
-													public void onClick(
-															DialogInterface dialog,
-															int which)
-													{
-														dialog.dismiss();
-														confirmPasswordEditText.requestFocus();
-													}
-												})
-												.create();
-					alertDialog.show();					
+					Utils.showToast(ResetPasswordActivity.this, "确认密码不能为空");
+					confirmPasswordEditText.requestFocus();
 				}
 				else if (!newPassword.equals(confirmPassword))
 				{
-					AlertDialog alertDialog = new AlertDialog.Builder(ResetPasswordActivity.this)
-													.setTitle("错误")
-													.setMessage("两次输入的密码不一致")
-													.setPositiveButton("确定", new OnClickListener()
-													{
-														public void onClick(
-																DialogInterface dialog,
-																int which)
-														{
-															dialog.dismiss();
-															confirmPasswordEditText.requestFocus();
-														}
-													})
-													.create();
-					alertDialog.show();
+					Utils.showToast(ResetPasswordActivity.this, "两次输入的密码不一致");
+					confirmPasswordEditText.requestFocus();
 				}
 				else
 				{
@@ -191,17 +154,14 @@ public class ResetPasswordActivity extends Activity
 						{
 							ReimApplication.dismissProgressDialog();
 							AlertDialog alertDialog = new AlertDialog.Builder(ResetPasswordActivity.this)
-														.setTitle("成功")
+														.setTitle(R.string.tip)
 														.setMessage("修改密码成功")
-														.setPositiveButton("确定", new OnClickListener()
+														.setNegativeButton(R.string.confirm, new OnClickListener()
 														{
-															public void onClick(
-																	DialogInterface dialog,
-																	int which)
+															public void onClick(DialogInterface dialog, int which)
 															{
-																dialog.dismiss();
-																startActivity(new Intent(ResetPasswordActivity.this,
-																						 SignInActivity.class));
+																startActivity(new Intent(ResetPasswordActivity.this, SignInActivity.class));
+																finish();
 															}
 														})
 														.create();
@@ -216,12 +176,7 @@ public class ResetPasswordActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							AlertDialog alertDialog = new AlertDialog.Builder(ResetPasswordActivity.this)
-															.setTitle("错误")
-															.setMessage("修改密码失败！"+response.getErrorMessage())
-															.setPositiveButton("确定", null)
-															.create();
-							alertDialog.show();	
+							Utils.showToast(ResetPasswordActivity.this, "修改密码失败！"+response.getErrorMessage());
 						}
 					});				
 				}
