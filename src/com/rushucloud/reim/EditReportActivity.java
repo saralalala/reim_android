@@ -620,46 +620,19 @@ public class EditReportActivity extends Activity
 				{
 					report.setStatus(Report.STATUS_DRAFT);					
 				}
-				AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-											.setTitle("无法提交报告")
-											.setMessage("此报告为空报告")
-											.setNegativeButton(R.string.confirm, null)
-											.create();
-				mDialog.show();
+				Utils.showToast(this, "无法提交报告,此报告为空报告");
 			}
 			else if (appPreference.getCurrentGroupID() == -1)
 			{
 				report.setStatus(Report.STATUS_FINISHED);
-				AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-											.setTitle("提示")
-											.setMessage("报告提交成功")
-											.setNegativeButton(R.string.confirm, 
-													new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													finish();
-												}
-											})
-											.create();
-				mDialog.show();
+				Utils.showToast(this, "报告提交成功");
+				finish();
 			}
 			else
 			{
-				report.setStatus(Report.STATUS_SUBMITTED);		
-				AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-										.setTitle("提示")
-										.setMessage("报告提交成功")
-										.setNegativeButton(R.string.confirm, 
-												new DialogInterface.OnClickListener()
-										{
-											public void onClick(DialogInterface dialog, int which)
-											{
-												finish();
-											}
-										})
-										.create();
-				mDialog.show();	
+				report.setStatus(Report.STATUS_SUBMITTED);
+				Utils.showToast(this, "报告提交成功");
+				finish();
 			}
 			dbManager.updateReportByLocalID(report);
 			if (SyncUtils.canSyncToServer())
@@ -676,11 +649,7 @@ public class EditReportActivity extends Activity
 		}
 		else
 		{
-			AlertDialog mDialog = new AlertDialog.Builder(EditReportActivity.this)
-												.setTitle("保存失败")
-												.setNegativeButton(R.string.confirm, null)
-												.create();
-			mDialog.show();
+			Utils.showToast(this, "保存失败");
 		}
     }
 

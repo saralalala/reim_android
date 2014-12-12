@@ -50,7 +50,6 @@ import com.umeng.analytics.MobclickAgent;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -107,13 +106,16 @@ public class EditItemActivity extends Activity
 	private TextView vendorTextView;
 	private PopupWindow vendorPopupWindow;
 	private TextView locationTextView;
-	private AlertDialog locationDialog;
+	private PopupWindow locationPopupWindow;
 	private ImageView categoryImageView;
 	private TextView categoryTextView;
+	private PopupWindow categoryPopupWindow;
 	private LinearLayout tagLayout;
 	private View addTagView;
+	private PopupWindow tagPopupWindow;
 	private LinearLayout memberLayout;
 	private View addMemberView;
+	private PopupWindow memberPopupWindow;
 	private EditText noteEditText;
 	
 	private Item item;
@@ -490,9 +492,10 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				typePopupWindow.dismiss();
+				
 				item.setIsProveAhead(proveAheadRadio.isChecked());
 				item.setNeedReimbursed(needReimToggleButton.isChecked());
-				typePopupWindow.dismiss();
 				
 				String temp = item.isProveAhead() ? getString(R.string.prove_ahead) : getString(R.string.consumed);
 				if (item.needReimbursed())
@@ -622,6 +625,7 @@ public class EditItemActivity extends Activity
 			public void onClick(View v)
 			{
 				timePopupWindow.dismiss();
+				
 				GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), 
 						datePicker.getMonth(), datePicker.getDayOfMonth());
 				item.setConsumedDate((int)(greCal.getTimeInMillis() / 1000));
@@ -677,8 +681,8 @@ public class EditItemActivity extends Activity
 			}
 		});
 		
-		ImageView vendorBackImageView = (ImageView) vendorView.findViewById(R.id.backImageView);
-		vendorBackImageView.setOnClickListener(new View.OnClickListener()
+		ImageView backImageView = (ImageView) vendorView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -686,15 +690,16 @@ public class EditItemActivity extends Activity
 			}
 		});
 		
-		TextView vendorConfirmTextView = (TextView) vendorView.findViewById(R.id.confirmTextView);
-		vendorConfirmTextView.setOnClickListener(new View.OnClickListener()
+		TextView confirmTextView = (TextView) vendorView.findViewById(R.id.confirmTextView);
+		confirmTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
+				vendorPopupWindow.dismiss();
+				
 				item.setVendor(vendorEditText.getText().toString());
 				vendorTextView.setText(item.getVendor());
-				vendorPopupWindow.dismiss();
 			}
 		});
 
@@ -712,24 +717,25 @@ public class EditItemActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				locationDialog.show();
+				showLocationWindow();
 			}
 		});
+
+		// init location window
+		View locationView = View.inflate(this, R.layout.reim_location, null);
 		
-		// init location dialog
-		locationAdapter = new LocationListViewAdapter(this, item.getLocation());
-		locationCheck = locationAdapter.getCheck();
-		
-    	View locationView = View.inflate(this, R.layout.reim_location, null);
-    	final EditText locationEditText = (EditText) locationView.findViewById(R.id.locationEditText);
+		final EditText locationEditText = (EditText) locationView.findViewById(R.id.locationEditText);
     	if (!item.getLocation().equals(""))
 		{
         	locationEditText.setText(item.getLocation());			
 		}
 
-    	ListView locationListView = (ListView) locationView.findViewById(R.id.locationListView);
-    	locationListView.setAdapter(locationAdapter);
-    	locationListView.setOnItemClickListener(new OnItemClickListener()
+		locationAdapter = new LocationListViewAdapter(this, item.getLocation());
+		locationCheck = locationAdapter.getCheck();
+		
+		ListView locationListView = (ListView) locationView.findViewById(R.id.locationListView);
+		locationListView.setAdapter(locationAdapter);
+		locationListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
@@ -750,24 +756,34 @@ public class EditItemActivity extends Activity
 				}
 			}
 		});
-    	
-		Builder builder = new Builder(EditItemActivity.this);
-		builder.setTitle(R.string.choose_location);
-		builder.setView(locationView);
-		builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
-									{
-										public void onClick(DialogInterface dialog, int which)
-										{
-											item.setLocation(locationEditText.getText().toString());
-											locationTextView.setText(item.getLocation());
-										}
-									});
-		builder.setNegativeButton(R.string.cancel, null);
-		locationDialog = builder.create();
+		
+		ImageView backImageView = (ImageView) locationView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				locationPopupWindow.dismiss();
+			}
+		});
+		
+		TextView confirmTextView = (TextView) locationView.findViewById(R.id.confirmTextView);
+		confirmTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				locationPopupWindow.dismiss();
+				
+				item.setLocation(locationEditText.getText().toString());
+				locationTextView.setText(item.getLocation());
+			}
+		});
+
+		locationPopupWindow = Utils.constructFullPopupWindow(this, locationView);
 	}
 	
 	private void initCategoryView()
-	{		
+	{
 		// init category
 		categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
 		categoryImageView.setOnClickListener(new View.OnClickListener()
@@ -786,7 +802,7 @@ public class EditItemActivity extends Activity
 					}
 					
 					hideSoftKeyboard();
-					showCategoryDialog();
+					showCategoryWindow();
 				}				
 			}
 		});
@@ -810,7 +826,7 @@ public class EditItemActivity extends Activity
 					}
 					
 					hideSoftKeyboard();
-					showCategoryDialog();
+					showCategoryWindow();
 				}				
 			}
 		});
@@ -831,11 +847,71 @@ public class EditItemActivity extends Activity
 		else
 		{
 			categoryImageView.setVisibility(View.GONE);
-		}		
+		}	
+		
+		// init category window
+		final boolean[] check = Category.getCategoryCheck(categoryList, item.getCategory());
+		
+		categoryAdapter = new CategoryListViewAdapter(this, categoryList, check);
+    	View categoryView = View.inflate(this, R.layout.reim_category, null);
+    	ListView categoryListView = (ListView) categoryView.findViewById(R.id.categoryListView);
+    	categoryListView.setAdapter(categoryAdapter);
+    	categoryListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{				
+				for (int i = 0; i < check.length; i++)
+				{
+					check[i] = false;
+				}
+				check[position] = true;
+				categoryAdapter.setCheck(check);
+				categoryAdapter.notifyDataSetChanged();
+			}
+		});
+		
+		ImageView backImageView = (ImageView) categoryView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				categoryPopupWindow.dismiss();
+			}
+		});
+		
+		TextView confirmTextView = (TextView) categoryView.findViewById(R.id.confirmTextView);
+		confirmTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				categoryPopupWindow.dismiss();
+				
+				boolean flag = false;
+				for (int i = 0; i < check.length; i++)
+				{
+					if (check[i])
+					{
+						item.setCategory(categoryList.get(i));
+						flag = true;
+						break;
+					}
+				}
+				if (!flag)
+				{
+					item.setCategory(null);
+				}
+
+				categoryTextView.setText(item.getCategory().getName());
+			}
+		});
+
+		categoryPopupWindow = Utils.constructFullPopupWindow(this, categoryView);	
 	}
 	
 	private void initTagView()
-	{		
+	{
+		// init tag
 		tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
 		
 		addTagView = View.inflate(this, R.layout.grid_tag, null);
@@ -855,7 +931,7 @@ public class EditItemActivity extends Activity
 				hideSoftKeyboard();
 				if (tagList.size() > 0)
 				{
-					showTagDialog();
+					showTagWindow();
 				}
 				else
 				{
@@ -868,10 +944,60 @@ public class EditItemActivity extends Activity
 		iconImageView.setImageResource(R.drawable.add_tag_button);
 		
 		refreshTagView();
+
+		// init tag window
+		final boolean[] check = Tag.getTagsCheck(tagList, item.getTags());
+		
+		tagAdapter = new TagListViewAdapter(this, tagList, check);
+    	View tagView = View.inflate(this, R.layout.reim_tag, null);
+    	ListView tagListView = (ListView) tagView.findViewById(R.id.tagListView);
+    	tagListView.setAdapter(tagAdapter);
+    	tagListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				check[position] = !check[position];
+				tagAdapter.setCheck(check);
+				tagAdapter.notifyDataSetChanged();
+			}
+		});
+		
+		ImageView backImageView = (ImageView) tagView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				tagPopupWindow.dismiss();
+			}
+		});
+		
+		TextView confirmTextView = (TextView) tagView.findViewById(R.id.confirmTextView);
+		confirmTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				tagPopupWindow.dismiss();
+				
+				List<Tag> tags = new ArrayList<Tag>();
+				for (int i = 0; i < tagList.size(); i++)
+				{
+					if (check[i])
+					{
+						tags.add(tagList.get(i));
+					}
+				}
+				item.setTags(tags);
+				refreshTagView();
+			}
+		});
+
+		tagPopupWindow = Utils.constructFullPopupWindow(this, tagView);	
 	}
 	
 	private void initMemberView()
 	{	
+		// init member
 		memberLayout = (LinearLayout) findViewById(R.id.memberLayout);
 		
 		addMemberView = View.inflate(this, R.layout.grid_member, null);
@@ -891,7 +1017,7 @@ public class EditItemActivity extends Activity
 				hideSoftKeyboard();
 				if (userList.size() > 0)
 				{
-					showMemberDialog();
+					showMemberWindow();
 				}
 				else
 				{
@@ -903,7 +1029,56 @@ public class EditItemActivity extends Activity
 		ImageView avatarImageView = (ImageView) addMemberView.findViewById(R.id.avatarImageView);
 		avatarImageView.setImageResource(R.drawable.add_tag_button);
 		
-		refreshMemberView();		
+		refreshMemberView();	
+
+		// init member window
+		final boolean[] check = User.getUsersCheck(userList, item.getRelevantUsers());
+		
+		memberAdapter = new MemberListViewAdapter(EditItemActivity.this, userList, check);
+    	View memberView = View.inflate(EditItemActivity.this, R.layout.reim_member, null);
+    	ListView userListView = (ListView) memberView.findViewById(R.id.userListView);
+    	userListView.setAdapter(memberAdapter);
+    	userListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				check[position] = !check[position];
+				memberAdapter.setCheck(check);
+				memberAdapter.notifyDataSetChanged();
+			}
+		});
+		
+		ImageView backImageView = (ImageView) memberView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				memberPopupWindow.dismiss();
+			}
+		});
+		
+		TextView confirmTextView = (TextView) memberView.findViewById(R.id.confirmTextView);
+		confirmTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				memberPopupWindow.dismiss();
+				
+				List<User> users = new ArrayList<User>();
+				for (int i = 0; i < userList.size(); i++)
+				{
+					if (check[i])
+					{
+						users.add(userList.get(i));
+					}
+				}
+				item.setRelevantUsers(users);
+				refreshMemberView();
+			}
+		});
+
+		memberPopupWindow = Utils.constructFullPopupWindow(this, memberView);	
 	}
 	
 	private void initNoteView()
@@ -1190,56 +1365,16 @@ public class EditItemActivity extends Activity
 		}
     }
 
-    private void showCategoryDialog()
+    private void showLocationWindow()
     {
-		final boolean[] check = Category.getCategoryCheck(categoryList, item.getCategory());
-		
-		categoryAdapter = new CategoryListViewAdapter(this, categoryList, check);
-    	View view = View.inflate(this, R.layout.me_category, null);
-    	ListView categoryListView = (ListView) view.findViewById(R.id.categoryListView);
-    	categoryListView.setAdapter(categoryAdapter);
-    	categoryListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{				
-				for (int i = 0; i < check.length; i++)
-				{
-					check[i] = false;
-				}
-				check[position] = true;
-				categoryAdapter.setCheck(check);
-				categoryAdapter.notifyDataSetChanged();
-			}
-		});
-
-    	AlertDialog mDialog = new AlertDialog.Builder(this)
-    							.setTitle(R.string.choose_category)
-    							.setView(view)
-    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										boolean flag = false;
-										for (int i = 0; i < check.length; i++)
-										{
-											if (check[i])
-											{
-												item.setCategory(categoryList.get(i));
-												flag = true;
-												break;
-											}
-										}
-										if (!flag)
-										{
-											item.setCategory(null);
-										}
-
-										categoryTextView.setText(item.getCategory().getName());
-									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-    	mDialog.show();
+    	locationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+    	locationPopupWindow.update();
+    }
+    
+    private void showCategoryWindow()
+    {
+    	categoryPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+    	categoryPopupWindow.update();
 		
 		if (Utils.isNetworkConnected())
 		{
@@ -1252,47 +1387,11 @@ public class EditItemActivity extends Activity
 			}
 		}
     }
-    
-    private void showTagDialog()
-    {
-		final boolean[] check = Tag.getTagsCheck(tagList, item.getTags());
-		
-		tagAdapter = new TagListViewAdapter(this, tagList, check);
-    	View view = View.inflate(this, R.layout.me_tag, null);
-    	ListView tagListView = (ListView) view.findViewById(R.id.tagListView);
-    	tagListView.setAdapter(tagAdapter);
-    	tagListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				check[position] = !check[position];
-				tagAdapter.setCheck(check);
-				tagAdapter.notifyDataSetChanged();
-			}
-		});
 
-    	AlertDialog mDialog = new AlertDialog.Builder(this)
-    							.setTitle(R.string.choose_tag)
-    							.setView(view)
-    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										List<Tag> tags = new ArrayList<Tag>();
-										for (int i = 0; i < tagList.size(); i++)
-										{
-											if (check[i])
-											{
-												tags.add(tagList.get(i));
-											}
-										}
-										item.setTags(tags);
-										refreshTagView();
-									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-    	mDialog.show();
+    private void showTagWindow()
+    {
+    	tagPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+    	tagPopupWindow.update();
 		
 		if (Utils.isNetworkConnected())
 		{
@@ -1305,47 +1404,11 @@ public class EditItemActivity extends Activity
 			}
 		}
     }
-    
-    private void showMemberDialog()
-    {
-		final boolean[] check = User.getUsersCheck(userList, item.getRelevantUsers());
-		
-		memberAdapter = new MemberListViewAdapter(EditItemActivity.this, userList, check);
-    	View view = View.inflate(EditItemActivity.this, R.layout.me_member, null);
-    	ListView userListView = (ListView) view.findViewById(R.id.userListView);
-    	userListView.setAdapter(memberAdapter);
-    	userListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				check[position] = !check[position];
-				memberAdapter.setCheck(check);
-				memberAdapter.notifyDataSetChanged();
-			}
-		});
 
-    	AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-    							.setTitle(R.string.choose_member)
-    							.setView(view)
-    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										List<User> users = new ArrayList<User>();
-										for (int i = 0; i < userList.size(); i++)
-										{
-											if (check[i])
-											{
-												users.add(userList.get(i));
-											}
-										}
-										item.setRelevantUsers(users);
-										refreshMemberView();
-									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-    	mDialog.show();
+    private void showMemberWindow()
+    {
+    	memberPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+    	memberPopupWindow.update();
     }
     
     private void showManagerDialog()

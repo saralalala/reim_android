@@ -172,27 +172,27 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 				else
 				{
 					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-							.setTitle("警告")
-							.setMessage(R.string.delete_item_warning)
-							.setPositiveButton(R.string.confirm,
-									new DialogInterface.OnClickListener()
-									{
-										public void onClick(DialogInterface dialog, int which)
-										{
-											if (localItem.getServerID() == -1)
-											{
-												deleteItemFromLocal(localItem.getLocalID());
-											}
-											else if (!Utils.isNetworkConnected())
-											{
-												Utils.showToast(getActivity(), "网络未连接，无法删除");
-											}
-											else
-											{
-												sendDeleteItemRequest(localItem);
-											}
-										}
-									}).setNegativeButton(R.string.cancel, null).create();
+											.setTitle("警告")
+											.setMessage(R.string.delete_item_warning)
+											.setPositiveButton(R.string.confirm,
+													new DialogInterface.OnClickListener()
+													{
+														public void onClick(DialogInterface dialog, int which)
+														{
+															if (localItem.getServerID() == -1)
+															{
+																deleteItemFromLocal(localItem.getLocalID());
+															}
+															else if (!Utils.isNetworkConnected())
+															{
+																Utils.showToast(getActivity(), "网络未连接，无法删除");
+															}
+															else
+															{
+																sendDeleteItemRequest(localItem);
+															}
+														}
+													}).setNegativeButton(R.string.cancel, null).create();
 					mDialog.show();
 				}
 				break;

@@ -272,19 +272,8 @@ public class ApproveReportActivity extends Activity
 					    	ReimApplication.dismissProgressDialog();
 					    	if (report.getStatus() != Report.STATUS_SUBMITTED)
 							{
-								AlertDialog mDialog = new AlertDialog.Builder(ApproveReportActivity.this)
-													.setTitle(R.string.tip)
-													.setMessage("报告已被审批")
-													.setNegativeButton(R.string.confirm, 
-															new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															finish();
-														}
-													})
-													.create();
-								mDialog.show();
+					    		Utils.showToast(ApproveReportActivity.this, "报告已被审批");
+					    		finish();
 							}
 					    	else
 					    	{
@@ -302,19 +291,8 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							AlertDialog mDialog = new AlertDialog.Builder(ApproveReportActivity.this)
-												.setTitle("提示")
-												.setMessage("数据获取失败")
-												.setNegativeButton(R.string.confirm, 
-														new DialogInterface.OnClickListener()
-												{
-													public void onClick(DialogInterface dialog, int which)
-													{
-														finish();
-													}
-												})
-												.create();
-							mDialog.show();
+				    		Utils.showToast(ApproveReportActivity.this, "数据获取失败");
+				    		finish();
 						}
 					});
 				}
@@ -426,19 +404,8 @@ public class ApproveReportActivity extends Activity
 						{
 					    	ReimApplication.dismissProgressDialog();
 							String message = status == 2 ? "报告已通过" : "报告已退回";
-							AlertDialog mDialog = new AlertDialog.Builder(ApproveReportActivity.this)
-												.setTitle("提示")
-												.setMessage(message)
-												.setNegativeButton(R.string.confirm, 
-														new DialogInterface.OnClickListener()
-												{
-													public void onClick(DialogInterface dialog, int which)
-													{
-														finish();
-													}
-												})
-												.create();
-							mDialog.show();
+							Utils.showToast(ApproveReportActivity.this, message);
+							finish();
 						}
 					});
 				}

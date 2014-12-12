@@ -46,6 +46,7 @@
     <string name="error_code">验证码输入错误！</string>
     <string name="error_no_code">未获取到任何验证码！</string>
     <string name="reset_password">设置新密码</string>
+    <string name="complete_info">完善个人信息</string>
     
     <string name="reimbursement">报销</string>
     <string name="report">报告</string>
