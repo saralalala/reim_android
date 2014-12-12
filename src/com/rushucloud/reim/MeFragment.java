@@ -62,7 +62,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
@@ -227,12 +226,9 @@ public class MeFragment extends Fragment
 			}
 		});
 		
-		final View pictureView = View.inflate(getActivity(), R.layout.window_picture, null); 
-
-		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.window_button_unselected);
-		final double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+		View pictureView = View.inflate(getActivity(), R.layout.window_picture, null);
 		
-		final Button cameraButton = (Button) pictureView.findViewById(R.id.cameraButton);
+		Button cameraButton = (Button) pictureView.findViewById(R.id.cameraButton);
 		cameraButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -243,17 +239,9 @@ public class MeFragment extends Fragment
 				startActivityForResult(intent, TAKE_PHOTO);
 			}
 		});
-		cameraButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				ViewGroup.LayoutParams params = cameraButton.getLayoutParams();
-				params.height = (int)(cameraButton.getWidth() * ratio);;
-				cameraButton.setLayoutParams(params);
-			}
-		});
+		cameraButton = Utils.resizeWindowButton(cameraButton);
 		
-		final Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
+		Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
 		galleryButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -265,17 +253,9 @@ public class MeFragment extends Fragment
 				startActivityForResult(intent, PICK_IMAGE);
 			}
 		});
-		galleryButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				ViewGroup.LayoutParams params = galleryButton.getLayoutParams();
-				params.height = (int)(galleryButton.getWidth() * ratio);;
-				galleryButton.setLayoutParams(params);
-			}
-		});
+		galleryButton = Utils.resizeWindowButton(galleryButton);
 		
-		final Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
+		Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -283,15 +263,7 @@ public class MeFragment extends Fragment
 				picturePopupWindow.dismiss();
 			}
 		});
-		cancelButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				ViewGroup.LayoutParams params = cancelButton.getLayoutParams();
-				params.height = (int)(cameraButton.getWidth() * ratio);;
-				cancelButton.setLayoutParams(params);
-			}
-		});
+		cancelButton = Utils.resizeWindowButton(cancelButton);
 		
 		picturePopupWindow = Utils.constructPopupWindow(getActivity(), pictureView);
         

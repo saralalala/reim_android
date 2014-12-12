@@ -14,6 +14,7 @@
     <string name="cancel">取消</string>
     <string name="add">添加</string>
     <string name="back">返回</string>
+    <string name="complete">完成</string>
     <string name="next">下一步</string>
     <string name="modify">修改</string>
     <string name="delete">删除</string>
@@ -34,15 +35,17 @@
     <string name="input_new_password">请输入新密码</string>
     <string name="input_confirm_password">请确认密码</string>
     <string name="forgot_password">忘记密码</string>
-    <string name="find_password_by_phone">用手机找回</string>
-    <string name="find_password_by_email">用邮箱找回</string>
+    <string name="find_password_by_phone">手机找回</string>
+    <string name="find_password_by_email">邮箱找回</string>
     <string name="input_email">请输入邮箱</string>
     <string name="input_phone">请输入手机号</string>
     <string name="input_code">请输入验证码</string>
     <string name="acquire_code">获取验证码</string>
+    <string name="send_verify_email">发送验证邮件</string>
     <string name="email_sent_prompt">邮件已发送，请查阅邮箱！</string>
     <string name="error_code">验证码输入错误！</string>
     <string name="error_no_code">未获取到任何验证码！</string>
+    <string name="reset_password">设置新密码</string>
     
     <string name="reimbursement">报销</string>
     <string name="report">报告</string>

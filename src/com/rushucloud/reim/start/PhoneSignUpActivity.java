@@ -24,13 +24,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -130,19 +126,9 @@ public class PhoneSignUpActivity extends Activity
 				}
 			}
 		});
-		acquireCodeButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_short_solid_light);
-				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
-				ViewGroup.LayoutParams params = acquireCodeButton.getLayoutParams();
-				params.height = (int)(acquireCodeButton.getWidth() * ratio);;
-				acquireCodeButton.setLayoutParams(params);
-			}
-		});
+		acquireCodeButton = Utils.resizeShortButton(acquireCodeButton, 32);
 		
-		final Button signUpButton = (Button)findViewById(R.id.signUpButton);
+		Button signUpButton = (Button)findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -200,17 +186,7 @@ public class PhoneSignUpActivity extends Activity
 				}
 			}
 		});
-		signUpButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_solid_light);
-				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
-				ViewGroup.LayoutParams params = signUpButton.getLayoutParams();
-				params.height = (int)(signUpButton.getWidth() * ratio);;
-				signUpButton.setLayoutParams(params);
-			}
-		});
+		signUpButton = Utils.resizeLongButton(signUpButton);
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()

@@ -19,10 +19,7 @@
             android:background="@null"
             android:ems="10"
             android:hint="@string/input_location"
-            android:inputType="text" >
-
-            <requestFocus />
-        </EditText>
+            android:inputType="text" />
 
     </RelativeLayout>
             

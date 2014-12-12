@@ -9,8 +9,6 @@ import database.DBManager;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,7 +18,6 @@ import android.widget.Button;
 
 public class WelcomeActivity extends Activity
 {
-	private int buttonHeight;
 	private long exitTime;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -74,7 +71,7 @@ public class WelcomeActivity extends Activity
 	{
 		getActionBar().hide();
 		
-		final Button signInButton = (Button)findViewById(R.id.signInButton);
+		Button signInButton = (Button)findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()
 		{
 
@@ -84,19 +81,9 @@ public class WelcomeActivity extends Activity
 				finish();
 			}			
 		});
-		signInButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_border_light);
-				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
-				ViewGroup.LayoutParams params = signInButton.getLayoutParams();
-				params.height = (int)(signInButton.getWidth() * ratio);;
-				signInButton.setLayoutParams(params);
-				
-				buttonHeight = params.height;
-			}
-		});
+		signInButton = Utils.resizeLongButton(signInButton);
+
+		final int buttonHeight = signInButton.getLayoutParams().height;
 		
 		final Button phoneSignUpButton = (Button)findViewById(R.id.phoneSignUpButton);
 		phoneSignUpButton.setOnClickListener(new View.OnClickListener()

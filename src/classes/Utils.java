@@ -23,6 +23,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.ColorDrawable;
@@ -32,15 +33,19 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupWindow.OnDismissListener;
 
 public class Utils
-{	
+{
 	private static String regexEmail = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
 			 
 	private static String regexPhone = "[1]+\\d{10}";
@@ -202,42 +207,21 @@ public class Utils
 
 	public static boolean isEmailOrPhone(String source)
 	{
-		if (isEmail(source) || isPhone(source))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return isEmail(source) || isPhone(source);
 	}
 	
 	public static boolean isEmail(String source)
 	{
 		Pattern pattern = Pattern.compile(regexEmail);
 		Matcher matcher = pattern.matcher(source);
-		if (matcher.find())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return matcher.find();
 	}
 	
 	public static boolean isPhone(String source)
 	{
 		Pattern pattern = Pattern.compile(regexPhone);
 		Matcher matcher = pattern.matcher(source);
-		if (matcher.find())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return matcher.find();
 	}
 
 	public static int booleanToInt(boolean b)
@@ -418,5 +402,56 @@ public class Utils
 		WindowManager.LayoutParams params = activity.getWindow().getAttributes();
 		params.alpha = (float) 1;
 		activity.getWindow().setAttributes(params);
+	}
+
+	public static Button resizeLongButton(Button button)
+	{
+		Context context = ReimApplication.getContext();
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		
+		int marginPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_long_solid_light);
+		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+		
+		ViewGroup.LayoutParams params = button.getLayoutParams();
+		params.width = metrics.widthPixels - marginPixels * 2;
+		params.height = (int)(params.width * ratio);
+		
+		button.setLayoutParams(params);
+		return button;
+	}
+
+	public static Button resizeShortButton(Button button, int height)
+	{
+		Context context = ReimApplication.getContext();
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		
+		int heightPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
+		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_short_solid_light);
+		double ratio = ((double)bitmap.getWidth()) / bitmap.getHeight();
+		
+		ViewGroup.LayoutParams params = button.getLayoutParams();
+		params.width = (int)(heightPixels * ratio);
+		params.height = heightPixels;
+		
+		button.setLayoutParams(params);
+		return button;
+	}
+	
+	public static Button resizeWindowButton(Button button)
+	{
+		Context context = ReimApplication.getContext();
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		
+		int marginPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.window_button_selected);
+		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+		
+		ViewGroup.LayoutParams params = button.getLayoutParams();
+		params.width = metrics.widthPixels - marginPixels * 2;
+		params.height = (int)(params.width * ratio);
+		
+		button.setLayoutParams(params);
+		return button;
 	}
 }

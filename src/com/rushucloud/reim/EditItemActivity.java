@@ -68,7 +68,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.AdapterView.OnItemClickListener;
@@ -558,12 +557,9 @@ public class EditItemActivity extends Activity
 		refreshInvoiceView();
 		
 		// init picture window
-		final View pictureView = View.inflate(this, R.layout.window_picture, null); 
-
-		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.window_button_unselected);
-		final double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+		View pictureView = View.inflate(this, R.layout.window_picture, null); 
 		
-		final Button cameraButton = (Button) pictureView.findViewById(R.id.cameraButton);
+		Button cameraButton = (Button) pictureView.findViewById(R.id.cameraButton);
 		cameraButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -574,17 +570,9 @@ public class EditItemActivity extends Activity
 				startActivityForResult(intent, TAKE_PHOTO);
 			}
 		});
-		cameraButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				ViewGroup.LayoutParams params = cameraButton.getLayoutParams();
-				params.height = (int)(cameraButton.getWidth() * ratio);;
-				cameraButton.setLayoutParams(params);
-			}
-		});
+		cameraButton = Utils.resizeWindowButton(cameraButton);
 		
-		final Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
+		Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
 		galleryButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -596,17 +584,9 @@ public class EditItemActivity extends Activity
 				startActivityForResult(intent, PICK_IMAGE);
 			}
 		});
-		galleryButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				ViewGroup.LayoutParams params = galleryButton.getLayoutParams();
-				params.height = (int)(galleryButton.getWidth() * ratio);;
-				galleryButton.setLayoutParams(params);
-			}
-		});
+		galleryButton = Utils.resizeWindowButton(galleryButton);
 		
-		final Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
+		Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -614,15 +594,7 @@ public class EditItemActivity extends Activity
 				picturePopupWindow.dismiss();
 			}
 		});
-		cancelButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				ViewGroup.LayoutParams params = cancelButton.getLayoutParams();
-				params.height = (int)(cancelButton.getWidth() * ratio);;
-				cancelButton.setLayoutParams(params);
-			}
-		});
+		cancelButton = Utils.resizeWindowButton(cancelButton);
 		
 		picturePopupWindow = Utils.constructPopupWindow(this, pictureView);		
 	}
@@ -642,9 +614,9 @@ public class EditItemActivity extends Activity
 		timeTextView.setText(Utils.secondToStringUpToDay(time));
 		
 		// init time window
-		final View timeView = View.inflate(this, R.layout.window_date, null);
+		View timeView = View.inflate(this, R.layout.window_date, null);
 		
-		final Button confirmButton = (Button) timeView.findViewById(R.id.confirmButton);
+		Button confirmButton = (Button) timeView.findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -656,17 +628,7 @@ public class EditItemActivity extends Activity
 				timeTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));
 			}
 		});
-		confirmButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_short_solid_dark);
-				double ratio = ((double)bitmap.getWidth()) / bitmap.getHeight();
-				ViewGroup.LayoutParams params = confirmButton.getLayoutParams();
-				params.width = (int)(confirmButton.getHeight() * ratio);;
-				confirmButton.setLayoutParams(params);
-			}
-		});
+		confirmButton = Utils.resizeShortButton(confirmButton, 30);
 		
 		datePicker = (DatePicker) timeView.findViewById(R.id.datePicker);
 		

@@ -17,17 +17,15 @@ import database.DBManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,6 +34,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 	private EditText usernameEditText;
 	private EditText passwordEditText;
 	private TextView forgorPasswordTextView;
+	private PopupWindow forgotPopupWindow;
 	private TextView signUpTextView;
 	private ImageView signUpImageView;
 
@@ -107,7 +106,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		usernameEditText.setText("a@a.com");
 		passwordEditText.setText("111111");
 
-		final Button signInButton = (Button)findViewById(R.id.signInButton);
+		Button signInButton = (Button)findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -148,21 +147,52 @@ public class SignInActivity extends Activity implements View.OnClickListener
 				}
 			}
 		});
-		signInButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_solid_light);
-				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
-				ViewGroup.LayoutParams params = signInButton.getLayoutParams();
-				params.height = (int)(signInButton.getWidth() * ratio);;
-				signInButton.setLayoutParams(params);
-			}
-		});
+		signInButton = Utils.resizeLongButton(signInButton);
 		
 		forgorPasswordTextView = (TextView)findViewById(R.id.forgotTextView);
 		forgorPasswordTextView.setOnClickListener(this);
 
+		// init forgot window
+		View forgorView = View.inflate(this, R.layout.window_find_password, null);
+		
+		Button phoneButton = (Button) forgorView.findViewById(R.id.phoneButton);
+		phoneButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				forgotPopupWindow.dismiss();
+				
+				startActivity(new Intent(SignInActivity.this, PhoneFindActivity.class));
+				finish();
+			}
+		});
+		phoneButton = Utils.resizeWindowButton(phoneButton);
+		
+		Button emailButton = (Button) forgorView.findViewById(R.id.emailButton);
+		emailButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				forgotPopupWindow.dismiss();
+				
+				startActivity(new Intent(SignInActivity.this, EmailFindActivity.class));
+				finish();
+			}
+		});
+		emailButton = Utils.resizeWindowButton(emailButton);
+		
+		Button cancelButton = (Button) forgorView.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				forgotPopupWindow.dismiss();
+			}
+		});
+		cancelButton = Utils.resizeWindowButton(cancelButton);
+		
+		forgotPopupWindow = Utils.constructPopupWindow(this, forgorView);
+		
 		signUpTextView = (TextView)findViewById(R.id.signUpTextView);
 		signUpTextView.setOnClickListener(this);
 		
@@ -178,6 +208,14 @@ public class SignInActivity extends Activity implements View.OnClickListener
 			}
 		});
 	}
+
+    private void showForgotWindow()
+    {
+		forgotPopupWindow.showAtLocation(findViewById(R.id.baseLayout), Gravity.BOTTOM, 0, 0);
+		forgotPopupWindow.update();
+
+		Utils.dimBackground(this);
+    }
 	
 	private void sendSignInRequest()
 	{
@@ -279,8 +317,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 	{
 		if (v.equals(forgorPasswordTextView))
 		{
-			startActivity(new Intent(SignInActivity.this, ForgotPasswordActivity.class));
-			finish();
+			showForgotWindow();
 		}
 		else if (v.equals(signUpTextView) || v.equals(signUpImageView))
 		{

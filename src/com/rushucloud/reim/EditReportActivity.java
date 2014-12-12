@@ -41,9 +41,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -392,12 +390,9 @@ public class EditReportActivity extends Activity
     {	
     	if (deletePopupWindow == null)
 		{
-    		final View deleteView = View.inflate(this, R.layout.window_delete, null); 
-
-    		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.window_button_unselected);
-    		final double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+    		View deleteView = View.inflate(this, R.layout.window_delete, null);
     		
-    		final Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
+    		Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
     		deleteButton.setOnClickListener(new View.OnClickListener()
     		{
     			public void onClick(View v)
@@ -409,17 +404,9 @@ public class EditReportActivity extends Activity
     				refreshView();
     			}
     		});
-    		deleteButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-    		{
-    			public void onGlobalLayout()
-    			{
-    				ViewGroup.LayoutParams params = deleteButton.getLayoutParams();
-    				params.height = (int)(deleteButton.getWidth() * ratio);;
-    				deleteButton.setLayoutParams(params);
-    			}
-    		});
+    		deleteButton = Utils.resizeWindowButton(deleteButton);
     		
-    		final Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
+    		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
     		cancelButton.setOnClickListener(new View.OnClickListener()
     		{
     			public void onClick(View v)
@@ -427,15 +414,7 @@ public class EditReportActivity extends Activity
     				deletePopupWindow.dismiss();
     			}
     		});
-    		cancelButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-    		{
-    			public void onGlobalLayout()
-    			{
-    				ViewGroup.LayoutParams params = cancelButton.getLayoutParams();
-    				params.height = (int)(cancelButton.getWidth() * ratio);;
-    				cancelButton.setLayoutParams(params);
-    			}
-    		});
+    		cancelButton = Utils.resizeWindowButton(cancelButton);
     		
     		deletePopupWindow = Utils.constructPopupWindow(this, deleteView);
 		}

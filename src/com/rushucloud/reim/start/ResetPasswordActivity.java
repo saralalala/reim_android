@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 public class ResetPasswordActivity extends Activity
@@ -38,7 +39,6 @@ public class ResetPasswordActivity extends Activity
 		setContentView(R.layout.start_reset_password);
 		initData();
 		initView();
-		initButton();
 	}
 
 	protected void onResume()
@@ -59,7 +59,7 @@ public class ResetPasswordActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			startActivity(new Intent(ResetPasswordActivity.this, ForgotPasswordActivity.class));
+			startActivity(new Intent(ResetPasswordActivity.this, EmailFindActivity.class));
 			finish();
 		}
 		return super.onKeyDown(keyCode, event);
@@ -76,24 +76,22 @@ public class ResetPasswordActivity extends Activity
 	{
 		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
+
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(ResetPasswordActivity.this, PhoneFindActivity.class));
+				finish();
+			}
+		});
 		
 		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
 		
-    	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
-    	baseLayout.setOnClickListener(new View.OnClickListener()
-    	{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});
-	}
-	
-	private void initButton()
-	{
-		Button confirmButton = (Button)findViewById(R.id.confirmButton);
-		confirmButton.setOnClickListener(new View.OnClickListener()
+		Button completeButton = (Button)findViewById(R.id.completeButton);
+		completeButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -125,18 +123,18 @@ public class ResetPasswordActivity extends Activity
 				}
 			}
 		});
+		completeButton = Utils.resizeLongButton(completeButton);
 		
-		Button cancelbuButton= (Button)findViewById(R.id.cancelButton);
-		cancelbuButton.setOnClickListener(new View.OnClickListener()
-		{
+    	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
+    	baseLayout.setOnClickListener(new View.OnClickListener()
+    	{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(ResetPasswordActivity.this, ForgotPasswordActivity.class));
-				finish();
+				hideSoftKeyboard();
 			}
 		});
 	}
-	
+
 	private void sendResetPasswordRequest(String password)
 	{
 		ReimApplication.showProgressDialog();
