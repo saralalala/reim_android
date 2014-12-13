@@ -117,6 +117,7 @@ public class EditItemActivity extends Activity
 	private View addMemberView;
 	private PopupWindow memberPopupWindow;
 	private EditText noteEditText;
+	private PopupWindow managerPopupWindow;
 	
 	private Item item;
 	private Report report;
@@ -325,7 +326,7 @@ public class EditItemActivity extends Activity
 												{
 													if (Utils.isNetworkConnected())
 													{
-														showManagerDialog();
+														showManagerWindow();
 													}
 													else
 													{
@@ -344,18 +345,8 @@ public class EditItemActivity extends Activity
 				}
 				catch (NumberFormatException e)
 				{
-					AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-														.setTitle("保存失败")
-														.setMessage("数字输入格式不正确")
-														.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																amountEditText.requestFocus();
-															}
-														})
-														.create();
-					mDialog.show();
+					Utils.showToast(EditItemActivity.this, "数字输入格式不正确");
+					amountEditText.requestFocus();
 				}
 				catch (Exception e)
 				{
@@ -382,7 +373,8 @@ public class EditItemActivity extends Activity
 		initCategoryView();
 		initTagView();
 		initMemberView();
-		initNoteView();		
+		initNoteView();
+		initManagerView();
 	}
 	
 	private void initStatusView()
@@ -1080,7 +1072,7 @@ public class EditItemActivity extends Activity
 
 		memberPopupWindow = Utils.constructFullPopupWindow(this, memberView);	
 	}
-	
+
 	private void initNoteView()
 	{
 		noteEditText = (EditText)findViewById(R.id.noteEditText);
@@ -1101,6 +1093,97 @@ public class EditItemActivity extends Activity
 		});
 	}
 	
+	private void initManagerView()
+	{
+		final List<User> memberList = User.removeCurrentUserFromList(userList);
+		final boolean[] check = User.getUsersCheck(memberList, appPreference.getCurrentUser().constructListWithManager());
+		
+		final MemberListViewAdapter memberAdapter = new MemberListViewAdapter(this, memberList, check);
+    	View managerView = View.inflate(this, R.layout.reim_manager, null);
+    	ListView userListView = (ListView) managerView.findViewById(R.id.userListView);
+    	userListView.setAdapter(memberAdapter);
+    	userListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				check[position] = !check[position];
+				memberAdapter.setCheck(check);
+				memberAdapter.notifyDataSetChanged();
+			}
+		});
+
+		ImageView backImageView = (ImageView) managerView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				managerPopupWindow.dismiss();
+			}
+		});
+		
+		TextView confirmTextView = (TextView) managerView.findViewById(R.id.confirmTextView);
+		confirmTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				managerPopupWindow.dismiss();
+				
+				List<User> managerList = new ArrayList<User>();
+				for (int i = 0; i < check.length; i++)
+				{
+					if (check[i])
+					{
+						managerList.add(memberList.get(i));
+					}
+				}
+
+				if (managerList.size() == 0)
+				{
+					Utils.showToast(EditItemActivity.this, "未选择汇报对象");
+				}
+				else
+				{
+					report = new Report();
+			    	report.setTitle("预审批的报告");
+			    	report.setStatus(Report.STATUS_SUBMITTED);
+			    	report.setSender(appPreference.getCurrentUser());
+			    	report.setCreatedDate(Utils.getCurrentTime());									    	
+					report.setManagerList(managerList);
+					report.setIsProveAhead(true);
+			    	dbManager.insertReport(report);
+			    	report.setLocalID(dbManager.getLastInsertReportID());					
+
+					ReimApplication.showProgressDialog();
+					if (newItem)
+					{
+						if (!item.getInvoicePath().equals("") && item.getServerID() == -1)
+						{
+							sendUploadImageRequest();
+						}
+						else
+						{
+							sendCreateItemRequest();													
+						}
+					}
+					else
+					{
+						if (!item.getInvoicePath().equals("") && item.getServerID() == -1)
+						{
+							sendUploadImageRequest();
+						}
+						else
+						{
+							sendModifyItemRequest();													
+						}
+					}											
+				}
+			}
+		});
+
+		managerPopupWindow = Utils.constructFullPopupWindow(this, managerView);	
+	}
+
 	private void refreshInvoiceView()
 	{
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -1411,86 +1494,10 @@ public class EditItemActivity extends Activity
     	memberPopupWindow.update();
     }
     
-    private void showManagerDialog()
+    private void showManagerWindow()
     {
-		final List<User> memberList = User.removeCurrentUserFromList(userList);
-		final boolean[] check = User.getUsersCheck(memberList, appPreference.getCurrentUser().constructListWithManager());
-		
-		final MemberListViewAdapter memberAdapter = new MemberListViewAdapter(this, memberList, check);
-    	View view = View.inflate(this, R.layout.me_member, null);
-    	ListView userListView = (ListView) view.findViewById(R.id.userListView);
-    	userListView.setAdapter(memberAdapter);
-    	userListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				check[position] = !check[position];
-				memberAdapter.setCheck(check);
-				memberAdapter.notifyDataSetChanged();
-			}
-		});
-
-    	AlertDialog mDialog = new AlertDialog.Builder(this)
-    							.setTitle(R.string.choose_manager)
-    							.setView(view)
-    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										List<User> managerList = new ArrayList<User>();
-										for (int i = 0; i < check.length; i++)
-										{
-											if (check[i])
-											{
-												managerList.add(memberList.get(i));
-											}
-										}
-
-										if (managerList.size() == 0)
-										{
-											Utils.showToast(EditItemActivity.this, "未选择汇报对象");
-										}
-										else
-										{
-											report = new Report();
-									    	report.setTitle("预审批的报告");
-									    	report.setStatus(Report.STATUS_SUBMITTED);
-									    	report.setSender(appPreference.getCurrentUser());
-									    	report.setCreatedDate(Utils.getCurrentTime());									    	
-											report.setManagerList(managerList);
-											report.setIsProveAhead(true);
-									    	dbManager.insertReport(report);
-									    	report.setLocalID(dbManager.getLastInsertReportID());					
-
-											ReimApplication.showProgressDialog();
-											if (newItem)
-											{
-												if (!item.getInvoicePath().equals("") && item.getServerID() == -1)
-												{
-													sendUploadImageRequest();
-												}
-												else
-												{
-													sendCreateItemRequest();													
-												}
-											}
-											else
-											{
-												if (!item.getInvoicePath().equals("") && item.getServerID() == -1)
-												{
-													sendUploadImageRequest();
-												}
-												else
-												{
-													sendModifyItemRequest();													
-												}
-											}											
-										}
-									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-    	mDialog.show();
+    	managerPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+    	managerPopupWindow.update();
     }
 
     private void sendDownloadInvoiceRequest()

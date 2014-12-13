@@ -62,7 +62,9 @@ public class EditReportActivity extends Activity
 	private TextView timeTextView;
 	private ImageView statusImageView;
 	private TextView managerTextView;
+	private PopupWindow managerPopupWindow;
 	private TextView ccTextView;
+	private PopupWindow ccPopupWindow;
 	private TextView amountTextView;
 	private TextView itemCountTextView;
 	private LinearLayout itemLayout;
@@ -163,7 +165,7 @@ public class EditReportActivity extends Activity
 			public void onClick(View v)
 			{
 				finish();
-			}
+			}	
 		});
 		
 		TextView saveTextView = (TextView)findViewById(R.id.saveTextView);
@@ -187,17 +189,20 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				showManagerDialog();
+				showManagerWindow();
 			}
 		});
+		initManagerView();
+		
 		ccTextView = (TextView) findViewById(R.id.ccTextView);
 		ccTextView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				showCCDialog();
+				showCCWindow();
 			}
 		});
+		initCCView();
 		
 		amountTextView = (TextView) findViewById(R.id.amountTextView);
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -268,6 +273,117 @@ public class EditReportActivity extends Activity
 				startActivity(intent);
 			}
 		});		
+	}
+	
+	private void initManagerView()
+	{
+		if (report.getManagerList() == null || report.getManagerList().size() == 0)
+		{
+			managerCheckList = User.getUsersCheck(userList, currentUser.constructListWithManager());
+		}
+		else
+		{
+			managerCheckList = User.getUsersCheck(userList, report.getManagerList());
+		}
+		
+    	memberAdapter = new MemberListViewAdapter(this, userList, managerCheckList);
+    	View managerView = View.inflate(this, R.layout.report_manager, null);
+    	ListView userListView = (ListView) managerView.findViewById(R.id.userListView);
+    	userListView.setAdapter(memberAdapter);
+    	userListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				managerCheckList[position] = !managerCheckList[position];
+				memberAdapter.setCheck(managerCheckList);
+				memberAdapter.notifyDataSetChanged();
+			}
+		});
+
+		ImageView backImageView = (ImageView) managerView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				managerPopupWindow.dismiss();
+			}
+		});
+		
+		TextView confirmTextView = (TextView) managerView.findViewById(R.id.confirmTextView);
+		confirmTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				managerPopupWindow.dismiss();
+				
+				List<User> managerList = new ArrayList<User>();
+				for (int i = 0; i < managerCheckList.length; i++)
+				{
+					if (managerCheckList[i])
+					{
+						managerList.add(userList.get(i));
+					}
+				}
+
+				report.setManagerList(managerList);
+				managerTextView.setText(report.getManagersName());
+			}
+		});
+
+		managerPopupWindow = Utils.constructFullPopupWindow(this, managerView);	
+	}
+	
+	private void initCCView()
+	{
+    	ccCheckList = User.getUsersCheck(userList, report.getCCList());
+		
+    	memberAdapter = new MemberListViewAdapter(this, userList, ccCheckList);
+    	View ccView = View.inflate(this, R.layout.report_cc, null);
+    	ListView userListView = (ListView) ccView.findViewById(R.id.userListView);
+    	userListView.setAdapter(memberAdapter);
+    	userListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				ccCheckList[position] = !ccCheckList[position];
+				memberAdapter.setCheck(ccCheckList);
+				memberAdapter.notifyDataSetChanged();
+			}
+		});
+
+		ImageView backImageView = (ImageView) ccView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				ccPopupWindow.dismiss();
+			}
+		});
+		
+		TextView confirmTextView = (TextView) ccView.findViewById(R.id.confirmTextView);
+		confirmTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				ccPopupWindow.dismiss();
+
+				List<User> ccList = new ArrayList<User>();
+				for (int i = 0; i < ccCheckList.length; i++)
+				{
+					if (ccCheckList[i])
+					{
+						ccList.add(userList.get(i));
+					}
+				}
+				
+				report.setCCList(ccList);
+				ccTextView.setText(report.getCCsName());
+			}
+		});
+
+		ccPopupWindow = Utils.constructFullPopupWindow(this, ccView);	
 	}
 	
 	private void refreshView()
@@ -461,101 +577,20 @@ public class EditReportActivity extends Activity
 		mDialog.show();
     }
     
-    private void showManagerDialog()
+    private void showManagerWindow()
     {
     	hideSoftKeyboard();
-		if (report.getManagerList() == null || report.getManagerList().size() == 0)
-		{
-			managerCheckList = User.getUsersCheck(userList, currentUser.constructListWithManager());
-		}
-		else
-		{
-			managerCheckList = User.getUsersCheck(userList, report.getManagerList());
-		}
-		
-    	memberAdapter = new MemberListViewAdapter(this, userList, managerCheckList);
-    	View view = View.inflate(this, R.layout.me_member, null);
-    	ListView userListView = (ListView) view.findViewById(R.id.userListView);
-    	userListView.setAdapter(memberAdapter);
-    	userListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				managerCheckList[position] = !managerCheckList[position];
-				memberAdapter.setCheck(managerCheckList);
-				memberAdapter.notifyDataSetChanged();
-			}
-		});
+    	managerPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+    	managerPopupWindow.update();
 
-    	AlertDialog mDialog = new AlertDialog.Builder(this)
-    							.setTitle("请选择汇报对象")
-    							.setView(view)
-    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										List<User> managerList = new ArrayList<User>();
-										for (int i = 0; i < managerCheckList.length; i++)
-										{
-											if (managerCheckList[i])
-											{
-												managerList.add(userList.get(i));
-											}
-										}
-
-										report.setManagerList(managerList);
-										managerTextView.setText(report.getManagersName());
-									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-    	mDialog.show();
-    	
     	downloadAvatars();
     }
-    
-    private void showCCDialog()
+
+    private void showCCWindow()
     {
     	hideSoftKeyboard();
-    	ccCheckList = User.getUsersCheck(userList, report.getCCList());
-		
-    	memberAdapter = new MemberListViewAdapter(this, userList, ccCheckList);
-    	View view = View.inflate(this, R.layout.me_member, null);
-    	ListView userListView = (ListView) view.findViewById(R.id.userListView);
-    	userListView.setAdapter(memberAdapter);
-    	userListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				ccCheckList[position] = !ccCheckList[position];
-				memberAdapter.setCheck(ccCheckList);
-				memberAdapter.notifyDataSetChanged();
-			}
-		});
-
-    	AlertDialog mDialog = new AlertDialog.Builder(this)
-    							.setTitle("请选择抄送对象")
-    							.setView(view)
-    							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										List<User> ccList = new ArrayList<User>();
-										for (int i = 0; i < ccCheckList.length; i++)
-										{
-											if (ccCheckList[i])
-											{
-												ccList.add(userList.get(i));
-											}
-										}
-										
-										report.setCCList(ccList);
-										ccTextView.setText(report.getCCsName());
-									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-    	mDialog.show();
+    	ccPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+    	ccPopupWindow.update();
     	
     	downloadAvatars();
     }
