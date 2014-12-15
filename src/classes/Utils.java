@@ -32,13 +32,17 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
@@ -281,7 +285,7 @@ public class Utils
     		String path;
     		if (type == HttpConstant.IMAGE_TYPE_AVATAR)
 			{
-				path = appPreference.getProfileImageDirectory() + "/" + getImageName();
+				path = appPreference.getAvatarImageDirectory() + "/" + getImageName();
 			}
     		else
     		{
@@ -453,5 +457,22 @@ public class Utils
 		
 		button.setLayoutParams(params);
 		return button;
+	}
+
+	public static OnFocusChangeListener getEditTextFocusChangeListener()
+	{
+		OnFocusChangeListener listener = new OnFocusChangeListener()
+		{
+			public void onFocusChange(View v, boolean hasFocus)
+			{
+				if (v instanceof EditText && hasFocus)
+				{
+					Spannable spanText = ((EditText)v).getText();
+					Selection.setSelection(spanText, spanText.length());
+				}
+			}
+		};
+		
+		return listener;
 	}
 }

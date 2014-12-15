@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -43,6 +44,7 @@ public class CompleteInfoActivity extends Activity
 	private static final int TAKE_PHOTO = 1;
 	private static final int CROP_IMAGE = 2;
 	
+	private AppPreference appPreference;
 	private DBManager dbManager;
 
 	private ImageView avatarImageView;
@@ -50,7 +52,6 @@ public class CompleteInfoActivity extends Activity
 	private PopupWindow picturePopupWindow;
 
 	private User currentUser;
-	private Uri originalImageUri;
 	private String avatarPath = "";
 	private boolean newAvatar = false;
 
@@ -85,27 +86,18 @@ public class CompleteInfoActivity extends Activity
 			{
 				if (requestCode == PICK_IMAGE)
 				{
-					originalImageUri = null;
-					cropImage(data.getData());
+					cropImage(data.getData());	
 				}
 				else if (requestCode == TAKE_PHOTO)
 				{
-					originalImageUri = data.getData();
-					cropImage(data.getData());					
+					cropImage(appPreference.getTempAvatarUri());					
 				}
 				else if (requestCode == CROP_IMAGE)
 				{
-					Uri newImageUri = Uri.parse(data.getAction());
-					Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), newImageUri);
+					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
 					avatarPath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_AVATAR);
 					newAvatar = true;
 					avatarImageView.setImageBitmap(bitmap);
-					
-					if (originalImageUri != null)
-					{
-						getContentResolver().delete(originalImageUri, null, null);							
-					}
-					getContentResolver().delete(newImageUri, null, null);	
 				}
 			}
 			catch (Exception e)
@@ -128,6 +120,7 @@ public class CompleteInfoActivity extends Activity
 
 	private void initData()
 	{
+		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
         currentUser = AppPreference.getAppPreference().getCurrentUser();
 	}
@@ -217,6 +210,7 @@ public class CompleteInfoActivity extends Activity
 				picturePopupWindow.dismiss();
 				
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
 				startActivityForResult(intent, TAKE_PHOTO);
 			}
 		});
@@ -270,6 +264,7 @@ public class CompleteInfoActivity extends Activity
 	    	intent.putExtra("aspectY", 1);
 	    	intent.putExtra("outputX", bitmap.getWidth());
 	    	intent.putExtra("outputY", bitmap.getWidth());
+	    	intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
 	    	intent.putExtra("return-data", false);
 	    	startActivityForResult(intent, CROP_IMAGE);
 		}

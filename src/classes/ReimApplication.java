@@ -19,7 +19,6 @@ import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.Environment;
 import android.text.TextUtils;
 
 public class ReimApplication extends Application
@@ -37,12 +36,12 @@ public class ReimApplication extends Application
 	{
 		super.onCreate();
 
-		createDirectories();
 		initPushService();
 		initData();
 		initMeChat();
 		initBeeCloud();
 		MobclickAgent.openActivityDurationTrack(false);
+		createDirectories();
 
 		System.out.println("**************** Application Started *****************");
 		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
@@ -132,34 +131,38 @@ public class ReimApplication extends Application
 	{
 		try
 		{
-			String appDirectory = Environment.getExternalStorageDirectory() + "/如数云报销";
-			File dir = new File(appDirectory);
+			AppPreference appPreference = AppPreference.getAppPreference();			
+			File dir = new File(appPreference.getAppDirectory());
 			if (!dir.exists())
 			{
 				dir.mkdir();
 			}
-			dir = new File(appDirectory + "/images");
-			if (!dir.exists())
-			{
-				dir.mkdir();
-				File nomediaFile = new File(dir, ".nomedia");
-				nomediaFile.createNewFile();
-			}
-			dir = new File(appDirectory + "/images/profile");
+			dir = new File(appPreference.getAppImageDirectory());
 			if (!dir.exists())
 			{
 				dir.mkdir();
 				File nomediaFile = new File(dir, ".nomedia");
 				nomediaFile.createNewFile();
 			}
-			dir = new File(appDirectory + "/images/invoice");
+			dir = new File(appPreference.getAvatarImageDirectory());
 			if (!dir.exists())
 			{
 				dir.mkdir();
 				File nomediaFile = new File(dir, ".nomedia");
 				nomediaFile.createNewFile();
+				File tempAvatarFile = new File(dir, "temp.jpg");
+				tempAvatarFile.createNewFile();
 			}
-			dir = new File(appDirectory + "/images/icon");
+			dir = new File(appPreference.getInvoiceImageDirectory());
+			if (!dir.exists())
+			{
+				dir.mkdir();
+				File nomediaFile = new File(dir, ".nomedia");
+				nomediaFile.createNewFile();
+				File tempInvoiceFile = new File(dir, "temp.jpg");
+				tempInvoiceFile.createNewFile();
+			}
+			dir = new File(appPreference.getIconImageDirectory());
 			if (!dir.exists())
 			{
 				dir.mkdir();

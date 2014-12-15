@@ -1,24 +1,36 @@
 package com.rushucloud.reim.me;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import netUtils.HttpConnectionCallback;
+import netUtils.HttpConstant;
+import netUtils.Request.UploadImageRequest;
 import netUtils.Request.Group.ModifyGroupRequest;
 import netUtils.Request.User.ModifyUserRequest;
+import netUtils.Response.UploadImageResponse;
 import netUtils.Response.Group.ModifyGroupResponse;
 import netUtils.Response.User.ModifyUserResponse;
 
+import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
-
 import classes.AppPreference;
 import classes.Group;
 import classes.ReimApplication;
 import classes.User;
 import classes.Utils;
+import classes.Widget.CircleImageView;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,26 +38,46 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ProfileActivity extends Activity
-{	
-	private EditText emailEditText;
-	private EditText phoneEditText;
-	private EditText nicknameEditText;
-	private EditText companyEditText;
-	private TextView companyTextView;
+{
+	private static final int PICK_IMAGE = 0;
+	private static final int TAKE_PHOTO = 1;
+	private static final int CROP_IMAGE = 2;
 	
-	private RelativeLayout showCompanyLayout;
-	private RelativeLayout editCompanyLayout;
-	private RelativeLayout categoryLayout;
-	private RelativeLayout tagLayout;
+	private CircleImageView avatarImageView;
+	private PopupWindow picturePopupWindow;
+	
+	private TextView emailTextView;
+	private PopupWindow emailPopupWindow;
+	private EditText emailEditText;
+
+	private TextView phoneTextView;
+	private PopupWindow phonePopupWindow;
+	private EditText phoneEditText;
+
+	private TextView nicknameTextView;
+	private PopupWindow nicknamePopupWindow;
+	private EditText nicknameEditText;
+	
+	private TextView companyTextView;
+	private ImageView companyNextImageView;
+	private RelativeLayout companyLayout;
+	private PopupWindow companyPopupWindow;
+	private EditText companyEditText;
+	
+	private TextView managerTextView;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
-	private User currentUser;
+
 	private Group currentGroup;
+	private User currentUser;
+	private String avatarPath;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -53,7 +85,6 @@ public class ProfileActivity extends Activity
 		setContentView(R.layout.me_profile);
 		initData();
 		initView();
-		loadInfoView();
 	}
 
 	protected void onResume()
@@ -61,6 +92,7 @@ public class ProfileActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ProfileActivity");		
 		MobclickAgent.onResume(this);
+		loadInfoView();
 	}
 
 	protected void onPause()
@@ -68,6 +100,48 @@ public class ProfileActivity extends Activity
 		super.onPause();
 		MobclickAgent.onPageEnd("ProfileActivity");
 		MobclickAgent.onPause(this);
+	}
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if(resultCode == Activity.RESULT_OK)
+		{
+			try
+			{
+				if (requestCode == PICK_IMAGE)
+				{
+					cropImage(data.getData());	
+				}
+				else if (requestCode == TAKE_PHOTO)
+				{
+					cropImage(appPreference.getTempAvatarUri());					
+				}
+				else if (requestCode == CROP_IMAGE)
+				{
+					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
+					avatarPath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_AVATAR);
+					
+					if (!avatarPath.equals("") && Utils.isNetworkConnected())
+					{
+						Utils.showToast(this, "头像保存成功，正在上传");
+						avatarImageView.setImageBitmap(bitmap);
+						sendUploadAvatarRequest();
+					}
+					else if (avatarPath.equals(""))
+					{
+						Utils.showToast(this, "头像保存失败");
+					}
+					else
+					{
+						Utils.showToast(this, "网络未连接，无法上传头像");
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -83,6 +157,9 @@ public class ProfileActivity extends Activity
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
+		
+		currentUser = appPreference.getCurrentUser();
+		currentGroup = appPreference.getCurrentGroup();
 	}	
 	
 	private void initView()
@@ -99,33 +176,351 @@ public class ProfileActivity extends Activity
 			}
 		});
 		
-		TextView saveTextView = (TextView)findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new OnClickListener()
+		initAvatarView();
+		initEmailView();
+		initPhoneView();
+		initNicknameView();
+		initCompanyView();
+		initManagerView();
+		initPasswordView();
+	}
+	
+	private void initAvatarView()
+	{
+		// init avatar
+		RelativeLayout avatarLayout = (RelativeLayout) findViewById(R.id.avatarLayout);
+		avatarLayout.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				if (Utils.isNetworkConnected())
+				showPictureWindow();
+			}
+		});
+        
+		avatarImageView = (CircleImageView) findViewById(R.id.avatarImageView);
+		avatarImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (currentUser != null && !currentUser.getAvatarPath().equals(""))
 				{
-					sendModifyUserInfoRequest();				
-				}
-				else
-				{
-					Utils.showToast(ProfileActivity.this, "网络未连接，无法保存用户信息");
+					Intent intent = new Intent(ProfileActivity.this, ImageActivity.class);
+					intent.putExtra("imagePath", currentUser.getAvatarPath());
+					startActivity(intent);
 				}
 			}
 		});
 		
-		emailEditText = (EditText)findViewById(R.id.emailEditText);
-		phoneEditText = (EditText)findViewById(R.id.phoneEditText);
-		nicknameEditText = (EditText)findViewById(R.id.nicknameEditText);
-		companyEditText = (EditText)findViewById(R.id.companyEditText);
-		companyTextView = (TextView)findViewById(R.id.companyTextView);
+		// init avatar window
+		View pictureView = View.inflate(this, R.layout.window_picture, null);
 		
-        showCompanyLayout = (RelativeLayout) findViewById(R.id.showCompanyLayout);
-        editCompanyLayout = (RelativeLayout) findViewById(R.id.editCompanyLayout);
+		Button cameraButton = (Button) pictureView.findViewById(R.id.cameraButton);
+		cameraButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				picturePopupWindow.dismiss();
+				
+				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
+				startActivityForResult(intent, TAKE_PHOTO);
+			}
+		});
+		cameraButton = Utils.resizeWindowButton(cameraButton);
+		
+		Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
+		galleryButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				picturePopupWindow.dismiss();
+				
+				Intent intent = new Intent(Intent.ACTION_PICK, null);
+				intent.setType("image/*");
+				startActivityForResult(intent, PICK_IMAGE);
+			}
+		});
+		galleryButton = Utils.resizeWindowButton(galleryButton);
+		
+		Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				picturePopupWindow.dismiss();
+			}
+		});
+		cancelButton = Utils.resizeWindowButton(cancelButton);
+		
+		picturePopupWindow = Utils.constructPopupWindow(this, pictureView);        
+	}
+	
+	private void initEmailView()
+	{
+		// init email
+		emailTextView = (TextView) findViewById(R.id.emailTextView);
+		
+		RelativeLayout emailLayout = (RelativeLayout) findViewById(R.id.emailLayout);
+		emailLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				showEmailWindow();
+				emailEditText.requestFocus();
+			}
+		});
+        
+        // init email window
+    	View emailView = View.inflate(this, R.layout.me_email, null);
+    	
+    	emailEditText = (EditText) emailView.findViewById(R.id.emailEditText);
+    	emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	if (currentUser != null)
+		{
+        	emailEditText.setText(currentUser.getEmail());			
+		}
+		
+		ImageView backImageView = (ImageView) emailView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				emailPopupWindow.dismiss();
+			}
+		});
+		
+		TextView saveTextView = (TextView) emailView.findViewById(R.id.saveTextView);
+		saveTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				
+				String originalEmail = currentUser.getEmail();
+				String newEmail = emailEditText.getText().toString();
+				if (!Utils.isNetworkConnected())
+				{
+					Utils.showToast(ProfileActivity.this, "网络未连接，无法修改");			
+				}
+				else if (newEmail.equals(originalEmail))
+				{
+					Utils.showToast(ProfileActivity.this, "邮箱与原有相同，无需修改");
+				}
+				else if (newEmail.equals(""))
+				{
+					Utils.showToast(ProfileActivity.this, "新邮箱不可为空");
+				}
+				else
+				{
+					currentUser.setEmail(newEmail);
+					sendModifyUserInfoRequest();
+				}
+			}
+		});
 
-        Button companyButton = (Button) findViewById(R.id.companyButton);
-		companyButton.setOnClickListener(new OnClickListener()
+        LinearLayout baseLayout = (LinearLayout) emailView.findViewById(R.id.baseLayout);
+        baseLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+			}
+		});
+        
+		emailPopupWindow = Utils.constructFullPopupWindow(this, emailView);
+	}
+	
+	private void initPhoneView()
+	{
+		// init phone
+		phoneTextView = (TextView) findViewById(R.id.phoneTextView);
+		
+		RelativeLayout phoneLayout = (RelativeLayout) findViewById(R.id.phoneLayout);
+		phoneLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				showPhoneWindow();
+				phoneEditText.requestFocus();
+			}
+		});
+        
+        // init phone window
+    	View phoneView = View.inflate(this, R.layout.me_phone, null);
+    	
+    	phoneEditText = (EditText) phoneView.findViewById(R.id.phoneEditText);
+    	phoneEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	if (currentUser != null)
+		{
+        	phoneEditText.setText(currentUser.getPhone());			
+		}
+		
+		ImageView backImageView = (ImageView) phoneView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				phonePopupWindow.dismiss();
+			}
+		});
+		
+		TextView saveTextView = (TextView) phoneView.findViewById(R.id.saveTextView);
+		saveTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				
+				String originalPhone = currentUser.getPhone();
+				String newPhone = phoneEditText.getText().toString();
+				if (!Utils.isNetworkConnected())
+				{
+					Utils.showToast(ProfileActivity.this, "网络未连接，无法修改");			
+				}
+				else if (newPhone.equals(originalPhone))
+				{
+					Utils.showToast(ProfileActivity.this, "手机与原有相同，无需修改");
+				}
+				else if (newPhone.equals(""))
+				{
+					Utils.showToast(ProfileActivity.this, "新手机不可为空");
+				}
+				else
+				{
+					currentUser.setPhone(newPhone);
+					sendModifyUserInfoRequest();
+				}
+			}
+		});
+
+        LinearLayout baseLayout = (LinearLayout) phoneView.findViewById(R.id.baseLayout);
+        baseLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+			}
+		});
+        
+		phonePopupWindow = Utils.constructFullPopupWindow(this, phoneView);
+	}
+	
+	private void initNicknameView()
+	{
+		// init nickname
+		nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
+		
+		RelativeLayout nicknameLayout = (RelativeLayout) findViewById(R.id.nicknameLayout);
+		nicknameLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				showNicknameWindow();
+				nicknameEditText.requestFocus();
+			}
+		});
+        
+        // init nickname window
+    	View nicknameView = View.inflate(this, R.layout.me_nickname, null);
+    	
+    	nicknameEditText = (EditText) nicknameView.findViewById(R.id.nicknameEditText);
+    	nicknameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	if (currentUser != null)
+		{
+        	nicknameEditText.setText(currentUser.getNickname());			
+		}
+		
+		ImageView backImageView = (ImageView) nicknameView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				nicknamePopupWindow.dismiss();
+			}
+		});
+		
+		TextView saveTextView = (TextView) nicknameView.findViewById(R.id.saveTextView);
+		saveTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				
+				String originalNickname = currentUser.getNickname();
+				String newNickname = nicknameEditText.getText().toString();
+				if (!Utils.isNetworkConnected())
+				{
+					Utils.showToast(ProfileActivity.this, "网络未连接，无法修改");			
+				}
+				else if (newNickname.equals(originalNickname))
+				{
+					Utils.showToast(ProfileActivity.this, "昵称与原有相同，无需修改");
+				}
+				else if (newNickname.equals(""))
+				{
+					Utils.showToast(ProfileActivity.this, "新昵称不可为空");
+				}
+				else
+				{
+					currentUser.setNickname(newNickname);
+					sendModifyUserInfoRequest();
+				}
+			}
+		});
+
+        LinearLayout baseLayout = (LinearLayout) nicknameView.findViewById(R.id.baseLayout);
+        baseLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+			}
+		});
+        
+		nicknamePopupWindow = Utils.constructFullPopupWindow(this, nicknameView);
+	}
+	
+	private void initCompanyView()
+	{
+		// init company
+		companyTextView = (TextView) findViewById(R.id.companyTextView);
+		companyNextImageView = (ImageView) findViewById(R.id.companyNextImageView);
+		
+		companyLayout = (RelativeLayout) findViewById(R.id.companyLayout);
+        companyLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				showCompanyWindow();
+				companyEditText.requestFocus();
+			}
+		});
+        
+        // init company window
+    	View companyView = View.inflate(this, R.layout.me_company, null);
+    	
+    	companyEditText = (EditText) companyView.findViewById(R.id.companyEditText);
+    	companyEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	if (currentGroup != null)
+		{
+        	companyEditText.setText(currentGroup.getName());			
+		}
+		
+		ImageView backImageView = (ImageView) companyView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				companyPopupWindow.dismiss();
+			}
+		});
+		
+		TextView saveTextView = (TextView) companyView.findViewById(R.id.saveTextView);
+		saveTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -152,7 +547,42 @@ public class ProfileActivity extends Activity
 				}
 			}
 		});
+
+        LinearLayout baseLayout = (LinearLayout) companyView.findViewById(R.id.baseLayout);
+        baseLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+			}
+		});
         
+		companyPopupWindow = Utils.constructFullPopupWindow(this, companyView);
+	}
+
+	private void initManagerView()
+	{
+		managerTextView = (TextView)findViewById(R.id.managerTextView);
+		
+        RelativeLayout defaultManagerLayout = (RelativeLayout) findViewById(R.id.defaultManagerLayout);
+        defaultManagerLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (currentUser.getGroupID() <= 0)
+				{
+					Utils.showToast(ProfileActivity.this, "你还没加入任何组");			
+				}
+				else
+				{
+					startActivity(new Intent(ProfileActivity.this, ManagerActivity.class));
+				}
+			}
+		});
+	}
+	
+	private void initPasswordView()
+	{
         RelativeLayout passwordLayout = (RelativeLayout) findViewById(R.id.passwordLayout);
         passwordLayout.setOnClickListener(new View.OnClickListener()
 		{
@@ -161,116 +591,191 @@ public class ProfileActivity extends Activity
 				startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
 			}
 		});
-        
-        categoryLayout = (RelativeLayout) findViewById(R.id.categoryLayout);
-        categoryLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(ProfileActivity.this, "UMENG_MINE_CATEGORT_SETTING");
-				startActivity(new Intent(ProfileActivity.this, CategoryActivity.class));
-			}
-		});
-        
-        tagLayout = (RelativeLayout) findViewById(R.id.tagLayout);
-        tagLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(ProfileActivity.this, "UMENG_MINE_TAG_SETTING");
-				startActivity(new Intent(ProfileActivity.this, TagActivity.class));
-			}
-		});
-		
-	}
-
+	}	
+	
 	private void loadInfoView()
-	{
+	{		
 		currentUser = appPreference.getCurrentUser();
-		currentGroup = dbManager.getGroup(appPreference.getCurrentGroupID());
+		currentGroup = appPreference.getCurrentGroup();
+		currentUser.setIsAdmin(true);
 		
-		emailEditText.setText(currentUser.getEmail());
-		phoneEditText.setText(currentUser.getPhone());
-		nicknameEditText.setText(currentUser.getNickname());
+		if (!currentUser.getAvatarPath().equals(""))
+		{
+			Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
+			if (bitmap != null)
+			{
+				avatarImageView.setImageBitmap(bitmap);
+			}
+		}
 		
-		String companyName = currentGroup != null ? currentGroup.getName() : getString(R.string.not_available);	
+		String email = currentUser != null && !currentUser.getEmail().equals("") ? currentUser.getEmail() : getString(R.string.not_binding);
+		emailTextView.setText(email);
+		
+		String phone = currentUser != null && !currentUser.getPhone().equals("") ? currentUser.getPhone() : getString(R.string.not_binding);
+		phoneTextView.setText(phone);
+		
+		String nickname = currentUser != null && !currentUser.getNickname().equals("") ? currentUser.getNickname() : getString(R.string.null_string);
+		nicknameTextView.setText(nickname);
+		
+		User manager = dbManager.getUser(currentUser.getDefaultManagerID());
+		if (manager != null)
+		{
+			managerTextView.setText(manager.getNickname());			
+		}
+		
+		String companyName = currentGroup != null ? currentGroup.getName() : getString(R.string.null_string);	
+		companyTextView.setText(companyName);
 		
         if (!currentUser.isAdmin() || currentUser.getGroupID() <= 0)
 		{
-			editCompanyLayout.setVisibility(View.GONE);       
-			showCompanyLayout.setVisibility(View.VISIBLE);	
-			
-			companyTextView.setText(companyName);
-
-			categoryLayout.setVisibility(View.GONE);
-			tagLayout.setVisibility(View.GONE);
+        	companyLayout.setClickable(false);
+        	companyNextImageView.setVisibility(View.GONE);			
 		}
         else
         {
-			showCompanyLayout.setVisibility(View.GONE);
-			editCompanyLayout.setVisibility(View.VISIBLE);
-			
-			companyEditText.setText(companyName);
-
-			categoryLayout.setVisibility(View.VISIBLE);
-			tagLayout.setVisibility(View.VISIBLE);
+        	companyLayout.setClickable(true);
+        	companyNextImageView.setVisibility(View.VISIBLE);
         }
 	}
-	
+
+    private void showPictureWindow()
+    {
+		picturePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		picturePopupWindow.update();
+
+		Utils.dimBackground(this);
+    }
+    
+    private void showEmailWindow()
+    {
+		emailPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+		emailPopupWindow.update();
+    }
+    
+    private void showPhoneWindow()
+    {
+		phonePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+		phonePopupWindow.update();
+    }
+    
+    private void showNicknameWindow()
+    {
+		nicknamePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+		nicknamePopupWindow.update();
+    }
+    
+    private void showCompanyWindow()
+    {
+		companyPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+		companyPopupWindow.update();
+    }
+
+    private void cropImage(Uri uri)
+    {
+		try
+		{
+	    	Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+	    	Intent intent = new Intent("com.android.camera.action.CROP");
+	    	intent.setDataAndType(uri, "image/*");
+	    	intent.putExtra("crop", "true");
+	    	intent.putExtra("aspectX", 1);
+	    	intent.putExtra("aspectY", 1);
+	    	intent.putExtra("outputX", bitmap.getWidth());
+	    	intent.putExtra("outputY", bitmap.getWidth());
+	    	intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
+	    	intent.putExtra("return-data", false);
+	    	startActivityForResult(intent, CROP_IMAGE);
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+    }
+
+    private void sendUploadAvatarRequest()
+    {
+		UploadImageRequest request = new UploadImageRequest(avatarPath, HttpConstant.IMAGE_TYPE_AVATAR);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final UploadImageResponse response = new UploadImageResponse(httpResponse);
+				if (response.getStatus())
+				{
+					int currentTime = Utils.getCurrentTime();
+					DBManager dbManager = DBManager.getDBManager();
+					currentUser.setAvatarID(response.getImageID());
+					currentUser.setAvatarPath(avatarPath);
+					currentUser.setLocalUpdatedDate(currentTime);
+					currentUser.setServerUpdatedDate(currentTime);
+					dbManager.updateUser(currentUser);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							loadInfoView();
+							Utils.showToast(ProfileActivity.this, "头像上传成功");
+						}
+					});	
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							loadInfoView();
+							Utils.showToast(ProfileActivity.this, "头像上传失败");
+						}
+					});				
+				}
+			}
+		});
+    }
+    
 	private void sendModifyUserInfoRequest()
 	{
-		hideSoftKeyboard();
+		ReimApplication.showProgressDialog();
 		
-		String email = emailEditText.getText().toString();
-		String phone = phoneEditText.getText().toString();;
-		String nickname = nicknameEditText.getText().toString();;
-		
-		if (email.equals("") && phone.equals(""))
+		ModifyUserRequest request = new ModifyUserRequest(currentUser);
+		request.sendRequest(new HttpConnectionCallback()
 		{
-			Utils.showToast(this, "邮箱和手机号不能同时为空");
-		}
-		else
-		{
-			ReimApplication.showProgressDialog();
-			currentUser.setEmail(email);
-			currentUser.setPhone(phone);
-			currentUser.setNickname(nickname);
-			
-			ModifyUserRequest request = new ModifyUserRequest(currentUser);
-			request.sendRequest(new HttpConnectionCallback()
+			public void execute(Object httpResponse)
 			{
-				public void execute(Object httpResponse)
+				ModifyUserResponse response = new ModifyUserResponse(httpResponse);
+				if (response.getStatus())
 				{
-					ModifyUserResponse response = new ModifyUserResponse(httpResponse);
-					if (response.getStatus())
+					dbManager.updateUser(currentUser);
+					
+					runOnUiThread(new Runnable()
 					{
-						dbManager.updateUser(currentUser);
-						
-						runOnUiThread(new Runnable()
+						public void run()
 						{
-							public void run()
-							{
-								ReimApplication.dismissProgressDialog();
-								Utils.showToast(ProfileActivity.this, "用户信息修改成功");
-								loadInfoView();
-							}
-						});
-					}
-					else
-					{
-						runOnUiThread(new Runnable()
-						{
-							public void run()
-							{
-								ReimApplication.dismissProgressDialog();
-								Utils.showToast(ProfileActivity.this, "用户信息修改失败");
-								loadInfoView();
-							}
-						});						
-					}
+							ReimApplication.dismissProgressDialog();
+							Utils.showToast(ProfileActivity.this, "用户信息修改成功");
+							loadInfoView();
+						}
+					});
 				}
-			});
-		}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Utils.showToast(ProfileActivity.this, "用户信息修改失败");
+							loadInfoView();
+						}
+					});						
+				}
+			}
+		});
 	}
 	
 	private void sendModifyGroupRequest(final String newName)
@@ -291,6 +796,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
+							companyPopupWindow.dismiss();
 							Utils.showToast(ProfileActivity.this, "修改成功");
 						}
 					});
@@ -302,6 +808,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							ReimApplication.showProgressDialog();
+							companyPopupWindow.dismiss();
 							Utils.showToast(ProfileActivity.this, "修改失败");
 						}
 					});
@@ -312,7 +819,7 @@ public class ProfileActivity extends Activity
 
 	private void hideSoftKeyboard()
 	{
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);

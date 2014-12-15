@@ -8,11 +8,13 @@
     <string name="off">关</string>
     <string name="rmb">¥</string>
     <string name="not_available">N/A</string>
+    <string name="null_string">无</string>
     
     <string name="confirm">确定</string>
     <string name="save">保存</string>
     <string name="cancel">取消</string>
     <string name="add">添加</string>
+    <string name="establish">新建</string>
     <string name="back">返回</string>
     <string name="complete">完成</string>
     <string name="next">下一步</string>
@@ -138,12 +140,12 @@
     <string name="sync_without_wifi">仅WiFi开启时上传云端</string>
     <string name="preference">偏好设置</string>
     <string name="get_invoice">我要开发票</string>
+    <string name="my_messages">我的消息</string>
     <string name="my_invites">收到的邀请</string>
     <string name="invite">邀请好友</string>
+    <string name="send_invite">发送邀请</string>
     <string name="share">分享</string>
     <string name="custom_service">联系客服</string>
-    <string name="feedback">意见反馈</string>
-    <string name="sign_out">退出登录</string>
     <string name="personal_info">个人信息</string>
     <string name="email">邮箱</string>
     <string name="phone">手机</string>
@@ -151,8 +153,7 @@
     <string name="nickname">昵称</string>
     <string name="change_password">修改密码</string>
     <string name="default_manager">我的上级</string>
-    <string name="category_management">分类管理</string>
-    <string name="tag_management">标签管理</string>
+    <string name="not_binding">未绑定</string>
     <string name="input_company_name">请输入公司名称</string>
     <string name="input_nickname">请输入昵称</string>
     <string name="input_feedback">请输入您的意见或建议</string>
@@ -164,12 +165,16 @@
     <string name="input_tag_name">请输入标签名称</string>
     <string name="input_user_contact">请输入对方手机号或邮箱</string>
     <string name="agree">同意</string>
-    <string name="no_invites">没有收到任何邀请</string>
-    <string name="no_categories">当前没有任何分类</string>
-    <string name="no_tags">当前没有任何标签</string>
+    <string name="no_messages">当前没有任何消息</string>
     <string name="get_invoice_prompt">发票抬头请开：</string>
     <string name="invoice_invalid">还没公司，开啥发票</string>
+    <string name="category_management">类别管理</string>
+    <string name="tag_management">标签管理</string>
+    <string name="no_categories">当前没有任何分类</string>
+    <string name="no_tags">当前没有任何标签</string>
     <string name="about_us">关于我们</string>
+    <string name="feedback">意见反馈</string>
+    <string name="sign_out">退出登录</string>
     <string name="current_version">当前版本：</string>
     <string name="about_content">瞎看什么?!</string>
     

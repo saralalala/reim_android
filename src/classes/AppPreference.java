@@ -1,5 +1,7 @@
 package classes;
 
+import java.io.File;
+
 import com.avos.avoscloud.AVInstallation;
 
 import database.DBManager;
@@ -8,6 +10,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.Environment;
 
 public class AppPreference
@@ -24,7 +27,9 @@ public class AppPreference
 	private boolean syncOnlyWithWifi = true;
 	private boolean enablePasswordProtection = true;
 	private int lastSyncTime = 0;
-	private String profileImageDirectory = "";
+	private String appDirectory = "";
+	private String appImageDirectory = "";
+	private String avatarImageDirectory = "";
 	private String invoiceImageDirectory = "";
 	private String iconImageDirectory = "";
 	
@@ -60,10 +65,11 @@ public class AppPreference
 		appPreference.setEnablePasswordProtection(preferences.getBoolean("enablePasswordProtection", true));
 		appPreference.setLastSyncTime(preferences.getInt("lastSyncTime", 0));
 		
-		String path = Environment.getExternalStorageDirectory() + "/如数云报销";
-		appPreference.setProfileImageDirectory(path + "/images/profile");
-		appPreference.setInvoiceImageDirectory(path + "/images/invoice");
-		appPreference.setIconImageDirectory(path + "/images/icon");
+		appPreference.setAppDirectory(Environment.getExternalStorageDirectory() + "/如数云报销");
+		appPreference.setAppImageDirectory(appPreference.getAppDirectory() + "/images");
+		appPreference.setAvatarImageDirectory(appPreference.getAppImageDirectory() + "/avatar");
+		appPreference.setInvoiceImageDirectory(appPreference.getAppImageDirectory() + "/invoice");
+		appPreference.setIconImageDirectory(appPreference.getAppImageDirectory() + "/icon");
 	}
 	
 	public void saveAppPreference()
@@ -106,6 +112,11 @@ public class AppPreference
 	public void setCurrentGroupID(int currentGroupID)
 	{
 		this.currentGroupID = currentGroupID;
+	}
+	
+	public Group getCurrentGroup()
+	{
+		return DBManager.getDBManager().getGroup(currentGroupID);
 	}
 	
 	public String getUsername()
@@ -178,16 +189,46 @@ public class AppPreference
 		this.lastSyncTime = lastSyncTime;
 	}
 	
-	public String getProfileImageDirectory()
+	public String getAppDirectory()
 	{
-		return profileImageDirectory;
+		return appDirectory;
 	}
 
-	public void setProfileImageDirectory(String profileImageDirectory)
+	public void setAppDirectory(String appDirectory)
 	{
-		this.profileImageDirectory = profileImageDirectory;
+		this.appDirectory = appDirectory;
 	}
 
+	public String getAppImageDirectory()
+	{
+		return appImageDirectory;
+	}
+
+	public void setAppImageDirectory(String appImageDirectory)
+	{
+		this.appImageDirectory = appImageDirectory;
+	}
+
+	public String getAvatarImageDirectory()
+	{
+		return avatarImageDirectory;
+	}
+
+	public void setAvatarImageDirectory(String avatarImageDirectory)
+	{
+		this.avatarImageDirectory = avatarImageDirectory;
+	}
+
+	public String getTempAvatarPath()
+	{
+		return getAvatarImageDirectory() + "/temp.jpg";
+	}
+	
+	public Uri getTempAvatarUri()
+	{
+		return Uri.fromFile(new File(getAvatarImageDirectory() + "/temp.jpg"));
+	}
+	
 	public String getInvoiceImageDirectory()
 	{
 		return invoiceImageDirectory;
@@ -198,6 +239,16 @@ public class AppPreference
 		this.invoiceImageDirectory = invoiceImageDirectory;
 	}
 
+	public String getTempInvoicePath()
+	{
+		return getInvoiceImageDirectory() + "/temp.jpg";
+	}
+	
+	public Uri getTempInvoiceUri()
+	{
+		return Uri.fromFile(new File(getInvoiceImageDirectory() + "/temp.jpg"));
+	}
+	
 	public String getIconImageDirectory()
 	{
 		return iconImageDirectory;

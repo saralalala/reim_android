@@ -55,11 +55,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Selection;
-import android.text.Spannable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -88,36 +85,46 @@ public class EditItemActivity extends Activity
 {
 	private static final int PICK_IMAGE = 0;
 	private static final int TAKE_PHOTO = 1;
-
-	private static AppPreference appPreference;
-	private static DBManager dbManager;
 	
 	private EditText amountEditText;
+	
 	private PopupWindow typePopupWindow;
 	private TextView typeTextView;
+	
 	private LinearLayout invoiceLayout;
 	private ImageView invoiceImageView;
 	private ImageView addInvoiceImageView;
 	private ImageView removeImageView;
 	private PopupWindow picturePopupWindow;
+	
 	private TextView timeTextView;
 	private PopupWindow timePopupWindow;
 	private DatePicker datePicker;
+	
 	private TextView vendorTextView;
 	private PopupWindow vendorPopupWindow;
+	
 	private TextView locationTextView;
 	private PopupWindow locationPopupWindow;
+	
 	private ImageView categoryImageView;
 	private TextView categoryTextView;
 	private PopupWindow categoryPopupWindow;
+	
 	private LinearLayout tagLayout;
 	private View addTagView;
 	private PopupWindow tagPopupWindow;
+	
 	private LinearLayout memberLayout;
 	private View addMemberView;
 	private PopupWindow memberPopupWindow;
+	
 	private EditText noteEditText;
+	
 	private PopupWindow managerPopupWindow;
+
+	private static AppPreference appPreference;
+	private static DBManager dbManager;
 	
 	private Item item;
 	private Report report;
@@ -189,14 +196,31 @@ public class EditItemActivity extends Activity
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-		if(data != null)
+		if(resultCode == Activity.RESULT_OK)
 		{
 			try
 			{
-				if (requestCode == PICK_IMAGE || requestCode == TAKE_PHOTO)
+				if (requestCode == PICK_IMAGE)
 				{
-					Uri uri = data.getData();
-					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+					invoiceImageView.setImageBitmap(bitmap);
+					
+					String invoicePath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_INVOICE);
+					if (!invoicePath.equals(""))
+					{
+						item.setInvoicePath(invoicePath);
+						item.setInvoiceID(-1);
+					}
+					else
+					{
+						Utils.showToast(EditItemActivity.this, "图片保存失败");
+					}
+					
+					refreshInvoiceView();
+				}
+				else if (requestCode == TAKE_PHOTO)
+				{
+					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempInvoicePath());
 					invoiceImageView.setImageBitmap(bitmap);
 					
 					String invoicePath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_INVOICE);
@@ -385,17 +409,7 @@ public class EditItemActivity extends Activity
 
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		amountEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
-		amountEditText.setOnFocusChangeListener(new OnFocusChangeListener()
-		{
-			public void onFocusChange(View v, boolean hasFocus)
-			{
-				if (hasFocus)
-				{
-					Spannable spanText = amountEditText.getText();
-					Selection.setSelection(spanText, spanText.length());
-				}
-			}
-		});
+		amountEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 		if (item.getAmount() == 0)
 		{
 			amountEditText.requestFocus();
@@ -562,6 +576,7 @@ public class EditItemActivity extends Activity
 				picturePopupWindow.dismiss();
 				
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempInvoiceUri());
 				startActivityForResult(intent, TAKE_PHOTO);
 			}
 		});

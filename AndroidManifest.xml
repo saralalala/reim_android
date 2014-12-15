@@ -176,7 +176,12 @@
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.InviteActivity">
+            android:name="com.rushucloud.reim.me.SendInviteActivity">
+        </activity>
+        
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.me.MessageActivity">
         </activity>
         
         <activity 

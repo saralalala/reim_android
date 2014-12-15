@@ -62,8 +62,10 @@ public class EditReportActivity extends Activity
 	private TextView timeTextView;
 	private ImageView statusImageView;
 	private TextView managerTextView;
+	private ListView managerListView;
 	private PopupWindow managerPopupWindow;
 	private TextView ccTextView;
+	private ListView ccListView;
 	private PopupWindow ccPopupWindow;
 	private TextView amountTextView;
 	private TextView itemCountTextView;
@@ -153,6 +155,17 @@ public class EditReportActivity extends Activity
     	
     	int currentGroupID = appPreference.getCurrentGroupID();
 		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
+
+		if (report.getManagerList() == null || report.getManagerList().size() == 0)
+		{
+			managerCheckList = User.getUsersCheck(userList, currentUser.constructListWithManager());
+		}
+		else
+		{
+			managerCheckList = User.getUsersCheck(userList, report.getManagerList());
+		}
+		
+    	ccCheckList = User.getUsersCheck(userList, report.getCCList());
 	}
 	
 	private void initView()
@@ -277,20 +290,9 @@ public class EditReportActivity extends Activity
 	
 	private void initManagerView()
 	{
-		if (report.getManagerList() == null || report.getManagerList().size() == 0)
-		{
-			managerCheckList = User.getUsersCheck(userList, currentUser.constructListWithManager());
-		}
-		else
-		{
-			managerCheckList = User.getUsersCheck(userList, report.getManagerList());
-		}
-		
-    	memberAdapter = new MemberListViewAdapter(this, userList, managerCheckList);
     	View managerView = View.inflate(this, R.layout.report_manager, null);
-    	ListView userListView = (ListView) managerView.findViewById(R.id.userListView);
-    	userListView.setAdapter(memberAdapter);
-    	userListView.setOnItemClickListener(new OnItemClickListener()
+    	managerListView = (ListView) managerView.findViewById(R.id.userListView);
+    	managerListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
@@ -336,13 +338,9 @@ public class EditReportActivity extends Activity
 	
 	private void initCCView()
 	{
-    	ccCheckList = User.getUsersCheck(userList, report.getCCList());
-		
-    	memberAdapter = new MemberListViewAdapter(this, userList, ccCheckList);
     	View ccView = View.inflate(this, R.layout.report_cc, null);
-    	ListView userListView = (ListView) ccView.findViewById(R.id.userListView);
-    	userListView.setAdapter(memberAdapter);
-    	userListView.setOnItemClickListener(new OnItemClickListener()
+    	ccListView = (ListView) ccView.findViewById(R.id.userListView);
+    	ccListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
@@ -580,6 +578,17 @@ public class EditReportActivity extends Activity
     private void showManagerWindow()
     {
     	hideSoftKeyboard();
+
+    	if (memberAdapter == null)
+		{
+			memberAdapter = new MemberListViewAdapter(this, userList, managerCheckList);
+		}
+    	else
+    	{
+        	memberAdapter.setCheck(managerCheckList);			
+		}
+    	managerListView.setAdapter(memberAdapter);
+    	
     	managerPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
     	managerPopupWindow.update();
 
@@ -589,6 +598,17 @@ public class EditReportActivity extends Activity
     private void showCCWindow()
     {
     	hideSoftKeyboard();
+
+    	if (memberAdapter == null)
+		{
+			memberAdapter = new MemberListViewAdapter(this, userList, ccCheckList);
+		}
+    	else
+    	{
+        	memberAdapter.setCheck(ccCheckList);		
+		}
+    	ccListView.setAdapter(memberAdapter);
+    	
     	ccPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
     	ccPopupWindow.update();
     	

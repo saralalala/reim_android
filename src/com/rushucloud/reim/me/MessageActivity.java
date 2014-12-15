@@ -29,25 +29,25 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class InviteActivity extends Activity
+public class MessageActivity extends Activity
 {
-	private ListView inviteListView;
-	private TextView inviteTextView;
+	private ListView messageListView;
+	private TextView messageTextView;
 	private SimpleAdapter adapter;
-	private List<Invite> inviteList = new ArrayList<Invite>();
+	private List<Invite> messageList = new ArrayList<Invite>();
 	private List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_invite_list);
+		setContentView(R.layout.me_messages);
 		initView();
 	}
 
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("InviteActivity");		
+		MobclickAgent.onPageStart("MessageActivity");		
 		MobclickAgent.onResume(this);
 		if (Utils.isNetworkConnected())
 		{
@@ -55,16 +55,16 @@ public class InviteActivity extends Activity
 		}
 		else
 		{
-			Utils.showToast(InviteActivity.this, "网络未连接，获取数据失败");
-			inviteListView.setVisibility(View.GONE);
-			inviteTextView.setVisibility(View.VISIBLE);
+			Utils.showToast(MessageActivity.this, "网络未连接，获取数据失败");
+			messageListView.setVisibility(View.GONE);
+			messageTextView.setVisibility(View.VISIBLE);
 		}
 	}
 
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("InviteActivity");
+		MobclickAgent.onPageEnd("MessageActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -83,21 +83,21 @@ public class InviteActivity extends Activity
 		
 		ReimApplication.setProgressDialog(this);
 
-		inviteTextView = (TextView)findViewById(R.id.inviteTextView);
+		messageTextView = (TextView)findViewById(R.id.messageTextView);
 
 		mapList = Invite.getMessageList(null);
 		String[] columns = new String[]{ "message", "time" };
 		int[] views = new int[]{android.R.id.text1, android.R.id.text2};
 		adapter = new SimpleAdapter(this, mapList, android.R.layout.simple_list_item_2, columns, views);
-		inviteListView = (ListView)findViewById(R.id.inviteListView);
-		inviteListView.setAdapter(adapter);
-		inviteListView.setOnItemClickListener(new OnItemClickListener()
+		messageListView = (ListView)findViewById(R.id.messageListView);
+		messageListView.setAdapter(adapter);
+		messageListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				Bundle bundle = new Bundle();
-				bundle.putSerializable("invite", inviteList.get(position));
-				Intent intent = new Intent(InviteActivity.this, InviteReplyActivity.class);
+				bundle.putSerializable("invite", messageList.get(position));
+				Intent intent = new Intent(MessageActivity.this, InviteReplyActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
 			}
@@ -129,21 +129,21 @@ public class InviteActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							inviteList = response.getInviteList();
-							if (inviteList.size() == 0)
+							messageList = response.getInviteList();
+							if (messageList.size() == 0)
 							{
-								inviteListView.setVisibility(View.GONE);
-								inviteTextView.setVisibility(View.VISIBLE);
+								messageListView.setVisibility(View.GONE);
+								messageTextView.setVisibility(View.VISIBLE);
 							}
 							else
 							{
-								mapList = Invite.getMessageList(inviteList);
+								mapList = Invite.getMessageList(messageList);
 								String[] columns = new String[]{"message", "time"};
 								int[] views = new int[]{android.R.id.text1, android.R.id.text2};
-								adapter = new SimpleAdapter(InviteActivity.this, mapList, android.R.layout.simple_list_item_2, columns, views);
-								inviteListView.setAdapter(adapter);
-								inviteTextView.setVisibility(View.GONE);
-								inviteListView.setVisibility(View.VISIBLE);
+								adapter = new SimpleAdapter(MessageActivity.this, mapList, android.R.layout.simple_list_item_2, columns, views);
+								messageListView.setAdapter(adapter);
+								messageTextView.setVisibility(View.GONE);
+								messageListView.setVisibility(View.VISIBLE);
 							}
 						}						
 					});
@@ -155,7 +155,7 @@ public class InviteActivity extends Activity
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							AlertDialog mDialog = new AlertDialog.Builder(InviteActivity.this)
+							AlertDialog mDialog = new AlertDialog.Builder(MessageActivity.this)
 														.setTitle("提示")
 														.setMessage("获取邀请列表失败")
 														.setNegativeButton(R.string.confirm, 

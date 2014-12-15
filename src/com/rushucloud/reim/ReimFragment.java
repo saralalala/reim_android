@@ -9,9 +9,12 @@ import com.umeng.analytics.MobclickAgent;
 import netUtils.HttpConnectionCallback;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
+import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.Item.DeleteItemRequest;
+import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Item.DeleteItemResponse;
 import classes.AppPreference;
+import classes.Category;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
@@ -205,232 +208,225 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 
 	private void initData()
 	{
-		if (appPreference == null)
-		{
-			appPreference = AppPreference.getAppPreference();
-		}
+		appPreference = AppPreference.getAppPreference();
+		dbManager = DBManager.getDBManager();
+		tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+		dbManager.executeTempCommand();
+
+		itemList.clear();
+		itemList.addAll(readItemList());
+		filterItemList();
 		
-		if (dbManager == null)
+		if (Utils.isNetworkConnected())
 		{
-			dbManager = DBManager.getDBManager();
-			tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-			dbManager.executeTempCommand();
+			for (Item item : showList)
+			{
+				Category category = item.getCategory();
+				if (category != null && category.hasUndownloadedIcon())
+				{
+					sendDownloadCategoryIconRequest(category);
+				}
+			}
 		}
 	}
 
 	private void initView()
 	{
-		if (adapter == null)
+		adapter = new ItemListViewAdapter(getActivity(), itemList);
+		itemListView = (XListView) getActivity().findViewById(R.id.itemListView);
+		itemListView.setAdapter(adapter);
+		itemListView.setXListViewListener(this);
+		itemListView.setPullLoadEnable(true);
+		itemListView.setPullRefreshEnable(true);
+		itemListView.setOnItemClickListener(new OnItemClickListener()
 		{
-			adapter = new ItemListViewAdapter(getActivity(), itemList);
-		}
-
-		if (itemListView == null)
-		{
-			itemListView = (XListView) getActivity().findViewById(R.id.itemListView);
-			itemListView.setAdapter(adapter);
-			itemListView.setXListViewListener(this);
-			itemListView.setPullLoadEnable(true);
-			itemListView.setPullRefreshEnable(true);
-			itemListView.setOnItemClickListener(new OnItemClickListener()
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+				Item item = showList.get(position-1);
+				if (item.getBelongReport() == null
+						|| item.getBelongReport().getStatus() == Report.STATUS_DRAFT
+						|| item.getBelongReport().getStatus() == Report.STATUS_REJECTED)
 				{
-					Item item = showList.get(position-1);
-					if (item.getBelongReport() == null
-							|| item.getBelongReport().getStatus() == Report.STATUS_DRAFT
-							|| item.getBelongReport().getStatus() == Report.STATUS_REJECTED)
-					{
-						Intent intent = new Intent(getActivity(), EditItemActivity.class);
-						intent.putExtra("itemLocalID", item.getLocalID());
-						intent.putExtra("fromReim", true);
-						startActivity(intent);
-					}
-					else
-					{
-						Intent intent = new Intent(getActivity(), ShowItemActivity.class);
-						intent.putExtra("itemLocalID", item.getLocalID());
-						startActivity(intent);
-					}
-				}
-			});
-			registerForContextMenu(itemListView);
-		}
-		
-		if (filterImageView == null)
-		{
-			filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
-			filterImageView.setOnClickListener(new OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
-					windowManager.addView(filterView, params);
-				}
-			});
-		}
-		
-		if (searchImageView == null)
-		{
-			searchImageView = (ImageView) getActivity().findViewById(R.id.searchImageView);
-			searchImageView.setOnClickListener(new OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
-					Intent intent = new Intent(getActivity(), SearchItemActivity.class);
+					Intent intent = new Intent(getActivity(), EditItemActivity.class);
+					intent.putExtra("itemLocalID", item.getLocalID());
+					intent.putExtra("fromReim", true);
 					startActivity(intent);
 				}
-			});
-		}
-		
-		if (filterView == null)
+				else
+				{
+					Intent intent = new Intent(getActivity(), ShowItemActivity.class);
+					intent.putExtra("itemLocalID", item.getLocalID());
+					startActivity(intent);
+				}
+			}
+		});
+		registerForContextMenu(itemListView);
+
+		filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
+		filterImageView.setOnClickListener(new OnClickListener()
 		{
-			windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
-			
-			DisplayMetrics dm = new DisplayMetrics();
-			getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-			
-			filterView = getActivity().getLayoutInflater().inflate(R.layout.reim_filter, (ViewGroup) null, false);
-			filterView.setBackgroundColor(Color.WHITE);
-			filterView.setMinimumHeight(dm.heightPixels);
-			
-			filterView.setFocusable(true);
-			filterView.setFocusableInTouchMode(true);
-			filterView.setOnKeyListener(this);
-
-			final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
-			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		
-			final RadioButton sortConsumedDateRadio = (RadioButton)filterView.findViewById(R.id.sortConsumedDateRadio);	
-			SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
-			sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+			public void onClick(View v)
 			{
-				public void onCheckedChanged(RadioGroup group, int checkedId)
-				{
-					if (checkedId == sortNullRadio.getId())
-					{
-						tempSortType = SORT_NULL;
-					}
-					else if (checkedId == sortAmountRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_AMOUNT");
-						tempSortType = SORT_AMOUNT;
-					}
-					else if (checkedId == sortConsumedDateRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
-						tempSortType = SORT_CONSUMED_DATE;
-					}
-				}
-			});
-
-			final RadioButton filterTypeAllRadio = (RadioButton)filterView.findViewById(R.id.filterTypeAllRadio);
-			final RadioButton filterProveAheadRadio = (RadioButton)filterView.findViewById(R.id.filterProveAheadRadio);
-			final RadioButton filterConsumedRadio = (RadioButton)filterView.findViewById(R.id.filterConsumedRadio);			
-			SegmentedGroup filterTypeRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterTypeRadioGroup);
-			filterTypeRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
+				windowManager.addView(filterView, params);
+			}
+		});
+		
+		searchImageView = (ImageView) getActivity().findViewById(R.id.searchImageView);
+		searchImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
 			{
-				public void onCheckedChanged(RadioGroup group, int checkedId)
-				{
-					if (checkedId == filterTypeAllRadio.getId())
-					{
-						tempFilterType = FILTER_TYPE_ALL;
-					}
-					else if (checkedId == filterProveAheadRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PROVE_AHEAD");
-						tempFilterType = FILTER_TYPE_PROVE_AHEAD;
-					}
-					else if (checkedId == filterConsumedRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_REIMBURSED");
-						tempFilterType = FILTER_TYPE_CONSUMED;
-					}
-				}
-			});
+				MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
+				Intent intent = new Intent(getActivity(), SearchItemActivity.class);
+				startActivity(intent);
+			}
+		});
 
-			final RadioButton filterStatusAllRadio = (RadioButton)filterView.findViewById(R.id.filterStatusAllRadio);
-			final RadioButton filterFreeRadio = (RadioButton)filterView.findViewById(R.id.filterFreeRadio);
-			final RadioButton filterAddedRadio = (RadioButton)filterView.findViewById(R.id.filterAddedRadio);			
-			SegmentedGroup filterStatusRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterStatusRadioGroup);
-			filterStatusRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
+		
+		DisplayMetrics dm = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+		
+		filterView = getActivity().getLayoutInflater().inflate(R.layout.reim_filter, (ViewGroup) null, false);
+		filterView.setBackgroundColor(Color.WHITE);
+		filterView.setMinimumHeight(dm.heightPixels);
+		
+		filterView.setFocusable(true);
+		filterView.setFocusableInTouchMode(true);
+		filterView.setOnKeyListener(this);
+
+		final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
+		final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		
+		final RadioButton sortConsumedDateRadio = (RadioButton)filterView.findViewById(R.id.sortConsumedDateRadio);	
+		SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
+		sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
-				public void onCheckedChanged(RadioGroup group, int checkedId)
+				if (checkedId == sortNullRadio.getId())
 				{
-					if (checkedId == filterStatusAllRadio.getId())
-					{
-						tempFilterStatus = FILTER_STATUS_ALL;
-					}
-					else if (checkedId == filterFreeRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_NO_IN_REPORT");
-						tempFilterStatus = FILTER_STATUS_FREE;
-					}
-					else if (checkedId == filterAddedRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_IN_REPORT");
-						tempFilterStatus = FILTER_STATUS_ADDED;
-					}
+					tempSortType = SORT_NULL;
 				}
-			});
+				else if (checkedId == sortAmountRadio.getId())
+				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_AMOUNT");
+					tempSortType = SORT_AMOUNT;
+				}
+				else if (checkedId == sortConsumedDateRadio.getId())
+				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
+					tempSortType = SORT_CONSUMED_DATE;
+				}
+			}
+		});
 
-			DisplayMetrics metrics = getResources().getDisplayMetrics();
-
-			int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-			int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-			int tagWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);	
-			int tagMaxCount = (metrics.widthPixels - padding * 2 + interval) / (tagWidth + interval);
-			
-			final ItemTagGridViewAdapter tagAdapter = new ItemTagGridViewAdapter(getActivity(), tagList);
-			
-			GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
-			tagGridView.setAdapter(tagAdapter);
-			tagGridView.setNumColumns(tagMaxCount);
-			tagGridView.setOnItemClickListener(new OnItemClickListener()
+		final RadioButton filterTypeAllRadio = (RadioButton)filterView.findViewById(R.id.filterTypeAllRadio);
+		final RadioButton filterProveAheadRadio = (RadioButton)filterView.findViewById(R.id.filterProveAheadRadio);
+		final RadioButton filterConsumedRadio = (RadioButton)filterView.findViewById(R.id.filterConsumedRadio);			
+		SegmentedGroup filterTypeRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterTypeRadioGroup);
+		filterTypeRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+				if (checkedId == filterTypeAllRadio.getId())
 				{
-					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TAG");
-					tagAdapter.setSelection(position);
-					tagAdapter.notifyDataSetChanged();
+					tempFilterType = FILTER_TYPE_ALL;
 				}
-			});
-
-			ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
-			confirmImageView.setOnClickListener(new View.OnClickListener()
-			{
-				public void onClick(View v)
+				else if (checkedId == filterProveAheadRadio.getId())
 				{
-					sortReverse = sortType == tempSortType ? !sortReverse : false;
-					sortType = tempSortType;
-					filterType = tempFilterType;
-					filterStatus = tempFilterStatus;
-					filterTagList.clear();
-					boolean[] check = tagAdapter.getCheckedTags();
-					for (int i = 0; i < check.length; i++)
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PROVE_AHEAD");
+					tempFilterType = FILTER_TYPE_PROVE_AHEAD;
+				}
+				else if (checkedId == filterConsumedRadio.getId())
+				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_REIMBURSED");
+					tempFilterType = FILTER_TYPE_CONSUMED;
+				}
+			}
+		});
+
+		final RadioButton filterStatusAllRadio = (RadioButton)filterView.findViewById(R.id.filterStatusAllRadio);
+		final RadioButton filterFreeRadio = (RadioButton)filterView.findViewById(R.id.filterFreeRadio);
+		final RadioButton filterAddedRadio = (RadioButton)filterView.findViewById(R.id.filterAddedRadio);			
+		SegmentedGroup filterStatusRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterStatusRadioGroup);
+		filterStatusRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+			public void onCheckedChanged(RadioGroup group, int checkedId)
+			{
+				if (checkedId == filterStatusAllRadio.getId())
+				{
+					tempFilterStatus = FILTER_STATUS_ALL;
+				}
+				else if (checkedId == filterFreeRadio.getId())
+				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_NO_IN_REPORT");
+					tempFilterStatus = FILTER_STATUS_FREE;
+				}
+				else if (checkedId == filterAddedRadio.getId())
+				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_IN_REPORT");
+					tempFilterStatus = FILTER_STATUS_ADDED;
+				}
+			}
+		});
+
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		int tagWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);	
+		int tagMaxCount = (metrics.widthPixels - padding * 2 + interval) / (tagWidth + interval);
+		
+		final ItemTagGridViewAdapter tagAdapter = new ItemTagGridViewAdapter(getActivity(), tagList);
+		
+		GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
+		tagGridView.setAdapter(tagAdapter);
+		tagGridView.setNumColumns(tagMaxCount);
+		tagGridView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TAG");
+				tagAdapter.setSelection(position);
+				tagAdapter.notifyDataSetChanged();
+			}
+		});
+
+		ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
+		confirmImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				sortReverse = sortType == tempSortType ? !sortReverse : false;
+				sortType = tempSortType;
+				filterType = tempFilterType;
+				filterStatus = tempFilterStatus;
+				filterTagList.clear();
+				boolean[] check = tagAdapter.getCheckedTags();
+				for (int i = 0; i < check.length; i++)
+				{
+					if (check[i])
 					{
-						if (check[i])
-						{
-							filterTagList.add(tagList.get(i));
-						}
-					}					
-					
-					windowManager.removeView(filterView);
-					ReimApplication.showProgressDialog();
-					refreshItemListView();
-					ReimApplication.dismissProgressDialog();
-				}
-			});
+						filterTagList.add(tagList.get(i));
+					}
+				}					
+				
+				windowManager.removeView(filterView);
+				ReimApplication.showProgressDialog();
+				refreshItemListView();
+				ReimApplication.dismissProgressDialog();
+			}
+		});
 
-			ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
-			cancelImageView.setOnClickListener(new View.OnClickListener()
+		ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
+		cancelImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
 			{
-				public void onClick(View v)
-				{
-					windowManager.removeView(filterView);
-				}
-			});
-		}
+				windowManager.removeView(filterView);
+			}
+		});
 	}
 
 	private List<Item> readItemList()
@@ -447,6 +443,26 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 		adapter.notifyDataSetChanged();
 	}
 
+    private void sendDownloadCategoryIconRequest(final Category category)
+    {
+    	DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+				if (response.getBitmap() != null)
+				{
+					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
+					category.setIconPath(iconPath);
+					category.setLocalUpdatedDate(Utils.getCurrentTime());
+					category.setServerUpdatedDate(category.getLocalUpdatedDate());
+					dbManager.updateCategory(category);
+				}
+			}
+		});
+    }
+    
 	private void sendDeleteItemRequest(final Item item)
 	{
 		ReimApplication.showProgressDialog();

@@ -10,6 +10,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import classes.AppPreference;
 import classes.ReimApplication;
+import classes.User;
 import classes.Utils;
 import android.app.Activity;
 import android.content.Intent;
@@ -23,6 +24,9 @@ import android.widget.RelativeLayout;
 
 public class SettingsActivity extends Activity
 {	
+	private RelativeLayout categoryLayout;
+	private RelativeLayout tagLayout;
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -66,6 +70,38 @@ public class SettingsActivity extends Activity
 				finish();
 			}
 		});
+		
+        categoryLayout = (RelativeLayout) findViewById(R.id.categoryLayout);
+        categoryLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(SettingsActivity.this, "UMENG_MINE_CATEGORT_SETTING");
+				startActivity(new Intent(SettingsActivity.this, CategoryActivity.class));
+			}
+		});
+        
+        tagLayout = (RelativeLayout) findViewById(R.id.tagLayout);
+        tagLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(SettingsActivity.this, "UMENG_MINE_TAG_SETTING");
+				startActivity(new Intent(SettingsActivity.this, TagActivity.class));
+			}
+		});
+		
+        User currentUser = AppPreference.getAppPreference().getCurrentUser();
+        if (!currentUser.isAdmin() || currentUser.getGroupID() <= 0)
+		{
+        	categoryLayout.setVisibility(View.GONE);
+			tagLayout.setVisibility(View.GONE);
+		}
+        else
+        {
+			categoryLayout.setVisibility(View.VISIBLE);
+			tagLayout.setVisibility(View.VISIBLE);
+        }
         
         RelativeLayout aboutLayout = (RelativeLayout) findViewById(R.id.aboutLayout);
         aboutLayout.setOnClickListener(new View.OnClickListener()
@@ -100,7 +136,8 @@ public class SettingsActivity extends Activity
 					Utils.showToast(SettingsActivity.this, "网络未连接，无法登出");							
 				}
 			}
-		});  
+		});
+        signOutButton = Utils.resizeLongButton(signOutButton);
 	}
 	
 	private void sendSignOutRequest()
