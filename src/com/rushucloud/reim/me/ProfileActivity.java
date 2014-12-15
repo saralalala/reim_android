@@ -589,6 +589,7 @@ public class ProfileActivity extends Activity
 			public void onClick(View v)
 			{
 				startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
+				overridePendingTransition(R.anim.full_window_in, 0);
 			}
 		});
 	}	
@@ -647,7 +648,7 @@ public class ProfileActivity extends Activity
     }
     
     private void showEmailWindow()
-    {
+    {    	
 		emailPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		emailPopupWindow.update();
     }
@@ -758,6 +759,10 @@ public class ProfileActivity extends Activity
 						{
 							ReimApplication.dismissProgressDialog();
 							Utils.showToast(ProfileActivity.this, "用户信息修改成功");
+							emailPopupWindow.dismiss();
+							phonePopupWindow.dismiss();
+							nicknamePopupWindow.dismiss();
+							companyPopupWindow.dismiss();
 							loadInfoView();
 						}
 					});

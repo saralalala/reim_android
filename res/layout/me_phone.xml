@@ -43,36 +43,49 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="50.5dp"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/me_item_drawable"
-        android:focusable="true"
-        android:focusableInTouchMode="true" >
+        android:layout_height="match_parent" >
 
-	    <include
-	        android:layout_width="match_parent"
-	        android:layout_height="0.5dp"
-	        layout="@layout/divider" />
-
-        <EditText
-            android:id="@+id/phoneEditText"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@null"
-            android:hint="@string/input_phone"
-            android:inputType="text|phone"
-            android:textSize="14sp"
-            android:textColor="@color/font_major_dark" />
-        
-    </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        layout="@layout/divider" />
+		    <RelativeLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="50.5dp"
+		        android:layout_marginTop="18dp"
+		        android:background="@drawable/me_item_drawable"
+		        android:focusable="true"
+		        android:focusableInTouchMode="true" >
+		
+			    <include
+			        android:layout_width="match_parent"
+			        android:layout_height="0.5dp"
+			        layout="@layout/divider" />
+		
+		        <EditText
+		            android:id="@+id/phoneEditText"
+		            android:layout_width="match_parent"
+		            android:layout_height="match_parent"
+		            android:layout_marginLeft="16dp"
+		            android:layout_marginRight="16dp"
+		            android:background="@null"
+		            android:hint="@string/input_phone"
+		            android:inputType="text|phone"
+		            android:textSize="14sp"
+		            android:textColor="@color/font_major_dark" />
+		        
+		    </RelativeLayout>
+		
+		    <include
+		        android:layout_width="match_parent"
+		        android:layout_height="0.5dp"
+		        layout="@layout/divider" />
+		    
+        </LinearLayout>
+        
+    </ScrollView>
 
 </LinearLayout>

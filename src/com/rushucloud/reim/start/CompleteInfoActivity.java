@@ -80,7 +80,7 @@ public class CompleteInfoActivity extends Activity
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-		if(resultCode == Activity.RESULT_OK && data != null)
+		if(resultCode == Activity.RESULT_OK)
 		{
 			try
 			{
