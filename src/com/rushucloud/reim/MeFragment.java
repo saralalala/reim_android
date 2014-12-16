@@ -94,8 +94,8 @@ public class MeFragment extends Fragment
 		{
 			initData();
 	        initView();
-	        loadProfileView();
 			hasInit = true;
+	        loadProfileView();
 		}
 	}
 

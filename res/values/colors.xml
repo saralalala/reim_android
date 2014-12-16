@@ -48,5 +48,9 @@
     <color name="report_status_approved">#FF3CB798</color>
     <color name="report_status_rejected">#FFB570B2</color>
     <color name="report_status_finished">#FFCCCECF</color>
+    
+    <color name="stat_done">#FF61686D</color>
+    <color name="stat_ongoing">#FF45A3D2</color>
+    <color name="stat_new">#FFF6575B</color>
         
 </resources>

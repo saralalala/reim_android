@@ -6,9 +6,10 @@
     <string name="settings">设置</string>
     <string name="on">开</string>
     <string name="off">关</string>
-    <string name="rmb">¥</string>
     <string name="not_available">N/A</string>
     <string name="null_string">无</string>
+    <string name="rmb">¥</string>
+    <string name="percent">%</string>
     
     <string name="confirm">确定</string>
     <string name="save">保存</string>
@@ -132,7 +133,14 @@
     <string name="submit">提交</string>
     <string name="approve">批准</string>
     <string name="reject">拒绝</string>
-    <string name="report_over_flow">99+</string>    
+    <string name="report_over_flow">99+</string>
+    
+    <string name="mark">标记</string>
+    <string name="stat_done">已报销</string>
+    <string name="stat_ongoing">报销中</string>
+    <string name="stat_new">未报销</string>
+    <string name="cost_per_month">花费/月</string>
+    <string name="stat_by_category">类别统计</string>
     
     <string name="personal_center">个人中心</string>
     <string name="avatar">头像</string>
@@ -158,10 +166,10 @@
     <string name="input_nickname">请输入昵称</string>
     <string name="input_feedback">请输入您的意见或建议</string>
     <string name="input_contact_info">请输入您的联系方式</string>
-    <string name="input_category_name">请输入分类名称</string>
-    <string name="input_category_limit">请输入分类限额</string>
+    <string name="input_category_name">请输入类别名称</string>
+    <string name="input_category_limit">请输入类别限额</string>
     <string name="icon">图标</string>
-    <string name="sub_category">子分类</string>
+    <string name="sub_category">子类别</string>
     <string name="input_tag_name">请输入标签名称</string>
     <string name="input_user_contact">请输入对方手机号或邮箱</string>
     <string name="agree">同意</string>
@@ -170,7 +178,7 @@
     <string name="invoice_invalid">还没公司，开啥发票</string>
     <string name="category_management">类别管理</string>
     <string name="tag_management">标签管理</string>
-    <string name="no_categories">当前没有任何分类</string>
+    <string name="no_categories">当前没有任何类别</string>
     <string name="no_tags">当前没有任何标签</string>
     <string name="about_us">关于我们</string>
     <string name="feedback">意见反馈</string>

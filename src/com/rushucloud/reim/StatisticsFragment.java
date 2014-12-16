@@ -1,28 +1,21 @@
 package com.rushucloud.reim;
 
-import java.util.HashMap;
-import java.util.Set;
-
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.StatisticsRequest;
 import netUtils.Response.StatisticsResponse;
 
-import android.graphics.Color;
-import android.graphics.Paint.Align;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.support.v4.app.Fragment;
-
-import org.achartengine.*;
-import org.achartengine.chart.BarChart.Type;
-import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.model.XYSeries;
-import org.achartengine.renderer.SimpleSeriesRenderer;
-
-import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
 import classes.ReimApplication;
 import classes.Utils;
@@ -34,17 +27,20 @@ public class StatisticsFragment extends Fragment
 {
 	private boolean hasInit = false;
 
-	private LinearLayout newPieContainer;
-	private LinearLayout donePieContainer;
-	private LinearLayout processPieContainer;
-	private LinearLayout monthBarContainer;
+	private FrameLayout statContainer;
+	private TextView mainPercentTextView;
+	private TextView donePercentTextView;
+	private TextView ongoingPercentTextView;
+	private TextView newPercentTextView;
 	
 	private StatisticsResponse response = null;
 	
 	private ReimPie doneReimPie;
 	private ReimPie newReimPie;
-	private ReimPie processReimPie;
-	private GraphicalView monthBarChart;
+	private ReimPie ongoingReimPie;
+//	private GraphicalView monthBarChart;
+	
+	private int diameter;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -59,6 +55,7 @@ public class StatisticsFragment extends Fragment
 		{
 			initView();
 			hasInit = true;
+			initData();
 		}
 	}
 
@@ -79,18 +76,43 @@ public class StatisticsFragment extends Fragment
 	
 	private void initView()
 	{
-		newPieContainer = (LinearLayout) getActivity().findViewById(R.id.newPieContainer);
-		donePieContainer = (LinearLayout) getActivity().findViewById(R.id.donePieContainer);
-		processPieContainer = (LinearLayout) getActivity().findViewById(R.id.processPieContainer);
-		monthBarContainer = (LinearLayout) getActivity().findViewById(R.id.monthBarContainer);
+		statContainer = (FrameLayout) getActivity().findViewById(R.id.statContainer);
+		
+		mainPercentTextView = (TextView) getActivity().findViewById(R.id.mainPercentTextView);
+		mainPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		
+		donePercentTextView = (TextView) getActivity().findViewById(R.id.donePercentTextView);
+		donePercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		
+		ongoingPercentTextView = (TextView) getActivity().findViewById(R.id.ongoingPercentTextView);
+		ongoingPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		
+		newPercentTextView = (TextView) getActivity().findViewById(R.id.newPercentTextView);
+		newPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		
+		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.arc);
+		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+		
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int margin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, metrics);
+		
+		diameter = metrics.widthPixels - margin * 2;
+		ImageView arcImageView = (ImageView) getActivity().findViewById(R.id.arcImageView);
+		ViewGroup.LayoutParams params = arcImageView.getLayoutParams();
+		params.width = diameter;
+		params.height = (int)(params.width * ratio);
+		arcImageView.setLayoutParams(params);
+		
+		ImageView arcCoverImageView = (ImageView) getActivity().findViewById(R.id.arcCoverImageView);
+		arcCoverImageView.setLayoutParams(params);
+		
+		FrameLayout statContainer = (FrameLayout) getActivity().findViewById(R.id.statContainer);
+		statContainer.setLayoutParams(params);
 	}
 
 	private void resetView()
 	{
-		newPieContainer.removeAllViews();
-		donePieContainer.removeAllViews();
-		processPieContainer.removeAllViews();
-		monthBarContainer.removeAllViews();
+		statContainer.removeAllViews();
 	}
 	
 	private void initData()
@@ -107,151 +129,136 @@ public class StatisticsFragment extends Fragment
 	
 	private void drawPie()
 	{
+		int doneRatio, ongoingRatio, newRatio;
 		double total = response.getTotal();
+		if (total == 0)
+		{
+			doneRatio = ongoingRatio = newRatio = 0;
+		}
+		else
+		{
+			doneRatio = (int)(response.getDoneAmount() * 100 / total);
+			ongoingRatio = (int)(response.getOngoingAmount() * 100 / total);
+			newRatio = (int)(response.getNewAmount() * 100 / total);
+		}
+		
+		doneRatio = 30;
+		ongoingRatio = 40;
+		newRatio = 30;
+		
+		mainPercentTextView.setText(Integer.toString(newRatio));
+		donePercentTextView.setText(Integer.toString(doneRatio) + getString(R.string.percent));
+		ongoingPercentTextView.setText(Integer.toString(ongoingRatio) + getString(R.string.percent));
+		newPercentTextView.setText(Integer.toString(newRatio) + getString(R.string.percent));
 
-		float doneAngle = (float) (response.getDoneAmount() * 360 / total);
-		float newAngle = (float) (response.getNewAmount() * 360 / total);
-		float processAngle = (float) (response.getProcessAmount() * 360 / total);
+		float totalAngle = 261;
+		float startAngle = (float) 139;
+		float doneAngle = ((float) doneRatio) * totalAngle / 100;
+		float newAngle = ((float) newRatio) * totalAngle / 100;
+		float ongoingAngle = ((float) ongoingRatio) * totalAngle / 100;
 		
 		// Draw done pie
-		if (doneAngle == 0 || Float.isNaN(doneAngle))
+		if (doneReimPie == null)
 		{
-			if (doneReimPie == null)
-			{
-				doneReimPie = new ReimPie(getActivity(), 0, 0, donePieContainer.getWidth(), donePieContainer.getHeight());
-			} 
-			else
-			{
-				doneReimPie.setPieRect(0, 0, donePieContainer.getWidth(), donePieContainer.getHeight());
-			}
-		}
-		else 
+			doneReimPie = new ReimPie(getActivity(), startAngle, doneAngle, statContainer.getWidth(), R.color.stat_done);
+		} 
+		else
 		{
-			if (doneReimPie == null)
-			{
-				doneReimPie = new ReimPie(getActivity(), doneAngle, 0, donePieContainer.getWidth(), donePieContainer.getHeight());
-			} 
-			else
-			{
-				doneReimPie.setPieRect(doneAngle, 0, donePieContainer.getWidth(), donePieContainer.getHeight());
-			}		
+			doneReimPie.setPieRect(startAngle, doneAngle, statContainer.getWidth());
 		}
-		donePieContainer.addView(doneReimPie);	
+		statContainer.addView(doneReimPie);	
+
+		// Draw ongoing pie
+		if (ongoingReimPie == null)
+		{
+			ongoingReimPie = new ReimPie(getActivity(), startAngle + doneAngle, ongoingAngle, statContainer.getWidth(), R.color.stat_ongoing);
+		} 
+		else
+		{
+			ongoingReimPie.setPieRect(startAngle + doneAngle, ongoingAngle, statContainer.getWidth());
+		}
+		statContainer.addView(ongoingReimPie);	
 
 		// Draw new pie
-		if (newAngle == 0 || Float.isNaN(newAngle))
+		if (newReimPie == null)
 		{
-			if (newReimPie == null)
-			{
-				newReimPie = new ReimPie(getActivity(), 0, 0, newPieContainer.getWidth(), newPieContainer.getHeight());
-			} 
-			else
-			{
-				newReimPie.setPieRect(0, 0, newPieContainer.getWidth(), newPieContainer.getHeight());
-			}
-		}
-		else 
+			newReimPie = new ReimPie(getActivity(), startAngle + doneAngle + ongoingAngle, newAngle, statContainer.getWidth(), R.color.stat_new);
+		} 
+		else
 		{
-			if (newReimPie == null)
-			{
-				newReimPie = new ReimPie(getActivity(), newAngle, doneAngle, newPieContainer.getWidth(), newPieContainer.getHeight());
-			} 
-			else
-			{
-				newReimPie.setPieRect(newAngle, doneAngle, newPieContainer.getWidth(), newPieContainer.getHeight());
-			}
+			newReimPie.setPieRect(startAngle + doneAngle + ongoingAngle, newAngle, statContainer.getWidth());
 		}
-		newPieContainer.addView(newReimPie);
-
-		// Draw process pie
-		if (processAngle == 0 || Float.isNaN(processAngle))
-		{
-			if (processReimPie == null)
-			{
-				processReimPie = new ReimPie(getActivity(), 0, 0, processPieContainer.getWidth(), processPieContainer.getHeight());
-			} 
-			else
-			{
-				processReimPie.setPieRect(0, 0, processPieContainer.getWidth(), processPieContainer.getHeight());
-			}
-		}
-		else 
-		{
-			if (processReimPie == null)
-			{
-				processReimPie = new ReimPie(getActivity(), processAngle, newAngle + doneAngle, processPieContainer.getWidth(), processPieContainer.getHeight());
-			} 
-			else
-			{
-				processReimPie.setPieRect(processAngle, newAngle + doneAngle, processPieContainer.getWidth(), processPieContainer.getHeight());
-			}
-		}
-		processPieContainer.addView(processReimPie);	
+		statContainer.addView(newReimPie);
 	}
 
 	private void drawBar()
 	{
-		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
-
-		renderer.setChartTitle("月度详细");
-		renderer.setXAxisMin(0);
-		renderer.setXAxisMax(12);
-		renderer.setXLabels(0);
-
-		renderer.setYAxisMin(0);
-		renderer.setYAxisMax(1000);
-		renderer.setYLabels(15);
-
-		renderer.setAxisTitleTextSize(18);
-		renderer.setDisplayValues(true);
-		renderer.setShowGrid(true);
-		renderer.setMarginsColor(getResources().getColor(R.color.background));
-		renderer.setLabelsColor(Color.BLACK);
-		renderer.setXLabelsColor(Color.BLACK);
-		renderer.setYLabelsColor(0, Color.BLACK);
-		renderer.setYLabelsAlign(Align.CENTER);
-		renderer.setBarSpacing(0.5f);
-		renderer.setPanEnabled(false, false);
-		renderer.setLabelsTextSize(16);
-
-		HashMap<String, String> monthsData = response.getMonthsData();
+//		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+//
+//		renderer.setChartTitle("月度详细");
+//		renderer.setXAxisMin(0);
+//		renderer.setXAxisMax(12);
+//		renderer.setXLabels(0);
+//
+//		renderer.setYAxisMin(0);
+//		renderer.setYAxisMax(1000);
+//		renderer.setYLabels(15);
+//
+//		renderer.setAxisTitleTextSize(18);
+//		renderer.setDisplayValues(true);
+//		renderer.setShowGrid(true);
+//		renderer.setMarginsColor(getResources().getColor(R.color.background));
+//		renderer.setLabelsColor(Color.BLACK);
+//		renderer.setXLabelsColor(Color.BLACK);
+//		renderer.setYLabelsColor(0, Color.BLACK);
+//		renderer.setYLabelsAlign(Align.CENTER);
+//		renderer.setBarSpacing(0.5f);
+//		renderer.setPanEnabled(false, false);
+//		renderer.setLabelsTextSize(16);
+//
+//		HashMap<String, String> monthsData = response.getMonthsData();
+//		
+//		XYMultipleSeriesDataset dataSet = new XYMultipleSeriesDataset();
+//		if (monthsData.size() == 0)
+//		{			
+//			SimpleSeriesRenderer r = new SimpleSeriesRenderer();
+//			r.setColor(Color.rgb(50, 143, 201));
+//			renderer.addSeriesRenderer(r);
+//			
+//			String timeString = Utils.secondToStringUpToDay(Utils.getCurrentTime());
+//			String currentMonth = timeString.substring(0, timeString.length()-3);
+//			XYSeries series = new XYSeries(currentMonth);
+//			series.add(1, 0);
+//			renderer.addXTextLabel(1, currentMonth);
+//			dataSet.addSeries(series);
+//		}
+//		else
+//		{
+//			Set<String> keys = monthsData.keySet();
+//			int count = keys.size();
+//			for (int i = 0; i < count; i++)
+//			{				
+//				String key = (String) ((keys.toArray())[i]);
+//				
+//				SimpleSeriesRenderer r = new SimpleSeriesRenderer();
+//				r.setColor(Color.rgb(50, 143, 201));
+//				renderer.addSeriesRenderer(r);
+//				renderer.addXTextLabel(i + 1, key);
+//				
+//				XYSeries series = new XYSeries(key);
+//				Long value = Long.parseLong(monthsData.get(key));
+//				series.add(i + 1, value);
+//				dataSet.addSeries(series);
+//			}
+//		}
+//		
+//		monthBarChart = ChartFactory.getBarChartView(getActivity(), dataSet, renderer, Type.STACKED);
+//		monthBarContainer.addView(monthBarChart);
+	}
+	
+	private void drawCategory()
+	{
 		
-		XYMultipleSeriesDataset dataSet = new XYMultipleSeriesDataset();
-		if (monthsData.size() == 0)
-		{			
-			SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-			r.setColor(Color.rgb(50, 143, 201));
-			renderer.addSeriesRenderer(r);
-			
-			String timeString = Utils.secondToStringUpToDay(Utils.getCurrentTime());
-			String currentMonth = timeString.substring(0, timeString.length()-3);
-			XYSeries series = new XYSeries(currentMonth);
-			series.add(1, 0);
-			renderer.addXTextLabel(1, currentMonth);
-			dataSet.addSeries(series);
-		}
-		else
-		{
-			Set<String> keys = monthsData.keySet();
-			int count = keys.size();
-			for (int i = 0; i < count; i++)
-			{				
-				String key = (String) ((keys.toArray())[i]);
-				
-				SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-				r.setColor(Color.rgb(50, 143, 201));
-				renderer.addSeriesRenderer(r);
-				renderer.addXTextLabel(i + 1, key);
-				
-				XYSeries series = new XYSeries(key);
-				Long value = Long.parseLong(monthsData.get(key));
-				series.add(i + 1, value);
-				dataSet.addSeries(series);
-			}
-		}
-		
-		monthBarChart = ChartFactory.getBarChartView(getActivity(), dataSet, renderer, Type.STACKED);
-		monthBarContainer.addView(monthBarChart);
 	}
 
 	private void sendGetDataRequest()
@@ -262,6 +269,7 @@ public class StatisticsFragment extends Fragment
 		{
 			public void execute(Object httpResponse)
 			{
+				System.out.println((String)httpResponse);
 				response = new StatisticsResponse(httpResponse);
 				if (response.getStatus())
 				{
@@ -272,6 +280,7 @@ public class StatisticsFragment extends Fragment
 							resetView();
 							drawPie();
 							drawBar();
+							drawCategory();
 							ReimApplication.dismissProgressDialog();
 						}
 					});

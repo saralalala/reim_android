@@ -13,7 +13,7 @@ import classes.StatisticsCategory;
 public class StatisticsResponse extends BaseResponse
 {
 	private double newAmount;
-	private double processAmount;
+	private double ongoingAmount;
 	private double doneAmount;
 	private List<StatisticsCategory> statCategoryList;
 	private HashMap<String, String> monthsData;
@@ -29,7 +29,7 @@ public class StatisticsResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			this.doneAmount = jObject.getDouble("done");
-			this.processAmount = jObject.getDouble("process");
+			this.ongoingAmount = jObject.getDouble("process");
 			this.newAmount = jObject.getDouble("new");
 			JSONArray cates = jObject.getJSONArray("cates");
 			this.statCategoryList = new LinkedList<StatisticsCategory>();
@@ -68,7 +68,7 @@ public class StatisticsResponse extends BaseResponse
 
 	public double getTotal()
 	{
-		return doneAmount + newAmount + processAmount;
+		return doneAmount + newAmount + ongoingAmount;
 	}
 
 	public double getNewAmount()
@@ -81,14 +81,14 @@ public class StatisticsResponse extends BaseResponse
 		this.newAmount = newAmount;
 	}
 
-	public double getProcessAmount()
+	public double getOngoingAmount()
 	{
-		return processAmount;
+		return ongoingAmount;
 	}
 
-	public void setProcessAmount(double processAmount)
+	public void setOngoingAmount(double ongoingAmount)
 	{
-		this.processAmount = processAmount;
+		this.ongoingAmount = ongoingAmount;
 	}
 
 	public double getDoneAmount()

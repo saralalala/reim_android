@@ -6,8 +6,6 @@ import classes.Group;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import database.DBManager;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
