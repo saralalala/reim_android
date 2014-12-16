@@ -1632,6 +1632,32 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
+	public boolean updateOthersReport(Report report)
+	{
+		try
+		{
+			String sqlString = "UPDATE tbl_others_report SET " +
+								"server_id = '" + report.getServerID() + "'," +
+								"title = '" + report.getTitle() + "'," +
+								"user_id = '" + report.getSender().getServerID() + "'," +
+								"status = '" + report.getStatus() + "'," +
+								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
+								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
+								"prove_ahead = '" + Utils.booleanToInt(report.isProveAhead()) + "'," +
+								"created_date = '" + report.getCreatedDate() + "'," +
+								"server_updatedt = '" + report.getServerUpdatedDate() + "'," +
+								"local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
+								"WHERE server_id = '" + report.getServerID() + "'";			
+			database.execSQL(sqlString);			
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	public boolean deleteReport(int reportLocalID)
 	{
 		try

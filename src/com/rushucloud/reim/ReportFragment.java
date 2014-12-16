@@ -166,7 +166,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
     	{
 			case 0:
 			{
-				if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECTED)
+				if (report.isEditable())
 				{
 					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
 														.setTitle("警告")
@@ -281,7 +281,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 						Bundle bundle = new Bundle();
 						bundle.putSerializable("report", report);
 						Intent intent;
-						if (report.getStatus() == Report.STATUS_DRAFT || report.getStatus() == Report.STATUS_REJECTED)
+						if (report.isEditable())
 						{
 							intent = new Intent(getActivity(), EditReportActivity.class);
 						}

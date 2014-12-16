@@ -148,7 +148,7 @@ public class ApproveReportActivity extends Activity
 				}
 				else
 				{
-					saveReport(Report.STATUS_APPROVED);
+					sendModifyReportRequest(Report.STATUS_APPROVED, "");
 				}
 			}
 		});
@@ -165,7 +165,7 @@ public class ApproveReportActivity extends Activity
 				}
 				else
 				{
-					saveReport(Report.STATUS_REJECTED);
+					showCommentDialog();
 				}
 			}
 		});
@@ -186,15 +186,6 @@ public class ApproveReportActivity extends Activity
 				}
 			}
 		});
-	
-//		if (!Utils.isNetworkConnected())
-//		{
-//			Utils.showToast(ApproveReportActivity.this, "网络未连接，无法添加评论");
-//		}
-//		else
-//		{
-//			showAddCommentDialog();
-//		}
 	}
 
 	private void refreshView()
@@ -303,28 +294,23 @@ public class ApproveReportActivity extends Activity
 		});
     }
     
-    private void showAddCommentDialog()
+    private void showCommentDialog()
     {
 		View view = View.inflate(this, R.layout.report_comment_dialog, null);
+		
+		TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
+		titleTextView.setText(R.string.reject_reason);
+		
 		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
 		commentEditText.requestFocus();
 		
     	AlertDialog mDialog = new AlertDialog.Builder(this)
-								.setTitle("添加评论")
 								.setView(view)
-								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								.setPositiveButton(R.string.reject, new DialogInterface.OnClickListener()
 								{
 									public void onClick(DialogInterface dialog, int which)
 									{
-										String comment = commentEditText.getText().toString();
-										if (comment.equals(""))
-										{
-											Utils.showToast(ApproveReportActivity.this, "评论不能为空");
-										}
-										else
-										{
-											sendCommentRequest(comment);
-										}
+										sendModifyReportRequest(Report.STATUS_REJECTED, commentEditText.getText().toString());
 									}
 								})
 								.setNegativeButton(R.string.cancel, null)
@@ -332,9 +318,10 @@ public class ApproveReportActivity extends Activity
 		mDialog.show();
     }
 	
-    private void sendCommentRequest(final String commentContent)
+    private void sendModifyReportRequest(final int status, final String commentContent)
     {
     	ReimApplication.showProgressDialog();
+    	report.setStatus(status);
 		
     	ModifyReportRequest request = new ModifyReportRequest(report, commentContent);
     	request.sendRequest(new HttpConnectionCallback()
@@ -344,68 +331,31 @@ public class ApproveReportActivity extends Activity
 				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
 				if (response.getStatus())
 				{
-					User user = appPreference.getCurrentUser();
-					int currentTime = Utils.getCurrentTime();
+					int currentTime = Utils.getCurrentTime();					
+					report.setLocalUpdatedDate(currentTime);
+					report.setServerUpdatedDate(currentTime);
+					dbManager.updateOthersReport(report);
 					
-					Comment comment = new Comment();
-					comment.setContent(commentContent);
-					comment.setCreatedDate(currentTime);
-					comment.setLocalUpdatedDate(currentTime);
-					comment.setServerUpdatedDate(currentTime);
-					comment.setReportID(report.getServerID());
-					comment.setReviewer(user);
-					
-					dbManager.insertOthersComment(comment);
+					if (!commentContent.equals(""))
+					{
+						User user = appPreference.getCurrentUser();
+						
+						Comment comment = new Comment();
+						comment.setContent(commentContent);
+						comment.setCreatedDate(currentTime);
+						comment.setLocalUpdatedDate(currentTime);
+						comment.setServerUpdatedDate(currentTime);
+						comment.setReportID(report.getServerID());
+						comment.setReviewer(user);
+						
+						dbManager.insertOthersComment(comment);						
+					}
 					
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(ApproveReportActivity.this, "评论发表成功");
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimApplication.dismissProgressDialog();
-							Utils.showToast(ApproveReportActivity.this, "评论发表失败, " + response.getErrorMessage());
-						}
-					});					
-				}
-			}
-		});
-    }
-    
-    private void saveReport(final int status)
-    {
-    	ReimApplication.showProgressDialog();
-    	report.setStatus(status);
-    	
-    	ModifyReportRequest request = new ModifyReportRequest(report);
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
-				if (response.getStatus())
-				{
-					report.setLocalUpdatedDate(Utils.getCurrentTime());
-					report.setServerUpdatedDate(report.getLocalUpdatedDate());
-
-					int managerID = appPreference.getCurrentUserID();
-					dbManager.deleteOthersReport(reportServerID, managerID);
-					dbManager.deleteOthersReportItems(reportServerID);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-					    	ReimApplication.dismissProgressDialog();
 							String message = status == 2 ? "报告已通过" : "报告已退回";
 							Utils.showToast(ApproveReportActivity.this, message);
 							finish();
@@ -418,11 +368,10 @@ public class ApproveReportActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.dismissProgressDialog();
-							Utils.showToast(ApproveReportActivity.this, "操作失败，" + 
-											response.getErrorMessage());
+							ReimApplication.dismissProgressDialog();
+							Utils.showToast(ApproveReportActivity.this, "操作失败, " + response.getErrorMessage());
 						}
-					});
+					});					
 				}
 			}
 		});

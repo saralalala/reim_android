@@ -133,9 +133,7 @@ public class SearchItemActivity extends Activity
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				Item item = itemList.get(position);
-				if (item.getBelongReport() == null
-						|| item.getBelongReport().getStatus() == Report.STATUS_DRAFT
-						|| item.getBelongReport().getStatus() == Report.STATUS_REJECTED)
+				if (item.getBelongReport() == null || item.getBelongReport().isEditable())
 				{
 					Intent intent = new Intent(SearchItemActivity.this, EditItemActivity.class);
 					intent.putExtra("itemLocalID", item.getLocalID());

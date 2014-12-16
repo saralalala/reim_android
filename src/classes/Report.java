@@ -256,6 +256,11 @@ public class Report implements Serializable
 		return true;
 	}
     
+	public boolean isEditable()
+	{
+		return getStatus() == Report.STATUS_DRAFT || getStatus() == Report.STATUS_REJECTED;
+	}
+	
 	public boolean isInSpecificStatus(List<Integer> statusList)
 	{
 		for (Integer integer : statusList)

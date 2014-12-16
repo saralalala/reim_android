@@ -34,11 +34,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
@@ -46,10 +44,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -67,14 +67,13 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 	private static final int SORT_AMOUNT = 1;	
 	private static final int SORT_CONSUMED_DATE = 2;	
 	
-	private boolean hasInit = false;
-	
 	private View view;
 	private View filterView;
 	private ImageView filterImageView;
 	private ImageView searchImageView;
 	private XListView itemListView;
 	private ItemListViewAdapter adapter;
+	private PopupWindow deletePopupWindow;
 
 	private WindowManager windowManager;
 	private LayoutParams params = new LayoutParams();
@@ -88,12 +87,13 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 	private int filterStatus = FILTER_STATUS_ALL;
 	private int sortType = SORT_NULL;
 	private boolean sortReverse = false;
+	private List<Tag> filterTagList = new ArrayList<Tag>();
 	
 	private int tempFilterType = FILTER_TYPE_ALL;
 	private int tempFilterStatus = FILTER_STATUS_ALL;
-	private int tempSortType = SORT_NULL;
+	private int tempSortType = SORT_NULL;	
 	
-	private List<Tag> filterTagList = new ArrayList<Tag>();
+	private boolean hasInit = false;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -145,67 +145,6 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 		}
 	}
 
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle("选项");
-		menu.add(0, 0, 0, "删除");
-	}
-
-	public boolean onContextItemSelected(MenuItem item)
-	{
-    	if (!getUserVisibleHint())
-		{
-			return false;
-		}
-    	
-		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		final int index = (int) itemListView.getAdapter().getItemId(menuInfo.position);
-		final Item localItem = showList.get(index);
-		Report report = localItem.getBelongReport();
-		switch (item.getItemId())
-		{
-			case 0:
-				if (report != null
-						&& (report.getStatus() != Report.STATUS_DRAFT && report.getStatus() != Report.STATUS_REJECTED))
-				{
-					Utils.showToast(getActivity(), "条目已提交，不可删除");
-
-				}
-				else
-				{
-					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-											.setTitle("警告")
-											.setMessage(R.string.delete_item_warning)
-											.setPositiveButton(R.string.confirm,
-													new DialogInterface.OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															if (localItem.getServerID() == -1)
-															{
-																deleteItemFromLocal(localItem.getLocalID());
-															}
-															else if (!Utils.isNetworkConnected())
-															{
-																Utils.showToast(getActivity(), "网络未连接，无法删除");
-															}
-															else
-															{
-																sendDeleteItemRequest(localItem);
-															}
-														}
-													}).setNegativeButton(R.string.cancel, null).create();
-					mDialog.show();
-				}
-				break;
-			default:
-				break;
-		}
-
-		return super.onContextItemSelected(item);
-	}
-
 	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
@@ -232,6 +171,13 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 
 	private void initView()
 	{
+		initListView();
+		initFilterView();
+		initSearchView();
+	}
+	
+	private void initListView()
+	{
 		adapter = new ItemListViewAdapter(getActivity(), itemList);
 		itemListView = (XListView) getActivity().findViewById(R.id.itemListView);
 		itemListView.setAdapter(adapter);
@@ -243,9 +189,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				Item item = showList.get(position-1);
-				if (item.getBelongReport() == null
-						|| item.getBelongReport().getStatus() == Report.STATUS_DRAFT
-						|| item.getBelongReport().getStatus() == Report.STATUS_REJECTED)
+				if (item.getBelongReport() == null || item.getBelongReport().isEditable())
 				{
 					Intent intent = new Intent(getActivity(), EditItemActivity.class);
 					intent.putExtra("itemLocalID", item.getLocalID());
@@ -260,8 +204,18 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 				}
 			}
 		});
-		registerForContextMenu(itemListView);
-
+		itemListView.setOnItemLongClickListener(new OnItemLongClickListener()
+		{
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				showDeleteWindow(position - 1);
+				return false;
+			}
+		});
+	}
+	
+	private void initFilterView()
+	{
 		filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 		filterImageView.setOnClickListener(new OnClickListener()
 		{
@@ -270,19 +224,8 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
 				windowManager.addView(filterView, params);
 			}
-		});
+		});		
 		
-		searchImageView = (ImageView) getActivity().findViewById(R.id.searchImageView);
-		searchImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
-				Intent intent = new Intent(getActivity(), SearchItemActivity.class);
-				startActivity(intent);
-			}
-		});
-
 		windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
 		
 		DisplayMetrics dm = new DisplayMetrics();
@@ -428,12 +371,74 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 			}
 		});
 	}
+	
+	private void initSearchView()
+	{		
+		searchImageView = (ImageView) getActivity().findViewById(R.id.searchImageView);
+		searchImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
+				Intent intent = new Intent(getActivity(), SearchItemActivity.class);
+				startActivity(intent);
+			}
+		});		
+	}
 
 	private List<Item> readItemList()
 	{
 		return dbManager.getUserItems(appPreference.getCurrentUserID());
 	}
 
+	private void filterItemList()
+	{
+		showList.clear();
+		for (Item item : itemList)
+		{
+			if (filterType == FILTER_TYPE_PROVE_AHEAD && !item.isProveAhead())
+			{
+				continue;
+			}
+			if (filterType == FILTER_TYPE_CONSUMED && !item.needReimbursed())
+			{
+				continue;
+			}			
+			if (filterStatus == FILTER_STATUS_FREE && item.getBelongReport() != null && item.getBelongReport().getLocalID() != -1)
+			{
+				continue;
+			}			
+			if (filterStatus == FILTER_STATUS_ADDED && (item.getBelongReport() == null || item.getBelongReport().getLocalID() == -1))
+			{
+				continue;
+			}
+			
+			if (filterTagList.size() > 0 && !item.containsSpecificTags(filterTagList))
+			{
+				continue;
+			}
+			showList.add(item);
+		}
+
+		if (sortType == SORT_NULL)
+		{
+			Item.sortByUpdateDate(showList);
+		}
+		if (sortType == SORT_AMOUNT)
+		{
+			Item.sortByAmount(showList);
+		}
+		if (sortType == SORT_CONSUMED_DATE)
+		{
+			Item.sortByConsumedDate(showList);
+		}
+		
+		if (sortReverse)
+		{
+			Collections.reverse(showList);
+		}
+	}
+	
 	private void refreshItemListView()
 	{
 		itemList.clear();
@@ -443,6 +448,76 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 		adapter.notifyDataSetChanged();
 	}
 
+    private void showDeleteWindow(final int index)
+    {    
+    	if (deletePopupWindow == null)
+		{
+    		View deleteView = View.inflate(getActivity(), R.layout.window_delete, null);
+    		
+    		Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
+    		deleteButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				deletePopupWindow.dismiss();
+    				
+    				final Item localItem = showList.get(index);
+    				Report report = localItem.getBelongReport();
+
+    				if (report != null && !report.isEditable())
+    				{
+    					Utils.showToast(getActivity(), "条目已提交，不可删除");
+
+    				}
+    				else
+    				{
+    					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
+    											.setTitle(R.string.warning)
+    											.setMessage(R.string.delete_item_warning)
+    											.setPositiveButton(R.string.confirm,
+    													new DialogInterface.OnClickListener()
+    													{
+    														public void onClick(DialogInterface dialog, int which)
+    														{
+    															if (localItem.getServerID() == -1)
+    															{
+    																deleteItemFromLocal(localItem.getLocalID());
+    															}
+    															else if (!Utils.isNetworkConnected())
+    															{
+    																Utils.showToast(getActivity(), "网络未连接，无法删除");
+    															}
+    															else
+    															{
+    																sendDeleteItemRequest(localItem);
+    															}
+    														}
+    													}).setNegativeButton(R.string.cancel, null).create();
+    					mDialog.show();
+    				}
+    			}
+    		});
+    		deleteButton = Utils.resizeWindowButton(deleteButton);
+    		
+    		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
+    		cancelButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				deletePopupWindow.dismiss();
+    			}
+    		});
+    		cancelButton = Utils.resizeWindowButton(cancelButton);
+    		
+    		deletePopupWindow = Utils.constructPopupWindow(getActivity(), deleteView);    	
+		}
+    	
+		deletePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		deletePopupWindow.update();
+		
+		Utils.dimBackground(getActivity());
+    }
+    
     private void sendDownloadCategoryIconRequest(final Category category)
     {
     	DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
@@ -512,54 +587,6 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 		}
 	}
 	
-	private void filterItemList()
-	{
-		showList.clear();
-		for (Item item : itemList)
-		{
-			if (filterType == FILTER_TYPE_PROVE_AHEAD && !item.isProveAhead())
-			{
-				continue;
-			}
-			if (filterType == FILTER_TYPE_CONSUMED && !item.needReimbursed())
-			{
-				continue;
-			}			
-			if (filterStatus == FILTER_STATUS_FREE && item.getBelongReport() != null && item.getBelongReport().getLocalID() != -1)
-			{
-				continue;
-			}			
-			if (filterStatus == FILTER_STATUS_ADDED && (item.getBelongReport() == null || item.getBelongReport().getLocalID() == -1))
-			{
-				continue;
-			}
-			
-			if (filterTagList.size() > 0 && !item.containsSpecificTags(filterTagList))
-			{
-				continue;
-			}
-			showList.add(item);
-		}
-
-		if (sortType == SORT_NULL)
-		{
-			Item.sortByUpdateDate(showList);
-		}
-		if (sortType == SORT_AMOUNT)
-		{
-			Item.sortByAmount(showList);
-		}
-		if (sortType == SORT_CONSUMED_DATE)
-		{
-			Item.sortByConsumedDate(showList);
-		}
-		
-		if (sortReverse)
-		{
-			Collections.reverse(showList);
-		}
-	}
-
 	private void syncItems()
 	{
 		if (SyncUtils.canSyncToServer())

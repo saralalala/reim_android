@@ -541,7 +541,7 @@ public class EditItemActivity extends Activity
 		});
 		
 		addInvoiceImageView = new ImageView(this);
-		addInvoiceImageView.setImageResource(R.drawable.add_photo_button);
+		addInvoiceImageView.setImageResource(R.drawable.add_tag_button);
 		addInvoiceImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

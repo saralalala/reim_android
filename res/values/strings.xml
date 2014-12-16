@@ -134,6 +134,7 @@
     <string name="submit">提交</string>
     <string name="approve">同意</string>
     <string name="reject">拒绝</string>
+    <string name="reject_reason">拒绝理由：</string>
     <string name="report_over_flow">99+</string>
     
     <string name="mark">标记</string>

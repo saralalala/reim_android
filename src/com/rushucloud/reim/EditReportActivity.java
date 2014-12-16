@@ -430,7 +430,7 @@ public class EditReportActivity extends Activity
 			{
 				public boolean onLongClick(View v)
 				{
-					showDeleteDialog(itemIndex);
+					showDeleteWindow(itemIndex);
 					return false;
 				}
 			});
@@ -503,8 +503,8 @@ public class EditReportActivity extends Activity
 		imm.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
     }
 
-    private void showDeleteDialog(final int itemIndex)
-    {	
+    private void showDeleteWindow(final int itemIndex)
+    {
     	if (deletePopupWindow == null)
 		{
     		View deleteView = View.inflate(this, R.layout.window_delete, null);
@@ -545,11 +545,14 @@ public class EditReportActivity extends Activity
     private void showAddCommentDialog()
     {
 		View view = View.inflate(this, R.layout.report_comment_dialog, null);
+		
+		TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
+		titleTextView.setText(R.string.add_comment);
+		
 		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
 		commentEditText.requestFocus();
 		
     	AlertDialog mDialog = new AlertDialog.Builder(this)
-								.setTitle("添加评论")
 								.setView(view)
 								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 								{
