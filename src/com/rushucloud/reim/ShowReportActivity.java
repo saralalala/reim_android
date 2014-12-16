@@ -4,16 +4,12 @@ import java.util.List;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.Report.GetReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
 import netUtils.Response.Report.GetReportResponse;
-import netUtils.Response.Report.ModifyReportResponse;
-
 import classes.AppPreference;
 import classes.Comment;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
-import classes.User;
 import classes.Utils;
 import classes.Adapter.ReportDetailListViewAdapter;
 
@@ -22,14 +18,11 @@ import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -116,15 +109,19 @@ public class ShowReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				Intent intent = new Intent(ShowReportActivity.this, CommentActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putString("source", "ShowReportActivity");
+				bundle.putSerializable("report", report);
 				if (myReport)
 				{
-					intent.putExtra("reportLocalID", report.getLocalID());					
+					bundle.putInt("reportLocalID", report.getLocalID());				
 				}
 				else
 				{
-					intent.putExtra("reportServerID", report.getServerID());						
+					bundle.putInt("reportServerID", report.getServerID());
 				}
+				Intent intent = new Intent(ShowReportActivity.this, CommentActivity.class);
+				intent.putExtras(bundle);
 				startActivity(intent);
 			}
 		});
@@ -152,15 +149,6 @@ public class ShowReportActivity extends Activity
 				}
 			}
 		});
-		
-//		if (!Utils.isNetworkConnected())
-//		{
-//			Utils.showToast(ShowReportActivity.this, "网络未连接，无法添加");
-//		}
-//		else
-//		{
-//			showAddCommentDialog();
-//		}
 	}
 
 	private void refreshView()
@@ -249,92 +237,6 @@ public class ShowReportActivity extends Activity
 		});
     }
 	
-    private void showAddCommentDialog()
-    {
-		View view = View.inflate(this, R.layout.report_comment_dialog, null);
-		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
-		commentEditText.requestFocus();
-		
-    	AlertDialog mDialog = new AlertDialog.Builder(this)
-								.setTitle("添加评论")
-								.setView(view)
-								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										String comment = commentEditText.getText().toString();
-										if (comment.equals(""))
-										{
-											Utils.showToast(ShowReportActivity.this, "评论不能为空");
-										}
-										else
-										{
-											sendCommentRequest(comment);
-										}
-									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-		mDialog.show();
-    }
-	
-    private void sendCommentRequest(final String commentContent)
-    {
-    	ReimApplication.showProgressDialog();
-		
-    	ModifyReportRequest request = new ModifyReportRequest(report, commentContent);
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
-				if (response.getStatus())
-				{					
-					User user = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());
-					int currentTime = Utils.getCurrentTime();
-					
-					Comment comment = new Comment();
-					comment.setContent(commentContent);
-					comment.setCreatedDate(currentTime);
-					comment.setLocalUpdatedDate(currentTime);
-					comment.setServerUpdatedDate(currentTime);
-					comment.setReviewer(user);
-					
-					if (myReport)
-					{
-						comment.setReportID(report.getLocalID());
-						dbManager.insertComment(comment);						
-					}
-					else
-					{
-						comment.setReportID(report.getServerID());
-						dbManager.insertOthersComment(comment);
-					}
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimApplication.dismissProgressDialog();
-							Utils.showToast(ShowReportActivity.this, "评论发表成功");
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimApplication.dismissProgressDialog();
-							Utils.showToast(ShowReportActivity.this, "评论发表失败, " + response.getErrorMessage());
-						}
-					});					
-				}
-			}
-		});
-    }
-    
     private void goBackToMainActivity()
     {
     	int reportTabIndex = myReport ? 0 : 1;

@@ -281,8 +281,11 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				Bundle bundle = new Bundle();
+				bundle.putString("source", "EditReportActivity");
+				bundle.putInt("reportLocalID", report.getLocalID());
 				Intent intent = new Intent(EditReportActivity.this, CommentActivity.class);
-				intent.putExtra("reportLocalID", report.getLocalID());
+				intent.putExtras(bundle);
 				startActivity(intent);
 			}
 		});		

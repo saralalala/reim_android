@@ -79,7 +79,7 @@
 	
 	    <ToggleButton
 	        android:id="@+id/needReimToggleButton"
-	        android:layout_width="103dp"
+	        android:layout_width="49dp"
 	        android:layout_height="30dp"
 	        android:layout_centerVertical="true"
 	        android:layout_alignParentRight="true"

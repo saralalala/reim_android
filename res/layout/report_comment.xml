@@ -4,17 +4,96 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ListView
-        android:id="@+id/commentListView"
+    <RelativeLayout
+        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
 
-    <TextView
-        android:id="@+id/commentTextView"
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/comment"
+            android:textColor="@color/major_light"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/contentLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/no_comment" />
+        android:layout_below="@+id/titleLayout"
+        android:layout_above="@+id/commentLayout" >
+
+	    <ListView
+	        android:id="@+id/commentListView"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	    </ListView>
+	
+	    <TextView
+	        android:id="@+id/commentTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:text="@string/no_comment" />
+	    
+    </RelativeLayout>
+
+    <RelativeLayout
+	    android:id="@+id/commentLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:visibility="visible" >
+            
+		<include                
+	        android:id="@+id/divider" 
+			android:layout_width="match_parent"
+			android:layout_height="0.5dp"
+		  	layout="@layout/divider" />
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:layout_below="@+id/divider"
+	        android:background="@color/major_light" >
+	
+	        <EditText
+	            android:id="@+id/commentEditText"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:hint="@string/input_comment"
+	            android:ems="10" >
+	        </EditText>
+	
+	        <TextView
+	            android:id="@+id/sendTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:gravity="center"
+	            android:text="@string/send"
+	            android:textColor="@color/font_major_dark"
+	            android:textSize="18sp" />
+	
+	    </LinearLayout>
+	    
+    </RelativeLayout>
 
 </RelativeLayout>

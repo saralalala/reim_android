@@ -142,16 +142,12 @@ public class StatisticsFragment extends Fragment
 			newRatio = (int)(response.getNewAmount() * 100 / total);
 		}
 		
-		doneRatio = 30;
-		ongoingRatio = 40;
-		newRatio = 30;
-		
 		mainPercentTextView.setText(Integer.toString(newRatio));
 		donePercentTextView.setText(Integer.toString(doneRatio) + getString(R.string.percent));
 		ongoingPercentTextView.setText(Integer.toString(ongoingRatio) + getString(R.string.percent));
 		newPercentTextView.setText(Integer.toString(newRatio) + getString(R.string.percent));
 
-		float totalAngle = 261;
+		float totalAngle = 262;
 		float startAngle = (float) 139;
 		float doneAngle = ((float) doneRatio) * totalAngle / 100;
 		float newAngle = ((float) newRatio) * totalAngle / 100;

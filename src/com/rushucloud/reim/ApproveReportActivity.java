@@ -127,8 +127,11 @@ public class ApproveReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				Bundle bundle = new Bundle();
+				bundle.putString("source", "ApproveReportActivity");
+				bundle.putInt("reportServerID", report.getServerID());
 				Intent intent = new Intent(ApproveReportActivity.this, CommentActivity.class);
-				intent.putExtra("reportServerID", report.getServerID());	
+				intent.putExtras(bundle);
 				startActivity(intent);
 			}
 		});
