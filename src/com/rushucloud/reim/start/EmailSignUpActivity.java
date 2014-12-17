@@ -17,7 +17,7 @@ import com.umeng.analytics.MobclickAgent;
 import database.DBManager;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -84,8 +84,13 @@ public class EmailSignUpActivity extends Activity
 		});
 
 		emailEditText = (EditText)findViewById(R.id.emailEditText);
+    	emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
+		passwordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
+		confirmPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 
 		Button signUpButton = (Button)findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()
@@ -214,19 +219,18 @@ public class EmailSignUpActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							AlertDialog alertDialog = new AlertDialog.Builder(EmailSignUpActivity.this)
-													.setTitle(R.string.tip)
-													.setMessage("注册成功！激活邮件已发送，请到邮箱中查看！")
-													.setNegativeButton(R.string.confirm, new OnClickListener()
+							Builder builder = new Builder(EmailSignUpActivity.this);
+							builder.setTitle(R.string.tip);
+							builder.setMessage("注册成功！激活邮件已发送，请到邮箱中查看！");
+							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 													{
 														public void onClick(DialogInterface dialog, int which)
 														{
 															startActivity(new Intent(EmailSignUpActivity.this, MainActivity.class));
 															finish();
 														}
-													})
-													.create();
-							alertDialog.show();		
+													});
+							builder.create().show();
 						}
 					});
 				}

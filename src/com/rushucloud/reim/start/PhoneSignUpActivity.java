@@ -19,7 +19,7 @@ import com.umeng.analytics.MobclickAgent;
 import database.DBManager;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -94,9 +94,16 @@ public class PhoneSignUpActivity extends Activity
 		});
 		
 		phoneEditText = (EditText)findViewById(R.id.phoneEditText);
+		phoneEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
+		passwordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
+		confirmPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
 		codeEditText = (EditText)findViewById(R.id.codeEditText);	
+		codeEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 
 		acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
 		acquireCodeButton.setOnClickListener(new View.OnClickListener()
@@ -340,10 +347,10 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							AlertDialog alertDialog = new AlertDialog.Builder(PhoneSignUpActivity.this)
-													.setTitle(R.string.tip)
-													.setMessage("注册成功！")
-													.setNegativeButton(R.string.confirm, new OnClickListener()
+							Builder builder = new Builder(PhoneSignUpActivity.this);
+							builder.setTitle(R.string.tip);
+							builder.setMessage("注册成功！");
+							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 													{
 														public void onClick(DialogInterface dialog, int which)
 														{
@@ -351,9 +358,8 @@ public class PhoneSignUpActivity extends Activity
 															startActivity(new Intent(PhoneSignUpActivity.this, MainActivity.class));
 															finish();
 														}
-													})
-													.create();
-							alertDialog.show();		
+													});
+							builder.create().show();
 						}
 					});
 				}

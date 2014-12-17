@@ -74,6 +74,7 @@ public class SendInviteActivity extends Activity
 		});
 		
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
+		usernameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 
         Button inviteButton = (Button) findViewById(R.id.inviteButton);
         inviteButton.setOnClickListener(new OnClickListener()

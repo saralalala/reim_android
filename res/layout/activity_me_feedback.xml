@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/baseLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" 
-    android:orientation="vertical" 
-    android:id="@+id/baseLayout" >
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,9 +17,9 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:contentDescription="@string/back"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:contentDescription="@string/back"
             android:src="@drawable/back" />
 
         <TextView
@@ -27,19 +28,21 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/feedback"
-            android:textSize="20sp"
-            android:textColor="@color/major_light" />
-
+            android:textColor="@color/major_light"
+            android:textSize="20sp" />
     </RelativeLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="18dp"
+        layout="@layout/view_divider" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp" 
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:padding="5dp"
-        android:background="@drawable/border">
+        android:layout_height="200dp"
+        android:background="@color/major_light"
+        android:padding="16dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,35 +57,62 @@
                 android:background="@null"
                 android:gravity="top"
                 android:hint="@string/input_feedback"
-                android:inputType="textMultiLine" 
-                android:minLines="8"/>
-
+                android:inputType="textMultiLine"
+                android:minLines="8"
+                android:textColor="@color/font_major_dark"
+                android:textSize="14sp" />
         </LinearLayout>
     </ScrollView>
 
-    <EditText
-        android:id="@+id/contactEditText"
+    <include
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:hint="@string/input_contact_info"
-        android:inputType="text" />
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider" />
 
-    <Button
-        android:id="@+id/submitButton"
+    <include
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:text="@string/submit" />
+        android:layout_height="0.5dp"
+        android:layout_marginTop="18dp"
+        layout="@layout/view_divider" />
 
-    <Button
-        android:id="@+id/cancelButton"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:text="@string/cancel" />
+        android:layout_height="50dp"
+        android:background="@color/major_light" >
+
+        <EditText
+            android:id="@+id/contactEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@null"
+            android:hint="@string/input_contact_info"
+            android:textColor="@color/font_major_dark"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="16dp" >
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/button_long_dark_drawable"
+            android:text="@string/submit"
+            android:textColor="@color/button_text_light_color" />
+        
+    </RelativeLayout>
 
 </LinearLayout>

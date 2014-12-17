@@ -50,7 +50,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,6 +58,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Selection;
+import android.text.Spannable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -289,6 +291,9 @@ public class EditItemActivity extends Activity
 				item.setCategory(categoryList.get(0));				
 			}
 			item.setConsumedDate(Utils.getCurrentTime());
+			List<User> relevantUsers = new ArrayList<User>();
+			relevantUsers.add(appPreference.getCurrentUser());
+			item.setRelevantUsers(relevantUsers);
 		}
 		else
 		{
@@ -335,17 +340,17 @@ public class EditItemActivity extends Activity
 					
 					if (fromReim && item.isProveAhead() && item.getPaAmount() == 0)
 					{
-						AlertDialog mDialog = new AlertDialog.Builder(EditItemActivity.this)
-											.setTitle("请选择操作")
-											.setMessage("这是一条预审批的条目，您是想仅保存此条目还是要直接发送给上级审批？")
-											.setPositiveButton(R.string.only_save, new DialogInterface.OnClickListener()
+						Builder buider = new Builder(EditItemActivity.this);
+						buider.setTitle("请选择操作");
+						buider.setMessage("这是一条预审批的条目，您是想仅保存此条目还是要直接发送给上级审批？");
+						buider.setPositiveButton(R.string.only_save, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
 													saveItem();												
 												}
-											})
-											.setNeutralButton(R.string.send_to_approve, new DialogInterface.OnClickListener()
+											});
+						buider.setNeutralButton(R.string.send_to_approve, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
@@ -358,10 +363,9 @@ public class EditItemActivity extends Activity
 														Utils.showToast(EditItemActivity.this, "网络未连接，无法发送审批");
 													}
 												}
-											})
-											.setNegativeButton(R.string.cancel, null)
-											.create();
-						mDialog.show();
+											});
+						buider.setNegativeButton(R.string.cancel, null);
+						buider.create().show();
 					}
 					else
 					{
@@ -676,6 +680,7 @@ public class EditItemActivity extends Activity
 		
 		final EditText vendorEditText = (EditText) vendorView.findViewById(R.id.vendorEditText);
 		vendorEditText.setText(item.getVendor());
+		vendorEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 		
 		vendorAdapter = new VendorListViewAdapter(this);
 		ListView vendorListView = (ListView) vendorView.findViewById(R.id.vendorListView);
@@ -733,6 +738,7 @@ public class EditItemActivity extends Activity
 		View locationView = View.inflate(this, R.layout.window_reim_location, null);
 		
 		final EditText locationEditText = (EditText) locationView.findViewById(R.id.locationEditText);
+		locationEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
     	if (!item.getLocation().equals(""))
 		{
         	locationEditText.setText(item.getLocation());			
@@ -747,6 +753,11 @@ public class EditItemActivity extends Activity
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
+				for (int i = 0; i < locationCheck.length; i++)
+				{
+					locationCheck[i] = false;
+				}
+				
 				if (position == 0 && !locationAdapter.getCurrentCity().equals(locationInvalid))
 				{
 					locationEditText.setText(locationAdapter.getCurrentCity());
@@ -754,10 +765,6 @@ public class EditItemActivity extends Activity
 				else if (position > 1)
 				{
 					locationEditText.setText(locationAdapter.getCityList().get(position - 2));
-					for (int i = 0; i < locationCheck.length; i++)
-					{
-						locationCheck[i] = false;
-					}
 					locationCheck[position - 2] = true;
 					locationAdapter.setCheck(locationCheck);
 					locationAdapter.notifyDataSetChanged();
@@ -1097,6 +1104,9 @@ public class EditItemActivity extends Activity
 		{
 			public void onFocusChange(View v, boolean hasFocus)
 			{
+				Spannable spanText = ((EditText)v).getText();
+				Selection.setSelection(spanText, spanText.length());
+				
 				if (hasFocus && newItem)
 				{
 					MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_NOTE");
@@ -1326,10 +1336,10 @@ public class EditItemActivity extends Activity
 			
 			View memberView = View.inflate(this, R.layout.grid_member, null);
 			
-			ImageView iconImageView = (ImageView) memberView.findViewById(R.id.iconImageView);
+			ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
 			if (avatar != null)
 			{
-				iconImageView.setImageBitmap(avatar);		
+				avatarImageView.setImageBitmap(avatar);
 			}
 			
 			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);

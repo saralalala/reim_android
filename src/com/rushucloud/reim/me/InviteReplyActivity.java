@@ -6,7 +6,7 @@ import netUtils.Request.User.InviteReplyRequest;
 import netUtils.Response.CommonResponse;
 import netUtils.Response.User.InviteReplyResponse;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,7 +38,6 @@ public class InviteReplyActivity extends Activity
 		setContentView(R.layout.activity_me_invite);
 		initData();
 		initView();
-		initButton();
 	}
   
 	protected void onResume()
@@ -89,10 +88,7 @@ public class InviteReplyActivity extends Activity
 		
 		TextView textView = (TextView)findViewById(R.id.inviteTextView);
 		textView.setText(invite.getMessage());
-	}
-	
-	private void initButton()
-	{	
+		
 		Button agreeButton = (Button)findViewById(R.id.agreeButton);
 		agreeButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -161,19 +157,17 @@ public class InviteReplyActivity extends Activity
 							public void run()
 							{
 						    	ReimApplication.dismissProgressDialog();
-								AlertDialog mDialog = new AlertDialog.Builder(InviteReplyActivity.this)
-															.setTitle("提示")
-															.setMessage("邀请回复已发送成功！")
-															.setNegativeButton(R.string.confirm, 
-																	new DialogInterface.OnClickListener()
+								Builder builder = new Builder(InviteReplyActivity.this);
+								builder.setTitle(R.string.tip);
+								builder.setMessage("邀请回复已发送成功！");
+								builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 															{
 																public void onClick(DialogInterface dialog, int which)
 																{
 																	goBackToMainActivity();
 																}
-															})
-															.create();
-								mDialog.show();
+															});
+								builder.create().show();
 							}
 						});
 					}
@@ -185,12 +179,7 @@ public class InviteReplyActivity extends Activity
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							AlertDialog mDialog = new AlertDialog.Builder(InviteReplyActivity.this)
-														.setTitle("提示")
-														.setMessage("邀请回复发送失败")
-														.setNegativeButton(R.string.confirm, null)
-														.create();
-							mDialog.show();
+					    	Utils.showToast(InviteReplyActivity.this, "邀请回复发送失败");
 						}						
 					});
 				}
@@ -271,19 +260,17 @@ public class InviteReplyActivity extends Activity
 					public void run()
 					{
 				    	ReimApplication.dismissProgressDialog();
-						AlertDialog mDialog = new AlertDialog.Builder(InviteReplyActivity.this)
-													.setTitle("提示")
-													.setMessage("邀请回复已发送成功！")
-													.setNegativeButton(R.string.confirm, 
-															new DialogInterface.OnClickListener()
+						Builder builder = new Builder(InviteReplyActivity.this);
+						builder.setTitle(R.string.tip);
+						builder.setMessage("邀请回复已发送成功！");
+						builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 													{
 														public void onClick(DialogInterface dialog, int which)
 														{
 															goBackToMainActivity();
 														}
-													})
-													.create();
-						mDialog.show();
+													});
+						builder.create().show();
 					}
 				});
 			}

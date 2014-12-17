@@ -219,6 +219,7 @@ public class ShowReportActivity extends Activity
 						{
 					    	ReimApplication.dismissProgressDialog();
 					    	adapter.setReport(report);
+					    	adapter.setItemList(itemList);
 					    	adapter.notifyDataSetChanged();
 						}
 					});

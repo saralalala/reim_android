@@ -23,7 +23,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -303,20 +303,20 @@ public class ApproveReportActivity extends Activity
 		titleTextView.setText(R.string.reject_reason);
 		
 		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
+		commentEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 		commentEditText.requestFocus();
 		
-    	AlertDialog mDialog = new AlertDialog.Builder(this)
-								.setView(view)
-								.setPositiveButton(R.string.reject, new DialogInterface.OnClickListener()
+    	Builder builder = new Builder(this);
+    	builder.setView(view);
+    	builder.setPositiveButton(R.string.reject, new DialogInterface.OnClickListener()
 								{
 									public void onClick(DialogInterface dialog, int which)
 									{
 										sendModifyReportRequest(Report.STATUS_REJECTED, commentEditText.getText().toString());
 									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-		mDialog.show();
+								});
+    	builder.setNegativeButton(R.string.cancel, null);
+    	builder.create().show();
     }
 	
     private void sendModifyReportRequest(final int status, final String commentContent)

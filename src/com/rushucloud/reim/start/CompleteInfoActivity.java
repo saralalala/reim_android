@@ -162,6 +162,7 @@ public class CompleteInfoActivity extends Activity
 		});
 		
 		nicknameEditText = (EditText)findViewById(R.id.nicknameEditText);
+		nicknameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 
 		Button completeButton = (Button)findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()
@@ -266,6 +267,7 @@ public class CompleteInfoActivity extends Activity
 	    	intent.putExtra("outputY", bitmap.getWidth());
 	    	intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
 	    	intent.putExtra("return-data", false);
+	    	intent.putExtra("noFaceDetection", true);
 	    	startActivityForResult(intent, CROP_IMAGE);
 		}
 		catch (FileNotFoundException e)

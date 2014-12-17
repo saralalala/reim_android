@@ -33,7 +33,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -513,11 +513,10 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
     		    	final Report report = showMineList.get(index);
     		    	if (report.isEditable())
     				{
-    					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-    														.setTitle(R.string.warning)
-    														.setMessage(R.string.delete_report_warning)
-    														.setPositiveButton(R.string.confirm, 
-    																new DialogInterface.OnClickListener()
+    					Builder builder = new Builder(getActivity());
+    					builder.setTitle(R.string.warning);
+    					builder.setMessage(R.string.delete_report_warning);
+    					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
     														{
     															public void onClick(DialogInterface dialog, int which)
     															{
@@ -534,10 +533,9 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
     																	sendDeleteReportRequest(report);																		
     																}
     															}
-    														})
-    														.setNegativeButton(R.string.cancel, null)
-    														.create();
-    					mDialog.show();
+    														});
+    					builder.setNegativeButton(R.string.cancel, null);
+    					builder.create().show();
     				}
     				else
     				{
@@ -593,7 +591,10 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	private void showExportDialog(final int reportID)
     {
 		View view = View.inflate(getActivity(), R.layout.dialog_report_export, null);
+		
 		final EditText emailEditText = (EditText)view.findViewById(R.id.emailEditText);
+		emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
 		User user = appPreference.getCurrentUser();
 		if (!user.getEmail().equals(""))
 		{
@@ -602,10 +603,10 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 		emailEditText.requestFocus();
 		
-    	AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-								.setTitle("导出报告")
-								.setView(view)
-								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+    	Builder builder = new Builder(getActivity());
+    	builder.setTitle("导出报告");
+    	builder.setView(view);
+    	builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 								{
 									public void onClick(DialogInterface dialog, int which)
 									{
@@ -623,10 +624,9 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 											sendExportReportRequest(reportID, email);
 										}
 									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-		mDialog.show();
+								});
+    	builder.setNegativeButton(R.string.cancel, null);
+    	builder.create().show();
     }
 	
 	private void sendDeleteReportRequest(final Report report)

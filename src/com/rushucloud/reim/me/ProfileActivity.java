@@ -423,7 +423,7 @@ public class ProfileActivity extends Activity
 		});
         
         // init nickname window
-    	View nicknameView = View.inflate(this, R.layout.activity_me_nickname, null);
+    	View nicknameView = View.inflate(this, R.layout.window_me_nickname, null);
     	
     	nicknameEditText = (EditText) nicknameView.findViewById(R.id.nicknameEditText);
     	nicknameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
@@ -685,6 +685,7 @@ public class ProfileActivity extends Activity
 	    	intent.putExtra("outputY", bitmap.getWidth());
 	    	intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
 	    	intent.putExtra("return-data", false);
+	    	intent.putExtra("noFaceDetection", true);
 	    	startActivityForResult(intent, CROP_IMAGE);
 		}
 		catch (FileNotFoundException e)

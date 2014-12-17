@@ -12,8 +12,6 @@ import com.rushucloud.reim.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +28,11 @@ public class ReportItemListViewAdapter extends BaseAdapter
 	private List<Item> itemList;
 	private boolean[] check;
 	
-	private int screenWidth;
-	private int interval;
-	private int padding;
-	private int sideLength;
-	private int iconCount;
+//	private int screenWidth;
+//	private int interval;
+//	private int padding;
+//	private int sideLength;
+//	private int iconCount;
 
 	public ReportItemListViewAdapter(Context context, List<Item> items, boolean[] checkList)
 	{
@@ -44,12 +42,12 @@ public class ReportItemListViewAdapter extends BaseAdapter
 		this.itemList = new ArrayList<Item>(items);
 		this.check = checkList;
 		
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		
-		this.screenWidth = metrics.widthPixels;
-		this.padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-		this.interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
-		this.sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+//		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+//		
+//		this.screenWidth = metrics.widthPixels;
+//		this.padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+//		this.interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
+//		this.sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -96,19 +94,19 @@ public class ReportItemListViewAdapter extends BaseAdapter
 		
 		iconLayout.removeAllViews();
 		
-		amountTextView.measure(0,0);
-
-		// category 和 tag 一共iconCount个
-		iconCount = (screenWidth - amountTextView.getMeasuredWidth() - padding * 3 + interval) / (sideLength + interval);
-		iconCount = 1;
-		for (int i = 0; i < iconCount; i++)
-		{
-			ImageView iconImageView = new ImageView(context);
-			iconImageView.setImageResource(R.drawable.food);
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
-			params.rightMargin = interval;
-			iconLayout.addView(iconImageView, params);
-		}
+//		amountTextView.measure(0,0);
+//
+//		// category 和 tag 一共iconCount个
+//		iconCount = (screenWidth - amountTextView.getMeasuredWidth() - padding * 3 + interval) / (sideLength + interval);
+//		iconCount = 1;
+//		for (int i = 0; i < iconCount; i++)
+//		{
+//			ImageView iconImageView = new ImageView(context);
+//			iconImageView.setImageResource(R.drawable.food);
+//			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
+//			params.rightMargin = interval;
+//			iconLayout.addView(iconImageView, params);
+//		}
 
 		iconLayout.addView(categoryImageView);
 		

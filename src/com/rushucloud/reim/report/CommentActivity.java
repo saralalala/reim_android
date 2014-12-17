@@ -1,6 +1,5 @@
 package com.rushucloud.reim.report;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
@@ -26,17 +25,22 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 public class CommentActivity extends Activity
 {
+	private TextView commentTextView;
+	private ListView commentListView;
 	private CommentListViewAdapter adapter;
+	private EditText commentEditText;
 
 	private DBManager dbManager;
 	private Report report;
@@ -58,6 +62,7 @@ public class CommentActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("CommentActivity");		
 		MobclickAgent.onResume(this);
+		refreshView();
 	}
 
 	protected void onPause()
@@ -84,7 +89,8 @@ public class CommentActivity extends Activity
 		source = bundle.getString("source", "");
 		if (source.equals("EditReportActivity"))
 		{
-			reportID = bundle.getInt("reportLocalID", -1);			
+			reportID = bundle.getInt("reportLocalID", -1);	
+			myReport = true;		
 		}
 		else if (source.equals("ShowReportActivity"))
 		{
@@ -103,19 +109,11 @@ public class CommentActivity extends Activity
 		else // source.equals("ApproveReportActivity")
 		{
 			reportID = bundle.getInt("reportServerID", -1);
+			myReport = false;
 		}
 		
 		// init comment list
-		reportID = bundle.getInt("reportLocalID", -1);
-		if (reportID == -1)
-		{
-			commentList = new ArrayList<Comment>();
-		}
-		else
-		{
-			commentList = myReport ? dbManager.getReportComments(reportID) : dbManager.getOthersReportComments(reportID);
-		}
-		
+		commentList = myReport ? dbManager.getReportComments(reportID) : dbManager.getOthersReportComments(reportID);	
 		
 		if (commentList != null || commentList.size() > 0)
 		{
@@ -135,35 +133,18 @@ public class CommentActivity extends Activity
 				finish();
 			}
 		});
+
+		commentTextView = (TextView)findViewById(R.id.commentTextView);
 		
-		ListView commentListView = (ListView)findViewById(R.id.commentListView);
-		TextView commentTextView = (TextView)findViewById(R.id.commentTextView);
-		if (commentList == null || commentList.size() == 0)
-		{
-			commentListView.setVisibility(View.GONE);
-		}
-		else
-		{
-			commentTextView.setVisibility(View.GONE);
-			adapter = new CommentListViewAdapter(this, commentList);
-			commentListView.setAdapter(adapter);
-			
-			if (Utils.isNetworkConnected())
-			{
-				for (Comment comment : commentList)
-				{
-					User user = comment.getReviewer();
-					if (user.hasUndownloadedAvatar())
-					{
-						sendDownloadAvatarRequest(user);
-					}
-				}			
-			}			
-		}
+		adapter = new CommentListViewAdapter(this, commentList);
+		commentListView = (ListView)findViewById(R.id.commentListView);
+		commentListView.setAdapter(adapter);
 		
 		if (source.equals("ShowReportActivity"))
 		{
-			final EditText commentEditText = (EditText) findViewById(R.id.commentEditText);
+			commentEditText = (EditText) findViewById(R.id.commentEditText);
+			commentEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+			
 			TextView sendTextView = (TextView) findViewById(R.id.sendTextView);
 			sendTextView.setOnClickListener(new OnClickListener()
 			{
@@ -190,12 +171,43 @@ public class CommentActivity extends Activity
 		}
 		else
 		{
+			LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+			params.addRule(RelativeLayout.BELOW, R.id.titleLayout);
+			
+			RelativeLayout contentLayout = (RelativeLayout) findViewById(R.id.contentLayout);
+			contentLayout.setLayoutParams(params);
+			
 			RelativeLayout commentLayout = (RelativeLayout) findViewById(R.id.commentLayout);
 			commentLayout.setVisibility(View.GONE);
 		}
 	}
 
-    
+	private void refreshView()
+	{
+		if (commentList == null || commentList.size() == 0)
+		{
+			commentListView.setVisibility(View.GONE);
+			commentTextView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			commentListView.setVisibility(View.VISIBLE);
+			commentTextView.setVisibility(View.GONE);
+			
+			if (Utils.isNetworkConnected())
+			{
+				for (Comment comment : commentList)
+				{
+					User user = comment.getReviewer();
+					if (user.hasUndownloadedAvatar())
+					{
+						sendDownloadAvatarRequest(user);
+					}
+				}			
+			}
+		}
+	}
+	
 	private void sendDownloadAvatarRequest(final User user)
     {
     	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
@@ -225,7 +237,6 @@ public class CommentActivity extends Activity
 		});
     }
 
-    
     private void sendCommentRequest(final String commentContent)
     {
     	ReimApplication.showProgressDialog();
@@ -251,7 +262,7 @@ public class CommentActivity extends Activity
 					if (myReport)
 					{
 						comment.setReportID(report.getLocalID());
-						dbManager.insertComment(comment);						
+						dbManager.insertComment(comment);			
 					}
 					else
 					{
@@ -259,12 +270,19 @@ public class CommentActivity extends Activity
 						dbManager.insertOthersComment(comment);
 					}
 					
+					commentList.add(comment);
+					Comment.sortByCreateDate(commentList);
+					
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
 							Utils.showToast(CommentActivity.this, "评论发表成功");
+							commentEditText.setText("");
+							adapter.setComments(commentList);
+							adapter.notifyDataSetChanged();
+							refreshView();
 						}
 					});
 				}

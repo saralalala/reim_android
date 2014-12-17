@@ -103,20 +103,23 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		isProveAhead = report.isProveAhead();
 		tabIndex = Utils.booleanToInt(isProveAhead);
 		
-		List<Item> items = dbManager.getReportItems(report.getLocalID());
-		if (items.size() > 0)
+		if (report.getLocalID() != -1)
 		{
-			Item item = items.get(0);
-			if (item.isProveAhead() && (item.getStatus() == Item.STATUS_DRAFT || item.getStatus() == Item.STATUS_REJECTED))
+			List<Item> items = dbManager.getReportItems(report.getLocalID());
+			if (items.size() > 0)
 			{
-				proveAheadItemList.addAll(items);
-				Item.sortByUpdateDate(proveAheadItemList);
-			}
-			else
-			{
-				consumedItemList.addAll(items);
-				Item.sortByUpdateDate(consumedItemList);
-			}
+				Item item = items.get(0);
+				if (item.isProveAhead() && (item.getStatus() == Item.STATUS_DRAFT || item.getStatus() == Item.STATUS_REJECTED))
+				{
+					proveAheadItemList.addAll(items);
+					Item.sortByUpdateDate(proveAheadItemList);
+				}
+				else
+				{
+					consumedItemList.addAll(items);
+					Item.sortByUpdateDate(consumedItemList);
+				}
+			}			
 		}
 		
 		List<Item> chosenItems = dbManager.getItems(chosenItemIDList);

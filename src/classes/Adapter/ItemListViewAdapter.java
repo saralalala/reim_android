@@ -15,8 +15,6 @@ import com.rushucloud.reim.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +31,9 @@ public class ItemListViewAdapter extends BaseAdapter
 	private ItemFilter itemFilter;
 	private List<Item> itemList;
 	private List<Item> originalList;
-	private int interval;
-	private int sideLength;
-	private int iconCount;
+//	private int interval;
+//	private int sideLength;
+//	private int iconCount;
 	private final Object mLock = new Object();
 
 	public ItemListViewAdapter(Context context, List<Item> items)
@@ -45,12 +43,12 @@ public class ItemListViewAdapter extends BaseAdapter
 		
 		this.itemList = new ArrayList<Item>(items);
 		
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+//		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 
-		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-		this.interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
-		this.sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);	
-		this.iconCount = (metrics.widthPixels - padding * 2 + interval) / (sideLength + interval);
+//		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+//		this.interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
+//		this.sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);	
+//		this.iconCount = (metrics.widthPixels - padding * 2 + interval) / (sideLength + interval);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -116,15 +114,15 @@ public class ItemListViewAdapter extends BaseAdapter
 
 		iconLayout.removeAllViews();
 		
-		iconCount = 1;
-		for (int i = 0; i < iconCount; i++)
-		{
-			ImageView iconImageView = new ImageView(context);
-			iconImageView.setImageResource(R.drawable.food);
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
-			params.rightMargin = interval;
-			iconLayout.addView(iconImageView, params);
-		}
+//		iconCount = 1;
+//		for (int i = 0; i < iconCount; i++)
+//		{
+//			ImageView iconImageView = new ImageView(context);
+//			iconImageView.setImageResource(R.drawable.food);
+//			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
+//			params.rightMargin = interval;
+//			iconLayout.addView(iconImageView, params);
+//		}
 
 		iconLayout.addView(categoryImageView);
 		

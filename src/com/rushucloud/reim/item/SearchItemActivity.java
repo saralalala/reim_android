@@ -17,7 +17,6 @@ import classes.Adapter.ItemListViewAdapter;
 import database.DBManager;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -189,12 +188,7 @@ public class SearchItemActivity extends Activity
 					{
 						public void run()
 						{
-							AlertDialog alertDialog = new AlertDialog.Builder(SearchItemActivity.this)
-														.setTitle("错误")
-														.setMessage("网络搜索失败")
-														.setPositiveButton("确定", null)
-														.create();
-							alertDialog.show();
+							Utils.showToast(SearchItemActivity.this, "网络搜索失败");
 						}
 					});
 				}

@@ -10,7 +10,7 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -33,7 +33,6 @@ public class FeedbackActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_me_feedback);
 		initView();
-		initButton();
 	}
 
 	protected void onResume()
@@ -73,20 +72,11 @@ public class FeedbackActivity extends Activity
 		});
 		
 		feedbackEditText = (EditText)findViewById(R.id.feedbackEditText);
-		contactEditText = (EditText)findViewById(R.id.contactEditText);
+		feedbackEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 		
-		LinearLayout layout = (LinearLayout)findViewById(R.id.baseLayout);
-		layout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});
-	}
-	
-	private void initButton()
-	{	
+		contactEditText = (EditText)findViewById(R.id.contactEditText);
+		contactEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+
 		Button submitButton = (Button)findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -99,20 +89,20 @@ public class FeedbackActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(FeedbackActivity.this, "网络未连接，无法发送反馈");					
+					Utils.showToast(FeedbackActivity.this, "网络未连接，无法发送反馈");
 				}
 			}
 		});
+		submitButton = Utils.resizeLongButton(submitButton);
 		
-		Button cancelButton = (Button)findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(new View.OnClickListener()
+		LinearLayout layout = (LinearLayout)findViewById(R.id.baseLayout);
+		layout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				finish();
 			}
-		});	
+		});
 	}
 	
     private void hideSoftKeyboard()
@@ -128,12 +118,7 @@ public class FeedbackActivity extends Activity
 		final String contactInfo = contactEditText.getText().toString();
 		if (feedback.equals("") && contactInfo.equals(""))
 		{
-			AlertDialog mDialog = new AlertDialog.Builder(FeedbackActivity.this)
-									.setTitle("错误")
-									.setMessage("意见或联系方式不能均为空")
-									.setNegativeButton(R.string.confirm, null)
-									.create();
-			mDialog.show();		
+			Utils.showToast(this, "意见或联系方式不能均为空");
 		}
 		else
 		{
@@ -155,28 +140,21 @@ public class FeedbackActivity extends Activity
 					{
 						if (response.getStatus())
 						{
-							AlertDialog mDialog = new AlertDialog.Builder(FeedbackActivity.this)
-																.setTitle("成功")
-																.setMessage("反馈已发送！")
-																.setNegativeButton(R.string.confirm, 
-																		new DialogInterface.OnClickListener()
+							Builder builder = new Builder(FeedbackActivity.this);
+							builder.setTitle(R.string.tip);
+							builder.setMessage("反馈已发送！");
+							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 																{
 																	public void onClick(DialogInterface dialog, int which)
 																	{
 																		finish();
 																	}
-																})
-																.create();
-							mDialog.show();
+																});
+							builder.create().show();
 						}
 						else
 						{
-							AlertDialog mDialog = new AlertDialog.Builder(FeedbackActivity.this)
-																.setTitle("错误")
-																.setMessage("反馈发送失败！" + response.getErrorMessage())
-																.setNegativeButton(R.string.confirm, null)
-																.create();
-							mDialog.show();
+							Utils.showToast(FeedbackActivity.this, "反馈发送失败！" + response.getErrorMessage());
 						}
 					}						
 				});

@@ -161,6 +161,7 @@
                 android:layout_height="0.5dp"
                 android:layout_alignParentBottom="true"
                 layout="@layout/view_divider" />
+            
         </RelativeLayout>
         
     </LinearLayout>

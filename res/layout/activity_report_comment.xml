@@ -34,8 +34,8 @@
 
     <RelativeLayout
         android:id="@+id/contentLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/titleLayout"
         android:layout_above="@+id/commentLayout" >
 
@@ -76,18 +76,21 @@
 	
 	        <EditText
 	            android:id="@+id/commentEditText"
-	            android:layout_width="wrap_content"
+	            android:layout_width="0dp"
 	            android:layout_height="wrap_content"
 	            android:layout_weight="1"
-	            android:hint="@string/input_comment"
-	            android:ems="10" >
+	            android:layout_marginTop="6dp"
+	            android:layout_marginBottom="6dp"
+	            android:layout_marginLeft="12dp"	            
+	            android:hint="@string/input_comment" >
 	        </EditText>
 	
 	        <TextView
 	            android:id="@+id/sendTextView"
 	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
+	            android:layout_height="match_parent"
+	            android:paddingLeft="12dp"
+	            android:paddingRight="12dp"
 	            android:gravity="center"
 	            android:text="@string/send"
 	            android:textColor="@color/font_major_dark"

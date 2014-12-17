@@ -78,7 +78,10 @@ public class PhoneFindActivity extends Activity
 		});
     	
 		phoneEditText = (EditText)findViewById(R.id.phoneEditText);
+		phoneEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
     	codeEditText = (EditText)findViewById(R.id.codeEditText);
+    	codeEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
     	
     	acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
     	acquireCodeButton.setOnClickListener(new View.OnClickListener()

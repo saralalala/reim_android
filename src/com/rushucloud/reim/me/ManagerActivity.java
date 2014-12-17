@@ -21,7 +21,7 @@ import classes.Utils;
 import classes.Adapter.MemberListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -268,19 +268,17 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							AlertDialog mDialog = new AlertDialog.Builder(ManagerActivity.this)
-																.setTitle("提示")
-																.setMessage("默认上级修改成功")
-																.setNegativeButton(R.string.confirm, 
-																		new DialogInterface.OnClickListener()
+							Builder builder = new Builder(ManagerActivity.this);
+							builder.setTitle(R.string.tip);
+							builder.setMessage("默认上级修改成功");
+							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 																{
 																	public void onClick(DialogInterface dialog, int which)
 																	{
 																		finish();
 																	}
-																})
-																.create();
-							mDialog.show();
+																});
+							builder.create().show();
 						}
 					});
 				}

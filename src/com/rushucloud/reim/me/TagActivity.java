@@ -22,7 +22,7 @@ import classes.Utils;
 import classes.Adapter.TagListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -189,19 +189,18 @@ public class TagActivity extends Activity
     				}
     				else 
     				{
-    					AlertDialog mDialog = new AlertDialog.Builder(TagActivity.this)
-    											.setTitle(R.string.warning)
-    											.setMessage("是否要删除此标签")
-    											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+    					Builder builder = new Builder(TagActivity.this);
+    					builder.setTitle(R.string.warning);
+    					builder.setMessage("是否要删除此标签");
+    					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
     											{
     												public void onClick(DialogInterface dialog, int which)
     												{
     													sendDeleteTagRequest(tag);
     												}
-    											})
-    											.setNegativeButton(R.string.cancel, null)
-    											.create();
-    					mDialog.show();
+    											});
+    					builder.setNegativeButton(R.string.cancel, null);
+    					builder.create().show();
     				}
     			}
     		});
@@ -231,16 +230,17 @@ public class TagActivity extends Activity
 		final boolean isNewTag = tag.getServerID() == -1 ? true : false; 
 		View view = View.inflate(this, R.layout.dialog_me_tag, null);
 		final EditText nameEditText = (EditText)view.findViewById(R.id.nameEditText);
+		nameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 		
 		if (!isNewTag)
 		{
 			nameEditText.setText(tag.getName());
 		}
 		
-		AlertDialog mDialog = new AlertDialog.Builder(this)
-											.setTitle("请输入标签信息")
-											.setView(view)
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+		Builder builder = new Builder(this);
+		builder.setTitle("请输入标签信息");
+		builder.setView(view);
+		builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
@@ -271,10 +271,9 @@ public class TagActivity extends Activity
 														}
 													}
 												}
-											})
-											.setNegativeButton(R.string.cancel, null)
-											.create();
-		mDialog.show();
+											});
+		builder.setNegativeButton(R.string.cancel, null);
+		builder.create().show();
 	}
 	
 	private void sendCreateTagRequest(final Tag tag)

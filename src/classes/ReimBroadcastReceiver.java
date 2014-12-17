@@ -81,9 +81,9 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 							newIntent.putExtra("reportServerID", jObject.getInt("args"));
 							context.startActivity(newIntent);
 						}
-						else 
+						else
 						{
-							ReimApplication.setReportTabIndex(1);
+							ReimApplication.setReportTabIndex(0);
 							Intent newIntent = new Intent(context, MainActivity.class);
 							newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 							newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

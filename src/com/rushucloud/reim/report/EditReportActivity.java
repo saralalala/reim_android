@@ -30,7 +30,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -195,6 +195,8 @@ public class EditReportActivity extends Activity
 		itemLayout = (LinearLayout) findViewById(R.id.itemLayout);
 		
 		titleEditText = (EditText) findViewById(R.id.titleEditText);
+		titleEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		statusImageView = (ImageView) findViewById(R.id.statusImageView);
 		
@@ -551,11 +553,12 @@ public class EditReportActivity extends Activity
 		titleTextView.setText(R.string.add_comment);
 		
 		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
+		commentEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 		commentEditText.requestFocus();
 		
-    	AlertDialog mDialog = new AlertDialog.Builder(this)
-								.setView(view)
-								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+    	Builder builder = new Builder(this);
+    	builder.setView(view);
+    	builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 								{
 									public void onClick(DialogInterface dialog, int which)
 									{
@@ -576,10 +579,9 @@ public class EditReportActivity extends Activity
 											}
 										}
 									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-		mDialog.show();
+								});
+    	builder.setNegativeButton(R.string.cancel, null);
+    	builder.create().show();
     }
     
     private void showManagerWindow()

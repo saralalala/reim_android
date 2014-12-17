@@ -11,7 +11,7 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -88,7 +88,10 @@ public class ResetPasswordActivity extends Activity
 		});
 		
 		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
+		newPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
+		confirmPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 		
 		Button completeButton = (Button)findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()
@@ -151,19 +154,18 @@ public class ResetPasswordActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							AlertDialog alertDialog = new AlertDialog.Builder(ResetPasswordActivity.this)
-														.setTitle(R.string.tip)
-														.setMessage("修改密码成功")
-														.setNegativeButton(R.string.confirm, new OnClickListener()
+							Builder builder = new Builder(ResetPasswordActivity.this);
+							builder.setTitle(R.string.tip);
+							builder.setMessage("修改密码成功");
+							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which)
 															{
 																startActivity(new Intent(ResetPasswordActivity.this, SignInActivity.class));
 																finish();
 															}
-														})
-														.create();
-							alertDialog.show();
+														});
+							builder.create().show();
 						}
 					});
 				}

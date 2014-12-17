@@ -265,7 +265,6 @@ public class StatisticsFragment extends Fragment
 		{
 			public void execute(Object httpResponse)
 			{
-				System.out.println((String)httpResponse);
 				response = new StatisticsResponse(httpResponse);
 				if (response.getStatus())
 				{

@@ -15,7 +15,7 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -155,19 +155,17 @@ public class MessageActivity extends Activity
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-							AlertDialog mDialog = new AlertDialog.Builder(MessageActivity.this)
-														.setTitle("提示")
-														.setMessage("获取邀请列表失败")
-														.setNegativeButton(R.string.confirm, 
-																new DialogInterface.OnClickListener()
+							Builder builder = new Builder(MessageActivity.this);
+							builder.setTitle(R.string.tip);
+							builder.setMessage("获取邀请列表失败");
+							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which)
 															{
 																finish();
 															}
-														})
-														.create();
-							mDialog.show();
+														});
+							builder.create().show();
 						}						
 					});
 				}

@@ -10,7 +10,7 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -74,6 +74,7 @@ public class EmailFindActivity extends Activity
 		});
     	
     	emailEditText = (EditText)findViewById(R.id.emailEditText);
+    	emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 		
     	Button confirmButton = (Button)findViewById(R.id.confirmButton);
     	confirmButton.setOnClickListener(new View.OnClickListener()
@@ -126,19 +127,18 @@ public class EmailFindActivity extends Activity
 					{
 						public void run()
 						{
-							AlertDialog alertDialog = new AlertDialog.Builder(EmailFindActivity.this)
-														.setTitle(R.string.tip)
-														.setMessage(getString(R.string.email_sent_prompt))
-														.setNegativeButton(R.string.confirm, new OnClickListener()
+							Builder builder = new Builder(EmailFindActivity.this);
+							builder.setTitle(R.string.tip);
+							builder.setMessage(getString(R.string.email_sent_prompt));
+							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which)
 															{
 																startActivity(new Intent(EmailFindActivity.this, SignInActivity.class));
 																finish();
 															}
-														})
-														.create();
-							alertDialog.show();
+														});
+							builder.create().show();
 						}
 					});					
 				}

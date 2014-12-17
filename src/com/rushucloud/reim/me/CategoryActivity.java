@@ -22,7 +22,6 @@ import classes.Utils;
 import classes.Adapter.CategoryListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -224,8 +223,7 @@ public class CategoryActivity extends Activity
     													}
     												});
     					builder.setNegativeButton(R.string.cancel, null);
-    					AlertDialog alertDialog = builder.create();
-    					alertDialog.show();
+    					builder.create().show();
     				}
     			}
     		});
@@ -253,9 +251,15 @@ public class CategoryActivity extends Activity
 	private void showCategoryDialog(final Category category)
 	{
 		final boolean isNewCategory = category.getServerID() == -1 ? true : false;
+		
 		View view = View.inflate(this, R.layout.dialog_me_category, null);
+		
 		final EditText nameEditText = (EditText) view.findViewById(R.id.nameEditText);
+		nameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
 		final EditText limitEditText = (EditText) view.findViewById(R.id.limitEditText);
+		limitEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
 		final CheckBox proveAheadCheckBox = (CheckBox) view.findViewById(R.id.proveAheadCheckBox);
 
 		if (!isNewCategory)
@@ -301,8 +305,7 @@ public class CategoryActivity extends Activity
 										}
 									});
 		builder.setNegativeButton(R.string.cancel, null);
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
+		builder.create().show();
 	}
 
 	private void sendCreateCategoryRequest(final Category category)

@@ -95,7 +95,10 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		}
 		
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
+		usernameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
+		passwordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 
 		if (username != null)
 		{
@@ -103,8 +106,8 @@ public class SignInActivity extends Activity implements View.OnClickListener
 			passwordEditText.setText(password);
 		}
 		
-		usernameEditText.setText("a@a.com");
-		passwordEditText.setText("111111");
+//		usernameEditText.setText("a@a.com");
+//		passwordEditText.setText("111111");
 
 		Button signInButton = (Button)findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()

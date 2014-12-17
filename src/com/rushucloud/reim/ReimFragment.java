@@ -29,7 +29,7 @@ import classes.Widget.XListView.IXListViewListener;
 import classes.Adapter.ItemListViewAdapter;
 import classes.Adapter.ItemTagGridViewAdapter;
 import database.DBManager;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -470,11 +470,10 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
     				}
     				else
     				{
-    					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-    											.setTitle(R.string.warning)
-    											.setMessage(R.string.delete_item_warning)
-    											.setPositiveButton(R.string.confirm,
-    													new DialogInterface.OnClickListener()
+    					Builder builder = new Builder(getActivity());
+    					builder.setTitle(R.string.warning);
+    					builder.setMessage(R.string.delete_item_warning);
+    					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
     													{
     														public void onClick(DialogInterface dialog, int which)
     														{
@@ -491,8 +490,9 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
     																sendDeleteItemRequest(localItem);
     															}
     														}
-    													}).setNegativeButton(R.string.cancel, null).create();
-    					mDialog.show();
+    													});
+    					builder.setNegativeButton(R.string.cancel, null);
+    					builder.create();
     				}
     			}
     		});
