@@ -74,7 +74,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	
 	private View view;
 	private View filterView;
-	private ImageView filterImageView;
 	private TextView myTitleTextView;
 	private TextView othersTitleTextView;
 	private XListView reportListView;
@@ -177,7 +176,27 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		myTitleTextView.setOnClickListener(this);
 
 		othersTitleTextView = (TextView)getActivity().findViewById(R.id.othersTitleTextView);
-		othersTitleTextView.setOnClickListener(this);		
+		othersTitleTextView.setOnClickListener(this);
+
+		ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
+		filterImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
+				windowManager.addView(filterView, params);
+			}
+		});
+		
+		ImageView addImageView = (ImageView) view.findViewById(R.id.addImageView);
+		addImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				Intent intent = new Intent(getActivity(), EditReportActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 	
 	private void initListView()
@@ -248,16 +267,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	
 	private void initFilterView()
 	{		
-		filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
-		filterImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
-				windowManager.addView(filterView, params);
-			}
-		});
-		
 		windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);	
 		
 		DisplayMetrics metrics = new DisplayMetrics();

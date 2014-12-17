@@ -14,10 +14,11 @@
         <ImageView
             android:id="@+id/backImageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:contentDescription="@string/back"
             android:src="@drawable/back" />
 
@@ -51,11 +52,10 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:gravity="right|bottom" >
+            android:gravity="right|center_vertical" >
 
 	        <TextView
 	            android:id="@+id/itemCountTextView"
@@ -68,7 +68,9 @@
 	        <TextView
 	            android:id="@+id/confirmTextView"
 	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
+	            android:layout_height="match_parent"
+				android:paddingRight="16dp"
+				android:gravity="center"
 	            android:text="@string/confirm"
 	            android:textSize="16sp"
 	            android:textColor="@color/major_light" />

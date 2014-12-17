@@ -13,26 +13,26 @@
         android:scaleType="fitXY" />
 
     <ImageView
-        android:id="@+id/confirmImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="16dp"
-        android:contentDescription="@string/confirm"
-		android:src="@drawable/confirm" />
-
-    <ImageView
         android:id="@+id/cancelImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="14dp"
+        android:padding="16dp"
         android:contentDescription="@string/cancel"
 		android:src="@drawable/cancel" />
+
+    <ImageView
+        android:id="@+id/confirmImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="14dp"
+        android:padding="16dp"
+        android:contentDescription="@string/confirm"
+		android:src="@drawable/confirm" />
 
     <TextView
         android:id="@+id/sortTextView"

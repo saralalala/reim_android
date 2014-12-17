@@ -14,10 +14,11 @@
         <ImageView
             android:id="@+id/filterImageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:contentDescription="@string/filter"
             android:src="@drawable/filter" />
 

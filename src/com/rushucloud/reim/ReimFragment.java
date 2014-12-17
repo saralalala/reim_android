@@ -72,8 +72,6 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 	
 	private View view;
 	private View filterView;
-	private ImageView filterImageView;
-	private ImageView searchImageView;
 	private XListView itemListView;
 	private ItemListViewAdapter adapter;
 	private PopupWindow deletePopupWindow;
@@ -219,7 +217,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 	
 	private void initFilterView()
 	{
-		filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
+		ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 		filterImageView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -375,7 +373,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 	
 	private void initSearchView()
 	{		
-		searchImageView = (ImageView) getActivity().findViewById(R.id.searchImageView);
+		ImageView searchImageView = (ImageView) getActivity().findViewById(R.id.searchImageView);
 		searchImageView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)

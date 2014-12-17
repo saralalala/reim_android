@@ -16,7 +16,6 @@ import classes.Utils;
 import classes.Widget.TabItem;
 
 import com.rushucloud.reim.item.EditItemActivity;
-import com.rushucloud.reim.report.EditReportActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
@@ -203,17 +202,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			public void onClick(View v)
 			{
-				if (viewPager.getCurrentItem() == 1)
-				{
-					Intent intent = new Intent(MainActivity.this, EditReportActivity.class);
-					startActivity(intent);
-				}
-				else
-				{
-					Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
-					intent.putExtra("fromReim", true);
-					startActivity(intent);
-				}
+				Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
+				intent.putExtra("fromReim", true);
+				startActivity(intent);
 			}
 		});
 	}

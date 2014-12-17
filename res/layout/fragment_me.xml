@@ -12,14 +12,14 @@
 	    android:layout_height="50dp"
 	    android:background="@color/major_dark" >
 
-	<TextView
-        android:id="@+id/meTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/personal_center"
-        android:textSize="20sp"
-        android:textColor="@color/major_light" />
+		<TextView
+	        android:id="@+id/meTitleTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:text="@string/personal_center"
+	        android:textSize="20sp"
+	        android:textColor="@color/major_light" />
 
     </RelativeLayout>
 
