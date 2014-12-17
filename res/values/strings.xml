@@ -136,6 +136,7 @@
     <string name="reject">拒绝</string>
     <string name="reject_reason">拒绝理由：</string>
     <string name="report_over_flow">99+</string>
+    <string name="export">导出</string>
     
     <string name="mark">标记</string>
     <string name="stat_done">已报销</string>

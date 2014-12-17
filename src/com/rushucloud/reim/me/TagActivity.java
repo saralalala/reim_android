@@ -25,34 +25,36 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class TagActivity extends Activity
 {
 	private ListView tagListView;
 	private TextView tagTextView;
 	private TagListViewAdapter adapter;
-	private List<Tag> tagList;
+	private PopupWindow deletePopupWindow;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
+	private List<Tag> tagList;
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_tag_management);
+		setContentView(R.layout.activity_me_tag_management);
 		initData();
 		initView();
 	}
@@ -80,52 +82,7 @@ public class TagActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle("选项");
-		menu.add(0, 0, 0, "删除");
-	}
-
-	public boolean onContextItemSelected(MenuItem item)
-	{
-		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		final int index = (int) tagListView.getAdapter().getItemId(menuInfo.position);
-		final Tag tag = tagList.get(index);
-		switch (item.getItemId())
-		{
-			case 0:
-			{
-				if (!Utils.isNetworkConnected())
-				{
-					Utils.showToast(this, "网络未连接，无法删除");
-				}
-				else 
-				{
-					AlertDialog mDialog = new AlertDialog.Builder(TagActivity.this)
-											.setTitle("警告")
-											.setMessage(R.string.delete_item_warning)
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													sendDeleteTagRequest(tag);
-												}
-											})
-											.setNegativeButton(R.string.cancel, null)
-											.create();
-					mDialog.show();
-				}
-				break;
-			}
-			default:
-				break;
-		}
-
-		return super.onContextItemSelected(item);
-	}
-	
+		
 	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
@@ -136,19 +93,6 @@ public class TagActivity extends Activity
 	{		
 		getActionBar().hide();
 		ReimApplication.setProgressDialog(this);
-		
-		tagTextView = (TextView)findViewById(R.id.tagTextView);
-		
-		tagListView = (ListView)findViewById(R.id.tagListView);
-		tagListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				Tag tag = tagList.get(position);
-				showTagDialog(tag);
-			}
-		});
-		registerForContextMenu(tagListView);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
@@ -174,6 +118,26 @@ public class TagActivity extends Activity
 				}
 			}
 		});
+		
+		tagTextView = (TextView)findViewById(R.id.tagTextView);
+		
+		tagListView = (ListView)findViewById(R.id.tagListView);
+		tagListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				Tag tag = tagList.get(position);
+				showTagDialog(tag);
+			}
+		});
+		tagListView.setOnItemLongClickListener(new OnItemLongClickListener()
+		{
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				showDeleteWindow(position);
+				return false;
+			}
+		});		
 	}
 	
 	private void refreshListView()
@@ -205,10 +169,67 @@ public class TagActivity extends Activity
 		}
 	}
 
+    private void showDeleteWindow(final int index)
+    {    
+    	if (deletePopupWindow == null)
+		{
+    		View deleteView = View.inflate(this, R.layout.window_delete, null);
+    		
+    		Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
+    		deleteButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				deletePopupWindow.dismiss();
+    				
+    				final Tag tag = tagList.get(index);
+    				if (!Utils.isNetworkConnected())
+    				{
+    					Utils.showToast(TagActivity.this, "网络未连接，无法删除");
+    				}
+    				else 
+    				{
+    					AlertDialog mDialog = new AlertDialog.Builder(TagActivity.this)
+    											.setTitle(R.string.warning)
+    											.setMessage("是否要删除此标签")
+    											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+    											{
+    												public void onClick(DialogInterface dialog, int which)
+    												{
+    													sendDeleteTagRequest(tag);
+    												}
+    											})
+    											.setNegativeButton(R.string.cancel, null)
+    											.create();
+    					mDialog.show();
+    				}
+    			}
+    		});
+    		deleteButton = Utils.resizeWindowButton(deleteButton);
+    		
+    		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
+    		cancelButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				deletePopupWindow.dismiss();
+    			}
+    		});
+    		cancelButton = Utils.resizeWindowButton(cancelButton);
+    		
+    		deletePopupWindow = Utils.constructPopupWindow(this, deleteView);    	
+		}
+    	
+		deletePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		deletePopupWindow.update();
+		
+		Utils.dimBackground(this);
+    }
+
 	private void showTagDialog(final Tag tag)
 	{
 		final boolean isNewTag = tag.getServerID() == -1 ? true : false; 
-		View view = View.inflate(this, R.layout.me_tag_dialog, null);
+		View view = View.inflate(this, R.layout.dialog_me_tag, null);
 		final EditText nameEditText = (EditText)view.findViewById(R.id.nameEditText);
 		
 		if (!isNewTag)

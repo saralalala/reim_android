@@ -41,7 +41,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.start_sign_in);
+		setContentView(R.layout.activity_start_sign_in);
 		initView();
 	}
 
@@ -153,7 +153,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		forgorPasswordTextView.setOnClickListener(this);
 
 		// init forgot window
-		View forgorView = View.inflate(this, R.layout.window_find_password, null);
+		View forgorView = View.inflate(this, R.layout.window_start_find_password, null);
 		
 		Button phoneButton = (Button) forgorView.findViewById(R.id.phoneButton);
 		phoneButton.setOnClickListener(new View.OnClickListener()

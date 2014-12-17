@@ -26,6 +26,9 @@ import classes.Widget.SegmentedGroup;
 import classes.Widget.XListView;
 import classes.Widget.XListView.IXListViewListener;
 
+import com.rushucloud.reim.report.ApproveReportActivity;
+import com.rushucloud.reim.report.EditReportActivity;
+import com.rushucloud.reim.report.ShowReportActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
@@ -37,25 +40,25 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.WindowManager.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.support.v4.app.Fragment;
@@ -77,6 +80,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	private XListView reportListView;
 	private ReportListViewAdapter mineAdapter;
 	private OthersReportListViewAdapter othersAdapter;
+	private PopupWindow operationPopupWindow;
 
 	private WindowManager windowManager;
 	private LayoutParams params = new LayoutParams();
@@ -143,85 +147,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 			syncReports();
 		}
 	}
-
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-    {
-    	super.onCreateContextMenu(menu, v, menuInfo);
-    	menu.setHeaderTitle("选项");
-    	menu.add(0,0,0,"删除");
-    	menu.add(0,1,0,"导出");
-    }
-
-    public boolean onContextItemSelected(MenuItem item)
-    {
-    	if (!getUserVisibleHint())
-		{
-			return false;
-		}
-    	
-    	AdapterContextMenuInfo menuInfo=(AdapterContextMenuInfo)item.getMenuInfo();
-    	int index = (int)reportListView.getAdapter().getItemId(menuInfo.position);
-    	final Report report = showMineList.get(index);
-    	switch (item.getItemId()) 
-    	{
-			case 0:
-			{
-				if (report.isEditable())
-				{
-					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-														.setTitle("警告")
-														.setMessage(R.string.delete_report_warning)
-														.setPositiveButton(R.string.confirm, 
-																new DialogInterface.OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																if (report.getServerID() == -1)
-																{
-																	deleteReportFromLocal(report.getLocalID());
-																}
-																else if (!Utils.isNetworkConnected())
-																{
-																	Utils.showToast(getActivity(), "网络未连接，无法删除");
-																}
-																else
-																{
-																	sendDeleteReportRequest(report);																		
-																}
-															}
-														})
-														.setNegativeButton(R.string.cancel, null)
-														.create();
-					mDialog.show();
-				}
-				else
-				{
-					Utils.showToast(getActivity(), "报告已提交，不可删除");
-				}
-				break;
-			}
-			case 1:
-			{
-				if (!Utils.isNetworkConnected())
-				{
-					Utils.showToast(getActivity(), "网络未连接，无法导出");
-				}
-				else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
-				{
-					Utils.showToast(getActivity(), "报销未完成，不可导出");					
-				}
-				else
-				{
-					showExportDialog(report.getServerID());
-				}
-				break;
-			}
-			default:
-				break;
-		}    		
-		
-    	return super.onContextItemSelected(item);
-    }
     
     private void initData()
     {
@@ -241,217 +166,218 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 
 	private void initView()
 	{
-		if (mineAdapter == null)
-		{
-			mineAdapter = new ReportListViewAdapter(getActivity(), showMineList);			
-		}
+		initTitleView();
+		initListView();	
+		initFilterView();
+	}
+	
+	private void initTitleView()
+	{
+		myTitleTextView = (TextView)getActivity().findViewById(R.id.myTitleTextView);
+		myTitleTextView.setOnClickListener(this);
+
+		othersTitleTextView = (TextView)getActivity().findViewById(R.id.othersTitleTextView);
+		othersTitleTextView.setOnClickListener(this);		
+	}
+	
+	private void initListView()
+	{
+		mineAdapter = new ReportListViewAdapter(getActivity(), showMineList);	
+		othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);
 		
-		if (othersAdapter == null)
+		reportListView = (XListView)getActivity().findViewById(R.id.reportListView);
+		reportListView.setAdapter(mineAdapter);
+		reportListView.setXListViewListener(this);
+		reportListView.setPullLoadEnable(true);
+		reportListView.setPullRefreshEnable(true);
+		reportListView.setOnItemClickListener(new OnItemClickListener()
 		{
-			othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);			
-		}
-		
-		if (myTitleTextView == null)
-		{
-			myTitleTextView = (TextView)getActivity().findViewById(R.id.myTitleTextView);
-			myTitleTextView.setOnClickListener(this);
-		}
-		
-		if (othersTitleTextView == null)
-		{
-			othersTitleTextView = (TextView)getActivity().findViewById(R.id.othersTitleTextView);
-			othersTitleTextView.setOnClickListener(this);
-		}
-		
-		if (reportListView == null)
-		{
-			reportListView = (XListView)getActivity().findViewById(R.id.reportListView);
-			reportListView.setAdapter(mineAdapter);
-			reportListView.setXListViewListener(this);
-			reportListView.setPullLoadEnable(true);
-			reportListView.setPullRefreshEnable(true);
-			reportListView.setOnItemClickListener(new OnItemClickListener()
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id)
 			{
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id)
+				if (ReimApplication.getReportTabIndex() == 0)
 				{
-					if (ReimApplication.getReportTabIndex() == 0)
+					Report report = showMineList.get(position-1);
+					Bundle bundle = new Bundle();
+					bundle.putSerializable("report", report);
+					Intent intent;
+					if (report.isEditable())
 					{
-						Report report = showMineList.get(position-1);
-						Bundle bundle = new Bundle();
-						bundle.putSerializable("report", report);
-						Intent intent;
-						if (report.isEditable())
-						{
-							intent = new Intent(getActivity(), EditReportActivity.class);
-						}
-						else
-						{
-							bundle.putBoolean("myReport", true);
-							intent = new Intent(getActivity(), ShowReportActivity.class);						
-						}
-						intent.putExtras(bundle);
-						startActivity(intent);						
+						intent = new Intent(getActivity(), EditReportActivity.class);
 					}
 					else
 					{
-						Report report = showOthersList.get(position-1);
-						Bundle bundle = new Bundle();
-						bundle.putSerializable("report", report);
-						Intent intent;
-						if (report.getStatus() == Report.STATUS_SUBMITTED)
-						{
-							intent = new Intent(getActivity(), ApproveReportActivity.class);
-						}
-						else
-						{
-							bundle.putBoolean("myReport", false);
-							intent = new Intent(getActivity(), ShowReportActivity.class);
-						}
-						intent.putExtras(bundle);
-						startActivity(intent);
+						bundle.putBoolean("myReport", true);
+						intent = new Intent(getActivity(), ShowReportActivity.class);						
 					}
+					intent.putExtras(bundle);
+					startActivity(intent);						
 				}
-			});
-			registerForContextMenu(reportListView);
-		}
-		
-		if (filterImageView == null)
-		{
-			filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
-			filterImageView.setOnClickListener(new OnClickListener()
-			{
-				public void onClick(View v)
+				else
 				{
-					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
-					windowManager.addView(filterView, params);
-				}
-			});
-		}
-		
-		if (filterView == null)
-		{
-			windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);	
-			
-			DisplayMetrics dm = new DisplayMetrics();
-			getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-			
-			filterView = getActivity().getLayoutInflater().inflate(R.layout.report_filter, (ViewGroup) null, false);
-			filterView.setBackgroundColor(Color.WHITE);
-			filterView.setMinimumHeight(dm.heightPixels);
-			
-			filterView.setFocusable(true);
-			filterView.setFocusableInTouchMode(true);
-			filterView.setOnKeyListener(this);
-
-			final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
-			final RadioButton sortItemsCountRadio = (RadioButton)filterView.findViewById(R.id.sortItemsCountRadio);
-			final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);	
-			final RadioButton sortCreateDateRadio = (RadioButton)filterView.findViewById(R.id.sortCreateDateRadio);
-			SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
-			sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
-			{
-				public void onCheckedChanged(RadioGroup group, int checkedId)
-				{
-					if (ReimApplication.getReportTabIndex() == 0)
+					Report report = showOthersList.get(position-1);
+					Bundle bundle = new Bundle();
+					bundle.putSerializable("report", report);
+					Intent intent;
+					if (report.getStatus() == Report.STATUS_SUBMITTED)
 					{
-						if (checkedId == sortNullRadio.getId())
-						{
-							MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_MODIFY_DATE");
-							mineTempSortType = SORT_NULL;
-						}
-						else if (checkedId == sortItemsCountRadio.getId())
-						{
-							MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_ITEMS_COUNT");
-							mineTempSortType = SORT_ITEMS_COUNT;
-						}
-						else if (checkedId == sortAmountRadio.getId())
-						{
-							MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_AMOUNT");
-							mineTempSortType = SORT_AMOUNT;
-						}
-						else if (checkedId == sortCreateDateRadio.getId())
-						{
-							MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_CREATE_DATE");
-							mineTempSortType = SORT_CREATE_DATE;
-						}						
+						intent = new Intent(getActivity(), ApproveReportActivity.class);
 					}
 					else
 					{
-						if (checkedId == sortNullRadio.getId())
-						{
-							MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_MODIFY_DATE");
-							othersTempSortType = SORT_NULL;
-						}
-						else if (checkedId == sortItemsCountRadio.getId())
-						{
-							MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_ITEMS_COUNT");
-							othersTempSortType = SORT_ITEMS_COUNT;
-						}
-						else if (checkedId == sortAmountRadio.getId())
-						{
-							MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_AMOUNT");
-							othersTempSortType = SORT_AMOUNT;
-						}
-						else if (checkedId == sortCreateDateRadio.getId())
-						{
-							MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_CREATE_DATE");
-							othersTempSortType = SORT_CREATE_DATE;
-						}						
+						bundle.putBoolean("myReport", false);
+						intent = new Intent(getActivity(), ShowReportActivity.class);
 					}
+					intent.putExtras(bundle);
+					startActivity(intent);
 				}
-			});
+			}
+		});
+		reportListView.setOnItemLongClickListener(new OnItemLongClickListener()
+		{
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				if (ReimApplication.getReportTabIndex() == 0)
+				{
+					showOperationWindow(position - 1);
+				}
+				return false;
+			}
+		});
+	}
+	
+	private void initFilterView()
+	{		
+		filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
+		filterImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
+				windowManager.addView(filterView, params);
+			}
+		});
+		
+		windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);	
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		
+		filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);
+		filterView.setBackgroundColor(Color.WHITE);
+		filterView.setMinimumHeight(metrics.heightPixels);
+		
+		filterView.setFocusable(true);
+		filterView.setFocusableInTouchMode(true);
+		filterView.setOnKeyListener(this);
 
-			final ReportTagGridViewAdapter tagAdapter = new ReportTagGridViewAdapter(getActivity());
-			
-			GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
-			tagGridView.setAdapter(tagAdapter);
-			tagGridView.setOnItemClickListener(new OnItemClickListener()
+		final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
+		final RadioButton sortItemsCountRadio = (RadioButton)filterView.findViewById(R.id.sortItemsCountRadio);
+		final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);	
+		final RadioButton sortCreateDateRadio = (RadioButton)filterView.findViewById(R.id.sortCreateDateRadio);
+		SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
+		sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+				if (ReimApplication.getReportTabIndex() == 0)
 				{
-					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_TAG");
-					tagAdapter.setSelection(position);
-					tagAdapter.notifyDataSetChanged();
+					if (checkedId == sortNullRadio.getId())
+					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_MODIFY_DATE");
+						mineTempSortType = SORT_NULL;
+					}
+					else if (checkedId == sortItemsCountRadio.getId())
+					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_ITEMS_COUNT");
+						mineTempSortType = SORT_ITEMS_COUNT;
+					}
+					else if (checkedId == sortAmountRadio.getId())
+					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_AMOUNT");
+						mineTempSortType = SORT_AMOUNT;
+					}
+					else if (checkedId == sortCreateDateRadio.getId())
+					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_CREATE_DATE");
+						mineTempSortType = SORT_CREATE_DATE;
+					}						
 				}
-			});
-			
-			ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
-			confirmImageView.setOnClickListener(new View.OnClickListener()
-			{
-				public void onClick(View v)
+				else
 				{
-					if (ReimApplication.getReportTabIndex() == 0)
+					if (checkedId == sortNullRadio.getId())
 					{
-						mineSortReverse = mineSortType == mineTempSortType ? !mineSortReverse : false;
-						mineSortType = mineTempSortType;
-						mineFilterStatusList.clear();
-						mineFilterStatusList.addAll(tagAdapter.getFilterStatusList());						
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_MODIFY_DATE");
+						othersTempSortType = SORT_NULL;
 					}
-					else
+					else if (checkedId == sortItemsCountRadio.getId())
 					{
-						othersSortReverse = othersSortType == othersTempSortType ? !othersSortReverse : false;
-						othersSortType = othersTempSortType;
-						othersFilterStatusList.clear();
-						othersFilterStatusList.addAll(tagAdapter.getFilterStatusList());
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_ITEMS_COUNT");
+						othersTempSortType = SORT_ITEMS_COUNT;
 					}
-					
-					windowManager.removeView(filterView);
-					ReimApplication.showProgressDialog();
-					refreshReportListView();
-					ReimApplication.dismissProgressDialog();
+					else if (checkedId == sortAmountRadio.getId())
+					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_AMOUNT");
+						othersTempSortType = SORT_AMOUNT;
+					}
+					else if (checkedId == sortCreateDateRadio.getId())
+					{
+						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_CREATE_DATE");
+						othersTempSortType = SORT_CREATE_DATE;
+					}						
 				}
-			});
+			}
+		});
 
-			ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
-			cancelImageView.setOnClickListener(new View.OnClickListener()
+		final ReportTagGridViewAdapter tagAdapter = new ReportTagGridViewAdapter(getActivity());
+		
+		GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
+		tagGridView.setAdapter(tagAdapter);
+		tagGridView.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				public void onClick(View v)
+				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_TAG");
+				tagAdapter.setSelection(position);
+				tagAdapter.notifyDataSetChanged();
+			}
+		});
+		
+		ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
+		confirmImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (ReimApplication.getReportTabIndex() == 0)
 				{
-					windowManager.removeView(filterView);
+					mineSortReverse = mineSortType == mineTempSortType ? !mineSortReverse : false;
+					mineSortType = mineTempSortType;
+					mineFilterStatusList.clear();
+					mineFilterStatusList.addAll(tagAdapter.getFilterStatusList());						
 				}
-			});
-		}
+				else
+				{
+					othersSortReverse = othersSortType == othersTempSortType ? !othersSortReverse : false;
+					othersSortType = othersTempSortType;
+					othersFilterStatusList.clear();
+					othersFilterStatusList.addAll(tagAdapter.getFilterStatusList());
+				}
+				
+				windowManager.removeView(filterView);
+				ReimApplication.showProgressDialog();
+				refreshReportListView();
+				ReimApplication.dismissProgressDialog();
+			}
+		});
+
+		ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
+		cancelImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				windowManager.removeView(filterView);
+			}
+		});
 	}
 	
 	private void setListView(int index)
@@ -461,7 +387,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		{
 			myTitleTextView.setTextColor(getResources().getColor(R.color.major_light));
 			othersTitleTextView.setTextColor(getResources().getColor(R.color.hint_white));
-			registerForContextMenu(reportListView);
 		}
 		else
 		{
@@ -471,7 +396,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 			}
 			myTitleTextView.setTextColor(getResources().getColor(R.color.hint_white));
 			othersTitleTextView.setTextColor(getResources().getColor(R.color.major_light));
-			unregisterForContextMenu(reportListView);
 		}
 		ReimApplication.showProgressDialog();
 		refreshReportListView();
@@ -487,81 +411,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	{
 		return dbManager.getOthersReports(appPreference.getCurrentUserID());
 	}
-	
-	private void refreshReportListView()
-	{
-		if (ReimApplication.getReportTabIndex() == 0)
-		{
-			mineList.clear();
-			mineList.addAll(readMineReportList());
-			showMineList.clear();
-			showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
-			mineAdapter.set(showMineList);
-			if (reportListView.getAdapter().equals(mineAdapter))
-			{
-				mineAdapter.notifyDataSetChanged();
-			}
-			else
-			{
-				reportListView.setAdapter(mineAdapter);				
-			}	
-		}
-		else
-		{
-			othersList.clear();
-			othersList.addAll(readOthersReportList());
-			showOthersList.clear();
-			showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
-			othersAdapter.set(showOthersList);
-			if (reportListView.getAdapter().equals(othersAdapter))
-			{
-				othersAdapter.notifyDataSetChanged();
-			}
-			else
-			{
-				reportListView.setAdapter(othersAdapter);				
-			}		
-		}
-	}
-	
-	private void showExportDialog(final int reportID)
-    {
-		View view = View.inflate(getActivity(), R.layout.report_export_dialog, null);
-		final EditText emailEditText = (EditText)view.findViewById(R.id.emailEditText);
-		User user = appPreference.getCurrentUser();
-		if (!user.getEmail().equals(""))
-		{
-			emailEditText.setText(user.getEmail());
-		}
-		emailEditText.requestFocus();
-		
-    	AlertDialog mDialog = new AlertDialog.Builder(getActivity())
-								.setTitle("导出报告")
-								.setView(view)
-								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										String email = emailEditText.getText().toString();
-										if (email.equals(""))
-										{
-											Utils.showToast(getActivity(), "邮箱不能为空");
-										}
-										else if (!Utils.isEmail(email))
-										{
-											Utils.showToast(getActivity(), "邮箱格式不正确");
-										}
-										else
-										{
-											sendExportReportRequest(reportID, email);
-										}
-									}
-								})
-								.setNegativeButton(R.string.cancel, null)
-								.create();
-		mDialog.show();
-    }
-	
+
 	private List<Report> filterReportList(List<Report> reportList, int sortType, boolean sortReverse, List<Integer> filterStatusList)
 	{
 		List<Report> resultList = new ArrayList<Report>();
@@ -601,6 +451,174 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 
 		return resultList;
 	}
+	
+	private void refreshReportListView()
+	{
+		if (ReimApplication.getReportTabIndex() == 0)
+		{
+			mineList.clear();
+			mineList.addAll(readMineReportList());
+			showMineList.clear();
+			showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
+			mineAdapter.set(showMineList);
+			if (reportListView.getAdapter().equals(mineAdapter))
+			{
+				mineAdapter.notifyDataSetChanged();
+			}
+			else
+			{
+				reportListView.setAdapter(mineAdapter);				
+			}	
+		}
+		else
+		{
+			othersList.clear();
+			othersList.addAll(readOthersReportList());
+			showOthersList.clear();
+			showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
+			othersAdapter.set(showOthersList);
+			if (reportListView.getAdapter().equals(othersAdapter))
+			{
+				othersAdapter.notifyDataSetChanged();
+			}
+			else
+			{
+				reportListView.setAdapter(othersAdapter);				
+			}		
+		}
+	}
+
+    private void showOperationWindow(final int index)
+    {    
+    	if (operationPopupWindow == null)
+		{
+    		View operationView = View.inflate(getActivity(), R.layout.window_report_operation, null);
+    		
+    		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
+    		deleteButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				operationPopupWindow.dismiss();
+
+    		    	final Report report = showMineList.get(index);
+    		    	if (report.isEditable())
+    				{
+    					AlertDialog mDialog = new AlertDialog.Builder(getActivity())
+    														.setTitle(R.string.warning)
+    														.setMessage(R.string.delete_report_warning)
+    														.setPositiveButton(R.string.confirm, 
+    																new DialogInterface.OnClickListener()
+    														{
+    															public void onClick(DialogInterface dialog, int which)
+    															{
+    																if (report.getServerID() == -1)
+    																{
+    																	deleteReportFromLocal(report.getLocalID());
+    																}
+    																else if (!Utils.isNetworkConnected())
+    																{
+    																	Utils.showToast(getActivity(), "网络未连接，无法删除");
+    																}
+    																else
+    																{
+    																	sendDeleteReportRequest(report);																		
+    																}
+    															}
+    														})
+    														.setNegativeButton(R.string.cancel, null)
+    														.create();
+    					mDialog.show();
+    				}
+    				else
+    				{
+    					Utils.showToast(getActivity(), "报告已提交，不可删除");
+    				}
+    			}
+    		});
+    		deleteButton = Utils.resizeWindowButton(deleteButton);
+    		
+    		Button exportButton = (Button) operationView.findViewById(R.id.exportButton);
+    		exportButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				operationPopupWindow.dismiss();
+    				
+    		    	final Report report = showMineList.get(index);
+    				if (!Utils.isNetworkConnected())
+    				{
+    					Utils.showToast(getActivity(), "网络未连接，无法导出");
+    				}
+    				else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
+    				{
+    					Utils.showToast(getActivity(), "报销未完成，不可导出");					
+    				}
+    				else
+    				{
+    					showExportDialog(report.getServerID());
+    				}
+    			}
+    		});
+    		exportButton = Utils.resizeWindowButton(exportButton);
+    		
+    		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
+    		cancelButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				operationPopupWindow.dismiss();
+    			}
+    		});
+    		cancelButton = Utils.resizeWindowButton(cancelButton);
+    		
+    		operationPopupWindow = Utils.constructPopupWindow(getActivity(), operationView);    	
+		}
+    	
+		operationPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		operationPopupWindow.update();
+		
+		Utils.dimBackground(getActivity());
+    }
+    
+	private void showExportDialog(final int reportID)
+    {
+		View view = View.inflate(getActivity(), R.layout.dialog_report_export, null);
+		final EditText emailEditText = (EditText)view.findViewById(R.id.emailEditText);
+		User user = appPreference.getCurrentUser();
+		if (!user.getEmail().equals(""))
+		{
+			emailEditText.setText(user.getEmail());
+		}
+		emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		emailEditText.requestFocus();
+		
+    	AlertDialog mDialog = new AlertDialog.Builder(getActivity())
+								.setTitle("导出报告")
+								.setView(view)
+								.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										String email = emailEditText.getText().toString();
+										if (email.equals(""))
+										{
+											Utils.showToast(getActivity(), "邮箱不能为空");
+										}
+										else if (!Utils.isEmail(email))
+										{
+											Utils.showToast(getActivity(), "邮箱格式不正确");
+										}
+										else
+										{
+											sendExportReportRequest(reportID, email);
+										}
+									}
+								})
+								.setNegativeButton(R.string.cancel, null)
+								.create();
+		mDialog.show();
+    }
 	
 	private void sendDeleteReportRequest(final Report report)
 	{

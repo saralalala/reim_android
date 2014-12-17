@@ -35,7 +35,7 @@ public class InviteReplyActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_invite);
+		setContentView(R.layout.activity_me_invite);
 		initData();
 		initView();
 		initButton();

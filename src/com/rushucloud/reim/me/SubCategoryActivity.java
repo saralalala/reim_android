@@ -23,36 +23,40 @@ import classes.Adapter.CategoryListViewAdapter;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 public class SubCategoryActivity extends Activity
 {
 	private ListView categoryListView;
 	private TextView categoryTextView;
 	private CategoryListViewAdapter adapter;
-	private List<Category> categoryList;
-	private int parentID;
+	private PopupWindow operationPopupWindow;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
+	private List<Category> categoryList;
+	private int parentID;
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_category_management);
+		setContentView(R.layout.activity_me_category_management);
 		initData();
 		initView();
 	}
@@ -80,65 +84,7 @@ public class SubCategoryActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle("选项");
-		menu.add(0, 0, 0, "修改");
-		menu.add(0, 1, 0, "删除");
-	}
-
-	public boolean onContextItemSelected(MenuItem item)
-	{
-		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		final int index = (int) categoryListView.getAdapter().getItemId(menuInfo.position);
-		final Category category = categoryList.get(index);
-		switch (item.getItemId())
-		{
-			case 0:
-			{
-				if (!Utils.isNetworkConnected())
-				{
-					Utils.showToast(this, "网络未连接，无法修改");
-				}
-				else
-				{
-					showCategoryDialog(category);
-				}
-				break;
-			}
-			case 1:
-			{
-				if (!Utils.isNetworkConnected())
-				{
-					Utils.showToast(this, "网络未连接，无法删除");
-				}
-				else 
-				{
-					AlertDialog mDialog = new AlertDialog.Builder(SubCategoryActivity.this)
-											.setTitle("警告")
-											.setMessage(R.string.delete_item_warning)
-											.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													sendDeleteCategoryRequest(category);
-												}
-											})
-											.setNegativeButton(R.string.cancel, null)
-											.create();
-					mDialog.show();
-				}
-				break;
-			}
-			default:
-				break;
-		}
-
-		return super.onContextItemSelected(item);
-	}
-	
+		
 	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
@@ -183,7 +129,14 @@ public class SubCategoryActivity extends Activity
 		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
 		
 		categoryListView = (ListView)findViewById(R.id.categoryListView);
-		registerForContextMenu(categoryListView);
+		categoryListView.setOnItemLongClickListener(new OnItemLongClickListener()
+		{
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				showOperationWindow(position);
+				return false;
+			}
+		});
 	}
 	
 	private void refreshListView()
@@ -215,10 +168,87 @@ public class SubCategoryActivity extends Activity
 		}
 	}
 
+    private void showOperationWindow(final int index)
+    {    
+    	if (operationPopupWindow == null)
+		{
+    		View operationView = View.inflate(this, R.layout.window_report_operation, null);
+    		
+    		Button modifyButton = (Button) operationView.findViewById(R.id.modifyButton);
+    		modifyButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				operationPopupWindow.dismiss();
+
+    				final Category category = categoryList.get(index);
+    				if (!Utils.isNetworkConnected())
+    				{
+    					Utils.showToast(SubCategoryActivity.this, "网络未连接，无法修改");
+    				}
+    				else
+    				{
+    					showCategoryDialog(category);
+    				}
+    			}
+    		});
+    		modifyButton = Utils.resizeWindowButton(modifyButton);
+    		
+    		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
+    		deleteButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				operationPopupWindow.dismiss();
+    				
+    				final Category category = categoryList.get(index);
+    				if (!Utils.isNetworkConnected())
+    				{
+    					Utils.showToast(SubCategoryActivity.this, "网络未连接，无法删除");
+    				}
+    				else
+    				{
+    					Builder builder = new Builder(SubCategoryActivity.this);
+    					builder.setTitle(R.string.warning);
+    					builder.setMessage("是否要删除此分类");
+    					builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
+    												{
+    													public void onClick(DialogInterface dialog, int which)
+    													{
+    														sendDeleteCategoryRequest(category);
+    													}
+    												});
+    					builder.setNegativeButton(R.string.cancel, null);
+    					AlertDialog alertDialog = builder.create();
+    					alertDialog.show();
+    				}
+    			}
+    		});
+    		deleteButton = Utils.resizeWindowButton(deleteButton);
+    		
+    		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
+    		cancelButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				operationPopupWindow.dismiss();
+    			}
+    		});
+    		cancelButton = Utils.resizeWindowButton(cancelButton);
+    		
+    		operationPopupWindow = Utils.constructPopupWindow(this, operationView);    	
+		}
+    	
+		operationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		operationPopupWindow.update();
+		
+		Utils.dimBackground(this);
+    }
+    
 	private void showCategoryDialog(final Category category)
 	{
 		final boolean isNewCategory = category.getServerID() == -1 ? true : false; 
-		View view = View.inflate(this, R.layout.me_category_dialog, null);
+		View view = View.inflate(this, R.layout.dialog_me_category, null);
 		final EditText nameEditText = (EditText)view.findViewById(R.id.nameEditText);
 		final EditText limitEditText = (EditText)view.findViewById(R.id.limitEditText);
 		final CheckBox proveAheadCheckBox = (CheckBox)view.findViewById(R.id.proveAheadCheckBox);

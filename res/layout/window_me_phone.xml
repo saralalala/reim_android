@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:id="@+id/baseLayout" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/phone"
+            android:textSize="20sp"
+            android:textColor="@color/major_light" />
+
+        <TextView
+            android:id="@+id/saveTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:text="@string/save"
+            android:textSize="16sp"
+            android:textColor="@color/major_light" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+		    <RelativeLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="50.5dp"
+		        android:layout_marginTop="18dp"
+		        android:background="@drawable/me_item_drawable"
+		        android:focusable="true"
+		        android:focusableInTouchMode="true" >
+		
+			    <include
+			        android:layout_width="match_parent"
+			        android:layout_height="0.5dp"
+			        layout="@layout/view_divider" />
+		
+		        <EditText
+		            android:id="@+id/phoneEditText"
+		            android:layout_width="match_parent"
+		            android:layout_height="match_parent"
+		            android:layout_marginLeft="16dp"
+		            android:layout_marginRight="16dp"
+		            android:background="@null"
+		            android:hint="@string/input_phone"
+		            android:inputType="text|phone"
+		            android:textSize="14sp"
+		            android:textColor="@color/font_major_dark" />
+		        
+		    </RelativeLayout>
+		
+		    <include
+		        android:layout_width="match_parent"
+		        android:layout_height="0.5dp"
+		        layout="@layout/view_divider" />
+		    
+        </LinearLayout>
+        
+    </ScrollView>
+
+</LinearLayout>

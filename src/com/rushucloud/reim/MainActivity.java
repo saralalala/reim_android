@@ -15,6 +15,8 @@ import classes.User;
 import classes.Utils;
 import classes.Widget.TabItem;
 
+import com.rushucloud.reim.item.EditItemActivity;
+import com.rushucloud.reim.report.EditReportActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;

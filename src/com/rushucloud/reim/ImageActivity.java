@@ -22,7 +22,7 @@ public class ImageActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.reim_image);
+		setContentView(R.layout.activity_image);
 		initView();
 	}
 
@@ -65,22 +65,22 @@ public class ImageActivity extends Activity
 		imageView = (ImageView)findViewById(R.id.imageView);
 		imageView.setImageBitmap(bitmap);
 
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		
 		double imageRatio = ((double)bitmap.getHeight())/bitmap.getWidth();
-		double screenRatio = ((double)dm.heightPixels)/dm.widthPixels;
+		double screenRatio = ((double)metrics.heightPixels)/metrics.widthPixels;
 		
 		LayoutParams params = imageView.getLayoutParams();
 		if (imageRatio > screenRatio)
 		{
-			params.height = dm.heightPixels;
-			params.width = (int) (dm.heightPixels / imageRatio);
+			params.height = metrics.heightPixels;
+			params.width = (int) (metrics.heightPixels / imageRatio);
 		}
 		else
 		{
-			params.height = (int) (dm.widthPixels * imageRatio);
-			params.width = dm.widthPixels;
+			params.height = (int) (metrics.widthPixels * imageRatio);
+			params.width = metrics.widthPixels;
 		}
 		
 		imageView.setLayoutParams(params);

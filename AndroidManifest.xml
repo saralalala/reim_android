@@ -96,42 +96,42 @@
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.EditItemActivity">
+            android:name="com.rushucloud.reim.item.EditItemActivity">
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.ShowItemActivity">
+            android:name="com.rushucloud.reim.item.ShowItemActivity">
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.SearchItemActivity">
+            android:name="com.rushucloud.reim.item.SearchItemActivityivity">
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.EditReportActivity" >            
+            android:name="com.rushucloud.reim.report.EditReportActivity" >            
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.ApproveReportActivity">
+            android:name="com.rushucloud.reim.report.ApproveReportActivity">
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.ShowReportActivity">
+            android:name="com.rushucloud.reim.report.ShowReportActivity">
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.CommentActivity">
+            android:name="com.rushucloud.reim.report.CommentActivityctivity">
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.UnarchivedItemsActivity">
+            android:name="com.rushucloud.reim.report.UnarchivedItemsActivity">
         </activity>
         
         <activity 

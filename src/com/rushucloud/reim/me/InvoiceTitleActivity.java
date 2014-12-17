@@ -16,7 +16,7 @@ public class InvoiceTitleActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_invoice_title);
+		setContentView(R.layout.activity_me_invoice_title);
 		initView();
 	}
 

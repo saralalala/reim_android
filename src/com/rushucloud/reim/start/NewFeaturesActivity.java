@@ -11,7 +11,7 @@ public class NewFeaturesActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.start_new_features);
+		setContentView(R.layout.activity_start_new_features);
 	}
 
 	protected void onResume()

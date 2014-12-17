@@ -48,7 +48,7 @@ public class PhoneSignUpActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.start_sign_up_by_phone);
+		setContentView(R.layout.activity_start_sign_up_by_phone);
 		initView();
 	}
 

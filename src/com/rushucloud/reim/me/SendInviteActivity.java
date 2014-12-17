@@ -32,7 +32,7 @@ public class SendInviteActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_send_invite);
+		setContentView(R.layout.activity_me_send_invite);
 		initView();
 	}
 

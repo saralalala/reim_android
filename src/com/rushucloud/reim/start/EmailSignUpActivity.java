@@ -40,7 +40,7 @@ public class EmailSignUpActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.start_sign_up_by_email);
+		setContentView(R.layout.activity_start_sign_up_by_email);
 		initView();
 	}
 

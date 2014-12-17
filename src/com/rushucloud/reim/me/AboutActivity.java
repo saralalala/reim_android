@@ -18,7 +18,7 @@ public class AboutActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_about);
+		setContentView(R.layout.activity_me_about);
 		initView();
 	}
 

@@ -58,7 +58,7 @@ public class CompleteInfoActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.start_complete_info);
+		setContentView(R.layout.activity_start_complete_info);
 		initData();
 		initView();
 	}

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.rushucloud.reim.item.EditItemActivity;
+import com.rushucloud.reim.item.SearchItemActivity;
+import com.rushucloud.reim.item.ShowItemActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import netUtils.HttpConnectionCallback;
@@ -228,12 +231,12 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 		
 		windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
 		
-		DisplayMetrics dm = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+		DisplayMetrics metrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		
-		filterView = getActivity().getLayoutInflater().inflate(R.layout.reim_filter, (ViewGroup) null, false);
+		filterView = View.inflate(getActivity(), R.layout.window_reim_filter, null);
 		filterView.setBackgroundColor(Color.WHITE);
-		filterView.setMinimumHeight(dm.heightPixels);
+		filterView.setMinimumHeight(metrics.heightPixels);
 		
 		filterView.setFocusable(true);
 		filterView.setFocusableInTouchMode(true);
@@ -313,8 +316,6 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 				}
 			}
 		});
-
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
 
 		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
 		int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);

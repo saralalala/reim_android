@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/baseLayout" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:contentDescription="@string/background"
+        android:scaleType="fitXY"
+        android:src="@drawable/start_background" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp" >
+
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+	        android:contentDescription="@string/back"
+	        android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/find_password_by_email"
+            android:textSize="20sp"
+            android:textColor="@color/major_light" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:hint="@string/input_email"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/font_major_light"
+        android:textColorHint="@color/hint_white" 
+        android:background="@null"
+        android:cursorVisible="true"
+        android:textCursorDrawable="@drawable/cursor" />
+
+    <include 
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/emailEditText"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        layout="@layout/view_start_divider"/>
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/divider"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/button_long_light_solid_drawable"
+        android:text="@string/send_verify_email"
+        android:textColor="@color/start_button_text_color"
+        android:textSize="20sp" />
+
+</RelativeLayout>

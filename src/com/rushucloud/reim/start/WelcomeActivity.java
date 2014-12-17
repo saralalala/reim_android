@@ -23,7 +23,7 @@ public class WelcomeActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.start_welcome);
+		setContentView(R.layout.activity_start_welcome);
 		
 		exitTime=0;
 		initView();

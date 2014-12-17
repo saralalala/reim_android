@@ -82,7 +82,7 @@ public class ProfileActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.me_profile);
+		setContentView(R.layout.activity_me_profile);
 		initData();
 		initView();
 	}
@@ -271,7 +271,7 @@ public class ProfileActivity extends Activity
 		});
         
         // init email window
-    	View emailView = View.inflate(this, R.layout.me_email, null);
+    	View emailView = View.inflate(this, R.layout.window_me_email, null);
     	
     	emailEditText = (EditText) emailView.findViewById(R.id.emailEditText);
     	emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
@@ -347,7 +347,7 @@ public class ProfileActivity extends Activity
 		});
         
         // init phone window
-    	View phoneView = View.inflate(this, R.layout.me_phone, null);
+    	View phoneView = View.inflate(this, R.layout.window_me_phone, null);
     	
     	phoneEditText = (EditText) phoneView.findViewById(R.id.phoneEditText);
     	phoneEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
@@ -423,7 +423,7 @@ public class ProfileActivity extends Activity
 		});
         
         // init nickname window
-    	View nicknameView = View.inflate(this, R.layout.me_nickname, null);
+    	View nicknameView = View.inflate(this, R.layout.activity_me_nickname, null);
     	
     	nicknameEditText = (EditText) nicknameView.findViewById(R.id.nicknameEditText);
     	nicknameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
@@ -500,7 +500,7 @@ public class ProfileActivity extends Activity
 		});
         
         // init company window
-    	View companyView = View.inflate(this, R.layout.me_company, null);
+    	View companyView = View.inflate(this, R.layout.window_me_company, null);
     	
     	companyEditText = (EditText) companyView.findViewById(R.id.companyEditText);
     	companyEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());

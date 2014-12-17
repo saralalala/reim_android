@@ -31,7 +31,7 @@ public class EmailFindActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.start_find_by_email);
+		setContentView(R.layout.activity_start_find_by_email);
 		initView();
 	}
 

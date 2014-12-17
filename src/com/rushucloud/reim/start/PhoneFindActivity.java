@@ -35,7 +35,7 @@ public class PhoneFindActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.start_find_by_phone);
+		setContentView(R.layout.activity_start_find_by_phone);
 		initView();
 	}
 
