@@ -270,7 +270,7 @@ public class ManagerActivity extends Activity
 							ReimApplication.dismissProgressDialog();
 							Builder builder = new Builder(ManagerActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage("默认上级修改成功");
+							builder.setMessage(R.string.prompt_default_manager_changed);
 							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 																{
 																	public void onClick(DialogInterface dialog, int which)

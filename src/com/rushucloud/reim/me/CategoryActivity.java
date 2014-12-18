@@ -214,7 +214,7 @@ public class CategoryActivity extends Activity
     				{
     					Builder builder = new Builder(CategoryActivity.this);
     					builder.setTitle(R.string.warning);
-    					builder.setMessage("是否要删除此分类");
+    					builder.setMessage(R.string.prompt_delete_category);
     					builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
     												{
     													public void onClick(DialogInterface dialog, int which)
@@ -271,7 +271,7 @@ public class CategoryActivity extends Activity
 
 
 		Builder builder = new Builder(this);
-		builder.setTitle("请输入分类信息");
+		builder.setTitle(R.string.category);
 		builder.setView(view);
 		builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
 									{

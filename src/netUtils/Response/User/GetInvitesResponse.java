@@ -29,10 +29,10 @@ public class GetInvitesResponse extends BaseResponse
 			for (int i = 0 ; i < jsonArray.length() ; i++)
 			{
 				JSONObject jObject = jsonArray.getJSONObject(i);
-				if (jObject.getInt("actived") != 0)
-				{
-					continue;
-				}
+//				if (jObject.getInt("actived") != 0)
+//				{
+//					continue;
+//				}
 				Invite invite = new Invite();
 				invite.setInviteCode(jObject.getString("code"));
 				invite.setInviteTime(jObject.getInt("invitedt"));

@@ -349,7 +349,7 @@ public class PhoneSignUpActivity extends Activity
 							ReimApplication.dismissProgressDialog();
 							Builder builder = new Builder(PhoneSignUpActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage("注册成功！");
+							builder.setMessage(R.string.prompt_sign_up_succeed);
 							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 													{
 														public void onClick(DialogInterface dialog, int which)

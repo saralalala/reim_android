@@ -123,7 +123,6 @@ public class SendInviteActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				System.out.println((String)httpResponse);
 				final InviteResponse response = new InviteResponse(httpResponse);
 				if (response.getStatus())
 				{
@@ -190,6 +189,7 @@ public class SendInviteActivity extends Activity
 						{
 					    	ReimApplication.dismissProgressDialog();
 							Utils.showToast(SendInviteActivity.this, "邀请已发送");
+							finish();
 						}
 					});
 				}

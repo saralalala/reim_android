@@ -515,7 +515,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
     				{
     					Builder builder = new Builder(getActivity());
     					builder.setTitle(R.string.warning);
-    					builder.setMessage(R.string.delete_report_warning);
+    					builder.setMessage(R.string.prompt_delete_report);
     					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
     														{
     															public void onClick(DialogInterface dialog, int which)
@@ -604,7 +604,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		emailEditText.requestFocus();
 		
     	Builder builder = new Builder(getActivity());
-    	builder.setTitle("导出报告");
+    	builder.setTitle(R.string.export_report);
     	builder.setView(view);
     	builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 								{
@@ -655,7 +655,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-				            Utils.showToast(getActivity(), R.string.delete_failed);
+				            Utils.showToast(getActivity(), R.string.prompt_delete_failed);
 						}
 					});		
 				}
@@ -737,7 +737,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 						{
 							reportListView.stopRefresh();
 							reportListView.stopLoadMore();
-							Utils.showToast(getActivity(), "获取数据失败" + response.getErrorMessage());
+							Utils.showToast(getActivity(), "获取数据失败，" + response.getErrorMessage());
 						}
 					});					
 				}
@@ -751,12 +751,12 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		{
 			refreshReportListView();
 			ReimApplication.dismissProgressDialog();
-            Utils.showToast(getActivity(), R.string.delete_succeed);														
+            Utils.showToast(getActivity(), R.string.prompt_delete_succeed);														
 		}
 		else
 		{
 			ReimApplication.dismissProgressDialog();
-            Utils.showToast(getActivity(), R.string.delete_failed);
+            Utils.showToast(getActivity(), R.string.prompt_delete_failed);
 		}		
 	}
 

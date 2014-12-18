@@ -11,6 +11,7 @@ import com.avos.avoscloud.PushService;
 import com.mechat.mechatlibrary.MCClient;
 import com.mechat.mechatlibrary.callback.OnInitCallback;
 import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
@@ -114,7 +115,7 @@ public class ReimApplication extends Application
 	public static void setProgressDialog(Context context)
 	{
 		progressDialog = new ProgressDialog(context);
-		progressDialog.setMessage("读取数据中，请稍等……");
+		progressDialog.setMessage(context.getString(R.string.prompt_loading));
 	}
 	
 	public static void showProgressDialog()

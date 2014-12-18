@@ -147,7 +147,7 @@ public class ChangePasswordActivity extends Activity
 							{
 								Builder builder = new Builder(ChangePasswordActivity.this);
 								builder.setTitle(R.string.tip);
-								builder.setMessage("密码修改成功！");
+								builder.setMessage(R.string.prompt_password_changed);
 								builder.setPositiveButton(R.string.confirm,	new DialogInterface.OnClickListener()
 															{
 																public void onClick(DialogInterface dialog, int which)

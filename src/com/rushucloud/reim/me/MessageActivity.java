@@ -157,7 +157,7 @@ public class MessageActivity extends Activity
 					    	ReimApplication.dismissProgressDialog();
 							Builder builder = new Builder(MessageActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage("获取邀请列表失败");
+							builder.setMessage(R.string.prompt_invite_list_failed);
 							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which)

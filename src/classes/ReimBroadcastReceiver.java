@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.InviteReplyActivity;
+import com.rushucloud.reim.me.MessageActivity;
 import com.rushucloud.reim.report.ApproveReportActivity;
 
 import android.app.Notification;
@@ -21,6 +22,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 	private static final int TYPE_SYSTEM_MESSAGE = 1;
 	private static final int TYPE_REPORT = 2;
 	private static final int TYPE_INVITE = 3;
+	private static final int TYPE_INVITE_REPLY = 4;
 	
 	private static NotificationManager manager = null;
 	private static int messageNumber = 0;
@@ -62,6 +64,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 			{
 				int type = intent.getIntExtra("type", -1);
 				JSONObject jObject = new JSONObject(intent.getStringExtra("data"));
+				System.out.println(jObject.toString());
 				switch (type)
 				{
 					case TYPE_SYSTEM_MESSAGE:
@@ -101,7 +104,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 						}
 						catch (JSONException e)
 						{
-							invite.setMessage("数据读取出错了！");
+							invite.setMessage(context.getString(R.string.prompt_data_error));
 							invite.setInviteCode("");
 						}
 						
@@ -112,6 +115,13 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 						newIntent.putExtras(bundle);
 						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						context.startActivity(newIntent);
+						break;
+					}
+					case TYPE_INVITE_REPLY:
+					{						
+						Intent newIntent = new Intent(context, MessageActivity.class);
+						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						context.startActivity(newIntent);						
 						break;
 					}
 					default:

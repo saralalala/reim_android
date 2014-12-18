@@ -31,7 +31,7 @@ import classes.Tag;
 import classes.User;
 import classes.Utils;
 import classes.Vendor;
-import classes.Adapter.CategoryListViewAdapter;
+import classes.Adapter.CategoryExpandableListAdapter;
 import classes.Adapter.LocationListViewAdapter;
 import classes.Adapter.MemberListViewAdapter;
 import classes.Adapter.TagListViewAdapter;
@@ -75,6 +75,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -88,6 +91,12 @@ public class EditItemActivity extends Activity
 {
 	private static final int PICK_IMAGE = 0;
 	private static final int TAKE_PHOTO = 1;
+
+	private LocationListViewAdapter locationAdapter;
+	private CategoryExpandableListAdapter categoryAdapter;
+	private VendorListViewAdapter vendorAdapter;
+	private TagListViewAdapter tagAdapter;
+	private MemberListViewAdapter memberAdapter;
 	
 	private EditText amountEditText;
 	
@@ -134,14 +143,11 @@ public class EditItemActivity extends Activity
 	
 	private List<Vendor> vendorList = null;
 	private List<Category> categoryList = null;
+	private List<List<Category>> subCategoryList = null;
+	private List<Boolean> check = null;
+	private List<List<Boolean>> subCheck = null;
 	private List<Tag> tagList = null;
 	private List<User> userList = null;
-
-	private LocationListViewAdapter locationAdapter;
-	private CategoryListViewAdapter categoryAdapter;
-	private VendorListViewAdapter vendorAdapter;
-	private TagListViewAdapter tagAdapter;
-	private MemberListViewAdapter memberAdapter;
 
 	private boolean fromReim;
 	private boolean newItem = false;
@@ -153,7 +159,6 @@ public class EditItemActivity extends Activity
 	private LocationClient locationClient = null;
 	private BDLocationListener listener = new ReimLocationListener();
 	private BDLocation currentLocation;
-	private String locationInvalid;
 	private boolean[] locationCheck;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -262,11 +267,10 @@ public class EditItemActivity extends Activity
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 		locationClient = new LocationClient(getApplicationContext());
-		
-		locationInvalid = getString(R.string.location_invalid);
 
 		int currentGroupID = appPreference.getCurrentGroupID();
-		categoryList = dbManager.getGroupCategories(currentGroupID);
+		
+		initCategoryList();
 		if (currentGroupID != -1)
 		{
 			tagList = dbManager.getGroupTags(currentGroupID);
@@ -300,6 +304,51 @@ public class EditItemActivity extends Activity
 			newItem = false;
 			MobclickAgent.onEvent(this, "UMENG_EDIT_ITEM");
 			item = dbManager.getItemByLocalID(itemLocalID);			
+		}
+	}
+	
+	private void initCategoryList()
+	{
+		int currentGroupID = appPreference.getCurrentGroupID();
+		if (categoryList == null)
+		{
+			categoryList = dbManager.getGroupCategories(currentGroupID);			
+		}
+		else
+		{
+			categoryList.clear();
+			categoryList.addAll(dbManager.getGroupCategories(currentGroupID));
+		}
+
+		if (subCategoryList == null)
+		{
+			subCategoryList = new ArrayList<List<Category>>();
+		}
+		else
+		{
+			subCategoryList.clear();
+		}
+		
+		for (Category category : categoryList)
+		{
+			List<Category> subCategories = dbManager.getSubCategories(category.getServerID(), currentGroupID);
+			subCategoryList.add(subCategories);
+		}
+	}
+	
+	private void resetCheck()
+	{
+		for (int i = 0; i < check.size(); i++)
+		{
+			check.set(i, false);
+		}
+		
+		for (List<Boolean> booleans : subCheck)
+		{
+			for (int i = 0; i < booleans.size(); i++)
+			{
+				booleans.set(i, false);
+			}
 		}
 	}
 	
@@ -341,8 +390,8 @@ public class EditItemActivity extends Activity
 					if (fromReim && item.isProveAhead() && item.getPaAmount() == 0)
 					{
 						Builder buider = new Builder(EditItemActivity.this);
-						buider.setTitle("请选择操作");
-						buider.setMessage("这是一条预审批的条目，您是想仅保存此条目还是要直接发送给上级审批？");
+						buider.setTitle(R.string.option);
+						buider.setMessage(R.string.prompt_save_prove_ahead_item);
 						buider.setPositiveButton(R.string.only_save, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
@@ -758,7 +807,7 @@ public class EditItemActivity extends Activity
 					locationCheck[i] = false;
 				}
 				
-				if (position == 0 && !locationAdapter.getCurrentCity().equals(locationInvalid))
+				if (position == 0 && !locationAdapter.getCurrentCity().equals(getString(R.string.no_location)))
 				{
 					locationEditText.setText(locationAdapter.getCurrentCity());
 				}
@@ -822,7 +871,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 		
-		String categoryName = item.getCategory() == null ? "N/A" : item.getCategory().getName();
+		String categoryName = item.getCategory() == null ? getString(R.string.not_available) : item.getCategory().getName();
 		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
 		categoryTextView.setText(categoryName);
 		categoryTextView.setOnClickListener(new View.OnClickListener()
@@ -865,26 +914,41 @@ public class EditItemActivity extends Activity
 		}	
 		
 		// init category window
-		final boolean[] check = Category.getCategoryCheck(categoryList, item.getCategory());
-		
-		categoryAdapter = new CategoryListViewAdapter(this, categoryList, check);
-    	View categoryView = View.inflate(this, R.layout.window_reim_category, null);
-    	ListView categoryListView = (ListView) categoryView.findViewById(R.id.categoryListView);
-    	categoryListView.setAdapter(categoryAdapter);
-    	categoryListView.setOnItemClickListener(new OnItemClickListener()
+		check = Category.getCategoryCheck(categoryList, item.getCategory());
+		subCheck = new ArrayList<List<Boolean>>();
+		for (List<Category> categories : subCategoryList)
 		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{				
-				for (int i = 0; i < check.length; i++)
-				{
-					check[i] = false;
-				}
-				check[position] = true;
-				categoryAdapter.setCheck(check);
+			subCheck.add(Category.getCategoryCheck(categories, item.getCategory()));
+		}
+		
+		categoryAdapter = new CategoryExpandableListAdapter(this, categoryList, subCategoryList, check, subCheck);
+    	View categoryView = View.inflate(this, R.layout.window_reim_category, null);
+    	ExpandableListView categoryListView = (ExpandableListView) categoryView.findViewById(R.id.categoryListView);
+    	categoryListView.setAdapter(categoryAdapter);
+    	categoryListView.setOnGroupClickListener(new OnGroupClickListener()
+		{
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id)
+			{
+				resetCheck();
+				check.set(groupPosition, true);
+				categoryAdapter.setCheck(check, subCheck);
 				categoryAdapter.notifyDataSetChanged();
+				return false;
 			}
 		});
-		
+    	categoryListView.setOnChildClickListener(new OnChildClickListener()
+		{
+			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+					int childPosition, long id)
+			{
+				resetCheck();
+				subCheck.get(groupPosition).set(childPosition, true);
+				categoryAdapter.setCheck(check, subCheck);
+				categoryAdapter.notifyDataSetChanged();
+				return false;
+			}
+		});
+		    	
 		ImageView backImageView = (ImageView) categoryView.findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{
@@ -903,21 +967,54 @@ public class EditItemActivity extends Activity
 				categoryPopupWindow.dismiss();
 				
 				boolean flag = false;
-				for (int i = 0; i < check.length; i++)
+				for (int i = 0; i < check.size(); i++)
 				{
-					if (check[i])
+					if (check.get(i))
 					{
 						item.setCategory(categoryList.get(i));
 						flag = true;
 						break;
 					}
 				}
+				
+				if (!flag)
+				{
+					for (int i = 0; i < subCheck.size(); i++)
+					{
+						List<Boolean> booleans = subCheck.get(i);
+						for (int j = 0; j < booleans.size(); j++)
+						{
+							if (booleans.get(j))
+							{
+								item.setCategory(subCategoryList.get(i).get(j));
+								flag = true;
+								break;
+							}
+						}
+						if (flag)
+						{
+							break;
+						}
+					}
+				}
+				
 				if (!flag)
 				{
 					item.setCategory(null);
 				}
-
-				categoryTextView.setText(item.getCategory().getName());
+				else
+				{
+					categoryTextView.setText(item.getCategory().getName());
+					Bitmap bitmap = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+					if (bitmap != null)
+					{
+						categoryImageView.setImageBitmap(bitmap);
+					}
+					else
+					{
+						categoryImageView.setImageResource(R.drawable.default_icon);
+					}
+				}
 			}
 		});
 
@@ -1036,7 +1133,7 @@ public class EditItemActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(EditItemActivity.this, "当前组无任何其他成员");
+					Utils.showToast(EditItemActivity.this, R.string.no_member);
 				}											
 			}
 		});
@@ -1171,7 +1268,7 @@ public class EditItemActivity extends Activity
 				else
 				{
 					report = new Report();
-			    	report.setTitle("预审批的报告");
+			    	report.setTitle(getString(R.string.report_prove_ahead));
 			    	report.setStatus(Report.STATUS_SUBMITTED);
 			    	report.setSender(appPreference.getCurrentUser());
 			    	report.setCreatedDate(Utils.getCurrentTime());									    	
@@ -1597,10 +1694,10 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+							initCategoryList();
 							if (categoryAdapter != null)
 							{
-								categoryAdapter.setCategory(categoryList);
+								categoryAdapter.setCategory(categoryList, subCategoryList);
 								categoryAdapter.notifyDataSetChanged();								
 							}
 							

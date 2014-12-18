@@ -24,7 +24,7 @@ public class LocationListViewAdapter extends BaseAdapter
 	{
 		this.layoutInflater = LayoutInflater.from(context);
 		
-		this.currentCity = context.getString(R.string.location_invalid);
+		this.currentCity = context.getString(R.string.no_location);
 		this.selectedColor = context.getResources().getColor(R.color.major_dark);
 		this.unselectedColor = context.getResources().getColor(R.color.font_major_dark);
 

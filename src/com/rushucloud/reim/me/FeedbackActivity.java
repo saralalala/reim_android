@@ -142,7 +142,7 @@ public class FeedbackActivity extends Activity
 						{
 							Builder builder = new Builder(FeedbackActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage("反馈已发送！");
+							builder.setMessage(R.string.prompt_feedback_sent);
 							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 																{
 																	public void onClick(DialogInterface dialog, int which)

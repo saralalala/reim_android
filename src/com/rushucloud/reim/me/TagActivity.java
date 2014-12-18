@@ -191,7 +191,7 @@ public class TagActivity extends Activity
     				{
     					Builder builder = new Builder(TagActivity.this);
     					builder.setTitle(R.string.warning);
-    					builder.setMessage("是否要删除此标签");
+    					builder.setMessage(R.string.prompt_delete_tag);
     					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
     											{
     												public void onClick(DialogInterface dialog, int which)
@@ -238,7 +238,7 @@ public class TagActivity extends Activity
 		}
 		
 		Builder builder = new Builder(this);
-		builder.setTitle("请输入标签信息");
+		builder.setTitle(R.string.tag);
 		builder.setView(view);
 		builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 											{

@@ -451,13 +451,13 @@ public class EditReportActivity extends Activity
 			vendorTextView.setText(vendor);
 			
 			// category 和 tag 一共iconCount个
-			Category category = item.getCategory();
-			if (category == null)
+			if (item.missingInfo())
 			{
 				warningImageView.setVisibility(View.VISIBLE);
 			}
 			else
 			{
+				Category category = item.getCategory();
 				Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
 				if (bitmap != null)
 				{

@@ -159,7 +159,7 @@ public class InviteReplyActivity extends Activity
 						    	ReimApplication.dismissProgressDialog();
 								Builder builder = new Builder(InviteReplyActivity.this);
 								builder.setTitle(R.string.tip);
-								builder.setMessage("邀请回复已发送成功！");
+								builder.setMessage(R.string.prompt_invite_reply_sent);
 								builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 															{
 																public void onClick(DialogInterface dialog, int which)
@@ -258,7 +258,7 @@ public class InviteReplyActivity extends Activity
 				    	ReimApplication.dismissProgressDialog();
 						Builder builder = new Builder(InviteReplyActivity.this);
 						builder.setTitle(R.string.tip);
-						builder.setMessage("邀请回复已发送成功！");
+						builder.setMessage(R.string.prompt_invite_reply_sent);
 						builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 													{
 														public void onClick(DialogInterface dialog, int which)

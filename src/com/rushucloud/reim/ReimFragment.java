@@ -472,7 +472,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
     				{
     					Builder builder = new Builder(getActivity());
     					builder.setTitle(R.string.warning);
-    					builder.setMessage(R.string.delete_item_warning);
+    					builder.setMessage(R.string.prompt_delete_item);
     					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
     													{
     														public void onClick(DialogInterface dialog, int which)
@@ -492,7 +492,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
     														}
     													});
     					builder.setNegativeButton(R.string.cancel, null);
-    					builder.create();
+    					builder.create().show();
     				}
     			}
     		});
@@ -571,7 +571,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(getActivity(), R.string.delete_failed);
+							Utils.showToast(getActivity(), R.string.prompt_delete_failed);
 						}
 					});
 				}
@@ -585,12 +585,12 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 		{
 			refreshItemListView();
 			ReimApplication.dismissProgressDialog();
-			Utils.showToast(getActivity(), R.string.delete_succeed);
+			Utils.showToast(getActivity(), R.string.prompt_delete_succeed);
 		}
 		else
 		{
 			ReimApplication.dismissProgressDialog();
-			Utils.showToast(getActivity(), R.string.delete_failed);
+			Utils.showToast(getActivity(), R.string.prompt_delete_failed);
 		}
 	}
 	

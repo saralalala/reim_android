@@ -139,17 +139,17 @@ public class Category
 		this.localUpdatedDate = localUpdatedDate;
 	}
 
-	public static boolean[] getCategoryCheck(List<Category> categoryList, Category category)
+	public static List<Boolean> getCategoryCheck(List<Category> categoryList, Category category)
 	{	
 		if (categoryList == null)
 		{
 			return null;
 		}
 		
-		boolean[] check = new boolean[categoryList.size()];
+		List<Boolean> check = new ArrayList<Boolean>();
 		for (int i = 0; i < categoryList.size(); i++)
 		{
-			check[i] = category != null && category.getServerID() == categoryList.get(i).getServerID();
+			check.add(category != null && category.getServerID() == categoryList.get(i).getServerID());
 		}
 		return check;
 	}

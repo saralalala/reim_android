@@ -156,7 +156,7 @@ public class ResetPasswordActivity extends Activity
 							ReimApplication.dismissProgressDialog();
 							Builder builder = new Builder(ResetPasswordActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage("修改密码成功");
+							builder.setMessage(R.string.prompt_password_changed);
 							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which)

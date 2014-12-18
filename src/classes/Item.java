@@ -323,6 +323,11 @@ public class Item
     	return idArrayList;
     }
 	
+    public boolean missingInfo()
+    {
+    	return getCategory() == null;
+    }
+    
 	public boolean canBeSubmitWithReport()
 	{
 		if (invoiceID == -1 && !invoicePath.equals(""))

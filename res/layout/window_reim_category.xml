@@ -43,11 +43,11 @@
 
     </RelativeLayout>
     
-    <ListView
+    <ExpandableListView
         android:id="@+id/categoryListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:listSelector="@drawable/list_item_drawable" >
-    </ListView>
+    </ExpandableListView>
 
 </LinearLayout>

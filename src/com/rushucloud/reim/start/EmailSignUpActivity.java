@@ -221,7 +221,7 @@ public class EmailSignUpActivity extends Activity
 							ReimApplication.dismissProgressDialog();
 							Builder builder = new Builder(EmailSignUpActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage("注册成功！激活邮件已发送，请到邮箱中查看！");
+							builder.setMessage(R.string.prompt_sign_up_succeed_with_email);
 							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 													{
 														public void onClick(DialogInterface dialog, int which)
