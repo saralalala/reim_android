@@ -153,6 +153,11 @@ public class PhoneSignUpActivity extends Activity
 				{
 					Utils.showToast(PhoneSignUpActivity.this, "网络未连接，无法发送请求");
 				}
+				else if (Utils.isPhone(phoneNumber))
+				{
+					Utils.showToast(PhoneSignUpActivity.this, "手机号格式不正确");
+					phoneEditText.requestFocus();		
+				}
 				else if (phoneNumber.equals(""))
 				{
 					Utils.showToast(PhoneSignUpActivity.this, "手机号不能为空");

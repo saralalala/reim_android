@@ -88,24 +88,21 @@ public class PhoneFindActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (Utils.isNetworkConnected())
+				String phoneNumber = phoneEditText.getText().toString();
+				if (!Utils.isNetworkConnected())
 				{
-					String phoneNumber = phoneEditText.getText().toString();
-					if (Utils.isPhone(phoneNumber))
-					{
-						hideSoftKeyboard();
-						sendTextMessage();
-					}
-					else
-					{
-						Utils.showToast(PhoneFindActivity.this, "手机号码格式不正确");
-						phoneEditText.requestFocus();			
-					}
+					Utils.showToast(PhoneFindActivity.this, "网络未连接，无法发送请求");
+				}
+				else if (!Utils.isPhone(phoneNumber))
+				{
+					Utils.showToast(PhoneFindActivity.this, "手机号码格式不正确");
+					phoneEditText.requestFocus();	
 				}
 				else
 				{
-					Utils.showToast(PhoneFindActivity.this, "网络未连接，无法发送请求");
-				}			
+					hideSoftKeyboard();
+					sendTextMessage();
+				}		
 			}
 		});
 		acquireCodeButton = Utils.resizeShortButton(acquireCodeButton, 32);

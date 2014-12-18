@@ -379,6 +379,10 @@ public class ProfileActivity extends Activity
 				{
 					Utils.showToast(ProfileActivity.this, "网络未连接，无法修改");			
 				}
+				else if (!Utils.isPhone(newPhone))
+				{
+					Utils.showToast(ProfileActivity.this, "手机号格式不正确");
+				}
 				else if (newPhone.equals(originalPhone))
 				{
 					Utils.showToast(ProfileActivity.this, "手机与原有相同，无需修改");
