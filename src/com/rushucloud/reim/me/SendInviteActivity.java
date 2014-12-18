@@ -123,6 +123,7 @@ public class SendInviteActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
+				System.out.println((String)httpResponse);
 				final InviteResponse response = new InviteResponse(httpResponse);
 				if (response.getStatus())
 				{
@@ -163,20 +164,16 @@ public class SendInviteActivity extends Activity
 
 					// update members
 					DBManager dbManager = DBManager.getDBManager();
+					User currentUser = response.getCurrentUser();
+					User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+					if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+					{
+						currentUser.setAvatarPath(localUser.getAvatarPath());
+					}
+					
 					dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
 
-					User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-					if (localUser.getServerUpdatedDate() == response.getCurrentUser().getServerUpdatedDate())
-					{
-						if (localUser.getAvatarPath().equals(""))
-						{
-							dbManager.updateUser(response.getCurrentUser());
-						}
-					}
-					else
-					{
-						dbManager.syncUser(response.getCurrentUser());
-					}
+					dbManager.syncUser(currentUser);
 
 					// update categories
 					dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

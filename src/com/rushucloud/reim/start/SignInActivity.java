@@ -259,7 +259,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 						
 						dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
 
-						dbManager.syncUser(response.getCurrentUser());
+						dbManager.syncUser(currentUser);
 
 						// update categories
 						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

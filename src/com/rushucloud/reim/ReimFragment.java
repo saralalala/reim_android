@@ -532,6 +532,14 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());
 					dbManager.updateCategory(category);
+					
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							refreshItemListView();
+						}
+					});
 				}
 			}
 		});

@@ -143,20 +143,16 @@ public class SplashActivity extends Activity
 						appPreference.saveAppPreference();
 						
 						// update members
-						dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+						User currentUser = response.getCurrentUser();
+						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+						if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+						{
+							currentUser.setAvatarPath(localUser.getAvatarPath());
+						}
 						
-						User localUser = dbManager.getUser(response.getCurrentUser().getServerID());						
-						if (localUser.getServerUpdatedDate() == response.getCurrentUser().getServerUpdatedDate())
-						{
-							if (localUser.getAvatarPath().equals(""))
-							{
-								dbManager.updateUser(response.getCurrentUser());								
-							}
-						}
-						else
-						{
-							dbManager.syncUser(response.getCurrentUser())	;
-						}
+						dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+						dbManager.syncUser(currentUser);
 						
 						// update categories
 						dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

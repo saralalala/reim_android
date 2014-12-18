@@ -269,7 +269,7 @@ public class Utils
     
     public static String getIconFilePath(int iconID)
     {
-    	return AppPreference.getAppPreference().getInvoiceImageDirectory() + "/" + iconID + ".png";  
+    	return AppPreference.getAppPreference().getIconImageDirectory() + "/" + iconID + ".png";  
     }
     
     public static String saveBitmapToFile(Bitmap bitmap, int type)
@@ -289,7 +289,7 @@ public class Utils
 			}
     		else
     		{
-				path = appPreference.getIconImageDirectory() + "/" + getImageName();    			
+				path = appPreference.getInvoiceImageDirectory() + "/" + getImageName();    			
     		}
     		
     		File compressedBitmapFile = new File(path);
