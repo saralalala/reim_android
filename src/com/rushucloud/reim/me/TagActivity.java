@@ -30,7 +30,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,12 +43,16 @@ public class TagActivity extends Activity
 	private ListView tagListView;
 	private TextView tagTextView;
 	private TagListViewAdapter adapter;
-	private PopupWindow deletePopupWindow;
+	private PopupWindow operationPopupWindow;
+	private PopupWindow tagPopupWindow;
+	private EditText nameEditText;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
 	private List<Tag> tagList;
+	private Tag currentTag;
+	private boolean isNewTag;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -64,6 +67,7 @@ public class TagActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("TagActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		refreshListView();
 	}
 
@@ -92,7 +96,6 @@ public class TagActivity extends Activity
 	private void initView()
 	{		
 		getActionBar().hide();
-		ReimApplication.setProgressDialog(this);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
@@ -114,7 +117,9 @@ public class TagActivity extends Activity
 				}
 				else
 				{
-					showTagDialog(new Tag());
+					isNewTag = true;
+					currentTag = new Tag();
+					showTagWindow();
 				}
 			}
 		});
@@ -122,22 +127,62 @@ public class TagActivity extends Activity
 		tagTextView = (TextView)findViewById(R.id.tagTextView);
 		
 		tagListView = (ListView)findViewById(R.id.tagListView);
-		tagListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				Tag tag = tagList.get(position);
-				showTagDialog(tag);
-			}
-		});
 		tagListView.setOnItemLongClickListener(new OnItemLongClickListener()
 		{
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				showDeleteWindow(position);
+				currentTag = tagList.get(position);
+				showOperationWindow();
 				return false;
 			}
-		});		
+		});
+		
+		initTagWindow();
+	}
+
+	private void initTagWindow()
+	{ 		
+		View tagView = View.inflate(this, R.layout.window_me_tag, null);
+		
+		nameEditText = (EditText) tagView.findViewById(R.id.nameEditText);
+		nameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
+		ImageView backImageView = (ImageView) tagView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				tagPopupWindow.dismiss();
+			}
+		});    		
+		
+		TextView saveTextView = (TextView) tagView.findViewById(R.id.saveTextView);
+		saveTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				String name = nameEditText.getText().toString();
+				if (name.equals(""))
+				{
+					Utils.showToast(TagActivity.this, "标签名称不能为空");
+				}
+				else
+				{
+					currentTag.setName(name);
+					currentTag.setGroupID(appPreference.getCurrentGroupID());
+					if (isNewTag)
+					{
+						sendCreateTagRequest(currentTag);															
+					}
+					else
+					{
+						sendModifyTagRequest(currentTag);
+					}
+				}
+			}
+		});
+		
+		tagPopupWindow = Utils.constructFullPopupWindow(this, tagView);
 	}
 	
 	private void refreshListView()
@@ -169,20 +214,39 @@ public class TagActivity extends Activity
 		}
 	}
 
-    private void showDeleteWindow(final int index)
+    private void showOperationWindow()
     {    
-    	if (deletePopupWindow == null)
+    	if (operationPopupWindow == null)
 		{
-    		View deleteView = View.inflate(this, R.layout.window_delete, null);
+    		View operationView = View.inflate(this, R.layout.window_operation, null);
     		
-    		Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
+    		Button modifyButton = (Button) operationView.findViewById(R.id.modifyButton);
+    		modifyButton.setOnClickListener(new View.OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				operationPopupWindow.dismiss();
+    				
+    				if (!Utils.isNetworkConnected())
+    				{
+    					Utils.showToast(TagActivity.this, "网络未连接，无法修改");
+    				}
+    				else
+    				{
+    					isNewTag = false;
+    					showTagWindow();
+    				}
+    			}
+    		});
+    		modifyButton = Utils.resizeWindowButton(modifyButton);
+    		
+    		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
     		deleteButton.setOnClickListener(new View.OnClickListener()
     		{
     			public void onClick(View v)
     			{
-    				deletePopupWindow.dismiss();
+    				operationPopupWindow.dismiss();
     				
-    				final Tag tag = tagList.get(index);
     				if (!Utils.isNetworkConnected())
     				{
     					Utils.showToast(TagActivity.this, "网络未连接，无法删除");
@@ -196,7 +260,7 @@ public class TagActivity extends Activity
     											{
     												public void onClick(DialogInterface dialog, int which)
     												{
-    													sendDeleteTagRequest(tag);
+    													sendDeleteTagRequest(currentTag);
     												}
     											});
     					builder.setNegativeButton(R.string.cancel, null);
@@ -206,75 +270,32 @@ public class TagActivity extends Activity
     		});
     		deleteButton = Utils.resizeWindowButton(deleteButton);
     		
-    		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
+    		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
     		cancelButton.setOnClickListener(new View.OnClickListener()
     		{
     			public void onClick(View v)
     			{
-    				deletePopupWindow.dismiss();
+    				operationPopupWindow.dismiss();
     			}
     		});
     		cancelButton = Utils.resizeWindowButton(cancelButton);
     		
-    		deletePopupWindow = Utils.constructPopupWindow(this, deleteView);    	
+    		operationPopupWindow = Utils.constructPopupWindow(this, operationView);    	
 		}
     	
-		deletePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
-		deletePopupWindow.update();
+		operationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		operationPopupWindow.update();
 		
 		Utils.dimBackground(this);
     }
-
-	private void showTagDialog(final Tag tag)
-	{
-		final boolean isNewTag = tag.getServerID() == -1 ? true : false; 
-		View view = View.inflate(this, R.layout.dialog_me_tag, null);
-		final EditText nameEditText = (EditText)view.findViewById(R.id.nameEditText);
-		nameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    
+    private void showTagWindow()
+    {
+		nameEditText.setText(currentTag.getName());
 		
-		if (!isNewTag)
-		{
-			nameEditText.setText(tag.getName());
-		}
-		
-		Builder builder = new Builder(this);
-		builder.setTitle(R.string.tag);
-		builder.setView(view);
-		builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													String name = nameEditText.getText().toString();
-													if (name.equals(tag.getName()))
-													{
-														return;
-													}
-													else if (Utils.isNetworkConnected())
-													{						
-														Utils.showToast(TagActivity.this, "网络未连接，无法修改");										
-													}
-													else if (name.equals(""))
-													{
-														Utils.showToast(TagActivity.this, "标签名称不能为空");
-													}
-													else
-													{
-														tag.setName(name);
-														tag.setGroupID(appPreference.getCurrentGroupID());
-														if (isNewTag)
-														{
-															sendCreateTagRequest(tag);															
-														}
-														else
-														{
-															sendUpdateTagRequest(tag);
-														}
-													}
-												}
-											});
-		builder.setNegativeButton(R.string.cancel, null);
-		builder.create().show();
-	}
+		tagPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+		tagPopupWindow.update();
+    }
 	
 	private void sendCreateTagRequest(final Tag tag)
 	{
@@ -291,12 +312,14 @@ public class TagActivity extends Activity
 					tag.setLocalUpdatedDate(Utils.getCurrentTime());
 					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
 					dbManager.insertTag(tag);
+					
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
+							tagPopupWindow.dismiss();
 							Utils.showToast(TagActivity.this, "标签创建成功");
 						}
 					});
@@ -316,7 +339,7 @@ public class TagActivity extends Activity
 		});
 	}
 	
-	private void sendUpdateTagRequest(final Tag tag)
+	private void sendModifyTagRequest(final Tag tag)
 	{
 		ReimApplication.showProgressDialog();
 		ModifyTagRequest request = new ModifyTagRequest(tag);
@@ -330,12 +353,14 @@ public class TagActivity extends Activity
 					tag.setLocalUpdatedDate(Utils.getCurrentTime());
 					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
 					dbManager.updateTag(tag);
+					
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
+							tagPopupWindow.dismiss();
 							Utils.showToast(TagActivity.this, "标签修改成功");
 						}
 					});

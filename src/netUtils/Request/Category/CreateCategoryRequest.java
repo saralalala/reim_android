@@ -24,6 +24,7 @@ public class CreateCategoryRequest extends BaseRequest
 		params.add(new BasicNameValuePair("pid", Integer.toString(category.getParentID())));
 		params.add(new BasicNameValuePair("gid", Integer.toString(category.getGroupID())));
 		params.add(new BasicNameValuePair("pb", pbFlag));
+		params.add(new BasicNameValuePair("avatar", Integer.toString(category.getIconID())));
 		setParams(params);
 
 		appendUrl("/category");

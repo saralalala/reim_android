@@ -58,6 +58,7 @@ public class ManagerActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ManagerActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		if (Utils.isNetworkConnected())
 		{
 			sendGetGroupRequest();
@@ -102,7 +103,6 @@ public class ManagerActivity extends Activity
 	private void initView()
 	{
 		getActionBar().hide();
-		ReimApplication.setProgressDialog(this);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()

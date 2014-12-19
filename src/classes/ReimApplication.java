@@ -2,6 +2,8 @@ package classes;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.beecloud.BeeCloud;
 
@@ -19,6 +21,8 @@ import database.DBManager;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 
@@ -43,6 +47,7 @@ public class ReimApplication extends Application
 		initBeeCloud();
 		MobclickAgent.openActivityDurationTrack(false);
 		createDirectories();
+		saveCategoryIcon();
 
 		System.out.println("**************** Application Started *****************");
 		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
@@ -177,6 +182,31 @@ public class ReimApplication extends Application
 		}
 	}
 
+	private void saveCategoryIcon()
+	{
+		List<Integer> iconList= new ArrayList<Integer>();
+		iconList.add(R.drawable.icon_food);
+		iconList.add(R.drawable.icon_transport);
+		iconList.add(R.drawable.icon_office_supplies);
+		iconList.add(R.drawable.icon_business_development);
+		iconList.add(R.drawable.icon_marketing);
+		iconList.add(R.drawable.icon_recruiting);
+		iconList.add(R.drawable.icon_travel);
+		iconList.add(R.drawable.icon_operating);
+		iconList.add(R.drawable.icon_entertainment);
+		iconList.add(R.drawable.icon_others);
+		
+		for (int i = 0; i < iconList.size(); i++)
+		{
+			File file = new File(Utils.getIconFilePath(i + 1));
+			if (!file.exists())
+			{
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), iconList.get(i));
+				Utils.saveIconToFile(bitmap, i + 1);				
+			}
+		}		
+	}
+	
 	private void initPushService()
 	{
 		AVOSCloud.initialize(this, "25tdcbg3l8kp6yeqa4iqju6g788saf4xlseat1dxma3pdzfc",

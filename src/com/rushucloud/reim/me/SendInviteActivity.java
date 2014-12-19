@@ -41,6 +41,7 @@ public class SendInviteActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("SendInviteActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -62,7 +63,6 @@ public class SendInviteActivity extends Activity
 	private void initView()
 	{		
 		getActionBar().hide();
-		ReimApplication.setProgressDialog(this);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()

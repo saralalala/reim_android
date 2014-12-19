@@ -245,6 +245,7 @@ public class Report implements Serializable
 
 	public boolean canBeSubmitted()
 	{
+		double amount = 0;
 		List<Item> itemList = DBManager.getDBManager().getReportItems(localID);
 		for (Item item : itemList)
 		{
@@ -252,7 +253,14 @@ public class Report implements Serializable
 			{
 				return false;
 			}
+			amount += item.getAmount();
 		}
+		
+		if (amount == 0)
+		{
+			return false;
+		}
+		
 		return true;
 	}
     

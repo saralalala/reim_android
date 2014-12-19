@@ -59,6 +59,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		super.onResume();
 		MobclickAgent.onPageStart("UnarchivedItemsActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		refreshView();
 	}
 
@@ -225,7 +226,6 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 	
 	private void refreshView()
 	{
-		ReimApplication.setProgressDialog(this);
 		ReimApplication.showProgressDialog();
 		
 		if (tabIndex == 0)

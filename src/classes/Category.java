@@ -167,10 +167,10 @@ public class Category
 
 	public boolean hasUndownloadedIcon()
 	{
-		if (getIconPath().equals("") && getIconID() != -1 && getIconID() != 0)
+		if (getIconPath().equals("") && getIconID() > 0)
 		{
 			return true;
-		}	
+		}
 		
 		if (!getIconPath().equals(""))
 		{

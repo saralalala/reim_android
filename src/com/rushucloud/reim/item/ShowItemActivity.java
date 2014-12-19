@@ -57,6 +57,7 @@ public class ShowItemActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ShowItemActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -102,7 +103,6 @@ public class ShowItemActivity extends Activity
 	private void initView()
 	{		
 		getActionBar().hide();
-		ReimApplication.setProgressDialog(this);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()

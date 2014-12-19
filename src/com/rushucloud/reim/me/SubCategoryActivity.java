@@ -1,5 +1,6 @@
 package com.rushucloud.reim.me;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
@@ -24,20 +25,26 @@ import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.ToggleButton;
 
 public class SubCategoryActivity extends Activity
 {
@@ -45,12 +52,27 @@ public class SubCategoryActivity extends Activity
 	private TextView categoryTextView;
 	private CategoryListViewAdapter adapter;
 	private PopupWindow operationPopupWindow;
+	private PopupWindow categoryPopupWindow;
+	private ImageView iconImageView;
+	private EditText nameEditText;
+	private EditText limitEditText;
+	private ToggleButton proveAheadToggleButton;
+	private LinearLayout iconLayout;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
 	private List<Category> categoryList;
+	private List<Integer> iconList;
+	private List<Boolean> checkList;
+	private Category currentCategory;
 	private int parentID;
+	private boolean isNewCategory;
+	
+	private int iconWidth;
+	private int iconHorizontalInterval;
+	private int iconVerticalInterval;
+	private int iconMaxCount;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -65,6 +87,7 @@ public class SubCategoryActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("SubCategoryActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		refreshListView();
 	}
 
@@ -90,12 +113,37 @@ public class SubCategoryActivity extends Activity
 		dbManager = DBManager.getDBManager();
 		
 		parentID = this.getIntent().getIntExtra("parentID", -1);
+		
+		iconList = new ArrayList<Integer>();
+		iconList.add(R.drawable.icon_food);
+		iconList.add(R.drawable.icon_transport);
+		iconList.add(R.drawable.icon_office_supplies);
+		iconList.add(R.drawable.icon_business_development);
+		iconList.add(R.drawable.icon_marketing);
+		iconList.add(R.drawable.icon_recruiting);
+		iconList.add(R.drawable.icon_travel);
+		iconList.add(R.drawable.icon_operating);
+		iconList.add(R.drawable.icon_entertainment);
+		iconList.add(R.drawable.icon_others);
+		
+		checkList = new ArrayList<Boolean>();
+		for (int i = 0; i < iconList.size(); i++)
+		{
+			checkList.add(false);
+		}
 	}
-	
+
 	private void initView()
 	{		
 		getActionBar().hide();
-		ReimApplication.setProgressDialog(this);
+
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, metrics);
+		iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, metrics);
+		iconHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, metrics);
+		iconMaxCount = (metrics.widthPixels - padding + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
+		iconHorizontalInterval = (metrics.widthPixels - padding - iconWidth * iconMaxCount) / (iconMaxCount - 1);
+		iconVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, metrics);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
@@ -120,7 +168,9 @@ public class SubCategoryActivity extends Activity
 				}
 				else
 				{
-					showCategoryDialog(new Category());
+					isNewCategory = true;
+					currentCategory = new Category();
+					showCategoryWindow();
 				}
 			}
 		});
@@ -132,10 +182,97 @@ public class SubCategoryActivity extends Activity
 		{
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				showOperationWindow(position);
+				currentCategory = categoryList.get(position);
+				showOperationWindow();
 				return false;
 			}
 		});
+	
+		initCategoryWindow();
+	}
+
+	private void initCategoryWindow()
+	{		
+		View categoryView = View.inflate(this, R.layout.window_me_category, null);    		
+
+		iconImageView = (ImageView) categoryView.findViewById(R.id.iconImageView);
+		
+		nameEditText = (EditText) categoryView.findViewById(R.id.nameEditText);
+		nameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
+		limitEditText = (EditText) categoryView.findViewById(R.id.limitEditText);
+		limitEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
+		
+		proveAheadToggleButton = (ToggleButton) categoryView.findViewById(R.id.proveAheadToggleButton);
+
+		iconLayout = (LinearLayout) categoryView.findViewById(R.id.iconLayout);
+		
+		ImageView backImageView = (ImageView) categoryView.findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				categoryPopupWindow.dismiss();
+			}
+		});    		
+		
+		TextView saveTextView = (TextView) categoryView.findViewById(R.id.saveTextView);
+		saveTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				String name = nameEditText.getText().toString();
+				String limit = limitEditText.getText().toString();
+				if (name.equals(""))
+				{
+					Utils.showToast(SubCategoryActivity.this, "类别名称不能为空");
+				}
+				else
+				{
+					currentCategory.setName(name);
+					currentCategory.setParentID(parentID);
+					currentCategory.setGroupID(appPreference.getCurrentGroupID());
+					currentCategory.setIsProveAhead(proveAheadToggleButton.isChecked());
+
+   					if (!limit.equals(""))
+					{
+						currentCategory.setLimit(Double.valueOf(limit));
+					}
+					
+					int iconIndex = checkList.indexOf(true);
+					if (iconIndex != -1)
+					{
+    					currentCategory.setIconID(iconIndex + 1);
+						Bitmap bitmap = BitmapFactory.decodeResource(getResources(), iconList.get(iconIndex));
+						String iconPath = Utils.saveIconToFile(bitmap, iconIndex + 1);
+						currentCategory.setIconPath(iconPath);
+					}
+					else
+					{
+    					currentCategory.setIconID(-1);
+					}
+					
+					if (isNewCategory)
+					{
+						sendCreateCategoryRequest(currentCategory);
+					}
+					else
+					{
+						sendModifyCategoryRequest(currentCategory);
+					}
+				}
+			}
+		});
+		
+		categoryPopupWindow = Utils.constructFullPopupWindow(this, categoryView); 
+	}
+
+	private void resetCheck()
+	{
+		for (int j = 0; j < checkList.size(); j++)
+		{
+			checkList.set(j, false);
+		}
 	}
 	
 	private void refreshListView()
@@ -167,11 +304,62 @@ public class SubCategoryActivity extends Activity
 		}
 	}
 
-    private void showOperationWindow(final int index)
+	private void refreshIconLayout()
+	{
+		iconLayout.removeAllViews();
+
+		LinearLayout layout = new LinearLayout(this);
+		for (int i = 0; i < iconList.size(); i++)
+		{
+			if (i % iconMaxCount == 0)
+			{
+				layout = new LinearLayout(this);
+				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				if (i != 0)
+				{
+					params.topMargin = iconVerticalInterval;					
+				}
+				layout.setLayoutParams(params);
+				layout.setOrientation(LinearLayout.HORIZONTAL);
+				
+				iconLayout.addView(layout);
+			}
+
+			final int index = i;
+			ImageView imageView = new ImageView(this);
+			imageView.setOnClickListener(new OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					resetCheck();
+					checkList.set(index, true);
+	    			iconImageView.setImageResource(iconList.get(index));
+					refreshIconLayout();
+				}
+			});
+			if (checkList.get(i))
+			{
+				imageView.setImageResource(R.drawable.icon_chosen);
+			}
+			else
+			{
+				imageView.setImageResource(iconList.get(i));
+			}
+			
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(iconWidth, iconWidth);
+			if (i % iconMaxCount != 0)
+			{
+				params.leftMargin = iconHorizontalInterval;
+			}
+			layout.addView(imageView, params);
+		}
+	}
+	
+    private void showOperationWindow()
     {    
     	if (operationPopupWindow == null)
 		{
-    		View operationView = View.inflate(this, R.layout.window_report_operation, null);
+    		View operationView = View.inflate(this, R.layout.window_operation, null);
     		
     		Button modifyButton = (Button) operationView.findViewById(R.id.modifyButton);
     		modifyButton.setOnClickListener(new View.OnClickListener()
@@ -180,14 +368,14 @@ public class SubCategoryActivity extends Activity
     			{
     				operationPopupWindow.dismiss();
 
-    				final Category category = categoryList.get(index);
     				if (!Utils.isNetworkConnected())
     				{
     					Utils.showToast(SubCategoryActivity.this, "网络未连接，无法修改");
     				}
     				else
     				{
-    					showCategoryDialog(category);
+    					isNewCategory = false;
+    					showCategoryWindow();
     				}
     			}
     		});
@@ -200,7 +388,6 @@ public class SubCategoryActivity extends Activity
     			{
     				operationPopupWindow.dismiss();
     				
-    				final Category category = categoryList.get(index);
     				if (!Utils.isNetworkConnected())
     				{
     					Utils.showToast(SubCategoryActivity.this, "网络未连接，无法删除");
@@ -214,7 +401,7 @@ public class SubCategoryActivity extends Activity
     												{
     													public void onClick(DialogInterface dialog, int which)
     													{
-    														sendDeleteCategoryRequest(category);
+    														sendDeleteCategoryRequest(currentCategory);
     													}
     												});
     					builder.setNegativeButton(R.string.cancel, null);
@@ -242,64 +429,44 @@ public class SubCategoryActivity extends Activity
 		
 		Utils.dimBackground(this);
     }
-    
-	private void showCategoryDialog(final Category category)
+
+	private void showCategoryWindow()
 	{
-		final boolean isNewCategory = category.getServerID() == -1 ? true : false; 
-		
-		View view = View.inflate(this, R.layout.dialog_me_category, null);
-		
-		final EditText nameEditText = (EditText)view.findViewById(R.id.nameEditText);
-		nameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
-		
-		final EditText limitEditText = (EditText)view.findViewById(R.id.limitEditText);
-		limitEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
-		
-		final CheckBox proveAheadCheckBox = (CheckBox)view.findViewById(R.id.proveAheadCheckBox);
+		resetCheck();
 		
 		if (!isNewCategory)
 		{
-			nameEditText.setText(category.getName());
-			limitEditText.setText(Double.toString(category.getLimit()));
-			proveAheadCheckBox.setChecked(category.isProveAhead());
+			nameEditText.setText(currentCategory.getName());
+			limitEditText.setText(Utils.formatDouble(currentCategory.getLimit()));
+			proveAheadToggleButton.setChecked(currentCategory.isProveAhead());
+
+			if (currentCategory.getIconID() > 0)
+			{
+				int index = currentCategory.getIconID() - 1;
+    			checkList.set(index, true);
+    			iconImageView.setImageResource(iconList.get(index));
+			}
+		}
+		else
+		{
+			nameEditText.setText("");
+			limitEditText.setText("");
+			proveAheadToggleButton.setChecked(false);
+			iconImageView.setImageResource(R.drawable.default_icon);
+			
+			Category parentCategory = dbManager.getCategory(parentID);
+			if (parentCategory != null && parentCategory.getIconID() > 0)
+			{
+				int index = parentCategory.getIconID() - 1;
+    			checkList.set(index, true);
+    			iconImageView.setImageResource(iconList.get(index));
+			}
 		}
 		
-		Builder builder = new Builder(this);
-		builder.setTitle(R.string.category);
-		builder.setView(view);
-		builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-											{
-												public void onClick(DialogInterface dialog, int which)
-												{
-													String name = nameEditText.getText().toString();
-													String limit = limitEditText.getText().toString();
-													if (name.equals(""))
-													{
-														Utils.showToast(SubCategoryActivity.this, "分类名称不能为空");
-													}
-													else
-													{
-														category.setName(name);
-														category.setParentID(parentID);
-														category.setGroupID(appPreference.getCurrentGroupID());
-														category.setIsProveAhead(proveAheadCheckBox.isChecked());
-														if (!limit.equals(""))
-														{
-															category.setLimit(Double.valueOf(limit));
-														}
-														if (isNewCategory)
-														{
-															sendCreateCategoryRequest(category);															
-														}
-														else
-														{
-															sendUpdateCategoryRequest(category);
-														}
-													}
-												}
-											});
-		builder.setNegativeButton(R.string.cancel, null);
-		builder.create().show();
+		refreshIconLayout();
+		
+		categoryPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+		categoryPopupWindow.update();
 	}
 	
 	private void sendCreateCategoryRequest(final Category category)
@@ -317,13 +484,15 @@ public class SubCategoryActivity extends Activity
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());
 					dbManager.insertCategory(category);
+					
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(SubCategoryActivity.this, "分类创建成功");
+							categoryPopupWindow.dismiss();
+							Utils.showToast(SubCategoryActivity.this, "类别创建成功");
 						}
 					});
 				}
@@ -334,7 +503,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(SubCategoryActivity.this, "分类创建失败");							
+							Utils.showToast(SubCategoryActivity.this, "类别创建失败");							
 						}
 					});
 				}
@@ -342,7 +511,7 @@ public class SubCategoryActivity extends Activity
 		});
 	}
 	
-	private void sendUpdateCategoryRequest(final Category category)
+	private void sendModifyCategoryRequest(final Category category)
 	{
 		ReimApplication.showProgressDialog();
 		ModifyCategoryRequest request = new ModifyCategoryRequest(category);
@@ -356,13 +525,15 @@ public class SubCategoryActivity extends Activity
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());
 					dbManager.updateCategory(category);
+					
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(SubCategoryActivity.this, "分类修改成功");
+							categoryPopupWindow.dismiss();
+							Utils.showToast(SubCategoryActivity.this, "类别修改成功");
 						}
 					});
 				}
@@ -373,7 +544,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(SubCategoryActivity.this, "分类修改失败");							
+							Utils.showToast(SubCategoryActivity.this, "类别修改失败");							
 						}
 					});
 				}
@@ -400,7 +571,7 @@ public class SubCategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(SubCategoryActivity.this, "分类删除成功");
+							Utils.showToast(SubCategoryActivity.this, "类别删除成功");
 						}
 					});
 				}
@@ -411,7 +582,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(SubCategoryActivity.this, "分类删除失败");					
+							Utils.showToast(SubCategoryActivity.this, "类别删除失败");					
 						}
 					});
 				}

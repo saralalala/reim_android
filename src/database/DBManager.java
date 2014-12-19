@@ -2566,7 +2566,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "DELETE FROM tbl_category WHERE group_id = '" + groupServerID + "' " +
-								"AND server_id = '" + categoryServerID + "'";			
+								"AND parent_id = '" + categoryServerID + "'";			
 			database.execSQL(sqlString);
 			return true;
 		}
@@ -2976,7 +2976,6 @@ public class DBManager extends SQLiteOpenHelper
 	
 	private boolean getBooleanFromCursor(Cursor cursor, String columnName)
 	{
-		int temp=cursor.getInt(cursor.getColumnIndex(columnName));
-		return temp > 0 ? true : false;
+		return cursor.getInt(cursor.getColumnIndex(columnName)) > 0;
 	}
 }

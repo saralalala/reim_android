@@ -28,7 +28,7 @@ public class EventsResponse extends BaseResponse
 						
 			reportEventCount = reportsArray.length();
 			inviteEventCount = invitesArray.length();
-			needToRefresh = membersArray.length() + managersArray.length() > 0 ? true : false;
+			needToRefresh = (membersArray.length() + managersArray.length()) > 0;
 		}
 		catch (JSONException e)
 		{

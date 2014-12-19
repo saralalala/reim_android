@@ -27,19 +27,19 @@ public class VendorListViewAdapter extends BaseAdapter
 		this.vendorList = new ArrayList<Vendor>();
 		
 		Vendor vendor = new Vendor(context.getString(R.string.vendor_taxi));
-		vendor.setPhotoResID(R.drawable.taxi);
+		vendor.setPhotoResID(R.drawable.icon_taxi);
 		defaultList.add(vendor);
 		
 		vendor = new Vendor(context.getString(R.string.vendor_flight));
-		vendor.setPhotoResID(R.drawable.flight);
+		vendor.setPhotoResID(R.drawable.icon_flight);
 		defaultList.add(vendor);
 		
 		vendor = new Vendor(context.getString(R.string.vendor_train));
-		vendor.setPhotoResID(R.drawable.train);
+		vendor.setPhotoResID(R.drawable.icon_train);
 		defaultList.add(vendor);
 		
 		vendor = new Vendor(context.getString(R.string.vendor_phone));
-		vendor.setPhotoResID(R.drawable.phone);
+		vendor.setPhotoResID(R.drawable.icon_phone);
 		defaultList.add(vendor);
 		
 		vendorList.addAll(defaultList);

@@ -235,7 +235,7 @@ public class Utils
 
 	public static boolean intToBoolean(int i)
 	{
-		return i > 0 ? true : false;
+		return i > 0;
 	}
 
 	public static String booleanToString(boolean b)

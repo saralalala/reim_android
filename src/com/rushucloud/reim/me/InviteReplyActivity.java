@@ -277,7 +277,8 @@ public class InviteReplyActivity extends Activity
     {
     	ReimApplication.setTabIndex(3);
     	Intent intent = new Intent(InviteReplyActivity.this, MainActivity.class);
-    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
     	startActivity(intent);
     	finish();
     }

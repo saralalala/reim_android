@@ -49,6 +49,7 @@ public class MessageActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("MessageActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		if (Utils.isNetworkConnected())
 		{
 			sendGetInvitesRequest();			
@@ -79,9 +80,7 @@ public class MessageActivity extends Activity
 	
 	private void initView()
 	{	
-		getActionBar().hide();
-		
-		ReimApplication.setProgressDialog(this);
+		getActionBar().hide();		
 
 		messageTextView = (TextView)findViewById(R.id.messageTextView);
 

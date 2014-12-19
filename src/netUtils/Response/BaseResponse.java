@@ -26,7 +26,7 @@ public abstract class BaseResponse
 		{
 			String string = (String)httpResponse;
 			JSONObject object = new JSONObject(string);
-			status = object.getInt("status") > 0 ? true : false;
+			status = object.getInt("status") > 0;
 			code = object.getInt("code");
 			serverToken = object.getString("server_token");
 			if (status)

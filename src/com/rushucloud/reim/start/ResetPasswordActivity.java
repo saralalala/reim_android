@@ -46,6 +46,7 @@ public class ResetPasswordActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ResetPasswordActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -75,7 +76,6 @@ public class ResetPasswordActivity extends Activity
 	private void initView()
 	{
 		getActionBar().hide();
-		ReimApplication.setProgressDialog(this);
 
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()

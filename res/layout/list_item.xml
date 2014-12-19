@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
-                android:text="@string/rmb"
+                android:text="@string/rmb_symbol"
                 android:textColor="@color/hint_black"
                 android:textSize="16sp" />
 

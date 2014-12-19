@@ -174,6 +174,7 @@ public class EditItemActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EditItemActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		locationClient.registerLocationListener(listener);
 		if (Utils.isLocalisationEnabled() && Utils.isNetworkConnected())
 		{
@@ -355,7 +356,6 @@ public class EditItemActivity extends Activity
 	private void initView()
 	{
 		getActionBar().hide();
-		ReimApplication.setProgressDialog(this);
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
@@ -771,7 +771,7 @@ public class EditItemActivity extends Activity
 	private void initLocationView()
 	{		
 		// init location
-		String cityName = item.getLocation().equals("") ? getString(R.string.not_available) : item.getLocation();
+		String cityName = item.getLocation().equals("") ? getString(R.string.no_location) : item.getLocation();
 		locationTextView = (TextView)findViewById(R.id.locationTextView);
 		locationTextView.setText(cityName);
 		locationTextView.setOnClickListener(new View.OnClickListener()
@@ -1984,6 +1984,10 @@ public class EditItemActivity extends Activity
 				{
 					public void run()
 					{
+						if (locationTextView.equals(getString(R.string.no_location)))
+						{
+							locationTextView.setText(address.getCity());
+						}
 				    	locationAdapter.notifyDataSetChanged();						
 					}
 				});

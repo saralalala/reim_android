@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/edit_category"
+            android:textColor="@color/major_light"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/saveTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:gravity="center"
+            android:text="@string/save"
+            android:textSize="16sp"
+            android:textColor="@color/major_light" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+		
+		    <RelativeLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="50.5dp"
+		        android:layout_marginTop="18dp"
+        		android:background="@color/major_light" >
+		
+			    <include
+			        android:layout_width="match_parent"
+			        android:layout_height="0.5dp"
+			        layout="@layout/view_divider" />
+
+			    <ImageView
+			        android:id="@+id/iconImageView"
+			        android:layout_width="30dp"
+			        android:layout_height="30dp"
+			        android:layout_centerVertical="true"
+			        android:layout_alignParentLeft="true"
+			        android:layout_marginLeft="20dp"
+			        android:contentDescription="@string/icon"
+			        android:src="@drawable/default_icon" />
+
+		        <EditText
+		            android:id="@+id/nameEditText"
+		            android:layout_width="match_parent"
+		            android:layout_height="match_parent"
+		            android:layout_toRightOf="@+id/iconImageView"
+		            android:layout_marginLeft="16dp"
+		            android:layout_marginRight="16dp"
+		            android:background="@null"
+		            android:hint="@string/input_category_name"
+		            android:textSize="14sp"
+		            android:textColor="@color/font_major_dark" />
+		        
+		    </RelativeLayout>
+		
+		    <include
+		        android:layout_width="match_parent"
+		        android:layout_height="0.5dp"
+		        layout="@layout/view_divider" />
+
+		    <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="6dp"
+		        android:layout_marginLeft="20dp"
+		        android:text="@string/choose_icon"
+		        android:textColor="@color/hint_grey"
+		        android:textSize="14sp" />
+		
+		    <include
+		        android:layout_width="match_parent"
+		        android:layout_height="0.5dp"
+		        android:layout_marginTop="6dp"
+		        android:layout_marginLeft="12dp"
+		        android:layout_marginRight="12dp"
+		        layout="@layout/view_divider" />
+
+		    <LinearLayout
+		        android:id="@+id/iconLayout"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical"
+		        android:layout_margin="16dp" >
+		    </LinearLayout>
+		
+			<include
+			    android:layout_width="match_parent"
+			    android:layout_height="0.5dp"
+			    layout="@layout/view_divider" />
+		
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="50dp"
+		        android:orientation="horizontal"
+        		android:background="@color/major_light" >
+
+			    <TextView
+        			android:id="@+id/limitTextView"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center_vertical"
+			        android:layout_marginLeft="20dp"
+			        android:text="@string/category_limit"
+		            android:textColor="@color/font_major_dark"
+		            android:textSize="16sp" />
+		
+		        <EditText
+		            android:id="@+id/limitEditText"
+		            android:layout_width="0dp"
+		            android:layout_height="match_parent"
+		            android:layout_weight="1"
+		            android:layout_marginLeft="16dp"
+		            android:gravity="right|center_vertical"
+		            android:background="@null"
+		            android:hint="@string/input_category_limit"
+        			android:inputType="numberDecimal"
+		            android:textSize="16sp"
+		            android:textColor="@color/font_major_dark" />
+
+			    <TextView
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center_vertical"
+			        android:layout_marginTop="2dp"
+			        android:layout_marginLeft="6dp"
+		            android:layout_marginRight="16dp"
+			        android:text="@string/rmb"
+		            android:textColor="@color/hint_grey"
+		            android:textSize="14sp" />
+		        
+		    </LinearLayout>
+		
+			<include
+			    android:layout_width="match_parent"
+			    android:layout_height="0.5dp"
+			    layout="@layout/view_divider" />
+		
+		    <RelativeLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="50dp"
+		        android:orientation="horizontal"
+        		android:background="@color/major_light" >
+
+			    <TextView
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_centerVertical="true"
+			        android:layout_marginLeft="20dp"
+			        android:text="@string/prove_ahead"
+		            android:textColor="@color/font_major_dark"
+		            android:textSize="16sp" />
+	
+			    <ToggleButton
+			        android:id="@+id/proveAheadToggleButton"
+			        android:layout_width="49dp"
+			        android:layout_height="30dp"
+			        android:layout_centerVertical="true"
+			        android:layout_alignParentRight="true"
+			        android:layout_marginRight="16dp"
+			        android:background="@drawable/toggle_drawable"
+			        android:textOn=""
+			        android:textOff="" />
+		        
+		    </RelativeLayout>
+		
+			<include
+			    android:layout_width="match_parent"
+			    android:layout_height="0.5dp"
+			    android:layout_marginBottom="24dp"
+			    layout="@layout/view_divider" />
+		    
+        </LinearLayout>
+        
+    </ScrollView>
+
+</LinearLayout>

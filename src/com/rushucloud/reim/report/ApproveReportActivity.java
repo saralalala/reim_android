@@ -61,6 +61,7 @@ public class ApproveReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ApproveReportActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		refreshView();
 	}
 
@@ -190,9 +191,7 @@ public class ApproveReportActivity extends Activity
 	}
 
 	private void refreshView()
-	{
-		ReimApplication.setProgressDialog(this);
-		
+	{		
 		if (Utils.isNetworkConnected())
 		{
 			if (reportServerID == -1 && report == null)

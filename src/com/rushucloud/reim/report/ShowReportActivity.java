@@ -53,6 +53,7 @@ public class ShowReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ShowReportActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		refreshView();
 	}
 
@@ -153,9 +154,7 @@ public class ShowReportActivity extends Activity
 	}
 
 	private void refreshView()
-	{
-		ReimApplication.setProgressDialog(this);
-		
+	{		
 		if (Utils.isNetworkConnected())
 		{
 			sendGetReportRequest(report.getServerID());		

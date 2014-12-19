@@ -19,7 +19,7 @@ public class GetVendorsResponse
 		try
 		{
 			JSONObject jObject = new JSONObject((String)httpResponse);
-			status = jObject.getString("status").equals("OK") ? true : false;
+			status = jObject.getString("status").equals("OK");
 			JSONArray jsonArray = jObject.getJSONArray("businesses");
 			vendorList = new ArrayList<Vendor>();
 

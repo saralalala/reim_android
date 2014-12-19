@@ -95,6 +95,7 @@ public class EditReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EditReportActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		initData();
 		refreshView();
 	}
@@ -391,9 +392,7 @@ public class EditReportActivity extends Activity
 	}
 	
 	private void refreshView()
-	{
-		ReimApplication.setProgressDialog(this);	
-		
+	{		
 		titleEditText.setText(report.getTitle());
 		if (report.getTitle().equals(""))
 		{

@@ -92,6 +92,7 @@ public class ProfileActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ProfileActivity");		
 		MobclickAgent.onResume(this);
+		ReimApplication.setProgressDialog(this);
 		loadInfoView();
 	}
 
@@ -165,7 +166,6 @@ public class ProfileActivity extends Activity
 	private void initView()
 	{		
 		getActionBar().hide();
-		ReimApplication.setProgressDialog(this);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()

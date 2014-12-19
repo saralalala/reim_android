@@ -8,7 +8,8 @@
     <string name="off">关</string>
     <string name="not_available">N/A</string>
     <string name="null_string">无</string>
-    <string name="rmb">¥</string>
+    <string name="rmb">元</string>
+    <string name="rmb_symbol">¥</string>
     <string name="percent">%</string>
     
     <string name="confirm">确定</string>
@@ -149,7 +150,11 @@
     <string name="get_invoice_prompt">发票抬头请开：</string>
     <string name="invoice_invalid">还没公司，开啥发票</string>
     <string name="category_management">类别管理</string>
+    <string name="edit_category">编辑类别</string>
+    <string name="choose_icon">选择图标</string>
+    <string name="category_limit">限额</string>
     <string name="tag_management">标签管理</string>
+    <string name="edit_tag">编辑标签</string>
     <string name="about_us">关于我们</string>
     <string name="feedback">意见反馈</string>
     <string name="sign_out">退出登录</string>

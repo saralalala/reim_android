@@ -7,13 +7,10 @@ import classes.Tag;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TagListViewAdapter extends BaseAdapter
@@ -41,18 +38,9 @@ public class TagListViewAdapter extends BaseAdapter
 			convertView = layoutInflater.inflate(R.layout.list_tag, parent, false);
 		}
 
-		ImageView iconImageView = (ImageView)convertView.findViewById(R.id.iconImageView);
 		TextView nameTextView = (TextView)convertView.findViewById(R.id.nameTextView);
 		
 		Tag tag = tagList.get(position);
-		if (!tag.getIconPath().equals(""))
-		{
-			Bitmap bitmap = BitmapFactory.decodeFile(tag.getIconPath());
-			if (bitmap != null)
-			{
-				iconImageView.setImageBitmap(bitmap);				
-			}
-		}
 		
 		if (tag.getName().equals(""))
 		{
