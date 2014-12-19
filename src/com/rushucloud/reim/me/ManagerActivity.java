@@ -40,10 +40,10 @@ public class ManagerActivity extends Activity
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
-	
-	private List<User> userList;
+
+	private int currentGroupID;
 	private User currentUser;
-	private int lastIndex = -1;
+	private List<User> userList;
 	private boolean[] checkList;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -91,13 +91,11 @@ public class ManagerActivity extends Activity
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 		
-		currentUser = appPreference.getCurrentUser();
-		
-    	int currentGroupID = appPreference.getCurrentGroupID();
+		currentUser = appPreference.getCurrentUser();		
+    	currentGroupID = appPreference.getCurrentGroupID();
+    	
 		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
-		
 		checkList = User.getUsersCheck(userList, currentUser.constructListWithManager());
-		lastIndex = User.getIndexOfUser(userList, dbManager.getUser(currentUser.getDefaultManagerID()));
 	}
 	
 	private void initView()
@@ -119,25 +117,36 @@ public class ManagerActivity extends Activity
 			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_CHANGE_USERINFO");
+				
+				User manager = null;
+				for (int i = 0; i < checkList.length; i++)
+				{
+					if (checkList[i])
+					{
+						manager = userList.get(i);
+						break;
+					}
+				}
+				
 				if (!Utils.isNetworkConnected())
 				{
 					Utils.showToast(ManagerActivity.this, "网络未连接，无法保存");
 				}
-				else if (lastIndex == -1)
+				else if (manager == null)
 				{
 					sendDefaultManagerRequest(-1);			
 				}
-				else if (userList.get(lastIndex).getServerID() == currentUser.getServerID())
+				else if (manager.getServerID() == currentUser.getServerID())
 				{
 					Utils.showToast(ManagerActivity.this, "不能选择自己作为上级");				
 				}
-				else if (userList.get(lastIndex).getServerID() == currentUser.getDefaultManagerID())
+				else if (manager.getServerID() == currentUser.getDefaultManagerID())
 				{
 					Utils.showToast(ManagerActivity.this, "与原有默认上级相同，无需保存");				
 				}
 				else
 				{
-					sendDefaultManagerRequest(userList.get(lastIndex).getServerID());
+					sendDefaultManagerRequest(manager.getServerID());
 				}
 			}
 		});
@@ -147,20 +156,11 @@ public class ManagerActivity extends Activity
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				if (lastIndex == position)
+				for (int i = 0; i < checkList.length; i++)
 				{
-					checkList[position] = !checkList[position];
-					lastIndex = checkList[position] ? position : -1;
+					checkList[i] = false;
 				}
-				else
-				{
-					if (lastIndex != -1)
-					{
-						checkList[lastIndex] = false;					
-					}
-					checkList[position] = true;
-					lastIndex = position;
-				}
+				checkList[position] = true;
 				adapter.setCheck(checkList);
 				adapter.notifyDataSetChanged();
 			}
@@ -198,28 +198,11 @@ public class ManagerActivity extends Activity
 					appPreference = AppPreference.getAppPreference();
 					dbManager = DBManager.getDBManager();
 					
-					List<User> memberList = response.getMemberList();
-					User currentUser = appPreference.getCurrentUser();
+					currentGroupID = appPreference.getCurrentGroupID();
+					currentUser = appPreference.getCurrentUser();
 					
-					for (User user : memberList)
-					{
-						if (user.getServerID() == currentUser.getServerID())							
-						{
-							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
-							{
-								if (user.getAvatarID() == currentUser.getAvatarID())
-								{
-									user.setAvatarPath(currentUser.getAvatarPath());								
-								}								
-							}
-							else
-							{
-								user = currentUser;
-							}
-						}
-					}
-					
-					dbManager.updateGroupUsers(memberList, appPreference.getCurrentGroupID());
+					dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+					dbManager.syncUser(currentUser);
 
 					dbManager.syncGroup(response.getGroup());
 					
@@ -263,6 +246,7 @@ public class ManagerActivity extends Activity
 					currentUser.setLocalUpdatedDate(Utils.getCurrentTime());
 					currentUser.setServerUpdatedDate(currentUser.getLocalUpdatedDate());
 					dbManager.updateUser(currentUser);
+					
 					runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -289,7 +273,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(ManagerActivity.this, "默认上级修改失败");							
+							Utils.showToast(ManagerActivity.this, "默认上级修改失败");				
 						}
 					});
 				}
@@ -317,7 +301,7 @@ public class ManagerActivity extends Activity
 					{
 						public void run()
 						{
-							userList = dbManager.getGroupUsers(appPreference.getCurrentGroupID());
+							userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
 							adapter.setMember(userList);
 							adapter.notifyDataSetChanged();
 						}

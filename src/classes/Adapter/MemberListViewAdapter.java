@@ -40,6 +40,12 @@ public class MemberListViewAdapter extends BaseAdapter
 		{
 			convertView = layoutInflater.inflate(R.layout.list_member, parent, false);
 		}
+		
+		if (check != null)
+		{
+			int color = check[position] ? R.color.list_item_selected : R.color.list_item_unselected;
+			convertView.setBackgroundResource(color);
+		}
 
 		ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView);
 		TextView nicknameTextView = (TextView)convertView.findViewById(R.id.nicknameTextView);
