@@ -57,6 +57,7 @@ public class ItemTagGridViewAdapter extends BaseAdapter
 		}
 		else
 		{
+			iconImageView.setImageResource(R.drawable.default_icon);
 			Bitmap icon = BitmapFactory.decodeFile(tag.getIconPath());
 			if (icon != null)
 			{

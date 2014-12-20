@@ -43,6 +43,8 @@ public class CommentListViewAdapter extends BaseAdapter
 		
 		Comment comment = commentList.get(position);
 		User user = comment.getReviewer();
+
+		avatarImageView.setImageResource(R.drawable.default_avatar);
 		if (!user.getAvatarPath().equals(""))
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());

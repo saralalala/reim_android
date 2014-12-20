@@ -207,8 +207,8 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		reportListView = (XListView)getActivity().findViewById(R.id.reportListView);
 		reportListView.setAdapter(mineAdapter);
 		reportListView.setXListViewListener(this);
-		reportListView.setPullLoadEnable(true);
 		reportListView.setPullRefreshEnable(true);
+		reportListView.setPullLoadEnable(false);
 		reportListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view,

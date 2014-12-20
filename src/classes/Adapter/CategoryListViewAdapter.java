@@ -45,6 +45,8 @@ public class CategoryListViewAdapter extends BaseAdapter
 		TextView nameTextView = (TextView)convertView.findViewById(R.id.nameTextView);
 		
 		Category category = categoryList.get(position);
+		
+		iconImageView.setImageResource(R.drawable.default_icon);
 		if (!category.getIconPath().equals(""))
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());

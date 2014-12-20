@@ -291,6 +291,7 @@ public class ManagerActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
+					System.out.println("download succeed:"+user.getNickname()+"-"+user.getAvatarID());
 					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
 					user.setAvatarPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
@@ -306,6 +307,10 @@ public class ManagerActivity extends Activity
 							adapter.notifyDataSetChanged();
 						}
 					});	
+				}
+				else
+				{
+					System.out.println("download failed:"+user.getNickname()+"-"+user.getAvatarID());					
 				}
 			}
 		});

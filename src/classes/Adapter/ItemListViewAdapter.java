@@ -103,6 +103,8 @@ public class ItemListViewAdapter extends BaseAdapter
 		
 		// category 和 tag 一共iconCount个
 		Category category = item.getCategory();
+		
+		categoryImageView.setImageResource(R.drawable.default_icon);
 		if (category != null)
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());

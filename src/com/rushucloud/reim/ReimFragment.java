@@ -183,8 +183,8 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 		itemListView = (XListView) getActivity().findViewById(R.id.itemListView);
 		itemListView.setAdapter(adapter);
 		itemListView.setXListViewListener(this);
-		itemListView.setPullLoadEnable(true);
 		itemListView.setPullRefreshEnable(true);
+		itemListView.setPullLoadEnable(false);
 		itemListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
