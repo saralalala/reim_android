@@ -44,6 +44,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	private TextView longBadgeTextView;
 	private ImageView tipImageView;
 	
+	private DBManager dbManager;
+	
 	private List<Fragment> fragmentList = new ArrayList<Fragment>();
 	private List<TabItem> tabItemList = new ArrayList<TabItem>();
 
@@ -51,6 +53,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		initDate();
 		initView();
 	}
 
@@ -60,13 +63,13 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		MobclickAgent.onResume(this);
 		ReimApplication.setProgressDialog(this);
 
+		System.out.println(ReimApplication.getTabIndex());
 		viewPager.setCurrentItem(ReimApplication.getTabIndex());
+		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
 		if (Utils.isNetworkConnected())
 		{
-			sendGetEventsRequest();			
-		}
-		
-		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
+			sendGetEventsRequest();
+		}		
 	}
 
 	protected void onPause()
@@ -87,7 +90,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			else
 			{
 				finish();
-				DBManager dbManager = DBManager.getDBManager();
 				dbManager.close();
 				android.os.Process.killProcess(android.os.Process.myPid());
 			}
@@ -209,6 +211,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		});
 	}
 	
+	private void initDate()
+	{
+		dbManager = DBManager.getDBManager();
+	}
+	
 	private void setReportBadge(int eventCount)
 	{
 		if (eventCount > 99)
@@ -295,7 +302,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				GetGroupResponse response = new GetGroupResponse(httpResponse);
 				if (response.getStatus())
 				{
-					DBManager dbManager = DBManager.getDBManager();
 					int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
 					
 					// update members

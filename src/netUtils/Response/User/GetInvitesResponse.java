@@ -29,15 +29,33 @@ public class GetInvitesResponse extends BaseResponse
 			for (int i = 0 ; i < jsonArray.length() ; i++)
 			{
 				JSONObject jObject = jsonArray.getJSONObject(i);
-//				if (jObject.getInt("actived") != 0)
-//				{
-//					continue;
-//				}
+				
 				Invite invite = new Invite();
 				invite.setInviteCode(jObject.getString("code"));
 				invite.setInviteTime(jObject.getInt("invitedt"));
-				String message = "用户" + jObject.getString("invitor") + "邀请您加入" + jObject.getString("groupname");
-				invite.setMessage(message);
+				switch (jObject.getInt("actived"))
+				{
+					case Invite.TYPE_NEW:
+					{
+						String message = "用户" + jObject.getString("invitor") + "邀请您加入" + jObject.getString("groupname");
+						invite.setMessage(message);						
+						break;
+					}
+					case Invite.TYPE_REJECTED:
+					{
+						String message = "用户" + jObject.getString("invitor") + "拒绝了您的入组邀请";
+						invite.setMessage(message);						
+						break;
+					}
+					case Invite.TYPE_ACCEPTED:
+					{
+						String message = "用户" + jObject.getString("invitor") + "同意了您的入组邀请";
+						invite.setMessage(message);						
+						break;
+					}
+					default:
+						break;
+				}
 				inviteList.add(invite);
 			}			
 		}

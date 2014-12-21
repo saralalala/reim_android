@@ -28,9 +28,11 @@ import com.umeng.analytics.MobclickAgent;
 
 import database.DBManager;
 
-public class InviteReplyActivity extends Activity
+public class MessageDetailActivity extends Activity
 {	
 	private Invite invite;
+	
+	private boolean fromPush;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -43,7 +45,7 @@ public class InviteReplyActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("InviteReplyActivity");		
+		MobclickAgent.onPageStart("MessageDetailActivity");		
 		MobclickAgent.onResume(this);
 		ReimApplication.setProgressDialog(this);
 	}
@@ -51,7 +53,7 @@ public class InviteReplyActivity extends Activity
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("InviteReplyActivity");
+		MobclickAgent.onPageEnd("MessageDetailActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -70,6 +72,7 @@ public class InviteReplyActivity extends Activity
 		if (bundle != null)
 		{
 			invite = (Invite)bundle.getSerializable("invite");
+			fromPush = bundle.getBoolean("fromPush", false);
 		}
 	}
 	
@@ -96,11 +99,11 @@ public class InviteReplyActivity extends Activity
 			{
 				if (Utils.isNetworkConnected())
 				{
-					sendInviteReplyRequest(2, invite.getInviteCode());					
+					sendInviteReplyRequest(Invite.TYPE_ACCEPTED, invite.getInviteCode());					
 				}
 				else
 				{
-					Utils.showToast(InviteReplyActivity.this, "网络未连接，无法发送回复");
+					Utils.showToast(MessageDetailActivity.this, "网络未连接，无法发送回复");
 				}
 			}
 		});
@@ -110,28 +113,21 @@ public class InviteReplyActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (invite.getInviteCode().equals(""))
+				if (Utils.isNetworkConnected())
 				{
-					goBackToMainActivity();					
+					sendInviteReplyRequest(Invite.TYPE_REJECTED, invite.getInviteCode());				
 				}
 				else
 				{
-					if (Utils.isNetworkConnected())
-					{
-						sendInviteReplyRequest(3, invite.getInviteCode());				
-					}
-					else
-					{
-						Utils.showToast(InviteReplyActivity.this, "网络未连接，无法发送回复");
-					}
+					Utils.showToast(MessageDetailActivity.this, "网络未连接，无法发送回复");
 				}
 			}
 		});
 		
-		if (invite.getInviteCode().equals(""))
+		if (invite.getTypeCode() != Invite.TYPE_NEW)
 		{
 			agreeButton.setVisibility(View.GONE);
-			rejectButton.setText(R.string.cancel);
+			rejectButton.setVisibility(View.GONE);
 		}
 	}
 	
@@ -146,7 +142,7 @@ public class InviteReplyActivity extends Activity
 				InviteReplyResponse response = new InviteReplyResponse(httpResponse);
 				if (response.getStatus())
 				{
-					if (agree == 2)
+					if (agree == Invite.TYPE_ACCEPTED)
 					{
 						sendCommonRequest();						
 					}
@@ -157,7 +153,7 @@ public class InviteReplyActivity extends Activity
 							public void run()
 							{
 						    	ReimApplication.dismissProgressDialog();
-								Builder builder = new Builder(InviteReplyActivity.this);
+								Builder builder = new Builder(MessageDetailActivity.this);
 								builder.setTitle(R.string.tip);
 								builder.setMessage(R.string.prompt_invite_reply_sent);
 								builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
@@ -179,7 +175,7 @@ public class InviteReplyActivity extends Activity
 						public void run()
 						{
 					    	ReimApplication.dismissProgressDialog();
-					    	Utils.showToast(InviteReplyActivity.this, "邀请回复发送失败");
+					    	Utils.showToast(MessageDetailActivity.this, "邀请回复发送失败");
 						}						
 					});
 				}
@@ -256,7 +252,7 @@ public class InviteReplyActivity extends Activity
 					public void run()
 					{
 				    	ReimApplication.dismissProgressDialog();
-						Builder builder = new Builder(InviteReplyActivity.this);
+						Builder builder = new Builder(MessageDetailActivity.this);
 						builder.setTitle(R.string.tip);
 						builder.setMessage(R.string.prompt_invite_reply_sent);
 						builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
@@ -275,11 +271,18 @@ public class InviteReplyActivity extends Activity
 
     private void goBackToMainActivity()
     {
-    	ReimApplication.setTabIndex(3);
-    	Intent intent = new Intent(InviteReplyActivity.this, MainActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    	startActivity(intent);
-    	finish();
+    	if (fromPush)
+		{
+        	ReimApplication.setTabIndex(3);
+        	Intent intent = new Intent(MessageDetailActivity.this, MainActivity.class);
+    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        	startActivity(intent);
+        	finish();
+		}
+    	else
+    	{
+			finish();
+		}
     }
 }

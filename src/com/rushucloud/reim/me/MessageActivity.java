@@ -96,7 +96,7 @@ public class MessageActivity extends Activity
 			{
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("invite", messageList.get(position));
-				Intent intent = new Intent(MessageActivity.this, InviteReplyActivity.class);
+				Intent intent = new Intent(MessageActivity.this, MessageDetailActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
 			}

@@ -30,16 +30,28 @@ public abstract class SyncUtils
 	
 	public static boolean canSyncToServer()
 	{
-		AppPreference appPreference = AppPreference.getAppPreference();
+//		AppPreference appPreference = AppPreference.getAppPreference();
+//		if (isSyncOnGoing)
+//		{
+//			return false;
+//		}
+//		else if (appPreference.syncOnlyWithWifi() && Utils.isWiFiConnected())
+//		{
+//			return true;
+//		}
+//		else if (!appPreference.syncOnlyWithWifi() && Utils.isNetworkConnected())
+//		{
+//			return true;
+//		}
+//		else
+//		{
+//			return false;
+//		}
 		if (isSyncOnGoing)
 		{
 			return false;
 		}
-		else if (appPreference.syncOnlyWithWifi() && Utils.isWiFiConnected())
-		{
-			return true;
-		}
-		else if (!appPreference.syncOnlyWithWifi() && Utils.isNetworkConnected())
+		else if (Utils.isNetworkConnected())
 		{
 			return true;
 		}

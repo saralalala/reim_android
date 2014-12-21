@@ -395,7 +395,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		if (index == 0)
 		{
 			myTitleTextView.setTextColor(getResources().getColor(R.color.major_light));
-			othersTitleTextView.setTextColor(getResources().getColor(R.color.hint_white));
+			othersTitleTextView.setTextColor(getResources().getColor(R.color.hint_light));
 		}
 		else
 		{
@@ -403,7 +403,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 			{
 				sendSubordinatesReportsRequest();
 			}
-			myTitleTextView.setTextColor(getResources().getColor(R.color.hint_white));
+			myTitleTextView.setTextColor(getResources().getColor(R.color.hint_light));
 			othersTitleTextView.setTextColor(getResources().getColor(R.color.major_light));
 		}
 		ReimApplication.showProgressDialog();
@@ -827,7 +827,8 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 					public void run()
 					{
 						reportListView.stopRefresh();
-						String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+//						String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+						String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "网络未连接，无法刷新";
 						Utils.showToast(getActivity(), prompt);
 					}
 				});

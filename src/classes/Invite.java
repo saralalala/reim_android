@@ -10,9 +10,14 @@ public class Invite implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
+	public static final int TYPE_NEW = 0;
+	public static final int TYPE_REJECTED = 1;
+	public static final int TYPE_ACCEPTED = 2;
+	
 	private String inviteCode = "";
 	private String message = "";
 	private int inviteTime = -1;
+	private int typeCode = -1;
 	
 	public String getInviteCode()
 	{
@@ -39,6 +44,15 @@ public class Invite implements Serializable
 	public void setInviteTime(int inviteTime)
 	{
 		this.inviteTime = inviteTime;
+	}
+	
+	public int getTypeCode()
+	{
+		return typeCode;
+	}
+	public void setTypeCode(int typeCode)
+	{
+		this.typeCode = typeCode;
 	}
 	
 	public static List<Map<String, String>> getMessageList(List<Invite> inviteList)

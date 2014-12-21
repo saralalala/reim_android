@@ -20,6 +20,7 @@
     
     <color name="hint_black">#FF000000</color>
     <color name="hint_white">#CCFFFFFF</color>
+    <color name="hint_light">#66FFFFFF</color>
     <color name="hint_grey">#FF999999</color>
     <color name="hint_dark_grey">#CC000000</color>
     <color name="hint_light_grey">#66000000</color>
