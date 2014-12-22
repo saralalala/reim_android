@@ -5,8 +5,8 @@ import java.util.List;
 
 import classes.Category;
 import classes.Item;
-import classes.ReimApplication;
-import classes.Utils;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;

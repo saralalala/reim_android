@@ -3,9 +3,9 @@ package classes.Adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.ReimApplication;
 import classes.Report;
-import classes.Utils;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
 

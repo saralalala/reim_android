@@ -12,13 +12,13 @@ import netUtils.Response.Report.ModifyReportResponse;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.AppPreference;
 import classes.Comment;
-import classes.ReimApplication;
 import classes.Report;
 import classes.User;
-import classes.Utils;
 import classes.Adapter.CommentListViewAdapter;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Context;

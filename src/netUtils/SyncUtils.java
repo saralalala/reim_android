@@ -16,10 +16,10 @@ import netUtils.Response.Item.CreateItemResponse;
 import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
-import classes.AppPreference;
 import classes.Item;
 import classes.Report;
-import classes.Utils;
+import classes.Utils.AppPreference;
+import classes.Utils.Utils;
 import database.DBManager;
 
 public abstract class SyncUtils

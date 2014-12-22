@@ -27,12 +27,12 @@
         <item name="android:paddingRight">5dp</item>
     </style>
     
-    <style name="WindowAnimation" parent="android:Animation" mce_bogus="1">
+    <style name="WindowAnimation" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/window_in</item>  
         <item name="android:windowExitAnimation">@anim/window_out</item>
     </style>
     
-    <style name="FullWindowAnimation" parent="android:Animation" mce_bogus="1">
+    <style name="FullWindowAnimation" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/full_window_in</item>  
         <item name="android:windowExitAnimation">@anim/full_window_out</item>
     </style>

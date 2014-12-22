@@ -3,10 +3,10 @@ package com.rushucloud.reim.start;
 import netUtils.Request.User.SignInRequest;
 import netUtils.HttpConnectionCallback;
 import netUtils.Response.User.SignInResponse;
-import classes.AppPreference;
-import classes.ReimApplication;
 import classes.User;
-import classes.Utils;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;

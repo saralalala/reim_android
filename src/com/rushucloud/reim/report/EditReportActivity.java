@@ -15,15 +15,17 @@ import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
-import classes.AppPreference;
 import classes.Category;
 import classes.Comment;
 import classes.Item;
-import classes.ReimApplication;
 import classes.Report;
 import classes.User;
-import classes.Utils;
 import classes.Adapter.MemberListViewAdapter;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.TextLengthFilter;
+import classes.Utils.Utils;
+
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.EditItemActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -37,6 +39,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -197,6 +200,8 @@ public class EditReportActivity extends Activity
 		
 		titleEditText = (EditText) findViewById(R.id.titleEditText);
 		titleEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		InputFilter[] filters = { new TextLengthFilter(10) };
+		titleEditText.setFilters(filters);
 		
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		statusImageView = (ImageView) findViewById(R.id.statusImageView);

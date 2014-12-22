@@ -4,7 +4,7 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.FeedbackRequest;
 import netUtils.Response.FeedbackResponse;
 
-import classes.Utils;
+import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;

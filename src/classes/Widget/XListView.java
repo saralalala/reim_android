@@ -110,7 +110,7 @@ import android.widget.TextView;
 		// make sure XListViewFooter is the last footer view, and only add once.
 		if (mIsFooterReady == false) {
 			mIsFooterReady = true;
-			addFooterView(mFooterView);
+//			addFooterView(mFooterView);
 		}
 		super.setAdapter(adapter);
 	}

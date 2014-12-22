@@ -8,10 +8,10 @@ import netUtils.Response.User.InviteResponse;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.AppPreference;
-import classes.ReimApplication;
 import classes.User;
-import classes.Utils;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Context;

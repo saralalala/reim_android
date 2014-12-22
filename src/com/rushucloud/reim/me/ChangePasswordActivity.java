@@ -6,8 +6,8 @@ import com.umeng.analytics.MobclickAgent;
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.ChangePasswordRequest;
 import netUtils.Response.User.ChangePasswordResponse;
-import classes.AppPreference;
-import classes.Utils;
+import classes.Utils.AppPreference;
+import classes.Utils.Utils;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;

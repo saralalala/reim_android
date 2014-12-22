@@ -16,11 +16,11 @@ import netUtils.Response.Category.ModifyCategoryResponse;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.AppPreference;
 import classes.Category;
-import classes.ReimApplication;
-import classes.Utils;
 import classes.Adapter.CategoryListViewAdapter;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;

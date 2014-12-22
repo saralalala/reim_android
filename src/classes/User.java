@@ -7,6 +7,9 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import classes.Utils.AppPreference;
+import classes.Utils.Utils;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;

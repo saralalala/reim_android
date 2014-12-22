@@ -22,20 +22,20 @@ import netUtils.Response.Item.CreateItemResponse;
 import netUtils.Response.Item.GetVendorsResponse;
 import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
-import classes.AppPreference;
 import classes.Category;
 import classes.Item;
-import classes.ReimApplication;
 import classes.Report;
 import classes.Tag;
 import classes.User;
-import classes.Utils;
 import classes.Vendor;
 import classes.Adapter.CategoryExpandableListAdapter;
 import classes.Adapter.LocationListViewAdapter;
 import classes.Adapter.MemberListViewAdapter;
 import classes.Adapter.TagListViewAdapter;
 import classes.Adapter.VendorListViewAdapter;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 
 import cn.beecloud.BCLocation;
 

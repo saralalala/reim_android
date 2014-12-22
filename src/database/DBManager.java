@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Log;
-import classes.AppPreference;
 import classes.Category;
 import classes.Comment;
 import classes.Group;
@@ -17,7 +16,8 @@ import classes.Item;
 import classes.Report;
 import classes.Tag;
 import classes.User;
-import classes.Utils;
+import classes.Utils.AppPreference;
+import classes.Utils.Utils;
 
 public class DBManager extends SQLiteOpenHelper
 {
@@ -424,6 +424,10 @@ public class DBManager extends SQLiteOpenHelper
 			}
 			else if (user.getServerUpdatedDate() > localUser.getLocalUpdatedDate())
 			{
+				if (user.getAvatarID() == localUser.getAvatarID())
+				{
+					user.setAvatarPath(localUser.getAvatarPath());
+				}
 				return updateUser(user);
 			}
 			else
@@ -433,7 +437,6 @@ public class DBManager extends SQLiteOpenHelper
 		}
 		catch (Exception e)
 		{
-			Log.i("reim", e.getMessage());
 			return false;
 		}
 	}

@@ -2,14 +2,13 @@ package com.rushucloud.reim.me;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.GetInvitesRequest;
 import netUtils.Response.User.GetInvitesResponse;
 import classes.Invite;
-import classes.ReimApplication;
-import classes.Utils;
+import classes.Adapter.MessageListViewAdapter;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -26,16 +25,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class MessageActivity extends Activity
 {
-	private ListView messageListView;
 	private TextView messageTextView;
-	private SimpleAdapter adapter;
+	private ListView messageListView;
+	private MessageListViewAdapter adapter;
+	
 	private List<Invite> messageList = new ArrayList<Invite>();
-	private List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -80,16 +78,20 @@ public class MessageActivity extends Activity
 	
 	private void initView()
 	{	
-		getActionBar().hide();		
+		getActionBar().hide();
+		
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});	
 
 		messageTextView = (TextView)findViewById(R.id.messageTextView);
 
-		mapList = Invite.getMessageList(null);
-		String[] columns = new String[]{ "message", "time" };
-		int[] views = new int[]{android.R.id.text1, android.R.id.text2};
-		adapter = new SimpleAdapter(this, mapList, android.R.layout.simple_list_item_2, columns, views);
 		messageListView = (ListView)findViewById(R.id.messageListView);
-		messageListView.setAdapter(adapter);
 		messageListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -99,15 +101,6 @@ public class MessageActivity extends Activity
 				Intent intent = new Intent(MessageActivity.this, MessageDetailActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
-			}
-		});
-		
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				finish();
 			}
 		});
 	}
@@ -129,6 +122,7 @@ public class MessageActivity extends Activity
 						{
 							ReimApplication.dismissProgressDialog();
 							messageList = response.getInviteList();
+							
 							if (messageList.size() == 0)
 							{
 								messageListView.setVisibility(View.GONE);
@@ -136,11 +130,10 @@ public class MessageActivity extends Activity
 							}
 							else
 							{
-								mapList = Invite.getMessageList(messageList);
-								String[] columns = new String[]{"message", "time"};
-								int[] views = new int[]{android.R.id.text1, android.R.id.text2};
-								adapter = new SimpleAdapter(MessageActivity.this, mapList, android.R.layout.simple_list_item_2, columns, views);
+								Invite.sortByUpdateDate(messageList);
+								adapter = new MessageListViewAdapter(MessageActivity.this, messageList);
 								messageListView.setAdapter(adapter);
+								
 								messageTextView.setVisibility(View.GONE);
 								messageListView.setVisibility(View.VISIBLE);
 							}

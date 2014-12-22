@@ -5,7 +5,7 @@ import java.util.List;
 
 import classes.Comment;
 import classes.User;
-import classes.Utils;
+import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;

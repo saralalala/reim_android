@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import classes.Item;
 import classes.Tag;
 import classes.User;
-import classes.Utils;
+import classes.Utils.Utils;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;

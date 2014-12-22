@@ -9,11 +9,11 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.Item.SearchItemsRequest;
 import netUtils.Response.Item.SearchItemsResponse;
 
-import classes.AppPreference;
 import classes.Item;
 import classes.Report;
-import classes.Utils;
 import classes.Adapter.ItemListViewAdapter;
+import classes.Utils.AppPreference;
+import classes.Utils.Utils;
 import database.DBManager;
 import android.app.ActionBar;
 import android.app.Activity;

@@ -1,6 +1,9 @@
-package classes;
+package classes.Utils;
 
 import java.io.File;
+
+import classes.Group;
+import classes.User;
 
 import com.avos.avoscloud.AVInstallation;
 

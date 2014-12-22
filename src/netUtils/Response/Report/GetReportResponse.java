@@ -12,7 +12,7 @@ import classes.Comment;
 import classes.Item;
 import classes.Report;
 import classes.User;
-import classes.Utils;
+import classes.Utils.Utils;
 import database.DBManager;
 import netUtils.Response.BaseResponse;
 

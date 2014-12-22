@@ -30,10 +30,10 @@ import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
-import classes.AppPreference;
 import classes.Group;
 import classes.User;
-import classes.Utils;
+import classes.Utils.AppPreference;
+import classes.Utils.Utils;
 import classes.Widget.CircleImageView;
 import database.DBManager;
 import android.content.Intent;

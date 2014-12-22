@@ -14,14 +14,14 @@ import netUtils.Response.Report.DeleteReportResponse;
 import netUtils.Response.Report.ExportReportResponse;
 import netUtils.Response.Report.SubordinatesReportResponse;
 
-import classes.AppPreference;
-import classes.ReimApplication;
 import classes.Report;
 import classes.User;
-import classes.Utils;
 import classes.Adapter.OthersReportListViewAdapter;
 import classes.Adapter.ReportListViewAdapter;
 import classes.Adapter.ReportTagGridViewAdapter;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 import classes.Widget.SegmentedGroup;
 import classes.Widget.XListView;
 import classes.Widget.XListView.IXListViewListener;

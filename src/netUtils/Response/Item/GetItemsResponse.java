@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import classes.Category;
 import classes.Item;
 import classes.User;
-import classes.Utils;
+import classes.Utils.Utils;
 
 import netUtils.Response.BaseResponse;
 

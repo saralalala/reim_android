@@ -32,7 +32,7 @@
         android:allowBackup="true" 
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" 
-        android:name="classes.ReimApplication" 
+        android:name="classes.Utils.ReimApplication" 
         android:theme="@style/AppTheme">
         
         <activity 
@@ -257,7 +257,7 @@
 		<!-- ################### AVOS推送 ################### -->
         <service android:name="com.avos.avoscloud.PushService"/>
         <receiver 
-            android:name="classes.ReimBroadcastReceiver">
+            android:name="classes.Utils.ReimBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

@@ -1,4 +1,4 @@
-package classes;
+package classes.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import com.rushucloud.reim.R;
 
 import netUtils.HttpConstant;

@@ -1,7 +1,9 @@
-package classes;
+package classes.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import classes.Invite;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;

@@ -8,14 +8,14 @@ import netUtils.Request.Report.GetReportRequest;
 import netUtils.Request.Report.ModifyReportRequest;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
-import classes.AppPreference;
 import classes.Comment;
 import classes.Item;
-import classes.ReimApplication;
 import classes.Report;
 import classes.User;
-import classes.Utils;
 import classes.Adapter.ReportDetailListViewAdapter;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.ShowItemActivity;

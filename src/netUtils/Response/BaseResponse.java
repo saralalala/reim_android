@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 import com.rushucloud.reim.start.SignInActivity;
 
-import classes.AppPreference;
-import classes.ReimApplication;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
 
 import android.content.Intent;
 

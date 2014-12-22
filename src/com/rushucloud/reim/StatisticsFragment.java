@@ -17,8 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 
-import classes.ReimApplication;
-import classes.Utils;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 import classes.Widget.ReimPie;
 
 import com.umeng.analytics.MobclickAgent;

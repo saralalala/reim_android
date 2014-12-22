@@ -5,13 +5,13 @@ import java.util.List;
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.Report.GetReportRequest;
 import netUtils.Response.Report.GetReportResponse;
-import classes.AppPreference;
 import classes.Comment;
 import classes.Item;
-import classes.ReimApplication;
 import classes.Report;
-import classes.Utils;
 import classes.Adapter.ReportDetailListViewAdapter;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.ShowItemActivity;

@@ -9,10 +9,10 @@ import netUtils.Request.EventsRequest;
 import netUtils.Request.Group.GetGroupRequest;
 import netUtils.Response.EventsResponse;
 import netUtils.Response.Group.GetGroupResponse;
-import classes.AppPreference;
-import classes.ReimApplication;
 import classes.User;
-import classes.Utils;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 import classes.Widget.TabItem;
 
 import com.rushucloud.reim.item.EditItemActivity;

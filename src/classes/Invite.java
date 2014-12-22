@@ -2,9 +2,13 @@ package classes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import classes.Utils.Utils;
 
 public class Invite implements Serializable
 {
@@ -16,7 +20,7 @@ public class Invite implements Serializable
 	
 	private String inviteCode = "";
 	private String message = "";
-	private int inviteTime = -1;
+	private int updateTime = -1;
 	private int typeCode = -1;
 	
 	public String getInviteCode()
@@ -37,13 +41,13 @@ public class Invite implements Serializable
 		this.message = message;
 	}
 	
-	public int getInviteTime()
+	public int getUpdateTime()
 	{
-		return inviteTime;
+		return updateTime;
 	}
-	public void setInviteTime(int inviteTime)
+	public void setUpdateTime(int updateTime)
 	{
-		this.inviteTime = inviteTime;
+		this.updateTime = updateTime;
 	}
 	
 	public int getTypeCode()
@@ -64,10 +68,21 @@ public class Invite implements Serializable
 			{
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("message", invite.getMessage());
-				map.put("time", Utils.secondToStringUpToMinute(invite.getInviteTime()));
+				map.put("time", Utils.secondToStringUpToMinute(invite.getUpdateTime()));
 				resultList.add(map);
 			}
 		}
 		return resultList;
 	}
+	
+	public static void sortByUpdateDate(List<Invite> inviteList)
+    {
+    	Collections.sort(inviteList, new Comparator<Invite>()
+		{
+			public int compare(Invite invite1, Invite invite2)
+			{
+				return (int)(invite2.getUpdateTime() - invite1.getUpdateTime());
+			}
+		});
+    }
 }

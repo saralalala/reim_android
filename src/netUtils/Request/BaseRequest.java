@@ -42,7 +42,7 @@ import org.json.JSONObject;
 
 import android.text.TextUtils;
 
-import classes.AppPreference;
+import classes.Utils.AppPreference;
 
 public abstract class BaseRequest
 {

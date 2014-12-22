@@ -16,11 +16,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import classes.AppPreference;
 import classes.Invite;
-import classes.ReimApplication;
 import classes.User;
-import classes.Utils;
+import classes.Utils.AppPreference;
+import classes.Utils.ReimApplication;
+import classes.Utils.Utils;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
