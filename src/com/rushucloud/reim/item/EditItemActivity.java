@@ -24,6 +24,7 @@ import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import classes.Category;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Report;
 import classes.Tag;
 import classes.User;
@@ -34,7 +35,6 @@ import classes.Adapter.MemberListViewAdapter;
 import classes.Adapter.TagListViewAdapter;
 import classes.Adapter.VendorListViewAdapter;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import cn.beecloud.BCLocation;
@@ -757,7 +757,9 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				hideSoftKeyboard();
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
+				imm.hideSoftInputFromWindow(vendorEditText.getWindowToken(), 0);
+				
 				vendorPopupWindow.dismiss();
 				
 				item.setVendor(vendorEditText.getText().toString());
@@ -835,7 +837,8 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				hideSoftKeyboard();
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
+				imm.hideSoftInputFromWindow(locationEditText.getWindowToken(), 0);
 				locationPopupWindow.dismiss();
 				
 				item.setLocation(locationEditText.getText().toString());

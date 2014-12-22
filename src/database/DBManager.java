@@ -500,21 +500,20 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			List<Integer> idArray = new ArrayList<Integer>();
-			for (User user : userList)
-			{
-				idArray.add(user.getServerID());
-			}
-
 			List<User> userLocalList = getGroupUsers(AppPreference.getAppPreference().getCurrentGroupID());
-			for (User user : userLocalList)
+			for (User localUser : userLocalList)
 			{
-				if (idArray.indexOf(user.getServerID()) == -1)
+				for (User user : userList)
 				{
-					deleteUser(user.getServerID());
+					if (localUser.getServerID() == user.getServerID() && localUser.getAvatarID() == user.getAvatarID())
+					{
+						user.setAvatarPath(localUser.getAvatarPath());
+						break;
+					}
 				}
 			}
 			
+			deleteGroupUsers(groupServerID);
 			for (User user : userList)
 			{
 				syncUser(user);
@@ -2027,6 +2026,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setCommentList(getOthersReportComments(report.getServerID()));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));

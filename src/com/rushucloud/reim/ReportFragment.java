@@ -14,13 +14,13 @@ import netUtils.Response.Report.DeleteReportResponse;
 import netUtils.Response.Report.ExportReportResponse;
 import netUtils.Response.Report.SubordinatesReportResponse;
 
+import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Adapter.OthersReportListViewAdapter;
 import classes.Adapter.ReportListViewAdapter;
 import classes.Adapter.ReportTagGridViewAdapter;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 import classes.Widget.SegmentedGroup;
 import classes.Widget.XListView;
@@ -76,6 +76,9 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	private View filterView;
 	private TextView myTitleTextView;
 	private TextView othersTitleTextView;
+	private TextView shortBadgeTextView;
+	private TextView mediumBadgeTextView;
+	private TextView longBadgeTextView;
 	private XListView reportListView;
 	private ReportListViewAdapter mineAdapter;
 	private OthersReportListViewAdapter othersAdapter;
@@ -142,6 +145,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit)
 		{
+			showBadge();
 			setListView(ReimApplication.getReportTabIndex());
 			syncReports();
 		}
@@ -177,6 +181,10 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 
 		othersTitleTextView = (TextView)getActivity().findViewById(R.id.othersTitleTextView);
 		othersTitleTextView.setOnClickListener(this);
+		
+		shortBadgeTextView = (TextView)getActivity().findViewById(R.id.shortBadgeTextView);
+		mediumBadgeTextView = (TextView)getActivity().findViewById(R.id.mediumBadgeTextView);
+		longBadgeTextView = (TextView)getActivity().findViewById(R.id.longBadgeTextView);
 
 		ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 		filterImageView.setOnClickListener(new OnClickListener()
@@ -470,14 +478,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 			showMineList.clear();
 			showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
 			mineAdapter.set(showMineList);
-			if (reportListView.getAdapter().equals(mineAdapter))
-			{
-				mineAdapter.notifyDataSetChanged();
-			}
-			else
-			{
-				reportListView.setAdapter(mineAdapter);				
-			}	
+			reportListView.setAdapter(mineAdapter);
 		}
 		else
 		{
@@ -486,14 +487,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 			showOthersList.clear();
 			showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
 			othersAdapter.set(showOthersList);
-			if (reportListView.getAdapter().equals(othersAdapter))
-			{
-				othersAdapter.notifyDataSetChanged();
-			}
-			else
-			{
-				reportListView.setAdapter(othersAdapter);				
-			}		
+			reportListView.setAdapter(othersAdapter);
 		}
 	}
 
@@ -854,6 +848,37 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		}		
 	}
 	
+	private void showBadge()
+	{
+		int count = ReimApplication.getReportBadgeCount();
+		if (count > 99)
+		{
+			longBadgeTextView.setVisibility(View.VISIBLE);
+			mediumBadgeTextView.setVisibility(View.GONE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
+		else if (count > 9)
+		{
+			mediumBadgeTextView.setText(Integer.toString(count));
+			longBadgeTextView.setVisibility(View.GONE);
+			mediumBadgeTextView.setVisibility(View.VISIBLE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
+		else if (count > 0)
+		{
+			shortBadgeTextView.setText(Integer.toString(count));
+			longBadgeTextView.setVisibility(View.GONE);
+			mediumBadgeTextView.setVisibility(View.GONE);
+			shortBadgeTextView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			longBadgeTextView.setVisibility(View.GONE);
+			mediumBadgeTextView.setVisibility(View.GONE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
+	}
+	
 	public boolean onKey(View v, int keyCode, KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
@@ -867,10 +892,12 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	{
 		if (v.equals(myTitleTextView))
 		{
-			setListView(0);			
+			setListView(0);
 		}
 		else
 		{
+			ReimApplication.setReportBadgeCount(0);
+			showBadge();
 			setListView(1);
 		}
 	}

@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.Invite;
+import classes.ReimApplication;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -66,7 +67,6 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 			{
 				int type = intent.getIntExtra("type", -1);
 				JSONObject jObject = new JSONObject(intent.getStringExtra("data"));
-				System.out.println(jObject.toString());
 				switch (type)
 				{
 					case TYPE_SYSTEM_MESSAGE:

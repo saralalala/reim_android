@@ -4,7 +4,7 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.ResetPasswordRequest;
 import netUtils.Response.User.ResetPasswordResponse;
 
-import classes.Utils.ReimApplication;
+import classes.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;

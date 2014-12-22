@@ -7,10 +7,10 @@ import netUtils.Request.Report.GetReportRequest;
 import netUtils.Response.Report.GetReportResponse;
 import classes.Comment;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Report;
 import classes.Adapter.ReportDetailListViewAdapter;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
@@ -33,6 +33,7 @@ public class ShowReportActivity extends Activity
 {
 	private DBManager dbManager;
 
+	private ListView detailListView;
 	private ReportDetailListViewAdapter adapter;
 	
 	private Report report;
@@ -129,7 +130,7 @@ public class ShowReportActivity extends Activity
 		});
 		
 		adapter = new ReportDetailListViewAdapter(ShowReportActivity.this, report, itemList);
-		ListView detailListView = (ListView)findViewById(R.id.detailListView);
+		detailListView = (ListView)findViewById(R.id.detailListView);
 		detailListView.setAdapter(adapter);
 		detailListView.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -177,12 +178,13 @@ public class ShowReportActivity extends Activity
 				if (response.getStatus())
 				{ 
 					int ownerID = AppPreference.getAppPreference().getCurrentUserID();
+					
 					report.setManagerList(response.getReport().getManagerList());
 					report.setCCList(response.getReport().getCCList());
 					report.setCommentList(response.getReport().getCommentList());
 					
 					if (myReport)
-					{
+					{						
 						dbManager.updateReportByLocalID(report);
 						
 						dbManager.deleteReportComments(report.getLocalID());
@@ -196,7 +198,7 @@ public class ShowReportActivity extends Activity
 					{
 						dbManager.deleteOthersReport(reportServerID, ownerID);
 						dbManager.insertOthersReport(report);
-						
+												
 						dbManager.deleteOthersReportItems(reportServerID);
 						for (Item item : response.getItemList())
 						{
@@ -209,7 +211,7 @@ public class ShowReportActivity extends Activity
 						{
 							comment.setReportID(report.getServerID());
 							dbManager.insertOthersComment(comment);
-						}						
+						}
 					}
 					
 					runOnUiThread(new Runnable()

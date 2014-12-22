@@ -5,9 +5,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import classes.Utils.AppPreference;
+
 public class EventsResponse extends BaseResponse
 {
 	private int reportEventCount;
+	private int approveEventCount;
 	private int inviteEventCount;
 	private boolean needToRefresh;
 	
@@ -25,10 +28,21 @@ public class EventsResponse extends BaseResponse
 			JSONArray reportsArray = jObject.getJSONArray("reports");	
 			JSONArray membersArray = jObject.getJSONArray("members");
 			JSONArray managersArray = jObject.getJSONArray("managers");
-						
+			
 			reportEventCount = reportsArray.length();
 			inviteEventCount = invitesArray.length();
 			needToRefresh = (membersArray.length() + managersArray.length()) > 0;
+			
+			approveEventCount = 0;
+			int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
+			for (int i = 0; i < reportEventCount; i++)
+			{
+				JSONObject object = reportsArray.getJSONObject(i);
+				if (object.getInt("suid") != currentUserID)
+				{
+					approveEventCount++;
+				}
+			}
 		}
 		catch (JSONException e)
 		{
@@ -41,6 +55,11 @@ public class EventsResponse extends BaseResponse
 		return reportEventCount;
 	}
 
+	public int getApproveEventCount()
+	{
+		return approveEventCount;
+	}
+	
 	public int getInviteEventCount()
 	{
 		return inviteEventCount;

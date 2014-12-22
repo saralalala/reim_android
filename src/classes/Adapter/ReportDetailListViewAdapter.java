@@ -5,8 +5,8 @@ import java.util.List;
 
 import classes.Category;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Report;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
@@ -78,7 +78,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			{
 				senderTextView.setText(report.getSender().getNickname());					
 			}
-			
+
 			managerTextView.setText(report.getManagersName());
 			ccTextView.setText(report.getCCsName());
 			

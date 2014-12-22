@@ -5,7 +5,7 @@ import java.util.List;
 
 import classes.Category;
 import classes.Item;
-import classes.Utils.ReimApplication;
+import classes.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;

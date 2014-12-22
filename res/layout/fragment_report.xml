@@ -49,6 +49,43 @@
             android:textSize="20sp"
             android:textColor="@color/hint_white" />
 
+		<TextView
+			android:id="@+id/shortBadgeTextView"
+			android:layout_width="20dp"
+			android:layout_height="20dp"
+			android:layout_alignTop="@+id/othersTitleTextView"
+			android:layout_alignRight="@+id/othersTitleTextView"
+			android:layout_marginRight="-10dp"
+			android:gravity="center"
+			android:textColor="@color/major_dark"
+			android:background="@drawable/title_badge_short"
+			android:visibility="gone" />
+
+		<TextView
+			android:id="@+id/mediumBadgeTextView"
+			android:layout_width="30dp"
+			android:layout_height="20dp"
+			android:layout_alignTop="@+id/othersTitleTextView"
+			android:layout_alignRight="@+id/othersTitleTextView"
+			android:layout_marginRight="-15dp"
+			android:gravity="center"
+			android:textColor="@color/major_dark"
+			android:background="@drawable/title_badge_medium"
+			android:visibility="visible" />
+		
+		<TextView
+			android:id="@+id/longBadgeTextView"
+			android:layout_width="40dp"
+			android:layout_height="20dp"
+			android:layout_alignTop="@+id/othersTitleTextView"
+			android:layout_alignRight="@+id/othersTitleTextView"
+			android:layout_marginRight="-20dp"
+			android:gravity="center"
+			android:text="@string/report_over_flow"
+			android:textColor="@color/major_dark"
+			android:background="@drawable/title_badge_long"
+			android:visibility="gone" />
+
         <ImageView
             android:id="@+id/addImageView"
             android:layout_width="wrap_content"

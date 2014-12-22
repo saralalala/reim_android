@@ -40,6 +40,24 @@ public class User implements Serializable
 		
 	}
 	
+	public User(User user)
+	{
+		serverID = user.getServerID();
+		email = user.getEmail();
+		password = user.getPassword();
+		nickname = user.getNickname();
+		phone = user.getPhone();
+		avatarID = user.getAvatarID();
+		avatarPath = user.getAvatarPath();
+		privilege = user.getPrivilege();
+		isActive = user.isActive();
+		isAdmin = user.isAdmin();
+		groupID = user.getGroupID();
+		defaultManagerID = user.getDefaultManagerID();
+		serverUpdatedDate = user.getServerUpdatedDate();
+		localUpdatedDate = user.getLocalUpdatedDate();
+	}
+	
 	public User(JSONObject jObject, int groupID)
 	{
 		try
@@ -200,6 +218,23 @@ public class User implements Serializable
 		this.localUpdatedDate = localUpdatedDate;
 	}
 
+	public boolean equals(Object o)
+	{
+		if (o == null)
+		{
+			return false;
+		}
+		
+		if (o instanceof User)
+		{
+			if (((User)o).getServerID() == this.getServerID())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean hasUndownloadedAvatar()
 	{
 		if (getAvatarPath().equals("") && getAvatarID() > 0)

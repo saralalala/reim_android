@@ -1,6 +1,7 @@
 package classes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -43,6 +44,24 @@ public class Report implements Serializable
 	public Report()
 	{
 		
+	}
+	
+	public Report(Report report)
+	{
+		localID = report.getLocalID();
+		serverID = report.getServerID();
+		title = report.getTitle();
+		status = report.getStatus();
+		managerList = new ArrayList<User>(report.getManagerList());
+		ccList = new ArrayList<User>(report.getCCList());
+		commentList = new ArrayList<Comment>(report.getCommentList());
+		sender = new User(report.getSender());
+		isProveAhead = report.isProveAhead();
+		createdDate = report.getCreatedDate();
+		serverUpdatedDate = report.getServerUpdatedDate();
+		localUpdatedDate = report.getLocalUpdatedDate();
+		itemCount = report.getItemCount();
+		amount = report.getAmount();
 	}
 
 	public Report(JSONObject jObject)

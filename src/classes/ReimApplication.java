@@ -1,10 +1,12 @@
-package classes.Utils;
+package classes;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.Utils.AppPreference;
+import classes.Utils.Utils;
 import cn.beecloud.BeeCloud;
 
 import com.avos.avoscloud.AVInstallation;
@@ -36,6 +38,7 @@ public class ReimApplication extends Application
 	
 	private static int tabIndex = 0;
 	private static int reportTabIndex = 0;
+	private static int reportBadgeCount = 0;
 	
 	public void onCreate()
 	{
@@ -74,6 +77,16 @@ public class ReimApplication extends Application
 		ReimApplication.reportTabIndex = reportTabIndex;
 	}
 	
+	public static int getReportBadgeCount()
+	{
+		return reportBadgeCount;
+	}
+
+	public static void setReportBadgeCount(int reportBadgeCount)
+	{
+		ReimApplication.reportBadgeCount = reportBadgeCount;
+	}
+
 	public static String getDeviceInfo(Context context)
 	{
 		try

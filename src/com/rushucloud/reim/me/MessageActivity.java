@@ -6,8 +6,8 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.GetInvitesRequest;
 import netUtils.Response.User.GetInvitesResponse;
 import classes.Invite;
+import classes.ReimApplication;
 import classes.Adapter.MessageListViewAdapter;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;

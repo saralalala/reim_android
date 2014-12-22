@@ -9,9 +9,9 @@ import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.User.ModifyUserResponse;
+import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.ImageActivity;

@@ -17,9 +17,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import classes.Invite;
+import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.MainActivity;

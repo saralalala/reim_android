@@ -5,9 +5,9 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.RegisterRequest;
 import netUtils.Response.User.SignInResponse;
 import netUtils.Response.User.RegisterResponse;
+import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.MainActivity;

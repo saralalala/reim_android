@@ -7,9 +7,9 @@ import netUtils.Request.User.VerifyCodeRequest;
 import netUtils.Response.User.SignInResponse;
 import netUtils.Response.User.RegisterResponse;
 import netUtils.Response.User.VerifyCodeResponse;
+import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.MainActivity;

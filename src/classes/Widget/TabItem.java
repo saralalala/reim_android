@@ -1,6 +1,6 @@
 package classes.Widget;
 
-import classes.Utils.ReimApplication;
+import classes.ReimApplication;
 
 import com.rushucloud.reim.R;
 

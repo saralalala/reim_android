@@ -8,9 +8,9 @@ import com.rushucloud.reim.R;
 import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
+import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 import android.app.Activity;
 import android.content.Intent;

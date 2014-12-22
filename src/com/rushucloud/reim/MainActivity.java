@@ -9,9 +9,9 @@ import netUtils.Request.EventsRequest;
 import netUtils.Request.Group.GetGroupRequest;
 import netUtils.Response.EventsResponse;
 import netUtils.Response.Group.GetGroupResponse;
+import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 import classes.Widget.TabItem;
 
@@ -63,7 +63,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		MobclickAgent.onResume(this);
 		ReimApplication.setProgressDialog(this);
 
-		System.out.println(ReimApplication.getTabIndex());
 		viewPager.setCurrentItem(ReimApplication.getTabIndex());
 		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
 		if (Utils.isNetworkConnected())
@@ -215,6 +214,14 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	{
 		dbManager = DBManager.getDBManager();
 	}
+
+	private void resetTabItems()
+	{
+		for (int i = 0; i < tabItemList.size(); i++)
+		{
+			tabItemList.get(i).setIconAlpha(0);
+		}
+	}
 	
 	private void setReportBadge(int eventCount)
 	{
@@ -224,7 +231,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			mediumBadgeTextView.setVisibility(View.GONE);
 			shortBadgeTextView.setVisibility(View.GONE);
 		}
-		else if (eventCount > 10)
+		else if (eventCount > 9)
 		{
 			mediumBadgeTextView.setText(Integer.toString(eventCount));
 			longBadgeTextView.setVisibility(View.GONE);
@@ -277,6 +284,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					{
 						public void run()
 						{
+							ReimApplication.setReportBadgeCount(response.getApproveEventCount());
 							setReportBadge(response.getReportEventCount());
 							setMeBadge(response.getInviteEventCount());
 						}
@@ -333,14 +341,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				}
 			}
 		});
-	}
-	
-	private void resetTabItems()
-	{
-		for (int i = 0; i < tabItemList.size(); i++)
-		{
-			tabItemList.get(i).setIconAlpha(0);
-		}
 	}
 
 	public void onClick(View v)

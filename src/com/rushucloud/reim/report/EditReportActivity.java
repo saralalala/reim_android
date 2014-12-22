@@ -18,11 +18,11 @@ import netUtils.Response.Report.ModifyReportResponse;
 import classes.Category;
 import classes.Comment;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Adapter.MemberListViewAdapter;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.TextLengthFilter;
 import classes.Utils.Utils;
 

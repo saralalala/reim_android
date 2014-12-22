@@ -10,11 +10,11 @@ import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
 import classes.Comment;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Adapter.ReportDetailListViewAdapter;
 import classes.Utils.AppPreference;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
@@ -242,9 +242,6 @@ public class ApproveReportActivity extends Activity
 						report.setCommentList(response.getReport().getCommentList());						
 					}
 					
-					dbManager.deleteOthersReport(reportServerID, ownerID);
-					dbManager.insertOthersReport(report);
-					
 					dbManager.deleteOthersReportItems(reportServerID);
 					for (Item item : response.getItemList())
 					{
@@ -258,6 +255,9 @@ public class ApproveReportActivity extends Activity
 						comment.setReportID(report.getServerID());
 						dbManager.insertOthersComment(comment);
 					}
+
+					dbManager.deleteOthersReport(reportServerID, ownerID);
+					dbManager.insertOthersReport(report);
 					
 					runOnUiThread(new Runnable()
 					{
@@ -268,6 +268,16 @@ public class ApproveReportActivity extends Activity
 							{
 					    		Utils.showToast(ApproveReportActivity.this, "报告已被审批");
 					    		finish();
+							}
+					    	else if (!report.getManagerList().contains(appPreference.getCurrentUserID()))
+							{
+					    		Bundle bundle = new Bundle();
+								bundle.putSerializable("report", report);
+								bundle.putBoolean("myReport", false);
+								Intent intent = new Intent(ApproveReportActivity.this, ShowReportActivity.class);
+								intent.putExtras(bundle);
+								startActivity(intent);
+								finish();
 							}
 					    	else
 					    	{

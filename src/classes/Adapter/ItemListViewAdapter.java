@@ -6,9 +6,9 @@ import java.util.Locale;
 
 import classes.Category;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Tag;
 import classes.User;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;

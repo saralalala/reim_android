@@ -6,9 +6,9 @@ import netUtils.Request.DownloadImageRequest;
 import netUtils.Response.DownloadImageResponse;
 import classes.Category;
 import classes.Item;
+import classes.ReimApplication;
 import classes.Tag;
 import classes.User;
-import classes.Utils.ReimApplication;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.ImageActivity;
