@@ -16,15 +16,22 @@ public class ReimPie extends View
 	private RectF pieRect = new RectF();
 	private float occupyAngle = 0;
 	private float startAngle = 0;
+	private int offset;
 
 	public ReimPie(Context context, float start, float angle, int diameter, int colorResID)
 	{
 		super(context);
+
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		offset = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, metrics);
+		
 		paint.setColor(getResources().getColor(colorResID));
 		paint.setStyle(Style.FILL_AND_STROKE);
 		paint.setAntiAlias(true);
+		
 		startAngle = start;
 		occupyAngle = angle;
+		
 		pieRect.left = 0;
 		pieRect.top = 0;
 		pieRect.right = diameter;
@@ -37,23 +44,12 @@ public class ReimPie extends View
 	}
 
 	public void onDraw(Canvas canvas)
-	{
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int offset = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, metrics);
+	{		
 		pieRect.top += offset;
 		pieRect.left += offset;
 		pieRect.right -= offset;
 		pieRect.bottom -= offset;
+		
 		canvas.drawArc(pieRect, startAngle, occupyAngle, true, paint);
-	}
-	
-	public void setPieRect(float start, float angle, int diameter)
-	{
-		startAngle = start;
-		occupyAngle = angle;
-		pieRect.left = 0;
-		pieRect.top = 0;
-		pieRect.right = diameter;
-		pieRect.bottom = diameter;
 	}
 }

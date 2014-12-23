@@ -333,7 +333,7 @@ public class Item
 				return R.drawable.status_finished;
 			default:
 				return 0;
-		}		
+		}
     }
 
 	public int getStatusString()

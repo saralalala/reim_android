@@ -95,7 +95,7 @@
         android:layout_marginLeft="16dp"
         android:text="@string/forgot_password"
         android:textSize="14sp"
-        android:textColor="@color/start_font" />
+        android:textColor="@color/font_start" />
 
     <ImageView
         android:id="@+id/signUpImageView"
@@ -118,6 +118,6 @@
         android:layout_marginRight="6dp"        
         android:text="@string/sign_up"
         android:textSize="14sp" 
-        android:textColor="@color/start_font" />
+        android:textColor="@color/font_start" />
 
 </RelativeLayout>

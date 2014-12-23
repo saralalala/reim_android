@@ -16,7 +16,7 @@ public class StatisticsResponse extends BaseResponse
 	private double ongoingAmount;
 	private double doneAmount;
 	private List<StatisticsCategory> statCategoryList;
-	private HashMap<String, String> monthsData;
+	private HashMap<String, Double> monthsData;
 	
 	public StatisticsResponse(Object httpResponse)
 	{
@@ -28,9 +28,11 @@ public class StatisticsResponse extends BaseResponse
 		try
 		{
 			JSONObject jObject = getDataObject();
+			
 			this.doneAmount = jObject.getDouble("done");
 			this.ongoingAmount = jObject.getDouble("process");
 			this.newAmount = jObject.getDouble("new");
+			
 			JSONArray cates = jObject.getJSONArray("cates");
 			this.statCategoryList = new LinkedList<StatisticsCategory>();
 			for (int i = 0; i < cates.length(); i++)
@@ -39,23 +41,24 @@ public class StatisticsResponse extends BaseResponse
 				StatisticsCategory object = new StatisticsCategory();
 				object.setCategoryID(item.getInt("id"));
 				object.setAmount(item.getDouble("amount"));
-				List<Integer> _items = new LinkedList<Integer>();
+				List<Integer> itemIDList = new LinkedList<Integer>();
 				JSONArray iids = item.getJSONArray("items");
 				for (int j = 0; j < iids.length(); j++)
 				{
-					_items.add(iids.getInt(j));
+					itemIDList.add(iids.getInt(j));
 				}
-				object.setItems(_items);
+				object.setItems(itemIDList);
 				this.statCategoryList.add(object);
 			}
+			
 			JSONObject months = jObject.optJSONObject("ms");
-			this.monthsData = new HashMap<String, String>();
+			this.monthsData = new HashMap<String, Double>();
 			if (months != null)
 			{
 				for (Iterator<?> iterator = months.keys(); iterator.hasNext();)
 				{
 					String key = (String) iterator.next();
-					String value = String.valueOf(months.getLong(key));
+					Double value = months.getDouble(key);
 					this.monthsData.put(key, value);
 				}				
 			}
@@ -111,12 +114,12 @@ public class StatisticsResponse extends BaseResponse
 		this.statCategoryList = statCategoryList;
 	}
 
-	public HashMap<String, String> getMonthsData()
+	public HashMap<String, Double> getMonthsData()
 	{
 		return monthsData;
 	}
 
-	public void setMonthsData(HashMap<String, String> monthsData)
+	public void setMonthsData(HashMap<String, Double> monthsData)
 	{
 		this.monthsData = monthsData;
 	}
