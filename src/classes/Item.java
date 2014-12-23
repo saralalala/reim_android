@@ -8,6 +8,8 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.rushucloud.reim.R;
+
 import classes.Utils.Utils;
 
 import android.graphics.Bitmap;
@@ -313,6 +315,44 @@ public class Item
 	public void setTagsID(String tagsID)
 	{
 		this.tagsID = tagsID;
+	}
+
+	public int getStatusBackground()
+    {
+    	switch (getStatus())
+		{
+			case STATUS_DRAFT:
+				return R.drawable.status_draft;
+			case STATUS_SUBMITTED:
+				return R.drawable.status_submitted;
+			case STATUS_APPROVED:
+				return R.drawable.status_approved;
+			case STATUS_REJECTED:
+				return R.drawable.status_rejected;
+			case STATUS_FINISHED:
+				return R.drawable.status_finished;
+			default:
+				return 0;
+		}		
+    }
+
+	public int getStatusString()
+	{
+		switch (getStatus())
+		{
+			case STATUS_DRAFT:
+				return R.string.status_draft;
+			case STATUS_SUBMITTED:
+				return R.string.status_submitted;
+			case STATUS_APPROVED:
+				return R.string.status_approved;
+			case STATUS_REJECTED:
+				return R.string.status_rejected;
+			case STATUS_FINISHED:
+				return R.string.status_finished;
+			default:
+				return R.string.not_available;
+		}
 	}
 	
     public static ArrayList<Integer> getItemsIDArray(List<Item> itemList)

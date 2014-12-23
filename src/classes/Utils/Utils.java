@@ -192,14 +192,14 @@ public class Utils
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis((long)second * 1000);
 		String result = "";
-		result += calendar.get(Calendar.YEAR) + ".";
+		result += calendar.get(Calendar.YEAR) + "-";
 		
 		int month = calendar.get(Calendar.MONTH) + 1;
 		if (month < 10)
 		{
 			result += "0";			
 		}
-		result += month + ".";
+		result += month + "-";
 		
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		if (day < 10)
@@ -255,6 +255,16 @@ public class Utils
 		}
     	return resultList;
     } 
+
+    public static double roundDouble(double arg)
+    {
+    	if (arg > 0 & arg < 0.1)
+		{
+			return 0.1;
+		}
+		DecimalFormat format = new DecimalFormat("#0.0");
+		return Double.valueOf(format.format(arg));
+    }
     
     public static String formatDouble(double arg)
     {

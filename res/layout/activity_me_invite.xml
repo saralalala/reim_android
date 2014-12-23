@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background" >
 
     <RelativeLayout
         android:id="@+id/titleLayout"
@@ -30,29 +32,54 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/agreeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/inviteTextView"
-        android:text="@string/agree" />
-
-    <Button
-        android:id="@+id/rejectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/inviteTextView"
-        android:text="@string/reject" />
-
     <TextView
         android:id="@+id/inviteTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/titleLayout"
-        android:maxLines="10"
-        android:padding="10dp" />
+        android:layout_marginTop="34dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/font_major_dark"
+        android:textSize="16sp" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="22dp"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/hint_light_grey"
+        android:textSize="12sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/agreeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rejectButton"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/button_long_dark_drawable"
+            android:text="@string/join_group"
+            android:textColor="@color/button_text_light_color" />
+
+        <Button
+            android:id="@+id/rejectButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="22dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/button_long_light_solid_drawable"
+            android:text="@string/reject_invite"
+            android:textColor="@color/hint_grey" />
+        
+    </RelativeLayout>
+
+</LinearLayout>

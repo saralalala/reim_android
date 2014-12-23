@@ -12,6 +12,7 @@ import classes.User;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,10 +32,12 @@ public class ItemListViewAdapter extends BaseAdapter
 	private ItemFilter itemFilter;
 	private List<Item> itemList;
 	private List<Item> originalList;
+	private final Object mLock = new Object();
+	private int approvedColor;
+	private int proveAheadColor;
 //	private int interval;
 //	private int sideLength;
 //	private int iconCount;
-	private final Object mLock = new Object();
 
 	public ItemListViewAdapter(Context context, List<Item> items)
 	{
@@ -42,7 +45,8 @@ public class ItemListViewAdapter extends BaseAdapter
 		this.layoutInflater = LayoutInflater.from(context);
 		
 		this.itemList = new ArrayList<Item>(items);
-		
+		this.approvedColor = context.getResources().getColor(R.color.item_approved);
+		this.proveAheadColor = context.getResources().getColor(R.color.item_prove_ahead);
 //		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 
 //		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
@@ -59,7 +63,8 @@ public class ItemListViewAdapter extends BaseAdapter
 		}
 		
 		ImageView photoImageView = (ImageView)convertView.findViewById(R.id.photoImageView);
-		ImageView statusImageView = (ImageView)convertView.findViewById(R.id.statusImageView);
+		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
+		TextView proveTextView = (TextView)convertView.findViewById(R.id.proveTextView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		TextView reportTextView = (TextView)convertView.findViewById(R.id.reportTextView);
 		TextView vendorTextView = (TextView)convertView.findViewById(R.id.vendorTextView);
@@ -76,20 +81,27 @@ public class ItemListViewAdapter extends BaseAdapter
 		{
 			photoImageView.setVisibility(View.GONE);
 		}
+
+		statusTextView.setText(item.getStatusString());
+		statusTextView.setBackgroundResource(item.getStatusBackground());	
 		
 		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
 		{
-			statusImageView.setImageResource(R.drawable.item_approved_list);
-			statusImageView.setVisibility(View.VISIBLE);
+			proveTextView.setText(R.string.status_prove_ahead_approved);
+			proveTextView.setTextColor(approvedColor);
+			proveTextView.setBackgroundResource(R.drawable.item_approved_list);
+			proveTextView.setVisibility(View.VISIBLE);
 		}
 		else if (item.isProveAhead())
 		{
-			statusImageView.setImageResource(R.drawable.item_prove_ahead_list);
-			statusImageView.setVisibility(View.VISIBLE);
+			proveTextView.setText(R.string.prove_ahead);
+			proveTextView.setTextColor(proveAheadColor);
+			proveTextView.setBackgroundResource(R.drawable.item_prove_ahead_list);
+			proveTextView.setVisibility(View.VISIBLE);
 		}
 		else
 		{
-			statusImageView.setVisibility(View.INVISIBLE);					
+			proveTextView.setVisibility(View.INVISIBLE);					
 		}
 
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);

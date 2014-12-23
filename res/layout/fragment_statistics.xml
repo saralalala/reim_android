@@ -126,11 +126,10 @@
                         android:id="@+id/donePercentTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/markDoneImageView"
-                        android:layout_alignLeft="@+id/markDoneTextView"
+                        android:layout_alignLeft="@+id/markDoneImageView"
                         android:layout_alignRight="@+id/markDoneTextView"
                         android:layout_below="@+id/markDoneTextView"
-                        android:gravity="center"
+                        android:gravity="right"
                         android:textColor="@color/hint_dark_grey"
                         android:textSize="18sp" />
                 </RelativeLayout>
@@ -163,10 +162,10 @@
                         android:id="@+id/ongoingPercentTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/markOngoingTextView"
+                        android:layout_alignLeft="@+id/markOngoingImageView"
                         android:layout_alignRight="@+id/markOngoingTextView"
                         android:layout_below="@+id/markOngoingTextView"
-                        android:gravity="center"
+                        android:gravity="right"
                         android:textColor="@color/hint_dark_grey"
                         android:textSize="18sp" />
                 </RelativeLayout>
@@ -199,11 +198,10 @@
                         android:id="@+id/newPercentTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/markNewImageView"
-                        android:layout_alignLeft="@+id/markNewTextView"
+                        android:layout_alignLeft="@+id/markNewImageView"
                         android:layout_alignRight="@+id/markNewTextView"
                         android:layout_below="@+id/markNewTextView"
-                        android:gravity="center"
+                        android:gravity="right"
                         android:textColor="@color/hint_dark_grey"
                         android:textSize="18sp" />
                 </RelativeLayout>

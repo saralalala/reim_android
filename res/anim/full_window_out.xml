@@ -4,7 +4,7 @@
         android:interpolator="@android:anim/decelerate_interpolator"
         android:fromXDelta="0%"
         android:toXDelta="50%p"
-        android:duration="300"/>
+        android:duration="300" />
     <alpha
         android:interpolator="@android:anim/decelerate_interpolator"
         android:fromAlpha="1.0"

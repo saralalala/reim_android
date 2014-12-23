@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ReportListViewAdapter extends BaseAdapter
@@ -43,7 +42,7 @@ public class ReportListViewAdapter extends BaseAdapter
 		
 		TextView titleTextView = (TextView)convertView.findViewById(R.id.titleTextView);
 		TextView dateTextView = (TextView)convertView.findViewById(R.id.dateTextView);
-		final ImageView statusImageView = (ImageView)convertView.findViewById(R.id.statusImageView);
+		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		
 		Report report = reportList.get(position);
@@ -54,10 +53,8 @@ public class ReportListViewAdapter extends BaseAdapter
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
 		dateTextView.setText(date.equals("") ? context.getString(R.string.not_available) : date);
 
-		if (report.getStatus() >= 0 && report.getStatus() <= 4)
-		{
-			statusImageView.setImageResource(report.getStatusBackground());
-		}
+		statusTextView.setText(report.getStatusString());
+		statusTextView.setBackgroundResource(report.getStatusBackground());
 
 		double amount = dbManager.getReportAmount(report.getLocalID());
 		amountTextView.setText(Utils.formatDouble(amount));

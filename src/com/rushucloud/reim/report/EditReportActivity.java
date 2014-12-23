@@ -64,7 +64,7 @@ public class EditReportActivity extends Activity
 	
 	private EditText titleEditText;
 	private TextView timeTextView;
-	private ImageView statusImageView;
+	private TextView statusTextView;
 	private TextView managerTextView;
 	private ListView managerListView;
 	private PopupWindow managerPopupWindow;
@@ -204,7 +204,7 @@ public class EditReportActivity extends Activity
 		titleEditText.setFilters(filters);
 		
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
-		statusImageView = (ImageView) findViewById(R.id.statusImageView);
+		statusTextView = (TextView) findViewById(R.id.statusTextView);
 		
 		managerTextView = (TextView) findViewById(R.id.managerTextView);
 		managerTextView.setOnClickListener(new OnClickListener()
@@ -407,7 +407,8 @@ public class EditReportActivity extends Activity
 		String createDate = report.getCreatedDate() == -1 ? getString(R.string.not_available) : Utils.secondToStringUpToMinute(report.getCreatedDate());
 		timeTextView.setText(createDate);
 		
-		statusImageView.setImageResource(report.getStatusBackground());
+		statusTextView.setText(report.getStatusString());
+		statusTextView.setBackgroundResource(report.getStatusBackground());
 		
 		managerTextView.setText(report.getManagersName());		
 		ccTextView.setText(report.getCCsName());

@@ -60,14 +60,15 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			// init title, time and status
 			TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
 			TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
-			ImageView statusImageView = (ImageView) view.findViewById(R.id.statusImageView);
+			TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
 
 			String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
 			titleTextView.setText(title);
 			
 			timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
 
-			statusImageView.setImageResource(report.getStatusBackground());
+			statusTextView.setText(report.getStatusString());
+			statusTextView.setBackgroundResource(report.getStatusBackground());
 
 			// init sender, manager and cc			
 			TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);

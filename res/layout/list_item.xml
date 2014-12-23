@@ -11,17 +11,28 @@
         android:layout_toLeftOf="@+id/pivotView"
         android:paddingLeft="16dp" >
 
-        <ImageView
-            android:id="@+id/statusImageView"
-            android:layout_width="42dp"
-            android:layout_height="15dp"
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="36dp"
+            android:layout_height="20dp"
             android:layout_marginTop="7dp"
-            android:contentDescription="@string/status" />
+            android:gravity="center"
+            android:textColor="@color/major_light" />
+
+        <TextView
+            android:id="@+id/proveTextView"
+            android:layout_width="55dp"
+            android:layout_height="20dp"
+            android:layout_toRightOf="@+id/statusTextView"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="6dp"
+	        android:gravity="center"
+	        android:textSize="14sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/statusImageView"
+            android:layout_below="@+id/proveTextView"
             android:layout_marginTop="6dp"
             android:gravity="bottom" >
 

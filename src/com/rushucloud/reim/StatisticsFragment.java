@@ -129,29 +129,47 @@ public class StatisticsFragment extends Fragment
 	
 	private void drawPie()
 	{
-		int doneRatio, ongoingRatio, newRatio;
+		double doneRatio, ongoingRatio, newRatio, mainRatio;
 		double total = response.getTotal();
 		if (total == 0)
 		{
-			doneRatio = ongoingRatio = newRatio = 0;
+			doneRatio = ongoingRatio = newRatio = mainRatio = 0;
 		}
 		else
-		{
-			doneRatio = (int)(response.getDoneAmount() * 100 / total);
-			ongoingRatio = (int)(response.getOngoingAmount() * 100 / total);
-			newRatio = (int)(response.getNewAmount() * 100 / total);
+		{			
+			doneRatio = Utils.roundDouble(response.getDoneAmount() * 100 / total);
+			ongoingRatio = Utils.roundDouble(response.getOngoingAmount() * 100 / total);
+			newRatio = Utils.roundDouble(response.getNewAmount() * 100 / total);
+			
+			if (doneRatio >= ongoingRatio && doneRatio >= newRatio)
+			{
+				doneRatio = 100 - ongoingRatio - newRatio;
+				doneRatio = Utils.roundDouble(doneRatio);
+			}
+			else if (ongoingRatio >= doneRatio && ongoingRatio >= newRatio)
+			{
+				ongoingRatio = 100 - doneRatio - newRatio;
+				ongoingRatio = Utils.roundDouble(ongoingRatio);
+			}
+			else if (newRatio >= ongoingRatio && newRatio >= doneRatio)
+			{
+				newRatio = 100 - doneRatio - ongoingRatio;
+				newRatio = Utils.roundDouble(newRatio);
+			}
+			
+			mainRatio = ongoingRatio + newRatio;
 		}
 		
-		mainPercentTextView.setText(Integer.toString(newRatio));
-		donePercentTextView.setText(Integer.toString(doneRatio) + getString(R.string.percent));
-		ongoingPercentTextView.setText(Integer.toString(ongoingRatio) + getString(R.string.percent));
-		newPercentTextView.setText(Integer.toString(newRatio) + getString(R.string.percent));
+		mainPercentTextView.setText(Double.toString(mainRatio));
+		donePercentTextView.setText(Double.toString(doneRatio) + getString(R.string.percent));
+		ongoingPercentTextView.setText(Double.toString(ongoingRatio) + getString(R.string.percent));
+		newPercentTextView.setText(Double.toString(newRatio) + getString(R.string.percent));
 
 		float totalAngle = 262;
 		float startAngle = (float) 139;
-		float doneAngle = ((float) doneRatio) * totalAngle / 100;
-		float newAngle = ((float) newRatio) * totalAngle / 100;
-		float ongoingAngle = ((float) ongoingRatio) * totalAngle / 100;
+		float doneAngle = (float) doneRatio * totalAngle / 100;
+		float newAngle = (float) newRatio * totalAngle / 100;
+		float ongoingAngle = (float) ongoingRatio * totalAngle / 100;
 		
 		// Draw done pie
 		if (doneReimPie == null)

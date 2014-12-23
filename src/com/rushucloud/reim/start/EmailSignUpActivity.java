@@ -178,7 +178,7 @@ public class EmailSignUpActivity extends Activity
 					appPreference.setCurrentGroupID(-1);
 					appPreference.saveAppPreference();
 					
-					getCommonInfo();
+					sendGetCommonInfoRequest();
 				}
 				else
 				{
@@ -195,7 +195,7 @@ public class EmailSignUpActivity extends Activity
 		});		
 	}
     
-    private void getCommonInfo()
+    private void sendGetCommonInfoRequest()
     {
 		SignInRequest request = new SignInRequest();
 		request.sendRequest(new HttpConnectionCallback()
@@ -241,7 +241,14 @@ public class EmailSignUpActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(EmailSignUpActivity.this, "获取信息失败！" + response.getErrorMessage());
+							Utils.showToast(EmailSignUpActivity.this, "获取信息失败，请稍候重试");
+							Bundle bundle = new Bundle();
+							bundle.putString("username", AppPreference.getAppPreference().getUsername());
+							bundle.putString("password", AppPreference.getAppPreference().getPassword());
+							Intent intent = new Intent(EmailSignUpActivity.this, SignInActivity.class);
+							intent.putExtras(bundle);
+							startActivity(intent);
+							finish();
 						}
 					});								
 				}			

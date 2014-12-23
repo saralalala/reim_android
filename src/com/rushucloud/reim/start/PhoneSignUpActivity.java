@@ -153,7 +153,7 @@ public class PhoneSignUpActivity extends Activity
 				{
 					Utils.showToast(PhoneSignUpActivity.this, "网络未连接，无法发送请求");
 				}
-				else if (Utils.isPhone(phoneNumber))
+				else if (!Utils.isPhone(phoneNumber))
 				{
 					Utils.showToast(PhoneSignUpActivity.this, "手机号格式不正确");
 					phoneEditText.requestFocus();		
@@ -209,56 +209,12 @@ public class PhoneSignUpActivity extends Activity
 			}
 		});
 	}
-	
-	private void sendRegisterRequest(final User user, String verifyCode)
-	{
-		ReimApplication.showProgressDialog();
-		RegisterRequest request = new RegisterRequest(user, verifyCode);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final RegisterResponse response = new RegisterResponse(httpResponse);
-				if (response.getStatus())
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							Utils.showToast(PhoneSignUpActivity.this, "注册成功!正在获取数据");
-						}
-					});
-					
-					AppPreference appPreference = AppPreference.getAppPreference();
-					appPreference.setUsername(user.getEmail());	
-					appPreference.setPassword(user.getPassword());
-					appPreference.setServerToken(response.getServerToken());
-					appPreference.setCurrentUserID(response.getUserID());
-					appPreference.setCurrentGroupID(-1);
-					appPreference.saveAppPreference();
-					
-					getCommonInfo();
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimApplication.dismissProgressDialog();
-							Utils.showToast(PhoneSignUpActivity.this, "注册失败！"+response.getErrorMessage());
-						}
-					});		
-				}
-			}
-		});		
-	}
-        
+	  
     private void getVerifyCode(String phoneNumber)
     {
 		waitingTime = 60;
 		acquireCodeButton.setEnabled(false);
-		acquireCodeButton.setText(waitingTime + "s后重新获取");
+		acquireCodeButton.setText(waitingTime + "秒");
 		thread = new Thread(new Runnable()
 		{
 			public void run()
@@ -273,7 +229,7 @@ public class PhoneSignUpActivity extends Activity
 						{
 							public void run()
 							{
-								acquireCodeButton.setText(waitingTime + "s后重新获取");
+								acquireCodeButton.setText(waitingTime + "秒");
 							}
 						});	
 					}
@@ -328,6 +284,50 @@ public class PhoneSignUpActivity extends Activity
 		});
     }
     
+	private void sendRegisterRequest(final User user, String verifyCode)
+	{
+		ReimApplication.showProgressDialog();
+		RegisterRequest request = new RegisterRequest(user, verifyCode);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final RegisterResponse response = new RegisterResponse(httpResponse);
+				if (response.getStatus())
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							Utils.showToast(PhoneSignUpActivity.this, "注册成功!正在获取数据");
+						}
+					});
+					
+					AppPreference appPreference = AppPreference.getAppPreference();
+					appPreference.setUsername(user.getEmail());	
+					appPreference.setPassword(user.getPassword());
+					appPreference.setServerToken(response.getServerToken());
+					appPreference.setCurrentUserID(response.getUserID());
+					appPreference.setCurrentGroupID(-1);
+					appPreference.saveAppPreference();
+					
+					getCommonInfo();
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimApplication.dismissProgressDialog();
+							Utils.showToast(PhoneSignUpActivity.this, "注册失败！"+response.getErrorMessage());
+						}
+					});		
+				}
+			}
+		});		
+	}
+
     private void getCommonInfo()
     {
 		SignInRequest request = new SignInRequest();
@@ -375,7 +375,14 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimApplication.dismissProgressDialog();
-							Utils.showToast(PhoneSignUpActivity.this, "获取信息失败！"+response.getErrorMessage());
+							Utils.showToast(PhoneSignUpActivity.this, "获取信息失败，请稍候重试");
+							Bundle bundle = new Bundle();
+							bundle.putString("username", AppPreference.getAppPreference().getUsername());
+							bundle.putString("password", AppPreference.getAppPreference().getPassword());
+							Intent intent = new Intent(PhoneSignUpActivity.this, SignInActivity.class);
+							intent.putExtras(bundle);
+							startActivity(intent);
+							finish();
 						}
 					});								
 				}			

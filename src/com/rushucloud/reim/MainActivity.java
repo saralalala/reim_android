@@ -68,7 +68,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		if (Utils.isNetworkConnected())
 		{
 			sendGetEventsRequest();
-		}		
+		}
 	}
 
 	protected void onPause()

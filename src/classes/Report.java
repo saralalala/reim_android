@@ -238,19 +238,38 @@ public class Report implements Serializable
     	switch (getStatus())
 		{
 			case STATUS_DRAFT:
-				return R.drawable.report_status_draft;
+				return R.drawable.status_draft;
 			case STATUS_SUBMITTED:
-				return R.drawable.report_status_submitted;
+				return R.drawable.status_submitted;
 			case STATUS_APPROVED:
-				return R.drawable.report_status_approved;
+				return R.drawable.status_approved;
 			case STATUS_REJECTED:
-				return R.drawable.report_status_rejected;
+				return R.drawable.status_rejected;
 			case STATUS_FINISHED:
-				return R.drawable.report_status_rejected;
+				return R.drawable.status_finished;
 			default:
 				return 0;
 		}		
     }
+
+	public int getStatusString()
+	{
+		switch (getStatus())
+		{
+			case STATUS_DRAFT:
+				return R.string.status_draft;
+			case STATUS_SUBMITTED:
+				return R.string.status_submitted;
+			case STATUS_APPROVED:
+				return R.string.status_approved;
+			case STATUS_REJECTED:
+				return R.string.status_rejected;
+			case STATUS_FINISHED:
+				return R.string.status_finished;
+			default:
+				return R.string.not_available;
+		}
+	}
 	
 	public boolean hasItems()
 	{
@@ -300,22 +319,22 @@ public class Report implements Serializable
 		return false;
 	}
 
-	public static String getStatusString(int status)
+	public static int getStatusString(int status)
 	{
 		switch (status)
 		{
 			case STATUS_DRAFT:
-				return "草稿";
+				return R.string.status_draft;
 			case STATUS_SUBMITTED:
-				return "提交";
+				return R.string.status_submitted;
 			case STATUS_APPROVED:
-				return "通过";
+				return R.string.status_approved;
 			case STATUS_REJECTED:
-				return "退回";
+				return R.string.status_rejected;
 			case STATUS_FINISHED:
-				return "结束";
+				return R.string.status_finished;
 			default:
-				return "N/A";
+				return R.string.not_available;
 		}
 	}
 	

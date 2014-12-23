@@ -459,7 +459,7 @@ public class EditItemActivity extends Activity
 	{
 		TextView actualCostTextView = (TextView)findViewById(R.id.actualCostTextView);
 		TextView budgetTextView = (TextView)findViewById(R.id.budgetTextView);
-		ImageView approvedImageView = (ImageView)findViewById(R.id.approvedImageView);
+		TextView approvedTextView = (TextView)findViewById(R.id.approvedTextView);
 
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		amountEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -481,7 +481,7 @@ public class EditItemActivity extends Activity
 		{
 			actualCostTextView.setVisibility(View.GONE);
 			budgetTextView.setVisibility(View.GONE);
-			approvedImageView.setVisibility(View.GONE);
+			approvedTextView.setVisibility(View.GONE);
 		}
 	}
 	

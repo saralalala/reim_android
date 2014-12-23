@@ -11,14 +11,17 @@ import classes.Utils.Utils;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 public class ChangePasswordActivity extends Activity
 {
@@ -62,15 +65,6 @@ public class ChangePasswordActivity extends Activity
 	{
 		getActionBar().hide();
 		
-		oldPasswordEditText = (EditText)findViewById(R.id.oldPasswordEditText);
-		oldPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
-		
-		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
-		newPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
-		
-		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
-		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
 		{
@@ -80,11 +74,21 @@ public class ChangePasswordActivity extends Activity
 			}
 		});
 		
-		TextView saveTextView = (TextView)findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new OnClickListener()
+		oldPasswordEditText = (EditText)findViewById(R.id.oldPasswordEditText);
+		oldPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
+		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
+		newPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
+		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
+		confirmPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		
+		Button submitButton = (Button)findViewById(R.id.submitButton);
+		submitButton.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
+				hideSoftKeyboard();
 				MobclickAgent.onEvent(ChangePasswordActivity.this, "UMENG_MINE_CHANGE_USERINFO");
 				if (Utils.isNetworkConnected())
 				{
@@ -94,6 +98,16 @@ public class ChangePasswordActivity extends Activity
 				{
 					Utils.showToast(ChangePasswordActivity.this, "网络未连接，无法修改密码");
 				}
+			}
+		});
+		submitButton = Utils.resizeLongButton(submitButton);
+		
+		LinearLayout layout = (LinearLayout)findViewById(R.id.baseLayout);
+		layout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
 			}
 		});
 	}
@@ -117,6 +131,11 @@ public class ChangePasswordActivity extends Activity
 		{
 			Utils.showToast(ChangePasswordActivity.this, "确认密码不能为空！请重新输入");
 			confirmPasswordEditText.requestFocus();
+		}
+		else if (!oldPassword.equals(newPassword))
+		{
+			Utils.showToast(ChangePasswordActivity.this, "新旧密码相同！请重新输入");
+			newPasswordEditText.requestFocus();
 		}
 		else if (!confirmPassword.equals(newPassword))
 		{
@@ -164,4 +183,12 @@ public class ChangePasswordActivity extends Activity
 			});
 		}		
 	}
+
+    private void hideSoftKeyboard()
+    {
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
+		imm.hideSoftInputFromWindow(oldPasswordEditText.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(newPasswordEditText.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
+    }
 }
