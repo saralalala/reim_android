@@ -252,7 +252,7 @@ public class ProfileActivity extends Activity
 		});
 		cancelButton = Utils.resizeWindowButton(cancelButton);
 		
-		picturePopupWindow = Utils.constructPopupWindow(this, pictureView);        
+		picturePopupWindow = Utils.constructBottomPopupWindow(this, pictureView);        
 	}
 	
 	private void initEmailView()
@@ -328,7 +328,7 @@ public class ProfileActivity extends Activity
 			}
 		});
         
-		emailPopupWindow = Utils.constructFullPopupWindow(this, emailView);
+		emailPopupWindow = Utils.constructHorizontalPopupWindow(this, emailView);
 	}
 	
 	private void initPhoneView()
@@ -408,7 +408,7 @@ public class ProfileActivity extends Activity
 			}
 		});
         
-		phonePopupWindow = Utils.constructFullPopupWindow(this, phoneView);
+		phonePopupWindow = Utils.constructHorizontalPopupWindow(this, phoneView);
 	}
 	
 	private void initNicknameView()
@@ -484,7 +484,7 @@ public class ProfileActivity extends Activity
 			}
 		});
         
-		nicknamePopupWindow = Utils.constructFullPopupWindow(this, nicknameView);
+		nicknamePopupWindow = Utils.constructHorizontalPopupWindow(this, nicknameView);
 	}
 	
 	private void initCompanyView()
@@ -561,7 +561,7 @@ public class ProfileActivity extends Activity
 			}
 		});
         
-		companyPopupWindow = Utils.constructFullPopupWindow(this, companyView);
+		companyPopupWindow = Utils.constructHorizontalPopupWindow(this, companyView);
 	}
 
 	private void initManagerView()
@@ -593,7 +593,7 @@ public class ProfileActivity extends Activity
 			public void onClick(View v)
 			{
 				startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
-				overridePendingTransition(R.anim.full_window_in, 0);
+				overridePendingTransition(R.anim.window_horizontal_in, 0);
 			}
 		});
 	}	

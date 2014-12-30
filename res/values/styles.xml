@@ -27,14 +27,19 @@
         <item name="android:paddingRight">5dp</item>
     </style>
     
-    <style name="WindowAnimation" parent="android:Animation">
-        <item name="android:windowEnterAnimation">@anim/window_in</item>  
-        <item name="android:windowExitAnimation">@anim/window_out</item>
+    <style name="WindowTopAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/window_vertical_top_in</item>  
+        <item name="android:windowExitAnimation">@anim/window_vertical_top_out</item>
     </style>
     
-    <style name="FullWindowAnimation" parent="android:Animation">
-        <item name="android:windowEnterAnimation">@anim/full_window_in</item>  
-        <item name="android:windowExitAnimation">@anim/full_window_out</item>
+    <style name="WindowBottomAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/window_vertical_bottom_in</item>  
+        <item name="android:windowExitAnimation">@anim/window_vertical_bottom_out</item>
+    </style>
+    
+    <style name="WindowHorizontalAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/window_horizontal_in</item>  
+        <item name="android:windowExitAnimation">@anim/window_horizontal_out</item>
     </style>
 
 </resources>

@@ -241,7 +241,7 @@ public class CompleteInfoActivity extends Activity
 		});
 		cancelButton = Utils.resizeWindowButton(cancelButton);
 		
-		picturePopupWindow = Utils.constructPopupWindow(this, pictureView);
+		picturePopupWindow = Utils.constructBottomPopupWindow(this, pictureView);
 		
 		RelativeLayout baseLayout = (RelativeLayout)findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()

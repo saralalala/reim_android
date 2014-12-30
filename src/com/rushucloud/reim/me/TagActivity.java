@@ -182,7 +182,7 @@ public class TagActivity extends Activity
 			}
 		});
 		
-		tagPopupWindow = Utils.constructFullPopupWindow(this, tagView);
+		tagPopupWindow = Utils.constructHorizontalPopupWindow(this, tagView);
 	}
 	
 	private void refreshListView()
@@ -280,7 +280,7 @@ public class TagActivity extends Activity
     		});
     		cancelButton = Utils.resizeWindowButton(cancelButton);
     		
-    		operationPopupWindow = Utils.constructPopupWindow(this, operationView);    	
+    		operationPopupWindow = Utils.constructBottomPopupWindow(this, operationView);    	
 		}
     	
 		operationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);

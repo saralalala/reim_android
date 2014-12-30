@@ -194,7 +194,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		});
 		cancelButton = Utils.resizeWindowButton(cancelButton);
 		
-		forgotPopupWindow = Utils.constructPopupWindow(this, forgorView);
+		forgotPopupWindow = Utils.constructBottomPopupWindow(this, forgorView);
 		
 		signUpTextView = (TextView)findViewById(R.id.signUpTextView);
 		signUpTextView.setOnClickListener(this);

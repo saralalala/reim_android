@@ -30,22 +30,16 @@ import classes.Adapter.ItemListViewAdapter;
 import classes.Adapter.ItemTagGridViewAdapter;
 import database.DBManager;
 import android.app.AlertDialog.Builder;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -58,7 +52,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.support.v4.app.Fragment;
 
-public class ReimFragment extends Fragment implements OnKeyListener, IXListViewListener
+public class ReimFragment extends Fragment implements IXListViewListener
 {
 	private static final int FILTER_TYPE_ALL = 0;
 	private static final int FILTER_TYPE_PROVE_AHEAD = 1;
@@ -71,15 +65,14 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 	private static final int SORT_CONSUMED_DATE = 2;	
 	
 	private View view;
-	private View filterView;
+	private PopupWindow filterPopupWindow;
 	private XListView itemListView;
 	private ItemListViewAdapter adapter;
 	private PopupWindow deletePopupWindow;
 
-	private WindowManager windowManager;
-	private LayoutParams params = new LayoutParams();
 	private AppPreference appPreference;
 	private DBManager dbManager;
+
 	private List<Item> itemList = new ArrayList<Item>();
 	private List<Item> showList = new ArrayList<Item>();
 	private List<Tag> tagList = new ArrayList<Tag>();
@@ -223,22 +216,11 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
-				windowManager.addView(filterView, params);
+				showFilterWindow();
 			}
-		});		
+		});
 		
-		windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
-		
-		DisplayMetrics metrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		
-		filterView = View.inflate(getActivity(), R.layout.window_reim_filter, null);
-		filterView.setBackgroundColor(Color.WHITE);
-		filterView.setMinimumHeight(metrics.heightPixels);
-		
-		filterView.setFocusable(true);
-		filterView.setFocusableInTouchMode(true);
-		filterView.setOnKeyListener(this);
+		View filterView = View.inflate(getActivity(), R.layout.window_reim_filter, null);
 
 		final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
 		final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		
@@ -315,6 +297,9 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 			}
 		});
 
+		DisplayMetrics metrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		
 		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
 		int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
 		int tagWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);	
@@ -353,8 +338,8 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 						filterTagList.add(tagList.get(i));
 					}
 				}					
-				
-				windowManager.removeView(filterView);
+
+				filterPopupWindow.dismiss();
 				ReimApplication.showProgressDialog();
 				refreshItemListView();
 				ReimApplication.dismissProgressDialog();
@@ -366,9 +351,11 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 		{
 			public void onClick(View v)
 			{
-				windowManager.removeView(filterView);
+				filterPopupWindow.dismiss();
 			}
 		});
+	
+		filterPopupWindow = Utils.constructTopPopupWindow(getActivity(), filterView);
 	}
 	
 	private void initSearchView()
@@ -447,6 +434,12 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 		adapter.notifyDataSetChanged();
 	}
 
+    private void showFilterWindow()
+    {    	
+		filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+		filterPopupWindow.update();
+    }
+    
     private void showDeleteWindow(final int index)
     {    
     	if (deletePopupWindow == null)
@@ -508,7 +501,7 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
     		});
     		cancelButton = Utils.resizeWindowButton(cancelButton);
     		
-    		deletePopupWindow = Utils.constructPopupWindow(getActivity(), deleteView);    	
+    		deletePopupWindow = Utils.constructBottomPopupWindow(getActivity(), deleteView);    	
 		}
     	
 		deletePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
@@ -621,15 +614,6 @@ public class ReimFragment extends Fragment implements OnKeyListener, IXListViewL
 				}
 			});
 		}
-	}
-	
-	public boolean onKey(View v, int keyCode, KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			windowManager.removeView(filterView);
-		}
-		return false;
 	}
 	
 	public void onRefresh()

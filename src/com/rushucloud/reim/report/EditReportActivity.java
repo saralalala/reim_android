@@ -345,7 +345,7 @@ public class EditReportActivity extends Activity
 			}
 		});
 
-		managerPopupWindow = Utils.constructFullPopupWindow(this, managerView);	
+		managerPopupWindow = Utils.constructHorizontalPopupWindow(this, managerView);	
 	}
 	
 	private void initCCView()
@@ -393,7 +393,7 @@ public class EditReportActivity extends Activity
 			}
 		});
 
-		ccPopupWindow = Utils.constructFullPopupWindow(this, ccView);	
+		ccPopupWindow = Utils.constructHorizontalPopupWindow(this, ccView);	
 	}
 	
 	private void refreshView()
@@ -541,7 +541,7 @@ public class EditReportActivity extends Activity
     		});
     		cancelButton = Utils.resizeWindowButton(cancelButton);
     		
-    		deletePopupWindow = Utils.constructPopupWindow(this, deleteView);
+    		deletePopupWindow = Utils.constructBottomPopupWindow(this, deleteView);
 		}
     	
 		deletePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);

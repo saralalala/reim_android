@@ -269,7 +269,7 @@ public class ApproveReportActivity extends Activity
 					    		Utils.showToast(ApproveReportActivity.this, "报告已被审批");
 					    		finish();
 							}
-					    	else if (!report.getManagerList().contains(appPreference.getCurrentUserID()))
+					    	else if (!report.getManagerList().contains(appPreference.getCurrentUser()))
 							{
 					    		Bundle bundle = new Bundle();
 								bundle.putSerializable("report", report);
@@ -283,7 +283,7 @@ public class ApproveReportActivity extends Activity
 					    	{
 					    		adapter.setReport(report);
 								adapter.setItemList(itemList);
-								adapter.notifyDataSetChanged();						    		
+								adapter.notifyDataSetChanged();
 					    	}				
 						}
 					});

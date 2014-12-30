@@ -566,7 +566,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		typePopupWindow = Utils.constructPopupWindow(this, typeView);
+		typePopupWindow = Utils.constructBottomPopupWindow(this, typeView);
 	}
 	
 	private void initInvoiceView()
@@ -660,7 +660,7 @@ public class EditItemActivity extends Activity
 		});
 		cancelButton = Utils.resizeWindowButton(cancelButton);
 		
-		picturePopupWindow = Utils.constructPopupWindow(this, pictureView);		
+		picturePopupWindow = Utils.constructBottomPopupWindow(this, pictureView);		
 	}
 	
 	private void initTimeView()
@@ -697,7 +697,7 @@ public class EditItemActivity extends Activity
 		
 		datePicker = (DatePicker) timeView.findViewById(R.id.datePicker);
 		
-		timePopupWindow = Utils.constructPopupWindow(this, timeView);
+		timePopupWindow = Utils.constructBottomPopupWindow(this, timeView);
 	}
 	
 	private void initVendorView()
@@ -767,7 +767,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		vendorPopupWindow = Utils.constructFullPopupWindow(this, vendorView);
+		vendorPopupWindow = Utils.constructHorizontalPopupWindow(this, vendorView);
 	}
 	
 	private void initLocationView()
@@ -846,7 +846,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		locationPopupWindow = Utils.constructFullPopupWindow(this, locationView);
+		locationPopupWindow = Utils.constructHorizontalPopupWindow(this, locationView);
 	}
 	
 	private void initCategoryView()
@@ -1021,7 +1021,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		categoryPopupWindow = Utils.constructFullPopupWindow(this, categoryView);	
+		categoryPopupWindow = Utils.constructHorizontalPopupWindow(this, categoryView);	
 	}
 	
 	private void initTagView()
@@ -1107,7 +1107,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		tagPopupWindow = Utils.constructFullPopupWindow(this, tagView);	
+		tagPopupWindow = Utils.constructHorizontalPopupWindow(this, tagView);	
 	}
 	
 	private void initMemberView()
@@ -1193,7 +1193,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		memberPopupWindow = Utils.constructFullPopupWindow(this, memberView);	
+		memberPopupWindow = Utils.constructHorizontalPopupWindow(this, memberView);	
 	}
 
 	private void initNoteView()
@@ -1307,7 +1307,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		managerPopupWindow = Utils.constructFullPopupWindow(this, managerView);	
+		managerPopupWindow = Utils.constructHorizontalPopupWindow(this, managerView);	
 	}
 
 	private void refreshInvoiceView()

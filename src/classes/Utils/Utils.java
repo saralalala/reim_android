@@ -366,31 +366,8 @@ public class Utils
     {
     	Toast.makeText(context, resID, Toast.LENGTH_SHORT).show();
     }
-    
-	public static PopupWindow constructPopupWindow(final Activity activity, View view)
-	{
-		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
-		
-		PopupWindow popupWindow = new PopupWindow(activity);
-		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
-		popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
-		popupWindow.setContentView(view);
-		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
-		popupWindow.setFocusable(true);
-		popupWindow.setOutsideTouchable(true);
-		popupWindow.setAnimationStyle(R.style.WindowAnimation);
-		popupWindow.setOnDismissListener(new OnDismissListener()
-		{
-			public void onDismiss()
-			{
-				recoverBackground(activity);
-			}
-		});
-		
-		return popupWindow;
-	}    
 	
-	public static PopupWindow constructFullPopupWindow(final Activity activity, View view)
+	public static PopupWindow constructTopPopupWindow(final Activity activity, View view)
 	{
 		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
 		
@@ -401,7 +378,46 @@ public class Utils
 		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
 		popupWindow.setFocusable(true);
 		popupWindow.setOutsideTouchable(true);
-		popupWindow.setAnimationStyle(R.style.FullWindowAnimation);
+		popupWindow.setAnimationStyle(R.style.WindowTopAnimation);
+		
+		return popupWindow;
+	}
+	
+	public static PopupWindow constructBottomPopupWindow(final Activity activity, View view)
+	{
+		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
+		
+		PopupWindow popupWindow = new PopupWindow(activity);
+		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
+		popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
+		popupWindow.setContentView(view);
+		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+		popupWindow.setFocusable(true);
+		popupWindow.setOutsideTouchable(true);
+		popupWindow.setAnimationStyle(R.style.WindowBottomAnimation);
+		popupWindow.setOnDismissListener(new OnDismissListener()
+		{
+			public void onDismiss()
+			{
+				recoverBackground(activity);
+			}
+		});
+		
+		return popupWindow;
+	}
+	
+	public static PopupWindow constructHorizontalPopupWindow(final Activity activity, View view)
+	{
+		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
+		
+		PopupWindow popupWindow = new PopupWindow(activity);
+		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
+		popupWindow.setHeight(LayoutParams.MATCH_PARENT);
+		popupWindow.setContentView(view);
+		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+		popupWindow.setFocusable(true);
+		popupWindow.setOutsideTouchable(true);
+		popupWindow.setAnimationStyle(R.style.WindowHorizontalAnimation);
 		
 		return popupWindow;
 	}

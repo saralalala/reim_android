@@ -34,20 +34,13 @@ import com.umeng.analytics.MobclickAgent;
 import database.DBManager;
 
 import android.app.AlertDialog.Builder;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
-import android.view.WindowManager.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -63,7 +56,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.support.v4.app.Fragment;
 
-public class ReportFragment extends Fragment implements OnKeyListener, OnClickListener, IXListViewListener
+public class ReportFragment extends Fragment implements OnClickListener, IXListViewListener
 {
 	private static final int SORT_NULL = 0;	
 	private static final int SORT_ITEMS_COUNT = 1;	
@@ -73,7 +66,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	private boolean hasInit = false;
 	
 	private View view;
-	private View filterView;
+	private PopupWindow filterPopupWindow;
 	private TextView myTitleTextView;
 	private TextView othersTitleTextView;
 	private TextView shortBadgeTextView;
@@ -84,8 +77,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	private OthersReportListViewAdapter othersAdapter;
 	private PopupWindow operationPopupWindow;
 
-	private WindowManager windowManager;
-	private LayoutParams params = new LayoutParams();
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
@@ -192,7 +183,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
-				windowManager.addView(filterView, params);
+				showFilterWindow();
 			}
 		});
 		
@@ -275,18 +266,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 	
 	private void initFilterView()
 	{		
-		windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);	
-		
-		DisplayMetrics metrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		
-		filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);
-		filterView.setBackgroundColor(Color.WHITE);
-		filterView.setMinimumHeight(metrics.heightPixels);
-		
-		filterView.setFocusable(true);
-		filterView.setFocusableInTouchMode(true);
-		filterView.setOnKeyListener(this);
+		View filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);
 
 		final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
 		final RadioButton sortItemsCountRadio = (RadioButton)filterView.findViewById(R.id.sortItemsCountRadio);
@@ -379,8 +359,8 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 					othersFilterStatusList.clear();
 					othersFilterStatusList.addAll(tagAdapter.getFilterStatusList());
 				}
-				
-				windowManager.removeView(filterView);
+
+				filterPopupWindow.dismiss();
 				ReimApplication.showProgressDialog();
 				refreshReportListView();
 				ReimApplication.dismissProgressDialog();
@@ -392,9 +372,11 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		{
 			public void onClick(View v)
 			{
-				windowManager.removeView(filterView);
+				filterPopupWindow.dismiss();
 			}
 		});
+		
+		filterPopupWindow = Utils.constructTopPopupWindow(getActivity(), filterView);
 	}
 	
 	private void setListView(int index)
@@ -491,6 +473,12 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		}
 	}
 
+    private void showFilterWindow()
+    {    	
+		filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+		filterPopupWindow.update();
+    }
+    
     private void showOperationWindow(final int index)
     {    
     	if (operationPopupWindow == null)
@@ -573,7 +561,7 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
     		});
     		cancelButton = Utils.resizeWindowButton(cancelButton);
     		
-    		operationPopupWindow = Utils.constructPopupWindow(getActivity(), operationView);    	
+    		operationPopupWindow = Utils.constructBottomPopupWindow(getActivity(), operationView);    	
 		}
     	
 		operationPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
@@ -879,15 +867,6 @@ public class ReportFragment extends Fragment implements OnKeyListener, OnClickLi
 		}
 	}
 	
-	public boolean onKey(View v, int keyCode, KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			windowManager.removeView(filterView);
-		}
-		return false;
-	}
-
 	public void onClick(View v)
 	{
 		if (v.equals(myTitleTextView))

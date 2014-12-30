@@ -269,7 +269,7 @@ public class CategoryActivity extends Activity
 			}
 		});
 		
-		categoryPopupWindow = Utils.constructFullPopupWindow(this, categoryView);
+		categoryPopupWindow = Utils.constructHorizontalPopupWindow(this, categoryView);
 	}
 
 	private void resetCheck()
@@ -426,7 +426,7 @@ public class CategoryActivity extends Activity
     		});
     		cancelButton = Utils.resizeWindowButton(cancelButton);
     		
-    		operationPopupWindow = Utils.constructPopupWindow(this, operationView);    	
+    		operationPopupWindow = Utils.constructBottomPopupWindow(this, operationView);    	
 		}
     	
 		operationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
