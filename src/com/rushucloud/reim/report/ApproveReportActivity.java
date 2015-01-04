@@ -17,6 +17,7 @@ import classes.Adapter.ReportDetailListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
 
+import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.ShowItemActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -48,6 +49,8 @@ public class ApproveReportActivity extends Activity
 	private Report report;
 	private List<Item> itemList = new ArrayList<Item>();
 	
+	private boolean fromPush;
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -76,7 +79,7 @@ public class ApproveReportActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+			goBackToMainActivity();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -98,6 +101,7 @@ public class ApproveReportActivity extends Activity
 			{
 				reportServerID = report.getServerID();				
 			}
+			fromPush = bundle.getBoolean("fromPush", false);
 		}
 		else
 		{
@@ -120,7 +124,7 @@ public class ApproveReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+				goBackToMainActivity();
 			}
 		});
 		
@@ -241,23 +245,21 @@ public class ApproveReportActivity extends Activity
 						report.setCCList(response.getReport().getCCList());
 						report.setCommentList(response.getReport().getCommentList());						
 					}
+
+					dbManager.deleteOthersReport(reportServerID, ownerID);
+					dbManager.insertOthersReport(report);
 					
-					dbManager.deleteOthersReportItems(reportServerID);
 					for (Item item : response.getItemList())
 					{
 						dbManager.insertOthersItem(item);
 					}
 					itemList = dbManager.getOthersReportItems(reportServerID);
 					
-					dbManager.deleteOthersReportComments(report.getServerID());
 					for (Comment comment : report.getCommentList())
 					{
 						comment.setReportID(report.getServerID());
 						dbManager.insertOthersComment(comment);
 					}
-
-					dbManager.deleteOthersReport(reportServerID, ownerID);
-					dbManager.insertOthersReport(report);
 					
 					runOnUiThread(new Runnable()
 					{
@@ -267,17 +269,7 @@ public class ApproveReportActivity extends Activity
 					    	if (report.getStatus() != Report.STATUS_SUBMITTED)
 							{
 					    		Utils.showToast(ApproveReportActivity.this, "报告已被审批");
-					    		finish();
-							}
-					    	else if (!report.getManagerList().contains(appPreference.getCurrentUser()))
-							{
-					    		Bundle bundle = new Bundle();
-								bundle.putSerializable("report", report);
-								bundle.putBoolean("myReport", false);
-								Intent intent = new Intent(ApproveReportActivity.this, ShowReportActivity.class);
-								intent.putExtras(bundle);
-								startActivity(intent);
-								finish();
+								goBackToMainActivity();
 							}
 					    	else
 					    	{
@@ -296,7 +288,7 @@ public class ApproveReportActivity extends Activity
 						{
 					    	ReimApplication.dismissProgressDialog();
 				    		Utils.showToast(ApproveReportActivity.this, "数据获取失败");
-				    		finish();
+							goBackToMainActivity();
 						}
 					});
 				}
@@ -368,7 +360,7 @@ public class ApproveReportActivity extends Activity
 							ReimApplication.dismissProgressDialog();
 							String message = status == 2 ? "报告已通过" : "报告已退回";
 							Utils.showToast(ApproveReportActivity.this, message);
-							finish();
+							goBackToMainActivity();
 						}
 					});
 				}
@@ -385,5 +377,23 @@ public class ApproveReportActivity extends Activity
 				}
 			}
 		});
+    }
+
+    private void goBackToMainActivity()
+    {
+    	if (fromPush)
+		{
+        	ReimApplication.setTabIndex(1);
+        	ReimApplication.setReportTabIndex(1);
+        	Intent intent = new Intent(ApproveReportActivity.this, MainActivity.class);
+    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        	startActivity(intent);
+        	finish();
+		}
+    	else
+    	{
+			finish();
+		}
     }
 }

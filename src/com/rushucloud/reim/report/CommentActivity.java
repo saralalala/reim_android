@@ -105,7 +105,7 @@ public class CommentActivity extends Activity
 			{
 				myReport = true;
 			}
-		} 
+		}
 		else // source.equals("ApproveReportActivity")
 		{
 			reportID = bundle.getInt("reportServerID", -1);

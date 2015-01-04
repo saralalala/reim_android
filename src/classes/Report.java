@@ -40,6 +40,7 @@ public class Report implements Serializable
 	private int localUpdatedDate = -1;
 	private int itemCount;
 	private String amount;
+	private boolean isCC;
 	
 	public Report()
 	{
@@ -233,6 +234,15 @@ public class Report implements Serializable
 		this.amount = amount;
 	}
 		
+	public boolean isCC()
+	{
+		return isCC;
+	}
+	public void setIsCC(boolean isCC)
+	{
+		this.isCC = isCC;
+	}
+
 	public int getStatusBackground()
     {
     	switch (getStatus())

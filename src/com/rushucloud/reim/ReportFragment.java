@@ -236,8 +236,8 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 					Report report = showOthersList.get(position-1);
 					Bundle bundle = new Bundle();
 					bundle.putSerializable("report", report);
-					Intent intent;
-					if (report.getStatus() == Report.STATUS_SUBMITTED)
+					Intent intent;		
+					if (report.getStatus() == Report.STATUS_SUBMITTED && !report.isCC())
 					{
 						intent = new Intent(getActivity(), ApproveReportActivity.class);
 					}
@@ -691,13 +691,36 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				if (response.getStatus())
 				{
 					int managerID = appPreference.getCurrentUserID();
-					List<Report> reportList = response.getReportList();
-					dbManager.deleteOthersReports(managerID);
 					
-					for (Report report : reportList)
+					List<Report> localReportList = dbManager.getOthersReports(managerID);
+					for (Report localReport : localReportList)
 					{
-						dbManager.insertOthersReport(report);
-						dbManager.deleteOthersReportItems(report.getServerID());
+						boolean reportExists = false;
+						for (Report report : response.getReportList())
+						{
+							if (localReport.getServerID() == report.getServerID())
+							{
+								reportExists = true;
+								break;
+							}
+						}
+						if (!reportExists)
+						{
+							dbManager.deleteOthersReport(localReport.getServerID(), managerID);
+						}
+					}
+					
+					for (Report report : response.getReportList())
+					{
+						Report localReport = dbManager.getOthersReport(report.getServerID());
+						if (localReport == null)
+						{
+							dbManager.insertOthersReport(report);
+						}
+						else if (report.getServerUpdatedDate() > localReport.getLocalUpdatedDate())
+						{
+							dbManager.updateOthersReport(report);
+						}
 					}
 					
 					getActivity().runOnUiThread(new Runnable()

@@ -261,6 +261,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "prove_ahead INT DEFAULT(0),"
 										+ "item_count INT DEFAULT(0),"
 										+ "amount TEXT DEFAULT(''),"
+										+ "is_cc INT DEFAULT(0),"
 										+ "created_date INT DEFAULT(0),"
 										+ "server_updatedt INT DEFAULT(0),"
 										+ "local_updatedt INT DEFAULT(0),"
@@ -1558,7 +1559,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "INSERT INTO tbl_others_report (server_id, owner_id, title, user_id, status, manager_id, cc_id, " +
-									"prove_ahead, amount, item_count, created_date, server_updatedt, local_updatedt) VALUES (" + 
+									"prove_ahead, amount, item_count, is_cc, created_date, server_updatedt, local_updatedt) VALUES (" + 
 								"'" + report.getServerID() + "'," +
 								"'" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
 								"'" + report.getTitle() + "'," +
@@ -1569,6 +1570,7 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + Utils.booleanToInt(report.isProveAhead()) + "'," +
 								"'" + report.getAmount() + "'," +
 								"'" + report.getItemCount() + "'," +
+								"'" + Utils.booleanToInt(report.isCC()) + "'," +
 								"'" + report.getCreatedDate() + "'," +
 								"'" + report.getServerUpdatedDate() + "'," +
 								"'" + report.getLocalUpdatedDate() + "')";
@@ -1684,7 +1686,11 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "DELETE FROM tbl_others_report WHERE server_id = '" + reportServerID +"' AND owner_id = '" + managerID + "'";
-			database.execSQL(sqlString);			
+			database.execSQL(sqlString);
+			
+			deleteOthersReportItems(reportServerID);
+			deleteOthersReportComments(reportServerID);
+			
 			return true;
 		}
 		catch (Exception e)
@@ -1715,6 +1721,22 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			String idString = remainingList.size() > 0 ? TextUtils.join(",", remainingList) + ",-1" : "-1";
 			String sqlString = "DELETE FROM tbl_report WHERE server_id NOT IN (" + idString +") AND user_id = " + userServerID;
+			database.execSQL(sqlString);
+			
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	public boolean deleteOthersTrashReports(List<Integer> remainingList, int userServerID)
+	{
+		try
+		{
+			String idString = remainingList.size() > 0 ? TextUtils.join(",", remainingList) : "";
+			String sqlString = "DELETE FROM tbl_others_report WHERE server_id NOT IN (" + idString +") AND owner_id = " + userServerID;
 			database.execSQL(sqlString);
 			
 			return true;
@@ -1819,6 +1841,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
 				report.setAmount(getStringFromCursor(cursor, "amount"));
+				report.setIsCC(Utils.intToBoolean(getIntFromCursor(cursor, "is_cc")));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -2031,6 +2054,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
 				report.setAmount(getStringFromCursor(cursor, "amount"));
+				report.setIsCC(Utils.intToBoolean(getIntFromCursor(cursor, "is_cc")));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -2046,7 +2070,7 @@ public class DBManager extends SQLiteOpenHelper
 			return reportList;
 		}
 	}
-		
+
 	public String getReportItemIDs(int reportLocalID)
 	{
 		List<Integer> idList = new ArrayList<Integer>();

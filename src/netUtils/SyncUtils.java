@@ -97,16 +97,10 @@ public abstract class SyncUtils
 					dbManager.deleteTrashReports(remainingList, appPreference.getCurrentUserID());
 					
 					remainingList.clear();
-//					int i = 1;
 					for (Item item : response.getItemList())
 					{
 						Report report = item.getBelongReport();
 						report.setLocalID(reportIDArray.get(report.getServerID()));
-//						System.out.println("-------------------------------------------");
-//						System.out.println("item server id:" + item.getServerID());
-//						System.out.println("report server id:" + report.getServerID() + "    report local id:"+report.getLocalID());
-//						System.out.println("number: "+i);
-//						i++;
 						item.setBelongReport(report);
 						dbManager.syncItem(item);
 						remainingList.add(item.getServerID());

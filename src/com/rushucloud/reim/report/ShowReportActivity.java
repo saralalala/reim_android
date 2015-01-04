@@ -199,14 +199,12 @@ public class ShowReportActivity extends Activity
 						dbManager.deleteOthersReport(reportServerID, ownerID);
 						dbManager.insertOthersReport(report);
 												
-						dbManager.deleteOthersReportItems(reportServerID);
 						for (Item item : response.getItemList())
 						{
 							dbManager.insertOthersItem(item);
 						}
 						itemList = dbManager.getOthersReportItems(reportServerID);
 						
-						dbManager.deleteOthersReportComments(report.getServerID());
 						for (Comment comment : report.getCommentList())
 						{
 							comment.setReportID(report.getServerID());
@@ -217,7 +215,7 @@ public class ShowReportActivity extends Activity
 					runOnUiThread(new Runnable()
 					{
 						public void run()
-						{
+						{							
 					    	ReimApplication.dismissProgressDialog();
 					    	adapter.setReport(report);
 					    	adapter.setItemList(itemList);

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import classes.Report;
 import classes.User;
+import classes.Utils.Utils;
 import netUtils.Response.BaseResponse;
 
 public class SubordinatesReportResponse extends BaseResponse
@@ -42,6 +43,7 @@ public class SubordinatesReportResponse extends BaseResponse
 					report.setLocalUpdatedDate(object.getInt("lastdt"));
 					report.setItemCount(object.getInt("item_count"));
 					report.setAmount(object.getString("amount"));
+					report.setIsCC(Utils.intToBoolean(object.getInt("cc_flag")));
 					
 					User user = new User();
 					user.setServerID(object.getInt("uid"));
