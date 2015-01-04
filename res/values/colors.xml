@@ -36,14 +36,13 @@
     <color name="tab_item_selected">#FFFF575B</color>
     <color name="tab_item_unselected">#FF61686D</color>
     
-    <color name="reim_pie_occupy">#FF0366C9</color>
-    <color name="reim_pie_remain">#FF03CACA</color>
-    
     <color name="radio_button_selected_color">#FFFF575B</color>
     <color name="radio_button_unselected_color">@android:color/transparent</color>
     
     <color name="item_approved">#FF3CB798</color>
     <color name="item_prove_ahead">#FFFF575B</color>
+    
+    <color name="tag_background">#FFABABAB</color>
     
     <color name="report_status_draft">#FFA17356</color>
     <color name="report_status_submitted">#FF46A3D3</color>

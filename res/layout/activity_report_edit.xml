@@ -284,6 +284,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="?android:attr/buttonBarButtonStyle"
+            android:background="@drawable/bar_button_drawable"
             android:text="@string/message"
             android:textColor="@color/hint_grey" />
 
@@ -293,6 +294,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="?android:attr/buttonBarButtonStyle"
+            android:background="@drawable/bar_button_drawable"
             android:text="@string/submit" 
             android:textColor="@color/start_button_text_color"/>
         

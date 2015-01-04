@@ -2,22 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="50dp"
     android:layout_height="wrap_content" >
-
-    <ImageView
-        android:id="@+id/iconImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="@string/tag"
-        android:src="@drawable/default_icon" />
     
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/iconImageView"
-        android:layout_marginTop="5dp"
         android:gravity="center"
 	    android:textColor="@color/font_major_dark"
 	    android:textSize="12sp"/>

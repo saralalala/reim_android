@@ -56,6 +56,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Selection;
@@ -65,7 +67,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
@@ -124,11 +125,11 @@ public class EditItemActivity extends Activity
 	private PopupWindow categoryPopupWindow;
 	
 	private LinearLayout tagLayout;
-	private View addTagView;
+	private ImageView addTagImageView;
 	private PopupWindow tagPopupWindow;
 	
 	private LinearLayout memberLayout;
-	private View addMemberView;
+	private ImageView addMemberImageView;
 	private PopupWindow memberPopupWindow;
 	
 	private EditText noteEditText;
@@ -151,11 +152,7 @@ public class EditItemActivity extends Activity
 
 	private boolean fromReim;
 	private boolean newItem = false;
-	
-	private int iconWidth;
-	private int iconInterval;
-	private int iconMaxCount;
-	
+		
 	private LocationClient locationClient = null;
 	private BDLocationListener listener = new ReimLocationListener();
 	private BDLocation currentLocation;
@@ -356,12 +353,6 @@ public class EditItemActivity extends Activity
 	private void initView()
 	{
 		getActionBar().hide();
-
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
-		iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
-		iconInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
-		iconMaxCount = (metrics.widthPixels - padding + iconInterval) / (iconWidth + iconInterval);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
@@ -1029,8 +1020,8 @@ public class EditItemActivity extends Activity
 		// init tag
 		tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
 		
-		addTagView = View.inflate(this, R.layout.grid_tag, null);
-		addTagView.setOnClickListener(new View.OnClickListener()
+		addTagImageView = (ImageView) findViewById(R.id.addTagImageView);
+		addTagImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -1054,10 +1045,7 @@ public class EditItemActivity extends Activity
 				}														
 			}
 		});
-		
-		ImageView iconImageView = (ImageView) addTagView.findViewById(R.id.iconImageView);
-		iconImageView.setImageResource(R.drawable.add_tag_button);
-		
+				
 		refreshTagView();
 
 		// init tag window
@@ -1114,9 +1102,9 @@ public class EditItemActivity extends Activity
 	{	
 		// init member
 		memberLayout = (LinearLayout) findViewById(R.id.memberLayout);
-		
-		addMemberView = View.inflate(this, R.layout.grid_member, null);
-		addMemberView.setOnClickListener(new View.OnClickListener()
+
+		addMemberImageView = (ImageView) findViewById(R.id.addMemberImageView);
+		addMemberImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -1140,9 +1128,6 @@ public class EditItemActivity extends Activity
 				}											
 			}
 		});
-		
-		ImageView avatarImageView = (ImageView) addMemberView.findViewById(R.id.avatarImageView);
-		avatarImageView.setImageResource(R.drawable.add_tag_button);
 		
 		refreshMemberView();	
 
@@ -1356,66 +1341,68 @@ public class EditItemActivity extends Activity
 	{
 		tagLayout.removeAllViews();
 
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 126, metrics);
+		int tagVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		int tagHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, metrics);
+		int textSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, metrics);
+		
+		int space = 0;
 		LinearLayout layout = new LinearLayout(this);
 		int tagCount = item.getTags() != null ? item.getTags().size() : 0;
 		for (int i = 0; i < tagCount; i++)
 		{
-			if (i % iconMaxCount == 0)
+			String name = item.getTags().get(i).getName();
+			
+			View view = View.inflate(this, R.layout.grid_tag, null);
+
+			TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+			nameTextView.setText(name);
+			
+			Paint textPaint = new Paint();
+			textPaint.setTextSize(textSize);
+			Rect textRect = new Rect();
+			textPaint.getTextBounds(name, 0, name.length(), textRect);
+			int width = textRect.width() + padding;
+			
+			if (space - width - tagHorizontalInterval <= 0)
 			{
 				layout = new LinearLayout(this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				params.topMargin = iconInterval;
+				params.topMargin = tagVerticalInterval;
 				layout.setLayoutParams(params);
 				layout.setOrientation(LinearLayout.HORIZONTAL);
 				
 				tagLayout.addView(layout);
+				
+				params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				layout.addView(view, params);
+				space = layoutMaxLength - width;
 			}
-			
-			Tag tag = item.getTags().get(i);
-			Bitmap tagIcon = BitmapFactory.decodeFile(tag.getIconPath());
-			
-			View tagView = View.inflate(this, R.layout.grid_tag, null);
-			
-			ImageView iconImageView = (ImageView) tagView.findViewById(R.id.iconImageView);
-			if (tagIcon != null)
+			else
 			{
-				iconImageView.setImageBitmap(tagIcon);		
+				LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				params.leftMargin = tagHorizontalInterval;
+				layout.addView(view, params);
+				space -= width + tagHorizontalInterval;
 			}
-			
-			TextView nameTextView = (TextView) tagView.findViewById(R.id.nameTextView);
-			nameTextView.setText(tag.getName());
-			
-			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
-			params.rightMargin = iconInterval;
-			
-			layout.addView(tagView, params);
 		}
 		
-		// add addTagView
-		if (tagCount % iconMaxCount == 0)
-		{
-			layout = new LinearLayout(this);
-			LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			params.topMargin = iconInterval;
-			layout.setLayoutParams(params);
-			layout.setOrientation(LinearLayout.HORIZONTAL);
-			
-			tagLayout.addView(layout);			
-		}
-
-		ViewGroup viewGroup = (ViewGroup) addTagView.getParent();
-		if (viewGroup != null)
-		{
-			viewGroup.removeView(addTagView);
-		}
-		LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);		
-		layout.addView(addTagView, params);		
 	}
 
 	private void refreshMemberView()
 	{
 		memberLayout.removeAllViews();
 
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 126, metrics);
+		int iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
+		int iconVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		int iconHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
+		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
+		
 		LinearLayout layout = new LinearLayout(this);
 		int memberCount = item.getRelevantUsers() != null ? item.getRelevantUsers().size() : 0;
 		for (int i = 0; i < memberCount; i++)
@@ -1424,7 +1411,7 @@ public class EditItemActivity extends Activity
 			{
 				layout = new LinearLayout(this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				params.topMargin = iconInterval;
+				params.topMargin = iconVerticalInterval;
 				layout.setLayoutParams(params);
 				layout.setOrientation(LinearLayout.HORIZONTAL);
 				
@@ -1446,30 +1433,10 @@ public class EditItemActivity extends Activity
 			nameTextView.setText(user.getNickname());
 			
 			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
-			params.rightMargin = iconInterval;
+			params.rightMargin = iconHorizontalInterval;
 			
 			layout.addView(memberView, params);
 		}
-		
-		// add addMemberView
-		if (memberCount % iconMaxCount == 0)
-		{
-			layout = new LinearLayout(this);
-			LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			params.topMargin = iconInterval;
-			layout.setLayoutParams(params);
-			layout.setOrientation(LinearLayout.HORIZONTAL);
-			
-			memberLayout.addView(layout);			
-		}
-
-		ViewGroup viewGroup = (ViewGroup) addMemberView.getParent();
-		if (viewGroup != null)
-		{
-			viewGroup.removeView(addMemberView);
-		}
-		LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);		
-		layout.addView(addMemberView, params);		
 	}
 	
     private void hideSoftKeyboard()

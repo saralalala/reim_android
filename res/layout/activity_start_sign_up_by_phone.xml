@@ -43,8 +43,7 @@
         android:textColor="@color/font_major_light"
         android:textColorHint="@color/hint_white" 
         android:background="@null"
-        android:cursorVisible="true"
-        android:textCursorDrawable="@drawable/cursor" />
+        android:textCursorDrawable="@null" />
 
     <include 
         android:id="@+id/divider1"
@@ -69,8 +68,7 @@
         android:textColor="@color/font_major_light"
         android:textColorHint="@color/hint_white" 
         android:background="@null"
-        android:cursorVisible="true"
-        android:textCursorDrawable="@drawable/cursor" />
+        android:textCursorDrawable="@null" />
 
     <include 
         android:id="@+id/divider2"
@@ -95,8 +93,7 @@
         android:textColor="@color/font_major_light"
         android:textColorHint="@color/hint_white" 
         android:background="@null"
-        android:cursorVisible="true"
-        android:textCursorDrawable="@drawable/cursor" />
+        android:textCursorDrawable="@null" />
 
     <include 
         android:id="@+id/divider3"
@@ -120,8 +117,7 @@
         android:textColor="@color/font_major_light"
         android:textColorHint="@color/hint_white" 
         android:background="@null"
-        android:cursorVisible="true"
-        android:textCursorDrawable="@drawable/cursor" />
+        android:textCursorDrawable="@null" />
 
     <Button
         android:id="@+id/acquireCodeButton"

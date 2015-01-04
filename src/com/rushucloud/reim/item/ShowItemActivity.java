@@ -20,6 +20,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -39,9 +41,6 @@ public class ShowItemActivity extends Activity
 	
 	private DBManager dbManager;
 	private Item item;
-	private int iconWidth;
-	private int iconInterval;
-	private int iconMaxCount;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -216,14 +215,9 @@ public class ShowItemActivity extends Activity
 				sendDownloadCategoryIconRequest(item.getCategory());
 			}
 		}
-		
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
-		iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
-		iconInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
-		iconMaxCount = (metrics.widthPixels - padding + iconInterval) / (iconWidth + iconInterval);
 
 		// init tag
+		tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
 		refreshTagView();
 		
 		if (item.getTags() != null && Utils.isNetworkConnected())
@@ -238,6 +232,7 @@ public class ShowItemActivity extends Activity
 		}
 		
 		// init member
+		memberLayout = (LinearLayout) findViewById(R.id.memberLayout);
 		refreshMemberView();
 		
 		if (item.getRelevantUsers() != null && Utils.isNetworkConnected())
@@ -260,42 +255,54 @@ public class ShowItemActivity extends Activity
 	{
 		initData();
 
-		tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
 		tagLayout.removeAllViews();
 
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 126, metrics);
+		int tagVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		int tagHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, metrics);
+		int textSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, metrics);
+
+		int space = 0;
 		LinearLayout layout = new LinearLayout(this);
 		int tagCount = item.getTags() != null ? item.getTags().size() : 0;
 		for (int i = 0; i < tagCount; i++)
 		{
-			if (i % iconMaxCount == 0)
+			String name = item.getTags().get(i).getName();
+			
+			View view = View.inflate(this, R.layout.grid_tag, null);
+
+			TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+			nameTextView.setText(name);
+			
+			Paint textPaint = new Paint();
+			textPaint.setTextSize(textSize);
+			Rect textRect = new Rect();
+			textPaint.getTextBounds(name, 0, name.length(), textRect);
+			int width = textRect.width() + padding;
+			
+			if (space - width - tagHorizontalInterval <= 0)
 			{
 				layout = new LinearLayout(this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				params.topMargin = iconInterval;
+				params.topMargin = tagVerticalInterval;
 				layout.setLayoutParams(params);
 				layout.setOrientation(LinearLayout.HORIZONTAL);
 				
 				tagLayout.addView(layout);
+				
+				params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				layout.addView(view, params);
+				space = layoutMaxLength - width;
 			}
-			
-			Tag tag = item.getTags().get(i);
-			Bitmap tagIcon = BitmapFactory.decodeFile(tag.getIconPath());
-			
-			View tagView = View.inflate(this, R.layout.grid_tag, null);
-			
-			ImageView iconImageView = (ImageView) tagView.findViewById(R.id.iconImageView);
-			if (tagIcon != null)
+			else
 			{
-				iconImageView.setImageBitmap(tagIcon);		
+				LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				params.leftMargin = tagHorizontalInterval;
+				layout.addView(view, params);
+				space -= width + tagHorizontalInterval;
 			}
-			
-			TextView nameTextView = (TextView) tagView.findViewById(R.id.nameTextView);
-			nameTextView.setText(tag.getName());
-			
-			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
-			params.rightMargin = iconInterval;
-			
-			layout.addView(tagView, params);
 		}
 	}
 	
@@ -303,8 +310,15 @@ public class ShowItemActivity extends Activity
 	{
 		initData();
 		
-		memberLayout = (LinearLayout) findViewById(R.id.memberLayout);
 		memberLayout.removeAllViews();
+		
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
+		int iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
+		int iconVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		int iconHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
+		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
 
 		LinearLayout layout = new LinearLayout(this);
 		int memberCount = item.getRelevantUsers() != null ? item.getRelevantUsers().size() : 0;
@@ -314,7 +328,7 @@ public class ShowItemActivity extends Activity
 			{
 				layout = new LinearLayout(this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				params.topMargin = iconInterval;
+				params.topMargin = iconVerticalInterval;
 				layout.setLayoutParams(params);
 				layout.setOrientation(LinearLayout.HORIZONTAL);
 				
@@ -322,21 +336,21 @@ public class ShowItemActivity extends Activity
 			}
 			
 			User user = item.getRelevantUsers().get(i);
-			Bitmap memberAvatar = BitmapFactory.decodeFile(user.getAvatarPath());
+			Bitmap avatar = BitmapFactory.decodeFile(user.getAvatarPath());
 			
 			View memberView = View.inflate(this, R.layout.grid_member, null);
 			
 			ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
-			if (memberAvatar != null)
+			if (avatar != null)
 			{
-				avatarImageView.setImageBitmap(memberAvatar);		
+				avatarImageView.setImageBitmap(avatar);		
 			}
 			
 			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
 			nameTextView.setText(user.getNickname());
 			
 			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
-			params.rightMargin = iconInterval;
+			params.rightMargin = iconHorizontalInterval;
 			
 			layout.addView(memberView, params);
 		}
