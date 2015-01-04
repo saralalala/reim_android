@@ -25,14 +25,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 public class CommentActivity extends Activity
@@ -89,26 +86,29 @@ public class CommentActivity extends Activity
 		source = bundle.getString("source", "");
 		if (source.equals("EditReportActivity"))
 		{
-			reportID = bundle.getInt("reportLocalID", -1);	
-			myReport = true;		
+			reportID = bundle.getInt("reportLocalID", -1);
+			report = dbManager.getReportByLocalID(reportID);
+			myReport = true;
 		}
 		else if (source.equals("ShowReportActivity"))
 		{
-			report = (Report) bundle.getSerializable("report");
 			reportID = bundle.getInt("reportLocalID", -1);
 			if (reportID == -1)
 			{
 				myReport = false;
 				reportID = bundle.getInt("reportServerID", -1);
+				report = dbManager.getOthersReport(reportID);
 			}
 			else
 			{
 				myReport = true;
+				report = dbManager.getReportByLocalID(reportID);
 			}
 		}
 		else // source.equals("ApproveReportActivity")
 		{
 			reportID = bundle.getInt("reportServerID", -1);
+			report = dbManager.getOthersReport(reportID);
 			myReport = false;
 		}
 		
@@ -138,48 +138,34 @@ public class CommentActivity extends Activity
 		
 		adapter = new CommentListViewAdapter(this, commentList);
 		commentListView = (ListView)findViewById(R.id.commentListView);
-		commentListView.setAdapter(adapter);
+		commentListView.setAdapter(adapter);		
+
+		commentEditText = (EditText) findViewById(R.id.commentEditText);
+		commentEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
 		
-		if (source.equals("ShowReportActivity"))
+		TextView sendTextView = (TextView) findViewById(R.id.sendTextView);
+		sendTextView.setOnClickListener(new OnClickListener()
 		{
-			commentEditText = (EditText) findViewById(R.id.commentEditText);
-			commentEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
-			
-			TextView sendTextView = (TextView) findViewById(R.id.sendTextView);
-			sendTextView.setOnClickListener(new OnClickListener()
+			public void onClick(View v)
 			{
-				public void onClick(View v)
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
+				imm.hideSoftInputFromWindow(commentEditText.getWindowToken(), 0);
+				
+				String comment = commentEditText.getText().toString();
+				if (!Utils.isNetworkConnected())
 				{
-					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-					imm.hideSoftInputFromWindow(commentEditText.getWindowToken(), 0);
-					
-					String comment = commentEditText.getText().toString();
-					if (!Utils.isNetworkConnected())
-					{
-						Utils.showToast(CommentActivity.this, "网络未连接，无法发送评论");
-					}
-					else if (comment.equals(""))
-					{
-						Utils.showToast(CommentActivity.this, "评论不能为空");
-					}
-					else
-					{
-						sendCommentRequest(comment);
-					}
+					Utils.showToast(CommentActivity.this, "网络未连接，无法发送评论");
 				}
-			});
-		}
-		else
-		{
-			LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-			params.addRule(RelativeLayout.BELOW, R.id.titleLayout);
-			
-			RelativeLayout contentLayout = (RelativeLayout) findViewById(R.id.contentLayout);
-			contentLayout.setLayoutParams(params);
-			
-			RelativeLayout commentLayout = (RelativeLayout) findViewById(R.id.commentLayout);
-			commentLayout.setVisibility(View.GONE);
-		}
+				else if (comment.equals(""))
+				{
+					Utils.showToast(CommentActivity.this, "评论不能为空");
+				}
+				else
+				{
+					sendCommentRequest(comment);
+				}
+			}
+		});
 	}
 
 	private void refreshView()
@@ -223,6 +209,7 @@ public class CommentActivity extends Activity
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
 					dbManager.updateUser(user);
+					
 					runOnUiThread(new Runnable()
 					{
 						public void run()

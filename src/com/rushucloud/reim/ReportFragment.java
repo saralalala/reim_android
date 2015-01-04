@@ -229,7 +229,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						intent = new Intent(getActivity(), ShowReportActivity.class);						
 					}
 					intent.putExtras(bundle);
-					startActivity(intent);						
+					startActivity(intent);
 				}
 				else
 				{

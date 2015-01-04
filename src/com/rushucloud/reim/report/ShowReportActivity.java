@@ -114,7 +114,6 @@ public class ShowReportActivity extends Activity
 			{
 				Bundle bundle = new Bundle();
 				bundle.putString("source", "ShowReportActivity");
-				bundle.putSerializable("report", report);
 				if (myReport)
 				{
 					bundle.putInt("reportLocalID", report.getLocalID());				

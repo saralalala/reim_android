@@ -49,9 +49,8 @@ public class ModifyReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("comment", commentContent));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/report/" + report.getServerID();
-		setUrl(requestUrl);
+		String urlSuffix = "/report/" + report.getServerID();
+		appendUrl(urlSuffix);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

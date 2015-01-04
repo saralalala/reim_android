@@ -1731,22 +1731,6 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public boolean deleteOthersTrashReports(List<Integer> remainingList, int userServerID)
-	{
-		try
-		{
-			String idString = remainingList.size() > 0 ? TextUtils.join(",", remainingList) : "";
-			String sqlString = "DELETE FROM tbl_others_report WHERE server_id NOT IN (" + idString +") AND owner_id = " + userServerID;
-			database.execSQL(sqlString);
-			
-			return true;
-		}
-		catch (Exception e)
-		{
-			return false;
-		}
-	}
-	
 	public Report getReportByLocalID(int reportLocalID)
 	{
 		try
@@ -1763,6 +1747,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setCommentList(getReportComments(report.getLocalID()));
 				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
@@ -1800,6 +1785,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setCommentList(getReportComments(report.getLocalID()));
 				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
@@ -1837,6 +1823,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setCommentList(getOthersReportComments(report.getServerID()));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
@@ -2014,12 +2001,13 @@ public class DBManager extends SQLiteOpenHelper
 				report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
+				report.setCommentList(getReportComments(report.getLocalID()));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				
+
 				reportList.add(report);
 			}
 			

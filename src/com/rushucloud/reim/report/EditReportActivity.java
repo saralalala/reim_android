@@ -90,6 +90,7 @@ public class EditReportActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_report_edit);
+		initData();
 		initView();
 	}
 	
@@ -99,7 +100,6 @@ public class EditReportActivity extends Activity
 		MobclickAgent.onPageStart("EditReportActivity");		
 		MobclickAgent.onResume(this);
 		ReimApplication.setProgressDialog(this);
-		initData();
 		refreshView();
 	}
 
@@ -248,8 +248,8 @@ public class EditReportActivity extends Activity
 			}
 		});
 		
-		TextView submitTextView = (TextView) findViewById(R.id.submitTextView);
-		submitTextView.setOnClickListener(new OnClickListener()
+		Button submitButton = (Button) findViewById(R.id.submitButton);
+		submitButton.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -269,35 +269,33 @@ public class EditReportActivity extends Activity
 			}
 		});
 		
-		Button addCommentButton = (Button)findViewById(R.id.addCommentButton);
-		addCommentButton.setOnClickListener(new View.OnClickListener()
+		Button commentButton = (Button)findViewById(R.id.commentButton);
+		commentButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				if (!Utils.isNetworkConnected())
+				if (report.getCommentList() == null || report.getCommentList().size() == 0)
 				{
-					Utils.showToast(EditReportActivity.this, "网络未连接，无法添加评论");
+					if (!Utils.isNetworkConnected())
+					{
+						Utils.showToast(EditReportActivity.this, "网络未连接，无法添加评论");
+					}
+					else
+					{
+						showAddCommentDialog();
+					}					
 				}
 				else
 				{
-					showAddCommentDialog();
+					Bundle bundle = new Bundle();
+					bundle.putString("source", "EditReportActivity");
+					bundle.putInt("reportLocalID", report.getLocalID());
+					Intent intent = new Intent(EditReportActivity.this, CommentActivity.class);
+					intent.putExtras(bundle);
+					startActivity(intent);					
 				}
 			}
-		});
-
-		Button checkCommentButton = (Button)findViewById(R.id.checkCommentButton);
-		checkCommentButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				Bundle bundle = new Bundle();
-				bundle.putString("source", "EditReportActivity");
-				bundle.putInt("reportLocalID", report.getLocalID());
-				Intent intent = new Intent(EditReportActivity.this, CommentActivity.class);
-				intent.putExtras(bundle);
-				startActivity(intent);
-			}
-		});		
+		});	
 	}
 	
 	private void initManagerView()
@@ -397,7 +395,9 @@ public class EditReportActivity extends Activity
 	}
 	
 	private void refreshView()
-	{		
+	{
+		itemList = dbManager.getItems(Item.getItemsIDArray(itemList));
+		
 		titleEditText.setText(report.getTitle());
 		if (report.getTitle().equals(""))
 		{
@@ -826,7 +826,7 @@ public class EditReportActivity extends Activity
 		report.setLocalUpdatedDate(report.getCreatedDate());
 		dbManager.insertReport(report);
 		report.setLocalID(dbManager.getLastInsertReportID());
-		dbManager.updateReportItems(chosenItemIDList, report.getLocalID());    	
+		dbManager.updateReportItems(chosenItemIDList, report.getLocalID());
     	
     	CreateReportRequest request = new CreateReportRequest(report, commentContent);
     	request.sendRequest(new HttpConnectionCallback()
@@ -851,6 +851,8 @@ public class EditReportActivity extends Activity
 					comment.setReportID(report.getLocalID());
 					comment.setReviewer(currentUser);
 					dbManager.insertComment(comment);					
+					
+					report.setCommentList(dbManager.getReportComments(report.getLocalID()));
 					
 					runOnUiThread(new Runnable()
 					{
@@ -906,6 +908,8 @@ public class EditReportActivity extends Activity
 					comment.setReportID(report.getLocalID());
 					comment.setReviewer(currentUser);
 					dbManager.insertComment(comment);
+
+					report.setCommentList(dbManager.getReportComments(report.getLocalID()));
 					
 					runOnUiThread(new Runnable()
 					{
