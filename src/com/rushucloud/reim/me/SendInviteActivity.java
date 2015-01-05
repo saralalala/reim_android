@@ -8,10 +8,10 @@ import netUtils.Response.User.InviteResponse;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Context;
@@ -41,7 +41,7 @@ public class SendInviteActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("SendInviteActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -117,7 +117,7 @@ public class SendInviteActivity extends Activity
 	
     private void sendInviteRequest(String username)
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
     	InviteRequest request = new InviteRequest(username);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -134,7 +134,7 @@ public class SendInviteActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(SendInviteActivity.this, "邀请发送失败，" + response.getErrorMessage());
 						}
 					});
@@ -145,7 +145,7 @@ public class SendInviteActivity extends Activity
     
     private void sendCommonRequest()
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
     	CommonRequest request = new CommonRequest();
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -187,7 +187,7 @@ public class SendInviteActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(SendInviteActivity.this, "邀请已发送");
 							finish();
 						}
@@ -199,7 +199,7 @@ public class SendInviteActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(SendInviteActivity.this, "邀请发送失败，" + response.getErrorMessage());
 						}
 					});

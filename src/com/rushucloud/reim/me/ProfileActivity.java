@@ -16,11 +16,11 @@ import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 import classes.Group;
-import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
 import classes.Widget.CircleImageView;
+import classes.Widget.ReimProgressDialog;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Context;
@@ -92,7 +92,7 @@ public class ProfileActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ProfileActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 		loadInfoView();
 	}
 
@@ -546,7 +546,7 @@ public class ProfileActivity extends Activity
 				}
 				else
 				{
-					ReimApplication.showProgressDialog();
+					ReimProgressDialog.show();
 					sendModifyGroupRequest(newName);
 				}
 			}
@@ -746,8 +746,7 @@ public class ProfileActivity extends Activity
     
 	private void sendModifyUserInfoRequest()
 	{
-		ReimApplication.showProgressDialog();
-		
+		ReimProgressDialog.show();		
 		ModifyUserRequest request = new ModifyUserRequest(currentUser);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -762,7 +761,7 @@ public class ProfileActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(ProfileActivity.this, "用户信息修改成功");
 							emailPopupWindow.dismiss();
 							phonePopupWindow.dismiss();
@@ -778,7 +777,7 @@ public class ProfileActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(ProfileActivity.this, "用户信息修改失败");
 							loadInfoView();
 						}
@@ -805,7 +804,7 @@ public class ProfileActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							companyPopupWindow.dismiss();
 							Utils.showToast(ProfileActivity.this, "修改成功");
 						}
@@ -817,7 +816,7 @@ public class ProfileActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.showProgressDialog();
+							ReimProgressDialog.dismiss();
 							companyPopupWindow.dismiss();
 							Utils.showToast(ProfileActivity.this, "修改失败");
 						}

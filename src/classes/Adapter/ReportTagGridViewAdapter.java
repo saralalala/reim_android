@@ -106,6 +106,14 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 		check[position] = !check[position];
 	}
 	
+	public void setCheck(boolean[] checks)
+	{
+		for (int i = 0; i < checks.length; i++)
+		{
+			check[i] = checks[i];
+		}
+	}
+	
 	public List<Integer> getFilterStatusList()
 	{
 		List<Integer> filterStatusList = new ArrayList<Integer>();

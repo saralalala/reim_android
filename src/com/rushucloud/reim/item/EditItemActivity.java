@@ -36,6 +36,7 @@ import classes.Adapter.TagListViewAdapter;
 import classes.Adapter.VendorListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 
 import cn.beecloud.BCLocation;
 
@@ -171,7 +172,7 @@ public class EditItemActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EditItemActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 		locationClient.registerLocationListener(listener);
 		if (Utils.isLocalisationEnabled() && Utils.isNetworkConnected())
 		{
@@ -1265,7 +1266,7 @@ public class EditItemActivity extends Activity
 			    	dbManager.insertReport(report);
 			    	report.setLocalID(dbManager.getLastInsertReportID());					
 
-					ReimApplication.showProgressDialog();
+					ReimProgressDialog.show();
 					if (newItem)
 					{
 						if (!item.getInvoicePath().equals("") && item.getServerID() == -1)
@@ -1770,7 +1771,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditItemActivity.this, "上传图片失败");
 						}
 					});
@@ -1805,7 +1806,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditItemActivity.this, "创建条目失败");
 						}
 					});
@@ -1835,7 +1836,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditItemActivity.this, "修改条目失败");
 						}
 					});			
@@ -1867,7 +1868,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditItemActivity.this, "创建审批报告成功");
 							finish();
 						}
@@ -1880,7 +1881,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditItemActivity.this, "创建审批报告失败");
 							finish();
 						}
@@ -1933,7 +1934,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditItemActivity.this, "获取商家列表失败, 请手动输入");
 						}
 					});					

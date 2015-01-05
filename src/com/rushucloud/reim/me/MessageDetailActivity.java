@@ -21,6 +21,7 @@ import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -47,7 +48,7 @@ public class MessageDetailActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("MessageDetailActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -138,7 +139,7 @@ public class MessageDetailActivity extends Activity
 	
     private void sendInviteReplyRequest(final int agree, String inviteCode)
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
     	InviteReplyRequest request = new InviteReplyRequest(agree, inviteCode);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -157,7 +158,7 @@ public class MessageDetailActivity extends Activity
 						{
 							public void run()
 							{
-						    	ReimApplication.dismissProgressDialog();
+								ReimProgressDialog.dismiss();
 								Builder builder = new Builder(MessageDetailActivity.this);
 								builder.setTitle(R.string.tip);
 								builder.setMessage(R.string.prompt_invite_reply_sent);
@@ -179,7 +180,7 @@ public class MessageDetailActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 					    	Utils.showToast(MessageDetailActivity.this, "邀请回复发送失败");
 						}						
 					});
@@ -256,7 +257,7 @@ public class MessageDetailActivity extends Activity
 				{
 					public void run()
 					{
-				    	ReimApplication.dismissProgressDialog();
+						ReimProgressDialog.dismiss();
 						Builder builder = new Builder(MessageDetailActivity.this);
 						builder.setTitle(R.string.tip);
 						builder.setMessage(R.string.prompt_invite_reply_sent);

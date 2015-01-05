@@ -10,6 +10,7 @@ import classes.ReimApplication;
 import classes.Tag;
 import classes.User;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 
 import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.R;
@@ -56,7 +57,7 @@ public class ShowItemActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ShowItemActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 	}
 
 	protected void onPause()

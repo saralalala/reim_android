@@ -7,6 +7,7 @@ import java.util.List;
 
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import cn.beecloud.BeeCloud;
 
 import com.avos.avoscloud.AVInstallation;
@@ -21,7 +22,6 @@ import com.umeng.analytics.MobclickAgent;
 import database.DBManager;
 
 import android.app.Application;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,8 +32,7 @@ public class ReimApplication extends Application
 {
 	public static Typeface TypeFaceYaHei;
 	public static Typeface TypeFaceAleoLight;
-	
-	private static ProgressDialog progressDialog;
+
 	private static Context context;
 	
 	private static int tabIndex = 0;
@@ -130,22 +129,6 @@ public class ReimApplication extends Application
 		return context;
 	}
 	
-	public static void setProgressDialog(Context context)
-	{
-		progressDialog = new ProgressDialog(context);
-		progressDialog.setMessage(context.getString(R.string.prompt_loading));
-	}
-	
-	public static void showProgressDialog()
-	{
-		progressDialog.show();
-	}
-	
-	public static void dismissProgressDialog()
-	{
-		progressDialog.dismiss();
-	}
-	
 	private void createDirectories()
 	{
 		try
@@ -231,8 +214,6 @@ public class ReimApplication extends Application
 	
 	private void initData()
 	{
-		AppPreference.createAppPreference(getApplicationContext());
-		DBManager.createDBManager(getApplicationContext());
 		context = getApplicationContext();
 		TypeFaceYaHei = Typeface.createFromAsset(getAssets(), "fonts/YaHei.ttf");
 		TypeFaceAleoLight = Typeface.createFromAsset(getAssets(), "fonts/Aleo_Light.ttf");
@@ -251,6 +232,11 @@ public class ReimApplication extends Application
 		{
 			e.printStackTrace();
 		}
+		
+		ReimProgressDialog.init(context);
+		
+		AppPreference.createAppPreference(getApplicationContext());
+		DBManager.createDBManager(getApplicationContext());
 	}
 	
 	private void initMeChat()

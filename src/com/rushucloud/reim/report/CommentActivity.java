@@ -13,12 +13,12 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Comment;
-import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.Adapter.CommentListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Context;
@@ -226,7 +226,7 @@ public class CommentActivity extends Activity
 
     private void sendCommentRequest(final String commentContent)
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		
     	ModifyReportRequest request = new ModifyReportRequest(report, commentContent);
     	request.sendRequest(new HttpConnectionCallback()
@@ -264,7 +264,7 @@ public class CommentActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(CommentActivity.this, "评论发表成功");
 							commentEditText.setText("");
 							adapter.setComments(commentList);
@@ -279,7 +279,7 @@ public class CommentActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(CommentActivity.this, "评论发表失败, " + response.getErrorMessage());
 						}
 					});					

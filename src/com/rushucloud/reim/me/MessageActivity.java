@@ -6,9 +6,9 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.GetInvitesRequest;
 import netUtils.Response.User.GetInvitesResponse;
 import classes.Invite;
-import classes.ReimApplication;
 import classes.Adapter.MessageListViewAdapter;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -47,7 +47,7 @@ public class MessageActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("MessageActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 		if (Utils.isNetworkConnected())
 		{
 			sendGetInvitesRequest();			
@@ -107,7 +107,7 @@ public class MessageActivity extends Activity
 	
     private void sendGetInvitesRequest()
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
     	GetInvitesRequest request = new GetInvitesRequest();
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -120,7 +120,7 @@ public class MessageActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							messageList = response.getInviteList();
 							
 							if (messageList.size() == 0)
@@ -146,7 +146,7 @@ public class MessageActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Builder builder = new Builder(MessageActivity.this);
 							builder.setTitle(R.string.tip);
 							builder.setMessage(R.string.prompt_invite_list_failed);

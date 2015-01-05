@@ -140,7 +140,7 @@ public class Category
 	{
 		this.localUpdatedDate = localUpdatedDate;
 	}
-
+    
 	public static List<Boolean> getCategoryCheck(List<Category> categoryList, Category category)
 	{	
 		if (categoryList == null)

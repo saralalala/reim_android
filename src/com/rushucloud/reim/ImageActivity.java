@@ -65,8 +65,7 @@ public class ImageActivity extends Activity
 		imageView = (ImageView)findViewById(R.id.imageView);
 		imageView.setImageBitmap(bitmap);
 
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		
 		double imageRatio = ((double)bitmap.getHeight())/bitmap.getWidth();
 		double screenRatio = ((double)metrics.heightPixels)/metrics.widthPixels;

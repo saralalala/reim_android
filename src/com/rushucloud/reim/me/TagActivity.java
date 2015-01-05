@@ -15,11 +15,11 @@ import netUtils.Response.Tag.ModifyTagResponse;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.ReimApplication;
 import classes.Tag;
 import classes.Adapter.TagListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -67,7 +67,7 @@ public class TagActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("TagActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 		refreshListView();
 	}
 
@@ -299,7 +299,7 @@ public class TagActivity extends Activity
 	
 	private void sendCreateTagRequest(final Tag tag)
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		CreateTagRequest request = new CreateTagRequest(tag);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -318,7 +318,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							tagPopupWindow.dismiss();
 							Utils.showToast(TagActivity.this, "标签创建成功");
 						}
@@ -330,7 +330,7 @@ public class TagActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(TagActivity.this, "标签创建失败");							
 						}
 					});
@@ -341,7 +341,7 @@ public class TagActivity extends Activity
 	
 	private void sendModifyTagRequest(final Tag tag)
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		ModifyTagRequest request = new ModifyTagRequest(tag);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -359,7 +359,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							tagPopupWindow.dismiss();
 							Utils.showToast(TagActivity.this, "标签修改成功");
 						}
@@ -371,7 +371,7 @@ public class TagActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(TagActivity.this, "标签修改失败");							
 						}
 					});
@@ -382,7 +382,7 @@ public class TagActivity extends Activity
 	
 	private void sendDeleteTagRequest(final Tag tag)
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		DeleteTagRequest request = new DeleteTagRequest(tag.getServerID());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -397,7 +397,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(TagActivity.this, "标签删除成功");
 						}
 					});
@@ -408,7 +408,7 @@ public class TagActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(TagActivity.this, "标签删除失败");					
 						}
 					});

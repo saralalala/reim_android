@@ -12,6 +12,7 @@ import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,7 +40,7 @@ public class SettingsActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("SettingsActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -142,7 +143,7 @@ public class SettingsActivity extends Activity
 	
 	private void sendSignOutRequest()
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		SignOutRequest request = new SignOutRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -166,8 +167,8 @@ public class SettingsActivity extends Activity
 					runOnUiThread(new Runnable()
 					{
 						public void run()
-						{						
-							ReimApplication.dismissProgressDialog();	
+						{
+							ReimProgressDialog.dismiss();
 							Intent intent = new Intent(SettingsActivity.this, SignInActivity.class);
 							intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 							intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -182,7 +183,7 @@ public class SettingsActivity extends Activity
 					{
 						public void run()	
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(SettingsActivity.this, "登出失败");
 						}
 					});

@@ -14,11 +14,11 @@ import netUtils.Response.User.DefaultManagerResponse;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.ReimApplication;
 import classes.User;
 import classes.Adapter.MemberListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -58,7 +58,7 @@ public class ManagerActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ManagerActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 		if (Utils.isNetworkConnected())
 		{
 			sendGetGroupRequest();
@@ -186,7 +186,7 @@ public class ManagerActivity extends Activity
 
 	private void sendGetGroupRequest()
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		GetGroupRequest request = new GetGroupRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -210,7 +210,7 @@ public class ManagerActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							initData();
 							refreshListView();
 						}
@@ -222,7 +222,7 @@ public class ManagerActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(ManagerActivity.this, "刷新数据失败");
 						}
 					});
@@ -233,7 +233,7 @@ public class ManagerActivity extends Activity
 	
 	private void sendDefaultManagerRequest(final int newManagerID)
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		DefaultManagerRequest request = new DefaultManagerRequest(newManagerID);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -251,7 +251,7 @@ public class ManagerActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Builder builder = new Builder(ManagerActivity.this);
 							builder.setTitle(R.string.tip);
 							builder.setMessage(R.string.prompt_default_manager_changed);
@@ -272,7 +272,7 @@ public class ManagerActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(ManagerActivity.this, "默认上级修改失败");				
 						}
 					});

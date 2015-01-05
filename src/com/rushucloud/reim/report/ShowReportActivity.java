@@ -12,6 +12,7 @@ import classes.Report;
 import classes.Adapter.ReportDetailListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.ShowItemActivity;
@@ -54,7 +55,7 @@ public class ShowReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ShowReportActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 		refreshView();
 	}
 
@@ -167,7 +168,7 @@ public class ShowReportActivity extends Activity
 	
     private void sendGetReportRequest(final int reportServerID)
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
     	GetReportRequest request = new GetReportRequest(reportServerID);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -214,8 +215,8 @@ public class ShowReportActivity extends Activity
 					runOnUiThread(new Runnable()
 					{
 						public void run()
-						{							
-					    	ReimApplication.dismissProgressDialog();
+						{
+							ReimProgressDialog.dismiss();
 					    	adapter.setReport(report);
 					    	adapter.setItemList(itemList);
 					    	adapter.notifyDataSetChanged();
@@ -228,7 +229,7 @@ public class ShowReportActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(ShowReportActivity.this, "获取详细信息失败");
 						}
 					});

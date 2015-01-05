@@ -16,6 +16,7 @@ import classes.User;
 import classes.Adapter.ReportDetailListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -64,7 +65,7 @@ public class ApproveReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ApproveReportActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 		refreshView();
 	}
 
@@ -225,7 +226,7 @@ public class ApproveReportActivity extends Activity
 	
     private void sendGetReportRequest(final int reportServerID)
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
     	GetReportRequest request = new GetReportRequest(reportServerID);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -265,7 +266,7 @@ public class ApproveReportActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 					    	if (report.getStatus() != Report.STATUS_SUBMITTED)
 							{
 					    		Utils.showToast(ApproveReportActivity.this, "报告已被审批");
@@ -286,7 +287,7 @@ public class ApproveReportActivity extends Activity
 					{
 						public void run()
 						{
-					    	ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 				    		Utils.showToast(ApproveReportActivity.this, "数据获取失败");
 							goBackToMainActivity();
 						}
@@ -322,7 +323,7 @@ public class ApproveReportActivity extends Activity
 	
     private void sendModifyReportRequest(final int status, final String commentContent)
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
     	report.setStatus(status);
 		
     	ModifyReportRequest request = new ModifyReportRequest(report, commentContent);
@@ -357,7 +358,7 @@ public class ApproveReportActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							String message = status == 2 ? "报告已通过" : "报告已退回";
 							Utils.showToast(ApproveReportActivity.this, message);
 							goBackToMainActivity();
@@ -370,7 +371,7 @@ public class ApproveReportActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(ApproveReportActivity.this, "操作失败, " + response.getErrorMessage());
 						}
 					});					

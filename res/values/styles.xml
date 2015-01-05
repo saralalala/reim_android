@@ -41,5 +41,15 @@
         <item name="android:windowEnterAnimation">@anim/window_horizontal_in</item>  
         <item name="android:windowExitAnimation">@anim/window_horizontal_out</item>
     </style>
+    
+    <style name="ProgressDialog" parent="android:Theme.Dialog">  
+        <item name="android:windowFrame">@null</item>       <!-- Dialog的windowFrame框为无 -->  
+        <item name="android:windowBackground">@android:color/transparent</item> <!-- 设置dialog的背景 -->  
+        <item name="android:windowNoTitle">true</item>      <!-- 是否显示title -->  
+        <item name="android:windowIsTranslucent">true</item>    <!-- 是否半透明 -->  
+        <item name="android:windowIsFloating">true</item>       <!-- 是否浮现在activity之上 -->  
+        <item name="android:windowContentOverlay">@null</item>  <!-- 也是个drawable，定义contentoverlay的背景 -->  
+        <item name="android:backgroundDimEnabled">true</item>  <!-- 背景是否模糊显示 -->  
+    </style>
 
 </resources>

@@ -103,6 +103,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 						{
 							invite.setMessage(jObject.getString("msg"));
 							invite.setInviteCode(jObject.getString("code"));
+							invite.setTypeCode(Invite.TYPE_NEW);
 						}
 						catch (JSONException e)
 						{

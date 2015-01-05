@@ -3,10 +3,10 @@ package com.rushucloud.reim.start;
 import netUtils.Request.User.SignInRequest;
 import netUtils.HttpConnectionCallback;
 import netUtils.Response.User.SignInResponse;
-import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -50,7 +50,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		super.onResume();
 		MobclickAgent.onPageStart("SignInActivity");
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -106,8 +106,8 @@ public class SignInActivity extends Activity implements View.OnClickListener
 			passwordEditText.setText(password);
 		}
 		
-//		usernameEditText.setText("a@a.com");
-//		passwordEditText.setText("111111");
+//		usernameEditText.setText("13911977103");
+//		passwordEditText.setText("g0YTBhMzE2OTg1OWZhMDMyYjlmOGVkMTE3NDQ3OD");
 
 		Button signInButton = (Button)findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()
@@ -222,7 +222,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 	
 	private void sendSignInRequest()
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		SignInRequest request = new SignInRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -288,7 +288,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							startActivity(new Intent(SignInActivity.this, MainActivity.class));
 							finish();
 						}
@@ -300,7 +300,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(SignInActivity.this, "登录失败！" + response.getErrorMessage());
 						}
 					});

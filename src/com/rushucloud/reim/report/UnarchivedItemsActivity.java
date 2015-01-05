@@ -7,11 +7,11 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Item;
-import classes.ReimApplication;
 import classes.Report;
 import classes.Adapter.ReportItemListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import database.DBManager;
 import android.app.Activity;
 import android.content.Intent;
@@ -59,7 +59,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		super.onResume();
 		MobclickAgent.onPageStart("UnarchivedItemsActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 		refreshView();
 	}
 
@@ -226,7 +226,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 	
 	private void refreshView()
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		
 		if (tabIndex == 0)
 		{
@@ -264,8 +264,8 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 				adapter.notifyDataSetChanged();		
 			}
 		}
-		
-		ReimApplication.dismissProgressDialog();
+
+		ReimProgressDialog.dismiss();
 	}
 	
 	private void constructList()

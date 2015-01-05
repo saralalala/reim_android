@@ -382,6 +382,23 @@ public class Item
 		}
 		return true;
 	}
+
+	public boolean containsCategory(List<Category> categories)
+	{
+		if (categories == null || getCategory() == null)
+		{
+			return false;
+		}
+		
+		for (Category category : categories)
+		{
+			if (getCategory().getServerID() == category.getServerID())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public boolean containsSpecificTags(List<Tag> tagList)
 	{
@@ -402,7 +419,7 @@ public class Item
 		}
 		return false;
 	}
-    
+	
 	public boolean hasInvoice()
 	{
 		return getInvoiceID() > 0 || !getInvoicePath().equals("");

@@ -21,6 +21,7 @@ import classes.ReimApplication;
 import classes.Adapter.CategoryListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -88,7 +89,7 @@ public class CategoryActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("CategoryActivity");
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 		refreshListView();
 	}
 
@@ -468,7 +469,7 @@ public class CategoryActivity extends Activity
 
 	private void sendCreateCategoryRequest(final Category category)
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		CreateCategoryRequest request = new CreateCategoryRequest(category);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -487,7 +488,7 @@ public class CategoryActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							categoryPopupWindow.dismiss();
 							Utils.showToast(CategoryActivity.this, "类别创建成功");
 						}
@@ -499,7 +500,7 @@ public class CategoryActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(CategoryActivity.this, "类别创建失败，" + response.getErrorMessage());
 						}
 					});
@@ -510,7 +511,7 @@ public class CategoryActivity extends Activity
 
 	private void sendModifyCategoryRequest(final Category category)
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		ModifyCategoryRequest request = new ModifyCategoryRequest(category);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -528,7 +529,7 @@ public class CategoryActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							categoryPopupWindow.dismiss();
 							Utils.showToast(CategoryActivity.this, "类别修改成功");
 						}
@@ -540,7 +541,7 @@ public class CategoryActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(CategoryActivity.this, "类别修改失败，" + response.getErrorMessage());
 						}
 					});
@@ -551,7 +552,7 @@ public class CategoryActivity extends Activity
 
 	private void sendDeleteCategoryRequest(final Category category)
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		DeleteCategoryRequest request = new DeleteCategoryRequest(category.getServerID());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -567,7 +568,7 @@ public class CategoryActivity extends Activity
 						public void run()
 						{
 							refreshListView();
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(CategoryActivity.this, "类别删除成功");
 						}
 					});
@@ -578,7 +579,7 @@ public class CategoryActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(CategoryActivity.this, "类别删除失败，" + response.getErrorMessage());
 						}
 					});

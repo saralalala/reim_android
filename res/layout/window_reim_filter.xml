@@ -14,8 +14,8 @@
 
     <ImageView
         android:id="@+id/cancelImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="14dp"
@@ -25,8 +25,8 @@
 
     <ImageView
         android:id="@+id/confirmImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="14dp"
@@ -34,198 +34,241 @@
         android:contentDescription="@string/confirm"
 		android:src="@drawable/confirm" />
 
-    <TextView
-        android:id="@+id/sortTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignBottom="@+id/sortDivider"
-        android:layout_marginBottom="6dp"
-        android:layout_marginLeft="16dp"
-        android:text="@string/sort"
-        android:textColor="@color/hint_light_grey"
-        android:textSize="14sp" />
-
-    <include 
-        android:id="@+id/sortDivider"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="124dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        layout="@layout/view_divider"/>
-    
-    <classes.Widget.SegmentedGroup
-        android:id="@+id/sortRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-        android:layout_below="@+id/sortDivider"
-        android:layout_marginTop="22dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-    	android:orientation="horizontal" >
+        android:layout_height="match_parent"
+        android:layout_below="@+id/confirmImageView" >
 
-        <RadioButton
-            android:id="@+id/sortNullRadio"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="@string/sort_null"
-            style="@style/RadioButton" />
+            android:orientation="vertical" >
 
-        <RadioButton
-            android:id="@+id/sortAmountRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/sort_item_count"
-            style="@style/RadioButton" />
+		    <TextView
+		        android:id="@+id/sortTextView"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignBottom="@+id/sortDivider"
+		        android:layout_marginBottom="6dp"
+		        android:layout_marginLeft="16dp"
+		        android:text="@string/sort"
+		        android:textColor="@color/hint_light_grey"
+		        android:textSize="14sp" />
+		
+		    <include 
+		        android:id="@+id/sortDivider"
+		        android:layout_width="match_parent"
+		        android:layout_height="0.5dp"
+		        android:layout_alignParentTop="true"
+		        android:layout_marginTop="50dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        layout="@layout/view_divider"/>
+		    
+		    <classes.Widget.SegmentedGroup
+		        android:id="@+id/sortRadioGroup"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+				android:layout_centerHorizontal="true"
+		        android:layout_below="@+id/sortDivider"
+		        android:layout_marginTop="22dp"
+		        android:layout_marginLeft="16dp"
+		        android:layout_marginRight="16dp"
+		    	android:orientation="horizontal" >
+		
+		        <RadioButton
+		            android:id="@+id/sortNullRadio"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:checked="true"
+		            android:text="@string/sort_null"
+		            style="@style/RadioButton" />
+		
+		        <RadioButton
+		            android:id="@+id/sortAmountRadio"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:text="@string/sort_item_count"
+		            style="@style/RadioButton" />
+		
+		        <RadioButton
+		            android:id="@+id/sortConsumedDateRadio"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:text="@string/sort_amount"
+		            style="@style/RadioButton" />
+		        
+		    </classes.Widget.SegmentedGroup>
+		
+		    <TextView
+		        android:id="@+id/filterTextView"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignBottom="@+id/filterDivider"
+		        android:layout_marginBottom="6dp"
+		        android:layout_marginLeft="16dp"
+		        android:text="@string/filter"
+		        android:textColor="@color/hint_light_grey"
+		        android:textSize="14sp" />
+		
+		    <include 
+		        android:id="@+id/filterDivider"
+		        android:layout_width="match_parent"
+		        android:layout_height="0.5dp"
+				android:layout_alignTop="@+id/sortDivider"
+		        android:layout_marginTop="108dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        layout="@layout/view_divider"/>
+		    
+		    <classes.Widget.SegmentedGroup
+		        android:id="@+id/filterTypeRadioGroup"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+				android:layout_centerHorizontal="true"
+		        android:layout_below="@+id/filterDivider"
+		        android:layout_marginTop="22dp"
+		        android:layout_marginLeft="16dp"
+		        android:layout_marginRight="16dp"
+		    	android:orientation="horizontal" >
+		
+		        <RadioButton
+		            android:id="@+id/filterTypeAllRadio"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:checked="true"
+		            android:text="@string/filter_all"
+		            style="@style/RadioButton" />
+		
+		        <RadioButton
+		            android:id="@+id/filterProveAheadRadio"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:text="@string/filter_prove_ahead"
+		            style="@style/RadioButton" />
+		
+		        <RadioButton
+		            android:id="@+id/filterConsumedRadio"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:text="@string/filter_consumed"
+		            style="@style/RadioButton" />
+		        
+		    </classes.Widget.SegmentedGroup>
+		    
+		    <classes.Widget.SegmentedGroup
+		        android:id="@+id/filterStatusRadioGroup"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+				android:layout_centerHorizontal="true"
+		        android:layout_below="@+id/filterTypeRadioGroup"
+		        android:layout_marginTop="28dp"
+		        android:layout_marginLeft="16dp"
+		        android:layout_marginRight="16dp"
+		    	android:orientation="horizontal" >
+		
+		        <RadioButton
+		            android:id="@+id/filterStatusAllRadio"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:checked="true"
+		            android:text="@string/filter_all"
+		            style="@style/RadioButton" />
+		
+		        <RadioButton
+		            android:id="@+id/filterAddedRadio"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="0.5"
+		            android:text="@string/filter_added"
+		            style="@style/RadioButton" />
+		
+		        <RadioButton
+		            android:id="@+id/filterFreeRadio"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="0.5"
+		            android:text="@string/filter_free"
+		            style="@style/RadioButton" />
+		        
+		    </classes.Widget.SegmentedGroup>
+		
+		    <TextView
+		        android:id="@+id/tagTextView"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignBottom="@+id/tagDivider"
+		        android:layout_marginBottom="6dp"
+		        android:layout_marginLeft="16dp"
+		        android:text="@string/filter_tag"
+		        android:textColor="@color/hint_light_grey"
+		        android:textSize="14sp" />
+		
+		    <include 
+		        android:id="@+id/tagDivider"
+		        android:layout_width="match_parent"
+		        android:layout_height="0.5dp"
+				android:layout_below="@+id/filterStatusRadioGroup"
+		        android:layout_marginTop="58dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        layout="@layout/view_divider"/>
+		
+		    <LinearLayout
+		        android:id="@+id/tagLayout"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/tagDivider"
+		        android:orientation="vertical"
+		        android:layout_marginTop="6dp"
+		        android:layout_marginLeft="16dp"
+		        android:layout_marginRight="16dp" />
+		
+		    <TextView
+		        android:id="@+id/categoryTextView"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignBottom="@+id/categoryDivider"
+		        android:layout_marginBottom="6dp"
+		        android:layout_marginLeft="16dp"
+		        android:text="@string/filter_category"
+		        android:textColor="@color/hint_light_grey"
+		        android:textSize="14sp" />
+		
+		    <include
+		        android:id="@+id/categoryDivider"
+		        android:layout_width="match_parent"
+		        android:layout_height="0.5dp"
+				android:layout_below="@+id/tagLayout"
+		        android:layout_marginTop="58dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        layout="@layout/view_divider"/>
 
-        <RadioButton
-            android:id="@+id/sortConsumedDateRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/sort_amount"
-            style="@style/RadioButton" />
-        
-    </classes.Widget.SegmentedGroup>
+		    <LinearLayout
+		        android:id="@+id/categoryLayout"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical"
+				android:layout_below="@+id/categoryDivider"
+		        android:paddingBottom="16dp"
+		        android:layout_marginTop="6dp"
+		        android:layout_marginLeft="16dp"
+		        android:layout_marginRight="16dp" >
+		    </LinearLayout>
 
-    <TextView
-        android:id="@+id/filterTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignBottom="@+id/filterDivider"
-        android:layout_marginBottom="6dp"
-        android:layout_marginLeft="16dp"
-        android:text="@string/filter"
-        android:textColor="@color/hint_light_grey"
-        android:textSize="14sp" />
-
-    <include 
-        android:id="@+id/filterDivider"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-		android:layout_alignTop="@+id/sortDivider"
-        android:layout_marginTop="108dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        layout="@layout/view_divider"/>
-    
-    <classes.Widget.SegmentedGroup
-        android:id="@+id/filterTypeRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-        android:layout_below="@+id/filterDivider"
-        android:layout_marginTop="22dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-    	android:orientation="horizontal" >
-
-        <RadioButton
-            android:id="@+id/filterTypeAllRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="@string/filter_all"
-            style="@style/RadioButton" />
-
-        <RadioButton
-            android:id="@+id/filterProveAheadRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/filter_prove_ahead"
-            style="@style/RadioButton" />
-
-        <RadioButton
-            android:id="@+id/filterConsumedRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/filter_consumed"
-            style="@style/RadioButton" />
-        
-    </classes.Widget.SegmentedGroup>
-    
-    <classes.Widget.SegmentedGroup
-        android:id="@+id/filterStatusRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-        android:layout_below="@+id/filterTypeRadioGroup"
-        android:layout_marginTop="28dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-    	android:orientation="horizontal" >
-
-        <RadioButton
-            android:id="@+id/filterStatusAllRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="@string/filter_all"
-            style="@style/RadioButton" />
-
-        <RadioButton
-            android:id="@+id/filterAddedRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/filter_added"
-            style="@style/RadioButton" />
-
-        <RadioButton
-            android:id="@+id/filterFreeRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/filter_free"
-            style="@style/RadioButton" />
-        
-    </classes.Widget.SegmentedGroup>
-
-    <TextView
-        android:id="@+id/tagTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignBottom="@+id/tagDivider"
-        android:layout_marginBottom="6dp"
-        android:layout_marginLeft="16dp"
-        android:text="@string/filter_tags"
-        android:textColor="@color/hint_light_grey"
-        android:textSize="14sp" />
-
-    <include 
-        android:id="@+id/tagDivider"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-		android:layout_below="@+id/filterStatusRadioGroup"
-        android:layout_marginTop="58dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        layout="@layout/view_divider"/>
-
-    <GridView
-        android:id="@+id/tagGridView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tagDivider"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:listSelector="@android:color/transparent"
-        android:numColumns="4"
-        android:verticalSpacing="22dp"
-        android:horizontalSpacing="16dp" />
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>

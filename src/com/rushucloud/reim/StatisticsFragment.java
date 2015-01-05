@@ -23,6 +23,7 @@ import classes.ReimApplication;
 import classes.Utils.Utils;
 import classes.Widget.ReimMonthBar;
 import classes.Widget.ReimPie;
+import classes.Widget.ReimProgressDialog;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -238,7 +239,7 @@ public class StatisticsFragment extends Fragment
 
 	private void sendGetDataRequest()
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		StatisticsRequest request = new StatisticsRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -255,7 +256,7 @@ public class StatisticsFragment extends Fragment
 							drawPie();
 							drawMonthBar();
 							drawCategory();
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 						}
 					});
 				}

@@ -13,6 +13,7 @@ import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import classes.Widget.TabItem;
 
 import com.rushucloud.reim.item.EditItemActivity;
@@ -53,7 +54,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		initDate();
+		initData();
 		initView();
 	}
 
@@ -61,7 +62,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	{
 		super.onResume();
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 
 		viewPager.setCurrentItem(ReimApplication.getTabIndex());
 		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
@@ -210,7 +211,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		});
 	}
 	
-	private void initDate()
+	private void initData()
 	{
 		dbManager = DBManager.getDBManager();
 	}

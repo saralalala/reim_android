@@ -43,6 +43,7 @@ public class GetInvitesResponse extends BaseResponse
 					invite.setInviteCode(jObject.getString("code"));
 					invite.setUpdateTime(jObject.getInt("invitedt"));
 					invite.setMessage(message);
+					invite.setTypeCode(activeType);
 					
 					inviteList.add(invite);
 				}
@@ -54,6 +55,7 @@ public class GetInvitesResponse extends BaseResponse
 					invite.setInviteCode(jObject.getString("code"));
 					invite.setUpdateTime(jObject.getInt("activedt"));
 					invite.setMessage(message);
+					invite.setTypeCode(activeType);
 					
 					inviteList.add(invite);
 				}
@@ -65,6 +67,7 @@ public class GetInvitesResponse extends BaseResponse
 					invite.setInviteCode(jObject.getString("code"));
 					invite.setUpdateTime(jObject.getInt("activedt"));
 					invite.setMessage(message);
+					invite.setTypeCode(activeType);
 					
 					inviteList.add(invite);
 				}

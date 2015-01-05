@@ -30,6 +30,7 @@
     <string name="search">搜索</string>
     <string name="status">状态</string>
     <string name="detail">详情</string>
+    <string name="loading">等待</string>
     
     <string name="sign_up">注册</string>
     <string name="sign_up_by_phone">手机注册</string>
@@ -64,7 +65,8 @@
     <string name="filter_consumed">已消费</string>
     <string name="filter_added">已加入报告</string>
     <string name="filter_free">未加入报告</string>
-    <string name="filter_tags">标签</string>    
+    <string name="filter_tag">标签</string>
+    <string name="filter_category">类别</string>    
     
     <string name="invoice">发票</string>
     <string name="reim_type">报销类型</string>

@@ -18,20 +18,23 @@ import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Item.DeleteItemResponse;
 import classes.Category;
 import classes.Item;
-import classes.ReimApplication;
 import classes.Report;
 import classes.Tag;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import classes.Widget.SegmentedGroup;
 import classes.Widget.XListView;
 import classes.Widget.XListView.IXListViewListener;
 import classes.Adapter.ItemListViewAdapter;
-import classes.Adapter.ItemTagGridViewAdapter;
 import database.DBManager;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -44,11 +47,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.support.v4.app.Fragment;
 
@@ -66,6 +71,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	
 	private View view;
 	private PopupWindow filterPopupWindow;
+	private LinearLayout tagLayout;
+	private LinearLayout categoryLayout;
 	private XListView itemListView;
 	private ItemListViewAdapter adapter;
 	private PopupWindow deletePopupWindow;
@@ -76,16 +83,22 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	private List<Item> itemList = new ArrayList<Item>();
 	private List<Item> showList = new ArrayList<Item>();
 	private List<Tag> tagList = new ArrayList<Tag>();
-	
-	private int filterType = FILTER_TYPE_ALL;
-	private int filterStatus = FILTER_STATUS_ALL;
+	private List<Category> categoryList = new ArrayList<Category>();
+
 	private int sortType = SORT_NULL;
 	private boolean sortReverse = false;
+	private int filterType = FILTER_TYPE_ALL;
+	private int filterStatus = FILTER_STATUS_ALL;
+	private boolean[] tagCheck;
+	private boolean[] categoryCheck;
 	private List<Tag> filterTagList = new ArrayList<Tag>();
+	private List<Category> filterCategoryList = new ArrayList<Category>();
 	
 	private int tempFilterType = FILTER_TYPE_ALL;
 	private int tempFilterStatus = FILTER_STATUS_ALL;
-	private int tempSortType = SORT_NULL;	
+	private int tempSortType = SORT_NULL;
+	private boolean[] tempTagCheck;
+	private boolean[] tempCategoryCheck;
 	
 	private boolean hasInit = false;
 	
@@ -132,9 +145,9 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit)
 		{
-			ReimApplication.showProgressDialog();
+			ReimProgressDialog.show();
 			refreshItemListView();
-			ReimApplication.dismissProgressDialog();
+			ReimProgressDialog.dismiss();
 			syncItems();
 		}
 	}
@@ -143,8 +156,22 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
+		
 		tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-		dbManager.executeTempCommand();
+		tagCheck = new boolean[tagList.size()];
+		for (int i = 0; i < tagCheck.length; i++)
+		{
+			tagCheck[i] = false;
+		}
+		tempTagCheck = tagCheck;
+		
+		categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+		categoryCheck = new boolean[categoryList.size()];
+		for (int i = 0; i < categoryCheck.length; i++)
+		{
+			categoryCheck[i] = false;
+		}
+		tempCategoryCheck = categoryCheck;
 
 		itemList.clear();
 		itemList.addAll(readItemList());
@@ -225,7 +252,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
 		final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		
 		final RadioButton sortConsumedDateRadio = (RadioButton)filterView.findViewById(R.id.sortConsumedDateRadio);	
-		SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
+		final SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
 		sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 			public void onCheckedChanged(RadioGroup group, int checkedId)
@@ -250,7 +277,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		final RadioButton filterTypeAllRadio = (RadioButton)filterView.findViewById(R.id.filterTypeAllRadio);
 		final RadioButton filterProveAheadRadio = (RadioButton)filterView.findViewById(R.id.filterProveAheadRadio);
 		final RadioButton filterConsumedRadio = (RadioButton)filterView.findViewById(R.id.filterConsumedRadio);			
-		SegmentedGroup filterTypeRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterTypeRadioGroup);
+		final SegmentedGroup filterTypeRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterTypeRadioGroup);
 		filterTypeRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 			public void onCheckedChanged(RadioGroup group, int checkedId)
@@ -275,7 +302,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		final RadioButton filterStatusAllRadio = (RadioButton)filterView.findViewById(R.id.filterStatusAllRadio);
 		final RadioButton filterFreeRadio = (RadioButton)filterView.findViewById(R.id.filterFreeRadio);
 		final RadioButton filterAddedRadio = (RadioButton)filterView.findViewById(R.id.filterAddedRadio);			
-		SegmentedGroup filterStatusRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterStatusRadioGroup);
+		final SegmentedGroup filterStatusRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterStatusRadioGroup);
 		filterStatusRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 			public void onCheckedChanged(RadioGroup group, int checkedId)
@@ -297,29 +324,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			}
 		});
 
-		DisplayMetrics metrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		tagLayout = (LinearLayout) filterView.findViewById(R.id.tagLayout);
+		refreshTagView();
 		
-		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-		int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-		int tagWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);	
-		int tagMaxCount = (metrics.widthPixels - padding * 2 + interval) / (tagWidth + interval);
+		categoryLayout = (LinearLayout) filterView.findViewById(R.id.categoryLayout);
+		refreshCategoryView();
 		
-		final ItemTagGridViewAdapter tagAdapter = new ItemTagGridViewAdapter(getActivity(), tagList);
-		
-		GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
-		tagGridView.setAdapter(tagAdapter);
-		tagGridView.setNumColumns(tagMaxCount);
-		tagGridView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TAG");
-				tagAdapter.setSelection(position);
-				tagAdapter.notifyDataSetChanged();
-			}
-		});
-
 		ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
 		confirmImageView.setOnClickListener(new View.OnClickListener()
 		{
@@ -327,22 +337,35 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			{
 				sortReverse = sortType == tempSortType ? !sortReverse : false;
 				sortType = tempSortType;
+				
 				filterType = tempFilterType;
 				filterStatus = tempFilterStatus;
+				
+				tagCheck = tempTagCheck;
+				categoryCheck = tempCategoryCheck;
+				
 				filterTagList.clear();
-				boolean[] check = tagAdapter.getCheckedTags();
-				for (int i = 0; i < check.length; i++)
+				for (int i = 0; i < tagCheck.length; i++)
 				{
-					if (check[i])
+					if (tagCheck[i])
 					{
 						filterTagList.add(tagList.get(i));
 					}
-				}					
+				}
+				
+				filterCategoryList.clear();
+				for (int i = 0; i < categoryCheck.length; i++)
+				{
+					if (categoryCheck[i])
+					{
+						filterCategoryList.add(categoryList.get(i));
+					}
+				}
 
 				filterPopupWindow.dismiss();
-				ReimApplication.showProgressDialog();
+				ReimProgressDialog.show();
 				refreshItemListView();
-				ReimApplication.dismissProgressDialog();
+				ReimProgressDialog.dismiss();
 			}
 		});
 
@@ -351,10 +374,61 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			public void onClick(View v)
 			{
+				switch (sortType)
+				{
+					case SORT_NULL:
+						sortRadioGroup.check(sortNullRadio.getId());
+						break;
+					case SORT_AMOUNT:
+						sortRadioGroup.check(sortAmountRadio.getId());
+						break;
+					case SORT_CONSUMED_DATE:
+						sortRadioGroup.check(sortConsumedDateRadio.getId());
+						break;
+					default:
+						break;
+				}
+				
+				switch (filterType)
+				{
+					case FILTER_TYPE_ALL:
+						filterTypeRadioGroup.check(filterTypeAllRadio.getId());
+						break;
+					case FILTER_TYPE_PROVE_AHEAD:
+						filterTypeRadioGroup.check(filterProveAheadRadio.getId());
+						break;
+					case FILTER_TYPE_CONSUMED:
+						filterTypeRadioGroup.check(filterConsumedRadio.getId());
+						break;
+					default:
+						break;
+				}
+				
+				switch (filterStatus)
+				{
+					case FILTER_STATUS_ALL:
+						filterStatusRadioGroup.check(filterStatusAllRadio.getId());
+						break;
+					case FILTER_STATUS_FREE:
+						filterStatusRadioGroup.check(filterFreeRadio.getId());
+						break;
+					case FILTER_STATUS_ADDED:
+						filterStatusRadioGroup.check(filterAddedRadio.getId());
+						break;
+					default:
+						break;
+				}
+				
+				tempTagCheck = tagCheck;
+				refreshTagView();
+				
+				tempCategoryCheck = categoryCheck;
+				refreshCategoryView();
+				
 				filterPopupWindow.dismiss();
 			}
 		});
-	
+		
 		filterPopupWindow = Utils.constructTopPopupWindow(getActivity(), filterView);
 	}
 	
@@ -403,6 +477,11 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			{
 				continue;
 			}
+			
+			if (filterCategoryList.size() > 0 && !item.containsCategory(filterCategoryList))
+			{
+				continue;
+			}
 			showList.add(item);
 		}
 
@@ -434,8 +513,141 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		adapter.notifyDataSetChanged();
 	}
 
+	private void refreshTagView()
+	{
+		tagLayout.removeAllViews();
+
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, metrics);
+		int tagVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		int tagHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, metrics);
+		int textSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, metrics);
+
+		int space = 0;
+		LinearLayout layout = new LinearLayout(getActivity());
+		for (int i = 0; i < tagList.size(); i++)
+		{
+			String name = tagList.get(i).getName();
+			
+			int layoutID = tempTagCheck[i] ? R.layout.grid_tag : R.layout.grid_tag_unselected;
+			View view = View.inflate(getActivity(), layoutID, null);
+
+			final int index = i;
+			TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+			nameTextView.setText(name);
+			nameTextView.setOnClickListener(new OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TAG");
+					tempTagCheck[index] = !tempTagCheck[index];
+					refreshTagView();
+				}
+			});
+			
+			Paint textPaint = new Paint();
+			textPaint.setTextSize(textSize);
+			Rect textRect = new Rect();
+			textPaint.getTextBounds(name, 0, name.length(), textRect);
+			int width = textRect.width() + padding;
+			
+			if (space - width - tagHorizontalInterval <= 0)
+			{
+				layout = new LinearLayout(getActivity());
+				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				params.topMargin = tagVerticalInterval;
+				layout.setLayoutParams(params);
+				layout.setOrientation(LinearLayout.HORIZONTAL);
+				
+				tagLayout.addView(layout);
+				
+				params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				layout.addView(view, params);
+				space = layoutMaxLength - width;
+			}
+			else
+			{
+				LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				params.leftMargin = tagHorizontalInterval;
+				layout.addView(view, params);
+				space -= width + tagHorizontalInterval;
+			}
+		}
+	}
+	
+	private void refreshCategoryView()
+	{
+		categoryLayout.removeAllViews();
+		
+		int selectedColor = getResources().getColor(R.color.major_dark);
+		int unselectedColor = getResources().getColor(R.color.font_major_dark);
+
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		
+		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, metrics);
+		int iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
+		int iconVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		int iconHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
+		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
+
+		LinearLayout layout = new LinearLayout(getActivity());
+		for (int i = 0; i < categoryList.size(); i++)
+		{
+			if (i % iconMaxCount == 0)
+			{
+				layout = new LinearLayout(getActivity());
+				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				params.topMargin = iconVerticalInterval;
+				layout.setLayoutParams(params);
+				layout.setOrientation(LinearLayout.HORIZONTAL);
+				
+				categoryLayout.addView(layout);
+			}
+			
+			Category category = categoryList.get(i);
+
+			final int index = i;
+			View view = View.inflate(getActivity(), R.layout.grid_category, null);
+			view.setOnClickListener(new OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					tempCategoryCheck[index] = !tempCategoryCheck[index];
+					refreshCategoryView();
+				}
+			});
+			
+			ImageView iconImageView = (ImageView) view.findViewById(R.id.iconImageView);
+			
+			TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+			nameTextView.setText(category.getName());
+			
+			if (tempCategoryCheck[i])
+			{
+				iconImageView.setImageResource(R.drawable.icon_chosen);
+				nameTextView.setTextColor(selectedColor);
+			}
+			else
+			{
+				Bitmap icon = BitmapFactory.decodeFile(category.getIconPath());
+				if (icon != null)
+				{
+					iconImageView.setImageBitmap(icon);		
+				}
+				nameTextView.setTextColor(unselectedColor);
+			}			
+			
+			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
+			params.rightMargin = iconHorizontalInterval;
+			
+			layout.addView(view, params);
+		}
+	}
+	
     private void showFilterWindow()
-    {    	
+    {
 		filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		filterPopupWindow.update();
     }
@@ -540,7 +752,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
     
 	private void sendDeleteItemRequest(final Item item)
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		DeleteItemRequest request = new DeleteItemRequest(item.getServerID());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -563,7 +775,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(getActivity(), R.string.prompt_delete_failed);
 						}
 					});
@@ -577,12 +789,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		if (dbManager.deleteItem(itemLocalID))
 		{
 			refreshItemListView();
-			ReimApplication.dismissProgressDialog();
+			ReimProgressDialog.dismiss();
 			Utils.showToast(getActivity(), R.string.prompt_delete_succeed);
 		}
 		else
 		{
-			ReimApplication.dismissProgressDialog();
+			ReimProgressDialog.dismiss();
 			Utils.showToast(getActivity(), R.string.prompt_delete_failed);
 		}
 	}

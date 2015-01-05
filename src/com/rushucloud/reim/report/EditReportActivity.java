@@ -25,6 +25,7 @@ import classes.Adapter.MemberListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.TextLengthFilter;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.EditItemActivity;
@@ -99,7 +100,7 @@ public class EditReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EditReportActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 		refreshView();
 	}
 
@@ -768,7 +769,7 @@ public class EditReportActivity extends Activity
 	
     private void sendGetReportRequest(final int reportServerID)
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
     	GetReportRequest request = new GetReportRequest(reportServerID);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -796,7 +797,7 @@ public class EditReportActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							managerTextView.setText(report.getManagersName());		
 							ccTextView.setText(report.getCCsName());
 						}
@@ -808,7 +809,7 @@ public class EditReportActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditReportActivity.this, "获取详细信息失败");
 						}
 					});
@@ -819,7 +820,7 @@ public class EditReportActivity extends Activity
     
     private void sendCreateReportRequest(final String commentContent)
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 
 		report.setTitle(titleEditText.getText().toString());
 		report.setCreatedDate(Utils.getCurrentTime());
@@ -857,8 +858,8 @@ public class EditReportActivity extends Activity
 					runOnUiThread(new Runnable()
 					{
 						public void run()
-						{							
-							ReimApplication.dismissProgressDialog();
+						{
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditReportActivity.this, "评论发表成功");
 						}
 					});
@@ -869,7 +870,7 @@ public class EditReportActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditReportActivity.this, "评论发表失败, " + response.getErrorMessage());
 						}
 					});					
@@ -880,7 +881,7 @@ public class EditReportActivity extends Activity
     
     private void sendModifyReportRequest(final String commentContent)
     {
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
     	
 		report.setTitle(titleEditText.getText().toString());
 		dbManager.updateReportByLocalID(report);
@@ -915,7 +916,7 @@ public class EditReportActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditReportActivity.this, "评论发表成功");
 						}
 					});
@@ -926,7 +927,7 @@ public class EditReportActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EditReportActivity.this, "评论发表失败, " + response.getErrorMessage());
 						}
 					});					

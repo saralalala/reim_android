@@ -22,6 +22,7 @@ import classes.Adapter.ReportListViewAdapter;
 import classes.Adapter.ReportTagGridViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 import classes.Widget.SegmentedGroup;
 import classes.Widget.XListView;
 import classes.Widget.XListView.IXListViewListener;
@@ -84,14 +85,16 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	private List<Report> showMineList = new ArrayList<Report>();	
 	private int mineSortType = SORT_NULL;
 	private boolean mineSortReverse = false;
-	private int mineTempSortType = SORT_NULL;	
+	private int mineTempSortType = SORT_NULL;
+	private boolean[] mineCheck;
 	private List<Integer> mineFilterStatusList = new ArrayList<Integer>();
 	
 	private List<Report> othersList = new ArrayList<Report>();
 	private List<Report> showOthersList = new ArrayList<Report>();
 	private int othersSortType = SORT_NULL;
 	private boolean othersSortReverse = false;
-	private int othersTempSortType = SORT_NULL;	
+	private int othersTempSortType = SORT_NULL;
+	private boolean[] othersCheck;
 	private List<Integer> othersFilterStatusList = new ArrayList<Integer>();
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -156,6 +159,14 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		
 		mineList.addAll(readMineReportList());
 		showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
+		
+		mineCheck = new boolean[5];
+		othersCheck = new boolean[5];
+		for (int i = 0; i < 5; i++)
+		{
+			mineCheck[i] = false;
+			othersCheck[i] = false;
+		}
     }
 
 	private void initView()
@@ -265,8 +276,108 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	}
 	
 	private void initFilterView()
-	{		
-		View filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);
+	{
+		View filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);		
+		filterPopupWindow = Utils.constructTopPopupWindow(getActivity(), filterView);
+	}
+	
+	private void setListView(int index)
+	{
+		ReimApplication.setReportTabIndex(index);
+		if (index == 0)
+		{
+			myTitleTextView.setTextColor(getResources().getColor(R.color.major_light));
+			othersTitleTextView.setTextColor(getResources().getColor(R.color.hint_light));
+		}
+		else
+		{
+			if (Utils.isNetworkConnected())
+			{
+				sendSubordinatesReportsRequest();
+			}
+			myTitleTextView.setTextColor(getResources().getColor(R.color.hint_light));
+			othersTitleTextView.setTextColor(getResources().getColor(R.color.major_light));
+		}
+		ReimProgressDialog.show();
+		refreshReportListView();
+		ReimProgressDialog.dismiss();
+	}
+	
+	private List<Report> readMineReportList()
+	{
+		return dbManager.getUserReports(appPreference.getCurrentUserID());
+	}
+	
+	private List<Report> readOthersReportList()
+	{
+		return dbManager.getOthersReports(appPreference.getCurrentUserID());
+	}
+
+	private List<Report> filterReportList(List<Report> reportList, int sortType, boolean sortReverse, List<Integer> filterStatusList)
+	{
+		List<Report> resultList = new ArrayList<Report>();
+		for (Report report : reportList)
+		{
+			if (filterStatusList.size() > 0 && filterStatusList.size() < 5)
+			{
+				if (!report.isInSpecificStatus(filterStatusList))
+				{
+					continue;
+				}
+			}
+			resultList.add(report);
+		}
+
+		if (sortType == SORT_NULL)
+		{
+			Report.sortByUpdateDate(resultList);
+		}
+		if (sortType == SORT_AMOUNT)
+		{
+			Report.sortByAmount(resultList);
+		}
+		if (sortType == SORT_ITEMS_COUNT)
+		{
+			Report.sortByItemsCount(resultList);
+		}
+		if (sortType == SORT_CREATE_DATE)
+		{
+			Report.sortByCreateDate(resultList);
+		}
+		
+		if (sortReverse)
+		{
+			Collections.reverse(resultList);
+		}
+
+		return resultList;
+	}
+	
+	private void refreshReportListView()
+	{
+		if (ReimApplication.getReportTabIndex() == 0)
+		{
+			mineList.clear();
+			mineList.addAll(readMineReportList());
+			showMineList.clear();
+			showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
+			mineAdapter.set(showMineList);
+			reportListView.setAdapter(mineAdapter);
+		}
+		else
+		{
+			othersList.clear();
+			othersList.addAll(readOthersReportList());
+			showOthersList.clear();
+			showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
+			othersAdapter.set(showOthersList);
+			reportListView.setAdapter(othersAdapter);
+		}
+	}
+
+    private void showFilterWindow()
+    {
+    	View filterView = filterPopupWindow.getContentView();
 
 		final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
 		final RadioButton sortItemsCountRadio = (RadioButton)filterView.findViewById(R.id.sortItemsCountRadio);
@@ -350,7 +461,8 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 					mineSortReverse = mineSortType == mineTempSortType ? !mineSortReverse : false;
 					mineSortType = mineTempSortType;
 					mineFilterStatusList.clear();
-					mineFilterStatusList.addAll(tagAdapter.getFilterStatusList());						
+					mineFilterStatusList.addAll(tagAdapter.getFilterStatusList());
+					mineCheck = tagAdapter.getCheckedTags();
 				}
 				else
 				{
@@ -358,12 +470,13 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 					othersSortType = othersTempSortType;
 					othersFilterStatusList.clear();
 					othersFilterStatusList.addAll(tagAdapter.getFilterStatusList());
+					othersCheck = tagAdapter.getCheckedTags();
 				}
 
 				filterPopupWindow.dismiss();
-				ReimApplication.showProgressDialog();
+				ReimProgressDialog.show();
 				refreshReportListView();
-				ReimApplication.dismissProgressDialog();
+				ReimProgressDialog.dismiss();
 			}
 		});
 
@@ -376,105 +489,53 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			}
 		});
 		
-		filterPopupWindow = Utils.constructTopPopupWindow(getActivity(), filterView);
-	}
-	
-	private void setListView(int index)
-	{
-		ReimApplication.setReportTabIndex(index);
-		if (index == 0)
-		{
-			myTitleTextView.setTextColor(getResources().getColor(R.color.major_light));
-			othersTitleTextView.setTextColor(getResources().getColor(R.color.hint_light));
-		}
-		else
-		{
-			if (Utils.isNetworkConnected())
-			{
-				sendSubordinatesReportsRequest();
-			}
-			myTitleTextView.setTextColor(getResources().getColor(R.color.hint_light));
-			othersTitleTextView.setTextColor(getResources().getColor(R.color.major_light));
-		}
-		ReimApplication.showProgressDialog();
-		refreshReportListView();
-		ReimApplication.dismissProgressDialog();
-	}
-	
-	private List<Report> readMineReportList()
-	{
-		return dbManager.getUserReports(appPreference.getCurrentUserID());
-	}
-	
-	private List<Report> readOthersReportList()
-	{
-		return dbManager.getOthersReports(appPreference.getCurrentUserID());
-	}
-
-	private List<Report> filterReportList(List<Report> reportList, int sortType, boolean sortReverse, List<Integer> filterStatusList)
-	{
-		List<Report> resultList = new ArrayList<Report>();
-		for (Report report : reportList)
-		{
-			if (filterStatusList.size() > 0 && filterStatusList.size() < 5)
-			{
-				if (!report.isInSpecificStatus(filterStatusList))
-				{
-					continue;
-				}
-			}
-			resultList.add(report);
-		}
-
-		if (sortType == SORT_NULL)
-		{
-			Report.sortByUpdateDate(resultList);
-		}
-		if (sortType == SORT_AMOUNT)
-		{
-			Report.sortByAmount(resultList);
-		}
-		if (sortType == SORT_ITEMS_COUNT)
-		{
-			Report.sortByItemsCount(resultList);
-		}
-		if (sortType == SORT_CREATE_DATE)
-		{
-			Report.sortByCreateDate(resultList);
-		}
-		
-		if (sortReverse)
-		{
-			Collections.reverse(resultList);
-		}
-
-		return resultList;
-	}
-	
-	private void refreshReportListView()
-	{
 		if (ReimApplication.getReportTabIndex() == 0)
 		{
-			mineList.clear();
-			mineList.addAll(readMineReportList());
-			showMineList.clear();
-			showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
-			mineAdapter.set(showMineList);
-			reportListView.setAdapter(mineAdapter);
+			switch (mineSortType)
+			{
+				case SORT_NULL:
+					sortRadioGroup.check(sortNullRadio.getId());
+					break;
+				case SORT_ITEMS_COUNT:
+					sortRadioGroup.check(sortItemsCountRadio.getId());
+					break;
+				case SORT_AMOUNT:
+					sortRadioGroup.check(sortAmountRadio.getId());
+					break;
+				case SORT_CREATE_DATE:
+					sortRadioGroup.check(sortCreateDateRadio.getId());
+					break;
+				default:
+					break;
+			}
+			
+			tagAdapter.setCheck(mineCheck);
+			tagAdapter.notifyDataSetChanged();
 		}
 		else
 		{
-			othersList.clear();
-			othersList.addAll(readOthersReportList());
-			showOthersList.clear();
-			showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
-			othersAdapter.set(showOthersList);
-			reportListView.setAdapter(othersAdapter);
+			switch (othersSortType)
+			{
+				case SORT_NULL:
+					sortRadioGroup.check(sortNullRadio.getId());
+					break;
+				case SORT_ITEMS_COUNT:
+					sortRadioGroup.check(sortItemsCountRadio.getId());
+					break;
+				case SORT_AMOUNT:
+					sortRadioGroup.check(sortAmountRadio.getId());
+					break;
+				case SORT_CREATE_DATE:
+					sortRadioGroup.check(sortCreateDateRadio.getId());
+					break;
+				default:
+					break;
+			}
+			
+			tagAdapter.setCheck(othersCheck);
+			tagAdapter.notifyDataSetChanged();			
 		}
-	}
-
-    private void showFilterWindow()
-    {    	
+		
 		filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		filterPopupWindow.update();
     }
@@ -613,7 +674,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	
 	private void sendDeleteReportRequest(final Report report)
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		DeleteReportRequest request = new DeleteReportRequest(report.getServerID());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -636,7 +697,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 				            Utils.showToast(getActivity(), R.string.prompt_delete_failed);
 						}
 					});		
@@ -647,7 +708,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 
 	private void sendExportReportRequest(int reportID, String email)
 	{
-    	ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		ExportReportRequest request = new ExportReportRequest(reportID, email);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -660,7 +721,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(getActivity(), "报告导出成功");
 						}
 					});
@@ -671,7 +732,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(getActivity(), "报告导出失败");
 						}
 					});
@@ -755,12 +816,12 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		if (dbManager.deleteReport(reportLocalID))
 		{
 			refreshReportListView();
-			ReimApplication.dismissProgressDialog();
+			ReimProgressDialog.dismiss();
             Utils.showToast(getActivity(), R.string.prompt_delete_succeed);														
 		}
 		else
 		{
-			ReimApplication.dismissProgressDialog();
+			ReimProgressDialog.dismiss();
             Utils.showToast(getActivity(), R.string.prompt_delete_failed);
 		}		
 	}

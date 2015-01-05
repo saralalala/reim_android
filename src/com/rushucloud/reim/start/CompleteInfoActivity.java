@@ -9,10 +9,10 @@ import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.User.ModifyUserResponse;
-import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 
 import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.MainActivity;
@@ -68,7 +68,7 @@ public class CompleteInfoActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("CompleteInfoActivity");
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -188,12 +188,12 @@ public class CompleteInfoActivity extends Activity
 				}
 				else if (newAvatar)
 				{
-					ReimApplication.showProgressDialog();
+					ReimProgressDialog.show();
 					sendUploadAvatarRequest();
 				}
 				else
 				{
-					ReimApplication.showProgressDialog();
+					ReimProgressDialog.show();
 					sendModifyUserInfoRequest();
 				}
 			}
@@ -312,7 +312,7 @@ public class CompleteInfoActivity extends Activity
 						{
 							public void run()
 							{
-								ReimApplication.dismissProgressDialog();
+								ReimProgressDialog.dismiss();
 								Utils.showToast(CompleteInfoActivity.this, "个人信息修改成功");
 								startActivity(new Intent(CompleteInfoActivity.this, WelcomeActivity.class));
 								finish();
@@ -330,7 +330,7 @@ public class CompleteInfoActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(CompleteInfoActivity.this, "头像上传失败" + response.getErrorMessage());
 						}
 					});				
@@ -355,7 +355,7 @@ public class CompleteInfoActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(CompleteInfoActivity.this, "个人信息修改成功");
 							startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
 							finish();
@@ -368,7 +368,7 @@ public class CompleteInfoActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(CompleteInfoActivity.this, "用户信息修改失败!" + response.getErrorMessage());
 						}
 					});						

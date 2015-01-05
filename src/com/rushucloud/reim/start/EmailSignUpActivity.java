@@ -5,10 +5,10 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.RegisterRequest;
 import netUtils.Response.User.SignInResponse;
 import netUtils.Response.User.RegisterResponse;
-import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
+import classes.Widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -49,7 +49,7 @@ public class EmailSignUpActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EmailSignUpActivity");		
 		MobclickAgent.onResume(this);
-		ReimApplication.setProgressDialog(this);
+		ReimProgressDialog.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -153,7 +153,7 @@ public class EmailSignUpActivity extends Activity
 	
 	private void sendRegisterRequest(final User user)
 	{
-		ReimApplication.showProgressDialog();
+		ReimProgressDialog.show();
 		RegisterRequest request = new RegisterRequest(user, "");
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -186,7 +186,7 @@ public class EmailSignUpActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EmailSignUpActivity.this, "注册失败！" + response.getErrorMessage());
 						}
 					});		
@@ -218,7 +218,7 @@ public class EmailSignUpActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Builder builder = new Builder(EmailSignUpActivity.this);
 							builder.setTitle(R.string.tip);
 							builder.setMessage(R.string.prompt_sign_up_succeed_with_email);
@@ -240,7 +240,7 @@ public class EmailSignUpActivity extends Activity
 					{
 						public void run()
 						{
-							ReimApplication.dismissProgressDialog();
+							ReimProgressDialog.dismiss();
 							Utils.showToast(EmailSignUpActivity.this, "获取信息失败，请稍候重试");
 							Bundle bundle = new Bundle();
 							bundle.putString("username", AppPreference.getAppPreference().getUsername());
