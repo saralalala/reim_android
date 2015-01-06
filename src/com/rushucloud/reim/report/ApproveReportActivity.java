@@ -93,16 +93,17 @@ public class ApproveReportActivity extends Activity
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null)
 		{
-			report = (Report)getIntent().getExtras().getSerializable("report");
+			report = (Report) bundle.getSerializable("report");
 			if (report == null)
 			{
-				reportServerID = getIntent().getIntExtra("reportServerID", -1);				
+				reportServerID = getIntent().getIntExtra("reportServerID", -1);
+				fromPush = true;
 			}
 			else
 			{
-				reportServerID = report.getServerID();				
+				reportServerID = report.getServerID();
+				fromPush = false;
 			}
-			fromPush = bundle.getBoolean("fromPush", false);
 		}
 		else
 		{
@@ -203,11 +204,7 @@ public class ApproveReportActivity extends Activity
 			{
 				Utils.showToast(this, "数据获取失败");
 			}
-			else if (reportServerID != -1 && report == null)
-			{
-				sendGetReportRequest(reportServerID);
-			}
-			else if (report != null && itemList.size() == 0)
+			else if (itemList.size() == 0)
 			{
 				sendGetReportRequest(reportServerID);
 			}
@@ -223,80 +220,7 @@ public class ApproveReportActivity extends Activity
 			Utils.showToast(this, "网络未连接，无法获取数据");
 		}
 	}
-	
-    private void sendGetReportRequest(final int reportServerID)
-    {
-		ReimProgressDialog.show();
-    	GetReportRequest request = new GetReportRequest(reportServerID);
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final GetReportResponse response = new GetReportResponse(httpResponse);
-				if (response.getStatus())
-				{ 
-					int ownerID = appPreference.getCurrentUserID();
-					if (report.getServerID() == -1)
-					{
-						report = response.getReport();
-					}
-					else
-					{
-						report.setManagerList(response.getReport().getManagerList());
-						report.setCCList(response.getReport().getCCList());
-						report.setCommentList(response.getReport().getCommentList());						
-					}
 
-					dbManager.deleteOthersReport(reportServerID, ownerID);
-					dbManager.insertOthersReport(report);
-					
-					for (Item item : response.getItemList())
-					{
-						dbManager.insertOthersItem(item);
-					}
-					itemList = dbManager.getOthersReportItems(reportServerID);
-					
-					for (Comment comment : report.getCommentList())
-					{
-						comment.setReportID(report.getServerID());
-						dbManager.insertOthersComment(comment);
-					}
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-					    	if (report.getStatus() != Report.STATUS_SUBMITTED)
-							{
-					    		Utils.showToast(ApproveReportActivity.this, "报告已被审批");
-								goBackToMainActivity();
-							}
-					    	else
-					    	{
-					    		adapter.setReport(report);
-								adapter.setItemList(itemList);
-								adapter.notifyDataSetChanged();
-					    	}				
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-				    		Utils.showToast(ApproveReportActivity.this, "数据获取失败");
-							goBackToMainActivity();
-						}
-					});
-				}
-			}
-		});
-    }
-    
     private void showCommentDialog()
     {
 		View view = View.inflate(this, R.layout.dialog_report_comment, null);
@@ -320,7 +244,90 @@ public class ApproveReportActivity extends Activity
     	builder.setNegativeButton(R.string.cancel, null);
     	builder.create().show();
     }
-	
+    
+    private void sendGetReportRequest(final int reportServerID)
+    {
+		ReimProgressDialog.show();
+    	GetReportRequest request = new GetReportRequest(reportServerID);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final GetReportResponse response = new GetReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					int ownerID = appPreference.getCurrentUserID();
+					
+					if (report.getServerID() == -1)
+					{
+						report = response.getReport();
+					}
+					else
+					{
+						report.setManagerList(response.getReport().getManagerList());
+						report.setCCList(response.getReport().getCCList());
+						report.setCommentList(response.getReport().getCommentList());						
+					}
+					dbManager.deleteOthersReport(reportServerID, ownerID);
+					
+					int itemCount = 0;
+					double amount = 0;
+					
+					for (Item item : response.getItemList())
+					{
+						itemCount++;
+						amount += item.getAmount();
+						dbManager.insertOthersItem(item);
+					}
+					itemList = dbManager.getOthersReportItems(reportServerID);
+
+					for (Comment comment : report.getCommentList())
+					{
+						comment.setReportID(report.getServerID());
+						dbManager.insertOthersComment(comment);
+					}
+					
+					report.setAmount(Double.toString(amount));
+					report.setItemCount(itemCount);
+
+					dbManager.insertOthersReport(report);
+					
+		    		adapter.setReport(report);
+					adapter.setItemList(itemList);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+					    	if (report.getStatus() != Report.STATUS_SUBMITTED)
+							{
+					    		Utils.showToast(ApproveReportActivity.this, "报告已被审批");
+								goBackToMainActivity();
+							}
+					    	else
+					    	{
+								adapter.notifyDataSetChanged();
+					    	}				
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+				    		Utils.showToast(ApproveReportActivity.this, "数据获取失败");
+							goBackToMainActivity();
+						}
+					});
+				}
+			}
+		});
+    }
+    	
     private void sendModifyReportRequest(final int status, final String commentContent)
     {
 		ReimProgressDialog.show();

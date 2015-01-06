@@ -65,6 +65,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		ReimProgressDialog.setProgressDialog(this);
 
 		viewPager.setCurrentItem(ReimApplication.getTabIndex());
+		resetTabItems();
+		tabItemList.get(ReimApplication.getTabIndex()).setIconAlpha(1);
 		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
 		if (Utils.isNetworkConnected())
 		{

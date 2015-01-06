@@ -8,7 +8,6 @@ import classes.ReimApplication;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
-import com.rushucloud.reim.me.MessageActivity;
 import com.rushucloud.reim.me.MessageDetailActivity;
 import com.rushucloud.reim.report.ApproveReportActivity;
 
@@ -67,69 +66,55 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 			{
 				int type = intent.getIntExtra("type", -1);
 				JSONObject jObject = new JSONObject(intent.getStringExtra("data"));
-				switch (type)
+				
+				if (type == TYPE_SYSTEM_MESSAGE)
 				{
-					case TYPE_SYSTEM_MESSAGE:
+					Utils.showToast(context, jObject.getString("message"));
+				}
+				else if (type == TYPE_REPORT)
+				{
+					ReimApplication.setTabIndex(1);
+					int status = jObject.getInt("status");
+					if (status == 1)
 					{
-						Utils.showToast(context, jObject.getString("message"));
-						break;
-					}		
-					case TYPE_REPORT:
-					{
-						ReimApplication.setTabIndex(1);
-						int status = jObject.getInt("status");
-						if (status == 1)
-						{
-							ReimApplication.setReportTabIndex(1);
-							Intent newIntent = new Intent(context, ApproveReportActivity.class);
-							newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							newIntent.putExtra("reportServerID", jObject.getInt("args"));
-							context.startActivity(newIntent);
-						}
-						else
-						{
-							ReimApplication.setReportTabIndex(0);
-							Intent newIntent = new Intent(context, MainActivity.class);
-							newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-							newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							context.startActivity(newIntent);							
-						}
-						break;
-					}
-					case TYPE_INVITE:
-					{
-						Invite invite = new Invite();
-						try
-						{
-							invite.setMessage(jObject.getString("msg"));
-							invite.setInviteCode(jObject.getString("code"));
-							invite.setTypeCode(Invite.TYPE_NEW);
-						}
-						catch (JSONException e)
-						{
-							invite.setMessage(context.getString(R.string.prompt_data_error));
-							invite.setInviteCode("");
-						}
-						
-						Bundle bundle = new Bundle();
-						bundle.putSerializable("invite", invite);
-						bundle.putBoolean("fromPush", true);
-						
-						Intent newIntent = new Intent(context, MessageDetailActivity.class);
-						newIntent.putExtras(bundle);
+						ReimApplication.setReportTabIndex(1);
+						Intent newIntent = new Intent(context, ApproveReportActivity.class);
 						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						newIntent.putExtra("reportServerID", jObject.getInt("args"));
 						context.startActivity(newIntent);
-						break;
 					}
-					case TYPE_INVITE_REPLY:
-					{						
-						Intent newIntent = new Intent(context, MessageActivity.class);
+					else
+					{
+						ReimApplication.setReportTabIndex(0);
+						Intent newIntent = new Intent(context, MainActivity.class);
+						newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						context.startActivity(newIntent);						
-						break;
+						context.startActivity(newIntent);							
 					}
-					default:
-						break;
+				}
+				else if (type == TYPE_INVITE || type == TYPE_INVITE_REPLY)
+				{
+					Invite invite = new Invite();
+					try
+					{
+						invite.setMessage(jObject.getString("msg"));
+						invite.setInviteCode(jObject.getString("code"));
+						invite.setTypeCode(jObject.getInt("actived"));
+					}
+					catch (JSONException e)
+					{
+						invite.setMessage(context.getString(R.string.prompt_data_error));
+						invite.setInviteCode("");
+					}
+					
+					Bundle bundle = new Bundle();
+					bundle.putSerializable("invite", invite);
+					bundle.putBoolean("fromPush", true);
+					
+					Intent newIntent = new Intent(context, MessageDetailActivity.class);
+					newIntent.putExtras(bundle);
+					newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(newIntent);
 				}
 			}
 		}

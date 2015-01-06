@@ -13,14 +13,14 @@
 
         <ImageView
             android:id="@+id/filterImageView"
-            android:layout_width="wrap_content"
+            android:layout_width="54dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/filter"
-            android:src="@drawable/filter" />
+            android:src="@drawable/filter_drawable" />
 
         <TextView
             android:id="@+id/titleTextView"

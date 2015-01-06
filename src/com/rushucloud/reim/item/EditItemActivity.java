@@ -465,7 +465,7 @@ public class EditItemActivity extends Activity
 			amountEditText.setText(Utils.formatDouble(item.getAmount()));
 		}
 		
-		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
+		if (item.isPaApproved())
 		{
 			budgetTextView.setText(getString(R.string.budget) + " " + Utils.formatDouble(item.getPaAmount()));
 		}
@@ -492,7 +492,7 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (fromReim && item.getStatus() != Item.STATUS_PROVE_AHEAD_APPROVED)
+				if (fromReim && !item.isPaApproved())
 				{
 					hideSoftKeyboard();
 					showTypeWindow();
@@ -849,7 +849,7 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (item.getStatus() != Item.STATUS_PROVE_AHEAD_APPROVED)
+				if (!item.isPaApproved())
 				{
 					if (newItem)
 					{
@@ -873,7 +873,7 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (item.getStatus() != Item.STATUS_PROVE_AHEAD_APPROVED)
+				if (!item.isPaApproved())
 				{
 					if (newItem)
 					{
@@ -1754,7 +1754,7 @@ public class EditItemActivity extends Activity
 				if (response.getStatus())
 				{
 					item.setInvoiceID(response.getImageID());
-					DBManager.getDBManager().updateItem(item);
+					dbManager.updateItem(item);
 					
 					if (newItem)
 					{

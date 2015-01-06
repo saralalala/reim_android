@@ -160,7 +160,7 @@ public class Tag
 		return TextUtils.join(",", tagIDs);
 	}
 	
-	public static List<Tag> stringToTagList(String idString)
+	public static List<Tag> idStringToTagList(String idString)
 	{
 		List<Tag> tagList = new ArrayList<Tag>();
 		DBManager dbManager = DBManager.getDBManager();

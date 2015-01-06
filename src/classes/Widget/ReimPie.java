@@ -32,10 +32,10 @@ public class ReimPie extends View
 		startAngle = start;
 		occupyAngle = angle;
 		
-		pieRect.left = 0;
-		pieRect.top = 0;
-		pieRect.right = diameter;
-		pieRect.bottom = diameter;
+		pieRect.left = offset;
+		pieRect.top = offset;
+		pieRect.right = diameter - offset;
+		pieRect.bottom = diameter - offset;
 	}
 
 	public ReimPie(Context context, AttributeSet attrs)
@@ -45,11 +45,6 @@ public class ReimPie extends View
 
 	public void onDraw(Canvas canvas)
 	{		
-		pieRect.top += offset;
-		pieRect.left += offset;
-		pieRect.right -= offset;
-		pieRect.bottom -= offset;
-		
 		canvas.drawArc(pieRect, startAngle, occupyAngle, true, paint);
 	}
 }

@@ -124,8 +124,9 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	        initData();
 	        hasInit = true;
 			setListView(ReimApplication.getReportTabIndex());
-			syncReports();			
+			syncReports();	
 		}
+		showBadge();
 	}
 
 	public void onPause()
@@ -139,7 +140,6 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit)
 		{
-			showBadge();
 			setListView(ReimApplication.getReportTabIndex());
 			syncReports();
 		}
@@ -301,6 +301,37 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		ReimProgressDialog.show();
 		refreshReportListView();
 		ReimProgressDialog.dismiss();
+	}
+
+	private void showBadge()
+	{
+		int count = ReimApplication.getReportBadgeCount();
+		if (count > 99)
+		{
+			longBadgeTextView.setVisibility(View.VISIBLE);
+			mediumBadgeTextView.setVisibility(View.GONE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
+		else if (count > 9)
+		{
+			mediumBadgeTextView.setText(Integer.toString(count));
+			longBadgeTextView.setVisibility(View.GONE);
+			mediumBadgeTextView.setVisibility(View.VISIBLE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
+		else if (count > 0)
+		{
+			shortBadgeTextView.setText(Integer.toString(count));
+			longBadgeTextView.setVisibility(View.GONE);
+			mediumBadgeTextView.setVisibility(View.GONE);
+			shortBadgeTextView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			longBadgeTextView.setVisibility(View.GONE);
+			mediumBadgeTextView.setVisibility(View.GONE);
+			shortBadgeTextView.setVisibility(View.GONE);
+		}
 	}
 	
 	private List<Report> readMineReportList()
@@ -919,38 +950,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			}			
 		}		
 	}
-	
-	private void showBadge()
-	{
-		int count = ReimApplication.getReportBadgeCount();
-		if (count > 99)
-		{
-			longBadgeTextView.setVisibility(View.VISIBLE);
-			mediumBadgeTextView.setVisibility(View.GONE);
-			shortBadgeTextView.setVisibility(View.GONE);
-		}
-		else if (count > 9)
-		{
-			mediumBadgeTextView.setText(Integer.toString(count));
-			longBadgeTextView.setVisibility(View.GONE);
-			mediumBadgeTextView.setVisibility(View.VISIBLE);
-			shortBadgeTextView.setVisibility(View.GONE);
-		}
-		else if (count > 0)
-		{
-			shortBadgeTextView.setText(Integer.toString(count));
-			longBadgeTextView.setVisibility(View.GONE);
-			mediumBadgeTextView.setVisibility(View.GONE);
-			shortBadgeTextView.setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			longBadgeTextView.setVisibility(View.GONE);
-			mediumBadgeTextView.setVisibility(View.GONE);
-			shortBadgeTextView.setVisibility(View.GONE);
-		}
-	}
-	
+		
 	public void onClick(View v)
 	{
 		if (v.equals(myTitleTextView))

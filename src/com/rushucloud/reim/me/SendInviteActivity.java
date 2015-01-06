@@ -145,7 +145,6 @@ public class SendInviteActivity extends Activity
     
     private void sendCommonRequest()
     {
-		ReimProgressDialog.show();
     	CommonRequest request = new CommonRequest();
     	request.sendRequest(new HttpConnectionCallback()
 		{

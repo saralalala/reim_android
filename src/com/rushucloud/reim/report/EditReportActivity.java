@@ -446,7 +446,6 @@ public class EditReportActivity extends Activity
 			
 			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
 			TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
-			LinearLayout iconLayout = (LinearLayout) view.findViewById(R.id.iconLayout);
 			ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
 			ImageView warningImageView = (ImageView) view.findViewById(R.id.warningImageView);
 			
@@ -456,7 +455,6 @@ public class EditReportActivity extends Activity
 			String vendor = item.getVendor().equals("") ? getString(R.string.not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
-			// category 和 tag 一共iconCount个
 			if (item.missingInfo())
 			{
 				warningImageView.setVisibility(View.VISIBLE);
@@ -468,31 +466,8 @@ public class EditReportActivity extends Activity
 				if (bitmap != null)
 				{
 					categoryImageView.setImageBitmap(bitmap);				
-				}					
+				}
 			}
-			
-			iconLayout.removeAllViews();
-			
-			// category 和 tag 一共iconCount个
-
-//			DisplayMetrics metrics = getResources().getDisplayMetrics();
-//			int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, metrics);
-//			int screenWidth = metrics.widthPixels;
-//			int interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
-//			int sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-			
-//			int iconCount = (screenWidth - amountTextView.getMeasuredWidth() - padding * 3 + interval) / (sideLength + interval);
-//			iconCount = 1;
-//			for (int i = 0; i < iconCount; i++)
-//			{
-//				ImageView iconImageView = new ImageView(this);
-//				iconImageView.setImageResource(R.drawable.food);
-//				LayoutParams params = new LayoutParams(sideLength, sideLength);
-//				params.rightMargin = interval;
-//				iconLayout.addView(iconImageView, params);
-//			}
-
-			iconLayout.addView(categoryImageView);
 			
 			itemLayout.addView(view);
 

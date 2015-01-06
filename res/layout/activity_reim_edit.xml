@@ -131,10 +131,9 @@
 
 	            <TextView
 	                android:id="@+id/typeTextView"
-	                android:layout_width="match_parent"
+	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_centerVertical="true"
-	                android:layout_toLeftOf="@+id/approvedTextView"
 	                android:layout_marginLeft="80dp"
 	                android:layout_marginRight="10dp"
 	                android:textColor="@color/font_major_dark"
@@ -142,16 +141,15 @@
 
 	            <TextView
 	                android:id="@+id/approvedTextView"
-	                android:layout_width="55dp"
-	                android:layout_height="25dp"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
 	                android:layout_centerVertical="true"
-	                android:layout_alignParentRight="true"
+	                android:layout_toRightOf="@+id/typeTextView"
 	                android:layout_marginRight="10dp"
 	                android:gravity="center"
-	                android:background="@drawable/item_approved_detail"
 	                android:text="@string/status_prove_ahead_approved"
 	                android:textColor="@color/item_approved"
-	                android:textSize="14sp" />
+	                android:textSize="18sp" />
 	
 	        </RelativeLayout>
             

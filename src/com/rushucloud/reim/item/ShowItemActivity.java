@@ -122,7 +122,7 @@ public class ShowItemActivity extends Activity
 		amountTextView.setText(Utils.formatDouble(item.getAmount()));
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
-		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
+		if (item.isPaApproved())
 		{
 			budgetTextView.setText(getString(R.string.budget) + " " + Utils.formatDouble(item.getPaAmount()));
 		}

@@ -21,12 +21,14 @@
 
         <TextView
             android:id="@+id/proveTextView"
-            android:layout_width="55dp"
+            android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_toRightOf="@+id/statusTextView"
             android:layout_marginTop="7dp"
             android:layout_marginLeft="6dp"
 	        android:gravity="center"
+	        android:text="@string/status_prove_ahead"
+	        android:textColor="@color/major_light"
 	        android:textSize="14sp"/>
 
         <LinearLayout
@@ -107,27 +109,16 @@
             android:singleLine="true"
             android:textColor="@color/font_major_dark"
             android:textSize="20sp" />
-        
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/iconLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/infoLayout"
-        android:layout_marginTop="3dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal"
-        android:gravity="right" >
 
         <ImageView
             android:id="@+id/categoryImageView"
             android:layout_width="16dp"
             android:layout_height="16dp"
+            android:layout_gravity="right"
+        	android:layout_marginTop="3dp"
             android:contentDescription="@string/tag"
             android:src="@drawable/default_icon" />
-
+        
     </LinearLayout>
 
 </RelativeLayout>

@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ReportDetailListViewAdapter extends BaseAdapter
@@ -29,12 +28,6 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 	private Report report;
 	private List<Item> itemList;
 	
-//	private int screenWidth;
-//	private int interval;
-//	private int padding;
-//	private int sideLength;
-//	private int iconCount;
-
 	public ReportDetailListViewAdapter(Context context, Report report, List<Item> items)
 	{
 		this.context = context;
@@ -42,13 +35,6 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 		
 		this.report = report;
 		this.itemList = new ArrayList<Item>(items);
-		
-//		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-//		
-//		this.screenWidth = metrics.widthPixels;
-//		this.padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-//		this.interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
-//		this.sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -100,7 +86,6 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			itemCountTextView.setText(itemCount + context.getString(R.string.item_count));
 			
 			return view;
-
 		}
 		else 
 		{
@@ -108,7 +93,6 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			
 			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
 			TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
-			LinearLayout iconLayout = (LinearLayout) view.findViewById(R.id.iconLayout);
 			ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
 			
 			Item item = itemList.get(position - 1);
@@ -119,7 +103,6 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			String vendor = item.getVendor().equals("") ? context.getString(R.string.not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
-			// category 和 tag 一共iconCount个
 			Category category = item.getCategory();
 			if (category != null)
 			{
@@ -129,24 +112,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 					categoryImageView.setImageBitmap(bitmap);				
 				}
 			}
-
-			iconLayout.removeAllViews();
 			
-//			amountTextView.measure(0,0);
-//
-//			// category 和 tag 一共iconCount个
-//			iconCount = (screenWidth - amountTextView.getMeasuredWidth() - padding * 3 + interval) / (sideLength + interval);
-//			iconCount = 1;
-//			for (int i = 0; i < iconCount; i++)
-//			{
-//				ImageView iconImageView = new ImageView(context);
-//				iconImageView.setImageResource(R.drawable.food);
-//				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
-//				params.rightMargin = interval;
-//				iconLayout.addView(iconImageView, params);
-//			}
-
-			iconLayout.addView(categoryImageView);
 			return view;
 		}
 	}
@@ -168,7 +134,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 
 	public void setReport(Report report)
 	{
-		this.report = report;
+		this.report = new Report(report);
 	}
 	
 	public void setItemList(List<Item> items)

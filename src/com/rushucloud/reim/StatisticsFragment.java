@@ -13,7 +13,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,7 +30,7 @@ public class StatisticsFragment extends Fragment
 {
 	private boolean hasInit = false;
 
-	private FrameLayout statContainer;
+	private LinearLayout statContainer;
 	private TextView mainPercentTextView;
 	private TextView donePercentTextView;
 	private TextView ongoingPercentTextView;
@@ -76,24 +75,7 @@ public class StatisticsFragment extends Fragment
 	}
 	
 	private void initView()
-	{
-		statContainer = (FrameLayout) getActivity().findViewById(R.id.statContainer);
-		
-		mainPercentTextView = (TextView) getActivity().findViewById(R.id.mainPercentTextView);
-		mainPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-		
-		donePercentTextView = (TextView) getActivity().findViewById(R.id.donePercentTextView);
-		donePercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-		
-		ongoingPercentTextView = (TextView) getActivity().findViewById(R.id.ongoingPercentTextView);
-		ongoingPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-		
-		newPercentTextView = (TextView) getActivity().findViewById(R.id.newPercentTextView);
-		newPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-
-		monthCostTextView = (TextView) getActivity().findViewById(R.id.monthCostTextView);
-		monthLayout = (LinearLayout) getActivity().findViewById(R.id.monthLayout);
-		
+	{		
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.arc);
 		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
 		
@@ -110,8 +92,23 @@ public class StatisticsFragment extends Fragment
 		ImageView arcCoverImageView = (ImageView) getActivity().findViewById(R.id.arcCoverImageView);
 		arcCoverImageView.setLayoutParams(params);
 		
-		FrameLayout statContainer = (FrameLayout) getActivity().findViewById(R.id.statContainer);
+		statContainer = (LinearLayout) getActivity().findViewById(R.id.statContainer);
 		statContainer.setLayoutParams(params);
+		
+		mainPercentTextView = (TextView) getActivity().findViewById(R.id.mainPercentTextView);
+		mainPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		
+		donePercentTextView = (TextView) getActivity().findViewById(R.id.donePercentTextView);
+		donePercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		
+		ongoingPercentTextView = (TextView) getActivity().findViewById(R.id.ongoingPercentTextView);
+		ongoingPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		
+		newPercentTextView = (TextView) getActivity().findViewById(R.id.newPercentTextView);
+		newPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+
+		monthCostTextView = (TextView) getActivity().findViewById(R.id.monthCostTextView);
+		monthLayout = (LinearLayout) getActivity().findViewById(R.id.monthLayout);
 	}
 
 	private void resetView()

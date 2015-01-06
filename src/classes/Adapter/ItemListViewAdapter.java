@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ItemListViewAdapter extends BaseAdapter
@@ -33,26 +32,12 @@ public class ItemListViewAdapter extends BaseAdapter
 	private List<Item> itemList;
 	private List<Item> originalList;
 	private final Object mLock = new Object();
-	private int approvedColor;
-	private int proveAheadColor;
-//	private int interval;
-//	private int sideLength;
-//	private int iconCount;
 
 	public ItemListViewAdapter(Context context, List<Item> items)
 	{
 		this.context = context;
-		this.layoutInflater = LayoutInflater.from(context);
-		
+		this.layoutInflater = LayoutInflater.from(context);		
 		this.itemList = new ArrayList<Item>(items);
-		this.approvedColor = context.getResources().getColor(R.color.item_approved);
-		this.proveAheadColor = context.getResources().getColor(R.color.item_prove_ahead);
-//		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-
-//		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-//		this.interval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, metrics);
-//		this.sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);	
-//		this.iconCount = (metrics.widthPixels - padding * 2 + interval) / (sideLength + interval);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -68,7 +53,6 @@ public class ItemListViewAdapter extends BaseAdapter
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		TextView reportTextView = (TextView)convertView.findViewById(R.id.reportTextView);
 		TextView vendorTextView = (TextView)convertView.findViewById(R.id.vendorTextView);
-		LinearLayout iconLayout = (LinearLayout)convertView.findViewById(R.id.iconLayout);
 		ImageView categoryImageView = (ImageView)convertView.findViewById(R.id.categoryImageView);
 		
 		Item item = this.getItem(position);
@@ -85,19 +69,15 @@ public class ItemListViewAdapter extends BaseAdapter
 		statusTextView.setText(item.getStatusString());
 		statusTextView.setBackgroundResource(item.getStatusBackground());	
 		
-		if (item.getStatus() == Item.STATUS_PROVE_AHEAD_APPROVED)
+		if (item.isProveAhead() && item.isPaApproved())
 		{
-			proveTextView.setText(R.string.status_prove_ahead_approved);
-			proveTextView.setTextColor(approvedColor);
-			proveTextView.setBackgroundResource(R.drawable.item_approved_list);
 			proveTextView.setVisibility(View.VISIBLE);
+			proveTextView.setBackgroundResource(R.drawable.item_approved);
 		}
 		else if (item.isProveAhead())
 		{
-			proveTextView.setText(R.string.prove_ahead);
-			proveTextView.setTextColor(proveAheadColor);
-			proveTextView.setBackgroundResource(R.drawable.item_prove_ahead_list);
 			proveTextView.setVisibility(View.VISIBLE);
+			proveTextView.setBackgroundResource(R.drawable.item_prove_ahead);
 		}
 		else
 		{
@@ -125,20 +105,6 @@ public class ItemListViewAdapter extends BaseAdapter
 				categoryImageView.setImageBitmap(bitmap);				
 			}
 		}
-
-		iconLayout.removeAllViews();
-		
-//		iconCount = 1;
-//		for (int i = 0; i < iconCount; i++)
-//		{
-//			ImageView iconImageView = new ImageView(context);
-//			iconImageView.setImageResource(R.drawable.food);
-//			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
-//			params.rightMargin = interval;
-//			iconLayout.addView(iconImageView, params);
-//		}
-
-		iconLayout.addView(categoryImageView);
 		
 		return convertView;
 	}

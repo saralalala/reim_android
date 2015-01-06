@@ -7,12 +7,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.Category;
 import classes.Comment;
 import classes.Item;
 import classes.Report;
 import classes.User;
-import classes.Utils.Utils;
 import database.DBManager;
 import netUtils.Response.BaseResponse;
 
@@ -87,39 +85,7 @@ public class GetReportResponse extends BaseResponse
 			JSONArray jsonArray = jObject.getJSONArray("items");
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
-				JSONObject object = jsonArray.getJSONObject(i);
-				Item item = new Item();
-				item.setServerID(object.getInt("id"));
-				item.setAmount(object.getDouble("amount"));
-				item.setVendor(object.getString("merchants"));
-				item.setNote(object.getString("note"));
-				item.setStatus(object.getInt("status"));
-				item.setLocation(object.getString("location"));
-				item.setConsumedDate(object.getInt("dt"));
-				item.setServerUpdatedDate(object.getInt("lastdt"));				
-				item.setLocalUpdatedDate(object.getInt("lastdt"));
-				item.setInvoicePath("");
-				item.setIsProveAhead(Utils.intToBoolean(object.getInt("prove_ahead")));
-				item.setNeedReimbursed(Utils.intToBoolean(object.getInt("reimbursed")));
-				item.setTagsID(object.getString("tags"));
-				item.setRelevantUsersID(object.getString("relates"));
-				
-				List<Integer> idList = Utils.stringToIntList(object.getString("image_id"));
-				int imageID = idList.size() > 0 ? idList.get(0) : -1;
-				item.setInvoiceID(imageID);
-				
-				Report report = new Report();
-				report.setServerID(object.getInt("rid"));
-				item.setBelongReport(report);				
-				
-				Category category = new Category();
-				category.setServerID(object.getInt("category"));
-				item.setCategory(category);
-				
-				User consumser = new User();
-				consumser.setServerID(object.getInt("uid"));
-				item.setConsumer(consumser);
-				
+				Item item = new Item(jsonArray.getJSONObject(i));				
 				itemList.add(item);
 			}
 		}

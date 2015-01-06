@@ -22,7 +22,6 @@ public class Item
 	public static final int STATUS_APPROVED = 2;
 	public static final int STATUS_REJECTED = 3;
 	public static final int STATUS_FINISHED = 4;
-	public static final int STATUS_PROVE_AHEAD_APPROVED = 5;
 	
 	private int localID = -1;
 	private int serverID = -1;
@@ -39,6 +38,7 @@ public class Item
 	private String note = "";
 	private boolean isProveAhead = false;
 	private boolean needReimbursed = false;
+	private boolean paApproved = false;
 	private int status = STATUS_DRAFT;
 	private String location = "";
 	private List<User> relevantUsers = null;
@@ -72,6 +72,9 @@ public class Item
 			setInvoicePath("");
 			setIsProveAhead(Utils.intToBoolean(jObject.getInt("prove_ahead")));
 			setNeedReimbursed(Utils.intToBoolean(jObject.getInt("reimbursed")));
+			setPaApproved(Utils.intToBoolean(jObject.getInt("pa_approval")));
+			setTags(Tag.idStringToTagList(jObject.getString("tags")));
+			setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
 			
 			List<Integer> idList = Utils.stringToIntList(jObject.getString("image_id"));
 			int imageID = idList.size() > 0 ? idList.get(0) : -1;
@@ -83,13 +86,7 @@ public class Item
 			
 			Category category = new Category();
 			category.setServerID(jObject.getInt("category"));
-			setCategory(category);
-			
-			List<Tag> tagList = Tag.stringToTagList(jObject.getString("tags"));
-			setTags(tagList);
-			
-			List<User> userList = User.idStringToUserList(jObject.getString("relates"));
-			setRelevantUsers(userList);
+			setCategory(category);			
 			
 			User user = new User();
 			user.setServerID(jObject.getInt("uid"));
@@ -281,6 +278,15 @@ public class Item
 		this.needReimbursed = needReimbursed;
 	}
 
+	public boolean isPaApproved()
+	{
+		return paApproved;
+	}
+	public void setPaApproved(boolean paApproved)
+	{
+		this.paApproved = paApproved;
+	}
+
 	public int getStatus()
 	{
 		return status;
@@ -319,39 +325,53 @@ public class Item
 
 	public int getStatusBackground()
     {
-    	switch (getStatus())
+		if (getBelongReport() != null)
 		{
-			case STATUS_DRAFT:
-				return R.drawable.status_draft;
-			case STATUS_SUBMITTED:
-				return R.drawable.status_submitted;
-			case STATUS_APPROVED:
-				return R.drawable.status_approved;
-			case STATUS_REJECTED:
-				return R.drawable.status_rejected;
-			case STATUS_FINISHED:
-				return R.drawable.status_finished;
-			default:
-				return 0;
+	    	switch (getBelongReport().getStatus())
+			{
+				case STATUS_DRAFT:
+					return R.drawable.status_draft;
+				case STATUS_SUBMITTED:
+					return R.drawable.status_submitted;
+				case STATUS_APPROVED:
+					return R.drawable.status_approved;
+				case STATUS_REJECTED:
+					return R.drawable.status_rejected;
+				case STATUS_FINISHED:
+					return R.drawable.status_finished;
+				default:
+					return 0;
+			}			
+		}
+		else
+		{
+			return R.drawable.status_draft;
 		}
     }
 
 	public int getStatusString()
 	{
-		switch (getStatus())
+		if (getBelongReport() != null)
 		{
-			case STATUS_DRAFT:
-				return R.string.status_draft;
-			case STATUS_SUBMITTED:
-				return R.string.status_submitted;
-			case STATUS_APPROVED:
-				return R.string.status_approved;
-			case STATUS_REJECTED:
-				return R.string.status_rejected;
-			case STATUS_FINISHED:
-				return R.string.status_finished;
-			default:
-				return R.string.not_available;
+			switch (getBelongReport().getStatus())
+			{
+				case STATUS_DRAFT:
+					return R.string.status_draft;
+				case STATUS_SUBMITTED:
+					return R.string.status_submitted;
+				case STATUS_APPROVED:
+					return R.string.status_approved;
+				case STATUS_REJECTED:
+					return R.string.status_rejected;
+				case STATUS_FINISHED:
+					return R.string.status_finished;
+				default:
+					return R.string.not_available;
+			}			
+		}
+		else
+		{
+			return R.string.status_draft;
 		}
 	}
 	

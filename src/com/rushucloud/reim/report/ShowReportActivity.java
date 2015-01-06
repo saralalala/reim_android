@@ -198,13 +198,13 @@ public class ShowReportActivity extends Activity
 					{
 						dbManager.deleteOthersReport(reportServerID, ownerID);
 						dbManager.insertOthersReport(report);
-												
+						
 						for (Item item : response.getItemList())
 						{
 							dbManager.insertOthersItem(item);
 						}
 						itemList = dbManager.getOthersReportItems(reportServerID);
-						
+
 						for (Comment comment : report.getCommentList())
 						{
 							comment.setReportID(report.getServerID());

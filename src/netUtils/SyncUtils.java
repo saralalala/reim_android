@@ -371,9 +371,4 @@ public abstract class SyncUtils
 			}
 		});
     }
-
-	public interface callback
-	{
-		void execute();
-	}	
 }
