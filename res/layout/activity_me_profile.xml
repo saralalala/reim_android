@@ -21,7 +21,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back" />
+            android:src="@drawable/back_drawable" />
 
         <TextView
             android:id="@+id/titleTextView"
@@ -29,8 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/personal_info"
-            android:textSize="20sp"
-            android:textColor="@color/major_light" />
+            android:textColor="@color/major_light"
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

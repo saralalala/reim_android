@@ -115,7 +115,7 @@ public class CommentActivity extends Activity
 		// init comment list
 		commentList = myReport ? dbManager.getReportComments(reportID) : dbManager.getOthersReportComments(reportID);	
 		
-		if (commentList != null || commentList.size() > 0)
+		if (commentList != null || !commentList.isEmpty())
 		{
 			Comment.sortByCreateDate(commentList);
 		}
@@ -170,7 +170,7 @@ public class CommentActivity extends Activity
 
 	private void refreshView()
 	{
-		if (commentList == null || commentList.size() == 0)
+		if (commentList == null || commentList.isEmpty())
 		{
 			commentListView.setVisibility(View.GONE);
 			commentTextView.setVisibility(View.VISIBLE);

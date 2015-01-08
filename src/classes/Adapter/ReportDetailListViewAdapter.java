@@ -7,9 +7,12 @@ import classes.Category;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
+import classes.User;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
+
+import database.DBManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +28,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 	private Context context;
 	private LayoutInflater layoutInflater;
 	
+	private DBManager dbManager;
 	private Report report;
 	private List<Item> itemList;
 	
@@ -35,6 +39,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 		
 		this.report = report;
 		this.itemList = new ArrayList<Item>(items);
+		this.dbManager = DBManager.getDBManager();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -63,7 +68,8 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 
 			if (report.getSender() != null)
 			{
-				senderTextView.setText(report.getSender().getNickname());					
+				User user = dbManager.getUser(report.getSender().getServerID());
+				senderTextView.setText(user.getNickname());
 			}
 
 			managerTextView.setText(report.getManagersName());

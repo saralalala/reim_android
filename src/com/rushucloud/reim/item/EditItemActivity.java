@@ -37,7 +37,6 @@ import classes.Adapter.VendorListViewAdapter;
 import classes.Utils.AppPreference;
 import classes.Utils.Utils;
 import classes.Widget.ReimProgressDialog;
-
 import cn.beecloud.BCLocation;
 
 import com.baidu.location.BDLocation;
@@ -86,8 +85,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
-import android.widget.ToggleButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class EditItemActivity extends Activity
 {
@@ -289,7 +288,7 @@ public class EditItemActivity extends Activity
 			newItem = true;
 			MobclickAgent.onEvent(this, "UMENG_NEW_ITEM");
 			item = new Item();
-			if (categoryList.size() > 0)
+			if (!categoryList.isEmpty())
 			{
 				item.setCategory(categoryList.get(0));				
 			}
@@ -1036,7 +1035,7 @@ public class EditItemActivity extends Activity
 				}
 				
 				hideSoftKeyboard();
-				if (tagList.size() > 0)
+				if (!tagList.isEmpty())
 				{
 					showTagWindow();
 				}
@@ -1119,7 +1118,7 @@ public class EditItemActivity extends Activity
 				}
 				
 				hideSoftKeyboard();
-				if (userList.size() > 0)
+				if (!userList.isEmpty())
 				{
 					showMemberWindow();
 				}
@@ -1250,7 +1249,7 @@ public class EditItemActivity extends Activity
 					}
 				}
 
-				if (managerList.size() == 0)
+				if (managerList.isEmpty())
 				{
 					Utils.showToast(EditItemActivity.this, "未选择汇报对象");
 				}
@@ -1472,7 +1471,7 @@ public class EditItemActivity extends Activity
     }
     
     private void showTypeWindow()
-    {
+    {    	
 		typePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		typePopupWindow.update();
 		
@@ -1907,7 +1906,7 @@ public class EditItemActivity extends Activity
 						{
 							vendorList = response.getVendorList();
 							
-							if (vendorList.size() > 0)
+							if (!vendorList.isEmpty())
 							{
 								vendorAdapter.setVendorList(vendorList);
 								vendorAdapter.notifyDataSetChanged();

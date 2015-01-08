@@ -107,7 +107,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		if (report.getLocalID() != -1)
 		{
 			List<Item> items = dbManager.getReportItems(report.getLocalID());
-			if (items.size() > 0)
+			if (!items.isEmpty())
 			{
 				Item item = items.get(0);
 				if (item.isProveAhead() && (item.getStatus() == Item.STATUS_DRAFT || item.getStatus() == Item.STATUS_REJECTED))
@@ -233,7 +233,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			consumedTextView.setTextColor(getResources().getColor(R.color.major_light));
 			proveAheadTextView.setTextColor(getResources().getColor(R.color.hint_white));
 			
-			if (consumedItemList.size() == 0)
+			if (consumedItemList.isEmpty())
 			{
 				itemListView.setVisibility(View.INVISIBLE);
 				warningTextView.setVisibility(View.VISIBLE);
@@ -251,7 +251,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			consumedTextView.setTextColor(getResources().getColor(R.color.hint_white));
 			proveAheadTextView.setTextColor(getResources().getColor(R.color.major_light));
 			
-			if (proveAheadItemList.size() == 0)
+			if (proveAheadItemList.isEmpty())
 			{
 				itemListView.setVisibility(View.INVISIBLE);
 				warningTextView.setVisibility(View.VISIBLE);

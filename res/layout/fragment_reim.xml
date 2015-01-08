@@ -28,8 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/reimbursement"
-            android:textSize="20sp"
-            android:textColor="@color/major_light" />
+            android:textColor="@color/major_light"
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/searchImageView"

@@ -22,7 +22,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="60dp"
         android:layout_marginRight="-20dp"
-        android:rotation="90"
-        android:text="@string/get_invoice_prompt" />
+        android:text="@string/get_invoice_prompt"
+        android:rotation="90" />
 
 </RelativeLayout>

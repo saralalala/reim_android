@@ -5,12 +5,12 @@ import org.json.JSONObject;
 
 import classes.Invite;
 import classes.ReimApplication;
+import classes.Report;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.MessageDetailActivity;
 import com.rushucloud.reim.report.ApproveReportActivity;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -78,9 +78,17 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					if (status == 1)
 					{
 						ReimApplication.setReportTabIndex(1);
+						
+						Report report = new Report();
+						report.setServerID(jObject.getInt("args"));
+
+						Bundle bundle = new Bundle();
+						bundle.putSerializable("report", report);
+						bundle.putBoolean("fromPush", true);
+						
 						Intent newIntent = new Intent(context, ApproveReportActivity.class);
 						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						newIntent.putExtra("reportServerID", jObject.getInt("args"));
+						newIntent.putExtras(bundle);
 						context.startActivity(newIntent);
 					}
 					else

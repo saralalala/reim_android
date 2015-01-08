@@ -113,7 +113,7 @@ public class Tag
 
 	public static boolean[] getTagsCheck(List<Tag> allTags, List<Tag> targetTags)
 	{
-		if (allTags == null || allTags.size() == 0)
+		if (allTags == null || allTags.isEmpty())
 		{
 			return null;
 		}
@@ -146,7 +146,7 @@ public class Tag
 
 	public static String getTagsIDString(List<Tag> tagList)
 	{
-		if (tagList == null || tagList.size() == 0)
+		if (tagList == null || tagList.isEmpty())
 		{
 			return "";
 		}

@@ -1,6 +1,8 @@
 package com.rushucloud.reim;
 
 import java.util.HashMap;
+import java.util.List;
+
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.StatisticsRequest;
 import netUtils.Response.StatisticsResponse;
@@ -15,10 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 
 import classes.ReimApplication;
+import classes.StatisticsCategory;
 import classes.Utils.Utils;
 import classes.Widget.ReimMonthBar;
 import classes.Widget.ReimPie;
@@ -26,10 +30,10 @@ import classes.Widget.ReimProgressDialog;
 
 import com.umeng.analytics.MobclickAgent;
 
+import database.DBManager;
+
 public class StatisticsFragment extends Fragment
 {
-	private boolean hasInit = false;
-
 	private LinearLayout statContainer;
 	private TextView mainPercentTextView;
 	private TextView donePercentTextView;
@@ -37,9 +41,14 @@ public class StatisticsFragment extends Fragment
 	private TextView newPercentTextView;
 	private TextView monthCostTextView;
 	private LinearLayout monthLayout;
+	private RelativeLayout categoryTitleLayout;
+	private LinearLayout categoryLayout;
+	
+	private DBManager dbManager;
 	
 	private StatisticsResponse response = null;
-	
+
+	private boolean hasInit = false;
 	private int diameter;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -109,16 +118,22 @@ public class StatisticsFragment extends Fragment
 
 		monthCostTextView = (TextView) getActivity().findViewById(R.id.monthCostTextView);
 		monthLayout = (LinearLayout) getActivity().findViewById(R.id.monthLayout);
+
+		categoryTitleLayout = (RelativeLayout) getActivity().findViewById(R.id.categoryTitleLayout);
+		categoryLayout = (LinearLayout) getActivity().findViewById(R.id.categoryLayout);
 	}
 
 	private void resetView()
 	{
 		statContainer.removeAllViews();
 		monthLayout.removeAllViews();
+		categoryLayout.removeAllViews();
 	}
 	
 	private void initData()
 	{
+		dbManager = DBManager.getDBManager();
+		
 		if (Utils.isNetworkConnected())
 		{
 			sendGetDataRequest();			
@@ -231,7 +246,33 @@ public class StatisticsFragment extends Fragment
 	
 	private void drawCategory()
 	{
-		
+		List<StatisticsCategory> categoryList = response.getStatCategoryList();
+		if (categoryList.isEmpty())
+		{
+			categoryTitleLayout.setVisibility(View.GONE);
+			categoryLayout.setVisibility(View.GONE);
+		}
+		else
+		{
+			categoryTitleLayout.setVisibility(View.VISIBLE);
+			categoryLayout.setVisibility(View.VISIBLE);
+			
+			for (StatisticsCategory category : categoryList)
+			{
+				View view = View.inflate(getActivity(), R.layout.list_category_stat, null);
+				
+				TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
+				titleTextView.setText(dbManager.getCategory(category.getCategoryID()).getName());
+				
+				TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
+				countTextView.setText(Integer.toString(category.getItems().size()));
+				
+				TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+				amountTextView.setText(Utils.formatDouble(category.getAmount()));
+				
+				categoryLayout.addView(view);
+			}
+		}		
 	}
 
 	private void sendGetDataRequest()

@@ -162,7 +162,7 @@ public class EditReportActivity extends Activity
     	int currentGroupID = appPreference.getCurrentGroupID();
 		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
 
-		if (report.getManagerList() == null || report.getManagerList().size() == 0)
+		if (report.getManagerList() == null || report.getManagerList().isEmpty())
 		{
 			managerCheckList = User.getUsersCheck(userList, currentUser.constructListWithManager());
 		}
@@ -259,7 +259,7 @@ public class EditReportActivity extends Activity
 				{
 					Utils.showToast(EditReportActivity.this, "网络未连接，无法提交");
 				}
-				else if (report.getManagerList() == null || report.getManagerList().size() == 0)
+				else if (report.getManagerList() == null || report.getManagerList().isEmpty())
 				{
 					Utils.showToast(EditReportActivity.this, "未选择汇报对象");
 				}
@@ -275,7 +275,7 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (report.getCommentList() == null || report.getCommentList().size() == 0)
+				if (report.getCommentList() == null || report.getCommentList().isEmpty())
 				{
 					if (!Utils.isNetworkConnected())
 					{

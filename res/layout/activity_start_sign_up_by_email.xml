@@ -19,7 +19,7 @@
         android:layout_alignParentLeft="true"
         android:padding="16dp"
         android:contentDescription="@string/back"
-        android:src="@drawable/back" />
+        android:src="@drawable/back_drawable" />
 
     <ImageView
         android:layout_width="80dp"

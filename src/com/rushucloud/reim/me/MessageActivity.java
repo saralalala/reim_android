@@ -123,7 +123,7 @@ public class MessageActivity extends Activity
 							ReimProgressDialog.dismiss();
 							messageList = response.getInviteList();
 							
-							if (messageList.size() == 0)
+							if (messageList.isEmpty())
 							{
 								messageListView.setVisibility(View.GONE);
 								messageTextView.setVisibility(View.VISIBLE);

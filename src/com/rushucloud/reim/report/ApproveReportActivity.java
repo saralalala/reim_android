@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.HttpConstant;
 import netUtils.Request.Report.GetReportRequest;
 import netUtils.Request.Report.ModifyReportRequest;
 import netUtils.Response.Report.GetReportResponse;
@@ -94,26 +95,14 @@ public class ApproveReportActivity extends Activity
 		if (bundle != null)
 		{
 			report = (Report) bundle.getSerializable("report");
-			if (report == null)
-			{
-				reportServerID = getIntent().getIntExtra("reportServerID", -1);
-				fromPush = true;
-			}
-			else
-			{
-				reportServerID = report.getServerID();
-				fromPush = false;
-			}
+			fromPush = bundle.getBoolean("fromPush", false);
+			reportServerID = report.getServerID();
 		}
 		else
 		{
 			reportServerID = -1;
 		}
-		
-		if (report == null)
-		{
-			report = new Report();
-		}
+
 		itemList = dbManager.getOthersReportItems(reportServerID);
 	}
 	
@@ -197,27 +186,18 @@ public class ApproveReportActivity extends Activity
 	}
 
 	private void refreshView()
-	{		
+	{
+		itemList = dbManager.getOthersReportItems(reportServerID);
+		adapter.setItemList(itemList);
+		adapter.notifyDataSetChanged();
+		
 		if (Utils.isNetworkConnected())
 		{
-			if (reportServerID == -1 && report == null)
-			{
-				Utils.showToast(this, "数据获取失败");
-			}
-			else if (itemList.size() == 0)
-			{
-				sendGetReportRequest(reportServerID);
-			}
-			else
-			{
-				itemList = dbManager.getOthersReportItems(reportServerID);
-				adapter.setItemList(itemList);
-				adapter.notifyDataSetChanged();		
-			}			
+			sendGetReportRequest(reportServerID);
 		}
-		else
+		else if (itemList.isEmpty())
 		{
-			Utils.showToast(this, "网络未连接，无法获取数据");
+			Utils.showToast(this, "网络未连接，无法获取数据");			
 		}
 	}
 
@@ -257,17 +237,8 @@ public class ApproveReportActivity extends Activity
 				if (response.getStatus())
 				{
 					int ownerID = appPreference.getCurrentUserID();
-					
-					if (report.getServerID() == -1)
-					{
-						report = response.getReport();;
-					}
-					else
-					{
-						report.setManagerList(response.getReport().getManagerList());
-						report.setCCList(response.getReport().getCCList());
-						report.setCommentList(response.getReport().getCommentList());						
-					}
+
+					report = new Report(response.getReport());
 					dbManager.deleteOthersReport(reportServerID, ownerID);
 					
 					int itemCount = 0;
@@ -335,7 +306,11 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-				    		Utils.showToast(ApproveReportActivity.this, "数据获取失败");
+				    		Utils.showToast(ApproveReportActivity.this, "数据获取失败, " + response.getErrorMessage());
+				    		if (response.getCode() == HttpConstant.ERROR_REPORT_DELETED || response.getCode() == HttpConstant.ERROR_REPORT_NOT_EXISTS)
+							{
+								dbManager.deleteOthersReport(reportServerID, AppPreference.getAppPreference().getCurrentUserID());
+							}
 							goBackToMainActivity();
 						}
 					});

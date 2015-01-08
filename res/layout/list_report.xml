@@ -9,22 +9,39 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="3"
 		android:paddingLeft="16dp" >
 
-        <TextView
-            android:id="@+id/statusTextView"
-            android:layout_width="36dp"
-            android:layout_height="20dp"
+        <LinearLayout
+	        android:id="@+id/statusLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="14dp"
-            android:gravity="center"
-            android:textColor="@color/major_light" />
+            android:layout_marginTop="14dp" >
+
+	        <TextView
+	            android:id="@+id/statusTextView"
+	            android:layout_width="36dp"
+	            android:layout_height="20dp"
+	            android:gravity="center"
+	            android:textColor="@color/major_light" />
+
+	        <TextView
+	            android:id="@+id/senderTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="20dp"
+	            android:layout_marginLeft="6dp"
+	            android:gravity="center"
+	            android:textColor="@color/font_major_dark"
+	            android:textSize="14sp" />
+	        
+        </LinearLayout>
         
          <TextView android:id="@+id/titleTextView"    
             android:layout_width="wrap_content"  
             android:layout_height="wrap_content"
-            android:layout_below="@+id/statusTextView"
+            android:layout_below="@+id/statusLayout"
             android:layout_marginTop="6dp"
             android:ellipsize="end"
             android:singleLine="true"
@@ -36,7 +53,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
 		android:paddingRight="16dp" >
 
         <TextView
@@ -54,21 +71,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dateTextView"
-            android:gravity="right|bottom" >
+            android:orientation="horizontal"
+            android:gravity="right|bottom"
+            android:layout_marginTop="6dp"
+            android:baselineAligned="true" >
 
             <TextView
                 android:id="@+id/amountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dp"
-                android:layout_marginTop="6dp"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/font_major_dark"
                 android:textSize="22sp" />
 
             <TextView
-                android:id="@+id/signTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/rmb_symbol"

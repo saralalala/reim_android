@@ -19,7 +19,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back" />
+            android:src="@drawable/back_drawable" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,8 +38,8 @@
 			android:paddingRight="16dp"
 			android:gravity="center"
             android:text="@string/save"
-            android:textSize="16sp"
-            android:textColor="@color/major_light" />
+            android:textColor="@color/title_text_color"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 
@@ -220,7 +220,6 @@
 			            android:textSize="24sp" />
 			
 			        <TextView
-			            android:id="@+id/signTextView"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:layout_marginLeft="3dp"

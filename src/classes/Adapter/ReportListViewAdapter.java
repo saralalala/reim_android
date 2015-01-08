@@ -39,23 +39,23 @@ public class ReportListViewAdapter extends BaseAdapter
 		{
 			convertView = layoutInflater.inflate(R.layout.list_report, parent, false);
 		}
-		
+
+		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
 		TextView titleTextView = (TextView)convertView.findViewById(R.id.titleTextView);
 		TextView dateTextView = (TextView)convertView.findViewById(R.id.dateTextView);
-		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 		
 		Report report = reportList.get(position);
 
-		String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
-		titleTextView.setText(title);
-		
-		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
-		dateTextView.setText(date.equals("") ? context.getString(R.string.not_available) : date);
-
 		statusTextView.setText(report.getStatusString());
 		statusTextView.setBackgroundResource(report.getStatusBackground());
+		
+		String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
+		titleTextView.setText(title);
 
+		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
+		dateTextView.setText(date.equals("") ? context.getString(R.string.not_available) : date);
+		
 		double amount = dbManager.getReportAmount(report.getLocalID());
 		amountTextView.setText(Utils.formatDouble(amount));
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);

@@ -287,7 +287,7 @@ public class CategoryActivity extends Activity
 		adapter = new CategoryListViewAdapter(this, categoryList, null);
 		categoryListView.setAdapter(adapter);
 		
-		if (categoryList.size() == 0)
+		if (categoryList.isEmpty())
 		{
 			categoryListView.setVisibility(View.INVISIBLE);
 			categoryTextView.setVisibility(View.VISIBLE);

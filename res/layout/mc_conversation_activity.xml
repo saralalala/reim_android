@@ -12,7 +12,7 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/mc_title_height"
         android:layout_alignParentTop="true"
-        android:background="@color/mc_title" >
+        android:background="@color/major_dark" >
 
         <RelativeLayout
             android:id="@+id/chat_back"
@@ -36,7 +36,7 @@
                 android:layout_toRightOf="@id/chat_back_iv"
                 android:text="返回"
                 android:textColor="@color/mc_normal_text_white"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
         </RelativeLayout>
 
         <RelativeLayout

@@ -128,7 +128,7 @@ public class Report implements Serializable
 	}
 	public String getManagersName()
 	{
-		if (getManagerList() == null || getManagerList().size() == 0)
+		if (getManagerList() == null || getManagerList().isEmpty())
 		{
 			return "";
 		}
@@ -148,7 +148,7 @@ public class Report implements Serializable
 	}
 	public String getCCsName()
 	{
-		if (getCCList() == null || getCCList().size() == 0)
+		if (getCCList() == null || getCCList().isEmpty())
 		{
 			return "";
 		}
@@ -284,7 +284,7 @@ public class Report implements Serializable
 	public boolean hasItems()
 	{
 		List<Item> itemList = DBManager.getDBManager().getReportItems(localID);
-		if (itemList.size() == 0)
+		if (itemList.isEmpty())
 		{
 			return false;
 		}

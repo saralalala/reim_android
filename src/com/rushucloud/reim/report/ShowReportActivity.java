@@ -3,6 +3,7 @@ package com.rushucloud.reim.report;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.HttpConstant;
 import netUtils.Request.Report.GetReportRequest;
 import netUtils.Response.Report.GetReportResponse;
 import classes.Comment;
@@ -104,7 +105,7 @@ public class ShowReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+				goBackToMainActivity();
 			}
 		});
 		
@@ -179,13 +180,11 @@ public class ShowReportActivity extends Activity
 				{ 
 					int ownerID = AppPreference.getAppPreference().getCurrentUserID();
 					
-					report.setManagerList(response.getReport().getManagerList());
-					report.setCCList(response.getReport().getCCList());
-					report.setCommentList(response.getReport().getCommentList());
+					report = new Report(response.getReport());
 					
 					if (myReport)
 					{						
-						dbManager.updateReportByLocalID(report);
+						dbManager.updateReportByServerID(report);
 						
 						dbManager.deleteReportComments(report.getLocalID());
 						for (Comment comment : report.getCommentList())
@@ -217,9 +216,26 @@ public class ShowReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-					    	adapter.setReport(report);
-					    	adapter.setItemList(itemList);
-					    	adapter.notifyDataSetChanged();
+					    	if (!myReport && report.getStatus() == Report.STATUS_SUBMITTED &&
+					    			report.getManagerList().contains(AppPreference.getAppPreference().getCurrentUser()))
+					    	{
+					        	ReimApplication.setTabIndex(1);
+					        	ReimApplication.setReportTabIndex(1);
+					        	
+								Bundle bundle = new Bundle();
+								bundle.putSerializable("report", report);
+								
+					        	Intent intent = new Intent(ShowReportActivity.this, ApproveReportActivity.class);			    		
+					        	intent.putExtras(bundle);
+					        	startActivity(intent);
+					        	finish();
+							}
+					    	else
+					    	{
+						    	adapter.setReport(report);
+						    	adapter.setItemList(itemList);
+						    	adapter.notifyDataSetChanged();					    		
+					    	}
 						}
 					});
 				}
@@ -230,7 +246,12 @@ public class ShowReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ShowReportActivity.this, "获取详细信息失败");
+				    		Utils.showToast(ShowReportActivity.this, "数据获取失败, " + response.getErrorMessage());
+				    		if (response.getCode() == HttpConstant.ERROR_REPORT_DELETED || response.getCode() == HttpConstant.ERROR_REPORT_NOT_EXISTS)
+							{
+								dbManager.deleteOthersReport(reportServerID, AppPreference.getAppPreference().getCurrentUserID());
+							}
+				    		goBackToMainActivity();
 						}
 					});
 				}

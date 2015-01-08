@@ -20,7 +20,7 @@
             android:contentDescription="@string/back"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/back" />
+            android:src="@drawable/back_drawable" />
 
         <TextView
             android:id="@+id/titleTextView"
@@ -30,6 +30,7 @@
             android:text="@string/feedback"
             android:textColor="@color/major_light"
             android:textSize="20sp" />
+        
     </RelativeLayout>
 
     <include

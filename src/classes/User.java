@@ -266,7 +266,7 @@ public class User implements Serializable
 	
 	public static boolean[] getUsersCheck(List<User> allUsers, List<User> targetUsers)
 	{		
-		if (allUsers == null || allUsers.size() == 0)
+		if (allUsers == null || allUsers.isEmpty())
 		{
 			return null;
 		}
@@ -326,7 +326,7 @@ public class User implements Serializable
 
 	public static String getUsersNameString(List<User> userList)
 	{
-		if (userList == null || userList.size() == 0)
+		if (userList == null || userList.isEmpty())
 		{
 			return "";
 		}
@@ -336,7 +336,7 @@ public class User implements Serializable
 	
 	public static String getUsersIDString(List<User> userList)
 	{
-		if (userList == null || userList.size() == 0)
+		if (userList == null || userList.isEmpty())
 		{
 			return "";
 		}

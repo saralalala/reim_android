@@ -191,7 +191,7 @@ public class TagActivity extends Activity
 		adapter = new TagListViewAdapter(this, tagList, null);
 		tagListView.setAdapter(adapter);
 		
-		if (tagList.size() == 0)
+		if (tagList.isEmpty())
 		{
 			tagListView.setVisibility(View.INVISIBLE);
 			tagTextView.setVisibility(View.VISIBLE);

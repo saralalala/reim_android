@@ -1,8 +1,8 @@
 package netUtils.Response;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -34,21 +34,23 @@ public class StatisticsResponse extends BaseResponse
 			this.newAmount = jObject.getDouble("new");
 			
 			JSONArray cates = jObject.getJSONArray("cates");
-			this.statCategoryList = new LinkedList<StatisticsCategory>();
+			this.statCategoryList = new ArrayList<StatisticsCategory>();
 			for (int i = 0; i < cates.length(); i++)
 			{
-				JSONObject item = cates.getJSONObject(i);
-				StatisticsCategory object = new StatisticsCategory();
-				object.setCategoryID(item.getInt("id"));
-				object.setAmount(item.getDouble("amount"));
-				List<Integer> itemIDList = new LinkedList<Integer>();
-				JSONArray iids = item.getJSONArray("items");
+				JSONObject object = cates.getJSONObject(i);				
+				StatisticsCategory category = new StatisticsCategory();
+				category.setCategoryID(object.getInt("id"));
+				category.setAmount(object.getDouble("amount"));
+				
+				List<Integer> itemIDList = new ArrayList<Integer>();
+				JSONArray iids = object.getJSONArray("items");
 				for (int j = 0; j < iids.length(); j++)
 				{
 					itemIDList.add(iids.getInt(j));
 				}
-				object.setItems(itemIDList);
-				this.statCategoryList.add(object);
+				category.setItems(itemIDList);
+				
+				this.statCategoryList.add(category);
 			}
 			
 			JSONObject months = jObject.optJSONObject("ms");

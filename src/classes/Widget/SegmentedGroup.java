@@ -87,7 +87,7 @@ public class SegmentedGroup extends RadioGroup {
                 {android.R.attr.state_pressed},
                 {-android.R.attr.state_pressed, -android.R.attr.state_checked},
                 {-android.R.attr.state_pressed, android.R.attr.state_checked}},
-                new int[]{Color.GRAY, mTintColor, mCheckedTextColor});
+                new int[]{mCheckedTextColor, mTintColor, mCheckedTextColor});
         ((Button) view).setTextColor(colorStateList);
 
         //Redraw with tint color

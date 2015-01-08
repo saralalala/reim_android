@@ -77,7 +77,7 @@ public class Item
 			setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
 			
 			List<Integer> idList = Utils.stringToIntList(jObject.getString("image_id"));
-			int imageID = idList.size() > 0 ? idList.get(0) : -1;
+			int imageID = !idList.isEmpty() ? idList.get(0) : -1;
 			setInvoiceID(imageID);
 			
 			Report report = new Report();
@@ -465,7 +465,7 @@ public class Item
 	
 	public static boolean[] getItemsCheck(List<Item> allItems, List<Item> targetItems)
 	{		
-		if (allItems == null || allItems.size() == 0)
+		if (allItems == null || allItems.isEmpty())
 		{
 			return null;
 		}

@@ -36,22 +36,26 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		{
 			convertView = layoutInflater.inflate(R.layout.list_report, parent, false);
 		}
-		
+
+		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
+		TextView senderTextView = (TextView)convertView.findViewById(R.id.senderTextView);
 		TextView titleTextView = (TextView)convertView.findViewById(R.id.titleTextView);
 		TextView dateTextView = (TextView)convertView.findViewById(R.id.dateTextView);
-		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
 		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
 
 		Report report = reportList.get(position);
+		
+		statusTextView.setText(report.getStatusString());
+		statusTextView.setBackgroundResource(report.getStatusBackground());	
 
+		String sender = context.getString(R.string.sender) + "：" + report.getSender().getNickname();
+		senderTextView.setText(sender);
+		
 		String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
 		titleTextView.setText(title);
 		
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
 		dateTextView.setText(date.equals("") ? context.getString(R.string.not_available) : date);
-
-		statusTextView.setText(report.getStatusString());
-		statusTextView.setBackgroundResource(report.getStatusBackground());	
 
 		double amount = Double.valueOf(report.getAmount());
 		amountTextView.setText(Utils.formatDouble(amount));

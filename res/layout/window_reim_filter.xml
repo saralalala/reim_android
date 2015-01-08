@@ -21,7 +21,7 @@
         android:layout_marginTop="14dp"
         android:padding="16dp"
         android:contentDescription="@string/cancel"
-		android:src="@drawable/cancel" />
+		android:src="@drawable/cancel_drawable" />
 
     <ImageView
         android:id="@+id/confirmImageView"
@@ -32,7 +32,7 @@
         android:layout_marginTop="14dp"
         android:padding="16dp"
         android:contentDescription="@string/confirm"
-		android:src="@drawable/confirm" />
+		android:src="@drawable/confirm_drawable" />
 
     <ScrollView
         android:layout_width="match_parent"

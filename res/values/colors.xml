@@ -5,18 +5,18 @@
     <color name="background_black">#FF000000</color>
     
     <color name="divider">#1A000000</color>
+    <color name="start_divider">#FFFE8888</color>
     
     <color name="font_major_dark">#FF373737</color>
     <color name="font_minor_dark">#FF333333</color>
     <color name="font_major_light">#CCFFFFFF</color>
+    <color name="font_title_selected">#FFE9E9E9</color>
     <color name="font_reim_number">#FFFF5353</color>
     <color name="font_budget">#FF3CB798</color>
     <color name="font_list_item_header">#FFA9A9A9</color>
     <color name="font_start">#FFFE8888</color>
     <color name="font_month_data">#FF47A3D2</color>
-    
-    <color name="start_divider">#FFFE8888</color>
-    
+        
     <color name="major_dark">#FFFF575B</color>
     <color name="major_light">#FFFFFFFF</color>
     
@@ -35,7 +35,10 @@
     <color name="list_item_unselected">#00000000</color>
     
     <color name="tab_item_selected">#FFFF575B</color>
-    <color name="tab_item_unselected">#FF61686D</color>
+    <color name="tab_item_unselected">#FF61686D</color>    
+    
+    <color name="toggle_on">#FFFF898C</color>
+    <color name="toggle_off">#FFCCCCCC</color>
     
     <color name="radio_button_selected_color">#FFFF575B</color>
     <color name="radio_button_unselected_color">@android:color/transparent</color>

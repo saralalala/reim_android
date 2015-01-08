@@ -349,7 +349,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		List<Report> resultList = new ArrayList<Report>();
 		for (Report report : reportList)
 		{
-			if (filterStatusList.size() > 0 && filterStatusList.size() < 5)
+			if (!filterStatusList.isEmpty() && filterStatusList.size() < 5)
 			{
 				if (!report.isInSpecificStatus(filterStatusList))
 				{

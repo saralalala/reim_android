@@ -473,12 +473,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				continue;
 			}
 			
-			if (filterTagList.size() > 0 && !item.containsSpecificTags(filterTagList))
+			if (!filterTagList.isEmpty() && !item.containsSpecificTags(filterTagList))
 			{
 				continue;
 			}
 			
-			if (filterCategoryList.size() > 0 && !item.containsCategory(filterCategoryList))
+			if (!filterCategoryList.isEmpty() && !item.containsCategory(filterCategoryList))
 			{
 				continue;
 			}
