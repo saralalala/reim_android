@@ -11,7 +11,7 @@ import classes.Comment;
 import classes.Item;
 import classes.Report;
 import classes.User;
-import database.DBManager;
+import classes.Utils.DBManager;
 import netUtils.Response.BaseResponse;
 
 public class GetReportResponse extends BaseResponse
@@ -80,14 +80,22 @@ public class GetReportResponse extends BaseResponse
 				commentList.add(comment);
 			}
 			report.setCommentList(commentList);
+
+			int itemCount = 0;
+			double amount = 0;
 			
 			itemList = new ArrayList<Item>();
 			JSONArray jsonArray = jObject.getJSONArray("items");
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
-				Item item = new Item(jsonArray.getJSONObject(i));				
+				Item item = new Item(jsonArray.getJSONObject(i));			
 				itemList.add(item);
+				itemCount++;
+				amount += item.getAmount();
 			}
+			
+			report.setAmount(Double.toString(amount));
+			report.setItemCount(itemCount);
 		}
 		catch (JSONException e)
 		{

@@ -20,6 +20,7 @@ import classes.Invite;
 import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 import classes.Widget.ReimProgressDialog;
 
@@ -27,7 +28,6 @@ import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import database.DBManager;
 
 public class MessageDetailActivity extends Activity
 {	

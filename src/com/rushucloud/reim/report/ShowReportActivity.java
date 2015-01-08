@@ -12,6 +12,7 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.Adapter.ReportDetailListViewAdapter;
 import classes.Utils.AppPreference;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 import classes.Widget.ReimProgressDialog;
 
@@ -19,7 +20,6 @@ import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.ShowItemActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import database.DBManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

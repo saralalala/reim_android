@@ -7,7 +7,6 @@ import classes.User;
 
 import com.avos.avoscloud.AVInstallation;
 
-import database.DBManager;
 
 import android.app.Application;
 import android.content.Context;

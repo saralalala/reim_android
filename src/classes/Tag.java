@@ -6,13 +6,13 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
-import database.DBManager;
 
 public class Tag
 {

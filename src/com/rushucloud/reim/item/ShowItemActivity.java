@@ -9,13 +9,13 @@ import classes.Item;
 import classes.ReimApplication;
 import classes.Tag;
 import classes.User;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 import classes.Widget.ReimProgressDialog;
 
 import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
-import database.DBManager;
 
 import android.app.Activity;
 import android.content.Intent;

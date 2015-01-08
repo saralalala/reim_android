@@ -9,12 +9,13 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import classes.Utils.DBManager;
+
 import com.rushucloud.reim.R;
 
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
-import database.DBManager;
 
 public class Report implements Serializable
 {

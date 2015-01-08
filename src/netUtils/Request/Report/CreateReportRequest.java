@@ -8,8 +8,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import classes.Report;
 import classes.User;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
-import database.DBManager;
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 

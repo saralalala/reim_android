@@ -14,13 +14,5 @@
         <attr name="border_width" format="dimension" />
         <attr name="border_color" format="color" />
     </declare-styleable>
-    
-    <declare-styleable name="ToggleButton">
-    	<attr name="borderWidth" format="dimension" />
-    	<attr name="offBorderColor" format="reference|color" />
-    	<attr name="offColor" format="reference|color" />
-    	<attr name="onColor" format="reference|color" />
-    	<attr name="spotColor" format="reference|color" />
-    </declare-styleable>
 
 </resources>

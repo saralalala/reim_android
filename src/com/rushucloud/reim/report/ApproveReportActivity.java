@@ -16,6 +16,7 @@ import classes.Report;
 import classes.User;
 import classes.Adapter.ReportDetailListViewAdapter;
 import classes.Utils.AppPreference;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 import classes.Widget.ReimProgressDialog;
 
@@ -24,7 +25,6 @@ import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.ShowItemActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -240,14 +240,10 @@ public class ApproveReportActivity extends Activity
 
 					report = new Report(response.getReport());
 					dbManager.deleteOthersReport(reportServerID, ownerID);
-					
-					int itemCount = 0;
-					double amount = 0;
+					dbManager.insertOthersReport(report);					
 					
 					for (Item item : response.getItemList())
 					{
-						itemCount++;
-						amount += item.getAmount();
 						dbManager.insertOthersItem(item);
 					}
 					itemList = dbManager.getOthersReportItems(reportServerID);
@@ -256,12 +252,7 @@ public class ApproveReportActivity extends Activity
 					{
 						comment.setReportID(report.getServerID());
 						dbManager.insertOthersComment(comment);
-					}
-					
-					report.setAmount(Double.toString(amount));
-					report.setItemCount(itemCount);
-
-					dbManager.insertOthersReport(report);					
+					}					
 					
 					runOnUiThread(new Runnable()
 					{

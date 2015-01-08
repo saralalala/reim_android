@@ -1,4 +1,4 @@
-package database;
+package classes.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +16,6 @@ import classes.Item;
 import classes.Report;
 import classes.Tag;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.Utils;
 
 public class DBManager extends SQLiteOpenHelper
 {
@@ -51,15 +49,12 @@ public class DBManager extends SQLiteOpenHelper
 		if (dbManager == null)
 		{
 			dbManager = new DBManager(context);
+			dbManager.openDatabase();
 		}
 	}
 	
 	public static synchronized DBManager getDBManager()
 	{
-		if (dbManager != null)
-		{
-			dbManager.openDatabase();
-		}
 		return dbManager;
 	}
 
@@ -68,20 +63,6 @@ public class DBManager extends SQLiteOpenHelper
 //		String sqlString = "DELETE FROM tbl_report WHERE id = 23";
 //		database.execSQL(sqlString);
 //		String sqlString = "DROP TABLE IF EXISTS tbl_category";
-//		database.execSQL(sqlString);
-//		sqlString = "DROP TABLE IF EXISTS tbl_tag";
-//		database.execSQL(sqlString);
-//		sqlString = "DROP TABLE IF EXISTS tbl_category";
-//		database.execSQL(sqlString);
-//		sqlString = "DROP TABLE IF EXISTS tbl_item";
-//		database.execSQL(sqlString);
-//		sqlString = "DROP TABLE IF EXISTS tbl_comment";
-//		database.execSQL(sqlString);	
-//		sqlString = "DROP TABLE IF EXISTS tbl_others_report";
-//		database.execSQL(sqlString);
-//		sqlString = "DROP TABLE IF EXISTS tbl_others_item";
-//		database.execSQL(sqlString);
-//		sqlString = "DROP TABLE IF EXISTS tbl_others_comment";
 //		database.execSQL(sqlString);		
 	}
 	
@@ -2854,7 +2835,7 @@ public class DBManager extends SQLiteOpenHelper
 				}
 			}
 			
-			return tags.isEmpty() ? tags : null;
+			return !tags.isEmpty() ? tags : null;
 		}
 		catch (Exception e)
 		{

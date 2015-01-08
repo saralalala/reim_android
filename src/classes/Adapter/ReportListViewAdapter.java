@@ -5,11 +5,11 @@ import java.util.List;
 
 import classes.ReimApplication;
 import classes.Report;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
 
-import database.DBManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

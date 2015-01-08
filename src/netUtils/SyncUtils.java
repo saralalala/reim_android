@@ -19,8 +19,8 @@ import netUtils.Response.Report.ModifyReportResponse;
 import classes.Item;
 import classes.Report;
 import classes.Utils.AppPreference;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
-import database.DBManager;
 
 public abstract class SyncUtils
 {

@@ -21,6 +21,7 @@ import classes.Adapter.OthersReportListViewAdapter;
 import classes.Adapter.ReportListViewAdapter;
 import classes.Adapter.ReportTagGridViewAdapter;
 import classes.Utils.AppPreference;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 import classes.Widget.ReimProgressDialog;
 import classes.Widget.SegmentedGroup;
@@ -32,7 +33,6 @@ import com.rushucloud.reim.report.EditReportActivity;
 import com.rushucloud.reim.report.ShowReportActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import database.DBManager;
 
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;

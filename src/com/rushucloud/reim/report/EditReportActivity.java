@@ -23,6 +23,7 @@ import classes.Report;
 import classes.User;
 import classes.Adapter.MemberListViewAdapter;
 import classes.Utils.AppPreference;
+import classes.Utils.DBManager;
 import classes.Utils.TextLengthFilter;
 import classes.Utils.Utils;
 import classes.Widget.ReimProgressDialog;
@@ -31,7 +32,6 @@ import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.EditItemActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;

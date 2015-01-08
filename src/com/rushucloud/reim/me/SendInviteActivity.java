@@ -10,9 +10,9 @@ import com.umeng.analytics.MobclickAgent;
 
 import classes.User;
 import classes.Utils.AppPreference;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 import classes.Widget.ReimProgressDialog;
-import database.DBManager;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;

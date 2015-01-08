@@ -35,6 +35,7 @@ import classes.Adapter.MemberListViewAdapter;
 import classes.Adapter.TagListViewAdapter;
 import classes.Adapter.VendorListViewAdapter;
 import classes.Utils.AppPreference;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 import classes.Widget.ReimProgressDialog;
 import cn.beecloud.BCLocation;
@@ -48,7 +49,6 @@ import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import database.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;

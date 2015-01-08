@@ -23,6 +23,7 @@ import android.support.v4.app.Fragment;
 
 import classes.ReimApplication;
 import classes.StatisticsCategory;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 import classes.Widget.ReimMonthBar;
 import classes.Widget.ReimPie;
@@ -30,7 +31,6 @@ import classes.Widget.ReimProgressDialog;
 
 import com.umeng.analytics.MobclickAgent;
 
-import database.DBManager;
 
 public class StatisticsFragment extends Fragment
 {

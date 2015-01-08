@@ -8,11 +8,11 @@ import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
 import classes.User;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
 
-import database.DBManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

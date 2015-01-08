@@ -12,6 +12,7 @@ import netUtils.Response.Group.GetGroupResponse;
 import classes.ReimApplication;
 import classes.User;
 import classes.Utils.AppPreference;
+import classes.Utils.DBManager;
 import classes.Utils.Utils;
 import classes.Widget.ReimProgressDialog;
 import classes.Widget.TabItem;
@@ -19,7 +20,6 @@ import classes.Widget.TabItem;
 import com.rushucloud.reim.item.EditItemActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import database.DBManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
