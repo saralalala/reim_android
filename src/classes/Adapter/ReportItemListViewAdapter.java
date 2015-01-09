@@ -25,15 +25,15 @@ public class ReportItemListViewAdapter extends BaseAdapter
 	private LayoutInflater layoutInflater;
 	
 	private List<Item> itemList;
-	private boolean[] check;
+	private List<Integer> chosenIDList;
 
-	public ReportItemListViewAdapter(Context context, List<Item> items, boolean[] checkList)
+	public ReportItemListViewAdapter(Context context, List<Item> items, List<Integer> chosenList)
 	{
 		this.context = context;
 		this.layoutInflater = LayoutInflater.from(context);
 		
 		this.itemList = new ArrayList<Item>(items);
-		this.check = checkList;
+		this.chosenIDList = new ArrayList<Integer>(chosenList);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -46,18 +46,15 @@ public class ReportItemListViewAdapter extends BaseAdapter
 		{
 			View view = layoutInflater.inflate(R.layout.list_report_item_edit, parent, false);
 			
-			if (check != null)
-			{
-				int color = check[position - 1] ? R.color.list_item_selected : R.color.list_item_unselected;
-				view.setBackgroundResource(color);
-			}
-			
 			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
 			TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
 			ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
 			ImageView warningImageView = (ImageView) view.findViewById(R.id.warningImageView);
 			
 			Item item = itemList.get(position - 1);
+
+			int color = chosenIDList.contains(item.getLocalID()) ? R.color.list_item_selected : R.color.list_item_unselected;
+			view.setBackgroundResource(color);
 
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
@@ -101,16 +98,18 @@ public class ReportItemListViewAdapter extends BaseAdapter
 		return position;
 	}
 	
-	public void set(List<Item> items, boolean[] checkList)
+	public void set(List<Item> items, List<Integer> chosenList)
 	{
 		itemList.clear();
 		itemList.addAll(items);
-		
-		check = checkList;
+
+		chosenIDList.clear();
+		chosenIDList.addAll(chosenList);
 	}
 	
-	public void setCheck(boolean[] checkList)
+	public void setChosenList(List<Integer> chosenList)
 	{
-		check = checkList;
+		chosenIDList.clear();
+		chosenIDList.addAll(chosenList);
 	}
 }

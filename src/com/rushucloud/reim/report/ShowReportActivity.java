@@ -28,7 +28,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ShowReportActivity extends Activity
@@ -108,9 +107,9 @@ public class ShowReportActivity extends Activity
 				goBackToMainActivity();
 			}
 		});
-		
-		TextView commentTextView = (TextView)findViewById(R.id.commentTextView);
-		commentTextView.setOnClickListener(new View.OnClickListener()
+
+		ImageView commentImageView = (ImageView)findViewById(R.id.commentImageView);
+		commentImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{

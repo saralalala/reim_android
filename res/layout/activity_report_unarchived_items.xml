@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="@color/background" >
+    android:background="@color/background"
+    android:id="@+id/containerLayout" >
 
     <RelativeLayout
         android:id="@+id/titleLayout"
@@ -12,15 +13,15 @@
         android:background="@color/major_dark" >
 
         <ImageView
-            android:id="@+id/backImageView"
-            android:layout_width="wrap_content"
+            android:id="@+id/filterImageView"
+            android:layout_width="54dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:contentDescription="@string/filter"
+            android:src="@drawable/filter_drawable" />
 
         <TextView
             android:id="@+id/consumedTextView"

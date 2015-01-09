@@ -67,7 +67,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	private static final int FILTER_STATUS_ADDED = 2;	
 	private static final int SORT_NULL = 0;	
 	private static final int SORT_AMOUNT = 1;	
-	private static final int SORT_CONSUMED_DATE = 2;	
+	private static final int SORT_CONSUMED_DATE = 2;
 	
 	private View view;
 	private PopupWindow filterPopupWindow;
@@ -209,7 +209,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				if (!deletePopupWindow.isShowing())
+				if (deletePopupWindow == null || !deletePopupWindow.isShowing())
 				{
 					Item item = showList.get(position-1);
 					if (item.getBelongReport() == null || item.getBelongReport().isEditable())

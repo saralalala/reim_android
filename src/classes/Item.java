@@ -495,6 +495,21 @@ public class Item
 		}
 		return check;
 	}
+	
+	public static ArrayList<Integer> getItemsIDList(List<Item> items)
+	{
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		if (items == null)
+		{
+			return  result;
+		}
+		
+		for (Item item : items)
+		{
+			result.add(item.getLocalID());
+		}
+		return result;
+	}
 
     public static void sortByConsumedDate(List<Item> itemList)
     {

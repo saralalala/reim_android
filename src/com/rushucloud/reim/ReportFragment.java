@@ -224,7 +224,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				if (!operationPopupWindow.isShowing())
+				if (operationPopupWindow == null || !operationPopupWindow.isShowing())
 				{		
 					if (ReimApplication.getReportTabIndex() == 0)
 					{

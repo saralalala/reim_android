@@ -119,8 +119,8 @@ public class ApproveReportActivity extends Activity
 			}
 		});
 		
-		TextView commentTextView = (TextView)findViewById(R.id.commentTextView);
-		commentTextView.setOnClickListener(new View.OnClickListener()
+		ImageView commentImageView = (ImageView)findViewById(R.id.commentImageView);
+		commentImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
