@@ -902,10 +902,6 @@ public class EditItemActivity extends Activity
 				sendDownloadCategoryIconRequest(item.getCategory());
 			}
 		}
-		else
-		{
-			categoryImageView.setVisibility(View.GONE);
-		}	
 		
 		// init category window
 		check = Category.getCategoryCheck(categoryList, item.getCategory());

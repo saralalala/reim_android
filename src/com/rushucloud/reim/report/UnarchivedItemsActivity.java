@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.item.EditItemActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Item;
@@ -43,6 +44,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 	private boolean[] consumedCheck;
 	private boolean[] proveAheadCheck;
 	private ArrayList<Integer> chosenItemIDList = null;
+	private ArrayList<Integer> tempItemIDList = null;
 	private boolean isProveAhead;
 	private int tabIndex = 0;
 	
@@ -60,6 +62,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		MobclickAgent.onPageStart("UnarchivedItemsActivity");		
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setProgressDialog(this);
+		refreshData();
 		refreshView();
 	}
 
@@ -94,46 +97,13 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		{
 			chosenItemIDList = new ArrayList<Integer>();
 		}
+		tempItemIDList = new ArrayList<Integer>(chosenItemIDList);
 
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
-		
-		consumedItemList = dbManager.getUnarchivedConsumedItems(appPreference.getCurrentUserID());
-		proveAheadItemList = dbManager.getUnarchivedProveAheadItems(appPreference.getCurrentUserID());
 
 		isProveAhead = report.isProveAhead();
 		tabIndex = Utils.booleanToInt(isProveAhead);
-		
-		if (report.getLocalID() != -1)
-		{
-			List<Item> items = dbManager.getReportItems(report.getLocalID());
-			if (!items.isEmpty())
-			{
-				Item item = items.get(0);
-				if (item.isProveAhead() && (item.getStatus() == Item.STATUS_DRAFT || item.getStatus() == Item.STATUS_REJECTED))
-				{
-					proveAheadItemList.addAll(items);
-					Item.sortByUpdateDate(proveAheadItemList);
-				}
-				else
-				{
-					consumedItemList.addAll(items);
-					Item.sortByUpdateDate(consumedItemList);
-				}
-			}			
-		}
-		
-		List<Item> chosenItems = dbManager.getItems(chosenItemIDList);
-		if (isProveAhead)
-		{
-			proveAheadCheck = Item.getItemsCheck(proveAheadItemList, chosenItems);
-			consumedCheck = Item.getItemsCheck(consumedItemList, null);
-		}
-		else
-		{
-			proveAheadCheck = Item.getItemsCheck(proveAheadItemList, null);
-			consumedCheck = Item.getItemsCheck(consumedItemList, chosenItems);			
-		}
 	}
 	
 	private void initView()
@@ -160,9 +130,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		proveAheadTextView = (TextView)findViewById(R.id.proveAheadTextView);
 		proveAheadTextView.setOnClickListener(this);
 		
-		int itemCount = isProveAhead ? checkCount(proveAheadCheck) : checkCount(consumedCheck);
 		itemCountTextView = (TextView)findViewById(R.id.itemCountTextView);
-		itemCountTextView.setText(Integer.toString(itemCount));
 		
 		TextView confirmTextView = (TextView)findViewById(R.id.confirmTextView);
 		confirmTextView.setOnClickListener(new View.OnClickListener()
@@ -175,7 +143,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 					constructList();
 					Bundle bundle = new Bundle();
 					bundle.putSerializable("report", report);
-					bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
+					bundle.putIntegerArrayList("chosenItemIDList", tempItemIDList);
 					Intent intent = new Intent(UnarchivedItemsActivity.this, EditReportActivity.class);
 					intent.putExtras(bundle);
 					startActivity(intent);
@@ -190,43 +158,97 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 
 		warningTextView = (TextView)findViewById(R.id.warningTextView);
 		
-		if (isProveAhead)
-		{
-			adapter = new ReportItemListViewAdapter(UnarchivedItemsActivity.this, consumedItemList, consumedCheck);			
-		}
-		else
-		{
-			adapter = new ReportItemListViewAdapter(UnarchivedItemsActivity.this, proveAheadItemList, proveAheadCheck);	
-		}
 		itemListView = (ListView) findViewById(R.id.itemListView);
-		itemListView.setAdapter(adapter);
 		itemListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				if (tabIndex == 0)
+				if (position == 0)
 				{
-					consumedCheck[position] = !consumedCheck[position];
-					isProveAhead = false;
-					itemCountTextView.setText(Integer.toString(checkCount(consumedCheck)));
-					adapter.setCheck(consumedCheck);
+					constructList();
+					Intent intent = new Intent(UnarchivedItemsActivity.this, EditItemActivity.class);
+					intent.putExtra("fromReim", true);
+					startActivity(intent);
 				}
 				else
 				{
-					proveAheadCheck[position] = !proveAheadCheck[position];
-					isProveAhead = true;
-					itemCountTextView.setText(Integer.toString(checkCount(proveAheadCheck)));
-					adapter.setCheck(proveAheadCheck);
+					if (tabIndex == 0)
+					{
+						consumedCheck[position - 1] = !consumedCheck[position - 1];
+						isProveAhead = false;
+						itemCountTextView.setText(Integer.toString(checkCount(consumedCheck)));
+						adapter.setCheck(consumedCheck);
+					}
+					else
+					{
+						proveAheadCheck[position - 1] = !proveAheadCheck[position - 1];
+						isProveAhead = true;
+						itemCountTextView.setText(Integer.toString(checkCount(proveAheadCheck)));
+						adapter.setCheck(proveAheadCheck);
+					}
+					resetCheck();
+					adapter.notifyDataSetChanged();					
 				}
-				resetCheck();
-				adapter.notifyDataSetChanged();
 			}
 		});
+	}
+
+	private void refreshData()
+	{
+		consumedItemList = dbManager.getUnarchivedConsumedItems(appPreference.getCurrentUserID());
+		proveAheadItemList = dbManager.getUnarchivedProveAheadItems(appPreference.getCurrentUserID());
+		
+		if (report.getLocalID() != -1)
+		{
+			List<Item> items = dbManager.getReportItems(report.getLocalID());
+			if (!items.isEmpty())
+			{
+				Item item = items.get(0);
+				if (item.isProveAhead() && !item.isPaApproved())
+				{
+					proveAheadItemList.addAll(items);
+					Item.sortByUpdateDate(proveAheadItemList);
+				}
+				else
+				{
+					consumedItemList.addAll(items);
+					Item.sortByUpdateDate(consumedItemList);
+				}
+			}			
+		}
+		
+		List<Item> chosenItems = dbManager.getItems(tempItemIDList);
+		if (isProveAhead)
+		{
+			proveAheadCheck = Item.getItemsCheck(proveAheadItemList, chosenItems);
+			consumedCheck = Item.getItemsCheck(consumedItemList, null);
+		}
+		else
+		{
+			proveAheadCheck = Item.getItemsCheck(proveAheadItemList, null);
+			consumedCheck = Item.getItemsCheck(consumedItemList, chosenItems);			
+		}
 	}
 	
 	private void refreshView()
 	{
 		ReimProgressDialog.show();
+
+		int itemCount = isProveAhead ? checkCount(proveAheadCheck) : checkCount(consumedCheck);
+		itemCountTextView.setText(Integer.toString(itemCount));
+		
+		if (adapter == null)
+		{
+			if (isProveAhead)
+			{
+				adapter = new ReportItemListViewAdapter(UnarchivedItemsActivity.this, consumedItemList, consumedCheck);			
+			}
+			else
+			{
+				adapter = new ReportItemListViewAdapter(UnarchivedItemsActivity.this, proveAheadItemList, proveAheadCheck);	
+			}
+			itemListView.setAdapter(adapter);			
+		}
 		
 		if (tabIndex == 0)
 		{
@@ -270,7 +292,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 	
 	private void constructList()
 	{
-		chosenItemIDList.clear();
+		tempItemIDList.clear();
 		if (isProveAhead)
 		{
 			if (proveAheadCheck != null)
@@ -279,7 +301,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 				{
 					if (proveAheadCheck[i])
 					{
-						chosenItemIDList.add(proveAheadItemList.get(i).getLocalID());
+						tempItemIDList.add(proveAheadItemList.get(i).getLocalID());
 					}
 				}
 			}
@@ -292,7 +314,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 				{
 					if (consumedCheck[i])
 					{
-						chosenItemIDList.add(consumedItemList.get(i).getLocalID());
+						tempItemIDList.add(consumedItemList.get(i).getLocalID());
 					}
 				}
 			}

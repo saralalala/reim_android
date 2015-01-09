@@ -224,41 +224,44 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				if (ReimApplication.getReportTabIndex() == 0)
-				{
-					Report report = showMineList.get(position-1);
-					Bundle bundle = new Bundle();
-					bundle.putSerializable("report", report);
-					Intent intent;
-					if (report.isEditable())
+				if (!operationPopupWindow.isShowing())
+				{		
+					if (ReimApplication.getReportTabIndex() == 0)
 					{
-						intent = new Intent(getActivity(), EditReportActivity.class);
+						Report report = showMineList.get(position-1);
+						Bundle bundle = new Bundle();
+						bundle.putSerializable("report", report);
+						Intent intent;
+						if (report.isEditable())
+						{
+							intent = new Intent(getActivity(), EditReportActivity.class);
+						}
+						else
+						{
+							bundle.putBoolean("myReport", true);
+							intent = new Intent(getActivity(), ShowReportActivity.class);						
+						}
+						intent.putExtras(bundle);
+						startActivity(intent);
 					}
 					else
 					{
-						bundle.putBoolean("myReport", true);
-						intent = new Intent(getActivity(), ShowReportActivity.class);						
-					}
-					intent.putExtras(bundle);
-					startActivity(intent);
-				}
-				else
-				{
-					Report report = showOthersList.get(position-1);
-					Bundle bundle = new Bundle();
-					bundle.putSerializable("report", report);
-					Intent intent;		
-					if (report.getStatus() == Report.STATUS_SUBMITTED && !report.isCC())
-					{
-						intent = new Intent(getActivity(), ApproveReportActivity.class);
-					}
-					else
-					{
-						bundle.putBoolean("myReport", false);
-						intent = new Intent(getActivity(), ShowReportActivity.class);
-					}
-					intent.putExtras(bundle);
-					startActivity(intent);
+						Report report = showOthersList.get(position-1);
+						Bundle bundle = new Bundle();
+						bundle.putSerializable("report", report);
+						Intent intent;		
+						if (report.getStatus() == Report.STATUS_SUBMITTED && !report.isCC())
+						{
+							intent = new Intent(getActivity(), ApproveReportActivity.class);
+						}
+						else
+						{
+							bundle.putBoolean("myReport", false);
+							intent = new Intent(getActivity(), ShowReportActivity.class);
+						}
+						intent.putExtras(bundle);
+						startActivity(intent);
+					}		
 				}
 			}
 		});

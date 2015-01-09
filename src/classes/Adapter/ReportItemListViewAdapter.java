@@ -38,53 +38,57 @@ public class ReportItemListViewAdapter extends BaseAdapter
 
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		if (convertView == null)
+		if (position == 0)
 		{
-			convertView = layoutInflater.inflate(R.layout.list_report_item_edit, parent, false);
-		}
-		
-		if (check != null)
-		{
-			int color = check[position] ? R.color.list_item_selected : R.color.list_item_unselected;
-			convertView.setBackgroundResource(color);
-		}
-		
-		TextView amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
-		TextView vendorTextView = (TextView) convertView.findViewById(R.id.vendorTextView);
-		ImageView categoryImageView = (ImageView) convertView.findViewById(R.id.categoryImageView);
-		ImageView warningImageView = (ImageView) convertView.findViewById(R.id.warningImageView);
-		
-		Item item = this.getItem(position);
-
-		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-		amountTextView.setText(Utils.formatDouble(item.getAmount()));
-
-		String vendor = item.getVendor().equals("") ? context.getString(R.string.not_available) : item.getVendor();
-		vendorTextView.setText(vendor);
-		
-		// category 和 tag 一共iconCount个
-		if (item.missingInfo())
-		{
-			warningImageView.setVisibility(View.VISIBLE);
+			return layoutInflater.inflate(R.layout.list_report_new_item, parent, false);
 		}
 		else
 		{
-			Category category = item.getCategory();
+			View view = layoutInflater.inflate(R.layout.list_report_item_edit, parent, false);
 			
-			categoryImageView.setImageResource(R.drawable.default_icon);
-			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
-			if (bitmap != null)
+			if (check != null)
 			{
-				categoryImageView.setImageBitmap(bitmap);				
-			}					
+				int color = check[position - 1] ? R.color.list_item_selected : R.color.list_item_unselected;
+				view.setBackgroundResource(color);
+			}
+			
+			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+			TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
+			ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
+			ImageView warningImageView = (ImageView) view.findViewById(R.id.warningImageView);
+			
+			Item item = itemList.get(position - 1);
+
+			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+			amountTextView.setText(Utils.formatDouble(item.getAmount()));
+
+			String vendor = item.getVendor().equals("") ? context.getString(R.string.not_available) : item.getVendor();
+			vendorTextView.setText(vendor);
+			
+			// category 和 tag 一共iconCount个
+			if (item.missingInfo())
+			{
+				warningImageView.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				Category category = item.getCategory();
+				
+				categoryImageView.setImageResource(R.drawable.default_icon);
+				Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
+				if (bitmap != null)
+				{
+					categoryImageView.setImageBitmap(bitmap);				
+				}					
+			}
+			
+			return view;
 		}
-		
-		return convertView;
 	}
 	
 	public int getCount()
 	{
-		return itemList.size();
+		return itemList.size() + 1;
 	}
 
 	public Item getItem(int position)

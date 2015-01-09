@@ -209,19 +209,22 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				Item item = showList.get(position-1);
-				if (item.getBelongReport() == null || item.getBelongReport().isEditable())
+				if (!deletePopupWindow.isShowing())
 				{
-					Intent intent = new Intent(getActivity(), EditItemActivity.class);
-					intent.putExtra("itemLocalID", item.getLocalID());
-					intent.putExtra("fromReim", true);
-					startActivity(intent);
-				}
-				else
-				{
-					Intent intent = new Intent(getActivity(), ShowItemActivity.class);
-					intent.putExtra("itemLocalID", item.getLocalID());
-					startActivity(intent);
+					Item item = showList.get(position-1);
+					if (item.getBelongReport() == null || item.getBelongReport().isEditable())
+					{
+						Intent intent = new Intent(getActivity(), EditItemActivity.class);
+						intent.putExtra("itemLocalID", item.getLocalID());
+						intent.putExtra("fromReim", true);
+						startActivity(intent);
+					}
+					else
+					{
+						Intent intent = new Intent(getActivity(), ShowItemActivity.class);
+						intent.putExtra("itemLocalID", item.getLocalID());
+						startActivity(intent);
+					}					
 				}
 			}
 		});

@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -169,6 +170,8 @@ public class TabItem extends View
 	
 	private void drawIcons(Canvas canvas, int alpha)
 	{
+		canvas.drawColor(Color.TRANSPARENT);
+		
 		iconPaint.setAntiAlias(true);
 		iconPaint.setDither(true);
 		iconPaint.setFilterBitmap(true);
@@ -177,7 +180,7 @@ public class TabItem extends View
 		canvas.drawBitmap(iconNotSelected, null, iconRect, iconPaint);		
 
 		iconPaint.setAlpha(alpha);
-		canvas.drawBitmap(iconSelected, null, iconRect, iconPaint);	
+		canvas.drawBitmap(iconSelected, null, iconRect, iconPaint);
 	}
 
 	private void drawSrcText(Canvas canvas, int alpha)
