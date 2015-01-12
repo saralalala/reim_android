@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.UDPClient;
+import netUtils.UDPConnectionCallback;
 import netUtils.Request.EventsReadRequest;
 import netUtils.Request.EventsRequest;
 import netUtils.Request.Group.GetGroupRequest;
@@ -46,6 +48,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	private ImageView tipImageView;
 	
 	private DBManager dbManager;
+	private UDPClient udpClient;
 	
 	private List<Fragment> fragmentList = new ArrayList<Fragment>();
 	private List<TabItem> tabItemList = new ArrayList<TabItem>();
@@ -68,9 +71,44 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		resetTabItems();
 		tabItemList.get(ReimApplication.getTabIndex()).setIconAlpha(1);
 		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
+		
 		if (Utils.isNetworkConnected())
 		{
 			sendGetEventsRequest();
+			
+			if (udpClient == null)
+			{
+				udpClient = new UDPClient();
+				udpClient.send();
+			}
+			
+			if (udpClient.isConnected())
+			{
+				udpClient.receive(new UDPConnectionCallback()
+				{
+					public void execute(Object udpResponse)
+					{
+//						final EventsResponse response = new EventsResponse(udpResponse);
+//						if (response.getStatus())
+//						{
+//							if (response.isNeedToRefresh() && Utils.isNetworkConnected())
+//							{
+//								sendGetGroupRequest();
+//							}
+//							
+//							runOnUiThread(new Runnable()
+//							{
+//								public void run()
+//								{
+//									ReimApplication.setReportBadgeCount(response.getApproveEventCount());
+//									setReportBadge(response.getReportEventCount());
+//									setMeBadge(response.getInviteEventCount());
+//								}
+//							});
+//						}
+					}
+				});				
+			}
 		}
 	}
 
@@ -93,6 +131,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			{
 				finish();
 				dbManager.close();
+				udpClient.close();
 				android.os.Process.killProcess(android.os.Process.myPid());
 			}
 			return true;

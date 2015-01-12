@@ -11,7 +11,7 @@ import java.util.List;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.HttpConstant;
-import netUtils.ReimJWT;
+import netUtils.HttpUtils;
 import netUtils.URLDef;
 
 import org.apache.http.HttpResponse;
@@ -25,24 +25,13 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.text.TextUtils;
-
-import classes.Utils.AppPreference;
 
 public abstract class BaseRequest
 {
@@ -52,7 +41,7 @@ public abstract class BaseRequest
 
 	protected BaseRequest()
 	{
-		this.httpClient = getHttpClient();
+		this.httpClient = HttpUtils.getHttpClient();
 		this.url = URLDef.URL_PREFIX;
 		params = null;
 	}
@@ -195,7 +184,7 @@ public abstract class BaseRequest
 				try
 				{
 					HttpGet request = new HttpGet(url);	
-					request.addHeader(HttpConstant.X_REIM_JWT, getJWTString());
+					request.addHeader(HttpConstant.X_REIM_JWT, HttpUtils.getJWTString());
 
 					HttpResponse response = httpClient.execute(request);
 					if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
@@ -237,7 +226,7 @@ public abstract class BaseRequest
 				String resultString = null;
 				try
 				{
-					request.addHeader(HttpConstant.X_REIM_JWT, getJWTString());
+					request.addHeader(HttpConstant.X_REIM_JWT, HttpUtils.getJWTString());
 					
 					HttpResponse response = httpClient.execute(request);
 					if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
@@ -268,43 +257,5 @@ public abstract class BaseRequest
 				}
 			}
 		}).start();
-	}
-
-	private HttpClient getHttpClient()
-	{
-		HttpParams httpParams=new BasicHttpParams();
-		
-		HttpConnectionParams.setConnectionTimeout(httpParams, 20*1000);
-		HttpConnectionParams.setSoTimeout(httpParams, 20*1000);
-		HttpConnectionParams.setSocketBufferSize(httpParams, 8192);
-		
-		HttpClientParams.setRedirecting(httpParams, true);
-		
-		HttpProtocolParams.setUserAgent(httpParams, HttpConstant.USER_AGENT);
-		HttpClient client=new DefaultHttpClient(httpParams);
-		
-		return client;
-	}
-	
-	private String getJWTString()
-	{
-		try
-		{
-			AppPreference appPreference = AppPreference.getAppPreference();
-			JSONObject jObject = new JSONObject();
-			jObject.put(HttpConstant.USERNAME, appPreference.getUsername());
-			jObject.put(HttpConstant.PASSWORD, appPreference.getPassword());
-			jObject.put(HttpConstant.DEVICE_TYPE, HttpConstant.DEVICE_TYPE_ANDROID);
-			jObject.put(HttpConstant.DEVICE_TOKEN, appPreference.getDeviceToken());
-			jObject.put(HttpConstant.SERVER_TOKEN, appPreference.getServerToken());
-			String resultString=jObject.toString();
-			
-			return ReimJWT.Encode(resultString);
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-			return "";
-		}		
 	}
 }

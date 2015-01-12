@@ -12,6 +12,7 @@ import android.util.Log;
 import classes.Category;
 import classes.Comment;
 import classes.Group;
+import classes.Image;
 import classes.Item;
 import classes.Report;
 import classes.Tag;
@@ -102,6 +103,40 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
+			String createGroupTable="CREATE TABLE IF NOT EXISTS tbl_group ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "group_name TEXT DEFAULT(''),"
+										+ "group_domain TEXT DEFAULT(''),"
+										+ "creator_id INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			database.execSQL(createGroupTable);
+
+			String createUserTable="CREATE TABLE IF NOT EXISTS tbl_user ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "email TEXT DEFAULT(''),"
+										+ "phone TEXT DEFAULT(''),"
+										+ "nickname TEXT DEFAULT(''),"
+										+ "avatar_id INT DEFAULT(0),"
+										+ "avatar_path TEXT DEFAULT(''),"
+										+ "privilege INT DEFAULT(0),"
+										+ "manager_id INT DEFAULT(0),"
+										+ "group_id INT DEFAULT(0),"
+										+ "admin INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			database.execSQL(createUserTable);
+			
 			String createItemTable="CREATE TABLE IF NOT EXISTS tbl_item ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
@@ -179,40 +214,6 @@ public class DBManager extends SQLiteOpenHelper
 									+ "backup3 TEXT DEFAULT('')"
 									+ ")";
 			database.execSQL(createOthersItemTable);
-
-			String createUserTable="CREATE TABLE IF NOT EXISTS tbl_user ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "server_id INT DEFAULT(0),"
-										+ "email TEXT DEFAULT(''),"
-										+ "phone TEXT DEFAULT(''),"
-										+ "nickname TEXT DEFAULT(''),"
-										+ "avatar_id INT DEFAULT(0),"
-										+ "avatar_path TEXT DEFAULT(''),"
-										+ "privilege INT DEFAULT(0),"
-										+ "manager_id INT DEFAULT(0),"
-										+ "group_id INT DEFAULT(0),"
-										+ "admin INT DEFAULT(0),"
-										+ "server_updatedt INT DEFAULT(0),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-			database.execSQL(createUserTable);
-
-			String createGroupTable="CREATE TABLE IF NOT EXISTS tbl_group ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "server_id INT DEFAULT(0),"
-										+ "group_name TEXT DEFAULT(''),"
-										+ "group_domain TEXT DEFAULT(''),"
-										+ "creator_id INT DEFAULT(0),"
-										+ "server_updatedt INT DEFAULT(0),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-			database.execSQL(createGroupTable);
 			
 			String createReportTable="CREATE TABLE IF NOT EXISTS tbl_report ("
 										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -284,21 +285,6 @@ public class DBManager extends SQLiteOpenHelper
 											+ ")";
 			database.execSQL(createOthersCommentTable);
 
-			String createTagTable="CREATE TABLE IF NOT EXISTS tbl_tag ("
-									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-									+ "server_id INT DEFAULT(0),"
-									+ "tag_name TEXT DEFAULT(''),"
-									+ "group_id INT DEFAULT(0),"
-									+ "icon_id INT DEFAULT(0),"
-									+ "icon_path TEXT DEFAULT(''),"
-									+ "server_updatedt INT DEFAULT(0),"
-									+ "local_updatedt INT DEFAULT(0),"
-									+ "backup1 INT DEFAULT(0),"
-									+ "backup2 TEXT DEFAULT(''),"
-									+ "backup3 TEXT DEFAULT('')"
-									+ ")";
-			database.execSQL(createTagTable);
-
 			String createCategoryTable="CREATE TABLE IF NOT EXISTS tbl_category ("
 										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 										+ "server_id INT DEFAULT(0),"
@@ -316,6 +302,43 @@ public class DBManager extends SQLiteOpenHelper
 										+ "backup3 TEXT DEFAULT('')"
 										+ ")";
 			database.execSQL(createCategoryTable);
+
+			String createTagTable="CREATE TABLE IF NOT EXISTS tbl_tag ("
+									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+									+ "server_id INT DEFAULT(0),"
+									+ "tag_name TEXT DEFAULT(''),"
+									+ "group_id INT DEFAULT(0),"
+									+ "icon_id INT DEFAULT(0),"
+									+ "icon_path TEXT DEFAULT(''),"
+									+ "server_updatedt INT DEFAULT(0),"
+									+ "local_updatedt INT DEFAULT(0),"
+									+ "backup1 INT DEFAULT(0),"
+									+ "backup2 TEXT DEFAULT(''),"
+									+ "backup3 TEXT DEFAULT('')"
+									+ ")";
+			database.execSQL(createTagTable);
+
+			String createImageTable="CREATE TABLE IF NOT EXISTS tbl_image ("
+									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+									+ "server_id INT DEFAULT(0),"
+									+ "path TEXT DEFAULT(''),"
+									+ "item_local_id INT DEFAULT(0),"
+									+ "backup1 INT DEFAULT(0),"
+									+ "backup2 TEXT DEFAULT(''),"
+									+ "backup3 TEXT DEFAULT('')"
+									+ ")";
+			database.execSQL(createImageTable);
+
+			String createOthersImageTable="CREATE TABLE IF NOT EXISTS tbl_others_image ("
+									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+									+ "server_id INT DEFAULT(0),"
+									+ "path TEXT DEFAULT(''),"
+									+ "item_server_id INT DEFAULT(0),"
+									+ "backup1 INT DEFAULT(0),"
+									+ "backup2 TEXT DEFAULT(''),"
+									+ "backup3 TEXT DEFAULT('')"
+									+ ")";
+			database.execSQL(createOthersImageTable);
 			
 			return true;
 		}
@@ -325,7 +348,117 @@ public class DBManager extends SQLiteOpenHelper
 			return false;
 		}
 	}
-		
+
+	// Group
+	public boolean insertGroup(Group group)
+	{
+		try
+		{
+			String sqlString = "INSERT INTO tbl_group (server_id, group_name, local_updatedt, server_updatedt) VALUES (" +
+								"'" + group.getServerID() + "'," +
+								"'" + group.getName() + "'," +
+								"'" + group.getLocalUpdatedDate() + "'," +
+								"'" + group.getServerUpdatedDate() + "')";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean updateGroup(Group group)
+	{
+		try
+		{
+			String sqlString = "UPDATE tbl_group SET " +
+								"group_name = '" + group.getName() + "'," +
+								"local_updatedt = '" + group.getLocalUpdatedDate() + "'," +
+								"server_updatedt = '" + group.getServerUpdatedDate() + "' " +
+								"WHERE server_id = '" + group.getServerID() + "'";
+			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}		
+	}
+	
+	public boolean deleteGroup(int groupServerID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_group WHERE server_id = '" + groupServerID + "'";			
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean syncGroup(Group group)
+	{
+		try
+		{
+			Group localGroup = getGroup(group.getServerID());
+			if (localGroup == null)
+			{
+				return insertGroup(group);
+			}
+			else if (group.getServerUpdatedDate() > localGroup.getLocalUpdatedDate())
+			{
+				return updateGroup(group);
+			}
+			else
+			{
+				return true;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Group getGroup(int groupServerID)
+	{
+		try
+		{	
+			Cursor cursor = database.rawQuery("SELECT server_id, group_name, local_updatedt, server_updatedt" +
+											  " FROM tbl_group WHERE server_id = ?", new String[]{Integer.toString(groupServerID)});
+			if (cursor.moveToNext())
+			{
+				Group group = new Group();
+				group.setServerID(getIntFromCursor(cursor, "server_id"));
+				group.setName(getStringFromCursor(cursor, "group_name"));
+				group.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+				group.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+
+				cursor.close();
+				return group;
+			}
+			else
+			{
+				cursor.close();
+				return null;				
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	// User
 	public boolean insertUser(User user)
 	{
@@ -606,7 +739,7 @@ public class DBManager extends SQLiteOpenHelper
 		List<User> relevantUsers = new ArrayList<User>();	
 		try
 		{		
-			Cursor userCursor = database.rawQuery("SELECT user_id FROM tbl_item_user WHERE item_local_id=?", 
+			Cursor userCursor = database.rawQuery("SELECT user_id FROM tbl_item_user WHERE item_local_id = ?", 
 													new String[]{Integer.toString(itemLocalID)});
 			while (userCursor.moveToNext())
 			{
@@ -944,7 +1077,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE id=?", new String[]{Integer.toString(itemLocalID)});
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE id = ?", new String[]{Integer.toString(itemLocalID)});
 
 			if (cursor.moveToNext())
 			{
@@ -992,7 +1125,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE server_id=?", new String[]{Integer.toString(itemServerID)});
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE server_id = ?", new String[]{Integer.toString(itemServerID)});
 
 			if (cursor.moveToNext())
 			{
@@ -1090,7 +1223,7 @@ public class DBManager extends SQLiteOpenHelper
 		List<Item> itemList = new ArrayList<Item>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id=?", new String[]{Integer.toString(userServerID)});
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ?", new String[]{Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())
 			{
@@ -1282,7 +1415,7 @@ public class DBManager extends SQLiteOpenHelper
 		List<Item> itemList = new ArrayList<Item>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT id, server_id FROM tbl_item WHERE user_id=? AND server_id != -1", 
+			Cursor cursor = database.rawQuery("SELECT id, server_id FROM tbl_item WHERE user_id = ? AND server_id != -1", 
 												new String[]{Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())
@@ -1407,7 +1540,7 @@ public class DBManager extends SQLiteOpenHelper
 		List<Item> itemList = new ArrayList<Item>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE report_local_id=?", 
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE report_local_id = ?", 
 													new String[]{Integer.toString(reportLocalID)});
 
 			while (cursor.moveToNext())
@@ -1731,7 +1864,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE id=? ", 
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE id = ? ", 
 												new String[]{Integer.toString(reportLocalID)});
 			
 			if (cursor.moveToNext())
@@ -1769,7 +1902,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE server_id=? ", 
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE server_id = ? ", 
 													new String[]{Integer.toString(reportServerID)});
 			
 			if (cursor.moveToNext())
@@ -2081,7 +2214,7 @@ public class DBManager extends SQLiteOpenHelper
 	public double getReportAmount(int reportLocalID)
 	{
 		double amount = 0;
-		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id=?", 
+		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id = ?", 
 												new String[]{Integer.toString(reportLocalID)});
 		while (cursor.moveToNext())
 		{
@@ -2094,7 +2227,7 @@ public class DBManager extends SQLiteOpenHelper
 	public int getReportItemsCount(int reportLocalID)
 	{
 		int count = 0;
-		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id=?", 
+		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id = ?", 
 												new String[]{Integer.toString(reportLocalID)});
 		while (cursor.moveToNext())
 		{
@@ -2236,7 +2369,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE id=?", 
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE id = ?", 
 											new String[]{Integer.toString(commentLocalID)});
 
 			if (cursor.moveToNext())
@@ -2272,7 +2405,7 @@ public class DBManager extends SQLiteOpenHelper
 		List<Comment> commentList = new ArrayList<Comment>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE report_local_id=?", 
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE report_local_id = ?", 
 														new String[]{Integer.toString(reportLocalID)});
 
 			while (cursor.moveToNext())
@@ -2305,7 +2438,7 @@ public class DBManager extends SQLiteOpenHelper
 		List<Comment> commentList = new ArrayList<Comment>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_comment WHERE report_server_id=?", 
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_comment WHERE report_server_id = ?", 
 														new String[]{Integer.toString(reportServerID)});
 
 			while (cursor.moveToNext())
@@ -2824,7 +2957,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			List<Tag> tags = new ArrayList<Tag>();			
-			Cursor tagCursor = database.rawQuery("SELECT tag_id FROM tbl_item_tag WHERE item_local_id=?", 
+			Cursor tagCursor = database.rawQuery("SELECT tag_id FROM tbl_item_tag WHERE item_local_id = ?", 
 													new String[]{Integer.toString(itemLocalID)});
 			while (tagCursor.moveToNext())
 			{
@@ -2859,16 +2992,81 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	// Group
-	public boolean insertGroup(Group group)
+	// Image
+	public boolean insertImage(Image image)
 	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_group (server_id, group_name, local_updatedt, server_updatedt) VALUES (" +
-								"'" + group.getServerID() + "'," +
-								"'" + group.getName() + "'," +
-								"'" + group.getLocalUpdatedDate() + "'," +
-								"'" + group.getServerUpdatedDate() + "')";
+			String sqlString = "INSERT INTO tbl_image (server_id, path, item_local_id) VALUES (" + 
+								"'" + image.getServerID() + "'," +
+								"'" + image.getPath() + "'," +
+								"'" + image.getItemID() + "')";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	public boolean insertOthersImage(Image image)
+	{
+		try
+		{
+			String sqlString = "INSERT INTO tbl_others_image (server_id, path, item_server_id) VALUES (" + 
+								"'" + image.getServerID() + "'," +
+								"'" + image.getPath() + "'," +
+								"'" + image.getItemID() + "')";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	public boolean updateImage(Image image)
+	{
+		try
+		{
+			String sqlString = "UPDATE tbl_image SET " + 
+								"server_id = '" + image.getServerID() + "'," +
+								"path = '" + image.getPath() + "'," +
+								"item_local_id = '" + image.getItemID() + "'," +
+								"WHERE id = '" + image.getLocalID() + "'";		
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	public boolean updateOthersImage(Image image)
+	{
+		try
+		{
+			String sqlString = "UPDATE tbl_image SET " + 
+								"path = '" + image.getPath() + "'," +
+								"item_server_id = '" + image.getItemID() + "'," +
+								"WHERE server_id = '" + image.getServerID() + "'";		
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	public boolean deleteImage(int imageLocalID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_image WHERE id = '" + imageLocalID +"'";
 			database.execSQL(sqlString);
 			return true;
 		}
@@ -2879,31 +3077,11 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public boolean updateGroup(Group group)
+	public boolean deleteOthersImage(int imageServerID)
 	{
 		try
 		{
-			String sqlString = "UPDATE tbl_group SET " +
-								"group_name = '" + group.getName() + "'," +
-								"local_updatedt = '" + group.getLocalUpdatedDate() + "'," +
-								"server_updatedt = '" + group.getServerUpdatedDate() + "' " +
-								"WHERE server_id = '" + group.getServerID() + "'";
-			
-			database.execSQL(sqlString);
-			return true;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return false;
-		}		
-	}
-	
-	public boolean deleteGroup(int groupServerID)
-	{
-		try
-		{
-			String sqlString = "DELETE FROM tbl_group WHERE server_id = '" + groupServerID + "'";			
+			String sqlString = "DELETE FROM tbl_others_image WHERE server_id = '" + imageServerID +"'";
 			database.execSQL(sqlString);
 			return true;
 		}
@@ -2914,23 +3092,15 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public boolean syncGroup(Group group)
+	public boolean deleteItemImages(int itemLocalID)
 	{
 		try
 		{
-			Group localGroup = getGroup(group.getServerID());
-			if (localGroup == null)
-			{
-				return insertGroup(group);
-			}
-			else if (group.getServerUpdatedDate() > localGroup.getLocalUpdatedDate())
-			{
-				return updateGroup(group);
-			}
-			else
-			{
-				return true;
-			}
+			String sqlString = "UPDATE tbl_image SET " +
+								"item_local_id = '" + -1 + "' " +
+								"WHERE item_local_id = '" + itemLocalID + "'";
+			database.execSQL(sqlString);
+			return true;
 		}
 		catch (Exception e)
 		{
@@ -2939,27 +3109,75 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public Group getGroup(int groupServerID)
+	public boolean deleteOthersItemImages(int itemServerID)
 	{
 		try
-		{	
-			Cursor cursor = database.rawQuery("SELECT server_id, group_name, local_updatedt, server_updatedt" +
-											  " FROM tbl_group WHERE server_id = ?", new String[]{Integer.toString(groupServerID)});
+		{
+			String sqlString = "UPDATE tbl_others_image SET " +
+								"item_server_id = '" + -1 + "' " +
+								"WHERE item_server_id = '" + itemServerID + "'";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean deleteUnusedImages()
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_image WHERE item_local_id = '-1'";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean deleteOthersUnusedImages()
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_others_image WHERE item_server_id = '-1'";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Image getImage(int imageLocalID)
+	{
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE id = ?", 
+											new String[]{Integer.toString(imageLocalID)});
+
 			if (cursor.moveToNext())
 			{
-				Group group = new Group();
-				group.setServerID(getIntFromCursor(cursor, "server_id"));
-				group.setName(getStringFromCursor(cursor, "group_name"));
-				group.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				group.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+				Image image = new Image();
+				image.setLocalID(getIntFromCursor(cursor, "id"));
+				image.setServerID(getIntFromCursor(cursor, "server_id"));
+				image.setPath(getStringFromCursor(cursor, "path"));
+				image.setItemID(getIntFromCursor(cursor, "item_local_id"));
 
 				cursor.close();
-				return group;
+				return image;
 			}
 			else
 			{
 				cursor.close();
-				return null;				
+				return null;
 			}
 		}
 		catch (Exception e)
@@ -2967,6 +3185,153 @@ public class DBManager extends SQLiteOpenHelper
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public Image getOthersImage(int imageServerID)
+	{
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_image WHERE server_id = ?", 
+											new String[]{Integer.toString(imageServerID)});
+
+			if (cursor.moveToNext())
+			{
+				Image image = new Image();
+				image.setLocalID(getIntFromCursor(cursor, "id"));
+				image.setServerID(getIntFromCursor(cursor, "server_id"));
+				image.setPath(getStringFromCursor(cursor, "path"));
+				image.setItemID(getIntFromCursor(cursor, "item_server_id"));
+
+				cursor.close();
+				return image;
+			}
+			else
+			{
+				cursor.close();
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Image> getItemImages(int itemLocalID)
+	{
+		List<Image> imageList = new ArrayList<Image>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE item_local_id = ?", 
+														new String[]{Integer.toString(itemLocalID)});
+
+			while (cursor.moveToNext())
+			{
+				Image image = new Image();
+				image.setLocalID(getIntFromCursor(cursor, "id"));
+				image.setServerID(getIntFromCursor(cursor, "server_id"));
+				image.setPath(getStringFromCursor(cursor, "path"));
+				image.setItemID(getIntFromCursor(cursor, "item_local_id"));
+				
+				imageList.add(image);
+			}
+			
+			cursor.close();
+			return imageList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return imageList;
+		}		
+	}
+	
+	public List<Image> getOthersItemImages(int itemServerID)
+	{
+		List<Image> imageList = new ArrayList<Image>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_image WHERE item_server_id = ?", 
+														new String[]{Integer.toString(itemServerID)});
+
+			while (cursor.moveToNext())
+			{
+				Image image = new Image();
+				image.setLocalID(getIntFromCursor(cursor, "id"));
+				image.setServerID(getIntFromCursor(cursor, "server_id"));
+				image.setPath(getStringFromCursor(cursor, "path"));
+				image.setItemID(getIntFromCursor(cursor, "item_server_id"));
+				
+				imageList.add(image);
+			}
+			
+			cursor.close();
+			return imageList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return imageList;
+		}		
+	}
+	
+	public List<Image> getUnusedImages()
+	{
+		List<Image> imageList = new ArrayList<Image>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE item_local_id = ?", 
+														new String[]{Integer.toString(-1)});
+
+			while (cursor.moveToNext())
+			{
+				Image image = new Image();
+				image.setLocalID(getIntFromCursor(cursor, "id"));
+				image.setServerID(getIntFromCursor(cursor, "server_id"));
+				image.setPath(getStringFromCursor(cursor, "path"));
+				image.setItemID(getIntFromCursor(cursor, "item_server_id"));
+				
+				imageList.add(image);
+			}
+			
+			cursor.close();
+			return imageList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return imageList;
+		}		
+	}
+	
+	public List<Image> getOthersUnusedImages()
+	{
+		List<Image> imageList = new ArrayList<Image>();
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_image WHERE item_server_id = ?", 
+														new String[]{Integer.toString(-1)});
+
+			while (cursor.moveToNext())
+			{
+				Image image = new Image();
+				image.setLocalID(getIntFromCursor(cursor, "id"));
+				image.setServerID(getIntFromCursor(cursor, "server_id"));
+				image.setPath(getStringFromCursor(cursor, "path"));
+				image.setItemID(getIntFromCursor(cursor, "item_server_id"));
+				
+				imageList.add(image);
+			}
+			
+			cursor.close();
+			return imageList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return imageList;
+		}		
 	}
 	
 	// Auxiliaries	
