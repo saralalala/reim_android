@@ -101,6 +101,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	private boolean[] tempCategoryCheck;
 	
 	private boolean hasInit = false;
+	private int itemIndex;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -194,6 +195,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	{
 		initListView();
 		initFilterView();
+		initDeleteView();
 		initSearchView();
 	}
 	
@@ -232,12 +234,13 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				showDeleteWindow(position - 1);
+				itemIndex = position - 1;
+				showDeleteWindow();
 				return false;
 			}
 		});
 	}
-	
+
 	private void initFilterView()
 	{
 		ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
@@ -434,6 +437,68 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		
 		filterPopupWindow = Utils.constructTopPopupWindow(getActivity(), filterView);
 	}
+
+	private void initDeleteView()
+	{
+		View deleteView = View.inflate(getActivity(), R.layout.window_delete, null);
+		
+		Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
+		deleteButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				deletePopupWindow.dismiss();
+				
+				final Item localItem = showList.get(itemIndex);
+				Report report = localItem.getBelongReport();
+
+				if (report != null && !report.isEditable())
+				{
+					Utils.showToast(getActivity(), "条目已提交，不可删除");
+
+				}
+				else
+				{
+					Builder builder = new Builder(getActivity());
+					builder.setTitle(R.string.warning);
+					builder.setMessage(R.string.prompt_delete_item);
+					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+													{
+														public void onClick(DialogInterface dialog, int which)
+														{
+															if (localItem.getServerID() == -1)
+															{
+																deleteItemFromLocal(localItem.getLocalID());
+															}
+															else if (!Utils.isNetworkConnected())
+															{
+																Utils.showToast(getActivity(), "网络未连接，无法删除");
+															}
+															else
+															{
+																sendDeleteItemRequest(localItem);
+															}
+														}
+													});
+					builder.setNegativeButton(R.string.cancel, null);
+					builder.create().show();
+				}
+			}
+		});
+		deleteButton = Utils.resizeWindowButton(deleteButton);
+		
+		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				deletePopupWindow.dismiss();
+			}
+		});
+		cancelButton = Utils.resizeWindowButton(cancelButton);
+		
+		deletePopupWindow = Utils.constructBottomPopupWindow(getActivity(), deleteView);
+	}
 	
 	private void initSearchView()
 	{		
@@ -448,7 +513,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			}
 		});		
 	}
-
+	
 	private List<Item> readItemList()
 	{
 		return dbManager.getUserItems(appPreference.getCurrentUserID());
@@ -655,70 +720,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		filterPopupWindow.update();
     }
     
-    private void showDeleteWindow(final int index)
-    {    
-    	if (deletePopupWindow == null)
-		{
-    		View deleteView = View.inflate(getActivity(), R.layout.window_delete, null);
-    		
-    		Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
-    		deleteButton.setOnClickListener(new View.OnClickListener()
-    		{
-    			public void onClick(View v)
-    			{
-    				deletePopupWindow.dismiss();
-    				
-    				final Item localItem = showList.get(index);
-    				Report report = localItem.getBelongReport();
-
-    				if (report != null && !report.isEditable())
-    				{
-    					Utils.showToast(getActivity(), "条目已提交，不可删除");
-
-    				}
-    				else
-    				{
-    					Builder builder = new Builder(getActivity());
-    					builder.setTitle(R.string.warning);
-    					builder.setMessage(R.string.prompt_delete_item);
-    					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-    													{
-    														public void onClick(DialogInterface dialog, int which)
-    														{
-    															if (localItem.getServerID() == -1)
-    															{
-    																deleteItemFromLocal(localItem.getLocalID());
-    															}
-    															else if (!Utils.isNetworkConnected())
-    															{
-    																Utils.showToast(getActivity(), "网络未连接，无法删除");
-    															}
-    															else
-    															{
-    																sendDeleteItemRequest(localItem);
-    															}
-    														}
-    													});
-    					builder.setNegativeButton(R.string.cancel, null);
-    					builder.create().show();
-    				}
-    			}
-    		});
-    		deleteButton = Utils.resizeWindowButton(deleteButton);
-    		
-    		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
-    		cancelButton.setOnClickListener(new View.OnClickListener()
-    		{
-    			public void onClick(View v)
-    			{
-    				deletePopupWindow.dismiss();
-    			}
-    		});
-    		cancelButton = Utils.resizeWindowButton(cancelButton);
-    		
-    		deletePopupWindow = Utils.constructBottomPopupWindow(getActivity(), deleteView);    	
-		}
-    	
+    private void showDeleteWindow()
+    {    	
 		deletePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		deletePopupWindow.update();
 		

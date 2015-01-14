@@ -5,9 +5,9 @@ import netUtils.HttpConstant;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Response.DownloadImageResponse;
 import classes.Category;
+import classes.Image;
 import classes.Item;
 import classes.ReimApplication;
-import classes.Tag;
 import classes.User;
 import classes.Utils.DBManager;
 import classes.Utils.Utils;
@@ -35,7 +35,7 @@ import android.widget.TextView;
 
 public class ShowItemActivity extends Activity
 {
-	private ImageView invoiceImageView;
+	private LinearLayout invoiceLayout;
 	private ImageView categoryImageView;
 	private LinearLayout tagLayout;
 	private LinearLayout memberLayout;
@@ -143,40 +143,22 @@ public class ShowItemActivity extends Activity
 		typeTextView.setText(temp);
 		
 		// init invoice photo
-		invoiceImageView = (ImageView)findViewById(R.id.invoiceImageView);
-		invoiceImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (!item.getInvoicePath().equals(""))
-				{
-					Intent intent = new Intent(ShowItemActivity.this, ImageActivity.class);
-					intent.putExtra("imagePath", item.getInvoicePath());
-					startActivity(intent);
-				}
-			}
-		});
+		invoiceLayout = (LinearLayout)findViewById(R.id.invoiceLayout);
+		refreshInvoiceView();
 		
-		Bitmap invoice = BitmapFactory.decodeFile(item.getInvoicePath());
-		if (invoice != null)
+		if (!Utils.isNetworkConnected())
 		{
-			invoiceImageView.setImageBitmap(invoice);
-		}
-		else if (!item.hasInvoice())
-		{
-			invoiceImageView.setVisibility(View.GONE);
+			Utils.showToast(ShowItemActivity.this, "网络未连接，无法下载图片");				
 		}
 		else
-		{			
-			invoiceImageView.setImageResource(R.drawable.default_invoice);
-			if (item.hasUndownloadedInvoice() && Utils.isNetworkConnected())
+		{
+			for (Image image : item.getInvoices())
 			{
-				sendDownloadInvoiceRequest();
-			}
-			else if (item.hasUndownloadedInvoice() && !Utils.isNetworkConnected())
-			{
-				Utils.showToast(ShowItemActivity.this, "网络未连接，无法下载图片");				
-			}
+				if (image.isNotDownloaded() && Utils.isNetworkConnected())
+				{
+					sendDownloadInvoiceRequest(image);
+				}
+			}			
 		}
 		
 		// init time
@@ -221,17 +203,6 @@ public class ShowItemActivity extends Activity
 		tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
 		refreshTagView();
 		
-		if (item.getTags() != null && Utils.isNetworkConnected())
-		{
-			for (Tag tag : item.getTags())
-			{
-				if (tag.hasUndownloadedIcon())
-				{
-					sendDownloadTagIconRequest(tag);
-				}
-			}
-		}
-		
 		// init member
 		memberLayout = (LinearLayout) findViewById(R.id.memberLayout);
 		refreshMemberView();
@@ -252,16 +223,77 @@ public class ShowItemActivity extends Activity
 		noteTextView.setText(item.getNote());		
 	}
 	
+	private void refreshInvoiceView()
+	{
+		invoiceLayout.removeAllViews();
+
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
+		int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, metrics);
+		int verticalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+		int horizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+		int maxCount = (layoutMaxLength + horizontalPadding) / (width + horizontalPadding);
+		horizontalPadding = (layoutMaxLength - width * maxCount) / (maxCount - 1);
+
+		LinearLayout layout = new LinearLayout(this);
+		int invoiceCount = item.getInvoices() != null ? item.getInvoices().size() : 0;
+		for (int i = 0; i < invoiceCount; i++)
+		{
+			if (i % maxCount == 0)
+			{
+				layout = new LinearLayout(this);
+				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				params.topMargin = verticalPadding;
+				layout.setLayoutParams(params);
+				layout.setOrientation(LinearLayout.HORIZONTAL);
+				
+				invoiceLayout.addView(layout);
+			}
+			
+			final Bitmap bitmap = item.getInvoices().get(i).getBitmap();
+
+			final int index = i;
+			ImageView invoiceImageView = new ImageView(this);
+			invoiceImageView.setOnClickListener(new View.OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					if (bitmap != null)
+					{
+						Intent intent = new Intent(ShowItemActivity.this, ImageActivity.class);
+						intent.putExtra("imagePath", item.getInvoices().get(index).getPath());
+						startActivity(intent);
+					}
+				}
+			});
+			
+			if (bitmap == null)
+			{
+				invoiceImageView.setImageResource(R.drawable.default_invoice);				
+			}
+			else
+			{
+				invoiceImageView.setImageBitmap(bitmap);
+			}
+
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, width);
+			if ((i + 1) % maxCount != 0)
+			{
+				params.rightMargin = horizontalPadding;				
+			}
+			
+			layout.addView(invoiceImageView, params);
+		}
+	}
+	
 	private void refreshTagView()
 	{
-		initData();
-
 		tagLayout.removeAllViews();
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 126, metrics);
-		int tagVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-		int tagHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
+		int verticalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, metrics);
+		int horizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
 		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, metrics);
 		int textSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, metrics);
 
@@ -283,11 +315,11 @@ public class ShowItemActivity extends Activity
 			textPaint.getTextBounds(name, 0, name.length(), textRect);
 			int width = textRect.width() + padding;
 			
-			if (space - width - tagHorizontalInterval <= 0)
+			if (space - width - horizontalPadding <= 0)
 			{
 				layout = new LinearLayout(this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				params.topMargin = tagVerticalInterval;
+				params.topMargin = verticalPadding;
 				layout.setLayoutParams(params);
 				layout.setOrientation(LinearLayout.HORIZONTAL);
 				
@@ -300,36 +332,34 @@ public class ShowItemActivity extends Activity
 			else
 			{
 				LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				params.leftMargin = tagHorizontalInterval;
+				params.leftMargin = horizontalPadding;
 				layout.addView(view, params);
-				space -= width + tagHorizontalInterval;
+				space -= width + horizontalPadding;
 			}
 		}
 	}
 	
 	private void refreshMemberView()
 	{
-		initData();
-		
 		memberLayout.removeAllViews();
 		
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
-		int iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
-		int iconVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
-		int iconHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
-		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
-		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
+		int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
+		int verticalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		int horizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		int maxCount = (layoutMaxLength + horizontalPadding) / (width + horizontalPadding);
+		horizontalPadding = (layoutMaxLength - width * maxCount) / (maxCount - 1);
 
 		LinearLayout layout = new LinearLayout(this);
 		int memberCount = item.getRelevantUsers() != null ? item.getRelevantUsers().size() : 0;
 		for (int i = 0; i < memberCount; i++)
 		{
-			if (i % iconMaxCount == 0)
+			if (i % maxCount == 0)
 			{
 				layout = new LinearLayout(this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				params.topMargin = iconVerticalInterval;
+				params.topMargin = verticalPadding;
 				layout.setLayoutParams(params);
 				layout.setOrientation(LinearLayout.HORIZONTAL);
 				
@@ -350,16 +380,19 @@ public class ShowItemActivity extends Activity
 			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
 			nameTextView.setText(user.getNickname());
 			
-			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
-			params.rightMargin = iconHorizontalInterval;
+			LayoutParams params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+			if ((i + 1) % maxCount != 0)
+			{
+				params.rightMargin = horizontalPadding;				
+			}
 			
 			layout.addView(memberView, params);
 		}
 	}
 	
-	private void sendDownloadInvoiceRequest()
+	private void sendDownloadInvoiceRequest(final Image image)
 	{
-		DownloadImageRequest request = new DownloadImageRequest(item.getInvoiceID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
+		DownloadImageRequest request = new DownloadImageRequest(image.getServerID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -367,18 +400,18 @@ public class ShowItemActivity extends Activity
 				final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), 
-																	HttpConstant.IMAGE_TYPE_INVOICE);
+					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
-						item.setInvoicePath(invoicePath);
-						dbManager.updateItem(item);
+						image.setPath(invoicePath);
+						dbManager.updateImageByServerID(image);
 						
 						runOnUiThread(new Runnable()
 						{
 							public void run()
 							{
-								invoiceImageView.setImageBitmap(response.getBitmap());
+								initData();
+								refreshInvoiceView();
 							}
 						});
 					}
@@ -388,7 +421,7 @@ public class ShowItemActivity extends Activity
 						{
 							public void run()
 							{
-								Utils.showToast(ShowItemActivity.this, "发票图片下载失败");
+								Utils.showToast(ShowItemActivity.this, "发票图片保存失败");
 							}
 						});						
 					}
@@ -399,7 +432,7 @@ public class ShowItemActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(ShowItemActivity.this, "图片下载失败");
+							Utils.showToast(ShowItemActivity.this, "发票图片下载失败");
 						}
 					});								
 				}
@@ -434,34 +467,6 @@ public class ShowItemActivity extends Activity
 			}
 		});
     }
-    
-    private void sendDownloadTagIconRequest(final Tag tag)
-    {
-    	DownloadImageRequest request = new DownloadImageRequest(tag.getIconID());
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-				if (response.getBitmap() != null)
-				{
-					String iconPath = Utils.saveIconToFile(response.getBitmap(), tag.getIconID());
-					tag.setIconPath(iconPath);
-					tag.setLocalUpdatedDate(Utils.getCurrentTime());
-					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
-					dbManager.updateTag(tag);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							refreshTagView();
-						}
-					});	
-				}
-			}
-		});
-    }
 
     private void sendDownloadAvatarRequest(final User user)
     {
@@ -483,6 +488,7 @@ public class ShowItemActivity extends Activity
 					{
 						public void run()
 						{
+							initData();
 							refreshMemberView();
 						}
 					});	

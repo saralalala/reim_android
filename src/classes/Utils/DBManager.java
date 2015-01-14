@@ -140,8 +140,6 @@ public class DBManager extends SQLiteOpenHelper
 			String createItemTable="CREATE TABLE IF NOT EXISTS tbl_item ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
-									+ "invoice_id INT DEFAULT(0),"
-									+ "invoice_path TEXT DEFAULT(''),"
 									+ "vendor TEXT DEFAULT(''),"
 									+ "report_local_id INT DEFAULT(0),"
 									+ "category_id INT DEFAULT(0),"
@@ -189,8 +187,6 @@ public class DBManager extends SQLiteOpenHelper
 			String createOthersItemTable="CREATE TABLE IF NOT EXISTS tbl_others_item ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
-									+ "invoice_id INT DEFAULT(0),"
-									+ "invoice_path TEXT DEFAULT(''),"
 									+ "vendor TEXT DEFAULT(''),"
 									+ "report_server_id INT DEFAULT(0),"
 									+ "category_id INT DEFAULT(0),"
@@ -775,19 +771,17 @@ public class DBManager extends SQLiteOpenHelper
 	}	
 	
 	// Item
-	public boolean insertItem(Item item)
+	public int insertItem(Item item)
 	{
 		try
 		{
 			System.out.println("insert item: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
 			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
-			String sqlString = "INSERT INTO tbl_item (server_id, invoice_id, invoice_path, vendor, report_local_id, category_id, " +
-							   							"amount, pa_amount, user_id, consumed_date, note, status, location, createdt, " +
-							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" + 
+			String sqlString = "INSERT INTO tbl_item (server_id, vendor, report_local_id, category_id, amount, pa_amount, " +
+							   							"user_id, consumed_date, note, status, location, createdt, server_updatedt, " +
+							   							"local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" + 
 														"'" + item.getServerID() + "'," +
-														"'" + item.getInvoiceID() + "'," +
-														"'" + item.getInvoicePath() + "'," +
 														"'" + item.getVendor() + "'," +
 														"'" + reportID + "'," +
 														"'" + categoryID + "'," +
@@ -810,16 +804,17 @@ public class DBManager extends SQLiteOpenHelper
 			cursor.moveToFirst();
 			item.setLocalID(cursor.getInt(0));
 
+			updateItemImages(item);
 			updateItemTags(item);
 			updateRelevantUsers(item);
 
 			cursor.close();
-			return true;
+			return item.getLocalID();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			return false;
+			return -1;
 		}
 	}
 	
@@ -828,12 +823,10 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
-			String sqlString = "INSERT INTO tbl_others_item (server_id, invoice_id, invoice_path, vendor, report_server_id, category_id, tags_id, " +
-							   							"users_id, amount, pa_amount, user_id, consumed_date, note, status, location, createdt, " +
+			String sqlString = "INSERT INTO tbl_others_item (server_id, vendor, report_server_id, category_id, tags_id, users_id" +
+							   							"amount, pa_amount, user_id, consumed_date, note, status, location, createdt, " +
 							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" + 
 														"'" + item.getServerID() + "'," +
-														"'" + item.getInvoiceID() + "'," +
-														"'" + item.getInvoicePath() + "'," +
 														"'" + item.getVendor() + "'," +
 														"'" + item.getBelongReport().getServerID() + "'," +
 														"'" + categoryID + "'," +
@@ -852,7 +845,10 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + Utils.booleanToInt(item.isProveAhead()) + "'," +
 														"'" + Utils.booleanToInt(item.needReimbursed()) + "'," +
 														"'" + Utils.booleanToInt(item.isPaApproved()) + "')";
-			database.execSQL(sqlString);
+			database.execSQL(sqlString);			
+
+			updateOthersItemImages(item);
+			
 			return true;
 		}
 		catch (Exception e)
@@ -883,8 +879,6 @@ public class DBManager extends SQLiteOpenHelper
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
 			String sqlString = "UPDATE tbl_item SET " +
 								"server_id = '" + item.getServerID() + "'," +
-								"invoice_id = '" + item.getInvoiceID() + "'," +
-								"invoice_path = '" + item.getInvoicePath() + "'," +
 								"vendor = '" + item.getVendor() + "'," +
 								"report_local_id = '" + reportID + "'," +
 								"category_id = '" + categoryID + "'," +
@@ -903,7 +897,8 @@ public class DBManager extends SQLiteOpenHelper
 								"pa_approved = '" + Utils.booleanToInt(item.isPaApproved()) + "' " +
 								"WHERE id = '" + item.getLocalID() + "'";			
 			database.execSQL(sqlString);
-			
+
+			updateItemImages(item);
 			updateItemTags(item);
 			updateRelevantUsers(item);
 
@@ -924,8 +919,6 @@ public class DBManager extends SQLiteOpenHelper
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
 			String sqlString = "UPDATE tbl_item SET " +
 								"server_id = '" + item.getServerID() + "'," +
-								"invoice_id = '" + item.getInvoiceID() + "'," +
-								"invoice_path = '" + item.getInvoicePath() + "'," +
 								"vendor = '" + item.getVendor() + "'," +
 								"report_local_id = '" + reportID + "'," +
 								"category_id = '" + categoryID + "'," +
@@ -945,13 +938,14 @@ public class DBManager extends SQLiteOpenHelper
 								"WHERE server_id = '" + item.getServerID() + "'";			
 			database.execSQL(sqlString);
 			
-			if (item.getTags() != null || item.getRelevantUsers() != null)
+			if (item.getInvoices() != null || item.getTags() != null || item.getRelevantUsers() != null)
 			{
 				item.setLocalID(getItemByServerID(item.getServerID()).getLocalID());
+
+				updateItemImages(item);
+				updateItemTags(item);
+				updateRelevantUsers(item);
 			}
-			
-			updateItemTags(item);
-			updateRelevantUsers(item);
 
 			return true;		
 		}
@@ -968,6 +962,7 @@ public class DBManager extends SQLiteOpenHelper
 			String sqlString = "DELETE FROM tbl_item WHERE id = '" + itemLocalID +"'";
 			database.execSQL(sqlString);
 
+			deleteItemImages(itemLocalID);
 			deleteItemTags(itemLocalID);
 			deleteRelevantUsers(itemLocalID);
 			
@@ -983,9 +978,25 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String idString = !remainingList.isEmpty() ? TextUtils.join(",", remainingList) + ",-1" : "-1";
-			String sqlString = "DELETE FROM tbl_item WHERE server_id NOT IN (" + idString +") AND user_id = " + userServerID;
-			database.execSQL(sqlString);
+			String idString = !remainingList.isEmpty() ? TextUtils.join(",", remainingList) + ", -1" : "-1";
+			List<Integer> itemIDList = new ArrayList<Integer>();
+
+			String command = "SELECT id FROM tbl_item WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
+			Cursor cursor = database.rawQuery(command, null);
+//			Cursor cursor = database.rawQuery("SELECT id FROM tbl_item WHERE server_id NOT IN ( ? ) AND user_id = ?", 
+//													new String[]{idString, Integer.toString(userServerID)});
+
+			while (cursor.moveToNext())
+			{			
+				itemIDList.add(getIntFromCursor(cursor, "id"));
+			}
+
+			cursor.close();
+			
+			for (Integer itemLocalID : itemIDList)
+			{
+				deleteItem(itemLocalID);
+			}
 			
 			return true;
 		}
@@ -1001,7 +1012,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			if (item.getLocalID() == -1 && item.getServerID() == -1)
 			{
-				return insertItem(item);
+				return insertItem(item) > 0;
 			}
 			else if (item.getLocalID() != -1 && item.getServerID() == -1)
 			{
@@ -1012,14 +1023,10 @@ public class DBManager extends SQLiteOpenHelper
 				Item localItem = getItemByServerID(item.getServerID());
 				if (localItem == null)
 				{
-					return insertItem(item);
+					return insertItem(item) > 0;
 				}
 				else if (item.getServerUpdatedDate() > localItem.getLocalUpdatedDate())
 				{
-					if (item.getInvoiceID() == localItem.getInvoiceID())
-					{
-						item.setInvoicePath(localItem.getInvoicePath());
-					}
 					return updateItemByServerID(item);
 				}
 				else
@@ -1084,8 +1091,6 @@ public class DBManager extends SQLiteOpenHelper
 				Item item = new Item();
 				item.setLocalID(getIntFromCursor(cursor, "id"));
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
-				item.setInvoiceID(getIntFromCursor(cursor, "invoice_id"));
-				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
@@ -1101,9 +1106,10 @@ public class DBManager extends SQLiteOpenHelper
 				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
-				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));				
-				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
-				item.setTags(getItemTags(item.getLocalID()));
+				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setInvoices(getItemImages(itemLocalID));
+				item.setRelevantUsers(getRelevantUsers(itemLocalID));
+				item.setTags(getItemTags(itemLocalID));
 
 				cursor.close();
 				return item;
@@ -1132,8 +1138,6 @@ public class DBManager extends SQLiteOpenHelper
 				Item item = new Item();
 				item.setLocalID(getIntFromCursor(cursor, "id"));
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
-				item.setInvoiceID(getIntFromCursor(cursor, "invoice_id"));
-				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
@@ -1149,7 +1153,8 @@ public class DBManager extends SQLiteOpenHelper
 				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
-				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));				
+				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setInvoices(getItemImages(item.getLocalID()));
 				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
 				item.setTags(getItemTags(item.getLocalID()));
 
@@ -1181,8 +1186,6 @@ public class DBManager extends SQLiteOpenHelper
 				Item item = new Item();
 				item.setLocalID(getIntFromCursor(cursor, "id"));
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
-				item.setInvoiceID(getIntFromCursor(cursor, "invoice_id"));
-				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
@@ -1199,6 +1202,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getOthersReport(getIntFromCursor(cursor, "report_server_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setInvoices(getOthersItemImages(itemServerID));
 				item.setRelevantUsers(User.idStringToUserList(getStringFromCursor(cursor, "users_id")));
 				item.setTags(Tag.idStringToTagList(getStringFromCursor(cursor, "tags_id")));
 
@@ -1230,8 +1234,6 @@ public class DBManager extends SQLiteOpenHelper
 				Item item = new Item();
 				item.setLocalID(getIntFromCursor(cursor, "id"));
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
-				item.setInvoiceID(getIntFromCursor(cursor, "invoice_id"));
-				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
@@ -1248,6 +1250,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setInvoices(getItemImages(item.getLocalID()));
 				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
 				item.setTags(getItemTags(item.getLocalID()));
 				
@@ -1279,8 +1282,6 @@ public class DBManager extends SQLiteOpenHelper
 				Item item = new Item();
 				item.setLocalID(getIntFromCursor(cursor, "id"));
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
-				item.setInvoiceID(getIntFromCursor(cursor, "invoice_id"));
-				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
@@ -1297,6 +1298,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setInvoices(getItemImages(item.getLocalID()));
 				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
 				item.setTags(getItemTags(item.getLocalID()));
 				
@@ -1328,8 +1330,6 @@ public class DBManager extends SQLiteOpenHelper
 				Item item = new Item();
 				item.setLocalID(getIntFromCursor(cursor, "id"));
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
-				item.setInvoiceID(getIntFromCursor(cursor, "invoice_id"));
-				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
@@ -1346,6 +1346,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setInvoices(getItemImages(item.getLocalID()));
 				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
 				item.setTags(getItemTags(item.getLocalID()));
 				
@@ -1367,8 +1368,7 @@ public class DBManager extends SQLiteOpenHelper
 		List<Item> itemList = new ArrayList<Item>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE (local_updatedt > server_updatedt " +
-											"OR (invoice_id = -1 AND invoice_path != '')) AND user_id = ?", 
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE local_updatedt > server_updatedt AND user_id = ?", 
 													new String[]{Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())
@@ -1376,8 +1376,6 @@ public class DBManager extends SQLiteOpenHelper
 				Item item = new Item();
 				item.setLocalID(getIntFromCursor(cursor, "id"));
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
-				item.setInvoiceID(getIntFromCursor(cursor, "invoice_id"));
-				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
@@ -1394,6 +1392,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setInvoices(getItemImages(item.getLocalID()));
 				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
 				item.setTags(getItemTags(item.getLocalID()));
 				
@@ -1548,8 +1547,6 @@ public class DBManager extends SQLiteOpenHelper
 				Item item = new Item();
 				item.setLocalID(getIntFromCursor(cursor, "id"));
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
-				item.setInvoiceID(getIntFromCursor(cursor, "invoice_id"));
-				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
@@ -1566,6 +1563,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setInvoices(getItemImages(item.getLocalID()));
 				item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
 				item.setTags(getItemTags(item.getLocalID()));
 				
@@ -1595,8 +1593,6 @@ public class DBManager extends SQLiteOpenHelper
 				Item item = new Item();
 				item.setLocalID(getIntFromCursor(cursor, "id"));
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
-				item.setInvoiceID(getIntFromCursor(cursor, "invoice_id"));
-				item.setInvoicePath(getStringFromCursor(cursor, "invoice_path"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
 				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
@@ -1613,6 +1609,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getOthersReport(reportServerID));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+				item.setInvoices(getOthersItemImages(item.getServerID()));
 				item.setRelevantUsers(User.idStringToUserList(getStringFromCursor(cursor, "users_id")));
 				item.setTags(Tag.idStringToTagList(getStringFromCursor(cursor, "tags_id")));
 				
@@ -1848,9 +1845,25 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String idString = !remainingList.isEmpty() ? TextUtils.join(",", remainingList) + ",-1" : "-1";
-			String sqlString = "DELETE FROM tbl_report WHERE server_id NOT IN (" + idString +") AND user_id = " + userServerID;
-			database.execSQL(sqlString);
+			String idString = !remainingList.isEmpty() ? TextUtils.join(",", remainingList) + ",-1" : "-1";			
+			List<Integer> reportIDList = new ArrayList<Integer>();
+
+			String command = "SELECT id FROM tbl_report WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
+			Cursor cursor = database.rawQuery(command, null);
+//			Cursor cursor = database.rawQuery("SELECT id FROM tbl_report WHERE server_id NOT IN ( ? ) AND user_id = ?", 
+//													new String[]{idString, Integer.toString(userServerID)});
+
+			while (cursor.moveToNext())
+			{			
+				reportIDList.add(getIntFromCursor(cursor, "id"));
+			}
+
+			cursor.close();
+			
+			for (Integer reportLocalID : reportIDList)
+			{
+				deleteReport(reportLocalID);
+			}
 			
 			return true;
 		}
@@ -3026,16 +3039,34 @@ public class DBManager extends SQLiteOpenHelper
 			return false;
 		}
 	}
-	
-	public boolean updateImage(Image image)
+
+	public boolean updateImageByLocalID(Image image)
 	{
 		try
 		{
 			String sqlString = "UPDATE tbl_image SET " + 
 								"server_id = '" + image.getServerID() + "'," +
 								"path = '" + image.getPath() + "'," +
-								"item_local_id = '" + image.getItemID() + "'," +
+								"item_local_id = '" + image.getItemID() + "' " +
 								"WHERE id = '" + image.getLocalID() + "'";		
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	public boolean updateImageByServerID(Image image)
+	{
+		try
+		{
+			String sqlString = "UPDATE tbl_image SET " + 
+								"server_id = '" + image.getServerID() + "'," +
+								"path = '" + image.getPath() + "'," +
+								"item_local_id = '" + image.getItemID() + "' " +
+								"WHERE server_id = '" + image.getServerID() + "'";		
 			database.execSQL(sqlString);
 			return true;
 		}
@@ -3059,6 +3090,80 @@ public class DBManager extends SQLiteOpenHelper
 		catch (Exception e)
 		{
 			return false;
+		}
+	}
+
+	public void updateItemImages(Item item)
+	{
+		int itemLocalID = item.getLocalID();
+		List<Image> images = item.getInvoices();
+		List<Image> localImages = getItemImages(itemLocalID);
+		
+		for (Image image : localImages)
+		{
+			if (!images.contains(image))
+			{
+				image.deleteFile();
+				deleteImage(image.getLocalID());
+			}
+		}
+
+		localImages = getItemImages(itemLocalID);
+		for (Image image : images)
+		{
+			image.setItemID(itemLocalID);
+			boolean imageExists = false;
+			for (Image localImage : localImages)
+			{
+				if (localImage.equals(image))
+				{
+					imageExists = true;
+					image.setPath(localImage.getPath());
+					updateImageByServerID(image);
+					break;
+				}
+			}
+			if (!imageExists)
+			{
+				insertImage(image);				
+			}
+		}
+	}
+
+	public void updateOthersItemImages(Item item)
+	{
+		int itemServerID = item.getServerID();
+		List<Image> images = item.getInvoices();
+		List<Image> localImages = getOthersItemImages(itemServerID);
+		
+		for (Image image : localImages)
+		{
+			if (!images.contains(image))
+			{
+				image.deleteFile();
+				deleteImage(image.getLocalID());
+			}
+		}
+
+		localImages = getOthersItemImages(itemServerID);
+		for (Image image : images)
+		{
+			image.setItemID(itemServerID);
+			boolean imageExists = false;
+			for (Image localImage : localImages)
+			{
+				if (localImage.equals(image))
+				{
+					imageExists = true;
+					image.setPath(localImage.getPath());
+					updateOthersImage(image);
+					break;
+				}
+			}
+			if (!imageExists)
+			{
+				insertOthersImage(image);				
+			}
 		}
 	}
 	
@@ -3096,9 +3201,13 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "UPDATE tbl_image SET " +
-								"item_local_id = '" + -1 + "' " +
-								"WHERE item_local_id = '" + itemLocalID + "'";
+			List<Image> images = getItemImages(itemLocalID);
+			for (Image image : images)
+			{
+				image.deleteFile();
+			}
+			
+			String sqlString = "DELETE FROM tbl_image WHERE item_local_id = '" + itemLocalID + "'";
 			database.execSQL(sqlString);
 			return true;
 		}
@@ -3113,9 +3222,13 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "UPDATE tbl_others_image SET " +
-								"item_server_id = '" + -1 + "' " +
-								"WHERE item_server_id = '" + itemServerID + "'";
+			List<Image> images = getOthersItemImages(itemServerID);
+			for (Image image : images)
+			{
+				image.deleteFile();
+			}
+			
+			String sqlString = "DELETE FROM tbl_others_image WHERE item_server_id = '" + itemServerID + "'";
 			database.execSQL(sqlString);
 			return true;
 		}
@@ -3126,42 +3239,43 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public boolean deleteUnusedImages()
-	{
-		try
-		{
-			String sqlString = "DELETE FROM tbl_image WHERE item_local_id = '-1'";
-			database.execSQL(sqlString);
-			return true;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	public boolean deleteOthersUnusedImages()
-	{
-		try
-		{
-			String sqlString = "DELETE FROM tbl_others_image WHERE item_server_id = '-1'";
-			database.execSQL(sqlString);
-			return true;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	public Image getImage(int imageLocalID)
+	public Image getImageByLocalID(int imageLocalID)
 	{
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE id = ?", 
 											new String[]{Integer.toString(imageLocalID)});
+
+			if (cursor.moveToNext())
+			{
+				Image image = new Image();
+				image.setLocalID(getIntFromCursor(cursor, "id"));
+				image.setServerID(getIntFromCursor(cursor, "server_id"));
+				image.setPath(getStringFromCursor(cursor, "path"));
+				image.setItemID(getIntFromCursor(cursor, "item_local_id"));
+
+				cursor.close();
+				return image;
+			}
+			else
+			{
+				cursor.close();
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Image getImageByServerID(int imageServerID)
+	{
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE server_id = ?", 
+											new String[]{Integer.toString(imageServerID)});
 
 			if (cursor.moveToNext())
 			{
@@ -3254,64 +3368,6 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_image WHERE item_server_id = ?", 
 														new String[]{Integer.toString(itemServerID)});
-
-			while (cursor.moveToNext())
-			{
-				Image image = new Image();
-				image.setLocalID(getIntFromCursor(cursor, "id"));
-				image.setServerID(getIntFromCursor(cursor, "server_id"));
-				image.setPath(getStringFromCursor(cursor, "path"));
-				image.setItemID(getIntFromCursor(cursor, "item_server_id"));
-				
-				imageList.add(image);
-			}
-			
-			cursor.close();
-			return imageList;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return imageList;
-		}		
-	}
-	
-	public List<Image> getUnusedImages()
-	{
-		List<Image> imageList = new ArrayList<Image>();
-		try
-		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE item_local_id = ?", 
-														new String[]{Integer.toString(-1)});
-
-			while (cursor.moveToNext())
-			{
-				Image image = new Image();
-				image.setLocalID(getIntFromCursor(cursor, "id"));
-				image.setServerID(getIntFromCursor(cursor, "server_id"));
-				image.setPath(getStringFromCursor(cursor, "path"));
-				image.setItemID(getIntFromCursor(cursor, "item_server_id"));
-				
-				imageList.add(image);
-			}
-			
-			cursor.close();
-			return imageList;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return imageList;
-		}		
-	}
-	
-	public List<Image> getOthersUnusedImages()
-	{
-		List<Image> imageList = new ArrayList<Image>();
-		try
-		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_image WHERE item_server_id = ?", 
-														new String[]{Integer.toString(-1)});
 
 			while (cursor.moveToNext())
 			{

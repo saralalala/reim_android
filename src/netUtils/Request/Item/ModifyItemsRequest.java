@@ -8,6 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import classes.Image;
 import classes.Item;
 import classes.Tag;
 import classes.User;
@@ -37,7 +38,7 @@ public class ModifyItemsRequest extends BaseRequest
 				jObject.put("location", item.getLocation());
 				jObject.put("uid", item.getConsumer().getServerID());
 				jObject.put("prove_ahead", Utils.booleanToString(item.isProveAhead()));
-				jObject.put("image_id", item.getInvoiceID());
+				jObject.put("image_id", Image.getImagesIDString(item.getInvoices()));
 				jObject.put("uids", User.getUsersIDString(item.getRelevantUsers()));
 				jObject.put("tags", Tag.getTagsIDString(item.getTags()));
 				jObject.put("dt", item.getConsumedDate());

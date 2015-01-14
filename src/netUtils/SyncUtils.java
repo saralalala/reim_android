@@ -16,6 +16,7 @@ import netUtils.Response.Item.CreateItemResponse;
 import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
+import classes.Image;
 import classes.Item;
 import classes.Report;
 import classes.Utils.AppPreference;
@@ -25,6 +26,7 @@ import classes.Utils.Utils;
 public abstract class SyncUtils
 {
 	public static boolean isSyncOnGoing = false;
+	private static int imageTaskCount = 0;
 	private static int itemTaskCount = 0;
 	private static int reportTaskCount = 0;
 	
@@ -127,8 +129,44 @@ public abstract class SyncUtils
     public static void syncAllToServer(SyncDataCallback callback)
     {
 		System.out.println("------------- syncAllToServer ------------");
+    	imageTaskCount = 0;
     	itemTaskCount = 0;
     	reportTaskCount = 0;
+    	
+    	AppPreference appPreference = AppPreference.getAppPreference();
+    	DBManager dbManager = DBManager.getDBManager();
+    	List<Item> itemList = dbManager.getUnsyncedItems(appPreference.getCurrentUserID());
+    	List<Image> imageList = new ArrayList<Image>();
+    	
+    	for (Item item : itemList)
+		{
+			for (Image image : item.getInvoices())
+			{
+				if (image.isNotUploaded())
+				{
+					imageList.add(image);
+				}
+			}
+		}
+    	
+    	imageTaskCount = imageList.size();
+    	
+    	System.out.println("imageTaskCount："+imageTaskCount);
+    	if (imageTaskCount > 0)
+		{
+    		for (Image image : imageList)
+			{
+				sendUploadImageRequest(image, callback);
+			}		
+		}
+    	else
+		{
+    		syncItemsToServer(callback);
+		}
+    }
+    
+    private static void syncItemsToServer(SyncDataCallback callback)
+    {
     	AppPreference appPreference = AppPreference.getAppPreference();
     	DBManager dbManager = DBManager.getDBManager();
     	List<Item> itemList = dbManager.getUnsyncedItems(appPreference.getCurrentUserID());
@@ -138,9 +176,15 @@ public abstract class SyncUtils
 		{
         	for (Item item : itemList)
     		{
-    			if (item.getInvoiceID() == -1 && !item.getInvoicePath().equals(""))
+    			if (item.hasUnuploadedInvoice())
     			{
-    				sendUploadImageRequest(item, callback);
+    		    	System.out.println("ignore item：local id " + item.getLocalID());
+					itemTaskCount--;
+					if (itemTaskCount == 0)
+					{
+						syncReportsToServer(callback);
+					}
+					continue;
     			}
     			else if (item.getServerID() == -1)
     			{
@@ -199,10 +243,10 @@ public abstract class SyncUtils
 		}
     }
     
-    private static void sendUploadImageRequest(final Item item, final SyncDataCallback callback)
+    private static void sendUploadImageRequest(final Image image, final SyncDataCallback callback)
     {
-    	System.out.println("upload image for item：local id " + item.getLocalID());
-		UploadImageRequest request = new UploadImageRequest(item.getInvoicePath(), HttpConstant.IMAGE_TYPE_INVOICE);
+    	System.out.println("upload image：local id " + image.getLocalID());
+		UploadImageRequest request = new UploadImageRequest(image.getPath(), HttpConstant.IMAGE_TYPE_INVOICE);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -210,21 +254,19 @@ public abstract class SyncUtils
 				final UploadImageResponse response = new UploadImageResponse(httpResponse);
 				if (response.getStatus())
 				{
-			    	System.out.println("upload image for item：local id " + item.getLocalID() + " *Succeed*");
-					item.setInvoiceID(response.getImageID());
-					DBManager.getDBManager().updateItem(item);
+			    	System.out.println("upload image：local id " + image.getLocalID() + " *Succeed*");
+					image.setServerID(response.getImageID());
+					DBManager.getDBManager().updateImageByLocalID(image);
 				}
 				else
 				{
-			    	System.out.println("upload image for item：local id " + item.getLocalID() + " *Failed*");					
+			    	System.out.println("upload image：local id " + image.getLocalID() + " *Failed*");
 				}
-				if (item.getServerID() == -1)
+				
+				imageTaskCount--;
+				if (imageTaskCount == 0)
 				{
-					sendCreateItemRequest(item, callback);
-				}
-				else
-				{
-					sendUpdateItemRequest(item, callback);
+					syncItemsToServer(callback);
 				}
 			}
 		});
@@ -248,20 +290,16 @@ public abstract class SyncUtils
 					item.setCreatedDate(response.getCreateDate());
 					
 					DBManager.getDBManager().updateItemByLocalID(item);
-					itemTaskCount--;
-					if (itemTaskCount == 0)
-					{
-						syncReportsToServer(callback);
-					}
 				}
 				else
 				{
 			    	System.out.println("create item：local id " + item.getLocalID() + " *Failed*");
-					itemTaskCount--;
-					if (itemTaskCount == 0)
-					{
-						syncReportsToServer(callback);
-					}
+				}
+				
+				itemTaskCount--;
+				if (itemTaskCount == 0)
+				{
+					syncReportsToServer(callback);
 				}
 			}
 		});
@@ -283,20 +321,16 @@ public abstract class SyncUtils
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());
 					item.setServerID(response.getItemID());
 					DBManager.getDBManager().updateItem(item);
-					itemTaskCount--;
-					if (itemTaskCount == 0)
-					{
-						syncReportsToServer(callback);
-					}
 				}
 				else
 				{
 			    	System.out.println("modify item：local id " + item.getLocalID() + " *Failed*");
-					itemTaskCount--;
-					if (itemTaskCount == 0)
-					{
-						syncReportsToServer(callback);
-					}		
+				}
+				
+				itemTaskCount--;
+				if (itemTaskCount == 0)
+				{
+					syncReportsToServer(callback);
 				}
 			}
 		});
@@ -319,20 +353,16 @@ public abstract class SyncUtils
 					report.setServerUpdatedDate(currentTime);
 					report.setServerID(response.getReportID());
 					DBManager.getDBManager().updateReportByLocalID(report);
-					reportTaskCount--;
-					if (reportTaskCount == 0 && callback != null)
-					{
-						callback.execute();	
-					}
 				}
 				else
 				{
 			    	System.out.println("create report：local id " + report.getLocalID() + " *Failed*");
-					reportTaskCount--;
-					if (reportTaskCount == 0 && callback != null)
-					{
-						callback.execute();	
-					}
+				}
+				
+				reportTaskCount--;
+				if (reportTaskCount == 0 && callback != null)
+				{
+					callback.execute();	
 				}
 			}
 		});
@@ -353,20 +383,16 @@ public abstract class SyncUtils
 					report.setLocalUpdatedDate(Utils.getCurrentTime());
 					report.setServerUpdatedDate(report.getLocalUpdatedDate());
 					DBManager.getDBManager().updateReportByLocalID(report);
-					reportTaskCount--;
-					if (reportTaskCount == 0 && callback != null)
-					{
-						callback.execute();	
-					}
 				}
 				else
 				{
 			    	System.out.println("modify report：local id " + report.getLocalID() + " *Failed*");
-					reportTaskCount--;
-					if (reportTaskCount == 0 && callback != null)
-					{
-						callback.execute();	
-					}
+				}
+
+				reportTaskCount--;
+				if (reportTaskCount == 0 && callback != null)
+				{
+					callback.execute();	
 				}
 			}
 		});

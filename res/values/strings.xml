@@ -95,6 +95,8 @@
     <string name="all_cities">全部城市</string>
     <string name="only_save">仅保存</string>
     <string name="send_to_approve">发送审批</string>
+    <string name="report_not_available">未加入报告</string>
+    <string name="vendor_not_available">未填写商家</string>
     
     <string name="my_report">我的</string>
     <string name="others_report">需审批</string>

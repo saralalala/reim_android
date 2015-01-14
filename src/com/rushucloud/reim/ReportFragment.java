@@ -97,6 +97,8 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	private boolean[] othersCheck;
 	private List<Integer> othersFilterStatusList = new ArrayList<Integer>();
 	
+	private int reportIndex;
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		if (view == null)
@@ -174,6 +176,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		initTitleView();
 		initListView();	
 		initFilterView();
+		initOperationView();
 	}
 	
 	private void initTitleView()
@@ -271,7 +274,8 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			{
 				if (ReimApplication.getReportTabIndex() == 0)
 				{
-					showOperationWindow(position - 1);
+					reportIndex = position - 1;
+					showOperationWindow();
 				}
 				return false;
 			}
@@ -282,6 +286,89 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	{
 		View filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);		
 		filterPopupWindow = Utils.constructTopPopupWindow(getActivity(), filterView);
+	}
+	
+	private void initOperationView()
+	{
+		View operationView = View.inflate(getActivity(), R.layout.window_report_operation, null);
+		
+		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
+		deleteButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				operationPopupWindow.dismiss();
+
+		    	final Report report = showMineList.get(reportIndex);
+		    	if (report.isEditable())
+				{
+					Builder builder = new Builder(getActivity());
+					builder.setTitle(R.string.warning);
+					builder.setMessage(R.string.prompt_delete_report);
+					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+														{
+															public void onClick(DialogInterface dialog, int which)
+															{
+																if (report.getServerID() == -1)
+																{
+																	deleteReportFromLocal(report.getLocalID());
+																}
+																else if (!Utils.isNetworkConnected())
+																{
+																	Utils.showToast(getActivity(), "网络未连接，无法删除");
+																}
+																else
+																{
+																	sendDeleteReportRequest(report);																		
+																}
+															}
+														});
+					builder.setNegativeButton(R.string.cancel, null);
+					builder.create().show();
+				}
+				else
+				{
+					Utils.showToast(getActivity(), "报告已提交，不可删除");
+				}
+			}
+		});
+		deleteButton = Utils.resizeWindowButton(deleteButton);
+		
+		Button exportButton = (Button) operationView.findViewById(R.id.exportButton);
+		exportButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				operationPopupWindow.dismiss();
+				
+		    	final Report report = showMineList.get(reportIndex);
+				if (!Utils.isNetworkConnected())
+				{
+					Utils.showToast(getActivity(), "网络未连接，无法导出");
+				}
+				else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
+				{
+					Utils.showToast(getActivity(), "报销未完成，不可导出");					
+				}
+				else
+				{
+					showExportDialog(report.getServerID());
+				}
+			}
+		});
+		exportButton = Utils.resizeWindowButton(exportButton);
+		
+		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				operationPopupWindow.dismiss();
+			}
+		});
+		cancelButton = Utils.resizeWindowButton(cancelButton);
+		
+		operationPopupWindow = Utils.constructBottomPopupWindow(getActivity(), operationView);  
 	}
 	
 	private void setListView(int index)
@@ -574,91 +661,8 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		filterPopupWindow.update();
     }
     
-    private void showOperationWindow(final int index)
-    {    
-    	if (operationPopupWindow == null)
-		{
-    		View operationView = View.inflate(getActivity(), R.layout.window_report_operation, null);
-    		
-    		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
-    		deleteButton.setOnClickListener(new View.OnClickListener()
-    		{
-    			public void onClick(View v)
-    			{
-    				operationPopupWindow.dismiss();
-
-    		    	final Report report = showMineList.get(index);
-    		    	if (report.isEditable())
-    				{
-    					Builder builder = new Builder(getActivity());
-    					builder.setTitle(R.string.warning);
-    					builder.setMessage(R.string.prompt_delete_report);
-    					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-    														{
-    															public void onClick(DialogInterface dialog, int which)
-    															{
-    																if (report.getServerID() == -1)
-    																{
-    																	deleteReportFromLocal(report.getLocalID());
-    																}
-    																else if (!Utils.isNetworkConnected())
-    																{
-    																	Utils.showToast(getActivity(), "网络未连接，无法删除");
-    																}
-    																else
-    																{
-    																	sendDeleteReportRequest(report);																		
-    																}
-    															}
-    														});
-    					builder.setNegativeButton(R.string.cancel, null);
-    					builder.create().show();
-    				}
-    				else
-    				{
-    					Utils.showToast(getActivity(), "报告已提交，不可删除");
-    				}
-    			}
-    		});
-    		deleteButton = Utils.resizeWindowButton(deleteButton);
-    		
-    		Button exportButton = (Button) operationView.findViewById(R.id.exportButton);
-    		exportButton.setOnClickListener(new View.OnClickListener()
-    		{
-    			public void onClick(View v)
-    			{
-    				operationPopupWindow.dismiss();
-    				
-    		    	final Report report = showMineList.get(index);
-    				if (!Utils.isNetworkConnected())
-    				{
-    					Utils.showToast(getActivity(), "网络未连接，无法导出");
-    				}
-    				else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
-    				{
-    					Utils.showToast(getActivity(), "报销未完成，不可导出");					
-    				}
-    				else
-    				{
-    					showExportDialog(report.getServerID());
-    				}
-    			}
-    		});
-    		exportButton = Utils.resizeWindowButton(exportButton);
-    		
-    		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
-    		cancelButton.setOnClickListener(new View.OnClickListener()
-    		{
-    			public void onClick(View v)
-    			{
-    				operationPopupWindow.dismiss();
-    			}
-    		});
-    		cancelButton = Utils.resizeWindowButton(cancelButton);
-    		
-    		operationPopupWindow = Utils.constructBottomPopupWindow(getActivity(), operationView);    	
-		}
-    	
+    private void showOperationWindow()
+    {    	
 		operationPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		operationPopupWindow.update();
 		

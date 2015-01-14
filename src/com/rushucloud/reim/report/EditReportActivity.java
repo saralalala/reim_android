@@ -87,6 +87,8 @@ public class EditReportActivity extends Activity
 	private boolean[] managerCheckList;
 	private boolean[] ccCheckList;
 	
+	private int itemIndex;
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -297,6 +299,8 @@ public class EditReportActivity extends Activity
 				}
 			}
 		});	
+	
+		initDeleteWindow();
 	}
 	
 	private void initManagerView()
@@ -395,6 +399,37 @@ public class EditReportActivity extends Activity
 		ccPopupWindow = Utils.constructHorizontalPopupWindow(this, ccView);	
 	}
 	
+	private void initDeleteWindow()
+	{
+		View deleteView = View.inflate(this, R.layout.window_delete, null);
+		
+		Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
+		deleteButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				chosenItemIDList.remove(itemIndex);
+				itemList.remove(itemIndex);
+				
+				deletePopupWindow.dismiss();
+				refreshView();
+			}
+		});
+		deleteButton = Utils.resizeWindowButton(deleteButton);
+		
+		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				deletePopupWindow.dismiss();
+			}
+		});
+		cancelButton = Utils.resizeWindowButton(cancelButton);
+		
+		deletePopupWindow = Utils.constructBottomPopupWindow(this, deleteView);		
+	}
+	
 	private void refreshView()
 	{
 		itemList = dbManager.getItems(Item.getItemsIDArray(itemList));
@@ -424,7 +459,7 @@ public class EditReportActivity extends Activity
 		{
 			LayoutInflater inflater = LayoutInflater.from(this);
 			final Item item = itemList.get(i);
-			final int itemIndex = i;
+			final int index = i;
 			View view = inflater.inflate(R.layout.list_report_item_edit, null);
 			view.setOnClickListener(new OnClickListener()
 			{
@@ -439,7 +474,8 @@ public class EditReportActivity extends Activity
 			{
 				public boolean onLongClick(View v)
 				{
-					showDeleteWindow(itemIndex);
+					itemIndex = index;
+					showDeleteWindow();
 					return false;
 				}
 			});
@@ -452,7 +488,7 @@ public class EditReportActivity extends Activity
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-			String vendor = item.getVendor().equals("") ? getString(R.string.not_available) : item.getVendor();
+			String vendor = item.getVendor().equals("") ? getString(R.string.vendor_not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
 			if (item.missingInfo())
@@ -487,39 +523,8 @@ public class EditReportActivity extends Activity
 		imm.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
     }
 
-    private void showDeleteWindow(final int itemIndex)
-    {
-    	if (deletePopupWindow == null)
-		{
-    		View deleteView = View.inflate(this, R.layout.window_delete, null);
-    		
-    		Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
-    		deleteButton.setOnClickListener(new View.OnClickListener()
-    		{
-    			public void onClick(View v)
-    			{
-    				chosenItemIDList.remove(itemIndex);
-    				itemList.remove(itemIndex);
-    				
-    				deletePopupWindow.dismiss();
-    				refreshView();
-    			}
-    		});
-    		deleteButton = Utils.resizeWindowButton(deleteButton);
-    		
-    		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
-    		cancelButton.setOnClickListener(new View.OnClickListener()
-    		{
-    			public void onClick(View v)
-    			{
-    				deletePopupWindow.dismiss();
-    			}
-    		});
-    		cancelButton = Utils.resizeWindowButton(cancelButton);
-    		
-    		deletePopupWindow = Utils.constructBottomPopupWindow(this, deleteView);
-		}
-    	
+    private void showDeleteWindow()
+    {    	
 		deletePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		deletePopupWindow.update();
 		

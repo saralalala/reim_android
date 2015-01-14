@@ -153,17 +153,17 @@
 	                android:layout_marginLeft="16dp"
 	                android:text="@string/photo"
 	                android:textColor="@color/hint_grey"
-	                android:textSize="14sp" />
-	
-	            <ImageView
-	                android:id="@+id/invoiceImageView"
-	                android:layout_width="30dp"
-	                android:layout_height="30dp"
-	                android:layout_centerVertical="true"
+	                android:textSize="14sp" />	            
+
+	            <LinearLayout
+	                android:id="@+id/invoiceLayout"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:orientation="vertical"
+	                android:paddingTop="3dp"
+	                android:paddingBottom="13dp" 
 	                android:layout_marginLeft="80dp"
-	                android:contentDescription="@string/invoice"
-	                android:scaleType="fitXY"
-	                android:src="@drawable/default_invoice" />
+	                android:layout_marginRight="16dp" />
 	
 	        </RelativeLayout>
             
@@ -334,7 +334,7 @@
 	            	android:minHeight="56dp"
 	            	android:orientation="vertical"
 	                android:layout_alignParentTop="true"
-	                android:paddingBottom="18dp"
+	                android:paddingBottom="17dp"
 	                android:layout_marginLeft="80dp"
 	                android:layout_marginRight="16dp" >
 	            </LinearLayout>

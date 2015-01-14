@@ -3,8 +3,6 @@ package classes;
 import java.io.File;
 import java.util.List;
 
-import classes.Utils.DBManager;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
@@ -52,28 +50,9 @@ public class Image
 	{
 		return itemID;
 	}
-
 	public void setItemID(int itemID)
 	{
 		this.itemID = itemID;
-	}
-
-	public static void deleteUnusedImage()
-	{
-		DBManager dbManager = DBManager.getDBManager();
-		List<Image> imageList = dbManager.getUnusedImages();
-		for (Image image : imageList)
-		{
-			image.deleteImage();
-		}
-		dbManager.deleteUnusedImages();
-		
-		imageList = dbManager.getOthersUnusedImages();
-		for (Image image : imageList)
-		{
-			image.deleteImage();
-		}
-		dbManager.deleteOthersUnusedImages();
 	}
 
 	public static String getImagesIDString(List<Image> imageList)
@@ -94,10 +73,12 @@ public class Image
 		
 	public Bitmap getBitmap()
 	{
-		return BitmapFactory.decodeFile(path);
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inSampleSize = 8;
+		return BitmapFactory.decodeFile(path, options);
 	}
 	
-	public void deleteImage()
+	public void deleteFile()
 	{
 		File file = new File(path);
 		if (file != null)
@@ -106,8 +87,23 @@ public class Image
 		}
 	}
 	
-	public boolean isDownloaded()
+	public boolean isNotDownloaded()
 	{
-		return getBitmap() != null;
+		return getPath().equals("") || getBitmap() == null;
+	}
+	
+	public boolean isNotUploaded()
+	{
+		return getServerID() == -1;
+	}
+
+	public boolean equals(Object o)
+	{
+		if (o instanceof Image)
+		{
+			Image image = (Image)o;
+			return image.getServerID() == this.getServerID();
+		}
+		return super.equals(o);
 	}
 }

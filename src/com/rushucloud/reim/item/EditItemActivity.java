@@ -23,6 +23,7 @@ import netUtils.Response.Item.GetVendorsResponse;
 import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import classes.Category;
+import classes.Image;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
@@ -67,6 +68,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
@@ -105,9 +107,7 @@ public class EditItemActivity extends Activity
 	private TextView typeTextView;
 	
 	private LinearLayout invoiceLayout;
-	private ImageView invoiceImageView;
 	private ImageView addInvoiceImageView;
-	private ImageView removeImageView;
 	private PopupWindow picturePopupWindow;
 	
 	private TextView timeTextView;
@@ -136,12 +136,15 @@ public class EditItemActivity extends Activity
 	
 	private PopupWindow managerPopupWindow;
 
+	private List<ImageView> removeList = null;
+	boolean removeImageViewShown = false;
+	
 	private static AppPreference appPreference;
 	private static DBManager dbManager;
 	
 	private Item item;
 	private Report report;
-	
+
 	private List<Vendor> vendorList = null;
 	private List<Category> categoryList = null;
 	private List<List<Category>> subCategoryList = null;
@@ -152,6 +155,7 @@ public class EditItemActivity extends Activity
 
 	private boolean fromReim;
 	private boolean newItem = false;
+	private int imageTaskCount;
 		
 	private LocationClient locationClient = null;
 	private BDLocationListener listener = new ReimLocationListener();
@@ -189,9 +193,13 @@ public class EditItemActivity extends Activity
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		if (keyCode == KeyEvent.KEYCODE_BACK && removeImageView.getVisibility() == View.VISIBLE)
+		if (removeImageViewShown)
 		{
-			removeImageView.setVisibility(View.INVISIBLE);
+			for (ImageView removeImageView : removeList)
+			{
+				removeImageView.setVisibility(View.INVISIBLE);
+			}
+			removeImageViewShown = false;
 		}
 		else if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
@@ -208,14 +216,13 @@ public class EditItemActivity extends Activity
 			{
 				if (requestCode == PICK_IMAGE)
 				{
-					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-					invoiceImageView.setImageBitmap(bitmap);
-					
+					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());					
 					String invoicePath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
-						item.setInvoicePath(invoicePath);
-						item.setInvoiceID(-1);
+						Image image = new Image();
+						image.setPath(invoicePath);
+						item.getInvoices().add(image);
 					}
 					else
 					{
@@ -227,13 +234,12 @@ public class EditItemActivity extends Activity
 				else if (requestCode == TAKE_PHOTO)
 				{
 					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempInvoicePath());
-					invoiceImageView.setImageBitmap(bitmap);
-					
 					String invoicePath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
-						item.setInvoicePath(invoicePath);
-						item.setInvoiceID(-1);
+						Image image = new Image();
+						image.setPath(invoicePath);
+						item.getInvoices().add(image);
 					}
 					else
 					{
@@ -293,6 +299,7 @@ public class EditItemActivity extends Activity
 				item.setCategory(categoryList.get(0));				
 			}
 			item.setConsumedDate(Utils.getCurrentTime());
+			item.setInvoices(new ArrayList<Image>());
 			List<User> relevantUsers = new ArrayList<User>();
 			relevantUsers.add(appPreference.getCurrentUser());
 			item.setRelevantUsers(relevantUsers);
@@ -378,7 +385,7 @@ public class EditItemActivity extends Activity
 					item.setNote(noteEditText.getText().toString());
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					
-					if (fromReim && item.isProveAhead() && item.getPaAmount() == 0)
+					if (fromReim && item.isProveAhead() && !item.isPaApproved())
 					{
 						Builder buider = new Builder(EditItemActivity.this);
 						buider.setTitle(R.string.option);
@@ -564,27 +571,7 @@ public class EditItemActivity extends Activity
 	{		
 		// init invoice		
 		invoiceLayout = (LinearLayout)findViewById(R.id.invoiceLayout);
-		
-		invoiceImageView = new ImageView(this);
-		invoiceImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				Intent intent = new Intent(EditItemActivity.this, ImageActivity.class);
-				intent.putExtra("imagePath", item.getInvoicePath());
-				startActivity(intent);
-			}
-		});		
-		invoiceImageView.setOnLongClickListener(new View.OnLongClickListener()
-		{
-			public boolean onLongClick(View v)
-			{
-				removeImageView.setVisibility(View.VISIBLE);
-				return false;
-			}
-		});
-		
+				
 		addInvoiceImageView = new ImageView(this);
 		addInvoiceImageView.setImageResource(R.drawable.add_tag_button);
 		addInvoiceImageView.setOnClickListener(new View.OnClickListener()
@@ -593,18 +580,6 @@ public class EditItemActivity extends Activity
 			{
 				hideSoftKeyboard();
 				showPictureWindow();
-			}
-		});
-
-		removeImageView = (ImageView) findViewById(R.id.removeImageView);
-		removeImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				removeImageView.setVisibility(View.INVISIBLE);
-				item.setInvoiceID(-1);
-				item.setInvoicePath("");
-				refreshInvoiceView();
 			}
 		});
 		
@@ -651,7 +626,22 @@ public class EditItemActivity extends Activity
 		});
 		cancelButton = Utils.resizeWindowButton(cancelButton);
 		
-		picturePopupWindow = Utils.constructBottomPopupWindow(this, pictureView);		
+		picturePopupWindow = Utils.constructBottomPopupWindow(this, pictureView);
+
+		if (!Utils.isNetworkConnected())
+		{
+			Utils.showToast(EditItemActivity.this, "网络未连接，无法下载图片");				
+		}
+		else
+		{
+			for (Image image : item.getInvoices())
+			{
+				if (image.isNotDownloaded() && Utils.isNetworkConnected())
+				{
+					sendDownloadInvoiceRequest(image);
+				}
+			}			
+		}
 	}
 	
 	private void initTimeView()
@@ -1264,26 +1254,47 @@ public class EditItemActivity extends Activity
 					ReimProgressDialog.show();
 					if (newItem)
 					{
-						if (!item.getInvoicePath().equals("") && item.getServerID() == -1)
-						{
-							sendUploadImageRequest();
-						}
-						else
-						{
-							sendCreateItemRequest();													
-						}
+						int localID = dbManager.insertItem(item);
+						item = dbManager.getItemByLocalID(localID);
+						newItem = false;
 					}
 					else
 					{
-						if (!item.getInvoicePath().equals("") && item.getServerID() == -1)
+						dbManager.updateItemByLocalID(item);
+						item = dbManager.getItemByLocalID(item.getLocalID());
+					}
+
+					List<Image> invoiceList = new ArrayList<Image>();
+					for (Image image : item.getInvoices())
+					{
+						if (image.isNotUploaded())
 						{
-							sendUploadImageRequest();
+							invoiceList.add(image);
+						}
+					}
+					imageTaskCount = invoiceList.size();
+					
+					if (imageTaskCount > 0)
+					{
+						for (Image image : invoiceList)
+						{
+							if (image.isNotUploaded())
+							{
+								sendUploadImageRequest(image);
+							}
+						}
+					}
+					else
+					{						
+						if (item.getServerID() == -1)
+						{
+							sendCreateItemRequest();
 						}
 						else
 						{
 							sendModifyItemRequest();													
 						}
-					}											
+					}
 				}
 			}
 		});
@@ -1293,43 +1304,125 @@ public class EditItemActivity extends Activity
 
 	private void refreshInvoiceView()
 	{
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
-		int sideLength = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, metrics);
-		
 		invoiceLayout.removeAllViews();
 		
-		if (!item.hasInvoice())
+		if (removeList == null)
 		{
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
-			invoiceLayout.addView(addInvoiceImageView, params);
+			removeList = new ArrayList<ImageView>();
 		}
 		else
 		{
-			Bitmap bitmap = BitmapFactory.decodeFile(item.getInvoicePath());
-			if (bitmap != null)
+			removeList.clear();
+		}
+		
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
+		int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, metrics);
+		int verticalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, metrics);
+		int horizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, metrics);
+		int maxCount = (layoutMaxLength + horizontalPadding) / (width + horizontalPadding);
+		horizontalPadding = (layoutMaxLength - width * maxCount) / (maxCount - 1);
+
+		LinearLayout layout = new LinearLayout(this);
+		int invoiceCount = item.getInvoices() != null ? item.getInvoices().size() : 0;
+		for (int i = 0; i < invoiceCount + 1; i++)
+		{
+			if (i >= Item.MAX_INVOICE_COUNT)
 			{
-				invoiceImageView.setImageBitmap(bitmap);
-			}			
-			else // item has invoice path but the file was deleted
-			{
-				invoiceImageView.setImageResource(R.drawable.default_invoice);
-				if (item.hasUndownloadedInvoice() && Utils.isNetworkConnected())
-				{
-					sendDownloadInvoiceRequest();
-				}
-				else if (item.hasUndownloadedInvoice() && !Utils.isNetworkConnected())
-				{
-					Utils.showToast(EditItemActivity.this, "网络未连接，无法下载图片");				
-				}
+				break;
 			}
 			
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
-			params.rightMargin = padding;
-			invoiceLayout.addView(invoiceImageView, params);
+			if (i % maxCount == 0)
+			{
+				layout = new LinearLayout(this);
+				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				if (i != 0)
+				{
+					params.topMargin = verticalPadding;					
+				}
+				layout.setLayoutParams(params);
+				layout.setOrientation(LinearLayout.HORIZONTAL);
+				
+				invoiceLayout.addView(layout);
+			}
 			
-			params = new LinearLayout.LayoutParams(sideLength, sideLength);
-			invoiceLayout.addView(addInvoiceImageView, params);			
+			if (i < invoiceCount)
+			{
+				final int index = i;
+				final Bitmap bitmap = item.getInvoices().get(index).getBitmap();
+				
+				View view = View.inflate(this, R.layout.grid_invoice, null);
+
+				final ImageView removeImageView = (ImageView) view.findViewById(R.id.removeImageView);
+				removeImageView.setOnClickListener(new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						item.getInvoices().remove(index);
+						refreshInvoiceView();
+					}
+				});
+				removeList.add(removeImageView);
+				
+				ImageView invoiceImageView = (ImageView) view.findViewById(R.id.invoiceImageView);
+				invoiceImageView.setOnClickListener(new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						if (bitmap != null && removeImageView.getVisibility() != View.VISIBLE)
+						{
+							hideSoftKeyboard();
+							removeImageView.setVisibility(View.INVISIBLE);
+							Intent intent = new Intent(EditItemActivity.this, ImageActivity.class);
+							intent.putExtra("imagePath", item.getInvoices().get(index).getPath());
+							startActivity(intent);
+						}
+					}
+				});
+				invoiceImageView.setOnLongClickListener(new View.OnLongClickListener()
+				{
+					public boolean onLongClick(View v)
+					{
+						for (ImageView removeImageView : removeList)
+						{
+							removeImageView.setVisibility(View.VISIBLE);
+						}
+						removeImageViewShown = true;
+						return false;
+					}
+				});
+							
+				if (bitmap == null)
+				{
+					invoiceImageView.setImageResource(R.drawable.default_invoice);				
+				}
+				else
+				{
+					invoiceImageView.setImageBitmap(bitmap);
+				}
+
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, width);
+				if ((i + 1) % maxCount != 0)
+				{
+					params.rightMargin = horizontalPadding;				
+				}
+				layout.addView(view, params);
+			}
+			else
+			{
+				int addButtonWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, metrics);
+				int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(addButtonWidth, addButtonWidth);
+				params.topMargin = padding;
+				
+				ViewGroup viewGroup = (ViewGroup) addInvoiceImageView.getParent();
+				if (viewGroup != null)
+				{
+					viewGroup.removeView(addInvoiceImageView);
+				}
+				layout.addView(addInvoiceImageView, params);
+			}
+			
 		}
 	}
 
@@ -1339,7 +1432,7 @@ public class EditItemActivity extends Activity
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 126, metrics);
-		int tagVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		int tagVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, metrics);
 		int tagHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
 		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, metrics);
 		int textSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, metrics);
@@ -1434,7 +1527,7 @@ public class EditItemActivity extends Activity
 			layout.addView(memberView, params);
 		}
 	}
-	
+		
     private void hideSoftKeyboard()
     {
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
@@ -1589,9 +1682,9 @@ public class EditItemActivity extends Activity
     	managerPopupWindow.update();
     }
 
-    private void sendDownloadInvoiceRequest()
+    private void sendDownloadInvoiceRequest(final Image image)
     {
-		DownloadImageRequest request = new DownloadImageRequest(item.getInvoiceID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
+		DownloadImageRequest request = new DownloadImageRequest(image.getServerID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -1599,19 +1692,22 @@ public class EditItemActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), 
-																	HttpConstant.IMAGE_TYPE_INVOICE);
+					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
-						item.setInvoicePath(invoicePath);
-						dbManager.updateItem(item);
+						image.setPath(invoicePath);
+						dbManager.updateImageByServerID(image);
 						
 						runOnUiThread(new Runnable()
 						{
 							public void run()
 							{
-								Bitmap bitmap = BitmapFactory.decodeFile(invoicePath);
-								invoiceImageView.setImageBitmap(bitmap);
+								int index = item.getInvoices().indexOf(image);
+								if (index != -1)
+								{
+									item.getInvoices().set(index, image);
+								}
+								refreshInvoiceView();
 							}
 						});
 					}
@@ -1738,9 +1834,9 @@ public class EditItemActivity extends Activity
 		});
     }
         
-    private void sendUploadImageRequest()
+    private void sendUploadImageRequest(final Image image)
     {
-		UploadImageRequest request = new UploadImageRequest(item.getInvoicePath(), HttpConstant.IMAGE_TYPE_INVOICE);
+		UploadImageRequest request = new UploadImageRequest(image.getPath(), HttpConstant.IMAGE_TYPE_INVOICE);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -1748,16 +1844,20 @@ public class EditItemActivity extends Activity
 				final UploadImageResponse response = new UploadImageResponse(httpResponse);
 				if (response.getStatus())
 				{
-					item.setInvoiceID(response.getImageID());
-					dbManager.updateItem(item);
+					image.setServerID(response.getImageID());
+					dbManager.updateImageByLocalID(image);
 					
-					if (newItem)
+					imageTaskCount--;
+					if (imageTaskCount == 0)
 					{
-						sendCreateItemRequest();
-					}
-					else
-					{
-						sendModifyItemRequest();
+						if (item.getServerID() == -1)
+						{
+							sendCreateItemRequest();
+						}
+						else
+						{
+							sendModifyItemRequest();
+						}
 					}
 				}
 				else
@@ -1788,11 +1888,8 @@ public class EditItemActivity extends Activity
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());
 					item.setServerID(response.getItemID());
-					item.setCreatedDate(response.getCreateDate());
-					
-					dbManager.insertItem(item);
-					item.setLocalID(dbManager.getLastInsertItemID());
-					newItem = false;
+					item.setCreatedDate(response.getCreateDate());					
+					dbManager.updateItemByLocalID(item);
 					sendApproveReportRequest();
 				}
 				else

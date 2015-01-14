@@ -12,9 +12,6 @@ import com.rushucloud.reim.R;
 
 import classes.Utils.Utils;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 public class Item
 {		
 	public static final int STATUS_DRAFT = 0;
@@ -23,28 +20,28 @@ public class Item
 	public static final int STATUS_REJECTED = 3;
 	public static final int STATUS_FINISHED = 4;
 	
+	public static final int MAX_INVOICE_COUNT = 5;
+	
 	private int localID = -1;
 	private int serverID = -1;
-	private int invoiceID = -1;
-	private String invoicePath = "";
-	private String vendor = "";
 	private Report belongReport = null;
-	private Package belongPackage = null;
-	private Category category = null;
+	private User consumer;
 	private double amount = 0.0;
 	private double paAmount = 0.0;
-	private User consumer;
-	private int consumedDate = -1;
-	private String note = "";
 	private boolean isProveAhead = false;
 	private boolean needReimbursed = false;
 	private boolean paApproved = false;
 	private int status = STATUS_DRAFT;
+	private Category category = null;
+	private String vendor = "";
 	private String location = "";
+	private List<Image> invoices = null;
 	private List<User> relevantUsers = null;
 	private List<Tag> tags = null;
+	private String note = "";
 	private String relevantUsersID = "";
 	private String tagsID = "";
+	private int consumedDate = -1;
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
@@ -68,8 +65,7 @@ public class Item
 			setConsumedDate(jObject.getInt("dt"));
 			setCreatedDate(jObject.getInt("createdt"));		
 			setServerUpdatedDate(jObject.getInt("lastdt"));				
-			setLocalUpdatedDate(jObject.getInt("lastdt"));		
-			setInvoicePath("");
+			setLocalUpdatedDate(jObject.getInt("lastdt"));
 			setIsProveAhead(Utils.intToBoolean(jObject.getInt("prove_ahead")));
 			setNeedReimbursed(Utils.intToBoolean(jObject.getInt("reimbursed")));
 			setPaApproved(Utils.intToBoolean(jObject.getInt("pa_approval")));
@@ -77,8 +73,14 @@ public class Item
 			setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
 			
 			List<Integer> idList = Utils.stringToIntList(jObject.getString("image_id"));
-			int imageID = !idList.isEmpty() ? idList.get(0) : -1;
-			setInvoiceID(imageID);
+			List<Image> invoiceList = new ArrayList<Image>();
+			for (Integer integer : idList)
+			{
+				Image image = new Image();
+				image.setServerID(integer);
+				invoiceList.add(image);
+			}
+			setInvoices(invoiceList);
 			
 			Report report = new Report();
 			report.setServerID(jObject.getInt("rid"));
@@ -106,7 +108,7 @@ public class Item
 	{
 		this.localID = localID;
 	}
-	
+
 	public int getServerID()
 	{
 		return serverID;
@@ -115,34 +117,7 @@ public class Item
 	{
 		this.serverID = serverID;
 	}
-	
-	public int getInvoiceID()
-	{
-		return invoiceID;
-	}
-	public void setInvoiceID(int invoiceID)
-	{
-		this.invoiceID = invoiceID;
-	}
-	
-	public String getInvoicePath()
-	{
-		return invoicePath;
-	}
-	public void setInvoicePath(String invoicePath)
-	{
-		this.invoicePath = invoicePath;
-	}
-	
-	public String getVendor()
-	{
-		return vendor;
-	}
-	public void setVendor(String vendor)
-	{
-		this.vendor = vendor;
-	}
-	
+
 	public Report getBelongReport()
 	{
 		return belongReport;
@@ -150,42 +125,6 @@ public class Item
 	public void setBelongReport(Report belongReport)
 	{
 		this.belongReport = belongReport;
-	}
-	
-	public Package getBelongPackage()
-	{
-		return belongPackage;
-	}
-	public void setBelongPackage(Package belongPackage)
-	{
-		this.belongPackage = belongPackage;
-	}
-	
-	public Category getCategory()
-	{
-		return category;
-	}
-	public void setCategory(Category category)
-	{
-		this.category = category;
-	}
-	
-	public double getAmount()
-	{
-		return amount;
-	}
-	public void setAmount(double amount)
-	{
-		this.amount = amount;
-	}
-	
-	public double getPaAmount()
-	{
-		return paAmount;
-	}
-	public void setPaAmount(double paAmount)
-	{
-		this.paAmount = paAmount;
 	}
 
 	public User getConsumer()
@@ -196,70 +135,25 @@ public class Item
 	{
 		this.consumer = consumer;
 	}
-	
-	public List<User> getRelevantUsers()
+
+	public double getAmount()
 	{
-		return relevantUsers;
+		return amount;
 	}
-	public void setRelevantUsers(List<User> relevantUsers)
+	public void setAmount(double amount)
 	{
-		this.relevantUsers = relevantUsers;
+		this.amount = amount;
 	}
-	
-	public List<Tag> getTags()
+
+	public double getPaAmount()
 	{
-		return tags;
+		return paAmount;
 	}
-	public void setTags(List<Tag> tag)
+	public void setPaAmount(double paAmount)
 	{
-		this.tags = tag;
+		this.paAmount = paAmount;
 	}
-	
-	public int getCreatedDate()
-	{
-		return createdDate;
-	}
-	public void setCreatedDate(int createdDate)
-	{
-		this.createdDate = createdDate;
-	}
-	
-	public int getServerUpdatedDate()
-	{
-		return serverUpdatedDate;
-	}
-	public void setServerUpdatedDate(int serverUpdatedDate)
-	{
-		this.serverUpdatedDate = serverUpdatedDate;
-	}
-	
-	public int getLocalUpdatedDate()
-	{
-		return localUpdatedDate;
-	}
-	public void setLocalUpdatedDate(int localUpdatedDate)
-	{
-		this.localUpdatedDate = localUpdatedDate;
-	}
-	
-	public int getConsumedDate()
-	{
-		return consumedDate;
-	}
-	public void setConsumedDate(int consumedDate)
-	{
-		this.consumedDate = consumedDate;
-	}
-	
-	public String getNote()
-	{
-		return note;
-	}
-	public void setNote(String note)
-	{
-		this.note = note;
-	}
-	
+
 	public boolean isProveAhead()
 	{
 		return isProveAhead;
@@ -268,8 +162,8 @@ public class Item
 	{
 		this.isProveAhead = isProveAhead;
 	}
-	
-	public boolean needReimbursed()	
+
+	public boolean needReimbursed()
 	{
 		return needReimbursed;
 	}
@@ -295,7 +189,25 @@ public class Item
 	{
 		this.status = status;
 	}
-	
+
+	public Category getCategory()
+	{
+		return category;
+	}
+	public void setCategory(Category category)
+	{
+		this.category = category;
+	}
+
+	public String getVendor()
+	{
+		return vendor;
+	}
+	public void setVendor(String vendor)
+	{
+		this.vendor = vendor;
+	}
+
 	public String getLocation()
 	{
 		return location;
@@ -304,7 +216,43 @@ public class Item
 	{
 		this.location = location;
 	}
-	
+
+	public List<Image> getInvoices()
+	{
+		return invoices;
+	}
+	public void setInvoices(List<Image> invoices)
+	{
+		this.invoices = invoices;
+	}
+
+	public List<User> getRelevantUsers()
+	{
+		return relevantUsers;
+	}
+	public void setRelevantUsers(List<User> relevantUsers)
+	{
+		this.relevantUsers = relevantUsers;
+	}
+
+	public List<Tag> getTags()
+	{
+		return tags;
+	}
+	public void setTags(List<Tag> tags)
+	{
+		this.tags = tags;
+	}
+
+	public String getNote()
+	{
+		return note;
+	}
+	public void setNote(String note)
+	{
+		this.note = note;
+	}
+
 	public String getRelevantUsersID()
 	{
 		return relevantUsersID;
@@ -313,7 +261,7 @@ public class Item
 	{
 		this.relevantUsersID = relevantUsersID;
 	}
-	
+
 	public String getTagsID()
 	{
 		return tagsID;
@@ -321,6 +269,42 @@ public class Item
 	public void setTagsID(String tagsID)
 	{
 		this.tagsID = tagsID;
+	}
+
+	public int getConsumedDate()
+	{
+		return consumedDate;
+	}
+	public void setConsumedDate(int consumedDate)
+	{
+		this.consumedDate = consumedDate;
+	}
+
+	public int getCreatedDate()
+	{
+		return createdDate;
+	}
+	public void setCreatedDate(int createdDate)
+	{
+		this.createdDate = createdDate;
+	}
+
+	public int getServerUpdatedDate()
+	{
+		return serverUpdatedDate;
+	}
+	public void setServerUpdatedDate(int serverUpdatedDate)
+	{
+		this.serverUpdatedDate = serverUpdatedDate;
+	}
+
+	public int getLocalUpdatedDate()
+	{
+		return localUpdatedDate;
+	}
+	public void setLocalUpdatedDate(int localUpdatedDate)
+	{
+		this.localUpdatedDate = localUpdatedDate;
 	}
 
 	public int getStatusBackground()
@@ -392,11 +376,11 @@ public class Item
     
 	public boolean canBeSubmitWithReport()
 	{
-		if (invoiceID == -1 && !invoicePath.equals(""))
+		if (serverID == -1)
 		{
 			return false;
 		}
-		if (serverID == -1)
+		if (hasUnuploadedInvoice())
 		{
 			return false;
 		}
@@ -442,20 +426,36 @@ public class Item
 	
 	public boolean hasInvoice()
 	{
-		return getInvoiceID() > 0 || !getInvoicePath().equals("");
+		return getInvoices() != null && !getInvoices().isEmpty();
 	}
 	
 	public boolean hasUndownloadedInvoice()
 	{
-		if (getInvoicePath().equals("") && getInvoiceID() != -1 && getInvoiceID() != 0)
+		if (getInvoices() == null || getInvoices().isEmpty())
 		{
-			return true;
+			return false;
 		}	
 		
-		if (!getInvoicePath().equals(""))
+		for (Image image : getInvoices())
 		{
-			Bitmap bitmap = BitmapFactory.decodeFile(getInvoicePath());
-			if (bitmap == null)
+			if (image.isNotDownloaded())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasUnuploadedInvoice()
+	{
+		if (getInvoices() == null || getInvoices().isEmpty())
+		{
+			return false;
+		}	
+		
+		for (Image image : getInvoices())
+		{
+			if (image.isNotUploaded())
 			{
 				return true;
 			}
@@ -510,7 +510,7 @@ public class Item
 		}
 		return result;
 	}
-
+	
     public static void sortByConsumedDate(List<Item> itemList)
     {
     	Collections.sort(itemList, new Comparator<Item>()
