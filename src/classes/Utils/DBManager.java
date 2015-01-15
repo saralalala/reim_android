@@ -823,7 +823,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
-			String sqlString = "INSERT INTO tbl_others_item (server_id, vendor, report_server_id, category_id, tags_id, users_id" +
+			String sqlString = "INSERT INTO tbl_others_item (server_id, vendor, report_server_id, category_id, tags_id, users_id, " +
 							   							"amount, pa_amount, user_id, consumed_date, note, status, location, createdt, " +
 							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" + 
 														"'" + item.getServerID() + "'," +

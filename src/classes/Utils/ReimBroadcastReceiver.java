@@ -95,8 +95,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					{
 						ReimApplication.setReportTabIndex(0);
 						Intent newIntent = new Intent(context, MainActivity.class);
-						newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						context.startActivity(newIntent);							
 					}
 				}

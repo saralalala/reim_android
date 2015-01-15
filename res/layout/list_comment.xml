@@ -8,10 +8,11 @@
 
     <RelativeLayout
         android:id="@+id/reviewerLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp" >
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp" >
 
         <classes.Widget.CircleImageView
             android:id="@+id/avatarImageView"
@@ -24,17 +25,22 @@
 
         <TextView
             android:id="@+id/reviewerTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/avatarImageView"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
 			android:layout_marginTop="8dp"
+			android:gravity="center"
+			android:ellipsize="end"
+			android:singleLine="true"
             android:textColor="@color/font_major_dark"
             android:textSize="14sp" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginLeft="10dp"

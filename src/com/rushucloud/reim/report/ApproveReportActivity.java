@@ -274,8 +274,7 @@ public class ApproveReportActivity extends Activity
 								bundle.putBoolean("myReport", false);
 								
 					        	Intent intent = new Intent(ApproveReportActivity.this, MainActivity.class);
-					    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					    		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+					        	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					    		Intent intent2 = new Intent(ApproveReportActivity.this, ShowReportActivity.class);					    		
 								intent2.putExtras(bundle);								
 					        	startActivities(new Intent[] {intent, intent2});
@@ -376,8 +375,7 @@ public class ApproveReportActivity extends Activity
         	ReimApplication.setTabIndex(1);
         	ReimApplication.setReportTabIndex(1);
         	Intent intent = new Intent(ApproveReportActivity.this, MainActivity.class);
-    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         	startActivity(intent);
         	finish();
 		}
