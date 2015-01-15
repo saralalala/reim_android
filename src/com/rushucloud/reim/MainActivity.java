@@ -79,35 +79,30 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			if (udpClient == null)
 			{
 				udpClient = new UDPClient();
-				udpClient.send();
-			}
-			
-			if (udpClient.isConnected())
-			{
-				udpClient.receive(new UDPConnectionCallback()
+				udpClient.send(new UDPConnectionCallback()
 				{
 					public void execute(Object udpResponse)
 					{
-//						final EventsResponse response = new EventsResponse(udpResponse);
-//						if (response.getStatus())
-//						{
-//							if (response.isNeedToRefresh() && Utils.isNetworkConnected())
-//							{
-//								sendGetGroupRequest();
-//							}
-//							
-//							runOnUiThread(new Runnable()
-//							{
-//								public void run()
-//								{
-//									ReimApplication.setReportBadgeCount(response.getApproveEventCount());
-//									setReportBadge(response.getReportEventCount());
-//									setMeBadge(response.getInviteEventCount());
-//								}
-//							});
-//						}
+						final EventsResponse response = new EventsResponse(udpResponse);
+						if (response.getStatus())
+						{
+							if (response.isNeedToRefresh() && Utils.isNetworkConnected())
+							{
+								sendGetGroupRequest();
+							}
+							
+							runOnUiThread(new Runnable()
+							{
+								public void run()
+								{
+									ReimApplication.setReportBadgeCount(response.getApproveEventCount());
+									setReportBadge(response.getReportEventCount());
+									setMeBadge(response.getInviteEventCount());
+								}
+							});
+						}
 					}
-				});				
+				});		
 			}
 		}
 	}

@@ -983,8 +983,6 @@ public class DBManager extends SQLiteOpenHelper
 
 			String command = "SELECT id FROM tbl_item WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
 			Cursor cursor = database.rawQuery(command, null);
-//			Cursor cursor = database.rawQuery("SELECT id FROM tbl_item WHERE server_id NOT IN ( ? ) AND user_id = ?", 
-//													new String[]{idString, Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())
 			{			
@@ -1850,8 +1848,6 @@ public class DBManager extends SQLiteOpenHelper
 
 			String command = "SELECT id FROM tbl_report WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
 			Cursor cursor = database.rawQuery(command, null);
-//			Cursor cursor = database.rawQuery("SELECT id FROM tbl_report WHERE server_id NOT IN ( ? ) AND user_id = ?", 
-//													new String[]{idString, Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())
 			{			

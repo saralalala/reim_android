@@ -23,7 +23,7 @@ public class UDPClient
 		message = HttpUtils.getJWTString();
 	}
 	
-	public void send()
+	public void send(final UDPConnectionCallback callback)
 	{
 		thread = new Thread(new Runnable()
 		{
@@ -38,6 +38,20 @@ public class UDPClient
 					byte[] data = message.getBytes();
 					DatagramPacket packet = new DatagramPacket(data, data.length, address, SERVER_PORT);
 					socket.send(packet);
+
+					while (true)
+					{
+						byte[] buffer = new byte[4096];
+						DatagramPacket receivedPacket = new DatagramPacket(buffer, 0, buffer.length);
+						socket.receive(receivedPacket);
+					    String response = new String(buffer, 0, receivedPacket.getLength());
+					    socket.close();
+					    
+						if (callback != null)
+						{
+							callback.execute(response);
+						}
+					}
 				}
 				catch (SocketException e)
 				{
@@ -56,49 +70,11 @@ public class UDPClient
 		thread.start();
 	}
 	
-	public void receive(final UDPConnectionCallback callback)
-	{		
-		thread = new Thread(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					while (true)
-					{
-//						socket = new DatagramSocket(SERVER_PORT);
-						byte[] receivedData = new byte[4096];
-						DatagramPacket receivedPacket = new DatagramPacket(receivedData, 0, receivedData.length);
-						socket.receive(receivedPacket);
-					    String response = new String(receivedPacket.getData());
-					    System.out.println("FROM SERVER:" + response);
-					    socket.close();
-					    
-						if (callback != null)
-						{
-							callback.execute(response);
-						}
-					}
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}			
-			}
-		});
-		thread.start();
-	}
-	
 	public void close()
 	{
 		if (socket != null && !socket.isClosed())
 		{
 			socket.close();
 		}
-	}
-
-	public boolean isConnected()
-	{
-		return socket != null && socket.isConnected();
 	}
 }

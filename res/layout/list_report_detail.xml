@@ -37,16 +37,34 @@
 	            android:textColor="@color/major_light" />
 	
 	    </RelativeLayout>
-	
-	    <TextView
-	        android:id="@+id/timeTextView"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-			android:layout_marginLeft="16dp"
-	        android:layout_marginTop="22dp"
-	        android:layout_marginBottom="22dp"
-	        android:textColor="@color/hint_grey"
-	        android:textSize="14sp" />
+
+		<RelativeLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="22dp"
+		    android:layout_marginBottom="22dp"
+		    android:layout_marginLeft="16dp"
+		    android:layout_marginRight="16dp" >
+			
+			<TextView
+			    android:id="@+id/timeTextView"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignParentTop="true"
+			    android:textColor="@color/hint_grey"
+			    android:textSize="14sp" />
+			
+			<TextView
+			    android:id="@+id/approveInfoTextView"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignParentTop="true"
+			    android:layout_alignParentRight="true"
+			    android:text="@string/approve_info_hint"
+			    android:textColor="@color/major_dark"
+			    android:textSize="14sp" />
+			
+		</RelativeLayout>
 	
 	</LinearLayout>
             
