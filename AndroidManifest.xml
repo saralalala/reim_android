@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" 
     android:versionCode="1" 
     android:versionName="0.3" 
-    package="com.rushucloud.reim">
+    package="com.rushucloud.reim" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -33,7 +33,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" 
         android:name="classes.ReimApplication" 
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         
         <activity 
             android:label="@string/app_name" 
@@ -71,43 +71,43 @@
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.start.PhoneFindActivity">
+            android:name="com.rushucloud.reim.start.PhoneFindActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.start.EmailFindActivity">
+            android:name="com.rushucloud.reim.start.EmailFindActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.start.ResetPasswordActivity">
+            android:name="com.rushucloud.reim.start.ResetPasswordActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.start.CompleteInfoActivity">
+            android:name="com.rushucloud.reim.start.CompleteInfoActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name"
             android:name="com.rushucloud.reim.MainActivity"
-            android:launchMode="singleTop">          
+            android:launchMode="singleTop" >          
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.item.EditItemActivity">
+            android:name="com.rushucloud.reim.item.EditItemActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.item.ShowItemActivity">
+            android:name="com.rushucloud.reim.item.ShowItemActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.item.SearchItemActivity">
+            android:name="com.rushucloud.reim.item.SearchItemActivity" >
         </activity>
         
         <activity 
@@ -117,22 +117,27 @@
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.report.ApproveReportActivity">
+            android:name="com.rushucloud.reim.report.ApproveReportActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.report.ShowReportActivity">
+            android:name="com.rushucloud.reim.report.ShowReportActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.report.CommentActivity">
+            android:name="com.rushucloud.reim.report.CommentActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.report.UnarchivedItemsActivity">
+            android:name="com.rushucloud.reim.report.UnarchivedItemsActivity" >
+        </activity>
+        
+        <activity 
+            android:label="@string/app_name" 
+            android:name="com.rushucloud.reim.report.ApproveInfoActivity" >
         </activity>
         
         <activity 
@@ -152,42 +157,42 @@
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.ChangePasswordActivity">
+            android:name="com.rushucloud.reim.me.ChangePasswordActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.ManagerActivity">
+            android:name="com.rushucloud.reim.me.ManagerActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.CategoryActivity">
+            android:name="com.rushucloud.reim.me.CategoryActivity" >
         </activity>
         
         <activity 
             android:label="@string/sub_category" 
-            android:name="com.rushucloud.reim.me.SubCategoryActivity">
+            android:name="com.rushucloud.reim.me.SubCategoryActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.TagActivity">
+            android:name="com.rushucloud.reim.me.TagActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.SendInviteActivity">
+            android:name="com.rushucloud.reim.me.SendInviteActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.MessageActivity">
+            android:name="com.rushucloud.reim.me.MessageActivity" >
         </activity>
         
         <activity 
             android:label="@string/app_name" 
-            android:name="com.rushucloud.reim.me.MessageDetailActivity">
+            android:name="com.rushucloud.reim.me.MessageDetailActivity" >
         </activity>
         
         <activity 
@@ -252,13 +257,13 @@
 		<activity 
 		    android:name="com.tencent.connect.common.AssistActivity" 
 		    android:screenOrientation="portrait" 
-		    android:theme="@android:style/Theme.Translucent.NoTitleBar">
+		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         
 		<!-- ################### AVOS推送 ################### -->
         <service android:name="com.avos.avoscloud.PushService"/>
         <receiver 
-            android:name="classes.Utils.ReimBroadcastReceiver">
+            android:name="classes.Utils.ReimBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

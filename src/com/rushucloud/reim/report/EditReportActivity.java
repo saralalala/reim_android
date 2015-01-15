@@ -209,6 +209,15 @@ public class EditReportActivity extends Activity
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		statusTextView = (TextView) findViewById(R.id.statusTextView);
 		
+		TextView approveInfoTextView = (TextView)findViewById(R.id.approveInfoTextView);
+		approveInfoTextView.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(EditReportActivity.this, ApproveInfoActivity.class));
+			}
+		});
+		
 		managerTextView = (TextView) findViewById(R.id.managerTextView);
 		managerTextView.setOnClickListener(new OnClickListener()
 		{

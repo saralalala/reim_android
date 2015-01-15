@@ -12,8 +12,9 @@ import classes.Utils.DBManager;
 import classes.Utils.Utils;
 
 import com.rushucloud.reim.R;
-
+import com.rushucloud.reim.report.ApproveInfoActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -60,6 +61,15 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 
 			statusTextView.setText(report.getStatusString());
 			statusTextView.setBackgroundResource(report.getStatusBackground());
+			
+			TextView approveInfoTextView = (TextView) view.findViewById(R.id.approveInfoTextView);
+			approveInfoTextView.setOnClickListener(new View.OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					context.startActivity(new Intent(context, ApproveInfoActivity.class));
+				}
+			});
 
 			// init sender, manager and cc			
 			TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);
