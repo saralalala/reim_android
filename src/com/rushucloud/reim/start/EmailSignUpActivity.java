@@ -1,15 +1,15 @@
 package com.rushucloud.reim.start;
 
-import netUtils.Request.User.SignInRequest;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.RegisterRequest;
 import netUtils.Response.User.SignInResponse;
 import netUtils.Response.User.RegisterResponse;
+import netUtils.Request.User.RegisterRequest;
+import netUtils.Request.User.SignInRequest;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -107,26 +107,26 @@ public class EmailSignUpActivity extends Activity
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(EmailSignUpActivity.this, "网络未连接，无法发送请求");
+					Utils.showToast(EmailSignUpActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (email.equals(""))
 				{
-					Utils.showToast(EmailSignUpActivity.this, "邮箱不能为空");
+					Utils.showToast(EmailSignUpActivity.this, R.string.error_email_empty);
 					emailEditText.requestFocus();
 				}
 				else if (password.equals(""))
 				{
-					Utils.showToast(EmailSignUpActivity.this, "密码不能为空");
+					Utils.showToast(EmailSignUpActivity.this, R.string.error_password_empty);
 					passwordEditText.requestFocus();
 				}
 				else if (confirmPassword.equals(""))
 				{
-					Utils.showToast(EmailSignUpActivity.this, "确认密码不能为空");
+					Utils.showToast(EmailSignUpActivity.this, R.string.error_confirm_password_empty);
 					confirmPasswordEditText.requestFocus();
 				}
 				else if (!password.equals(confirmPassword))
 				{
-					Utils.showToast(EmailSignUpActivity.this, "两次输入的密码不一致");
+					Utils.showToast(EmailSignUpActivity.this, R.string.error_wrong_confirm_password);
 					confirmPasswordEditText.requestFocus();
 				}
 				else
@@ -166,7 +166,7 @@ public class EmailSignUpActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(EmailSignUpActivity.this, "注册成功!正在获取数据");
+							Utils.showToast(EmailSignUpActivity.this, R.string.succeed_in_signing_up);
 						}
 					});
 					
@@ -187,7 +187,7 @@ public class EmailSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EmailSignUpActivity.this, "注册失败！" + response.getErrorMessage());
+							Utils.showToast(EmailSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
 						}
 					});		
 				}
@@ -241,7 +241,7 @@ public class EmailSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EmailSignUpActivity.this, "获取信息失败，请稍候重试");
+							Utils.showToast(EmailSignUpActivity.this, R.string.failed_to_get_data);
 							Bundle bundle = new Bundle();
 							bundle.putString("username", AppPreference.getAppPreference().getUsername());
 							bundle.putString("password", AppPreference.getAppPreference().getPassword());

@@ -3,24 +3,24 @@ package com.rushucloud.reim.me;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Tag.CreateTagRequest;
-import netUtils.Request.Tag.DeleteTagRequest;
-import netUtils.Request.Tag.ModifyTagRequest;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Tag.CreateTagResponse;
 import netUtils.Response.Tag.DeleteTagResponse;
 import netUtils.Response.Tag.ModifyTagResponse;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Tag.CreateTagRequest;
+import netUtils.Request.Tag.DeleteTagRequest;
+import netUtils.Request.Tag.ModifyTagRequest;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Tag;
-import classes.Adapter.TagListViewAdapter;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.adapter.TagListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -113,7 +113,7 @@ public class TagActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(TagActivity.this, "网络未连接，无法添加");
+					Utils.showToast(TagActivity.this, R.string.error_add_network_unavailable);
 				}
 				else
 				{
@@ -164,7 +164,7 @@ public class TagActivity extends Activity
 				String name = nameEditText.getText().toString();
 				if (name.equals(""))
 				{
-					Utils.showToast(TagActivity.this, "标签名称不能为空");
+					Utils.showToast(TagActivity.this, R.string.error_tag_name_empty);
 				}
 				else
 				{
@@ -229,7 +229,7 @@ public class TagActivity extends Activity
     				
     				if (!Utils.isNetworkConnected())
     				{
-    					Utils.showToast(TagActivity.this, "网络未连接，无法修改");
+    					Utils.showToast(TagActivity.this, R.string.error_modify_network_unavailable);
     				}
     				else
     				{
@@ -249,7 +249,7 @@ public class TagActivity extends Activity
     				
     				if (!Utils.isNetworkConnected())
     				{
-    					Utils.showToast(TagActivity.this, "网络未连接，无法删除");
+    					Utils.showToast(TagActivity.this, R.string.error_delete_network_unavailable);
     				}
     				else 
     				{
@@ -320,7 +320,7 @@ public class TagActivity extends Activity
 							refreshListView();
 							ReimProgressDialog.dismiss();
 							tagPopupWindow.dismiss();
-							Utils.showToast(TagActivity.this, "标签创建成功");
+							Utils.showToast(TagActivity.this, R.string.succeed_in_creating_tag);
 						}
 					});
 				}
@@ -331,7 +331,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(TagActivity.this, "标签创建失败");							
+							Utils.showToast(TagActivity.this, R.string.failed_to_create_tag);							
 						}
 					});
 				}
@@ -361,7 +361,7 @@ public class TagActivity extends Activity
 							refreshListView();
 							ReimProgressDialog.dismiss();
 							tagPopupWindow.dismiss();
-							Utils.showToast(TagActivity.this, "标签修改成功");
+							Utils.showToast(TagActivity.this, R.string.succeed_in_modifying_tag);
 						}
 					});
 				}
@@ -372,7 +372,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(TagActivity.this, "标签修改失败");							
+							Utils.showToast(TagActivity.this, R.string.failed_to_modify_tag);							
 						}
 					});
 				}
@@ -398,7 +398,7 @@ public class TagActivity extends Activity
 						{
 							refreshListView();
 							ReimProgressDialog.dismiss();
-							Utils.showToast(TagActivity.this, "标签删除成功");
+							Utils.showToast(TagActivity.this, R.string.succeed_in_deleting_tag);
 						}
 					});
 				}
@@ -409,7 +409,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(TagActivity.this, "标签删除失败");					
+							Utils.showToast(TagActivity.this, R.string.failed_to_delete_tag);					
 						}
 					});
 				}

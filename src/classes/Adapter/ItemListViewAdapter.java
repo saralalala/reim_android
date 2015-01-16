@@ -1,4 +1,4 @@
-package classes.Adapter;
+package classes.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import classes.Item;
 import classes.ReimApplication;
 import classes.Tag;
 import classes.User;
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 
@@ -93,7 +93,6 @@ public class ItemListViewAdapter extends BaseAdapter
 		String reportTitle = item.getBelongReport() == null ? context.getString(R.string.report_not_available) : item.getBelongReport().getTitle();
 		reportTextView.setText(reportTitle);
 		
-		// category 和 tag 一共iconCount个
 		Category category = item.getCategory();
 		
 		categoryImageView.setImageResource(R.drawable.default_icon);

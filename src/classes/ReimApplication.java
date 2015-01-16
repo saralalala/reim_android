@@ -5,10 +5,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 import cn.beecloud.BeeCloud;
 
 import com.avos.avoscloud.AVInstallation;

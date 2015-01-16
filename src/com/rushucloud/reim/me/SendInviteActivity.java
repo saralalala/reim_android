@@ -1,18 +1,19 @@
 package com.rushucloud.reim.me;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.CommonRequest;
-import netUtils.Request.User.InviteRequest;
 import netUtils.Response.CommonResponse;
 import netUtils.Response.User.InviteResponse;
+import netUtils.Request.CommonRequest;
+import netUtils.Request.User.InviteRequest;
+
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -86,15 +87,15 @@ public class SendInviteActivity extends Activity
 				String username = usernameEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(SendInviteActivity.this, "网络未连接，无法发送邀请");			
+					Utils.showToast(SendInviteActivity.this, R.string.error_send_invite_network_unavailable);			
 				}
 				if (username.equals(""))
 				{
-					Utils.showToast(SendInviteActivity.this, "手机号或邮箱不能为空");
+					Utils.showToast(SendInviteActivity.this, R.string.error_email_or_phone_empty);
 				}
 				else if (!Utils.isEmailOrPhone(username))
 				{
-					Utils.showToast(SendInviteActivity.this, "手机号或邮箱格式不正确");
+					Utils.showToast(SendInviteActivity.this, R.string.error_email_or_phone_wrong_format);
 				}
 				else
 				{
@@ -135,7 +136,7 @@ public class SendInviteActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SendInviteActivity.this, "邀请发送失败，" + response.getErrorMessage());
+							Utils.showToast(SendInviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
 						}
 					});
 				}
@@ -187,7 +188,7 @@ public class SendInviteActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SendInviteActivity.this, "邀请已发送");
+							Utils.showToast(SendInviteActivity.this, R.string.succeed_in_sending_invite);
 							finish();
 						}
 					});
@@ -199,7 +200,7 @@ public class SendInviteActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SendInviteActivity.this, "邀请发送失败，" + response.getErrorMessage());
+							Utils.showToast(SendInviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
 						}
 					});
 				}

@@ -5,7 +5,7 @@
     android:layout_height="66dp"
     android:background="@drawable/list_item_drawable" >
 
-    <classes.Widget.CircleImageView
+    <classes.widget.CircleImageView
         android:id="@+id/imageView"
         android:layout_width="48dp"
         android:layout_height="48dp"

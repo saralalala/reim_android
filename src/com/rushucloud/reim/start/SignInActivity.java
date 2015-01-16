@@ -1,13 +1,13 @@
 package com.rushucloud.reim.start;
 
-import netUtils.Request.User.SignInRequest;
 import netUtils.HttpConnectionCallback;
 import netUtils.Response.User.SignInResponse;
+import netUtils.Request.User.SignInRequest;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -122,21 +122,21 @@ public class SignInActivity extends Activity implements View.OnClickListener
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(SignInActivity.this, "网络未连接，无法登录");
+					Utils.showToast(SignInActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (username.equals(""))
 				{
-					Utils.showToast(SignInActivity.this, "用户名不能为空");
+					Utils.showToast(SignInActivity.this, R.string.error_username_empty);
 					usernameEditText.requestFocus();
 				}
 				else if (password.equals(""))
 				{
-					Utils.showToast(SignInActivity.this, "密码不能为空");
+					Utils.showToast(SignInActivity.this, R.string.error_password_empty);
 					passwordEditText.requestFocus();
 				}
 				else if (!Utils.isEmailOrPhone(username))
 				{
-					Utils.showToast(SignInActivity.this, "手机或邮箱格式不正确");
+					Utils.showToast(SignInActivity.this, R.string.error_email_or_phone_wrong_format);
 					usernameEditText.requestFocus();
 				}
 				else
@@ -301,7 +301,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SignInActivity.this, "登录失败！" + response.getErrorMessage());
+							Utils.showToast(SignInActivity.this, R.string.failed_to_sign_in, response.getErrorMessage());
 						}
 					});
 				}

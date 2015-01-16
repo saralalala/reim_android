@@ -1,10 +1,10 @@
 package com.rushucloud.reim.start;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.ForgotPasswordRequest;
 import netUtils.Response.User.ForgotPasswordResponse;
+import netUtils.Request.User.ForgotPasswordRequest;
 
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -91,11 +91,11 @@ public class PhoneFindActivity extends Activity
 				String phoneNumber = phoneEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(PhoneFindActivity.this, "网络未连接，无法发送请求");
+					Utils.showToast(PhoneFindActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (!Utils.isPhone(phoneNumber))
 				{
-					Utils.showToast(PhoneFindActivity.this, "手机号码格式不正确");
+					Utils.showToast(PhoneFindActivity.this, R.string.error_phone_wrong_format);
 					phoneEditText.requestFocus();	
 				}
 				else
@@ -114,11 +114,11 @@ public class PhoneFindActivity extends Activity
 			{
 				if (code.equals(""))
 				{
-					Utils.showToast(PhoneFindActivity.this, getResources().getString(R.string.error_no_code));
+					Utils.showToast(PhoneFindActivity.this, R.string.error_no_code);
 				}
 				else if (!codeEditText.getText().toString().equals(code))
 				{
-					Utils.showToast(PhoneFindActivity.this, getResources().getString(R.string.error_code));
+					Utils.showToast(PhoneFindActivity.this, R.string.error_wrong_code);
 				}
 				else
 				{
@@ -148,7 +148,7 @@ public class PhoneFindActivity extends Activity
     {
 		waitingTime = 60;
 		acquireCodeButton.setEnabled(false);
-		acquireCodeButton.setText(waitingTime + "s后重新获取");
+		acquireCodeButton.setText(waitingTime + "秒");
 		thread = new Thread(new Runnable()
 		{
 			public void run()
@@ -163,7 +163,7 @@ public class PhoneFindActivity extends Activity
 						{
 							public void run()
 							{
-								acquireCodeButton.setText(waitingTime + "s后重新获取");
+								acquireCodeButton.setText(waitingTime + "秒");
 							}
 						});	
 					}
@@ -202,7 +202,7 @@ public class PhoneFindActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(PhoneFindActivity.this, "验证短信已发送！");
+							Utils.showToast(PhoneFindActivity.this, R.string.prompt_message_sent);
 						}
 					});
 				}
@@ -212,7 +212,7 @@ public class PhoneFindActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(PhoneFindActivity.this, "短信发送失败！"+response.getErrorMessage());
+							Utils.showToast(PhoneFindActivity.this, R.string.failed_to_send_message, response.getErrorMessage());
 						}
 					});
 				}

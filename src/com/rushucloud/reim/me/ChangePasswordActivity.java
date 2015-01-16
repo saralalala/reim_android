@@ -4,10 +4,10 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.ChangePasswordRequest;
 import netUtils.Response.User.ChangePasswordResponse;
-import classes.Utils.AppPreference;
-import classes.Utils.Utils;
+import netUtils.Request.User.ChangePasswordRequest;
+import classes.utils.AppPreference;
+import classes.utils.Utils;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -96,7 +96,7 @@ public class ChangePasswordActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(ChangePasswordActivity.this, "网络未连接，无法修改密码");
+					Utils.showToast(ChangePasswordActivity.this, R.string.error_change_password_network_unavailable);
 				}
 			}
 		});
@@ -119,32 +119,32 @@ public class ChangePasswordActivity extends Activity
 		final String confirmPassword = confirmPasswordEditText.getText().toString();
 		if (oldPassword.equals(""))
 		{
-			Utils.showToast(ChangePasswordActivity.this, "旧密码不能为空！请重新输入");
+			Utils.showToast(ChangePasswordActivity.this, R.string.error_old_password_empty);
 			oldPasswordEditText.requestFocus();
 		}
 		else if (newPassword.equals(""))
 		{
-			Utils.showToast(ChangePasswordActivity.this, "新密码不能为空！请重新输入");
+			Utils.showToast(ChangePasswordActivity.this, R.string.error_new_password_empty);
 			newPasswordEditText.requestFocus();
 		}
 		else if (confirmPassword.equals(""))
 		{
-			Utils.showToast(ChangePasswordActivity.this, "确认密码不能为空！请重新输入");
+			Utils.showToast(ChangePasswordActivity.this, R.string.error_confirm_password_empty);
 			confirmPasswordEditText.requestFocus();
 		}
 		else if (!oldPassword.equals(newPassword))
 		{
-			Utils.showToast(ChangePasswordActivity.this, "新旧密码相同！请重新输入");
+			Utils.showToast(ChangePasswordActivity.this, R.string.error_same_password);
 			newPasswordEditText.requestFocus();
 		}
 		else if (!confirmPassword.equals(newPassword))
 		{
-			Utils.showToast(ChangePasswordActivity.this, "新密码两次输入不一致！请重新输入");
+			Utils.showToast(ChangePasswordActivity.this, R.string.error_wrong_confirm_password);
 			confirmPasswordEditText.requestFocus();
 		}
 		else if (!oldPassword.equals(appPreference.getPassword()))
 		{
-			Utils.showToast(ChangePasswordActivity.this, "旧密码输入错误！请重新输入");
+			Utils.showToast(ChangePasswordActivity.this, R.string.error_wrong_old_password);
 			oldPasswordEditText.requestFocus();
 		}
 		else

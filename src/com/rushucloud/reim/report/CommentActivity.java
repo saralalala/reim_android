@@ -3,11 +3,11 @@ package com.rushucloud.reim.report;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Report.ModifyReportRequest;
+import netUtils.NetworkConstant;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Report.ModifyReportResponse;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Report.ModifyReportRequest;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -15,11 +15,11 @@ import com.umeng.analytics.MobclickAgent;
 import classes.Comment;
 import classes.Report;
 import classes.User;
-import classes.Adapter.CommentListViewAdapter;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.adapter.CommentListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -154,11 +154,11 @@ public class CommentActivity extends Activity
 				String comment = commentEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(CommentActivity.this, "网络未连接，无法发送评论");
+					Utils.showToast(CommentActivity.this, R.string.error_comment_network_unavailable);
 				}
 				else if (comment.equals(""))
 				{
-					Utils.showToast(CommentActivity.this, "评论不能为空");
+					Utils.showToast(CommentActivity.this, R.string.error_comment_empty);
 				}
 				else
 				{
@@ -204,7 +204,7 @@ public class CommentActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
+					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					user.setAvatarPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
@@ -265,7 +265,7 @@ public class CommentActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(CommentActivity.this, "评论发表成功");
+							Utils.showToast(CommentActivity.this, R.string.succeed_in_sending_comment);
 							commentEditText.setText("");
 							adapter.setComments(commentList);
 							adapter.notifyDataSetChanged();
@@ -280,7 +280,7 @@ public class CommentActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(CommentActivity.this, "评论发表失败, " + response.getErrorMessage());
+							Utils.showToast(CommentActivity.this, R.string.failed_to_send_comment, response.getErrorMessage());
 						}
 					});					
 				}

@@ -1,4 +1,4 @@
-package classes.Utils;
+package classes.utils;
 
 import java.io.File;
 

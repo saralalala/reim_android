@@ -1,4 +1,4 @@
-package classes.Adapter;
+package classes.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,8 @@ import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
 import classes.User;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
+import classes.utils.DBManager;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.report.ApproveInfoActivity;

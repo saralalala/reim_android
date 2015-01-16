@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import netUtils.Response.BaseResponse;
 

@@ -1,4 +1,4 @@
-package classes.Utils;
+package classes.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -16,7 +16,7 @@ import classes.ReimApplication;
 
 import com.rushucloud.reim.R;
 
-import netUtils.HttpConstant;
+import netUtils.NetworkConstant;
 
 import android.app.Activity;
 import android.content.Context;
@@ -58,9 +58,9 @@ public class Utils
 
 	public static String getCurrentVersion()
 	{
+		Context context = ReimApplication.getContext();
 		try
 		{
-			Context context = ReimApplication.getContext();
 			PackageManager packageManager = context.getPackageManager();
 			PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
 			return packageInfo.versionName;
@@ -68,7 +68,7 @@ public class Utils
 		catch (NameNotFoundException e)
 		{
 			e.printStackTrace();
-			return "获取版本号失败";
+			return context.getString(R.string.failed_to_get_version);
 		}
 	}
 	
@@ -295,7 +295,7 @@ public class Utils
     		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     		
     		String path;
-    		if (type == HttpConstant.IMAGE_TYPE_AVATAR)
+    		if (type == NetworkConstant.IMAGE_TYPE_AVATAR)
 			{
 				path = appPreference.getAvatarImageDirectory() + "/" + getImageName();
 			}
@@ -366,7 +366,12 @@ public class Utils
     {
     	Toast.makeText(context, resID, Toast.LENGTH_SHORT).show();
     }
-	
+
+    public static void showToast(Context context, int resID, String errorMessage)
+    {
+    	Toast.makeText(context, context.getString(resID) + "，" + errorMessage, Toast.LENGTH_SHORT).show();
+    }
+    
 	public static PopupWindow constructTopPopupWindow(final Activity activity, View view)
 	{
 		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);

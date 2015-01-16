@@ -1,11 +1,11 @@
-package classes.Adapter;
+package classes.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import classes.ReimApplication;
 import classes.Report;
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 

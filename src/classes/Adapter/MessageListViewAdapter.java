@@ -1,10 +1,10 @@
-package classes.Adapter;
+package classes.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import classes.Invite;
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;

@@ -3,17 +3,17 @@ package com.rushucloud.reim.start;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.User.ModifyUserRequest;
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
+import netUtils.NetworkConstant;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.User.ModifyUserResponse;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Request.User.ModifyUserRequest;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.MainActivity;
@@ -95,7 +95,7 @@ public class CompleteInfoActivity extends Activity
 				else if (requestCode == CROP_IMAGE)
 				{
 					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
-					avatarPath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_AVATAR);
+					avatarPath = Utils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
 					newAvatar = true;
 					avatarImageView.setImageBitmap(bitmap);
 				}
@@ -177,7 +177,7 @@ public class CompleteInfoActivity extends Activity
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(CompleteInfoActivity.this, "网络未连接，无法更新信息");
+					Utils.showToast(CompleteInfoActivity.this, R.string.error_update_network_unavailable);
 					startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
 					finish();
 				}
@@ -290,7 +290,7 @@ public class CompleteInfoActivity extends Activity
     
     private void sendUploadAvatarRequest()
     {
-		UploadImageRequest request = new UploadImageRequest(avatarPath, HttpConstant.IMAGE_TYPE_AVATAR);
+		UploadImageRequest request = new UploadImageRequest(avatarPath, NetworkConstant.IMAGE_TYPE_AVATAR);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -313,7 +313,7 @@ public class CompleteInfoActivity extends Activity
 							public void run()
 							{
 								ReimProgressDialog.dismiss();
-								Utils.showToast(CompleteInfoActivity.this, "个人信息修改成功");
+								Utils.showToast(CompleteInfoActivity.this, R.string.succeed_in_modifying_user_info);
 								startActivity(new Intent(CompleteInfoActivity.this, WelcomeActivity.class));
 								finish();
 							}
@@ -331,7 +331,7 @@ public class CompleteInfoActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(CompleteInfoActivity.this, "头像上传失败" + response.getErrorMessage());
+							Utils.showToast(CompleteInfoActivity.this, R.string.failed_to_upload_avatar, response.getErrorMessage());
 						}
 					});				
 				}
@@ -356,7 +356,7 @@ public class CompleteInfoActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(CompleteInfoActivity.this, "个人信息修改成功");
+							Utils.showToast(CompleteInfoActivity.this, R.string.succeed_in_modifying_user_info);
 							startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
 							finish();
 						}
@@ -369,7 +369,7 @@ public class CompleteInfoActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(CompleteInfoActivity.this, "用户信息修改失败!" + response.getErrorMessage());
+							Utils.showToast(CompleteInfoActivity.this, R.string.failed_to_upload_avatar, response.getErrorMessage());
 						}
 					});						
 				}

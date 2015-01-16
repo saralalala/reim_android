@@ -6,8 +6,8 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
+import classes.utils.DBManager;
+import classes.utils.Utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

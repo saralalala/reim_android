@@ -3,10 +3,12 @@ package com.rushucloud.reim;
 import java.util.HashMap;
 import java.util.Map;
 
-import netUtils.HttpConstant;
-import netUtils.Request.DownloadImageRequest;
+import netUtils.NetworkConstant;
+import netUtils.URLDef;
 import netUtils.HttpConnectionCallback;
 import netUtils.Response.DownloadImageResponse;
+import netUtils.Request.DownloadImageRequest;
+
 import com.mechat.mechatlibrary.MCClient;
 import com.mechat.mechatlibrary.MCOnlineConfig;
 import com.mechat.mechatlibrary.MCUserConfig;
@@ -32,10 +34,10 @@ import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 import classes.Group;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.CircleImageView;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.CircleImageView;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -258,7 +260,7 @@ public class MeFragment extends Fragment
 				if (response.getBitmap() != null)
 				{
 					int currentTime = Utils.getCurrentTime();
-					avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
+					avatarPath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					currentUser.setAvatarPath(avatarPath);
 					currentUser.setLocalUpdatedDate(currentTime);
 					currentUser.setServerUpdatedDate(currentTime);
@@ -278,7 +280,7 @@ public class MeFragment extends Fragment
 						{
 							public void run()
 							{
-								Utils.showToast(getActivity(), "头像保存失败");
+								Utils.showToast(getActivity(), R.string.failed_to_save_avatar);
 							}
 						});						
 					}
@@ -289,7 +291,7 @@ public class MeFragment extends Fragment
 					{
 						public void run()
 						{
-							Utils.showToast(getActivity(), "头像下载失败");
+							Utils.showToast(getActivity(), R.string.failed_to_download_avatar);
 						}
 					});						
 				}
@@ -317,27 +319,27 @@ public class MeFragment extends Fragment
     	qqSsoHandler.addToSocialSDK();
 
     	WeiXinShareContent weiXinShareContent = new WeiXinShareContent();
-    	weiXinShareContent.setShareContent("这是来自XAndroid版的微信分享");
-    	weiXinShareContent.setTitle("微信分享");
-    	weiXinShareContent.setTargetUrl("http://www.rushucloud.com");    	
+    	weiXinShareContent.setShareContent(getString(R.string.share_wechat_content));
+    	weiXinShareContent.setTitle(getString(R.string.share_wechat));
+    	weiXinShareContent.setTargetUrl(URLDef.SHARE_TARGET);    	
     	mController.setShareMedia(weiXinShareContent);
 
     	CircleShareContent circleShareContent = new CircleShareContent();
-    	circleShareContent.setShareContent("这是来自XAndroid版的朋友圈分享");
-    	circleShareContent.setTitle("朋友圈分享");
-    	circleShareContent.setTargetUrl("http://www.rushucloud.com");    
+    	circleShareContent.setShareContent(getString(R.string.share_moment_content));
+    	circleShareContent.setTitle(getString(R.string.share_moment));
+    	circleShareContent.setTargetUrl(URLDef.SHARE_TARGET);    
     	mController.setShareMedia(circleShareContent);
 
     	SinaShareContent sinaShareContent = new SinaShareContent();
-    	sinaShareContent.setShareContent("这是来自XAndroid版的新浪微博分享");
-    	sinaShareContent.setTitle("新浪微博分享");
-    	sinaShareContent.setTargetUrl("http://www.rushucloud.com");    
+    	sinaShareContent.setShareContent(getString(R.string.share_weibo_content));
+    	sinaShareContent.setTitle(getString(R.string.share_weibo));
+    	sinaShareContent.setTargetUrl(URLDef.SHARE_TARGET);    
     	mController.setShareMedia(sinaShareContent);
 
     	QQShareContent qqShareContent = new QQShareContent();
-    	qqShareContent.setShareContent("这是来自XAndroid版的QQ分享");
-    	qqShareContent.setTitle("QQ分享");
-    	qqShareContent.setTargetUrl("http://www.rushucloud.com");    
+    	qqShareContent.setShareContent(getString(R.string.share_qq_content));
+    	qqShareContent.setTitle(getString(R.string.share_qq));
+    	qqShareContent.setTargetUrl(URLDef.SHARE_TARGET);    
     	mController.setShareMedia(qqShareContent);
 
     	mController.getConfig().removePlatform(SHARE_MEDIA.QZONE, SHARE_MEDIA.TENCENT);

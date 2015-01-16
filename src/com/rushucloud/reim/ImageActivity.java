@@ -1,6 +1,6 @@
 package com.rushucloud.reim;
 
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -58,7 +58,7 @@ public class ImageActivity extends Activity
 		
 		if (bitmap == null)
 		{
-			Utils.showToast(this, "读取图片文件失败");
+			Utils.showToast(this, R.string.failed_to_read_image);
 			finish();
 		}
 		

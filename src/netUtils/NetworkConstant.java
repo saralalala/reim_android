@@ -1,7 +1,7 @@
 package netUtils;
 
-public class HttpConstant
-{
+public class NetworkConstant
+{	
 	public static String USER_AGENT = "ReimApp";
 	public static String X_REIM_JWT = "X-reim-jwt";
 	

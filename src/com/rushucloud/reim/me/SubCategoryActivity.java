@@ -4,25 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Category.CreateCategoryRequest;
-import netUtils.Request.Category.DeleteCategoryRequest;
-import netUtils.Request.Category.ModifyCategoryRequest;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Category.CreateCategoryResponse;
 import netUtils.Response.Category.DeleteCategoryResponse;
 import netUtils.Response.Category.ModifyCategoryResponse;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Category.CreateCategoryRequest;
+import netUtils.Request.Category.DeleteCategoryRequest;
+import netUtils.Request.Category.ModifyCategoryRequest;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Category;
 import classes.ReimApplication;
-import classes.Adapter.CategoryListViewAdapter;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.adapter.CategoryListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -165,7 +165,7 @@ public class SubCategoryActivity extends Activity
 			{
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(SubCategoryActivity.this, "网络未连接，无法添加");
+					Utils.showToast(SubCategoryActivity.this, R.string.error_add_network_unavailable);
 				}
 				else
 				{
@@ -226,7 +226,7 @@ public class SubCategoryActivity extends Activity
 				String limit = limitEditText.getText().toString();
 				if (name.equals(""))
 				{
-					Utils.showToast(SubCategoryActivity.this, "类别名称不能为空");
+					Utils.showToast(SubCategoryActivity.this, R.string.error_category_name_empty);
 				}
 				else
 				{
@@ -371,7 +371,7 @@ public class SubCategoryActivity extends Activity
 
     				if (!Utils.isNetworkConnected())
     				{
-    					Utils.showToast(SubCategoryActivity.this, "网络未连接，无法修改");
+    					Utils.showToast(SubCategoryActivity.this, R.string.error_modify_network_unavailable);
     				}
     				else
     				{
@@ -391,7 +391,7 @@ public class SubCategoryActivity extends Activity
     				
     				if (!Utils.isNetworkConnected())
     				{
-    					Utils.showToast(SubCategoryActivity.this, "网络未连接，无法删除");
+    					Utils.showToast(SubCategoryActivity.this, R.string.error_delete_network_unavailable);
     				}
     				else
     				{
@@ -493,7 +493,7 @@ public class SubCategoryActivity extends Activity
 							refreshListView();
 							ReimProgressDialog.dismiss();
 							categoryPopupWindow.dismiss();
-							Utils.showToast(SubCategoryActivity.this, "类别创建成功");
+							Utils.showToast(SubCategoryActivity.this, R.string.succeed_in_creating_category);
 						}
 					});
 				}
@@ -504,7 +504,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SubCategoryActivity.this, "类别创建失败");							
+							Utils.showToast(SubCategoryActivity.this, R.string.failed_to_create_category);							
 						}
 					});
 				}
@@ -534,7 +534,7 @@ public class SubCategoryActivity extends Activity
 							refreshListView();
 							ReimProgressDialog.dismiss();
 							categoryPopupWindow.dismiss();
-							Utils.showToast(SubCategoryActivity.this, "类别修改成功");
+							Utils.showToast(SubCategoryActivity.this, R.string.succeed_in_modifying_category);
 						}
 					});
 				}
@@ -545,7 +545,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SubCategoryActivity.this, "类别修改失败");							
+							Utils.showToast(SubCategoryActivity.this, R.string.failed_to_modify_category);							
 						}
 					});
 				}
@@ -572,7 +572,7 @@ public class SubCategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SubCategoryActivity.this, "类别删除成功");
+							Utils.showToast(SubCategoryActivity.this, R.string.succeed_in_deleting_category);
 						}
 					});
 				}
@@ -583,7 +583,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SubCategoryActivity.this, "类别删除失败");					
+							Utils.showToast(SubCategoryActivity.this, R.string.failed_to_delete_category);					
 						}
 					});
 				}

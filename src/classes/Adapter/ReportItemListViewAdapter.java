@@ -1,4 +1,4 @@
-package classes.Adapter;
+package classes.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import classes.Category;
 import classes.Item;
 import classes.ReimApplication;
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
@@ -62,7 +62,6 @@ public class ReportItemListViewAdapter extends BaseAdapter
 			String vendor = item.getVendor().equals("") ? context.getString(R.string.vendor_not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
-			// category 和 tag 一共iconCount个
 			if (item.missingInfo())
 			{
 				warningImageView.setVisibility(View.VISIBLE);

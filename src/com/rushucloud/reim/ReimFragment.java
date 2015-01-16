@@ -12,22 +12,22 @@ import com.umeng.analytics.MobclickAgent;
 import netUtils.HttpConnectionCallback;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Item.DeleteItemRequest;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Item.DeleteItemResponse;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Item.DeleteItemRequest;
 import classes.Category;
 import classes.Item;
 import classes.Report;
 import classes.Tag;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
-import classes.Widget.SegmentedGroup;
-import classes.Widget.XListView;
-import classes.Widget.XListView.IXListViewListener;
-import classes.Adapter.ItemListViewAdapter;
+import classes.adapter.ItemListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
+import classes.widget.SegmentedGroup;
+import classes.widget.XListView;
+import classes.widget.XListView.IXListViewListener;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -454,8 +454,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 				if (report != null && !report.isEditable())
 				{
-					Utils.showToast(getActivity(), "条目已提交，不可删除");
-
+					Utils.showToast(getActivity(), R.string.error_delete_item_submitted);
 				}
 				else
 				{
@@ -472,7 +471,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 															}
 															else if (!Utils.isNetworkConnected())
 															{
-																Utils.showToast(getActivity(), "网络未连接，无法删除");
+																Utils.showToast(getActivity(), R.string.error_delete_network_unavailable);
 															}
 															else
 															{
@@ -871,7 +870,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				{
 					itemListView.stopRefresh();
 //					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "网络未连接，无法刷新";
+					int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
 					Utils.showToast(getActivity(), prompt);
 				}
 			});
@@ -915,7 +914,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				{
 					itemListView.stopLoadMore();
 //					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "网络未连接，无法刷新";
+					int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
 					Utils.showToast(getActivity(), prompt);
 				}
 			});

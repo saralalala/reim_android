@@ -1,17 +1,17 @@
 package com.rushucloud.reim.start;
 
-import netUtils.Request.User.SignInRequest;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.RegisterRequest;
-import netUtils.Request.User.VerifyCodeRequest;
 import netUtils.Response.User.SignInResponse;
 import netUtils.Response.User.RegisterResponse;
 import netUtils.Response.User.VerifyCodeResponse;
+import netUtils.Request.User.RegisterRequest;
+import netUtils.Request.User.SignInRequest;
+import netUtils.Request.User.VerifyCodeRequest;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -115,16 +115,16 @@ public class PhoneSignUpActivity extends Activity
 				String phoneNumber = phoneEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "网络未连接，无法发送请求");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (phoneNumber.equals(""))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "手机号不能为空");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
 					phoneEditText.requestFocus();
 				}
 				else if (!Utils.isPhone(phoneNumber))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "手机号格式不正确");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
 					phoneEditText.requestFocus();
 				}
 				else 
@@ -151,41 +151,41 @@ public class PhoneSignUpActivity extends Activity
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "网络未连接，无法发送请求");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (!Utils.isPhone(phoneNumber))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "手机号格式不正确");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
 					phoneEditText.requestFocus();		
 				}
 				else if (phoneNumber.equals(""))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "手机号不能为空");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
 					phoneEditText.requestFocus();		
 				}
 				else if (password.equals(""))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "密码不能为空");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_password_empty);
 					passwordEditText.requestFocus();	
 				}
 				else if (confirmPassword.equals(""))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "确认密码不能为空");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_confirm_password_empty);
 					confirmPasswordEditText.requestFocus();
 				}
 				else if (!password.equals(confirmPassword))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "两次输入的密码不一致");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_confirm_password);
 					confirmPasswordEditText.requestFocus();
 				}
 				else if (inputCode.equals(""))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "验证码不能为空");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_code_empty);
 					codeEditText.requestFocus();	
 				}
 				else if (!inputCode.equals(code))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, "验证码错误");
+					Utils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_code);
 					codeEditText.requestFocus();		
 				}
 				else
@@ -266,7 +266,7 @@ public class PhoneSignUpActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(PhoneSignUpActivity.this, "验证短信已发送");
+							Utils.showToast(PhoneSignUpActivity.this, R.string.prompt_message_sent);
 						}
 					});
 				}
@@ -276,7 +276,7 @@ public class PhoneSignUpActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(PhoneSignUpActivity.this, "注册失败！"+response.getErrorMessage());
+							Utils.showToast(PhoneSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
 						}
 					});
 				}
@@ -299,7 +299,7 @@ public class PhoneSignUpActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(PhoneSignUpActivity.this, "注册成功!正在获取数据");
+							Utils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_signing_up);
 						}
 					});
 					
@@ -320,7 +320,7 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(PhoneSignUpActivity.this, "注册失败！"+response.getErrorMessage());
+							Utils.showToast(PhoneSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
 						}
 					});		
 				}
@@ -375,7 +375,7 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(PhoneSignUpActivity.this, "获取信息失败，请稍候重试");
+							Utils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_data);
 							Bundle bundle = new Bundle();
 							bundle.putString("username", AppPreference.getAppPreference().getUsername());
 							bundle.putString("password", AppPreference.getAppPreference().getPassword());

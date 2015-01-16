@@ -1,12 +1,12 @@
 package com.rushucloud.reim.start;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.SignInRequest;
 import netUtils.Response.User.SignInResponse;
+import netUtils.Request.User.SignInRequest;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -191,7 +191,7 @@ public class SplashActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(SplashActivity.this, "登录失败，请稍候重试");
+							Utils.showToast(SplashActivity.this, R.string.failed_to_sign_in);
 							Bundle bundle = new Bundle();
 							bundle.putString("username", appPreference.getUsername());
 							bundle.putString("password", appPreference.getPassword());

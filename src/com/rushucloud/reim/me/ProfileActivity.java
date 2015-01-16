@@ -4,24 +4,24 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.Group.ModifyGroupRequest;
-import netUtils.Request.User.ModifyUserRequest;
+import netUtils.NetworkConstant;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.Group.ModifyGroupResponse;
 import netUtils.Response.User.ModifyUserResponse;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Request.Group.ModifyGroupRequest;
+import netUtils.Request.User.ModifyUserRequest;
 
 import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 import classes.Group;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.CircleImageView;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.CircleImageView;
+import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -120,21 +120,21 @@ public class ProfileActivity extends Activity
 				else if (requestCode == CROP_IMAGE)
 				{
 					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
-					avatarPath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_AVATAR);
+					avatarPath = Utils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
 					
 					if (!avatarPath.equals("") && Utils.isNetworkConnected())
 					{
-						Utils.showToast(this, "头像保存成功，正在上传");
+						Utils.showToast(this, R.string.succeed_in_saving_avatar);
 						avatarImageView.setImageBitmap(bitmap);
 						sendUploadAvatarRequest();
 					}
 					else if (avatarPath.equals(""))
 					{
-						Utils.showToast(this, "头像保存失败");
+						Utils.showToast(this, R.string.failed_to_save_avatar);
 					}
 					else
 					{
-						Utils.showToast(this, "网络未连接，无法上传头像");
+						Utils.showToast(this, R.string.error_upload_avatar_network_unavailable);
 					}
 				}
 			}
@@ -301,15 +301,15 @@ public class ProfileActivity extends Activity
 				String newEmail = emailEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(ProfileActivity.this, "网络未连接，无法修改");			
+					Utils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
 				}
 				else if (newEmail.equals(originalEmail))
 				{
-					Utils.showToast(ProfileActivity.this, "邮箱与原有相同，无需修改");
+					Utils.showToast(ProfileActivity.this, R.string.error_same_email);
 				}
 				else if (newEmail.equals(""))
 				{
-					Utils.showToast(ProfileActivity.this, "新邮箱不可为空");
+					Utils.showToast(ProfileActivity.this, R.string.error_new_email_empty);
 				}
 				else
 				{
@@ -377,19 +377,19 @@ public class ProfileActivity extends Activity
 				String newPhone = phoneEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(ProfileActivity.this, "网络未连接，无法修改");			
+					Utils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
 				}
 				else if (!Utils.isPhone(newPhone))
 				{
-					Utils.showToast(ProfileActivity.this, "手机号格式不正确");
+					Utils.showToast(ProfileActivity.this, R.string.error_phone_wrong_format);
 				}
 				else if (newPhone.equals(originalPhone))
 				{
-					Utils.showToast(ProfileActivity.this, "手机与原有相同，无需修改");
+					Utils.showToast(ProfileActivity.this, R.string.error_same_phone);
 				}
 				else if (newPhone.equals(""))
 				{
-					Utils.showToast(ProfileActivity.this, "新手机不可为空");
+					Utils.showToast(ProfileActivity.this, R.string.error_new_phone_empty);
 				}
 				else
 				{
@@ -457,15 +457,15 @@ public class ProfileActivity extends Activity
 				String newNickname = nicknameEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(ProfileActivity.this, "网络未连接，无法修改");			
+					Utils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
 				}
 				else if (newNickname.equals(originalNickname))
 				{
-					Utils.showToast(ProfileActivity.this, "昵称与原有相同，无需修改");
+					Utils.showToast(ProfileActivity.this, R.string.error_same_nickname);
 				}
 				else if (newNickname.equals(""))
 				{
-					Utils.showToast(ProfileActivity.this, "新昵称不可为空");
+					Utils.showToast(ProfileActivity.this, R.string.error_new_nickname_empty);
 				}
 				else
 				{
@@ -534,15 +534,15 @@ public class ProfileActivity extends Activity
 				String newName = companyEditText.getText().toString();
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(ProfileActivity.this, "网络未连接，无法修改");			
+					Utils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
 				}
 				else if (newName.equals(originalName))
 				{
-					Utils.showToast(ProfileActivity.this, "名称与原有相同，无需修改");
+					Utils.showToast(ProfileActivity.this, R.string.error_same_company_name);
 				}
 				else if (newName.equals(""))
 				{
-					Utils.showToast(ProfileActivity.this, "新名称不可为空");
+					Utils.showToast(ProfileActivity.this, R.string.error_new_company_name_empty);
 				}
 				else
 				{
@@ -575,7 +575,7 @@ public class ProfileActivity extends Activity
 			{
 				if (currentUser.getGroupID() <= 0)
 				{
-					Utils.showToast(ProfileActivity.this, "你还没加入任何组");			
+					Utils.showToast(ProfileActivity.this, R.string.error_no_group);			
 				}
 				else
 				{
@@ -704,7 +704,7 @@ public class ProfileActivity extends Activity
 
     private void sendUploadAvatarRequest()
     {
-		UploadImageRequest request = new UploadImageRequest(avatarPath, HttpConstant.IMAGE_TYPE_AVATAR);
+		UploadImageRequest request = new UploadImageRequest(avatarPath, NetworkConstant.IMAGE_TYPE_AVATAR);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -725,7 +725,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							loadInfoView();
-							Utils.showToast(ProfileActivity.this, "头像上传成功");
+							Utils.showToast(ProfileActivity.this, R.string.succeed_in_uploading_avatar);
 						}
 					});	
 				}
@@ -736,7 +736,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							loadInfoView();
-							Utils.showToast(ProfileActivity.this, "头像上传失败");
+							Utils.showToast(ProfileActivity.this, R.string.failed_to_upload_avatar);
 						}
 					});				
 				}
@@ -762,7 +762,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ProfileActivity.this, "用户信息修改成功");
+							Utils.showToast(ProfileActivity.this, R.string.succeed_in_modifying_user_info);
 							emailPopupWindow.dismiss();
 							phonePopupWindow.dismiss();
 							nicknamePopupWindow.dismiss();
@@ -778,7 +778,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ProfileActivity.this, "用户信息修改失败");
+							Utils.showToast(ProfileActivity.this, R.string.failed_to_modify_user_info);
 							loadInfoView();
 						}
 					});						
@@ -806,7 +806,7 @@ public class ProfileActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							companyPopupWindow.dismiss();
-							Utils.showToast(ProfileActivity.this, "修改成功");
+							Utils.showToast(ProfileActivity.this, R.string.succeed_in_modifying);
 						}
 					});
 				}
@@ -818,7 +818,7 @@ public class ProfileActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							companyPopupWindow.dismiss();
-							Utils.showToast(ProfileActivity.this, "修改失败");
+							Utils.showToast(ProfileActivity.this, R.string.failed_to_modify);
 						}
 					});
 				}

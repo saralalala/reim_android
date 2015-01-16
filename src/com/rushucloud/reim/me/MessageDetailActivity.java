@@ -1,10 +1,10 @@
 package com.rushucloud.reim.me;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.CommonRequest;
-import netUtils.Request.User.InviteReplyRequest;
 import netUtils.Response.CommonResponse;
 import netUtils.Response.User.InviteReplyResponse;
+import netUtils.Request.CommonRequest;
+import netUtils.Request.User.InviteReplyRequest;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -19,10 +19,10 @@ import android.widget.TextView;
 import classes.Invite;
 import classes.ReimApplication;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -107,7 +107,7 @@ public class MessageDetailActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(MessageDetailActivity.this, "网络未连接，无法发送回复");
+					Utils.showToast(MessageDetailActivity.this, R.string.error_send_reply_network_unavailable);
 				}
 			}
 		});
@@ -124,7 +124,7 @@ public class MessageDetailActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(MessageDetailActivity.this, "网络未连接，无法发送回复");
+					Utils.showToast(MessageDetailActivity.this, R.string.error_send_reply_network_unavailable);
 				}
 			}
 		});
@@ -181,7 +181,7 @@ public class MessageDetailActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-					    	Utils.showToast(MessageDetailActivity.this, "邀请回复发送失败");
+					    	Utils.showToast(MessageDetailActivity.this, R.string.failed_to_send_reply);
 						}						
 					});
 				}

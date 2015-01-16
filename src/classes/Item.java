@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import com.rushucloud.reim.R;
 
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 public class Item
 {		

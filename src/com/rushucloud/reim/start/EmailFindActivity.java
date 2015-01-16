@@ -1,10 +1,10 @@
 package com.rushucloud.reim.start;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.ForgotPasswordRequest;
 import netUtils.Response.User.ForgotPasswordResponse;
+import netUtils.Request.User.ForgotPasswordRequest;
 
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -91,13 +91,13 @@ public class EmailFindActivity extends Activity
 					}
 					else
 					{
-						Utils.showToast(EmailFindActivity.this, "邮箱格式不正确");
+						Utils.showToast(EmailFindActivity.this, R.string.error_email_wrong_format);
 						emailEditText.requestFocus();	
 					}					
 				}
 				else
 				{
-					Utils.showToast(EmailFindActivity.this, "网络未连接，无法发送请求");
+					Utils.showToast(EmailFindActivity.this, R.string.error_request_network_unavailable);
 				}
 			}
 		});
@@ -148,7 +148,7 @@ public class EmailFindActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(EmailFindActivity.this, "邮件发送失败！"+response.getErrorMessage());
+							Utils.showToast(EmailFindActivity.this, R.string.failed_to_send_email, response.getErrorMessage());
 						}
 					});
 				}

@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.Utils.AppPreference;
+import classes.utils.AppPreference;
 
 public class EventsResponse extends BaseResponse
 {

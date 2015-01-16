@@ -3,18 +3,18 @@ package com.rushucloud.reim.report;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
-import netUtils.Request.Report.GetReportRequest;
+import netUtils.NetworkConstant;
 import netUtils.Response.Report.GetReportResponse;
+import netUtils.Request.Report.GetReportRequest;
 import classes.Comment;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
-import classes.Adapter.ReportDetailListViewAdapter;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.adapter.ReportDetailListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.ShowItemActivity;
@@ -162,7 +162,7 @@ public class ShowReportActivity extends Activity
 		}
 		else
 		{
-			Utils.showToast(this, "网络未连接，无法获取详细信息");
+			Utils.showToast(this, R.string.error_get_data_network_unavailable);
 		}
 	}
 	
@@ -245,8 +245,8 @@ public class ShowReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-				    		Utils.showToast(ShowReportActivity.this, "数据获取失败, " + response.getErrorMessage());
-				    		if (response.getCode() == HttpConstant.ERROR_REPORT_DELETED || response.getCode() == HttpConstant.ERROR_REPORT_NOT_EXISTS)
+				    		Utils.showToast(ShowReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+				    		if (response.getCode() == NetworkConstant.ERROR_REPORT_DELETED || response.getCode() == NetworkConstant.ERROR_REPORT_NOT_EXISTS)
 							{
 								dbManager.deleteOthersReport(reportServerID, AppPreference.getAppPreference().getCurrentUserID());
 							}

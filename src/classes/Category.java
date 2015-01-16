@@ -6,7 +6,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -154,17 +154,6 @@ public class Category
 			check.add(category != null && category.getServerID() == categoryList.get(i).getServerID());
 		}
 		return check;
-	}
-	
-	public static String[] getCategoryNames(List<Category> categoryList)
-	{
-		List<String> names = new ArrayList<String>();
-		for (int i = 0; i < categoryList.size(); i++)
-		{
-			String max = categoryList.get(i).getLimit() == 0 ? "(MAX:Unlimited)" : "(MAX:￥" + categoryList.get(i).getLimit() + ")";
-			names.add(categoryList.get(i).getName() + max);	
-		}
-		return names.toArray(new String[names.size()]);
 	}
 
 	public boolean hasUndownloadedIcon()

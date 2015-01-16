@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.StatisticsRequest;
 import netUtils.Response.StatisticsResponse;
+import netUtils.Request.StatisticsRequest;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,11 +23,11 @@ import android.support.v4.app.Fragment;
 
 import classes.ReimApplication;
 import classes.StatisticsCategory;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimMonthBar;
-import classes.Widget.ReimPie;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimMonthBar;
+import classes.widget.ReimPie;
+import classes.widget.ReimProgressDialog;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -140,7 +140,7 @@ public class StatisticsFragment extends Fragment
 		}
 		else
 		{
-			Utils.showToast(getActivity(), "网络未连接，无法获取数据");
+			Utils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
 		}		
 	}
 	

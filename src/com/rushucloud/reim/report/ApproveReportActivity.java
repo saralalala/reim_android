@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
-import netUtils.Request.Report.GetReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
+import netUtils.NetworkConstant;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
+import netUtils.Request.Report.GetReportRequest;
+import netUtils.Request.Report.ModifyReportRequest;
 import classes.Comment;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
 import classes.User;
-import classes.Adapter.ReportDetailListViewAdapter;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.adapter.ReportDetailListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -141,7 +141,7 @@ public class ApproveReportActivity extends Activity
 				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_PASS_REPORT_DETAIL");
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(ApproveReportActivity.this, "网络未连接，无法审批");
+					Utils.showToast(ApproveReportActivity.this, R.string.error_approve_network_unavailable);
 				}
 				else
 				{
@@ -158,7 +158,7 @@ public class ApproveReportActivity extends Activity
 				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REJECT_REPORT_DETAIL");
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(ApproveReportActivity.this, "网络未连接，无法审批");
+					Utils.showToast(ApproveReportActivity.this, R.string.error_approve_network_unavailable);
 				}
 				else
 				{
@@ -197,7 +197,7 @@ public class ApproveReportActivity extends Activity
 		}
 		else if (itemList.isEmpty())
 		{
-			Utils.showToast(this, "网络未连接，无法获取数据");			
+			Utils.showToast(this, R.string.error_get_data_network_unavailable);			
 		}
 	}
 
@@ -261,7 +261,7 @@ public class ApproveReportActivity extends Activity
 							ReimProgressDialog.dismiss();
 					    	if (report.getStatus() != Report.STATUS_SUBMITTED)
 							{
-					    		Utils.showToast(ApproveReportActivity.this, "报告已被审批");
+					    		Utils.showToast(ApproveReportActivity.this, R.string.error_report_approved);
 								goBackToMainActivity();
 							}
 					    	else if (fromPush && !report.getManagerList().contains(appPreference.getCurrentUser()))
@@ -296,8 +296,8 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-				    		Utils.showToast(ApproveReportActivity.this, "数据获取失败, " + response.getErrorMessage());
-				    		if (response.getCode() == HttpConstant.ERROR_REPORT_DELETED || response.getCode() == HttpConstant.ERROR_REPORT_NOT_EXISTS)
+				    		Utils.showToast(ApproveReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+				    		if (response.getCode() == NetworkConstant.ERROR_REPORT_DELETED || response.getCode() == NetworkConstant.ERROR_REPORT_NOT_EXISTS)
 							{
 								dbManager.deleteOthersReport(reportServerID, AppPreference.getAppPreference().getCurrentUserID());
 							}
@@ -347,7 +347,7 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							String message = status == 2 ? "报告已通过" : "报告已退回";
+							int message = status == 2 ? R.string.prompt_report_approved : R.string.prompt_report_rejected;
 							Utils.showToast(ApproveReportActivity.this, message);
 							goBackToMainActivity();
 						}
@@ -360,7 +360,7 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ApproveReportActivity.this, "操作失败, " + response.getErrorMessage());
+							Utils.showToast(ApproveReportActivity.this, R.string.error_operation_failed, response.getErrorMessage());
 						}
 					});					
 				}

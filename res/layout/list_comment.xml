@@ -14,7 +14,7 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp" >
 
-        <classes.Widget.CircleImageView
+        <classes.widget.CircleImageView
             android:id="@+id/avatarImageView"
             android:layout_width="40dp"
             android:layout_height="40dp"

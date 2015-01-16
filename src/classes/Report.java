@@ -9,7 +9,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.Utils.DBManager;
+import classes.utils.DBManager;
 
 import com.rushucloud.reim.R;
 

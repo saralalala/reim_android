@@ -1,10 +1,10 @@
 package com.rushucloud.reim.me;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.FeedbackRequest;
 import netUtils.Response.FeedbackResponse;
+import netUtils.Request.FeedbackRequest;
 
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -89,7 +89,7 @@ public class FeedbackActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(FeedbackActivity.this, "网络未连接，无法发送反馈");
+					Utils.showToast(FeedbackActivity.this, R.string.error_feedback_network_unavailable);
 				}
 			}
 		});
@@ -118,7 +118,7 @@ public class FeedbackActivity extends Activity
 		final String contactInfo = contactEditText.getText().toString();
 		if (feedback.equals("") && contactInfo.equals(""))
 		{
-			Utils.showToast(this, "意见或联系方式不能均为空");
+			Utils.showToast(this, R.string.error_feedback_contact_empty);
 		}
 		else
 		{
@@ -154,7 +154,7 @@ public class FeedbackActivity extends Activity
 						}
 						else
 						{
-							Utils.showToast(FeedbackActivity.this, "反馈发送失败！" + response.getErrorMessage());
+							Utils.showToast(FeedbackActivity.this, R.string.failed_to_send_feedback, response.getErrorMessage());
 						}
 					}						
 				});

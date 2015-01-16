@@ -7,26 +7,26 @@ import java.util.List;
 import netUtils.HttpConnectionCallback;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
-import netUtils.Request.Report.DeleteReportRequest;
-import netUtils.Request.Report.ExportReportRequest;
-import netUtils.Request.Report.SubordinatesReportRequest;
 import netUtils.Response.Report.DeleteReportResponse;
 import netUtils.Response.Report.ExportReportResponse;
 import netUtils.Response.Report.SubordinatesReportResponse;
+import netUtils.Request.Report.DeleteReportRequest;
+import netUtils.Request.Report.ExportReportRequest;
+import netUtils.Request.Report.SubordinatesReportRequest;
 
 import classes.ReimApplication;
 import classes.Report;
 import classes.User;
-import classes.Adapter.OthersReportListViewAdapter;
-import classes.Adapter.ReportListViewAdapter;
-import classes.Adapter.ReportTagGridViewAdapter;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
-import classes.Widget.SegmentedGroup;
-import classes.Widget.XListView;
-import classes.Widget.XListView.IXListViewListener;
+import classes.adapter.OthersReportListViewAdapter;
+import classes.adapter.ReportListViewAdapter;
+import classes.adapter.ReportTagGridViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
+import classes.widget.SegmentedGroup;
+import classes.widget.XListView;
+import classes.widget.XListView.IXListViewListener;
 
 import com.rushucloud.reim.report.ApproveReportActivity;
 import com.rushucloud.reim.report.EditReportActivity;
@@ -315,7 +315,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 																}
 																else if (!Utils.isNetworkConnected())
 																{
-																	Utils.showToast(getActivity(), "网络未连接，无法删除");
+																	Utils.showToast(getActivity(), R.string.error_delete_network_unavailable);
 																}
 																else
 																{
@@ -328,7 +328,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				}
 				else
 				{
-					Utils.showToast(getActivity(), "报告已提交，不可删除");
+					Utils.showToast(getActivity(), R.string.error_delete_report_submitted);
 				}
 			}
 		});
@@ -344,11 +344,11 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		    	final Report report = showMineList.get(reportIndex);
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(getActivity(), "网络未连接，无法导出");
+					Utils.showToast(getActivity(), R.string.error_export_network_unavailable);
 				}
 				else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
 				{
-					Utils.showToast(getActivity(), "报销未完成，不可导出");					
+					Utils.showToast(getActivity(), R.string.error_export_not_finished);					
 				}
 				else
 				{
@@ -694,11 +694,11 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 										String email = emailEditText.getText().toString();
 										if (email.equals(""))
 										{
-											Utils.showToast(getActivity(), "邮箱不能为空");
+											Utils.showToast(getActivity(), R.string.error_email_empty);
 										}
 										else if (!Utils.isEmail(email))
 										{
-											Utils.showToast(getActivity(), "邮箱格式不正确");
+											Utils.showToast(getActivity(), R.string.error_email_wrong_format);
 										}
 										else
 										{
@@ -760,7 +760,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(getActivity(), "报告导出成功");
+							Utils.showToast(getActivity(), R.string.succeed_in_exporting);
 						}
 					});
 				}
@@ -771,7 +771,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(getActivity(), "报告导出失败");
+							Utils.showToast(getActivity(), R.string.failed_to_export);
 						}
 					});
 				}
@@ -841,7 +841,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						{
 							reportListView.stopRefresh();
 							reportListView.stopLoadMore();
-							Utils.showToast(getActivity(), "获取数据失败，" + response.getErrorMessage());
+							Utils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
 						}
 					});					
 				}
@@ -932,7 +932,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 					{
 						reportListView.stopRefresh();
 //						String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-						String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "网络未连接，无法刷新";
+						int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
 						Utils.showToast(getActivity(), prompt);
 					}
 				});
@@ -951,7 +951,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 					public void run()
 					{
 						reportListView.stopRefresh();
-						Utils.showToast(getActivity(), "网络未连接，无法刷新");
+						Utils.showToast(getActivity(), R.string.error_refresh_network_unavailable);
 					}
 				});
 			}			

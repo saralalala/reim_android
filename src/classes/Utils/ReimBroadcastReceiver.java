@@ -1,4 +1,4 @@
-package classes.Utils;
+package classes.utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,7 +54,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 
 																PendingIntent.FLAG_UPDATE_CURRENT);
 				
-				notification.setLatestEventInfo(context, "如数云报销", message, pendingIntent);
+				notification.setLatestEventInfo(context, context.getString(R.string.app_name), message, pendingIntent);
 
 				if (manager == null)
 				{

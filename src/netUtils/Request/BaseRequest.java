@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
+import netUtils.NetworkConstant;
 import netUtils.HttpUtils;
 import netUtils.URLDef;
 
@@ -178,38 +178,30 @@ public abstract class BaseRequest
 		{
 			public void run()
 			{
-				String resultString = null;
 				InputStream inputStream = null;
 			
 				try
 				{
 					HttpGet request = new HttpGet(url);	
-					request.addHeader(HttpConstant.X_REIM_JWT, HttpUtils.getJWTString());
+					request.addHeader(NetworkConstant.X_REIM_JWT, HttpUtils.getJWTString());
 
 					HttpResponse response = httpClient.execute(request);
 					if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 					{
 						inputStream = response.getEntity().getContent();
 					}
-					else
-					{
-						resultString = response.getStatusLine().getReasonPhrase();
-					}
 				} 
 				catch (ClientProtocolException e)
 				{
 					e.printStackTrace();
-					System.out.println(resultString);
 				}
 				catch (IOException e)
 				{
 					e.printStackTrace();
-					System.out.println(resultString);
 				}
 				catch (Exception e)
 				{
 					e.printStackTrace();
-					System.out.println(resultString);
 				}
 				
 				callback.execute(inputStream);
@@ -226,7 +218,7 @@ public abstract class BaseRequest
 				String resultString = null;
 				try
 				{
-					request.addHeader(HttpConstant.X_REIM_JWT, HttpUtils.getJWTString());
+					request.addHeader(NetworkConstant.X_REIM_JWT, HttpUtils.getJWTString());
 					
 					HttpResponse response = httpClient.execute(request);
 					if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)

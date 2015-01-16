@@ -4,29 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
+import netUtils.NetworkConstant;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Report.CreateReportRequest;
-import netUtils.Request.Report.GetReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Report.CreateReportRequest;
+import netUtils.Request.Report.GetReportRequest;
+import netUtils.Request.Report.ModifyReportRequest;
 import classes.Category;
 import classes.Comment;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
 import classes.User;
-import classes.Adapter.MemberListViewAdapter;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.TextLengthFilter;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.adapter.MemberListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.TextLengthFilter;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.EditItemActivity;
@@ -195,7 +195,7 @@ public class EditReportActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				saveReport("报告保存成功");
+				saveReport();
 			}
 		});
 		
@@ -268,11 +268,11 @@ public class EditReportActivity extends Activity
 				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(EditReportActivity.this, "网络未连接，无法提交");
+					Utils.showToast(EditReportActivity.this, R.string.error_submit_network_unavailable);
 				}
 				else if (report.getManagerList() == null || report.getManagerList().isEmpty())
 				{
-					Utils.showToast(EditReportActivity.this, "未选择汇报对象");
+					Utils.showToast(EditReportActivity.this, R.string.no_manager);
 				}
 				else
 				{
@@ -290,7 +290,7 @@ public class EditReportActivity extends Activity
 				{
 					if (!Utils.isNetworkConnected())
 					{
-						Utils.showToast(EditReportActivity.this, "网络未连接，无法添加评论");
+						Utils.showToast(EditReportActivity.this, R.string.error_comment_network_unavailable);
 					}
 					else
 					{
@@ -560,7 +560,7 @@ public class EditReportActivity extends Activity
 										String comment = commentEditText.getText().toString();
 										if (comment.equals(""))
 										{
-											Utils.showToast(EditReportActivity.this, "评论不能为空");
+											Utils.showToast(EditReportActivity.this, R.string.error_comment_empty);
 										}
 										else
 										{
@@ -619,7 +619,7 @@ public class EditReportActivity extends Activity
     	downloadAvatars();
     }
 
-    private void saveReport(String prompt)
+    private void saveReport()
     {
     	hideSoftKeyboard();
     	report.setLocalUpdatedDate(Utils.getCurrentTime());
@@ -647,12 +647,12 @@ public class EditReportActivity extends Activity
 					}
 				});
 			}
-			Utils.showToast(EditReportActivity.this, "报告保存成功");
+			Utils.showToast(EditReportActivity.this, R.string.succeed_in_saving_report);
 			finish();
 		}
 		else
 		{
-			Utils.showToast(EditReportActivity.this, "保存失败");
+			Utils.showToast(EditReportActivity.this, R.string.failed_to_save_report);
 		}
     }
 
@@ -679,18 +679,18 @@ public class EditReportActivity extends Activity
 				{
 					report.setStatus(Report.STATUS_DRAFT);					
 				}
-				Utils.showToast(this, "无法提交报告,此报告为空报告");
+				Utils.showToast(this, R.string.error_submit_report_empty);
 			}
 			else if (appPreference.getCurrentGroupID() == -1)
 			{
 				report.setStatus(Report.STATUS_FINISHED);
-				Utils.showToast(this, "报告提交成功");
+				Utils.showToast(this, R.string.succeed_in_submitting_report);
 				finish();
 			}
 			else
 			{
 				report.setStatus(Report.STATUS_SUBMITTED);
-				Utils.showToast(this, "报告提交成功");
+				Utils.showToast(this, R.string.succeed_in_submitting_report);
 				finish();
 			}
 			dbManager.updateReportByLocalID(report);
@@ -708,7 +708,7 @@ public class EditReportActivity extends Activity
 		}
 		else
 		{
-			Utils.showToast(this, "保存失败");
+			Utils.showToast(this, R.string.failed_to_save_report);
 		}
     }
 
@@ -737,7 +737,7 @@ public class EditReportActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
+					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					user.setAvatarPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
@@ -799,7 +799,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditReportActivity.this, "获取详细信息失败");
+							Utils.showToast(EditReportActivity.this, R.string.failed_to_get_data);
 						}
 					});
 				}
@@ -849,7 +849,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditReportActivity.this, "评论发表成功");
+							Utils.showToast(EditReportActivity.this, R.string.succeed_in_sending_comment);
 						}
 					});
 				}
@@ -860,7 +860,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditReportActivity.this, "评论发表失败, " + response.getErrorMessage());
+							Utils.showToast(EditReportActivity.this, R.string.failed_to_send_comment, response.getErrorMessage());
 						}
 					});					
 				}
@@ -906,7 +906,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditReportActivity.this, "评论发表成功");
+							Utils.showToast(EditReportActivity.this, R.string.succeed_in_sending_comment);
 						}
 					});
 				}
@@ -917,7 +917,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditReportActivity.this, "评论发表失败, " + response.getErrorMessage());
+							Utils.showToast(EditReportActivity.this, R.string.failed_to_send_comment, response.getErrorMessage());
 						}
 					});					
 				}

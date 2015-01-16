@@ -3,7 +3,7 @@ package com.rushucloud.reim.report;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.Widget.ReimProgressDialog;
+import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;

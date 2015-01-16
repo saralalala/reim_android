@@ -27,7 +27,7 @@
 	        android:textColor="@color/font_major_dark"
 	        android:textSize="16sp" />
     
-	    <classes.Widget.SegmentedGroup
+	    <classes.widget.SegmentedGroup
 	        android:id="@+id/typeRadioGroup"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
 	            android:text="@string/prove_ahead"
 	            style="@style/RadioButton" />
 	        
-	    </classes.Widget.SegmentedGroup>
+	    </classes.widget.SegmentedGroup>
 	
 	</RelativeLayout>
     

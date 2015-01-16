@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import classes.Report;
 import classes.User;
-import classes.Utils.Utils;
+import classes.utils.Utils;
 import netUtils.Response.BaseResponse;
 
 public class SubordinatesReportResponse extends BaseResponse

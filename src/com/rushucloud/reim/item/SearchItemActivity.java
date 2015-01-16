@@ -6,15 +6,15 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.Item.SearchItemsRequest;
 import netUtils.Response.Item.SearchItemsResponse;
+import netUtils.Request.Item.SearchItemsRequest;
 
 import classes.Item;
 import classes.Report;
-import classes.Adapter.ItemListViewAdapter;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
+import classes.adapter.ItemListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -88,7 +88,7 @@ public class SearchItemActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(SearchItemActivity.this, "网络未连接，无法联网查找");
+					Utils.showToast(SearchItemActivity.this, R.string.error_search_network_unavailable);
 				}
 				return true;
 			}
@@ -188,7 +188,7 @@ public class SearchItemActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(SearchItemActivity.this, "网络搜索失败");
+							Utils.showToast(SearchItemActivity.this, R.string.failed_to_search);
 						}
 					});
 				}

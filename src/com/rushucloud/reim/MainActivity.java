@@ -6,18 +6,18 @@ import java.util.List;
 import netUtils.HttpConnectionCallback;
 import netUtils.UDPClient;
 import netUtils.UDPConnectionCallback;
+import netUtils.Response.EventsResponse;
+import netUtils.Response.Group.GetGroupResponse;
 import netUtils.Request.EventsReadRequest;
 import netUtils.Request.EventsRequest;
 import netUtils.Request.Group.GetGroupRequest;
-import netUtils.Response.EventsResponse;
-import netUtils.Response.Group.GetGroupResponse;
 import classes.ReimApplication;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
-import classes.Widget.TabItem;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
+import classes.widget.TabItem;
 
 import com.rushucloud.reim.item.EditItemActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -119,7 +119,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			if (System.currentTimeMillis() - exitTime > 2000)
 			{
-				Utils.showToast(MainActivity.this, "再按一次返回键退出程序");
+				Utils.showToast(MainActivity.this, R.string.prompt_press_back_to_exit);
 				exitTime = System.currentTimeMillis();
 			}
 			else

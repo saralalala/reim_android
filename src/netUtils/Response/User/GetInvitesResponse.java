@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.Invite;
-import classes.Utils.AppPreference;
+import classes.utils.AppPreference;
 
 import netUtils.Response.BaseResponse;
 

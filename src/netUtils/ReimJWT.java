@@ -33,7 +33,6 @@ public class ReimJWT
 		}
 		catch (JSONException ex)
 		{
-			System.out.println(ex.toString());
 			return "";
 		}
 	}

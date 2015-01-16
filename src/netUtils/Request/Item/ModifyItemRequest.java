@@ -12,7 +12,7 @@ import classes.Image;
 import classes.Item;
 import classes.Tag;
 import classes.User;
-import classes.Utils.Utils;
+import classes.utils.Utils;
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 

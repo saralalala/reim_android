@@ -1,7 +1,7 @@
 
 package netUtils.Response;
 
-import netUtils.HttpConstant;
+import netUtils.NetworkConstant;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import com.rushucloud.reim.start.SignInActivity;
 
 import classes.ReimApplication;
-import classes.Utils.AppPreference;
+import classes.utils.AppPreference;
 
 import android.content.Intent;
 
@@ -137,70 +137,70 @@ public abstract class BaseResponse
 		String result = null;
 		switch (code)
 		{
-			case HttpConstant.ERROR_SYSTEM_ERROR:
+			case NetworkConstant.ERROR_SYSTEM_ERROR:
 				result = "系统错误，请稍候尝试";
 				break;
-			case HttpConstant.ERROR_USER_NOT_EXISTS:
+			case NetworkConstant.ERROR_USER_NOT_EXISTS:
 				result = "用户不存在或密码错误";
 				break;
-			case HttpConstant.ERROR_MAIL_SEND_ERROR:
+			case NetworkConstant.ERROR_MAIL_SEND_ERROR:
 				result = "邮件发送错误";
 				break;
-			case HttpConstant.ERROR_PARAMETER_ERROR:
+			case NetworkConstant.ERROR_PARAMETER_ERROR:
 				result = "参数错误";
 				break;
-			case HttpConstant.ERROR_EMPTY_HEADER:
+			case NetworkConstant.ERROR_EMPTY_HEADER:
 				result = "非法请求";
 				break;
-			case HttpConstant.ERROR_AUTH_FAIL:
+			case NetworkConstant.ERROR_AUTH_FAIL:
 				result = "认证失败";
 				break;
-			case HttpConstant.ERROR_USER_EXISTS:
+			case NetworkConstant.ERROR_USER_EXISTS:
 				result = "用户已经存在";
 				break;
-			case HttpConstant.ERROR_AUTH_TIMEOUT:
+			case NetworkConstant.ERROR_AUTH_TIMEOUT:
 				result = "认证超时";
 				break;
-			case HttpConstant.ERROR_BAD_PERMISSION:
+			case NetworkConstant.ERROR_BAD_PERMISSION:
 				result = "权限不足本次操作";
 				break;
-			case HttpConstant.ERROR_ALREAD_BOUND:
+			case NetworkConstant.ERROR_ALREAD_BOUND:
 				result = "用户已绑定";
 				break;
-			case HttpConstant.ERROR_USER_AUTH_ERROR:
+			case NetworkConstant.ERROR_USER_AUTH_ERROR:
 				result = "用户认证失败";
 				break;
-			case HttpConstant.ERROR_BAD_ITEMS:
+			case NetworkConstant.ERROR_BAD_ITEMS:
 				result = "条目信息不齐全，请重新填写";
 				break;
-			case HttpConstant.ERROR_EMPTY_BIND:
+			case NetworkConstant.ERROR_EMPTY_BIND:
 				result = "尚未绑定账号";
 				break;
-			case HttpConstant.ERROR_CLOSE_REPORT:
+			case NetworkConstant.ERROR_CLOSE_REPORT:
 				result = "您提交的报告已经处于关闭状态";
 				break;
-			case HttpConstant.ERROR_EMPTY_CATEGORY:
+			case NetworkConstant.ERROR_EMPTY_CATEGORY:
 				result = "没有选定分类";
 				break;
-			case HttpConstant.ERROR_ZERO_AMOUNT:
+			case NetworkConstant.ERROR_ZERO_AMOUNT:
 				result = "没有报销额度";
 				break;
-			case HttpConstant.ERROR_OLDER_COMPANY:
+			case NetworkConstant.ERROR_OLDER_COMPANY:
 				result = "报销中有条目不属于当前公司";
 				break;
-			case HttpConstant.ERROR_EMPTY_REPORT:
+			case NetworkConstant.ERROR_EMPTY_REPORT:
 				result = "报销不存在";
 				break;
-			case HttpConstant.ERROR_EMPTY_ITEMS:
+			case NetworkConstant.ERROR_EMPTY_ITEMS:
 				result = "没有提交项目";
 				break;
-			case HttpConstant.ERROR_ITEM_ADDED:
+			case NetworkConstant.ERROR_ITEM_ADDED:
 				result = "条目已加入报销";
 				break;
-			case HttpConstant.ERROR_REPORT_DELETED:
+			case NetworkConstant.ERROR_REPORT_DELETED:
 				result = "报告已被删除";
 				break;
-			case HttpConstant.ERROR_REPORT_NOT_EXISTS:
+			case NetworkConstant.ERROR_REPORT_NOT_EXISTS:
 				result = "报告不存在";
 				break;
 			default:

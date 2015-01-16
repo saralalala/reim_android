@@ -1,7 +1,7 @@
 package com.rushucloud.reim.start;
 
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
+import classes.utils.DBManager;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -47,9 +47,9 @@ public class WelcomeActivity extends Activity
     {
         if (keyCode == KeyEvent.KEYCODE_BACK) 
         {
-        	if(System.currentTimeMillis()-exitTime>2000)
+        	if(System.currentTimeMillis() - exitTime > 2000)
         	{
-        		Utils.showToast(WelcomeActivity.this, "再按一次返回键退出程序");
+        		Utils.showToast(WelcomeActivity.this, R.string.prompt_press_back_to_exit);
         		exitTime=System.currentTimeMillis();
         	}
         	else 

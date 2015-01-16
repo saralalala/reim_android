@@ -11,7 +11,7 @@ import classes.Comment;
 import classes.Item;
 import classes.Report;
 import classes.User;
-import classes.Utils.DBManager;
+import classes.utils.DBManager;
 import netUtils.Response.BaseResponse;
 
 public class GetReportResponse extends BaseResponse

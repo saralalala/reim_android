@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import android.util.SparseIntArray;
 
-import netUtils.Request.SyncDataRequest;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.Item.CreateItemRequest;
-import netUtils.Request.Item.ModifyItemRequest;
-import netUtils.Request.Report.CreateReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
 import netUtils.Response.SyncDataResponse;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.Item.CreateItemResponse;
 import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
+import netUtils.Request.SyncDataRequest;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Request.Item.CreateItemRequest;
+import netUtils.Request.Item.ModifyItemRequest;
+import netUtils.Request.Report.CreateReportRequest;
+import netUtils.Request.Report.ModifyReportRequest;
 import classes.Image;
 import classes.Item;
 import classes.Report;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
 
 public abstract class SyncUtils
 {
@@ -66,7 +66,6 @@ public abstract class SyncUtils
 	public static void syncFromServer(final SyncDataCallback callback)
 	{
 //		int lastSynctime = AppPreference.getAppPreference().getLastSyncTime();
-//		System.out.println("*************************************");
 //		System.out.println("lastSynctime:"+lastSynctime);
 		final int currentTime = Utils.getCurrentTime();
 		SyncDataRequest request = new SyncDataRequest(0);
@@ -246,7 +245,7 @@ public abstract class SyncUtils
     private static void sendUploadImageRequest(final Image image, final SyncDataCallback callback)
     {
     	System.out.println("upload image：local id " + image.getLocalID());
-		UploadImageRequest request = new UploadImageRequest(image.getPath(), HttpConstant.IMAGE_TYPE_INVOICE);
+		UploadImageRequest request = new UploadImageRequest(image.getPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

@@ -3,12 +3,12 @@ package com.rushucloud.reim.me;
 import java.util.ArrayList;
 import java.util.List;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.GetInvitesRequest;
 import netUtils.Response.User.GetInvitesResponse;
+import netUtils.Request.User.GetInvitesRequest;
 import classes.Invite;
-import classes.Adapter.MessageListViewAdapter;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.adapter.MessageListViewAdapter;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -54,7 +54,7 @@ public class MessageActivity extends Activity
 		}
 		else
 		{
-			Utils.showToast(MessageActivity.this, "网络未连接，获取数据失败");
+			Utils.showToast(MessageActivity.this, R.string.error_get_data_network_unavailable);
 			messageListView.setVisibility(View.GONE);
 			messageTextView.setVisibility(View.VISIBLE);
 		}

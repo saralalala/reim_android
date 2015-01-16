@@ -1,6 +1,6 @@
 package com.rushucloud.reim.me;
 
-import classes.Utils.Utils;
+import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;

@@ -9,10 +9,6 @@ import java.net.UnknownHostException;
 
 public class UDPClient
 {
-//	private static final String SERVER_ADDRESS = "182.92.166.53";
-	private static final String SERVER_ADDRESS = "online.rushucloud.com";
-	private static final int SERVER_PORT = 4888;
-
 	private DatagramSocket socket = null;
 	private Thread thread;
 	private String message;
@@ -31,12 +27,12 @@ public class UDPClient
 			{
 				try
 				{
-					socket = new DatagramSocket(SERVER_PORT);
-					InetAddress address = InetAddress.getByName(SERVER_ADDRESS);
-					socket.connect(address, SERVER_PORT);
+					socket = new DatagramSocket(URLDef.UDP_SERVER_PORT);
+					InetAddress address = InetAddress.getByName(URLDef.UDP_SERVER_ADDRESS);
+					socket.connect(address, URLDef.UDP_SERVER_PORT);
 
 					byte[] data = message.getBytes();
-					DatagramPacket packet = new DatagramPacket(data, data.length, address, SERVER_PORT);
+					DatagramPacket packet = new DatagramPacket(data, data.length, address, URLDef.UDP_SERVER_PORT);
 					socket.send(packet);
 
 					while (true)

@@ -10,7 +10,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.Utils.AppPreference;
+import classes.utils.AppPreference;
 
 public class HttpUtils
 {
@@ -24,7 +24,7 @@ public class HttpUtils
 		
 		HttpClientParams.setRedirecting(httpParams, true);
 		
-		HttpProtocolParams.setUserAgent(httpParams, HttpConstant.USER_AGENT);
+		HttpProtocolParams.setUserAgent(httpParams, NetworkConstant.USER_AGENT);
 		HttpClient client=new DefaultHttpClient(httpParams);
 		
 		return client;
@@ -36,11 +36,11 @@ public class HttpUtils
 		{
 			AppPreference appPreference = AppPreference.getAppPreference();
 			JSONObject jObject = new JSONObject();
-			jObject.put(HttpConstant.USERNAME, appPreference.getUsername());
-			jObject.put(HttpConstant.PASSWORD, appPreference.getPassword());
-			jObject.put(HttpConstant.DEVICE_TYPE, HttpConstant.DEVICE_TYPE_ANDROID);
-			jObject.put(HttpConstant.DEVICE_TOKEN, appPreference.getDeviceToken());
-			jObject.put(HttpConstant.SERVER_TOKEN, appPreference.getServerToken());
+			jObject.put(NetworkConstant.USERNAME, appPreference.getUsername());
+			jObject.put(NetworkConstant.PASSWORD, appPreference.getPassword());
+			jObject.put(NetworkConstant.DEVICE_TYPE, NetworkConstant.DEVICE_TYPE_ANDROID);
+			jObject.put(NetworkConstant.DEVICE_TOKEN, appPreference.getDeviceToken());
+			jObject.put(NetworkConstant.SERVER_TOKEN, appPreference.getServerToken());
 			String resultString=jObject.toString();
 			
 			return ReimJWT.Encode(resultString);

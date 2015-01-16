@@ -9,19 +9,19 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.Item.CreateItemRequest;
-import netUtils.Request.Item.GetVendorsRequest;
-import netUtils.Request.Item.ModifyItemRequest;
-import netUtils.Request.Report.CreateReportRequest;
+import netUtils.NetworkConstant;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.Item.CreateItemResponse;
 import netUtils.Response.Item.GetVendorsResponse;
 import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Request.Item.CreateItemRequest;
+import netUtils.Request.Item.GetVendorsRequest;
+import netUtils.Request.Item.ModifyItemRequest;
+import netUtils.Request.Report.CreateReportRequest;
 import classes.Category;
 import classes.Image;
 import classes.Item;
@@ -30,15 +30,15 @@ import classes.Report;
 import classes.Tag;
 import classes.User;
 import classes.Vendor;
-import classes.Adapter.CategoryExpandableListAdapter;
-import classes.Adapter.LocationListViewAdapter;
-import classes.Adapter.MemberListViewAdapter;
-import classes.Adapter.TagListViewAdapter;
-import classes.Adapter.VendorListViewAdapter;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.adapter.CategoryExpandableListAdapter;
+import classes.adapter.LocationListViewAdapter;
+import classes.adapter.MemberListViewAdapter;
+import classes.adapter.TagListViewAdapter;
+import classes.adapter.VendorListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 import cn.beecloud.BCLocation;
 
 import com.baidu.location.BDLocation;
@@ -217,7 +217,7 @@ public class EditItemActivity extends Activity
 				if (requestCode == PICK_IMAGE)
 				{
 					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());					
-					String invoicePath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_INVOICE);
+					String invoicePath = Utils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
 						Image image = new Image();
@@ -226,7 +226,7 @@ public class EditItemActivity extends Activity
 					}
 					else
 					{
-						Utils.showToast(EditItemActivity.this, "图片保存失败");
+						Utils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
 					}
 					
 					refreshInvoiceView();
@@ -234,7 +234,7 @@ public class EditItemActivity extends Activity
 				else if (requestCode == TAKE_PHOTO)
 				{
 					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempInvoicePath());
-					String invoicePath = Utils.saveBitmapToFile(bitmap, HttpConstant.IMAGE_TYPE_INVOICE);
+					String invoicePath = Utils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
 						Image image = new Image();
@@ -243,7 +243,7 @@ public class EditItemActivity extends Activity
 					}
 					else
 					{
-						Utils.showToast(EditItemActivity.this, "图片保存失败");
+						Utils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
 					}
 					
 					refreshInvoiceView();
@@ -259,7 +259,7 @@ public class EditItemActivity extends Activity
 			}
 			catch (Exception e)
 			{
-				Utils.showToast(EditItemActivity.this, "图片保存失败");
+				Utils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
 				e.printStackTrace();
 			}
 		}
@@ -407,7 +407,7 @@ public class EditItemActivity extends Activity
 													}
 													else
 													{
-														Utils.showToast(EditItemActivity.this, "网络未连接，无法发送审批");
+														Utils.showToast(EditItemActivity.this, R.string.error_send_network_unavailable);
 													}
 												}
 											});
@@ -421,7 +421,7 @@ public class EditItemActivity extends Activity
 				}
 				catch (NumberFormatException e)
 				{
-					Utils.showToast(EditItemActivity.this, "数字输入格式不正确");
+					Utils.showToast(EditItemActivity.this, R.string.error_number_wrong_format);
 					amountEditText.requestFocus();
 				}
 				catch (Exception e)
@@ -630,7 +630,7 @@ public class EditItemActivity extends Activity
 
 		if (!Utils.isNetworkConnected())
 		{
-			Utils.showToast(EditItemActivity.this, "网络未连接，无法下载图片");				
+			Utils.showToast(EditItemActivity.this, R.string.failed_to_download_invoice);				
 		}
 		else
 		{
@@ -1027,7 +1027,7 @@ public class EditItemActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(EditItemActivity.this, "当前组无任何标签");
+					Utils.showToast(EditItemActivity.this, R.string.no_tags);
 				}														
 			}
 		});
@@ -1237,7 +1237,7 @@ public class EditItemActivity extends Activity
 
 				if (managerList.isEmpty())
 				{
-					Utils.showToast(EditItemActivity.this, "未选择汇报对象");
+					Utils.showToast(EditItemActivity.this, R.string.no_manager);
 				}
 				else
 				{
@@ -1550,12 +1550,12 @@ public class EditItemActivity extends Activity
     {
     	if (dbManager.syncItem(item))
 		{
-			Utils.showToast(EditItemActivity.this, "条目保存成功");
+			Utils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
 			finish();
 		}
 		else
 		{
-			Utils.showToast(EditItemActivity.this, "条目保存失败");
+			Utils.showToast(EditItemActivity.this, R.string.failed_to_save_item);
 		}
     }
     
@@ -1611,7 +1611,7 @@ public class EditItemActivity extends Activity
 		
 		if (!Utils.isNetworkConnected())
 		{
-			Utils.showToast(EditItemActivity.this, "网络未连接，无法联网获取商家，请手动输入商家名称");
+			Utils.showToast(EditItemActivity.this, R.string.error_get_vendor_network_unavailable);
 		}
 		else if (currentLocation != null)
 		{
@@ -1622,11 +1622,11 @@ public class EditItemActivity extends Activity
 		}
 		else if (!Utils.isLocalisationEnabled())
 		{
-			Utils.showToast(EditItemActivity.this, "定位服务不可用，请打开定位服务或手动输入商家名称");
+			Utils.showToast(EditItemActivity.this, R.string.error_gps_unavailable);
 		}
 		else
 		{
-			Utils.showToast(EditItemActivity.this, "未获取到定位信息，请手动输入商家名或稍后再试");    	
+			Utils.showToast(EditItemActivity.this, R.string.failed_to_get_gps_info);    	
 		}
     }
 
@@ -1692,7 +1692,7 @@ public class EditItemActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_INVOICE);
+					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
 						image.setPath(invoicePath);
@@ -1717,7 +1717,7 @@ public class EditItemActivity extends Activity
 						{
 							public void run()
 							{
-								Utils.showToast(EditItemActivity.this, "图片保存失败");
+								Utils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
 							}
 						});						
 					}
@@ -1728,7 +1728,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(EditItemActivity.this, "图片下载失败");
+							Utils.showToast(EditItemActivity.this, R.string.failed_to_download_invoice);
 						}
 					});								
 				}
@@ -1836,7 +1836,7 @@ public class EditItemActivity extends Activity
         
     private void sendUploadImageRequest(final Image image)
     {
-		UploadImageRequest request = new UploadImageRequest(image.getPath(), HttpConstant.IMAGE_TYPE_INVOICE);
+		UploadImageRequest request = new UploadImageRequest(image.getPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -1867,7 +1867,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, "上传图片失败");
+							Utils.showToast(EditItemActivity.this, R.string.failed_to_upload_invoice);
 						}
 					});
 				}
@@ -1899,7 +1899,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, "创建条目失败");
+							Utils.showToast(EditItemActivity.this, R.string.failed_to_create_item);
 						}
 					});
 				}
@@ -1929,7 +1929,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, "修改条目失败");
+							Utils.showToast(EditItemActivity.this, R.string.failed_to_modify_item);
 						}
 					});			
 				}
@@ -1961,7 +1961,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, "创建审批报告成功");
+							Utils.showToast(EditItemActivity.this, R.string.succeed_in_creating_report);
 							finish();
 						}
 					});					
@@ -1974,7 +1974,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, "创建审批报告失败");
+							Utils.showToast(EditItemActivity.this, R.string.failed_to_create_report);
 							finish();
 						}
 					});								
@@ -2015,7 +2015,7 @@ public class EditItemActivity extends Activity
 							}
 							else 
 							{
-								Utils.showToast(EditItemActivity.this, "未获取到任何商家, 请手动输入");								
+								Utils.showToast(EditItemActivity.this, R.string.failed_to_get_vendor_no_data);								
 							}
 						}
 					});
@@ -2027,7 +2027,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, "获取商家列表失败, 请手动输入");
+							Utils.showToast(EditItemActivity.this, R.string.failed_to_get_vendor);
 						}
 					});					
 				}

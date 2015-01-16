@@ -1,8 +1,8 @@
 package com.rushucloud.reim.me;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.SignOutRequest;
 import netUtils.Response.User.SignOutResponse;
+import netUtils.Request.User.SignOutRequest;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.start.SignInActivity;
@@ -10,9 +10,9 @@ import com.umeng.analytics.MobclickAgent;
 
 import classes.ReimApplication;
 import classes.User;
-import classes.Utils.AppPreference;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.AppPreference;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -134,7 +134,7 @@ public class SettingsActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(SettingsActivity.this, "网络未连接，无法登出");							
+					Utils.showToast(SettingsActivity.this, R.string.error_sign_out_network_unavailable);							
 				}
 			}
 		});
@@ -184,7 +184,7 @@ public class SettingsActivity extends Activity
 						public void run()	
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SettingsActivity.this, "登出失败");
+							Utils.showToast(SettingsActivity.this, R.string.failed_to_sign_out);
 						}
 					});
 				}

@@ -19,7 +19,7 @@
         android:padding="5dp"
         android:orientation="horizontal" >
 
-        <classes.Widget.TabItem
+        <classes.widget.TabItem
             android:id="@+id/tabItemReim"
             android:layout_width="0dp"
             android:layout_height="50dp"
@@ -36,7 +36,7 @@
             android:layout_height="50dp"
             android:layout_weight="1" >
 
-            <classes.Widget.TabItem
+            <classes.widget.TabItem
                 android:id="@+id/tabItemReport"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -103,7 +103,7 @@
 
         </RelativeLayout>
 
-        <classes.Widget.TabItem
+        <classes.widget.TabItem
             android:id="@+id/tabItemStat"
             android:layout_width="0dp"
             android:layout_height="50dp"
@@ -120,7 +120,7 @@
             android:layout_height="50dp"
             android:layout_weight="1" >
 
-            <classes.Widget.TabItem
+            <classes.widget.TabItem
                 android:id="@+id/tabItemMe"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

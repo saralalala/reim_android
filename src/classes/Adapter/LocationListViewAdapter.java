@@ -1,4 +1,4 @@
-package classes.Adapter;
+package classes.adapter;
 
 import java.util.Arrays;
 import java.util.List;

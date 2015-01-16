@@ -1,11 +1,11 @@
 package com.rushucloud.reim.start;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.ResetPasswordRequest;
 import netUtils.Response.User.ResetPasswordResponse;
+import netUtils.Request.User.ResetPasswordRequest;
 
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -103,21 +103,21 @@ public class ResetPasswordActivity extends Activity
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(ResetPasswordActivity.this, "网络未连接，无法发送请求");
+					Utils.showToast(ResetPasswordActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (newPassword.equals(""))
 				{
-					Utils.showToast(ResetPasswordActivity.this, "新密码不能为空");
+					Utils.showToast(ResetPasswordActivity.this, R.string.error_new_password_empty);
 					newPasswordEditText.requestFocus();
 				}
 				else if (confirmPassword.equals(""))
 				{
-					Utils.showToast(ResetPasswordActivity.this, "确认密码不能为空");
+					Utils.showToast(ResetPasswordActivity.this, R.string.error_confirm_password_empty);
 					confirmPasswordEditText.requestFocus();
 				}
 				else if (!newPassword.equals(confirmPassword))
 				{
-					Utils.showToast(ResetPasswordActivity.this, "两次输入的密码不一致");
+					Utils.showToast(ResetPasswordActivity.this, R.string.error_wrong_confirm_password);
 					confirmPasswordEditText.requestFocus();
 				}
 				else
@@ -176,7 +176,7 @@ public class ResetPasswordActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ResetPasswordActivity.this, "修改密码失败！"+response.getErrorMessage());
+							Utils.showToast(ResetPasswordActivity.this, R.string.failed_to_change_password, response.getErrorMessage());
 						}
 					});				
 				}

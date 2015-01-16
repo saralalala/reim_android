@@ -263,7 +263,7 @@
 		<!-- ################### AVOS推送 ################### -->
         <service android:name="com.avos.avoscloud.PushService"/>
         <receiver 
-            android:name="classes.Utils.ReimBroadcastReceiver" >
+            android:name="classes.utils.ReimBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

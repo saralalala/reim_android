@@ -3,23 +3,23 @@ package com.rushucloud.reim.me;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Group.GetGroupRequest;
-import netUtils.Request.User.DefaultManagerRequest;
+import netUtils.NetworkConstant;
 import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.Group.GetGroupResponse;
 import netUtils.Response.User.DefaultManagerResponse;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Group.GetGroupRequest;
+import netUtils.Request.User.DefaultManagerRequest;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.User;
-import classes.Adapter.MemberListViewAdapter;
-import classes.Utils.AppPreference;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.adapter.MemberListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -130,7 +130,7 @@ public class ManagerActivity extends Activity
 				
 				if (!Utils.isNetworkConnected())
 				{
-					Utils.showToast(ManagerActivity.this, "网络未连接，无法保存");
+					Utils.showToast(ManagerActivity.this, R.string.error_save_network_unavailable);
 				}
 				else if (manager == null)
 				{
@@ -138,11 +138,11 @@ public class ManagerActivity extends Activity
 				}
 				else if (manager.getServerID() == currentUser.getServerID())
 				{
-					Utils.showToast(ManagerActivity.this, "不能选择自己作为上级");				
+					Utils.showToast(ManagerActivity.this, R.string.error_self_as_manager);				
 				}
 				else if (manager.getServerID() == currentUser.getDefaultManagerID())
 				{
-					Utils.showToast(ManagerActivity.this, "与原有默认上级相同，无需保存");				
+					Utils.showToast(ManagerActivity.this, R.string.error_same_manager);				
 				}
 				else
 				{
@@ -223,7 +223,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ManagerActivity.this, "刷新数据失败");
+							Utils.showToast(ManagerActivity.this, R.string.failed_to_get_data);
 						}
 					});
 				}
@@ -273,7 +273,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ManagerActivity.this, "默认上级修改失败");				
+							Utils.showToast(ManagerActivity.this, R.string.failed_to_change_manager);				
 						}
 					});
 				}
@@ -291,8 +291,7 @@ public class ManagerActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					System.out.println("download succeed:"+user.getNickname()+"-"+user.getAvatarID());
-					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
+					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					user.setAvatarPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
@@ -307,10 +306,6 @@ public class ManagerActivity extends Activity
 							adapter.notifyDataSetChanged();
 						}
 					});	
-				}
-				else
-				{
-					System.out.println("download failed:"+user.getNickname()+"-"+user.getAvatarID());					
 				}
 			}
 		});

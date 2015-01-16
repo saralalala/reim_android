@@ -1,17 +1,17 @@
 package com.rushucloud.reim.item;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.HttpConstant;
-import netUtils.Request.DownloadImageRequest;
+import netUtils.NetworkConstant;
 import netUtils.Response.DownloadImageResponse;
+import netUtils.Request.DownloadImageRequest;
 import classes.Category;
 import classes.Image;
 import classes.Item;
 import classes.ReimApplication;
 import classes.User;
-import classes.Utils.DBManager;
-import classes.Utils.Utils;
-import classes.Widget.ReimProgressDialog;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.R;
@@ -148,7 +148,7 @@ public class ShowItemActivity extends Activity
 		
 		if (!Utils.isNetworkConnected())
 		{
-			Utils.showToast(ShowItemActivity.this, "网络未连接，无法下载图片");				
+			Utils.showToast(ShowItemActivity.this, R.string.error_download_invoice_network_unavailable);				
 		}
 		else
 		{
@@ -400,7 +400,7 @@ public class ShowItemActivity extends Activity
 				final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_INVOICE);
+					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
 						image.setPath(invoicePath);
@@ -421,7 +421,7 @@ public class ShowItemActivity extends Activity
 						{
 							public void run()
 							{
-								Utils.showToast(ShowItemActivity.this, "发票图片保存失败");
+								Utils.showToast(ShowItemActivity.this, R.string.failed_to_save_invoice);
 							}
 						});						
 					}
@@ -432,7 +432,7 @@ public class ShowItemActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(ShowItemActivity.this, "发票图片下载失败");
+							Utils.showToast(ShowItemActivity.this, R.string.failed_to_download_invoice);
 						}
 					});								
 				}
@@ -478,7 +478,7 @@ public class ShowItemActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), HttpConstant.IMAGE_TYPE_AVATAR);
+					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					user.setAvatarPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
