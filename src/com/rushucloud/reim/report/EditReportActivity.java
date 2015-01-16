@@ -344,11 +344,14 @@ public class EditReportActivity extends Activity
 				managerPopupWindow.dismiss();
 				
 				List<User> managerList = new ArrayList<User>();
-				for (int i = 0; i < managerCheckList.length; i++)
+				if (!userList.isEmpty())
 				{
-					if (managerCheckList[i])
+					for (int i = 0; i < managerCheckList.length; i++)
 					{
-						managerList.add(userList.get(i));
+						if (managerCheckList[i])
+						{
+							managerList.add(userList.get(i));
+						}
 					}
 				}
 
@@ -392,11 +395,14 @@ public class EditReportActivity extends Activity
 				ccPopupWindow.dismiss();
 
 				List<User> ccList = new ArrayList<User>();
-				for (int i = 0; i < ccCheckList.length; i++)
+				if (!userList.isEmpty())
 				{
-					if (ccCheckList[i])
+					for (int i = 0; i < ccCheckList.length; i++)
 					{
-						ccList.add(userList.get(i));
+						if (ccCheckList[i])
+						{
+							ccList.add(userList.get(i));
+						}
 					}
 				}
 				

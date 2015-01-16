@@ -83,23 +83,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				{
 					public void execute(Object udpResponse)
 					{
-						final EventsResponse response = new EventsResponse(udpResponse);
-						if (response.getStatus())
+						if (Utils.isNetworkConnected())
 						{
-							if (response.isNeedToRefresh() && Utils.isNetworkConnected())
-							{
-								sendGetGroupRequest();
-							}
-							
-							runOnUiThread(new Runnable()
-							{
-								public void run()
-								{
-									ReimApplication.setReportBadgeCount(response.getApproveEventCount());
-									setReportBadge(response.getReportEventCount());
-									setMeBadge(response.getInviteEventCount());
-								}
-							});
+							sendGetEventsRequest();
 						}
 					}
 				});		

@@ -186,7 +186,7 @@ public class PhoneSignUpActivity extends Activity
 				else if (!inputCode.equals(code))
 				{
 					Utils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_code);
-					codeEditText.requestFocus();		
+					codeEditText.requestFocus();
 				}
 				else
 				{
@@ -253,6 +253,7 @@ public class PhoneSignUpActivity extends Activity
 		});
 		thread.start();
 		
+		ReimProgressDialog.show();
 		VerifyCodeRequest request = new VerifyCodeRequest(phoneNumber);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -266,6 +267,7 @@ public class PhoneSignUpActivity extends Activity
 					{
 						public void run()
 						{
+							ReimProgressDialog.dismiss();
 							Utils.showToast(PhoneSignUpActivity.this, R.string.prompt_message_sent);
 						}
 					});
@@ -276,7 +278,8 @@ public class PhoneSignUpActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(PhoneSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
+							ReimProgressDialog.dismiss();
+							Utils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_code, response.getErrorMessage());
 						}
 					});
 				}
@@ -304,7 +307,7 @@ public class PhoneSignUpActivity extends Activity
 					});
 					
 					AppPreference appPreference = AppPreference.getAppPreference();
-					appPreference.setUsername(user.getEmail());	
+					appPreference.setUsername(user.getPhone());	
 					appPreference.setPassword(user.getPassword());
 					appPreference.setServerToken(response.getServerToken());
 					appPreference.setCurrentUserID(response.getUserID());
