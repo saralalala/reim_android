@@ -281,7 +281,8 @@ public class MessageDetailActivity extends Activity
 		{
         	ReimApplication.setTabIndex(3);
         	Intent intent = new Intent(MessageDetailActivity.this, MainActivity.class);
-        	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
     		Intent intent2 = new Intent(MessageDetailActivity.this, MessageActivity.class);
         	startActivities(new Intent[] {intent, intent2});
         	finish();

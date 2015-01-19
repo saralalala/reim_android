@@ -41,7 +41,7 @@ public class StatisticsResponse extends BaseResponse
 				StatisticsCategory category = new StatisticsCategory();
 				category.setCategoryID(object.getInt("id"));
 				category.setAmount(object.getDouble("amount"));
-				
+				  
 				List<Integer> itemIDList = new ArrayList<Integer>();
 				JSONArray iids = object.getJSONArray("items");
 				for (int j = 0; j < iids.length(); j++)

@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 
+import classes.Category;
 import classes.ReimApplication;
 import classes.StatisticsCategory;
 import classes.utils.DBManager;
@@ -261,8 +262,9 @@ public class StatisticsFragment extends Fragment
 			{
 				View view = View.inflate(getActivity(), R.layout.list_category_stat, null);
 				
+				Category localCategory = dbManager.getCategory(category.getCategoryID());
 				TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-				titleTextView.setText(dbManager.getCategory(category.getCategoryID()).getName());
+				titleTextView.setText(localCategory.getName());
 				
 				TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
 				countTextView.setText(Integer.toString(category.getItems().size()));

@@ -42,7 +42,7 @@ public class HttpUtils
 			jObject.put(NetworkConstant.DEVICE_TOKEN, appPreference.getDeviceToken());
 			jObject.put(NetworkConstant.SERVER_TOKEN, appPreference.getServerToken());
 			String resultString=jObject.toString();
-			
+
 			return ReimJWT.Encode(resultString);
 		}
 		catch (JSONException e)

@@ -178,8 +178,9 @@ public class ShowReportActivity extends Activity
 				if (response.getStatus())
 				{ 
 					int ownerID = AppPreference.getAppPreference().getCurrentUserID();
-					
+					int localID = report.getLocalID();
 					report = new Report(response.getReport());
+					report.setLocalID(localID);
 					
 					if (myReport)
 					{						

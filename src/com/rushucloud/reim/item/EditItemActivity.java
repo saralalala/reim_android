@@ -177,10 +177,7 @@ public class EditItemActivity extends Activity
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setProgressDialog(this);
 		locationClient.registerLocationListener(listener);
-		if (Utils.isLocalisationEnabled() && Utils.isNetworkConnected())
-		{
-			getLocation();
-		}
+		getLocation();
 	}
 
 	protected void onPause()
@@ -821,9 +818,9 @@ public class EditItemActivity extends Activity
 				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 				imm.hideSoftInputFromWindow(locationEditText.getWindowToken(), 0);
 				locationPopupWindow.dismiss();
-				
+
 				item.setLocation(locationEditText.getText().toString());
-				locationTextView.setText(item.getLocation());
+				locationTextView.setText(locationEditText.getText().toString());
 			}
 		});
 
@@ -1535,30 +1532,6 @@ public class EditItemActivity extends Activity
 		imm.hideSoftInputFromWindow(noteEditText.getWindowToken(), 0);  	
     }
  
-    private void getLocation()
-    {
-    	LocationClientOption option = new LocationClientOption();
-    	option.setLocationMode(LocationMode.Hight_Accuracy);
-    	option.setScanSpan(5000);
-    	option.setIsNeedAddress(false);
-    	option.setNeedDeviceDirect(false);
-    	locationClient.setLocOption(option);
-    	locationClient.start();
-    }
-    
-    private void saveItem()
-    {
-    	if (dbManager.syncItem(item))
-		{
-			Utils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
-			finish();
-		}
-		else
-		{
-			Utils.showToast(EditItemActivity.this, R.string.failed_to_save_item);
-		}
-    }
-    
     private void showTypeWindow()
     {    	
 		typePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
@@ -1632,6 +1605,8 @@ public class EditItemActivity extends Activity
 
     private void showLocationWindow()
     {
+    	getLocation();
+    	
     	locationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
     	locationPopupWindow.update();
     }
@@ -1682,6 +1657,19 @@ public class EditItemActivity extends Activity
     	managerPopupWindow.update();
     }
 
+    private void saveItem()
+    {
+    	if (dbManager.syncItem(item))
+		{
+			Utils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+			finish();
+		}
+		else
+		{
+			Utils.showToast(EditItemActivity.this, R.string.failed_to_save_item);
+		}
+    }
+    
     private void sendDownloadInvoiceRequest(final Image image)
     {
 		DownloadImageRequest request = new DownloadImageRequest(image.getServerID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
@@ -2042,14 +2030,16 @@ public class EditItemActivity extends Activity
 		{
 			public void run()
 			{
-		    	locationAdapter.setCurrentCity(address.getCity());
+				final String cityName = address.getCity();
+		    	locationAdapter.setCurrentCity(cityName);
+		    	
 		    	runOnUiThread(new Runnable()
 				{
 					public void run()
 					{
-						if (locationTextView.equals(getString(R.string.no_location)))
+						if (locationTextView.getText().toString().equals(getString(R.string.no_location)))
 						{
-							locationTextView.setText(address.getCity());
+							locationTextView.setText(cityName);
 						}
 				    	locationAdapter.notifyDataSetChanged();						
 					}
@@ -2058,6 +2048,20 @@ public class EditItemActivity extends Activity
 		}).start();
     }
 
+    private void getLocation()
+    {
+		if (Utils.isLocalisationEnabled() && Utils.isNetworkConnected())
+		{
+	    	LocationClientOption option = new LocationClientOption();
+	    	option.setLocationMode(LocationMode.Hight_Accuracy);
+	    	option.setScanSpan(5000);
+	    	option.setIsNeedAddress(false);
+	    	option.setNeedDeviceDirect(false);
+	    	locationClient.setLocOption(option);
+	    	locationClient.start();
+		}
+    }
+    
     public class ReimLocationListener implements BDLocationListener
     {
     	public void onReceiveLocation(BDLocation location)

@@ -314,7 +314,7 @@ public abstract class SyncUtils
 			{
 				final ModifyItemResponse response = new ModifyItemResponse(httpResponse);
 				if (response.getStatus())
-				{
+				{ 
 			    	System.out.println("modify item：local id " + item.getLocalID() + " *Succeed*");
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());

@@ -76,7 +76,7 @@
     <string name="type">类&#160;&#160;&#160;&#8201;型</string>
     <string name="photo">照&#160;&#160;&#160;&#8201;片</string>
     <string name="category">类&#160;&#160;&#160;&#8201;别</string>
-    <string name="vendor">供应商</string>
+    <string name="vendor">商&#160;&#160;&#160;&#8201;家</string>
     <string name="location">地&#160;&#160;&#160;&#8201;点</string>
     <string name="current_location">当前城市:</string>
     <string name="tag">标&#160;&#160;&#160;&#8201;签</string>
@@ -87,7 +87,7 @@
     <string name="choose_vendor">选择商家</string>
     <string name="choose_location">选择城市</string>
     <string name="choose_tag">选择标签</string>
-    <string name="choose_member">选择参与人员</string>
+    <string name="choose_member">选择参与者</string>
     <string name="choose_from_camera">拍照</string>
     <string name="choose_from_gallery">从手机相册选择</string>
     <string name="all_cities">全部城市</string>
@@ -153,7 +153,7 @@
     <string name="sub_category">子类别</string>
     <string name="join_group">加入团队</string>
     <string name="reject_invite">拒绝邀请</string>
-    <string name="get_invoice_prompt">发票抬头请开：</string>
+    <string name="get_invoice_prompt">发票抬头：</string>
     <string name="invoice_invalid">还没公司，开啥发票</string>
     <string name="category_management">类别管理</string>
     <string name="edit_category">编辑类别</string>
@@ -237,21 +237,21 @@
     <string name="error_new_nickname_empty">新昵称不能为空</string>
     <string name="error_same_nickname">昵称与原有相同，无需修改</string>
     <string name="error_new_company_name_empty">公司新名称不能为空</string>
-    <string name="error_same_company_name">公司名称与原有相同，无需修改</string>
+    <string name="error_same_company_name">与原公司名相同，无需修改</string>
     <string name="error_number_wrong_format">数字输入格式不正确</string>
     <string name="error_password_empty">密码不能为空</string>
-    <string name="error_old_password_empty">旧密码不能为空！请重新输入</string>
-    <string name="error_new_password_empty">新密码不能为空！请重新输入</string>
-    <string name="error_confirm_password_empty">确认密码不能为空！请重新输入</string>
-    <string name="error_same_password">新旧密码相同！请重新输入</string>
-    <string name="error_wrong_old_password">旧密码输入错误！请重新输入</string>
-    <string name="error_wrong_confirm_password">新密码两次输入不一致！请重新输入</string>
-    <string name="error_email_or_phone_empty">手机号或邮箱不能为空</string>
+    <string name="error_old_password_empty">请输入旧密码</string>
+    <string name="error_new_password_empty">请输入新密码</string>
+    <string name="error_confirm_password_empty">请再次输入密码</string>
+    <string name="error_same_password">新旧密码重复了，请再选一个新密码吧：）</string>
+    <string name="error_wrong_old_password">旧密码有误</string>
+    <string name="error_wrong_confirm_password">新密码两次输入不一致</string>
+    <string name="error_email_or_phone_empty">请输入手机号或邮箱</string>
     <string name="error_email_or_phone_wrong_format">手机号或邮箱格式不正确</string>
-    <string name="error_category_name_empty">类别名称不能为空</string>
-    <string name="error_tag_name_empty">标签名称不能为空</string>
-    <string name="error_comment_empty">评论不能为空</string>
-    <string name="error_feedback_contact_empty">意见或联系方式不能均为空</string>
+    <string name="error_category_name_empty">请输入类别名称</string>
+    <string name="error_tag_name_empty">请输入标签名称</string>
+    <string name="error_comment_empty">请输入评论</string>
+    <string name="error_feedback_contact_empty">请输入你的意见或者联系方式</string>
     <string name="error_refresh_network_unavailable">网络未连接，无法刷新</string>
     <string name="error_add_network_unavailable">网络未连接，无法添加</string>
     <string name="error_modify_network_unavailable">网络未连接，无法修改</string>
@@ -283,7 +283,7 @@
     <string name="error_no_group">你还没加入任何组</string>
     <string name="error_report_approved">报告已被审批</string>
     <string name="error_operation_failed">操作失败</string>
-    <string name="error_submit_report_empty">无法提交报告,此报告为空报告</string>
+    <string name="error_submit_report_empty">请为报告中添加一些条目后再提交</string>
     
     <string name="succeed_in_exporting">报告导出成功</string>
     <string name="succeed_in_saving_item">条目保存成功</string>
@@ -307,8 +307,8 @@
     <string name="failed_to_get_code">获取验证码失败</string>
     <string name="failed_to_get_data">获取数据失败</string>
     <string name="failed_to_get_vendor">获取商家列表失败, 请手动输入</string>
-    <string name="failed_to_get_vendor_no_data">未获取到任何商家, 请手动输入</string>
-    <string name="failed_to_get_gps_info">未获取到定位信息，请手动输入商家名或稍后再试</string>
+    <string name="failed_to_get_vendor_no_data">没有获取到商家信息, 请手动输入</string>
+    <string name="failed_to_get_gps_info">未能定位你的位置，请手动输入商家名或稍后再试</string>
     <string name="failed_to_get_version">获取版本号失败</string>
     <string name="failed_to_export">报告导出失败</string>
     <string name="failed_to_read_image">读取图片文件失败</string>
@@ -344,7 +344,7 @@
     <string name="failed_to_sign_out">登出失败</string>
     <string name="failed_to_change_password">修改密码失败</string>
     
-    <string name="no_location">未获取到城市信息</string>
+    <string name="no_location">无法获取地点信息</string>
     <string name="no_member">当前组没有其他成员</string>
     <string name="no_comment">当前没有任何评论</string>
     <string name="no_manager">未选择经理</string>
@@ -367,10 +367,10 @@
     <string name="status_prove_ahead">预</string>
     <string name="status_prove_ahead_approved">(已审批)</string>
     
-    <string name="xlistview_header_hint_normal">下拉刷新</string>
-    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_normal">下拉更新</string>
+    <string name="xlistview_header_hint_ready">释放更新</string>
     <string name="xlistview_header_hint_loading">正在加载……</string>
-    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_header_last_time">最近更新：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
     
