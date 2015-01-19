@@ -4,10 +4,9 @@ import com.rushucloud.reim.R;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 public class ReimProgressDialog
@@ -15,7 +14,7 @@ public class ReimProgressDialog
 	private static Dialog progressDialog;
 	private static View dialogView;
 	private static ImageView imageView;
-	private static Animation animation;
+	private static AnimationDrawable animationDrawable;
 	
 	private ReimProgressDialog()
 	{
@@ -26,7 +25,7 @@ public class ReimProgressDialog
 	{
 		dialogView = View.inflate(context, R.layout.progress_dialog, null);		
 		imageView = (ImageView) dialogView.findViewById(R.id.imageView);
-		animation = AnimationUtils.loadAnimation(context, R.anim.progress_dialog);
+		animationDrawable = (AnimationDrawable) imageView.getDrawable();
 	}
 	
 	public static void setProgressDialog(Context context)
@@ -43,7 +42,11 @@ public class ReimProgressDialog
 	
 	public static void show()
 	{
-		imageView.startAnimation(animation);
+		if (animationDrawable.isRunning())
+		{
+			animationDrawable.stop();
+		}
+		animationDrawable.start();
 		progressDialog.show();
 	}
 	

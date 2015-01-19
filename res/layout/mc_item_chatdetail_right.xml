@@ -20,7 +20,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:indeterminate="false"
-            android:indeterminateDrawable="@anim/loading"
+            android:indeterminateDrawable="@anim/mc_loading"
             android:visibility="gone" />
 
         <TextView

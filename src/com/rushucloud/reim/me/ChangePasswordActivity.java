@@ -132,7 +132,7 @@ public class ChangePasswordActivity extends Activity
 			Utils.showToast(ChangePasswordActivity.this, R.string.error_confirm_password_empty);
 			confirmPasswordEditText.requestFocus();
 		}
-		else if (!oldPassword.equals(newPassword))
+		else if (oldPassword.equals(newPassword))
 		{
 			Utils.showToast(ChangePasswordActivity.this, R.string.error_same_password);
 			newPasswordEditText.requestFocus();

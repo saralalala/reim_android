@@ -84,7 +84,6 @@ public class MeFragment extends Fragment
 				viewGroup.removeView(view);
 			}
 		}
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
 	    return view;
 	}
 
@@ -223,7 +222,12 @@ public class MeFragment extends Fragment
 				}
 			}
 			
-			nicknameTextView.setText(currentUser.getNickname());					
+			nicknameTextView.setText(currentUser.getNickname());
+	        
+			if (currentUser.hasUndownloadedAvatar() && Utils.isNetworkConnected())
+			{
+		        sendDownloadAvatarRequest();
+			}
 		}
 		else
 		{
@@ -238,14 +242,6 @@ public class MeFragment extends Fragment
 		else
 		{
 			companyTextView.setText(R.string.not_available);
-		}
-        
-		if (Utils.isNetworkConnected())
-		{
-		    if (currentUser.hasUndownloadedAvatar())
-			{
-		        sendDownloadAvatarRequest();			
-			}
 		}
 	}
 	

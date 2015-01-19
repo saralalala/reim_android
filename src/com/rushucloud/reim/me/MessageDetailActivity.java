@@ -284,6 +284,7 @@ public class MessageDetailActivity extends Activity
     		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
     		Intent intent2 = new Intent(MessageDetailActivity.this, MessageActivity.class);
+    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         	startActivities(new Intent[] {intent, intent2});
         	finish();
 		}

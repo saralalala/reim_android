@@ -2,7 +2,6 @@ package com.rushucloud.reim.start;
 
 import classes.utils.DBManager;
 import classes.utils.Utils;
-
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 

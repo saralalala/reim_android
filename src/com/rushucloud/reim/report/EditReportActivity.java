@@ -344,7 +344,7 @@ public class EditReportActivity extends Activity
 				managerPopupWindow.dismiss();
 				
 				List<User> managerList = new ArrayList<User>();
-				if (!userList.isEmpty())
+				if (managerCheckList != null)
 				{
 					for (int i = 0; i < managerCheckList.length; i++)
 					{
@@ -395,7 +395,7 @@ public class EditReportActivity extends Activity
 				ccPopupWindow.dismiss();
 
 				List<User> ccList = new ArrayList<User>();
-				if (!userList.isEmpty())
+				if (ccCheckList != null)
 				{
 					for (int i = 0; i < ccCheckList.length; i++)
 					{

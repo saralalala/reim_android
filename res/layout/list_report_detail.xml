@@ -62,8 +62,7 @@
 			    android:layout_alignParentRight="true"
 			    android:text="@string/approve_info_hint"
 			    android:textColor="@color/major_dark"
-			    android:textSize="14sp"
-			    android:visibility="invisible" />
+			    android:textSize="14sp" />
 			
 		</RelativeLayout>
 	

@@ -2230,6 +2230,7 @@ public class DBManager extends SQLiteOpenHelper
 			amount += getDoubleFromCursor(cursor, "amount");
 		}
 
+		cursor.close();
 		return amount;
 	}
 	
@@ -3386,7 +3387,7 @@ public class DBManager extends SQLiteOpenHelper
 		}		
 	}
 	
-	// Auxiliaries	
+	// Auxiliaries
 	private double getDoubleFromCursor(Cursor cursor, String columnName)
 	{
 		return cursor.getDouble(cursor.getColumnIndex(columnName));

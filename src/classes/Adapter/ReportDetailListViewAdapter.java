@@ -67,7 +67,9 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			{
 				public void onClick(View v)
 				{
-					context.startActivity(new Intent(context, ApproveInfoActivity.class));
+					Intent intent = new Intent(context, ApproveInfoActivity.class);
+					intent.putExtra("reportServerID", report.getServerID());
+					context.startActivity(intent);
 				}
 			});
 

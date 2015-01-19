@@ -260,19 +260,23 @@ public class StatisticsFragment extends Fragment
 			
 			for (StatisticsCategory category : categoryList)
 			{
-				View view = View.inflate(getActivity(), R.layout.list_category_stat, null);
 				
 				Category localCategory = dbManager.getCategory(category.getCategoryID());
-				TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-				titleTextView.setText(localCategory.getName());
-				
-				TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
-				countTextView.setText(Integer.toString(category.getItems().size()));
-				
-				TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-				amountTextView.setText(Utils.formatDouble(category.getAmount()));
-				
-				categoryLayout.addView(view);
+				if (localCategory != null)
+				{
+					View view = View.inflate(getActivity(), R.layout.list_category_stat, null);
+					
+					TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
+					titleTextView.setText(localCategory.getName());
+					
+					TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
+					countTextView.setText(Integer.toString(category.getItems().size()));
+					
+					TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+					amountTextView.setText(Utils.formatDouble(category.getAmount()));
+					
+					categoryLayout.addView(view);					
+				}
 			}
 		}		
 	}

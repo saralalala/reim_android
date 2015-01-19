@@ -90,7 +90,7 @@ public class ProfileActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("ProfileActivity");		
+		MobclickAgent.onPageStart("ProfileActivity");
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setProgressDialog(this);
 		loadInfoView();
