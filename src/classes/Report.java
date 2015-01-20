@@ -13,8 +13,11 @@ import classes.utils.DBManager;
 
 import com.rushucloud.reim.R;
 
+import android.content.Context;
+import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
+import android.util.TypedValue;
 
 
 public class Report implements Serializable
@@ -281,6 +284,29 @@ public class Report implements Serializable
 				return R.string.not_available;
 		}
 	}
+
+	public int getStatusWidth(Context context)
+    {
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		int longWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, metrics);
+		int shortWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, metrics);
+		
+		switch (status)
+		{
+			case STATUS_DRAFT:
+				return longWidth;
+			case STATUS_SUBMITTED:
+				return longWidth;
+			case STATUS_APPROVED:
+				return shortWidth;
+			case STATUS_REJECTED:
+				return shortWidth;
+			case STATUS_FINISHED:
+				return shortWidth;
+			default:
+				return 0;
+		}
+    }
 	
 	public boolean hasItems()
 	{

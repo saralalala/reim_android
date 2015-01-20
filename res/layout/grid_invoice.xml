@@ -10,7 +10,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:contentDescription="@string/tag"
-        android:src="@drawable/default_invoice" />
+        android:src="@drawable/default_invoice"
+        android:scaleType="fitXY" />
 
     <ImageView
         android:id="@+id/removeImageView"

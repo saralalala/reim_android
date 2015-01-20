@@ -221,6 +221,7 @@
     <string name="prompt_sync_ongoing">正在同步中</string>
     <string name="prompt_report_approved">报告已通过</string>
     <string name="prompt_report_rejected">报告已退回</string>
+    <string name="prompt_max_image_count">啊哦，最多只能添加15张图片</string>    
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>
@@ -357,10 +358,10 @@
     <string name="vendor_taxi">出租车</string>
     <string name="vendor_flight">飞机票</string>
     <string name="vendor_train">火车票</string>
-    <string name="vendor_phone">话费</string>    
+    <string name="vendor_phone">话费</string>
     
-    <string name="status_draft">草稿</string>
-    <string name="status_submitted">提交</string>
+    <string name="status_draft">待提交</string>
+    <string name="status_submitted">已提交</string>
     <string name="status_approved">通过</string>
     <string name="status_rejected">退回</string>
     <string name="status_finished">完成</string>

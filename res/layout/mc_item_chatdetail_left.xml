@@ -21,7 +21,8 @@
             android:singleLine="false"
             android:text="I \ue32d emojicon"
             android:textColor="@color/mc_chat_text"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:visibility="visible" />
 
         <RelativeLayout
             android:id="@+id/content_pic_rl"
@@ -34,7 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:focusable="true"
-                android:maxWidth="130dp" />
+                android:maxHeight="105dp"
+                android:maxWidth="105dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -46,18 +48,42 @@
                 android:background="@drawable/mc_bg_msg_image_left" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/content_voice"
+        <RelativeLayout
+            android:id="@+id/content_voice_rl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/mc_bg_message_left"
-            android:gravity="center"
-            android:maxWidth="270dp"
-            android:singleLine="false"
-            android:text="7s"
-            android:textColor="@color/mc_chat_text"
-            android:textSize="16sp"
-            android:visibility="gone" />
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/content_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/mc_bg_message_left"
+                android:gravity="center"
+                android:maxWidth="270dp"
+                android:singleLine="false"
+                android:text="18s         "
+                android:textColor="@color/mc_chat_text"
+                android:textSize="16sp"
+                android:visibility="visible" />
+
+            <com.mechat.mechatlibrary.custom.RoundProgressBar
+                android:id="@+id/mc_play_progressbar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignRight="@id/content_voice"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="6dp" />
+
+            <ImageView
+                android:id="@+id/pic_voice"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignRight="@id/content_voice"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="7dp"
+                android:background="@drawable/mc_voice_play" />
+        </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>

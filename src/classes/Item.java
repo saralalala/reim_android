@@ -8,19 +8,23 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+
 import com.rushucloud.reim.R;
 
 import classes.utils.Utils;
 
 public class Item
-{		
+{
 	public static final int STATUS_DRAFT = 0;
 	public static final int STATUS_SUBMITTED = 1;
 	public static final int STATUS_APPROVED = 2;
 	public static final int STATUS_REJECTED = 3;
 	public static final int STATUS_FINISHED = 4;
 	
-	public static final int MAX_INVOICE_COUNT = 5;
+	public static final int MAX_INVOICE_COUNT = 16;
 	
 	private int localID = -1;
 	private int serverID = -1;
@@ -358,6 +362,36 @@ public class Item
 			return R.string.status_draft;
 		}
 	}
+
+	public int getStatusWidth(Context context)
+    {
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		int longWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, metrics);
+		int shortWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, metrics);
+		
+		if (getBelongReport() != null)
+		{
+	    	switch (getBelongReport().getStatus())
+			{
+				case STATUS_DRAFT:
+					return longWidth;
+				case STATUS_SUBMITTED:
+					return longWidth;
+				case STATUS_APPROVED:
+					return shortWidth;
+				case STATUS_REJECTED:
+					return shortWidth;
+				case STATUS_FINISHED:
+					return shortWidth;
+				default:
+					return 0;
+			}			
+		}
+		else
+		{
+			return longWidth;
+		}
+    }
 	
     public static ArrayList<Integer> getItemsIDArray(List<Item> itemList)
     {

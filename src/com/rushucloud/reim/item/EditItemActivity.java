@@ -576,7 +576,14 @@ public class EditItemActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				showPictureWindow();
+				if (item.getInvoices().size() == Item.MAX_INVOICE_COUNT)
+				{
+					Utils.showToast(EditItemActivity.this, R.string.prompt_max_image_count);
+				}
+				else
+				{
+					showPictureWindow();					
+				}
 			}
 		});
 		
@@ -1324,7 +1331,7 @@ public class EditItemActivity extends Activity
 		int invoiceCount = item.getInvoices() != null ? item.getInvoices().size() : 0;
 		for (int i = 0; i < invoiceCount + 1; i++)
 		{
-			if (i >= Item.MAX_INVOICE_COUNT)
+			if (i > Item.MAX_INVOICE_COUNT)
 			{
 				break;
 			}
