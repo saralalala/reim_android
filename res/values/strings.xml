@@ -221,7 +221,7 @@
     <string name="prompt_sync_ongoing">正在同步中</string>
     <string name="prompt_report_approved">报告已通过</string>
     <string name="prompt_report_rejected">报告已退回</string>
-    <string name="prompt_max_image_count">啊哦，最多只能添加15张图片</string>    
+    <string name="prompt_max_image_count">啊哦，最多只能添加16张图片</string>    
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>

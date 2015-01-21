@@ -15,6 +15,7 @@ import classes.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.TabItem;
@@ -72,7 +73,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		tabItemList.get(ReimApplication.getTabIndex()).setIconAlpha(1);
 		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
 		
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetEventsRequest();
 			
@@ -83,7 +84,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				{
 					public void execute(Object udpResponse)
 					{
-						if (Utils.isNetworkConnected())
+						if (PhoneUtils.isNetworkConnected())
 						{
 							sendGetEventsRequest();
 						}
@@ -182,7 +183,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					if (currentIndex == 1)
 					{
 						setReportBadge(0);	
-						if (Utils.isNetworkConnected())
+						if (PhoneUtils.isNetworkConnected())
 						{
 							sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
 						}					
@@ -190,7 +191,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					else if (currentIndex == 3)
 					{
 						setMeBadge(0);
-						if (Utils.isNetworkConnected())
+						if (PhoneUtils.isNetworkConnected())
 						{
 							sendEventsReadRequest(EventsReadRequest.TYPE_INVITE);		
 						}
@@ -298,7 +299,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				final EventsResponse response = new EventsResponse(httpResponse);
 				if (response.getStatus())
 				{
-					if (response.isNeedToRefresh() && Utils.isNetworkConnected())
+					if (response.isNeedToRefresh() && PhoneUtils.isNetworkConnected())
 					{
 						sendGetGroupRequest();
 					}
@@ -382,7 +383,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			{
 				position = 1;
 				setReportBadge(0);
-				if (Utils.isNetworkConnected())
+				if (PhoneUtils.isNetworkConnected())
 				{
 					sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
 				}
@@ -397,7 +398,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			{
 				position = 3;
 				setMeBadge(0);
-				if (Utils.isNetworkConnected())
+				if (PhoneUtils.isNetworkConnected())
 				{
 					sendEventsReadRequest(EventsReadRequest.TYPE_INVITE);		
 				}

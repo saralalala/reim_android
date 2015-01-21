@@ -25,6 +25,7 @@ import classes.Category;
 import classes.ReimApplication;
 import classes.StatisticsCategory;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.widget.ReimMonthBar;
 import classes.widget.ReimPie;
@@ -135,7 +136,7 @@ public class StatisticsFragment extends Fragment
 	{
 		dbManager = DBManager.getDBManager();
 		
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetDataRequest();			
 		}

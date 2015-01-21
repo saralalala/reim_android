@@ -37,6 +37,7 @@ import classes.adapter.TagListViewAdapter;
 import classes.adapter.VendorListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.widget.ReimProgressDialog;
 import cn.beecloud.BCLocation;
@@ -214,7 +215,7 @@ public class EditItemActivity extends Activity
 				if (requestCode == PICK_IMAGE)
 				{
 					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());					
-					String invoicePath = Utils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
+					String invoicePath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
 						Image image = new Image();
@@ -231,7 +232,7 @@ public class EditItemActivity extends Activity
 				else if (requestCode == TAKE_PHOTO)
 				{
 					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempInvoicePath());
-					String invoicePath = Utils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
+					String invoicePath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
 						Image image = new Image();
@@ -398,7 +399,7 @@ public class EditItemActivity extends Activity
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
-													if (Utils.isNetworkConnected())
+													if (PhoneUtils.isNetworkConnected())
 													{
 														showManagerWindow();
 													}
@@ -632,7 +633,7 @@ public class EditItemActivity extends Activity
 		
 		picturePopupWindow = Utils.constructBottomPopupWindow(this, pictureView);
 
-		if (!Utils.isNetworkConnected())
+		if (!PhoneUtils.isNetworkConnected())
 		{
 			Utils.showToast(EditItemActivity.this, R.string.failed_to_download_invoice);				
 		}
@@ -640,7 +641,7 @@ public class EditItemActivity extends Activity
 		{
 			for (Image image : item.getInvoices())
 			{
-				if (image.isNotDownloaded() && Utils.isNetworkConnected())
+				if (image.isNotDownloaded() && PhoneUtils.isNetworkConnected())
 				{
 					sendDownloadInvoiceRequest(image);
 				}

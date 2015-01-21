@@ -21,6 +21,7 @@ import classes.Item;
 import classes.Report;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 
 public abstract class SyncUtils
@@ -53,7 +54,7 @@ public abstract class SyncUtils
 		{
 			return false;
 		}
-		else if (Utils.isNetworkConnected())
+		else if (PhoneUtils.isNetworkConnected())
 		{
 			return true;
 		}

@@ -6,6 +6,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 
 import android.graphics.Bitmap;
@@ -43,7 +44,7 @@ public class Category
 			setIsProveAhead(Utils.intToBoolean(jObject.getInt("prove_before")));
 			int iconID = jObject.optInt("avatar", -1);
 			setIconID(iconID);
-			setIconPath(Utils.getIconFilePath(iconID));
+			setIconPath(PhoneUtils.getIconFilePath(iconID));
 		}
 		catch (JSONException e)
 		{

@@ -36,6 +36,7 @@ import classes.Group;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.widget.CircleImageView;
 import android.content.Intent;
@@ -224,7 +225,7 @@ public class MeFragment extends Fragment
 			
 			nicknameTextView.setText(currentUser.getNickname());
 	        
-			if (currentUser.hasUndownloadedAvatar() && Utils.isNetworkConnected())
+			if (currentUser.hasUndownloadedAvatar() && PhoneUtils.isNetworkConnected())
 			{
 		        sendDownloadAvatarRequest();
 			}
@@ -256,7 +257,7 @@ public class MeFragment extends Fragment
 				if (response.getBitmap() != null)
 				{
 					int currentTime = Utils.getCurrentTime();
-					avatarPath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
+					avatarPath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					currentUser.setAvatarPath(avatarPath);
 					currentUser.setLocalUpdatedDate(currentTime);
 					currentUser.setServerUpdatedDate(currentTime);

@@ -23,6 +23,7 @@ import classes.Tag;
 import classes.adapter.ItemListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.SegmentedGroup;
@@ -178,7 +179,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		itemList.addAll(readItemList());
 		filterItemList();
 		
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			for (Item item : showList)
 			{
@@ -469,7 +470,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 															{
 																deleteItemFromLocal(localItem.getLocalID());
 															}
-															else if (!Utils.isNetworkConnected())
+															else if (!PhoneUtils.isNetworkConnected())
 															{
 																Utils.showToast(getActivity(), R.string.error_delete_network_unavailable);
 															}
@@ -737,7 +738,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
+					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
 					category.setIconPath(iconPath);
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());

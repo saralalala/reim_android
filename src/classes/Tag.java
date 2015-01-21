@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import classes.utils.DBManager;
 import classes.utils.Utils;
+import classes.utils.PhoneUtils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,7 +41,7 @@ public class Tag
 			setServerUpdatedDate(jObject.getInt("lastdt"));
 			int iconID = jObject.optInt("avatar", -1);
 			setIconID(iconID);
-			setIconPath(Utils.getIconFilePath(iconID));
+			setIconPath(PhoneUtils.getIconFilePath(iconID));
 		}
 		catch (JSONException e)
 		{

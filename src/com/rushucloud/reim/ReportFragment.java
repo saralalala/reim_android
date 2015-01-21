@@ -22,6 +22,7 @@ import classes.adapter.ReportListViewAdapter;
 import classes.adapter.ReportTagGridViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.SegmentedGroup;
@@ -313,7 +314,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 																{
 																	deleteReportFromLocal(report.getLocalID());
 																}
-																else if (!Utils.isNetworkConnected())
+																else if (!PhoneUtils.isNetworkConnected())
 																{
 																	Utils.showToast(getActivity(), R.string.error_delete_network_unavailable);
 																}
@@ -342,7 +343,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				operationPopupWindow.dismiss();
 				
 		    	final Report report = showMineList.get(reportIndex);
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
 					Utils.showToast(getActivity(), R.string.error_export_network_unavailable);
 				}
@@ -381,7 +382,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		}
 		else
 		{
-			if (Utils.isNetworkConnected())
+			if (PhoneUtils.isNetworkConnected())
 			{
 				sendSubordinatesReportsRequest();
 			}
@@ -940,7 +941,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		}	
 		else
 		{
-			if (Utils.isNetworkConnected())
+			if (PhoneUtils.isNetworkConnected())
 			{
 				sendSubordinatesReportsRequest();
 			}

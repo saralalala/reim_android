@@ -7,7 +7,7 @@ import java.util.List;
 
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
-import classes.utils.Utils;
+import classes.utils.PhoneUtils;
 import classes.widget.ReimProgressDialog;
 import cn.beecloud.BeeCloud;
 
@@ -194,11 +194,11 @@ public class ReimApplication extends Application
 		
 		for (int i = 0; i < iconList.size(); i++)
 		{
-			File file = new File(Utils.getIconFilePath(i + 1));
+			File file = new File(PhoneUtils.getIconFilePath(i + 1));
 			if (!file.exists())
 			{
 				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), iconList.get(i));
-				Utils.saveIconToFile(bitmap, i + 1);				
+				PhoneUtils.saveIconToFile(bitmap, i + 1);				
 			}
 		}		
 	}
