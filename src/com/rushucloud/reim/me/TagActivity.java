@@ -19,7 +19,9 @@ import classes.Tag;
 import classes.adapter.TagListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -111,9 +113,9 @@ public class TagActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(TagActivity.this, R.string.error_add_network_unavailable);
+					ViewUtils.showToast(TagActivity.this, R.string.error_add_network_unavailable);
 				}
 				else
 				{
@@ -145,7 +147,7 @@ public class TagActivity extends Activity
 		View tagView = View.inflate(this, R.layout.window_me_tag, null);
 		
 		nameEditText = (EditText) tagView.findViewById(R.id.nameEditText);
-		nameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		nameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		ImageView backImageView = (ImageView) tagView.findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
@@ -164,7 +166,7 @@ public class TagActivity extends Activity
 				String name = nameEditText.getText().toString();
 				if (name.equals(""))
 				{
-					Utils.showToast(TagActivity.this, R.string.error_tag_name_empty);
+					ViewUtils.showToast(TagActivity.this, R.string.error_tag_name_empty);
 				}
 				else
 				{
@@ -182,7 +184,7 @@ public class TagActivity extends Activity
 			}
 		});
 		
-		tagPopupWindow = Utils.constructHorizontalPopupWindow(this, tagView);
+		tagPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, tagView);
 	}
 	
 	private void refreshListView()
@@ -202,7 +204,7 @@ public class TagActivity extends Activity
 			tagTextView.setVisibility(View.INVISIBLE);			
 		}
 		
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			for (Tag tag : tagList)
 			{
@@ -227,9 +229,9 @@ public class TagActivity extends Activity
     			{
     				operationPopupWindow.dismiss();
     				
-    				if (!Utils.isNetworkConnected())
+    				if (!PhoneUtils.isNetworkConnected())
     				{
-    					Utils.showToast(TagActivity.this, R.string.error_modify_network_unavailable);
+    					ViewUtils.showToast(TagActivity.this, R.string.error_modify_network_unavailable);
     				}
     				else
     				{
@@ -238,7 +240,7 @@ public class TagActivity extends Activity
     				}
     			}
     		});
-    		modifyButton = Utils.resizeWindowButton(modifyButton);
+    		modifyButton = ViewUtils.resizeWindowButton(modifyButton);
     		
     		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
     		deleteButton.setOnClickListener(new View.OnClickListener()
@@ -247,9 +249,9 @@ public class TagActivity extends Activity
     			{
     				operationPopupWindow.dismiss();
     				
-    				if (!Utils.isNetworkConnected())
+    				if (!PhoneUtils.isNetworkConnected())
     				{
-    					Utils.showToast(TagActivity.this, R.string.error_delete_network_unavailable);
+    					ViewUtils.showToast(TagActivity.this, R.string.error_delete_network_unavailable);
     				}
     				else 
     				{
@@ -268,7 +270,7 @@ public class TagActivity extends Activity
     				}
     			}
     		});
-    		deleteButton = Utils.resizeWindowButton(deleteButton);
+    		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
     		
     		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
     		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -278,15 +280,15 @@ public class TagActivity extends Activity
     				operationPopupWindow.dismiss();
     			}
     		});
-    		cancelButton = Utils.resizeWindowButton(cancelButton);
+    		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
     		
-    		operationPopupWindow = Utils.constructBottomPopupWindow(this, operationView);    	
+    		operationPopupWindow = ViewUtils.constructBottomPopupWindow(this, operationView);    	
 		}
     	
 		operationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		operationPopupWindow.update();
 		
-		Utils.dimBackground(this);
+		ViewUtils.dimBackground(this);
     }
     
     private void showTagWindow()
@@ -320,7 +322,7 @@ public class TagActivity extends Activity
 							refreshListView();
 							ReimProgressDialog.dismiss();
 							tagPopupWindow.dismiss();
-							Utils.showToast(TagActivity.this, R.string.succeed_in_creating_tag);
+							ViewUtils.showToast(TagActivity.this, R.string.succeed_in_creating_tag);
 						}
 					});
 				}
@@ -331,7 +333,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(TagActivity.this, R.string.failed_to_create_tag);							
+							ViewUtils.showToast(TagActivity.this, R.string.failed_to_create_tag);							
 						}
 					});
 				}
@@ -361,7 +363,7 @@ public class TagActivity extends Activity
 							refreshListView();
 							ReimProgressDialog.dismiss();
 							tagPopupWindow.dismiss();
-							Utils.showToast(TagActivity.this, R.string.succeed_in_modifying_tag);
+							ViewUtils.showToast(TagActivity.this, R.string.succeed_in_modifying_tag);
 						}
 					});
 				}
@@ -372,7 +374,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(TagActivity.this, R.string.failed_to_modify_tag);							
+							ViewUtils.showToast(TagActivity.this, R.string.failed_to_modify_tag);							
 						}
 					});
 				}
@@ -398,7 +400,7 @@ public class TagActivity extends Activity
 						{
 							refreshListView();
 							ReimProgressDialog.dismiss();
-							Utils.showToast(TagActivity.this, R.string.succeed_in_deleting_tag);
+							ViewUtils.showToast(TagActivity.this, R.string.succeed_in_deleting_tag);
 						}
 					});
 				}
@@ -409,7 +411,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(TagActivity.this, R.string.failed_to_delete_tag);					
+							ViewUtils.showToast(TagActivity.this, R.string.failed_to_delete_tag);					
 						}
 					});
 				}
@@ -427,7 +429,7 @@ public class TagActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String iconPath = Utils.saveIconToFile(response.getBitmap(), tag.getIconID());
+					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), tag.getIconID());
 					tag.setIconPath(iconPath);
 					tag.setLocalUpdatedDate(Utils.getCurrentTime());
 					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());

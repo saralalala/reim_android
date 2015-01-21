@@ -7,7 +7,7 @@ import netUtils.Response.Report.ApproveInfoResponse;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.os.Bundle;
@@ -55,7 +55,7 @@ public class ApproveInfoActivity extends Activity
 		int reportServerID = getIntent().getIntExtra("reportServerID", -1);
 		if (reportServerID == -1)
 		{
-			Utils.showToast(this, R.string.failed_to_get_data);
+			ViewUtils.showToast(this, R.string.failed_to_get_data);
 		}
 		else 
 		{
@@ -103,7 +103,7 @@ public class ApproveInfoActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ApproveInfoActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+							ViewUtils.showToast(ApproveInfoActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
 						}
 					});
 				}

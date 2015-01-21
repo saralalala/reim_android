@@ -10,7 +10,9 @@ import netUtils.Request.User.VerifyCodeRequest;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
@@ -94,16 +96,16 @@ public class PhoneSignUpActivity extends Activity
 		});
 		
 		phoneEditText = (EditText)findViewById(R.id.phoneEditText);
-		phoneEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		phoneEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
-		passwordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		passwordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		codeEditText = (EditText)findViewById(R.id.codeEditText);	
-		codeEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		codeEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 
 		acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
 		acquireCodeButton.setOnClickListener(new View.OnClickListener()
@@ -113,18 +115,18 @@ public class PhoneSignUpActivity extends Activity
 				hideSoftKeyboard();
 				
 				String phoneNumber = phoneEditText.getText().toString();
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (phoneNumber.equals(""))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
 					phoneEditText.requestFocus();
 				}
 				else if (!Utils.isPhone(phoneNumber))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
 					phoneEditText.requestFocus();
 				}
 				else 
@@ -133,7 +135,7 @@ public class PhoneSignUpActivity extends Activity
 				}
 			}
 		});
-		acquireCodeButton = Utils.resizeShortButton(acquireCodeButton, 32);
+		acquireCodeButton = ViewUtils.resizeShortButton(acquireCodeButton, 32);
 		
 		Button signUpButton = (Button)findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()
@@ -149,43 +151,43 @@ public class PhoneSignUpActivity extends Activity
 				String confirmPassword = confirmPasswordEditText.getText().toString();
 				String inputCode = codeEditText.getText().toString();
 				
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (!Utils.isPhone(phoneNumber))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
 					phoneEditText.requestFocus();		
 				}
 				else if (phoneNumber.equals(""))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
 					phoneEditText.requestFocus();		
 				}
 				else if (password.equals(""))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_password_empty);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_password_empty);
 					passwordEditText.requestFocus();	
 				}
 				else if (confirmPassword.equals(""))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_confirm_password_empty);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_confirm_password_empty);
 					confirmPasswordEditText.requestFocus();
 				}
 				else if (!password.equals(confirmPassword))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_confirm_password);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_confirm_password);
 					confirmPasswordEditText.requestFocus();
 				}
 				else if (inputCode.equals(""))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_code_empty);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_code_empty);
 					codeEditText.requestFocus();	
 				}
 				else if (!inputCode.equals(code))
 				{
-					Utils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_code);
+					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_code);
 					codeEditText.requestFocus();
 				}
 				else
@@ -198,7 +200,7 @@ public class PhoneSignUpActivity extends Activity
 				}
 			}
 		});
-		signUpButton = Utils.resizeLongButton(signUpButton);
+		signUpButton = ViewUtils.resizeLongButton(signUpButton);
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
@@ -268,7 +270,7 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(PhoneSignUpActivity.this, R.string.prompt_message_sent);
+							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.prompt_message_sent);
 						}
 					});
 				}
@@ -279,7 +281,7 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_code, response.getErrorMessage());
+							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_code, response.getErrorMessage());
 						}
 					});
 				}
@@ -302,7 +304,7 @@ public class PhoneSignUpActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_signing_up);
+							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_signing_up);
 						}
 					});
 					
@@ -323,7 +325,7 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(PhoneSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
+							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
 						}
 					});		
 				}
@@ -378,7 +380,7 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_data);
+							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_data);
 							Bundle bundle = new Bundle();
 							bundle.putString("username", AppPreference.getAppPreference().getUsername());
 							bundle.putString("password", AppPreference.getAppPreference().getPassword());

@@ -18,7 +18,9 @@ import classes.User;
 import classes.adapter.MemberListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -59,7 +61,7 @@ public class ManagerActivity extends Activity
 		MobclickAgent.onPageStart("ManagerActivity");		
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setProgressDialog(this);
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetGroupRequest();
 		}
@@ -128,9 +130,9 @@ public class ManagerActivity extends Activity
 					}
 				}
 				
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(ManagerActivity.this, R.string.error_save_network_unavailable);
+					ViewUtils.showToast(ManagerActivity.this, R.string.error_save_network_unavailable);
 				}
 				else if (manager == null)
 				{
@@ -138,11 +140,11 @@ public class ManagerActivity extends Activity
 				}
 				else if (manager.getServerID() == currentUser.getServerID())
 				{
-					Utils.showToast(ManagerActivity.this, R.string.error_self_as_manager);				
+					ViewUtils.showToast(ManagerActivity.this, R.string.error_self_as_manager);				
 				}
 				else if (manager.getServerID() == currentUser.getDefaultManagerID())
 				{
-					Utils.showToast(ManagerActivity.this, R.string.error_same_manager);				
+					ViewUtils.showToast(ManagerActivity.this, R.string.error_same_manager);				
 				}
 				else
 				{
@@ -172,7 +174,7 @@ public class ManagerActivity extends Activity
 		adapter = new MemberListViewAdapter(this, userList, checkList);
 		managerListView.setAdapter(adapter);
 		
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			for (User user : userList)
 			{
@@ -223,7 +225,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ManagerActivity.this, R.string.failed_to_get_data);
+							ViewUtils.showToast(ManagerActivity.this, R.string.failed_to_get_data);
 						}
 					});
 				}
@@ -273,7 +275,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ManagerActivity.this, R.string.failed_to_change_manager);				
+							ViewUtils.showToast(ManagerActivity.this, R.string.failed_to_change_manager);				
 						}
 					});
 				}
@@ -291,7 +293,7 @@ public class ManagerActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
+					String avatarPath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					user.setAvatarPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());

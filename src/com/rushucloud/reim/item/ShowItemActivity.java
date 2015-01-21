@@ -10,7 +10,9 @@ import classes.Item;
 import classes.ReimApplication;
 import classes.User;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.ImageActivity;
@@ -146,15 +148,15 @@ public class ShowItemActivity extends Activity
 		invoiceLayout = (LinearLayout)findViewById(R.id.invoiceLayout);
 		refreshInvoiceView();
 		
-		if (!Utils.isNetworkConnected())
+		if (!PhoneUtils.isNetworkConnected())
 		{
-			Utils.showToast(ShowItemActivity.this, R.string.error_download_invoice_network_unavailable);				
+			ViewUtils.showToast(ShowItemActivity.this, R.string.error_download_invoice_network_unavailable);				
 		}
 		else
 		{
 			for (Image image : item.getInvoices())
 			{
-				if (image.isNotDownloaded() && Utils.isNetworkConnected())
+				if (image.isNotDownloaded() && PhoneUtils.isNetworkConnected())
 				{
 					sendDownloadInvoiceRequest(image);
 				}
@@ -193,7 +195,7 @@ public class ShowItemActivity extends Activity
 			}
 			categoryTextView.setText(item.getCategory().getName());
 			
-			if (item.getCategory().hasUndownloadedIcon() && Utils.isNetworkConnected())
+			if (item.getCategory().hasUndownloadedIcon() && PhoneUtils.isNetworkConnected())
 			{
 				sendDownloadCategoryIconRequest(item.getCategory());
 			}
@@ -207,7 +209,7 @@ public class ShowItemActivity extends Activity
 		memberLayout = (LinearLayout) findViewById(R.id.memberLayout);
 		refreshMemberView();
 		
-		if (item.getRelevantUsers() != null && Utils.isNetworkConnected())
+		if (item.getRelevantUsers() != null && PhoneUtils.isNetworkConnected())
 		{
 			for (User user : item.getRelevantUsers())
 			{
@@ -400,7 +402,7 @@ public class ShowItemActivity extends Activity
 				final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE);
+					final String invoicePath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
 						image.setPath(invoicePath);
@@ -421,7 +423,7 @@ public class ShowItemActivity extends Activity
 						{
 							public void run()
 							{
-								Utils.showToast(ShowItemActivity.this, R.string.failed_to_save_invoice);
+								ViewUtils.showToast(ShowItemActivity.this, R.string.failed_to_save_invoice);
 							}
 						});						
 					}
@@ -432,7 +434,7 @@ public class ShowItemActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(ShowItemActivity.this, R.string.failed_to_download_invoice);
+							ViewUtils.showToast(ShowItemActivity.this, R.string.failed_to_download_invoice);
 						}
 					});								
 				}
@@ -450,7 +452,7 @@ public class ShowItemActivity extends Activity
 				final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
+					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
 					category.setIconPath(iconPath);
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());
@@ -478,7 +480,7 @@ public class ShowItemActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
+					String avatarPath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					user.setAvatarPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());

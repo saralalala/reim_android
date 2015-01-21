@@ -4,7 +4,8 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Response.User.ResetPasswordResponse;
 import netUtils.Request.User.ResetPasswordRequest;
 
-import classes.utils.Utils;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
@@ -88,10 +89,10 @@ public class ResetPasswordActivity extends Activity
 		});
 		
 		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
-		newPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		newPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
     	
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		Button completeButton = (Button)findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()
@@ -101,23 +102,23 @@ public class ResetPasswordActivity extends Activity
 				final String newPassword = newPasswordEditText.getText().toString();
 				final String confirmPassword = confirmPasswordEditText.getText().toString();
 				
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(ResetPasswordActivity.this, R.string.error_request_network_unavailable);
+					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (newPassword.equals(""))
 				{
-					Utils.showToast(ResetPasswordActivity.this, R.string.error_new_password_empty);
+					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_new_password_empty);
 					newPasswordEditText.requestFocus();
 				}
 				else if (confirmPassword.equals(""))
 				{
-					Utils.showToast(ResetPasswordActivity.this, R.string.error_confirm_password_empty);
+					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_confirm_password_empty);
 					confirmPasswordEditText.requestFocus();
 				}
 				else if (!newPassword.equals(confirmPassword))
 				{
-					Utils.showToast(ResetPasswordActivity.this, R.string.error_wrong_confirm_password);
+					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_wrong_confirm_password);
 					confirmPasswordEditText.requestFocus();
 				}
 				else
@@ -126,7 +127,7 @@ public class ResetPasswordActivity extends Activity
 				}
 			}
 		});
-		completeButton = Utils.resizeLongButton(completeButton);
+		completeButton = ViewUtils.resizeLongButton(completeButton);
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
@@ -176,7 +177,7 @@ public class ResetPasswordActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ResetPasswordActivity.this, R.string.failed_to_change_password, response.getErrorMessage());
+							ViewUtils.showToast(ResetPasswordActivity.this, R.string.failed_to_change_password, response.getErrorMessage());
 						}
 					});				
 				}

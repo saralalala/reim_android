@@ -1,7 +1,6 @@
 package com.rushucloud.reim.me;
 
-import classes.utils.Utils;
-
+import classes.utils.PhoneUtils;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -50,7 +49,7 @@ public class AboutActivity extends Activity
 		getActionBar().hide();
 		
 		TextView currentVersionTextView = (TextView)findViewById(R.id.currentVersionTextView);
-		String versionPrompt = currentVersionTextView.getText() + Utils.getCurrentVersion();
+		String versionPrompt = currentVersionTextView.getText() + PhoneUtils.getCurrentVersion();
 		currentVersionTextView.setText(versionPrompt);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);

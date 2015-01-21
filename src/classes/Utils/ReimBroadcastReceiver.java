@@ -69,7 +69,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				
 				if (type == TYPE_SYSTEM_MESSAGE)
 				{
-					Utils.showToast(context, jObject.getString("message"));
+					ViewUtils.showToast(context, jObject.getString("message"));
 				}
 				else if (type == TYPE_REPORT)
 				{

@@ -7,7 +7,8 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Response.User.ChangePasswordResponse;
 import netUtils.Request.User.ChangePasswordRequest;
 import classes.utils.AppPreference;
-import classes.utils.Utils;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -75,13 +76,13 @@ public class ChangePasswordActivity extends Activity
 		});
 		
 		oldPasswordEditText = (EditText)findViewById(R.id.oldPasswordEditText);
-		oldPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		oldPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
-		newPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		newPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		Button submitButton = (Button)findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new OnClickListener()
@@ -90,17 +91,17 @@ public class ChangePasswordActivity extends Activity
 			{
 				hideSoftKeyboard();
 				MobclickAgent.onEvent(ChangePasswordActivity.this, "UMENG_MINE_CHANGE_USERINFO");
-				if (Utils.isNetworkConnected())
+				if (PhoneUtils.isNetworkConnected())
 				{
 					changePassword();
 				}
 				else
 				{
-					Utils.showToast(ChangePasswordActivity.this, R.string.error_change_password_network_unavailable);
+					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_change_password_network_unavailable);
 				}
 			}
 		});
-		submitButton = Utils.resizeLongButton(submitButton);
+		submitButton = ViewUtils.resizeLongButton(submitButton);
 		
 		LinearLayout layout = (LinearLayout)findViewById(R.id.baseLayout);
 		layout.setOnClickListener(new View.OnClickListener()
@@ -119,32 +120,32 @@ public class ChangePasswordActivity extends Activity
 		final String confirmPassword = confirmPasswordEditText.getText().toString();
 		if (oldPassword.equals(""))
 		{
-			Utils.showToast(ChangePasswordActivity.this, R.string.error_old_password_empty);
+			ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_old_password_empty);
 			oldPasswordEditText.requestFocus();
 		}
 		else if (newPassword.equals(""))
 		{
-			Utils.showToast(ChangePasswordActivity.this, R.string.error_new_password_empty);
+			ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_new_password_empty);
 			newPasswordEditText.requestFocus();
 		}
 		else if (confirmPassword.equals(""))
 		{
-			Utils.showToast(ChangePasswordActivity.this, R.string.error_confirm_password_empty);
+			ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_confirm_password_empty);
 			confirmPasswordEditText.requestFocus();
 		}
 		else if (oldPassword.equals(newPassword))
 		{
-			Utils.showToast(ChangePasswordActivity.this, R.string.error_same_password);
+			ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_same_password);
 			newPasswordEditText.requestFocus();
 		}
 		else if (!confirmPassword.equals(newPassword))
 		{
-			Utils.showToast(ChangePasswordActivity.this, R.string.error_wrong_confirm_password);
+			ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_wrong_confirm_password);
 			confirmPasswordEditText.requestFocus();
 		}
 		else if (!oldPassword.equals(appPreference.getPassword()))
 		{
-			Utils.showToast(ChangePasswordActivity.this, R.string.error_wrong_old_password);
+			ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_wrong_old_password);
 			oldPasswordEditText.requestFocus();
 		}
 		else

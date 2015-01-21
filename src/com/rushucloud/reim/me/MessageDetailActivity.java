@@ -21,7 +21,9 @@ import classes.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
@@ -101,34 +103,34 @@ public class MessageDetailActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (Utils.isNetworkConnected())
+				if (PhoneUtils.isNetworkConnected())
 				{
 					sendInviteReplyRequest(Invite.TYPE_ACCEPTED, invite.getInviteCode());					
 				}
 				else
 				{
-					Utils.showToast(MessageDetailActivity.this, R.string.error_send_reply_network_unavailable);
+					ViewUtils.showToast(MessageDetailActivity.this, R.string.error_send_reply_network_unavailable);
 				}
 			}
 		});
-		agreeButton = Utils.resizeLongButton(agreeButton);
+		agreeButton = ViewUtils.resizeLongButton(agreeButton);
 		
 		Button rejectButton = (Button)findViewById(R.id.rejectButton);
 		rejectButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				if (Utils.isNetworkConnected())
+				if (PhoneUtils.isNetworkConnected())
 				{
 					sendInviteReplyRequest(Invite.TYPE_REJECTED, invite.getInviteCode());				
 				}
 				else
 				{
-					Utils.showToast(MessageDetailActivity.this, R.string.error_send_reply_network_unavailable);
+					ViewUtils.showToast(MessageDetailActivity.this, R.string.error_send_reply_network_unavailable);
 				}
 			}
 		});
-		rejectButton = Utils.resizeLongButton(rejectButton);
+		rejectButton = ViewUtils.resizeLongButton(rejectButton);
 		
 		if (invite.getTypeCode() != Invite.TYPE_NEW)
 		{
@@ -181,7 +183,7 @@ public class MessageDetailActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-					    	Utils.showToast(MessageDetailActivity.this, R.string.failed_to_send_reply);
+					    	ViewUtils.showToast(MessageDetailActivity.this, R.string.failed_to_send_reply);
 						}						
 					});
 				}

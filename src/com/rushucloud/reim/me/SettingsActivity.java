@@ -11,7 +11,8 @@ import com.umeng.analytics.MobclickAgent;
 import classes.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
-import classes.utils.Utils;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Intent;
@@ -128,17 +129,17 @@ public class SettingsActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (Utils.isNetworkConnected())
+				if (PhoneUtils.isNetworkConnected())
 				{
 					sendSignOutRequest();							
 				}
 				else
 				{
-					Utils.showToast(SettingsActivity.this, R.string.error_sign_out_network_unavailable);							
+					ViewUtils.showToast(SettingsActivity.this, R.string.error_sign_out_network_unavailable);							
 				}
 			}
 		});
-        signOutButton = Utils.resizeLongButton(signOutButton);
+        signOutButton = ViewUtils.resizeLongButton(signOutButton);
 	}
 	
 	private void sendSignOutRequest()
@@ -184,7 +185,7 @@ public class SettingsActivity extends Activity
 						public void run()	
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SettingsActivity.this, R.string.failed_to_sign_out);
+							ViewUtils.showToast(SettingsActivity.this, R.string.failed_to_sign_out);
 						}
 					});
 				}

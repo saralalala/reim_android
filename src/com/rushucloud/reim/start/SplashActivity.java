@@ -6,7 +6,8 @@ import netUtils.Request.User.SignInRequest;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
-import classes.utils.Utils;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
@@ -78,7 +79,7 @@ public class SplashActivity extends Activity
 		}
 		else
 		{
-			if (Utils.isNetworkConnected())
+			if (PhoneUtils.isNetworkConnected())
 			{
 				sendSignInRequest();
 			}
@@ -191,7 +192,7 @@ public class SplashActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(SplashActivity.this, R.string.failed_to_sign_in);
+							ViewUtils.showToast(SplashActivity.this, R.string.failed_to_sign_in);
 							Bundle bundle = new Bundle();
 							bundle.putString("username", appPreference.getUsername());
 							bundle.putString("password", appPreference.getPassword());

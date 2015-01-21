@@ -39,6 +39,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import cn.beecloud.BCLocation;
 
@@ -224,7 +225,7 @@ public class EditItemActivity extends Activity
 					}
 					else
 					{
-						Utils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
+						ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
 					}
 					
 					refreshInvoiceView();
@@ -241,7 +242,7 @@ public class EditItemActivity extends Activity
 					}
 					else
 					{
-						Utils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
+						ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
 					}
 					
 					refreshInvoiceView();
@@ -257,7 +258,7 @@ public class EditItemActivity extends Activity
 			}
 			catch (Exception e)
 			{
-				Utils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
+				ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
 				e.printStackTrace();
 			}
 		}
@@ -405,7 +406,7 @@ public class EditItemActivity extends Activity
 													}
 													else
 													{
-														Utils.showToast(EditItemActivity.this, R.string.error_send_network_unavailable);
+														ViewUtils.showToast(EditItemActivity.this, R.string.error_send_network_unavailable);
 													}
 												}
 											});
@@ -419,7 +420,7 @@ public class EditItemActivity extends Activity
 				}
 				catch (NumberFormatException e)
 				{
-					Utils.showToast(EditItemActivity.this, R.string.error_number_wrong_format);
+					ViewUtils.showToast(EditItemActivity.this, R.string.error_number_wrong_format);
 					amountEditText.requestFocus();
 				}
 				catch (Exception e)
@@ -459,7 +460,7 @@ public class EditItemActivity extends Activity
 
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		amountEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
-		amountEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		amountEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		if (item.getAmount() == 0)
 		{
 			amountEditText.requestFocus();
@@ -562,7 +563,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		typePopupWindow = Utils.constructBottomPopupWindow(this, typeView);
+		typePopupWindow = ViewUtils.constructBottomPopupWindow(this, typeView);
 	}
 	
 	private void initInvoiceView()
@@ -579,7 +580,7 @@ public class EditItemActivity extends Activity
 				hideSoftKeyboard();
 				if (item.getInvoices().size() == Item.MAX_INVOICE_COUNT)
 				{
-					Utils.showToast(EditItemActivity.this, R.string.prompt_max_image_count);
+					ViewUtils.showToast(EditItemActivity.this, R.string.prompt_max_image_count);
 				}
 				else
 				{
@@ -605,7 +606,7 @@ public class EditItemActivity extends Activity
 				startActivityForResult(intent, TAKE_PHOTO);
 			}
 		});
-		cameraButton = Utils.resizeWindowButton(cameraButton);
+		cameraButton = ViewUtils.resizeWindowButton(cameraButton);
 		
 		Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
 		galleryButton.setOnClickListener(new View.OnClickListener()
@@ -619,7 +620,7 @@ public class EditItemActivity extends Activity
 				startActivityForResult(intent, PICK_IMAGE);
 			}
 		});
-		galleryButton = Utils.resizeWindowButton(galleryButton);
+		galleryButton = ViewUtils.resizeWindowButton(galleryButton);
 		
 		Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -629,13 +630,13 @@ public class EditItemActivity extends Activity
 				picturePopupWindow.dismiss();
 			}
 		});
-		cancelButton = Utils.resizeWindowButton(cancelButton);
+		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
-		picturePopupWindow = Utils.constructBottomPopupWindow(this, pictureView);
+		picturePopupWindow = ViewUtils.constructBottomPopupWindow(this, pictureView);
 
 		if (!PhoneUtils.isNetworkConnected())
 		{
-			Utils.showToast(EditItemActivity.this, R.string.failed_to_download_invoice);				
+			ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_download_invoice);				
 		}
 		else
 		{
@@ -679,11 +680,11 @@ public class EditItemActivity extends Activity
 				timeTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));
 			}
 		});
-		confirmButton = Utils.resizeShortButton(confirmButton, 30);
+		confirmButton = ViewUtils.resizeShortButton(confirmButton, 30);
 		
 		datePicker = (DatePicker) timeView.findViewById(R.id.datePicker);
 		
-		timePopupWindow = Utils.constructBottomPopupWindow(this, timeView);
+		timePopupWindow = ViewUtils.constructBottomPopupWindow(this, timeView);
 	}
 	
 	private void initVendorView()
@@ -715,7 +716,7 @@ public class EditItemActivity extends Activity
 		
 		final EditText vendorEditText = (EditText) vendorView.findViewById(R.id.vendorEditText);
 		vendorEditText.setText(item.getVendor());
-		vendorEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		vendorEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		vendorAdapter = new VendorListViewAdapter(this);
 		ListView vendorListView = (ListView) vendorView.findViewById(R.id.vendorListView);
@@ -753,7 +754,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		vendorPopupWindow = Utils.constructHorizontalPopupWindow(this, vendorView);
+		vendorPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, vendorView);
 	}
 	
 	private void initLocationView()
@@ -775,7 +776,7 @@ public class EditItemActivity extends Activity
 		View locationView = View.inflate(this, R.layout.window_reim_location, null);
 		
 		final EditText locationEditText = (EditText) locationView.findViewById(R.id.locationEditText);
-		locationEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		locationEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
     	if (!item.getLocation().equals(""))
 		{
         	locationEditText.setText(item.getLocation());			
@@ -832,7 +833,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		locationPopupWindow = Utils.constructHorizontalPopupWindow(this, locationView);
+		locationPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, locationView);
 	}
 	
 	private void initCategoryView()
@@ -892,7 +893,7 @@ public class EditItemActivity extends Activity
 			}
 			categoryTextView.setText(item.getCategory().getName());
 			
-			if (item.getCategory().hasUndownloadedIcon() && Utils.isNetworkConnected())
+			if (item.getCategory().hasUndownloadedIcon() && PhoneUtils.isNetworkConnected())
 			{
 				sendDownloadCategoryIconRequest(item.getCategory());
 			}
@@ -1003,7 +1004,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		categoryPopupWindow = Utils.constructHorizontalPopupWindow(this, categoryView);	
+		categoryPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, categoryView);	
 	}
 	
 	private void initTagView()
@@ -1032,7 +1033,7 @@ public class EditItemActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(EditItemActivity.this, R.string.no_tags);
+					ViewUtils.showToast(EditItemActivity.this, R.string.no_tags);
 				}														
 			}
 		});
@@ -1086,7 +1087,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		tagPopupWindow = Utils.constructHorizontalPopupWindow(this, tagView);	
+		tagPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, tagView);	
 	}
 	
 	private void initMemberView()
@@ -1115,7 +1116,7 @@ public class EditItemActivity extends Activity
 				}
 				else
 				{
-					Utils.showToast(EditItemActivity.this, R.string.no_member);
+					ViewUtils.showToast(EditItemActivity.this, R.string.no_member);
 				}											
 			}
 		});
@@ -1169,7 +1170,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		memberPopupWindow = Utils.constructHorizontalPopupWindow(this, memberView);	
+		memberPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, memberView);	
 	}
 
 	private void initNoteView()
@@ -1242,7 +1243,7 @@ public class EditItemActivity extends Activity
 
 				if (managerList.isEmpty())
 				{
-					Utils.showToast(EditItemActivity.this, R.string.no_manager);
+					ViewUtils.showToast(EditItemActivity.this, R.string.no_manager);
 				}
 				else
 				{
@@ -1304,7 +1305,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		managerPopupWindow = Utils.constructHorizontalPopupWindow(this, managerView);	
+		managerPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, managerView);	
 	}
 
 	private void refreshInvoiceView()
@@ -1545,7 +1546,7 @@ public class EditItemActivity extends Activity
 		typePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		typePopupWindow.update();
 		
-		Utils.dimBackground(this);
+		ViewUtils.dimBackground(this);
     }
     
     private void showPictureWindow()
@@ -1553,7 +1554,7 @@ public class EditItemActivity extends Activity
 		picturePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		picturePopupWindow.update();
 
-		Utils.dimBackground(this);
+		ViewUtils.dimBackground(this);
     }
     
     private void showTimeWindow()
@@ -1582,7 +1583,7 @@ public class EditItemActivity extends Activity
 		timePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		timePopupWindow.update();
 
-		Utils.dimBackground(this);
+		ViewUtils.dimBackground(this);
     }
 
     private void showVendorWindow()
@@ -1590,9 +1591,9 @@ public class EditItemActivity extends Activity
     	vendorPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
     	vendorPopupWindow.update();
 		
-		if (!Utils.isNetworkConnected())
+		if (!PhoneUtils.isNetworkConnected())
 		{
-			Utils.showToast(EditItemActivity.this, R.string.error_get_vendor_network_unavailable);
+			ViewUtils.showToast(EditItemActivity.this, R.string.error_get_vendor_network_unavailable);
 		}
 		else if (currentLocation != null)
 		{
@@ -1601,13 +1602,13 @@ public class EditItemActivity extends Activity
 			String category = item.getCategory() == null ? "" : item.getCategory().getName();
 			sendVendorsRequest(category, latitude, longitude);
 		}
-		else if (!Utils.isLocalisationEnabled())
+		else if (!PhoneUtils.isLocalisationEnabled())
 		{
-			Utils.showToast(EditItemActivity.this, R.string.error_gps_unavailable);
+			ViewUtils.showToast(EditItemActivity.this, R.string.error_gps_unavailable);
 		}
 		else
 		{
-			Utils.showToast(EditItemActivity.this, R.string.failed_to_get_gps_info);    	
+			ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_get_gps_info);    	
 		}
     }
 
@@ -1624,7 +1625,7 @@ public class EditItemActivity extends Activity
     	categoryPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
     	categoryPopupWindow.update();
 		
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			for (Category category : categoryList)
 			{
@@ -1641,7 +1642,7 @@ public class EditItemActivity extends Activity
     	tagPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
     	tagPopupWindow.update();
 		
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			for (Tag tag : tagList)
 			{
@@ -1669,12 +1670,12 @@ public class EditItemActivity extends Activity
     {
     	if (dbManager.syncItem(item))
 		{
-			Utils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+			ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
 			finish();
 		}
 		else
 		{
-			Utils.showToast(EditItemActivity.this, R.string.failed_to_save_item);
+			ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_save_item);
 		}
     }
     
@@ -1688,7 +1689,7 @@ public class EditItemActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					final String invoicePath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE);
+					final String invoicePath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.equals(""))
 					{
 						image.setPath(invoicePath);
@@ -1713,7 +1714,7 @@ public class EditItemActivity extends Activity
 						{
 							public void run()
 							{
-								Utils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
+								ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
 							}
 						});						
 					}
@@ -1724,7 +1725,7 @@ public class EditItemActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(EditItemActivity.this, R.string.failed_to_download_invoice);
+							ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_download_invoice);
 						}
 					});								
 				}
@@ -1742,7 +1743,7 @@ public class EditItemActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
+					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
 					category.setIconPath(iconPath);
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());
@@ -1810,7 +1811,7 @@ public class EditItemActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String iconPath = Utils.saveIconToFile(response.getBitmap(), tag.getIconID());
+					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), tag.getIconID());
 					tag.setIconPath(iconPath);
 					tag.setLocalUpdatedDate(Utils.getCurrentTime());
 					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
@@ -1863,7 +1864,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, R.string.failed_to_upload_invoice);
+							ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_upload_invoice);
 						}
 					});
 				}
@@ -1895,7 +1896,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, R.string.failed_to_create_item);
+							ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_create_item);
 						}
 					});
 				}
@@ -1925,7 +1926,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, R.string.failed_to_modify_item);
+							ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_modify_item);
 						}
 					});			
 				}
@@ -1957,7 +1958,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, R.string.succeed_in_creating_report);
+							ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_creating_report);
 							finish();
 						}
 					});					
@@ -1970,7 +1971,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, R.string.failed_to_create_report);
+							ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_create_report);
 							finish();
 						}
 					});								
@@ -2011,7 +2012,7 @@ public class EditItemActivity extends Activity
 							}
 							else 
 							{
-								Utils.showToast(EditItemActivity.this, R.string.failed_to_get_vendor_no_data);								
+								ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_get_vendor_no_data);								
 							}
 						}
 					});
@@ -2023,7 +2024,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditItemActivity.this, R.string.failed_to_get_vendor);
+							ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_get_vendor);
 						}
 					});					
 				}
@@ -2058,7 +2059,7 @@ public class EditItemActivity extends Activity
 
     private void getLocation()
     {
-		if (Utils.isLocalisationEnabled() && Utils.isNetworkConnected())
+		if (PhoneUtils.isLocalisationEnabled() && PhoneUtils.isNetworkConnected())
 		{
 	    	LocationClientOption option = new LocationClientOption();
 	    	option.setLocationMode(LocationMode.Hight_Accuracy);
@@ -2078,7 +2079,7 @@ public class EditItemActivity extends Activity
     		{
     			currentLocation = location;
     			locationClient.stop();
-    			if (Utils.isNetworkConnected())
+    			if (PhoneUtils.isNetworkConnected())
 				{
         			sendLocationRequest(currentLocation.getLatitude(), currentLocation.getLongitude());			
 				}

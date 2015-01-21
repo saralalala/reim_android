@@ -12,7 +12,9 @@ import com.umeng.analytics.MobclickAgent;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Context;
@@ -75,7 +77,7 @@ public class SendInviteActivity extends Activity
 		});
 		
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
-		usernameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		usernameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 
         Button inviteButton = (Button) findViewById(R.id.inviteButton);
         inviteButton.setOnClickListener(new OnClickListener()
@@ -85,17 +87,17 @@ public class SendInviteActivity extends Activity
 				MobclickAgent.onEvent(SendInviteActivity.this, "UMENG_MINE_INVITE");
 
 				String username = usernameEditText.getText().toString();
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(SendInviteActivity.this, R.string.error_send_invite_network_unavailable);			
+					ViewUtils.showToast(SendInviteActivity.this, R.string.error_send_invite_network_unavailable);			
 				}
 				if (username.equals(""))
 				{
-					Utils.showToast(SendInviteActivity.this, R.string.error_email_or_phone_empty);
+					ViewUtils.showToast(SendInviteActivity.this, R.string.error_email_or_phone_empty);
 				}
 				else if (!Utils.isEmailOrPhone(username))
 				{
-					Utils.showToast(SendInviteActivity.this, R.string.error_email_or_phone_wrong_format);
+					ViewUtils.showToast(SendInviteActivity.this, R.string.error_email_or_phone_wrong_format);
 				}
 				else
 				{
@@ -104,7 +106,7 @@ public class SendInviteActivity extends Activity
 				}
 			}
 		});
-        inviteButton = Utils.resizeLongButton(inviteButton);
+        inviteButton = ViewUtils.resizeLongButton(inviteButton);
         
         LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
@@ -136,7 +138,7 @@ public class SendInviteActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SendInviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
+							ViewUtils.showToast(SendInviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
 						}
 					});
 				}
@@ -188,7 +190,7 @@ public class SendInviteActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SendInviteActivity.this, R.string.succeed_in_sending_invite);
+							ViewUtils.showToast(SendInviteActivity.this, R.string.succeed_in_sending_invite);
 							finish();
 						}
 					});
@@ -200,7 +202,7 @@ public class SendInviteActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SendInviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
+							ViewUtils.showToast(SendInviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
 						}
 					});
 				}

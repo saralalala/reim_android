@@ -4,7 +4,9 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Response.User.ForgotPasswordResponse;
 import netUtils.Request.User.ForgotPasswordRequest;
 
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -74,14 +76,14 @@ public class EmailFindActivity extends Activity
 		});
     	
     	emailEditText = (EditText)findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	emailEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
     	Button confirmButton = (Button)findViewById(R.id.confirmButton);
     	confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				if (Utils.isNetworkConnected())
+				if (PhoneUtils.isNetworkConnected())
 				{
 					String emailAddress = emailEditText.getText().toString();
 					if (Utils.isEmail(emailAddress))
@@ -91,17 +93,17 @@ public class EmailFindActivity extends Activity
 					}
 					else
 					{
-						Utils.showToast(EmailFindActivity.this, R.string.error_email_wrong_format);
+						ViewUtils.showToast(EmailFindActivity.this, R.string.error_email_wrong_format);
 						emailEditText.requestFocus();	
 					}					
 				}
 				else
 				{
-					Utils.showToast(EmailFindActivity.this, R.string.error_request_network_unavailable);
+					ViewUtils.showToast(EmailFindActivity.this, R.string.error_request_network_unavailable);
 				}
 			}
 		});
-    	confirmButton = Utils.resizeLongButton(confirmButton);
+    	confirmButton = ViewUtils.resizeLongButton(confirmButton);
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
@@ -148,7 +150,7 @@ public class EmailFindActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(EmailFindActivity.this, R.string.failed_to_send_email, response.getErrorMessage());
+							ViewUtils.showToast(EmailFindActivity.this, R.string.failed_to_send_email, response.getErrorMessage());
 						}
 					});
 				}

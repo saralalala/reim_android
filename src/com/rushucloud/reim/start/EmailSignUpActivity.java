@@ -8,7 +8,8 @@ import netUtils.Request.User.SignInRequest;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
-import classes.utils.Utils;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
@@ -84,13 +85,13 @@ public class EmailSignUpActivity extends Activity
 		});
 
 		emailEditText = (EditText)findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	emailEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
     	
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
-		passwordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		passwordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 
 		Button signUpButton = (Button)findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()
@@ -105,28 +106,28 @@ public class EmailSignUpActivity extends Activity
 				String password = passwordEditText.getText().toString();
 				String confirmPassword = confirmPasswordEditText.getText().toString();
 				
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(EmailSignUpActivity.this, R.string.error_request_network_unavailable);
+					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (email.equals(""))
 				{
-					Utils.showToast(EmailSignUpActivity.this, R.string.error_email_empty);
+					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_email_empty);
 					emailEditText.requestFocus();
 				}
 				else if (password.equals(""))
 				{
-					Utils.showToast(EmailSignUpActivity.this, R.string.error_password_empty);
+					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_password_empty);
 					passwordEditText.requestFocus();
 				}
 				else if (confirmPassword.equals(""))
 				{
-					Utils.showToast(EmailSignUpActivity.this, R.string.error_confirm_password_empty);
+					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_confirm_password_empty);
 					confirmPasswordEditText.requestFocus();
 				}
 				else if (!password.equals(confirmPassword))
 				{
-					Utils.showToast(EmailSignUpActivity.this, R.string.error_wrong_confirm_password);
+					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_wrong_confirm_password);
 					confirmPasswordEditText.requestFocus();
 				}
 				else
@@ -139,7 +140,7 @@ public class EmailSignUpActivity extends Activity
 				}
 			}
 		});		
-		signUpButton = Utils.resizeLongButton(signUpButton);
+		signUpButton = ViewUtils.resizeLongButton(signUpButton);
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
@@ -166,7 +167,7 @@ public class EmailSignUpActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(EmailSignUpActivity.this, R.string.succeed_in_signing_up);
+							ViewUtils.showToast(EmailSignUpActivity.this, R.string.succeed_in_signing_up);
 						}
 					});
 					
@@ -187,7 +188,7 @@ public class EmailSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EmailSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
+							ViewUtils.showToast(EmailSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
 						}
 					});		
 				}
@@ -241,7 +242,7 @@ public class EmailSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EmailSignUpActivity.this, R.string.failed_to_get_data);
+							ViewUtils.showToast(EmailSignUpActivity.this, R.string.failed_to_get_data);
 							Bundle bundle = new Bundle();
 							bundle.putString("username", AppPreference.getAppPreference().getUsername());
 							bundle.putString("password", AppPreference.getAppPreference().getPassword());

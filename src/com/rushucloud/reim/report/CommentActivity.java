@@ -18,7 +18,9 @@ import classes.User;
 import classes.adapter.CommentListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Context;
@@ -141,7 +143,7 @@ public class CommentActivity extends Activity
 		commentListView.setAdapter(adapter);		
 
 		commentEditText = (EditText) findViewById(R.id.commentEditText);
-		commentEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		commentEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		TextView sendTextView = (TextView) findViewById(R.id.sendTextView);
 		sendTextView.setOnClickListener(new OnClickListener()
@@ -152,13 +154,13 @@ public class CommentActivity extends Activity
 				imm.hideSoftInputFromWindow(commentEditText.getWindowToken(), 0);
 				
 				String comment = commentEditText.getText().toString();
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(CommentActivity.this, R.string.error_comment_network_unavailable);
+					ViewUtils.showToast(CommentActivity.this, R.string.error_comment_network_unavailable);
 				}
 				else if (comment.equals(""))
 				{
-					Utils.showToast(CommentActivity.this, R.string.error_comment_empty);
+					ViewUtils.showToast(CommentActivity.this, R.string.error_comment_empty);
 				}
 				else
 				{
@@ -180,7 +182,7 @@ public class CommentActivity extends Activity
 			commentListView.setVisibility(View.VISIBLE);
 			commentTextView.setVisibility(View.GONE);
 			
-			if (Utils.isNetworkConnected())
+			if (PhoneUtils.isNetworkConnected())
 			{
 				for (Comment comment : commentList)
 				{
@@ -204,7 +206,7 @@ public class CommentActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
+					String avatarPath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					user.setAvatarPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
@@ -265,7 +267,7 @@ public class CommentActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(CommentActivity.this, R.string.succeed_in_sending_comment);
+							ViewUtils.showToast(CommentActivity.this, R.string.succeed_in_sending_comment);
 							commentEditText.setText("");
 							adapter.setComments(commentList);
 							adapter.notifyDataSetChanged();
@@ -280,7 +282,7 @@ public class CommentActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(CommentActivity.this, R.string.failed_to_send_comment, response.getErrorMessage());
+							ViewUtils.showToast(CommentActivity.this, R.string.failed_to_send_comment, response.getErrorMessage());
 						}
 					});					
 				}

@@ -6,7 +6,9 @@ import netUtils.Request.User.SignInRequest;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
@@ -95,10 +97,10 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		}
 		
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
-		usernameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		usernameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
-		passwordEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		passwordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 
 		if (username != null)
 		{
@@ -120,23 +122,23 @@ public class SignInActivity extends Activity implements View.OnClickListener
 				final String username = usernameEditText.getText().toString();
 				final String password = passwordEditText.getText().toString();
 				
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(SignInActivity.this, R.string.error_request_network_unavailable);
+					ViewUtils.showToast(SignInActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (username.equals(""))
 				{
-					Utils.showToast(SignInActivity.this, R.string.error_username_empty);
+					ViewUtils.showToast(SignInActivity.this, R.string.error_username_empty);
 					usernameEditText.requestFocus();
 				}
 				else if (password.equals(""))
 				{
-					Utils.showToast(SignInActivity.this, R.string.error_password_empty);
+					ViewUtils.showToast(SignInActivity.this, R.string.error_password_empty);
 					passwordEditText.requestFocus();
 				}
 				else if (!Utils.isEmailOrPhone(username))
 				{
-					Utils.showToast(SignInActivity.this, R.string.error_email_or_phone_wrong_format);
+					ViewUtils.showToast(SignInActivity.this, R.string.error_email_or_phone_wrong_format);
 					usernameEditText.requestFocus();
 				}
 				else
@@ -150,7 +152,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 				}
 			}
 		});
-		signInButton = Utils.resizeLongButton(signInButton);
+		signInButton = ViewUtils.resizeLongButton(signInButton);
 		
 		forgorPasswordTextView = (TextView)findViewById(R.id.forgotTextView);
 		forgorPasswordTextView.setOnClickListener(this);
@@ -169,7 +171,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 				finish();
 			}
 		});
-		phoneButton = Utils.resizeWindowButton(phoneButton);
+		phoneButton = ViewUtils.resizeWindowButton(phoneButton);
 		
 		Button emailButton = (Button) forgorView.findViewById(R.id.emailButton);
 		emailButton.setOnClickListener(new View.OnClickListener()
@@ -182,7 +184,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 				finish();
 			}
 		});
-		emailButton = Utils.resizeWindowButton(emailButton);
+		emailButton = ViewUtils.resizeWindowButton(emailButton);
 		
 		Button cancelButton = (Button) forgorView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -192,9 +194,9 @@ public class SignInActivity extends Activity implements View.OnClickListener
 				forgotPopupWindow.dismiss();
 			}
 		});
-		cancelButton = Utils.resizeWindowButton(cancelButton);
+		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
-		forgotPopupWindow = Utils.constructBottomPopupWindow(this, forgorView);
+		forgotPopupWindow = ViewUtils.constructBottomPopupWindow(this, forgorView);
 		
 		signUpTextView = (TextView)findViewById(R.id.signUpTextView);
 		signUpTextView.setOnClickListener(this);
@@ -217,7 +219,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		forgotPopupWindow.showAtLocation(findViewById(R.id.baseLayout), Gravity.BOTTOM, 0, 0);
 		forgotPopupWindow.update();
 
-		Utils.dimBackground(this);
+		ViewUtils.dimBackground(this);
     }
 	
 	private void sendSignInRequest()
@@ -301,7 +303,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SignInActivity.this, R.string.failed_to_sign_in, response.getErrorMessage());
+							ViewUtils.showToast(SignInActivity.this, R.string.failed_to_sign_in, response.getErrorMessage());
 						}
 					});
 				}

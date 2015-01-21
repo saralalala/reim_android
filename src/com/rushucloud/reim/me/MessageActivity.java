@@ -7,7 +7,8 @@ import netUtils.Response.User.GetInvitesResponse;
 import netUtils.Request.User.GetInvitesRequest;
 import classes.Invite;
 import classes.adapter.MessageListViewAdapter;
-import classes.utils.Utils;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
@@ -48,13 +49,13 @@ public class MessageActivity extends Activity
 		MobclickAgent.onPageStart("MessageActivity");		
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setProgressDialog(this);
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetInvitesRequest();			
 		}
 		else
 		{
-			Utils.showToast(MessageActivity.this, R.string.error_get_data_network_unavailable);
+			ViewUtils.showToast(MessageActivity.this, R.string.error_get_data_network_unavailable);
 			messageListView.setVisibility(View.GONE);
 			messageTextView.setVisibility(View.VISIBLE);
 		}

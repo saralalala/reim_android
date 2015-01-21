@@ -14,7 +14,8 @@ import classes.Report;
 import classes.adapter.ItemListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
-import classes.utils.Utils;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -82,13 +83,13 @@ public class SearchItemActivity extends Activity
 			public boolean onQueryTextSubmit(String query)
 			{
 				MobclickAgent.onEvent(SearchItemActivity.this, "UMENG_SEARCH");
-				if (Utils.isNetworkConnected())
+				if (PhoneUtils.isNetworkConnected())
 				{
 					sendSearchItemsRequest(query);
 				}
 				else
 				{
-					Utils.showToast(SearchItemActivity.this, R.string.error_search_network_unavailable);
+					ViewUtils.showToast(SearchItemActivity.this, R.string.error_search_network_unavailable);
 				}
 				return true;
 			}
@@ -188,7 +189,7 @@ public class SearchItemActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(SearchItemActivity.this, R.string.failed_to_search);
+							ViewUtils.showToast(SearchItemActivity.this, R.string.failed_to_search);
 						}
 					});
 				}

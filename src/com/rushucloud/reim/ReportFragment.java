@@ -24,6 +24,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.SegmentedGroup;
 import classes.widget.XListView;
@@ -286,7 +287,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	private void initFilterView()
 	{
 		View filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);		
-		filterPopupWindow = Utils.constructTopPopupWindow(getActivity(), filterView);
+		filterPopupWindow = ViewUtils.constructTopPopupWindow(getActivity(), filterView);
 	}
 	
 	private void initOperationView()
@@ -316,7 +317,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 																}
 																else if (!PhoneUtils.isNetworkConnected())
 																{
-																	Utils.showToast(getActivity(), R.string.error_delete_network_unavailable);
+																	ViewUtils.showToast(getActivity(), R.string.error_delete_network_unavailable);
 																}
 																else
 																{
@@ -329,11 +330,11 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				}
 				else
 				{
-					Utils.showToast(getActivity(), R.string.error_delete_report_submitted);
+					ViewUtils.showToast(getActivity(), R.string.error_delete_report_submitted);
 				}
 			}
 		});
-		deleteButton = Utils.resizeWindowButton(deleteButton);
+		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
 		
 		Button exportButton = (Button) operationView.findViewById(R.id.exportButton);
 		exportButton.setOnClickListener(new View.OnClickListener()
@@ -345,11 +346,11 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		    	final Report report = showMineList.get(reportIndex);
 				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(getActivity(), R.string.error_export_network_unavailable);
+					ViewUtils.showToast(getActivity(), R.string.error_export_network_unavailable);
 				}
 				else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
 				{
-					Utils.showToast(getActivity(), R.string.error_export_not_finished);					
+					ViewUtils.showToast(getActivity(), R.string.error_export_not_finished);					
 				}
 				else
 				{
@@ -357,7 +358,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				}
 			}
 		});
-		exportButton = Utils.resizeWindowButton(exportButton);
+		exportButton = ViewUtils.resizeWindowButton(exportButton);
 		
 		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -367,9 +368,9 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				operationPopupWindow.dismiss();
 			}
 		});
-		cancelButton = Utils.resizeWindowButton(cancelButton);
+		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
-		operationPopupWindow = Utils.constructBottomPopupWindow(getActivity(), operationView);  
+		operationPopupWindow = ViewUtils.constructBottomPopupWindow(getActivity(), operationView);  
 	}
 	
 	private void setListView(int index)
@@ -667,7 +668,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		operationPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		operationPopupWindow.update();
 		
-		Utils.dimBackground(getActivity());
+		ViewUtils.dimBackground(getActivity());
     }
     
 	private void showExportDialog(final int reportID)
@@ -675,14 +676,14 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		View view = View.inflate(getActivity(), R.layout.dialog_report_export, null);
 		
 		final EditText emailEditText = (EditText)view.findViewById(R.id.emailEditText);
-		emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		emailEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		User user = appPreference.getCurrentUser();
 		if (!user.getEmail().equals(""))
 		{
 			emailEditText.setText(user.getEmail());
 		}
-		emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		emailEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		emailEditText.requestFocus();
 		
     	Builder builder = new Builder(getActivity());
@@ -695,11 +696,11 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 										String email = emailEditText.getText().toString();
 										if (email.equals(""))
 										{
-											Utils.showToast(getActivity(), R.string.error_email_empty);
+											ViewUtils.showToast(getActivity(), R.string.error_email_empty);
 										}
 										else if (!Utils.isEmail(email))
 										{
-											Utils.showToast(getActivity(), R.string.error_email_wrong_format);
+											ViewUtils.showToast(getActivity(), R.string.error_email_wrong_format);
 										}
 										else
 										{
@@ -737,7 +738,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-				            Utils.showToast(getActivity(), R.string.prompt_delete_failed);
+				            ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
 						}
 					});		
 				}
@@ -761,7 +762,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(getActivity(), R.string.succeed_in_exporting);
+							ViewUtils.showToast(getActivity(), R.string.succeed_in_exporting);
 						}
 					});
 				}
@@ -772,7 +773,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(getActivity(), R.string.failed_to_export);
+							ViewUtils.showToast(getActivity(), R.string.failed_to_export);
 						}
 					});
 				}
@@ -842,7 +843,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						{
 							reportListView.stopRefresh();
 							reportListView.stopLoadMore();
-							Utils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
+							ViewUtils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
 						}
 					});					
 				}
@@ -856,12 +857,12 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		{
 			refreshReportListView();
 			ReimProgressDialog.dismiss();
-            Utils.showToast(getActivity(), R.string.prompt_delete_succeed);														
+            ViewUtils.showToast(getActivity(), R.string.prompt_delete_succeed);														
 		}
 		else
 		{
 			ReimProgressDialog.dismiss();
-            Utils.showToast(getActivity(), R.string.prompt_delete_failed);
+            ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
 		}		
 	}
 
@@ -934,7 +935,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						reportListView.stopRefresh();
 //						String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
 						int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
-						Utils.showToast(getActivity(), prompt);
+						ViewUtils.showToast(getActivity(), prompt);
 					}
 				});
 			}			
@@ -952,7 +953,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 					public void run()
 					{
 						reportListView.stopRefresh();
-						Utils.showToast(getActivity(), R.string.error_refresh_network_unavailable);
+						ViewUtils.showToast(getActivity(), R.string.error_refresh_network_unavailable);
 					}
 				});
 			}			

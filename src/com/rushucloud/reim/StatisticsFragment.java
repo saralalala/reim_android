@@ -27,6 +27,7 @@ import classes.StatisticsCategory;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimMonthBar;
 import classes.widget.ReimPie;
 import classes.widget.ReimProgressDialog;
@@ -142,7 +143,7 @@ public class StatisticsFragment extends Fragment
 		}
 		else
 		{
-			Utils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
+			ViewUtils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
 		}		
 	}
 	

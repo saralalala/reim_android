@@ -24,8 +24,10 @@ import classes.User;
 import classes.adapter.MemberListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.TextLengthFilter;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
@@ -202,7 +204,7 @@ public class EditReportActivity extends Activity
 		itemLayout = (LinearLayout) findViewById(R.id.itemLayout);
 		
 		titleEditText = (EditText) findViewById(R.id.titleEditText);
-		titleEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		titleEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		InputFilter[] filters = { new TextLengthFilter(10) };
 		titleEditText.setFilters(filters);
 		
@@ -266,13 +268,13 @@ public class EditReportActivity extends Activity
 			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(EditReportActivity.this, R.string.error_submit_network_unavailable);
+					ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_network_unavailable);
 				}
 				else if (report.getManagerList() == null || report.getManagerList().isEmpty())
 				{
-					Utils.showToast(EditReportActivity.this, R.string.no_manager);
+					ViewUtils.showToast(EditReportActivity.this, R.string.no_manager);
 				}
 				else
 				{
@@ -288,9 +290,9 @@ public class EditReportActivity extends Activity
 			{
 				if (report.getCommentList() == null || report.getCommentList().isEmpty())
 				{
-					if (!Utils.isNetworkConnected())
+					if (!PhoneUtils.isNetworkConnected())
 					{
-						Utils.showToast(EditReportActivity.this, R.string.error_comment_network_unavailable);
+						ViewUtils.showToast(EditReportActivity.this, R.string.error_comment_network_unavailable);
 					}
 					else
 					{
@@ -360,7 +362,7 @@ public class EditReportActivity extends Activity
 			}
 		});
 
-		managerPopupWindow = Utils.constructHorizontalPopupWindow(this, managerView);	
+		managerPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, managerView);	
 	}
 	
 	private void initCCView()
@@ -411,7 +413,7 @@ public class EditReportActivity extends Activity
 			}
 		});
 
-		ccPopupWindow = Utils.constructHorizontalPopupWindow(this, ccView);	
+		ccPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, ccView);	
 	}
 	
 	private void initDeleteWindow()
@@ -430,7 +432,7 @@ public class EditReportActivity extends Activity
 				refreshView();
 			}
 		});
-		deleteButton = Utils.resizeWindowButton(deleteButton);
+		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
 		
 		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -440,9 +442,9 @@ public class EditReportActivity extends Activity
 				deletePopupWindow.dismiss();
 			}
 		});
-		cancelButton = Utils.resizeWindowButton(cancelButton);
+		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
-		deletePopupWindow = Utils.constructBottomPopupWindow(this, deleteView);		
+		deletePopupWindow = ViewUtils.constructBottomPopupWindow(this, deleteView);		
 	}
 	
 	private void refreshView()
@@ -526,7 +528,7 @@ public class EditReportActivity extends Activity
 		}
 		amountTextView.setText(Utils.formatDouble(amount));
 		
-		if (report.getServerID() != -1 && Utils.isNetworkConnected())
+		if (report.getServerID() != -1 && PhoneUtils.isNetworkConnected())
 		{
 			sendGetReportRequest(report.getServerID());
 		}
@@ -543,7 +545,7 @@ public class EditReportActivity extends Activity
 		deletePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		deletePopupWindow.update();
 		
-		Utils.dimBackground(this);
+		ViewUtils.dimBackground(this);
     }
     
     private void showAddCommentDialog()
@@ -554,7 +556,7 @@ public class EditReportActivity extends Activity
 		titleTextView.setText(R.string.add_comment);
 		
 		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
-		commentEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		commentEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		commentEditText.requestFocus();
 		
     	Builder builder = new Builder(this);
@@ -566,7 +568,7 @@ public class EditReportActivity extends Activity
 										String comment = commentEditText.getText().toString();
 										if (comment.equals(""))
 										{
-											Utils.showToast(EditReportActivity.this, R.string.error_comment_empty);
+											ViewUtils.showToast(EditReportActivity.this, R.string.error_comment_empty);
 										}
 										else
 										{
@@ -653,12 +655,12 @@ public class EditReportActivity extends Activity
 					}
 				});
 			}
-			Utils.showToast(EditReportActivity.this, R.string.succeed_in_saving_report);
+			ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_saving_report);
 			finish();
 		}
 		else
 		{
-			Utils.showToast(EditReportActivity.this, R.string.failed_to_save_report);
+			ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_save_report);
 		}
     }
 
@@ -685,18 +687,18 @@ public class EditReportActivity extends Activity
 				{
 					report.setStatus(Report.STATUS_DRAFT);					
 				}
-				Utils.showToast(this, R.string.error_submit_report_empty);
+				ViewUtils.showToast(this, R.string.error_submit_report_empty);
 			}
 			else if (appPreference.getCurrentGroupID() == -1)
 			{
 				report.setStatus(Report.STATUS_FINISHED);
-				Utils.showToast(this, R.string.succeed_in_submitting_report);
+				ViewUtils.showToast(this, R.string.succeed_in_submitting_report);
 				finish();
 			}
 			else
 			{
 				report.setStatus(Report.STATUS_SUBMITTED);
-				Utils.showToast(this, R.string.succeed_in_submitting_report);
+				ViewUtils.showToast(this, R.string.succeed_in_submitting_report);
 				finish();
 			}
 			dbManager.updateReportByLocalID(report);
@@ -714,13 +716,13 @@ public class EditReportActivity extends Activity
 		}
 		else
 		{
-			Utils.showToast(this, R.string.failed_to_save_report);
+			ViewUtils.showToast(this, R.string.failed_to_save_report);
 		}
     }
 
     private void downloadAvatars()
     {
-    	if (Utils.isNetworkConnected())
+    	if (PhoneUtils.isNetworkConnected())
 		{
         	for (User user : userList)
     		{
@@ -743,7 +745,7 @@ public class EditReportActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String avatarPath = Utils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
+					String avatarPath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					user.setAvatarPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
@@ -805,7 +807,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditReportActivity.this, R.string.failed_to_get_data);
+							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_get_data);
 						}
 					});
 				}
@@ -855,7 +857,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditReportActivity.this, R.string.succeed_in_sending_comment);
+							ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_sending_comment);
 						}
 					});
 				}
@@ -866,7 +868,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditReportActivity.this, R.string.failed_to_send_comment, response.getErrorMessage());
+							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_send_comment, response.getErrorMessage());
 						}
 					});					
 				}
@@ -912,7 +914,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditReportActivity.this, R.string.succeed_in_sending_comment);
+							ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_sending_comment);
 						}
 					});
 				}
@@ -923,7 +925,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(EditReportActivity.this, R.string.failed_to_send_comment, response.getErrorMessage());
+							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_send_comment, response.getErrorMessage());
 						}
 					});					
 				}

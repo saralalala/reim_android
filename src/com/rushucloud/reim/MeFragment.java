@@ -38,6 +38,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -277,7 +278,7 @@ public class MeFragment extends Fragment
 						{
 							public void run()
 							{
-								Utils.showToast(getActivity(), R.string.failed_to_save_avatar);
+								ViewUtils.showToast(getActivity(), R.string.failed_to_save_avatar);
 							}
 						});						
 					}
@@ -288,7 +289,7 @@ public class MeFragment extends Fragment
 					{
 						public void run()
 						{
-							Utils.showToast(getActivity(), R.string.failed_to_download_avatar);
+							ViewUtils.showToast(getActivity(), R.string.failed_to_download_avatar);
 						}
 					});						
 				}

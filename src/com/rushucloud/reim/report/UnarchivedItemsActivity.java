@@ -16,6 +16,7 @@ import classes.adapter.ReportItemListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.SegmentedGroup;
 import android.app.Activity;
@@ -293,7 +294,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		tagLayout = (LinearLayout) filterView.findViewById(R.id.tagLayout);		
 		categoryLayout = (LinearLayout) filterView.findViewById(R.id.categoryLayout);
 		
-		filterPopupWindow = Utils.constructTopPopupWindow(this, filterView);
+		filterPopupWindow = ViewUtils.constructTopPopupWindow(this, filterView);
 	}
 
 	private void refreshView()

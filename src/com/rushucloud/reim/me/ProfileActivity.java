@@ -19,7 +19,9 @@ import classes.Group;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
@@ -120,21 +122,21 @@ public class ProfileActivity extends Activity
 				else if (requestCode == CROP_IMAGE)
 				{
 					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
-					avatarPath = Utils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
+					avatarPath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
 					
-					if (!avatarPath.equals("") && Utils.isNetworkConnected())
+					if (!avatarPath.equals("") && PhoneUtils.isNetworkConnected())
 					{
-						Utils.showToast(this, R.string.succeed_in_saving_avatar);
+						ViewUtils.showToast(this, R.string.succeed_in_saving_avatar);
 						avatarImageView.setImageBitmap(bitmap);
 						sendUploadAvatarRequest();
 					}
 					else if (avatarPath.equals(""))
 					{
-						Utils.showToast(this, R.string.failed_to_save_avatar);
+						ViewUtils.showToast(this, R.string.failed_to_save_avatar);
 					}
 					else
 					{
-						Utils.showToast(this, R.string.error_upload_avatar_network_unavailable);
+						ViewUtils.showToast(this, R.string.error_upload_avatar_network_unavailable);
 					}
 				}
 			}
@@ -226,7 +228,7 @@ public class ProfileActivity extends Activity
 				startActivityForResult(intent, TAKE_PHOTO);
 			}
 		});
-		cameraButton = Utils.resizeWindowButton(cameraButton);
+		cameraButton = ViewUtils.resizeWindowButton(cameraButton);
 		
 		Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
 		galleryButton.setOnClickListener(new View.OnClickListener()
@@ -240,7 +242,7 @@ public class ProfileActivity extends Activity
 				startActivityForResult(intent, PICK_IMAGE);
 			}
 		});
-		galleryButton = Utils.resizeWindowButton(galleryButton);
+		galleryButton = ViewUtils.resizeWindowButton(galleryButton);
 		
 		Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -250,9 +252,9 @@ public class ProfileActivity extends Activity
 				picturePopupWindow.dismiss();
 			}
 		});
-		cancelButton = Utils.resizeWindowButton(cancelButton);
+		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
-		picturePopupWindow = Utils.constructBottomPopupWindow(this, pictureView);        
+		picturePopupWindow = ViewUtils.constructBottomPopupWindow(this, pictureView);        
 	}
 	
 	private void initEmailView()
@@ -274,7 +276,7 @@ public class ProfileActivity extends Activity
     	View emailView = View.inflate(this, R.layout.window_me_email, null);
     	
     	emailEditText = (EditText) emailView.findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	emailEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
     	if (currentUser != null)
 		{
         	emailEditText.setText(currentUser.getEmail());			
@@ -299,17 +301,17 @@ public class ProfileActivity extends Activity
 				
 				String originalEmail = currentUser.getEmail();
 				String newEmail = emailEditText.getText().toString();
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
 				}
 				else if (newEmail.equals(originalEmail))
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_same_email);
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_same_email);
 				}
 				else if (newEmail.equals(""))
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_new_email_empty);
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_new_email_empty);
 				}
 				else
 				{
@@ -328,7 +330,7 @@ public class ProfileActivity extends Activity
 			}
 		});
         
-		emailPopupWindow = Utils.constructHorizontalPopupWindow(this, emailView);
+		emailPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, emailView);
 	}
 	
 	private void initPhoneView()
@@ -350,7 +352,7 @@ public class ProfileActivity extends Activity
     	View phoneView = View.inflate(this, R.layout.window_me_phone, null);
     	
     	phoneEditText = (EditText) phoneView.findViewById(R.id.phoneEditText);
-    	phoneEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	phoneEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
     	if (currentUser != null)
 		{
         	phoneEditText.setText(currentUser.getPhone());			
@@ -375,21 +377,21 @@ public class ProfileActivity extends Activity
 				
 				String originalPhone = currentUser.getPhone();
 				String newPhone = phoneEditText.getText().toString();
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
 				}
 				else if (!Utils.isPhone(newPhone))
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_phone_wrong_format);
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_phone_wrong_format);
 				}
 				else if (newPhone.equals(originalPhone))
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_same_phone);
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_same_phone);
 				}
 				else if (newPhone.equals(""))
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_new_phone_empty);
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_new_phone_empty);
 				}
 				else
 				{
@@ -408,7 +410,7 @@ public class ProfileActivity extends Activity
 			}
 		});
         
-		phonePopupWindow = Utils.constructHorizontalPopupWindow(this, phoneView);
+		phonePopupWindow = ViewUtils.constructHorizontalPopupWindow(this, phoneView);
 	}
 	
 	private void initNicknameView()
@@ -430,7 +432,7 @@ public class ProfileActivity extends Activity
     	View nicknameView = View.inflate(this, R.layout.window_me_nickname, null);
     	
     	nicknameEditText = (EditText) nicknameView.findViewById(R.id.nicknameEditText);
-    	nicknameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	nicknameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
     	if (currentUser != null)
 		{
         	nicknameEditText.setText(currentUser.getNickname());			
@@ -455,17 +457,17 @@ public class ProfileActivity extends Activity
 				
 				String originalNickname = currentUser.getNickname();
 				String newNickname = nicknameEditText.getText().toString();
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
 				}
 				else if (newNickname.equals(originalNickname))
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_same_nickname);
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_same_nickname);
 				}
 				else if (newNickname.equals(""))
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_new_nickname_empty);
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_new_nickname_empty);
 				}
 				else
 				{
@@ -484,7 +486,7 @@ public class ProfileActivity extends Activity
 			}
 		});
         
-		nicknamePopupWindow = Utils.constructHorizontalPopupWindow(this, nicknameView);
+		nicknamePopupWindow = ViewUtils.constructHorizontalPopupWindow(this, nicknameView);
 	}
 	
 	private void initCompanyView()
@@ -507,7 +509,7 @@ public class ProfileActivity extends Activity
     	View companyView = View.inflate(this, R.layout.window_me_company, null);
     	
     	companyEditText = (EditText) companyView.findViewById(R.id.companyEditText);
-    	companyEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	companyEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
     	if (currentGroup != null)
 		{
         	companyEditText.setText(currentGroup.getName());			
@@ -532,17 +534,17 @@ public class ProfileActivity extends Activity
 				
 				String originalName = currentGroup.getName();
 				String newName = companyEditText.getText().toString();
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
 				}
 				else if (newName.equals(originalName))
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_same_company_name);
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_same_company_name);
 				}
 				else if (newName.equals(""))
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_new_company_name_empty);
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_new_company_name_empty);
 				}
 				else
 				{
@@ -561,7 +563,7 @@ public class ProfileActivity extends Activity
 			}
 		});
         
-		companyPopupWindow = Utils.constructHorizontalPopupWindow(this, companyView);
+		companyPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, companyView);
 	}
 
 	private void initManagerView()
@@ -575,7 +577,7 @@ public class ProfileActivity extends Activity
 			{
 				if (currentUser.getGroupID() <= 0)
 				{
-					Utils.showToast(ProfileActivity.this, R.string.error_no_group);			
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_no_group);			
 				}
 				else
 				{
@@ -648,7 +650,7 @@ public class ProfileActivity extends Activity
 		picturePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		picturePopupWindow.update();
 
-		Utils.dimBackground(this);
+		ViewUtils.dimBackground(this);
     }
     
     private void showEmailWindow()
@@ -725,7 +727,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							loadInfoView();
-							Utils.showToast(ProfileActivity.this, R.string.succeed_in_uploading_avatar);
+							ViewUtils.showToast(ProfileActivity.this, R.string.succeed_in_uploading_avatar);
 						}
 					});	
 				}
@@ -736,7 +738,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							loadInfoView();
-							Utils.showToast(ProfileActivity.this, R.string.failed_to_upload_avatar);
+							ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_upload_avatar);
 						}
 					});				
 				}
@@ -762,7 +764,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ProfileActivity.this, R.string.succeed_in_modifying_user_info);
+							ViewUtils.showToast(ProfileActivity.this, R.string.succeed_in_modifying_user_info);
 							emailPopupWindow.dismiss();
 							phonePopupWindow.dismiss();
 							nicknamePopupWindow.dismiss();
@@ -778,7 +780,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ProfileActivity.this, R.string.failed_to_modify_user_info);
+							ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_modify_user_info);
 							loadInfoView();
 						}
 					});						
@@ -806,7 +808,7 @@ public class ProfileActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							companyPopupWindow.dismiss();
-							Utils.showToast(ProfileActivity.this, R.string.succeed_in_modifying);
+							ViewUtils.showToast(ProfileActivity.this, R.string.succeed_in_modifying);
 						}
 					});
 				}
@@ -818,7 +820,7 @@ public class ProfileActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							companyPopupWindow.dismiss();
-							Utils.showToast(ProfileActivity.this, R.string.failed_to_modify);
+							ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_modify);
 						}
 					});
 				}

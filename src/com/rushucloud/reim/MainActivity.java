@@ -16,7 +16,7 @@ import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
-import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.TabItem;
 
@@ -106,7 +106,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			if (System.currentTimeMillis() - exitTime > 2000)
 			{
-				Utils.showToast(MainActivity.this, R.string.prompt_press_back_to_exit);
+				ViewUtils.showToast(MainActivity.this, R.string.prompt_press_back_to_exit);
 				exitTime = System.currentTimeMillis();
 			}
 			else

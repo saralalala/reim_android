@@ -12,7 +12,9 @@ import netUtils.Request.User.ModifyUserRequest;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.ImageActivity;
@@ -95,7 +97,7 @@ public class CompleteInfoActivity extends Activity
 				else if (requestCode == CROP_IMAGE)
 				{
 					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
-					avatarPath = Utils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
+					avatarPath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
 					newAvatar = true;
 					avatarImageView.setImageBitmap(bitmap);
 				}
@@ -162,7 +164,7 @@ public class CompleteInfoActivity extends Activity
 		});
 		
 		nicknameEditText = (EditText)findViewById(R.id.nicknameEditText);
-		nicknameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		nicknameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 
 		Button completeButton = (Button)findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()
@@ -175,9 +177,9 @@ public class CompleteInfoActivity extends Activity
 				String nickname = nicknameEditText.getText().toString();
 				currentUser.setNickname(nickname);
 				
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(CompleteInfoActivity.this, R.string.error_update_network_unavailable);
+					ViewUtils.showToast(CompleteInfoActivity.this, R.string.error_update_network_unavailable);
 					startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
 					finish();
 				}
@@ -198,7 +200,7 @@ public class CompleteInfoActivity extends Activity
 				}
 			}
 		});
-		completeButton = Utils.resizeLongButton(completeButton);
+		completeButton = ViewUtils.resizeLongButton(completeButton);
 		
 		// init picture window
 		View pictureView = View.inflate(this, R.layout.window_picture, null); 
@@ -215,7 +217,7 @@ public class CompleteInfoActivity extends Activity
 				startActivityForResult(intent, TAKE_PHOTO);
 			}
 		});
-		cameraButton = Utils.resizeWindowButton(cameraButton);
+		cameraButton = ViewUtils.resizeWindowButton(cameraButton);
 		
 		Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
 		galleryButton.setOnClickListener(new View.OnClickListener()
@@ -229,7 +231,7 @@ public class CompleteInfoActivity extends Activity
 				startActivityForResult(intent, PICK_IMAGE);
 			}
 		});
-		galleryButton = Utils.resizeWindowButton(galleryButton);
+		galleryButton = ViewUtils.resizeWindowButton(galleryButton);
 		
 		Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -239,9 +241,9 @@ public class CompleteInfoActivity extends Activity
 				picturePopupWindow.dismiss();
 			}
 		});
-		cancelButton = Utils.resizeWindowButton(cancelButton);
+		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
-		picturePopupWindow = Utils.constructBottomPopupWindow(this, pictureView);
+		picturePopupWindow = ViewUtils.constructBottomPopupWindow(this, pictureView);
 		
 		RelativeLayout baseLayout = (RelativeLayout)findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
@@ -285,7 +287,7 @@ public class CompleteInfoActivity extends Activity
 		picturePopupWindow.showAtLocation(findViewById(R.id.baseLayout), Gravity.BOTTOM, 0, 0);
 		picturePopupWindow.update();
 
-		Utils.dimBackground(this);
+		ViewUtils.dimBackground(this);
     }
     
     private void sendUploadAvatarRequest()
@@ -313,7 +315,7 @@ public class CompleteInfoActivity extends Activity
 							public void run()
 							{
 								ReimProgressDialog.dismiss();
-								Utils.showToast(CompleteInfoActivity.this, R.string.succeed_in_modifying_user_info);
+								ViewUtils.showToast(CompleteInfoActivity.this, R.string.succeed_in_modifying_user_info);
 								startActivity(new Intent(CompleteInfoActivity.this, WelcomeActivity.class));
 								finish();
 							}
@@ -331,7 +333,7 @@ public class CompleteInfoActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(CompleteInfoActivity.this, R.string.failed_to_upload_avatar, response.getErrorMessage());
+							ViewUtils.showToast(CompleteInfoActivity.this, R.string.failed_to_upload_avatar, response.getErrorMessage());
 						}
 					});				
 				}
@@ -356,7 +358,7 @@ public class CompleteInfoActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(CompleteInfoActivity.this, R.string.succeed_in_modifying_user_info);
+							ViewUtils.showToast(CompleteInfoActivity.this, R.string.succeed_in_modifying_user_info);
 							startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
 							finish();
 						}
@@ -369,7 +371,7 @@ public class CompleteInfoActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(CompleteInfoActivity.this, R.string.failed_to_upload_avatar, response.getErrorMessage());
+							ViewUtils.showToast(CompleteInfoActivity.this, R.string.failed_to_upload_avatar, response.getErrorMessage());
 						}
 					});						
 				}

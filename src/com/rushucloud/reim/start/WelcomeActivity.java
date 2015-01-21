@@ -1,7 +1,8 @@
 package com.rushucloud.reim.start;
 
 import classes.utils.DBManager;
-import classes.utils.Utils;
+import classes.utils.ViewUtils;
+
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -48,7 +49,7 @@ public class WelcomeActivity extends Activity
         {
         	if(System.currentTimeMillis() - exitTime > 2000)
         	{
-        		Utils.showToast(WelcomeActivity.this, R.string.prompt_press_back_to_exit);
+        		ViewUtils.showToast(WelcomeActivity.this, R.string.prompt_press_back_to_exit);
         		exitTime=System.currentTimeMillis();
         	}
         	else 
@@ -80,7 +81,7 @@ public class WelcomeActivity extends Activity
 				finish();
 			}			
 		});
-		signInButton = Utils.resizeLongButton(signInButton);
+		signInButton = ViewUtils.resizeLongButton(signInButton);
 
 		final int buttonHeight = signInButton.getLayoutParams().height;
 		

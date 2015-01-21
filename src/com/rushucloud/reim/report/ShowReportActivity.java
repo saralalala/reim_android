@@ -13,7 +13,8 @@ import classes.Report;
 import classes.adapter.ReportDetailListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
-import classes.utils.Utils;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
@@ -156,13 +157,13 @@ public class ShowReportActivity extends Activity
 
 	private void refreshView()
 	{		
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetReportRequest(report.getServerID());		
 		}
 		else
 		{
-			Utils.showToast(this, R.string.error_get_data_network_unavailable);
+			ViewUtils.showToast(this, R.string.error_get_data_network_unavailable);
 		}
 	}
 	
@@ -246,7 +247,7 @@ public class ShowReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-				    		Utils.showToast(ShowReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+				    		ViewUtils.showToast(ShowReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
 				    		if (response.getCode() == NetworkConstant.ERROR_REPORT_DELETED || response.getCode() == NetworkConstant.ERROR_REPORT_NOT_EXISTS)
 							{
 								dbManager.deleteOthersReport(reportServerID, AppPreference.getAppPreference().getCurrentUserID());

@@ -21,7 +21,9 @@ import classes.ReimApplication;
 import classes.adapter.CategoryListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -163,9 +165,9 @@ public class SubCategoryActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(SubCategoryActivity.this, R.string.error_add_network_unavailable);
+					ViewUtils.showToast(SubCategoryActivity.this, R.string.error_add_network_unavailable);
 				}
 				else
 				{
@@ -199,7 +201,7 @@ public class SubCategoryActivity extends Activity
 		iconImageView = (ImageView) categoryView.findViewById(R.id.iconImageView);
 		
 		nameEditText = (EditText) categoryView.findViewById(R.id.nameEditText);
-		nameEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		nameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		limitEditText = (EditText) categoryView.findViewById(R.id.limitEditText);
 		limitEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -226,7 +228,7 @@ public class SubCategoryActivity extends Activity
 				String limit = limitEditText.getText().toString();
 				if (name.equals(""))
 				{
-					Utils.showToast(SubCategoryActivity.this, R.string.error_category_name_empty);
+					ViewUtils.showToast(SubCategoryActivity.this, R.string.error_category_name_empty);
 				}
 				else
 				{
@@ -245,7 +247,7 @@ public class SubCategoryActivity extends Activity
 					{
     					currentCategory.setIconID(iconIndex + 1);
 						Bitmap bitmap = BitmapFactory.decodeResource(getResources(), iconList.get(iconIndex));
-						String iconPath = Utils.saveIconToFile(bitmap, iconIndex + 1);
+						String iconPath = PhoneUtils.saveIconToFile(bitmap, iconIndex + 1);
 						currentCategory.setIconPath(iconPath);
 					}
 					else
@@ -265,7 +267,7 @@ public class SubCategoryActivity extends Activity
 			}
 		});
 		
-		categoryPopupWindow = Utils.constructHorizontalPopupWindow(this, categoryView); 
+		categoryPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, categoryView); 
 	}
 
 	private void resetCheck()
@@ -293,7 +295,7 @@ public class SubCategoryActivity extends Activity
 			categoryTextView.setVisibility(View.INVISIBLE);			
 		}	
 		
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			for (Category category : categoryList)
 			{
@@ -369,9 +371,9 @@ public class SubCategoryActivity extends Activity
     			{
     				operationPopupWindow.dismiss();
 
-    				if (!Utils.isNetworkConnected())
+    				if (!PhoneUtils.isNetworkConnected())
     				{
-    					Utils.showToast(SubCategoryActivity.this, R.string.error_modify_network_unavailable);
+    					ViewUtils.showToast(SubCategoryActivity.this, R.string.error_modify_network_unavailable);
     				}
     				else
     				{
@@ -380,7 +382,7 @@ public class SubCategoryActivity extends Activity
     				}
     			}
     		});
-    		modifyButton = Utils.resizeWindowButton(modifyButton);
+    		modifyButton = ViewUtils.resizeWindowButton(modifyButton);
     		
     		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
     		deleteButton.setOnClickListener(new View.OnClickListener()
@@ -389,9 +391,9 @@ public class SubCategoryActivity extends Activity
     			{
     				operationPopupWindow.dismiss();
     				
-    				if (!Utils.isNetworkConnected())
+    				if (!PhoneUtils.isNetworkConnected())
     				{
-    					Utils.showToast(SubCategoryActivity.this, R.string.error_delete_network_unavailable);
+    					ViewUtils.showToast(SubCategoryActivity.this, R.string.error_delete_network_unavailable);
     				}
     				else
     				{
@@ -410,7 +412,7 @@ public class SubCategoryActivity extends Activity
     				}
     			}
     		});
-    		deleteButton = Utils.resizeWindowButton(deleteButton);
+    		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
     		
     		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
     		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -420,15 +422,15 @@ public class SubCategoryActivity extends Activity
     				operationPopupWindow.dismiss();
     			}
     		});
-    		cancelButton = Utils.resizeWindowButton(cancelButton);
+    		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
     		
-    		operationPopupWindow = Utils.constructBottomPopupWindow(this, operationView);    	
+    		operationPopupWindow = ViewUtils.constructBottomPopupWindow(this, operationView);    	
 		}
     	
 		operationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		operationPopupWindow.update();
 		
-		Utils.dimBackground(this);
+		ViewUtils.dimBackground(this);
     }
 
 	private void showCategoryWindow()
@@ -493,7 +495,7 @@ public class SubCategoryActivity extends Activity
 							refreshListView();
 							ReimProgressDialog.dismiss();
 							categoryPopupWindow.dismiss();
-							Utils.showToast(SubCategoryActivity.this, R.string.succeed_in_creating_category);
+							ViewUtils.showToast(SubCategoryActivity.this, R.string.succeed_in_creating_category);
 						}
 					});
 				}
@@ -504,7 +506,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SubCategoryActivity.this, R.string.failed_to_create_category);							
+							ViewUtils.showToast(SubCategoryActivity.this, R.string.failed_to_create_category);							
 						}
 					});
 				}
@@ -534,7 +536,7 @@ public class SubCategoryActivity extends Activity
 							refreshListView();
 							ReimProgressDialog.dismiss();
 							categoryPopupWindow.dismiss();
-							Utils.showToast(SubCategoryActivity.this, R.string.succeed_in_modifying_category);
+							ViewUtils.showToast(SubCategoryActivity.this, R.string.succeed_in_modifying_category);
 						}
 					});
 				}
@@ -545,7 +547,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SubCategoryActivity.this, R.string.failed_to_modify_category);							
+							ViewUtils.showToast(SubCategoryActivity.this, R.string.failed_to_modify_category);							
 						}
 					});
 				}
@@ -572,7 +574,7 @@ public class SubCategoryActivity extends Activity
 						{
 							refreshListView();
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SubCategoryActivity.this, R.string.succeed_in_deleting_category);
+							ViewUtils.showToast(SubCategoryActivity.this, R.string.succeed_in_deleting_category);
 						}
 					});
 				}
@@ -583,7 +585,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(SubCategoryActivity.this, R.string.failed_to_delete_category);					
+							ViewUtils.showToast(SubCategoryActivity.this, R.string.failed_to_delete_category);					
 						}
 					});
 				}
@@ -601,7 +603,7 @@ public class SubCategoryActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String iconPath = Utils.saveIconToFile(response.getBitmap(), category.getIconID());
+					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
 					category.setIconPath(iconPath);
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());

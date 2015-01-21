@@ -17,7 +17,9 @@ import classes.User;
 import classes.adapter.ReportDetailListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.MainActivity;
@@ -139,9 +141,9 @@ public class ApproveReportActivity extends Activity
 			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_PASS_REPORT_DETAIL");
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(ApproveReportActivity.this, R.string.error_approve_network_unavailable);
+					ViewUtils.showToast(ApproveReportActivity.this, R.string.error_approve_network_unavailable);
 				}
 				else
 				{
@@ -156,9 +158,9 @@ public class ApproveReportActivity extends Activity
 			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REJECT_REPORT_DETAIL");
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(ApproveReportActivity.this, R.string.error_approve_network_unavailable);
+					ViewUtils.showToast(ApproveReportActivity.this, R.string.error_approve_network_unavailable);
 				}
 				else
 				{
@@ -191,13 +193,13 @@ public class ApproveReportActivity extends Activity
 		adapter.setItemList(itemList);
 		adapter.notifyDataSetChanged();
 		
-		if (Utils.isNetworkConnected())
+		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetReportRequest(reportServerID);
 		}
 		else if (itemList.isEmpty())
 		{
-			Utils.showToast(this, R.string.error_get_data_network_unavailable);			
+			ViewUtils.showToast(this, R.string.error_get_data_network_unavailable);			
 		}
 	}
 
@@ -209,7 +211,7 @@ public class ApproveReportActivity extends Activity
 		titleTextView.setText(R.string.reject_reason);
 		
 		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
-		commentEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		commentEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		commentEditText.requestFocus();
 		
     	Builder builder = new Builder(this);
@@ -261,7 +263,7 @@ public class ApproveReportActivity extends Activity
 							ReimProgressDialog.dismiss();
 					    	if (report.getStatus() != Report.STATUS_SUBMITTED)
 							{
-					    		Utils.showToast(ApproveReportActivity.this, R.string.error_report_approved);
+					    		ViewUtils.showToast(ApproveReportActivity.this, R.string.error_report_approved);
 								goBackToMainActivity();
 							}
 					    	else if (fromPush && !report.getManagerList().contains(appPreference.getCurrentUser()))
@@ -296,7 +298,7 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-				    		Utils.showToast(ApproveReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+							ViewUtils.showToast(ApproveReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
 				    		if (response.getCode() == NetworkConstant.ERROR_REPORT_DELETED || response.getCode() == NetworkConstant.ERROR_REPORT_NOT_EXISTS)
 							{
 								dbManager.deleteOthersReport(reportServerID, AppPreference.getAppPreference().getCurrentUserID());
@@ -348,7 +350,7 @@ public class ApproveReportActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							int message = status == 2 ? R.string.prompt_report_approved : R.string.prompt_report_rejected;
-							Utils.showToast(ApproveReportActivity.this, message);
+							ViewUtils.showToast(ApproveReportActivity.this, message);
 							goBackToMainActivity();
 						}
 					});
@@ -360,7 +362,7 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(ApproveReportActivity.this, R.string.error_operation_failed, response.getErrorMessage());
+							ViewUtils.showToast(ApproveReportActivity.this, R.string.error_operation_failed, response.getErrorMessage());
 						}
 					});					
 				}

@@ -4,7 +4,9 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Response.User.ForgotPasswordResponse;
 import netUtils.Request.User.ForgotPasswordRequest;
 
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -78,10 +80,10 @@ public class PhoneFindActivity extends Activity
 		});
     	
 		phoneEditText = (EditText)findViewById(R.id.phoneEditText);
-		phoneEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		phoneEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
     	codeEditText = (EditText)findViewById(R.id.codeEditText);
-    	codeEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+    	codeEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
     	
     	acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
     	acquireCodeButton.setOnClickListener(new View.OnClickListener()
@@ -89,13 +91,13 @@ public class PhoneFindActivity extends Activity
 			public void onClick(View v)
 			{
 				String phoneNumber = phoneEditText.getText().toString();
-				if (!Utils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					Utils.showToast(PhoneFindActivity.this, R.string.error_request_network_unavailable);
+					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_request_network_unavailable);
 				}
 				else if (!Utils.isPhone(phoneNumber))
 				{
-					Utils.showToast(PhoneFindActivity.this, R.string.error_phone_wrong_format);
+					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_phone_wrong_format);
 					phoneEditText.requestFocus();	
 				}
 				else
@@ -105,7 +107,7 @@ public class PhoneFindActivity extends Activity
 				}		
 			}
 		});
-		acquireCodeButton = Utils.resizeShortButton(acquireCodeButton, 32);
+		acquireCodeButton = ViewUtils.resizeShortButton(acquireCodeButton, 32);
     	
     	Button nextButton = (Button)findViewById(R.id.nextButton);
     	nextButton.setOnClickListener(new View.OnClickListener()
@@ -114,11 +116,11 @@ public class PhoneFindActivity extends Activity
 			{
 				if (code.equals(""))
 				{
-					Utils.showToast(PhoneFindActivity.this, R.string.error_no_code);
+					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_no_code);
 				}
 				else if (!codeEditText.getText().toString().equals(code))
 				{
-					Utils.showToast(PhoneFindActivity.this, R.string.error_wrong_code);
+					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_wrong_code);
 				}
 				else
 				{
@@ -132,7 +134,7 @@ public class PhoneFindActivity extends Activity
 				}
 			}
 		});
-    	nextButton = Utils.resizeLongButton(nextButton);
+    	nextButton = ViewUtils.resizeLongButton(nextButton);
 		
     	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
@@ -202,7 +204,7 @@ public class PhoneFindActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(PhoneFindActivity.this, R.string.prompt_message_sent);
+							ViewUtils.showToast(PhoneFindActivity.this, R.string.prompt_message_sent);
 						}
 					});
 				}
@@ -212,7 +214,7 @@ public class PhoneFindActivity extends Activity
 					{
 						public void run()
 						{
-							Utils.showToast(PhoneFindActivity.this, R.string.failed_to_send_message, response.getErrorMessage());
+							ViewUtils.showToast(PhoneFindActivity.this, R.string.failed_to_send_message, response.getErrorMessage());
 						}
 					});
 				}

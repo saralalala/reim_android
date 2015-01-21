@@ -4,7 +4,8 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Response.FeedbackResponse;
 import netUtils.Request.FeedbackRequest;
 
-import classes.utils.Utils;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -72,10 +73,10 @@ public class FeedbackActivity extends Activity
 		});
 		
 		feedbackEditText = (EditText)findViewById(R.id.feedbackEditText);
-		feedbackEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		feedbackEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 		
 		contactEditText = (EditText)findViewById(R.id.contactEditText);
-		contactEditText.setOnFocusChangeListener(Utils.getEditTextFocusChangeListener());
+		contactEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
 
 		Button submitButton = (Button)findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new View.OnClickListener()
@@ -83,17 +84,17 @@ public class FeedbackActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				if (Utils.isNetworkConnected())
+				if (PhoneUtils.isNetworkConnected())
 				{
 					sendFeedBack();
 				}
 				else
 				{
-					Utils.showToast(FeedbackActivity.this, R.string.error_feedback_network_unavailable);
+					ViewUtils.showToast(FeedbackActivity.this, R.string.error_feedback_network_unavailable);
 				}
 			}
 		});
-		submitButton = Utils.resizeLongButton(submitButton);
+		submitButton = ViewUtils.resizeLongButton(submitButton);
 		
 		LinearLayout layout = (LinearLayout)findViewById(R.id.baseLayout);
 		layout.setOnClickListener(new View.OnClickListener()
@@ -118,11 +119,11 @@ public class FeedbackActivity extends Activity
 		final String contactInfo = contactEditText.getText().toString();
 		if (feedback.equals("") && contactInfo.equals(""))
 		{
-			Utils.showToast(this, R.string.error_feedback_contact_empty);
+			ViewUtils.showToast(this, R.string.error_feedback_contact_empty);
 		}
 		else
 		{
-	    	sendFeedbackRequest(feedback, contactInfo, Utils.getCurrentVersion());
+	    	sendFeedbackRequest(feedback, contactInfo, PhoneUtils.getCurrentVersion());
 		}    	
     }
     
@@ -154,7 +155,7 @@ public class FeedbackActivity extends Activity
 						}
 						else
 						{
-							Utils.showToast(FeedbackActivity.this, R.string.failed_to_send_feedback, response.getErrorMessage());
+							ViewUtils.showToast(FeedbackActivity.this, R.string.failed_to_send_feedback, response.getErrorMessage());
 						}
 					}						
 				});

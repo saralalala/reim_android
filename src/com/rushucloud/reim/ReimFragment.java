@@ -25,6 +25,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.SegmentedGroup;
 import classes.widget.XListView;
@@ -436,7 +437,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			}
 		});
 		
-		filterPopupWindow = Utils.constructTopPopupWindow(getActivity(), filterView);
+		filterPopupWindow = ViewUtils.constructTopPopupWindow(getActivity(), filterView);
 	}
 
 	private void initDeleteView()
@@ -455,7 +456,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 
 				if (report != null && !report.isEditable())
 				{
-					Utils.showToast(getActivity(), R.string.error_delete_item_submitted);
+					ViewUtils.showToast(getActivity(), R.string.error_delete_item_submitted);
 				}
 				else
 				{
@@ -472,7 +473,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 															}
 															else if (!PhoneUtils.isNetworkConnected())
 															{
-																Utils.showToast(getActivity(), R.string.error_delete_network_unavailable);
+																ViewUtils.showToast(getActivity(), R.string.error_delete_network_unavailable);
 															}
 															else
 															{
@@ -485,7 +486,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				}
 			}
 		});
-		deleteButton = Utils.resizeWindowButton(deleteButton);
+		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
 		
 		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -495,9 +496,9 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				deletePopupWindow.dismiss();
 			}
 		});
-		cancelButton = Utils.resizeWindowButton(cancelButton);
+		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
-		deletePopupWindow = Utils.constructBottomPopupWindow(getActivity(), deleteView);
+		deletePopupWindow = ViewUtils.constructBottomPopupWindow(getActivity(), deleteView);
 	}
 	
 	private void initSearchView()
@@ -725,7 +726,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		deletePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		deletePopupWindow.update();
 		
-		Utils.dimBackground(getActivity());
+		ViewUtils.dimBackground(getActivity());
     }
     
     private void sendDownloadCategoryIconRequest(final Category category)
@@ -782,7 +783,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Utils.showToast(getActivity(), R.string.prompt_delete_failed);
+							ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
 						}
 					});
 				}
@@ -796,12 +797,12 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			refreshItemListView();
 			ReimProgressDialog.dismiss();
-			Utils.showToast(getActivity(), R.string.prompt_delete_succeed);
+			ViewUtils.showToast(getActivity(), R.string.prompt_delete_succeed);
 		}
 		else
 		{
 			ReimProgressDialog.dismiss();
-			Utils.showToast(getActivity(), R.string.prompt_delete_failed);
+			ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
 		}
 	}
 	
@@ -872,7 +873,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					itemListView.stopRefresh();
 //					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
 					int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
-					Utils.showToast(getActivity(), prompt);
+					ViewUtils.showToast(getActivity(), prompt);
 				}
 			});
 		}		
@@ -916,7 +917,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					itemListView.stopLoadMore();
 //					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
 					int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
-					Utils.showToast(getActivity(), prompt);
+					ViewUtils.showToast(getActivity(), prompt);
 				}
 			});
 		}	
