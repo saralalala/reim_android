@@ -1,7 +1,5 @@
 package com.rushucloud.reim.item;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,6 +46,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
+import com.rushucloud.reim.GalleryActivity;
 import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -146,6 +145,7 @@ public class EditItemActivity extends Activity
 	
 	private Item item;
 	private Report report;
+	private List<Image> originInvoiceList;
 
 	private List<Vendor> vendorList = null;
 	private List<Category> categoryList = null;
@@ -192,17 +192,20 @@ public class EditItemActivity extends Activity
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		if (removeImageViewShown)
+		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			for (ImageView removeImageView : removeList)
+			if (removeImageViewShown)
 			{
-				removeImageView.setVisibility(View.INVISIBLE);
+				for (ImageView removeImageView : removeList)
+				{
+					removeImageView.setVisibility(View.INVISIBLE);
+				}
+				removeImageViewShown = false;
 			}
-			removeImageViewShown = false;
-		}
-		else if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			finish();			
+			else
+			{
+				goBack();		
+			}			
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -215,17 +218,18 @@ public class EditItemActivity extends Activity
 			{
 				if (requestCode == PICK_IMAGE)
 				{
-					Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());					
-					String invoicePath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
-					if (!invoicePath.equals(""))
+					String[] paths = data.getStringArrayExtra("paths");
+
+					for (int i = 0; i < paths.length; i++)
 					{
-						Image image = new Image();
-						image.setPath(invoicePath);
-						item.getInvoices().add(image);
-					}
-					else
-					{
-						ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_save_invoice);
+						String filePath = PhoneUtils.getInvoiceFilePath();
+						boolean result = PhoneUtils.copyFile(paths[i], filePath);
+						if (result)
+						{
+							Image image = new Image();
+							image.setPath(filePath);
+							item.getInvoices().add(image);
+						}
 					}
 					
 					refreshInvoiceView();
@@ -247,14 +251,6 @@ public class EditItemActivity extends Activity
 					
 					refreshInvoiceView();
 				}
-			}
-			catch (FileNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
 			}
 			catch (Exception e)
 			{
@@ -302,12 +298,14 @@ public class EditItemActivity extends Activity
 			List<User> relevantUsers = new ArrayList<User>();
 			relevantUsers.add(appPreference.getCurrentUser());
 			item.setRelevantUsers(relevantUsers);
+			originInvoiceList = new ArrayList<Image>();
 		}
 		else
 		{
 			newItem = false;
 			MobclickAgent.onEvent(this, "UMENG_EDIT_ITEM");
-			item = dbManager.getItemByLocalID(itemLocalID);			
+			item = dbManager.getItemByLocalID(itemLocalID);
+			originInvoiceList = new ArrayList<Image>(item.getInvoices());
 		}
 	}
 	
@@ -365,7 +363,7 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+				goBack();
 			}
 		});
 		
@@ -614,9 +612,9 @@ public class EditItemActivity extends Activity
 			public void onClick(View v)
 			{
 				picturePopupWindow.dismiss();
-				
-				Intent intent = new Intent(Intent.ACTION_PICK, null);
-				intent.setType("image/*");
+
+				Intent intent = new Intent(EditItemActivity.this, GalleryActivity.class);
+				intent.putExtra("maxCount", Item.MAX_INVOICE_COUNT - item.getInvoices().size());
 				startActivityForResult(intent, PICK_IMAGE);
 			}
 		});
@@ -1666,6 +1664,27 @@ public class EditItemActivity extends Activity
     	managerPopupWindow.update();
     }
 
+    private void goBack()
+    {
+		for (Image newImage : item.getInvoices())
+		{
+			boolean imageExists = false;
+			for (Image oldImage : originInvoiceList)
+			{
+				if (newImage.getPath().equals(oldImage.getPath()))
+				{
+					imageExists = true;
+					break;
+				}
+			}
+			if (!imageExists)
+			{
+				newImage.deleteFile();
+			}
+		}
+		finish();
+    }
+    
     private void saveItem()
     {
     	if (dbManager.syncItem(item))

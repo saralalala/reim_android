@@ -31,6 +31,8 @@
     <string name="status">状态</string>
     <string name="detail">详情</string>
     <string name="loading">等待</string>
+    <string name="image">图片</string>
+    <string name="check">选中</string>
     
     <string name="sign_up">注册</string>
     <string name="sign_up_by_phone">手机注册</string>
@@ -95,6 +97,8 @@
     <string name="send_to_approve">发送审批</string>
     <string name="report_not_available">未加入报告</string>
     <string name="vendor_not_available">未填写商家</string>
+    <string name="pick_image">选择图片</string>
+    <string name="no_image">未找到图片</string>
     
     <string name="my_report">我的</string>
     <string name="others_report">需审批</string>

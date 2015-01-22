@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
+    <color name="major_dark">#FFFF575B</color>
+    <color name="major_light">#FFFFFFFF</color>
+    
     <color name="background">#FFF5F6F8</color>
     <color name="background_black">#FF000000</color>
     
@@ -16,9 +19,6 @@
     <color name="font_list_item_header">#FFA9A9A9</color>
     <color name="font_start">#FFFE8888</color>
     <color name="font_month_data">#FF47A3D2</color>
-        
-    <color name="major_dark">#FFFF575B</color>
-    <color name="major_light">#FFFFFFFF</color>
     
     <color name="hint_black">#FF000000</color>
     <color name="hint_white">#CCFFFFFF</color>

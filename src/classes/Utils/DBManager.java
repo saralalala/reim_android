@@ -59,7 +59,7 @@ public class DBManager extends SQLiteOpenHelper
 		return dbManager;
 	}
 
-	public void executeTempCommand()
+	public void executeExtraCommand()
 	{
 //		String sqlString = "DELETE FROM tbl_report WHERE id = 23";
 //		database.execSQL(sqlString);

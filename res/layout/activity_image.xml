@@ -5,10 +5,10 @@
     android:background="@color/background_black"
     android:gravity="center" >
 
-    <ImageView
-        android:id="@+id/imageView"
+    <uk.co.senab.photoview.PhotoView
+        android:id="@+id/photoView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/invoice" />
+        android:contentDescription="@string/image" />
 
 </LinearLayout>

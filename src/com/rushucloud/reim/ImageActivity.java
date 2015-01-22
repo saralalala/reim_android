@@ -1,5 +1,6 @@
 package com.rushucloud.reim;
 
+import uk.co.senab.photoview.PhotoView;
 import classes.utils.ViewUtils;
 
 import com.rushucloud.reim.R;
@@ -11,14 +12,10 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
 
 public class ImageActivity extends Activity
-{
-	private ImageView imageView;
-	
+{	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -62,15 +59,15 @@ public class ImageActivity extends Activity
 			finish();
 		}
 		
-		imageView = (ImageView)findViewById(R.id.imageView);
-		imageView.setImageBitmap(bitmap);
+		PhotoView photoView = (PhotoView)findViewById(R.id.photoView);
+		photoView.setImageBitmap(bitmap);
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		
 		double imageRatio = ((double)bitmap.getHeight())/bitmap.getWidth();
 		double screenRatio = ((double)metrics.heightPixels)/metrics.widthPixels;
 		
-		LayoutParams params = imageView.getLayoutParams();
+		LayoutParams params = photoView.getLayoutParams();
 		if (imageRatio > screenRatio)
 		{
 			params.height = metrics.heightPixels;
@@ -82,13 +79,6 @@ public class ImageActivity extends Activity
 			params.width = metrics.widthPixels;
 		}
 		
-		imageView.setLayoutParams(params);
-		imageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				finish();
-			}
-		});
+		photoView.setLayoutParams(params);
 	}
 }
