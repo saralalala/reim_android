@@ -37,6 +37,11 @@
         <item name="android:windowExitAnimation">@anim/window_vertical_bottom_out</item>
     </style>
     
+    <style name="WindowCenterAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/window_center_in</item>  
+        <item name="android:windowExitAnimation">@anim/window_center_out</item>
+    </style>
+    
     <style name="WindowHorizontalAnimation" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/window_horizontal_in</item>  
         <item name="android:windowExitAnimation">@anim/window_horizontal_out</item>

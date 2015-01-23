@@ -457,7 +457,7 @@ public class EditItemActivity extends Activity
 
 		amountEditText = (EditText)findViewById(R.id.amountEditText);
 		amountEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
-		amountEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		amountEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		if (item.getAmount() == 0)
 		{
 			amountEditText.requestFocus();
@@ -677,7 +677,7 @@ public class EditItemActivity extends Activity
 				timeTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));
 			}
 		});
-		confirmButton = ViewUtils.resizeShortButton(confirmButton, 30);
+		confirmButton = ViewUtils.resizeShortButton(confirmButton, 30, true);
 		
 		datePicker = (DatePicker) timeView.findViewById(R.id.datePicker);
 		
@@ -713,7 +713,7 @@ public class EditItemActivity extends Activity
 		
 		final EditText vendorEditText = (EditText) vendorView.findViewById(R.id.vendorEditText);
 		vendorEditText.setText(item.getVendor());
-		vendorEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		vendorEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		vendorAdapter = new VendorListViewAdapter(this);
 		ListView vendorListView = (ListView) vendorView.findViewById(R.id.vendorListView);
@@ -773,7 +773,7 @@ public class EditItemActivity extends Activity
 		View locationView = View.inflate(this, R.layout.window_reim_location, null);
 		
 		final EditText locationEditText = (EditText) locationView.findViewById(R.id.locationEditText);
-		locationEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		locationEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
     	if (!item.getLocation().equals(""))
 		{
         	locationEditText.setText(item.getLocation());			

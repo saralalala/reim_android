@@ -204,7 +204,7 @@ public class EditReportActivity extends Activity
 		itemLayout = (LinearLayout) findViewById(R.id.itemLayout);
 		
 		titleEditText = (EditText) findViewById(R.id.titleEditText);
-		titleEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		titleEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		InputFilter[] filters = { new TextLengthFilter(10) };
 		titleEditText.setFilters(filters);
 		
@@ -556,7 +556,7 @@ public class EditReportActivity extends Activity
 		titleTextView.setText(R.string.add_comment);
 		
 		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
-		commentEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		commentEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		commentEditText.requestFocus();
 		
     	Builder builder = new Builder(this);

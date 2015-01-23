@@ -205,7 +205,7 @@ public class CategoryActivity extends Activity
 		iconImageView = (ImageView) categoryView.findViewById(R.id.iconImageView);
 		
 		nameEditText = (EditText) categoryView.findViewById(R.id.nameEditText);
-		nameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		nameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		limitEditText = (EditText) categoryView.findViewById(R.id.limitEditText);
 		limitEditText.setTypeface(ReimApplication.TypeFaceAleoLight);

@@ -97,10 +97,10 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		}
 		
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
-		usernameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		usernameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
-		passwordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		passwordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 
 		if (username != null)
 		{

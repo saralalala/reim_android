@@ -80,10 +80,10 @@ public class PhoneFindActivity extends Activity
 		});
     	
 		phoneEditText = (EditText)findViewById(R.id.phoneEditText);
-		phoneEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		phoneEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
     	codeEditText = (EditText)findViewById(R.id.codeEditText);
-    	codeEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+    	codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
     	
     	acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
     	acquireCodeButton.setOnClickListener(new View.OnClickListener()
@@ -104,10 +104,10 @@ public class PhoneFindActivity extends Activity
 				{
 					hideSoftKeyboard();
 					sendTextMessage();
-				}		
+				}
 			}
 		});
-		acquireCodeButton = ViewUtils.resizeShortButton(acquireCodeButton, 32);
+		acquireCodeButton = ViewUtils.resizeShortButton(acquireCodeButton, 32, true);
     	
     	Button nextButton = (Button)findViewById(R.id.nextButton);
     	nextButton.setOnClickListener(new View.OnClickListener()

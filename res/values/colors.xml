@@ -6,6 +6,7 @@
     
     <color name="background">#FFF5F6F8</color>
     <color name="background_black">#FF000000</color>
+    <color name="background_grey">#FFE4E4E4</color>
     
     <color name="divider">#1A000000</color>
     <color name="start_divider">#FFFE8888</color>

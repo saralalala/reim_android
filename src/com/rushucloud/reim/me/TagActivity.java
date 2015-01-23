@@ -147,7 +147,7 @@ public class TagActivity extends Activity
 		View tagView = View.inflate(this, R.layout.window_me_tag, null);
 		
 		nameEditText = (EditText) tagView.findViewById(R.id.nameEditText);
-		nameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		nameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		ImageView backImageView = (ImageView) tagView.findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()

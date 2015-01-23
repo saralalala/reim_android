@@ -96,16 +96,16 @@ public class PhoneSignUpActivity extends Activity
 		});
 		
 		phoneEditText = (EditText)findViewById(R.id.phoneEditText);
-		phoneEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		phoneEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
-		passwordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		passwordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		codeEditText = (EditText)findViewById(R.id.codeEditText);	
-		codeEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 
 		acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
 		acquireCodeButton.setOnClickListener(new View.OnClickListener()
@@ -135,7 +135,7 @@ public class PhoneSignUpActivity extends Activity
 				}
 			}
 		});
-		acquireCodeButton = ViewUtils.resizeShortButton(acquireCodeButton, 32);
+		acquireCodeButton = ViewUtils.resizeShortButton(acquireCodeButton, 32, true);
 		
 		Button signUpButton = (Button)findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()

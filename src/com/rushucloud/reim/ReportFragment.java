@@ -676,14 +676,14 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		View view = View.inflate(getActivity(), R.layout.dialog_report_export, null);
 		
 		final EditText emailEditText = (EditText)view.findViewById(R.id.emailEditText);
-		emailEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		User user = appPreference.getCurrentUser();
 		if (!user.getEmail().equals(""))
 		{
 			emailEditText.setText(user.getEmail());
 		}
-		emailEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		emailEditText.requestFocus();
 		
     	Builder builder = new Builder(getActivity());

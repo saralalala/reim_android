@@ -76,7 +76,7 @@ public class EmailFindActivity extends Activity
 		});
     	
     	emailEditText = (EditText)findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+    	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
     	Button confirmButton = (Button)findViewById(R.id.confirmButton);
     	confirmButton.setOnClickListener(new View.OnClickListener()

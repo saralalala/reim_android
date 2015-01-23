@@ -54,6 +54,22 @@ public class ViewUtils
 		
 		return popupWindow;
 	}
+    
+	public static PopupWindow constructCenterPopupWindow(final Activity activity, View view)
+	{
+		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
+		
+		PopupWindow popupWindow = new PopupWindow(activity);
+		popupWindow.setWidth(PhoneUtils.dpToPixel(activity, 210));
+		popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
+		popupWindow.setContentView(view);
+		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+		popupWindow.setFocusable(true);
+		popupWindow.setOutsideTouchable(false);
+		popupWindow.setAnimationStyle(R.style.WindowCenterAnimation);
+		
+		return popupWindow;
+	}
 	
 	public static PopupWindow constructBottomPopupWindow(final Activity activity, View view)
 	{
@@ -124,18 +140,26 @@ public class ViewUtils
 		button.setLayoutParams(params);
 		return button;
 	}
-
-	public static Button resizeShortButton(Button button, int height)
+	
+	public static Button resizeShortButton(Button button, int length, boolean fixHeight)
 	{
 		Context context = ReimApplication.getContext();
-		
-		int heightPixels = PhoneUtils.dpToPixel(context, height);
+
+		int lengthPixels = PhoneUtils.dpToPixel(context, length);
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_short_solid_light);
 		double ratio = ((double)bitmap.getWidth()) / bitmap.getHeight();
 		
 		ViewGroup.LayoutParams params = button.getLayoutParams();
-		params.width = (int)(heightPixels * ratio);
-		params.height = heightPixels;
+		if (fixHeight)
+		{
+			params.width = (int)(lengthPixels * ratio);
+			params.height = lengthPixels;			
+		}
+		else
+		{
+			params.width = lengthPixels;
+			params.height = (int)(lengthPixels / ratio);			
+		}
 		
 		button.setLayoutParams(params);
 		return button;
@@ -158,20 +182,15 @@ public class ViewUtils
 		return button;
 	}
 
-	public static OnFocusChangeListener getEditTextFocusChangeListener()
+	public static OnFocusChangeListener onFocusChangeListener = new OnFocusChangeListener()
 	{
-		OnFocusChangeListener listener = new OnFocusChangeListener()
+		public void onFocusChange(View v, boolean hasFocus)
 		{
-			public void onFocusChange(View v, boolean hasFocus)
+			if (v instanceof EditText && hasFocus)
 			{
-				if (v instanceof EditText && hasFocus)
-				{
-					Spannable spanText = ((EditText)v).getText();
-					Selection.setSelection(spanText, spanText.length());
-				}
+				Spannable spanText = ((EditText)v).getText();
+				Selection.setSelection(spanText, spanText.length());
 			}
-		};
-		
-		return listener;
-	}
+		}
+	};
 }

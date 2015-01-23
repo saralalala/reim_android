@@ -7,15 +7,18 @@ import netUtils.HttpConnectionCallback;
 import netUtils.UDPClient;
 import netUtils.UDPConnectionCallback;
 import netUtils.Response.EventsResponse;
+import netUtils.Response.FeedbackResponse;
 import netUtils.Response.Group.GetGroupResponse;
 import netUtils.Request.EventsReadRequest;
 import netUtils.Request.EventsRequest;
+import netUtils.Request.FeedbackRequest;
 import netUtils.Request.Group.GetGroupRequest;
 import classes.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.TabItem;
@@ -30,12 +33,15 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener
@@ -47,6 +53,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	private TextView mediumBadgeTextView;
 	private TextView longBadgeTextView;
 	private ImageView tipImageView;
+	private PopupWindow feedbackPopupWindow;
+	private EditText feedbackEditText;
+	private PopupWindow phonePopupWindow;
+	private EditText codeEditText;
+	private EditText phoneEditText;
 	
 	private DBManager dbManager;
 	private UDPClient udpClient;
@@ -124,6 +135,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		}
 	}
 
+	private void initData()
+	{
+		dbManager = DBManager.getDBManager();
+	}
+	
 	private void initView()
 	{
 		getActionBar().hide();
@@ -232,13 +248,144 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				startActivity(intent);
 			}
 		});
+	
+		ImageView feedbackImageView = (ImageView) findViewById(R.id.feedbackImageView);
+		feedbackImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (PhoneUtils.isNetworkConnected())
+				{
+					showFeedbackWindow();					
+				}
+				else
+				{
+					ViewUtils.showToast(MainActivity.this, R.string.error_feedback_network_unavailable);
+				}
+			}
+		});
+		
+		initFeedbackWindow();
+		initPhoneWindow();
 	}
 	
-	private void initData()
+	private void initFeedbackWindow()
 	{
-		dbManager = DBManager.getDBManager();
+		View feedbackView = View.inflate(this, R.layout.window_feedback, null);
+
+		feedbackEditText = (EditText) feedbackView.findViewById(R.id.feedbackEditText);
+		
+		Button submitButton = (Button) feedbackView.findViewById(R.id.submitButton);
+		submitButton.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (PhoneUtils.isNetworkConnected())
+				{
+					User user = AppPreference.getAppPreference().getCurrentUser();
+					String feedback = feedbackEditText.getText().toString();
+					if (feedback.equals(""))
+					{
+						ViewUtils.showToast(MainActivity.this, R.string.error_feedback_empty);
+					}
+					else if (user != null && Utils.isPhone(user.getPhone()))
+					{
+						sendFeedbackRequest(feedbackEditText.getText().toString(), user.getPhone());
+					}
+					else
+					{
+						feedbackPopupWindow.dismiss();
+						showPhoneWindow();
+					}
+				}
+				else
+				{
+					ViewUtils.showToast(MainActivity.this, R.string.error_feedback_network_unavailable);
+				}
+			}
+		});
+		ViewUtils.resizeShortButton(submitButton, 90, false);
+		
+		Button cancelButton = (Button) feedbackView.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				feedbackPopupWindow.dismiss();
+			}
+		});
+		ViewUtils.resizeShortButton(cancelButton, 90, false);
+
+		feedbackPopupWindow = ViewUtils.constructCenterPopupWindow(this, feedbackView);
+	}
+	
+	private void initPhoneWindow()
+	{		
+		View phoneView = View.inflate(this, R.layout.window_feedback_phone, null);
+
+		codeEditText = (EditText) phoneView.findViewById(R.id.codeEditText);
+		phoneEditText = (EditText) phoneView.findViewById(R.id.phoneEditText);
+		
+		Button submitButton = (Button) phoneView.findViewById(R.id.submitButton);
+		submitButton.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (PhoneUtils.isNetworkConnected())
+				{
+					String code = codeEditText.getText().toString();
+					String phone = phoneEditText.getText().toString();
+					if (code.equals(""))
+					{
+						ViewUtils.showToast(MainActivity.this, R.string.error_feedback_code_empty);
+					}
+					else if (phone.equals(""))
+					{
+						ViewUtils.showToast(MainActivity.this, R.string.error_phone_empty);
+					}
+					else
+					{
+						sendFeedbackRequest(feedbackEditText.getText().toString(), code + "-" + phone);
+					}
+				}
+				else
+				{
+					ViewUtils.showToast(MainActivity.this, R.string.error_feedback_network_unavailable);
+				}
+			}
+		});
+		ViewUtils.resizeShortButton(submitButton, 90, false);
+		
+		Button skipButton = (Button) phoneView.findViewById(R.id.skipButton);
+		skipButton.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				sendFeedbackRequest(feedbackEditText.getText().toString(), "");
+			}
+		});
+		ViewUtils.resizeShortButton(skipButton, 90, false);
+
+		phonePopupWindow = ViewUtils.constructCenterPopupWindow(this, phoneView);
 	}
 
+    private void showFeedbackWindow()
+    {
+    	feedbackEditText.setText("");
+    	
+		feedbackPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+		feedbackPopupWindow.update();
+    }
+
+    private void showPhoneWindow()
+    {
+    	codeEditText.setText(R.string.feedback_code);
+    	phoneEditText.setText("");
+    	
+		phonePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+		phonePopupWindow.update();
+    }
+    
 	private void resetTabItems()
 	{
 		for (int i = 0; i < tabItemList.size(); i++)
@@ -367,6 +514,37 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		});
 	}
 
+    private void sendFeedbackRequest(String feedback, String contactInfo)
+    {
+    	ReimProgressDialog.show();
+    	FeedbackRequest request = new FeedbackRequest(feedback, contactInfo, PhoneUtils.getAppVersion());
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final FeedbackResponse response = new FeedbackResponse(httpResponse);
+				runOnUiThread(new Runnable()
+				{
+					public void run()
+					{
+						if (response.getStatus())
+						{
+					    	ReimProgressDialog.dismiss();
+							feedbackPopupWindow.dismiss();
+							phonePopupWindow.dismiss();
+							ViewUtils.showToast(MainActivity.this, R.string.prompt_feedback_sent);
+						}
+						else
+						{
+					    	ReimProgressDialog.dismiss();
+							ViewUtils.showToast(MainActivity.this, R.string.failed_to_send_feedback, response.getErrorMessage());
+						}
+					}						
+				});
+			}
+		});
+    }
+    
 	public void onClick(View v)
 	{
 		resetTabItems();

@@ -76,13 +76,13 @@ public class ChangePasswordActivity extends Activity
 		});
 		
 		oldPasswordEditText = (EditText)findViewById(R.id.oldPasswordEditText);
-		oldPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		oldPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
-		newPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		newPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		Button submitButton = (Button)findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new OnClickListener()

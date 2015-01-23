@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/baseLayout"
+    android:layout_width="210dp"
+    android:layout_height="wrap_content"
+    android:background="@color/background_grey"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/feedback"
+        android:textColor="@color/font_major_dark"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/prompt_feedback"
+        android:textColor="@color/font_major_dark"
+        android:textSize="12sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/major_light"
+        android:padding="5dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/feedbackEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="@string/input_feedback"
+                android:inputType="textMultiLine"
+                android:minLines="4"
+                android:textColor="@color/font_major_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" >
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:layout_toLeftOf="@+id/pivotView"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button_short_dark_drawable"
+            android:text="@string/submit"
+            android:textColor="@color/button_text_light_color" />
+
+        <View
+            android:id="@+id/pivotView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:layout_toRightOf="@+id/pivotView"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/button_short_light_solid_drawable"
+            android:text="@string/cancel"
+            android:textColor="@color/button_text_dark_color" />
+
+    </RelativeLayout>
+
+</LinearLayout>

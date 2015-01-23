@@ -73,10 +73,10 @@ public class FeedbackActivity extends Activity
 		});
 		
 		feedbackEditText = (EditText)findViewById(R.id.feedbackEditText);
-		feedbackEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		feedbackEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		contactEditText = (EditText)findViewById(R.id.contactEditText);
-		contactEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		contactEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 
 		Button submitButton = (Button)findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new View.OnClickListener()
@@ -123,13 +123,13 @@ public class FeedbackActivity extends Activity
 		}
 		else
 		{
-	    	sendFeedbackRequest(feedback, contactInfo, PhoneUtils.getAppVersion());
+	    	sendFeedbackRequest(feedback, contactInfo);
 		}    	
     }
     
-    private void sendFeedbackRequest(String feedback, String contactInfo, String versionName)
+    private void sendFeedbackRequest(String feedback, String contactInfo)
     {
-    	FeedbackRequest request = new FeedbackRequest(feedback, contactInfo, versionName);
+    	FeedbackRequest request = new FeedbackRequest(feedback, contactInfo, PhoneUtils.getAppVersion());
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

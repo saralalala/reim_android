@@ -2,7 +2,8 @@
     xmlns:reim="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:id="@+id/containerLayout" >
     
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
@@ -10,7 +11,18 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp" />
 
+    <ImageView
+        android:id="@+id/feedbackImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/tabLayout"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:contentDescription="@string/feedback"
+        android:src="@drawable/feedback" />
+
     <LinearLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_alignParentBottom="true"

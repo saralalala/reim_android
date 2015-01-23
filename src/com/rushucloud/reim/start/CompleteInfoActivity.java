@@ -164,7 +164,7 @@ public class CompleteInfoActivity extends Activity
 		});
 		
 		nicknameEditText = (EditText)findViewById(R.id.nicknameEditText);
-		nicknameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		nicknameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 
 		Button completeButton = (Button)findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()

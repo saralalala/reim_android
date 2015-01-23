@@ -211,7 +211,7 @@ public class ApproveReportActivity extends Activity
 		titleTextView.setText(R.string.reject_reason);
 		
 		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
-		commentEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		commentEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		commentEditText.requestFocus();
 		
     	Builder builder = new Builder(this);

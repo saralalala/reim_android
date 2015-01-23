@@ -33,6 +33,7 @@
     <string name="loading">等待</string>
     <string name="image">图片</string>
     <string name="check">选中</string>
+    <string name="skip">直接跳过</string>
     
     <string name="sign_up">注册</string>
     <string name="sign_up_by_phone">手机注册</string>
@@ -167,6 +168,7 @@
     <string name="edit_tag">编辑标签</string>
     <string name="about_us">关于我们</string>
     <string name="feedback">意见反馈</string>
+    <string name="feedback_code">+86</string>
     <string name="sign_out">退出登录</string>
     <string name="current_version">当前版本：</string>
     <string name="about_content">瞎看什么看&#8230;</string>
@@ -225,26 +227,28 @@
     <string name="prompt_sync_ongoing">正在同步中</string>
     <string name="prompt_report_approved">报告已通过</string>
     <string name="prompt_report_rejected">报告已退回</string>
-    <string name="prompt_max_image_count">啊哦，最多只能添加16张图片</string>    
+    <string name="prompt_max_image_count">啊哦，最多只能添加16张图片</string>   
+    <string name="prompt_feedback">告诉我们你在使用过程中遇到的问题，或对产品提出你的建议。我们会在1个工作日内给你答复。</string>
+    <string name="prompt_feedback_phone">请留下联系方式，方便我们与你沟通</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>
     <string name="error_code_empty">验证码不能为空</string>
-    <string name="error_username_empty">用户名不能为空</string>
-    <string name="error_email_empty">邮箱不能为空</string>
-    <string name="error_new_email_empty">新邮箱不能为空</string>
+    <string name="error_username_empty">请输入用户名</string>
+    <string name="error_email_empty">请输入邮箱</string>
+    <string name="error_new_email_empty">请输入新邮箱</string>
     <string name="error_email_wrong_format">邮箱格式不正确</string>
     <string name="error_same_email">邮箱与原有相同，无需修改</string>
-    <string name="error_phone_empty">手机号不能为空</string>
-    <string name="error_new_phone_empty">新手机号不能为空</string>
+    <string name="error_phone_empty">请输入手机号</string>
+    <string name="error_new_phone_empty">请输入新手机号</string>
     <string name="error_phone_wrong_format">手机号格式不正确</string>
     <string name="error_same_phone">手机号与原有相同，无需修改</string>
-    <string name="error_new_nickname_empty">新昵称不能为空</string>
+    <string name="error_new_nickname_empty">请输入新昵称</string>
     <string name="error_same_nickname">昵称与原有相同，无需修改</string>
-    <string name="error_new_company_name_empty">公司新名称不能为空</string>
+    <string name="error_new_company_name_empty">请输入公司新名称</string>
     <string name="error_same_company_name">与原公司名相同，无需修改</string>
     <string name="error_number_wrong_format">请输入消费金额</string>
-    <string name="error_password_empty">密码不能为空</string>
+    <string name="error_password_empty">请输入密码</string>
     <string name="error_old_password_empty">请输入旧密码</string>
     <string name="error_new_password_empty">请输入新密码</string>
     <string name="error_confirm_password_empty">请再次输入密码</string>
@@ -256,7 +260,9 @@
     <string name="error_category_name_empty">请输入类别名称</string>
     <string name="error_tag_name_empty">请输入标签名称</string>
     <string name="error_comment_empty">请输入评论</string>
+    <string name="error_feedback_empty">请输入你的意见</string>
     <string name="error_feedback_contact_empty">请输入你的意见或者联系方式</string>
+    <string name="error_feedback_code_empty">请输入区号</string>
     <string name="error_refresh_network_unavailable">网络未连接，无法刷新</string>
     <string name="error_add_network_unavailable">网络未连接，无法添加</string>
     <string name="error_modify_network_unavailable">网络未连接，无法修改</string>

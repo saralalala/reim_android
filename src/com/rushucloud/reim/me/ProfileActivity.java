@@ -276,11 +276,7 @@ public class ProfileActivity extends Activity
     	View emailView = View.inflate(this, R.layout.window_me_email, null);
     	
     	emailEditText = (EditText) emailView.findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
-    	if (currentUser != null)
-		{
-        	emailEditText.setText(currentUser.getEmail());			
-		}
+    	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		ImageView backImageView = (ImageView) emailView.findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
@@ -301,22 +297,29 @@ public class ProfileActivity extends Activity
 				
 				String originalEmail = currentUser.getEmail();
 				String newEmail = emailEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
-				}
-				else if (newEmail.equals(originalEmail))
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_same_email);
-				}
-				else if (newEmail.equals(""))
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_new_email_empty);
+				if (PhoneUtils.isNetworkConnected())
+				{	
+					if (newEmail.equals(originalEmail))
+					{
+						ViewUtils.showToast(ProfileActivity.this, R.string.error_same_email);
+					}
+					else if (newEmail.equals("") && currentUser.getPhone().equals(""))
+					{
+						ViewUtils.showToast(ProfileActivity.this, R.string.error_new_email_empty);
+					}
+					else if (!newEmail.equals("") && !Utils.isEmail(newEmail))
+					{
+						ViewUtils.showToast(ProfileActivity.this, R.string.error_email_wrong_format);
+					}
+					else
+					{
+						currentUser.setEmail(newEmail);
+						sendModifyUserInfoRequest();					
+					}
 				}
 				else
 				{
-					currentUser.setEmail(newEmail);
-					sendModifyUserInfoRequest();
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);
 				}
 			}
 		});
@@ -352,11 +355,7 @@ public class ProfileActivity extends Activity
     	View phoneView = View.inflate(this, R.layout.window_me_phone, null);
     	
     	phoneEditText = (EditText) phoneView.findViewById(R.id.phoneEditText);
-    	phoneEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
-    	if (currentUser != null)
-		{
-        	phoneEditText.setText(currentUser.getPhone());			
-		}
+    	phoneEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		ImageView backImageView = (ImageView) phoneView.findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
@@ -377,26 +376,29 @@ public class ProfileActivity extends Activity
 				
 				String originalPhone = currentUser.getPhone();
 				String newPhone = phoneEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
+				if (PhoneUtils.isNetworkConnected())
 				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
-				}
-				else if (!Utils.isPhone(newPhone))
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_phone_wrong_format);
-				}
-				else if (newPhone.equals(originalPhone))
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_same_phone);
-				}
-				else if (newPhone.equals(""))
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_new_phone_empty);
+					if (newPhone.equals(originalPhone))
+					{
+						ViewUtils.showToast(ProfileActivity.this, R.string.error_same_phone);
+					}
+					else if (newPhone.equals("") && currentUser.getEmail().equals(""))
+					{
+						ViewUtils.showToast(ProfileActivity.this, R.string.error_new_phone_empty);
+					}
+					else if (!newPhone.equals("") && !Utils.isPhone(newPhone))
+					{
+						ViewUtils.showToast(ProfileActivity.this, R.string.error_phone_wrong_format);
+					}
+					else
+					{
+						currentUser.setPhone(newPhone);
+						sendModifyUserInfoRequest();						
+					}
 				}
 				else
 				{
-					currentUser.setPhone(newPhone);
-					sendModifyUserInfoRequest();
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);						
 				}
 			}
 		});
@@ -432,11 +434,7 @@ public class ProfileActivity extends Activity
     	View nicknameView = View.inflate(this, R.layout.window_me_nickname, null);
     	
     	nicknameEditText = (EditText) nicknameView.findViewById(R.id.nicknameEditText);
-    	nicknameEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
-    	if (currentUser != null)
-		{
-        	nicknameEditText.setText(currentUser.getNickname());			
-		}
+    	nicknameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		ImageView backImageView = (ImageView) nicknameView.findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
@@ -509,11 +507,7 @@ public class ProfileActivity extends Activity
     	View companyView = View.inflate(this, R.layout.window_me_company, null);
     	
     	companyEditText = (EditText) companyView.findViewById(R.id.companyEditText);
-    	companyEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
-    	if (currentGroup != null)
-		{
-        	companyEditText.setText(currentGroup.getName());			
-		}
+    	companyEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		ImageView backImageView = (ImageView) companyView.findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
@@ -654,25 +648,45 @@ public class ProfileActivity extends Activity
     }
     
     private void showEmailWindow()
-    {    	
+    {
+    	if (currentUser != null)
+		{
+        	emailEditText.setText(currentUser.getEmail());			
+		}
+    	
 		emailPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		emailPopupWindow.update();
     }
     
     private void showPhoneWindow()
     {
+    	if (currentUser != null)
+		{
+        	phoneEditText.setText(currentUser.getPhone());			
+		}
+    	
 		phonePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		phonePopupWindow.update();
     }
     
     private void showNicknameWindow()
     {
+    	if (currentUser != null)
+		{
+        	nicknameEditText.setText(currentUser.getNickname());			
+		}
+    	
 		nicknamePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		nicknamePopupWindow.update();
     }
     
     private void showCompanyWindow()
     {
+    	if (currentGroup != null)
+		{
+        	companyEditText.setText(currentGroup.getName());			
+		}
+    	
 		companyPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		companyPopupWindow.update();
     }

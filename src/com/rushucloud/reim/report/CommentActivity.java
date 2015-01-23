@@ -143,7 +143,7 @@ public class CommentActivity extends Activity
 		commentListView.setAdapter(adapter);		
 
 		commentEditText = (EditText) findViewById(R.id.commentEditText);
-		commentEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		commentEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		TextView sendTextView = (TextView) findViewById(R.id.sendTextView);
 		sendTextView.setOnClickListener(new OnClickListener()

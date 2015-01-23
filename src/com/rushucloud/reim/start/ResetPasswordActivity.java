@@ -89,10 +89,10 @@ public class ResetPasswordActivity extends Activity
 		});
 		
 		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
-		newPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		newPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
     	
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		Button completeButton = (Button)findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()

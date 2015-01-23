@@ -85,13 +85,13 @@ public class EmailSignUpActivity extends Activity
 		});
 
 		emailEditText = (EditText)findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+    	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
     	
 		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
-		passwordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		passwordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.getEditTextFocusChangeListener());
+		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 
 		Button signUpButton = (Button)findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()
