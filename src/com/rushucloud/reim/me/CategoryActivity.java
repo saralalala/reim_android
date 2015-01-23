@@ -33,7 +33,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -140,12 +139,12 @@ public class CategoryActivity extends Activity
 		getActionBar().hide();
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, metrics);
-		iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, metrics);
-		iconHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, metrics);
+		int padding = PhoneUtils.dpToPixel(getResources(), 32);
+		iconWidth = PhoneUtils.dpToPixel(getResources(), 40);
+		iconHorizontalInterval = PhoneUtils.dpToPixel(getResources(), 20);
 		iconMaxCount = (metrics.widthPixels - padding + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
 		iconHorizontalInterval = (metrics.widthPixels - padding - iconWidth * iconMaxCount) / (iconMaxCount - 1);
-		iconVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, metrics);
+		iconVerticalInterval = PhoneUtils.dpToPixel(getResources(), 20);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()

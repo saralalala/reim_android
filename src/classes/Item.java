@@ -9,11 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-
 import com.rushucloud.reim.R;
 
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 
 public class Item
@@ -365,9 +363,8 @@ public class Item
 
 	public int getStatusWidth(Context context)
     {
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		int longWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, metrics);
-		int shortWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, metrics);
+		int longWidth = PhoneUtils.dpToPixel(context, 48);
+		int shortWidth = PhoneUtils.dpToPixel(context, 36);
 		
 		if (getBelongReport() != null)
 		{

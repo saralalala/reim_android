@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import classes.adapter.GalleryAdapter;
+import classes.utils.PhoneUtils;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
@@ -114,7 +115,7 @@ public class GalleryActivity extends Activity
 		// resize button
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		
-		int marginPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		int marginPixels = PhoneUtils.dpToPixel(getResources(), 16);
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_border_dark);
 		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
 		

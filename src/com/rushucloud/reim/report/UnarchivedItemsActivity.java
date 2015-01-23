@@ -15,6 +15,7 @@ import classes.Tag;
 import classes.adapter.ReportItemListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
@@ -363,11 +364,11 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		tagLayout.removeAllViews();
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, metrics);
-		int tagVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-		int tagHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
-		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, metrics);
-		int textSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, metrics);
+		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 32);
+		int tagVerticalInterval = PhoneUtils.dpToPixel(getResources(), 16);
+		int tagHorizontalInterval = PhoneUtils.dpToPixel(getResources(), 10);
+		int padding = PhoneUtils.dpToPixel(getResources(), 24);
+		int textSize = PhoneUtils.dpToPixel(getResources(), 16);
 
 		int space = 0;
 		LinearLayout layout = new LinearLayout(UnarchivedItemsActivity.this);
@@ -446,10 +447,10 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		
-		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, metrics);
-		int iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
-		int iconVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-		int iconHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 32);
+		int iconWidth = PhoneUtils.dpToPixel(getResources(), 50);
+		int iconVerticalInterval = PhoneUtils.dpToPixel(getResources(), 16);
+		int iconHorizontalInterval = PhoneUtils.dpToPixel(getResources(), 18);
 		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
 		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
 

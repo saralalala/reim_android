@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -23,6 +24,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import classes.ReimApplication;
 
 import com.rushucloud.reim.R;
@@ -92,11 +95,9 @@ public class PhoneUtils
 
 	public static boolean isLocalisationEnabled()
 	{
-		LocationManager locationManager = (LocationManager) ReimApplication.getContext()
-				.getSystemService(Context.LOCATION_SERVICE);
+		LocationManager locationManager = (LocationManager) ReimApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
 		boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-		boolean networkEnabled = locationManager
-				.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+		boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
 		return gpsEnabled || networkEnabled ? true : false;
 	}
@@ -236,4 +237,22 @@ public class PhoneUtils
 			return false;
 		}
 	}
+
+    public static int dpToPixel(Context context, int dp)
+    {
+    	DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
+    }
+    
+    public static int dpToPixel(Resources resources, int dp)
+    {
+    	DisplayMetrics metrics = resources.getDisplayMetrics();
+    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
+    }
+    
+    public static int dpToPixel(Resources resources, double dp)
+    {
+    	DisplayMetrics metrics = resources.getDisplayMetrics();
+    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, metrics);
+    }
 }

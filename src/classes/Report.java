@@ -10,14 +10,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 
 import com.rushucloud.reim.R;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
-import android.util.TypedValue;
 
 
 public class Report implements Serializable
@@ -287,9 +286,8 @@ public class Report implements Serializable
 
 	public int getStatusWidth(Context context)
     {
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		int longWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, metrics);
-		int shortWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, metrics);
+		int longWidth = PhoneUtils.dpToPixel(context, 48);
+		int shortWidth = PhoneUtils.dpToPixel(context, 36);
 		
 		switch (status)
 		{

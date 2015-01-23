@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -114,7 +113,7 @@ public class ViewUtils
 		Context context = ReimApplication.getContext();
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		
-		int marginPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
+		int marginPixels = PhoneUtils.dpToPixel(context, 16);
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_long_solid_light);
 		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
 		
@@ -129,9 +128,8 @@ public class ViewUtils
 	public static Button resizeShortButton(Button button, int height)
 	{
 		Context context = ReimApplication.getContext();
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		
-		int heightPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
+		int heightPixels = PhoneUtils.dpToPixel(context, height);
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_short_solid_light);
 		double ratio = ((double)bitmap.getWidth()) / bitmap.getHeight();
 		
@@ -148,7 +146,7 @@ public class ViewUtils
 		Context context = ReimApplication.getContext();
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		
-		int marginPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+		int marginPixels = PhoneUtils.dpToPixel(context, 10);
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.window_button_selected);
 		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
 		

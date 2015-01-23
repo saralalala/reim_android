@@ -1,5 +1,6 @@
 package classes.widget;
 
+import classes.utils.PhoneUtils;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,7 +9,6 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 
 public class ReimMonthBar extends View
@@ -16,17 +16,15 @@ public class ReimMonthBar extends View
 	private Paint paint = new Paint();
 	private RectF rect = new RectF();
 	private int width;
-	private int height;
-	private int radius;
+	private int height = PhoneUtils.dpToPixel(getResources(), 18);
+	private int radius = PhoneUtils.dpToPixel(getResources(), 2);
 	
 	public ReimMonthBar(Context context, double ratio)
 	{
 		super(context);
 		
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		width = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 154, metrics);
-		height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
-		radius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, metrics);
+		width = metrics.widthPixels - PhoneUtils.dpToPixel(context, 154);
 		
 		paint.setColor(getColor(ratio));
 		paint.setStyle(Style.FILL_AND_STROKE);

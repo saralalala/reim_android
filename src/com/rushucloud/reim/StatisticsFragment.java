@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +91,7 @@ public class StatisticsFragment extends Fragment
 		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
 		
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int margin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, metrics);
+		int margin = PhoneUtils.dpToPixel(getResources(), 36);
 		
 		diameter = metrics.widthPixels - margin * 2;
 		ImageView arcImageView = (ImageView) getActivity().findViewById(R.id.arcImageView);

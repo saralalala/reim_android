@@ -65,7 +65,6 @@ import android.provider.MediaStore;
 import android.text.Selection;
 import android.text.Spannable;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -1320,10 +1319,10 @@ public class EditItemActivity extends Activity
 		}
 		
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, metrics);
-		int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, metrics);
-		int verticalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, metrics);
-		int horizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, metrics);
+		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 96);
+		int width = PhoneUtils.dpToPixel(getResources(), 40);
+		int verticalPadding = PhoneUtils.dpToPixel(getResources(), 5);
+		int horizontalPadding = PhoneUtils.dpToPixel(getResources(), 5);
 		int maxCount = (layoutMaxLength + horizontalPadding) / (width + horizontalPadding);
 		horizontalPadding = (layoutMaxLength - width * maxCount) / (maxCount - 1);
 
@@ -1414,8 +1413,8 @@ public class EditItemActivity extends Activity
 			}
 			else
 			{
-				int addButtonWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, metrics);
-				int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+				int addButtonWidth = PhoneUtils.dpToPixel(getResources(), 30);
+				int padding = PhoneUtils.dpToPixel(getResources(), 10);
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(addButtonWidth, addButtonWidth);
 				params.topMargin = padding;
 				
@@ -1435,11 +1434,11 @@ public class EditItemActivity extends Activity
 		tagLayout.removeAllViews();
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 126, metrics);
-		int tagVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, metrics);
-		int tagHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
-		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, metrics);
-		int textSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, metrics);
+		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
+		int tagVerticalInterval = PhoneUtils.dpToPixel(getResources(), 17);
+		int tagHorizontalInterval = PhoneUtils.dpToPixel(getResources(), 10);
+		int padding = PhoneUtils.dpToPixel(getResources(), 24);
+		int textSize = PhoneUtils.dpToPixel(getResources(), 16);
 		
 		int space = 0;
 		LinearLayout layout = new LinearLayout(this);
@@ -1489,10 +1488,10 @@ public class EditItemActivity extends Activity
 		memberLayout.removeAllViews();
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 126, metrics);
-		int iconWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, metrics);
-		int iconVerticalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
-		int iconHorizontalInterval = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, metrics);
+		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
+		int iconWidth = PhoneUtils.dpToPixel(getResources(), 50);
+		int iconVerticalInterval = PhoneUtils.dpToPixel(getResources(), 18);
+		int iconHorizontalInterval = PhoneUtils.dpToPixel(getResources(), 18);
 		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
 		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
 		
