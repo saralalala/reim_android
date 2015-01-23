@@ -49,7 +49,7 @@ public class AboutActivity extends Activity
 		getActionBar().hide();
 		
 		TextView currentVersionTextView = (TextView)findViewById(R.id.currentVersionTextView);
-		String versionPrompt = currentVersionTextView.getText() + PhoneUtils.getCurrentVersion();
+		String versionPrompt = currentVersionTextView.getText() + PhoneUtils.getAppVersion();
 		currentVersionTextView.setText(versionPrompt);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);

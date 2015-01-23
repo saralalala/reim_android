@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.utils.AppPreference;
+import classes.utils.PhoneUtils;
 
 public class HttpUtils
 {
@@ -24,7 +25,7 @@ public class HttpUtils
 		
 		HttpClientParams.setRedirecting(httpParams, true);
 		
-		HttpProtocolParams.setUserAgent(httpParams, NetworkConstant.USER_AGENT);
+		HttpProtocolParams.setUserAgent(httpParams, getUserAgent());
 		HttpClient client=new DefaultHttpClient(httpParams);
 		
 		return client;
@@ -50,5 +51,14 @@ public class HttpUtils
 			e.printStackTrace();
 			return "";
 		}		
+	}
+	
+	private static String getUserAgent()
+	{
+		String result = NetworkConstant.USER_AGENT + ",";
+		result += NetworkConstant.DEVICE_TYPE_ANDROID + ",";
+		result += PhoneUtils.getAppVersion() + ",";
+		result += AppPreference.getAppPreference().getUsername();
+		return result;
 	}
 }

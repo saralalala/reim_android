@@ -123,7 +123,7 @@ public class FeedbackActivity extends Activity
 		}
 		else
 		{
-	    	sendFeedbackRequest(feedback, contactInfo, PhoneUtils.getCurrentVersion());
+	    	sendFeedbackRequest(feedback, contactInfo, PhoneUtils.getAppVersion());
 		}    	
     }
     

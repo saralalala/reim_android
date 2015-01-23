@@ -103,7 +103,7 @@
     <string name="my_report">我的</string>
     <string name="others_report">需审批</string>
     <string name="report_detail">报告详情</string>
-    <string name="report_prove_ahead">预审批的报告</string>
+    <string name="report_prove_ahead">预申请消费</string>
     <string name="comment">评论</string>
     <string name="add_comment">添加评论</string>
     <string name="check_comment">查看评论</string>
@@ -295,7 +295,6 @@
     <string name="succeed_in_saving_report">条目保存成功</string>
     <string name="succeed_in_saving_avatar">头像保存成功，正在上传</string>
     <string name="succeed_in_uploading_avatar">头像上传成功</string>
-    <string name="succeed_in_creating_report">创建审批报告成功</string>
     <string name="succeed_in_creating_category">创建类别成功</string>
     <string name="succeed_in_creating_tag">创建标签成功</string>
     <string name="succeed_in_modifying">修改成功</string>

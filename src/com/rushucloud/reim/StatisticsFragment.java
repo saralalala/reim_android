@@ -81,6 +81,7 @@ public class StatisticsFragment extends Fragment
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit)
 		{
+			ReimProgressDialog.show();
 			initData();
 		}
 	}
@@ -284,7 +285,6 @@ public class StatisticsFragment extends Fragment
 
 	private void sendGetDataRequest()
 	{
-		ReimProgressDialog.show();
 		StatisticsRequest request = new StatisticsRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{

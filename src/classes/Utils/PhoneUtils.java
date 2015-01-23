@@ -32,7 +32,7 @@ import com.rushucloud.reim.R;
 
 public class PhoneUtils
 {
-	public static String getCurrentVersion()
+	public static String getAppVersion()
 	{
 		Context context = ReimApplication.getContext();
 		try

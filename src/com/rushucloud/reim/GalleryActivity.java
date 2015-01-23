@@ -95,7 +95,6 @@ public class GalleryActivity extends Activity
 		
 		GridView galleryGridView = (GridView) findViewById(R.id.galleryGridView);
 		galleryGridView.setAdapter(adapter);
-		galleryGridView.setFastScrollEnabled(true);
 		galleryGridView.setOnScrollListener(new PauseOnScrollListener(imageLoader, true, true));
 
 		Button confirmButton = (Button) findViewById(R.id.confirmButton);

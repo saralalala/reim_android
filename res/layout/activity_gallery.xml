@@ -42,7 +42,11 @@
             android:layout_height="match_parent"
             android:layout_gravity="top"
             android:numColumns="3"
-            android:listSelector="@android:color/transparent" >
+            android:listSelector="@android:color/transparent"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbarSize="1dp"
+            android:horizontalSpacing="2dp"
+            android:verticalSpacing="2dp" >
         </GridView>
 
         <TextView

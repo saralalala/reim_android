@@ -4,13 +4,17 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 import android.widget.ImageView;
+
+import classes.utils.PhoneUtils;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -25,6 +29,7 @@ public class GalleryAdapter extends BaseAdapter
 	private ArrayList<String> pathList = new ArrayList<String>();
 	private boolean[] checkList;
 	private int maxChosenCount;
+	private int height;
 
 	public GalleryAdapter(Context context, ImageLoader imageLoader, int maxCount)
 	{
@@ -32,6 +37,9 @@ public class GalleryAdapter extends BaseAdapter
 		this.imageLoader = imageLoader;
 		this.layoutInflater = LayoutInflater.from(context);
 		this.maxChosenCount = maxCount;
+		
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		this.height = (metrics.widthPixels - PhoneUtils.dpToPixel(context, 2) * 4) / 3;
 	}
 
 	public View getView(final int position, View convertView, ViewGroup parent)
@@ -39,17 +47,21 @@ public class GalleryAdapter extends BaseAdapter
 		final ViewHolder holder;
 		if (convertView == null)
 		{
-			convertView = layoutInflater.inflate(R.layout.gallery_item, parent, false);
+			convertView = layoutInflater.inflate(R.layout.grid_gallery, parent, false);
 			holder = new ViewHolder();
 			holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);			
 			holder.checkImageView = (ImageView) convertView.findViewById(R.id.checkImageView);
+
+			LayoutParams params = (LayoutParams) holder.imageView.getLayoutParams();
+			params.height = height;
+			holder.imageView.setLayoutParams(params);
+			
 			convertView.setTag(holder);
 		}
 		else
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
 		holder.imageView.setTag(position);
 		holder.imageView.setOnClickListener(new View.OnClickListener()
 		{

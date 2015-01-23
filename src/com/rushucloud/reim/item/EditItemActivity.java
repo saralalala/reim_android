@@ -1976,7 +1976,7 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_creating_report);
+							ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_submitting_report);
 							finish();
 						}
 					});					
