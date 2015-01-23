@@ -48,7 +48,7 @@
     <string name="reset_password">设置新密码</string>
     <string name="complete_info">完善个人信息</string>
     
-    <string name="reimbursement">报销</string>
+    <string name="reimbursement">消费</string>
     <string name="report">报告</string>
     <string name="statistics">统计</string>
     <string name="me">自己</string>
@@ -56,7 +56,7 @@
     <string name="sort">排序</string> 
     <string name="sort_null">无</string>
     <string name="sort_amount">金额</string>
-    <string name="sort_item_count">条目数</string>
+    <string name="sort_item_count">消费笔数</string>
     <string name="sort_update_date">修改时间</string>
     <string name="sort_create_date">创建时间</string>
     <string name="sort_consumed_date">时间</string>
@@ -112,7 +112,7 @@
     <string name="submit_to">提交至</string>
     <string name="cc">抄&#160;&#160;&#160;&#8201;送</string>
     <string name="total_amount">总&#160;&#160;&#160;&#8201;额</string>
-    <string name="item_count">个条目</string>
+    <string name="item_count">笔消费</string>
     <string name="choose_manager">选择经理</string>
     <string name="choose_cc">选择抄送</string>
     <string name="submit">提交</string>
@@ -123,7 +123,7 @@
     <string name="report_over_flow">99+</string>
     <string name="export">导出</string>
     <string name="export_report">导出报告</string>
-    <string name="new_item">新建条目</string>
+    <string name="new_item">新建消费</string>
     <string name="approve_info_hint">审批情况 ></string>
     <string name="approve_info">审批情况</string>
     
@@ -216,8 +216,8 @@
     <string name="prompt_feedback_sent">反馈发送成功！</string>
     <string name="prompt_invite_list_failed">获取邀请列表失败</string>
     <string name="prompt_invite_reply_sent">邀请回复发送成功！</string>
-    <string name="prompt_save_prove_ahead_item">这是一条预审批的条目，您是想仅保存此条目还是要直接发送给上级审批？</string>
-    <string name="prompt_delete_item">是否要删除此条目？</string>
+    <string name="prompt_save_prove_ahead_item">这是一笔预申请的消费，您是想仅保存此笔消费还是要直接发送给上级审批？</string>
+    <string name="prompt_delete_item">是否要删除此笔消费？</string>
     <string name="prompt_delete_report">是否要删除此报告？</string>
     <string name="prompt_delete_category">是否要删除此类别？</string>
     <string name="prompt_delete_tag">是否要删除此标签？</string>
@@ -267,7 +267,7 @@
     <string name="error_add_network_unavailable">网络未连接，无法添加</string>
     <string name="error_modify_network_unavailable">网络未连接，无法修改</string>
     <string name="error_delete_network_unavailable">网络未连接，无法删除</string>
-    <string name="error_delete_item_submitted">条目已提交，无法删除</string>
+    <string name="error_delete_item_submitted">此笔消费已提交，无法删除</string>
     <string name="error_delete_report_submitted">报告已提交，无法删除</string>
     <string name="error_export_network_unavailable">网络未连接，无法导出</string>
     <string name="error_export_not_finished">报销未完成，无法导出</string>
@@ -294,11 +294,11 @@
     <string name="error_no_group">你还没加入任何组</string>
     <string name="error_report_approved">报告已被审批</string>
     <string name="error_operation_failed">操作失败</string>
-    <string name="error_submit_report_empty">请为报告中添加一些条目后再提交</string>
+    <string name="error_submit_report_empty">请添加消费后再提交报告</string>
     
     <string name="succeed_in_exporting">报告导出成功</string>
-    <string name="succeed_in_saving_item">条目保存成功</string>
-    <string name="succeed_in_saving_report">条目保存成功</string>
+    <string name="succeed_in_saving_item">此笔消费保存成功</string>
+    <string name="succeed_in_saving_report">报告保存成功</string>
     <string name="succeed_in_saving_avatar">头像保存成功，正在上传</string>
     <string name="succeed_in_uploading_avatar">头像上传成功</string>
     <string name="succeed_in_creating_category">创建类别成功</string>
@@ -324,17 +324,17 @@
     <string name="failed_to_read_image">读取图片文件失败</string>
     <string name="failed_to_save_avatar">头像保存失败</string>
     <string name="failed_to_save_invoice">照片保存失败</string>
-    <string name="failed_to_save_item">条目保存失败</string>
+    <string name="failed_to_save_item">此笔消费保存失败</string>
     <string name="failed_to_save_report">报告保存失败</string>
     <string name="failed_to_download_avatar">头像下载失败</string>
     <string name="failed_to_download_invoice">照片下载失败</string>
     <string name="failed_to_upload_invoice">照片上传失败</string>
     <string name="failed_to_upload_avatar">头像上传失败</string>
-    <string name="failed_to_create_item">创建条目失败</string>
+    <string name="failed_to_create_item">创建此笔消费失败</string>
     <string name="failed_to_create_report">创建审批报告失败</string>
     <string name="failed_to_create_category">创建类别失败</string>
     <string name="failed_to_create_tag">创建标签失败</string>
-    <string name="failed_to_modify_item">修改条目失败</string>
+    <string name="failed_to_modify_item">修改此笔消费失败</string>
     <string name="failed_to_modify_category">修改类别失败</string>
     <string name="failed_to_modify_tag">修改标签失败</string>
     <string name="failed_to_delete_category">删除类别失败</string>
@@ -359,7 +359,7 @@
     <string name="no_comment">当前没有任何评论</string>
     <string name="no_manager">未选择经理</string>
     <string name="no_cc">未选择CC</string>
-    <string name="no_unarchived_items">没有可使用的条目</string>
+    <string name="no_unarchived_items">没有可被添加的消费</string>
     <string name="no_messages">当前没有任何消息</string>
     <string name="no_categories">当前没有任何类别</string>
     <string name="no_tags">当前没有任何标签</string>
