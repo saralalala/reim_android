@@ -378,8 +378,8 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		ReimApplication.setReportTabIndex(index);
 		if (index == 0)
 		{
-			myTitleTextView.setTextColor(getResources().getColor(R.color.major_light));
-			othersTitleTextView.setTextColor(getResources().getColor(R.color.hint_light));
+			myTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
+			othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
 		}
 		else
 		{
@@ -387,8 +387,8 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			{
 				sendSubordinatesReportsRequest();
 			}
-			myTitleTextView.setTextColor(getResources().getColor(R.color.hint_light));
-			othersTitleTextView.setTextColor(getResources().getColor(R.color.major_light));
+			myTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
+			othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
 		}
 		ReimProgressDialog.show();
 		refreshReportListView();

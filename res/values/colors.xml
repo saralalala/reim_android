@@ -49,11 +49,11 @@
     
     <color name="tag">#FFABABAB</color>
     
-    <color name="report_status_draft">#FFA17356</color>
-    <color name="report_status_submitted">#FF46A3D3</color>
-    <color name="report_status_approved">#FF3CB798</color>
-    <color name="report_status_rejected">#FFB570B2</color>
-    <color name="report_status_finished">#FFCCCECF</color>
+    <color name="status_draft">#FFA17356</color>
+    <color name="status_submitted">#FF46A3D3</color>
+    <color name="status_approved">#FF3CB798</color>
+    <color name="status_rejected">#FFB570B2</color>
+    <color name="status_finished">#FFCCCECF</color>
     
     <color name="stat_done">#FF61686D</color>
     <color name="stat_ongoing">#FF45A3D2</color>

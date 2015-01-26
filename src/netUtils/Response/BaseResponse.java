@@ -15,7 +15,6 @@ import android.content.Intent;
 
 public abstract class BaseResponse
 {
-
 	private boolean status;
 	private int code;
 	private String errorMessage;
@@ -164,7 +163,7 @@ public abstract class BaseResponse
 			case NetworkConstant.ERROR_BAD_PERMISSION:
 				result = "权限不足本次操作";
 				break;
-			case NetworkConstant.ERROR_ALREAD_BOUND:
+			case NetworkConstant.ERROR_ALREADY_BOUND:
 				result = "用户已绑定";
 				break;
 			case NetworkConstant.ERROR_USER_AUTH_ERROR:
@@ -202,6 +201,9 @@ public abstract class BaseResponse
 				break;
 			case NetworkConstant.ERROR_REPORT_NOT_EXISTS:
 				result = "报告不存在";
+				break;
+			case NetworkConstant.ERROR_SIGN_IN:
+				result = "用户名或密码错误";
 				break;
 			default:
 				break;

@@ -768,7 +768,7 @@ public class ProfileActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				ModifyUserResponse response = new ModifyUserResponse(httpResponse);
+				final ModifyUserResponse response = new ModifyUserResponse(httpResponse);
 				if (response.getStatus())
 				{
 					dbManager.updateUser(currentUser);
@@ -794,7 +794,7 @@ public class ProfileActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_modify_user_info);
+							ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
 							loadInfoView();
 						}
 					});						

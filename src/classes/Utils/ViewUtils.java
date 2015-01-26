@@ -24,6 +24,11 @@ import com.rushucloud.reim.R;
 
 public class ViewUtils
 {
+	public static int getColor(int colorResID)
+	{
+		return ReimApplication.getContext().getResources().getColor(colorResID);
+	}
+	
     public static void showToast(Context context, String content)
     {
     	Toast.makeText(context, content, Toast.LENGTH_SHORT).show();

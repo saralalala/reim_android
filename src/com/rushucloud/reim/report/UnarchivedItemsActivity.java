@@ -318,8 +318,8 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		{
 			itemCountTextView.setText(Integer.toString(consumedChosenList.size()));
 			
-			consumedTextView.setTextColor(getResources().getColor(R.color.major_light));
-			proveAheadTextView.setTextColor(getResources().getColor(R.color.hint_white));
+			consumedTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
+			proveAheadTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
 			
 			if (consumedItemList.isEmpty())
 			{
@@ -338,8 +338,8 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		{
 			itemCountTextView.setText(Integer.toString(proveChosenList.size()));
 			
-			consumedTextView.setTextColor(getResources().getColor(R.color.hint_white));
-			proveAheadTextView.setTextColor(getResources().getColor(R.color.major_light));
+			consumedTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
+			proveAheadTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
 			
 			if (proveAheadItemList.isEmpty())
 			{
@@ -441,8 +441,8 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 	{
 		categoryLayout.removeAllViews();
 		
-		int selectedColor = getResources().getColor(R.color.major_dark);
-		int unselectedColor = getResources().getColor(R.color.font_major_dark);
+		int selectedColor = ViewUtils.getColor(R.color.major_dark);
+		int unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		

@@ -128,11 +128,6 @@ public class ItemListViewAdapter extends BaseAdapter
 		return position;
 	}
 	
-	public void clear()
-	{
-		itemList.clear();
-	}
-	
 	public void set(List<Item> items)
 	{
 		itemList.clear();

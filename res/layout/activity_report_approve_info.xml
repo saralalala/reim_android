@@ -32,4 +32,69 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/major_light"
+        android:clickable="false"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/font_major_dark"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_sender"
+                android:textColor="@color/hint_grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/senderTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="6dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/hint_grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/hint_grey"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+            
+	<include                 
+		android:layout_width="match_parent"
+		android:layout_height="0.5dp"
+	  	layout="@layout/view_divider"/>
+
+	<ListView
+	    android:id="@+id/infoListView"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:divider="@null"
+		android:listSelector="@android:color/transparent" />
+
 </LinearLayout>

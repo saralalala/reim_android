@@ -53,7 +53,7 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		params.width = report.getStatusWidth(context);
 		statusTextView.setLayoutParams(params);
 
-		String sender = context.getString(R.string.sender) + "：" + report.getSender().getNickname();
+		String sender = context.getString(R.string.prompt_sender) + report.getSender().getNickname();
 		senderTextView.setText(sender);
 		
 		String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();

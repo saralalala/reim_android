@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.User;
+import classes.utils.ViewUtils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
@@ -30,8 +31,8 @@ public class MemberListViewAdapter extends BaseAdapter
 		
 		this.memberList = new ArrayList<User>(userList);
 		this.check = checkList;
-		this.selectedColor = context.getResources().getColor(R.color.major_dark);
-		this.unselectedColor = context.getResources().getColor(R.color.font_major_dark);
+		this.selectedColor = ViewUtils.getColor(R.color.major_dark);
+		this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)

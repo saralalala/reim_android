@@ -648,8 +648,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	{
 		categoryLayout.removeAllViews();
 		
-		int selectedColor = getResources().getColor(R.color.major_dark);
-		int unselectedColor = getResources().getColor(R.color.font_major_dark);
+		int selectedColor = ViewUtils.getColor(R.color.major_dark);
+		int unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		

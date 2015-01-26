@@ -247,7 +247,7 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							acquireCodeButton.setText(R.string.acquire_code);
-							acquireCodeButton.setEnabled(true);	
+							acquireCodeButton.setEnabled(true);
 						}
 					});	
 				}
@@ -281,6 +281,7 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
+							thread.interrupt();
 							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_code, response.getErrorMessage());
 						}
 					});

@@ -35,7 +35,7 @@ public class NetworkConstant
 	public static final int ERROR_USER_EXISTS = -10;
 	public static final int ERROR_AUTH_TIMEOUT = -11;
 	public static final int ERROR_BAD_PERMISSION = -12;
-	public static final int ERROR_ALREAD_BOUND = -13;
+	public static final int ERROR_ALREADY_BOUND = -13;
 	public static final int ERROR_USER_AUTH_ERROR = -14;
 	public static final int ERROR_BAD_ITEMS = -15;
 	public static final int ERROR_EMPTY_BIND = -16;
@@ -48,4 +48,5 @@ public class NetworkConstant
 	public static final int ERROR_ITEM_ADDED = -23;
 	public static final int ERROR_REPORT_DELETED = -24;
 	public static final int ERROR_REPORT_NOT_EXISTS = -25;
+	public static final int ERROR_SIGN_IN = -31;
 }

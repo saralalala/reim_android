@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Report;
+import classes.utils.ViewUtils;
 
 import com.rushucloud.reim.R;
 import android.content.Context;
@@ -38,11 +39,11 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 		}
 		
 		this.fontColors = new ArrayList<Integer>();
-		this.fontColors.add(context.getResources().getColor(R.color.report_status_draft));
-		this.fontColors.add(context.getResources().getColor(R.color.report_status_submitted));
-		this.fontColors.add(context.getResources().getColor(R.color.report_status_approved));
-		this.fontColors.add(context.getResources().getColor(R.color.report_status_rejected));
-		this.fontColors.add(context.getResources().getColor(R.color.report_status_finished));
+		this.fontColors.add(ViewUtils.getColor(R.color.status_draft));
+		this.fontColors.add(ViewUtils.getColor(R.color.status_submitted));
+		this.fontColors.add(ViewUtils.getColor(R.color.status_approved));
+		this.fontColors.add(ViewUtils.getColor(R.color.status_rejected));
+		this.fontColors.add(ViewUtils.getColor(R.color.status_finished));
 		
 		selectedBackgrounds = new int[]{ R.drawable.report_tag_draft_selected, R.drawable.report_tag_submitted_selected, R.drawable.report_tag_approved_selected,
 										 R.drawable.report_tag_rejected_selected, R.drawable.report_tag_finished_selected };

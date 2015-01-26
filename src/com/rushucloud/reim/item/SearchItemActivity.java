@@ -124,7 +124,7 @@ public class SearchItemActivity extends Activity
 	{
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);		
-		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.major_dark)));
+		actionBar.setBackgroundDrawable(new ColorDrawable(ViewUtils.getColor(R.color.major_dark)));
 		
 		adapter = new ItemListViewAdapter(this, itemList);
 		ListView resultListView = (ListView)findViewById(R.id.resultListView);

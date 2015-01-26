@@ -3,6 +3,8 @@ package classes.adapter;
 import java.util.Arrays;
 import java.util.List;
 
+import classes.utils.ViewUtils;
+
 import com.rushucloud.reim.R;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -25,8 +27,8 @@ public class LocationListViewAdapter extends BaseAdapter
 		this.layoutInflater = LayoutInflater.from(context);
 		
 		this.currentCity = context.getString(R.string.no_location);
-		this.selectedColor = context.getResources().getColor(R.color.major_dark);
-		this.unselectedColor = context.getResources().getColor(R.color.font_major_dark);
+		this.selectedColor = ViewUtils.getColor(R.color.major_dark);
+		this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 
 		this.cityList = Arrays.asList(context.getResources().getStringArray(R.array.cityArray));
 		this.check = new boolean[cityList.size()];

@@ -124,7 +124,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			{
 				finish();
 				dbManager.close();
-				udpClient.close();
+				if (udpClient != null)
+				{
+					udpClient.close();					
+				}
 				android.os.Process.killProcess(android.os.Process.myPid());
 			}
 			return true;

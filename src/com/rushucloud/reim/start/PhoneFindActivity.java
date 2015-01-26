@@ -7,6 +7,7 @@ import netUtils.Request.User.ForgotPasswordRequest;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -46,6 +47,7 @@ public class PhoneFindActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("PhoneFindActivity");		
 		MobclickAgent.onResume(this);
+		ReimProgressDialog.setProgressDialog(this);
 	}
 
 	protected void onPause()
@@ -181,7 +183,7 @@ public class PhoneFindActivity extends Activity
 						public void run()
 						{
 							acquireCodeButton.setText(R.string.acquire_code);
-							acquireCodeButton.setEnabled(true);	
+							acquireCodeButton.setEnabled(true);
 						}
 					});	
 				}
@@ -189,6 +191,7 @@ public class PhoneFindActivity extends Activity
 		});
 		thread.start();
 		
+		ReimProgressDialog.show();
 		ForgotPasswordRequest request = new ForgotPasswordRequest(1, phoneEditText.getText().toString());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -204,6 +207,7 @@ public class PhoneFindActivity extends Activity
 					{
 						public void run()
 						{
+							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(PhoneFindActivity.this, R.string.prompt_message_sent);
 						}
 					});
@@ -214,6 +218,8 @@ public class PhoneFindActivity extends Activity
 					{
 						public void run()
 						{
+							ReimProgressDialog.dismiss();
+							thread.interrupt();
 							ViewUtils.showToast(PhoneFindActivity.this, R.string.failed_to_send_message, response.getErrorMessage());
 						}
 					});

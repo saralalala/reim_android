@@ -6,6 +6,7 @@ import java.util.List;
 import com.rushucloud.reim.R;
 
 import classes.Category;
+import classes.utils.ViewUtils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,8 +37,8 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 		this.checkList = new ArrayList<Boolean>(check);
 		this.subCheckList = new ArrayList<List<Boolean>>(subCheck);
 		
-		this.selectedColor = context.getResources().getColor(R.color.major_dark);
-		this.unselectedColor = context.getResources().getColor(R.color.font_major_dark);
+		this.selectedColor = ViewUtils.getColor(R.color.major_dark);
+		this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 	}
 	
 	public int getGroupCount()
