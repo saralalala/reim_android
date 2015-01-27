@@ -41,6 +41,7 @@ public class ApproveInfoResponse extends BaseResponse
 			}
 			
 			Collections.sort(infoList);
+			Collections.reverse(infoList);
 		}
 		catch (JSONException e)
 		{

@@ -585,6 +585,8 @@ public class EditItemActivity extends Activity
 				}
 			}
 		});
+
+		removeList = new ArrayList<ImageView>();
 		
 		refreshInvoiceView();
 		
@@ -1308,15 +1310,8 @@ public class EditItemActivity extends Activity
 	private void refreshInvoiceView()
 	{
 		invoiceLayout.removeAllViews();
-		
-		if (removeList == null)
-		{
-			removeList = new ArrayList<ImageView>();
-		}
-		else
-		{
-			removeList.clear();
-		}
+
+		removeList.clear();
 		
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 96);

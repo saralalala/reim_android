@@ -29,6 +29,7 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
+import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.EditItemActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -67,6 +68,7 @@ public class EditReportActivity extends Activity
 	private EditText titleEditText;
 	private TextView timeTextView;
 	private TextView statusTextView;
+	private TextView approveInfoTextView;
 	private TextView managerTextView;
 	private ListView managerListView;
 	private PopupWindow managerPopupWindow;
@@ -89,6 +91,7 @@ public class EditReportActivity extends Activity
 	private boolean[] ccCheckList;
 	
 	private int itemIndex;
+	private boolean fromPush;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -105,6 +108,11 @@ public class EditReportActivity extends Activity
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setProgressDialog(this);
 		refreshView();
+		
+		if (report.getServerID() != -1 && PhoneUtils.isNetworkConnected())
+		{
+			sendGetReportRequest(report.getServerID());
+		}
 	}
 
 	protected void onPause()
@@ -118,21 +126,15 @@ public class EditReportActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+			goBackToMainActivity();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 	
 	private void initData()
 	{
-		if (appPreference == null)
-		{
-			appPreference = AppPreference.getAppPreference();
-		}
-		if (dbManager == null)
-		{
-			dbManager = DBManager.getDBManager();
-		}
+		appPreference = AppPreference.getAppPreference();
+		dbManager = DBManager.getDBManager();
 		
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle == null)
@@ -146,6 +148,12 @@ public class EditReportActivity extends Activity
 		else
 		{
 			report = (Report)bundle.getSerializable("report");
+			fromPush = bundle.getBoolean("fromPush", false);
+			if (fromPush)
+			{
+				report = dbManager.getReportByServerID(report.getServerID());
+			}
+			
 			chosenItemIDList = bundle.getIntegerArrayList("chosenItemIDList");
 			if (chosenItemIDList == null)
 			{
@@ -186,7 +194,7 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+				goBackToMainActivity();
 			}	
 		});
 		
@@ -207,21 +215,17 @@ public class EditReportActivity extends Activity
 		
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		statusTextView = (TextView) findViewById(R.id.statusTextView);
-		
-		if (report.getStatus() == Report.STATUS_REJECTED)
+
+		approveInfoTextView = (TextView)findViewById(R.id.approveInfoTextView);
+		approveInfoTextView.setOnClickListener(new View.OnClickListener()
 		{
-			TextView approveInfoTextView = (TextView)findViewById(R.id.approveInfoTextView);
-			approveInfoTextView.setOnClickListener(new View.OnClickListener()
+			public void onClick(View v)
 			{
-				public void onClick(View v)
-				{
-					Intent intent = new Intent(EditReportActivity.this, ApproveInfoActivity.class);
-					intent.putExtra("reportServerID", report.getServerID());
-					startActivity(intent);
-				}
-			});
-			approveInfoTextView.setVisibility(View.VISIBLE);
-		}
+				Intent intent = new Intent(EditReportActivity.this, ApproveInfoActivity.class);
+				intent.putExtra("reportServerID", report.getServerID());
+				startActivity(intent);
+			}
+		});
 
 		managerTextView = (TextView) findViewById(R.id.managerTextView);
 		managerTextView.setOnClickListener(new OnClickListener()
@@ -281,7 +285,7 @@ public class EditReportActivity extends Activity
 				{
 					ViewUtils.showToast(EditReportActivity.this, R.string.no_manager);
 				}
-				else if (!report.hasItems())
+				else if (chosenItemIDList.isEmpty())
 				{
 					ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_empty);	
 				}
@@ -475,6 +479,11 @@ public class EditReportActivity extends Activity
 		LayoutParams params = (LayoutParams) statusTextView.getLayoutParams();
 		params.width = report.getStatusWidth(this);
 		statusTextView.setLayoutParams(params);
+
+		if (report.getStatus() == Report.STATUS_DRAFT)
+		{
+			approveInfoTextView.setVisibility(View.GONE);
+		}
 		
 		managerTextView.setText(report.getManagersName());		
 		ccTextView.setText(report.getCCsName());
@@ -540,11 +549,6 @@ public class EditReportActivity extends Activity
 			amount += item.getAmount();
 		}
 		amountTextView.setText(Utils.formatDouble(amount));
-		
-		if (report.getServerID() != -1 && PhoneUtils.isNetworkConnected())
-		{
-			sendGetReportRequest(report.getServerID());
-		}
 	}	
 	
     private void hideSoftKeyboard()
@@ -767,7 +771,20 @@ public class EditReportActivity extends Activity
 				final GetReportResponse response = new GetReportResponse(httpResponse);
 				if (response.getStatus())
 				{
-					if (report.getLocalUpdatedDate() <= response.getReport().getServerUpdatedDate())
+					if (fromPush)
+					{
+						report.setStatus(response.getReport().getStatus());
+						report.setCommentList(response.getReport().getCommentList());
+						dbManager.updateReportByLocalID(report);
+						
+						dbManager.deleteReportComments(report.getLocalID());
+						for (Comment comment : report.getCommentList())
+						{
+							comment.setReportID(report.getLocalID());
+							dbManager.insertComment(comment);
+						}
+					}
+					else if (report.getLocalUpdatedDate() <= response.getReport().getServerUpdatedDate())
 					{
 						report.setManagerList(response.getReport().getManagerList());
 						report.setCCList(response.getReport().getCCList());
@@ -787,8 +804,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							managerTextView.setText(report.getManagersName());		
-							ccTextView.setText(report.getCCsName());
+							refreshView();
 						}
 					});
 				}
@@ -1014,5 +1030,22 @@ public class EditReportActivity extends Activity
 				}
 			}
 		});
+    }
+
+    private void goBackToMainActivity()
+    {
+    	if (fromPush)
+		{
+        	ReimApplication.setTabIndex(1);
+        	ReimApplication.setReportTabIndex(0);
+        	Intent intent = new Intent(EditReportActivity.this, MainActivity.class);
+        	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        	startActivity(intent);
+        	finish();
+		}
+    	else
+    	{
+			finish();
+		}
     }
 }

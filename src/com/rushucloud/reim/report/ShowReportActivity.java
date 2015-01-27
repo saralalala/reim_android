@@ -17,6 +17,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
+import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.ShowItemActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -43,6 +44,8 @@ public class ShowReportActivity extends Activity
 	private List<Item> itemList = null;
 	private boolean myReport;
 	private int lastCommentCount;
+	
+	private boolean fromPush;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -86,9 +89,14 @@ public class ShowReportActivity extends Activity
 		if (bundle != null)
 		{
 			report = (Report)bundle.getSerializable("report");
+			fromPush = bundle.getBoolean("fromPush", false);			
 			myReport = bundle.getBoolean("myReport");
 			if (myReport)
 			{
+				if (fromPush)
+				{
+					report = dbManager.getReportByServerID(report.getServerID());
+				}
 				itemList = DBManager.getDBManager().getReportItems(report.getLocalID());				
 			}		
 			else
@@ -167,7 +175,7 @@ public class ShowReportActivity extends Activity
 	{		
 		if (PhoneUtils.isNetworkConnected())
 		{
-			sendGetReportRequest(report.getServerID());		
+			sendGetReportRequest(report.getServerID());
 		}
 		else
 		{
@@ -192,7 +200,7 @@ public class ShowReportActivity extends Activity
 					report.setLocalID(localID);
 					
 					if (myReport)
-					{						
+					{
 						dbManager.updateReportByServerID(report);
 						
 						dbManager.deleteReportComments(report.getLocalID());
@@ -276,8 +284,20 @@ public class ShowReportActivity extends Activity
 	
     private void goBackToMainActivity()
     {
-    	int reportTabIndex = myReport ? 0 : 1;
-    	ReimApplication.setReportTabIndex(reportTabIndex);
-    	finish();
+    	if (fromPush)
+		{
+        	ReimApplication.setTabIndex(1);
+        	ReimApplication.setReportTabIndex(1);
+        	Intent intent = new Intent(ShowReportActivity.this, MainActivity.class);
+        	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        	startActivity(intent);
+        	finish();
+		}
+    	else
+    	{
+        	int reportTabIndex = myReport ? 0 : 1;
+        	ReimApplication.setReportTabIndex(reportTabIndex);
+        	finish();
+		}
     }
 }

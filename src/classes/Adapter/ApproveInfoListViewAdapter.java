@@ -66,7 +66,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 		{
 			lowerLayout.setVisibility(View.VISIBLE);
 			ApproveInfo nextInfo = this.getItem(position + 1);
-			if (nextInfo.hasApproved())
+			if (nextInfo.hasApproved() || (info.hasApproved() && !nextInfo.hasApproved()))
 			{
 				lowerLayout.setBackgroundColor(ViewUtils.getColor(R.color.status_approved));
 			}

@@ -4,13 +4,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.Invite;
-import classes.ReimApplication;
 import classes.Report;
 
-import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.MessageDetailActivity;
 import com.rushucloud.reim.report.ApproveReportActivity;
+import com.rushucloud.reim.report.EditReportActivity;
+import com.rushucloud.reim.report.ShowReportActivity;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -74,31 +75,31 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				}
 				else if (type == TYPE_REPORT)
 				{
-					ReimApplication.setTabIndex(1);
-					int status = jObject.getInt("status");
-					if (status == 1)
-					{
-						ReimApplication.setReportTabIndex(1);
-						
-						Report report = new Report();
-						report.setServerID(jObject.getInt("args"));
+					Report report = new Report();
+					report.setServerID(jObject.getInt("args"));
 
-						Bundle bundle = new Bundle();
-						bundle.putSerializable("report", report);
-						bundle.putBoolean("fromPush", true);
-						
-						Intent newIntent = new Intent(context, ApproveReportActivity.class);
-						newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						newIntent.putExtras(bundle);
-						context.startActivity(newIntent);
+					Bundle bundle = new Bundle();
+					bundle.putSerializable("report", report);
+					bundle.putBoolean("fromPush", true);
+
+					Intent newIntent;
+					int status = jObject.getInt("status");
+					if (status == Report.STATUS_SUBMITTED)
+					{						
+						newIntent = new Intent(context, ApproveReportActivity.class);
+					}
+					else if (status == Report.STATUS_REJECTED)
+					{
+						newIntent = new Intent(context, EditReportActivity.class);
 					}
 					else
 					{
-						ReimApplication.setReportTabIndex(0);
-						Intent newIntent = new Intent(context, MainActivity.class);
-						newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						context.startActivity(newIntent);							
+						bundle.putBoolean("myReport", true);
+						newIntent = new Intent(context, ShowReportActivity.class);
 					}
+					newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					newIntent.putExtras(bundle);
+					context.startActivity(newIntent);						
 				}
 				else if (type == TYPE_INVITE || type == TYPE_INVITE_REPLY)
 				{
