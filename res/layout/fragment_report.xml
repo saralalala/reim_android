@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/background" >
 
     <RelativeLayout
+        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/major_dark" >
@@ -49,44 +49,15 @@
             android:textSize="20sp"
             android:textColor="@color/hint_white" />
 
-		<TextView
-			android:id="@+id/shortBadgeTextView"
-			android:layout_width="20dp"
-			android:layout_height="20dp"
+		<ImageView
+		    android:id="@+id/tipImageView"
+		    android:layout_width="10dp"
+		    android:layout_height="10dp"
 			android:layout_alignTop="@+id/othersTitleTextView"
 			android:layout_alignRight="@+id/othersTitleTextView"
-			android:layout_marginTop="-5dp"
-			android:layout_marginRight="-10dp"
-			android:gravity="center"
-			android:textColor="@color/major_dark"
-			android:background="@drawable/title_badge_short"
-			android:visibility="gone" />
-
-		<TextView
-			android:id="@+id/mediumBadgeTextView"
-			android:layout_width="30dp"
-			android:layout_height="20dp"
-			android:layout_alignTop="@+id/othersTitleTextView"
-			android:layout_alignRight="@+id/othersTitleTextView"
-			android:layout_marginTop="-5dp"
-			android:layout_marginRight="-15dp"
-			android:gravity="center"
-			android:textColor="@color/major_dark"
-			android:background="@drawable/title_badge_medium"
-			android:visibility="gone" />
-		
-		<TextView
-			android:id="@+id/longBadgeTextView"
-			android:layout_width="40dp"
-			android:layout_height="20dp"
-			android:layout_alignTop="@+id/othersTitleTextView"
-			android:layout_alignRight="@+id/othersTitleTextView"
-			android:layout_marginTop="-5dp"
-			android:layout_marginRight="-20dp"
-			android:gravity="center"
-			android:text="@string/report_over_flow"
-			android:textColor="@color/major_dark"
-			android:background="@drawable/title_badge_long"
+			android:layout_marginRight="-5dp"
+			android:contentDescription="@string/tip"
+			android:background="@drawable/tip_light"
 			android:visibility="gone" />
 
         <ImageView
@@ -106,6 +77,31 @@
         android:id="@+id/reportListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/titleLayout"
         android:cacheColorHint="#00000000" />
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/noResultLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/noResultImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+			android:layout_centerHorizontal="true"
+            android:contentDescription="@string/no_filter_result"
+            android:src="@drawable/no_result" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/noResultImageView"
+            android:layout_marginTop="5dp"
+            android:text="@string/no_filter_result"
+            android:textColor="@color/hint_light_grey" />
+    </RelativeLayout>
+
+</RelativeLayout>

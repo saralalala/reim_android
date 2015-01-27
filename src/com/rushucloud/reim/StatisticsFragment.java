@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,7 +37,7 @@ import com.umeng.analytics.MobclickAgent;
 
 public class StatisticsFragment extends Fragment
 {
-	private LinearLayout statContainer;
+	private FrameLayout statContainer;
 	private TextView mainPercentTextView;
 	private TextView donePercentTextView;
 	private TextView ongoingPercentTextView;
@@ -47,8 +48,6 @@ public class StatisticsFragment extends Fragment
 	private LinearLayout categoryLayout;
 	
 	private DBManager dbManager;
-	
-	private StatisticsResponse response = null;
 
 	private boolean hasInit = false;
 	private int diameter;
@@ -104,7 +103,7 @@ public class StatisticsFragment extends Fragment
 		ImageView arcCoverImageView = (ImageView) getActivity().findViewById(R.id.arcCoverImageView);
 		arcCoverImageView.setLayoutParams(params);
 		
-		statContainer = (LinearLayout) getActivity().findViewById(R.id.statContainer);
+		statContainer = (FrameLayout) getActivity().findViewById(R.id.statContainer);
 		statContainer.setLayoutParams(params);
 		
 		mainPercentTextView = (TextView) getActivity().findViewById(R.id.mainPercentTextView);
@@ -147,19 +146,18 @@ public class StatisticsFragment extends Fragment
 		}		
 	}
 	
-	private void drawPie()
+	private void drawPie(double totalAmount, double doneAmount, double ongoingAmount, double newAmount)
 	{
 		double doneRatio, ongoingRatio, newRatio, mainRatio;
-		double total = response.getTotal();
-		if (total == 0)
+		if (totalAmount == 0)
 		{
 			doneRatio = ongoingRatio = newRatio = mainRatio = 0;
 		}
 		else
 		{			
-			doneRatio = Utils.roundDouble(response.getDoneAmount() * 100 / total);
-			ongoingRatio = Utils.roundDouble(response.getOngoingAmount() * 100 / total);
-			newRatio = Utils.roundDouble(response.getNewAmount() * 100 / total);
+			doneRatio = Utils.roundDouble(doneAmount * 100 / totalAmount);
+			ongoingRatio = Utils.roundDouble(ongoingAmount * 100 / totalAmount);
+			newRatio = Utils.roundDouble(newAmount * 100 / totalAmount);
 			
 			if (doneRatio >= ongoingRatio && doneRatio >= newRatio)
 			{
@@ -196,17 +194,18 @@ public class StatisticsFragment extends Fragment
 		statContainer.addView(doneReimPie);	
 
 		// Draw ongoing pie
-		ReimPie ongoingReimPie = new ReimPie(getActivity(), startAngle + doneAngle, ongoingAngle, statContainer.getWidth(), R.color.stat_ongoing);
+		startAngle += doneAngle;
+		ReimPie ongoingReimPie = new ReimPie(getActivity(), startAngle, ongoingAngle, statContainer.getWidth(), R.color.stat_ongoing);
 		statContainer.addView(ongoingReimPie);	
 
 		// Draw new pie
-		ReimPie newReimPie = new ReimPie(getActivity(), startAngle + doneAngle + ongoingAngle, newAngle, statContainer.getWidth(), R.color.stat_new);
+		startAngle += ongoingAngle;
+		ReimPie newReimPie = new ReimPie(getActivity(), startAngle, newAngle, statContainer.getWidth(), R.color.stat_new);
 		statContainer.addView(newReimPie);
 	}
 
-	private void drawMonthBar()
+	private void drawMonthBar(HashMap<String, Double> monthsData)
 	{
-		HashMap<String, Double> monthsData = response.getMonthsData();
 		if (monthsData.isEmpty())
 		{
 			monthCostTextView.setVisibility(View.GONE);
@@ -247,9 +246,8 @@ public class StatisticsFragment extends Fragment
 		}
 	}
 	
-	private void drawCategory()
+	private void drawCategory(List<StatisticsCategory> categoryList)
 	{
-		List<StatisticsCategory> categoryList = response.getStatCategoryList();
 		if (categoryList.isEmpty())
 		{
 			categoryTitleLayout.setVisibility(View.GONE);
@@ -261,8 +259,7 @@ public class StatisticsFragment extends Fragment
 			categoryLayout.setVisibility(View.VISIBLE);
 			
 			for (StatisticsCategory category : categoryList)
-			{
-				
+			{				
 				Category localCategory = dbManager.getCategory(category.getCategoryID());
 				if (localCategory != null)
 				{
@@ -290,7 +287,7 @@ public class StatisticsFragment extends Fragment
 		{
 			public void execute(Object httpResponse)
 			{
-				response = new StatisticsResponse(httpResponse);
+				final StatisticsResponse response = new StatisticsResponse(httpResponse);
 				if (response.getStatus())
 				{
 					getActivity().runOnUiThread(new Runnable()
@@ -298,9 +295,9 @@ public class StatisticsFragment extends Fragment
 						public void run()
 						{
 							resetView();
-							drawPie();
-							drawMonthBar();
-							drawCategory();
+							drawPie(response.getTotal(), response.getDoneAmount(), response.getOngoingAmount(), response.getNewAmount());
+							drawMonthBar(response.getMonthsData());
+							drawCategory(response.getStatCategoryList());
 							ReimProgressDialog.dismiss();
 						}
 					});

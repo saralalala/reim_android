@@ -54,6 +54,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -70,11 +71,10 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	
 	private View view;
 	private PopupWindow filterPopupWindow;
+	private RelativeLayout noResultLayout;
 	private TextView myTitleTextView;
 	private TextView othersTitleTextView;
-	private TextView shortBadgeTextView;
-	private TextView mediumBadgeTextView;
-	private TextView longBadgeTextView;
+	private ImageView tipImageView;
 	private XListView reportListView;
 	private ReportListViewAdapter mineAdapter;
 	private OthersReportListViewAdapter othersAdapter;
@@ -188,11 +188,9 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 
 		othersTitleTextView = (TextView)getActivity().findViewById(R.id.othersTitleTextView);
 		othersTitleTextView.setOnClickListener(this);
-		
-		shortBadgeTextView = (TextView)getActivity().findViewById(R.id.shortBadgeTextView);
-		mediumBadgeTextView = (TextView)getActivity().findViewById(R.id.mediumBadgeTextView);
-		longBadgeTextView = (TextView)getActivity().findViewById(R.id.longBadgeTextView);
 
+		tipImageView = (ImageView)view.findViewById(R.id.tipImageView);
+		
 		ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 		filterImageView.setOnClickListener(new OnClickListener()
 		{
@@ -286,6 +284,8 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	
 	private void initFilterView()
 	{
+		noResultLayout = (RelativeLayout) view.findViewById(R.id.noResultLayout);
+		
 		View filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);		
 		filterPopupWindow = ViewUtils.constructTopPopupWindow(getActivity(), filterView);
 	}
@@ -398,31 +398,13 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	private void showBadge()
 	{
 		int count = ReimApplication.getReportBadgeCount();
-		if (count > 99)
+		if (count > 0)
 		{
-			longBadgeTextView.setVisibility(View.VISIBLE);
-			mediumBadgeTextView.setVisibility(View.GONE);
-			shortBadgeTextView.setVisibility(View.GONE);
-		}
-		else if (count > 9)
-		{
-			mediumBadgeTextView.setText(Integer.toString(count));
-			longBadgeTextView.setVisibility(View.GONE);
-			mediumBadgeTextView.setVisibility(View.VISIBLE);
-			shortBadgeTextView.setVisibility(View.GONE);
-		}
-		else if (count > 0)
-		{
-			shortBadgeTextView.setText(Integer.toString(count));
-			longBadgeTextView.setVisibility(View.GONE);
-			mediumBadgeTextView.setVisibility(View.GONE);
-			shortBadgeTextView.setVisibility(View.VISIBLE);
+			tipImageView.setVisibility(View.VISIBLE);
 		}
 		else
 		{
-			longBadgeTextView.setVisibility(View.GONE);
-			mediumBadgeTextView.setVisibility(View.GONE);
-			shortBadgeTextView.setVisibility(View.GONE);
+			tipImageView.setVisibility(View.GONE);
 		}
 	}
 	
@@ -486,6 +468,15 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
 			mineAdapter.set(showMineList);
 			reportListView.setAdapter(mineAdapter);
+
+			if (!mineFilterStatusList.isEmpty() && showMineList.isEmpty())
+			{
+				noResultLayout.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				noResultLayout.setVisibility(View.GONE);
+			}
 		}
 		else
 		{
@@ -495,6 +486,15 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
 			othersAdapter.set(showOthersList);
 			reportListView.setAdapter(othersAdapter);
+
+			if (!othersFilterStatusList.isEmpty() && showOthersList.isEmpty())
+			{
+				noResultLayout.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				noResultLayout.setVisibility(View.GONE);
+			}
 		}
 	}
 

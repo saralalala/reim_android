@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class ReportDetailListViewAdapter extends BaseAdapter
 {
@@ -54,13 +55,17 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
 			TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
 
-			String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
+			String title = report.getTitle().equals("") ? context.getString(R.string.report_no_name) : report.getTitle();
 			titleTextView.setText(title);
 			
 			timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
 
 			statusTextView.setText(report.getStatusString());
 			statusTextView.setBackgroundResource(report.getStatusBackground());
+			
+			LayoutParams params = (LayoutParams) statusTextView.getLayoutParams();
+			params.width = report.getStatusWidth(context);
+			statusTextView.setLayoutParams(params);
 			
 			TextView approveInfoTextView = (TextView) view.findViewById(R.id.approveInfoTextView);
 			approveInfoTextView.setOnClickListener(new View.OnClickListener()

@@ -42,17 +42,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener
 {
 	private long exitTime;
 
 	private ViewPager viewPager;
-	private TextView shortBadgeTextView;
-	private TextView mediumBadgeTextView;
-	private TextView longBadgeTextView;
-	private ImageView tipImageView;
+	private ImageView reportTipImageView;
+	private ImageView meTipImageView;
 	private PopupWindow feedbackPopupWindow;
 	private EditText feedbackEditText;
 	private PopupWindow phonePopupWindow;
@@ -235,11 +232,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		tabItemList.add(tabItemMe);
 		
 		tabItemReim.setIconAlpha(1);
-		
-		shortBadgeTextView = (TextView)findViewById(R.id.shortBadgeTextView);
-		mediumBadgeTextView = (TextView)findViewById(R.id.mediumBadgeTextView);
-		longBadgeTextView = (TextView)findViewById(R.id.longBadgeTextView);
-		tipImageView = (ImageView)findViewById(R.id.tipImageView);
+
+		reportTipImageView = (ImageView)findViewById(R.id.reportTipImageView);
+		meTipImageView = (ImageView)findViewById(R.id.meTipImageView);
 		
 		Button addButton = (Button)findViewById(R.id.addButton);
 		addButton.setOnClickListener(new OnClickListener()
@@ -399,31 +394,13 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	
 	private void setReportBadge(int eventCount)
 	{
-		if (eventCount > 99)
+		if (eventCount > 0)
 		{
-			longBadgeTextView.setVisibility(View.VISIBLE);
-			mediumBadgeTextView.setVisibility(View.GONE);
-			shortBadgeTextView.setVisibility(View.GONE);
-		}
-		else if (eventCount > 9)
-		{
-			mediumBadgeTextView.setText(Integer.toString(eventCount));
-			longBadgeTextView.setVisibility(View.GONE);
-			mediumBadgeTextView.setVisibility(View.VISIBLE);
-			shortBadgeTextView.setVisibility(View.GONE);
-		}
-		else if (eventCount > 0)
-		{
-			shortBadgeTextView.setText(Integer.toString(eventCount));
-			longBadgeTextView.setVisibility(View.GONE);
-			mediumBadgeTextView.setVisibility(View.GONE);
-			shortBadgeTextView.setVisibility(View.VISIBLE);
+			reportTipImageView.setVisibility(View.VISIBLE);
 		}
 		else
 		{
-			longBadgeTextView.setVisibility(View.GONE);
-			mediumBadgeTextView.setVisibility(View.GONE);
-			shortBadgeTextView.setVisibility(View.GONE);
+			reportTipImageView.setVisibility(View.GONE);
 		}
 	}
 	
@@ -431,11 +408,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	{
 		if (eventCount > 0)
 		{
-			tipImageView.setVisibility(View.VISIBLE);
+			meTipImageView.setVisibility(View.VISIBLE);
 		}
 		else
 		{
-			tipImageView.setVisibility(View.GONE);
+			meTipImageView.setVisibility(View.GONE);
 		}
 	}
 

@@ -46,12 +46,14 @@ public class ApproveReportActivity extends Activity
 {
 	private AppPreference appPreference;
 	private DBManager dbManager;
-	
+
+	private ImageView tipImageView;
 	private ReportDetailListViewAdapter adapter;
 	
 	private int reportServerID;
 	private Report report;
 	private List<Item> itemList = new ArrayList<Item>();
+	private int lastCommentCount;
 	
 	private boolean fromPush;
 	
@@ -106,6 +108,8 @@ public class ApproveReportActivity extends Activity
 		}
 
 		itemList = dbManager.getOthersReportItems(reportServerID);
+		
+		lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
 	}
 	
 	private void initView()
@@ -126,6 +130,8 @@ public class ApproveReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				tipImageView.setVisibility(View.GONE);
+				
 				Bundle bundle = new Bundle();
 				bundle.putString("source", "ApproveReportActivity");
 				bundle.putInt("reportServerID", report.getServerID());
@@ -135,6 +141,8 @@ public class ApproveReportActivity extends Activity
 			}
 		});
 
+		tipImageView = (ImageView)findViewById(R.id.tipImageView);
+		
 		Button approveButton = (Button)findViewById(R.id.approveButton);
 		approveButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -287,6 +295,12 @@ public class ApproveReportActivity extends Activity
 					    		adapter.setReport(report);
 								adapter.setItemList(itemList);
 								adapter.notifyDataSetChanged();
+								
+								if (report.getCommentList().size() != lastCommentCount)
+								{
+									tipImageView.setVisibility(View.VISIBLE);
+									lastCommentCount = report.getCommentList().size();
+								}
 					    	}				
 						}
 					});

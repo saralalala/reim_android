@@ -49,4 +49,5 @@ public class NetworkConstant
 	public static final int ERROR_REPORT_DELETED = -24;
 	public static final int ERROR_REPORT_NOT_EXISTS = -25;
 	public static final int ERROR_SIGN_IN = -31;
+	public static final int ERROR_NAME_EXCEED_LIMIT = -33;
 }

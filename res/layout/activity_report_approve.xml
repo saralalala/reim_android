@@ -41,6 +41,18 @@
             android:paddingRight="6dp"
             android:contentDescription="@string/comment"
             android:src="@drawable/comment_drawable" />
+
+		<ImageView
+		    android:id="@+id/tipImageView"
+		    android:layout_width="10dp"
+		    android:layout_height="10dp"
+			android:layout_alignTop="@+id/commentImageView"
+			android:layout_alignRight="@+id/commentImageView"
+			android:layout_marginTop="6dp"
+			android:layout_marginRight="10dp"
+			android:contentDescription="@string/tip"
+			android:background="@drawable/tip_light"
+			android:visibility="gone" />
         
     </RelativeLayout>
 

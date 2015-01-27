@@ -17,12 +17,6 @@
         android:textColor="@color/window_button_text_dark_color"
         android:textSize="20sp" />
 
-    <CheckBox
-        android:id="@+id/checkBox1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true" />
-
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="match_parent"

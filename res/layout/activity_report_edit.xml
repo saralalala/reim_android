@@ -78,7 +78,7 @@
 						android:layout_toLeftOf="@+id/statusTextView"
 						android:layout_marginRight="14dp"
 			            android:background="@null"
-			            android:inputType="text"
+			            android:inputType="textMultiLine"			            
 			            android:hint="@string/input_report_title"
 			            android:textColor="@color/font_major_dark"
 			            android:textSize="20sp" />
@@ -87,7 +87,7 @@
 			            android:id="@+id/statusTextView"
 			            android:layout_width="36dp"
 			            android:layout_height="20dp"
-						android:layout_centerVertical="true"
+						android:layout_marginTop="4dp"
 						android:layout_alignParentRight="true"
 			            android:gravity="center"
 			            android:textColor="@color/major_light" />

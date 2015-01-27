@@ -56,7 +56,7 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		String sender = context.getString(R.string.prompt_sender) + report.getSender().getNickname();
 		senderTextView.setText(sender);
 		
-		String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
+		String title = report.getTitle().equals("") ? context.getString(R.string.report_no_name) : report.getTitle();
 		titleTextView.setText(title);
 		
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());

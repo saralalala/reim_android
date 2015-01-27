@@ -44,11 +44,10 @@
                     android:contentDescription="@string/statistics"
                     android:src="@drawable/arc" />
 
-                <LinearLayout
+                <FrameLayout
                 	android:id="@+id/statContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal" />
+                    android:layout_height="match_parent" />
 
                 <ImageView
                     android:id="@+id/arcCoverImageView"

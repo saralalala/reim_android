@@ -41,7 +41,8 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				JSONObject jObject = new JSONObject(intent.getExtras().getString("com.avos.avoscloud.Data"));
 				int type = jObject.getInt("type");
 				String message = jObject.getString("msg");
-				
+
+				System.out.println(jObject.toString());
 				Intent notificationIntent = new Intent("com.rushucloud.reim.NOTIFICATION_CLICKED");
 				notificationIntent.putExtra("type", type);
 				notificationIntent.putExtra("data", jObject.toString());

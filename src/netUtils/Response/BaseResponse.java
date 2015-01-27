@@ -15,12 +15,12 @@ import android.content.Intent;
 
 public abstract class BaseResponse
 {
-	private boolean status;
-	private int code;
-	private String errorMessage;
-	private String serverToken;
-	private JSONObject dataObject;
-	private JSONArray dataArray;
+	private boolean status = false;
+	private int code = -1;
+	private String errorMessage = "";
+	private String serverToken = "";
+	private JSONObject dataObject = null;
+	private JSONArray dataArray = null;
 
 	public BaseResponse(Object httpResponse)
 	{
@@ -77,10 +77,7 @@ public abstract class BaseResponse
 		{
 			e.printStackTrace();
 			status = false;
-			code = -1;
 			errorMessage = errorCodeToString(code);
-			serverToken = "";
-			dataObject = null;
 		}
 	}
 

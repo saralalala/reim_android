@@ -25,7 +25,6 @@ import classes.adapter.MemberListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
-import classes.utils.TextLengthFilter;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
@@ -42,7 +41,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -59,6 +57,7 @@ import android.widget.PopupWindow;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class EditReportActivity extends Activity
 {
@@ -205,21 +204,25 @@ public class EditReportActivity extends Activity
 		
 		titleEditText = (EditText) findViewById(R.id.titleEditText);
 		titleEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		InputFilter[] filters = { new TextLengthFilter(10) };
-		titleEditText.setFilters(filters);
 		
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		statusTextView = (TextView) findViewById(R.id.statusTextView);
 		
-		TextView approveInfoTextView = (TextView)findViewById(R.id.approveInfoTextView);
-		approveInfoTextView.setOnClickListener(new View.OnClickListener()
+		if (report.getStatus() == Report.STATUS_REJECTED)
 		{
-			public void onClick(View v)
+			TextView approveInfoTextView = (TextView)findViewById(R.id.approveInfoTextView);
+			approveInfoTextView.setOnClickListener(new View.OnClickListener()
 			{
-				startActivity(new Intent(EditReportActivity.this, ApproveInfoActivity.class));
-			}
-		});
-		
+				public void onClick(View v)
+				{
+					Intent intent = new Intent(EditReportActivity.this, ApproveInfoActivity.class);
+					intent.putExtra("reportServerID", report.getServerID());
+					startActivity(intent);
+				}
+			});
+			approveInfoTextView.setVisibility(View.VISIBLE);
+		}
+
 		managerTextView = (TextView) findViewById(R.id.managerTextView);
 		managerTextView.setOnClickListener(new OnClickListener()
 		{
@@ -267,7 +270,9 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				hideSoftKeyboard();
 				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
+				
 				if (!PhoneUtils.isNetworkConnected())
 				{
 					ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_network_unavailable);
@@ -275,6 +280,10 @@ public class EditReportActivity extends Activity
 				else if (report.getManagerList() == null || report.getManagerList().isEmpty())
 				{
 					ViewUtils.showToast(EditReportActivity.this, R.string.no_manager);
+				}
+				else if (!report.hasItems())
+				{
+					ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_empty);	
 				}
 				else
 				{
@@ -296,7 +305,7 @@ public class EditReportActivity extends Activity
 					}
 					else
 					{
-						showAddCommentDialog();
+						showCommentDialog();
 					}					
 				}
 				else
@@ -463,6 +472,10 @@ public class EditReportActivity extends Activity
 		statusTextView.setText(report.getStatusString());
 		statusTextView.setBackgroundResource(report.getStatusBackground());
 		
+		LayoutParams params = (LayoutParams) statusTextView.getLayoutParams();
+		params.width = report.getStatusWidth(this);
+		statusTextView.setLayoutParams(params);
+		
 		managerTextView.setText(report.getManagersName());		
 		ccTextView.setText(report.getCCsName());
 		
@@ -548,7 +561,7 @@ public class EditReportActivity extends Activity
 		ViewUtils.dimBackground(this);
     }
     
-    private void showAddCommentDialog()
+    private void showCommentDialog()
     {
 		View view = View.inflate(this, R.layout.dialog_report_comment, null);
 		
@@ -561,7 +574,7 @@ public class EditReportActivity extends Activity
 		
     	Builder builder = new Builder(this);
     	builder.setView(view);
-    	builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+    	builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener()
 								{
 									public void onClick(DialogInterface dialog, int which)
 									{
@@ -574,11 +587,11 @@ public class EditReportActivity extends Activity
 										{
 											if (report.getServerID() == -1)
 											{
-												sendCreateReportRequest(comment);
+												sendCreateReportCommentRequest(comment);
 											}
 											else
-											{
-												sendModifyReportRequest(comment);
+											{												
+												sendModifyReportCommentRequest(comment);
 											}
 										}
 									}
@@ -629,7 +642,6 @@ public class EditReportActivity extends Activity
 
     private void saveReport()
     {
-    	hideSoftKeyboard();
     	report.setLocalUpdatedDate(Utils.getCurrentTime());
 		report.setTitle(titleEditText.getText().toString());
 		if (report.getLocalID() == -1)
@@ -666,8 +678,18 @@ public class EditReportActivity extends Activity
 
     private void submitReport()
     {
+    	int originalStatus = report.getStatus();
     	report.setLocalUpdatedDate(Utils.getCurrentTime());
 		report.setTitle(titleEditText.getText().toString());
+		if (appPreference.getCurrentGroupID() == -1)
+		{
+			report.setStatus(Report.STATUS_FINISHED);
+		}
+		else
+		{
+			report.setStatus(Report.STATUS_SUBMITTED);
+		}
+		
 		if (report.getLocalID() == -1)
 		{
 			report.setCreatedDate(Utils.getCurrentTime());
@@ -677,46 +699,16 @@ public class EditReportActivity extends Activity
 		else
 		{
 			dbManager.updateReportByLocalID(report);
-		}
+		}		
+		dbManager.updateReportItems(chosenItemIDList, report.getLocalID());
 		
-		if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
+		if (report.getServerID() == -1)
 		{
-			if (!report.hasItems())
-			{
-				if (report.getStatus() != Report.STATUS_REJECTED)
-				{
-					report.setStatus(Report.STATUS_DRAFT);					
-				}
-				ViewUtils.showToast(this, R.string.error_submit_report_empty);
-			}
-			else if (appPreference.getCurrentGroupID() == -1)
-			{
-				report.setStatus(Report.STATUS_FINISHED);
-				ViewUtils.showToast(this, R.string.succeed_in_submitting_report);
-				finish();
-			}
-			else
-			{
-				report.setStatus(Report.STATUS_SUBMITTED);
-				ViewUtils.showToast(this, R.string.succeed_in_submitting_report);
-				finish();
-			}
-			dbManager.updateReportByLocalID(report);
-			if (SyncUtils.canSyncToServer())
-			{
-				SyncUtils.isSyncOnGoing = true;
-				SyncUtils.syncAllToServer(new SyncDataCallback()
-				{
-					public void execute()
-					{
-						SyncUtils.isSyncOnGoing = false;
-					}
-				});
-			}
+			sendCreateReportRequest();
 		}
 		else
 		{
-			ViewUtils.showToast(this, R.string.failed_to_save_report);
+			sendModifyReportRequest(originalStatus);
 		}
     }
 
@@ -815,7 +807,98 @@ public class EditReportActivity extends Activity
 		});
     }
     
-    private void sendCreateReportRequest(final String commentContent)
+    private void sendCreateReportRequest()
+    {
+		ReimProgressDialog.show();    	
+    	CreateReportRequest request = new CreateReportRequest(report);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final CreateReportResponse response = new CreateReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					int currentTime = Utils.getCurrentTime();
+					
+					report.setServerID(response.getReportID());
+					report.setServerUpdatedDate(currentTime);
+					report.setLocalUpdatedDate(currentTime);
+					dbManager.updateReportByLocalID(report);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+							ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_submitting_report);
+							finish();
+						}
+					});
+				}
+				else
+				{
+					report.setStatus(Report.STATUS_DRAFT);
+					dbManager.updateReportByLocalID(report);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+						}
+					});					
+				}
+			}
+		});
+    }
+    
+    private void sendModifyReportRequest(final int originalStatus)
+    {
+		ReimProgressDialog.show();		
+    	ModifyReportRequest request = new ModifyReportRequest(report);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					int currentTime = Utils.getCurrentTime();
+					
+					report.setServerUpdatedDate(currentTime);
+					report.setLocalUpdatedDate(currentTime);
+					dbManager.updateReportByLocalID(report);
+										
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+							ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_submitting_report);
+							finish();
+						}
+					});
+				}
+				else
+				{
+					report.setStatus(originalStatus);
+					dbManager.updateReportByLocalID(report);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+						}
+					});					
+				}
+			}
+		});
+    }
+    
+    private void sendCreateReportCommentRequest(final String commentContent)
     {
 		ReimProgressDialog.show();
 
@@ -876,10 +959,10 @@ public class EditReportActivity extends Activity
 		});
     }
     
-    private void sendModifyReportRequest(final String commentContent)
+    private void sendModifyReportCommentRequest(final String commentContent)
     {
 		ReimProgressDialog.show();
-    	
+
 		report.setTitle(titleEditText.getText().toString());
 		dbManager.updateReportByLocalID(report);
 		dbManager.updateReportItems(chosenItemIDList, report.getLocalID());

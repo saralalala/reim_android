@@ -35,12 +35,14 @@ public class ShowReportActivity extends Activity
 {
 	private DBManager dbManager;
 
+	private ImageView tipImageView;
 	private ListView detailListView;
 	private ReportDetailListViewAdapter adapter;
 	
 	private Report report;
 	private List<Item> itemList = null;
 	private boolean myReport;
+	private int lastCommentCount;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -93,6 +95,8 @@ public class ShowReportActivity extends Activity
 			{
 				itemList = DBManager.getDBManager().getOthersReportItems(report.getServerID());
 			}
+			
+			lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
 		}
 	}
 	
@@ -114,6 +118,8 @@ public class ShowReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				tipImageView.setVisibility(View.GONE);
+				
 				Bundle bundle = new Bundle();
 				bundle.putString("source", "ShowReportActivity");
 				if (myReport)
@@ -129,6 +135,8 @@ public class ShowReportActivity extends Activity
 				startActivity(intent);
 			}
 		});
+		
+		tipImageView = (ImageView)findViewById(R.id.tipImageView);
 		
 		adapter = new ReportDetailListViewAdapter(ShowReportActivity.this, report, itemList);
 		detailListView = (ListView)findViewById(R.id.detailListView);
@@ -235,7 +243,13 @@ public class ShowReportActivity extends Activity
 					    	{
 						    	adapter.setReport(report);
 						    	adapter.setItemList(itemList);
-						    	adapter.notifyDataSetChanged();					    		
+						    	adapter.notifyDataSetChanged();
+								
+								if (report.getCommentList().size() != lastCommentCount)
+								{
+									tipImageView.setVisibility(View.VISIBLE);
+									lastCommentCount = report.getCommentList().size();
+								}			    		
 					    	}
 						}
 					});

@@ -55,7 +55,7 @@ public class ReportListViewAdapter extends BaseAdapter
 		params.width = report.getStatusWidth(context);
 		statusTextView.setLayoutParams(params);
 		
-		String title = report.getTitle().equals("") ? context.getString(R.string.not_available) : report.getTitle();
+		String title = report.getTitle().equals("") ? context.getString(R.string.report_no_name) : report.getTitle();
 		titleTextView.setText(title);
 
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());

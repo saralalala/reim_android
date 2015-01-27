@@ -40,7 +40,7 @@ public class ReimPie extends View
 	}
 
 	public void onDraw(Canvas canvas)
-	{		
+	{
 		canvas.drawArc(pieRect, startAngle, occupyAngle, true, paint);
 	}
 }

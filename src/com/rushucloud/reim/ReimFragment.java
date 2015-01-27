@@ -53,6 +53,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -72,6 +73,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	
 	private View view;
 	private PopupWindow filterPopupWindow;
+	private RelativeLayout noResultLayout;
 	private LinearLayout tagLayout;
 	private LinearLayout categoryLayout;
 	private XListView itemListView;
@@ -253,6 +255,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				showFilterWindow();
 			}
 		});
+
+		noResultLayout = (RelativeLayout) view.findViewById(R.id.noResultLayout);
 		
 		View filterView = View.inflate(getActivity(), R.layout.window_reim_filter, null);
 
@@ -579,6 +583,15 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		filterItemList();
 		adapter.set(showList);
 		adapter.notifyDataSetChanged();
+
+		if ((filterType != FILTER_STATUS_ALL || filterStatus != FILTER_STATUS_ALL || !filterCategoryList.isEmpty() || !filterTagList.isEmpty()) && showList.isEmpty())
+		{
+			noResultLayout.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			noResultLayout.setVisibility(View.GONE);
+		}
 	}
 
 	private void refreshTagView()
