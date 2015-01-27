@@ -70,13 +70,23 @@
         android:background="@null"
         android:textCursorDrawable="@null" />
 
+    <include 
+        android:id="@+id/passwordDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/passwordEditText"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        layout="@layout/view_start_divider"/>
+
     <Button
         android:id="@+id/signInButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/passwordEditText"
-        android:layout_marginTop="14dp"
+        android:layout_below="@+id/passwordDivider"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/button_long_light_solid_drawable"

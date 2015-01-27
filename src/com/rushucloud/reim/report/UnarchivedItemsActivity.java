@@ -130,11 +130,10 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
 			Bundle bundle = new Bundle();
-			bundle.putSerializable("report", report);
 			bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
-			Intent intent = new Intent(UnarchivedItemsActivity.this, EditReportActivity.class);
+			Intent intent = new Intent();
 			intent.putExtras(bundle);
-			startActivity(intent);
+			setResult(RESULT_OK, intent);
 			finish();
 		}
 		return super.onKeyDown(keyCode, event);
@@ -219,11 +218,10 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 					report.setIsProveAhead(isProveAhead);
 					chosenItemIDList = tabIndex == 0 ? consumedChosenList : proveChosenList;
 					Bundle bundle = new Bundle();
-					bundle.putSerializable("report", report);
 					bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
-					Intent intent = new Intent(UnarchivedItemsActivity.this, EditReportActivity.class);
+					Intent intent = new Intent();
 					intent.putExtras(bundle);
-					startActivity(intent);
+					setResult(RESULT_OK, intent);
 					finish();
 				}
 				catch (Exception e)

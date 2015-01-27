@@ -62,6 +62,8 @@ import android.widget.RelativeLayout.LayoutParams;
 
 public class EditReportActivity extends Activity
 {
+	private static final int PICK_ITEM = 0;
+	
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
@@ -131,6 +133,18 @@ public class EditReportActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if (resultCode == RESULT_OK && requestCode == PICK_ITEM)
+		{
+			chosenItemIDList.clear();
+			chosenItemIDList.addAll(data.getExtras().getIntegerArrayList("chosenItemIDList"));
+			itemList = dbManager.getItems(chosenItemIDList);
+			refreshView();
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
 	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
@@ -153,19 +167,10 @@ public class EditReportActivity extends Activity
 			{
 				report = dbManager.getReportByServerID(report.getServerID());
 			}
-			
-			chosenItemIDList = bundle.getIntegerArrayList("chosenItemIDList");
-			if (chosenItemIDList == null)
-			{
-				// edit report from ReportFragment
-				itemList = dbManager.getReportItems(report.getLocalID());
-				chosenItemIDList = Item.getItemsIDArray(itemList);
-			}
-			else
-			{
-				// edit report from UnarchivedActivity
-				itemList = dbManager.getItems(chosenItemIDList);
-			}
+
+			// edit report from ReportFragment
+			itemList = dbManager.getReportItems(report.getLocalID());
+			chosenItemIDList = Item.getItemsIDArray(itemList);
 		}
 
     	currentUser = appPreference.getCurrentUser();
@@ -264,8 +269,7 @@ public class EditReportActivity extends Activity
 				bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
 				Intent intent = new Intent(EditReportActivity.this, UnarchivedItemsActivity.class);
 				intent.putExtras(bundle);
-				startActivity(intent);
-				finish();
+				startActivityForResult(intent, PICK_ITEM);
 			}
 		});
 		
