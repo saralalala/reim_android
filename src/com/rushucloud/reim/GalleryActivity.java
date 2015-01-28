@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import classes.adapter.GalleryAdapter;
+import classes.utils.ExtraCallBack;
 import classes.utils.PhoneUtils;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
@@ -40,6 +41,7 @@ public class GalleryActivity extends Activity
 {
 	private TextView noImageTextView;
 	private GalleryAdapter adapter;
+	private Button confirmButton;
 	private ImageLoader imageLoader;
 
 	public void onCreate(Bundle savedInstanceState)
@@ -90,14 +92,21 @@ public class GalleryActivity extends Activity
 		
 		noImageTextView = (TextView) findViewById(R.id.noImageTextView);
 		
-		int maxCount = getIntent().getIntExtra("maxCount", -1);
-		adapter = new GalleryAdapter(getApplicationContext(), imageLoader, maxCount);
+		final int maxCount = getIntent().getIntExtra("maxCount", -1);
+		adapter = new GalleryAdapter(getApplicationContext(), imageLoader, maxCount, new ExtraCallBack()
+		{
+			public void execute()
+			{
+				int selectedCount = adapter.getSelectedCount();
+				confirmButton.setText(getString(R.string.confirm) + " (" + selectedCount + "/" + maxCount + ")");
+			}
+		});
 		
 		GridView galleryGridView = (GridView) findViewById(R.id.galleryGridView);
 		galleryGridView.setAdapter(adapter);
 		galleryGridView.setOnScrollListener(new PauseOnScrollListener(imageLoader, true, true));
 
-		Button confirmButton = (Button) findViewById(R.id.confirmButton);
+		confirmButton = (Button) findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

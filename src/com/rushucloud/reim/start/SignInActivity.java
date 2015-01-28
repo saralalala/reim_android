@@ -107,8 +107,11 @@ public class SignInActivity extends Activity implements View.OnClickListener
 			usernameEditText.setText(username);
 			passwordEditText.setText(password);
 		}
-		
+
+//		usernameEditText.setText("abjkl@163.com");
 //		usernameEditText.setText("kangdiwill@163.com");
+//		usernameEditText.setText("13911977103");
+//		usernameEditText.setText("18811567003");
 //		passwordEditText.setText("g0YTBhMzE2OTg1OWZhMDMyYjlmOGVkMTE3NDQ3OD");
 
 		Button signInButton = (Button)findViewById(R.id.signInButton);

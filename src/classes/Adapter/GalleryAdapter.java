@@ -14,6 +14,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 import android.widget.ImageView;
 
+import classes.utils.ExtraCallBack;
 import classes.utils.PhoneUtils;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -30,8 +31,9 @@ public class GalleryAdapter extends BaseAdapter
 	private boolean[] checkList;
 	private int maxChosenCount;
 	private int height;
+	private ExtraCallBack callBack;
 
-	public GalleryAdapter(Context context, ImageLoader imageLoader, int maxCount)
+	public GalleryAdapter(Context context, ImageLoader imageLoader, int maxCount, ExtraCallBack callBack)
 	{
 		this.context = context;
 		this.imageLoader = imageLoader;
@@ -40,6 +42,7 @@ public class GalleryAdapter extends BaseAdapter
 		
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		this.height = (metrics.widthPixels - PhoneUtils.dpToPixel(context, 2) * 4) / 3;
+		this.callBack = callBack;
 	}
 
 	public View getView(final int position, View convertView, ViewGroup parent)
@@ -87,6 +90,7 @@ public class GalleryAdapter extends BaseAdapter
 					checkList[position] = !checkList[position];
 					holder.checkImageView.setSelected(checkList[position]);			
 				}
+				callBack.execute();
 			}
 		});
 

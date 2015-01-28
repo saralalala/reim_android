@@ -27,18 +27,22 @@ import android.widget.TextView;
 
 public class ApproveInfoListViewAdapter extends BaseAdapter
 {
+	private Context context;
 	private LayoutInflater layoutInflater;
 	private DBManager dbManager;
 	private HttpConnectionCallback callback;
 	private List<ApproveInfo> infoList;
+	private int reportStatus;
 	private int reportServerID;
 	
-	public ApproveInfoListViewAdapter(Context context, int reportID, List<ApproveInfo> infos, HttpConnectionCallback callback)
+	public ApproveInfoListViewAdapter(Context context, Report report, List<ApproveInfo> infos, HttpConnectionCallback callback)
 	{
+		this.context = context;
 		this.layoutInflater = LayoutInflater.from(context);
 		this.callback = callback;
 		this.dbManager = DBManager.getDBManager();
-		this.reportServerID = reportID;
+		this.reportStatus = report.getStatus();
+		this.reportServerID = report.getServerID();
 		this.infoList = new ArrayList<ApproveInfo>(infos);
 	}
 
@@ -170,10 +174,22 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 			{
 				public void onClick(View v)
 				{
-					AlertRequest request = new AlertRequest(user.getServerID(), reportServerID);
-					request.sendRequest(callback);
+					if (reportStatus == Report.STATUS_SUBMITTED)
+					{
+						AlertRequest request = new AlertRequest(user.getServerID(), reportServerID);
+						request.sendRequest(callback);						
+					}
+					else
+					{
+						ViewUtils.showToast(context, R.string.prompt_no_need_to_alarm);
+					}
 				}
 			});
+			
+			if (reportStatus != Report.STATUS_SUBMITTED)
+			{
+				alarmImageView.setImageResource(R.drawable.alarm_disabled_drawable);
+			}
 		}
 		
 		return convertView;
@@ -194,9 +210,9 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 		return position;
 	}
 		
-	public void set(List<ApproveInfo> infos)
+	public void setInfoList(List<ApproveInfo> infos)
 	{
 		infoList.clear();
 		infoList.addAll(infos);
-	}
+	}	
 }

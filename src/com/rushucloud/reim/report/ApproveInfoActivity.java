@@ -112,7 +112,7 @@ public class ApproveInfoActivity extends Activity
 		
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		
-		adapter = new ApproveInfoListViewAdapter(this, report.getServerID(), infoList, new HttpConnectionCallback()
+		adapter = new ApproveInfoListViewAdapter(this, report, infoList, new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
@@ -164,7 +164,7 @@ public class ApproveInfoActivity extends Activity
 					infoList.clear();
 					infoList.addAll(response.getInfoList());
 					
-					adapter.set(infoList);
+					adapter.setInfoList(infoList);
 					
 					for (ApproveInfo info : infoList)
 					{

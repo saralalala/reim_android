@@ -117,7 +117,7 @@ public class ProfileActivity extends Activity
 				}
 				else if (requestCode == TAKE_PHOTO)
 				{
-					cropImage(appPreference.getTempAvatarUri());					
+					cropImage(appPreference.getTempAvatarUri());
 				}
 				else if (requestCode == CROP_IMAGE)
 				{

@@ -228,7 +228,7 @@
     <string name="prompt_delete_tag">是否要删除此标签？</string>
     <string name="prompt_delete_succeed">删除成功</string>
     <string name="prompt_delete_failed">删除失败</string>
-    <string name="prompt_press_back_to_exit">再按一次返回键退出程序</string>
+    <string name="prompt_press_back_to_exit">再按一次返回键退出应用</string>
     <string name="prompt_sync_ongoing">正在同步中</string>
     <string name="prompt_report_approved">报告已通过</string>
     <string name="prompt_report_rejected">报告已退回</string>
@@ -236,6 +236,7 @@
     <string name="prompt_feedback">告诉我们你在使用过程中遇到的问题，或对产品提出你的建议。我们会在1个工作日内给你答复。</string>
     <string name="prompt_feedback_phone">请留下联系方式，方便我们与你沟通</string>
     <string name="prompt_sender">发送者：</string>
+    <string name="prompt_no_need_to_alarm">报告未在审核过程中，无需发送提醒</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>
@@ -301,6 +302,7 @@
     <string name="error_report_approved">报告已被审批</string>
     <string name="error_operation_failed">操作失败</string>
     <string name="error_submit_report_empty">请添加消费后再提交报告</string>
+    <string name="error_item_submit">消费缺少信息，报告不可被提交</string>
     
     <string name="succeed_in_exporting">报告导出成功</string>
     <string name="succeed_in_saving_item">此笔消费保存成功</string>

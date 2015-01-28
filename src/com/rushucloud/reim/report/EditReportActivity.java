@@ -273,33 +273,6 @@ public class EditReportActivity extends Activity
 			}
 		});
 		
-		Button submitButton = (Button) findViewById(R.id.submitButton);
-		submitButton.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
-				
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_network_unavailable);
-				}
-				else if (report.getManagerList() == null || report.getManagerList().isEmpty())
-				{
-					ViewUtils.showToast(EditReportActivity.this, R.string.no_manager);
-				}
-				else if (chosenItemIDList.isEmpty())
-				{
-					ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_empty);	
-				}
-				else
-				{
-					submitReport();
-				}
-			}
-		});
-		
 		Button commentButton = (Button)findViewById(R.id.commentButton);
 		commentButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -327,7 +300,43 @@ public class EditReportActivity extends Activity
 				}
 			}
 		});	
-	
+
+		Button submitButton = (Button) findViewById(R.id.submitButton);
+		submitButton.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
+				
+				for (Item item : itemList)
+				{
+					if (item.missingInfo())
+					{
+						ViewUtils.showToast(EditReportActivity.this, R.string.error_item_submit);
+						return;
+					}
+				}
+				
+				if (!PhoneUtils.isNetworkConnected())
+				{
+					ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_network_unavailable);
+				}
+				else if (report.getManagerList() == null || report.getManagerList().isEmpty())
+				{
+					ViewUtils.showToast(EditReportActivity.this, R.string.no_manager);
+				}
+				else if (itemList.isEmpty())
+				{
+					ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_empty);	
+				}
+				else
+				{
+					submitReport();
+				}
+			}
+		});
+		
 		initDeleteWindow();
 	}
 	

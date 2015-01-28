@@ -402,7 +402,7 @@ public class Item
 	
     public boolean missingInfo()
     {
-    	return getCategory() == null;
+    	return getCategory() == null || amount == 0;
     }
     
 	public boolean canBeSubmitWithReport()
