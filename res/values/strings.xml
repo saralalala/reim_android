@@ -300,6 +300,7 @@
     <string name="error_same_manager">与原有默认上级相同，无需保存</string>
     <string name="error_no_group">你还没加入任何组</string>
     <string name="error_report_approved">报告已被审批</string>
+    <string name="error_report_deleted">报告已被删除</string>
     <string name="error_operation_failed">操作失败</string>
     <string name="error_submit_report_empty">请添加消费后再提交报告</string>
     <string name="error_submit_report_item_not_uploaded">消费未被上传，报告不可被提交</string>

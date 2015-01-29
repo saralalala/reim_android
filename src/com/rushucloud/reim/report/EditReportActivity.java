@@ -129,6 +129,11 @@ public class EditReportActivity extends Activity
 		{
 			sendGetReportRequest(report.getServerID());
 		}
+		else if (report.getLocalID() == -1 && report.getServerID() == -1 && fromPush)
+		{
+			ViewUtils.showToast(this, R.string.error_report_deleted);
+			goBackToMainActivity();
+		}
 	}
 
 	protected void onPause()
@@ -190,6 +195,7 @@ public class EditReportActivity extends Activity
 			}
 			else
 			{
+				report = new Report();
 				itemList = new ArrayList<Item>();
 				chosenItemIDList = new ArrayList<Integer>();
 			}
