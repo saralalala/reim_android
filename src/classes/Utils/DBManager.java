@@ -746,7 +746,7 @@ public class DBManager extends SQLiteOpenHelper
 				}
 			}
 
-			return !relevantUsers.isEmpty() ? relevantUsers : null;
+			return relevantUsers;
 		}
 		catch (Exception e)
 		{

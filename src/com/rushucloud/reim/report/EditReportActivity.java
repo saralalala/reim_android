@@ -8,15 +8,22 @@ import netUtils.NetworkConstant;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
 import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.UploadImageResponse;
+import netUtils.Response.Item.CreateItemResponse;
+import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
 import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Request.Item.CreateItemRequest;
+import netUtils.Request.Item.ModifyItemRequest;
 import netUtils.Request.Report.CreateReportRequest;
 import netUtils.Request.Report.GetReportRequest;
 import netUtils.Request.Report.ModifyReportRequest;
 import classes.Category;
 import classes.Comment;
+import classes.Image;
 import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
@@ -95,6 +102,13 @@ public class EditReportActivity extends Activity
 	private int itemIndex;
 	private boolean fromPush;
 	
+	private List<Image> imageSyncList = new ArrayList<Image>();
+	private List<Item> itemSyncList = new ArrayList<Item>();
+	private int imageTaskCount;
+	private int imageTaskSuccessCount;
+	private int itemTaskCount;
+	private int itemTaskSuccessCount;
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -168,9 +182,17 @@ public class EditReportActivity extends Activity
 				report = dbManager.getReportByServerID(report.getServerID());
 			}
 
-			// edit report from ReportFragment
-			itemList = dbManager.getReportItems(report.getLocalID());
-			chosenItemIDList = Item.getItemsIDArray(itemList);
+			if (report != null)
+			{
+				// edit report from ReportFragment
+				itemList = dbManager.getReportItems(report.getLocalID());
+				chosenItemIDList = Item.getItemsIDList(itemList);				
+			}
+			else
+			{
+				itemList = new ArrayList<Item>();
+				chosenItemIDList = new ArrayList<Integer>();
+			}
 		}
 
     	currentUser = appPreference.getCurrentUser();
@@ -313,7 +335,7 @@ public class EditReportActivity extends Activity
 				{
 					if (item.missingInfo())
 					{
-						ViewUtils.showToast(EditReportActivity.this, R.string.error_item_submit);
+						ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_miss_info);
 						return;
 					}
 				}
@@ -475,7 +497,7 @@ public class EditReportActivity extends Activity
 	
 	private void refreshView()
 	{
-		itemList = dbManager.getItems(Item.getItemsIDArray(itemList));
+		itemList = dbManager.getItems(Item.getItemsIDList(itemList));
 		
 		titleEditText.setText(report.getTitle());
 		if (report.getTitle().equals(""))
@@ -695,6 +717,75 @@ public class EditReportActivity extends Activity
 
     private void submitReport()
     {
+    	ReimProgressDialog.show();
+    	
+    	imageSyncList.clear();
+    	
+		for (Item item : itemList)
+		{
+			for (Image image : item.getInvoices())
+			{
+				if (image.isNotUploaded())
+				{
+					imageSyncList.add(image);
+				}
+			}
+		}
+
+    	imageTaskCount = imageSyncList.size();
+    	imageTaskSuccessCount = imageTaskCount;
+    	
+    	if (imageTaskCount > 0)
+		{
+			for (Image image : imageSyncList)
+			{
+				sendUploadImageRequest(image);
+			}
+		}
+    	else
+		{
+			syncItems();
+		}
+    }
+    
+    private void syncItems()
+    {
+    	itemList = dbManager.getItems(Item.getItemsIDList(itemList));
+    	itemSyncList.clear();
+    	
+		for (Item item : itemList)
+		{			
+			if (item.needToSync())
+			{
+				itemSyncList.add(item);
+			}
+		}
+
+    	itemTaskCount = itemSyncList.size();
+    	itemTaskSuccessCount = itemTaskCount;
+    	
+    	if (itemTaskCount > 0)
+		{
+        	for (Item item : itemSyncList)
+    		{
+    			if (item.getServerID() == -1)
+    			{
+    				sendCreateItemRequest(item);
+    			}
+    			else
+    			{
+    				sendModifyItemRequest(item);
+    			}
+    		}			
+		}
+    	else
+    	{
+    		syncReport();
+		}
+    }
+   
+    private void syncReport()
+    {		
     	int originalStatus = report.getStatus();
     	report.setLocalUpdatedDate(Utils.getCurrentTime());
 		report.setTitle(titleEditText.getText().toString());
@@ -719,13 +810,20 @@ public class EditReportActivity extends Activity
 		}		
 		dbManager.updateReportItems(chosenItemIDList, report.getLocalID());
 		
-		if (report.getServerID() == -1)
+		if (report.canBeSubmitted())
 		{
-			sendCreateReportRequest();
+			if (report.getServerID() == -1)
+			{
+				sendCreateReportRequest();
+			}
+			else
+			{
+				sendModifyReportRequest(originalStatus);
+			}			
 		}
 		else
 		{
-			sendModifyReportRequest(originalStatus);
+			ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_not_uploaded);
 		}
     }
 
@@ -772,7 +870,178 @@ public class EditReportActivity extends Activity
 			}
 		});
     }
-	
+
+	private void sendUploadImageRequest(final Image image)
+	{
+    	System.out.println("upload image：local id " + image.getLocalID());
+		UploadImageRequest request = new UploadImageRequest(image.getPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
+		request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final UploadImageResponse response = new UploadImageResponse(httpResponse);
+				if (response.getStatus())
+				{
+			    	System.out.println("upload image：local id " + image.getLocalID() + " *Succeed*");
+					image.setServerID(response.getImageID());
+					dbManager.updateImageByLocalID(image);
+					
+					imageTaskCount--;
+					imageTaskSuccessCount--;
+					if (imageTaskCount == 0 && imageTaskSuccessCount == 0)
+					{
+						syncItems();
+					}
+					else if (imageTaskCount == 0 && imageTaskSuccessCount != 0)
+					{
+						runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								ReimProgressDialog.dismiss();
+								ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report);
+							}
+						});						
+					}
+				}
+				else
+				{
+			    	System.out.println("upload image：local id " + image.getLocalID() + " *Failed*");
+			    	
+					imageTaskCount--;
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_upload_invoice);
+							if (imageTaskCount == 0)
+							{
+								ReimProgressDialog.dismiss();
+								ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report);
+							}
+						}
+					});
+				}
+			}
+		});
+	}
+
+    private void sendCreateItemRequest(final Item item)
+    {
+    	CreateItemRequest request = new CreateItemRequest(item);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				CreateItemResponse response = new CreateItemResponse(httpResponse);
+				if (response.getStatus())
+				{
+			    	System.out.println("create item：local id " + item.getLocalID() + " *Succeed*");
+					item.setLocalUpdatedDate(Utils.getCurrentTime());
+					item.setServerUpdatedDate(item.getLocalUpdatedDate());
+					item.setServerID(response.getItemID());
+					item.setCreatedDate(response.getCreateDate());					
+					dbManager.updateItemByLocalID(item);
+					
+					itemTaskCount--;
+					itemTaskSuccessCount--;
+					if (itemTaskCount == 0 && itemTaskSuccessCount == 0)
+					{
+						syncReport();
+					}
+					else if (itemTaskCount == 0 && itemTaskSuccessCount != 0)
+					{
+						runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								ReimProgressDialog.dismiss();
+								ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report);
+							}
+						});						
+					}
+				}
+				else
+				{
+			    	System.out.println("create item：local id " + item.getLocalID() + " *Failed*");
+
+			    	itemTaskCount--;
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_create_item);
+							if (itemTaskCount == 0)
+							{
+								ReimProgressDialog.dismiss();
+								ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report);
+							}
+						}
+					});
+				}
+			}
+		});
+    }
+    
+    private void sendModifyItemRequest(final Item item)
+    {
+    	System.out.println("modify item：local id " + item.getLocalID());
+    	ModifyItemRequest request = new ModifyItemRequest(item);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				ModifyItemResponse response = new ModifyItemResponse(httpResponse);
+				if (response.getStatus())
+				{
+			    	System.out.println("modify item：local id " + item.getLocalID() + " *Succeed*");
+					item.setLocalUpdatedDate(Utils.getCurrentTime());
+					item.setServerUpdatedDate(item.getLocalUpdatedDate());
+					dbManager.updateItem(item);
+					
+					itemTaskCount--;
+					itemTaskSuccessCount--;
+					if (itemTaskCount == 0 && itemTaskSuccessCount == 0)
+					{
+						syncReport();
+					}
+					else if (itemTaskCount == 0 && itemTaskSuccessCount != 0)
+					{
+						runOnUiThread(new Runnable()
+						{
+							public void run()
+							{
+								ReimProgressDialog.dismiss();
+								ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report);
+							}
+						});						
+					}
+				}
+				else
+				{
+			    	System.out.println("modify item：local id " + item.getLocalID() + " *Failed*");
+
+			    	itemTaskCount--;
+			    	
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_modify_item);
+							if (itemTaskCount == 0)
+							{
+								ReimProgressDialog.dismiss();
+								ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report);
+							}
+						}
+					});			
+				}
+			}
+		});
+    }
+    
     private void sendGetReportRequest(final int reportServerID)
     {
 		ReimProgressDialog.show();
@@ -884,7 +1153,6 @@ public class EditReportActivity extends Activity
     
     private void sendModifyReportRequest(final int originalStatus)
     {
-		ReimProgressDialog.show();		
     	ModifyReportRequest request = new ModifyReportRequest(report);
     	request.sendRequest(new HttpConnectionCallback()
 		{

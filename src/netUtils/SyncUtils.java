@@ -117,10 +117,7 @@ public abstract class SyncUtils
 				}
 				else
 				{
-					if (isSyncOnGoing)
-					{
-						isSyncOnGoing = false;						
-					}
+					isSyncOnGoing = false;
 				}
 			}
 		});
@@ -192,7 +189,7 @@ public abstract class SyncUtils
     			}
     			else
     			{
-    				sendUpdateItemRequest(item, callback);
+    				sendModifyItemRequest(item, callback);
     			}
     		}			
 		}
@@ -230,7 +227,7 @@ public abstract class SyncUtils
     			}
     			else
     			{
-    				sendUpdateReportRequest(report, callback);
+    				sendModifyReportRequest(report, callback);
     			}
     		}			
 		}
@@ -305,7 +302,7 @@ public abstract class SyncUtils
 		});
     }
 
-    private static void sendUpdateItemRequest(final Item item, final SyncDataCallback callback)
+    private static void sendModifyItemRequest(final Item item, final SyncDataCallback callback)
     {
     	System.out.println("modify item：local id " + item.getLocalID());
 		ModifyItemRequest request = new ModifyItemRequest(item);
@@ -368,7 +365,7 @@ public abstract class SyncUtils
 		});
     }
 
-    private static void sendUpdateReportRequest(final Report report, final SyncDataCallback callback)
+    private static void sendModifyReportRequest(final Report report, final SyncDataCallback callback)
     {
     	System.out.println("modify report：local id " + report.getLocalID());
     	ModifyReportRequest request = new ModifyReportRequest(report);

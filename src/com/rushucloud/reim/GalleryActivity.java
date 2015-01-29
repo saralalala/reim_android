@@ -98,7 +98,8 @@ public class GalleryActivity extends Activity
 			public void execute()
 			{
 				int selectedCount = adapter.getSelectedCount();
-				confirmButton.setText(getString(R.string.confirm) + " (" + selectedCount + "/" + maxCount + ")");
+				String title = selectedCount == 0 ? getString(R.string.confirm) : getString(R.string.confirm) + " (" + selectedCount + "/" + maxCount + ")";
+				confirmButton.setText(title);
 			}
 		});
 		

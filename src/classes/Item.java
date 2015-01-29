@@ -390,19 +390,14 @@ public class Item
 		}
     }
 	
-    public static ArrayList<Integer> getItemsIDArray(List<Item> itemList)
-    {
-    	ArrayList<Integer> idArrayList = new ArrayList<Integer>();
-    	for (int i = 0; i < itemList.size(); i++)
-		{
-			idArrayList.add(itemList.get(i).getLocalID());
-		}
-    	return idArrayList;
-    }
-	
     public boolean missingInfo()
     {
     	return getCategory() == null || amount == 0;
+    }
+    
+    public boolean needToSync()
+    {
+    	return getLocalUpdatedDate() > getServerUpdatedDate();
     }
     
 	public boolean canBeSubmitWithReport()
