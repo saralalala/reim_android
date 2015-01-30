@@ -147,7 +147,7 @@ public class MessageDetailActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				InviteReplyResponse response = new InviteReplyResponse(httpResponse);
+				final InviteReplyResponse response = new InviteReplyResponse(httpResponse);
 				if (response.getStatus())
 				{
 					if (agree == Invite.TYPE_ACCEPTED)
@@ -183,7 +183,7 @@ public class MessageDetailActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-					    	ViewUtils.showToast(MessageDetailActivity.this, R.string.failed_to_send_reply);
+					    	ViewUtils.showToast(MessageDetailActivity.this, R.string.failed_to_send_reply, response.getErrorMessage());
 						}						
 					});
 				}

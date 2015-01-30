@@ -33,7 +33,245 @@ public class DBManager extends SQLiteOpenHelper
 
 	public void onCreate(SQLiteDatabase db)
 	{
-		
+		try
+		{
+			String createGroupTable="CREATE TABLE IF NOT EXISTS tbl_group ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "group_name TEXT DEFAULT(''),"
+										+ "group_domain TEXT DEFAULT(''),"
+										+ "creator_id INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			db.execSQL(createGroupTable);
+
+			String createUserTable="CREATE TABLE IF NOT EXISTS tbl_user ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "email TEXT DEFAULT(''),"
+										+ "phone TEXT DEFAULT(''),"
+										+ "nickname TEXT DEFAULT(''),"
+										+ "avatar_id INT DEFAULT(0),"
+										+ "avatar_path TEXT DEFAULT(''),"
+										+ "privilege INT DEFAULT(0),"
+										+ "manager_id INT DEFAULT(0),"
+										+ "group_id INT DEFAULT(0),"
+										+ "admin INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			db.execSQL(createUserTable);
+			
+			String createItemTable="CREATE TABLE IF NOT EXISTS tbl_item ("
+									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+									+ "server_id INT DEFAULT(0),"
+									+ "vendor TEXT DEFAULT(''),"
+									+ "report_local_id INT DEFAULT(0),"
+									+ "category_id INT DEFAULT(0),"
+									+ "amount FLOAT DEFAULT(0),"
+									+ "pa_amount FLOAT DEFAULT(0),"
+									+ "user_id INT DEFAULT(0),"
+									+ "consumed_date INT DEFAULT(0),"
+									+ "note TEXT DEFAULT(''),"
+									+ "prove_ahead INT DEFAULT(0),"
+									+ "need_reimbursed INT DEFAULT(0),"
+									+ "pa_approved INT DEFAULT(0),"
+									+ "status INT DEFAULT(0),"
+									+ "location TEXT DEFAULT(''),"
+									+ "createdt INT DEFAULT(0),"
+									+ "server_updatedt INT DEFAULT(0),"
+									+ "local_updatedt INT DEFAULT(0),"
+									+ "backup1 INT DEFAULT(0),"
+									+ "backup2 TEXT DEFAULT(''),"
+									+ "backup3 TEXT DEFAULT('')"
+									+ ")";
+			db.execSQL(createItemTable);
+
+			String createItemUserTable="CREATE TABLE IF NOT EXISTS tbl_item_user ("
+											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+											+ "item_local_id INT DEFAULT(0),"
+											+ "user_id INT DEFAULT(0),"
+											+ "local_updatedt INT DEFAULT(0),"
+											+ "backup1 INT DEFAULT(0),"
+											+ "backup2 TEXT DEFAULT(''),"
+											+ "backup3 TEXT DEFAULT('')"
+											+ ")";
+			db.execSQL(createItemUserTable);
+
+			String createItemTagTable="CREATE TABLE IF NOT EXISTS tbl_item_tag ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "item_local_id INT DEFAULT(0),"
+										+ "tag_id INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			db.execSQL(createItemTagTable);
+			
+			String createOthersItemTable="CREATE TABLE IF NOT EXISTS tbl_others_item ("
+									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+									+ "server_id INT DEFAULT(0),"
+									+ "vendor TEXT DEFAULT(''),"
+									+ "report_server_id INT DEFAULT(0),"
+									+ "category_id INT DEFAULT(0),"
+									+ "tags_id TEXT DEFAULT(''),"
+									+ "users_id TEXT DEFAULT(''),"
+									+ "amount FLOAT DEFAULT(0),"
+									+ "pa_amount FLOAT DEFAULT(0),"
+									+ "user_id INT DEFAULT(0),"
+									+ "consumed_date INT DEFAULT(0),"
+									+ "note TEXT DEFAULT(''),"
+									+ "prove_ahead INT DEFAULT(0),"
+									+ "need_reimbursed INT DEFAULT(0),"
+									+ "pa_approved INT DEFAULT(0),"
+									+ "status INT DEFAULT(0),"
+									+ "location TEXT DEFAULT(''),"
+									+ "createdt INT DEFAULT(0),"
+									+ "server_updatedt INT DEFAULT(0),"
+									+ "local_updatedt INT DEFAULT(0),"
+									+ "backup1 INT DEFAULT(0),"
+									+ "backup2 TEXT DEFAULT(''),"
+									+ "backup3 TEXT DEFAULT('')"
+									+ ")";
+			db.execSQL(createOthersItemTable);
+			
+			String createReportTable="CREATE TABLE IF NOT EXISTS tbl_report ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "title TEXT DEFAULT(''),"
+										+ "user_id INT DEFAULT(0),"
+										+ "manager_id TEXT DEFAULT(''),"
+										+ "cc_id TEXT DEFAULT(''),"
+										+ "status INT DEFAULT(0),"
+										+ "prove_ahead INT DEFAULT(0),"
+										+ "created_date INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			db.execSQL(createReportTable);
+			
+			String createOthersReportTable="CREATE TABLE IF NOT EXISTS tbl_others_report ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "owner_id INT DEFAULT(0),"
+										+ "title TEXT DEFAULT(''),"
+										+ "user_id INT DEFAULT(0),"
+										+ "manager_id TEXT DEFAULT(''),"
+										+ "cc_id TEXT DEFAULT(''),"
+										+ "status INT DEFAULT(0),"
+										+ "prove_ahead INT DEFAULT(0),"
+										+ "item_count INT DEFAULT(0),"
+										+ "amount TEXT DEFAULT(''),"
+										+ "is_cc INT DEFAULT(0),"
+										+ "created_date INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			db.execSQL(createOthersReportTable);
+
+			String createCommentTable="CREATE TABLE IF NOT EXISTS tbl_comment ("
+											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+											+ "server_id INT DEFAULT(0),"
+											+ "report_local_id INT DEFAULT(0),"
+											+ "user_id INT DEFAULT(0),"
+											+ "comment TEXT DEFAULT(''),"
+											+ "comment_date INT DEFAULT(0),"
+											+ "local_updatedt INT DEFAULT(0),"
+											+ "server_updatedt INT DEFAULT(0),"
+											+ "backup1 INT DEFAULT(0),"
+											+ "backup2 TEXT DEFAULT(''),"
+											+ "backup3 TEXT DEFAULT('')"
+											+ ")";
+			db.execSQL(createCommentTable);
+
+			String createOthersCommentTable="CREATE TABLE IF NOT EXISTS tbl_others_comment ("
+											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+											+ "server_id INT DEFAULT(0),"
+											+ "report_server_id INT DEFAULT(0),"
+											+ "user_id INT DEFAULT(0),"
+											+ "comment TEXT DEFAULT(''),"
+											+ "comment_date INT DEFAULT(0),"
+											+ "local_updatedt INT DEFAULT(0),"
+											+ "server_updatedt INT DEFAULT(0),"
+											+ "backup1 INT DEFAULT(0),"
+											+ "backup2 TEXT DEFAULT(''),"
+											+ "backup3 TEXT DEFAULT('')"
+											+ ")";
+			db.execSQL(createOthersCommentTable);
+
+			String createCategoryTable="CREATE TABLE IF NOT EXISTS tbl_category ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "category_name TEXT DEFAULT(''),"
+										+ "max_limit INT DEFAULT(0),"
+										+ "group_id INT DEFAULT(0),"
+										+ "parent_id INT DEFAULT(0),"
+										+ "icon_id INT DEFAULT(0),"
+										+ "icon_path TEXT DEFAULT(''),"
+										+ "prove_ahead INT DEFAULT(0),"
+										+ "server_updatedt INT DEFAULT(0),"
+										+ "local_updatedt INT DEFAULT(0),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			db.execSQL(createCategoryTable);
+
+			String createTagTable="CREATE TABLE IF NOT EXISTS tbl_tag ("
+									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+									+ "server_id INT DEFAULT(0),"
+									+ "tag_name TEXT DEFAULT(''),"
+									+ "group_id INT DEFAULT(0),"
+									+ "icon_id INT DEFAULT(0),"
+									+ "icon_path TEXT DEFAULT(''),"
+									+ "server_updatedt INT DEFAULT(0),"
+									+ "local_updatedt INT DEFAULT(0),"
+									+ "backup1 INT DEFAULT(0),"
+									+ "backup2 TEXT DEFAULT(''),"
+									+ "backup3 TEXT DEFAULT('')"
+									+ ")";
+			db.execSQL(createTagTable);
+
+			String createImageTable="CREATE TABLE IF NOT EXISTS tbl_image ("
+									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+									+ "server_id INT DEFAULT(0),"
+									+ "path TEXT DEFAULT(''),"
+									+ "item_local_id INT DEFAULT(0),"
+									+ "backup1 INT DEFAULT(0),"
+									+ "backup2 TEXT DEFAULT(''),"
+									+ "backup3 TEXT DEFAULT('')"
+									+ ")";
+			db.execSQL(createImageTable);
+
+			String createOthersImageTable="CREATE TABLE IF NOT EXISTS tbl_others_image ("
+									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+									+ "server_id INT DEFAULT(0),"
+									+ "path TEXT DEFAULT(''),"
+									+ "item_server_id INT DEFAULT(0),"
+									+ "backup1 INT DEFAULT(0),"
+									+ "backup2 TEXT DEFAULT(''),"
+									+ "backup3 TEXT DEFAULT('')"
+									+ ")";
+			db.execSQL(createOthersImageTable);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -75,7 +313,6 @@ public class DBManager extends SQLiteOpenHelper
 			{
 				database = getWritableDatabase();				
 			}
-			createTables();
 			return true;
 		}
 		catch (Exception e)
@@ -90,252 +327,6 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			close();
-			return true;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	private boolean createTables()
-	{
-		try
-		{
-			String createGroupTable="CREATE TABLE IF NOT EXISTS tbl_group ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "server_id INT DEFAULT(0),"
-										+ "group_name TEXT DEFAULT(''),"
-										+ "group_domain TEXT DEFAULT(''),"
-										+ "creator_id INT DEFAULT(0),"
-										+ "server_updatedt INT DEFAULT(0),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-			database.execSQL(createGroupTable);
-
-			String createUserTable="CREATE TABLE IF NOT EXISTS tbl_user ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "server_id INT DEFAULT(0),"
-										+ "email TEXT DEFAULT(''),"
-										+ "phone TEXT DEFAULT(''),"
-										+ "nickname TEXT DEFAULT(''),"
-										+ "avatar_id INT DEFAULT(0),"
-										+ "avatar_path TEXT DEFAULT(''),"
-										+ "privilege INT DEFAULT(0),"
-										+ "manager_id INT DEFAULT(0),"
-										+ "group_id INT DEFAULT(0),"
-										+ "admin INT DEFAULT(0),"
-										+ "server_updatedt INT DEFAULT(0),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-			database.execSQL(createUserTable);
-			
-			String createItemTable="CREATE TABLE IF NOT EXISTS tbl_item ("
-									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-									+ "server_id INT DEFAULT(0),"
-									+ "vendor TEXT DEFAULT(''),"
-									+ "report_local_id INT DEFAULT(0),"
-									+ "category_id INT DEFAULT(0),"
-									+ "amount FLOAT DEFAULT(0),"
-									+ "pa_amount FLOAT DEFAULT(0),"
-									+ "user_id INT DEFAULT(0),"
-									+ "consumed_date INT DEFAULT(0),"
-									+ "note TEXT DEFAULT(''),"
-									+ "prove_ahead INT DEFAULT(0),"
-									+ "need_reimbursed INT DEFAULT(0),"
-									+ "pa_approved INT DEFAULT(0),"
-									+ "status INT DEFAULT(0),"
-									+ "location TEXT DEFAULT(''),"
-									+ "createdt INT DEFAULT(0),"
-									+ "server_updatedt INT DEFAULT(0),"
-									+ "local_updatedt INT DEFAULT(0),"
-									+ "backup1 INT DEFAULT(0),"
-									+ "backup2 TEXT DEFAULT(''),"
-									+ "backup3 TEXT DEFAULT('')"
-									+ ")";
-			database.execSQL(createItemTable);
-
-			String createItemUserTable="CREATE TABLE IF NOT EXISTS tbl_item_user ("
-											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-											+ "item_local_id INT DEFAULT(0),"
-											+ "user_id INT DEFAULT(0),"
-											+ "local_updatedt INT DEFAULT(0),"
-											+ "backup1 INT DEFAULT(0),"
-											+ "backup2 TEXT DEFAULT(''),"
-											+ "backup3 TEXT DEFAULT('')"
-											+ ")";
-			database.execSQL(createItemUserTable);
-
-			String createItemTagTable="CREATE TABLE IF NOT EXISTS tbl_item_tag ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "item_local_id INT DEFAULT(0),"
-										+ "tag_id INT DEFAULT(0),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-			database.execSQL(createItemTagTable);
-			
-			String createOthersItemTable="CREATE TABLE IF NOT EXISTS tbl_others_item ("
-									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-									+ "server_id INT DEFAULT(0),"
-									+ "vendor TEXT DEFAULT(''),"
-									+ "report_server_id INT DEFAULT(0),"
-									+ "category_id INT DEFAULT(0),"
-									+ "tags_id TEXT DEFAULT(''),"
-									+ "users_id TEXT DEFAULT(''),"
-									+ "amount FLOAT DEFAULT(0),"
-									+ "pa_amount FLOAT DEFAULT(0),"
-									+ "user_id INT DEFAULT(0),"
-									+ "consumed_date INT DEFAULT(0),"
-									+ "note TEXT DEFAULT(''),"
-									+ "prove_ahead INT DEFAULT(0),"
-									+ "need_reimbursed INT DEFAULT(0),"
-									+ "pa_approved INT DEFAULT(0),"
-									+ "status INT DEFAULT(0),"
-									+ "location TEXT DEFAULT(''),"
-									+ "createdt INT DEFAULT(0),"
-									+ "server_updatedt INT DEFAULT(0),"
-									+ "local_updatedt INT DEFAULT(0),"
-									+ "backup1 INT DEFAULT(0),"
-									+ "backup2 TEXT DEFAULT(''),"
-									+ "backup3 TEXT DEFAULT('')"
-									+ ")";
-			database.execSQL(createOthersItemTable);
-			
-			String createReportTable="CREATE TABLE IF NOT EXISTS tbl_report ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "server_id INT DEFAULT(0),"
-										+ "title TEXT DEFAULT(''),"
-										+ "user_id INT DEFAULT(0),"
-										+ "manager_id TEXT DEFAULT(''),"
-										+ "cc_id TEXT DEFAULT(''),"
-										+ "status INT DEFAULT(0),"
-										+ "prove_ahead INT DEFAULT(0),"
-										+ "created_date INT DEFAULT(0),"
-										+ "server_updatedt INT DEFAULT(0),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-			database.execSQL(createReportTable);
-			
-			String createOthersReportTable="CREATE TABLE IF NOT EXISTS tbl_others_report ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "server_id INT DEFAULT(0),"
-										+ "owner_id INT DEFAULT(0),"
-										+ "title TEXT DEFAULT(''),"
-										+ "user_id INT DEFAULT(0),"
-										+ "manager_id TEXT DEFAULT(''),"
-										+ "cc_id TEXT DEFAULT(''),"
-										+ "status INT DEFAULT(0),"
-										+ "prove_ahead INT DEFAULT(0),"
-										+ "item_count INT DEFAULT(0),"
-										+ "amount TEXT DEFAULT(''),"
-										+ "is_cc INT DEFAULT(0),"
-										+ "created_date INT DEFAULT(0),"
-										+ "server_updatedt INT DEFAULT(0),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-			database.execSQL(createOthersReportTable);
-
-			String createCommentTable="CREATE TABLE IF NOT EXISTS tbl_comment ("
-											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-											+ "server_id INT DEFAULT(0),"
-											+ "report_local_id INT DEFAULT(0),"
-											+ "user_id INT DEFAULT(0),"
-											+ "comment TEXT DEFAULT(''),"
-											+ "comment_date INT DEFAULT(0),"
-											+ "local_updatedt INT DEFAULT(0),"
-											+ "server_updatedt INT DEFAULT(0),"
-											+ "backup1 INT DEFAULT(0),"
-											+ "backup2 TEXT DEFAULT(''),"
-											+ "backup3 TEXT DEFAULT('')"
-											+ ")";
-			database.execSQL(createCommentTable);
-
-			String createOthersCommentTable="CREATE TABLE IF NOT EXISTS tbl_others_comment ("
-											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-											+ "server_id INT DEFAULT(0),"
-											+ "report_server_id INT DEFAULT(0),"
-											+ "user_id INT DEFAULT(0),"
-											+ "comment TEXT DEFAULT(''),"
-											+ "comment_date INT DEFAULT(0),"
-											+ "local_updatedt INT DEFAULT(0),"
-											+ "server_updatedt INT DEFAULT(0),"
-											+ "backup1 INT DEFAULT(0),"
-											+ "backup2 TEXT DEFAULT(''),"
-											+ "backup3 TEXT DEFAULT('')"
-											+ ")";
-			database.execSQL(createOthersCommentTable);
-
-			String createCategoryTable="CREATE TABLE IF NOT EXISTS tbl_category ("
-										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-										+ "server_id INT DEFAULT(0),"
-										+ "category_name TEXT DEFAULT(''),"
-										+ "max_limit INT DEFAULT(0),"
-										+ "group_id INT DEFAULT(0),"
-										+ "parent_id INT DEFAULT(0),"
-										+ "icon_id INT DEFAULT(0),"
-										+ "icon_path TEXT DEFAULT(''),"
-										+ "prove_ahead INT DEFAULT(0),"
-										+ "server_updatedt INT DEFAULT(0),"
-										+ "local_updatedt INT DEFAULT(0),"
-										+ "backup1 INT DEFAULT(0),"
-										+ "backup2 TEXT DEFAULT(''),"
-										+ "backup3 TEXT DEFAULT('')"
-										+ ")";
-			database.execSQL(createCategoryTable);
-
-			String createTagTable="CREATE TABLE IF NOT EXISTS tbl_tag ("
-									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-									+ "server_id INT DEFAULT(0),"
-									+ "tag_name TEXT DEFAULT(''),"
-									+ "group_id INT DEFAULT(0),"
-									+ "icon_id INT DEFAULT(0),"
-									+ "icon_path TEXT DEFAULT(''),"
-									+ "server_updatedt INT DEFAULT(0),"
-									+ "local_updatedt INT DEFAULT(0),"
-									+ "backup1 INT DEFAULT(0),"
-									+ "backup2 TEXT DEFAULT(''),"
-									+ "backup3 TEXT DEFAULT('')"
-									+ ")";
-			database.execSQL(createTagTable);
-
-			String createImageTable="CREATE TABLE IF NOT EXISTS tbl_image ("
-									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-									+ "server_id INT DEFAULT(0),"
-									+ "path TEXT DEFAULT(''),"
-									+ "item_local_id INT DEFAULT(0),"
-									+ "backup1 INT DEFAULT(0),"
-									+ "backup2 TEXT DEFAULT(''),"
-									+ "backup3 TEXT DEFAULT('')"
-									+ ")";
-			database.execSQL(createImageTable);
-
-			String createOthersImageTable="CREATE TABLE IF NOT EXISTS tbl_others_image ("
-									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-									+ "server_id INT DEFAULT(0),"
-									+ "path TEXT DEFAULT(''),"
-									+ "item_server_id INT DEFAULT(0),"
-									+ "backup1 INT DEFAULT(0),"
-									+ "backup2 TEXT DEFAULT(''),"
-									+ "backup3 TEXT DEFAULT('')"
-									+ ")";
-			database.execSQL(createOthersImageTable);
-			
 			return true;
 		}
 		catch (Exception e)

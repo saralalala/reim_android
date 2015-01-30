@@ -241,7 +241,7 @@ public class ManagerActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				DefaultManagerResponse response = new DefaultManagerResponse(httpResponse);
+				final DefaultManagerResponse response = new DefaultManagerResponse(httpResponse);
 				if (response.getStatus())
 				{
 					currentUser.setDefaultManagerID(newManagerID);
@@ -275,7 +275,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(ManagerActivity.this, R.string.failed_to_change_manager);				
+							ViewUtils.showToast(ManagerActivity.this, R.string.failed_to_change_manager, response.getErrorMessage());				
 						}
 					});
 				}
