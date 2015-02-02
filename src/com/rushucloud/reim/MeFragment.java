@@ -40,6 +40,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
+import classes.widget.ReimProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -114,6 +115,7 @@ public class MeFragment extends Fragment
 		if (isVisibleToUser && hasInit)
 		{
 	        loadProfileView();
+	        ReimProgressDialog.show();
 		}
 	}
 	

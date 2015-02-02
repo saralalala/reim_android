@@ -50,7 +50,7 @@ public class HttpUtils
 		{
 			e.printStackTrace();
 			return "";
-		}		
+		}
 	}
 	
 	private static String getUserAgent()

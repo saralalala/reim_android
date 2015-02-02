@@ -42,11 +42,10 @@ public class ReimProgressDialog
 	
 	public static void show()
 	{
-		if (animationDrawable.isRunning())
+		if (!animationDrawable.isRunning())
 		{
-			animationDrawable.stop();
+			animationDrawable.start();
 		}
-		animationDrawable.start();
 		progressDialog.show();
 	}
 	

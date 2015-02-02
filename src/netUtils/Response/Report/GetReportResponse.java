@@ -12,6 +12,7 @@ import classes.Item;
 import classes.Report;
 import classes.User;
 import classes.utils.DBManager;
+import classes.utils.Utils;
 import netUtils.Response.BaseResponse;
 
 public class GetReportResponse extends BaseResponse
@@ -30,6 +31,7 @@ public class GetReportResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			report = new Report(jObject);
+			report.setIsCC(Utils.intToBoolean(jObject.getInt("cc")));
 			
 			DBManager dbManager = DBManager.getDBManager();
 

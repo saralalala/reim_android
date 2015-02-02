@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
-
 import com.rushucloud.reim.R;
 
 import android.content.Context;
@@ -66,6 +65,7 @@ public class Report implements Serializable
 		localUpdatedDate = report.getLocalUpdatedDate();
 		itemCount = report.getItemCount();
 		amount = report.getAmount();
+		isCC = report.isCC();
 	}
 
 	public Report(JSONObject jObject)

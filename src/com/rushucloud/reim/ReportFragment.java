@@ -79,6 +79,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	private ReportListViewAdapter mineAdapter;
 	private OthersReportListViewAdapter othersAdapter;
 	private PopupWindow operationPopupWindow;
+	private PopupWindow deletePopupWindow;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
@@ -179,6 +180,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		initListView();	
 		initFilterView();
 		initOperationView();
+		initDeleteView();
 	}
 	
 	private void initTitleView()
@@ -272,10 +274,14 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		{
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
 			{
+				reportIndex = position - 1;
 				if (ReimApplication.getReportTabIndex() == 0)
 				{
-					reportIndex = position - 1;
 					showOperationWindow();
+				}
+				else
+				{
+					showDeleteWindow();
 				}
 				return false;
 			}
@@ -313,7 +319,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 															{
 																if (report.getServerID() == -1)
 																{
-																	deleteReportFromLocal(report.getLocalID());
+																	deleteLocalReport(report.getLocalID());
 																}
 																else if (!PhoneUtils.isNetworkConnected())
 																{
@@ -371,6 +377,70 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
 		operationPopupWindow = ViewUtils.constructBottomPopupWindow(getActivity(), operationView);  
+	}
+	
+	private void initDeleteView()
+	{
+		View deleteView = View.inflate(getActivity(), R.layout.window_delete, null);
+		
+		Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
+		deleteButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				deletePopupWindow.dismiss();
+
+		    	final Report report = showOthersList.get(reportIndex);
+		    	if (report.getStatus() == Report.STATUS_REJECTED)
+				{
+//					Builder builder = new Builder(getActivity());
+//					builder.setTitle(R.string.warning);
+//					builder.setMessage(R.string.prompt_delete_report);
+//					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+//														{
+//															public void onClick(DialogInterface dialog, int which)
+//															{
+//																if (!PhoneUtils.isNetworkConnected())
+//																{
+//																	ViewUtils.showToast(getActivity(), R.string.error_delete_network_unavailable);
+//																}
+//																else
+//																{
+//																	sendDeleteReportRequest(report);																		
+//																}
+//															}
+//														});
+//					builder.setNegativeButton(R.string.cancel, null);
+//					builder.create().show();
+
+					if (!PhoneUtils.isNetworkConnected())
+					{
+						ViewUtils.showToast(getActivity(), R.string.error_delete_network_unavailable);
+					}
+					else
+					{
+						sendDeleteReportRequest(report);																		
+					}
+				}
+				else
+				{
+					ViewUtils.showToast(getActivity(), R.string.error_delete_report_submitted);
+				}
+			}
+		});
+		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
+		
+		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				deletePopupWindow.dismiss();
+			}
+		});
+		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
+		
+		deletePopupWindow = ViewUtils.constructBottomPopupWindow(getActivity(), deleteView);  
 	}
 	
 	private void setListView(int index)
@@ -670,6 +740,14 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		
 		ViewUtils.dimBackground(getActivity());
     }
+
+    private void showDeleteWindow()
+    {    	
+		deletePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+		deletePopupWindow.update();
+		
+		ViewUtils.dimBackground(getActivity());
+    }
     
 	private void showExportDialog(final int reportID)
     {
@@ -720,14 +798,15 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		{
 			public void execute(Object httpResponse)
 			{
-				DeleteReportResponse response = new DeleteReportResponse(httpResponse);
+				final DeleteReportResponse response = new DeleteReportResponse(httpResponse);
 				if (response.getStatus())
 				{
 					getActivity().runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
-							deleteReportFromLocal(report.getLocalID());
+							int reportID = ReimApplication.getReportTabIndex() == 0 ? report.getLocalID() : report.getServerID();
+							deleteLocalReport(reportID);
 						}
 					});
 				}
@@ -738,7 +817,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-				            ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
+				            ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed, response.getErrorMessage());
 						}
 					});		
 				}
@@ -851,19 +930,36 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		});
 	}
 	
-	private void deleteReportFromLocal(int reportLocalID)
+	private void deleteLocalReport(int reportID)
 	{
-		if (dbManager.deleteReport(reportLocalID))
+		if (ReimApplication.getReportTabIndex() == 0)
 		{
-			refreshReportListView();
-			ReimProgressDialog.dismiss();
-            ViewUtils.showToast(getActivity(), R.string.prompt_delete_succeed);														
+			if (dbManager.deleteReport(reportID))
+			{
+				refreshReportListView();
+				ReimProgressDialog.dismiss();
+	            ViewUtils.showToast(getActivity(), R.string.prompt_delete_succeed);														
+			}
+			else
+			{
+				ReimProgressDialog.dismiss();
+	            ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
+			}			
 		}
 		else
 		{
-			ReimProgressDialog.dismiss();
-            ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
-		}		
+			if (dbManager.deleteOthersReport(reportID, appPreference.getCurrentUserID()))
+			{
+				refreshReportListView();
+				ReimProgressDialog.dismiss();
+	            ViewUtils.showToast(getActivity(), R.string.prompt_delete_succeed);														
+			}
+			else
+			{
+				ReimProgressDialog.dismiss();
+	            ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
+			}			
+		}
 	}
 
 	private void syncReports()
