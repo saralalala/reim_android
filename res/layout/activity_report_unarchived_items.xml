@@ -86,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/titleLayout"
         android:divider="@null"
-        android:cacheColorHint="#00000000"
+        android:cacheColorHint="@android:color/transparent"
         android:listSelector="@drawable/list_item_drawable" />
 
     <TextView

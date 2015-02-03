@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment;
 import classes.Category;
 import classes.ReimApplication;
 import classes.StatisticsCategory;
+import classes.adapter.StatisticsListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -32,6 +33,8 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimMonthBar;
 import classes.widget.ReimPie;
 import classes.widget.ReimProgressDialog;
+import classes.widget.XListView;
+import classes.widget.XListView.IXListViewListener;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -40,6 +43,9 @@ public class StatisticsFragment extends Fragment
 {
 	private static final int GET_DATA_INTERVAL = 600;
 	
+	private XListView statListView;
+	private StatisticsListViewAdapter adapter;
+	private View view;
 	private FrameLayout statContainer;
 	private TextView mainPercentTextView;
 	private TextView donePercentTextView;
@@ -96,7 +102,7 @@ public class StatisticsFragment extends Fragment
 	}
 	
 	private void initView()
-	{		
+	{
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.arc);
 		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
 		
@@ -104,35 +110,56 @@ public class StatisticsFragment extends Fragment
 		int margin = PhoneUtils.dpToPixel(getResources(), 36);
 		
 		diameter = metrics.widthPixels - margin * 2;
-		ImageView arcImageView = (ImageView) getActivity().findViewById(R.id.arcImageView);
+		
+		view = View.inflate(getActivity(), R.layout.view_statistics, null);
+		
+		ImageView arcImageView = (ImageView) view.findViewById(R.id.arcImageView);
 		ViewGroup.LayoutParams params = arcImageView.getLayoutParams();
 		params.width = diameter;
 		params.height = (int)(params.width * ratio);
 		arcImageView.setLayoutParams(params);
 		
-		ImageView arcCoverImageView = (ImageView) getActivity().findViewById(R.id.arcCoverImageView);
+		ImageView arcCoverImageView = (ImageView) view.findViewById(R.id.arcCoverImageView);
 		arcCoverImageView.setLayoutParams(params);
 		
-		statContainer = (FrameLayout) getActivity().findViewById(R.id.statContainer);
+		statContainer = (FrameLayout) view.findViewById(R.id.statContainer);
 		statContainer.setLayoutParams(params);
 		
-		mainPercentTextView = (TextView) getActivity().findViewById(R.id.mainPercentTextView);
+		mainPercentTextView = (TextView) view.findViewById(R.id.mainPercentTextView);
 		mainPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
-		donePercentTextView = (TextView) getActivity().findViewById(R.id.donePercentTextView);
+		donePercentTextView = (TextView) view.findViewById(R.id.donePercentTextView);
 		donePercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
-		ongoingPercentTextView = (TextView) getActivity().findViewById(R.id.ongoingPercentTextView);
+		ongoingPercentTextView = (TextView) view.findViewById(R.id.ongoingPercentTextView);
 		ongoingPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
-		newPercentTextView = (TextView) getActivity().findViewById(R.id.newPercentTextView);
+		newPercentTextView = (TextView) view.findViewById(R.id.newPercentTextView);
 		newPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 
-		monthCostTextView = (TextView) getActivity().findViewById(R.id.monthCostTextView);
-		monthLayout = (LinearLayout) getActivity().findViewById(R.id.monthLayout);
+		monthCostTextView = (TextView) view.findViewById(R.id.monthCostTextView);
+		monthLayout = (LinearLayout) view.findViewById(R.id.monthLayout);
 
-		categoryTitleLayout = (RelativeLayout) getActivity().findViewById(R.id.categoryTitleLayout);
-		categoryLayout = (LinearLayout) getActivity().findViewById(R.id.categoryLayout);
+		categoryTitleLayout = (RelativeLayout) view.findViewById(R.id.categoryTitleLayout);
+		categoryLayout = (LinearLayout) view.findViewById(R.id.categoryLayout);
+		
+		adapter = new StatisticsListViewAdapter(getActivity(), view);
+		statListView = (XListView) getActivity().findViewById(R.id.statListView);
+		statListView.setAdapter(adapter);
+		statListView.setXListViewListener(new IXListViewListener()
+		{
+			public void onRefresh()
+			{
+				getData();
+			}
+			
+			public void onLoadMore()
+			{
+				
+			}
+		});
+		statListView.setPullRefreshEnable(true);
+		statListView.setPullLoadEnable(false);
 	}
 
 	private void resetView()
@@ -151,10 +178,15 @@ public class StatisticsFragment extends Fragment
 	{		
 		if (PhoneUtils.isNetworkConnected())
 		{
-			sendGetDataRequest();			
+			if (needToGetData())
+			{
+				ReimProgressDialog.show();
+			}
+			sendGetDataRequest();
 		}
 		else
 		{
+			statListView.stopRefresh();
 			ViewUtils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
 		}		
 	}
@@ -295,7 +327,6 @@ public class StatisticsFragment extends Fragment
 
 	private void sendGetDataRequest()
 	{
-		ReimProgressDialog.show();
 		StatisticsRequest request = new StatisticsRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -317,6 +348,8 @@ public class StatisticsFragment extends Fragment
 							drawPie(response.getTotal(), response.getDoneAmount(), response.getOngoingAmount(), response.getNewAmount());
 							drawMonthBar(response.getMonthsData());
 							drawCategory(response.getStatCategoryList());
+							adapter.notifyDataSetChanged();
+							statListView.stopRefresh();
 							ReimProgressDialog.dismiss();
 						}
 					});
