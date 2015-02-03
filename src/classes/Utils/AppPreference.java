@@ -29,6 +29,7 @@ public class AppPreference
 	private boolean syncOnlyWithWifi = true;
 	private boolean enablePasswordProtection = true;
 	private int lastSyncTime = 0;
+	private int lastGetStatTime = 0;
 	private String appDirectory = "";
 	private String appImageDirectory = "";
 	private String avatarImageDirectory = "";
@@ -66,6 +67,7 @@ public class AppPreference
 		appPreference.setSyncOnlyWithWifi(preferences.getBoolean("syncOnlyWithWifi", true));
 		appPreference.setEnablePasswordProtection(preferences.getBoolean("enablePasswordProtection", true));
 		appPreference.setLastSyncTime(preferences.getInt("lastSyncTime", 0));
+		appPreference.setLastGetStatTime(preferences.getInt("lastGetStatTime", 0));
 		
 		appPreference.setAppDirectory(Environment.getExternalStorageDirectory() + "/如数云报销");
 		appPreference.setAppImageDirectory(appPreference.getAppDirectory() + "/images");
@@ -88,6 +90,7 @@ public class AppPreference
 		editor.putBoolean("syncOnlyWithWifi", appPreference.syncOnlyWithWifi());
 		editor.putBoolean("enablePasswordProtection", appPreference.passwordProtectionEnabled());
 		editor.putInt("lastSyncTime", appPreference.getLastSyncTime());
+		editor.putInt("lastGetStatTime", appPreference.getLastGetStatTime());
 		editor.commit();
 	}
 	
@@ -95,27 +98,23 @@ public class AppPreference
 	{
 		return currentUserID;
 	}
-
 	public void setCurrentUserID(int currentUserID)
 	{
 		this.currentUserID = currentUserID;
 	}	
-
 	public User getCurrentUser()
 	{
 		return DBManager.getDBManager().getUser(currentUserID);
 	}
-	
+
 	public int getCurrentGroupID()
 	{
 		return currentGroupID;
 	}
-
 	public void setCurrentGroupID(int currentGroupID)
 	{
 		this.currentGroupID = currentGroupID;
-	}
-	
+	}	
 	public Group getCurrentGroup()
 	{
 		return DBManager.getDBManager().getGroup(currentGroupID);
@@ -125,7 +124,6 @@ public class AppPreference
 	{
 		return username;
 	}
-	
 	public void setUsername(String username)
 	{
 		this.username = username;
@@ -135,7 +133,6 @@ public class AppPreference
 	{
 		return password;
 	}
-	
 	public void setPassword(String password)
 	{
 		this.password = password;
@@ -145,7 +142,6 @@ public class AppPreference
 	{
 		return deviceToken;
 	}
-	
 	public void setDeviceToken(String deviceToken)
 	{
 		this.deviceToken = deviceToken;
@@ -155,7 +151,6 @@ public class AppPreference
 	{
 		return serverToken;
 	}
-	
 	public void setServerToken(String serverToken)
 	{
 		this.serverToken = serverToken;
@@ -165,7 +160,6 @@ public class AppPreference
 	{
 		return syncOnlyWithWifi;
 	}
-
 	public void setSyncOnlyWithWifi(boolean syncOnlyWithWifi)
 	{
 		this.syncOnlyWithWifi = syncOnlyWithWifi;
@@ -175,7 +169,6 @@ public class AppPreference
 	{
 		return enablePasswordProtection;
 	}
-
 	public void setEnablePasswordProtection(boolean enablePasswordProtection)
 	{
 		this.enablePasswordProtection = enablePasswordProtection;
@@ -185,17 +178,24 @@ public class AppPreference
 	{
 		return lastSyncTime;
 	}
-
 	public void setLastSyncTime(int lastSyncTime)
 	{
 		this.lastSyncTime = lastSyncTime;
 	}
 	
+	public int getLastGetStatTime()
+	{
+		return lastGetStatTime;
+	}
+	public void setLastGetStatTime(int lastGetStatTime)
+	{
+		this.lastGetStatTime = lastGetStatTime;
+	}
+
 	public String getAppDirectory()
 	{
 		return appDirectory;
 	}
-
 	public void setAppDirectory(String appDirectory)
 	{
 		this.appDirectory = appDirectory;
@@ -205,7 +205,6 @@ public class AppPreference
 	{
 		return appImageDirectory;
 	}
-
 	public void setAppImageDirectory(String appImageDirectory)
 	{
 		this.appImageDirectory = appImageDirectory;
@@ -215,7 +214,6 @@ public class AppPreference
 	{
 		return avatarImageDirectory;
 	}
-
 	public void setAvatarImageDirectory(String avatarImageDirectory)
 	{
 		this.avatarImageDirectory = avatarImageDirectory;
@@ -225,7 +223,6 @@ public class AppPreference
 	{
 		return getAvatarImageDirectory() + "/temp.jpg";
 	}
-	
 	public Uri getTempAvatarUri()
 	{
 		return Uri.fromFile(new File(getAvatarImageDirectory() + "/temp.jpg"));
@@ -235,7 +232,6 @@ public class AppPreference
 	{
 		return invoiceImageDirectory;
 	}
-
 	public void setInvoiceImageDirectory(String invoiceImageDirectory)
 	{
 		this.invoiceImageDirectory = invoiceImageDirectory;
@@ -245,7 +241,6 @@ public class AppPreference
 	{
 		return getInvoiceImageDirectory() + "/temp.jpg";
 	}
-	
 	public Uri getTempInvoiceUri()
 	{
 		return Uri.fromFile(new File(getInvoiceImageDirectory() + "/temp.jpg"));
@@ -255,7 +250,6 @@ public class AppPreference
 	{
 		return iconImageDirectory;
 	}
-
 	public void setIconImageDirectory(String iconImageDirectory)
 	{
 		this.iconImageDirectory = iconImageDirectory;

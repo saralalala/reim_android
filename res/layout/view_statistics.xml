@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="36dp" >
+
+        <ImageView
+            android:id="@+id/arcImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="210dp"
+            android:contentDescription="@string/statistics"
+            android:src="@drawable/arc" />
+
+        <FrameLayout
+            android:id="@+id/statContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/arcCoverImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="210dp"
+            android:contentDescription="@string/statistics"
+            android:src="@drawable/arc_cover" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true" >
+
+            <TextView
+                android:id="@+id/mainPercentTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/major_dark"
+                android:textSize="50sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mainPercentTextView"
+                android:layout_centerHorizontal="true"
+                android:text="@string/stat_new"
+                android:textColor="@color/hint_grey"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@+id/mainPercentTextView"
+                android:text="@string/percent"
+                android:textColor="@color/major_dark"
+                android:textSize="24sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/markDoneImageView"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_alignTop="@+id/markDoneTextView"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/mark"
+                android:src="@drawable/mark_done" />
+
+            <TextView
+                android:id="@+id/markDoneTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_toRightOf="@+id/markDoneImageView"
+                android:text="@string/stat_done"
+                android:textColor="@color/hint_grey"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/donePercentTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/markDoneImageView"
+                android:layout_alignRight="@+id/markDoneTextView"
+                android:layout_below="@+id/markDoneTextView"
+                android:gravity="right"
+                android:textColor="@color/hint_dark_grey"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp" >
+
+            <ImageView
+                android:id="@+id/markOngoingImageView"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_alignTop="@+id/markOngoingTextView"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/mark"
+                android:src="@drawable/mark_ongoing" />
+
+            <TextView
+                android:id="@+id/markOngoingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_toRightOf="@+id/markOngoingImageView"
+                android:text="@string/stat_ongoing"
+                android:textColor="@color/hint_grey"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/ongoingPercentTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/markOngoingImageView"
+                android:layout_alignRight="@+id/markOngoingTextView"
+                android:layout_below="@+id/markOngoingTextView"
+                android:gravity="right"
+                android:textColor="@color/hint_dark_grey"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp" >
+
+            <ImageView
+                android:id="@+id/markNewImageView"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_alignTop="@+id/markNewTextView"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/mark"
+                android:src="@drawable/mark_new" />
+
+            <TextView
+                android:id="@+id/markNewTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_toRightOf="@+id/markNewImageView"
+                android:text="@string/stat_new"
+                android:textColor="@color/hint_grey"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/newPercentTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/markNewImageView"
+                android:layout_alignRight="@+id/markNewTextView"
+                android:layout_below="@+id/markNewTextView"
+                android:gravity="right"
+                android:textColor="@color/hint_dark_grey"
+                android:textSize="18sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/monthCostTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/cost_per_month"
+        android:textColor="@color/hint_grey"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/monthLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/categoryTitleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/list_item_header"
+        android:orientation="vertical" >
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            layout="@layout/view_divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical"
+            android:text="@string/stat_by_category"
+            android:textColor="@color/font_list_item_header"
+            android:textSize="12sp" />
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            layout="@layout/view_divider" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/categoryLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</LinearLayout>

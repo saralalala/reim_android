@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment;
 import classes.Category;
 import classes.ReimApplication;
 import classes.StatisticsCategory;
+import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
@@ -37,6 +38,8 @@ import com.umeng.analytics.MobclickAgent;
 
 public class StatisticsFragment extends Fragment
 {
+	private static final int GET_DATA_INTERVAL = 600;
+	
 	private FrameLayout statContainer;
 	private TextView mainPercentTextView;
 	private TextView donePercentTextView;
@@ -46,10 +49,12 @@ public class StatisticsFragment extends Fragment
 	private LinearLayout monthLayout;
 	private RelativeLayout categoryTitleLayout;
 	private LinearLayout categoryLayout;
-	
+
+	private AppPreference appPreference;
 	private DBManager dbManager;
 
 	private boolean hasInit = false;
+	private boolean hasData = false;
 	private int diameter;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -63,9 +68,15 @@ public class StatisticsFragment extends Fragment
 		MobclickAgent.onPageStart("StatisticsFragment");
 		if (!hasInit)
 		{
+			appPreference = AppPreference.getAppPreference();
+			dbManager = DBManager.getDBManager();
 			initView();
 			hasInit = true;
-			initData();
+		}
+		
+		if (getUserVisibleHint() && needToGetData())
+		{
+			getData();			
 		}
 	}
 
@@ -78,10 +89,9 @@ public class StatisticsFragment extends Fragment
 	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
 		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser && hasInit)
+		if (isVisibleToUser && hasInit && needToGetData())
 		{
-			ReimProgressDialog.show();
-			initData();
+			getData();
 		}
 	}
 	
@@ -131,11 +141,14 @@ public class StatisticsFragment extends Fragment
 		monthLayout.removeAllViews();
 		categoryLayout.removeAllViews();
 	}
-	
-	private void initData()
+
+	private boolean needToGetData()
 	{
-		dbManager = DBManager.getDBManager();
-		
+		return !hasData || Utils.getCurrentTime() - appPreference.getLastGetStatTime() > GET_DATA_INTERVAL;
+	}
+	
+	private void getData()
+	{		
 		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetDataRequest();			
@@ -282,6 +295,7 @@ public class StatisticsFragment extends Fragment
 
 	private void sendGetDataRequest()
 	{
+		ReimProgressDialog.show();
 		StatisticsRequest request = new StatisticsRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -290,6 +304,11 @@ public class StatisticsFragment extends Fragment
 				final StatisticsResponse response = new StatisticsResponse(httpResponse);
 				if (response.getStatus())
 				{
+					hasData = true;
+
+					appPreference.setLastGetStatTime(Utils.getCurrentTime());
+					appPreference.saveAppPreference();
+					
 					getActivity().runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -301,6 +320,17 @@ public class StatisticsFragment extends Fragment
 							ReimProgressDialog.dismiss();
 						}
 					});
+				}
+				else
+				{
+					getActivity().runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+							ViewUtils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
+						}
+					});					
 				}
 			}
 		});
