@@ -9,17 +9,9 @@ import java.util.List;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.UploadImageResponse;
-import netUtils.Response.Item.CreateItemResponse;
 import netUtils.Response.Item.GetVendorsResponse;
-import netUtils.Response.Item.ModifyItemResponse;
-import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.Item.CreateItemRequest;
 import netUtils.Request.Item.GetVendorsRequest;
-import netUtils.Request.Item.ModifyItemRequest;
-import netUtils.Request.Report.CreateReportRequest;
 import classes.Category;
 import classes.Image;
 import classes.Item;
@@ -49,6 +41,7 @@ import com.baidu.location.LocationClientOption.LocationMode;
 import com.rushucloud.reim.GalleryActivity;
 import com.rushucloud.reim.ImageActivity;
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.report.EditReportActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
@@ -133,8 +126,6 @@ public class EditItemActivity extends Activity
 	private PopupWindow memberPopupWindow;
 	
 	private EditText noteEditText;
-	
-	private PopupWindow managerPopupWindow;
 
 	private List<ImageView> removeList = null;
 	boolean removeImageViewShown = false;
@@ -143,7 +134,6 @@ public class EditItemActivity extends Activity
 	private static DBManager dbManager;
 	
 	private Item item;
-	private Report report;
 	private List<Image> originInvoiceList;
 
 	private List<Vendor> vendorList = null;
@@ -156,7 +146,6 @@ public class EditItemActivity extends Activity
 
 	private boolean fromReim;
 	private boolean newItem = false;
-	private int imageTaskCount;
 		
 	private LocationClient locationClient = null;
 	private BDLocationListener listener = new ReimLocationListener();
@@ -381,6 +370,11 @@ public class EditItemActivity extends Activity
 					item.setNote(noteEditText.getText().toString());
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					
+					if (newItem)
+					{
+						item.setCreatedDate(item.getLocalUpdatedDate());
+					}
+					
 					if (fromReim && item.isProveAhead() && !item.isPaApproved())
 					{
 						Builder buider = new Builder(EditItemActivity.this);
@@ -390,21 +384,43 @@ public class EditItemActivity extends Activity
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
-													saveItem();												
+										    		dbManager.syncItem(item);
+													ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+													finish();
 												}
 											});
 						buider.setNeutralButton(R.string.send_to_approve, new DialogInterface.OnClickListener()
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
-													if (PhoneUtils.isNetworkConnected())
+													Report report;
+													if (item.getBelongReport() == null)
 													{
-														showManagerWindow();
+														report = new Report();
+												    	report.setTitle(getString(R.string.report_prove_ahead));
+												    	report.setSender(appPreference.getCurrentUser());
+												    	report.setCreatedDate(Utils.getCurrentTime());
+												    	report.setLocalUpdatedDate(Utils.getCurrentTime());
+														report.setIsProveAhead(true);
+												    	dbManager.insertReport(report);
+												    	report.setLocalID(dbManager.getLastInsertReportID());
+														
+												    	item.setBelongReport(report);														
 													}
 													else
 													{
-														ViewUtils.showToast(EditItemActivity.this, R.string.error_send_network_unavailable);
+														report = item.getBelongReport();
 													}
+													
+										    		dbManager.syncItem(item);
+													ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);													
+
+													Bundle bundle = new Bundle();
+													bundle.putSerializable("report", report);
+													Intent intent = new Intent(EditItemActivity.this, EditReportActivity.class);
+													intent.putExtras(bundle);
+													startActivity(intent);
+													finish();
 												}
 											});
 						buider.setNegativeButton(R.string.cancel, null);
@@ -412,7 +428,9 @@ public class EditItemActivity extends Activity
 					}
 					else
 					{
-						saveItem();
+			    		dbManager.syncItem(item);
+						ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+						finish();
 					}
 				}
 				catch (NumberFormatException e)
@@ -446,7 +464,6 @@ public class EditItemActivity extends Activity
 		initTagView();
 		initMemberView();
 		initNoteView();
-		initManagerView();
 	}
 	
 	private void initStatusView()
@@ -1195,118 +1212,6 @@ public class EditItemActivity extends Activity
 		});
 	}
 	
-	private void initManagerView()
-	{
-		final List<User> memberList = User.removeCurrentUserFromList(userList);
-		final boolean[] check = User.getUsersCheck(memberList, appPreference.getCurrentUser().constructListWithManager());
-		
-		final MemberListViewAdapter memberAdapter = new MemberListViewAdapter(this, memberList, check);
-    	View managerView = View.inflate(this, R.layout.window_reim_manager, null);
-    	ListView userListView = (ListView) managerView.findViewById(R.id.userListView);
-    	userListView.setAdapter(memberAdapter);
-    	userListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				check[position] = !check[position];
-				memberAdapter.setCheck(check);
-				memberAdapter.notifyDataSetChanged();
-			}
-		});
-
-		ImageView backImageView = (ImageView) managerView.findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				managerPopupWindow.dismiss();
-			}
-		});
-		
-		TextView confirmTextView = (TextView) managerView.findViewById(R.id.confirmTextView);
-		confirmTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				managerPopupWindow.dismiss();
-				
-				List<User> managerList = new ArrayList<User>();
-				for (int i = 0; i < check.length; i++)
-				{
-					if (check[i])
-					{
-						managerList.add(memberList.get(i));
-					}
-				}
-
-				if (managerList.isEmpty())
-				{
-					ViewUtils.showToast(EditItemActivity.this, R.string.no_manager);
-				}
-				else
-				{
-					report = new Report();
-			    	report.setTitle(getString(R.string.report_prove_ahead));
-			    	report.setStatus(Report.STATUS_SUBMITTED);
-			    	report.setSender(appPreference.getCurrentUser());
-			    	report.setCreatedDate(Utils.getCurrentTime());									    	
-					report.setManagerList(managerList);
-					report.setIsProveAhead(true);
-			    	dbManager.insertReport(report);
-			    	report.setLocalID(dbManager.getLastInsertReportID());					
-
-					ReimProgressDialog.show();
-					if (newItem)
-					{
-						int localID = dbManager.insertItem(item);
-						item = dbManager.getItemByLocalID(localID);
-						newItem = false;
-					}
-					else
-					{
-						dbManager.updateItemByLocalID(item);
-						item = dbManager.getItemByLocalID(item.getLocalID());
-					}
-
-					List<Image> invoiceList = new ArrayList<Image>();
-					for (Image image : item.getInvoices())
-					{
-						if (image.isNotUploaded())
-						{
-							invoiceList.add(image);
-						}
-					}
-					imageTaskCount = invoiceList.size();
-					
-					if (imageTaskCount > 0)
-					{
-						for (Image image : invoiceList)
-						{
-							if (image.isNotUploaded())
-							{
-								sendUploadImageRequest(image);
-							}
-						}
-					}
-					else
-					{						
-						if (item.getServerID() == -1)
-						{
-							sendCreateItemRequest();
-						}
-						else
-						{
-							sendModifyItemRequest();													
-						}
-					}
-				}
-			}
-		});
-
-		managerPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, managerView);	
-	}
-
 	private void refreshInvoiceView()
 	{
 		invoiceLayout.removeAllViews();
@@ -1651,12 +1556,6 @@ public class EditItemActivity extends Activity
     	memberPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
     	memberPopupWindow.update();
     }
-    
-    private void showManagerWindow()
-    {
-    	managerPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-    	managerPopupWindow.update();
-    }
 
     private void goBack()
     {
@@ -1677,19 +1576,6 @@ public class EditItemActivity extends Activity
 			}
 		}
 		finish();
-    }
-    
-    private void saveItem()
-    {
-    	if (dbManager.syncItem(item))
-		{
-			ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
-			finish();
-		}
-		else
-		{
-			ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_save_item);
-		}
     }
     
     private void sendDownloadInvoiceRequest(final Image image)
@@ -1839,155 +1725,6 @@ public class EditItemActivity extends Activity
 							tagAdapter.notifyDataSetChanged();
 						}
 					});	
-				}
-			}
-		});
-    }
-        
-    private void sendUploadImageRequest(final Image image)
-    {
-		UploadImageRequest request = new UploadImageRequest(image.getPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final UploadImageResponse response = new UploadImageResponse(httpResponse);
-				if (response.getStatus())
-				{
-					image.setServerID(response.getImageID());
-					dbManager.updateImageByLocalID(image);
-					
-					imageTaskCount--;
-					if (imageTaskCount == 0)
-					{
-						if (item.getServerID() == -1)
-						{
-							sendCreateItemRequest();
-						}
-						else
-						{
-							sendModifyItemRequest();
-						}
-					}
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_upload_invoice);
-						}
-					});
-				}
-			}
-		});
-    }
-    
-    private void sendCreateItemRequest()
-    {
-    	CreateItemRequest request = new CreateItemRequest(item);
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				CreateItemResponse response = new CreateItemResponse(httpResponse);
-				if (response.getStatus())
-				{
-					item.setLocalUpdatedDate(Utils.getCurrentTime());
-					item.setServerUpdatedDate(item.getLocalUpdatedDate());
-					item.setServerID(response.getItemID());
-					item.setCreatedDate(response.getCreateDate());					
-					dbManager.updateItemByLocalID(item);
-					sendApproveReportRequest();
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_create_item);
-						}
-					});
-				}
-			}
-		});
-    }
-    
-    private void sendModifyItemRequest()
-    {
-    	ModifyItemRequest request = new ModifyItemRequest(item);
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				ModifyItemResponse response = new ModifyItemResponse(httpResponse);
-				if (response.getStatus())
-				{
-					item.setLocalUpdatedDate(Utils.getCurrentTime());
-					item.setServerUpdatedDate(item.getLocalUpdatedDate());
-					dbManager.updateItem(item);
-					sendApproveReportRequest();
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_modify_item);
-						}
-					});			
-				}
-			}
-		});
-    }
-    
-    private void sendApproveReportRequest()
-    {    	
-    	item.setBelongReport(report);
-    	dbManager.updateItemByServerID(item);   	
-    	
-    	CreateReportRequest request = new CreateReportRequest(report);
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				CreateReportResponse response = new CreateReportResponse(httpResponse);
-				if (response.getStatus())
-				{
-					int currentTime = Utils.getCurrentTime();
-					report.setServerUpdatedDate(currentTime);
-					report.setLocalUpdatedDate(currentTime);
-					report.setServerID(response.getReportID());
-					dbManager.updateReportByLocalID(report);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_submitting_report);
-							finish();
-						}
-					});					
-				}
-				else
-				{
-					dbManager.deleteReport(report.getLocalID());
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_create_report);
-							finish();
-						}
-					});								
 				}
 			}
 		});

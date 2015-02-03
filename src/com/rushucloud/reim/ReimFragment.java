@@ -210,6 +210,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		itemListView.setXListViewListener(this);
 		itemListView.setPullRefreshEnable(true);
 		itemListView.setPullLoadEnable(false);
+		itemListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastSyncTime()));
 		itemListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)

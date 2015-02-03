@@ -284,7 +284,6 @@ public abstract class SyncUtils
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());
 					item.setServerID(response.getItemID());
-					item.setCreatedDate(response.getCreateDate());
 					
 					DBManager.getDBManager().updateItemByLocalID(item);
 				}

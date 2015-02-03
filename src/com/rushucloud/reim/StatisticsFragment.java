@@ -160,6 +160,7 @@ public class StatisticsFragment extends Fragment
 		});
 		statListView.setPullRefreshEnable(true);
 		statListView.setPullLoadEnable(false);
+		statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetStatTime()));
 	}
 
 	private void resetView()
@@ -304,7 +305,7 @@ public class StatisticsFragment extends Fragment
 			categoryLayout.setVisibility(View.VISIBLE);
 			
 			for (StatisticsCategory category : categoryList)
-			{				
+			{
 				Category localCategory = dbManager.getCategory(category.getCategoryID());
 				if (localCategory != null)
 				{
@@ -350,6 +351,7 @@ public class StatisticsFragment extends Fragment
 							drawCategory(response.getStatCategoryList());
 							adapter.notifyDataSetChanged();
 							statListView.stopRefresh();
+							statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetStatTime()));
 							ReimProgressDialog.dismiss();
 						}
 					});
@@ -361,6 +363,7 @@ public class StatisticsFragment extends Fragment
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
+							statListView.stopRefresh();
 							ViewUtils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
 						}
 					});					

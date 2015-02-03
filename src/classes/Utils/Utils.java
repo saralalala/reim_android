@@ -25,7 +25,7 @@ public class Utils
 	
 	public static String secondToStringUpToMinute(int second)
 	{
-		if (second == -1)
+		if (second <= 0)
 		{
 			return "";
 		}

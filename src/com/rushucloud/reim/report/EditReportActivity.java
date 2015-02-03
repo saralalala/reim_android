@@ -947,7 +947,6 @@ public class EditReportActivity extends Activity
 					item.setLocalUpdatedDate(Utils.getCurrentTime());
 					item.setServerUpdatedDate(item.getLocalUpdatedDate());
 					item.setServerID(response.getItemID());
-					item.setCreatedDate(response.getCreateDate());					
 					dbManager.updateItemByLocalID(item);
 					
 					itemTaskCount--;
@@ -1321,10 +1320,10 @@ public class EditReportActivity extends Activity
 
     private void goBackToMainActivity()
     {
+    	ReimApplication.setTabIndex(1);
+    	ReimApplication.setReportTabIndex(0);
     	if (fromPush)
 		{
-        	ReimApplication.setTabIndex(1);
-        	ReimApplication.setReportTabIndex(0);
         	Intent intent = new Intent(EditReportActivity.this, MainActivity.class);
         	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         	startActivity(intent);

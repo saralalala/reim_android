@@ -29,6 +29,7 @@ public class CreateReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
 		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
 		params.add(new BasicNameValuePair("prove_ahead", Utils.booleanToString(report.isProveAhead())));
+		params.add(new BasicNameValuePair("createdt", Integer.toString(report.getCreatedDate())));
 		setParams(params);
 
 		appendUrl("/report");
@@ -48,6 +49,7 @@ public class CreateReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
 		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
 		params.add(new BasicNameValuePair("prove_ahead", Utils.booleanToString(report.isProveAhead())));
+		params.add(new BasicNameValuePair("createdt", Integer.toString(report.getCreatedDate())));
 		params.add(new BasicNameValuePair("comment", commentContent));
 		setParams(params);
 

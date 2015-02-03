@@ -254,7 +254,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						Report report = showOthersList.get(position-1);
 						Bundle bundle = new Bundle();
 						bundle.putSerializable("report", report);
-						Intent intent;		
+						Intent intent;
 						if (report.getStatus() == Report.STATUS_SUBMITTED && !report.isCC())
 						{
 							intent = new Intent(getActivity(), ApproveReportActivity.class);
@@ -266,7 +266,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						}
 						intent.putExtras(bundle);
 						startActivity(intent);
-					}		
+					}
 				}
 			}
 		});
