@@ -208,19 +208,21 @@ public class EditItemActivity extends Activity
 				{
 					String[] paths = data.getStringArrayExtra("paths");
 
+					ReimProgressDialog.show();
 					for (int i = 0; i < paths.length; i++)
 					{
-						String filePath = PhoneUtils.getInvoiceFilePath();
-						boolean result = PhoneUtils.copyFile(paths[i], filePath);
-						if (result)
+						Bitmap bitmap = BitmapFactory.decodeFile(paths[i]);
+						String invoicePath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
+						if (!invoicePath.equals(""))
 						{
 							Image image = new Image();
-							image.setPath(filePath);
+							image.setPath(invoicePath);
 							item.getInvoices().add(image);
 						}
 					}
 					
 					refreshInvoiceView();
+					ReimProgressDialog.dismiss();
 				}
 				else if (requestCode == TAKE_PHOTO)
 				{

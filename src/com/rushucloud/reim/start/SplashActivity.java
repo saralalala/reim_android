@@ -26,7 +26,6 @@ public class SplashActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start_splash);
-		
 		appPreference = AppPreference.getAppPreference();
 		getActionBar().hide();
 		start();
