@@ -47,6 +47,7 @@ public class Item
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
+	private String consumedDateGroup = "";
 	
 	public Item()
 	{
@@ -307,6 +308,15 @@ public class Item
 	public void setLocalUpdatedDate(int localUpdatedDate)
 	{
 		this.localUpdatedDate = localUpdatedDate;
+	}
+
+	public String getConsumedDateGroup()
+	{
+		return consumedDateGroup;
+	}
+	public void setConsumedDateGroup(String consumedDateGroup)
+	{
+		this.consumedDateGroup = consumedDateGroup;
 	}
 
 	public int getStatusBackground()

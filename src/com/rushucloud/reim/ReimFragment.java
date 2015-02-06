@@ -66,10 +66,9 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	private static final int FILTER_TYPE_CONSUMED = 2;
 	private static final int FILTER_STATUS_ALL = 0;
 	private static final int FILTER_STATUS_FREE = 1;
-	private static final int FILTER_STATUS_ADDED = 2;	
-	private static final int SORT_NULL = 0;	
-	private static final int SORT_AMOUNT = 1;	
-	private static final int SORT_CONSUMED_DATE = 2;
+	private static final int FILTER_STATUS_ADDED = 2;
+	private static final int SORT_CONSUMED_DATE = 0;
+	private static final int SORT_AMOUNT = 1;
 	
 	private View view;
 	private PopupWindow filterPopupWindow;
@@ -88,7 +87,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	private List<Tag> tagList = new ArrayList<Tag>();
 	private List<Category> categoryList = new ArrayList<Category>();
 
-	private int sortType = SORT_NULL;
+	private int sortType = SORT_CONSUMED_DATE;
 	private boolean sortReverse = false;
 	private int filterType = FILTER_TYPE_ALL;
 	private int filterStatus = FILTER_STATUS_ALL;
@@ -99,7 +98,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	
 	private int tempFilterType = FILTER_TYPE_ALL;
 	private int tempFilterStatus = FILTER_STATUS_ALL;
-	private int tempSortType = SORT_NULL;
+	private int tempSortType = SORT_CONSUMED_DATE;
 	private boolean[] tempTagCheck;
 	private boolean[] tempCategoryCheck;
 	
@@ -135,7 +134,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			hasInit = true;
 			refreshItemListView();
 			syncItems();		
-		}	
+		}
 	}
 
 	public void onPause()
@@ -261,27 +260,22 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		
 		View filterView = View.inflate(getActivity(), R.layout.window_reim_filter, null);
 
-		final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
-		final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		
 		final RadioButton sortConsumedDateRadio = (RadioButton)filterView.findViewById(R.id.sortConsumedDateRadio);	
+		final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);
 		final SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
 		sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
-				if (checkedId == sortNullRadio.getId())
+				if (checkedId == sortConsumedDateRadio.getId())
 				{
-					tempSortType = SORT_NULL;
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
+					tempSortType = SORT_CONSUMED_DATE;
 				}
 				else if (checkedId == sortAmountRadio.getId())
 				{
 					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_AMOUNT");
 					tempSortType = SORT_AMOUNT;
-				}
-				else if (checkedId == sortConsumedDateRadio.getId())
-				{
-					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
-					tempSortType = SORT_CONSUMED_DATE;
 				}
 			}
 		});
@@ -388,14 +382,11 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			{
 				switch (sortType)
 				{
-					case SORT_NULL:
-						sortRadioGroup.check(sortNullRadio.getId());
+					case SORT_CONSUMED_DATE:
+						sortRadioGroup.check(sortConsumedDateRadio.getId());
 						break;
 					case SORT_AMOUNT:
 						sortRadioGroup.check(sortAmountRadio.getId());
-						break;
-					case SORT_CONSUMED_DATE:
-						sortRadioGroup.check(sortConsumedDateRadio.getId());
 						break;
 					default:
 						break;
@@ -473,7 +464,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 														{
 															if (localItem.getServerID() == -1)
 															{
-																deleteItemFromLocal(localItem.getLocalID());
+																deleteLocalItem(localItem.getLocalID());
 															}
 															else if (!PhoneUtils.isNetworkConnected())
 															{
@@ -558,26 +549,69 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			showList.add(item);
 		}
 
-		if (sortType == SORT_NULL)
+		if (sortType == SORT_CONSUMED_DATE)
 		{
-			Item.sortByUpdateDate(showList);
+			Item.sortByConsumedDate(showList);			
+			if (sortReverse)
+			{
+				Collections.reverse(showList);
+			}			
+			buildItemListByConsumedDate();
 		}
 		if (sortType == SORT_AMOUNT)
 		{
-			Item.sortByAmount(showList);
-		}
-		if (sortType == SORT_CONSUMED_DATE)
-		{
-			Item.sortByConsumedDate(showList);
-		}
-		
-		if (sortReverse)
-		{
-			Collections.reverse(showList);
+			Item.sortByAmount(showList);			
+			if (sortReverse)
+			{
+				Collections.reverse(showList);
+			}
 		}
 	}
 	
-	private void refreshItemListView()
+	private void buildItemListByConsumedDate()
+	{
+		List<String> timeList = new ArrayList<String>();
+		for (Item item : showList)
+		{
+			String time = Utils.secondToStringUpToDay(item.getConsumedDate());
+			if (!timeList.contains(time))
+			{
+				timeList.add(time);
+			}
+		}
+		
+		List<List<Item>> collectList = new ArrayList<List<Item>>();
+		for (String time : timeList)
+		{
+			Item item = new Item();
+			item.setConsumedDateGroup(time);
+			
+			List<Item> subList = new ArrayList<Item>();
+			subList.add(item);
+			
+			collectList.add(subList);
+		}
+		
+		for (Item item : showList)
+		{
+			String time = Utils.secondToStringUpToDay(item.getConsumedDate());
+			int index = timeList.indexOf(time);
+			
+			List<Item> subList = collectList.get(index);
+			subList.add(item);
+		}
+		
+		showList.clear();
+		for (List<Item> subList : collectList)
+		{
+			for (Item item : subList)
+			{
+				showList.add(item);
+			}
+		}
+	}
+	
+ 	private void refreshItemListView()
 	{
 		itemList.clear();
 		itemList.addAll(readItemList());
@@ -785,7 +819,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 					{
 						public void run()
 						{
-							deleteItemFromLocal(item.getLocalID());
+							deleteLocalItem(item.getLocalID());
 						}
 					});
 				}
@@ -804,7 +838,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		});
 	}
 
-	private void deleteItemFromLocal(int itemLocalID)
+	private void deleteLocalItem(int itemLocalID)
 	{
 		if (dbManager.deleteItem(itemLocalID))
 		{

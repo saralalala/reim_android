@@ -43,74 +43,83 @@ public class ItemListViewAdapter extends BaseAdapter
 
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		if (convertView == null)
-		{
-			convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
-		}
-		
-		ImageView photoImageView = (ImageView)convertView.findViewById(R.id.photoImageView);
-		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
-		TextView proveTextView = (TextView)convertView.findViewById(R.id.proveTextView);
-		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
-		TextView reportTextView = (TextView)convertView.findViewById(R.id.reportTextView);
-		TextView vendorTextView = (TextView)convertView.findViewById(R.id.vendorTextView);
-		ImageView categoryImageView = (ImageView)convertView.findViewById(R.id.categoryImageView);
-		
 		Item item = this.getItem(position);
-
-		if (item.hasInvoice())
+		if (!item.getConsumedDateGroup().equals(""))
 		{
-			photoImageView.setVisibility(View.VISIBLE);
+			View view = layoutInflater.inflate(R.layout.list_header, parent, false);
+			
+			String date = item.getConsumedDateGroup();
+			TextView headerTextView = (TextView)view.findViewById(R.id.headerTextView);
+			headerTextView.setText(Utils.dateToWeekday(date) + " " + date);
+			
+			return view;
 		}
 		else
 		{
-			photoImageView.setVisibility(View.GONE);
-		}
+			View view = layoutInflater.inflate(R.layout.list_item, parent, false);
+			
+			ImageView photoImageView = (ImageView)view.findViewById(R.id.photoImageView);
+			TextView statusTextView = (TextView)view.findViewById(R.id.statusTextView);
+			TextView proveTextView = (TextView)view.findViewById(R.id.proveTextView);
+			TextView amountTextView = (TextView)view.findViewById(R.id.amountTextView);
+			TextView reportTextView = (TextView)view.findViewById(R.id.reportTextView);
+			TextView vendorTextView = (TextView)view.findViewById(R.id.vendorTextView);
+			ImageView categoryImageView = (ImageView)view.findViewById(R.id.categoryImageView);			
 
-		statusTextView.setText(item.getStatusString());
-		statusTextView.setBackgroundResource(item.getStatusBackground());
-		
-		LayoutParams params = (LayoutParams) statusTextView.getLayoutParams();
-		params.width = item.getStatusWidth(context);
-		statusTextView.setLayoutParams(params);
-		
-		if (item.isProveAhead() && item.isPaApproved())
-		{
-			proveTextView.setVisibility(View.VISIBLE);
-			proveTextView.setBackgroundResource(R.drawable.item_approved);
-		}
-		else if (item.isProveAhead())
-		{
-			proveTextView.setVisibility(View.VISIBLE);
-			proveTextView.setBackgroundResource(R.drawable.item_prove_ahead);
-		}
-		else
-		{
-			proveTextView.setVisibility(View.INVISIBLE);					
-		}
-
-		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-		amountTextView.setText(Utils.formatDouble(item.getAmount()));
-
-		String vendor = item.getVendor().equals("") ? context.getString(R.string.vendor_not_available) : item.getVendor();
-		vendorTextView.setText(vendor);
-		
-		String reportTitle = item.getBelongReport() == null ? context.getString(R.string.report_not_available) : item.getBelongReport().getTitle();
-		reportTextView.setText(reportTitle);
-		
-		Category category = item.getCategory();
-		
-		categoryImageView.setImageResource(R.drawable.default_icon);
-		if (category != null)
-		{
-			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
-			if (bitmap != null)
+			if (item.hasInvoice())
 			{
-				categoryImageView.setImageBitmap(bitmap);				
+				photoImageView.setVisibility(View.VISIBLE);
 			}
+			else
+			{
+				photoImageView.setVisibility(View.GONE);
+			}
+
+			statusTextView.setText(item.getStatusString());
+			statusTextView.setBackgroundResource(item.getStatusBackground());
+			
+			LayoutParams params = (LayoutParams) statusTextView.getLayoutParams();
+			params.width = item.getStatusWidth(context);
+			statusTextView.setLayoutParams(params);
+			
+			if (item.isProveAhead() && item.isPaApproved())
+			{
+				proveTextView.setVisibility(View.VISIBLE);
+				proveTextView.setBackgroundResource(R.drawable.item_approved);
+			}
+			else if (item.isProveAhead())
+			{
+				proveTextView.setVisibility(View.VISIBLE);
+				proveTextView.setBackgroundResource(R.drawable.item_prove_ahead);
+			}
+			else
+			{
+				proveTextView.setVisibility(View.INVISIBLE);					
+			}
+
+			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+			amountTextView.setText(Utils.formatDouble(item.getAmount()));
+
+			String vendor = item.getVendor().equals("") ? context.getString(R.string.vendor_not_available) : item.getVendor();
+			vendorTextView.setText(vendor);
+			
+			String reportTitle = item.getBelongReport() == null ? context.getString(R.string.report_not_available) : item.getBelongReport().getTitle();
+			reportTextView.setText(reportTitle);
+			
+			Category category = item.getCategory();
+			
+			categoryImageView.setImageResource(R.drawable.default_icon);
+			if (category != null)
+			{
+				Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
+				if (bitmap != null)
+				{
+					categoryImageView.setImageBitmap(bitmap);				
+				}
+			}
+			
+			return view;
 		}
-		
-		return convertView;
 	}
 	
 	public int getCount()

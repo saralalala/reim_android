@@ -58,9 +58,8 @@
     <string name="sort_null">无</string>
     <string name="sort_amount">金额</string>
     <string name="sort_item_count">消费笔数</string>
-    <string name="sort_update_date">修改时间</string>
     <string name="sort_create_date">创建时间</string>
-    <string name="sort_consumed_date">时间</string>
+    <string name="sort_consumed_date">消费时间</string>
     <string name="filter">筛选</string>
     <string name="filter_all">全部</string>
     <string name="filter_prove_ahead">预申请</string>

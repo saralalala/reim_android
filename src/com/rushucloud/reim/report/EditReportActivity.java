@@ -511,8 +511,8 @@ public class EditReportActivity extends Activity
 			titleEditText.requestFocus();
 		}
 		
-		String createDate = report.getCreatedDate() == -1 ? getString(R.string.not_available) : Utils.secondToStringUpToMinute(report.getCreatedDate());
-		timeTextView.setText(createDate);
+		int createDate = report.getCreatedDate() == -1 ? Utils.getCurrentTime() : report.getCreatedDate();
+		timeTextView.setText(Utils.secondToStringUpToMinute(createDate));
 		
 		statusTextView.setText(report.getStatusString());
 		statusTextView.setBackgroundResource(report.getStatusBackground());

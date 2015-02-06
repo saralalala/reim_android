@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,6 +94,34 @@ public class Utils
 		return result;
 	}
 
+	public static String dateToWeekday(String date)
+	{
+		int year = Integer.valueOf(date.substring(0, 4));
+		int month = Integer.valueOf(date.substring(5, 7));
+		int day = Integer.valueOf(date.substring(8, 10));
+		
+		GregorianCalendar calendar = new GregorianCalendar(year, month, day);
+		switch (calendar.get(GregorianCalendar.DAY_OF_WEEK))
+		{
+			case GregorianCalendar.SUNDAY:
+				return "周日";
+			case GregorianCalendar.MONDAY:
+				return "周一";
+			case GregorianCalendar.TUESDAY:
+				return "周二";
+			case GregorianCalendar.WEDNESDAY:
+				return "周三";
+			case GregorianCalendar.THURSDAY:
+				return "周四";
+			case GregorianCalendar.FRIDAY:
+				return "周五";
+			case GregorianCalendar.SATURDAY:
+				return "周六";
+			default:
+				return "";
+		}
+	}
+	
 	public static boolean isEmailOrPhone(String source)
 	{
 		return isEmail(source) || isPhone(source);
