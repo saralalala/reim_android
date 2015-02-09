@@ -5,10 +5,9 @@
     android:background="@color/background_black"
     android:gravity="center" >
 
-    <uk.co.senab.photoview.PhotoView
-        android:id="@+id/photoView"
+    <classes.widget.subscaleview.SubsamplingScaleImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/image" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -1,5 +1,7 @@
 package com.rushucloud.reim.item;
 
+import java.util.ArrayList;
+
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.Response.DownloadImageResponse;
@@ -15,7 +17,7 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
-import com.rushucloud.reim.ImageActivity;
+import com.rushucloud.reim.MultipleImageActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -261,8 +263,23 @@ public class ShowItemActivity extends Activity
 				{
 					if (bitmap != null)
 					{
-						Intent intent = new Intent(ShowItemActivity.this, ImageActivity.class);
-						intent.putExtra("imagePath", item.getInvoices().get(index).getPath());
+						ArrayList<String> pathList = new ArrayList<String>();
+						for (Image image : item.getInvoices())
+						{
+							if (!image.getPath().equals(""))
+							{
+								pathList.add(image.getPath());
+							}
+						}
+						
+						int pageIndex = pathList.indexOf(item.getInvoices().get(index).getPath());
+						
+						Bundle bundle = new Bundle();
+						bundle.putStringArrayList("imagePath", pathList);
+						bundle.putInt("index", pageIndex);
+						
+						Intent intent = new Intent(ShowItemActivity.this, MultipleImageActivity.class);
+						intent.putExtras(bundle);
 						startActivity(intent);
 					}
 				}

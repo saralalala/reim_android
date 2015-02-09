@@ -56,7 +56,8 @@
         <activity android:name="com.rushucloud.reim.MainActivity" android:launchMode="singleTop" />
         
         <activity android:name="com.rushucloud.reim.GalleryActivity" />
-        <activity android:name="com.rushucloud.reim.ImageActivity" />
+        <activity android:name="com.rushucloud.reim.MultipleImageActivity" />
+        <activity android:name="com.rushucloud.reim.SingleImageActivity" />
         
         <activity android:name="com.rushucloud.reim.item.EditItemActivity" />
         <activity android:name="com.rushucloud.reim.item.ShowItemActivity" />

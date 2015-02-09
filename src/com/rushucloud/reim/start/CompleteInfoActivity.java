@@ -17,7 +17,7 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
-import com.rushucloud.reim.ImageActivity;
+import com.rushucloud.reim.SingleImageActivity;
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -148,7 +148,7 @@ public class CompleteInfoActivity extends Activity
 			{
 				if (!avatarPath.equals(""))
 				{
-					Intent intent = new Intent(CompleteInfoActivity.this, ImageActivity.class);
+					Intent intent = new Intent(CompleteInfoActivity.this, SingleImageActivity.class);
 					intent.putExtra("imagePath", avatarPath);
 					startActivity(intent);
 				}

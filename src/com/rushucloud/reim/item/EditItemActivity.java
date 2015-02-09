@@ -39,7 +39,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 import com.rushucloud.reim.GalleryActivity;
-import com.rushucloud.reim.ImageActivity;
+import com.rushucloud.reim.MultipleImageActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.report.EditReportActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -209,9 +209,10 @@ public class EditItemActivity extends Activity
 					String[] paths = data.getStringArrayExtra("paths");
 
 					ReimProgressDialog.show();
+					Bitmap bitmap;
 					for (int i = 0; i < paths.length; i++)
 					{
-						Bitmap bitmap = BitmapFactory.decodeFile(paths[i]);
+						bitmap = BitmapFactory.decodeFile(paths[i]);
 						String invoicePath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
 						if (!invoicePath.equals(""))
 						{
@@ -1278,8 +1279,24 @@ public class EditItemActivity extends Activity
 						{
 							hideSoftKeyboard();
 							removeImageView.setVisibility(View.INVISIBLE);
-							Intent intent = new Intent(EditItemActivity.this, ImageActivity.class);
-							intent.putExtra("imagePath", item.getInvoices().get(index).getPath());
+							
+							ArrayList<String> pathList = new ArrayList<String>();
+							for (Image image : item.getInvoices())
+							{
+								if (!image.getPath().equals(""))
+								{
+									pathList.add(image.getPath());
+								}
+							}
+							
+							int pageIndex = pathList.indexOf(item.getInvoices().get(index).getPath());
+							
+							Bundle bundle = new Bundle();
+							bundle.putStringArrayList("imagePath", pathList);
+							bundle.putInt("index", pageIndex);
+							
+							Intent intent = new Intent(EditItemActivity.this, MultipleImageActivity.class);
+							intent.putExtras(bundle);
 							startActivity(intent);
 						}
 					}

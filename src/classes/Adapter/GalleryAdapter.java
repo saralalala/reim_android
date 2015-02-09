@@ -19,7 +19,7 @@ import classes.utils.PhoneUtils;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.rushucloud.reim.ImageActivity;
+import com.rushucloud.reim.SingleImageActivity;
 import com.rushucloud.reim.R;
 
 public class GalleryAdapter extends BaseAdapter
@@ -70,7 +70,7 @@ public class GalleryAdapter extends BaseAdapter
 		{
 			public void onClick(View v)
 			{
-				Intent intent = new Intent(context, ImageActivity.class);
+				Intent intent = new Intent(context, SingleImageActivity.class);
 				intent.putExtra("imagePath", pathList.get(position));
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(intent);

@@ -12,7 +12,7 @@ import netUtils.Request.UploadImageRequest;
 import netUtils.Request.Group.ModifyGroupRequest;
 import netUtils.Request.User.ModifyUserRequest;
 
-import com.rushucloud.reim.ImageActivity;
+import com.rushucloud.reim.SingleImageActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 import classes.Group;
@@ -206,7 +206,7 @@ public class ProfileActivity extends Activity
 			{
 				if (currentUser != null && !currentUser.getAvatarPath().equals(""))
 				{
-					Intent intent = new Intent(ProfileActivity.this, ImageActivity.class);
+					Intent intent = new Intent(ProfileActivity.this, SingleImageActivity.class);
 					intent.putExtra("imagePath", currentUser.getAvatarPath());
 					startActivity(intent);
 				}

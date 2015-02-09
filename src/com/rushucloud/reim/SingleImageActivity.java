@@ -1,37 +1,34 @@
 package com.rushucloud.reim;
 
-import uk.co.senab.photoview.PhotoView;
-import classes.utils.ViewUtils;
+import classes.widget.subscaleview.SubsamplingScaleImageView;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
-public class ImageActivity extends Activity
+public class SingleImageActivity extends Activity
 {	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_image);
+		setContentView(R.layout.activity_image_single);
 		initView();
 	}
 
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("ImageActivity");		
+		MobclickAgent.onPageStart("SingleImageActivity");		
 		MobclickAgent.onResume(this);
 	}
 
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("ImageActivity");
+		MobclickAgent.onPageEnd("SingleImageActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -47,17 +44,10 @@ public class ImageActivity extends Activity
 	private void initView()
 	{
 		getActionBar().hide();
-		
+
 		String imagePath = getIntent().getStringExtra("imagePath");
-		Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
 		
-		if (bitmap == null)
-		{
-			ViewUtils.showToast(this, R.string.failed_to_read_image);
-			finish();
-		}
-		
-		PhotoView photoView = (PhotoView)findViewById(R.id.photoView);
-		photoView.setImageBitmap(bitmap);
+		SubsamplingScaleImageView imageView = (SubsamplingScaleImageView) findViewById(R.id.imageView);
+		imageView.setImageUri(imagePath);
 	}
 }

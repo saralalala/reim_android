@@ -469,7 +469,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					
 					for (User user : memberList)
 					{
-						if (user.getServerID() == currentUser.getServerID())							
+						if (currentUser != null && user.getServerID() == currentUser.getServerID())
 						{
 							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
 							{
