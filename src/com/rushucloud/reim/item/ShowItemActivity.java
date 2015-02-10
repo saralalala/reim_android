@@ -168,7 +168,7 @@ public class ShowItemActivity extends Activity
 		TextView timeTextView = (TextView)findViewById(R.id.timeTextView);
 		if (item.getConsumedDate() > 0)
 		{
-			timeTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));			
+			timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));			
 		}
 		else
 		{

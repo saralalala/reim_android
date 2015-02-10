@@ -78,9 +78,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 public class EditItemActivity extends Activity
@@ -106,6 +108,7 @@ public class EditItemActivity extends Activity
 	private TextView timeTextView;
 	private PopupWindow timePopupWindow;
 	private DatePicker datePicker;
+	private TimePicker timePicker;
 	
 	private TextView vendorTextView;
 	private PopupWindow vendorPopupWindow;
@@ -678,13 +681,14 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				hideSoftKeyboard();
 				showTimeWindow();
 			}
 		});
-		timeTextView.setText(Utils.secondToStringUpToDay(time));
+		timeTextView.setText(Utils.secondToStringUpToMinute(time));
 		
 		// init time window
-		View timeView = View.inflate(this, R.layout.window_reim_date, null);
+		View timeView = View.inflate(this, R.layout.window_reim_time, null);
 		
 		Button confirmButton = (Button) timeView.findViewById(R.id.confirmButton);
 		confirmButton.setOnClickListener(new View.OnClickListener()
@@ -693,15 +697,20 @@ public class EditItemActivity extends Activity
 			{
 				timePopupWindow.dismiss();
 				
-				GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), 
-						datePicker.getMonth(), datePicker.getDayOfMonth());
+				GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(), 
+						datePicker.getDayOfMonth(), timePicker.getCurrentHour(), timePicker.getCurrentMinute());
 				item.setConsumedDate((int)(greCal.getTimeInMillis() / 1000));
-				timeTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));
+				timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
 			}
 		});
 		confirmButton = ViewUtils.resizeShortButton(confirmButton, 30, true);
 		
 		datePicker = (DatePicker) timeView.findViewById(R.id.datePicker);
+		
+		timePicker = (TimePicker) timeView.findViewById(R.id.timePicker);
+		timePicker.setIs24HourView(true);
+		
+		resizePicker();
 		
 		timePopupWindow = ViewUtils.constructBottomPopupWindow(this, timeView);
 	}
@@ -1496,6 +1505,9 @@ public class EditItemActivity extends Activity
 
 		datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
 		
+		timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+		timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+		
 		timePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		timePopupWindow.update();
 
@@ -1855,4 +1867,71 @@ public class EditItemActivity extends Activity
     		}
     	}
     }
+
+    private void resizePicker()
+    {
+    	int yearWidth = PhoneUtils.dpToPixel(this, 60);
+    	int width = PhoneUtils.dpToPixel(this, 40);
+    	int dateMargin = PhoneUtils.dpToPixel(this, 15);
+    	int timeMargin = PhoneUtils.dpToPixel(this, 5);
+    	
+    	LinearLayout datePickerContainer = (LinearLayout) datePicker.getChildAt(0);
+    	LinearLayout dateSpinner = (LinearLayout) datePickerContainer.getChildAt(0);
+    	
+    	NumberPicker yearPicker = (NumberPicker) dateSpinner.getChildAt(0);
+		LayoutParams params = new LayoutParams(yearWidth, LayoutParams.WRAP_CONTENT);
+		params.rightMargin = dateMargin;
+		yearPicker.setLayoutParams(params);
+    	
+    	NumberPicker monthPicker = (NumberPicker) dateSpinner.getChildAt(1);
+    	params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+		params.rightMargin = dateMargin;
+		monthPicker.setLayoutParams(params);
+    	
+    	NumberPicker datePicker = (NumberPicker) dateSpinner.getChildAt(2);
+    	params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+		datePicker.setLayoutParams(params);
+		
+		List<NumberPicker> pickerList = findNumberPickers(timePicker);
+		for (int i = 0; i < pickerList.size(); i++)
+		{
+			NumberPicker picker = pickerList.get(i);
+	    	params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+	    	if (i == 0)
+			{
+				params.rightMargin = timeMargin;
+			}
+	    	else
+	    	{
+	    		params.leftMargin = timeMargin;
+	    	}
+	    	picker.setLayoutParams(params);
+		}
+	}
+    
+	private List<NumberPicker> findNumberPickers(ViewGroup viewGroup)
+	{
+		List<NumberPicker> pickerList = new ArrayList<NumberPicker>();
+		View child = null;
+		if (null != viewGroup)
+		{
+			for (int i = 0; i < viewGroup.getChildCount(); i++)
+			{
+				child = viewGroup.getChildAt(i);
+				if (child instanceof NumberPicker)
+				{
+					pickerList.add((NumberPicker) child);
+				}
+				else if (child instanceof LinearLayout)
+				{
+					List<NumberPicker> result = findNumberPickers((ViewGroup) child);
+					if (result.size() > 0)
+					{
+						return result;
+					}
+				}
+			}
+		}
+		return pickerList;
+	}
 }
