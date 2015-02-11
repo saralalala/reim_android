@@ -1,6 +1,7 @@
 package netUtils.Request.Tag;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class DeleteTagRequest extends BaseRequest
@@ -9,8 +10,7 @@ public class DeleteTagRequest extends BaseRequest
 	{
 		super();
 
-		String urlSuffix = "/tags/" + tagID;
-		appendUrl(urlSuffix);
+		appendUrl(URLDef.URL_TAG + "/" + tagID);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

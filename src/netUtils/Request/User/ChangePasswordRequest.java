@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class ChangePasswordRequest extends BaseRequest
@@ -20,7 +21,7 @@ public class ChangePasswordRequest extends BaseRequest
 		params.add(new BasicNameValuePair("new_password", newPassword));
 		setParams(params);
 
-		appendUrl("/users");
+		appendUrl(URLDef.URL_USER);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

@@ -1,6 +1,7 @@
 package netUtils.Request.Report;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class AlertRequest extends BaseRequest
@@ -9,7 +10,7 @@ public class AlertRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl("/alert/" + userID + "/" + reportID);
+		appendUrl(URLDef.URL_ALERT + "/" + userID + "/" + reportID);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

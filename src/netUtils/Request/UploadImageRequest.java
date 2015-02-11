@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -20,7 +21,7 @@ public class UploadImageRequest extends BaseRequest
 		params.add(new BasicNameValuePair("type", Integer.toString(type)));
 		setParams(params);
 
-		appendUrl("/images");
+		appendUrl(URLDef.URL_IMAGE);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

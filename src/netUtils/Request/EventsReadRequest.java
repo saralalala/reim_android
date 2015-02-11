@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 
 public class EventsReadRequest extends BaseRequest
 {
@@ -23,7 +24,7 @@ public class EventsReadRequest extends BaseRequest
 		params.add(new BasicNameValuePair("type", Integer.toString(type)));
 		setParams(params);
 
-		appendUrl("/events");
+		appendUrl(URLDef.URL_EVENT);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

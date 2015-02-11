@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class SearchItemsRequest extends BaseRequest
@@ -17,7 +18,7 @@ public class SearchItemsRequest extends BaseRequest
 		params.add(new BasicNameValuePair("keyword", keyword));
 		setParams(params);
 
-		appendUrl("/search");
+		appendUrl(URLDef.URL_SEARCH);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

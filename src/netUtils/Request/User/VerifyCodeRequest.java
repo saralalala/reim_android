@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class VerifyCodeRequest extends BaseRequest
@@ -19,7 +20,7 @@ public class VerifyCodeRequest extends BaseRequest
 		params.add(new BasicNameValuePair("phone", phone));
 		setParams(params);
 		
-		appendUrl("/vcode");
+		appendUrl(URLDef.URL_CODE);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

@@ -10,6 +10,7 @@ import classes.Report;
 import classes.User;
 import classes.utils.DBManager;
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class ModifyReportRequest extends BaseRequest
@@ -29,8 +30,7 @@ public class ModifyReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
 		setParams(params);
 
-		String urlSuffix = "/report/" + report.getServerID();
-		appendUrl(urlSuffix);
+		appendUrl(URLDef.URL_REPORT + "/" + report.getServerID());
 	}
 	
 	public ModifyReportRequest(Report report, String commentContent)

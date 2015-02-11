@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class InviteReplyRequest extends BaseRequest
@@ -20,7 +21,7 @@ public class InviteReplyRequest extends BaseRequest
 		params.add(new BasicNameValuePair("code", inviteCode));
 		setParams(params);
 
-		appendUrl("/invite");
+		appendUrl(URLDef.URL_INVITE);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -21,7 +22,7 @@ public class FeedbackRequest extends BaseRequest
 		params.add(new BasicNameValuePair("platform", Integer.toString(2)));
 		setParams(params);
 
-		appendUrl("/feedback");
+		appendUrl(URLDef.URL_FEEDBACK);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

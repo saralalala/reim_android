@@ -11,6 +11,7 @@ import classes.User;
 import classes.utils.DBManager;
 import classes.utils.Utils;
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class CreateReportRequest extends BaseRequest
@@ -32,7 +33,7 @@ public class CreateReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("createdt", Integer.toString(report.getCreatedDate())));
 		setParams(params);
 
-		appendUrl("/report");
+		appendUrl(URLDef.URL_REPORT);
 	}
 	
 	public CreateReportRequest(Report report, String commentContent)

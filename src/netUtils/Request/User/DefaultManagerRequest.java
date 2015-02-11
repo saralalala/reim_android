@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 import org.apache.http.NameValuePair;
@@ -23,7 +24,7 @@ public class DefaultManagerRequest extends BaseRequest
 		params.add(new BasicNameValuePair("phone", phone));
 		setParams(params);
 
-		appendUrl("/users");
+		appendUrl(URLDef.URL_USER);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

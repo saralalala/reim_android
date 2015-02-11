@@ -1,6 +1,7 @@
 package netUtils.Request.Group;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class DeleteGroupRequest extends BaseRequest
@@ -9,7 +10,7 @@ public class DeleteGroupRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl("/groups");
+		appendUrl(URLDef.URL_GROUP);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

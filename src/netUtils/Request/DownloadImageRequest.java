@@ -1,6 +1,7 @@
 package netUtils.Request;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 
 public class DownloadImageRequest extends BaseRequest
 {
@@ -21,16 +22,14 @@ public class DownloadImageRequest extends BaseRequest
 	{
 		super();
 		
-		String urlSuffix = "/static/" + iconID + ".png";
-		appendUrl(urlSuffix);
+		appendUrl(URLDef.URL_STATIC + "/" + iconID + ".png");
 	}
 	
 	public DownloadImageRequest(int imageID, int type)
 	{
 		super();
 		
-		String urlSuffix = "/images/" + imageID + "/" + type;
-		appendUrl(urlSuffix);
+		appendUrl(URLDef.URL_IMAGE + "/" + imageID + "/" + type);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

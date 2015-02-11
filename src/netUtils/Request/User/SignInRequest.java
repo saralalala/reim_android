@@ -1,6 +1,7 @@
 package netUtils.Request.User;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class SignInRequest extends BaseRequest
@@ -9,7 +10,7 @@ public class SignInRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl("/login");
+		appendUrl(URLDef.URL_SIGN_IN);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

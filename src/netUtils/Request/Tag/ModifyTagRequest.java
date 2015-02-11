@@ -9,6 +9,7 @@ import org.apache.http.message.BasicNameValuePair;
 import classes.Tag;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class ModifyTagRequest extends BaseRequest
@@ -21,8 +22,7 @@ public class ModifyTagRequest extends BaseRequest
 		params.add(new BasicNameValuePair("name", tag.getName()));
 		setParams(params);
 
-		String urlSuffix = "/tags/" + tag.getServerID();
-		appendUrl(urlSuffix);
+		appendUrl(URLDef.URL_TAG + "/" + tag.getServerID());
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class ExportReportRequest extends BaseRequest
@@ -20,7 +21,7 @@ public class ExportReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("email", email));
 		setParams(params);
 
-		appendUrl("/exports");
+		appendUrl(URLDef.URL_EXPORT);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

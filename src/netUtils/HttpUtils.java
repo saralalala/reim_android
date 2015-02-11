@@ -17,7 +17,7 @@ public class HttpUtils
 {
 	public static HttpClient getHttpClient()
 	{
-		HttpParams httpParams=new BasicHttpParams();
+		HttpParams httpParams = new BasicHttpParams();
 		
 		HttpConnectionParams.setConnectionTimeout(httpParams, 20*1000);
 		HttpConnectionParams.setSoTimeout(httpParams, 20*1000);

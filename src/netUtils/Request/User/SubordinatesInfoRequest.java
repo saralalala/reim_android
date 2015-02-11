@@ -1,6 +1,7 @@
 package netUtils.Request.User;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class SubordinatesInfoRequest extends BaseRequest
@@ -9,7 +10,7 @@ public class SubordinatesInfoRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl("/subordinate/" + pageIndex + "/" + pageSize);
+		appendUrl(URLDef.URL_SUBORDINATE + "/" + pageIndex + "/" + pageSize);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

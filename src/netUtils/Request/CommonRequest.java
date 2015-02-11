@@ -1,6 +1,7 @@
 package netUtils.Request;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 
 public class CommonRequest extends BaseRequest
 {
@@ -8,7 +9,7 @@ public class CommonRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl("/common/0");
+		appendUrl(URLDef.URL_COMMON);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

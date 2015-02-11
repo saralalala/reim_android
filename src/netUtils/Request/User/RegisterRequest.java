@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 import org.apache.http.NameValuePair;
@@ -24,7 +25,7 @@ public class RegisterRequest extends BaseRequest
 		params.add(new BasicNameValuePair("code", verifyCode));	
 		setParams(params);
 
-		appendUrl("/users");
+		appendUrl(URLDef.URL_USER);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

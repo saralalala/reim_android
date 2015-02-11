@@ -3,6 +3,7 @@ package netUtils.Request;
 import java.sql.Date;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 
 public class SyncDataRequest extends BaseRequest
 {
@@ -10,16 +11,14 @@ public class SyncDataRequest extends BaseRequest
 	{
 		super();
 		
-		String urlSuffix = "/sync/" + timeStamp;
-		appendUrl(urlSuffix);
+		appendUrl(URLDef.URL_SYNC + "/" + timeStamp);
 	}
 	
 	public SyncDataRequest(int pageIndex, int pageSize, Date startDate, Date endDate)
 	{
 		super();
 		
-		String urlSuffix = "/item/" + startDate.getTime() + "/" + endDate.getTime() + "/" + pageIndex + "/" + pageSize;
-		appendUrl(urlSuffix);	
+		appendUrl(URLDef.URL_ITEM + "/" + startDate.getTime() + "/" + endDate.getTime() + "/" + pageIndex + "/" + pageSize);	
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

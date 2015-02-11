@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class ForgotPasswordRequest extends BaseRequest
@@ -20,7 +21,7 @@ public class ForgotPasswordRequest extends BaseRequest
 		params.add(new BasicNameValuePair("name", arg));
 		setParams(params);
 		
-		appendUrl("/password");
+		appendUrl(URLDef.URL_PASSWORD);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

@@ -9,6 +9,7 @@ import org.apache.http.message.BasicNameValuePair;
 import classes.Category;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class CreateCategoryRequest extends BaseRequest
@@ -27,7 +28,7 @@ public class CreateCategoryRequest extends BaseRequest
 		params.add(new BasicNameValuePair("avatar", Integer.toString(category.getIconID())));
 		setParams(params);
 
-		appendUrl("/category");
+		appendUrl(URLDef.URL_CATEGORY);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

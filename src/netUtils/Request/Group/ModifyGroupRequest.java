@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class ModifyGroupRequest extends BaseRequest
@@ -19,7 +20,7 @@ public class ModifyGroupRequest extends BaseRequest
 		params.add(new BasicNameValuePair("name", groupName));
 		setParams(params);
 
-		appendUrl("/groups");
+		appendUrl(URLDef.URL_GROUP);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

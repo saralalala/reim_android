@@ -15,6 +15,7 @@ import classes.User;
 import classes.utils.Utils;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class CreateItemRequest extends BaseRequest
@@ -49,7 +50,7 @@ public class CreateItemRequest extends BaseRequest
 			params.add(new BasicNameValuePair("items", jsonArray.toString()));
 			setParams(params);
 
-			appendUrl("/item");
+			appendUrl(URLDef.URL_ITEM);
 		}
 		catch (Exception e)
 		{

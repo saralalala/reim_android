@@ -13,6 +13,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class GetVendorsRequest extends BaseRequest
@@ -60,7 +61,7 @@ public class GetVendorsRequest extends BaseRequest
 		}
 		setParams(params);
 		
-		setUrl("http://api.dianping.com/v1/business/find_businesses");
+		setUrl(URLDef.URL_DIANPING);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

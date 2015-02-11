@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class ResetPasswordRequest extends BaseRequest
@@ -21,7 +22,7 @@ public class ResetPasswordRequest extends BaseRequest
 		params.add(new BasicNameValuePair("code", code));
 		setParams(params);
 
-		appendUrl("/password");
+		appendUrl(URLDef.URL_PASSWORD);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

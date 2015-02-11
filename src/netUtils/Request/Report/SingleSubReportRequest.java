@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class SingleSubReportRequest extends BaseRequest
@@ -20,8 +21,7 @@ public class SingleSubReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("status", Integer.toString(status)));
 		setParams(params);
 		
-		String urlSuffix = "/subordinate_reports/" + pageIndex + "/" + pageSize;
-		appendUrl(urlSuffix);
+		appendUrl(URLDef.URL_SUBORDINATE_REPORT + "/" + pageIndex + "/" + pageSize);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

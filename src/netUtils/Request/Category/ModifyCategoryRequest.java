@@ -9,6 +9,7 @@ import org.apache.http.message.BasicNameValuePair;
 import classes.Category;
 
 import netUtils.HttpConnectionCallback;
+import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
 
 public class ModifyCategoryRequest extends BaseRequest
@@ -28,8 +29,7 @@ public class ModifyCategoryRequest extends BaseRequest
 		params.add(new BasicNameValuePair("avatar", Integer.toString(category.getIconID())));
 		setParams(params);
 
-		String urlSuffix = "/category/" + category.getServerID();
-		appendUrl(urlSuffix);
+		appendUrl(URLDef.URL_CATEGORY + "/" + category.getServerID());
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)
