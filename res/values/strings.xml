@@ -7,7 +7,8 @@
     <string name="on">开</string>
     <string name="off">关</string>
     <string name="not_available">N/A</string>
-    <string name="null_string">无</string>
+    <string name="null_string"></string>
+    <string name="empty">无</string>
     <string name="rmb">元</string>
     <string name="rmb_symbol">¥</string>
     <string name="percent">%</string>
@@ -244,15 +245,11 @@
     <string name="error_email_empty">请输入邮箱</string>
     <string name="error_new_email_empty">请输入新邮箱</string>
     <string name="error_email_wrong_format">邮箱格式不正确</string>
-    <string name="error_same_email">邮箱与原有相同，无需修改</string>
     <string name="error_phone_empty">请输入手机号</string>
     <string name="error_new_phone_empty">请输入新手机号</string>
     <string name="error_phone_wrong_format">手机号格式不正确</string>
-    <string name="error_same_phone">手机号与原有相同，无需修改</string>
     <string name="error_new_nickname_empty">请输入新昵称</string>
-    <string name="error_same_nickname">昵称与原有相同，无需修改</string>
     <string name="error_new_company_name_empty">请输入公司新名称</string>
-    <string name="error_same_company_name">与原公司名相同，无需修改</string>
     <string name="error_number_wrong_format">请输入消费金额</string>
     <string name="error_password_empty">请输入密码</string>
     <string name="error_old_password_empty">请输入旧密码</string>
@@ -296,7 +293,6 @@
     <string name="error_request_network_unavailable">网络未连接，无法发送请求</string>
     <string name="error_gps_unavailable">定位服务不可用，请打开定位服务或手动输入商家名称</string>
     <string name="error_self_as_manager">不能选择自己作为上级</string>
-    <string name="error_same_manager">与原有默认上级相同，无需保存</string>
     <string name="error_no_group">你还没加入任何组</string>
     <string name="error_report_approved">报告已被审批</string>
     <string name="error_report_deleted">报告已被删除</string>

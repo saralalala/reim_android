@@ -53,7 +53,7 @@ public class CategoryListViewAdapter extends BaseAdapter
 			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
 			if (bitmap != null)
 			{
-				iconImageView.setImageBitmap(bitmap);				
+				iconImageView.setImageBitmap(bitmap);
 			}
 		}
 		
@@ -69,7 +69,7 @@ public class CategoryListViewAdapter extends BaseAdapter
 		if (check != null)
 		{
 			int color = check[position] ? selectedColor : unselectedColor;
-			nameTextView.setTextColor(color);			
+			nameTextView.setTextColor(color);
 		}
 		
 		return convertView;

@@ -22,11 +22,11 @@ public class LocationListViewAdapter extends BaseAdapter
 	private int selectedColor;
 	private int unselectedColor;
 	
-	public LocationListViewAdapter(Context context, String city)
+	public LocationListViewAdapter(Context context, String location, String currentCity)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
 		
-		this.currentCity = context.getString(R.string.no_location);
+		this.currentCity = !currentCity.isEmpty() ? currentCity : context.getString(R.string.no_location);
 		this.selectedColor = ViewUtils.getColor(R.color.major_dark);
 		this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 
@@ -34,7 +34,7 @@ public class LocationListViewAdapter extends BaseAdapter
 		this.check = new boolean[cityList.size()];
 		for (int i = 0; i < cityList.size(); i++)
 		{
-			check[i] = city.equals(cityList.get(i));
+			check[i] = location.equals(cityList.get(i));
 		}
 	}
 	
@@ -87,16 +87,6 @@ public class LocationListViewAdapter extends BaseAdapter
 	public long getItemId(int position)
 	{
 		return position;
-	}
-	
-	public String getCurrentCity()
-	{
-		return currentCity;
-	}
-	
-	public void setCurrentCity(String city)
-	{
-		currentCity = city;
 	}
 	
 	public boolean[] getCheck()

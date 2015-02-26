@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/choose_cc"
+            android:text="@string/choose_member"
             android:textColor="@color/major_light"
             android:textSize="20sp" />
 
@@ -42,12 +42,27 @@
             android:textSize="16sp" />
 
     </RelativeLayout>
-    
-    <ListView
-        android:id="@+id/userListView"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:listSelector="@drawable/list_item_drawable" >
-    </ListView>
+        android:layout_height="match_parent" >
+
+        <ListView
+            android:id="@+id/userListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:listSelector="@drawable/list_item_drawable" />
+        
+        <TextView
+            android:id="@+id/noMemberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:text="@string/no_member"
+            android:textColor="@color/hint_light_grey"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
 
 </LinearLayout>

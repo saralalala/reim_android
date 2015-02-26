@@ -3,15 +3,8 @@ package com.rushucloud.reim.me;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Tag.CreateTagResponse;
 import netUtils.Response.Tag.DeleteTagResponse;
-import netUtils.Response.Tag.ModifyTagResponse;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Tag.CreateTagRequest;
 import netUtils.Request.Tag.DeleteTagRequest;
-import netUtils.Request.Tag.ModifyTagRequest;
-
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -20,12 +13,12 @@ import classes.adapter.TagListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
-import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -34,7 +27,6 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -46,20 +38,16 @@ public class TagActivity extends Activity
 	private TextView tagTextView;
 	private TagListViewAdapter adapter;
 	private PopupWindow operationPopupWindow;
-	private PopupWindow tagPopupWindow;
-	private EditText nameEditText;
 
-	private AppPreference appPreference;
 	private DBManager dbManager;
 	
 	private List<Tag> tagList;
 	private Tag currentTag;
-	private boolean isNewTag;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_tag_management);
+		setContentView(R.layout.activity_me_tag);
 		initData();
 		initView();
 	}
@@ -91,8 +79,8 @@ public class TagActivity extends Activity
 		
 	private void initData()
 	{
-		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
+		tagList = dbManager.getGroupTags(AppPreference.getAppPreference().getCurrentGroupID());
 	}
 	
 	private void initView()
@@ -119,9 +107,9 @@ public class TagActivity extends Activity
 				}
 				else
 				{
-					isNewTag = true;
-					currentTag = new Tag();
-					showTagWindow();
+					Intent intent = new Intent(TagActivity.this, EditTagActivity.class);
+					intent.putExtra("tag", new Tag());
+					startActivity(intent);
 				}
 			}
 		});
@@ -138,60 +126,81 @@ public class TagActivity extends Activity
 				return false;
 			}
 		});
-		
-		initTagWindow();
+	
+		initOperationWindow();
 	}
-
-	private void initTagWindow()
-	{ 		
-		View tagView = View.inflate(this, R.layout.window_me_tag, null);
+	
+	private void initOperationWindow()
+	{
+		View operationView = View.inflate(this, R.layout.window_operation, null);
 		
-		nameEditText = (EditText) tagView.findViewById(R.id.nameEditText);
-		nameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		
-		ImageView backImageView = (ImageView) tagView.findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
+		Button modifyButton = (Button) operationView.findViewById(R.id.modifyButton);
+		modifyButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				tagPopupWindow.dismiss();
-			}
-		});    		
-		
-		TextView saveTextView = (TextView) tagView.findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				String name = nameEditText.getText().toString();
-				if (name.equals(""))
+				operationPopupWindow.dismiss();
+				
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					ViewUtils.showToast(TagActivity.this, R.string.error_tag_name_empty);
+					ViewUtils.showToast(TagActivity.this, R.string.error_modify_network_unavailable);
 				}
 				else
 				{
-					currentTag.setName(name);
-					currentTag.setGroupID(appPreference.getCurrentGroupID());
-					if (isNewTag)
-					{
-						sendCreateTagRequest(currentTag);															
-					}
-					else
-					{
-						sendModifyTagRequest(currentTag);
-					}
+					Intent intent = new Intent(TagActivity.this, EditTagActivity.class);
+					intent.putExtra("tag", currentTag);
+					startActivity(intent);
 				}
 			}
 		});
+		modifyButton = ViewUtils.resizeWindowButton(modifyButton);
 		
-		tagPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, tagView);
+		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
+		deleteButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				operationPopupWindow.dismiss();
+				
+				if (!PhoneUtils.isNetworkConnected())
+				{
+					ViewUtils.showToast(TagActivity.this, R.string.error_delete_network_unavailable);
+				}
+				else 
+				{
+					Builder builder = new Builder(TagActivity.this);
+					builder.setTitle(R.string.warning);
+					builder.setMessage(R.string.prompt_delete_tag);
+					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+											{
+												public void onClick(DialogInterface dialog, int which)
+												{
+													sendDeleteTagRequest(currentTag);
+												}
+											});
+					builder.setNegativeButton(R.string.cancel, null);
+					builder.create().show();
+				}
+			}
+		});
+		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
+		
+		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				operationPopupWindow.dismiss();
+			}
+		});
+		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
+		
+		operationPopupWindow = ViewUtils.constructBottomPopupWindow(this, operationView);
 	}
 	
 	private void refreshListView()
 	{
-		tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-		adapter = new TagListViewAdapter(this, tagList, null);
-		tagListView.setAdapter(adapter);
+		tagList = dbManager.getGroupTags(AppPreference.getAppPreference().getCurrentGroupID());
 		
 		if (tagList.isEmpty())
 		{
@@ -201,187 +210,21 @@ public class TagActivity extends Activity
 		else
 		{
 			tagListView.setVisibility(View.VISIBLE);
-			tagTextView.setVisibility(View.INVISIBLE);			
-		}
-		
-		if (PhoneUtils.isNetworkConnected())
-		{
-			for (Tag tag : tagList)
-			{
-				if (tag.hasUndownloadedIcon())
-				{
-					sendDownloadIconRequest(tag);
-				}
-			}
+			tagTextView.setVisibility(View.INVISIBLE);
+			
+			adapter = new TagListViewAdapter(this, tagList, null);
+			tagListView.setAdapter(adapter);	
 		}
 	}
 
     private void showOperationWindow()
-    {    
-    	if (operationPopupWindow == null)
-		{
-    		View operationView = View.inflate(this, R.layout.window_operation, null);
-    		
-    		Button modifyButton = (Button) operationView.findViewById(R.id.modifyButton);
-    		modifyButton.setOnClickListener(new View.OnClickListener()
-    		{
-    			public void onClick(View v)
-    			{
-    				operationPopupWindow.dismiss();
-    				
-    				if (!PhoneUtils.isNetworkConnected())
-    				{
-    					ViewUtils.showToast(TagActivity.this, R.string.error_modify_network_unavailable);
-    				}
-    				else
-    				{
-    					isNewTag = false;
-    					showTagWindow();
-    				}
-    			}
-    		});
-    		modifyButton = ViewUtils.resizeWindowButton(modifyButton);
-    		
-    		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
-    		deleteButton.setOnClickListener(new View.OnClickListener()
-    		{
-    			public void onClick(View v)
-    			{
-    				operationPopupWindow.dismiss();
-    				
-    				if (!PhoneUtils.isNetworkConnected())
-    				{
-    					ViewUtils.showToast(TagActivity.this, R.string.error_delete_network_unavailable);
-    				}
-    				else 
-    				{
-    					Builder builder = new Builder(TagActivity.this);
-    					builder.setTitle(R.string.warning);
-    					builder.setMessage(R.string.prompt_delete_tag);
-    					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-    											{
-    												public void onClick(DialogInterface dialog, int which)
-    												{
-    													sendDeleteTagRequest(currentTag);
-    												}
-    											});
-    					builder.setNegativeButton(R.string.cancel, null);
-    					builder.create().show();
-    				}
-    			}
-    		});
-    		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
-    		
-    		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
-    		cancelButton.setOnClickListener(new View.OnClickListener()
-    		{
-    			public void onClick(View v)
-    			{
-    				operationPopupWindow.dismiss();
-    			}
-    		});
-    		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
-    		
-    		operationPopupWindow = ViewUtils.constructBottomPopupWindow(this, operationView);    	
-		}
-    	
+    {    	
 		operationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		operationPopupWindow.update();
 		
 		ViewUtils.dimBackground(this);
     }
-    
-    private void showTagWindow()
-    {
-		nameEditText.setText(currentTag.getName());
-		
-		tagPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-		tagPopupWindow.update();
-    }
-	
-	private void sendCreateTagRequest(final Tag tag)
-	{
-		ReimProgressDialog.show();
-		CreateTagRequest request = new CreateTagRequest(tag);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				CreateTagResponse response = new CreateTagResponse(httpResponse);
-				if (response.getStatus())
-				{
-					tag.setServerID(response.getTagID());
-					tag.setLocalUpdatedDate(Utils.getCurrentTime());
-					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
-					dbManager.insertTag(tag);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							refreshListView();
-							ReimProgressDialog.dismiss();
-							tagPopupWindow.dismiss();
-							ViewUtils.showToast(TagActivity.this, R.string.succeed_in_creating_tag);
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(TagActivity.this, R.string.failed_to_create_tag);							
-						}
-					});
-				}
-			}
-		});
-	}
-	
-	private void sendModifyTagRequest(final Tag tag)
-	{
-		ReimProgressDialog.show();
-		ModifyTagRequest request = new ModifyTagRequest(tag);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				ModifyTagResponse response = new ModifyTagResponse(httpResponse);
-				if (response.getStatus())
-				{
-					tag.setLocalUpdatedDate(Utils.getCurrentTime());
-					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
-					dbManager.updateTag(tag);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							refreshListView();
-							ReimProgressDialog.dismiss();
-							tagPopupWindow.dismiss();
-							ViewUtils.showToast(TagActivity.this, R.string.succeed_in_modifying_tag);
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(TagActivity.this, R.string.failed_to_modify_tag);							
-						}
-					});
-				}
-			}
-		});
-	}
-	
+
 	private void sendDeleteTagRequest(final Tag tag)
 	{
 		ReimProgressDialog.show();
@@ -418,34 +261,4 @@ public class TagActivity extends Activity
 			}
 		});
 	}
-
-    private void sendDownloadIconRequest(final Tag tag)
-    {
-    	DownloadImageRequest request = new DownloadImageRequest(tag.getIconID());
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-				if (response.getBitmap() != null)
-				{
-					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), tag.getIconID());
-					tag.setIconPath(iconPath);
-					tag.setLocalUpdatedDate(Utils.getCurrentTime());
-					tag.setServerUpdatedDate(tag.getLocalUpdatedDate());
-					dbManager.updateTag(tag);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-							adapter.setTag(tagList);
-							adapter.notifyDataSetChanged();
-						}
-					});	
-				}
-			}
-		});
-    }
 }

@@ -1,5 +1,6 @@
 package classes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,10 @@ import classes.utils.Utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class Category
+public class Category implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private int serverID = -1;
 	private String name = "";
 	private double limit = 0;
@@ -44,7 +47,10 @@ public class Category
 			setIsProveAhead(Utils.intToBoolean(jObject.getInt("prove_before")));
 			int iconID = jObject.optInt("avatar", -1);
 			setIconID(iconID);
-			setIconPath(PhoneUtils.getIconFilePath(iconID));
+			if (iconID != -1)
+			{
+				setIconPath(PhoneUtils.getIconFilePath(iconID));				
+			}
 		}
 		catch (JSONException e)
 		{

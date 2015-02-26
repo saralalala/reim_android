@@ -51,7 +51,7 @@ public class ManagerActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_default_manager);
+		setContentView(R.layout.activity_me_manager);
 		initView();
 	}
 
@@ -144,7 +144,7 @@ public class ManagerActivity extends Activity
 				}
 				else if (manager.getServerID() == currentUser.getDefaultManagerID())
 				{
-					ViewUtils.showToast(ManagerActivity.this, R.string.error_same_manager);				
+					finish();
 				}
 				else
 				{

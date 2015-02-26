@@ -38,6 +38,12 @@ public class TagListViewAdapter extends BaseAdapter
 		{
 			convertView = layoutInflater.inflate(R.layout.list_tag, parent, false);
 		}
+		
+		if (check != null)
+		{
+			int color = check[position] ? R.color.list_item_selected : R.color.list_item_unselected;
+			convertView.setBackgroundResource(color);
+		}
 
 		TextView nameTextView = (TextView)convertView.findViewById(R.id.nameTextView);
 		

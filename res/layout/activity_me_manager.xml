@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background" >
+    android:background="@color/background"
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,32 +22,33 @@
             android:src="@drawable/back_drawable" />
 
         <TextView
+            android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/choose_member"
+            android:text="@string/default_manager"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/confirmTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:gravity="center"
+			android:paddingLeft="16dp"
+			android:paddingRight="16dp"
+			android:gravity="center"
             android:text="@string/confirm"
             android:textColor="@color/title_text_color"
             android:textSize="16sp" />
 
     </RelativeLayout>
-    
+
     <ListView
         android:id="@+id/userListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:listSelector="@drawable/list_item_drawable" >
-    </ListView>
+        android:listSelector="@drawable/list_item_drawable"
+        android:cacheColorHint="#00000000" />
 
 </LinearLayout>

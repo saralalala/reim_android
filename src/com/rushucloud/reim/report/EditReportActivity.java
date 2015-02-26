@@ -1,5 +1,6 @@
 package com.rushucloud.reim.report;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,14 +8,12 @@ import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
-import netUtils.Response.DownloadImageResponse;
 import netUtils.Response.UploadImageResponse;
 import netUtils.Response.Item.CreateItemResponse;
 import netUtils.Response.Item.ModifyItemResponse;
 import netUtils.Response.Report.CreateReportResponse;
 import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
-import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.UploadImageRequest;
 import netUtils.Request.Item.CreateItemRequest;
 import netUtils.Request.Item.ModifyItemRequest;
@@ -28,7 +27,6 @@ import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
 import classes.User;
-import classes.adapter.MemberListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -56,20 +54,19 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout.LayoutParams;
 
 public class EditReportActivity extends Activity
 {
-	private static final int PICK_ITEM = 0;
+	private static final int PICK_MANAGER = 0;
+	private static final int PICK_CC = 1;
+	private static final int PICK_ITEM = 2;
 	
 	private AppPreference appPreference;
 	private DBManager dbManager;
@@ -78,26 +75,20 @@ public class EditReportActivity extends Activity
 	private TextView timeTextView;
 	private TextView statusTextView;
 	private TextView approveInfoTextView;
-	private TextView managerTextView;
-	private ListView managerListView;
-	private PopupWindow managerPopupWindow;
+	
+	private TextView managerTextView;	
 	private TextView ccTextView;
-	private ListView ccListView;
-	private PopupWindow ccPopupWindow;
+	
 	private TextView amountTextView;
 	private TextView itemCountTextView;
 	private LinearLayout itemLayout;
-	private MemberListViewAdapter memberAdapter;
 	private PopupWindow deletePopupWindow;
 
 	private Report report;
 	private List<Item> itemList = null;
 	private ArrayList<Integer> chosenItemIDList = null;
 	
-	private List<User> userList;
 	private User currentUser;
-	private boolean[] managerCheckList;
-	private boolean[] ccCheckList;
 	
 	private int itemIndex;
 	private boolean fromPush;
@@ -152,14 +143,38 @@ public class EditReportActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-		if (resultCode == RESULT_OK && requestCode == PICK_ITEM)
+		if (resultCode == RESULT_OK)
 		{
-			chosenItemIDList.clear();
-			chosenItemIDList.addAll(data.getExtras().getIntegerArrayList("chosenItemIDList"));
-			itemList = dbManager.getItems(chosenItemIDList);
-			refreshView();
+			switch (requestCode)
+			{
+				case PICK_MANAGER:
+				{
+					List<User> managerList = (List<User>) data.getSerializableExtra("managers");
+					report.setManagerList(managerList);
+					managerTextView.setText(report.getManagersName());
+					break;
+				}
+				case PICK_CC:
+				{
+					List<User> ccList = (List<User>) data.getSerializableExtra("ccs");
+					report.setCCList(ccList);
+					ccTextView.setText(report.getCCsName());
+					break;
+				}
+				case PICK_ITEM:
+				{
+					chosenItemIDList.clear();
+					chosenItemIDList.addAll(data.getExtras().getIntegerArrayList("chosenItemIDList"));
+					itemList = dbManager.getItems(chosenItemIDList);
+					refreshView();
+					break;
+				}
+				default:
+					break;
+			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -202,20 +217,6 @@ public class EditReportActivity extends Activity
 		}
 
     	currentUser = appPreference.getCurrentUser();
-    	
-    	int currentGroupID = appPreference.getCurrentGroupID();
-		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
-
-		if (report.getManagerList() == null || report.getManagerList().isEmpty())
-		{
-			managerCheckList = User.getUsersCheck(userList, currentUser.constructListWithManager());
-		}
-		else
-		{
-			managerCheckList = User.getUsersCheck(userList, report.getManagerList());
-		}
-		
-    	ccCheckList = User.getUsersCheck(userList, report.getCCList());
 	}
 	
 	private void initView()
@@ -265,20 +266,24 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				showManagerWindow();
+		    	hideSoftKeyboard();
+				Intent intent = new Intent(EditReportActivity.this, PickManagerActivity.class);
+				intent.putExtra("managers", (Serializable) report.getManagerList());
+				startActivityForResult(intent, PICK_MANAGER);	
 			}
 		});
-		initManagerView();
 		
 		ccTextView = (TextView) findViewById(R.id.ccTextView);
 		ccTextView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				showCCWindow();
+		    	hideSoftKeyboard();
+				Intent intent = new Intent(EditReportActivity.this, PickCCActivity.class);
+				intent.putExtra("ccs", (Serializable) report.getCCList());
+				startActivityForResult(intent, PICK_CC);	
 			}
 		});
-		initCCView();
 		
 		amountTextView = (TextView) findViewById(R.id.amountTextView);
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -366,108 +371,6 @@ public class EditReportActivity extends Activity
 		});
 		
 		initDeleteWindow();
-	}
-	
-	private void initManagerView()
-	{
-    	View managerView = View.inflate(this, R.layout.window_report_manager, null);
-    	managerListView = (ListView) managerView.findViewById(R.id.userListView);
-    	managerListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				managerCheckList[position] = !managerCheckList[position];
-				memberAdapter.setCheck(managerCheckList);
-				memberAdapter.notifyDataSetChanged();
-			}
-		});
-
-		ImageView backImageView = (ImageView) managerView.findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				managerPopupWindow.dismiss();
-			}
-		});
-		
-		TextView confirmTextView = (TextView) managerView.findViewById(R.id.confirmTextView);
-		confirmTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				managerPopupWindow.dismiss();
-				
-				List<User> managerList = new ArrayList<User>();
-				if (managerCheckList != null)
-				{
-					for (int i = 0; i < managerCheckList.length; i++)
-					{
-						if (managerCheckList[i])
-						{
-							managerList.add(userList.get(i));
-						}
-					}
-				}
-
-				report.setManagerList(managerList);
-				managerTextView.setText(report.getManagersName());
-			}
-		});
-
-		managerPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, managerView);	
-	}
-	
-	private void initCCView()
-	{
-    	View ccView = View.inflate(this, R.layout.window_report_cc, null);
-    	ccListView = (ListView) ccView.findViewById(R.id.userListView);
-    	ccListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				ccCheckList[position] = !ccCheckList[position];
-				memberAdapter.setCheck(ccCheckList);
-				memberAdapter.notifyDataSetChanged();
-			}
-		});
-
-		ImageView backImageView = (ImageView) ccView.findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				ccPopupWindow.dismiss();
-			}
-		});
-		
-		TextView confirmTextView = (TextView) ccView.findViewById(R.id.confirmTextView);
-		confirmTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				ccPopupWindow.dismiss();
-
-				List<User> ccList = new ArrayList<User>();
-				if (ccCheckList != null)
-				{
-					for (int i = 0; i < ccCheckList.length; i++)
-					{
-						if (ccCheckList[i])
-						{
-							ccList.add(userList.get(i));
-						}
-					}
-				}
-				
-				report.setCCList(ccList);
-				ccTextView.setText(report.getCCsName());
-			}
-		});
-
-		ccPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, ccView);	
 	}
 	
 	private void initDeleteWindow()
@@ -644,46 +547,6 @@ public class EditReportActivity extends Activity
     	builder.setNegativeButton(R.string.cancel, null);
     	builder.create().show();
     }
-    
-    private void showManagerWindow()
-    {
-    	hideSoftKeyboard();
-
-    	if (memberAdapter == null)
-		{
-			memberAdapter = new MemberListViewAdapter(this, userList, managerCheckList);
-		}
-    	else
-    	{
-        	memberAdapter.setCheck(managerCheckList);			
-		}
-    	managerListView.setAdapter(memberAdapter);
-    	
-    	managerPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-    	managerPopupWindow.update();
-
-    	downloadAvatars();
-    }
-
-    private void showCCWindow()
-    {
-    	hideSoftKeyboard();
-
-    	if (memberAdapter == null)
-		{
-			memberAdapter = new MemberListViewAdapter(this, userList, ccCheckList);
-		}
-    	else
-    	{
-        	memberAdapter.setCheck(ccCheckList);		
-		}
-    	ccListView.setAdapter(memberAdapter);
-    	
-    	ccPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-    	ccPopupWindow.update();
-    	
-    	downloadAvatars();
-    }
 
     private void saveReport()
     {
@@ -832,51 +695,7 @@ public class EditReportActivity extends Activity
 			ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_not_uploaded);
 		}
     }
-
-    private void downloadAvatars()
-    {
-    	if (PhoneUtils.isNetworkConnected())
-		{
-        	for (User user : userList)
-    		{
-    			if (user.hasUndownloadedAvatar())
-    			{
-    				sendDownloadAvatarRequest(user);
-    			}	
-    		}			
-		}    	
-    }
     
-    private void sendDownloadAvatarRequest(final User user)
-    {
-    	final DBManager dbManager = DBManager.getDBManager();
-    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-				if (response.getBitmap() != null)
-				{
-					String avatarPath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
-					user.setAvatarPath(avatarPath);
-					user.setLocalUpdatedDate(Utils.getCurrentTime());
-					user.setServerUpdatedDate(user.getLocalUpdatedDate());
-					dbManager.updateUser(user);
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							List<User> memberList = dbManager.getGroupUsers(appPreference.getCurrentGroupID());
-							memberAdapter.setMember(User.removeCurrentUserFromList(memberList));
-							memberAdapter.notifyDataSetChanged();
-						}
-					});	
-				}
-			}
-		});
-    }
-
 	private void sendUploadImageRequest(final Image image)
 	{
     	System.out.println("upload image：local id " + image.getLocalID());

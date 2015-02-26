@@ -1,5 +1,6 @@
 package classes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,10 @@ import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
 
-public class Tag
+public class Tag implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private int serverID = -1;
 	private int groupID = -1;
 	private String name = "";
@@ -41,7 +44,10 @@ public class Tag
 			setServerUpdatedDate(jObject.getInt("lastdt"));
 			int iconID = jObject.optInt("avatar", -1);
 			setIconID(iconID);
-			setIconPath(PhoneUtils.getIconFilePath(iconID));
+			if (iconID != -1)
+			{
+				setIconPath(PhoneUtils.getIconFilePath(iconID));				
+			}
 		}
 		catch (JSONException e)
 		{

@@ -6,12 +6,7 @@ import java.io.IOException;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.Response.UploadImageResponse;
-import netUtils.Response.Group.ModifyGroupResponse;
-import netUtils.Response.User.ModifyUserResponse;
 import netUtils.Request.UploadImageRequest;
-import netUtils.Request.Group.ModifyGroupRequest;
-import netUtils.Request.User.ModifyUserRequest;
-
 import com.rushucloud.reim.SingleImageActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -25,7 +20,6 @@ import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,11 +30,8 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,22 +46,12 @@ public class ProfileActivity extends Activity
 	private PopupWindow picturePopupWindow;
 	
 	private TextView emailTextView;
-	private PopupWindow emailPopupWindow;
-	private EditText emailEditText;
-
 	private TextView phoneTextView;
-	private PopupWindow phonePopupWindow;
-	private EditText phoneEditText;
-
 	private TextView nicknameTextView;
-	private PopupWindow nicknamePopupWindow;
-	private EditText nicknameEditText;
 	
 	private TextView companyTextView;
 	private ImageView companyNextImageView;
 	private RelativeLayout companyLayout;
-	private PopupWindow companyPopupWindow;
-	private EditText companyEditText;
 	
 	private TextView managerTextView;
 
@@ -179,12 +160,85 @@ public class ProfileActivity extends Activity
 		});
 		
 		initAvatarView();
-		initEmailView();
-		initPhoneView();
-		initNicknameView();
-		initCompanyView();
-		initManagerView();
-		initPasswordView();
+		
+		// init email
+		emailTextView = (TextView) findViewById(R.id.emailTextView);
+		
+		RelativeLayout emailLayout = (RelativeLayout) findViewById(R.id.emailLayout);
+		emailLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(ProfileActivity.this, EmailActivity.class));
+			}
+		});
+
+		// init phone
+		phoneTextView = (TextView) findViewById(R.id.phoneTextView);
+		
+		RelativeLayout phoneLayout = (RelativeLayout) findViewById(R.id.phoneLayout);
+		phoneLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(ProfileActivity.this, PhoneActivity.class));
+			}
+		});
+		
+		// init nickname
+		nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
+		
+		RelativeLayout nicknameLayout = (RelativeLayout) findViewById(R.id.nicknameLayout);
+		nicknameLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(ProfileActivity.this, NicknameActivity.class));
+			}
+		});
+		
+		// init manager
+		managerTextView = (TextView)findViewById(R.id.managerTextView);
+		
+        RelativeLayout defaultManagerLayout = (RelativeLayout) findViewById(R.id.defaultManagerLayout);
+        defaultManagerLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (currentUser.getGroupID() <= 0)
+				{
+					ViewUtils.showToast(ProfileActivity.this, R.string.error_no_group);			
+				}
+				else
+				{
+					startActivity(new Intent(ProfileActivity.this, ManagerActivity.class));
+				}
+			}
+		});
+
+		// init company
+		companyTextView = (TextView) findViewById(R.id.companyTextView);
+		companyNextImageView = (ImageView) findViewById(R.id.companyNextImageView);
+		
+		companyLayout = (RelativeLayout) findViewById(R.id.companyLayout);
+        companyLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(ProfileActivity.this, CompanyActivity.class));
+			}
+		});
+
+        // init password
+        RelativeLayout passwordLayout = (RelativeLayout) findViewById(R.id.passwordLayout);
+        passwordLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
+				overridePendingTransition(R.anim.window_horizontal_in, 0);
+			}
+		});
 	}
 	
 	private void initAvatarView()
@@ -257,343 +311,6 @@ public class ProfileActivity extends Activity
 		picturePopupWindow = ViewUtils.constructBottomPopupWindow(this, pictureView);        
 	}
 	
-	private void initEmailView()
-	{
-		// init email
-		emailTextView = (TextView) findViewById(R.id.emailTextView);
-		
-		RelativeLayout emailLayout = (RelativeLayout) findViewById(R.id.emailLayout);
-		emailLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				showEmailWindow();
-				emailEditText.requestFocus();
-			}
-		});
-        
-        // init email window
-    	View emailView = View.inflate(this, R.layout.window_me_email, null);
-    	
-    	emailEditText = (EditText) emailView.findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		
-		ImageView backImageView = (ImageView) emailView.findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				emailPopupWindow.dismiss();
-			}
-		});
-		
-		TextView saveTextView = (TextView) emailView.findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				
-				String originalEmail = currentUser.getEmail();
-				String newEmail = emailEditText.getText().toString();
-				if (PhoneUtils.isNetworkConnected())
-				{	
-					if (newEmail.equals(originalEmail))
-					{
-						ViewUtils.showToast(ProfileActivity.this, R.string.error_same_email);
-					}
-					else if (newEmail.equals("") && currentUser.getPhone().equals(""))
-					{
-						ViewUtils.showToast(ProfileActivity.this, R.string.error_new_email_empty);
-					}
-					else if (!newEmail.equals("") && !Utils.isEmail(newEmail))
-					{
-						ViewUtils.showToast(ProfileActivity.this, R.string.error_email_wrong_format);
-					}
-					else
-					{
-						currentUser.setEmail(newEmail);
-						sendModifyUserInfoRequest();					
-					}
-				}
-				else
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);
-				}
-			}
-		});
-
-        LinearLayout baseLayout = (LinearLayout) emailView.findViewById(R.id.baseLayout);
-        baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});
-        
-		emailPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, emailView);
-	}
-	
-	private void initPhoneView()
-	{
-		// init phone
-		phoneTextView = (TextView) findViewById(R.id.phoneTextView);
-		
-		RelativeLayout phoneLayout = (RelativeLayout) findViewById(R.id.phoneLayout);
-		phoneLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				showPhoneWindow();
-				phoneEditText.requestFocus();
-			}
-		});
-        
-        // init phone window
-    	View phoneView = View.inflate(this, R.layout.window_me_phone, null);
-    	
-    	phoneEditText = (EditText) phoneView.findViewById(R.id.phoneEditText);
-    	phoneEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		
-		ImageView backImageView = (ImageView) phoneView.findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				phonePopupWindow.dismiss();
-			}
-		});
-		
-		TextView saveTextView = (TextView) phoneView.findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				
-				String originalPhone = currentUser.getPhone();
-				String newPhone = phoneEditText.getText().toString();
-				if (PhoneUtils.isNetworkConnected())
-				{
-					if (newPhone.equals(originalPhone))
-					{
-						ViewUtils.showToast(ProfileActivity.this, R.string.error_same_phone);
-					}
-					else if (newPhone.equals("") && currentUser.getEmail().equals(""))
-					{
-						ViewUtils.showToast(ProfileActivity.this, R.string.error_new_phone_empty);
-					}
-					else if (!newPhone.equals("") && !Utils.isPhone(newPhone))
-					{
-						ViewUtils.showToast(ProfileActivity.this, R.string.error_phone_wrong_format);
-					}
-					else
-					{
-						currentUser.setPhone(newPhone);
-						sendModifyUserInfoRequest();						
-					}
-				}
-				else
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);						
-				}
-			}
-		});
-
-        LinearLayout baseLayout = (LinearLayout) phoneView.findViewById(R.id.baseLayout);
-        baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});
-        
-		phonePopupWindow = ViewUtils.constructHorizontalPopupWindow(this, phoneView);
-	}
-	
-	private void initNicknameView()
-	{
-		// init nickname
-		nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
-		
-		RelativeLayout nicknameLayout = (RelativeLayout) findViewById(R.id.nicknameLayout);
-		nicknameLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				showNicknameWindow();
-				nicknameEditText.requestFocus();
-			}
-		});
-        
-        // init nickname window
-    	View nicknameView = View.inflate(this, R.layout.window_me_nickname, null);
-    	
-    	nicknameEditText = (EditText) nicknameView.findViewById(R.id.nicknameEditText);
-    	nicknameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		
-		ImageView backImageView = (ImageView) nicknameView.findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				nicknamePopupWindow.dismiss();
-			}
-		});
-		
-		TextView saveTextView = (TextView) nicknameView.findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				
-				String originalNickname = currentUser.getNickname();
-				String newNickname = nicknameEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
-				}
-				else if (newNickname.equals(originalNickname))
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_same_nickname);
-				}
-				else if (newNickname.equals(""))
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_new_nickname_empty);
-				}
-				else
-				{
-					currentUser.setNickname(newNickname);
-					sendModifyUserInfoRequest();
-				}
-			}
-		});
-
-        LinearLayout baseLayout = (LinearLayout) nicknameView.findViewById(R.id.baseLayout);
-        baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});
-        
-		nicknamePopupWindow = ViewUtils.constructHorizontalPopupWindow(this, nicknameView);
-	}
-	
-	private void initCompanyView()
-	{
-		// init company
-		companyTextView = (TextView) findViewById(R.id.companyTextView);
-		companyNextImageView = (ImageView) findViewById(R.id.companyNextImageView);
-		
-		companyLayout = (RelativeLayout) findViewById(R.id.companyLayout);
-        companyLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				showCompanyWindow();
-				companyEditText.requestFocus();
-			}
-		});
-        
-        // init company window
-    	View companyView = View.inflate(this, R.layout.window_me_company, null);
-    	
-    	companyEditText = (EditText) companyView.findViewById(R.id.companyEditText);
-    	companyEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		
-		ImageView backImageView = (ImageView) companyView.findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				companyPopupWindow.dismiss();
-			}
-		});
-		
-		TextView saveTextView = (TextView) companyView.findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				
-				String originalName = currentGroup.getName();
-				String newName = companyEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_modify_network_unavailable);			
-				}
-				else if (newName.equals(originalName))
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_same_company_name);
-				}
-				else if (newName.equals(""))
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_new_company_name_empty);
-				}
-				else
-				{
-					ReimProgressDialog.show();
-					sendModifyGroupRequest(newName);
-				}
-			}
-		});
-
-        LinearLayout baseLayout = (LinearLayout) companyView.findViewById(R.id.baseLayout);
-        baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});
-        
-		companyPopupWindow = ViewUtils.constructHorizontalPopupWindow(this, companyView);
-	}
-
-	private void initManagerView()
-	{
-		managerTextView = (TextView)findViewById(R.id.managerTextView);
-		
-        RelativeLayout defaultManagerLayout = (RelativeLayout) findViewById(R.id.defaultManagerLayout);
-        defaultManagerLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (currentUser.getGroupID() <= 0)
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_no_group);			
-				}
-				else
-				{
-					startActivity(new Intent(ProfileActivity.this, ManagerActivity.class));
-				}
-			}
-		});
-	}
-	
-	private void initPasswordView()
-	{
-        RelativeLayout passwordLayout = (RelativeLayout) findViewById(R.id.passwordLayout);
-        passwordLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
-				overridePendingTransition(R.anim.window_horizontal_in, 0);
-			}
-		});
-	}	
-	
 	private void loadInfoView()
 	{		
 		currentUser = appPreference.getCurrentUser();
@@ -615,7 +332,7 @@ public class ProfileActivity extends Activity
 		String phone = currentUser != null && !currentUser.getPhone().equals("") ? currentUser.getPhone() : getString(R.string.not_binding);
 		phoneTextView.setText(phone);
 		
-		String nickname = currentUser != null && !currentUser.getNickname().equals("") ? currentUser.getNickname() : getString(R.string.null_string);
+		String nickname = currentUser != null && !currentUser.getNickname().equals("") ? currentUser.getNickname() : getString(R.string.empty);
 		nicknameTextView.setText(nickname);
 		
 		User manager = dbManager.getUser(currentUser.getDefaultManagerID());
@@ -624,13 +341,13 @@ public class ProfileActivity extends Activity
 			managerTextView.setText(manager.getNickname());			
 		}
 		
-		String companyName = currentGroup != null ? currentGroup.getName() : getString(R.string.null_string);	
+		String companyName = currentGroup != null ? currentGroup.getName() : getString(R.string.empty);	
 		companyTextView.setText(companyName);
 		
         if (!currentUser.isAdmin() || currentUser.getGroupID() <= 0)
 		{
         	companyLayout.setClickable(false);
-        	companyNextImageView.setVisibility(View.GONE);			
+        	companyNextImageView.setVisibility(View.INVISIBLE);			
 		}
         else
         {
@@ -647,50 +364,6 @@ public class ProfileActivity extends Activity
 		ViewUtils.dimBackground(this);
     }
     
-    private void showEmailWindow()
-    {
-    	if (currentUser != null)
-		{
-        	emailEditText.setText(currentUser.getEmail());			
-		}
-    	
-		emailPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-		emailPopupWindow.update();
-    }
-    
-    private void showPhoneWindow()
-    {
-    	if (currentUser != null)
-		{
-        	phoneEditText.setText(currentUser.getPhone());			
-		}
-    	
-		phonePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-		phonePopupWindow.update();
-    }
-    
-    private void showNicknameWindow()
-    {
-    	if (currentUser != null)
-		{
-        	nicknameEditText.setText(currentUser.getNickname());			
-		}
-    	
-		nicknamePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-		nicknamePopupWindow.update();
-    }
-    
-    private void showCompanyWindow()
-    {
-    	if (currentGroup != null)
-		{
-        	companyEditText.setText(currentGroup.getName());			
-		}
-    	
-		companyPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-		companyPopupWindow.update();
-    }
-
     private void cropImage(Uri uri)
     {
 		try
@@ -759,95 +432,4 @@ public class ProfileActivity extends Activity
 			}
 		});
     }
-    
-	private void sendModifyUserInfoRequest()
-	{
-		ReimProgressDialog.show();		
-		ModifyUserRequest request = new ModifyUserRequest(currentUser);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ModifyUserResponse response = new ModifyUserResponse(httpResponse);
-				if (response.getStatus())
-				{
-					dbManager.updateUser(currentUser);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(ProfileActivity.this, R.string.succeed_in_modifying_user_info);
-							emailPopupWindow.dismiss();
-							phonePopupWindow.dismiss();
-							nicknamePopupWindow.dismiss();
-							companyPopupWindow.dismiss();
-							loadInfoView();
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
-							loadInfoView();
-						}
-					});						
-				}
-			}
-		});
-	}
-	
-	private void sendModifyGroupRequest(final String newName)
-	{
-		ModifyGroupRequest request = new ModifyGroupRequest(newName);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				ModifyGroupResponse response = new ModifyGroupResponse(httpResponse);
-				if (response.getStatus())
-				{
-					currentGroup.setName(newName);
-					dbManager.updateGroup(currentGroup);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							companyPopupWindow.dismiss();
-							ViewUtils.showToast(ProfileActivity.this, R.string.succeed_in_modifying);
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							companyPopupWindow.dismiss();
-							ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_modify);
-						}
-					});
-				}
-			}
-		});
-	}
-
-	private void hideSoftKeyboard()
-	{
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
-	}
 }

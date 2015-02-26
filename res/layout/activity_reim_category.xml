@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/choose_tag"
+            android:text="@string/choose_category"
             android:textColor="@color/major_light"
             android:textSize="20sp" />
 
@@ -43,11 +43,10 @@
 
     </RelativeLayout>
     
-    <ListView
-        android:id="@+id/tagListView"
+    <ExpandableListView
+        android:id="@+id/categoryListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:listSelector="@drawable/list_item_drawable" >
-    </ListView>
+        android:listSelector="@drawable/list_item_drawable" />
 
 </LinearLayout>

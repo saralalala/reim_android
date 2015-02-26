@@ -44,10 +44,9 @@
     </RelativeLayout>
     
     <ListView
-        android:id="@+id/userListView"
+        android:id="@+id/managerListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:listSelector="@drawable/list_item_drawable" >
-    </ListView>
+        android:listSelector="@drawable/list_item_drawable" />
 
 </LinearLayout>

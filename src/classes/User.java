@@ -224,15 +224,13 @@ public class User implements Serializable
 		{
 			return false;
 		}
-		
+
 		if (o instanceof User)
 		{
-			if (((User)o).getServerID() == this.getServerID())
-			{
-				return true;
-			}
+			User user = (User)o;
+			return user.getServerID() == this.getServerID();
 		}
-		return false;
+		return super.equals(o);
 	}
 	
 	public boolean hasUndownloadedAvatar()

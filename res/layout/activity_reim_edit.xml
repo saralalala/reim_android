@@ -302,27 +302,32 @@
 	                android:textColor="@color/hint_grey"
 	                android:textSize="14sp" />
 
-			    <ImageView
-			        android:id="@+id/categoryImageView"
-			        android:layout_width="30dp"
-			        android:layout_height="30dp"
-			        android:layout_centerVertical="true"
-			        android:layout_alignParentLeft="true"
+	            <RelativeLayout
+	                android:id="@+id/categoryLayout"
+	                android:layout_width="wrap_content"
+	                android:layout_height="match_parent"
+				    android:gravity="center_vertical"
 	                android:layout_marginLeft="90dp"
-			        android:contentDescription="@string/icon"
-			        android:src="@drawable/default_icon" />
+	                android:layout_marginRight="16dp" >
 
-	            <TextView
-	                android:id="@+id/categoryTextView"
-	                android:layout_width="match_parent"
-	                android:layout_height="wrap_content"
-	                android:layout_centerVertical="true"
-	                android:layout_toRightOf="@+id/categoryImageView"
-	                android:layout_marginLeft="10dp"
-	                android:layout_marginRight="16dp"
-	                android:text="@string/not_available"
-	                android:textColor="@color/font_major_dark"
-	                android:textSize="18sp" />
+				    <ImageView
+				        android:id="@+id/categoryImageView"
+				        android:layout_width="30dp"
+				        android:layout_height="30dp"
+				        android:layout_alignParentLeft="true"
+				        android:contentDescription="@string/icon"
+				        android:src="@drawable/default_icon" />
+	
+		            <TextView
+		                android:id="@+id/categoryTextView"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:layout_toRightOf="@+id/categoryImageView"
+		                android:layout_marginLeft="10dp"
+		                android:text="@string/not_available"
+		                android:textColor="@color/font_major_dark"
+		                android:textSize="18sp" />
+	            </RelativeLayout>
 	
 	        </RelativeLayout>
             
