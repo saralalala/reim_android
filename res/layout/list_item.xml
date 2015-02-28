@@ -17,7 +17,8 @@
             android:layout_height="20dp"
             android:layout_marginTop="7dp"
             android:gravity="center"
-            android:textColor="@color/major_light" />
+            android:textColor="@color/major_light"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/proveTextView"
@@ -96,7 +97,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/hint_light_grey"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
         </RelativeLayout>
 
         <TextView

@@ -88,7 +88,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="@string/new_total"
                 android:textColor="@color/hint_grey"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -120,7 +120,7 @@
 	            android:layout_marginLeft="6dp"
 	            android:text="@string/stat_ongoing"
 	            android:textColor="@color/hint_grey"
-	            android:textSize="16sp" />
+	            android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/ongoingPercentTextView"
@@ -129,7 +129,7 @@
                 android:layout_marginTop="1dp"
 				android:layout_marginLeft="6dp"
                 android:textColor="@color/hint_dark_grey"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
             
         </LinearLayout>
 
@@ -162,7 +162,7 @@
 	            android:layout_marginLeft="6dp"
 	            android:text="@string/stat_new"
 	            android:textColor="@color/hint_grey"
-	            android:textSize="16sp" />
+	            android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/newPercentTextView"
@@ -171,7 +171,7 @@
                 android:layout_marginTop="1dp"
 				android:layout_marginLeft="6dp"
                 android:textColor="@color/hint_dark_grey"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
             
         </LinearLayout>
         
@@ -196,7 +196,7 @@
             android:layout_marginLeft="16dp"
             android:text="@string/cost_total"
             android:textColor="@color/font_list_item_header"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/totalTextView"
@@ -209,7 +209,7 @@
             android:gravity="right|center_vertical"
             android:text="@string/cost_total"
             android:textColor="@color/font_list_item_header"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -219,7 +219,7 @@
             android:gravity="center_vertical"
             android:text="@string/rmb_symbol"
             android:textColor="@color/font_list_item_header"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <include
@@ -255,7 +255,7 @@
             android:gravity="center_vertical"
             android:text="@string/stat_by_category"
             android:textColor="@color/font_list_item_header"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <include
             android:layout_width="match_parent"

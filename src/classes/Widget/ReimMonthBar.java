@@ -8,13 +8,13 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 public class ReimMonthBar extends View
 {
 	private Paint paint = new Paint();
 	private RectF rect = new RectF();
+	private double ratio;
 	private int width;
 	private int height = PhoneUtils.dpToPixel(getResources(), 18);
 	private int radius = PhoneUtils.dpToPixel(getResources(), 2);
@@ -23,17 +23,11 @@ public class ReimMonthBar extends View
 	{
 		super(context);
 		
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		width = metrics.widthPixels - PhoneUtils.dpToPixel(context, 154);
+		this.ratio = ratio;
 		
 		paint.setColor(getColor(ratio));
 		paint.setStyle(Style.FILL_AND_STROKE);
 		paint.setAntiAlias(true);
-		
-		rect.left = 0;
-		rect.top = 0;
-		rect.right = (float) (width * ratio);
-		rect.bottom = height;
 	}
 
 	public ReimMonthBar(Context context, AttributeSet attrs)
@@ -43,6 +37,13 @@ public class ReimMonthBar extends View
 
 	public void onDraw(Canvas canvas)
 	{
+		width = canvas.getWidth();
+		
+		rect.left = 0;
+		rect.top = 0;
+		rect.right = (float) (width * ratio);
+		rect.bottom = height;
+		
 		canvas.drawRoundRect(rect, radius, radius, paint);
 	}
 	
