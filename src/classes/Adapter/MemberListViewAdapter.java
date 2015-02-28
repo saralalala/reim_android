@@ -54,7 +54,7 @@ public class MemberListViewAdapter extends BaseAdapter
 		User user = memberList.get(position);
 
 		imageView.setImageResource(R.drawable.default_avatar);
-		if (!user.getAvatarPath().equals(""))
+		if (!user.getAvatarPath().isEmpty())
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
 			if (bitmap != null)
@@ -63,7 +63,7 @@ public class MemberListViewAdapter extends BaseAdapter
 			}
 		}
 
-		if (user.getNickname().equals(""))
+		if (user.getNickname().isEmpty())
 		{
 			nicknameTextView.setText(R.string.not_available);
 		}

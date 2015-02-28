@@ -39,6 +39,8 @@
     <string name="skip">直接跳过</string>
     <string name="alarm">提醒</string>
     <string name="finish">直接结束</string>
+    <string name="exit">退出</string>
+    <string name="sign_in_again">重新登录</string>
     
     <string name="sign_up">注册</string>
     <string name="sign_up_by_phone">手机注册</string>
@@ -305,6 +307,7 @@
     <string name="error_submit_report_empty">请添加消费后再提交报告</string>
     <string name="error_submit_report_item_not_uploaded">消费未被上传，报告不可被提交</string>
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>
+    <string name="error_timeout">你的账号已经其他地方登录，本地已经下线。</string>
     
     <string name="succeed_in_exporting">报告导出成功</string>
     <string name="succeed_in_saving_item">此笔消费保存成功</string>

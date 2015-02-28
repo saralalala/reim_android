@@ -409,7 +409,7 @@ public class EditReportActivity extends Activity
 		itemList = dbManager.getItems(Item.getItemsIDList(itemList));
 		
 		titleEditText.setText(report.getTitle());
-		if (report.getTitle().equals(""))
+		if (report.getTitle().isEmpty())
 		{
 			titleEditText.requestFocus();
 		}
@@ -471,7 +471,7 @@ public class EditReportActivity extends Activity
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-			String vendor = item.getVendor().equals("") ? getString(R.string.vendor_not_available) : item.getVendor();
+			String vendor = item.getVendor().isEmpty() ? getString(R.string.vendor_not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
 			if (item.missingInfo())
@@ -481,10 +481,13 @@ public class EditReportActivity extends Activity
 			else
 			{
 				Category category = item.getCategory();
-				Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
-				if (bitmap != null)
+				if (!category.getIconPath().isEmpty())
 				{
-					categoryImageView.setImageBitmap(bitmap);				
+					Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
+					if (bitmap != null)
+					{
+						categoryImageView.setImageBitmap(bitmap);				
+					}					
 				}
 			}
 			
@@ -527,7 +530,7 @@ public class EditReportActivity extends Activity
 									public void onClick(DialogInterface dialog, int which)
 									{
 										String comment = commentEditText.getText().toString();
-										if (comment.equals(""))
+										if (comment.isEmpty())
 										{
 											ViewUtils.showToast(EditReportActivity.this, R.string.error_comment_empty);
 										}

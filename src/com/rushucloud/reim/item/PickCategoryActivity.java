@@ -202,8 +202,7 @@ public class PickCategoryActivity extends Activity
 				final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
-					category.setIconPath(iconPath);
+					PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());
 					dbManager.updateCategory(category);

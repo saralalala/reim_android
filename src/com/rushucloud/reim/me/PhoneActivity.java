@@ -99,11 +99,11 @@ public class PhoneActivity extends Activity
 					{
 						finish();
 					}
-					else if (newPhone.equals("") && currentUser.getEmail().equals(""))
+					else if (newPhone.isEmpty() && currentUser.getEmail().isEmpty())
 					{
 						ViewUtils.showToast(PhoneActivity.this, R.string.error_new_phone_empty);
 					}
-					else if (!newPhone.equals("") && !Utils.isPhone(newPhone))
+					else if (!newPhone.isEmpty() && !Utils.isPhone(newPhone))
 					{
 						ViewUtils.showToast(PhoneActivity.this, R.string.error_phone_wrong_format);
 					}

@@ -37,7 +37,8 @@ public class SubordinatesReportResponse extends BaseResponse
 					Report report = new Report();
 					report.setTitle(object.getString("title"));
 					report.setServerID(object.getInt("id"));
-					report.setStatus(Integer.valueOf(object.getString("status")));
+					report.setStatus(Integer.valueOf(object.getString("rstatus")));
+					report.setMyDecision(Integer.valueOf(object.getString("status")));
 					report.setCreatedDate(object.getInt("createdt"));
 					report.setServerUpdatedDate(object.getInt("lastdt"));
 					report.setLocalUpdatedDate(object.getInt("lastdt"));

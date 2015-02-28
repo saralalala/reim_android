@@ -747,10 +747,13 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			}
 			else
 			{
-				Bitmap icon = BitmapFactory.decodeFile(category.getIconPath());
-				if (icon != null)
+				if (!category.getIconPath().isEmpty())
 				{
-					iconImageView.setImageBitmap(icon);		
+					Bitmap icon = BitmapFactory.decodeFile(category.getIconPath());
+					if (icon != null)
+					{
+						iconImageView.setImageBitmap(icon);		
+					}					
 				}
 				nameTextView.setTextColor(unselectedColor);
 			}			
@@ -786,8 +789,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
-					category.setIconPath(iconPath);
+					PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());
 					dbManager.updateCategory(category);

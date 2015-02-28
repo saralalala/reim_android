@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 public class ReimProgressDialog
 {
-	private static Dialog progressDialog;
+	private static Dialog dialog;
 	private static View dialogView;
 	private static ImageView imageView;
 	private static AnimationDrawable animationDrawable;
@@ -36,8 +36,8 @@ public class ReimProgressDialog
 			viewGroup.removeView(dialogView);
 		}
 		
-		progressDialog = new Dialog(context, R.style.ProgressDialog);
-		progressDialog.setContentView(dialogView);
+		dialog = new Dialog(context, R.style.ProgressDialog);
+		dialog.setContentView(dialogView);
 	}
 	
 	public static void show()
@@ -46,11 +46,11 @@ public class ReimProgressDialog
 		{
 			animationDrawable.start();
 		}
-		progressDialog.show();
+		dialog.show();
 	}
 	
 	public static void dismiss()
 	{
-		progressDialog.dismiss();
+		dialog.dismiss();
 	}
 }

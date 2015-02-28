@@ -86,15 +86,8 @@ public class SignInActivity extends Activity implements View.OnClickListener
 			}
 		});
 		
-		String username = null;
-		String password = null;
-		
-		Bundle bundle = getIntent().getExtras();
-		if (bundle != null)
-		{
-			username = bundle.getString("username");
-			password = bundle.getString("password");
-		}
+		String username = getIntent().getStringExtra("username");
+		String password = getIntent().getStringExtra("password");
 		
 		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
 		usernameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
@@ -107,12 +100,6 @@ public class SignInActivity extends Activity implements View.OnClickListener
 			usernameEditText.setText(username);
 			passwordEditText.setText(password);
 		}
-
-//		usernameEditText.setText("abjkl@163.com");
-//		usernameEditText.setText("kangdiwill@163.com");
-//		usernameEditText.setText("13911977103");
-//		usernameEditText.setText("18811567003");
-//		passwordEditText.setText("g0YTBhMzE2OTg1OWZhMDMyYjlmOGVkMTE3NDQ3OD");
 
 		Button signInButton = (Button)findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()
@@ -129,12 +116,12 @@ public class SignInActivity extends Activity implements View.OnClickListener
 				{
 					ViewUtils.showToast(SignInActivity.this, R.string.error_request_network_unavailable);
 				}
-				else if (username.equals(""))
+				else if (username.isEmpty())
 				{
 					ViewUtils.showToast(SignInActivity.this, R.string.error_username_empty);
 					usernameEditText.requestFocus();
 				}
-				else if (password.equals(""))
+				else if (password.isEmpty())
 				{
 					ViewUtils.showToast(SignInActivity.this, R.string.error_password_empty);
 					passwordEditText.requestFocus();

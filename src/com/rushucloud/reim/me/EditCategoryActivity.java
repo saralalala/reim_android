@@ -153,7 +153,7 @@ public class EditCategoryActivity extends Activity
 			{
 				String name = nameEditText.getText().toString();
 				String limit = limitEditText.getText().toString();
-				if (name.equals(""))
+				if (name.isEmpty())
 				{
 					ViewUtils.showToast(EditCategoryActivity.this, R.string.error_category_name_empty);
 				}
@@ -167,7 +167,7 @@ public class EditCategoryActivity extends Activity
 					category.setGroupID(AppPreference.getAppPreference().getCurrentGroupID());
 					category.setIsProveAhead(proveAheadToggleButton.isChecked());
 
-   					if (!limit.equals(""))
+   					if (!limit.isEmpty())
 					{
 						category.setLimit(Double.valueOf(limit));
 					}
@@ -176,7 +176,6 @@ public class EditCategoryActivity extends Activity
 					if (iconIndex != -1)
 					{
     					category.setIconID(iconIndex + 1);
-						category.setIconPath(PhoneUtils.getIconFilePath(iconIndex + 1));
 					}
 					
 					if (category.getServerID() == -1)

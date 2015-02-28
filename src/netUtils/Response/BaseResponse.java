@@ -1,8 +1,6 @@
-
 package netUtils.Response;
 
 import netUtils.NetworkConstant;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,7 +8,6 @@ import com.rushucloud.reim.start.SignInActivity;
 
 import classes.ReimApplication;
 import classes.utils.AppPreference;
-
 import android.content.Intent;
 
 public abstract class BaseResponse
@@ -52,23 +49,13 @@ public abstract class BaseResponse
 					errorMessage = dataObject.getString("msg");					
 				}
 				
-				if (code == -11)
-				{
-					AppPreference appPreference = AppPreference.getAppPreference();
-					appPreference.setCurrentUserID(-1);
-					appPreference.setCurrentGroupID(-1);
-					appPreference.setUsername("");
-					appPreference.setPassword("");
-					appPreference.setServerToken("");
-					appPreference.setLastSyncTime(0);
-					appPreference.saveAppPreference();
-					
-					ReimApplication.setTabIndex(0);
-					ReimApplication.setReportTabIndex(0);
-					
+				if (code == NetworkConstant.ERROR_AUTH_TIMEOUT)
+				{					
 					Intent intent = new Intent(ReimApplication.getContext(), SignInActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+					intent.putExtra("username", AppPreference.getAppPreference().getUsername());
+					intent.putExtra("password", AppPreference.getAppPreference().getPassword());
 					ReimApplication.getContext().startActivity(intent);
 				}
 			}

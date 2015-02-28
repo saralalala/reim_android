@@ -66,14 +66,14 @@ public class User implements Serializable
 			setEmail(jObject.getString("email"));
 			setPhone(jObject.getString("phone"));
 			setNickname(jObject.getString("nickname"));
-			setDefaultManagerID(jObject.getInt("manager_id"));
-			setAvatarPath("");
 			setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
+			setDefaultManagerID(jObject.getInt("manager_id"));
 			setGroupID(groupID);
+			setAvatarPath("");
 			setLocalUpdatedDate(jObject.getInt("dt"));
 			setServerUpdatedDate(jObject.getInt("dt"));
 			String imageID = jObject.getString("avatar");
-			if (imageID.equals(""))
+			if (imageID.isEmpty())
 			{
 				setAvatarID(-1);					
 			}
@@ -235,12 +235,12 @@ public class User implements Serializable
 	
 	public boolean hasUndownloadedAvatar()
 	{
-		if (getAvatarPath().equals("") && getAvatarID() > 0)
+		if (getAvatarPath().isEmpty() && getAvatarID() > 0)
 		{
 			return true;
 		}
 		
-		if (!getAvatarPath().equals(""))
+		if (!getAvatarPath().isEmpty())
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(getAvatarPath());
 			if (bitmap == null)

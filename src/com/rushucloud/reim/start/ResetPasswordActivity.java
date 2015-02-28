@@ -106,12 +106,12 @@ public class ResetPasswordActivity extends Activity
 				{
 					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_request_network_unavailable);
 				}
-				else if (newPassword.equals(""))
+				else if (newPassword.isEmpty())
 				{
 					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_new_password_empty);
 					newPasswordEditText.requestFocus();
 				}
-				else if (confirmPassword.equals(""))
+				else if (confirmPassword.isEmpty())
 				{
 					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_confirm_password_empty);
 					confirmPasswordEditText.requestFocus();

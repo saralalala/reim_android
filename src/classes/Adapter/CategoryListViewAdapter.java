@@ -48,7 +48,7 @@ public class CategoryListViewAdapter extends BaseAdapter
 		Category category = categoryList.get(position);
 		
 		iconImageView.setImageResource(R.drawable.default_icon);
-		if (!category.getIconPath().equals(""))
+		if (!category.getIconPath().isEmpty())
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
 			if (bitmap != null)
@@ -57,7 +57,7 @@ public class CategoryListViewAdapter extends BaseAdapter
 			}
 		}
 		
-		if (category.getName().equals(""))
+		if (category.getName().isEmpty())
 		{
 			nameTextView.setText(R.string.not_available);
 		}

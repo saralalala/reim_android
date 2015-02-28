@@ -215,7 +215,7 @@ public class MeFragment extends Fragment
 		
 		if (currentUser != null)
 		{
-			if (!currentUser.getAvatarPath().equals(""))
+			if (!currentUser.getAvatarPath().isEmpty())
 			{
 				Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
 				if (bitmap != null)

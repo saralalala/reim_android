@@ -35,7 +35,6 @@ import com.rushucloud.reim.MultipleImageActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.report.EditReportActivity;
 import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -196,7 +195,7 @@ public class EditItemActivity extends Activity
 						{
 							bitmap = BitmapFactory.decodeFile(paths[i]);
 							String invoicePath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
-							if (!invoicePath.equals(""))
+							if (!invoicePath.isEmpty())
 							{
 								Image image = new Image();
 								image.setPath(invoicePath);
@@ -220,7 +219,7 @@ public class EditItemActivity extends Activity
 					{
 						Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempInvoicePath());
 						String invoicePath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
-						if (!invoicePath.equals(""))
+						if (!invoicePath.isEmpty())
 						{
 							Image image = new Image();
 							image.setPath(invoicePath);
@@ -261,14 +260,14 @@ public class EditItemActivity extends Activity
 					if (category != null)
 					{
 						categoryTextView.setText(category.getName());
-						Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
-						if (bitmap != null)
+						categoryImageView.setImageResource(R.drawable.default_icon);
+						if (!category.getIconPath().isEmpty())
 						{
-							categoryImageView.setImageBitmap(bitmap);
-						}
-						else
-						{
-							categoryImageView.setImageResource(R.drawable.default_icon);
+							Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
+							if (bitmap != null)
+							{
+								categoryImageView.setImageBitmap(bitmap);
+							}
 						}
 						
 						if (category.hasUndownloadedIcon())
@@ -732,7 +731,7 @@ public class EditItemActivity extends Activity
 	
 	private void initLocationView()
 	{
-		String cityName = item.getLocation().equals("") ? getString(R.string.no_location) : item.getLocation();
+		String cityName = item.getLocation().isEmpty() ? getString(R.string.no_location) : item.getLocation();
 		locationTextView = (TextView)findViewById(R.id.locationTextView);
 		locationTextView.setText(cityName);
 		locationTextView.setOnClickListener(new View.OnClickListener()
@@ -782,12 +781,14 @@ public class EditItemActivity extends Activity
 		{
 			categoryTextView.setText(item.getCategory().getName());
 			
-			Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
-			if (categoryIcon != null)
+			if (!item.getCategory().getIconPath().isEmpty())
 			{
-				categoryImageView.setImageBitmap(categoryIcon);
+				Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+				if (categoryIcon != null)
+				{
+					categoryImageView.setImageBitmap(categoryIcon);
+				}
 			}
-			categoryTextView.setText(item.getCategory().getName());
 			
 			if (item.getCategory().hasUndownloadedIcon() && PhoneUtils.isNetworkConnected())
 			{
@@ -958,7 +959,7 @@ public class EditItemActivity extends Activity
 							ArrayList<String> pathList = new ArrayList<String>();
 							for (Image image : item.getInvoices())
 							{
-								if (!image.getPath().equals(""))
+								if (!image.getPath().isEmpty())
 								{
 									pathList.add(image.getPath());
 								}
@@ -1105,14 +1106,17 @@ public class EditItemActivity extends Activity
 			}
 			
 			User user = item.getRelevantUsers().get(i);
-			Bitmap avatar = BitmapFactory.decodeFile(user.getAvatarPath());
 			
 			View memberView = View.inflate(this, R.layout.grid_member, null);
 			
 			ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
-			if (avatar != null)
+			if (!user.getAvatarPath().isEmpty())
 			{
-				avatarImageView.setImageBitmap(avatar);
+				Bitmap avatar = BitmapFactory.decodeFile(user.getAvatarPath());
+				if (avatar != null)
+				{
+					avatarImageView.setImageBitmap(avatar);
+				}				
 			}
 			
 			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
@@ -1216,7 +1220,7 @@ public class EditItemActivity extends Activity
 				if (response.getBitmap() != null)
 				{
 					final String invoicePath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE);
-					if (!invoicePath.equals(""))
+					if (!invoicePath.isEmpty())
 					{
 						image.setPath(invoicePath);
 						dbManager.updateImageByServerID(image);
@@ -1269,8 +1273,7 @@ public class EditItemActivity extends Activity
 				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
-					category.setIconPath(iconPath);
+					PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());
 					dbManager.updateCategory(category);
@@ -1280,10 +1283,13 @@ public class EditItemActivity extends Activity
 						public void run()
 						{
 							item.setCategory(category);
-							Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
-							if (categoryIcon != null)
+							if (!category.getIconPath().isEmpty())
 							{
-								categoryImageView.setImageBitmap(categoryIcon);
+								Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+								if (categoryIcon != null)
+								{
+									categoryImageView.setImageBitmap(categoryIcon);
+								}								
 							}
 						}
 					});	

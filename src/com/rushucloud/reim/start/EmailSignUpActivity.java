@@ -110,17 +110,17 @@ public class EmailSignUpActivity extends Activity
 				{
 					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_request_network_unavailable);
 				}
-				else if (email.equals(""))
+				else if (email.isEmpty())
 				{
 					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_email_empty);
 					emailEditText.requestFocus();
 				}
-				else if (password.equals(""))
+				else if (password.isEmpty())
 				{
 					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_password_empty);
 					passwordEditText.requestFocus();
 				}
-				else if (confirmPassword.equals(""))
+				else if (confirmPassword.isEmpty())
 				{
 					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_confirm_password_empty);
 					confirmPasswordEditText.requestFocus();
@@ -243,11 +243,9 @@ public class EmailSignUpActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(EmailSignUpActivity.this, R.string.failed_to_get_data);
-							Bundle bundle = new Bundle();
-							bundle.putString("username", AppPreference.getAppPreference().getUsername());
-							bundle.putString("password", AppPreference.getAppPreference().getPassword());
 							Intent intent = new Intent(EmailSignUpActivity.this, SignInActivity.class);
-							intent.putExtras(bundle);
+							intent.putExtra("username", AppPreference.getAppPreference().getUsername());
+							intent.putExtra("password", AppPreference.getAppPreference().getPassword());
 							startActivity(intent);
 							finish();
 						}

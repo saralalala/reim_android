@@ -282,7 +282,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				{
 					User user = AppPreference.getAppPreference().getCurrentUser();
 					String feedback = feedbackEditText.getText().toString();
-					if (feedback.equals(""))
+					if (feedback.isEmpty())
 					{
 						ViewUtils.showToast(MainActivity.this, R.string.error_feedback_empty);
 					}
@@ -333,11 +333,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				{
 					String code = codeEditText.getText().toString();
 					String phone = phoneEditText.getText().toString();
-					if (code.equals(""))
+					if (code.isEmpty())
 					{
 						ViewUtils.showToast(MainActivity.this, R.string.error_feedback_code_empty);
 					}
-					else if (phone.equals(""))
+					else if (phone.isEmpty())
 					{
 						ViewUtils.showToast(MainActivity.this, R.string.error_phone_empty);
 					}

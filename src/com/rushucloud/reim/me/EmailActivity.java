@@ -99,11 +99,11 @@ public class EmailActivity extends Activity
 					{
 						finish();
 					}
-					else if (newEmail.equals("") && currentUser.getPhone().equals(""))
+					else if (newEmail.isEmpty() && currentUser.getPhone().isEmpty())
 					{
 						ViewUtils.showToast(EmailActivity.this, R.string.error_new_email_empty);
 					}
-					else if (!newEmail.equals("") && !Utils.isEmail(newEmail))
+					else if (!newEmail.isEmpty() && !Utils.isEmail(newEmail))
 					{
 						ViewUtils.showToast(EmailActivity.this, R.string.error_email_wrong_format);
 					}

@@ -45,7 +45,7 @@ public class CommentListViewAdapter extends BaseAdapter
 		User user = comment.getReviewer();
 
 		avatarImageView.setImageResource(R.drawable.default_avatar);
-		if (!user.getAvatarPath().equals(""))
+		if (!user.getAvatarPath().isEmpty())
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
 			if (bitmap != null)
@@ -54,7 +54,7 @@ public class CommentListViewAdapter extends BaseAdapter
 			}
 		}
 		
-		if (user.getNickname().equals(""))
+		if (user.getNickname().isEmpty())
 		{
 			reviewerTextView.setText(R.string.not_available);
 		}

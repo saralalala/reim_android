@@ -185,12 +185,12 @@ public class Tag implements Serializable
 
 	public boolean hasUndownloadedIcon()
 	{
-		if (getIconPath().equals("") && getIconID() != -1 && getIconID() != 0)
+		if (getIconPath().isEmpty() && getIconID() != -1 && getIconID() != 0)
 		{
 			return true;
 		}	
 		
-		if (!getIconPath().equals(""))
+		if (!getIconPath().isEmpty())
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(getIconPath());
 			if (bitmap == null)

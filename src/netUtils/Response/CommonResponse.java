@@ -61,7 +61,7 @@ public class CommonResponse extends BaseResponse
 			currentUser.setLocalUpdatedDate(profileObject.getInt("lastdt"));
 			currentUser.setServerUpdatedDate(profileObject.getInt("lastdt"));
 			String imageID = profileObject.getString("avatar");
-			if (imageID.equals(""))
+			if (imageID.isEmpty())
 			{
 				currentUser.setAvatarID(-1);					
 			}
@@ -90,27 +90,7 @@ public class CommonResponse extends BaseResponse
 			memberList = new ArrayList<User>();
 			for (int i = 0; i < memberArray.length(); i++)
 			{
-				JSONObject object = memberArray.getJSONObject(i);
-				User user = new User();
-				user.setServerID(Integer.valueOf(object.getString("id")));
-				user.setEmail(object.getString("email"));
-				user.setPhone(object.getString("phone"));
-				user.setNickname(object.getString("nickname"));
-				user.setIsAdmin(Utils.intToBoolean(object.getInt("admin")));
-				user.setDefaultManagerID(object.getInt("manager_id"));
-				user.setGroupID(groupID);
-				user.setAvatarPath("");
-				user.setLocalUpdatedDate(object.getInt("dt"));
-				user.setServerUpdatedDate(object.getInt("dt"));
-				imageID = object.getString("avatar");
-				if (imageID.equals(""))
-				{
-					user.setAvatarID(-1);					
-				}
-				else
-				{
-					user.setAvatarID(Integer.valueOf(imageID));
-				}
+				User user = new User(memberArray.getJSONObject(i), groupID);
 				memberList.add(user);
 			}			
 		}

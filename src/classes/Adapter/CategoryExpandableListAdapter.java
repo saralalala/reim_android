@@ -90,7 +90,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 		Category category = categoryList.get(groupPosition);
 		
 		iconImageView.setImageResource(R.drawable.default_icon);
-		if (!category.getIconPath().equals(""))
+		if (!category.getIconPath().isEmpty())
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
 			if (bitmap != null)
@@ -99,7 +99,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 			}
 		}
 		
-		if (category.getName().equals(""))
+		if (category.getName().isEmpty())
 		{
 			nameTextView.setText(R.string.not_available);
 		}
@@ -127,7 +127,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 		Category category = subCategoryList.get(groupPosition).get(childPosition);
 		
 		iconImageView.setImageResource(R.drawable.default_icon);
-		if (!category.getIconPath().equals(""))
+		if (!category.getIconPath().isEmpty())
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
 			if (bitmap != null)
@@ -136,7 +136,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 			}
 		}
 		
-		if (category.getName().equals(""))
+		if (category.getName().isEmpty())
 		{
 			nameTextView.setText(R.string.not_available);
 		}

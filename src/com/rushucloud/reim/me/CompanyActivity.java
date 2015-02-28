@@ -99,7 +99,7 @@ public class CompanyActivity extends Activity
 				{
 					finish();
 				}
-				else if (newName.equals(""))
+				else if (newName.isEmpty())
 				{
 					ViewUtils.showToast(CompanyActivity.this, R.string.error_new_company_name_empty);
 				}

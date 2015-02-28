@@ -180,7 +180,7 @@ public class ShowItemActivity extends Activity
 		vendorTextView.setText(item.getVendor());
 
 		// init location
-		String cityName = item.getLocation().equals("") ? getString(R.string.not_available) : item.getLocation();
+		String cityName = item.getLocation().isEmpty() ? getString(R.string.not_available) : item.getLocation();
 		TextView locationTextView = (TextView)findViewById(R.id.locationTextView);
 		locationTextView.setText(cityName);
 
@@ -189,10 +189,13 @@ public class ShowItemActivity extends Activity
 		TextView categoryTextView = (TextView)findViewById(R.id.categoryTextView);
 		if (item.getCategory() != null)
 		{
-			Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
-			if (categoryIcon != null)
+			if (!item.getCategory().getIconPath().isEmpty())
 			{
-				categoryImageView.setImageBitmap(categoryIcon);
+				Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+				if (categoryIcon != null)
+				{
+					categoryImageView.setImageBitmap(categoryIcon);
+				}
 			}
 			categoryTextView.setText(item.getCategory().getName());
 			
@@ -266,7 +269,7 @@ public class ShowItemActivity extends Activity
 						ArrayList<String> pathList = new ArrayList<String>();
 						for (Image image : item.getInvoices())
 						{
-							if (!image.getPath().equals(""))
+							if (!image.getPath().isEmpty())
 							{
 								pathList.add(image.getPath());
 							}
@@ -385,14 +388,17 @@ public class ShowItemActivity extends Activity
 			}
 			
 			User user = item.getRelevantUsers().get(i);
-			Bitmap avatar = BitmapFactory.decodeFile(user.getAvatarPath());
 			
 			View memberView = View.inflate(this, R.layout.grid_member, null);
 			
-			ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
-			if (avatar != null)
+			ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);			
+			if (!user.getAvatarPath().isEmpty())
 			{
-				avatarImageView.setImageBitmap(avatar);		
+				Bitmap avatar = BitmapFactory.decodeFile(user.getAvatarPath());
+				if (avatar != null)
+				{
+					avatarImageView.setImageBitmap(avatar);		
+				}				
 			}
 			
 			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
@@ -419,7 +425,7 @@ public class ShowItemActivity extends Activity
 				if (response.getBitmap() != null)
 				{
 					final String invoicePath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE);
-					if (!invoicePath.equals(""))
+					if (!invoicePath.isEmpty())
 					{
 						image.setPath(invoicePath);
 						dbManager.updateImageByServerID(image);
@@ -452,7 +458,7 @@ public class ShowItemActivity extends Activity
 						{
 							ViewUtils.showToast(ShowItemActivity.this, R.string.failed_to_download_invoice);
 						}
-					});								
+					});
 				}
 			}
 		});		
@@ -468,8 +474,7 @@ public class ShowItemActivity extends Activity
 				final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
 				if (response.getBitmap() != null)
 				{
-					String iconPath = PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
-					category.setIconPath(iconPath);
+					PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
 					category.setLocalUpdatedDate(Utils.getCurrentTime());
 					category.setServerUpdatedDate(category.getLocalUpdatedDate());
 					dbManager.updateCategory(category);

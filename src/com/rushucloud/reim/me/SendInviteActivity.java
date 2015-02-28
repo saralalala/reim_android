@@ -91,7 +91,7 @@ public class SendInviteActivity extends Activity
 				{
 					ViewUtils.showToast(SendInviteActivity.this, R.string.error_send_invite_network_unavailable);			
 				}
-				if (username.equals(""))
+				if (username.isEmpty())
 				{
 					ViewUtils.showToast(SendInviteActivity.this, R.string.error_email_or_phone_empty);
 				}

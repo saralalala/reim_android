@@ -256,7 +256,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						Bundle bundle = new Bundle();
 						bundle.putSerializable("report", report);
 						Intent intent;
-						if (report.getStatus() == Report.STATUS_SUBMITTED && !report.isCC())
+						if (report.canBeApproved())
 						{
 							intent = new Intent(getActivity(), ApproveReportActivity.class);
 						}
@@ -758,7 +758,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		User user = appPreference.getCurrentUser();
-		if (!user.getEmail().equals(""))
+		if (!user.getEmail().isEmpty())
 		{
 			emailEditText.setText(user.getEmail());
 		}
@@ -773,7 +773,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 									public void onClick(DialogInterface dialog, int which)
 									{
 										String email = emailEditText.getText().toString();
-										if (email.equals(""))
+										if (email.isEmpty())
 										{
 											ViewUtils.showToast(getActivity(), R.string.error_email_empty);
 										}

@@ -119,7 +119,7 @@ public class PhoneSignUpActivity extends Activity
 				{
 					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
 				}
-				else if (phoneNumber.equals(""))
+				else if (phoneNumber.isEmpty())
 				{
 					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
 					phoneEditText.requestFocus();
@@ -160,17 +160,17 @@ public class PhoneSignUpActivity extends Activity
 					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
 					phoneEditText.requestFocus();		
 				}
-				else if (phoneNumber.equals(""))
+				else if (phoneNumber.isEmpty())
 				{
 					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
 					phoneEditText.requestFocus();		
 				}
-				else if (password.equals(""))
+				else if (password.isEmpty())
 				{
 					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_password_empty);
 					passwordEditText.requestFocus();	
 				}
-				else if (confirmPassword.equals(""))
+				else if (confirmPassword.isEmpty())
 				{
 					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_confirm_password_empty);
 					confirmPasswordEditText.requestFocus();
@@ -180,7 +180,7 @@ public class PhoneSignUpActivity extends Activity
 					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_confirm_password);
 					confirmPasswordEditText.requestFocus();
 				}
-				else if (inputCode.equals(""))
+				else if (inputCode.isEmpty())
 				{
 					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_code_empty);
 					codeEditText.requestFocus();	
@@ -382,11 +382,9 @@ public class PhoneSignUpActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_data);
-							Bundle bundle = new Bundle();
-							bundle.putString("username", AppPreference.getAppPreference().getUsername());
-							bundle.putString("password", AppPreference.getAppPreference().getPassword());
 							Intent intent = new Intent(PhoneSignUpActivity.this, SignInActivity.class);
-							intent.putExtras(bundle);
+							intent.putExtra("username", AppPreference.getAppPreference().getUsername());
+							intent.putExtra("password", AppPreference.getAppPreference().getPassword());
 							startActivity(intent);
 							finish();
 						}

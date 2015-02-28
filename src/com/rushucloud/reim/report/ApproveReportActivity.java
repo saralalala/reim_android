@@ -343,7 +343,7 @@ public class ApproveReportActivity extends Activity
 					report.setServerUpdatedDate(currentTime);
 					dbManager.updateOthersReport(report);
 					
-					if (!commentContent.equals(""))
+					if (!commentContent.isEmpty())
 					{
 						User user = appPreference.getCurrentUser();
 						

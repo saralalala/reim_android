@@ -32,6 +32,7 @@ public class Report implements Serializable
 	private int serverID = -1;
 	private String title = "";
 	private int status = Report.STATUS_DRAFT;
+	private int myDecision = Report.STATUS_SUBMITTED;
 	private List<User> managerList = null;
 	private List<User> ccList = null;
 	private List<Comment> commentList = null;
@@ -125,6 +126,19 @@ public class Report implements Serializable
 		this.status = status;
 	}
 	
+	public int getMyDecision()
+	{
+		return myDecision;
+	}
+	public void setMyDecision(int myDecision)
+	{
+		this.myDecision = myDecision;
+	}
+	public boolean canBeApproved()
+	{
+		return status == Report.STATUS_SUBMITTED && !isCC && myDecision == Report.STATUS_SUBMITTED;
+	}
+
 	public List<User> getManagerList()
 	{
 		return managerList;

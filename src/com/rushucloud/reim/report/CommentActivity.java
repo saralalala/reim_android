@@ -158,7 +158,7 @@ public class CommentActivity extends Activity
 				{
 					ViewUtils.showToast(CommentActivity.this, R.string.error_comment_network_unavailable);
 				}
-				else if (comment.equals(""))
+				else if (comment.isEmpty())
 				{
 					ViewUtils.showToast(CommentActivity.this, R.string.error_comment_empty);
 				}

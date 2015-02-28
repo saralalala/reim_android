@@ -105,13 +105,13 @@ public class ProfileActivity extends Activity
 					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
 					avatarPath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
 					
-					if (!avatarPath.equals("") && PhoneUtils.isNetworkConnected())
+					if (!avatarPath.isEmpty() && PhoneUtils.isNetworkConnected())
 					{
 						ViewUtils.showToast(this, R.string.succeed_in_saving_avatar);
 						avatarImageView.setImageBitmap(bitmap);
 						sendUploadAvatarRequest();
 					}
-					else if (avatarPath.equals(""))
+					else if (avatarPath.isEmpty())
 					{
 						ViewUtils.showToast(this, R.string.failed_to_save_avatar);
 					}
@@ -258,7 +258,7 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (currentUser != null && !currentUser.getAvatarPath().equals(""))
+				if (currentUser != null && !currentUser.getAvatarPath().isEmpty())
 				{
 					Intent intent = new Intent(ProfileActivity.this, SingleImageActivity.class);
 					intent.putExtra("imagePath", currentUser.getAvatarPath());
@@ -317,7 +317,7 @@ public class ProfileActivity extends Activity
 		currentGroup = appPreference.getCurrentGroup();
 		currentUser.setIsAdmin(true);
 		
-		if (!currentUser.getAvatarPath().equals(""))
+		if (!currentUser.getAvatarPath().isEmpty())
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
 			if (bitmap != null)
@@ -326,13 +326,13 @@ public class ProfileActivity extends Activity
 			}
 		}
 		
-		String email = currentUser != null && !currentUser.getEmail().equals("") ? currentUser.getEmail() : getString(R.string.not_binding);
+		String email = currentUser != null && !currentUser.getEmail().isEmpty() ? currentUser.getEmail() : getString(R.string.not_binding);
 		emailTextView.setText(email);
 		
-		String phone = currentUser != null && !currentUser.getPhone().equals("") ? currentUser.getPhone() : getString(R.string.not_binding);
+		String phone = currentUser != null && !currentUser.getPhone().isEmpty() ? currentUser.getPhone() : getString(R.string.not_binding);
 		phoneTextView.setText(phone);
 		
-		String nickname = currentUser != null && !currentUser.getNickname().equals("") ? currentUser.getNickname() : getString(R.string.empty);
+		String nickname = currentUser != null && !currentUser.getNickname().isEmpty() ? currentUser.getNickname() : getString(R.string.empty);
 		nicknameTextView.setText(nickname);
 		
 		User manager = dbManager.getUser(currentUser.getDefaultManagerID());

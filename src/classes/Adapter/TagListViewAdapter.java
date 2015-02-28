@@ -49,7 +49,7 @@ public class TagListViewAdapter extends BaseAdapter
 		
 		Tag tag = tagList.get(position);
 		
-		if (tag.getName().equals(""))
+		if (tag.getName().isEmpty())
 		{
 			nameTextView.setText(R.string.not_available);
 		}

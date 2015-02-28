@@ -23,7 +23,6 @@ public class Category implements Serializable
 	private int groupID = -1;
 	private int parentID = 0;
 	private int iconID = -1;
-	private String iconPath = "";
 	private boolean isProveAhead = false;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
@@ -45,12 +44,7 @@ public class Category implements Serializable
 			setLocalUpdatedDate(jObject.getInt("lastdt"));
 			setServerUpdatedDate(jObject.getInt("lastdt"));
 			setIsProveAhead(Utils.intToBoolean(jObject.getInt("prove_before")));
-			int iconID = jObject.optInt("avatar", -1);
-			setIconID(iconID);
-			if (iconID != -1)
-			{
-				setIconPath(PhoneUtils.getIconFilePath(iconID));				
-			}
+			setIconID(jObject.optInt("avatar", -1));
 		}
 		catch (JSONException e)
 		{
@@ -114,11 +108,7 @@ public class Category implements Serializable
 	
 	public String getIconPath()
 	{
-		return iconPath;
-	}
-	public void setIconPath(String iconPath)
-	{
-		this.iconPath = iconPath;
+		return iconID == -1 ? "" : PhoneUtils.getIconFilePath(iconID);
 	}
 	
 	public boolean isProveAhead()
@@ -165,12 +155,12 @@ public class Category implements Serializable
 
 	public boolean hasUndownloadedIcon()
 	{
-		if (getIconPath().equals("") && getIconID() > 0)
+		if (getIconPath().isEmpty() && getIconID() > 0)
 		{
 			return true;
 		}
 		
-		if (!getIconPath().equals(""))
+		if (!getIconPath().isEmpty())
 		{
 			Bitmap bitmap = BitmapFactory.decodeFile(getIconPath());
 			if (bitmap == null)

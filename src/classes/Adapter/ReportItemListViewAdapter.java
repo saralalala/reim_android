@@ -59,7 +59,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-			String vendor = item.getVendor().equals("") ? context.getString(R.string.vendor_not_available) : item.getVendor();
+			String vendor = item.getVendor().isEmpty() ? context.getString(R.string.vendor_not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
 			if (item.missingInfo())
@@ -71,11 +71,15 @@ public class ReportItemListViewAdapter extends BaseAdapter
 				Category category = item.getCategory();
 				
 				categoryImageView.setImageResource(R.drawable.default_icon);
-				Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
-				if (bitmap != null)
+				if (!category.getIconPath().isEmpty())
 				{
-					categoryImageView.setImageBitmap(bitmap);				
-				}					
+					Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
+					if (bitmap != null)
+					{
+						categoryImageView.setImageBitmap(bitmap);				
+					}
+					
+				}
 			}
 			
 			return view;

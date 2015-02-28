@@ -100,17 +100,17 @@ public class ChangePasswordActivity extends Activity
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_change_password_network_unavailable);
 				}
-				else if (oldPassword.equals(""))
+				else if (oldPassword.isEmpty())
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_old_password_empty);
 					oldPasswordEditText.requestFocus();
 				}
-				else if (newPassword.equals(""))
+				else if (newPassword.isEmpty())
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_new_password_empty);
 					newPasswordEditText.requestFocus();
 				}
-				else if (confirmPassword.equals(""))
+				else if (confirmPassword.isEmpty())
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_confirm_password_empty);
 					confirmPasswordEditText.requestFocus();

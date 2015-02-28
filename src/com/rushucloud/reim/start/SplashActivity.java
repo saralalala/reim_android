@@ -25,9 +25,10 @@ public class SplashActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_start_splash);
+//		setContentView(R.layout.activity_start_splash);
+		setContentView(R.layout.test);
 		appPreference = AppPreference.getAppPreference();
-		getActionBar().hide();
+//		getActionBar().hide();
 		start();
 	}
 
@@ -47,7 +48,7 @@ public class SplashActivity extends Activity
 	
 	private void start()
 	{
-		if (appPreference.getUsername().equals(""))
+		if (appPreference.getUsername().isEmpty())
 		{		
 			Thread splashThread = new Thread()
 			{
@@ -192,11 +193,9 @@ public class SplashActivity extends Activity
 						public void run()
 						{
 							ViewUtils.showToast(SplashActivity.this, R.string.failed_to_sign_in);
-							Bundle bundle = new Bundle();
-							bundle.putString("username", appPreference.getUsername());
-							bundle.putString("password", appPreference.getPassword());
 							Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
-							intent.putExtras(bundle);
+							intent.putExtra("username", AppPreference.getAppPreference().getUsername());
+							intent.putExtra("password", AppPreference.getAppPreference().getPassword());
 							startActivity(intent);
 							finish();
 						}

@@ -55,11 +55,11 @@ public class ReportListViewAdapter extends BaseAdapter
 		params.width = report.getStatusWidth(context);
 		statusTextView.setLayoutParams(params);
 		
-		String title = report.getTitle().equals("") ? context.getString(R.string.report_no_name) : report.getTitle();
+		String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
 		titleTextView.setText(title);
 
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
-		dateTextView.setText(date.equals("") ? context.getString(R.string.not_available) : date);
+		dateTextView.setText(date.isEmpty() ? context.getString(R.string.not_available) : date);
 		
 		double amount = dbManager.getReportAmount(report.getLocalID());
 		amountTextView.setText(Utils.formatDouble(amount));

@@ -100,7 +100,7 @@ public class NicknameActivity extends Activity
 				{
 					finish();
 				}
-				else if (newNickname.equals(""))
+				else if (newNickname.isEmpty())
 				{
 					ViewUtils.showToast(NicknameActivity.this, R.string.error_new_nickname_empty);
 				}

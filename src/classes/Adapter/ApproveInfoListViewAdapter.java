@@ -127,7 +127,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 		
 		if (user != null)
 		{
-			if (!user.getAvatarPath().equals(""))
+			if (!user.getAvatarPath().isEmpty())
 			{
 				Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
 				if (bitmap != null)

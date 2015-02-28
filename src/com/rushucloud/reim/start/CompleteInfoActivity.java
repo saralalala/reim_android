@@ -146,7 +146,7 @@ public class CompleteInfoActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (!avatarPath.equals(""))
+				if (!avatarPath.isEmpty())
 				{
 					Intent intent = new Intent(CompleteInfoActivity.this, SingleImageActivity.class);
 					intent.putExtra("imagePath", avatarPath);
@@ -183,7 +183,7 @@ public class CompleteInfoActivity extends Activity
 					startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
 					finish();
 				}
-				else if (!newAvatar && nickname.equals(""))
+				else if (!newAvatar && nickname.isEmpty())
 				{
 					startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
 					finish();
@@ -308,7 +308,7 @@ public class CompleteInfoActivity extends Activity
 					dbManager.updateUser(currentUser);
 					newAvatar = false;
 					
-					if (currentUser.getNickname().equals(""))
+					if (currentUser.getNickname().isEmpty())
 					{
 						runOnUiThread(new Runnable()
 						{

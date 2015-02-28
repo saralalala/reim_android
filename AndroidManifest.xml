@@ -37,7 +37,8 @@
         android:name="classes.ReimApplication" 
         android:theme="@style/AppTheme" >
         
-        <activity android:name="com.rushucloud.reim.start.SplashActivity" >
+        <activity android:name="com.rushucloud.reim.start.SplashActivity"
+            android:theme="@style/AppSplash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -77,6 +78,7 @@
         <activity android:name="com.rushucloud.reim.report.CommentActivity" />
         <activity android:name="com.rushucloud.reim.report.UnarchivedItemsActivity" />
         <activity android:name="com.rushucloud.reim.report.ApproveInfoActivity" />
+        <activity android:name="com.rushucloud.reim.report.FollowingActivity" />
         
         <activity android:name="com.rushucloud.reim.me.ProfileActivity" />
         <activity android:name="com.rushucloud.reim.me.EmailActivity" />

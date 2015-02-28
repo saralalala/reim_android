@@ -196,7 +196,7 @@ public class PickVendorActivity extends Activity
 								for (int i = 0 ; i < vendorList.size(); i++)
 								{
 									Vendor vendor = vendorList.get(i);
-									if (vendor.getPhoto() == null && !vendor.getPhotoURL().equals(""))
+									if (vendor.getPhoto() == null && !vendor.getPhotoURL().isEmpty())
 									{
 										sendDownloadVendorImageRequest(i);
 									}

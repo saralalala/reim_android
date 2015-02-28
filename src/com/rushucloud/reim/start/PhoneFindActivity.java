@@ -116,7 +116,7 @@ public class PhoneFindActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (code.equals(""))
+				if (code.isEmpty())
 				{
 					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_no_code);
 				}

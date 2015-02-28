@@ -170,6 +170,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "manager_id TEXT DEFAULT(''),"
 										+ "cc_id TEXT DEFAULT(''),"
 										+ "status INT DEFAULT(0),"
+										+ "my_decision INT DEFAULT(0),"
 										+ "prove_ahead INT DEFAULT(0),"
 										+ "item_count INT DEFAULT(0),"
 										+ "amount TEXT DEFAULT(''),"
@@ -221,7 +222,6 @@ public class DBManager extends SQLiteOpenHelper
 										+ "group_id INT DEFAULT(0),"
 										+ "parent_id INT DEFAULT(0),"
 										+ "icon_id INT DEFAULT(0),"
-										+ "icon_path TEXT DEFAULT(''),"
 										+ "prove_ahead INT DEFAULT(0),"
 										+ "server_updatedt INT DEFAULT(0),"
 										+ "local_updatedt INT DEFAULT(0),"
@@ -1673,13 +1673,14 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_others_report (server_id, owner_id, title, user_id, status, manager_id, cc_id, " +
+			String sqlString = "INSERT INTO tbl_others_report (server_id, owner_id, title, user_id, status, my_decision, manager_id, cc_id, " +
 									"prove_ahead, amount, item_count, is_cc, created_date, server_updatedt, local_updatedt) VALUES (" + 
 								"'" + report.getServerID() + "'," +
 								"'" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
 								"'" + report.getTitle() + "'," +
 								"'" + report.getSender().getServerID() + "'," +
 								"'" + report.getStatus() + "'," +
+								"'" + report.getMyDecision() + "'," +
 								"'" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"'" + User.getUsersIDString(report.getCCList()) + "'," +
 								"'" + Utils.booleanToInt(report.isProveAhead()) + "'," +
@@ -1760,6 +1761,7 @@ public class DBManager extends SQLiteOpenHelper
 								"title = '" + report.getTitle() + "'," +
 								"user_id = '" + report.getSender().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
+								"my_decision = '" + report.getMyDecision() + "'," +
 								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
 								"prove_ahead = '" + Utils.booleanToInt(report.isProveAhead()) + "'," +
@@ -1954,6 +1956,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setCommentList(getOthersReportComments(report.getServerID()));
 				report.setStatus(getIntFromCursor(cursor, "status"));
+				report.setMyDecision(getIntFromCursor(cursor, "my_decision"));
 				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
 				report.setAmount(getStringFromCursor(cursor, "amount"));
@@ -2168,6 +2171,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setCommentList(getOthersReportComments(report.getServerID()));
 				report.setStatus(getIntFromCursor(cursor, "status"));
+				report.setMyDecision(getIntFromCursor(cursor, "my_decision"));
 				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
 				report.setAmount(getStringFromCursor(cursor, "amount"));
@@ -2473,14 +2477,13 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "INSERT INTO tbl_category (server_id, category_name, max_limit, group_id, " +
-								"parent_id, icon_id, icon_path, prove_ahead, local_updatedt, server_updatedt) VALUES (" +
+								"parent_id, icon_id, prove_ahead, local_updatedt, server_updatedt) VALUES (" +
 								"'" + category.getServerID() + "'," +
 								"'" + category.getName() + "'," +
 								"'" + category.getLimit() + "'," +
 								"'" + category.getGroupID() + "'," +
 								"'" + category.getParentID() + "'," +
 								"'" + category.getIconID() + "'," +
-								"'" + category.getIconPath() + "'," +
 								"'" + Utils.booleanToInt(category.isProveAhead()) + "'," +
 								"'" + category.getLocalUpdatedDate() + "'," +
 								"'" + category.getServerUpdatedDate() + "')";			
@@ -2504,7 +2507,6 @@ public class DBManager extends SQLiteOpenHelper
 								"group_id = '" + category.getGroupID() + "'," +
 								"parent_id = '" + category.getParentID() + "'," +
 								"icon_id = '" + category.getIconID() + "'," +
-								"icon_path = '" + category.getIconPath() + "'," +
 								"prove_ahead = '" + Utils.booleanToInt(category.isProveAhead()) + "'," +
 								"local_updatedt = '" + category.getLocalUpdatedDate() + "'," +
 								"server_updatedt = '" + category.getServerUpdatedDate() + "' " +
@@ -2574,7 +2576,6 @@ public class DBManager extends SQLiteOpenHelper
 				category.setGroupID(getIntFromCursor(cursor, "group_id"));
 				category.setParentID(getIntFromCursor(cursor, "parent_id"));
 				category.setIconID(getIntFromCursor(cursor, "icon_id"));
-				category.setIconPath(getStringFromCursor(cursor, "icon_path"));
 				category.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -2641,7 +2642,6 @@ public class DBManager extends SQLiteOpenHelper
 				category.setGroupID(getIntFromCursor(cursor, "group_id"));
 				category.setParentID(getIntFromCursor(cursor, "parent_id"));
 				category.setIconID(getIntFromCursor(cursor, "icon_id"));
-				category.setIconPath(getStringFromCursor(cursor, "icon_path"));
 				category.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -2674,7 +2674,6 @@ public class DBManager extends SQLiteOpenHelper
 				category.setGroupID(getIntFromCursor(cursor, "group_id"));
 				category.setParentID(getIntFromCursor(cursor, "parent_id"));
 				category.setIconID(getIntFromCursor(cursor, "icon_id"));
-				category.setIconPath(getStringFromCursor(cursor, "icon_path"));
 				category.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
 				category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));

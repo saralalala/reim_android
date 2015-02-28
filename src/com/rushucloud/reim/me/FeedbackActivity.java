@@ -117,7 +117,7 @@ public class FeedbackActivity extends Activity
     {
 		final String feedback = feedbackEditText.getText().toString();
 		final String contactInfo = contactEditText.getText().toString();
-		if (feedback.equals("") && contactInfo.equals(""))
+		if (feedback.isEmpty() && contactInfo.isEmpty())
 		{
 			ViewUtils.showToast(this, R.string.error_feedback_contact_empty);
 		}

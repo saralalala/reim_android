@@ -88,7 +88,7 @@ public class EditTagActivity extends Activity
 			public void onClick(View v)
 			{
 				String name = nameEditText.getText().toString();
-				if (name.equals(""))
+				if (name.isEmpty())
 				{
 					ViewUtils.showToast(EditTagActivity.this, R.string.error_tag_name_empty);
 				}

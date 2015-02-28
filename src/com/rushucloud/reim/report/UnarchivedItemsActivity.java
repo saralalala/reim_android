@@ -499,10 +499,13 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 				}
 				else
 				{
-					Bitmap icon = BitmapFactory.decodeFile(category.getIconPath());
-					if (icon != null)
+					if (!category.getIconPath().isEmpty())
 					{
-						iconImageView.setImageBitmap(icon);		
+						Bitmap icon = BitmapFactory.decodeFile(category.getIconPath());
+						if (icon != null)
+						{
+							iconImageView.setImageBitmap(icon);		
+						}						
 					}
 					nameTextView.setTextColor(unselectedColor);
 				}
@@ -516,10 +519,13 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 				}
 				else
 				{
-					Bitmap icon = BitmapFactory.decodeFile(category.getIconPath());
-					if (icon != null)
+					if (!category.getIconPath().isEmpty())
 					{
-						iconImageView.setImageBitmap(icon);		
+						Bitmap icon = BitmapFactory.decodeFile(category.getIconPath());
+						if (icon != null)
+						{
+							iconImageView.setImageBitmap(icon);		
+						}				
 					}
 					nameTextView.setTextColor(unselectedColor);
 				}				

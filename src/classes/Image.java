@@ -89,7 +89,7 @@ public class Image
 	
 	public boolean isNotDownloaded()
 	{
-		return getPath().equals("") || getBitmap() == null;
+		return getPath().isEmpty() || getBitmap() == null;
 	}
 	
 	public boolean isNotUploaded()

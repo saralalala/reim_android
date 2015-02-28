@@ -44,7 +44,7 @@ public class ItemListViewAdapter extends BaseAdapter
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		Item item = this.getItem(position);
-		if (!item.getConsumedDateGroup().equals(""))
+		if (!item.getConsumedDateGroup().isEmpty())
 		{
 			View view = layoutInflater.inflate(R.layout.list_header, parent, false);
 			
@@ -100,7 +100,7 @@ public class ItemListViewAdapter extends BaseAdapter
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-			String vendor = item.getVendor().equals("") ? context.getString(R.string.vendor_not_available) : item.getVendor();
+			String vendor = item.getVendor().isEmpty() ? context.getString(R.string.vendor_not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
 			String reportTitle = item.getBelongReport() == null ? context.getString(R.string.report_not_available) : item.getBelongReport().getTitle();
@@ -109,7 +109,7 @@ public class ItemListViewAdapter extends BaseAdapter
 			Category category = item.getCategory();
 			
 			categoryImageView.setImageResource(R.drawable.default_icon);
-			if (category != null)
+			if (category != null && !category.getIconPath().isEmpty())
 			{
 				Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
 				if (bitmap != null)

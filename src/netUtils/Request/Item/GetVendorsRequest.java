@@ -32,7 +32,7 @@ public class GetVendorsRequest extends BaseRequest
 		paramMap.put("offset_type", "1");
 		paramMap.put("out_offset_type", "1");
 		paramMap.put("platform", "2");
-//		if (!category.equals(""))
+//		if (!category.isEmpty())
 //		{
 //			paramMap.put("category", category);			
 //		}
