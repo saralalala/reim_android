@@ -4,85 +4,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Report;
-import classes.utils.ViewUtils;
-
 import com.rushucloud.reim.R;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ReportTagGridViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
-	private Resources resources;
-	private List<Integer> fontColors;
-	private int[] selectedBackgrounds;
-	private int[] unselectedBackgrounds;
+	private int[] backgrounds;
 	private boolean[] check;
 
 	public ReportTagGridViewAdapter(Context context)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
-		this.resources = context.getResources();
 		this.check = new boolean[5];
 		for (int i = 0; i < 5; i++)
 		{
 			check[i] = false;
 		}
 		
-		this.fontColors = new ArrayList<Integer>();
-		this.fontColors.add(ViewUtils.getColor(R.color.status_draft));
-		this.fontColors.add(ViewUtils.getColor(R.color.status_submitted));
-		this.fontColors.add(ViewUtils.getColor(R.color.status_approved));
-		this.fontColors.add(ViewUtils.getColor(R.color.status_rejected));
-		this.fontColors.add(ViewUtils.getColor(R.color.status_finished));
-		
-		selectedBackgrounds = new int[]{ R.drawable.report_tag_draft_selected, R.drawable.report_tag_submitted_selected, R.drawable.report_tag_approved_selected,
-										 R.drawable.report_tag_rejected_selected, R.drawable.report_tag_finished_selected };
-		
-		unselectedBackgrounds = new int[]{ R.drawable.report_tag_draft_unselected, R.drawable.report_tag_submitted_unselected, R.drawable.report_tag_approved_unselected,
-				 						   R.drawable.report_tag_rejected_unselected, R.drawable.report_tag_finished_unselected };
+		backgrounds = new int[]{ R.drawable.report_tag_draft, R.drawable.report_tag_submitted, R.drawable.report_tag_approved,
+				 				 R.drawable.report_tag_rejected, R.drawable.report_tag_finished };
 	}
 
-	public View getView(final int position, View convertView, ViewGroup parent)
+	public View getView(int position, View convertView, ViewGroup parent)
 	{		
 		if (convertView == null)
 		{
 			convertView = layoutInflater.inflate(R.layout.grid_report_tag, parent, false);
 		}
 		
-		final TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
+		TextView statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
 		statusTextView.setText(Report.getStatusString(position));
-		statusTextView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				Bitmap bitmap = BitmapFactory.decodeResource(resources, selectedBackgrounds[position]);
-				double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
-				ViewGroup.LayoutParams params = statusTextView.getLayoutParams();
-				params.height = (int)(statusTextView.getWidth() * ratio);;
-				statusTextView.setLayoutParams(params);
-			}
-		});
+		statusTextView.setBackgroundResource(backgrounds[position]);
 		
-		if (check[position])
-		{
-			statusTextView.setTextColor(Color.WHITE);
-			statusTextView.setBackgroundResource(selectedBackgrounds[position]);
-		}
-		else
-		{
-			statusTextView.setTextColor(fontColors.get(position));
-			statusTextView.setBackgroundResource(unselectedBackgrounds[position]);
-		}
+		RelativeLayout coverLayout = (RelativeLayout) convertView.findViewById(R.id.coverLayout);
+		int visibility = check[position] ? View.VISIBLE : View.INVISIBLE;
+		coverLayout.setVisibility(visibility);
 		
 		return convertView;
 	}

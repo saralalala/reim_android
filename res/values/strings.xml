@@ -12,6 +12,8 @@
     <string name="rmb">元</string>
     <string name="rmb_symbol">¥</string>
     <string name="percent">%</string>
+    <string name="ten_thousand">万</string>
+    <string name="one_hundred_million">亿</string>
     
     <string name="confirm">确定</string>
     <string name="save">保存</string>
@@ -36,6 +38,7 @@
     <string name="check">选中</string>
     <string name="skip">直接跳过</string>
     <string name="alarm">提醒</string>
+    <string name="finish">直接结束</string>
     
     <string name="sign_up">注册</string>
     <string name="sign_up_by_phone">手机注册</string>
@@ -131,12 +134,14 @@
     <string name="rejected">已退回</string>
     <string name="ready_to_approved">待审批</string>
     <string name="report_no_name">无标题报告</string>
+    <string name="choose_following_managers">选择后续审批人</string>
     
     <string name="mark">标记</string>
-    <string name="stat_done">已报销</string>
     <string name="stat_ongoing">报销中</string>
-    <string name="stat_new">未报销</string>
-    <string name="cost_per_month">花费/月</string>
+    <string name="stat_new">待提交</string>
+    <string name="new_total">待报销总计</string>
+    <string name="last_12_months">近12个月</string>
+    <string name="cost_total">费用汇总</string>
     <string name="stat_by_category">类别统计</string>
     
     <string name="personal_center">个人中心</string>
@@ -379,7 +384,7 @@
     <string name="vendor_phone">话费</string>
     
     <string name="status_draft">待提交</string>
-    <string name="status_submitted">已提交</string>
+    <string name="status_submitted">审核中</string>
     <string name="status_approved">通过</string>
     <string name="status_rejected">退回</string>
     <string name="status_finished">完成</string>

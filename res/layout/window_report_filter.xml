@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:layout_width="match_parent"
@@ -127,7 +127,7 @@
     <GridView
         android:id="@+id/tagGridView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/tagDivider"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
@@ -135,6 +135,8 @@
         android:layout_marginRight="16dp"
         android:listSelector="@android:color/transparent"
         android:numColumns="4"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
         android:verticalSpacing="22dp"
         android:horizontalSpacing="10dp" />
     

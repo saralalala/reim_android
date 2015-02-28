@@ -1,7 +1,6 @@
 package com.rushucloud.reim.item;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -357,9 +356,8 @@ public class EditItemActivity extends Activity
 				try
 				{			
 			    	hideSoftKeyboard();
-			    	double amount = Double.valueOf(amountEditText.getText().toString());
-					DecimalFormat format = new DecimalFormat("#0.0");
-					item.setAmount(Double.valueOf(format.format(amount)));
+			    	
+					item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
 					item.setConsumer(appPreference.getCurrentUser());
 					item.setNote(noteEditText.getText().toString());
 					item.setLocalUpdatedDate(Utils.getCurrentTime());

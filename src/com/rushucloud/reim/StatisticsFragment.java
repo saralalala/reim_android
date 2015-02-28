@@ -7,17 +7,12 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Response.StatisticsResponse;
 import netUtils.Request.StatisticsRequest;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 
@@ -38,7 +33,6 @@ import classes.widget.XListView.IXListViewListener;
 
 import com.umeng.analytics.MobclickAgent;
 
-
 public class StatisticsFragment extends Fragment
 {
 	private static final int GET_DATA_INTERVAL = 600;
@@ -47,13 +41,12 @@ public class StatisticsFragment extends Fragment
 	private StatisticsListViewAdapter adapter;
 	private View view;
 	private FrameLayout statContainer;
-	private TextView mainPercentTextView;
-	private TextView donePercentTextView;
+	private TextView mainAmountTextView;
+	private TextView unitTextView;
 	private TextView ongoingPercentTextView;
 	private TextView newPercentTextView;
-	private TextView monthCostTextView;
+	private TextView totalTextView;
 	private LinearLayout monthLayout;
-	private RelativeLayout categoryTitleLayout;
 	private LinearLayout categoryLayout;
 
 	private AppPreference appPreference;
@@ -61,7 +54,6 @@ public class StatisticsFragment extends Fragment
 
 	private boolean hasInit = false;
 	private boolean hasData = false;
-	private int diameter;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -102,34 +94,15 @@ public class StatisticsFragment extends Fragment
 	}
 	
 	private void initView()
-	{
-		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.arc);
-		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
-		
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int margin = PhoneUtils.dpToPixel(getResources(), 36);
-		
-		diameter = metrics.widthPixels - margin * 2;
-		
+	{		
 		view = View.inflate(getActivity(), R.layout.view_statistics, null);
 		
-		ImageView arcImageView = (ImageView) view.findViewById(R.id.arcImageView);
-		ViewGroup.LayoutParams params = arcImageView.getLayoutParams();
-		params.width = diameter;
-		params.height = (int)(params.width * ratio);
-		arcImageView.setLayoutParams(params);
-		
-		ImageView arcCoverImageView = (ImageView) view.findViewById(R.id.arcCoverImageView);
-		arcCoverImageView.setLayoutParams(params);
-		
 		statContainer = (FrameLayout) view.findViewById(R.id.statContainer);
-		statContainer.setLayoutParams(params);
 		
-		mainPercentTextView = (TextView) view.findViewById(R.id.mainPercentTextView);
-		mainPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		mainAmountTextView = (TextView) view.findViewById(R.id.mainAmountTextView);
+		mainAmountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
-		donePercentTextView = (TextView) view.findViewById(R.id.donePercentTextView);
-		donePercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+		unitTextView = (TextView) view.findViewById(R.id.unitTextView);
 		
 		ongoingPercentTextView = (TextView) view.findViewById(R.id.ongoingPercentTextView);
 		ongoingPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -137,10 +110,8 @@ public class StatisticsFragment extends Fragment
 		newPercentTextView = (TextView) view.findViewById(R.id.newPercentTextView);
 		newPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 
-		monthCostTextView = (TextView) view.findViewById(R.id.monthCostTextView);
+		totalTextView = (TextView) view.findViewById(R.id.totalTextView);
 		monthLayout = (LinearLayout) view.findViewById(R.id.monthLayout);
-
-		categoryTitleLayout = (RelativeLayout) view.findViewById(R.id.categoryTitleLayout);
 		categoryLayout = (LinearLayout) view.findViewById(R.id.categoryLayout);
 		
 		adapter = new StatisticsListViewAdapter(getActivity(), view);
@@ -192,55 +163,43 @@ public class StatisticsFragment extends Fragment
 		}		
 	}
 	
-	private void drawPie(double totalAmount, double doneAmount, double ongoingAmount, double newAmount)
+	private void drawPie(double totalAmount, double ongoingAmount, double newAmount)
 	{
-		double doneRatio, ongoingRatio, newRatio, mainRatio;
+		double ongoingRatio, newRatio;
 		if (totalAmount == 0)
 		{
-			doneRatio = ongoingRatio = newRatio = mainRatio = 0;
+			ongoingRatio = newRatio = 0;
 		}
 		else
-		{			
-			doneRatio = Utils.roundDouble(doneAmount * 100 / totalAmount);
+		{
 			ongoingRatio = Utils.roundDouble(ongoingAmount * 100 / totalAmount);
-			newRatio = Utils.roundDouble(newAmount * 100 / totalAmount);
-			
-			if (doneRatio >= ongoingRatio && doneRatio >= newRatio)
-			{
-				doneRatio = 100 - ongoingRatio - newRatio;
-				doneRatio = Utils.roundDouble(doneRatio);
-			}
-			else if (ongoingRatio >= doneRatio && ongoingRatio >= newRatio)
-			{
-				ongoingRatio = 100 - doneRatio - newRatio;
-				ongoingRatio = Utils.roundDouble(ongoingRatio);
-			}
-			else if (newRatio >= ongoingRatio && newRatio >= doneRatio)
-			{
-				newRatio = 100 - doneRatio - ongoingRatio;
-				newRatio = Utils.roundDouble(newRatio);
-			}
-			
-			mainRatio = ongoingRatio + newRatio;
+			newRatio = 100 - ongoingRatio;
 		}
 		
-		mainPercentTextView.setText(Double.toString(mainRatio));
-		donePercentTextView.setText(Double.toString(doneRatio) + getString(R.string.percent));
-		ongoingPercentTextView.setText(Double.toString(ongoingRatio) + getString(R.string.percent));
-		newPercentTextView.setText(Double.toString(newRatio) + getString(R.string.percent));
+		if (totalAmount < 10000)
+		{
+			mainAmountTextView.setText(Utils.formatDouble(totalAmount));
+			unitTextView.setVisibility(View.GONE);
+		}
+		else if (totalAmount < 10000000)
+		{
+			mainAmountTextView.setText(Utils.formatDouble(totalAmount / 10000));
+			unitTextView.setText(R.string.ten_thousand);
+		}
+		else
+		{
+			mainAmountTextView.setText(Utils.formatDouble(totalAmount / 10000000));
+			unitTextView.setText(R.string.one_hundred_million);			
+		}
+		ongoingPercentTextView.setText(Utils.formatDouble(ongoingRatio) + getString(R.string.percent));
+		newPercentTextView.setText(Utils.formatDouble(newRatio) + getString(R.string.percent));
 
 		float totalAngle = 262;
 		float startAngle = (float) 139;
-		float doneAngle = (float) doneRatio * totalAngle / 100;
 		float newAngle = (float) newRatio * totalAngle / 100;
 		float ongoingAngle = (float) ongoingRatio * totalAngle / 100;
-		
-		// Draw done pie
-		ReimPie doneReimPie = new ReimPie(getActivity(), startAngle, doneAngle, statContainer.getWidth(), R.color.stat_done);
-		statContainer.addView(doneReimPie);	
 
 		// Draw ongoing pie
-		startAngle += doneAngle;
 		ReimPie ongoingReimPie = new ReimPie(getActivity(), startAngle, ongoingAngle, statContainer.getWidth(), R.color.stat_ongoing);
 		statContainer.addView(ongoingReimPie);	
 
@@ -252,24 +211,19 @@ public class StatisticsFragment extends Fragment
 
 	private void drawMonthBar(HashMap<String, Double> monthsData)
 	{
-		if (monthsData.isEmpty())
+		if (!monthsData.isEmpty())
 		{
-			monthCostTextView.setVisibility(View.GONE);
-			monthLayout.setVisibility(View.GONE);
-		}
-		else
-		{
-			monthCostTextView.setVisibility(View.VISIBLE);
-			monthLayout.setVisibility(View.VISIBLE);
-			
+			double total = 0;
 			double max = 0;
 			for (Double data : monthsData.values())
 			{
+				total += data;
 				if (data > max)
 				{
 					max = data;
 				}
 			}
+			totalTextView.setText(Double.toString(total));
 			
 			for (String month : monthsData.keySet())
 			{
@@ -294,16 +248,8 @@ public class StatisticsFragment extends Fragment
 	
 	private void drawCategory(List<StatisticsCategory> categoryList)
 	{
-		if (categoryList.isEmpty())
-		{
-			categoryTitleLayout.setVisibility(View.GONE);
-			categoryLayout.setVisibility(View.GONE);
-		}
-		else
-		{
-			categoryTitleLayout.setVisibility(View.VISIBLE);
-			categoryLayout.setVisibility(View.VISIBLE);
-			
+		if (!categoryList.isEmpty())
+		{			
 			for (StatisticsCategory category : categoryList)
 			{
 				Category localCategory = dbManager.getCategory(category.getCategoryID());
@@ -323,7 +269,7 @@ public class StatisticsFragment extends Fragment
 					categoryLayout.addView(view);					
 				}
 			}
-		}		
+		}	
 	}
 
 	private void sendGetDataRequest()
@@ -346,7 +292,7 @@ public class StatisticsFragment extends Fragment
 						public void run()
 						{
 							resetView();
-							drawPie(response.getTotal(), response.getDoneAmount(), response.getOngoingAmount(), response.getNewAmount());
+							drawPie(response.getTotal(), response.getOngoingAmount(), response.getNewAmount());
 							drawMonthBar(response.getMonthsData());
 							drawCategory(response.getStatCategoryList());
 							adapter.notifyDataSetChanged();

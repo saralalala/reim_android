@@ -32,7 +32,7 @@ public class Utils
 		}
 		
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis((long)second * 1000);
+		calendar.setTimeInMillis((long) second * 1000);
 		String result = "";
 		result += calendar.get(Calendar.YEAR) + "-";
 		
@@ -73,7 +73,7 @@ public class Utils
 		}
 		
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis((long)second * 1000);
+		calendar.setTimeInMillis((long) second * 1000);
 		String result = "";
 		result += calendar.get(Calendar.YEAR) + "-";
 		
@@ -167,19 +167,38 @@ public class Utils
     	return resultList;
     } 
 
+    public static double stringToDouble(String source)
+    {
+    	double amount = Double.valueOf(source);
+    	return Double.valueOf(formatDouble(amount));
+    }
+    
     public static double roundDouble(double arg)
     {
     	if (arg > 0 & arg < 0.1)
 		{
 			return 0.1;
 		}
-		DecimalFormat format = new DecimalFormat("#0.0");
+		DecimalFormat format = new DecimalFormat("#0.00");
 		return Double.valueOf(format.format(arg));
     }
     
     public static String formatDouble(double arg)
     {
-		DecimalFormat format = new DecimalFormat("#0.0");
-		return format.format(arg);
+		DecimalFormat format = new DecimalFormat("#0.00");
+		String result = format.format(arg);
+		if (result.charAt(result.length() - 1) == '0')
+		{
+			result = result.substring(0, result.length() - 1);
+		}
+		if (result.charAt(result.length() - 1) == '0')
+		{
+			result = result.substring(0, result.length() - 1);
+		}
+		if (result.charAt(result.length() - 1) == '.')
+		{
+			result = result.substring(0, result.length() - 1);
+		}
+		return result;
     }
 }
