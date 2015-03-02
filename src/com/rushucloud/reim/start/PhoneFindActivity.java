@@ -81,13 +81,13 @@ public class PhoneFindActivity extends Activity
 			}
 		});
     	
-		phoneEditText = (EditText)findViewById(R.id.phoneEditText);
+		phoneEditText = (EditText) findViewById(R.id.phoneEditText);
 		phoneEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-    	codeEditText = (EditText)findViewById(R.id.codeEditText);
+    	codeEditText = (EditText) findViewById(R.id.codeEditText);
     	codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
     	
-    	acquireCodeButton = (Button)findViewById(R.id.acquireCodeButton);
+    	acquireCodeButton = (Button) findViewById(R.id.acquireCodeButton);
     	acquireCodeButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -111,7 +111,7 @@ public class PhoneFindActivity extends Activity
 		});
 		acquireCodeButton = ViewUtils.resizeShortButton(acquireCodeButton, 32, true);
     	
-    	Button nextButton = (Button)findViewById(R.id.nextButton);
+    	Button nextButton = (Button) findViewById(R.id.nextButton);
     	nextButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -138,7 +138,7 @@ public class PhoneFindActivity extends Activity
 		});
     	nextButton = ViewUtils.resizeLongButton(nextButton);
 		
-    	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
+    	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
     	{
 			public void onClick(View v)

@@ -136,10 +136,10 @@ public class CommentActivity extends Activity
 			}
 		});
 
-		commentTextView = (TextView)findViewById(R.id.commentTextView);
+		commentTextView = (TextView) findViewById(R.id.commentTextView);
 		
 		adapter = new CommentListViewAdapter(this, commentList);
-		commentListView = (ListView)findViewById(R.id.commentListView);
+		commentListView = (ListView) findViewById(R.id.commentListView);
 		commentListView.setAdapter(adapter);		
 
 		commentEditText = (EditText) findViewById(R.id.commentEditText);

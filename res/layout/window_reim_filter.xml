@@ -65,36 +65,69 @@
 		        android:layout_marginLeft="10dp"
 		        android:layout_marginRight="10dp"
 		        layout="@layout/view_divider"/>
-		    
-		    <classes.widget.SegmentedGroup
-		        android:id="@+id/sortRadioGroup"
+
+		    <RelativeLayout
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 				android:layout_centerHorizontal="true"
 		        android:layout_below="@+id/sortDivider"
 		        android:layout_marginTop="22dp"
 		        android:layout_marginLeft="16dp"
-		        android:layout_marginRight="16dp"
-		    	android:orientation="horizontal" >
-		
-		        <RadioButton
-		            android:id="@+id/sortConsumedDateRadio"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_weight="1"
-		            android:checked="true"
-		            android:text="@string/sort_consumed_date"
-		            style="@style/RadioButton" />
-		
-		        <RadioButton
-		            android:id="@+id/sortAmountRadio"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_weight="1"
-		            android:text="@string/sort_amount"
-		            style="@style/RadioButton" />
-		        
-		    </classes.widget.SegmentedGroup>
+		        android:layout_marginRight="16dp" >
+		    
+			    <classes.widget.SegmentedGroup
+			        android:id="@+id/sortRadioGroup"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			    	android:orientation="horizontal" >
+			
+			        <RadioButton
+			            android:id="@+id/sortConsumedDateRadio"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_weight="1"
+			            android:checked="true"
+			            android:text="@string/sort_consumed_date"
+			            style="@style/RadioButton" />
+			
+			        <RadioButton
+			            android:id="@+id/sortAmountRadio"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_weight="1"
+			            android:text="@string/sort_amount"
+			            style="@style/RadioButton" />
+			        
+			    </classes.widget.SegmentedGroup>
+	
+			    <ImageView
+			        android:id="@+id/sortDateImageView"
+			        android:layout_width="12dp"
+			        android:layout_height="12dp"
+			        android:layout_toLeftOf="@+id/pivotView"
+					android:layout_marginRight="10dp"
+					android:layout_centerVertical="true"
+				    android:contentDescription="@string/sort_consumed_date"
+			        android:src="@drawable/arrow" />
+
+			    <View
+			        android:id="@+id/pivotView"
+			        android:layout_width="0dp"
+			        android:layout_height="0dp"
+			        android:layout_centerInParent="true" />
+			    
+			    <ImageView
+			        android:id="@+id/sortAmountImageView"
+			        android:layout_width="20dp"
+			        android:layout_height="20dp"
+					android:layout_alignParentRight="true"
+					android:layout_marginRight="10dp"
+					android:layout_centerVertical="true"
+				    android:contentDescription="@string/sort_consumed_date"
+			        android:src="@drawable/arrow"
+			        android:visibility="gone" />
+
+		    </RelativeLayout>
 		
 		    <TextView
 		        android:id="@+id/filterTextView"
@@ -180,7 +213,7 @@
 		            android:id="@+id/filterAddedRadio"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
-		            android:layout_weight="0.5"
+		            android:layout_weight="0.73"
 		            android:text="@string/filter_added"
 		            style="@style/RadioButton" />
 		
@@ -188,7 +221,7 @@
 		            android:id="@+id/filterFreeRadio"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
-		            android:layout_weight="0.5"
+		            android:layout_weight="0.73"
 		            android:text="@string/filter_free"
 		            style="@style/RadioButton" />
 		        

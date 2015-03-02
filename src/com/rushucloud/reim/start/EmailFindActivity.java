@@ -75,10 +75,10 @@ public class EmailFindActivity extends Activity
 			}
 		});
     	
-    	emailEditText = (EditText)findViewById(R.id.emailEditText);
+    	emailEditText = (EditText) findViewById(R.id.emailEditText);
     	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-    	Button confirmButton = (Button)findViewById(R.id.confirmButton);
+    	Button confirmButton = (Button) findViewById(R.id.confirmButton);
     	confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -105,7 +105,7 @@ public class EmailFindActivity extends Activity
 		});
     	confirmButton = ViewUtils.resizeLongButton(confirmButton);
 		
-    	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
+    	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
     	{
 			public void onClick(View v)

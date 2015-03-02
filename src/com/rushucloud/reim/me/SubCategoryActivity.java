@@ -103,10 +103,10 @@ public class SubCategoryActivity extends Activity
 			}
 		});
 		
-		TextView titleTextView = (TextView)findViewById(R.id.titleTextView);
+		TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
 		titleTextView.setText(R.string.sub_category);
 		
-		TextView addTextView = (TextView)findViewById(R.id.addTextView);
+		TextView addTextView = (TextView) findViewById(R.id.addTextView);
 		addTextView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -120,9 +120,9 @@ public class SubCategoryActivity extends Activity
 			}
 		});
 
-		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
+		categoryTextView = (TextView) findViewById(R.id.categoryTextView);
 		
-		categoryListView = (ListView)findViewById(R.id.categoryListView);
+		categoryListView = (ListView) findViewById(R.id.categoryListView);
 		categoryListView.setOnItemLongClickListener(new OnItemLongClickListener()
 		{
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)

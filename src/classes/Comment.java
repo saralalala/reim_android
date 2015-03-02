@@ -96,7 +96,7 @@ public class Comment implements Serializable
 		{
 			public int compare(Comment comment1, Comment comment2)
 			{
-				return (int)(comment2.getCreatedDate() - comment1.getCreatedDate());
+				return (int) (comment2.getCreatedDate() - comment1.getCreatedDate());
 			}
 		});
     }

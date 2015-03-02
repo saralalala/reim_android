@@ -75,7 +75,13 @@ public class PickCCActivity extends Activity
 		dbManager = DBManager.getDBManager();
 		
 		int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
-		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
+		int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
+		int senderID = getIntent().getIntExtra("sender", -1);
+		userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUserID);
+		if (senderID != -1)
+		{
+			userList = User.removeUserFromList(userList, senderID);
+		}
 
 		List<User> ccList = (List<User>) getIntent().getSerializableExtra("ccs");
 		check = User.getUsersCheck(userList, ccList);

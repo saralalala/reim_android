@@ -103,7 +103,7 @@ public class CategoryActivity extends Activity
 			}
 		});
 		
-		TextView addTextView = (TextView)findViewById(R.id.addTextView);
+		TextView addTextView = (TextView) findViewById(R.id.addTextView);
 		addTextView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -114,10 +114,10 @@ public class CategoryActivity extends Activity
 			}
 		});
 
-		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
+		categoryTextView = (TextView) findViewById(R.id.categoryTextView);
 		
 		adapter = new CategoryListViewAdapter(this, categoryList, null);		
-		categoryListView = (ListView)findViewById(R.id.categoryListView);
+		categoryListView = (ListView) findViewById(R.id.categoryListView);
 		categoryListView.setAdapter(adapter);
 		categoryListView.setOnItemClickListener(new OnItemClickListener()
 		{

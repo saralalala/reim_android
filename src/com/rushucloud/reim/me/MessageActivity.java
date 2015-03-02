@@ -90,9 +90,9 @@ public class MessageActivity extends Activity
 			}
 		});	
 
-		messageTextView = (TextView)findViewById(R.id.messageTextView);
+		messageTextView = (TextView) findViewById(R.id.messageTextView);
 
-		messageListView = (ListView)findViewById(R.id.messageListView);
+		messageListView = (ListView) findViewById(R.id.messageListView);
 		messageListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)

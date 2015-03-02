@@ -125,11 +125,11 @@ public class GalleryActivity extends Activity
 		
 		int marginPixels = PhoneUtils.dpToPixel(getResources(), 16);
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.button_long_border_dark);
-		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+		double ratio = ((double) bitmap.getHeight()) / bitmap.getWidth();
 		
 		ViewGroup.LayoutParams params = confirmButton.getLayoutParams();
 		params.width = metrics.widthPixels - marginPixels * 2;
-		params.height = (int)(params.width * ratio);
+		params.height = (int) (params.width * ratio);
 		
 		confirmButton.setLayoutParams(params);
 	}

@@ -117,11 +117,11 @@ public class ShowItemActivity extends Activity
 		});
 
 		// init status part
-		TextView actualCostTextView = (TextView)findViewById(R.id.actualCostTextView);
-		TextView budgetTextView = (TextView)findViewById(R.id.budgetTextView);
-		TextView approvedTextView = (TextView)findViewById(R.id.approvedTextView);
+		TextView actualCostTextView = (TextView) findViewById(R.id.actualCostTextView);
+		TextView budgetTextView = (TextView) findViewById(R.id.budgetTextView);
+		TextView approvedTextView = (TextView) findViewById(R.id.approvedTextView);
 		
-		TextView amountTextView = (TextView)findViewById(R.id.amountTextView);
+		TextView amountTextView = (TextView) findViewById(R.id.amountTextView);
 		amountTextView.setText(Utils.formatDouble(item.getAmount()));
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
@@ -142,11 +142,11 @@ public class ShowItemActivity extends Activity
 		{
 			temp += "/" + getString(R.string.need_reimburse);
 		}
-		TextView typeTextView = (TextView)findViewById(R.id.typeTextView);
+		TextView typeTextView = (TextView) findViewById(R.id.typeTextView);
 		typeTextView.setText(temp);
 		
 		// init invoice photo
-		invoiceLayout = (LinearLayout)findViewById(R.id.invoiceLayout);
+		invoiceLayout = (LinearLayout) findViewById(R.id.invoiceLayout);
 		refreshInvoiceView();
 		
 		if (!PhoneUtils.isNetworkConnected())
@@ -165,7 +165,7 @@ public class ShowItemActivity extends Activity
 		}
 		
 		// init time
-		TextView timeTextView = (TextView)findViewById(R.id.timeTextView);
+		TextView timeTextView = (TextView) findViewById(R.id.timeTextView);
 		if (item.getConsumedDate() > 0)
 		{
 			timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));			
@@ -176,17 +176,17 @@ public class ShowItemActivity extends Activity
 		}
 		
 		// init vendor		
-		TextView vendorTextView = (TextView)findViewById(R.id.vendorTextView);
+		TextView vendorTextView = (TextView) findViewById(R.id.vendorTextView);
 		vendorTextView.setText(item.getVendor());
 
 		// init location
 		String cityName = item.getLocation().isEmpty() ? getString(R.string.not_available) : item.getLocation();
-		TextView locationTextView = (TextView)findViewById(R.id.locationTextView);
+		TextView locationTextView = (TextView) findViewById(R.id.locationTextView);
 		locationTextView.setText(cityName);
 
 		// init category
 		categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
-		TextView categoryTextView = (TextView)findViewById(R.id.categoryTextView);
+		TextView categoryTextView = (TextView) findViewById(R.id.categoryTextView);
 		if (item.getCategory() != null)
 		{
 			if (!item.getCategory().getIconPath().isEmpty())
@@ -225,7 +225,7 @@ public class ShowItemActivity extends Activity
 		}
 		
 		// init note;
-		TextView noteTextView = (TextView)findViewById(R.id.noteTextView);
+		TextView noteTextView = (TextView) findViewById(R.id.noteTextView);
 		noteTextView.setText(item.getNote());		
 	}
 	
@@ -325,7 +325,7 @@ public class ShowItemActivity extends Activity
 		{
 			String name = item.getTags().get(i).getName();
 			
-			View view = View.inflate(this, R.layout.grid_tag, null);
+			View view = View.inflate(this, R.layout.grid_item_tag, null);
 
 			TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
 			nameTextView.setText(name);

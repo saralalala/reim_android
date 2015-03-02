@@ -136,6 +136,7 @@
     <string name="rejected">已退回</string>
     <string name="ready_to_approved">待审批</string>
     <string name="report_no_name">无标题报告</string>
+    <string name="continue_to_choose">继续选择</string>
     <string name="choose_following_managers">选择后续审批人</string>
     
     <string name="mark">标记</string>
@@ -244,6 +245,7 @@
     <string name="prompt_feedback_phone">请留下联系方式，方便我们与你沟通</string>
     <string name="prompt_sender">发送者：</string>
     <string name="prompt_no_need_to_alarm">报告未在审核过程中，无需发送提醒</string>
+    <string name="prompt_choose_or_finish">您是继续选择后续审批人还是直接结束这个报告？</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>
@@ -308,6 +310,7 @@
     <string name="error_submit_report_item_not_uploaded">消费未被上传，报告不可被提交</string>
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>
     <string name="error_timeout">你的账号已经其他地方登录，本地已经下线。</string>
+    <string name="error_choose_following">选择后续审批人和抄送失败</string>
     
     <string name="succeed_in_exporting">报告导出成功</string>
     <string name="succeed_in_saving_item">此笔消费保存成功</string>
@@ -327,6 +330,7 @@
     <string name="succeed_in_submitting_report">提交报告成功</string>
     <string name="succeed_in_signing_up">注册成功!正在获取数据</string>
     <string name="succeed_in_alerting">已提醒对方审批报告</string>
+    <string name="succeed_in_choosing_following">选择后续审批人和抄送成功</string>
     
     <string name="failed_to_get_code">获取验证码失败</string>
     <string name="failed_to_get_data">获取数据失败</string>

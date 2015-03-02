@@ -118,14 +118,14 @@ public class ViewUtils
 	public static void dimBackground(Activity activity)
 	{
 		WindowManager.LayoutParams params = activity.getWindow().getAttributes();
-		params.alpha = (float) 0.4;
+		params.alpha = 0.4f;
 		activity.getWindow().setAttributes(params);		
 	}
 	
 	public static void recoverBackground(Activity activity)
 	{
 		WindowManager.LayoutParams params = activity.getWindow().getAttributes();
-		params.alpha = (float) 1;
+		params.alpha = 1f;
 		activity.getWindow().setAttributes(params);
 	}
 
@@ -136,11 +136,11 @@ public class ViewUtils
 		
 		int marginPixels = PhoneUtils.dpToPixel(context, 16);
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_long_solid_light);
-		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+		double ratio = ((double) bitmap.getHeight()) / bitmap.getWidth();
 		
 		ViewGroup.LayoutParams params = button.getLayoutParams();
 		params.width = metrics.widthPixels - marginPixels * 2;
-		params.height = (int)(params.width * ratio);
+		params.height = (int) (params.width * ratio);
 		
 		button.setLayoutParams(params);
 		return button;
@@ -152,18 +152,18 @@ public class ViewUtils
 
 		int lengthPixels = PhoneUtils.dpToPixel(context, length);
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_short_solid_light);
-		double ratio = ((double)bitmap.getWidth()) / bitmap.getHeight();
+		double ratio = ((double) bitmap.getWidth()) / bitmap.getHeight();
 		
 		ViewGroup.LayoutParams params = button.getLayoutParams();
 		if (fixHeight)
 		{
-			params.width = (int)(lengthPixels * ratio);
+			params.width = (int) (lengthPixels * ratio);
 			params.height = lengthPixels;			
 		}
 		else
 		{
 			params.width = lengthPixels;
-			params.height = (int)(lengthPixels / ratio);			
+			params.height = (int) (lengthPixels / ratio);			
 		}
 		
 		button.setLayoutParams(params);
@@ -177,11 +177,11 @@ public class ViewUtils
 		
 		int marginPixels = PhoneUtils.dpToPixel(context, 10);
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.window_button_selected);
-		double ratio = ((double)bitmap.getHeight()) / bitmap.getWidth();
+		double ratio = ((double) bitmap.getHeight()) / bitmap.getWidth();
 		
 		ViewGroup.LayoutParams params = button.getLayoutParams();
 		params.width = metrics.widthPixels - marginPixels * 2;
-		params.height = (int)(params.width * ratio);
+		params.height = (int) (params.width * ratio);
 		
 		button.setLayoutParams(params);
 		return button;

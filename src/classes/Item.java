@@ -8,10 +8,8 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import com.rushucloud.reim.R;
 
-import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 
 public class Item
@@ -370,35 +368,6 @@ public class Item
 			return R.string.status_draft;
 		}
 	}
-
-	public int getStatusWidth(Context context)
-    {
-		int longWidth = PhoneUtils.dpToPixel(context, 48);
-		int shortWidth = PhoneUtils.dpToPixel(context, 36);
-		
-		if (getBelongReport() != null)
-		{
-	    	switch (getBelongReport().getStatus())
-			{
-				case STATUS_DRAFT:
-					return longWidth;
-				case STATUS_SUBMITTED:
-					return longWidth;
-				case STATUS_APPROVED:
-					return shortWidth;
-				case STATUS_REJECTED:
-					return shortWidth;
-				case STATUS_FINISHED:
-					return shortWidth;
-				default:
-					return 0;
-			}			
-		}
-		else
-		{
-			return longWidth;
-		}
-    }
 	
     public boolean missingInfo()
     {
@@ -553,7 +522,7 @@ public class Item
 		{
 			public int compare(Item item1, Item item2)
 			{
-				return (int)(item2.getConsumedDate() - item1.getConsumedDate());
+				return (int) (item2.getConsumedDate() - item1.getConsumedDate());
 			}
 		});
     }
@@ -564,7 +533,7 @@ public class Item
 		{
 			public int compare(Item item1, Item item2)
 			{
-				return (int)(item2.getAmount() - item1.getAmount());
+				return (int) (item2.getAmount() - item1.getAmount());
 			}
 		});
     }
@@ -575,7 +544,7 @@ public class Item
 		{
 			public int compare(Item item1, Item item2)
 			{
-				return (int)(item2.getLocalUpdatedDate() - item1.getLocalUpdatedDate());
+				return (int) (item2.getLocalUpdatedDate() - item1.getLocalUpdatedDate());
 			}
 		});
     }

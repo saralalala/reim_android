@@ -232,7 +232,7 @@ public class EditReportActivity extends Activity
 			}	
 		});
 		
-		TextView saveTextView = (TextView)findViewById(R.id.saveTextView);
+		TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
 		saveTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -250,7 +250,7 @@ public class EditReportActivity extends Activity
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		statusTextView = (TextView) findViewById(R.id.statusTextView);
 
-		approveInfoTextView = (TextView)findViewById(R.id.approveInfoTextView);
+		approveInfoTextView = (TextView) findViewById(R.id.approveInfoTextView);
 		approveInfoTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -306,7 +306,7 @@ public class EditReportActivity extends Activity
 			}
 		});
 		
-		Button commentButton = (Button)findViewById(R.id.commentButton);
+		Button commentButton = (Button) findViewById(R.id.commentButton);
 		commentButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -525,7 +525,7 @@ public class EditReportActivity extends Activity
 		
     	Builder builder = new Builder(this);
     	builder.setView(view);
-    	builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener()
+    	builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
 								{
 									public void onClick(DialogInterface dialog, int which)
 									{

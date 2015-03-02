@@ -4,13 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Response.Report.ModifyReportResponse;
-import netUtils.Request.Report.ModifyReportRequest;
+import netUtils.Response.Report.ApproveReportResponse;
+import netUtils.Request.Report.ApproveReportRequest;
 import classes.ReimApplication;
 import classes.Report;
 import classes.User;
-import classes.utils.DBManager;
-import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
@@ -31,8 +29,6 @@ public class FollowingActivity extends Activity
 {
 	private static final int PICK_MANAGER = 0;
 	private static final int PICK_CC = 1;
-	
-	private DBManager dbManager;
 	
 	private TextView managerTextView;	
 	private TextView ccTextView;
@@ -101,8 +97,7 @@ public class FollowingActivity extends Activity
 
 	private void initData()
 	{
-		dbManager = DBManager.getDBManager();
-		report = (Report) getIntent().getExtras().getSerializable("report");
+		report = (Report) getIntent().getSerializableExtra("report");
 	}
 	
 	private void initView()
@@ -125,7 +120,8 @@ public class FollowingActivity extends Activity
 			{
 				Intent intent = new Intent(FollowingActivity.this, PickManagerActivity.class);
 				intent.putExtra("managers", (Serializable) report.getManagerList());
-				startActivityForResult(intent, PICK_MANAGER);	
+				intent.putExtra("sender", report.getSender().getServerID());
+				startActivityForResult(intent, PICK_MANAGER);
 			}
 		});
 		
@@ -136,16 +132,17 @@ public class FollowingActivity extends Activity
 			{
 				Intent intent = new Intent(FollowingActivity.this, PickCCActivity.class);
 				intent.putExtra("ccs", (Serializable) report.getCCList());
+				intent.putExtra("sender", report.getSender().getServerID());
 				startActivityForResult(intent, PICK_CC);	
 			}
 		});
 		
-		Button finishButton = (Button)findViewById(R.id.finishButton);
+		Button finishButton = (Button) findViewById(R.id.finishButton);
 		finishButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-			
+				goBackToMainActivity();
 			}
 		});	
 
@@ -154,51 +151,36 @@ public class FollowingActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				sendModifyReportRequest(Report.STATUS_DRAFT);
+				sendChooseFollowingReportRequest();
 			}
 		});
 	}
   
-    private void sendModifyReportRequest(final int originalStatus)
+    private void sendChooseFollowingReportRequest()
     {
-    	ModifyReportRequest request = new ModifyReportRequest(report);
+    	ReimProgressDialog.show();
+    	ApproveReportRequest request = new ApproveReportRequest(report);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
-				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
-				if (response.getStatus())
+				final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
+				runOnUiThread(new Runnable()
 				{
-					int currentTime = Utils.getCurrentTime();
-					
-					report.setServerUpdatedDate(currentTime);
-					report.setLocalUpdatedDate(currentTime);
-					dbManager.updateReportByLocalID(report);
-										
-					runOnUiThread(new Runnable()
+					public void run()
 					{
-						public void run()
+						if (response.getStatus())
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(FollowingActivity.this, R.string.succeed_in_submitting_report);
-							finish();
+							ViewUtils.showToast(FollowingActivity.this, R.string.succeed_in_choosing_following, response.getErrorMessage());
+							goBackToMainActivity();
 						}
-					});
-				}
-				else
-				{
-					report.setStatus(originalStatus);
-					dbManager.updateReportByLocalID(report);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
+						else
 						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(FollowingActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+							ViewUtils.showToast(FollowingActivity.this, R.string.error_choose_following, response.getErrorMessage());
 						}
-					});					
-				}
+					}
+				});
 			}
 		});
     }

@@ -54,7 +54,9 @@
     <color name="status_submitted">#FF46A3D3</color>
     <color name="status_approved">#FF3CB798</color>
     <color name="status_rejected">#FFB570B2</color>
-    <color name="status_finished">#FFCCCECF</color>
+    <color name="status_finished">#FFCCCECF</color>  
+    <color name="status_item_prove_ahead">#FFFF5857</color>      
+    <color name="status_item_approved">#FFFF5857</color>
     
     <color name="stat_title">#FFECD4D5</color>
     <color name="stat_ongoing">#FF45A3D2</color>

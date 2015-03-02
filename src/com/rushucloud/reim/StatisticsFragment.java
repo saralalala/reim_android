@@ -188,14 +188,14 @@ public class StatisticsFragment extends Fragment
 		}
 		else
 		{
-			mainAmountTextView.setText(Utils.formatDouble(totalAmount / 10000000));
+			mainAmountTextView.setText(Utils.formatDouble(totalAmount / 100000000));
 			unitTextView.setText(R.string.one_hundred_million);			
 		}
 		ongoingPercentTextView.setText(Utils.formatDouble(ongoingRatio) + getString(R.string.percent));
 		newPercentTextView.setText(Utils.formatDouble(newRatio) + getString(R.string.percent));
 
 		float totalAngle = 262;
-		float startAngle = (float) 139;
+		float startAngle = 139;
 		float newAngle = (float) newRatio * totalAngle / 100;
 		float ongoingAngle = (float) ongoingRatio * totalAngle / 100;
 
@@ -234,9 +234,25 @@ public class StatisticsFragment extends Fragment
 				
 				TextView monthTextView = (TextView) view.findViewById(R.id.monthTextView);
 				monthTextView.setText(month);
-				
+
 				TextView dataTextView = (TextView) view.findViewById(R.id.dataTextView);
-				dataTextView.setText(Utils.formatDouble(data));
+				TextView unitTextView = (TextView) view.findViewById(R.id.unitTextView);
+				
+				if (data < 100000)
+				{
+					dataTextView.setText(Utils.formatDouble(data));
+					unitTextView.setVisibility(View.GONE);
+				}
+				else if (data < 100000000)
+				{
+					dataTextView.setText(Utils.formatDouble(data / 10000));
+					unitTextView.setText(R.string.ten_thousand);
+				}
+				else
+				{
+					dataTextView.setText(Utils.formatDouble(data / 100000000));
+					unitTextView.setText(R.string.one_hundred_million);			
+				}
 				
 				LinearLayout dataLayout = (LinearLayout) view.findViewById(R.id.dataLayout);
 				dataLayout.addView(monthBar);

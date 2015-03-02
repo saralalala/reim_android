@@ -198,7 +198,7 @@ public class ProfileActivity extends Activity
 		});
 		
 		// init manager
-		managerTextView = (TextView)findViewById(R.id.managerTextView);
+		managerTextView = (TextView) findViewById(R.id.managerTextView);
 		
         RelativeLayout defaultManagerLayout = (RelativeLayout) findViewById(R.id.defaultManagerLayout);
         defaultManagerLayout.setOnClickListener(new View.OnClickListener()

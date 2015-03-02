@@ -76,7 +76,7 @@ public class SendInviteActivity extends Activity
 			}
 		});
 		
-		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
+		usernameEditText = (EditText) findViewById(R.id.usernameEditText);
 		usernameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 
         Button inviteButton = (Button) findViewById(R.id.inviteButton);
@@ -108,7 +108,7 @@ public class SendInviteActivity extends Activity
 		});
         inviteButton = ViewUtils.resizeLongButton(inviteButton);
         
-        LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
+        LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

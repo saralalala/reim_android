@@ -28,8 +28,8 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 			check[i] = false;
 		}
 		
-		backgrounds = new int[]{ R.drawable.report_tag_draft, R.drawable.report_tag_submitted, R.drawable.report_tag_approved,
-				 				 R.drawable.report_tag_rejected, R.drawable.report_tag_finished };
+		backgrounds = new int[]{ R.drawable.tag_draft, R.drawable.tag_submitted, R.drawable.tag_approved,
+				 				 R.drawable.tag_rejected, R.drawable.tag_finished };
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)

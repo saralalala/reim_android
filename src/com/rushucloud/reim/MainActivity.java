@@ -154,7 +154,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		fragmentList.add(statisticsFragment);
 		fragmentList.add(meFragment);
 		
-		viewPager = (ViewPager)findViewById(R.id.viewPager);
+		viewPager = (ViewPager) findViewById(R.id.viewPager);
 		viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager())
 		{
 			public int getCount()
@@ -216,10 +216,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			}
 		});
 
-		TabItem tabItemReim = (TabItem)findViewById(R.id.tabItemReim);
-		TabItem tabItemReport = (TabItem)findViewById(R.id.tabItemReport);
-		TabItem tabItemStat = (TabItem)findViewById(R.id.tabItemStat);
-		TabItem tabItemMe = (TabItem)findViewById(R.id.tabItemMe);
+		TabItem tabItemReim = (TabItem) findViewById(R.id.tabItemReim);
+		TabItem tabItemReport = (TabItem) findViewById(R.id.tabItemReport);
+		TabItem tabItemStat = (TabItem) findViewById(R.id.tabItemStat);
+		TabItem tabItemMe = (TabItem) findViewById(R.id.tabItemMe);
 		
 		tabItemReim.setOnClickListener(this);
 		tabItemReport.setOnClickListener(this);
@@ -233,10 +233,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		
 		tabItemReim.setIconAlpha(1);
 
-		reportTipImageView = (ImageView)findViewById(R.id.reportTipImageView);
-		meTipImageView = (ImageView)findViewById(R.id.meTipImageView);
+		reportTipImageView = (ImageView) findViewById(R.id.reportTipImageView);
+		meTipImageView = (ImageView) findViewById(R.id.meTipImageView);
 		
-		Button addButton = (Button)findViewById(R.id.addButton);
+		Button addButton = (Button) findViewById(R.id.addButton);
 		addButton.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)

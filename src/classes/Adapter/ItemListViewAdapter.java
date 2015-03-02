@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 public class ItemListViewAdapter extends BaseAdapter
@@ -78,19 +77,15 @@ public class ItemListViewAdapter extends BaseAdapter
 			statusTextView.setText(item.getStatusString());
 			statusTextView.setBackgroundResource(item.getStatusBackground());
 			
-			LayoutParams params = (LayoutParams) statusTextView.getLayoutParams();
-			params.width = item.getStatusWidth(context);
-			statusTextView.setLayoutParams(params);
-			
 			if (item.isProveAhead() && item.isPaApproved())
 			{
 				proveTextView.setVisibility(View.VISIBLE);
-				proveTextView.setBackgroundResource(R.drawable.item_approved);
+				proveTextView.setBackgroundResource(R.drawable.status_item_approved);
 			}
 			else if (item.isProveAhead())
 			{
 				proveTextView.setVisibility(View.VISIBLE);
-				proveTextView.setBackgroundResource(R.drawable.item_prove_ahead);
+				proveTextView.setBackgroundResource(R.drawable.status_item_prove_ahead);
 			}
 			else
 			{

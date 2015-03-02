@@ -16,6 +16,15 @@
 	    android:id="@+id/coverLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-		android:background="@drawable/report_tag_cover" />
+		android:background="@drawable/tag_cover">
+
+		<ImageView
+		    android:layout_width="20dp"
+		    android:layout_height="20dp"
+			android:layout_centerInParent="true"
+			android:contentDescription="@string/choose_tag"
+		    android:src="@drawable/selected" />
+	    
+	</RelativeLayout>
 
 </FrameLayout>

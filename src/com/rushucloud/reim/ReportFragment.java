@@ -678,7 +678,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		cancelImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
-			{
+			{				
 				filterPopupWindow.dismiss();
 			}
 		});

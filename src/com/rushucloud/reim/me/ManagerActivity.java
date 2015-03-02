@@ -96,7 +96,7 @@ public class ManagerActivity extends Activity
 		currentUser = appPreference.getCurrentUser();		
     	currentGroupID = appPreference.getCurrentGroupID();
     	
-		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
+		userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUser.getServerID());
 		checkList = User.getUsersCheck(userList, currentUser.constructListWithManager());
 	}
 	
@@ -113,7 +113,7 @@ public class ManagerActivity extends Activity
 			}
 		});
 		
-		TextView confirmTextView = (TextView)findViewById(R.id.confirmTextView);
+		TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
 		confirmTextView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -153,7 +153,7 @@ public class ManagerActivity extends Activity
 			}
 		});
 		
-		managerListView = (ListView)findViewById(R.id.userListView);
+		managerListView = (ListView) findViewById(R.id.userListView);
 		managerListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -303,7 +303,7 @@ public class ManagerActivity extends Activity
 					{
 						public void run()
 						{
-							userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
+							userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUser.getServerID());
 							adapter.setMember(userList);
 							adapter.notifyDataSetChanged();
 						}

@@ -201,14 +201,14 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			}
 		});
 
-		consumedTextView = (TextView)findViewById(R.id.consumedTextView);
+		consumedTextView = (TextView) findViewById(R.id.consumedTextView);
 		consumedTextView.setOnClickListener(this);
-		proveAheadTextView = (TextView)findViewById(R.id.proveAheadTextView);
+		proveAheadTextView = (TextView) findViewById(R.id.proveAheadTextView);
 		proveAheadTextView.setOnClickListener(this);
 		
-		itemCountTextView = (TextView)findViewById(R.id.itemCountTextView);
+		itemCountTextView = (TextView) findViewById(R.id.itemCountTextView);
 		
-		TextView confirmTextView = (TextView)findViewById(R.id.confirmTextView);
+		TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
 		confirmTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -231,7 +231,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			}
 		});
 
-		warningTextView = (TextView)findViewById(R.id.warningTextView);
+		warningTextView = (TextView) findViewById(R.id.warningTextView);
 		
 		itemListView = (ListView) findViewById(R.id.itemListView);
 		itemListView.setOnItemClickListener(new OnItemClickListener()
@@ -376,12 +376,12 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			View view;
 			if (tabIndex == 0)
 			{
-				int layoutID = consumedTempTagCheck[i] ? R.layout.grid_tag : R.layout.grid_tag_unselected;
+				int layoutID = consumedTempTagCheck[i] ? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
 				view = View.inflate(UnarchivedItemsActivity.this, layoutID, null);				
 			}
 			else
 			{
-				int layoutID = proveTempTagCheck[i] ? R.layout.grid_tag : R.layout.grid_tag_unselected;
+				int layoutID = proveTempTagCheck[i] ? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
 				view = View.inflate(UnarchivedItemsActivity.this, layoutID, null);
 			}
 

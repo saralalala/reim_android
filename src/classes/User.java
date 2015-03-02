@@ -7,7 +7,6 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.Utils;
 
@@ -364,18 +363,17 @@ public class User implements Serializable
 		return userList;
 	}
 
-	public static List<User> removeCurrentUserFromList(List<User> userList)
+	public static List<User> removeUserFromList(List<User> userList, int userID)
 	{
 		if (userList == null)
 		{
 			return new ArrayList<User>();
 		}
 		
-		int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
 		List<User> tempList = new ArrayList<User>();
 		for (User user : userList)
 		{
-			if (user.getServerID() != currentUserID)
+			if (user.getServerID() != userID)
 			{
 				tempList.add(user);
 			}

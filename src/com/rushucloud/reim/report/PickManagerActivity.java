@@ -75,7 +75,13 @@ public class PickManagerActivity extends Activity
 		dbManager = DBManager.getDBManager();
 		
 		int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
-		userList = User.removeCurrentUserFromList(dbManager.getGroupUsers(currentGroupID));
+		int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
+		int senderID = getIntent().getIntExtra("sender", -1);
+		userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUserID);
+		if (senderID != -1)
+		{
+			userList = User.removeUserFromList(userList, senderID);
+		}
 
 		List<User> managerList = (List<User>) getIntent().getSerializableExtra("managers");
 		User currentUser = AppPreference.getAppPreference().getCurrentUser();

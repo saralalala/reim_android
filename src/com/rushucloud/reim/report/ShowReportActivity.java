@@ -121,7 +121,7 @@ public class ShowReportActivity extends Activity
 			}
 		});
 
-		ImageView commentImageView = (ImageView)findViewById(R.id.commentImageView);
+		ImageView commentImageView = (ImageView) findViewById(R.id.commentImageView);
 		commentImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -144,10 +144,10 @@ public class ShowReportActivity extends Activity
 			}
 		});
 		
-		tipImageView = (ImageView)findViewById(R.id.tipImageView);
+		tipImageView = (ImageView) findViewById(R.id.tipImageView);
 		
 		adapter = new ReportDetailListViewAdapter(ShowReportActivity.this, report, itemList);
-		detailListView = (ListView)findViewById(R.id.detailListView);
+		detailListView = (ListView) findViewById(R.id.detailListView);
 		detailListView.setAdapter(adapter);
 		detailListView.setOnItemClickListener(new OnItemClickListener()
 		{

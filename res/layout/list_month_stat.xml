@@ -10,10 +10,8 @@
         android:layout_width="60dp"
         android:layout_height="wrap_content"
 		android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="6dp"
-        android:text="2012-12"
         android:textColor="@color/font_major_dark"
         android:textSize="14sp" />
 
@@ -23,19 +21,33 @@
         android:layout_height="18dp"
         android:orientation="horizontal"
 		android:layout_centerVertical="true"
-		android:layout_toLeftOf="@+id/dataTextView"
+		android:layout_toLeftOf="@+id/amountLayout"
 		android:layout_toRightOf="@+id/monthTextView" />
 
-    <TextView
-        android:id="@+id/dataTextView"
+    <LinearLayout
+        android:id="@+id/amountLayout"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
-		android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="12dp"
-        android:gravity="right"
-        android:textColor="@color/font_month_data"
-        android:textSize="14sp" />
+        android:orientation="horizontal"
+	    android:layout_marginLeft="6dp"
+	    android:layout_marginRight="12dp"
+	    android:layout_alignParentRight="true"
+	    android:gravity="right"
+	    android:baselineAligned="true" >
+
+	    <TextView
+	        android:id="@+id/dataTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="@color/font_month_data"
+	        android:textSize="14sp" />
+	
+	    <TextView
+	        android:id="@+id/unitTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="@color/font_month_data"
+	        android:textSize="14sp" />
+    </LinearLayout>
 
 </RelativeLayout>

@@ -75,16 +75,16 @@ public class ChangePasswordActivity extends Activity
 			}
 		});
 		
-		oldPasswordEditText = (EditText)findViewById(R.id.oldPasswordEditText);
+		oldPasswordEditText = (EditText) findViewById(R.id.oldPasswordEditText);
 		oldPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
+		newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
 		newPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
+		confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
 		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-		Button submitButton = (Button)findViewById(R.id.submitButton);
+		Button submitButton = (Button) findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -138,7 +138,7 @@ public class ChangePasswordActivity extends Activity
 		});
 		submitButton = ViewUtils.resizeLongButton(submitButton);
 		
-		LinearLayout layout = (LinearLayout)findViewById(R.id.baseLayout);
+		LinearLayout layout = (LinearLayout) findViewById(R.id.baseLayout);
 		layout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

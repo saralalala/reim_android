@@ -347,7 +347,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 		
-		TextView saveTextView = (TextView)findViewById(R.id.saveTextView);
+		TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
 		saveTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -436,7 +436,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		LinearLayout baseLayout = (LinearLayout)findViewById(R.id.baseLayout);
+		LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -459,11 +459,11 @@ public class EditItemActivity extends Activity
 	
 	private void initStatusView()
 	{
-		TextView actualCostTextView = (TextView)findViewById(R.id.actualCostTextView);
-		TextView budgetTextView = (TextView)findViewById(R.id.budgetTextView);
-		TextView approvedTextView = (TextView)findViewById(R.id.approvedTextView);
+		TextView actualCostTextView = (TextView) findViewById(R.id.actualCostTextView);
+		TextView budgetTextView = (TextView) findViewById(R.id.budgetTextView);
+		TextView approvedTextView = (TextView) findViewById(R.id.approvedTextView);
 
-		amountEditText = (EditText)findViewById(R.id.amountEditText);
+		amountEditText = (EditText) findViewById(R.id.amountEditText);
 		amountEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
 		amountEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		if (item.getAmount() == 0)
@@ -496,7 +496,7 @@ public class EditItemActivity extends Activity
 			temp += "/" + getString(R.string.need_reimburse);
 		}
 		
-		typeTextView = (TextView)findViewById(R.id.typeTextView);
+		typeTextView = (TextView) findViewById(R.id.typeTextView);
 		typeTextView.setText(temp);
 		typeTextView.setOnClickListener(new View.OnClickListener()
 		{
@@ -570,7 +570,7 @@ public class EditItemActivity extends Activity
 	private void initInvoiceView()
 	{		
 		// init invoice		
-		invoiceLayout = (LinearLayout)findViewById(R.id.invoiceLayout);
+		invoiceLayout = (LinearLayout) findViewById(R.id.invoiceLayout);
 				
 		addInvoiceImageView = new ImageView(this);
 		addInvoiceImageView.setImageResource(R.drawable.add_tag_button);
@@ -657,7 +657,7 @@ public class EditItemActivity extends Activity
 	{
 		// init time
 		int time = item.getConsumedDate() > 0 ? item.getConsumedDate() : Utils.getCurrentTime();
-		timeTextView = (TextView)findViewById(R.id.timeTextView);
+		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		timeTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -680,7 +680,7 @@ public class EditItemActivity extends Activity
 				
 				GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(), 
 						datePicker.getDayOfMonth(), timePicker.getCurrentHour(), timePicker.getCurrentMinute());
-				item.setConsumedDate((int)(greCal.getTimeInMillis() / 1000));
+				item.setConsumedDate((int) (greCal.getTimeInMillis() / 1000));
 				timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
 			}
 		});
@@ -698,7 +698,7 @@ public class EditItemActivity extends Activity
 	
 	private void initVendorView()
 	{		
-		vendorTextView = (TextView)findViewById(R.id.vendorTextView);
+		vendorTextView = (TextView) findViewById(R.id.vendorTextView);
 		vendorTextView.setText(item.getVendor());
 		vendorTextView.setOnClickListener(new View.OnClickListener()
 		{
@@ -732,7 +732,7 @@ public class EditItemActivity extends Activity
 	private void initLocationView()
 	{
 		String cityName = item.getLocation().isEmpty() ? getString(R.string.no_location) : item.getLocation();
-		locationTextView = (TextView)findViewById(R.id.locationTextView);
+		locationTextView = (TextView) findViewById(R.id.locationTextView);
 		locationTextView.setText(cityName);
 		locationTextView.setOnClickListener(new View.OnClickListener()
 		{
@@ -775,7 +775,7 @@ public class EditItemActivity extends Activity
 		});
 
 		categoryImageView = (ImageView) findViewById(R.id.categoryImageView);		
-		categoryTextView = (TextView)findViewById(R.id.categoryTextView);
+		categoryTextView = (TextView) findViewById(R.id.categoryTextView);
 		
 		if (item.getCategory() != null)
 		{
@@ -870,7 +870,7 @@ public class EditItemActivity extends Activity
 
 	private void initNoteView()
 	{
-		noteEditText = (EditText)findViewById(R.id.noteEditText);
+		noteEditText = (EditText) findViewById(R.id.noteEditText);
 		noteEditText.setText(item.getNote());
 		noteEditText.setOnFocusChangeListener(new OnFocusChangeListener()
 		{
@@ -1042,7 +1042,7 @@ public class EditItemActivity extends Activity
 		{
 			String name = item.getTags().get(i).getName();
 			
-			View view = View.inflate(this, R.layout.grid_tag, null);
+			View view = View.inflate(this, R.layout.grid_item_tag, null);
 
 			TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
 			nameTextView.setText(name);

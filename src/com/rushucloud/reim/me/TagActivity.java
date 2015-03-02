@@ -96,7 +96,7 @@ public class TagActivity extends Activity
 			}
 		});
 		
-		TextView addTextView = (TextView)findViewById(R.id.addTextView);
+		TextView addTextView = (TextView) findViewById(R.id.addTextView);
 		addTextView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -114,9 +114,9 @@ public class TagActivity extends Activity
 			}
 		});
 		
-		tagTextView = (TextView)findViewById(R.id.tagTextView);
+		tagTextView = (TextView) findViewById(R.id.tagTextView);
 		
-		tagListView = (ListView)findViewById(R.id.tagListView);
+		tagListView = (ListView) findViewById(R.id.tagListView);
 		tagListView.setOnItemLongClickListener(new OnItemLongClickListener()
 		{
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)

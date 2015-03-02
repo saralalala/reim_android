@@ -81,7 +81,7 @@ public class Invite implements Serializable
 		{
 			public int compare(Invite invite1, Invite invite2)
 			{
-				return (int)(invite2.getUpdateTime() - invite1.getUpdateTime());
+				return (int) (invite2.getUpdateTime() - invite1.getUpdateTime());
 			}
 		});
     }

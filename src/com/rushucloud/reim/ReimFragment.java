@@ -43,6 +43,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -72,6 +74,10 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	
 	private View view;
 	private PopupWindow filterPopupWindow;
+	private ImageView sortDateImageView;
+	private ImageView sortAmountImageView;
+	private RotateAnimation rotateAnimation;
+	private RotateAnimation rotateReverseAnimation;
 	private RelativeLayout noResultLayout;
 	private LinearLayout tagLayout;
 	private LinearLayout categoryLayout;
@@ -97,6 +103,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	private List<Category> filterCategoryList = new ArrayList<Category>();
 	
 	private int tempFilterType = FILTER_TYPE_ALL;
+	private boolean tempSortReverse = false;
 	private int tempFilterStatus = FILTER_STATUS_ALL;
 	private int tempSortType = SORT_CONSUMED_DATE;
 	private boolean[] tempTagCheck;
@@ -255,35 +262,87 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				showFilterWindow();
 			}
 		});
-
+		
 		noResultLayout = (RelativeLayout) view.findViewById(R.id.noResultLayout);
+		
+		rotateAnimation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rotateAnimation.setDuration(200);
+		rotateAnimation.setFillAfter(true);
+		
+		rotateReverseAnimation = new RotateAnimation(180, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rotateReverseAnimation.setDuration(200);
+		rotateReverseAnimation.setFillAfter(true);
 		
 		View filterView = View.inflate(getActivity(), R.layout.window_reim_filter, null);
 
-		final RadioButton sortConsumedDateRadio = (RadioButton)filterView.findViewById(R.id.sortConsumedDateRadio);	
-		final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);
-		final SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
-		sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		sortDateImageView = (ImageView) filterView.findViewById(R.id.sortDateImageView);
+		sortDateImageView.setOnClickListener(new OnClickListener()
 		{
-			public void onCheckedChanged(RadioGroup group, int checkedId)
+			public void onClick(View v)
 			{
-				if (checkedId == sortConsumedDateRadio.getId())
+				reverseSortDateImageView();
+			}
+		});
+		sortAmountImageView = (ImageView) filterView.findViewById(R.id.sortAmountImageView);
+		sortAmountImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				reverseSortAmountImageView();
+			}
+		});
+		
+		final RadioButton sortConsumedDateRadio = (RadioButton) filterView.findViewById(R.id.sortConsumedDateRadio);
+		final RadioButton sortAmountRadio = (RadioButton) filterView.findViewById(R.id.sortAmountRadio);
+		sortConsumedDateRadio.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
+				sortAmountRadio.setChecked(false);
+				sortConsumedDateRadio.setChecked(true);
+				if (tempSortType != SORT_CONSUMED_DATE)
 				{
-					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
+					tempSortReverse = false;
+					sortAmountImageView.clearAnimation();
+					sortAmountImageView.setVisibility(View.GONE);
+					
 					tempSortType = SORT_CONSUMED_DATE;
+					sortDateImageView.setVisibility(View.VISIBLE);
 				}
-				else if (checkedId == sortAmountRadio.getId())
+				else
 				{
-					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_AMOUNT");
+					reverseSortDateImageView();
+				}
+			}
+		});
+		sortAmountRadio.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_AMOUNT");
+				sortAmountRadio.setChecked(true);
+				sortConsumedDateRadio.setChecked(false);
+				if (tempSortType != SORT_AMOUNT)
+				{
+					tempSortReverse = false;
+					sortDateImageView.clearAnimation();
+					sortDateImageView.setVisibility(View.GONE);
+					
 					tempSortType = SORT_AMOUNT;
+					sortAmountImageView.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					reverseSortAmountImageView();
 				}
 			}
 		});
 
-		final RadioButton filterTypeAllRadio = (RadioButton)filterView.findViewById(R.id.filterTypeAllRadio);
-		final RadioButton filterProveAheadRadio = (RadioButton)filterView.findViewById(R.id.filterProveAheadRadio);
-		final RadioButton filterConsumedRadio = (RadioButton)filterView.findViewById(R.id.filterConsumedRadio);			
-		final SegmentedGroup filterTypeRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterTypeRadioGroup);
+		final RadioButton filterTypeAllRadio = (RadioButton) filterView.findViewById(R.id.filterTypeAllRadio);
+		final RadioButton filterProveAheadRadio = (RadioButton) filterView.findViewById(R.id.filterProveAheadRadio);
+		final RadioButton filterConsumedRadio = (RadioButton) filterView.findViewById(R.id.filterConsumedRadio);			
+		final SegmentedGroup filterTypeRadioGroup = (SegmentedGroup) filterView.findViewById(R.id.filterTypeRadioGroup);
 		filterTypeRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 			public void onCheckedChanged(RadioGroup group, int checkedId)
@@ -305,10 +364,10 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			}
 		});
 
-		final RadioButton filterStatusAllRadio = (RadioButton)filterView.findViewById(R.id.filterStatusAllRadio);
-		final RadioButton filterFreeRadio = (RadioButton)filterView.findViewById(R.id.filterFreeRadio);
-		final RadioButton filterAddedRadio = (RadioButton)filterView.findViewById(R.id.filterAddedRadio);			
-		final SegmentedGroup filterStatusRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.filterStatusRadioGroup);
+		final RadioButton filterStatusAllRadio = (RadioButton) filterView.findViewById(R.id.filterStatusAllRadio);
+		final RadioButton filterFreeRadio = (RadioButton) filterView.findViewById(R.id.filterFreeRadio);
+		final RadioButton filterAddedRadio = (RadioButton) filterView.findViewById(R.id.filterAddedRadio);			
+		final SegmentedGroup filterStatusRadioGroup = (SegmentedGroup) filterView.findViewById(R.id.filterStatusRadioGroup);
 		filterStatusRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 			public void onCheckedChanged(RadioGroup group, int checkedId)
@@ -336,13 +395,16 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		categoryLayout = (LinearLayout) filterView.findViewById(R.id.categoryLayout);
 		refreshCategoryView();
 		
-		ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
+		ImageView confirmImageView = (ImageView) filterView.findViewById(R.id.confirmImageView);
 		confirmImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				sortReverse = sortType == tempSortType ? !sortReverse : false;
 				sortType = tempSortType;
+				sortReverse = tempSortReverse;
+				
+				sortDateImageView.clearAnimation();
+				sortAmountImageView.clearAnimation();
 				
 				filterType = tempFilterType;
 				filterStatus = tempFilterStatus;
@@ -379,18 +441,34 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		cancelImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
-			{
+			{				
 				switch (sortType)
 				{
 					case SORT_CONSUMED_DATE:
-						sortRadioGroup.check(sortConsumedDateRadio.getId());
+					{
+						sortConsumedDateRadio.setChecked(true);
+						sortAmountRadio.setChecked(false);
+						sortDateImageView.clearAnimation();
+						sortDateImageView.setVisibility(View.VISIBLE);
+						sortAmountImageView.clearAnimation();
+						sortAmountImageView.setVisibility(View.GONE);
 						break;
+					}
 					case SORT_AMOUNT:
-						sortRadioGroup.check(sortAmountRadio.getId());
+					{
+						sortConsumedDateRadio.setChecked(false);
+						sortAmountRadio.setChecked(true);
+						sortDateImageView.clearAnimation();
+						sortDateImageView.setVisibility(View.GONE);
+						sortAmountImageView.clearAnimation();
+						sortAmountImageView.setVisibility(View.VISIBLE);
 						break;
+					}
 					default:
 						break;
 				}
+
+				tempSortReverse = sortReverse;
 				
 				switch (filterType)
 				{
@@ -611,6 +689,32 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		}
 	}
 	
+	private void reverseSortDateImageView()
+	{
+		tempSortReverse = !tempSortReverse;
+		if (!tempSortReverse) // status before change
+		{
+			sortDateImageView.startAnimation(rotateReverseAnimation);
+		}
+		else
+		{
+			sortDateImageView.startAnimation(rotateAnimation);
+		}		
+	}
+	
+	private void reverseSortAmountImageView()
+	{
+		tempSortReverse = !tempSortReverse;
+		if (!tempSortReverse) // status before change
+		{
+			sortAmountImageView.startAnimation(rotateReverseAnimation);
+		}
+		else
+		{
+			sortAmountImageView.startAnimation(rotateAnimation);
+		}
+	}
+	
  	private void refreshItemListView()
 	{
 		itemList.clear();
@@ -646,7 +750,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			String name = tagList.get(i).getName();
 			
-			int layoutID = tempTagCheck[i] ? R.layout.grid_tag : R.layout.grid_tag_unselected;
+			int layoutID = tempTagCheck[i] ? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
 			View view = View.inflate(getActivity(), layoutID, null);
 
 			final int index = i;
@@ -767,6 +871,15 @@ public class ReimFragment extends Fragment implements IXListViewListener
 	
     private void showFilterWindow()
     {
+    	if (sortReverse && sortType == SORT_CONSUMED_DATE)
+		{
+    		sortDateImageView.startAnimation(rotateAnimation);
+		}
+    	else if (sortReverse && sortType == SORT_AMOUNT)
+    	{
+    		sortAmountImageView.startAnimation(rotateAnimation);    		
+		}
+    	
 		filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		filterPopupWindow.update();
     }
@@ -778,7 +891,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		
 		ViewUtils.dimBackground(getActivity());
     }
-    
+        
     private void sendDownloadCategoryIconRequest(final Category category)
     {
     	DownloadImageRequest request = new DownloadImageRequest(category.getIconID());

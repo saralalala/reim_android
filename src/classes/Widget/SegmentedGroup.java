@@ -20,11 +20,11 @@ import android.widget.RadioGroup;
 
 public class SegmentedGroup extends RadioGroup
 {
-
 	private int borderWidth;
 	private Resources resources;
 	private int mTintColor;
 	private int mCheckedTextColor = Color.WHITE;
+	private int textSize;
 
 	public SegmentedGroup(Context context)
 	{
@@ -32,6 +32,7 @@ public class SegmentedGroup extends RadioGroup
 		resources = getResources();
 		mTintColor = resources.getColor(R.color.radio_button_selected_color);
 		borderWidth = PhoneUtils.dpToPixel(resources, 1.5);
+		textSize = 14;
 	}
 
 	public SegmentedGroup(Context context, AttributeSet attrs)
@@ -40,6 +41,7 @@ public class SegmentedGroup extends RadioGroup
 		resources = getResources();
 		mTintColor = resources.getColor(R.color.radio_button_selected_color);
 		borderWidth = PhoneUtils.dpToPixel(resources, 1.5);
+		textSize = 14;
 	}
 
 	@Override
@@ -70,12 +72,10 @@ public class SegmentedGroup extends RadioGroup
 		{
 			View child = getChildAt(0);
 			LayoutParams initParams = (LayoutParams) child.getLayoutParams();
-			LayoutParams params = new LayoutParams(initParams.width, initParams.height,
-					initParams.weight);
+			LayoutParams params = new LayoutParams(initParams.width, initParams.height, initParams.weight);
 			params.setMargins(0, 0, -borderWidth, 0);
 			child.setLayoutParams(params);
-			updateBackground(getChildAt(0), R.drawable.radio_checked_left,
-					R.drawable.radio_unchecked_left);
+			updateBackground(getChildAt(0), R.drawable.radio_checked_left, R.drawable.radio_unchecked_left);
 			for (int i = 1; i < count - 1; i++)
 			{
 				updateBackground(getChildAt(i), R.drawable.radio_checked_middle, R.drawable.radio_unchecked_middle);
@@ -99,11 +99,13 @@ public class SegmentedGroup extends RadioGroup
 	{
 		// Set text color
 		ColorStateList colorStateList = new ColorStateList(new int[][] {
-				{ android.R.attr.state_pressed },
+				{ android.R.attr.state_pressed, -android.R.attr.state_checked },
+				{ android.R.attr.state_pressed, android.R.attr.state_checked },
 				{ -android.R.attr.state_pressed, -android.R.attr.state_checked },
 				{ -android.R.attr.state_pressed, android.R.attr.state_checked } }, new int[] {
-				mCheckedTextColor, mTintColor, mCheckedTextColor });
+				mTintColor, mCheckedTextColor, mTintColor, mCheckedTextColor });
 		((Button) view).setTextColor(colorStateList);
+		((Button) view).setTextSize(textSize);		
 
 		// Redraw with tint color
 		Drawable checkedDrawable = resources.getDrawable(checked).mutate();

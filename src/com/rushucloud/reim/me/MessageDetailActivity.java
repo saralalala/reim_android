@@ -92,13 +92,13 @@ public class MessageDetailActivity extends Activity
 			}
 		});
 		
-		TextView inviteTextView = (TextView)findViewById(R.id.inviteTextView);
+		TextView inviteTextView = (TextView) findViewById(R.id.inviteTextView);
 		inviteTextView.setText(invite.getMessage());
 
-		TextView dateTextView = (TextView)findViewById(R.id.dateTextView);
+		TextView dateTextView = (TextView) findViewById(R.id.dateTextView);
 		dateTextView.setText(Utils.secondToStringUpToDay(invite.getUpdateTime()));
 		
-		Button agreeButton = (Button)findViewById(R.id.agreeButton);
+		Button agreeButton = (Button) findViewById(R.id.agreeButton);
 		agreeButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -115,7 +115,7 @@ public class MessageDetailActivity extends Activity
 		});
 		agreeButton = ViewUtils.resizeLongButton(agreeButton);
 		
-		Button rejectButton = (Button)findViewById(R.id.rejectButton);
+		Button rejectButton = (Button) findViewById(R.id.rejectButton);
 		rejectButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

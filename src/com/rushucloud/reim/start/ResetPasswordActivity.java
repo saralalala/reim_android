@@ -88,13 +88,13 @@ public class ResetPasswordActivity extends Activity
 			}
 		});
 		
-		newPasswordEditText = (EditText)findViewById(R.id.newPasswordEditText);
+		newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
 		newPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
     	
-		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
+		confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
 		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-		Button completeButton = (Button)findViewById(R.id.completeButton);
+		Button completeButton = (Button) findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -129,7 +129,7 @@ public class ResetPasswordActivity extends Activity
 		});
 		completeButton = ViewUtils.resizeLongButton(completeButton);
 		
-    	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
+    	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
     	{
 			public void onClick(View v)

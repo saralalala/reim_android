@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
 
 public class OthersReportListViewAdapter extends BaseAdapter
 {
@@ -47,11 +46,7 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		Report report = reportList.get(position);
 		
 		statusTextView.setText(report.getStatusString());
-		statusTextView.setBackgroundResource(report.getStatusBackground());	
-		
-		LayoutParams params = (LayoutParams) statusTextView.getLayoutParams();
-		params.width = report.getStatusWidth(context);
-		statusTextView.setLayoutParams(params);
+		statusTextView.setBackgroundResource(report.getStatusBackground());
 
 		String sender = context.getString(R.string.prompt_sender) + report.getSender().getNickname();
 		senderTextView.setText(sender);

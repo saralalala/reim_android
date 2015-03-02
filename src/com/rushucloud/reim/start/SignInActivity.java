@@ -89,10 +89,10 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		String username = getIntent().getStringExtra("username");
 		String password = getIntent().getStringExtra("password");
 		
-		usernameEditText = (EditText)findViewById(R.id.usernameEditText);
+		usernameEditText = (EditText) findViewById(R.id.usernameEditText);
 		usernameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
+		passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 		passwordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 
 		if (username != null)
@@ -101,7 +101,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 			passwordEditText.setText(password);
 		}
 
-		Button signInButton = (Button)findViewById(R.id.signInButton);
+		Button signInButton = (Button) findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -144,7 +144,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		});
 		signInButton = ViewUtils.resizeLongButton(signInButton);
 		
-		forgorPasswordTextView = (TextView)findViewById(R.id.forgotTextView);
+		forgorPasswordTextView = (TextView) findViewById(R.id.forgotTextView);
 		forgorPasswordTextView.setOnClickListener(this);
 
 		// init forgot window
@@ -188,13 +188,13 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		
 		forgotPopupWindow = ViewUtils.constructBottomPopupWindow(this, forgorView);
 		
-		signUpTextView = (TextView)findViewById(R.id.signUpTextView);
+		signUpTextView = (TextView) findViewById(R.id.signUpTextView);
 		signUpTextView.setOnClickListener(this);
 		
-		signUpImageView = (ImageView)findViewById(R.id.signUpImageView);
+		signUpImageView = (ImageView) findViewById(R.id.signUpImageView);
 		signUpImageView.setOnClickListener(this);
 		
-		RelativeLayout baseLayout = (RelativeLayout)findViewById(R.id.baseLayout);
+		RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

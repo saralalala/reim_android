@@ -5,10 +5,10 @@ import java.util.List;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
+import netUtils.Response.Report.ApproveReportResponse;
 import netUtils.Response.Report.GetReportResponse;
-import netUtils.Response.Report.ModifyReportResponse;
+import netUtils.Request.Report.ApproveReportRequest;
 import netUtils.Request.Report.GetReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
 import classes.Comment;
 import classes.Item;
 import classes.ReimApplication;
@@ -125,7 +125,7 @@ public class ApproveReportActivity extends Activity
 			}
 		});
 		
-		ImageView commentImageView = (ImageView)findViewById(R.id.commentImageView);
+		ImageView commentImageView = (ImageView) findViewById(R.id.commentImageView);
 		commentImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -141,9 +141,9 @@ public class ApproveReportActivity extends Activity
 			}
 		});
 
-		tipImageView = (ImageView)findViewById(R.id.tipImageView);
+		tipImageView = (ImageView) findViewById(R.id.tipImageView);
 		
-		Button approveButton = (Button)findViewById(R.id.approveButton);
+		Button approveButton = (Button) findViewById(R.id.approveButton);
 		approveButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -155,12 +155,12 @@ public class ApproveReportActivity extends Activity
 				}
 				else
 				{
-					sendModifyReportRequest(Report.STATUS_APPROVED, "");
+					sendApproveReportRequest(Report.STATUS_APPROVED, "");
 				}
 			}
 		});
 
-		Button rejectButton = (Button)findViewById(R.id.rejectButton);
+		Button rejectButton = (Button) findViewById(R.id.rejectButton);
 		rejectButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -178,7 +178,7 @@ public class ApproveReportActivity extends Activity
 		});
 
 		adapter = new ReportDetailListViewAdapter(ApproveReportActivity.this, report, itemList);
-		ListView detailListView = (ListView)findViewById(R.id.detailListView);
+		ListView detailListView = (ListView) findViewById(R.id.detailListView);
 		detailListView.setAdapter(adapter);
 		detailListView.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -228,7 +228,7 @@ public class ApproveReportActivity extends Activity
 								{
 									public void onClick(DialogInterface dialog, int which)
 									{
-										sendModifyReportRequest(Report.STATUS_REJECTED, commentEditText.getText().toString());
+										sendApproveReportRequest(Report.STATUS_REJECTED, commentEditText.getText().toString());
 									}
 								});
     	builder.setNegativeButton(R.string.cancel, null);
@@ -325,17 +325,17 @@ public class ApproveReportActivity extends Activity
 		});
     }
     	
-    private void sendModifyReportRequest(final int status, final String commentContent)
+    private void sendApproveReportRequest(final int status, final String commentContent)
     {
 		ReimProgressDialog.show();
-    	report.setStatus(status);
+    	report.setMyDecision(status);
 		
-    	ModifyReportRequest request = new ModifyReportRequest(report, commentContent);
+    	ApproveReportRequest request = new ApproveReportRequest(report, commentContent);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
-				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
+				final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
 				if (response.getStatus())
 				{
 					int currentTime = Utils.getCurrentTime();					
@@ -363,9 +363,37 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							int message = status == 2 ? R.string.prompt_report_approved : R.string.prompt_report_rejected;
-							ViewUtils.showToast(ApproveReportActivity.this, message);
-							goBackToMainActivity();
+							if (status == Report.STATUS_APPROVED && appPreference.getCurrentUser().getDefaultManagerID() > 0)
+							{
+								ViewUtils.showToast(ApproveReportActivity.this, R.string.prompt_report_approved);
+								jumpToFollowingActivity();
+							}
+							else if (status == Report.STATUS_APPROVED) 
+							{								
+						    	Builder builder = new Builder(ApproveReportActivity.this);
+						    	builder.setTitle(R.string.tip);
+						    	builder.setMessage(R.string.prompt_choose_or_finish);
+						    	builder.setPositiveButton(R.string.continue_to_choose, new DialogInterface.OnClickListener()
+								{
+						    		public void onClick(DialogInterface dialog, int which)
+									{
+										jumpToFollowingActivity();
+									}
+								});
+						    	builder.setNegativeButton(R.string.finish, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int which)
+									{
+										goBackToMainActivity();
+									}
+								});
+						    	builder.create().show();
+							}
+							else
+							{
+								ViewUtils.showToast(ApproveReportActivity.this, R.string.prompt_report_rejected);
+								goBackToMainActivity();								
+							}
 						}
 					});
 				}
@@ -382,6 +410,14 @@ public class ApproveReportActivity extends Activity
 				}
 			}
 		});
+    }
+    
+    private void jumpToFollowingActivity()
+    {
+		Intent intent = new Intent(ApproveReportActivity.this, FollowingActivity.class);
+		intent.putExtra("report", report);
+		startActivity(intent);
+		finish();
     }
 
     private void goBackToMainActivity()

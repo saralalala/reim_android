@@ -127,7 +127,7 @@ public class SearchItemActivity extends Activity
 		actionBar.setBackgroundDrawable(new ColorDrawable(ViewUtils.getColor(R.color.major_dark)));
 		
 		adapter = new ItemListViewAdapter(this, itemList);
-		ListView resultListView = (ListView)findViewById(R.id.resultListView);
+		ListView resultListView = (ListView) findViewById(R.id.resultListView);
 		resultListView.setAdapter(adapter);
 		resultListView.setOnItemClickListener(new OnItemClickListener()
 		{

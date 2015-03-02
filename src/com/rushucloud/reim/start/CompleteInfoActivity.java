@@ -163,10 +163,10 @@ public class CompleteInfoActivity extends Activity
 			}
 		});
 		
-		nicknameEditText = (EditText)findViewById(R.id.nicknameEditText);
+		nicknameEditText = (EditText) findViewById(R.id.nicknameEditText);
 		nicknameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 
-		Button completeButton = (Button)findViewById(R.id.completeButton);
+		Button completeButton = (Button) findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -245,7 +245,7 @@ public class CompleteInfoActivity extends Activity
 		
 		picturePopupWindow = ViewUtils.constructBottomPopupWindow(this, pictureView);
 		
-		RelativeLayout baseLayout = (RelativeLayout)findViewById(R.id.baseLayout);
+		RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

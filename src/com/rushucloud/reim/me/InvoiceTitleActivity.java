@@ -49,13 +49,13 @@ public class InvoiceTitleActivity extends Activity
 		
 //		Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_right);
 //		
-//		TextView promptTextView = (TextView)findViewById(R.id.promptTextView);
+//		TextView promptTextView = (TextView) findViewById(R.id.promptTextView);
 //		promptTextView.setText(R.string.getInvoicePrompt);
 //		promptTextView.setAnimation(animation);
 //		
 //		animation = AnimationUtils.loadAnimation(this, R.anim.rotate_right_center);
 		Group group = AppPreference.getAppPreference().getCurrentGroup();
-		TextView titleTextView = (TextView)findViewById(R.id.titleTextView);
+		TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
 		String title = group == null ? getString(R.string.invoice_invalid) : group.getName();
 		titleTextView.setText(title);
 //		titleTextView.setAnimation(animation);

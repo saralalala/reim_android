@@ -142,10 +142,9 @@ public class PhoneUtils
 		try
 		{
 			Matrix matrix = new Matrix();
-			matrix.postScale((float) 0.5, (float) 0.5);
+			matrix.postScale(0.5f, 0.5f);
 
-			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
-					matrix, true);
+			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
 			String path;
 			if (type == NetworkConstant.IMAGE_TYPE_AVATAR)
@@ -183,10 +182,9 @@ public class PhoneUtils
 		try
 		{
 			Matrix matrix = new Matrix();
-			matrix.postScale((float) 0.5, (float) 0.5);
+			matrix.postScale(0.5f, 0.5f);
 
-			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
-					matrix, true);
+			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
 			String path = getIconFilePath(iconID);
 
@@ -237,7 +235,7 @@ public class PhoneUtils
 			return false;
 		}
 	}
-
+    
     public static int dpToPixel(Context context, int dp)
     {
     	DisplayMetrics metrics = context.getResources().getDisplayMetrics();

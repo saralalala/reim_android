@@ -71,7 +71,7 @@ public class WelcomeActivity extends Activity
 	{
 		getActionBar().hide();
 		
-		Button signInButton = (Button)findViewById(R.id.signInButton);
+		Button signInButton = (Button) findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()
 		{
 
@@ -85,7 +85,7 @@ public class WelcomeActivity extends Activity
 
 		final int buttonHeight = signInButton.getLayoutParams().height;
 		
-		final Button phoneSignUpButton = (Button)findViewById(R.id.phoneSignUpButton);
+		final Button phoneSignUpButton = (Button) findViewById(R.id.phoneSignUpButton);
 		phoneSignUpButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -104,7 +104,7 @@ public class WelcomeActivity extends Activity
 			}
 		});
 		
-		final Button emailSignUpButton = (Button)findViewById(R.id.emailSignUpButton);
+		final Button emailSignUpButton = (Button) findViewById(R.id.emailSignUpButton);
 		emailSignUpButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

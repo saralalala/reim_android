@@ -72,13 +72,13 @@ public class FeedbackActivity extends Activity
 			}
 		});
 		
-		feedbackEditText = (EditText)findViewById(R.id.feedbackEditText);
+		feedbackEditText = (EditText) findViewById(R.id.feedbackEditText);
 		feedbackEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-		contactEditText = (EditText)findViewById(R.id.contactEditText);
+		contactEditText = (EditText) findViewById(R.id.contactEditText);
 		contactEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 
-		Button submitButton = (Button)findViewById(R.id.submitButton);
+		Button submitButton = (Button) findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -96,7 +96,7 @@ public class FeedbackActivity extends Activity
 		});
 		submitButton = ViewUtils.resizeLongButton(submitButton);
 		
-		LinearLayout layout = (LinearLayout)findViewById(R.id.baseLayout);
+		LinearLayout layout = (LinearLayout) findViewById(R.id.baseLayout);
 		layout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

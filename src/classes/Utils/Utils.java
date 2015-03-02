@@ -21,7 +21,7 @@ public class Utils
 	{
 		Date date = new Date();
 		long result = date.getTime() / 1000;
-		return (int)result;
+		return (int) result;
 	}
 	
 	public static String secondToStringUpToMinute(int second)

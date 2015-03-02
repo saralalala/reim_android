@@ -84,16 +84,16 @@ public class EmailSignUpActivity extends Activity
 			}
 		});
 
-		emailEditText = (EditText)findViewById(R.id.emailEditText);
+		emailEditText = (EditText) findViewById(R.id.emailEditText);
     	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
     	
-		passwordEditText = (EditText)findViewById(R.id.passwordEditText);
+		passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 		passwordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-		confirmPasswordEditText = (EditText)findViewById(R.id.confirmPasswordEditText);
+		confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
 		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 
-		Button signUpButton = (Button)findViewById(R.id.signUpButton);
+		Button signUpButton = (Button) findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -142,7 +142,7 @@ public class EmailSignUpActivity extends Activity
 		});		
 		signUpButton = ViewUtils.resizeLongButton(signUpButton);
 		
-    	RelativeLayout baseLayout=(RelativeLayout)findViewById(R.id.baseLayout);
+    	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
     	{
 			public void onClick(View v)
