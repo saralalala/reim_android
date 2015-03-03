@@ -358,7 +358,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				}
 				else if (checkedId == filterConsumedRadio.getId())
 				{
-					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_REIMBURSED");
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PAY");
 					tempFilterType = FILTER_TYPE_CONSUMED;
 				}
 			}
@@ -400,6 +400,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_SUBMIT");
+				
 				sortType = tempSortType;
 				sortReverse = tempSortReverse;
 				
@@ -441,7 +443,9 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		cancelImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
-			{				
+			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CANCEL");
+				
 				switch (sortType)
 				{
 					case SORT_CONSUMED_DATE:
@@ -522,6 +526,8 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_EDIT_ITEM_DELETE");
+				
 				deletePopupWindow.dismiss();
 				
 				final Item localItem = showList.get(itemIndex);
@@ -834,6 +840,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			{
 				public void onClick(View v)
 				{
+					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CATEGORY");
 					tempCategoryCheck[index] = !tempCategoryCheck[index];
 					refreshCategoryView();
 				}

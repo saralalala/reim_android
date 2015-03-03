@@ -155,6 +155,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL");
 				forgotPopupWindow.dismiss();
 				
 				startActivity(new Intent(SignInActivity.this, PhoneFindActivity.class));
@@ -168,6 +169,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD_MAIL");
 				forgotPopupWindow.dismiss();
 				
 				startActivity(new Intent(SignInActivity.this, EmailFindActivity.class));
@@ -312,6 +314,7 @@ public class SignInActivity extends Activity implements View.OnClickListener
 	{
 		if (v.equals(forgorPasswordTextView))
 		{
+			MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD");
 			showForgotWindow();
 		}
 		else if (v.equals(signUpTextView) || v.equals(signUpImageView))

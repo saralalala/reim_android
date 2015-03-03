@@ -1,12 +1,15 @@
 package com.rushucloud.reim.report;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.Report.GetReportResponse;
 import netUtils.Response.Report.ModifyReportResponse;
 import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Report.GetReportRequest;
 import netUtils.Request.Report.ModifyReportRequest;
 
 import com.rushucloud.reim.R;
@@ -19,11 +22,13 @@ import classes.adapter.CommentListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimBroadcastReceiver;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,10 +48,10 @@ public class CommentActivity extends Activity
 
 	private DBManager dbManager;
 	private Report report;
-	private List<Comment> commentList;
-	private int reportID;
+	private List<Comment> commentList = new ArrayList<Comment>();
 	private boolean myReport;
-	private String source;
+	private boolean fromPush;
+	private int pushType;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -61,7 +66,15 @@ public class CommentActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("CommentActivity");		
 		MobclickAgent.onResume(this);
-		refreshView();
+		ReimProgressDialog.setProgressDialog(this);
+		if (fromPush)
+		{
+			sendGetReportRequest(report.getServerID());
+		}
+		else
+		{
+			refreshView();			
+		}
 	}
 
 	protected void onPause()
@@ -75,7 +88,7 @@ public class CommentActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+			goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -85,41 +98,26 @@ public class CommentActivity extends Activity
 		dbManager = DBManager.getDBManager();
 		
 		Bundle bundle = getIntent().getExtras();
-		source = bundle.getString("source", "");
-		if (source.equals("EditReportActivity"))
+		if (bundle != null)
 		{
-			reportID = bundle.getInt("reportLocalID", -1);
-			report = dbManager.getReportByLocalID(reportID);
-			myReport = true;
-		}
-		else if (source.equals("ShowReportActivity"))
-		{
-			reportID = bundle.getInt("reportLocalID", -1);
-			if (reportID == -1)
+			report = (Report) bundle.getSerializable("report");
+			fromPush = bundle.getBoolean("fromPush", false);
+			myReport = bundle.getBoolean("myReport", false);
+			pushType = bundle.getInt("pushType");
+			
+			if (myReport)
 			{
-				myReport = false;
-				reportID = bundle.getInt("reportServerID", -1);
-				report = dbManager.getOthersReport(reportID);
+				commentList = dbManager.getReportComments(report.getLocalID());
 			}
 			else
 			{
-				myReport = true;
-				report = dbManager.getReportByLocalID(reportID);
+				commentList = dbManager.getOthersReportComments(report.getServerID());	
 			}
-		}
-		else // source.equals("ApproveReportActivity")
-		{
-			reportID = bundle.getInt("reportServerID", -1);
-			report = dbManager.getOthersReport(reportID);
-			myReport = false;
-		}
-		
-		// init comment list
-		commentList = myReport ? dbManager.getReportComments(reportID) : dbManager.getOthersReportComments(reportID);	
-		
-		if (commentList != null || !commentList.isEmpty())
-		{
-			Comment.sortByCreateDate(commentList);
+			
+			if (commentList != null && !commentList.isEmpty())
+			{
+				Comment.sortByCreateDate(commentList);
+			}
 		}
 	}
 	
@@ -132,7 +130,11 @@ public class CommentActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+				if (!myReport)
+				{
+					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_OTHER_COMMENT_CLOSE");					
+				}
+				goBack();
 			}
 		});
 
@@ -150,6 +152,11 @@ public class CommentActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				if (myReport)
+				{
+					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_MINE_COMMENT_SEND_IN_LIST");
+				}
+				
 				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 				imm.hideSoftInputFromWindow(commentEditText.getWindowToken(), 0);
 				
@@ -189,14 +196,53 @@ public class CommentActivity extends Activity
 					User user = comment.getReviewer();
 					if (user.hasUndownloadedAvatar())
 					{
-						sendDownloadAvatarRequest(user);
+						sendDownloadAvatarRequest(comment, user);
 					}
 				}			
 			}
 		}
 	}
-	
-	private void sendDownloadAvatarRequest(final User user)
+
+    private void sendGetReportRequest(final int reportServerID)
+    {
+		ReimProgressDialog.show();
+    	GetReportRequest request = new GetReportRequest(reportServerID);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final GetReportResponse response = new GetReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					report = new Report(response.getReport());
+					commentList.clear();
+					commentList.addAll(report.getCommentList());
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+							refreshView();
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+							ViewUtils.showToast(CommentActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+						}
+					});
+				}
+			}
+		});
+    }
+    
+	private void sendDownloadAvatarRequest(final Comment comment, final User user)
     {
     	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
     	request.sendRequest(new HttpConnectionCallback()
@@ -212,11 +258,12 @@ public class CommentActivity extends Activity
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
 					dbManager.updateUser(user);
 					
+					comment.setReviewer(user);
+					
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
-							commentList = myReport ? dbManager.getReportComments(reportID) : dbManager.getOthersReportComments(reportID);
 							adapter.setComments(commentList);
 							adapter.notifyDataSetChanged();
 						}
@@ -288,5 +335,39 @@ public class CommentActivity extends Activity
 				}
 			}
 		});
+    }
+    
+    private void goBack()
+    {
+    	if (fromPush)
+		{
+    		Bundle bundle = new Bundle();
+    		bundle.putSerializable("report", report);
+			bundle.putBoolean("fromPush", fromPush);
+			bundle.putBoolean("myReport", myReport);
+
+        	Intent intent = new Intent();
+        	intent.putExtras(bundle);
+        	
+        	if (pushType == ReimBroadcastReceiver.REPORT_MINE_REJECTED_ONLY_COMMENT)
+			{
+				intent.setClass(this, EditReportActivity.class);
+			}
+        	else if (pushType == ReimBroadcastReceiver.REPORT_OTHERS_APPROVED_ONLY_COMMENT)
+			{
+				intent.setClass(this, ApproveReportActivity.class);				
+			}
+        	else
+        	{
+        		intent.setClass(this, ShowReportActivity.class);
+        	}
+        	
+        	startActivity(intent);
+        	finish();
+		}
+    	else
+    	{
+			finish();
+		}
     }
 }

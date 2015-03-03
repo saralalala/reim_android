@@ -252,6 +252,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(MainActivity.this, "UMENG_HELP");
+				
 				if (PhoneUtils.isNetworkConnected())
 				{
 					showFeedbackWindow();					
@@ -278,6 +280,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(MainActivity.this, "UMENG_HELP_SUBMIT");
+				
 				if (PhoneUtils.isNetworkConnected())
 				{
 					User user = AppPreference.getAppPreference().getCurrentUser();
@@ -309,6 +313,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(MainActivity.this, "UMENG_HELP_CANCEL");				
 				feedbackPopupWindow.dismiss();
 			}
 		});
@@ -534,11 +539,14 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			case R.id.tabItemReim:
 			{
+				MobclickAgent.onEvent(MainActivity.this, "UMENG_ITEM");				
 				position = 0;
 				break;
 			}
 			case R.id.tabItemReport:
 			{
+				MobclickAgent.onEvent(MainActivity.this, "UMENG_REPORT");
+				
 				position = 1;
 				setReportBadge(0);
 				if (PhoneUtils.isNetworkConnected())

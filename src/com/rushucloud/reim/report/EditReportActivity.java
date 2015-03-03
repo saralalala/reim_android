@@ -60,7 +60,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.RelativeLayout.LayoutParams;
 
 public class EditReportActivity extends Activity
 {
@@ -85,13 +84,14 @@ public class EditReportActivity extends Activity
 	private PopupWindow deletePopupWindow;
 
 	private Report report;
-	private List<Item> itemList = null;
-	private ArrayList<Integer> chosenItemIDList = null;
+	private List<Item> itemList = new ArrayList<Item>();
+	private ArrayList<Integer> chosenItemIDList = new ArrayList<Integer>();
 	
 	private User currentUser;
 	
 	private int itemIndex;
 	private boolean fromPush;
+	private boolean commentPrompt;
 	
 	private List<Image> imageSyncList = new ArrayList<Image>();
 	private List<Item> itemSyncList = new ArrayList<Item>();
@@ -183,40 +183,18 @@ public class EditReportActivity extends Activity
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
-		
-		Bundle bundle = this.getIntent().getExtras();
-		if (bundle == null)
-		{
-			// new report from ReportFragment
-			report = new Report();
-			report.setSender(appPreference.getCurrentUser());
-			chosenItemIDList = new ArrayList<Integer>();
-			itemList = new ArrayList<Item>();
-		}
-		else
-		{
-			report = (Report)bundle.getSerializable("report");
-			fromPush = bundle.getBoolean("fromPush", false);
-			if (fromPush)
-			{
-				report = dbManager.getReportByServerID(report.getServerID());
-			}
-
-			if (report != null)
-			{
-				// edit report from ReportFragment
-				itemList = dbManager.getReportItems(report.getLocalID());
-				chosenItemIDList = Item.getItemsIDList(itemList);				
-			}
-			else
-			{
-				report = new Report();
-				itemList = new ArrayList<Item>();
-				chosenItemIDList = new ArrayList<Integer>();
-			}
-		}
 
     	currentUser = appPreference.getCurrentUser();
+    	
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null)
+		{
+			report = (Report) bundle.getSerializable("report");
+			fromPush = bundle.getBoolean("fromPush", false);
+			commentPrompt = bundle.getBoolean("commentPrompt", false);
+			itemList = dbManager.getReportItems(report.getLocalID());
+			chosenItemIDList = Item.getItemsIDList(itemList);			
+		}
 	}
 	
 	private void initView()
@@ -237,6 +215,7 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW");
 				hideSoftKeyboard();
 				saveReport();
 			}
@@ -255,6 +234,7 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_MINE_STATUS");
 				Intent intent = new Intent(EditReportActivity.this, ApproveInfoActivity.class);
 				intent.putExtra("reportServerID", report.getServerID());
 				startActivity(intent);
@@ -305,12 +285,19 @@ public class EditReportActivity extends Activity
 				startActivityForResult(intent, PICK_ITEM);
 			}
 		});
+
+		final ImageView commentTipImageView = (ImageView) findViewById(R.id.commentTipImageView);
+		if (commentPrompt)
+		{
+			commentTipImageView.setVisibility(View.VISIBLE);
+		}
 		
 		Button commentButton = (Button) findViewById(R.id.commentButton);
 		commentButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
+				commentTipImageView.setVisibility(View.GONE);
 				if (report.getCommentList() == null || report.getCommentList().isEmpty())
 				{
 					if (!PhoneUtils.isNetworkConnected())
@@ -324,9 +311,11 @@ public class EditReportActivity extends Activity
 				}
 				else
 				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_MINE_COMMENT");
+					
 					Bundle bundle = new Bundle();
-					bundle.putString("source", "EditReportActivity");
-					bundle.putInt("reportLocalID", report.getLocalID());
+					bundle.putSerializable("report", report);
+					bundle.putBoolean("myReport", true);
 					Intent intent = new Intent(EditReportActivity.this, CommentActivity.class);
 					intent.putExtras(bundle);
 					startActivity(intent);					
@@ -339,8 +328,9 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				hideSoftKeyboard();
 				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
+				
+				hideSoftKeyboard();
 				
 				for (Item item : itemList)
 				{
@@ -419,10 +409,6 @@ public class EditReportActivity extends Activity
 		
 		statusTextView.setText(report.getStatusString());
 		statusTextView.setBackgroundResource(report.getStatusBackground());
-		
-		LayoutParams params = (LayoutParams) statusTextView.getLayoutParams();
-		params.width = report.getStatusWidth(this);
-		statusTextView.setLayoutParams(params);
 
 		if (report.getStatus() == Report.STATUS_DRAFT)
 		{
@@ -526,28 +512,33 @@ public class EditReportActivity extends Activity
     	Builder builder = new Builder(this);
     	builder.setView(view);
     	builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										String comment = commentEditText.getText().toString();
-										if (comment.isEmpty())
-										{
-											ViewUtils.showToast(EditReportActivity.this, R.string.error_comment_empty);
-										}
-										else
-										{
-											if (report.getServerID() == -1)
-											{
-												sendCreateReportCommentRequest(comment);
-											}
-											else
-											{												
-												sendModifyReportCommentRequest(comment);
-											}
-										}
-									}
-								});
-    	builder.setNegativeButton(R.string.cancel, null);
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_MINE_COMMENT_SEND");
+						
+				String comment = commentEditText.getText().toString();
+				if (comment.isEmpty())
+				{
+					ViewUtils.showToast(EditReportActivity.this, R.string.error_comment_empty);
+				}
+				else if (report.getServerID() == -1)
+				{
+					sendCreateReportCommentRequest(comment);
+				}
+				else
+				{												
+					sendModifyReportCommentRequest(comment);
+				}
+			}
+		});
+    	builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_MINE_COMMENT_CLOSE");
+			}
+		});
     	builder.create().show();
     }
 

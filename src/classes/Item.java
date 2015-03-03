@@ -504,7 +504,7 @@ public class Item
 	public static ArrayList<Integer> getItemsIDList(List<Item> items)
 	{
 		ArrayList<Integer> result = new ArrayList<Integer>();
-		if (items == null)
+		if (items == null || items.isEmpty())
 		{
 			return  result;
 		}

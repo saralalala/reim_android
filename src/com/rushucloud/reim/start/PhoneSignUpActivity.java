@@ -112,6 +112,7 @@ public class PhoneSignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(PhoneSignUpActivity.this, "UMENG_REGIST_TEL-CAPTCHA");
 				hideSoftKeyboard();
 				
 				String phoneNumber = phoneEditText.getText().toString();
@@ -142,7 +143,7 @@ public class PhoneSignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(PhoneSignUpActivity.this, "UMENG_REGIST_TEL");
+				MobclickAgent.onEvent(PhoneSignUpActivity.this, "UMENG_REGIST_TEL-SUBMIT");
 				
 				hideSoftKeyboard();
 				

@@ -9,14 +9,12 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import classes.utils.AppPreference;
 import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
 import com.rushucloud.reim.R;
 
-import android.content.Context;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
-
 
 public class Report implements Serializable
 {
@@ -56,6 +54,7 @@ public class Report implements Serializable
 		serverID = report.getServerID();
 		title = report.getTitle();
 		status = report.getStatus();
+		myDecision = report.getMyDecision();
 		managerList = new ArrayList<User>(report.getManagerList());
 		ccList = new ArrayList<User>(report.getCCList());
 		commentList = new ArrayList<Comment>(report.getCommentList());
@@ -133,10 +132,6 @@ public class Report implements Serializable
 	public void setMyDecision(int myDecision)
 	{
 		this.myDecision = myDecision;
-	}
-	public boolean canBeApproved()
-	{
-		return status == Report.STATUS_SUBMITTED && !isCC && myDecision == Report.STATUS_SUBMITTED;
 	}
 
 	public List<User> getManagerList()
@@ -297,28 +292,6 @@ public class Report implements Serializable
 				return R.string.not_available;
 		}
 	}
-
-	public int getStatusWidth(Context context)
-    {
-		int longWidth = PhoneUtils.dpToPixel(context, 48);
-		int shortWidth = PhoneUtils.dpToPixel(context, 36);
-		
-		switch (status)
-		{
-			case STATUS_DRAFT:
-				return longWidth;
-			case STATUS_SUBMITTED:
-				return longWidth;
-			case STATUS_APPROVED:
-				return shortWidth;
-			case STATUS_REJECTED:
-				return shortWidth;
-			case STATUS_FINISHED:
-				return shortWidth;
-			default:
-				return 0;
-		}
-    }
 	
 	public boolean hasItems()
 	{
@@ -354,6 +327,13 @@ public class Report implements Serializable
 	public boolean isEditable()
 	{
 		return getStatus() == Report.STATUS_DRAFT || getStatus() == Report.STATUS_REJECTED;
+	}
+	
+	public boolean canBeApproved()
+	{
+		return getSender() != null && getSender().getServerID() != AppPreference.getAppPreference().getCurrentUserID() &&
+				getManagerList().contains(AppPreference.getAppPreference().getCurrentUser()) && !isCC  &&
+				status == Report.STATUS_SUBMITTED && myDecision == Report.STATUS_SUBMITTED;
 	}
 	
 	public boolean isInSpecificStatus(List<Integer> statusList)

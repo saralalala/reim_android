@@ -101,15 +101,9 @@ public class ApproveReportActivity extends Activity
 			report = (Report) bundle.getSerializable("report");
 			fromPush = bundle.getBoolean("fromPush", false);
 			reportServerID = report.getServerID();
+			itemList = dbManager.getOthersReportItems(reportServerID);		
+			lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;			
 		}
-		else
-		{
-			reportServerID = -1;
-		}
-
-		itemList = dbManager.getOthersReportItems(reportServerID);
-		
-		lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
 	}
 	
 	private void initView()
@@ -130,11 +124,13 @@ public class ApproveReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				tipImageView.setVisibility(View.GONE);
+				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REPORT_OTHER_COMMENT");
 				
+				tipImageView.setVisibility(View.GONE);
+
 				Bundle bundle = new Bundle();
-				bundle.putString("source", "ApproveReportActivity");
-				bundle.putInt("reportServerID", report.getServerID());
+				bundle.putSerializable("report", report);
+				bundle.putBoolean("myReport", false);
 				Intent intent = new Intent(ApproveReportActivity.this, CommentActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
@@ -274,7 +270,7 @@ public class ApproveReportActivity extends Activity
 					    		ViewUtils.showToast(ApproveReportActivity.this, R.string.error_report_approved);
 								goBackToMainActivity();
 							}
-					    	else if (fromPush && !report.getManagerList().contains(appPreference.getCurrentUser()))
+					    	else if (fromPush && !report.canBeApproved())
 					    	{
 					        	ReimApplication.setTabIndex(1);
 					        	ReimApplication.setReportTabIndex(1);
@@ -426,7 +422,7 @@ public class ApproveReportActivity extends Activity
 		{
         	ReimApplication.setTabIndex(1);
         	ReimApplication.setReportTabIndex(1);
-        	Intent intent = new Intent(ApproveReportActivity.this, MainActivity.class);
+        	Intent intent = new Intent(this, MainActivity.class);
         	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         	startActivity(intent);
         	finish();

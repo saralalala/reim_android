@@ -99,6 +99,7 @@ public class ResetPasswordActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(ResetPasswordActivity.this, "UMENG_REGIST_FORGETPASSWORD-NEWPASSWORD");
 				final String newPassword = newPasswordEditText.getText().toString();
 				final String confirmPassword = confirmPasswordEditText.getText().toString();
 				

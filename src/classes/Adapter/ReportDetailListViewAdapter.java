@@ -8,11 +8,14 @@ import classes.Item;
 import classes.ReimApplication;
 import classes.Report;
 import classes.User;
+import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.Utils;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.report.ApproveInfoActivity;
+import com.umeng.analytics.MobclickAgent;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.RelativeLayout.LayoutParams;
 
 public class ReportDetailListViewAdapter extends BaseAdapter
 {
@@ -63,15 +65,20 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			statusTextView.setText(report.getStatusString());
 			statusTextView.setBackgroundResource(report.getStatusBackground());
 			
-			LayoutParams params = (LayoutParams) statusTextView.getLayoutParams();
-			params.width = report.getStatusWidth(context);
-			statusTextView.setLayoutParams(params);
-			
 			TextView approveInfoTextView = (TextView) view.findViewById(R.id.approveInfoTextView);
 			approveInfoTextView.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
 				{
+					if (report.getSender() != null && report.getSender().getServerID() == AppPreference.getAppPreference().getCurrentUserID())
+					{
+						MobclickAgent.onEvent(context, "UMENG_REPORT_MINE_STATUS");
+					}
+					else
+					{
+						MobclickAgent.onEvent(context, "UMENG_REPORT_OTHER_STATUS");
+					}
+						
 					Intent intent = new Intent(context, ApproveInfoActivity.class);
 					intent.putExtra("reportServerID", report.getServerID());
 					context.startActivity(intent);

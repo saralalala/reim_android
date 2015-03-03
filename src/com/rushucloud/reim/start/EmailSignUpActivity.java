@@ -98,7 +98,7 @@ public class EmailSignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(EmailSignUpActivity.this, "UMENG_REGIST_EMAIL");
+				MobclickAgent.onEvent(EmailSignUpActivity.this, "UMENG_REGIST_MAIL-SUBMIT");
 				
 				hideSoftKeyboard();
 				

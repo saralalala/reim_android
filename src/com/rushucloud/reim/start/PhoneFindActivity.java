@@ -92,6 +92,8 @@ public class PhoneFindActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(PhoneFindActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL-CAPTCHA");
+				
 				String phoneNumber = phoneEditText.getText().toString();
 				if (!PhoneUtils.isNetworkConnected())
 				{
@@ -116,6 +118,8 @@ public class PhoneFindActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(PhoneFindActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL-SUBMIT");
+				
 				if (code.isEmpty())
 				{
 					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_no_code);

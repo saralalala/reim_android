@@ -31,6 +31,7 @@ public class GetReportResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			report = new Report(jObject);
+			report.setMyDecision(jObject.getInt("mdecision"));
 			report.setIsCC(Utils.intToBoolean(jObject.getInt("cc")));
 			
 			DBManager dbManager = DBManager.getDBManager();

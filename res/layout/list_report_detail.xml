@@ -32,10 +32,12 @@
 
 	        <TextView
 	            android:id="@+id/statusTextView"
-	            android:layout_width="36dp"
-	            android:layout_height="20dp"
-				android:layout_marginTop="4dp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
 				android:layout_alignParentRight="true"
+				android:layout_marginTop="4dp"
+	            android:paddingLeft="3dp"
+	            android:paddingRight="3dp"
 	            android:gravity="center"
 	            android:textColor="@color/major_light" />
 	

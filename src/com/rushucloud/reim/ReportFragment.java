@@ -208,7 +208,14 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(getActivity(), "UMENG_REPORT_NEW");
+				
+				Report report = new Report();
+				report.setSender(appPreference.getCurrentUser());
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("report", report);				
 				Intent intent = new Intent(getActivity(), EditReportActivity.class);
+				intent.putExtras(bundle);
 				startActivity(intent);
 			}
 		});
@@ -237,15 +244,15 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						Report report = showMineList.get(position-1);
 						Bundle bundle = new Bundle();
 						bundle.putSerializable("report", report);
-						Intent intent;
+						Intent intent = new Intent();
 						if (report.isEditable())
 						{
-							intent = new Intent(getActivity(), EditReportActivity.class);
+							intent.setClass(getActivity(), EditReportActivity.class);
 						}
 						else
 						{
 							bundle.putBoolean("myReport", true);
-							intent = new Intent(getActivity(), ShowReportActivity.class);						
+							intent.setClass(getActivity(), ShowReportActivity.class);						
 						}
 						intent.putExtras(bundle);
 						startActivity(intent);
@@ -255,15 +262,15 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 						Report report = showOthersList.get(position-1);
 						Bundle bundle = new Bundle();
 						bundle.putSerializable("report", report);
-						Intent intent;
+						Intent intent = new Intent();
 						if (report.canBeApproved())
 						{
-							intent = new Intent(getActivity(), ApproveReportActivity.class);
+							intent.setClass(getActivity(), ApproveReportActivity.class);
 						}
 						else
 						{
 							bundle.putBoolean("myReport", false);
-							intent = new Intent(getActivity(), ShowReportActivity.class);
+							intent.setClass(getActivity(), ShowReportActivity.class);
 						}
 						intent.putExtras(bundle);
 						startActivity(intent);

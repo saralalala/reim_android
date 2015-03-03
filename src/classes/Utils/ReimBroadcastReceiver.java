@@ -9,6 +9,7 @@ import classes.Report;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.MessageDetailActivity;
 import com.rushucloud.reim.report.ApproveReportActivity;
+import com.rushucloud.reim.report.CommentActivity;
 import com.rushucloud.reim.report.EditReportActivity;
 import com.rushucloud.reim.report.ShowReportActivity;
 
@@ -26,6 +27,19 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 	private static final int TYPE_REPORT = 2;
 	private static final int TYPE_INVITE = 3;
 	private static final int TYPE_INVITE_REPLY = 4;
+
+	public static final int REPORT_MINE_REJECTED = 0;
+	public static final int REPORT_MINE_REJECTED_WITH_COMMENT = 1;
+	public static final int REPORT_MINE_APPROVED = 2;
+	public static final int REPORT_MINE_SUBMMITED_ONLY_COMMENT = 3;
+	public static final int REPORT_MINE_REJECTED_ONLY_COMMENT = 4;
+	public static final int REPORT_MINE_APPROVED_ONLY_COMMENT = 5;
+	public static final int REPORT_OTHERS_SUBMMITED = 6;
+	public static final int REPORT_OTHERS_SUBMMITED_CC = 7;
+	public static final int REPORT_OTHERS_CAN_BE_APPROVED_ONLY_COMMENT = 8;
+	public static final int REPORT_OTHERS_SUBMITTED_ONLY_COMMENT = 9;
+	public static final int REPORT_OTHERS_REJECTED_ONLY_COMMENT = 10;
+	public static final int REPORT_OTHERS_APPROVED_ONLY_COMMENT = 11;
 	
 	private static NotificationManager manager = null;
 	private static int messageNumber = 0;
@@ -75,28 +89,40 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				}
 				else if (type == TYPE_REPORT)
 				{
+					boolean myReport = jObject.getInt("uid") == AppPreference.getAppPreference().getCurrentUserID();
+					
 					Report report = new Report();
 					report.setServerID(jObject.getInt("args"));
 
 					Bundle bundle = new Bundle();
 					bundle.putSerializable("report", report);
 					bundle.putBoolean("fromPush", true);
+					bundle.putBoolean("myReport", myReport);
 
-					Intent newIntent;
-					int status = jObject.getInt("status");
-					if (status == Report.STATUS_SUBMITTED)
-					{						
-						newIntent = new Intent(context, ApproveReportActivity.class);
-					}
-					else if (status == Report.STATUS_REJECTED)
+					Intent newIntent = new Intent();
+					int pushType = judgeReportType(jObject);
+					if (pushType == REPORT_MINE_REJECTED || pushType == REPORT_MINE_REJECTED_WITH_COMMENT)
 					{
-						newIntent = new Intent(context, EditReportActivity.class);
+						if (pushType == REPORT_MINE_REJECTED_WITH_COMMENT)
+						{
+							bundle.putBoolean("commentPrompt", true);
+						}
+						newIntent.setClass(context, EditReportActivity.class);						
+					}
+					else if (pushType == REPORT_MINE_APPROVED || pushType == REPORT_OTHERS_SUBMMITED_CC)
+					{
+						newIntent.setClass(context, ShowReportActivity.class);						
+					}
+					else if (pushType == REPORT_OTHERS_SUBMMITED)
+					{
+						newIntent.setClass(context, ApproveReportActivity.class);						
 					}
 					else
 					{
-						bundle.putBoolean("myReport", true);
-						newIntent = new Intent(context, ShowReportActivity.class);
+						bundle.putInt("pushType", pushType);
+						newIntent.setClass(context, CommentActivity.class);
 					}
+					
 					newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					newIntent.putExtras(bundle);
 					context.startActivity(newIntent);						
@@ -130,6 +156,77 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	private int judgeReportType(JSONObject jObject)
+	{
+		try
+		{
+			boolean myReport = jObject.getInt("uid") == AppPreference.getAppPreference().getCurrentUserID();
+			boolean hasComment = Utils.intToBoolean(jObject.getInt("comment_flag"));
+			boolean onlyComment = Utils.intToBoolean(jObject.getInt("only_comment"));
+			boolean isCC = Utils.intToBoolean(jObject.getInt("cc_flag"));
+			int status = jObject.getInt("status");
+			int myDecision = jObject.getInt("my_decision");
+			
+			if (myReport && !hasComment && status == Report.STATUS_REJECTED)
+			{
+				return REPORT_MINE_REJECTED;
+			}
+			else if (myReport && hasComment && !onlyComment && status == Report.STATUS_REJECTED)
+			{
+				return REPORT_MINE_REJECTED_WITH_COMMENT;
+			}
+			else if (myReport && !hasComment && status == Report.STATUS_APPROVED)
+			{
+				return REPORT_MINE_APPROVED;
+			}
+			else if (myReport && hasComment && status == Report.STATUS_SUBMITTED)
+			{
+				return REPORT_MINE_SUBMMITED_ONLY_COMMENT;
+			}
+			else if (myReport && hasComment && onlyComment && status == Report.STATUS_REJECTED)
+			{
+				return REPORT_MINE_REJECTED_ONLY_COMMENT;
+			}
+			else if (myReport && hasComment && status == Report.STATUS_APPROVED)
+			{
+				return REPORT_MINE_APPROVED_ONLY_COMMENT;
+			}
+			else if (!myReport && !hasComment && !isCC && status == Report.STATUS_SUBMITTED && myDecision == Report.STATUS_SUBMITTED)
+			{
+				return REPORT_OTHERS_SUBMMITED;
+			}
+			else if (!myReport && !hasComment && isCC && status == Report.STATUS_SUBMITTED)
+			{
+				return REPORT_OTHERS_SUBMMITED_CC;
+			}
+			else if (!myReport && hasComment && !isCC && status == Report.STATUS_SUBMITTED && myDecision == Report.STATUS_SUBMITTED)
+			{
+				return REPORT_OTHERS_CAN_BE_APPROVED_ONLY_COMMENT;
+			}
+			else if (!myReport && hasComment && status == Report.STATUS_SUBMITTED)
+			{
+				return REPORT_OTHERS_SUBMITTED_ONLY_COMMENT;
+			}
+			else if (!myReport && hasComment && status == Report.STATUS_REJECTED)
+			{
+				return REPORT_OTHERS_REJECTED_ONLY_COMMENT;
+			}
+			else if (!myReport && hasComment && status == Report.STATUS_APPROVED)
+			{
+				return REPORT_OTHERS_APPROVED_ONLY_COMMENT;
+			}
+			else
+			{
+				return -1;
+			}
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+			return -1;
 		}
 	}
 }

@@ -72,6 +72,26 @@ public class SettingsActivity extends Activity
 				finish();
 			}
 		});
+        
+        RelativeLayout aboutLayout = (RelativeLayout) findViewById(R.id.aboutLayout);
+        aboutLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(SettingsActivity.this, "UMENG_MINE_SETTING_ABOUT");
+				startActivity(new Intent(SettingsActivity.this, AboutActivity.class));
+			}
+		});
+        
+        RelativeLayout feedbackLayout = (RelativeLayout) findViewById(R.id.feedbackLayout);
+        feedbackLayout.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				MobclickAgent.onEvent(SettingsActivity.this, "UMENG_MINE_SETTING_OPINION");
+				startActivity(new Intent(SettingsActivity.this, FeedbackActivity.class));
+			}
+		});
 		
         categoryLayout = (RelativeLayout) findViewById(R.id.categoryLayout);
         categoryLayout.setOnClickListener(new View.OnClickListener()
@@ -104,25 +124,6 @@ public class SettingsActivity extends Activity
 			categoryLayout.setVisibility(View.VISIBLE);
 			tagLayout.setVisibility(View.VISIBLE);
         }
-        
-        RelativeLayout aboutLayout = (RelativeLayout) findViewById(R.id.aboutLayout);
-        aboutLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				startActivity(new Intent(SettingsActivity.this, AboutActivity.class));
-			}
-		});
-        
-        RelativeLayout feedbackLayout = (RelativeLayout) findViewById(R.id.feedbackLayout);
-        feedbackLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(SettingsActivity.this, "UMENG_MINE_SETTING_FEEDBACK");
-				startActivity(new Intent(SettingsActivity.this, FeedbackActivity.class));
-			}
-		});
         
         Button signOutButton = (Button) findViewById(R.id.signOutButton);
         signOutButton.setOnClickListener(new View.OnClickListener()

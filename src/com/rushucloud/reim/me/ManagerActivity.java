@@ -118,7 +118,7 @@ public class ManagerActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_CHANGE_USERINFO");
+				MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_BOSS_SETTING_SAVE");
 				
 				User manager = null;
 				for (int i = 0; i < checkList.length; i++)
@@ -158,6 +158,8 @@ public class ManagerActivity extends Activity
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
+				MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_BOSS_SETTING_CHOOSE");
+				
 				for (int i = 0; i < checkList.length; i++)
 				{
 					checkList[i] = false;

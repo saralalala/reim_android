@@ -42,10 +42,9 @@ public class ShowReportActivity extends Activity
 	
 	private Report report;
 	private List<Item> itemList = null;
-	private boolean myReport;
-	private int lastCommentCount;
-	
 	private boolean fromPush;
+	private boolean myReport;
+	private int lastCommentCount;	
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -90,20 +89,16 @@ public class ShowReportActivity extends Activity
 		{
 			report = (Report)bundle.getSerializable("report");
 			fromPush = bundle.getBoolean("fromPush", false);			
-			myReport = bundle.getBoolean("myReport");
+			myReport = bundle.getBoolean("myReport", false);
 			if (myReport)
 			{
-				if (fromPush)
-				{
-					report = dbManager.getReportByServerID(report.getServerID());
-				}
-				itemList = DBManager.getDBManager().getReportItems(report.getLocalID());				
+				itemList = dbManager.getReportItems(report.getLocalID());	
 			}		
 			else
 			{
-				itemList = DBManager.getDBManager().getOthersReportItems(report.getServerID());
+				itemList = dbManager.getOthersReportItems(report.getServerID());
 			}
-			
+
 			lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
 		}
 	}
@@ -126,18 +121,20 @@ public class ShowReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				tipImageView.setVisibility(View.GONE);
-				
-				Bundle bundle = new Bundle();
-				bundle.putString("source", "ShowReportActivity");
 				if (myReport)
 				{
-					bundle.putInt("reportLocalID", report.getLocalID());				
+					MobclickAgent.onEvent(ShowReportActivity.this, "UMENG_REPORT_MINE_COMMENT");					
 				}
 				else
 				{
-					bundle.putInt("reportServerID", report.getServerID());
+					MobclickAgent.onEvent(ShowReportActivity.this, "UMENG_REPORT_OTHER_COMMENT");					
 				}
+				
+				tipImageView.setVisibility(View.GONE);
+				
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("report", report);
+				bundle.putBoolean("myReport", myReport);
 				Intent intent = new Intent(ShowReportActivity.this, CommentActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
@@ -233,15 +230,10 @@ public class ShowReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-					    	if (!myReport && report.getStatus() == Report.STATUS_SUBMITTED &&
-					    			report.getManagerList().contains(AppPreference.getAppPreference().getCurrentUser()))
+							if (report.canBeApproved())
 					    	{
-					        	ReimApplication.setTabIndex(1);
-					        	ReimApplication.setReportTabIndex(1);
-					        	
 								Bundle bundle = new Bundle();
-								bundle.putSerializable("report", report);
-								
+								bundle.putSerializable("report", report);								
 					        	Intent intent = new Intent(ShowReportActivity.this, ApproveReportActivity.class);			    		
 					        	intent.putExtras(bundle);
 					        	startActivity(intent);
@@ -257,7 +249,7 @@ public class ShowReportActivity extends Activity
 								{
 									tipImageView.setVisibility(View.VISIBLE);
 									lastCommentCount = report.getCommentList().size();
-								}			    		
+								}					    		
 					    	}
 						}
 					});
@@ -286,8 +278,9 @@ public class ShowReportActivity extends Activity
     {
     	if (fromPush)
 		{
+    		int reportTabIndex = myReport ? 0 : 1;
         	ReimApplication.setTabIndex(1);
-        	ReimApplication.setReportTabIndex(1);
+        	ReimApplication.setReportTabIndex(reportTabIndex);
         	Intent intent = new Intent(ShowReportActivity.this, MainActivity.class);
         	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         	startActivity(intent);
@@ -295,7 +288,7 @@ public class ShowReportActivity extends Activity
 		}
     	else
     	{
-        	int reportTabIndex = myReport ? 0 : 1;
+    		int reportTabIndex = myReport ? 0 : 1;
         	ReimApplication.setReportTabIndex(reportTabIndex);
         	finish();
 		}

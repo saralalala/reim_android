@@ -352,8 +352,10 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_SAVE");
+				
 				try
-				{			
+				{
 			    	hideSoftKeyboard();
 			    	
 					item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
@@ -375,6 +377,8 @@ public class EditItemActivity extends Activity
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
+													MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_PROVEAHEAD_SAVE");
+													
 										    		dbManager.syncItem(item);
 													ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
 													finish();
@@ -384,6 +388,8 @@ public class EditItemActivity extends Activity
 											{
 												public void onClick(DialogInterface dialog, int which)
 												{
+													MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_PROVEAHEAD_SUBMIT");
+													
 													Report report;
 													if (item.getBelongReport() == null)
 													{

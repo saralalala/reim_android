@@ -34,9 +34,11 @@ public class PickCCActivity extends Activity
 {
 	private MemberListViewAdapter adapter;
 
+	private AppPreference appPreference;
 	private DBManager dbManager;
 	private List<User> userList;
 	private boolean[] check;
+	private int senderID;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -72,12 +74,11 @@ public class PickCCActivity extends Activity
 	@SuppressWarnings("unchecked")
 	private void initData()
 	{
+		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 		
-		int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
-		int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
-		int senderID = getIntent().getIntExtra("sender", -1);
-		userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUserID);
+		senderID = getIntent().getIntExtra("sender", -1);
+		userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
 		if (senderID != -1)
 		{
 			userList = User.removeUserFromList(userList, senderID);
@@ -166,8 +167,11 @@ public class PickCCActivity extends Activity
 					{
 						public void run()
 						{
-							int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
-							userList = dbManager.getGroupUsers(currentGroupID);
+							userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
+							if (senderID != -1)
+							{
+								userList = User.removeUserFromList(userList, senderID);
+							}
 							adapter.setMember(userList);
 							adapter.notifyDataSetChanged();
 						}
