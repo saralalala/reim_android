@@ -130,7 +130,11 @@ public class CommentActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (!myReport)
+				if (myReport)
+				{
+					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_MINE_COMMENT_CLOSE");					
+				}
+				else 
 				{
 					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_OTHER_COMMENT_CLOSE");					
 				}
@@ -154,7 +158,11 @@ public class CommentActivity extends Activity
 			{
 				if (myReport)
 				{
-					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_MINE_COMMENT_SEND_IN_LIST");
+					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_MINE_COMMENT_SEND");					
+				}
+				else 
+				{
+					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_OTHER_COMMENT_SEND");					
 				}
 				
 				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 

@@ -8,7 +8,6 @@ import netUtils.NetworkConstant;
 import netUtils.Request.DownloadImageRequest;
 import netUtils.Request.Report.ApproveInfoRequest;
 import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Report.AlertResponse;
 import netUtils.Response.Report.ApproveInfoResponse;
 
 import com.rushucloud.reim.R;
@@ -112,27 +111,7 @@ public class ApproveInfoActivity extends Activity
 		
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		
-		adapter = new ApproveInfoListViewAdapter(this, report, infoList, new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final AlertResponse response = new AlertResponse(httpResponse);
-				runOnUiThread(new Runnable()
-				{
-					public void run()
-					{
-						if (response.getStatus())
-						{
-							ViewUtils.showToast(ApproveInfoActivity.this, R.string.succeed_in_alerting);
-						}
-						else
-						{
-							ViewUtils.showToast(ApproveInfoActivity.this, R.string.failed_to_alert, response.getErrorMessage());							
-						}
-					}
-				});				
-			}
-		});
+		adapter = new ApproveInfoListViewAdapter(this, report, infoList);
 
 		ListView infoListView = (ListView) findViewById(R.id.infoListView);
 		infoListView.setAdapter(adapter);

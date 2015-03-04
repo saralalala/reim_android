@@ -91,7 +91,7 @@ public class EditReportActivity extends Activity
 	
 	private int itemIndex;
 	private boolean fromPush;
-	private boolean commentPrompt;
+	private boolean newReport;
 	
 	private List<Image> imageSyncList = new ArrayList<Image>();
 	private List<Item> itemSyncList = new ArrayList<Item>();
@@ -191,9 +191,9 @@ public class EditReportActivity extends Activity
 		{
 			report = (Report) bundle.getSerializable("report");
 			fromPush = bundle.getBoolean("fromPush", false);
-			commentPrompt = bundle.getBoolean("commentPrompt", false);
 			itemList = dbManager.getReportItems(report.getLocalID());
-			chosenItemIDList = Item.getItemsIDList(itemList);			
+			chosenItemIDList = Item.getItemsIDList(itemList);
+			newReport = report.getLocalID() == -1;
 		}
 	}
 	
@@ -215,7 +215,14 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW");
+				if (newReport)
+				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_SAVE");
+				}
+				else
+				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_SAVE");					
+				}
 				hideSoftKeyboard();
 				saveReport();
 			}
@@ -246,9 +253,19 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				if (newReport)
+				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_SEND");
+				}
+				else
+				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_SEND");					
+				}
+				
 		    	hideSoftKeyboard();
 				Intent intent = new Intent(EditReportActivity.this, PickManagerActivity.class);
 				intent.putExtra("managers", (Serializable) report.getManagerList());
+				intent.putExtra("newReport", newReport);
 				startActivityForResult(intent, PICK_MANAGER);	
 			}
 		});
@@ -258,9 +275,19 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				if (newReport)
+				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_CC");
+				}
+				else
+				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_CC");					
+				}
+				
 		    	hideSoftKeyboard();
 				Intent intent = new Intent(EditReportActivity.this, PickCCActivity.class);
 				intent.putExtra("ccs", (Serializable) report.getCCList());
+				intent.putExtra("newReport", newReport);
 				startActivityForResult(intent, PICK_CC);	
 			}
 		});
@@ -274,6 +301,15 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				if (newReport)
+				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_ADDITEM");
+				}
+				else
+				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_ADDITEM");					
+				}
+				
 				hideSoftKeyboard();
 				report.setTitle(titleEditText.getText().toString());
 				
@@ -287,7 +323,7 @@ public class EditReportActivity extends Activity
 		});
 
 		final ImageView commentTipImageView = (ImageView) findViewById(R.id.commentTipImageView);
-		if (commentPrompt)
+		if (!getIntent().getExtras().getBoolean("commentPrompt", false))
 		{
 			commentTipImageView.setVisibility(View.VISIBLE);
 		}
@@ -300,6 +336,15 @@ public class EditReportActivity extends Activity
 				commentTipImageView.setVisibility(View.GONE);
 				if (report.getCommentList() == null || report.getCommentList().isEmpty())
 				{
+					if (newReport)
+					{
+						MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_COMMENT");
+					}
+					else
+					{
+						MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_COMMENT");					
+					}
+					
 					if (!PhoneUtils.isNetworkConnected())
 					{
 						ViewUtils.showToast(EditReportActivity.this, R.string.error_comment_network_unavailable);
@@ -328,7 +373,14 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_POST_REPORT_DETAIL");
+				if (newReport)
+				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_SUBMIT");
+				}
+				else
+				{
+					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_SUBMIT");					
+				}
 				
 				hideSoftKeyboard();
 				
@@ -515,7 +567,7 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(DialogInterface dialog, int which)
 			{
-				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_MINE_COMMENT_SEND");
+				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_MINE_DIALOG_COMMENT_SEND");
 						
 				String comment = commentEditText.getText().toString();
 				if (comment.isEmpty())
@@ -536,7 +588,7 @@ public class EditReportActivity extends Activity
 		{
 			public void onClick(DialogInterface dialog, int which)
 			{
-				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_MINE_COMMENT_CLOSE");
+				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_MINE_DIALOG_COMMENT_CLOSE");
 			}
 		});
     	builder.create().show();

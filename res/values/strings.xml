@@ -392,7 +392,7 @@
     
     <string name="status_draft">待提交</string>
     <string name="status_submitted">审核中</string>
-    <string name="status_approved">通过</string>
+    <string name="status_approved">待结算</string>
     <string name="status_rejected">退回</string>
     <string name="status_finished">完成</string>
     <string name="status_prove_ahead">预</string>

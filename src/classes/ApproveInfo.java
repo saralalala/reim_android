@@ -9,6 +9,7 @@ public class ApproveInfo implements Comparable<ApproveInfo>
 	private int status = -1;
 	private String approveTime = "";
 	private String approveDate = "";
+	private int step = -1;
 	
 	public ApproveInfo()
 	{
@@ -70,6 +71,16 @@ public class ApproveInfo implements Comparable<ApproveInfo>
 		this.approveDate = approveDate;
 	}
 
+	public int getStep()
+	{
+		return step;
+	}
+
+	public void setStep(int step)
+	{
+		this.step = step;
+	}
+
 	public boolean hasApproved()
 	{
 		return status == Report.STATUS_APPROVED || status == Report.STATUS_REJECTED;
@@ -77,6 +88,13 @@ public class ApproveInfo implements Comparable<ApproveInfo>
 	
 	public int compareTo(ApproveInfo another)
 	{
-		return getStatus() - another.getStatus();
+		if (getStep() != another.getStep())
+		{
+			return getStep() - another.getStep();
+		}
+		else
+		{
+			return another.getStatus() - getStatus();
+		}
 	}
 }

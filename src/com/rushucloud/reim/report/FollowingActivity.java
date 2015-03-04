@@ -9,6 +9,7 @@ import netUtils.Request.Report.ApproveReportRequest;
 import classes.ReimApplication;
 import classes.Report;
 import classes.User;
+import classes.utils.AppPreference;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
@@ -98,6 +99,7 @@ public class FollowingActivity extends Activity
 	private void initData()
 	{
 		report = (Report) getIntent().getSerializableExtra("report");
+		report.setManagerList(AppPreference.getAppPreference().getCurrentUser().constructListWithManager());
 	}
 	
 	private void initView()
@@ -124,6 +126,7 @@ public class FollowingActivity extends Activity
 				startActivityForResult(intent, PICK_MANAGER);
 			}
 		});
+		managerTextView.setText(report.getManagersName());
 		
 		ccTextView = (TextView) findViewById(R.id.ccTextView);
 		ccTextView.setOnClickListener(new OnClickListener()
@@ -172,7 +175,7 @@ public class FollowingActivity extends Activity
 						if (response.getStatus())
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(FollowingActivity.this, R.string.succeed_in_choosing_following, response.getErrorMessage());
+							ViewUtils.showToast(FollowingActivity.this, R.string.succeed_in_choosing_following);
 							goBackToMainActivity();
 						}
 						else

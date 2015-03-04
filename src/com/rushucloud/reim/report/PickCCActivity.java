@@ -39,6 +39,7 @@ public class PickCCActivity extends Activity
 	private List<User> userList;
 	private boolean[] check;
 	private int senderID;
+	private boolean newReport;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -78,6 +79,7 @@ public class PickCCActivity extends Activity
 		dbManager = DBManager.getDBManager();
 		
 		senderID = getIntent().getIntExtra("sender", -1);
+		newReport = getIntent().getBooleanExtra("newReport", false);
 		userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
 		if (senderID != -1)
 		{
@@ -106,6 +108,15 @@ public class PickCCActivity extends Activity
 		{
 			public void onClick(View v)
 			{				
+				if (newReport)
+				{
+					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEW_CC_SUBMIT");
+				}
+				else
+				{
+					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_EDIT_CC_SUBMIT");					
+				}
+				
 				List<User> ccList = new ArrayList<User>();
 				if (check != null)
 				{

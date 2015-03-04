@@ -39,6 +39,7 @@ public class PickManagerActivity extends Activity
 	private List<User> userList;
 	private boolean[] check;
 	private int senderID;
+	private boolean newReport;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -78,6 +79,7 @@ public class PickManagerActivity extends Activity
 		dbManager = DBManager.getDBManager();
 		
 		senderID = getIntent().getIntExtra("sender", -1);
+		newReport = getIntent().getBooleanExtra("newReport", false);
 		userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
 		if (senderID != -1)
 		{
@@ -114,7 +116,16 @@ public class PickManagerActivity extends Activity
 		confirmTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
-			{				
+			{
+				if (newReport)
+				{
+					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
+				}
+				else
+				{
+					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_EDIT_SEND_SUBMIT");					
+				}
+				
 				List<User> managerList = new ArrayList<User>();
 				if (check != null)
 				{

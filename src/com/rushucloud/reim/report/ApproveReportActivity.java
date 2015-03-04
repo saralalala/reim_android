@@ -30,6 +30,7 @@ import com.umeng.analytics.MobclickAgent;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -221,13 +222,20 @@ public class ApproveReportActivity extends Activity
     	Builder builder = new Builder(this);
     	builder.setView(view);
     	builder.setPositiveButton(R.string.reject, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										sendApproveReportRequest(Report.STATUS_REJECTED, commentEditText.getText().toString());
-									}
-								});
-    	builder.setNegativeButton(R.string.cancel, null);
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REPORT_OTHER_DIALOG_COMMENT_SEND");
+				sendApproveReportRequest(Report.STATUS_REJECTED, commentEditText.getText().toString());
+			}
+		});
+    	builder.setNegativeButton(R.string.cancel, new OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REPORT_OTHER_DIALOG_COMMENT_CLOSE");				
+			}
+		});
     	builder.create().show();
     }
     
