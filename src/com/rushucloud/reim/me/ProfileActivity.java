@@ -92,33 +92,41 @@ public class ProfileActivity extends Activity
 		{
 			try
 			{
-				if (requestCode == PICK_IMAGE)
+				switch (requestCode)
 				{
-					cropImage(data.getData());	
-				}
-				else if (requestCode == TAKE_PHOTO)
-				{
-					cropImage(appPreference.getTempAvatarUri());
-				}
-				else if (requestCode == CROP_IMAGE)
-				{
-					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
-					avatarPath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
-					
-					if (!avatarPath.isEmpty() && PhoneUtils.isNetworkConnected())
+					case PICK_IMAGE:
 					{
-						ViewUtils.showToast(this, R.string.succeed_in_saving_avatar);
-						avatarImageView.setImageBitmap(bitmap);
-						sendUploadAvatarRequest();
+						cropImage(data.getData());
+						break;
 					}
-					else if (avatarPath.isEmpty())
+					case TAKE_PHOTO:
 					{
-						ViewUtils.showToast(this, R.string.failed_to_save_avatar);
+						cropImage(appPreference.getTempAvatarUri());
+						break;
 					}
-					else
+					case CROP_IMAGE:
 					{
-						ViewUtils.showToast(this, R.string.error_upload_avatar_network_unavailable);
+						Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
+						avatarPath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
+						
+						if (!avatarPath.isEmpty() && PhoneUtils.isNetworkConnected())
+						{
+							ViewUtils.showToast(this, R.string.succeed_in_saving_avatar);
+							avatarImageView.setImageBitmap(bitmap);
+							sendUploadAvatarRequest();
+						}
+						else if (avatarPath.isEmpty())
+						{
+							ViewUtils.showToast(this, R.string.failed_to_save_avatar);
+						}
+						else
+						{
+							ViewUtils.showToast(this, R.string.error_upload_avatar_network_unavailable);
+						}
+						break;
 					}
+					default:
+						break;
 				}
 			}
 			catch (Exception e)
@@ -263,6 +271,10 @@ public class ProfileActivity extends Activity
 					Intent intent = new Intent(ProfileActivity.this, SingleImageActivity.class);
 					intent.putExtra("imagePath", currentUser.getAvatarPath());
 					startActivity(intent);
+				}
+				else if (currentUser != null)
+				{
+					showPictureWindow();					
 				}
 			}
 		});

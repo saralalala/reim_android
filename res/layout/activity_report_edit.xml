@@ -309,7 +309,7 @@
 		        android:layout_weight="1"
 		        android:background="@drawable/bar_button_drawable"
 		        android:text="@string/message"
-		        android:textColor="@color/hint_grey" />
+		        android:textColor="@color/font_major_dark" />
 
 		    <Button
 		        android:id="@+id/submitButton"

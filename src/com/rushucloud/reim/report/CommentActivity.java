@@ -50,6 +50,7 @@ public class CommentActivity extends Activity
 	private Report report;
 	private List<Comment> commentList = new ArrayList<Comment>();
 	private boolean myReport;
+	private boolean newReport;
 	private boolean fromPush;
 	private int pushType;
 	
@@ -103,6 +104,7 @@ public class CommentActivity extends Activity
 			report = (Report) bundle.getSerializable("report");
 			fromPush = bundle.getBoolean("fromPush", false);
 			myReport = bundle.getBoolean("myReport", false);
+			newReport = bundle.getBoolean("newReport", false);			
 			pushType = bundle.getInt("pushType");
 			
 			if (myReport)
@@ -132,7 +134,9 @@ public class CommentActivity extends Activity
 			{
 				if (myReport)
 				{
-					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_MINE_COMMENT_CLOSE");					
+					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_MINE_COMMENT_CLOSE");
+					String event = newReport ? "UMENG_REPORT_NEW_COMMENT_CANCEL" : "UMENG_REPORT_EDIT_COMMENT_CANCEL";
+					MobclickAgent.onEvent(CommentActivity.this, event);
 				}
 				else 
 				{
@@ -158,7 +162,9 @@ public class CommentActivity extends Activity
 			{
 				if (myReport)
 				{
-					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_MINE_COMMENT_SEND");					
+					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_MINE_COMMENT_SEND");
+					String event = newReport ? "UMENG_REPORT_NEW_COMMENT_SUBMIT" : "UMENG_REPORT_EDIT_COMMENT_SUBMIT";
+					MobclickAgent.onEvent(CommentActivity.this, event);
 				}
 				else 
 				{

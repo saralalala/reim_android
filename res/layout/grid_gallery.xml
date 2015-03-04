@@ -12,16 +12,22 @@
         android:scaleType="centerCrop"
         android:src="@drawable/no_media" />
 
-    <ImageView
-        android:id="@+id/checkImageView"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+    <RelativeLayout
+        android:id="@+id/checkLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
 		android:layout_alignParentRight="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:contentDescription="@string/check"
-        android:background="@drawable/check_drawable"
-       	android:scaleType="fitXY" />
+		android:padding="5dp" >
+
+	    <ImageView
+	        android:id="@+id/checkImageView"
+	        android:layout_width="20dp"
+	        android:layout_height="20dp"
+	        android:layout_centerInParent="true"
+	        android:contentDescription="@string/check"
+	        android:background="@drawable/check_drawable"
+	       	android:scaleType="fitXY" />
+    </RelativeLayout>
 
 </RelativeLayout>

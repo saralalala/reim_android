@@ -45,7 +45,7 @@ public class TagListViewAdapter extends BaseAdapter
 			convertView.setBackgroundResource(color);
 		}
 
-		TextView nameTextView = (TextView)convertView.findViewById(R.id.nameTextView);
+		TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
 		
 		Tag tag = tagList.get(position);
 		

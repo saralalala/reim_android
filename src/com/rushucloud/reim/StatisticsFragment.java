@@ -46,6 +46,7 @@ public class StatisticsFragment extends Fragment
 	private TextView ongoingPercentTextView;
 	private TextView newPercentTextView;
 	private TextView totalTextView;
+	private TextView totalUnitTextView;
 	private LinearLayout monthLayout;
 	private LinearLayout categoryLayout;
 
@@ -111,6 +112,7 @@ public class StatisticsFragment extends Fragment
 		newPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 
 		totalTextView = (TextView) view.findViewById(R.id.totalTextView);
+		totalUnitTextView = (TextView) view.findViewById(R.id.totalUnitTextView);
 		monthLayout = (LinearLayout) view.findViewById(R.id.monthLayout);
 		categoryLayout = (LinearLayout) view.findViewById(R.id.categoryLayout);
 		
@@ -259,6 +261,11 @@ public class StatisticsFragment extends Fragment
 				
 				monthLayout.addView(view);
 			}
+		}
+		else
+		{
+			totalTextView.setVisibility(View.INVISIBLE);
+			totalUnitTextView.setVisibility(View.INVISIBLE);
 		}
 	}
 	

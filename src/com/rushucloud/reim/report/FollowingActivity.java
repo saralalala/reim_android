@@ -120,9 +120,11 @@ public class FollowingActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(FollowingActivity.this, "UMENG_REPORT_NEXT_SEND");
 				Intent intent = new Intent(FollowingActivity.this, PickManagerActivity.class);
 				intent.putExtra("managers", (Serializable) report.getManagerList());
 				intent.putExtra("sender", report.getSender().getServerID());
+				intent.putExtra("fromFollowing", true);
 				startActivityForResult(intent, PICK_MANAGER);
 			}
 		});
@@ -133,9 +135,11 @@ public class FollowingActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+				MobclickAgent.onEvent(FollowingActivity.this, "UMENG_REPORT_NEXT_CC");
 				Intent intent = new Intent(FollowingActivity.this, PickCCActivity.class);
 				intent.putExtra("ccs", (Serializable) report.getCCList());
 				intent.putExtra("sender", report.getSender().getServerID());
+				intent.putExtra("fromFollowing", true);
 				startActivityForResult(intent, PICK_CC);	
 			}
 		});

@@ -36,10 +36,10 @@ public class CommentListViewAdapter extends BaseAdapter
 			convertView = layoutInflater.inflate(R.layout.list_comment, parent, false);
 		}
 
-		ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.avatarImageView);
-		TextView reviewerTextView = (TextView)convertView.findViewById(R.id.reviewerTextView);
-		TextView commentTextView = (TextView)convertView.findViewById(R.id.commentTextView);
-		TextView dateTextView = (TextView)convertView.findViewById(R.id.dateTextView);
+		ImageView avatarImageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
+		TextView reviewerTextView = (TextView) convertView.findViewById(R.id.reviewerTextView);
+		TextView commentTextView = (TextView) convertView.findViewById(R.id.commentTextView);
+		TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
 		
 		Comment comment = commentList.get(position);
 		User user = comment.getReviewer();

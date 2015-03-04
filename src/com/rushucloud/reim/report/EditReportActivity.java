@@ -191,9 +191,12 @@ public class EditReportActivity extends Activity
 		{
 			report = (Report) bundle.getSerializable("report");
 			fromPush = bundle.getBoolean("fromPush", false);
-			itemList = dbManager.getReportItems(report.getLocalID());
-			chosenItemIDList = Item.getItemsIDList(itemList);
 			newReport = report.getLocalID() == -1;
+			if (!newReport)
+			{
+				itemList = dbManager.getReportItems(report.getLocalID());
+				chosenItemIDList = Item.getItemsIDList(itemList);				
+			}
 		}
 	}
 	
@@ -231,10 +234,20 @@ public class EditReportActivity extends Activity
 		itemLayout = (LinearLayout) findViewById(R.id.itemLayout);
 		
 		titleEditText = (EditText) findViewById(R.id.titleEditText);
-		titleEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		titleEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);		
+		titleEditText.setText(report.getTitle());
+		if (report.getTitle().isEmpty())
+		{
+			titleEditText.requestFocus();
+		}
+
+		int createDate = report.getCreatedDate() == -1 ? Utils.getCurrentTime() : report.getCreatedDate();
+		timeTextView = (TextView) findViewById(R.id.timeTextView);		
+		timeTextView.setText(Utils.secondToStringUpToMinute(createDate));
 		
-		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		statusTextView = (TextView) findViewById(R.id.statusTextView);
+		statusTextView.setText(report.getStatusString());
+		statusTextView.setBackgroundResource(report.getStatusBackground());
 
 		approveInfoTextView = (TextView) findViewById(R.id.approveInfoTextView);
 		approveInfoTextView.setOnClickListener(new View.OnClickListener()
@@ -247,7 +260,11 @@ public class EditReportActivity extends Activity
 				startActivity(intent);
 			}
 		});
-
+		if (report.getStatus() == Report.STATUS_DRAFT)
+		{
+			approveInfoTextView.setVisibility(View.GONE);
+		}
+		
 		managerTextView = (TextView) findViewById(R.id.managerTextView);
 		managerTextView.setOnClickListener(new OnClickListener()
 		{
@@ -269,6 +286,7 @@ public class EditReportActivity extends Activity
 				startActivityForResult(intent, PICK_MANAGER);	
 			}
 		});
+		managerTextView.setText(report.getManagersName());		
 		
 		ccTextView = (TextView) findViewById(R.id.ccTextView);
 		ccTextView.setOnClickListener(new OnClickListener()
@@ -291,6 +309,7 @@ public class EditReportActivity extends Activity
 				startActivityForResult(intent, PICK_CC);	
 			}
 		});
+		ccTextView.setText(report.getCCsName());
 		
 		amountTextView = (TextView) findViewById(R.id.amountTextView);
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -323,7 +342,7 @@ public class EditReportActivity extends Activity
 		});
 
 		final ImageView commentTipImageView = (ImageView) findViewById(R.id.commentTipImageView);
-		if (!getIntent().getExtras().getBoolean("commentPrompt", false))
+		if (getIntent().getExtras().getBoolean("commentPrompt", false))
 		{
 			commentTipImageView.setVisibility(View.VISIBLE);
 		}
@@ -361,6 +380,7 @@ public class EditReportActivity extends Activity
 					Bundle bundle = new Bundle();
 					bundle.putSerializable("report", report);
 					bundle.putBoolean("myReport", true);
+					bundle.putBoolean("newReport", newReport);
 					Intent intent = new Intent(EditReportActivity.this, CommentActivity.class);
 					intent.putExtras(bundle);
 					startActivity(intent);					
@@ -450,26 +470,6 @@ public class EditReportActivity extends Activity
 	{
 		itemList = dbManager.getItems(Item.getItemsIDList(itemList));
 		
-		titleEditText.setText(report.getTitle());
-		if (report.getTitle().isEmpty())
-		{
-			titleEditText.requestFocus();
-		}
-		
-		int createDate = report.getCreatedDate() == -1 ? Utils.getCurrentTime() : report.getCreatedDate();
-		timeTextView.setText(Utils.secondToStringUpToMinute(createDate));
-		
-		statusTextView.setText(report.getStatusString());
-		statusTextView.setBackgroundResource(report.getStatusBackground());
-
-		if (report.getStatus() == Report.STATUS_DRAFT)
-		{
-			approveInfoTextView.setVisibility(View.GONE);
-		}
-		
-		managerTextView.setText(report.getManagersName());		
-		ccTextView.setText(report.getCCsName());
-		
 		int itemCount = itemList.size();
 		itemCountTextView.setText(itemCount + getString(R.string.item_count));
 
@@ -557,7 +557,7 @@ public class EditReportActivity extends Activity
 		TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
 		titleTextView.setText(R.string.add_comment);
 		
-		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
+		final EditText commentEditText = (EditText) view.findViewById(R.id.commentEditText);
 		commentEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		commentEditText.requestFocus();
 		

@@ -32,8 +32,8 @@ public class MessageListViewAdapter extends BaseAdapter
 			convertView = layoutInflater.inflate(R.layout.list_message, parent, false);
 		}
 
-		TextView messageTextView = (TextView)convertView.findViewById(R.id.messageTextView);
-		TextView dateTextView = (TextView)convertView.findViewById(R.id.dateTextView);
+		TextView messageTextView = (TextView) convertView.findViewById(R.id.messageTextView);
+		TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
 		
 		Invite invite = inviteList.get(position);
 

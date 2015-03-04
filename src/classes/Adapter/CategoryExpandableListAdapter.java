@@ -84,8 +84,8 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 		}
 		convertView.setBackgroundResource(R.drawable.me_item_drawable);
 		
-		ImageView iconImageView = (ImageView)convertView.findViewById(R.id.iconImageView);
-		TextView nameTextView = (TextView)convertView.findViewById(R.id.nameTextView);
+		ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
+		TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
 		
 		Category category = categoryList.get(groupPosition);
 		
@@ -121,8 +121,8 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 			convertView = layoutInflater.inflate(R.layout.list_category_expandable, parent, false);
 		}		
 
-		ImageView iconImageView = (ImageView)convertView.findViewById(R.id.iconImageView);
-		TextView nameTextView = (TextView)convertView.findViewById(R.id.nameTextView);
+		ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
+		TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
 		
 		Category category = subCategoryList.get(groupPosition).get(childPosition);
 		

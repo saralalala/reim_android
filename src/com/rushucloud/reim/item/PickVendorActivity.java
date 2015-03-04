@@ -120,8 +120,11 @@ public class PickVendorActivity extends Activity
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				Vendor vendor = vendorAdapter.getItem(position);
-				vendorEditText.setText(vendor.getName());
+				Vendor vendor = vendorAdapter.getItem(position);				
+				Intent intent = new Intent();
+				intent.putExtra("vendor", vendor.getName());
+				setResult(RESULT_OK, intent);
+				finish();
 			}
 		});
 	}

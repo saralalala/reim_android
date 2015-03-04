@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 import android.widget.ImageView;
@@ -52,7 +53,8 @@ public class GalleryAdapter extends BaseAdapter
 		{
 			convertView = layoutInflater.inflate(R.layout.grid_gallery, parent, false);
 			holder = new ViewHolder();
-			holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);			
+			holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
+			holder.checkLayout = (RelativeLayout) convertView.findViewById(R.id.checkLayout);
 			holder.checkImageView = (ImageView) convertView.findViewById(R.id.checkImageView);
 
 			LayoutParams params = (LayoutParams) holder.imageView.getLayoutParams();
@@ -65,6 +67,7 @@ public class GalleryAdapter extends BaseAdapter
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
+		
 		holder.imageView.setTag(position);
 		holder.imageView.setOnClickListener(new View.OnClickListener()
 		{
@@ -76,7 +79,7 @@ public class GalleryAdapter extends BaseAdapter
 				context.startActivity(intent);
 			}
 		});
-		holder.checkImageView.setOnClickListener(new OnClickListener()
+		holder.checkLayout.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -199,6 +202,7 @@ public class GalleryAdapter extends BaseAdapter
 	public class ViewHolder
 	{
 		public ImageView imageView;
+		public RelativeLayout checkLayout;
 		public ImageView checkImageView;
 	}
 }

@@ -48,8 +48,8 @@ public class MemberListViewAdapter extends BaseAdapter
 			convertView.setBackgroundResource(color);
 		}
 
-		ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView);
-		TextView nicknameTextView = (TextView)convertView.findViewById(R.id.nicknameTextView);
+		ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
+		TextView nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
 				
 		User user = memberList.get(position);
 

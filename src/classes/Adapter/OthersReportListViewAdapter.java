@@ -25,8 +25,7 @@ public class OthersReportListViewAdapter extends BaseAdapter
 	public OthersReportListViewAdapter(Context context, List<Report> reports)
 	{
 		this.context = context;
-		this.layoutInflater = LayoutInflater.from(context);
-		
+		this.layoutInflater = LayoutInflater.from(context);		
 		this.reportList = new ArrayList<Report>(reports);
 	}
 
@@ -37,11 +36,11 @@ public class OthersReportListViewAdapter extends BaseAdapter
 			convertView = layoutInflater.inflate(R.layout.list_report, parent, false);
 		}
 
-		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
-		TextView senderTextView = (TextView)convertView.findViewById(R.id.senderTextView);
-		TextView titleTextView = (TextView)convertView.findViewById(R.id.titleTextView);
-		TextView dateTextView = (TextView)convertView.findViewById(R.id.dateTextView);
-		TextView amountTextView = (TextView)convertView.findViewById(R.id.amountTextView);
+		TextView statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
+		TextView senderTextView = (TextView) convertView.findViewById(R.id.senderTextView);
+		TextView titleTextView = (TextView) convertView.findViewById(R.id.titleTextView);
+		TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+		TextView amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
 
 		Report report = reportList.get(position);
 		

@@ -42,8 +42,8 @@ public class CategoryListViewAdapter extends BaseAdapter
 			convertView = layoutInflater.inflate(R.layout.list_category, parent, false);
 		}
 
-		ImageView iconImageView = (ImageView)convertView.findViewById(R.id.iconImageView);
-		TextView nameTextView = (TextView)convertView.findViewById(R.id.nameTextView);
+		ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
+		TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
 		
 		Category category = categoryList.get(position);
 		

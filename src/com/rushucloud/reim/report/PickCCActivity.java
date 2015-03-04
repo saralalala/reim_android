@@ -40,6 +40,7 @@ public class PickCCActivity extends Activity
 	private boolean[] check;
 	private int senderID;
 	private boolean newReport;
+	private boolean fromFollowing;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -80,6 +81,7 @@ public class PickCCActivity extends Activity
 		
 		senderID = getIntent().getIntExtra("sender", -1);
 		newReport = getIntent().getBooleanExtra("newReport", false);
+		fromFollowing = getIntent().getBooleanExtra("fromFollowing", false);
 		userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
 		if (senderID != -1)
 		{
@@ -107,14 +109,18 @@ public class PickCCActivity extends Activity
 		confirmTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
-			{				
-				if (newReport)
+			{
+				if (!fromFollowing && newReport)
 				{
-					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEW_CC_SUBMIT");
+					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
+				}
+				else if (!fromFollowing && !newReport)
+				{
+					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_EDIT_SEND_SUBMIT");					
 				}
 				else
 				{
-					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_EDIT_CC_SUBMIT");					
+					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEXT_CC_SUBMIT");					
 				}
 				
 				List<User> ccList = new ArrayList<User>();

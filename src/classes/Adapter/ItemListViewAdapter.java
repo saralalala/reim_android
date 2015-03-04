@@ -48,7 +48,7 @@ public class ItemListViewAdapter extends BaseAdapter
 			View view = layoutInflater.inflate(R.layout.list_header, parent, false);
 			
 			String date = item.getConsumedDateGroup();
-			TextView headerTextView = (TextView)view.findViewById(R.id.headerTextView);
+			TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
 			headerTextView.setText(Utils.dateToWeekday(date) + " " + date);
 			
 			return view;
@@ -57,13 +57,13 @@ public class ItemListViewAdapter extends BaseAdapter
 		{
 			View view = layoutInflater.inflate(R.layout.list_item, parent, false);
 			
-			ImageView photoImageView = (ImageView)view.findViewById(R.id.photoImageView);
-			TextView statusTextView = (TextView)view.findViewById(R.id.statusTextView);
-			TextView proveTextView = (TextView)view.findViewById(R.id.proveTextView);
-			TextView amountTextView = (TextView)view.findViewById(R.id.amountTextView);
-			TextView reportTextView = (TextView)view.findViewById(R.id.reportTextView);
-			TextView vendorTextView = (TextView)view.findViewById(R.id.vendorTextView);
-			ImageView categoryImageView = (ImageView)view.findViewById(R.id.categoryImageView);			
+			ImageView photoImageView = (ImageView) view.findViewById(R.id.photoImageView);
+			TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
+			TextView proveTextView = (TextView) view.findViewById(R.id.proveTextView);
+			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+			TextView reportTextView = (TextView) view.findViewById(R.id.reportTextView);
+			TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
+			ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);			
 
 			if (item.hasInvoice())
 			{

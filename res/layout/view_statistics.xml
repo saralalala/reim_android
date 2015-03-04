@@ -207,11 +207,11 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="3dp"
             android:gravity="right|center_vertical"
-            android:text="@string/cost_total"
             android:textColor="@color/font_list_item_header"
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/totalUnitTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

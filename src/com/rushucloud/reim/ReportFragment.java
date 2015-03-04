@@ -191,7 +191,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		othersTitleTextView = (TextView)getActivity().findViewById(R.id.othersTitleTextView);
 		othersTitleTextView.setOnClickListener(this);
 
-		tipImageView = (ImageView)view.findViewById(R.id.tipImageView);
+		tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
 		
 		ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 		filterImageView.setOnClickListener(new OnClickListener()
@@ -209,9 +209,21 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(getActivity(), "UMENG_REPORT_NEW");
+
+				List<User> managerList = new ArrayList<User>();
+				int managerID = appPreference.getCurrentUser().getDefaultManagerID();
+				if (managerID > 0)
+				{
+					User user = dbManager.getUser(managerID);
+					if (user != null)
+					{
+						managerList.add(user);
+					}
+				}
 				
 				Report report = new Report();
 				report.setSender(appPreference.getCurrentUser());
+				report.setManagerList(managerList);
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("report", report);				
 				Intent intent = new Intent(getActivity(), EditReportActivity.class);
@@ -761,7 +773,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
     {
 		View view = View.inflate(getActivity(), R.layout.dialog_report_export, null);
 		
-		final EditText emailEditText = (EditText)view.findViewById(R.id.emailEditText);
+		final EditText emailEditText = (EditText) view.findViewById(R.id.emailEditText);
 		emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		User user = appPreference.getCurrentUser();

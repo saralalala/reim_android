@@ -504,7 +504,9 @@ public class EditItemActivity extends Activity
 		
 		typeTextView = (TextView) findViewById(R.id.typeTextView);
 		typeTextView.setText(temp);
-		typeTextView.setOnClickListener(new View.OnClickListener()
+		
+		LinearLayout typeLayout = (LinearLayout) findViewById(R.id.typeLayout);		
+		typeLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{

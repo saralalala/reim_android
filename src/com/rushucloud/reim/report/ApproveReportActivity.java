@@ -215,7 +215,7 @@ public class ApproveReportActivity extends Activity
 		TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
 		titleTextView.setText(R.string.reject_reason);
 		
-		final EditText commentEditText = (EditText)view.findViewById(R.id.commentEditText);
+		final EditText commentEditText = (EditText) view.findViewById(R.id.commentEditText);
 		commentEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		commentEditText.requestFocus();
 		

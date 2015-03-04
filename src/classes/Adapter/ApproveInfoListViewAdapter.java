@@ -53,15 +53,15 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 			convertView = layoutInflater.inflate(R.layout.list_approve_info, parent, false);
 		}
 
-		CircleImageView pointImageView = (CircleImageView)convertView.findViewById(R.id.pointImageView);
-		LinearLayout upperLayout = (LinearLayout)convertView.findViewById(R.id.upperLayout);
-		LinearLayout lowerLayout = (LinearLayout)convertView.findViewById(R.id.lowerLayout);
+		CircleImageView pointImageView = (CircleImageView) convertView.findViewById(R.id.pointImageView);
+		LinearLayout upperLayout = (LinearLayout) convertView.findViewById(R.id.upperLayout);
+		LinearLayout lowerLayout = (LinearLayout) convertView.findViewById(R.id.lowerLayout);
 		
-		CircleImageView avatarImageView = (CircleImageView)convertView.findViewById(R.id.avatarImageView);
-		TextView nicknameTextView = (TextView)convertView.findViewById(R.id.nicknameTextView);
-		TextView statusTextView = (TextView)convertView.findViewById(R.id.statusTextView);
-		LinearLayout timeLayout = (LinearLayout)convertView.findViewById(R.id.timeLayout);
-		ImageView alarmImageView = (ImageView)convertView.findViewById(R.id.alarmImageView);
+		CircleImageView avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
+		TextView nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
+		TextView statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
+		LinearLayout timeLayout = (LinearLayout) convertView.findViewById(R.id.timeLayout);
+		ImageView alarmImageView = (ImageView) convertView.findViewById(R.id.alarmImageView);
 		
 		ApproveInfo info = getItem(position);
 				
@@ -134,10 +134,10 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 			
 			timeLayout.setVisibility(View.VISIBLE);
 			
-			TextView timeTextView = (TextView)convertView.findViewById(R.id.timeTextView);
+			TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
 			timeTextView.setText(info.getApproveTime());
 			
-			TextView dateTextView = (TextView)convertView.findViewById(R.id.dateTextView);
+			TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
 			dateTextView.setText(info.getApproveDate());
 		}
 		else

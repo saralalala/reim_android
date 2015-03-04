@@ -40,6 +40,7 @@ public class PickManagerActivity extends Activity
 	private boolean[] check;
 	private int senderID;
 	private boolean newReport;
+	private boolean fromFollowing;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -80,6 +81,7 @@ public class PickManagerActivity extends Activity
 		
 		senderID = getIntent().getIntExtra("sender", -1);
 		newReport = getIntent().getBooleanExtra("newReport", false);
+		fromFollowing = getIntent().getBooleanExtra("fromFollowing", false);
 		userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
 		if (senderID != -1)
 		{
@@ -117,13 +119,17 @@ public class PickManagerActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (newReport)
+				if (!fromFollowing && newReport)
 				{
 					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
 				}
-				else
+				else if (!fromFollowing && !newReport)
 				{
 					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_EDIT_SEND_SUBMIT");					
+				}
+				else
+				{
+					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_NEXT_SEND_SUBMIT");					
 				}
 				
 				List<User> managerList = new ArrayList<User>();

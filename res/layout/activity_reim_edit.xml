@@ -129,27 +129,31 @@
 	                android:textColor="@color/hint_grey"
 	                android:textSize="14sp" />
 
-	            <TextView
-	                android:id="@+id/typeTextView"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:layout_centerVertical="true"
+	            <LinearLayout
+	                android:id="@+id/typeLayout"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
 	                android:layout_marginLeft="80dp"
 	                android:layout_marginRight="10dp"
-	                android:textColor="@color/font_major_dark"
-	                android:textSize="18sp" />
+	                android:gravity="center_vertical" >
 
-	            <TextView
-	                android:id="@+id/approvedTextView"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:layout_centerVertical="true"
-	                android:layout_toRightOf="@+id/typeTextView"
-	                android:layout_marginRight="10dp"
-	                android:gravity="center"
-	                android:text="@string/status_prove_ahead_approved"
-	                android:textColor="@color/item_approved"
-	                android:textSize="18sp" />
+		            <TextView
+		                android:id="@+id/typeTextView"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_marginRight="10dp"
+		                android:textColor="@color/font_major_dark"
+		                android:textSize="18sp" />
+	
+		            <TextView
+		                android:id="@+id/approvedTextView"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:gravity="center"
+		                android:text="@string/status_prove_ahead_approved"
+		                android:textColor="@color/item_approved"
+		                android:textSize="18sp" />
+	            </LinearLayout>
 	
 	        </RelativeLayout>
             
