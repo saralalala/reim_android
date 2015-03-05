@@ -150,9 +150,32 @@ public class ApproveReportActivity extends Activity
 				{
 					ViewUtils.showToast(ApproveReportActivity.this, R.string.error_approve_network_unavailable);
 				}
-				else
+				else if (appPreference.getCurrentUser().getDefaultManagerID() > 0) 
 				{
-					sendApproveReportRequest(Report.STATUS_APPROVED, "");
+	    	    	report.setMyDecision(Report.STATUS_APPROVED);
+					jumpToFollowingActivity();
+				}
+				else 
+				{
+			    	Builder builder = new Builder(ApproveReportActivity.this);
+			    	builder.setTitle(R.string.tip);
+			    	builder.setMessage(R.string.prompt_choose_or_finish);
+			    	builder.setPositiveButton(R.string.continue_to_choose, new DialogInterface.OnClickListener()
+					{
+			    		public void onClick(DialogInterface dialog, int which)
+						{
+			    	    	report.setMyDecision(Report.STATUS_APPROVED);
+							jumpToFollowingActivity();
+						}
+					});
+			    	builder.setNegativeButton(R.string.finish, new DialogInterface.OnClickListener()
+					{
+						public void onClick(DialogInterface dialog, int which)
+						{
+							goBackToMainActivity();
+						}
+					});
+			    	builder.create().show();					
 				}
 			}
 		});
@@ -371,27 +394,6 @@ public class ApproveReportActivity extends Activity
 							{
 								ViewUtils.showToast(ApproveReportActivity.this, R.string.prompt_report_approved);
 								jumpToFollowingActivity();
-							}
-							else if (status == Report.STATUS_APPROVED) 
-							{								
-						    	Builder builder = new Builder(ApproveReportActivity.this);
-						    	builder.setTitle(R.string.tip);
-						    	builder.setMessage(R.string.prompt_choose_or_finish);
-						    	builder.setPositiveButton(R.string.continue_to_choose, new DialogInterface.OnClickListener()
-								{
-						    		public void onClick(DialogInterface dialog, int which)
-									{
-										jumpToFollowingActivity();
-									}
-								});
-						    	builder.setNegativeButton(R.string.finish, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										goBackToMainActivity();
-									}
-								});
-						    	builder.create().show();
 							}
 							else
 							{

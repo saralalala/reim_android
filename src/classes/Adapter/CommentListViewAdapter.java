@@ -42,25 +42,29 @@ public class CommentListViewAdapter extends BaseAdapter
 		TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
 		
 		Comment comment = commentList.get(position);
-		User user = comment.getReviewer();
-
-		avatarImageView.setImageResource(R.drawable.default_avatar);
-		if (!user.getAvatarPath().isEmpty())
-		{
-			Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
-			if (bitmap != null)
-			{
-				avatarImageView.setImageBitmap(bitmap);				
-			}
-		}
 		
-		if (user.getNickname().isEmpty())
+		avatarImageView.setImageResource(R.drawable.default_avatar);
+		
+		User user = comment.getReviewer();
+		if (user != null)
 		{
-			reviewerTextView.setText(R.string.not_available);
-		}
-		else
-		{
-			reviewerTextView.setText(user.getNickname());			
+			if (!user.getAvatarPath().isEmpty())
+			{
+				Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
+				if (bitmap != null)
+				{
+					avatarImageView.setImageBitmap(bitmap);				
+				}
+			}
+			
+			if (user.getNickname().isEmpty())
+			{
+				reviewerTextView.setText(R.string.not_available);
+			}
+			else
+			{
+				reviewerTextView.setText(user.getNickname());			
+			}
 		}
 
 		commentTextView.setText(comment.getContent());

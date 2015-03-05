@@ -208,7 +208,7 @@ public class CommentActivity extends Activity
 				for (Comment comment : commentList)
 				{
 					User user = comment.getReviewer();
-					if (user.hasUndownloadedAvatar())
+					if (user != null && user.hasUndownloadedAvatar())
 					{
 						sendDownloadAvatarRequest(comment, user);
 					}
@@ -299,7 +299,7 @@ public class CommentActivity extends Activity
 				final ModifyReportResponse response = new ModifyReportResponse(httpResponse);
 				if (response.getStatus())
 				{					
-					User user = dbManager.getUser(AppPreference.getAppPreference().getCurrentUserID());
+					User user = AppPreference.getAppPreference().getCurrentUser();
 					int currentTime = Utils.getCurrentTime();
 					
 					Comment comment = new Comment();

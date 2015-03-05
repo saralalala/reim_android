@@ -59,7 +59,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 
 				System.out.println(jObject.toString());
 				Intent notificationIntent = new Intent("com.rushucloud.reim.NOTIFICATION_CLICKED");
-				notificationIntent.putExtra("type", type);
+				notificationIntent.putExtra("type",  type);
 				notificationIntent.putExtra("data", jObject.toString());
 				
 				Notification notification = new Notification();

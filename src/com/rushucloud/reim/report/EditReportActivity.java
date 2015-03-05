@@ -92,6 +92,7 @@ public class EditReportActivity extends Activity
 	private int itemIndex;
 	private boolean fromPush;
 	private boolean newReport;
+	private boolean hasInit = false;
 	
 	private List<Image> imageSyncList = new ArrayList<Image>();
 	private List<Item> itemSyncList = new ArrayList<Item>();
@@ -116,7 +117,7 @@ public class EditReportActivity extends Activity
 		ReimProgressDialog.setProgressDialog(this);
 		refreshView();
 		
-		if (report.getServerID() != -1 && PhoneUtils.isNetworkConnected())
+		if (!hasInit && report.getServerID() != -1 && PhoneUtils.isNetworkConnected())
 		{
 			sendGetReportRequest(report.getServerID());
 		}
@@ -920,6 +921,7 @@ public class EditReportActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
+				hasInit = true;
 				final GetReportResponse response = new GetReportResponse(httpResponse);
 				if (response.getStatus())
 				{
