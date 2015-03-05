@@ -24,6 +24,7 @@ public class ApproveInfo implements Comparable<ApproveInfo>
 			setStatus(jObject.getInt("status"));
 			setApproveTime(jObject.getString("approvaldt").substring(11, 16));
 			setApproveDate(jObject.getString("approvaldt").substring(0, 10));
+			setStep(jObject.getInt("step"));
 		}
 		catch (JSONException e)
 		{

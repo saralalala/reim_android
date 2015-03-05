@@ -151,7 +151,19 @@ public class Report implements Serializable
 	}
 	public void setManagerList(List<User> managerList)
 	{
-		this.managerList = managerList;
+		if (managerList == null)
+		{
+			this.managerList = new ArrayList<User>();
+		}
+		else if (this.managerList != null)
+		{
+			this.managerList.clear();
+			this.managerList.addAll(managerList);
+		}
+		else
+		{
+			this.managerList = managerList;			
+		}	
 	}
 	
 	public List<User> getCCList()
@@ -171,7 +183,19 @@ public class Report implements Serializable
 	}
 	public void setCCList(List<User> ccList)
 	{
-		this.ccList = ccList;
+		if (ccList == null)
+		{
+			this.ccList = new ArrayList<User>();
+		}
+		else if (this.ccList != null)
+		{
+			this.ccList.clear();
+			this.ccList.addAll(ccList);
+		}
+		else
+		{
+			this.ccList = ccList;			
+		}
 	}
 
 	public List<Comment> getCommentList()

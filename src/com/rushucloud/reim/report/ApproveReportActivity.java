@@ -152,7 +152,6 @@ public class ApproveReportActivity extends Activity
 				}
 				else if (appPreference.getCurrentUser().getDefaultManagerID() > 0) 
 				{
-	    	    	report.setMyDecision(Report.STATUS_APPROVED);
 					jumpToFollowingActivity();
 				}
 				else 
@@ -164,7 +163,6 @@ public class ApproveReportActivity extends Activity
 					{
 			    		public void onClick(DialogInterface dialog, int which)
 						{
-			    	    	report.setMyDecision(Report.STATUS_APPROVED);
 							jumpToFollowingActivity();
 						}
 					});
@@ -172,7 +170,10 @@ public class ApproveReportActivity extends Activity
 					{
 						public void onClick(DialogInterface dialog, int which)
 						{
-							goBackToMainActivity();
+					    	report.setMyDecision(Report.STATUS_APPROVED);
+					    	report.setManagerList(null);
+					    	report.setCCList(null);
+					    	sendApproveReportRequest();
 						}
 					});
 			    	builder.create().show();					
@@ -192,7 +193,7 @@ public class ApproveReportActivity extends Activity
 				}
 				else
 				{
-					showCommentDialog();
+					showRejectDialog();
 				}
 			}
 		});
@@ -231,7 +232,7 @@ public class ApproveReportActivity extends Activity
 		}
 	}
 
-    private void showCommentDialog()
+    private void showRejectDialog()
     {
 		View view = View.inflate(this, R.layout.dialog_report_comment, null);
 		
@@ -249,14 +250,15 @@ public class ApproveReportActivity extends Activity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REPORT_OTHER_DIALOG_COMMENT_SEND");
-				sendApproveReportRequest(Report.STATUS_REJECTED, commentEditText.getText().toString());
+		    	report.setMyDecision(Report.STATUS_REJECTED);
+				sendRejectReportRequest(commentEditText.getText().toString());
 			}
 		});
     	builder.setNegativeButton(R.string.cancel, new OnClickListener()
 		{
 			public void onClick(DialogInterface dialog, int which)
 			{
-				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REPORT_OTHER_DIALOG_COMMENT_CLOSE");				
+				MobclickAgent.onEvent(ApproveReportActivity.this, "UMENG_REPORT_OTHER_DIALOG_COMMENT_CLOSE");
 			}
 		});
     	builder.create().show();
@@ -351,11 +353,52 @@ public class ApproveReportActivity extends Activity
 			}
 		});
     }
-    	
-    private void sendApproveReportRequest(final int status, final String commentContent)
+
+    private void sendApproveReportRequest()
     {
 		ReimProgressDialog.show();
-    	report.setMyDecision(status);
+		
+    	ApproveReportRequest request = new ApproveReportRequest(report);
+    	request.sendRequest(new HttpConnectionCallback()
+		{
+			public void execute(Object httpResponse)
+			{
+				final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
+				if (response.getStatus())
+				{
+					int currentTime = Utils.getCurrentTime();					
+					report.setLocalUpdatedDate(currentTime);
+					report.setServerUpdatedDate(currentTime);
+					dbManager.updateOthersReport(report);
+					
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+							ViewUtils.showToast(ApproveReportActivity.this, R.string.prompt_report_approved);
+							goBackToMainActivity();
+						}
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
+						{
+							ReimProgressDialog.dismiss();
+							ViewUtils.showToast(ApproveReportActivity.this, R.string.error_operation_failed, response.getErrorMessage());
+						}
+					});					
+				}
+			}
+		});
+    }
+
+    private void sendRejectReportRequest(final String commentContent)
+    {
+		ReimProgressDialog.show();
 		
     	ApproveReportRequest request = new ApproveReportRequest(report, commentContent);
     	request.sendRequest(new HttpConnectionCallback()
@@ -390,16 +433,8 @@ public class ApproveReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							if (status == Report.STATUS_APPROVED && appPreference.getCurrentUser().getDefaultManagerID() > 0)
-							{
-								ViewUtils.showToast(ApproveReportActivity.this, R.string.prompt_report_approved);
-								jumpToFollowingActivity();
-							}
-							else
-							{
-								ViewUtils.showToast(ApproveReportActivity.this, R.string.prompt_report_rejected);
-								goBackToMainActivity();								
-							}
+							ViewUtils.showToast(ApproveReportActivity.this, R.string.prompt_report_rejected);
+							goBackToMainActivity();
 						}
 					});
 				}

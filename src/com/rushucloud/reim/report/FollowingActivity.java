@@ -1,6 +1,7 @@
 package com.rushucloud.reim.report;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
@@ -10,6 +11,8 @@ import classes.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
@@ -35,6 +38,8 @@ public class FollowingActivity extends Activity
 	private TextView ccTextView;
 	
 	private Report report;
+	private	List<User> managerList = new ArrayList<User>();
+	private List<User> ccList = new ArrayList<User>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -63,7 +68,7 @@ public class FollowingActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			goBackToMainActivity();
+			goBackToApproveReportActivity();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -99,6 +104,8 @@ public class FollowingActivity extends Activity
 	private void initData()
 	{
 		report = (Report) getIntent().getSerializableExtra("report");
+		managerList.addAll(report.getManagerList());
+		ccList.addAll(report.getCCList());
 		report.setManagerList(AppPreference.getAppPreference().getCurrentUser().constructListWithManager());
 	}
 	
@@ -111,7 +118,7 @@ public class FollowingActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				goBackToMainActivity();
+				goBackToApproveReportActivity();
 			}	
 		});
 
@@ -140,7 +147,7 @@ public class FollowingActivity extends Activity
 				intent.putExtra("ccs", (Serializable) report.getCCList());
 				intent.putExtra("sender", report.getSender().getServerID());
 				intent.putExtra("fromFollowing", true);
-				startActivityForResult(intent, PICK_CC);	
+				startActivityForResult(intent, PICK_CC);
 			}
 		});
 		
@@ -149,7 +156,9 @@ public class FollowingActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				goBackToMainActivity();
+				report.setManagerList(null);
+				report.setCCList(null);
+				sendApproveReportRequest();
 			}
 		});	
 
@@ -158,44 +167,71 @@ public class FollowingActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				sendChooseFollowingReportRequest();
+				sendApproveReportRequest();
 			}
 		});
 	}
   
-    private void sendChooseFollowingReportRequest()
+    private void sendApproveReportRequest()
     {
     	ReimProgressDialog.show();
+    	report.setMyDecision(Report.STATUS_APPROVED);
+    	
     	ApproveReportRequest request = new ApproveReportRequest(report);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
 				final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
-				runOnUiThread(new Runnable()
+				if (response.getStatus())
 				{
-					public void run()
+					int currentTime = Utils.getCurrentTime();					
+					report.setLocalUpdatedDate(currentTime);
+					report.setServerUpdatedDate(currentTime);
+					DBManager.getDBManager().updateOthersReport(report);
+					
+					runOnUiThread(new Runnable()
 					{
-						if (response.getStatus())
+						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(FollowingActivity.this, R.string.succeed_in_choosing_following);
+							ViewUtils.showToast(FollowingActivity.this, R.string.prompt_report_approved);
 							goBackToMainActivity();
 						}
-						else
+					});
+				}
+				else
+				{
+					runOnUiThread(new Runnable()
+					{
+						public void run()
 						{
-							ViewUtils.showToast(FollowingActivity.this, R.string.error_choose_following, response.getErrorMessage());
+							ReimProgressDialog.dismiss();
+							ViewUtils.showToast(FollowingActivity.this, R.string.error_operation_failed, response.getErrorMessage());
 						}
-					}
-				});
+					});
+				}
 			}
 		});
+    }
+ 
+    private void goBackToApproveReportActivity()
+    {
+    	report.setManagerList(managerList);
+    	report.setCCList(ccList);
+    	
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("report", report);
+		Intent intent = new Intent(FollowingActivity.this, ApproveReportActivity.class);
+		intent.putExtras(bundle);
+		startActivity(intent);
+		finish();
     }
  
     private void goBackToMainActivity()
     {
     	ReimApplication.setTabIndex(1);
-    	ReimApplication.setReportTabIndex(0);
+    	ReimApplication.setReportTabIndex(1);
 		finish();
     }
 }
