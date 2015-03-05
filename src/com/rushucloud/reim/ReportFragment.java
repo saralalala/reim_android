@@ -224,6 +224,7 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				Report report = new Report();
 				report.setSender(appPreference.getCurrentUser());
 				report.setManagerList(managerList);
+				
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("report", report);				
 				Intent intent = new Intent(getActivity(), EditReportActivity.class);

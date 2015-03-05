@@ -272,6 +272,7 @@
     <string name="error_category_name_empty">请输入类别名称</string>
     <string name="error_tag_name_empty">请输入标签名称</string>
     <string name="error_comment_empty">请输入评论</string>
+    <string name="error_report_title_empty">请输入报告名</string>
     <string name="error_feedback_empty">请输入你的意见</string>
     <string name="error_feedback_contact_empty">请输入你的意见或者联系方式</string>
     <string name="error_feedback_code_empty">请输入区号</string>

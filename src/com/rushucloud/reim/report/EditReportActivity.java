@@ -418,6 +418,10 @@ public class EditReportActivity extends Activity
 				{
 					ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_network_unavailable);
 				}
+				else if (titleEditText.getText().toString().isEmpty())
+				{
+					ViewUtils.showToast(EditReportActivity.this, R.string.error_report_title_empty);
+				}
 				else if (report.getManagerList() == null || report.getManagerList().isEmpty())
 				{
 					ViewUtils.showToast(EditReportActivity.this, R.string.no_manager);
