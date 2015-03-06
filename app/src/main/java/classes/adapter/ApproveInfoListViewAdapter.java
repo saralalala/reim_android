@@ -3,6 +3,7 @@ package classes.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.utils.AppPreference;
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.Report.AlertRequest;
 import netUtils.Response.Report.AlertResponse;
@@ -31,6 +32,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 	private Activity activity;
 	private LayoutInflater layoutInflater;
 	private DBManager dbManager;
+    private User currentUser;
 	private Report report;
 	private List<ApproveInfo> infoList;
 	private List<Integer> stepStartList;
@@ -40,6 +42,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 		this.activity = activity;
 		this.layoutInflater = LayoutInflater.from(activity);
 		this.dbManager = DBManager.getDBManager();
+        this.currentUser = AppPreference.getAppPreference().getCurrentUser();
 		this.report = report;
 		this.infoList = new ArrayList<ApproveInfo>(infos);
 		this.stepStartList = new ArrayList<Integer>();
@@ -147,7 +150,8 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 
 			timeLayout.setVisibility(View.GONE);
 
-			alarmImageView.setVisibility(View.VISIBLE);
+            int visibility = user.equals(currentUser) ? View.GONE : View.VISIBLE;
+			alarmImageView.setVisibility(visibility);
 			alarmImageView.setOnClickListener(new OnClickListener()
 			{
 				public void onClick(View v)
