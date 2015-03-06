@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="major_dark">#FFFF575B</color>
+    <color name="major_light">#FFFFFFFF</color>
+    
+    <color name="background">#FFF5F6F8</color>
+    <color name="background_black">#FF000000</color>
+    <color name="background_grey">#FFE4E4E4</color>
+    
+    <color name="divider">#1A000000</color>
+    <color name="start_divider">#FFFE8888</color>
+    
+    <color name="font_major_dark">#FF373737</color>
+    <color name="font_minor_dark">#FF333333</color>
+    <color name="font_major_light">#CCFFFFFF</color>
+    <color name="font_title_selected">#FFE9E9E9</color>
+    <color name="font_reim_number">#FFFF5353</color>
+    <color name="font_budget">#FF3CB798</color>
+    <color name="font_list_item_header">#FF999999</color>
+    <color name="font_start">#FFFE8888</color>
+    <color name="font_month_data">#FF47A3D2</color>
+    
+    <color name="hint_white">#CCFFFFFF</color>
+    <color name="hint_light">#66FFFFFF</color>
+    <color name="hint_grey">#FF999999</color>
+    <color name="hint_dark_grey">#CC000000</color>
+    <color name="hint_light_grey">#66000000</color>
+    
+    <color name="button_text_dark">#FFFF898C</color>
+    <color name="button_text_light">#FFFFFFFF</color>
+    
+    <color name="list_item_header">#FFE9E9EB</color>
+    <color name="list_item_selected">#FFFBE2E3</color>
+    <color name="list_item_unselected">#00000000</color>
+    
+    <color name="tab_item_selected">#FFFF575B</color>
+    <color name="tab_item_unselected">#FF61686D</color>    
+    
+    <color name="toggle_on">#FFFF898C</color>
+    <color name="toggle_off">#FFCCCCCC</color>
+    
+    <color name="radio_button_selected_color">#FFFF575B</color>
+    <color name="radio_button_unselected_color">@android:color/transparent</color>
+    
+    <color name="item_approved">#FF3CB798</color>
+    <color name="item_prove_ahead">#FFFF575B</color>
+    
+    <color name="tag">#FFABABAB</color>
+    
+    <color name="status_cover">#992B2D2F</color>
+    <color name="status_draft">#FFA17356</color>
+    <color name="status_submitted">#FF46A3D3</color>
+    <color name="status_approved">#FF3CB798</color>
+    <color name="status_rejected">#FFB570B2</color>
+    <color name="status_finished">#FFCCCECF</color>  
+    <color name="status_item_prove_ahead">#FFFF5857</color>      
+    <color name="status_item_approved">#FF3CB798</color>
+    
+    <color name="stat_title">#FFECD4D5</color>
+    <color name="stat_ongoing">#FF45A3D2</color>
+    <color name="stat_new">#FFF6575B</color>
+        
+</resources>

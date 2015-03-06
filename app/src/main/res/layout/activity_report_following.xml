@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background" >
+
+    <RelativeLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back_drawable" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/choose_following_managers"
+            android:textColor="@color/major_light"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/titleLayout"
+        android:layout_marginTop="18dp"
+        layout="@layout/view_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/divider" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/major_light" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="22dp"
+                android:text="@string/submit_to"
+                android:textColor="@color/hint_grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/managerTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="22dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="22dp"
+                android:textColor="@color/font_major_dark"
+                android:textSize="16sp" />
+        </LinearLayout>
+        
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="0.5dp"
+		    android:layout_marginLeft="82dp"
+		    android:orientation="vertical"
+		    android:background="@color/divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/major_light" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="22dp"
+                android:text="@string/cc"
+                android:textColor="@color/hint_grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/ccTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="22dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="22dp"
+                android:textColor="@color/font_major_dark"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            layout="@layout/view_divider" />
+    </LinearLayout>
+            
+	<include                 
+		android:layout_width="match_parent"
+		android:layout_height="0.5dp"
+		layout="@layout/view_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        style="?android:attr/buttonBarStyle" >
+
+        <Button
+            android:id="@+id/finishButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:background="@drawable/bar_button_drawable"
+            android:text="@string/finish"
+            android:textColor="@color/font_major_dark" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:background="@drawable/bar_button_drawable"
+            android:text="@string/submit" 
+            android:textColor="@color/start_button_text_color"/>
+        
+    </LinearLayout>
+
+</RelativeLayout>

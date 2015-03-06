@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="169.5dp"
+    android:orientation="vertical"
+    android:background="@color/background" >
+    
+    <RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="56.5dp"
+	    android:orientation="horizontal"
+	    android:background="@drawable/list_item_drawable" >
+            
+	    <include                 
+			android:layout_width="match_parent"
+			android:layout_height="0.5dp"
+			android:layout_alignParentTop="true"
+		  	layout="@layout/view_divider"/>
+	
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginLeft="16dp"
+	        android:text="@string/reim_type"
+	        android:textColor="@color/font_major_dark"
+	        android:textSize="16sp" />
+    
+	    <classes.widget.SegmentedGroup
+	        android:id="@+id/typeRadioGroup"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="16dp"
+	    	android:orientation="horizontal" >
+	
+	        <RadioButton
+	            android:id="@+id/consumedRadio"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:checked="true"
+	            android:text="@string/consumed"
+	            style="@style/RadioButton" />
+	
+	        <RadioButton
+	            android:id="@+id/proveAheadRadio"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/prove_ahead"
+	            style="@style/RadioButton" />
+	        
+	    </classes.widget.SegmentedGroup>
+	
+	</RelativeLayout>
+    
+    <RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="56.5dp"
+	    android:orientation="horizontal"
+	    android:background="@drawable/list_item_drawable" >
+            
+	    <include                 
+			android:layout_width="match_parent"
+			android:layout_height="0.5dp"
+			android:layout_alignParentTop="true"
+		  	layout="@layout/view_divider"/>
+	
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginLeft="16dp"
+	        android:text="@string/need_reimburse"
+	        android:textColor="@color/font_major_dark"
+	        android:textSize="16sp" />
+	
+	    <ToggleButton
+	        android:id="@+id/needReimToggleButton"
+	        android:layout_width="49dp"
+	        android:layout_height="30dp"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="16dp"
+	        android:background="@drawable/toggle_drawable"
+	        android:textOn=""
+	        android:textOff="" />
+	
+	</RelativeLayout>
+            
+	<include                 
+		android:layout_width="match_parent"
+		android:layout_height="0.5dp"
+	  	layout="@layout/view_divider"/>
+
+	<TextView
+	    android:id="@+id/confirmTextView"
+	    android:layout_width="match_parent"
+	    android:layout_height="56dp"
+	    android:gravity="center"
+	    android:background="@drawable/popup_drawable"
+	    android:text="@string/confirm"
+	    android:textColor="@color/button_text_dark" 
+	    android:textSize="18sp" />
+
+</LinearLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background" >
+
+    <RelativeLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <ImageView
+            android:id="@+id/filterImageView"
+            android:layout_width="54dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:contentDescription="@string/filter"
+            android:src="@drawable/filter_drawable" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/reimbursement"
+            android:textColor="@color/major_light"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/searchImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:contentDescription="@string/search"
+            android:src="@drawable/search"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <classes.widget.XListView
+        android:id="@+id/itemListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titleLayout"
+        android:cacheColorHint="@android:color/transparent" >
+    </classes.widget.XListView>
+
+    <RelativeLayout
+        android:id="@+id/noResultLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/noResultImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+			android:layout_centerHorizontal="true"
+            android:contentDescription="@string/no_filter_result"
+            android:src="@drawable/no_result" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/noResultImageView"
+            android:layout_marginTop="5dp"
+            android:text="@string/no_filter_result"
+            android:textColor="@color/hint_light_grey" />
+    </RelativeLayout>
+
+</RelativeLayout>

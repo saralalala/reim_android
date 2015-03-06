@@ -1,0 +1,138 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:reim="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/containerLayout" >
+    
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp" />
+
+    <ImageView
+        android:id="@+id/feedbackImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/tabLayout"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:contentDescription="@string/feedback"
+        android:src="@drawable/feedback" />
+
+    <LinearLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/tab_background"
+        android:gravity="bottom"
+        android:padding="5dp"
+        android:orientation="horizontal" >
+
+        <classes.widget.TabItem
+            android:id="@+id/tabItemReim"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            reim:tab_icon_selected="@drawable/tab_icon_reim_selected"
+            reim:tab_icon_unselected="@drawable/tab_icon_reim_not_selected"
+            reim:text="@string/reimbursement"
+            reim:text_size="10sp"
+            reim:text_color_selected="@color/tab_item_selected"
+            reim:text_color_unselected="@color/tab_item_unselected" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1" >
+
+            <classes.widget.TabItem
+                android:id="@+id/tabItemReport"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                reim:tab_icon_unselected="@drawable/tab_icon_report_not_selected"
+                reim:tab_icon_selected="@drawable/tab_icon_report_selected"
+                reim:text="@string/report"
+                reim:text_color_unselected="@color/tab_item_unselected"
+                reim:text_color_selected="@color/tab_item_selected"
+                reim:text_size="10sp" />
+
+			<ImageView
+			    android:id="@+id/reportTipImageView"
+			    android:layout_width="10dp"
+			    android:layout_height="10dp"
+				android:layout_alignTop="@+id/tabItemReport"
+				android:layout_alignRight="@+id/tabItemReport"
+				android:layout_marginTop="3dp"
+				android:layout_marginRight="12dp"
+				android:contentDescription="@string/tip"
+				android:background="@drawable/tip_dark"
+				android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/addButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+				android:layout_marginBottom="1dp"
+				android:layout_alignParentBottom="true"
+				android:layout_centerHorizontal="true"
+                android:background="@drawable/add_button" />
+
+        </RelativeLayout>
+
+        <classes.widget.TabItem
+            android:id="@+id/tabItemStat"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            reim:tab_icon_selected="@drawable/tab_icon_stat_selected"
+            reim:tab_icon_unselected="@drawable/tab_icon_stat_not_selected"
+            reim:text="@string/statistics"
+            reim:text_size="10sp"
+            reim:text_color_selected="@color/tab_item_selected"
+            reim:text_color_unselected="@color/tab_item_unselected" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1" >
+
+            <classes.widget.TabItem
+                android:id="@+id/tabItemMe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                reim:tab_icon_unselected="@drawable/tab_icon_me_not_selected"
+                reim:tab_icon_selected="@drawable/tab_icon_me_selected"
+                reim:text="@string/me"
+                reim:text_color_unselected="@color/tab_item_unselected"
+                reim:text_color_selected="@color/tab_item_selected"
+                reim:text_size="10sp" />
+
+			<ImageView
+			    android:id="@+id/meTipImageView"
+			    android:layout_width="10dp"
+			    android:layout_height="10dp"
+				android:layout_alignTop="@+id/tabItemMe"
+				android:layout_alignRight="@+id/tabItemMe"
+				android:layout_marginTop="3dp"
+				android:layout_marginRight="12dp"
+				android:contentDescription="@string/tip"
+				android:background="@drawable/tip_dark"
+				android:visibility="gone" />
+
+        </RelativeLayout>
+        
+    </LinearLayout>
+    
+</RelativeLayout>
