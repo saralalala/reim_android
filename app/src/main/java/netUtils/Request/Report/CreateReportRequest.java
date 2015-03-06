@@ -22,7 +22,7 @@ public class CreateReportRequest extends BaseRequest
 		
 		DBManager dbManager = DBManager.getDBManager();
 		String iids = dbManager.getReportItemIDs(report.getLocalID());
-		System.out.println("iids:"+iids);
+
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("title", report.getTitle()));
 		params.add(new BasicNameValuePair("iids", iids));
