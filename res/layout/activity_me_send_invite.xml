@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:id="@+id/baseLayout" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/major_dark" >
+
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:contentDescription="@string/back"
+            android:src="@drawable/back_drawable" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/invite"
+            android:textColor="@color/major_light"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50.5dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/me_item_drawable"
+        android:focusable="true"
+        android:focusableInTouchMode="true" >
+
+	    <include
+	        android:layout_width="match_parent"
+	        android:layout_height="0.5dp"
+	        layout="@layout/view_divider" />
+
+        <EditText
+            android:id="@+id/usernameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@null"
+            android:hint="@string/input_username"
+            android:textSize="14sp" />
+        
+    </RelativeLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider" />
+    
+    <Button
+		android:id="@+id/inviteButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="22dp"
+		android:layout_marginLeft="16dp"
+		android:layout_marginRight="16dp"
+		android:background="@drawable/button_long_dark_drawable"
+		android:text="@string/send_invite"
+		android:textColor="@color/button_text_light_color" />
+
+</LinearLayout>
