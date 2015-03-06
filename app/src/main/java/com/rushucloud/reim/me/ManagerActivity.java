@@ -97,7 +97,7 @@ public class ManagerActivity extends Activity
     	currentGroupID = appPreference.getCurrentGroupID();
     	
 		userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUser.getServerID());
-		checkList = User.getUsersCheck(userList, currentUser.constructListWithManager());
+		checkList = User.getUsersCheck(userList, currentUser.buildBaseManagerList());
 	}
 	
 	private void initView()

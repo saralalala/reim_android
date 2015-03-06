@@ -399,6 +399,7 @@ public class EditItemActivity extends Activity
 												    	report.setCreatedDate(Utils.getCurrentTime());
 												    	report.setLocalUpdatedDate(Utils.getCurrentTime());
 														report.setIsProveAhead(true);
+                                                        report.setManagerList(appPreference.getCurrentUser().buildBaseManagerList());
 												    	dbManager.insertReport(report);
 												    	report.setLocalID(dbManager.getLastInsertReportID());
 														

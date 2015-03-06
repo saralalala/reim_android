@@ -173,6 +173,7 @@
     <string name="reject_invite">拒绝邀请</string>
     <string name="get_invoice_prompt">发票抬头：</string>
     <string name="invoice_invalid">还没公司，开啥发票o(╯□╰)o</string>
+    <string name="powered_by">Powered by 云报销</string>
     <string name="category_management">类别管理</string>
     <string name="edit_category">编辑类别</string>
     <string name="choose_icon">选择图标</string>

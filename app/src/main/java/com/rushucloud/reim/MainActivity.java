@@ -120,7 +120,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			else
 			{
 				finish();
-				dbManager.close();
+				dbManager.closeDatabase();
 				if (udpClient != null)
 				{
 					udpClient.close();					

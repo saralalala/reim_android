@@ -1644,9 +1644,10 @@ public class DBManager extends SQLiteOpenHelper
 	
 	// Report
 	public boolean insertReport(Report report)
-	{	
+	{
 		try
 		{
+            System.out.println("insert report: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
 			String sqlString = "INSERT INTO tbl_report (server_id, title, user_id, status, manager_id, cc_id, prove_ahead, created_date, " +
 							   							"server_updatedt, local_updatedt) VALUES (" + 
 														"'" + report.getServerID() + "'," +
@@ -1704,6 +1705,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
+            System.out.println("update report by local id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
 			String sqlString = "UPDATE tbl_report SET " +
 								"server_id = '" + report.getServerID() + "'," +
 								"title = '" + report.getTitle() + "'," +
@@ -1730,6 +1732,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
+            System.out.println("update report by server id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
 			String sqlString = "UPDATE tbl_report SET " +
 								"server_id = '" + report.getServerID() + "'," +
 								"title = '" + report.getTitle() + "'," +
@@ -2535,32 +2538,7 @@ public class DBManager extends SQLiteOpenHelper
 			return false;
 		}
 	}
-	
-	public boolean syncCategory(Category category)
-	{
-		try
-		{
-			Category localCategory = getCategory(category.getServerID());
-			if (localCategory == null)
-			{
-				return insertCategory(category);
-			}
-			else if (category.getServerUpdatedDate() > localCategory.getLocalUpdatedDate())
-			{
-				return updateCategory(category);
-			}
-			else
-			{
-				return true;
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
+
 	public Category getCategory(int categoryServerID)
 	{
 		try

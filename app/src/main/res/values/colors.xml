@@ -20,6 +20,7 @@
     <color name="font_list_item_header">#FF999999</color>
     <color name="font_start">#FFFE8888</color>
     <color name="font_month_data">#FF47A3D2</color>
+    <color name="font_powered_by">#FFEEEEEE</color>
     
     <color name="hint_white">#CCFFFFFF</color>
     <color name="hint_light">#66FFFFFF</color>

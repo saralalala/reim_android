@@ -250,13 +250,13 @@ public class User implements Serializable
 		return false;
 	}
 	
-	public List<User> constructListWithManager()
+	public List<User> buildBaseManagerList()
 	{
 		List<User> tempList = new ArrayList<User>();
 		User defaultManager = DBManager.getDBManager().getUser(getDefaultManagerID());
 		if (defaultManager != null)
 		{
-			tempList.add(defaultManager);				
+			tempList.add(defaultManager);
 		}
 		return tempList;
 	}

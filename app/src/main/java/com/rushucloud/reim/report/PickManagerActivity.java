@@ -93,7 +93,7 @@ public class PickManagerActivity extends Activity
 
 		if (managerList == null)
 		{
-			check = User.getUsersCheck(userList, currentUser.constructListWithManager());
+			check = User.getUsersCheck(userList, currentUser.buildBaseManagerList());
 		}
 		else
 		{

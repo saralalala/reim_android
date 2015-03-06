@@ -210,17 +210,6 @@ public abstract class SyncUtils
 		{
     		for (Report report : reportList)
     		{
-    			if (!report.hasItems() || (report.getStatus() == Report.STATUS_SUBMITTED && !report.canBeSubmitted()))
-				{
-    		    	System.out.println("ignore report：local id " + report.getLocalID());
-					reportTaskCount--;
-					if (reportTaskCount == 0 && callback != null)
-					{
-						callback.execute();	
-					}
-					continue;
-				}
-    			
     			if (report.getServerID() == -1)
     			{
     				sendCreateReportRequest(report, callback);

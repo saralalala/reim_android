@@ -227,8 +227,28 @@ public class EditReportActivity extends Activity
 				{
 					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_SAVE");					
 				}
+
 				hideSoftKeyboard();
-				saveReport();
+                if (saveReport())
+                {
+                    if (SyncUtils.canSyncToServer())
+                    {
+                        SyncUtils.isSyncOnGoing = true;
+                        SyncUtils.syncAllToServer(new SyncDataCallback()
+                        {
+                            public void execute()
+                            {
+                                SyncUtils.isSyncOnGoing = false;
+                            }
+                        });
+                    }
+                    ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_saving_report);
+                    finish();
+                }
+                else
+                {
+                    ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_save_report);
+                }
 			}
 		});
 		
@@ -573,20 +593,34 @@ public class EditReportActivity extends Activity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_MINE_DIALOG_COMMENT_SEND");
-						
+
 				String comment = commentEditText.getText().toString();
 				if (comment.isEmpty())
 				{
 					ViewUtils.showToast(EditReportActivity.this, R.string.error_comment_empty);
 				}
-				else if (report.getServerID() == -1)
-				{
-					sendCreateReportCommentRequest(comment);
-				}
-				else
-				{												
-					sendModifyReportCommentRequest(comment);
-				}
+                else if (report.getLocalID() == -1)
+                {
+                    saveReport();
+                    sendCreateReportCommentRequest(comment);
+                }
+                else
+                {
+                    Report localReport = dbManager.getReportByLocalID(report.getLocalID());
+                    if (localReport.getServerID() == -1)
+                    {
+                        saveReport();
+                        sendCreateReportCommentRequest(comment);
+                    }
+                    else
+                    {
+                        report.setServerID(localReport.getServerID());
+                        report.setLocalUpdatedDate(localReport.getLocalUpdatedDate());
+                        report.setServerUpdatedDate(localReport.getServerUpdatedDate());
+                        saveReport();
+                        sendModifyReportCommentRequest(comment);
+                    }
+                }
 			}
 		});
     	builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
@@ -599,10 +633,10 @@ public class EditReportActivity extends Activity
     	builder.create().show();
     }
 
-    private void saveReport()
+    private boolean saveReport()
     {
+        report.setTitle(titleEditText.getText().toString());
     	report.setLocalUpdatedDate(Utils.getCurrentTime());
-		report.setTitle(titleEditText.getText().toString());
 		if (report.getLocalID() == -1)
 		{
 			report.setCreatedDate(Utils.getCurrentTime());
@@ -613,32 +647,15 @@ public class EditReportActivity extends Activity
 		{
 			dbManager.updateReportByLocalID(report);
 		}
-		if (dbManager.updateReportItems(chosenItemIDList, report.getLocalID()))
-		{
-			if (SyncUtils.canSyncToServer())
-			{
-				SyncUtils.isSyncOnGoing = true;
-				SyncUtils.syncAllToServer(new SyncDataCallback()
-				{
-					public void execute()
-					{
-						SyncUtils.isSyncOnGoing = false;
-					}
-				});
-			}
-			ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_saving_report);
-			finish();
-		}
-		else
-		{
-			ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_save_report);
-		}
+        return dbManager.updateReportItems(chosenItemIDList, report.getLocalID());
     }
 
     private void submitReport()
     {
     	ReimProgressDialog.show();
-    	
+
+    	saveReport();
+
     	imageSyncList.clear();
     	
 		for (Item item : itemList)
@@ -705,10 +722,8 @@ public class EditReportActivity extends Activity
     }
    
     private void syncReport()
-    {		
+    {
     	int originalStatus = report.getStatus();
-    	report.setLocalUpdatedDate(Utils.getCurrentTime());
-		report.setTitle(titleEditText.getText().toString());
 		if (appPreference.getCurrentGroupID() == -1)
 		{
 			report.setStatus(Report.STATUS_FINISHED);
@@ -717,18 +732,6 @@ public class EditReportActivity extends Activity
 		{
 			report.setStatus(Report.STATUS_SUBMITTED);
 		}
-		
-		if (report.getLocalID() == -1)
-		{
-			report.setCreatedDate(Utils.getCurrentTime());
-			dbManager.insertReport(report);
-			report.setLocalID(dbManager.getLastInsertReportID());								
-		}
-		else
-		{
-			dbManager.updateReportByLocalID(report);
-		}		
-		dbManager.updateReportItems(chosenItemIDList, report.getLocalID());
 		
 		if (report.canBeSubmitted())
 		{
@@ -805,6 +808,7 @@ public class EditReportActivity extends Activity
 
     private void sendCreateItemRequest(final Item item)
     {
+        System.out.println("create item：local id " + item.getLocalID());
     	CreateItemRequest request = new CreateItemRequest(item);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -814,8 +818,9 @@ public class EditReportActivity extends Activity
 				if (response.getStatus())
 				{
 			    	System.out.println("create item：local id " + item.getLocalID() + " *Succeed*");
-					item.setLocalUpdatedDate(Utils.getCurrentTime());
-					item.setServerUpdatedDate(item.getLocalUpdatedDate());
+                    int currentTime = Utils.getCurrentTime();
+					item.setLocalUpdatedDate(currentTime);
+					item.setServerUpdatedDate(currentTime);
 					item.setServerID(response.getItemID());
 					dbManager.updateItemByLocalID(item);
 					
@@ -872,8 +877,9 @@ public class EditReportActivity extends Activity
 				if (response.getStatus())
 				{
 			    	System.out.println("modify item：local id " + item.getLocalID() + " *Succeed*");
-					item.setLocalUpdatedDate(Utils.getCurrentTime());
-					item.setServerUpdatedDate(item.getLocalUpdatedDate());
+                    int currentTime = Utils.getCurrentTime();
+                    item.setLocalUpdatedDate(currentTime);
+                    item.setServerUpdatedDate(currentTime);
 					dbManager.updateItem(item);
 					
 					itemTaskCount--;
@@ -983,7 +989,6 @@ public class EditReportActivity extends Activity
     
     private void sendCreateReportRequest()
     {
-		ReimProgressDialog.show();    	
     	CreateReportRequest request = new CreateReportRequest(report);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -993,7 +998,6 @@ public class EditReportActivity extends Activity
 				if (response.getStatus())
 				{
 					int currentTime = Utils.getCurrentTime();
-					
 					report.setServerID(response.getReportID());
 					report.setServerUpdatedDate(currentTime);
 					report.setLocalUpdatedDate(currentTime);
@@ -1038,7 +1042,6 @@ public class EditReportActivity extends Activity
 				if (response.getStatus())
 				{
 					int currentTime = Utils.getCurrentTime();
-					
 					report.setServerUpdatedDate(currentTime);
 					report.setLocalUpdatedDate(currentTime);
 					dbManager.updateReportByLocalID(report);
@@ -1074,14 +1077,6 @@ public class EditReportActivity extends Activity
     private void sendCreateReportCommentRequest(final String commentContent)
     {
 		ReimProgressDialog.show();
-
-		report.setTitle(titleEditText.getText().toString());
-		report.setCreatedDate(Utils.getCurrentTime());
-		report.setLocalUpdatedDate(report.getCreatedDate());
-		dbManager.insertReport(report);
-		report.setLocalID(dbManager.getLastInsertReportID());
-		dbManager.updateReportItems(chosenItemIDList, report.getLocalID());
-    	
     	CreateReportRequest request = new CreateReportRequest(report, commentContent);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -1091,7 +1086,6 @@ public class EditReportActivity extends Activity
 				if (response.getStatus())
 				{
 					int currentTime = Utils.getCurrentTime();
-					
 					report.setServerID(response.getReportID());
 					report.setServerUpdatedDate(currentTime);
 					report.setLocalUpdatedDate(currentTime);
@@ -1135,11 +1129,6 @@ public class EditReportActivity extends Activity
     private void sendModifyReportCommentRequest(final String commentContent)
     {
 		ReimProgressDialog.show();
-
-		report.setTitle(titleEditText.getText().toString());
-		dbManager.updateReportByLocalID(report);
-		dbManager.updateReportItems(chosenItemIDList, report.getLocalID());
-		
     	ModifyReportRequest request = new ModifyReportRequest(report, commentContent);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -1149,7 +1138,6 @@ public class EditReportActivity extends Activity
 				if (response.getStatus())
 				{
 					int currentTime = Utils.getCurrentTime();
-					
 					report.setServerUpdatedDate(currentTime);
 					report.setLocalUpdatedDate(currentTime);
 					dbManager.updateReportByLocalID(report);

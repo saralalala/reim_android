@@ -15,8 +15,8 @@ public class SyncDataResponse extends BaseResponse
 	private List<Item> itemList;
 	
 	private List<Report> reportList;
-	
-	public SyncDataResponse(Object httpResponse)
+
+    public SyncDataResponse(Object httpResponse)
 	{
 		super(httpResponse);
 	}

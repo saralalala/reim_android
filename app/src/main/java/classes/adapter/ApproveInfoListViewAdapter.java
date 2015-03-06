@@ -18,6 +18,7 @@ import com.rushucloud.reim.R;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -151,7 +152,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 			timeLayout.setVisibility(View.GONE);
 
             int visibility = user.equals(currentUser) ? View.GONE : View.VISIBLE;
-			alarmImageView.setVisibility(visibility);
+            alarmImageView.setVisibility(visibility);
 			alarmImageView.setOnClickListener(new OnClickListener()
 			{
 				public void onClick(View v)

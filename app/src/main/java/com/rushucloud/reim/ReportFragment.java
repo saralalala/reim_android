@@ -210,20 +210,10 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			{
 				MobclickAgent.onEvent(getActivity(), "UMENG_REPORT_NEW");
 
-				List<User> managerList = new ArrayList<User>();
-				int managerID = appPreference.getCurrentUser().getDefaultManagerID();
-				if (managerID > 0)
-				{
-					User user = dbManager.getUser(managerID);
-					if (user != null)
-					{
-						managerList.add(user);
-					}
-				}
-				
+				User currentUser = appPreference.getCurrentUser();
 				Report report = new Report();
-				report.setSender(appPreference.getCurrentUser());
-				report.setManagerList(managerList);
+				report.setSender(currentUser);
+				report.setManagerList(currentUser.buildBaseManagerList());
 				
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("report", report);				
