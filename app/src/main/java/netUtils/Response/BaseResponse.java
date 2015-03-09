@@ -1,14 +1,15 @@
 package netUtils.Response;
 
-import netUtils.NetworkConstant;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import android.content.Intent;
 
 import com.rushucloud.reim.start.SignInActivity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import classes.ReimApplication;
 import classes.utils.AppPreference;
-import android.content.Intent;
+import netUtils.NetworkConstant;
 
 public abstract class BaseResponse
 {

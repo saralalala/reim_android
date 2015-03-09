@@ -1,13 +1,22 @@
 package com.rushucloud.reim.report;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Response.DownloadImageResponse;
 
 import classes.User;
 import classes.adapter.MemberListViewAdapter;
@@ -15,20 +24,10 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Response.DownloadImageResponse;
 
 public class PickManagerActivity extends Activity
 {

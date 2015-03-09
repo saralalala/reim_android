@@ -1,20 +1,21 @@
 package classes;
 
+import android.util.SparseArray;
+import android.util.SparseIntArray;
+
+import com.rushucloud.reim.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
-import com.rushucloud.reim.R;
-
-import android.util.SparseArray;
-import android.util.SparseIntArray;
 
 public class Report implements Serializable
 {

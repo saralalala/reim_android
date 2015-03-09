@@ -1,21 +1,5 @@
 package com.rushucloud.reim.me;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.CommonResponse;
-import netUtils.Response.User.InviteResponse;
-import netUtils.Request.CommonRequest;
-import netUtils.Request.User.InviteRequest;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
-import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -27,6 +11,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.CommonRequest;
+import netUtils.Request.User.InviteRequest;
+import netUtils.Response.CommonResponse;
+import netUtils.Response.User.InviteResponse;
 
 public class SendInviteActivity extends Activity
 {	

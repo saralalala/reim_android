@@ -1,7 +1,5 @@
 package classes.widget;
 
-import com.rushucloud.reim.R;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -16,6 +14,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
 
 @SuppressLint("ClickableViewAccessibility") public class XListView extends ListView implements OnScrollListener {
 

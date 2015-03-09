@@ -1,10 +1,5 @@
 package com.rushucloud.reim.me;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.CommonResponse;
-import netUtils.Response.User.InviteReplyResponse;
-import netUtils.Request.CommonRequest;
-import netUtils.Request.User.InviteReplyRequest;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -16,6 +11,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
 import classes.Invite;
 import classes.ReimApplication;
 import classes.User;
@@ -25,10 +25,11 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.MainActivity;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.CommonRequest;
+import netUtils.Request.User.InviteReplyRequest;
+import netUtils.Response.CommonResponse;
+import netUtils.Response.User.InviteReplyResponse;
 
 
 public class MessageDetailActivity extends Activity
@@ -74,7 +75,7 @@ public class MessageDetailActivity extends Activity
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null)
 		{
-			invite = (Invite)bundle.getSerializable("invite");
+			invite = (Invite) bundle.getSerializable("invite");
 			fromPush = bundle.getBoolean("fromPush", false);
 		}
 	}
@@ -131,8 +132,9 @@ public class MessageDetailActivity extends Activity
 			}
 		});
 		rejectButton = ViewUtils.resizeLongButton(rejectButton);
-		
-		if (invite.getTypeCode() != Invite.TYPE_NEW)
+
+        String currentNickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
+		if (invite.getTypeCode() != Invite.TYPE_NEW || invite.getInvitor().equals(currentNickname))
 		{
 			agreeButton.setVisibility(View.GONE);
 			rejectButton.setVisibility(View.GONE);
@@ -161,17 +163,8 @@ public class MessageDetailActivity extends Activity
 							public void run()
 							{
 								ReimProgressDialog.dismiss();
-								Builder builder = new Builder(MessageDetailActivity.this);
-								builder.setTitle(R.string.tip);
-								builder.setMessage(R.string.prompt_invite_reply_sent);
-								builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
-															{
-																public void onClick(DialogInterface dialog, int which)
-																{
-																	goBackToMainActivity();
-																}
-															});
-								builder.create().show();
+                                ViewUtils.showToast(MessageDetailActivity.this, R.string.prompt_invite_reply_sent);
+                                goBackToMainActivity();
 							}
 						});
 					}

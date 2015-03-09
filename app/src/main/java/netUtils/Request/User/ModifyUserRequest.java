@@ -1,16 +1,15 @@
 package netUtils.Request.User;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import classes.User;
+import java.util.ArrayList;
+import java.util.List;
 
+import classes.User;
 import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
+import netUtils.URLDef;
 
 public class ModifyUserRequest extends BaseRequest
 {

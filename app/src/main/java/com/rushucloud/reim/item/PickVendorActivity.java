@@ -1,22 +1,5 @@
 package com.rushucloud.reim.item;
 
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Item.GetVendorsRequest;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Item.GetVendorsResponse;
-
-import classes.Vendor;
-import classes.adapter.VendorListViewAdapter;
-import classes.utils.PhoneUtils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,11 +9,27 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.List;
+
+import classes.Vendor;
+import classes.adapter.VendorListViewAdapter;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Item.GetVendorsRequest;
+import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.Item.GetVendorsResponse;
 
 public class PickVendorActivity extends Activity
 {

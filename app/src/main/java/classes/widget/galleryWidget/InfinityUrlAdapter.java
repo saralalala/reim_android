@@ -1,10 +1,11 @@
 package classes.widget.galleryWidget;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import java.util.List;
+
 import classes.widget.touchView.UrlTouchImageView;
 
 /**

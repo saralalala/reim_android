@@ -1,19 +1,24 @@
 package com.rushucloud.reim;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import netUtils.NetworkConstant;
-import netUtils.URLDef;
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Request.DownloadImageRequest;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.mechat.mechatlibrary.MCClient;
 import com.mechat.mechatlibrary.MCOnlineConfig;
 import com.mechat.mechatlibrary.MCUserConfig;
-import com.rushucloud.reim.me.MessageActivity;
 import com.rushucloud.reim.me.InvoiceTitleActivity;
+import com.rushucloud.reim.me.MessageActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.rushucloud.reim.me.SendInviteActivity;
 import com.rushucloud.reim.me.SettingsActivity;
@@ -32,6 +37,9 @@ import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import classes.Group;
 import classes.User;
 import classes.utils.AppPreference;
@@ -40,19 +48,11 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.support.v4.app.Fragment;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Response.DownloadImageResponse;
+import netUtils.URLDef;
 
 public class MeFragment extends Fragment
 {

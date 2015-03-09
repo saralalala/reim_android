@@ -1,17 +1,17 @@
 package classes;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 public class Category implements Serializable
 {

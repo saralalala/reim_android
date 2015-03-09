@@ -1,12 +1,5 @@
 package classes.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.rushucloud.reim.R;
-
-import classes.Category;
-import classes.utils.ViewUtils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +9,14 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.Category;
+import classes.utils.ViewUtils;
 
 public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 {

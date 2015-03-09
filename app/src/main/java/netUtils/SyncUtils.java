@@ -1,21 +1,10 @@
 package netUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.util.SparseIntArray;
 
-import netUtils.Response.SyncDataResponse;
-import netUtils.Response.UploadImageResponse;
-import netUtils.Response.Item.CreateItemResponse;
-import netUtils.Response.Item.ModifyItemResponse;
-import netUtils.Response.Report.CreateReportResponse;
-import netUtils.Response.Report.ModifyReportResponse;
-import netUtils.Request.SyncDataRequest;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.Item.CreateItemRequest;
-import netUtils.Request.Item.ModifyItemRequest;
-import netUtils.Request.Report.CreateReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
+import java.util.ArrayList;
+import java.util.List;
+
 import classes.Image;
 import classes.Item;
 import classes.Report;
@@ -23,6 +12,18 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import netUtils.Request.Item.CreateItemRequest;
+import netUtils.Request.Item.ModifyItemRequest;
+import netUtils.Request.Report.CreateReportRequest;
+import netUtils.Request.Report.ModifyReportRequest;
+import netUtils.Request.SyncDataRequest;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Response.Item.CreateItemResponse;
+import netUtils.Response.Item.ModifyItemResponse;
+import netUtils.Response.Report.CreateReportResponse;
+import netUtils.Response.Report.ModifyReportResponse;
+import netUtils.Response.SyncDataResponse;
+import netUtils.Response.UploadImageResponse;
 
 public abstract class SyncUtils
 {

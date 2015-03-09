@@ -1,16 +1,15 @@
 package netUtils.Request.User;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
-import netUtils.Request.BaseRequest;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import classes.User;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.BaseRequest;
+import netUtils.URLDef;
 
 public class RegisterRequest extends BaseRequest
 {

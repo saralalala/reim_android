@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.User;
-
 import netUtils.Response.BaseResponse;
 
 public class UserInfoResponse extends BaseResponse

@@ -1,6 +1,5 @@
 package classes.widget;
 
-import classes.utils.PhoneUtils;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,6 +8,8 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
+
+import classes.utils.PhoneUtils;
 
 public class ReimMonthBar extends View
 {

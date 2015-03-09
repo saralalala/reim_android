@@ -1,5 +1,7 @@
 package classes.utils;
 
+import android.text.TextUtils;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,8 +10,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import android.text.TextUtils;
 
 public class Utils
 {

@@ -1,15 +1,11 @@
 package classes;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.widget.ReimProgressDialog;
-import cn.beecloud.BeeCloud;
+import android.app.Application;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.text.TextUtils;
 
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
@@ -20,13 +16,16 @@ import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.File;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.app.Application;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
-import android.text.TextUtils;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.widget.ReimProgressDialog;
+import cn.beecloud.BeeCloud;
 
 public class ReimApplication extends Application
 {

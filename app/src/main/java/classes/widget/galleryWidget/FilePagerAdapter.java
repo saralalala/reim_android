@@ -17,12 +17,12 @@
  */
 package classes.widget.galleryWidget;
 
+import android.content.Context;
+import android.view.ViewGroup;
+
 import java.util.List;
 
 import classes.widget.touchView.FileTouchImageView;
-
-import android.content.Context;
-import android.view.ViewGroup;
 
 /**
  Class wraps file paths to adapter, then it instantiates {@link ru.truba.touchgallery.TouchView.FileTouchImageView} objects to paging up through them.

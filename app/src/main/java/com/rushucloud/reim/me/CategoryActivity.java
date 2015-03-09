@@ -1,23 +1,5 @@
 package com.rushucloud.reim.me;
 
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Category.DeleteCategoryResponse;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Category.DeleteCategoryRequest;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
-import classes.Category;
-import classes.adapter.CategoryListViewAdapter;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -35,6 +17,25 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.List;
+
+import classes.Category;
+import classes.adapter.CategoryListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.Category.DeleteCategoryRequest;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Response.Category.DeleteCategoryResponse;
+import netUtils.Response.DownloadImageResponse;
 
 public class CategoryActivity extends Activity
 {

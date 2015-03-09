@@ -1,7 +1,5 @@
 package classes.adapter;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.Intent;
 import android.util.DisplayMetrics;
@@ -10,18 +8,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
-import android.widget.ImageView;
-
-import classes.utils.ExtraCallBack;
-import classes.utils.PhoneUtils;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.rushucloud.reim.SingleImageActivity;
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.SingleImageActivity;
+
+import java.util.ArrayList;
+
+import classes.utils.ExtraCallBack;
+import classes.utils.PhoneUtils;
 
 public class GalleryAdapter extends BaseAdapter
 {

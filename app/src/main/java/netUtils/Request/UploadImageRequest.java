@@ -1,13 +1,13 @@
 package netUtils.Request;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 public class UploadImageRequest extends BaseRequest
 {

@@ -1,17 +1,19 @@
 package com.rushucloud.reim.report;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Report.ApproveInfoRequest;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Report.ApproveInfoResponse;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import classes.ApproveInfo;
 import classes.Report;
@@ -22,14 +24,12 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Report.ApproveInfoRequest;
+import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.Report.ApproveInfoResponse;
 
 public class ApproveInfoActivity extends Activity
 {
@@ -142,11 +142,12 @@ public class ApproveInfoActivity extends Activity
 				{
 					infoList.clear();
 					infoList.addAll(response.getInfoList());
-					
+
 					adapter.setInfoList(infoList);
 					
 					for (ApproveInfo info : infoList)
 					{
+                        info.setReportSenderID(report.getSender().getServerID());
 						User user = dbManager.getUser(info.getUserID());
 						if (user != null && user.hasUndownloadedAvatar())
 						{
@@ -167,13 +168,13 @@ public class ApproveInfoActivity extends Activity
 				else
 				{
 					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(ApproveInfoActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
-						}
-					});
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ApproveInfoActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                        }
+                    });
 				}
 			}
 		});

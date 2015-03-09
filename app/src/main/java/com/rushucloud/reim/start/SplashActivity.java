@@ -1,22 +1,21 @@
 package com.rushucloud.reim.start;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.User.SignInResponse;
-import netUtils.Request.User.SignInRequest;
-import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.ViewUtils;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.User.SignInRequest;
+import netUtils.Response.User.SignInResponse;
 
 public class SplashActivity extends Activity
 {

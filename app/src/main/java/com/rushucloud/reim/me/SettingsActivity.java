@@ -1,8 +1,14 @@
 package com.rushucloud.reim.me;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.User.SignOutResponse;
-import netUtils.Request.User.SignOutRequest;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.start.SignInActivity;
@@ -14,15 +20,9 @@ import classes.utils.AppPreference;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.User.SignOutRequest;
+import netUtils.Response.User.SignOutResponse;
 
 public class SettingsActivity extends Activity
 {	

@@ -1,8 +1,8 @@
 package netUtils.Request.User;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
+import netUtils.URLDef;
 
 public class SubordinatesInfoRequest extends BaseRequest
 {

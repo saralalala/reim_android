@@ -1,9 +1,5 @@
 package classes.widget;
 
-import classes.utils.PhoneUtils;
-
-import com.rushucloud.reim.R;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -17,6 +13,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
+
+import com.rushucloud.reim.R;
+
+import classes.utils.PhoneUtils;
 
 public class SegmentedGroup extends RadioGroup
 {

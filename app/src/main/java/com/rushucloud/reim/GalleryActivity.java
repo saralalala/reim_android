@@ -1,9 +1,5 @@
 package com.rushucloud.reim;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,10 +20,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import classes.adapter.GalleryAdapter;
-import classes.utils.ExtraCallBack;
-import classes.utils.PhoneUtils;
-
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -36,6 +28,14 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import classes.adapter.GalleryAdapter;
+import classes.utils.ExtraCallBack;
+import classes.utils.PhoneUtils;
 
 public class GalleryActivity extends Activity
 {

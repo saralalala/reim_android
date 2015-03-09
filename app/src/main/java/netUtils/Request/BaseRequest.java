@@ -1,18 +1,6 @@
 package netUtils.Request;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.HttpUtils;
-import netUtils.URLDef;
+import android.text.TextUtils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -31,7 +19,20 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import android.text.TextUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import netUtils.HttpConnectionCallback;
+import netUtils.HttpUtils;
+import netUtils.NetworkConstant;
+import netUtils.URLDef;
 
 public abstract class BaseRequest
 {
@@ -45,8 +46,15 @@ public abstract class BaseRequest
 		this.url = URLDef.URL_PREFIX;
 		params = null;
 	}
-	
-	protected String getUrl()
+
+    protected BaseRequest(int connectTimeout, int socketTimeout)
+    {
+        this.httpClient = HttpUtils.getHttpClient(connectTimeout, socketTimeout);
+        this.url = URLDef.URL_PREFIX;
+        params = null;
+    }
+
+    protected String getUrl()
 	{
 		return url;
 	}

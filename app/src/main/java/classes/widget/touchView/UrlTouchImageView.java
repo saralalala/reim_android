@@ -26,11 +26,11 @@ import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.rushucloud.reim.R;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-
-import com.rushucloud.reim.R;
 
 import classes.widget.touchView.InputStreamWrapper.InputStreamProgressListener;
 

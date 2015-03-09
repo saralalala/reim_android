@@ -1,10 +1,12 @@
 package com.rushucloud.reim.me;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.Tag.CreateTagResponse;
-import netUtils.Response.Tag.ModifyTagResponse;
-import netUtils.Request.Tag.CreateTagRequest;
-import netUtils.Request.Tag.ModifyTagRequest;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -15,13 +17,11 @@ import classes.utils.DBManager;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.Tag.CreateTagRequest;
+import netUtils.Request.Tag.ModifyTagRequest;
+import netUtils.Response.Tag.CreateTagResponse;
+import netUtils.Response.Tag.ModifyTagResponse;
 
 public class EditTagActivity extends Activity
 {

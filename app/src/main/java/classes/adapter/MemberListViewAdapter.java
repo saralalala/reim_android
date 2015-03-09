@@ -1,12 +1,5 @@
 package classes.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import classes.User;
-import classes.utils.ViewUtils;
-
-import com.rushucloud.reim.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +9,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.User;
+import classes.utils.ViewUtils;
 
 public class MemberListViewAdapter extends BaseAdapter
 {

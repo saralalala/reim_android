@@ -1,10 +1,5 @@
 package com.rushucloud.reim.item;
 
-import classes.adapter.LocationListViewAdapter;
-import classes.utils.ViewUtils;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,11 +8,17 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import classes.adapter.LocationListViewAdapter;
+import classes.utils.ViewUtils;
 
 public class PickLocationActivity extends Activity
 {

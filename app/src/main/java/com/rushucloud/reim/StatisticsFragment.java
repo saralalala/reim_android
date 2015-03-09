@@ -1,20 +1,18 @@
 package com.rushucloud.reim;
 
-import java.util.HashMap;
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.StatisticsResponse;
-import netUtils.Request.StatisticsRequest;
-
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.support.v4.app.Fragment;
+
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.HashMap;
+import java.util.List;
 
 import classes.Category;
 import classes.ReimApplication;
@@ -30,8 +28,9 @@ import classes.widget.ReimPie;
 import classes.widget.ReimProgressDialog;
 import classes.widget.XListView;
 import classes.widget.XListView.IXListViewListener;
-
-import com.umeng.analytics.MobclickAgent;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.StatisticsRequest;
+import netUtils.Response.StatisticsResponse;
 
 public class StatisticsFragment extends Fragment
 {

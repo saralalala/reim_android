@@ -1,10 +1,10 @@
 package com.rushucloud.reim.start;
 
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class NewFeaturesActivity extends Activity
 {

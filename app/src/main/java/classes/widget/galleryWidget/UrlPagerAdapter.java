@@ -17,12 +17,12 @@
  */
 package classes.widget.galleryWidget;
 
+import android.content.Context;
+import android.view.ViewGroup;
+
 import java.util.List;
 
 import classes.widget.touchView.UrlTouchImageView;
-
-import android.content.Context;
-import android.view.ViewGroup;
 
 
 /**

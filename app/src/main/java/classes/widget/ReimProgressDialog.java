@@ -1,13 +1,13 @@
 package classes.widget;
 
-import com.rushucloud.reim.R;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.rushucloud.reim.R;
 
 public class ReimProgressDialog
 {

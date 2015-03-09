@@ -6,6 +6,7 @@ import org.json.JSONObject;
 public class ApproveInfo implements Comparable<ApproveInfo>
 {
 	private int userID = -1;
+    private int reportSenderID = -1;
 	private int status = -1;
 	private String approveTime = "";
 	private String approveDate = "";
@@ -36,17 +37,28 @@ public class ApproveInfo implements Comparable<ApproveInfo>
 	{
 		return userID;
 	}
-
 	public void setUserID(int userID)
 	{
 		this.userID = userID;
 	}
-	
+
+    public int getReportSenderID()
+    {
+        return reportSenderID;
+    }
+    public void setReportSenderID(int reportSenderID)
+    {
+        this.reportSenderID = reportSenderID;
+    }
+
 	public int getStatus()
 	{
 		return status;
 	}
-
+    public int getRealStatus()
+    {
+        return status % 100;
+    }
 	public void setStatus(int status)
 	{
 		this.status = status;
@@ -56,7 +68,6 @@ public class ApproveInfo implements Comparable<ApproveInfo>
 	{
 		return approveTime;
 	}
-
 	public void setApproveTime(String approveTime)
 	{
 		this.approveTime = approveTime;
@@ -66,7 +77,6 @@ public class ApproveInfo implements Comparable<ApproveInfo>
 	{
 		return approveDate;
 	}
-
 	public void setApproveDate(String approveDate)
 	{
 		this.approveDate = approveDate;
@@ -76,7 +86,6 @@ public class ApproveInfo implements Comparable<ApproveInfo>
 	{
 		return step;
 	}
-
 	public void setStep(int step)
 	{
 		this.step = step;
@@ -84,7 +93,18 @@ public class ApproveInfo implements Comparable<ApproveInfo>
 
 	public boolean hasApproved()
 	{
-		return status == Report.STATUS_APPROVED || status == Report.STATUS_REJECTED;
+        if (status >= 100)
+        {
+            return true;
+        }
+        else if (userID == reportSenderID)
+        {
+            return getRealStatus() != Report.STATUS_SUBMITTED;
+        }
+        else
+        {
+            return getRealStatus() == Report.STATUS_APPROVED || getRealStatus() == Report.STATUS_REJECTED;
+        }
 	}
 	
 	public int compareTo(ApproveInfo another)

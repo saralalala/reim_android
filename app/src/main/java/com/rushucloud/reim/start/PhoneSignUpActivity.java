@@ -1,25 +1,5 @@
 package com.rushucloud.reim.start;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.User.SignInResponse;
-import netUtils.Response.User.RegisterResponse;
-import netUtils.Response.User.VerifyCodeResponse;
-import netUtils.Request.User.RegisterRequest;
-import netUtils.Request.User.SignInRequest;
-import netUtils.Request.User.VerifyCodeRequest;
-import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.MainActivity;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
-
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -34,6 +14,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.User.RegisterRequest;
+import netUtils.Request.User.SignInRequest;
+import netUtils.Request.User.VerifyCodeRequest;
+import netUtils.Response.User.RegisterResponse;
+import netUtils.Response.User.SignInResponse;
+import netUtils.Response.User.VerifyCodeResponse;
 
 public class PhoneSignUpActivity extends Activity
 {	

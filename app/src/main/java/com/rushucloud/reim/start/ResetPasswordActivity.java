@@ -1,22 +1,11 @@
 package com.rushucloud.reim.start;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.User.ResetPasswordResponse;
-import netUtils.Request.User.ResetPasswordRequest;
-
-import classes.utils.PhoneUtils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,6 +14,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.User.ResetPasswordRequest;
+import netUtils.Response.User.ResetPasswordResponse;
 
 public class ResetPasswordActivity extends Activity
 {

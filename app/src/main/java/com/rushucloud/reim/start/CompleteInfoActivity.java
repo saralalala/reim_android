@@ -1,27 +1,5 @@
 package com.rushucloud.reim.start;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.Response.UploadImageResponse;
-import netUtils.Response.User.ModifyUserResponse;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.User.ModifyUserRequest;
-import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.SingleImageActivity;
-import com.rushucloud.reim.MainActivity;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +17,28 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+
+import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.R;
+import com.rushucloud.reim.SingleImageActivity;
+import com.umeng.analytics.MobclickAgent;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Request.User.ModifyUserRequest;
+import netUtils.Response.UploadImageResponse;
+import netUtils.Response.User.ModifyUserResponse;
 
 public class CompleteInfoActivity extends Activity
 {

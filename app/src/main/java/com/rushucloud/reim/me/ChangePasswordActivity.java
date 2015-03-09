@@ -1,15 +1,5 @@
 package com.rushucloud.reim.me;
 
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.User.ChangePasswordResponse;
-import netUtils.Request.User.ChangePasswordRequest;
-import classes.utils.AppPreference;
-import classes.utils.PhoneUtils;
-import classes.utils.ViewUtils;
-
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -23,6 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import classes.utils.AppPreference;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.User.ChangePasswordRequest;
+import netUtils.Response.User.ChangePasswordResponse;
 
 public class ChangePasswordActivity extends Activity
 {

@@ -122,7 +122,7 @@
     <string name="choose_manager">选择审批人</string>
     <string name="choose_cc">选择抄送人</string>
     <string name="submit">提交</string>
-    <string name="approve">同意</string>
+    <string name="approve">通过</string>
     <string name="reject">拒绝</string>
     <string name="reject_reason">拒绝理由：</string>
     <string name="message">留言</string>
@@ -132,9 +132,11 @@
     <string name="new_item">新建消费</string>
     <string name="approve_info_hint">审批情况 ></string>
     <string name="approve_info">审批情况</string>
+    <string name="ready_to_submitted">待提交</string>
+    <string name="submitted">已提交</string>
+    <string name="ready_to_approved">待审批</string>
     <string name="approved">已通过</string>
     <string name="rejected">已退回</string>
-    <string name="ready_to_approved">待审批</string>
     <string name="report_no_name">无标题报告</string>
     <string name="continue_to_choose">继续选择</string>
     <string name="choose_following_managers">选择后续审批人</string>

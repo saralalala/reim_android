@@ -1,26 +1,5 @@
 package com.rushucloud.reim.item;
 
-import java.util.ArrayList;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Request.DownloadImageRequest;
-import classes.Category;
-import classes.Image;
-import classes.Item;
-import classes.ReimApplication;
-import classes.User;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.MultipleImageActivity;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -35,6 +14,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.rushucloud.reim.MultipleImageActivity;
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+
+import classes.Category;
+import classes.Image;
+import classes.Item;
+import classes.ReimApplication;
+import classes.User;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Response.DownloadImageResponse;
 
 public class ShowItemActivity extends Activity
 {

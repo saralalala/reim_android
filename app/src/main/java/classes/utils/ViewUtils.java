@@ -9,18 +9,19 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupWindow;
-import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
-import classes.ReimApplication;
+import android.widget.Toast;
 
 import com.rushucloud.reim.R;
+
+import classes.ReimApplication;
 
 public class ViewUtils
 {

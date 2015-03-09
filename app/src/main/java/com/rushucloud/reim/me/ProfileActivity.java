@@ -1,24 +1,5 @@
 package com.rushucloud.reim.me;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.Response.UploadImageResponse;
-import netUtils.Request.UploadImageRequest;
-import com.rushucloud.reim.SingleImageActivity;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-import classes.Group;
-import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.CircleImageView;
-import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -35,6 +16,27 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.rushucloud.reim.SingleImageActivity;
+import com.umeng.analytics.MobclickAgent;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import classes.Group;
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.CircleImageView;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Response.UploadImageResponse;
 
 public class ProfileActivity extends Activity
 {

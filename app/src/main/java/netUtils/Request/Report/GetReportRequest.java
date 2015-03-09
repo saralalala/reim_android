@@ -1,8 +1,8 @@
 package netUtils.Request.Report;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
+import netUtils.URLDef;
 
 public class GetReportRequest extends BaseRequest
 {

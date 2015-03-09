@@ -1,31 +1,5 @@
 package com.rushucloud.reim.report;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Report.GetReportResponse;
-import netUtils.Response.Report.ModifyReportResponse;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Report.GetReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
-import classes.Comment;
-import classes.Report;
-import classes.User;
-import classes.adapter.CommentListViewAdapter;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.ReimBroadcastReceiver;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +12,32 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.Comment;
+import classes.Report;
+import classes.User;
+import classes.adapter.CommentListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.ReimBroadcastReceiver;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Report.GetReportRequest;
+import netUtils.Request.Report.ModifyReportRequest;
+import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.Report.GetReportResponse;
+import netUtils.Response.Report.ModifyReportResponse;
 
 public class CommentActivity extends Activity
 {
@@ -202,7 +202,10 @@ public class CommentActivity extends Activity
 		{
 			commentListView.setVisibility(View.VISIBLE);
 			commentTextView.setVisibility(View.GONE);
-			
+
+            adapter.setComments(commentList);
+            adapter.notifyDataSetChanged();
+
 			if (PhoneUtils.isNetworkConnected())
 			{
 				for (Comment comment : commentList)
@@ -330,8 +333,6 @@ public class CommentActivity extends Activity
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(CommentActivity.this, R.string.succeed_in_sending_comment);
 							commentEditText.setText("");
-							adapter.setComments(commentList);
-							adapter.notifyDataSetChanged();
 							refreshView();
 						}
 					});

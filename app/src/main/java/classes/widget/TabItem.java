@@ -1,10 +1,5 @@
 package classes.widget;
 
-import classes.ReimApplication;
-import classes.utils.PhoneUtils;
-
-import com.rushucloud.reim.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -20,6 +15,11 @@ import android.os.Looper;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.rushucloud.reim.R;
+
+import classes.ReimApplication;
+import classes.utils.PhoneUtils;
 
 public class TabItem extends View
 {

@@ -17,7 +17,6 @@
  */
 package classes.widget.galleryWidget;
 
-import classes.widget.touchView.TouchImageView;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -27,6 +26,8 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import classes.widget.touchView.TouchImageView;
 
 /**
  This class implements method to help <b>TouchImageView</b> fling, draggin and scaling.

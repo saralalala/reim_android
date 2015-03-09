@@ -1,13 +1,12 @@
 package com.rushucloud.reim;
 
-import classes.widget.subscaleview.SubsamplingScaleImageView;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+
+import com.umeng.analytics.MobclickAgent;
+
+import classes.widget.subscaleview.SubsamplingScaleImageView;
 
 public class SingleImageActivity extends Activity
 {	

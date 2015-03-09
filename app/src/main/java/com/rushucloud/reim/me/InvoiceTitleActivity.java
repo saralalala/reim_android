@@ -1,15 +1,15 @@
 package com.rushucloud.reim.me;
 
-import classes.Group;
-import classes.utils.AppPreference;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import classes.Group;
+import classes.utils.AppPreference;
 
 public class InvoiceTitleActivity extends Activity
 {	

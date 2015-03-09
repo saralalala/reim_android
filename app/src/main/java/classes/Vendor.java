@@ -1,9 +1,9 @@
 package classes;
 
+import android.graphics.Bitmap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.graphics.Bitmap;
 
 public class Vendor
 {

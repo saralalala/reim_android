@@ -1,7 +1,5 @@
 package classes.widget;
 
-import com.rushucloud.reim.R;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -14,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
 
 @SuppressLint("InflateParams") public class XListViewHeader extends LinearLayout {
 	private LinearLayout mContainer;

@@ -1,24 +1,5 @@
 package com.rushucloud.reim.report;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.Report.ApproveReportResponse;
-import netUtils.Request.Report.ApproveReportRequest;
-import classes.ReimApplication;
-import classes.Report;
-import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +9,25 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.ReimApplication;
+import classes.Report;
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.Report.ApproveReportRequest;
+import netUtils.Response.Report.ApproveReportResponse;
 
 public class FollowingActivity extends Activity
 {
@@ -156,9 +156,7 @@ public class FollowingActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				report.setManagerList(null);
-				report.setCCList(null);
-				sendApproveReportRequest();
+				sendApproveReportRequest(true);
 			}
 		});	
 
@@ -167,17 +165,17 @@ public class FollowingActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				sendApproveReportRequest();
+				sendApproveReportRequest(false);
 			}
 		});
 	}
   
-    private void sendApproveReportRequest()
+    private void sendApproveReportRequest(boolean isFinished)
     {
     	ReimProgressDialog.show();
     	report.setMyDecision(Report.STATUS_APPROVED);
     	
-    	ApproveReportRequest request = new ApproveReportRequest(report);
+    	ApproveReportRequest request = new ApproveReportRequest(report, isFinished);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

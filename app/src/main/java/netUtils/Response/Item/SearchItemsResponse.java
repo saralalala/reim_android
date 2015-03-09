@@ -1,10 +1,11 @@
 package netUtils.Response.Item;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import classes.Item;
 import netUtils.Response.BaseResponse;
 

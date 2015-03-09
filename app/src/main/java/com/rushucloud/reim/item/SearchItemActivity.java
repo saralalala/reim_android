@@ -1,13 +1,25 @@
 package com.rushucloud.reim.item;
 
-import java.util.List;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.Item.SearchItemsResponse;
-import netUtils.Request.Item.SearchItemsRequest;
+import java.util.List;
 
 import classes.Item;
 import classes.Report;
@@ -16,21 +28,9 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
-import android.support.v4.view.MenuItemCompat;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.Item.SearchItemsRequest;
+import netUtils.Response.Item.SearchItemsResponse;
 
 public class SearchItemActivity extends Activity
 {

@@ -1,5 +1,10 @@
 package netUtils.Request.Item;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,14 +12,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
 import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
+import netUtils.URLDef;
 
 public class GetVendorsRequest extends BaseRequest
 {

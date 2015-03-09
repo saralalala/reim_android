@@ -1,8 +1,8 @@
 package netUtils.Request.Tag;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
+import netUtils.URLDef;
 
 public class DeleteTagRequest extends BaseRequest
 {

@@ -1,25 +1,5 @@
 package com.rushucloud.reim.report;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import com.rushucloud.reim.R;
-import com.rushucloud.reim.item.EditItemActivity;
-import com.umeng.analytics.MobclickAgent;
-
-import classes.Category;
-import classes.Item;
-import classes.Report;
-import classes.Tag;
-import classes.adapter.ReportItemListViewAdapter;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-import classes.widget.SegmentedGroup;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,16 +13,37 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.rushucloud.reim.item.EditItemActivity;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import classes.Category;
+import classes.Item;
+import classes.Report;
+import classes.Tag;
+import classes.adapter.ReportItemListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import classes.widget.SegmentedGroup;
 
 public class UnarchivedItemsActivity extends Activity implements OnClickListener
 {

@@ -1,12 +1,5 @@
 package com.rushucloud.reim.start;
 
-import classes.utils.DBManager;
-import classes.utils.ViewUtils;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import classes.utils.DBManager;
+import classes.utils.ViewUtils;
 
 public class WelcomeActivity extends Activity
 {

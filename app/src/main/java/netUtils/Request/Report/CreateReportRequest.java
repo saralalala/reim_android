@@ -1,18 +1,18 @@
 package netUtils.Request.Report;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import classes.Report;
 import classes.User;
 import classes.utils.DBManager;
 import classes.utils.Utils;
 import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
+import netUtils.URLDef;
 
 public class CreateReportRequest extends BaseRequest
 {

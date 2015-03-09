@@ -20,8 +20,14 @@ import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -29,18 +35,19 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.rushucloud.reim.R.styleable;
+
 import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import classes.widget.subscaleview.decoder.ImageDecoder;
 import classes.widget.subscaleview.decoder.SkiaImageDecoder;
-
-import com.rushucloud.reim.R.styleable;
 
 /**
  * An alternative to {@link SubsamplingScaleImageView}, this reproduces all the same event handling, animation and

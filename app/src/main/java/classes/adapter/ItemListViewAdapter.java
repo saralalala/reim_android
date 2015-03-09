@@ -1,18 +1,5 @@
 package classes.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import classes.Category;
-import classes.Item;
-import classes.ReimApplication;
-import classes.Tag;
-import classes.User;
-import classes.utils.Utils;
-
-import com.rushucloud.reim.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +10,19 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import classes.Category;
+import classes.Item;
+import classes.ReimApplication;
+import classes.Tag;
+import classes.User;
+import classes.utils.Utils;
 
 public class ItemListViewAdapter extends BaseAdapter
 {

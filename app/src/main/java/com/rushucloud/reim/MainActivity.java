@@ -1,38 +1,12 @@
 package com.rushucloud.reim;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.UDPClient;
-import netUtils.UDPConnectionCallback;
-import netUtils.Response.EventsResponse;
-import netUtils.Response.FeedbackResponse;
-import netUtils.Response.Group.GetGroupResponse;
-import netUtils.Request.EventsReadRequest;
-import netUtils.Request.EventsRequest;
-import netUtils.Request.FeedbackRequest;
-import netUtils.Request.Group.GetGroupRequest;
-import classes.ReimApplication;
-import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-import classes.widget.TabItem;
-
-import com.rushucloud.reim.item.EditItemActivity;
-import com.umeng.analytics.MobclickAgent;
-
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBarActivity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -42,6 +16,32 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+
+import com.rushucloud.reim.item.EditItemActivity;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.ReimApplication;
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import classes.widget.TabItem;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.EventsReadRequest;
+import netUtils.Request.EventsRequest;
+import netUtils.Request.FeedbackRequest;
+import netUtils.Request.Group.GetGroupRequest;
+import netUtils.Response.EventsResponse;
+import netUtils.Response.FeedbackResponse;
+import netUtils.Response.Group.GetGroupResponse;
+import netUtils.UDPClient;
+import netUtils.UDPConnectionCallback;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener
 {

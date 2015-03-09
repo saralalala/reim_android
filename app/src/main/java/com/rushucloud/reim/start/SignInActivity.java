@@ -1,21 +1,5 @@
 package com.rushucloud.reim.start;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.User.SignInResponse;
-import netUtils.Request.User.SignInRequest;
-import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.MainActivity;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +14,21 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.User.SignInRequest;
+import netUtils.Response.User.SignInResponse;
 
 public class SignInActivity extends Activity implements View.OnClickListener
 {

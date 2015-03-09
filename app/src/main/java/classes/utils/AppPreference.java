@@ -1,19 +1,18 @@
 package classes.utils;
 
-import java.io.File;
-
-import classes.Group;
-import classes.User;
-
-import com.avos.avoscloud.AVInstallation;
-
-
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Environment;
+
+import com.avos.avoscloud.AVInstallation;
+
+import java.io.File;
+
+import classes.Group;
+import classes.User;
 
 public class AppPreference
 {

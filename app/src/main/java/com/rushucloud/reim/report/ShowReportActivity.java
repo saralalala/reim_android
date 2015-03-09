@@ -1,11 +1,22 @@
 package com.rushucloud.reim.report;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+
+import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.R;
+import com.rushucloud.reim.item.ShowItemActivity;
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.List;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.Response.Report.GetReportResponse;
-import netUtils.Request.Report.GetReportRequest;
 import classes.Comment;
 import classes.Item;
 import classes.ReimApplication;
@@ -16,21 +27,10 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.MainActivity;
-import com.rushucloud.reim.R;
-import com.rushucloud.reim.item.ShowItemActivity;
-import com.umeng.analytics.MobclickAgent;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.Report.GetReportRequest;
+import netUtils.Response.Report.GetReportResponse;
 
 public class ShowReportActivity extends Activity
 {

@@ -1,13 +1,5 @@
 package classes.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import classes.Comment;
-import classes.User;
-import classes.utils.Utils;
-
-import com.rushucloud.reim.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,14 +10,26 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rushucloud.reim.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.Comment;
+import classes.User;
+import classes.utils.DBManager;
+import classes.utils.Utils;
+
 public class CommentListViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
+    private DBManager dbManager;
 	private List<Comment> commentList;
 	
 	public CommentListViewAdapter(Context context, List<Comment> comments)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
+        this.dbManager = DBManager.getDBManager();
 		this.commentList = new ArrayList<Comment>(comments);
 	}
 	
@@ -45,7 +49,7 @@ public class CommentListViewAdapter extends BaseAdapter
 		
 		avatarImageView.setImageResource(R.drawable.default_avatar);
 		
-		User user = comment.getReviewer();
+		User user = dbManager.getUser(comment.getReviewer().getServerID());
 		if (user != null)
 		{
 			if (!user.getAvatarPath().isEmpty())

@@ -1,9 +1,5 @@
 package com.rushucloud.reim.me;
 
-import classes.utils.PhoneUtils;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -11,6 +7,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import classes.utils.PhoneUtils;
 
 public class AboutActivity extends Activity
 {

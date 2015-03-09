@@ -1,10 +1,10 @@
 package netUtils.Response.Report;
 
-import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import classes.Report;
 import netUtils.Response.BaseResponse;

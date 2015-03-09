@@ -1,15 +1,14 @@
 package netUtils.Response.Report;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.ApproveInfo;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import classes.ApproveInfo;
 import netUtils.Response.BaseResponse;
 
 public class ApproveInfoResponse extends BaseResponse

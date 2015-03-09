@@ -61,10 +61,11 @@
 			    android:clickable="false"
 			    android:background="@color/major_light" >
 			
-			    <RelativeLayout
+			    <LinearLayout
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
-			        android:layout_marginTop="40dp"
+                    android:orientation="horizontal"
+			        android:layout_marginTop="20dp"
 			        android:layout_marginLeft="16dp"
 			        android:layout_marginRight="16dp"
 			    	android:focusable="true"
@@ -72,11 +73,11 @@
 			
 			        <EditText
 			            android:id="@+id/titleEditText"
-			            android:layout_width="match_parent"
-			            android:layout_height="wrap_content"
-						android:layout_centerVertical="true"
-						android:layout_toLeftOf="@+id/statusTextView"
+			            android:layout_width="0dp"
+			            android:layout_height="50dp"
+                        android:layout_weight="1"
 						android:layout_marginRight="14dp"
+                        android:gravity="bottom"
 			            android:background="@null"
 			            android:inputType="textMultiLine"			            
 			            android:hint="@string/input_report_title"
@@ -87,14 +88,14 @@
 			            android:id="@+id/statusTextView"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
-						android:layout_alignParentRight="true"
-						android:layout_marginTop="4dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="2dp"
 			            android:paddingLeft="3dp"
 			            android:paddingRight="3dp"
 			            android:gravity="center"
 			            android:textColor="@color/major_light" />
 			
-			    </RelativeLayout>
+			    </LinearLayout>
 
 			    <RelativeLayout
 			        android:layout_width="match_parent"
@@ -145,7 +146,6 @@
 		            <TextView
 		                android:layout_width="wrap_content"
 		                android:layout_height="wrap_content"
-		                android:layout_marginTop="22dp"
 		                android:layout_marginLeft="16dp"
 		                android:text="@string/submit_to"
 		                android:textColor="@color/hint_grey"
@@ -155,8 +155,8 @@
 		                android:id="@+id/managerTextView"
 		                android:layout_width="match_parent"
 		                android:layout_height="wrap_content"
-		                android:layout_marginTop="22dp"
-		                android:layout_marginBottom="22dp"
+		                android:paddingTop="22dp"
+		                android:paddingBottom="22dp"
 		                android:layout_marginLeft="22dp"
 		                android:layout_marginRight="16dp"
 		                android:textColor="@color/font_major_dark"
@@ -178,7 +178,6 @@
 		            <TextView
 		                android:layout_width="wrap_content"
 		                android:layout_height="wrap_content"
-		                android:layout_marginTop="22dp"
 		                android:layout_marginLeft="16dp"
 		                android:text="@string/cc"
 		                android:textColor="@color/hint_grey"
@@ -188,8 +187,8 @@
 		                android:id="@+id/ccTextView"
 		                android:layout_width="match_parent"
 		                android:layout_height="wrap_content"
-		                android:layout_marginTop="22dp"
-		                android:layout_marginBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:paddingBottom="22dp"
 		                android:layout_marginLeft="22dp"
 		                android:layout_marginRight="16dp"
 		                android:textColor="@color/font_major_dark"

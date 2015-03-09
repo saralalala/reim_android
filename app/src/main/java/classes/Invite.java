@@ -19,6 +19,7 @@ public class Invite implements Serializable
 	public static final int TYPE_ACCEPTED = 2;
 	
 	private String inviteCode = "";
+    private String invitor = "";
 	private String message = "";
 	private int updateTime = -1;
 	private int typeCode = -1;
@@ -31,7 +32,16 @@ public class Invite implements Serializable
 	{
 		this.inviteCode = inviteCode;
 	}
-	
+
+    public String getInvitor()
+    {
+        return invitor;
+    }
+    public void setInvitor(String invitor)
+    {
+        this.invitor = invitor;
+    }
+
 	public String getMessage()
 	{
 		return message;

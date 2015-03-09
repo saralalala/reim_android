@@ -1,14 +1,5 @@
 package classes.utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-
-import netUtils.NetworkConstant;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -17,8 +8,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Matrix;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -26,9 +17,19 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import classes.ReimApplication;
 
 import com.rushucloud.reim.R;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
+
+import classes.ReimApplication;
+import netUtils.NetworkConstant;
 
 public class PhoneUtils
 {

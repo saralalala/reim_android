@@ -1,40 +1,5 @@
 package com.rushucloud.reim.item;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Request.DownloadImageRequest;
-import classes.Category;
-import classes.Image;
-import classes.Item;
-import classes.ReimApplication;
-import classes.Report;
-import classes.Tag;
-import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-import cn.beecloud.BCLocation;
-
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.location.LocationClientOption.LocationMode;
-import com.rushucloud.reim.GalleryActivity;
-import com.rushucloud.reim.MultipleImageActivity;
-import com.rushucloud.reim.R;
-import com.rushucloud.reim.report.EditReportActivity;
-import com.umeng.analytics.MobclickAgent;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -52,12 +17,12 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -70,6 +35,42 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
+
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
+import com.rushucloud.reim.GalleryActivity;
+import com.rushucloud.reim.MultipleImageActivity;
+import com.rushucloud.reim.R;
+import com.rushucloud.reim.report.EditReportActivity;
+import com.umeng.analytics.MobclickAgent;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import classes.Category;
+import classes.Image;
+import classes.Item;
+import classes.ReimApplication;
+import classes.Report;
+import classes.Tag;
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import cn.beecloud.BCLocation;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Response.DownloadImageResponse;
 
 public class EditItemActivity extends Activity
 {

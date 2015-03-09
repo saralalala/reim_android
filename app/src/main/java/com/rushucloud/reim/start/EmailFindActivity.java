@@ -1,16 +1,5 @@
 package com.rushucloud.reim.start;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.User.ForgotPasswordResponse;
-import netUtils.Request.User.ForgotPasswordRequest;
-
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -25,6 +14,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.User.ForgotPasswordRequest;
+import netUtils.Response.User.ForgotPasswordResponse;
 
 public class EmailFindActivity extends Activity
 {	

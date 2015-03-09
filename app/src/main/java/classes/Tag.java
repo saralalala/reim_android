@@ -1,19 +1,19 @@
 package classes;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.utils.DBManager;
-import classes.utils.Utils;
-import classes.utils.PhoneUtils;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.text.TextUtils;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
 
 
 public class Tag implements Serializable

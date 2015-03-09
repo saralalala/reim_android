@@ -1,19 +1,18 @@
 
 package netUtils.Response.User;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import netUtils.Response.BaseResponse;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import classes.Category;
 import classes.Group;
 import classes.Tag;
 import classes.User;
+import netUtils.Response.BaseResponse;
 
 public class SignInResponse extends BaseResponse
 {

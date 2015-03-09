@@ -1,15 +1,14 @@
 package netUtils.Response.Group;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import classes.Group;
 import classes.User;
-
 import netUtils.Response.BaseResponse;
 
 public class GetGroupResponse extends BaseResponse

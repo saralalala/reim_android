@@ -1,14 +1,14 @@
 package netUtils.Request.User;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
+import netUtils.URLDef;
 
 public class SignInRequest extends BaseRequest
 {
 	public SignInRequest()
 	{
-		super();
+		super(5, 2);
 
 		appendUrl(URLDef.URL_SIGN_IN);
 	}

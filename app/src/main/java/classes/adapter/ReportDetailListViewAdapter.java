@@ -1,5 +1,20 @@
 package classes.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.rushucloud.reim.report.ApproveInfoActivity;
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,21 +26,6 @@ import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.Utils;
-
-import com.rushucloud.reim.R;
-import com.rushucloud.reim.report.ApproveInfoActivity;
-import com.umeng.analytics.MobclickAgent;
-
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class ReportDetailListViewAdapter extends BaseAdapter
 {

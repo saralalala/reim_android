@@ -1,11 +1,11 @@
 package classes;
 
-import java.io.File;
-import java.util.List;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+
+import java.io.File;
+import java.util.List;
 
 public class Image
 {

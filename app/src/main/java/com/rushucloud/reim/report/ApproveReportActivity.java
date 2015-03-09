@@ -1,14 +1,29 @@
 package com.rushucloud.reim.report;
 
+import android.app.Activity;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.R;
+import com.rushucloud.reim.item.ShowItemActivity;
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.Response.Report.ApproveReportResponse;
-import netUtils.Response.Report.GetReportResponse;
-import netUtils.Request.Report.ApproveReportRequest;
-import netUtils.Request.Report.GetReportRequest;
 import classes.Comment;
 import classes.Item;
 import classes.ReimApplication;
@@ -21,27 +36,12 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.MainActivity;
-import com.rushucloud.reim.R;
-import com.rushucloud.reim.item.ShowItemActivity;
-import com.umeng.analytics.MobclickAgent;
-
-import android.app.Activity;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.Report.ApproveReportRequest;
+import netUtils.Request.Report.GetReportRequest;
+import netUtils.Response.Report.ApproveReportResponse;
+import netUtils.Response.Report.GetReportResponse;
 
 public class ApproveReportActivity extends Activity
 {
@@ -171,8 +171,6 @@ public class ApproveReportActivity extends Activity
 						public void onClick(DialogInterface dialog, int which)
 						{
 					    	report.setMyDecision(Report.STATUS_APPROVED);
-					    	report.setManagerList(null);
-					    	report.setCCList(null);
 					    	sendApproveReportRequest();
 						}
 					});
@@ -358,7 +356,7 @@ public class ApproveReportActivity extends Activity
     {
 		ReimProgressDialog.show();
 		
-    	ApproveReportRequest request = new ApproveReportRequest(report);
+    	ApproveReportRequest request = new ApproveReportRequest(report, true);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -366,9 +364,6 @@ public class ApproveReportActivity extends Activity
 				final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
 				if (response.getStatus())
 				{
-					int currentTime = Utils.getCurrentTime();					
-					report.setLocalUpdatedDate(currentTime);
-					report.setServerUpdatedDate(currentTime);
 					dbManager.updateOthersReport(report);
 					
 					runOnUiThread(new Runnable()
@@ -408,13 +403,11 @@ public class ApproveReportActivity extends Activity
 				final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
 				if (response.getStatus())
 				{
-					int currentTime = Utils.getCurrentTime();					
-					report.setLocalUpdatedDate(currentTime);
-					report.setServerUpdatedDate(currentTime);
 					dbManager.updateOthersReport(report);
 					
 					if (!commentContent.isEmpty())
 					{
+                        int currentTime = Utils.getCurrentTime();
 						User user = appPreference.getCurrentUser();
 						
 						Comment comment = new Comment();

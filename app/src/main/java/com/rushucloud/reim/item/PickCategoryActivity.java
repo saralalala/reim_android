@@ -1,30 +1,31 @@
 package com.rushucloud.reim.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Request.DownloadImageRequest;
-import classes.Category;
-import classes.adapter.CategoryExpandableListAdapter;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.Category;
+import classes.adapter.CategoryExpandableListAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Response.DownloadImageResponse;
 
 public class PickCategoryActivity extends Activity
 {

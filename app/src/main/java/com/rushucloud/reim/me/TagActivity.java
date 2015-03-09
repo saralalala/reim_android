@@ -1,20 +1,5 @@
 package com.rushucloud.reim.me;
 
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.Tag.DeleteTagResponse;
-import netUtils.Request.Tag.DeleteTagRequest;
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
-import classes.Tag;
-import classes.adapter.TagListViewAdapter;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -31,6 +16,22 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.List;
+
+import classes.Tag;
+import classes.adapter.TagListViewAdapter;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.Tag.DeleteTagRequest;
+import netUtils.Response.Tag.DeleteTagResponse;
 
 public class TagActivity extends Activity
 {

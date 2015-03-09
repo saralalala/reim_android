@@ -1,17 +1,18 @@
 package classes.adapter;
 
-import java.util.Arrays;
-import java.util.List;
-
-import classes.utils.ViewUtils;
-
-import com.rushucloud.reim.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+
+import java.util.Arrays;
+import java.util.List;
+
+import classes.utils.ViewUtils;
 
 public class LocationListViewAdapter extends BaseAdapter
 {

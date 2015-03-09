@@ -1,25 +1,5 @@
 package com.rushucloud.reim.me;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.Request.Category.CreateCategoryRequest;
-import netUtils.Request.Category.ModifyCategoryRequest;
-import netUtils.Response.Category.CreateCategoryResponse;
-import netUtils.Response.Category.ModifyCategoryResponse;
-import classes.Category;
-import classes.ReimApplication;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -31,9 +11,29 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-import android.widget.LinearLayout.LayoutParams;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.Category;
+import classes.ReimApplication;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.Category.CreateCategoryRequest;
+import netUtils.Request.Category.ModifyCategoryRequest;
+import netUtils.Response.Category.CreateCategoryResponse;
+import netUtils.Response.Category.ModifyCategoryResponse;
 
 public class EditCategoryActivity extends Activity
 {

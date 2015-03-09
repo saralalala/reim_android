@@ -1,19 +1,5 @@
 package com.rushucloud.reim.me;
 
-import java.util.ArrayList;
-import java.util.List;
-import netUtils.HttpConnectionCallback;
-import netUtils.Response.User.GetInvitesResponse;
-import netUtils.Request.User.GetInvitesRequest;
-import classes.Invite;
-import classes.adapter.MessageListViewAdapter;
-import classes.utils.PhoneUtils;
-import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -27,6 +13,21 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.Invite;
+import classes.adapter.MessageListViewAdapter;
+import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.User.GetInvitesRequest;
+import netUtils.Response.User.GetInvitesResponse;
 
 public class MessageActivity extends Activity
 {

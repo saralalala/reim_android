@@ -1,32 +1,32 @@
 package classes.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import classes.utils.AppPreference;
-import netUtils.HttpConnectionCallback;
-import netUtils.Request.Report.AlertRequest;
-import netUtils.Response.Report.AlertResponse;
-import classes.ApproveInfo;
-import classes.Report;
-import classes.User;
-import classes.utils.DBManager;
-import classes.utils.ViewUtils;
-import classes.widget.CircleImageView;
-
-import com.rushucloud.reim.R;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.ApproveInfo;
+import classes.Report;
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
+import classes.utils.ViewUtils;
+import classes.widget.CircleImageView;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.Report.AlertRequest;
+import netUtils.Response.Report.AlertResponse;
 
 public class ApproveInfoListViewAdapter extends BaseAdapter
 {
@@ -121,79 +121,106 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 			nicknameTextView.setText(user.getNickname());
 		}
 
-		if (info.hasApproved())
-		{
-			if (info.getStatus() == Report.STATUS_APPROVED)
-			{
-				statusTextView.setText(R.string.approved);
-				statusTextView.setTextColor(ViewUtils.getColor(R.color.status_approved));
-			}
-			else
-			{
-				statusTextView.setText(R.string.rejected);
-				statusTextView.setTextColor(ViewUtils.getColor(R.color.status_rejected));				
-			}
+        if (info.getUserID() == info.getReportSenderID())
+        {
+            int statusText = info.hasApproved() ? R.string.submitted : R.string.ready_to_submitted;
+            int statusColor = info.hasApproved() ? R.color.status_approved : R.color.major_dark;
 
-			alarmImageView.setVisibility(View.GONE);
-			
-			timeLayout.setVisibility(View.VISIBLE);
-			
-			TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
-			timeTextView.setText(info.getApproveTime());
-			
-			TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
-			dateTextView.setText(info.getApproveDate());
-		}
-		else
-		{
-			statusTextView.setText(R.string.ready_to_approved);
-			statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
+            statusTextView.setText(statusText);
+            statusTextView.setTextColor(ViewUtils.getColor(statusColor));
 
-			timeLayout.setVisibility(View.GONE);
+            alarmImageView.setVisibility(View.GONE);
+            timeLayout.setVisibility(View.GONE);
+        }
+        else if (info.hasApproved())
+        {
+            if (info.getRealStatus() == Report.STATUS_APPROVED)
+            {
+                statusTextView.setText(R.string.approved);
+                statusTextView.setTextColor(ViewUtils.getColor(R.color.status_approved));
+
+                alarmImageView.setVisibility(View.GONE);
+
+                timeLayout.setVisibility(View.VISIBLE);
+
+                TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
+                timeTextView.setText(info.getApproveTime());
+
+                TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+                dateTextView.setText(info.getApproveDate());
+            }
+            else if (info.getRealStatus() == Report.STATUS_REJECTED)
+            {
+                statusTextView.setText(R.string.rejected);
+                statusTextView.setTextColor(ViewUtils.getColor(R.color.status_rejected));
+
+                alarmImageView.setVisibility(View.GONE);
+
+                timeLayout.setVisibility(View.VISIBLE);
+
+                TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
+                timeTextView.setText(info.getApproveTime());
+
+                TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+                dateTextView.setText(info.getApproveDate());
+            }
+            else
+            {
+                statusTextView.setText(R.string.ready_to_approved);
+                statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
+
+                alarmImageView.setVisibility(View.GONE);
+                timeLayout.setVisibility(View.GONE);
+            }
+        }
+        else
+        {
+            statusTextView.setText(R.string.ready_to_approved);
+            statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
+
+            timeLayout.setVisibility(View.GONE);
 
             int visibility = user.equals(currentUser) ? View.GONE : View.VISIBLE;
             alarmImageView.setVisibility(visibility);
-			alarmImageView.setOnClickListener(new OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					if (report.getStatus() == Report.STATUS_SUBMITTED)
-					{
-						AlertRequest request = new AlertRequest(user.getServerID(), report.getServerID());
-						request.sendRequest(new HttpConnectionCallback()
-						{
-							public void execute(Object httpResponse)
-							{
-								final AlertResponse response = new AlertResponse(httpResponse);
-								activity.runOnUiThread(new Runnable()
-								{
-									public void run()
-									{
-										if (response.getStatus())
-										{
-											ViewUtils.showToast(activity, R.string.succeed_in_alerting);
-										}
-										else
-										{
-											ViewUtils.showToast(activity, R.string.failed_to_alert, response.getErrorMessage());							
-										}
-									}
-								});				
-							}
-						});						
-					}
-					else
-					{
-						ViewUtils.showToast(activity, R.string.prompt_no_need_to_alarm);
-					}
-				}
-			});
-			
-			if (report.getStatus() != Report.STATUS_SUBMITTED)
-			{
-				alarmImageView.setImageResource(R.drawable.alarm_disabled_drawable);
-			}
-		}
+            alarmImageView.setOnClickListener(new OnClickListener()
+            {
+                public void onClick(View v)
+                {
+                    if (report.getStatus() == Report.STATUS_SUBMITTED)
+                    {
+                        AlertRequest request = new AlertRequest(user.getServerID(), report.getServerID());
+                        request.sendRequest(new HttpConnectionCallback()
+                        {
+                            public void execute(Object httpResponse)
+                            {
+                                final AlertResponse response = new AlertResponse(httpResponse);
+                                activity.runOnUiThread(new Runnable()
+                                {
+                                    public void run()
+                                    {
+                                        if (response.getStatus())
+                                        {
+                                            ViewUtils.showToast(activity, R.string.succeed_in_alerting);
+                                        }
+                                        else
+                                        {
+                                            ViewUtils.showToast(activity, R.string.failed_to_alert, response.getErrorMessage());
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else
+                    {
+                        ViewUtils.showToast(activity, R.string.prompt_no_need_to_alarm);
+                    }
+                }
+            });
+
+            int alarmImage = report.getStatus() == Report.STATUS_SUBMITTED ? R.drawable.alarm_enabled_drawable : R.drawable.alarm_disabled_drawable;
+            alarmImageView.setImageResource(alarmImage);
+        }
 		
 		return convertView;
 	}

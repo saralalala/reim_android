@@ -1,18 +1,37 @@
 package com.rushucloud.reim;
 
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.rushucloud.reim.report.ApproveReportActivity;
+import com.rushucloud.reim.report.EditReportActivity;
+import com.rushucloud.reim.report.ShowReportActivity;
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.SyncDataCallback;
-import netUtils.SyncUtils;
-import netUtils.Response.Report.DeleteReportResponse;
-import netUtils.Response.Report.ExportReportResponse;
-import netUtils.Response.Report.SubordinatesReportResponse;
-import netUtils.Request.Report.DeleteReportRequest;
-import netUtils.Request.Report.ExportReportRequest;
-import netUtils.Request.Report.SubordinatesReportRequest;
 
 import classes.ReimApplication;
 import classes.Report;
@@ -29,36 +48,15 @@ import classes.widget.ReimProgressDialog;
 import classes.widget.SegmentedGroup;
 import classes.widget.XListView;
 import classes.widget.XListView.IXListViewListener;
-
-import com.rushucloud.reim.report.ApproveReportActivity;
-import com.rushucloud.reim.report.EditReportActivity;
-import com.rushucloud.reim.report.ShowReportActivity;
-import com.umeng.analytics.MobclickAgent;
-
-
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.support.v4.app.Fragment;
+import netUtils.HttpConnectionCallback;
+import netUtils.Request.Report.DeleteReportRequest;
+import netUtils.Request.Report.ExportReportRequest;
+import netUtils.Request.Report.SubordinatesReportRequest;
+import netUtils.Response.Report.DeleteReportResponse;
+import netUtils.Response.Report.ExportReportResponse;
+import netUtils.Response.Report.SubordinatesReportResponse;
+import netUtils.SyncDataCallback;
+import netUtils.SyncUtils;
 
 public class ReportFragment extends Fragment implements OnClickListener, IXListViewListener
 {

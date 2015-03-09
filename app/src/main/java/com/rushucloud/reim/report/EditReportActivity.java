@@ -1,25 +1,36 @@
 package com.rushucloud.reim.report;
 
+import android.app.Activity;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
+import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.R;
+import com.rushucloud.reim.item.EditItemActivity;
+import com.umeng.analytics.MobclickAgent;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.SyncDataCallback;
-import netUtils.SyncUtils;
-import netUtils.Response.UploadImageResponse;
-import netUtils.Response.Item.CreateItemResponse;
-import netUtils.Response.Item.ModifyItemResponse;
-import netUtils.Response.Report.CreateReportResponse;
-import netUtils.Response.Report.GetReportResponse;
-import netUtils.Response.Report.ModifyReportResponse;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.Item.CreateItemRequest;
-import netUtils.Request.Item.ModifyItemRequest;
-import netUtils.Request.Report.CreateReportRequest;
-import netUtils.Request.Report.GetReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
 import classes.Category;
 import classes.Comment;
 import classes.Image;
@@ -33,33 +44,22 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-
-import com.rushucloud.reim.MainActivity;
-import com.rushucloud.reim.R;
-import com.rushucloud.reim.item.EditItemActivity;
-import com.umeng.analytics.MobclickAgent;
-
-import android.app.Activity;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnLongClickListener;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.TextView;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.Item.CreateItemRequest;
+import netUtils.Request.Item.ModifyItemRequest;
+import netUtils.Request.Report.CreateReportRequest;
+import netUtils.Request.Report.GetReportRequest;
+import netUtils.Request.Report.ModifyReportRequest;
+import netUtils.Request.UploadImageRequest;
+import netUtils.Response.Item.CreateItemResponse;
+import netUtils.Response.Item.ModifyItemResponse;
+import netUtils.Response.Report.CreateReportResponse;
+import netUtils.Response.Report.GetReportResponse;
+import netUtils.Response.Report.ModifyReportResponse;
+import netUtils.Response.UploadImageResponse;
+import netUtils.SyncDataCallback;
+import netUtils.SyncUtils;
 
 public class EditReportActivity extends Activity
 {
@@ -243,7 +243,7 @@ public class EditReportActivity extends Activity
                         });
                     }
                     ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_saving_report);
-                    finish();
+                    goBackToMainActivity();
                 }
                 else
                 {
@@ -407,7 +407,7 @@ public class EditReportActivity extends Activity
 					startActivity(intent);					
 				}
 			}
-		});	
+		});
 
 		Button submitButton = (Button) findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new OnClickListener()
@@ -450,10 +450,14 @@ public class EditReportActivity extends Activity
 				{
 					ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_empty);	
 				}
-				else
+				else if (SyncUtils.isSyncOnGoing)
 				{
-					submitReport();
+                    ViewUtils.showToast(EditReportActivity.this, R.string.prompt_sync_ongoing);
 				}
+                else
+                {
+                    submitReport();
+                }
 			}
 		});
 		
@@ -1009,7 +1013,7 @@ public class EditReportActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_submitting_report);
-							finish();
+							goBackToMainActivity();
 						}
 					});
 				}
@@ -1052,7 +1056,7 @@ public class EditReportActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_submitting_report);
-							finish();
+                            goBackToMainActivity();
 						}
 					});
 				}

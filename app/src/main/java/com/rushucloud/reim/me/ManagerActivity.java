@@ -1,18 +1,22 @@
 package com.rushucloud.reim.me;
 
-import java.util.List;
-
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Group.GetGroupResponse;
-import netUtils.Response.User.DefaultManagerResponse;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Group.GetGroupRequest;
-import netUtils.Request.User.DefaultManagerRequest;
+import android.app.Activity;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
+
+import java.util.List;
 
 import classes.User;
 import classes.adapter.MemberListViewAdapter;
@@ -22,18 +26,14 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import android.app.Activity;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
+import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
+import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.Group.GetGroupRequest;
+import netUtils.Request.User.DefaultManagerRequest;
+import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.Group.GetGroupResponse;
+import netUtils.Response.User.DefaultManagerResponse;
 
 public class ManagerActivity extends Activity
 {

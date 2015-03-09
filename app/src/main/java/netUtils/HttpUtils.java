@@ -19,8 +19,8 @@ public class HttpUtils
 	{
 		HttpParams httpParams = new BasicHttpParams();
 		
-		HttpConnectionParams.setConnectionTimeout(httpParams, 20*1000);
-		HttpConnectionParams.setSoTimeout(httpParams, 20*1000);
+		HttpConnectionParams.setConnectionTimeout(httpParams, 20 * 1000);
+		HttpConnectionParams.setSoTimeout(httpParams, 20 * 1000);
 		HttpConnectionParams.setSocketBufferSize(httpParams, 8192);
 		
 		HttpClientParams.setRedirecting(httpParams, true);
@@ -30,6 +30,22 @@ public class HttpUtils
 		
 		return client;
 	}
+
+    public static HttpClient getHttpClient(int connectTimeout, int socketTimeout)
+    {
+        HttpParams httpParams = new BasicHttpParams();
+
+        HttpConnectionParams.setConnectionTimeout(httpParams, connectTimeout * 1000);
+        HttpConnectionParams.setSoTimeout(httpParams, socketTimeout * 1000);
+        HttpConnectionParams.setSocketBufferSize(httpParams, 8192);
+
+        HttpClientParams.setRedirecting(httpParams, true);
+
+        HttpProtocolParams.setUserAgent(httpParams, getUserAgent());
+        HttpClient client=new DefaultHttpClient(httpParams);
+
+        return client;
+    }
 	
 	public static String getJWTString()
 	{

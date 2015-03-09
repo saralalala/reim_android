@@ -1,16 +1,15 @@
 package com.rushucloud.reim;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.KeyEvent;
+
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.List;
 
 import classes.widget.galleryWidget.FilePagerAdapter;
 import classes.widget.galleryWidget.GalleryViewPager;
-
-import com.rushucloud.reim.R;
-import com.umeng.analytics.MobclickAgent;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.KeyEvent;
 
 public class MultipleImageActivity extends Activity
 {	

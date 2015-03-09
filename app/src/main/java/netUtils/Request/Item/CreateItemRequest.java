@@ -1,22 +1,21 @@
 package netUtils.Request.Item;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import classes.Image;
 import classes.Item;
 import classes.Tag;
 import classes.User;
 import classes.utils.Utils;
-
 import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
 import netUtils.Request.BaseRequest;
+import netUtils.URLDef;
 
 public class CreateItemRequest extends BaseRequest
 {
