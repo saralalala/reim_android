@@ -183,7 +183,9 @@ public class FollowingActivity extends Activity
 				final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
 				if (response.getStatus())
 				{
-					int currentTime = Utils.getCurrentTime();					
+					int currentTime = Utils.getCurrentTime();
+                    report.setManagerList(managerList);
+                    report.setCCList(ccList);
 					report.setLocalUpdatedDate(currentTime);
 					report.setServerUpdatedDate(currentTime);
 					DBManager.getDBManager().updateOthersReport(report);

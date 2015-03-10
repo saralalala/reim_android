@@ -88,10 +88,14 @@ public class ShowReportActivity extends Activity
 		if (bundle != null)
 		{
 			report = (Report)bundle.getSerializable("report");
-			fromPush = bundle.getBoolean("fromPush", false);			
+			fromPush = bundle.getBoolean("fromPush", false);
 			myReport = bundle.getBoolean("myReport", false);
 			if (myReport)
 			{
+                if (fromPush)
+                {
+                    report = dbManager.getReportByServerID(report.getServerID());
+                }
 				itemList = dbManager.getReportItems(report.getLocalID());	
 			}		
 			else

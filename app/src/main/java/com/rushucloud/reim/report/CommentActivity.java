@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Comment;
+import classes.Item;
 import classes.Report;
 import classes.User;
 import classes.adapter.CommentListViewAdapter;
@@ -234,7 +235,31 @@ public class CommentActivity extends Activity
 					report = new Report(response.getReport());
 					commentList.clear();
 					commentList.addAll(report.getCommentList());
-					
+
+                    if (myReport)
+                    {
+                        Report localReport = dbManager.getReportByServerID(reportServerID);
+                        if (localReport != null)
+                        {
+                            int reportLocalID = localReport.getLocalID();
+                            dbManager.deleteReportComments(reportLocalID);
+                            for (Comment comment : report.getCommentList())
+                            {
+                                comment.setReportID(reportLocalID);
+                                dbManager.insertComment(comment);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        dbManager.deleteOthersReportComments(reportServerID);
+                        for (Comment comment : report.getCommentList())
+                        {
+                            comment.setReportID(reportServerID);
+                            dbManager.insertOthersComment(comment);
+                        }
+                    }
+
 					runOnUiThread(new Runnable()
 					{
 						public void run()

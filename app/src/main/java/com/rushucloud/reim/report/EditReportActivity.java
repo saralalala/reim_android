@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,7 +74,6 @@ public class EditReportActivity extends Activity
 	private EditText titleEditText;
 	private TextView timeTextView;
 	private TextView statusTextView;
-	private TextView approveInfoTextView;
 	
 	private TextView managerTextView;	
 	private TextView ccTextView;
@@ -107,6 +107,11 @@ public class EditReportActivity extends Activity
 		setContentView(R.layout.activity_report_edit);
 		initData();
 		initView();
+
+        if (newReport)
+        {
+            titleEditText.requestFocus();
+        }
 	}
 	
 	protected void onResume()
@@ -190,8 +195,12 @@ public class EditReportActivity extends Activity
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null)
 		{
-			report = (Report) bundle.getSerializable("report");
-			fromPush = bundle.getBoolean("fromPush", false);
+            fromPush = bundle.getBoolean("fromPush", false);
+            report = (Report) bundle.getSerializable("report");
+            if (fromPush)
+            {
+                report = dbManager.getReportByServerID(report.getServerID());
+            }
 			newReport = report.getLocalID() == -1;
 			if (!newReport)
 			{
@@ -263,14 +272,14 @@ public class EditReportActivity extends Activity
 		}
 
 		int createDate = report.getCreatedDate() == -1 ? Utils.getCurrentTime() : report.getCreatedDate();
-		timeTextView = (TextView) findViewById(R.id.timeTextView);		
+		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		timeTextView.setText(Utils.secondToStringUpToMinute(createDate));
 		
 		statusTextView = (TextView) findViewById(R.id.statusTextView);
 		statusTextView.setText(report.getStatusString());
 		statusTextView.setBackgroundResource(report.getStatusBackground());
 
-		approveInfoTextView = (TextView) findViewById(R.id.approveInfoTextView);
+        TextView approveInfoTextView = (TextView) findViewById(R.id.approveInfoTextView);
 		approveInfoTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -356,7 +365,7 @@ public class EditReportActivity extends Activity
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("report", report);
 				bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
-				Intent intent = new Intent(EditReportActivity.this, UnarchivedItemsActivity.class);
+				Intent intent = new Intent(EditReportActivity.this, PickItemsActivity.class);
 				intent.putExtras(bundle);
 				startActivityForResult(intent, PICK_ITEM);
 			}
@@ -497,6 +506,14 @@ public class EditReportActivity extends Activity
 	
 	private void refreshView()
 	{
+        if (report.getCreatedDate() > 0)
+        {
+            timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
+        }
+
+        statusTextView.setText(report.getStatusString());
+        statusTextView.setBackgroundResource(report.getStatusBackground());
+
 		itemList = dbManager.getItems(Item.getItemsIDList(itemList));
 		
 		int itemCount = itemList.size();
@@ -564,12 +581,6 @@ public class EditReportActivity extends Activity
 		}
 		amountTextView.setText(Utils.formatDouble(amount));
 	}	
-	
-    private void hideSoftKeyboard()
-    {
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
-    }
 
     private void showDeleteWindow()
     {    	
@@ -635,6 +646,12 @@ public class EditReportActivity extends Activity
 			}
 		});
     	builder.create().show();
+    }
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
     }
 
     private boolean saveReport()

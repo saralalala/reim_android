@@ -70,6 +70,8 @@
 			        android:layout_marginRight="16dp"
 			    	android:focusable="true"
 			   		android:focusableInTouchMode="true" >
+
+                    <requestFocus/>
 			
 			        <EditText
 			            android:id="@+id/titleEditText"

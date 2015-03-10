@@ -356,8 +356,7 @@ public class Report implements Serializable
 	
 	public boolean canBeApproved()
 	{
-		return getSender() != null && getSender().getServerID() != AppPreference.getAppPreference().getCurrentUserID() &&
-				getManagerList().contains(AppPreference.getAppPreference().getCurrentUser()) && !isCC  &&
+		return getSender() != null && !getSender().equals(AppPreference.getAppPreference().getCurrentUser()) && !isCC  &&
 				status == Report.STATUS_SUBMITTED && myDecision == Report.STATUS_SUBMITTED;
 	}
 	

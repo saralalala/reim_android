@@ -45,7 +45,7 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.SegmentedGroup;
 
-public class UnarchivedItemsActivity extends Activity implements OnClickListener
+public class PickItemsActivity extends Activity implements OnClickListener
 {
 	private static final int SORT_NULL = 0;	
 	private static final int SORT_AMOUNT = 1;	
@@ -112,7 +112,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("UnarchivedItemsActivity");		
+		MobclickAgent.onPageStart("PickItemsActivity");
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setProgressDialog(this);
 		refreshData();
@@ -122,7 +122,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("UnarchivedItemsActivity");
+		MobclickAgent.onPageEnd("PickItemsActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -241,7 +241,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			{
 				if (position == 0)
 				{
-					Intent intent = new Intent(UnarchivedItemsActivity.this, EditItemActivity.class);
+					Intent intent = new Intent(PickItemsActivity.this, EditItemActivity.class);
 					intent.putExtra("fromReim", true);
 					startActivity(intent);
 				}
@@ -304,11 +304,11 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		{
 			if (isProveAhead)
 			{
-				adapter = new ReportItemListViewAdapter(UnarchivedItemsActivity.this, proveAheadShowList, proveChosenList);		
+				adapter = new ReportItemListViewAdapter(PickItemsActivity.this, proveAheadShowList, proveChosenList);
 			}
 			else
 			{
-				adapter = new ReportItemListViewAdapter(UnarchivedItemsActivity.this, consumedShowList, consumedChosenList);
+				adapter = new ReportItemListViewAdapter(PickItemsActivity.this, consumedShowList, consumedChosenList);
 			}
 			itemListView.setAdapter(adapter);			
 		}
@@ -319,19 +319,11 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			
 			consumedTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
 			proveAheadTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
-			
-			if (consumedItemList.isEmpty())
-			{
-				itemListView.setVisibility(View.INVISIBLE);
-				warningTextView.setVisibility(View.VISIBLE);
-			}
-			else
-			{
-				itemListView.setVisibility(View.VISIBLE);
-				warningTextView.setVisibility(View.INVISIBLE);
-				adapter.set(consumedShowList, consumedChosenList);
-				adapter.notifyDataSetChanged();		
-			}
+
+            int visibility = consumedItemList.isEmpty() ? View.VISIBLE : View.INVISIBLE;
+            warningTextView.setVisibility(visibility);
+            adapter.set(consumedShowList, consumedChosenList);
+            adapter.notifyDataSetChanged();
 		}
 		else
 		{
@@ -339,19 +331,11 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			
 			consumedTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
 			proveAheadTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
-			
-			if (proveAheadItemList.isEmpty())
-			{
-				itemListView.setVisibility(View.INVISIBLE);
-				warningTextView.setVisibility(View.VISIBLE);
-			}
-			else
-			{
-				itemListView.setVisibility(View.VISIBLE);
-				warningTextView.setVisibility(View.INVISIBLE);
-				adapter.set(proveAheadShowList, proveChosenList);
-				adapter.notifyDataSetChanged();		
-			}
+
+            int visibility = proveAheadItemList.isEmpty() ? View.VISIBLE : View.INVISIBLE;
+            warningTextView.setVisibility(visibility);
+            adapter.set(proveAheadShowList, proveChosenList);
+            adapter.notifyDataSetChanged();
 		}
 
 		ReimProgressDialog.dismiss();
@@ -369,7 +353,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		int textSize = PhoneUtils.dpToPixel(getResources(), 16);
 
 		int space = 0;
-		LinearLayout layout = new LinearLayout(UnarchivedItemsActivity.this);
+		LinearLayout layout = new LinearLayout(PickItemsActivity.this);
 		for (int i = 0; i < tagList.size(); i++)
 		{
 			String name = tagList.get(i).getName();
@@ -378,12 +362,12 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			if (tabIndex == 0)
 			{
 				int layoutID = consumedTempTagCheck[i] ? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
-				view = View.inflate(UnarchivedItemsActivity.this, layoutID, null);				
+				view = View.inflate(PickItemsActivity.this, layoutID, null);
 			}
 			else
 			{
 				int layoutID = proveTempTagCheck[i] ? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
-				view = View.inflate(UnarchivedItemsActivity.this, layoutID, null);
+				view = View.inflate(PickItemsActivity.this, layoutID, null);
 			}
 
 			final int index = i;
@@ -393,7 +377,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			{
 				public void onClick(View v)
 				{
-					MobclickAgent.onEvent(UnarchivedItemsActivity.this, "UMENG_SHEET_TAG");
+					MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_TAG");
 					if (tabIndex == 0)
 					{
 						consumedTempTagCheck[index] = !consumedTempTagCheck[index];			
@@ -414,7 +398,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			
 			if (space - width - tagHorizontalInterval <= 0)
 			{
-				layout = new LinearLayout(UnarchivedItemsActivity.this);
+				layout = new LinearLayout(PickItemsActivity.this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 				params.topMargin = tagVerticalInterval;
 				layout.setLayoutParams(params);
@@ -452,12 +436,12 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
 		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
 
-		LinearLayout layout = new LinearLayout(UnarchivedItemsActivity.this);
+		LinearLayout layout = new LinearLayout(PickItemsActivity.this);
 		for (int i = 0; i < categoryList.size(); i++)
 		{
 			if (i % iconMaxCount == 0)
 			{
-				layout = new LinearLayout(UnarchivedItemsActivity.this);
+				layout = new LinearLayout(PickItemsActivity.this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 				params.topMargin = iconVerticalInterval;
 				layout.setLayoutParams(params);
@@ -469,7 +453,7 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 			Category category = categoryList.get(i);
 
 			final int index = i;
-			View view = View.inflate(UnarchivedItemsActivity.this, R.layout.grid_category, null);
+			View view = View.inflate(PickItemsActivity.this, R.layout.grid_category, null);
 			view.setOnClickListener(new OnClickListener()
 			{
 				public void onClick(View v)
@@ -559,12 +543,12 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 					}
 					else if (checkedId == sortAmountRadio.getId())
 					{
-						MobclickAgent.onEvent(UnarchivedItemsActivity.this, "UMENG_SHEET_AMOUNT");
+						MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_AMOUNT");
 						consumedTempSortType = SORT_AMOUNT;
 					}
 					else if (checkedId == sortConsumedDateRadio.getId())
 					{
-						MobclickAgent.onEvent(UnarchivedItemsActivity.this, "UMENG_SHEET_TIME");
+						MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_TIME");
 						consumedTempSortType = SORT_CONSUMED_DATE;
 					}					
 				}
@@ -576,12 +560,12 @@ public class UnarchivedItemsActivity extends Activity implements OnClickListener
 					}
 					else if (checkedId == sortAmountRadio.getId())
 					{
-						MobclickAgent.onEvent(UnarchivedItemsActivity.this, "UMENG_SHEET_AMOUNT");
+						MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_AMOUNT");
 						proveTempSortType = SORT_AMOUNT;
 					}
 					else if (checkedId == sortConsumedDateRadio.getId())
 					{
-						MobclickAgent.onEvent(UnarchivedItemsActivity.this, "UMENG_SHEET_TIME");
+						MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_TIME");
 						proveTempSortType = SORT_CONSUMED_DATE;
 					}					
 				}

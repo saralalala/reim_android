@@ -76,7 +76,7 @@
         <activity android:name="com.rushucloud.reim.report.ApproveReportActivity" />
         <activity android:name="com.rushucloud.reim.report.ShowReportActivity" />        
         <activity android:name="com.rushucloud.reim.report.CommentActivity" />
-        <activity android:name="com.rushucloud.reim.report.UnarchivedItemsActivity" />
+        <activity android:name=".report.PickItemsActivity" />
         <activity android:name="com.rushucloud.reim.report.ApproveInfoActivity" />
         <activity android:name="com.rushucloud.reim.report.FollowingActivity" />
         
@@ -84,6 +84,7 @@
         <activity android:name="com.rushucloud.reim.me.EmailActivity" />
         <activity android:name="com.rushucloud.reim.me.PhoneActivity" />
         <activity android:name="com.rushucloud.reim.me.NicknameActivity" />
+        <activity android:name="com.rushucloud.reim.me.CompanyActivity" />
         <activity android:name="com.rushucloud.reim.me.InvoiceTitleActivity" />
         <activity android:name="com.rushucloud.reim.me.ChangePasswordActivity" />        
         <activity android:name="com.rushucloud.reim.me.ManagerActivity" />        
@@ -118,16 +119,14 @@
 		    android:name="com.umeng.socialize.view.ShareActivity" 
 		    android:noHistory="true" 
 		    android:theme="@style/Theme.UMDialog" 
-		    android:windowSoftInputMode="stateVisible|adjustResize" >
-        </activity>
+		    android:windowSoftInputMode="stateVisible|adjustResize" />
         
 		<activity 
 		    android:name=".wxapi.WXEntryActivity"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar"
 			android:configChanges="keyboardHidden|orientation|screenSize"
 			android:exported="true"
-			android:screenOrientation="portrait" >
-        </activity>
+			android:screenOrientation="portrait" />
         
         <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
 		<activity 

@@ -309,12 +309,11 @@ public class ApproveReportActivity extends Activity
 								Bundle bundle = new Bundle();
 								bundle.putSerializable("report", report);
 								bundle.putBoolean("myReport", false);
-								
-					        	Intent intent = new Intent(ApproveReportActivity.this, MainActivity.class);
-					        	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					    		Intent intent2 = new Intent(ApproveReportActivity.this, ShowReportActivity.class);					    		
-								intent2.putExtras(bundle);								
-					        	startActivities(new Intent[] {intent, intent2});
+                                bundle.putBoolean("fromPush", fromPush);
+
+					    		Intent intent = new Intent(ApproveReportActivity.this, ShowReportActivity.class);
+								intent.putExtras(bundle);
+                                startActivity(intent);
 					        	finish();
 							}
 					    	else
@@ -456,10 +455,11 @@ public class ApproveReportActivity extends Activity
 
     private void goBackToMainActivity()
     {
+        ReimApplication.setTabIndex(1);
+        ReimApplication.setReportTabIndex(1);
+
     	if (fromPush)
 		{
-        	ReimApplication.setTabIndex(1);
-        	ReimApplication.setReportTabIndex(1);
         	Intent intent = new Intent(this, MainActivity.class);
         	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         	startActivity(intent);

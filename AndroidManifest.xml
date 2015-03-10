@@ -76,7 +76,7 @@
         <activity android:name="com.rushucloud.reim.report.ApproveReportActivity" />
         <activity android:name="com.rushucloud.reim.report.ShowReportActivity" />        
         <activity android:name="com.rushucloud.reim.report.CommentActivity" />
-        <activity android:name="com.rushucloud.reim.report.UnarchivedItemsActivity" />
+        <activity android:name="com.rushucloud.reim.report.PickItemsActivity" />
         <activity android:name="com.rushucloud.reim.report.ApproveInfoActivity" />
         <activity android:name="com.rushucloud.reim.report.FollowingActivity" />
         

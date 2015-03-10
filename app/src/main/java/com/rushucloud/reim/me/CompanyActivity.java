@@ -111,7 +111,7 @@ public class CompanyActivity extends Activity
 			}
 		});
 		
-		companyEditText = (EditText) findViewById(R.id.nicknameEditText);
+		companyEditText = (EditText) findViewById(R.id.companyEditText);
 		companyEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		companyEditText.setText(currentGroup.getName());
 
