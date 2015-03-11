@@ -294,7 +294,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		});
 		
 		final RadioButton sortConsumedDateRadio = (RadioButton) filterView.findViewById(R.id.sortConsumedDateRadio);
-		final RadioButton sortAmountRadio = (RadioButton) filterView.findViewById(R.id.sortAmountRadio);
+        final RadioButton sortAmountRadio = (RadioButton) filterView.findViewById(R.id.sortAmountRadio);
 		sortConsumedDateRadio.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -632,23 +632,30 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			showList.add(item);
 		}
 
-		if (sortType == SORT_CONSUMED_DATE)
-		{
-			Item.sortByConsumedDate(showList);			
-			if (sortReverse)
-			{
-				Collections.reverse(showList);
-			}			
-			buildItemListByConsumedDate();
-		}
-		if (sortType == SORT_AMOUNT)
-		{
-			Item.sortByAmount(showList);			
-			if (sortReverse)
-			{
-				Collections.reverse(showList);
-			}
-		}
+        switch (sortType)
+        {
+            case SORT_CONSUMED_DATE:
+            {
+                Item.sortByConsumedDate(showList);
+                if (sortReverse)
+                {
+                    Collections.reverse(showList);
+                }
+                buildItemListByConsumedDate();
+                break;
+            }
+            case SORT_AMOUNT:
+            {
+                Item.sortByAmount(showList);
+                if (sortReverse)
+                {
+                    Collections.reverse(showList);
+                }
+                break;
+            }
+            default:
+                break;
+        }
 	}
 	
 	private void buildItemListByConsumedDate()
@@ -706,7 +713,7 @@ public class ReimFragment extends Fragment implements IXListViewListener
 			sortDateImageView.startAnimation(rotateAnimation);
 		}		
 	}
-	
+
 	private void reverseSortAmountImageView()
 	{
 		tempSortReverse = !tempSortReverse;

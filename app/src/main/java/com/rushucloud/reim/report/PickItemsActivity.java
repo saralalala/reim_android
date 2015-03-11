@@ -12,6 +12,8 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -20,8 +22,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -43,15 +43,19 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import classes.widget.SegmentedGroup;
 
 public class PickItemsActivity extends Activity implements OnClickListener
 {
-	private static final int SORT_NULL = 0;	
-	private static final int SORT_AMOUNT = 1;	
-	private static final int SORT_CONSUMED_DATE = 2;	
+    private static final int SORT_CONSUMED_DATE = 0;
+	private static final int SORT_AMOUNT = 1;
 
 	private PopupWindow filterPopupWindow;
+    private RadioButton sortAmountRadio;
+    private RadioButton sortConsumedDateRadio;
+    private ImageView sortDateImageView;
+    private ImageView sortAmountImageView;
+    private RotateAnimation rotateAnimation;
+    private RotateAnimation rotateReverseAnimation;
 	private LinearLayout tagLayout;
 	private LinearLayout categoryLayout;
 	private TextView consumedTextView;
@@ -75,14 +79,15 @@ public class PickItemsActivity extends Activity implements OnClickListener
 	private List<Item> consumedShowList;
 	private ArrayList<Integer> consumedChosenList = null;
 
-	private int consumedSortType = SORT_NULL;
+	private int consumedSortType = SORT_CONSUMED_DATE;
 	private boolean consumedSortReverse = false;
 	private boolean[] consumedTagCheck;
 	private boolean[] consumedCategoryCheck;
 	private List<Tag> consumedFilterTagList = new ArrayList<Tag>();
 	private List<Category> consumedFilterCategoryList = new ArrayList<Category>();
 	
-	private int consumedTempSortType = SORT_NULL;
+	private int consumedTempSortType = SORT_CONSUMED_DATE;
+    private boolean consumedTempSortReverse = false;
 	private boolean[] consumedTempTagCheck;
 	private boolean[] consumedTempCategoryCheck;
 	
@@ -90,14 +95,15 @@ public class PickItemsActivity extends Activity implements OnClickListener
 	private List<Item> proveAheadShowList;
 	private ArrayList<Integer> proveChosenList = null;
 
-	private int proveSortType = SORT_NULL;
+	private int proveSortType = SORT_CONSUMED_DATE;
 	private boolean proveSortReverse = false;
 	private boolean[] proveTagCheck;
 	private boolean[] proveCategoryCheck;
 	private List<Tag> proveFilterTagList = new ArrayList<Tag>();
 	private List<Category> proveFilterCategoryList = new ArrayList<Category>();
 	
-	private int proveTempSortType = SORT_NULL;
+	private int proveTempSortType = SORT_CONSUMED_DATE;
+    private boolean proveTempSortReverse = false;
 	private boolean[] proveTempTagCheck;
 	private boolean[] proveTempCategoryCheck;
 	
@@ -289,10 +295,177 @@ public class PickItemsActivity extends Activity implements OnClickListener
 
 	private void initFilterView()
 	{
+        rotateAnimation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnimation.setDuration(200);
+        rotateAnimation.setFillAfter(true);
+
+        rotateReverseAnimation = new RotateAnimation(180, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateReverseAnimation.setDuration(200);
+        rotateReverseAnimation.setFillAfter(true);
+
 		View filterView = View.inflate(this, R.layout.window_report_items_filter, null);
+
+        sortDateImageView = (ImageView) filterView.findViewById(R.id.sortDateImageView);
+        sortDateImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                reverseSortDateImageView();
+            }
+        });
+        sortAmountImageView = (ImageView) filterView.findViewById(R.id.sortAmountImageView);
+        sortAmountImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                reverseSortAmountImageView();
+            }
+        });
+
+        sortConsumedDateRadio = (RadioButton) filterView.findViewById(R.id.sortConsumedDateRadio);
+        sortConsumedDateRadio.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_TIME");
+                selectSortDateRadio();
+                if (tabIndex == 0)
+                {
+                    if (consumedTempSortType != SORT_CONSUMED_DATE)
+                    {
+                        consumedTempSortReverse = false;
+                        consumedTempSortType = SORT_CONSUMED_DATE;
+                    }
+                    else
+                    {
+                        reverseSortDateImageView();
+                    }
+                }
+                else
+                {
+                    if (proveTempSortType != SORT_CONSUMED_DATE)
+                    {
+                        proveTempSortReverse = false;
+                        proveTempSortType = SORT_CONSUMED_DATE;
+                    }
+                    else
+                    {
+                        reverseSortDateImageView();
+                    }
+                }
+            }
+        });
+
+        sortAmountRadio = (RadioButton) filterView.findViewById(R.id.sortAmountRadio);
+        sortAmountRadio.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_AMOUNT");
+                selectSortAmountRadio();
+                if (tabIndex == 0)
+                {
+                    if (consumedTempSortType != SORT_AMOUNT)
+                    {
+                        consumedTempSortReverse = false;
+                        consumedTempSortType = SORT_AMOUNT;
+                    }
+                    else
+                    {
+                        reverseSortAmountImageView();
+                    }
+                }
+                else
+                {
+                    if (proveTempSortType != SORT_AMOUNT)
+                    {
+                        proveTempSortReverse = false;
+                        proveTempSortType = SORT_AMOUNT;
+                    }
+                    else
+                    {
+                        reverseSortAmountImageView();
+                    }
+                }
+            }
+        });
+
 		tagLayout = (LinearLayout) filterView.findViewById(R.id.tagLayout);		
 		categoryLayout = (LinearLayout) filterView.findViewById(R.id.categoryLayout);
-		
+
+        ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
+        confirmImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (tabIndex == 0)
+                {
+                    consumedSortReverse = consumedTempSortReverse;
+                    consumedSortType = consumedTempSortType;
+
+                    consumedTagCheck = consumedTempTagCheck;
+                    consumedCategoryCheck = consumedTempCategoryCheck;
+
+                    consumedFilterTagList.clear();
+                    for (int i = 0; i < consumedTagCheck.length; i++)
+                    {
+                        if (consumedTagCheck[i])
+                        {
+                            consumedFilterTagList.add(tagList.get(i));
+                        }
+                    }
+
+                    consumedFilterCategoryList.clear();
+                    for (int i = 0; i < consumedCategoryCheck.length; i++)
+                    {
+                        if (consumedCategoryCheck[i])
+                        {
+                            consumedFilterCategoryList.add(categoryList.get(i));
+                        }
+                    }
+                }
+                else
+                {
+                    proveSortReverse = proveTempSortReverse;
+                    proveSortType = proveTempSortType;
+
+                    proveTagCheck = proveTempTagCheck;
+                    proveCategoryCheck = proveTempCategoryCheck;
+
+                    proveFilterTagList.clear();
+                    for (int i = 0; i < proveTagCheck.length; i++)
+                    {
+                        if (proveTagCheck[i])
+                        {
+                            proveFilterTagList.add(tagList.get(i));
+                        }
+                    }
+
+                    proveFilterCategoryList.clear();
+                    for (int i = 0; i < proveCategoryCheck.length; i++)
+                    {
+                        if (proveCategoryCheck[i])
+                        {
+                            proveFilterCategoryList.add(categoryList.get(i));
+                        }
+                    }
+                }
+
+                filterPopupWindow.dismiss();
+                filterItemList();
+                refreshView();
+            }
+        });
+
+        ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
+        cancelImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                filterPopupWindow.dismiss();
+            }
+        });
+
 		filterPopupWindow = ViewUtils.constructTopPopupWindow(this, filterView);
 	}
 
@@ -525,195 +698,151 @@ public class PickItemsActivity extends Activity implements OnClickListener
 
     private void showFilterWindow()
     {
-    	View filterView = filterPopupWindow.getContentView();
+        if (tabIndex == 0)
+        {
+            consumedTempSortReverse = false;
+            consumedTempSortType = consumedSortType;
+            switch (consumedSortType)
+            {
+                case SORT_CONSUMED_DATE:
+                {
+                    selectSortDateRadio();
+                    if (consumedSortReverse)
+                    {
+                        reverseSortDateImageView();
+                    }
+                    break;
+                }
+                case SORT_AMOUNT:
+                {
+                    selectSortAmountRadio();
+                    if (consumedSortReverse)
+                    {
+                        reverseSortAmountImageView();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            consumedTempTagCheck = consumedTagCheck;
+            consumedTempCategoryCheck = consumedCategoryCheck;
+        }
+        else
+        {
+            proveTempSortReverse = false;
+            proveTempSortType = proveSortType;
+            switch (proveSortType)
+            {
+                case SORT_CONSUMED_DATE:
+                {
+                    selectSortDateRadio();
+                    if (proveSortReverse)
+                    {
+                        reverseSortDateImageView();
+                    }
+                    break;
+                }
+                case SORT_AMOUNT:
+                {
+                    selectSortAmountRadio();
+                    if (proveSortReverse)
+                    {
+                        reverseSortAmountImageView();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            proveTempTagCheck = proveTagCheck;
+            proveTempCategoryCheck = proveCategoryCheck;
+        }
 
-		final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
-		final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);		
-		final RadioButton sortConsumedDateRadio = (RadioButton)filterView.findViewById(R.id.sortConsumedDateRadio);	
-		final SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
-		sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		{
-			public void onCheckedChanged(RadioGroup group, int checkedId)
-			{
-				if (tabIndex == 0)
-				{
-					if (checkedId == sortNullRadio.getId())
-					{
-						consumedTempSortType = SORT_NULL;
-					}
-					else if (checkedId == sortAmountRadio.getId())
-					{
-						MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_AMOUNT");
-						consumedTempSortType = SORT_AMOUNT;
-					}
-					else if (checkedId == sortConsumedDateRadio.getId())
-					{
-						MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_TIME");
-						consumedTempSortType = SORT_CONSUMED_DATE;
-					}					
-				}
-				else
-				{
-					if (checkedId == sortNullRadio.getId())
-					{
-						proveTempSortType = SORT_NULL;
-					}
-					else if (checkedId == sortAmountRadio.getId())
-					{
-						MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_AMOUNT");
-						proveTempSortType = SORT_AMOUNT;
-					}
-					else if (checkedId == sortConsumedDateRadio.getId())
-					{
-						MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_TIME");
-						proveTempSortType = SORT_CONSUMED_DATE;
-					}					
-				}
-			}
-		});
-		
-		ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
-		confirmImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (tabIndex == 0)
-				{
-					consumedSortReverse = consumedSortType == consumedTempSortType ? !consumedSortReverse : false;
-					consumedSortType = consumedTempSortType;
-					
-					consumedTagCheck = consumedTempTagCheck;
-					consumedCategoryCheck = consumedTempCategoryCheck;
-					
-					consumedFilterTagList.clear();
-					for (int i = 0; i < consumedTagCheck.length; i++)
-					{
-						if (consumedTagCheck[i])
-						{
-							consumedFilterTagList.add(tagList.get(i));
-						}
-					}
-					
-					consumedFilterCategoryList.clear();
-					for (int i = 0; i < consumedCategoryCheck.length; i++)
-					{
-						if (consumedCategoryCheck[i])
-						{
-							consumedFilterCategoryList.add(categoryList.get(i));
-						}
-					}		
-				}
-				else
-				{
-					proveSortReverse = proveSortType == proveTempSortType ? !proveSortReverse : false;
-					proveSortType = proveTempSortType;
-					
-					proveTagCheck = proveTempTagCheck;
-					proveCategoryCheck = proveTempCategoryCheck;
-					
-					proveFilterTagList.clear();
-					for (int i = 0; i < proveTagCheck.length; i++)
-					{
-						if (proveTagCheck[i])
-						{
-							proveFilterTagList.add(tagList.get(i));
-						}
-					}
-					
-					proveFilterCategoryList.clear();
-					for (int i = 0; i < proveCategoryCheck.length; i++)
-					{
-						if (proveCategoryCheck[i])
-						{
-							proveFilterCategoryList.add(categoryList.get(i));
-						}
-					}					
-				}
-
-				filterPopupWindow.dismiss();
-				filterItemList();
-				refreshView();
-			}
-		});
-
-		ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
-		cancelImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (tabIndex == 0)
-				{
-					switch (consumedSortType)
-					{
-						case SORT_NULL:
-							sortRadioGroup.check(sortNullRadio.getId());
-							break;
-						case SORT_AMOUNT:
-							sortRadioGroup.check(sortAmountRadio.getId());
-							break;
-						case SORT_CONSUMED_DATE:
-							sortRadioGroup.check(sortConsumedDateRadio.getId());
-							break;
-						default:
-							break;
-					}
-					
-					consumedTempTagCheck = consumedTagCheck;
-					consumedTempCategoryCheck = consumedCategoryCheck;
-				}
-				else
-				{
-					switch (proveSortType)
-					{
-						case SORT_NULL:
-							sortRadioGroup.check(sortNullRadio.getId());
-							break;
-						case SORT_AMOUNT:
-							sortRadioGroup.check(sortAmountRadio.getId());
-							break;
-						case SORT_CONSUMED_DATE:
-							sortRadioGroup.check(sortConsumedDateRadio.getId());
-							break;
-						default:
-							break;
-					}
-					
-					proveTempTagCheck = proveTagCheck;
-					proveTempCategoryCheck = proveCategoryCheck;					
-				}
-				
-				refreshTagView();				
-				refreshCategoryView();				
-				filterPopupWindow.dismiss();
-			}
-		});
-
-		// init filter view
-		int sortType = tabIndex == 0 ? consumedSortType : proveSortType;
-		
-		switch (sortType)
-		{
-			case SORT_NULL:
-				sortRadioGroup.check(sortNullRadio.getId());
-				break;
-			case SORT_AMOUNT:
-				sortRadioGroup.check(sortAmountRadio.getId());
-				break;
-			case SORT_CONSUMED_DATE:
-				sortRadioGroup.check(sortConsumedDateRadio.getId());
-				break;
-			default:
-				break;
-		}
-		
 		refreshTagView();
 		refreshCategoryView();
 		
 		filterPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		filterPopupWindow.update();
     }
-    
-	private void refreshData()
+
+    private void selectSortDateRadio()
+    {
+        sortConsumedDateRadio.setChecked(true);
+        sortAmountRadio.setChecked(false);
+
+        sortDateImageView.setVisibility(View.VISIBLE);
+        sortAmountImageView.clearAnimation();
+        sortAmountImageView.setVisibility(View.GONE);
+    }
+
+    private void selectSortAmountRadio()
+    {
+        sortConsumedDateRadio.setChecked(false);
+        sortAmountRadio.setChecked(true);
+
+        sortDateImageView.clearAnimation();
+        sortDateImageView.setVisibility(View.GONE);
+        sortAmountImageView.setVisibility(View.VISIBLE);
+    }
+
+    private void reverseSortDateImageView()
+    {
+        if (tabIndex == 0)
+        {
+            consumedTempSortReverse = !consumedTempSortReverse;
+            if (!consumedTempSortReverse) // status before change
+            {
+                sortDateImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortDateImageView.startAnimation(rotateAnimation);
+            }
+        }
+        else
+        {
+            proveTempSortReverse = !proveTempSortReverse;
+            if (!proveTempSortReverse) // status before change
+            {
+                sortDateImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortDateImageView.startAnimation(rotateAnimation);
+            }
+        }
+    }
+
+    private void reverseSortAmountImageView()
+    {
+        if (tabIndex == 0)
+        {
+            consumedTempSortReverse = !consumedTempSortReverse;
+            if (!consumedTempSortReverse) // status before change
+            {
+                sortAmountImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortAmountImageView.startAnimation(rotateAnimation);
+            }
+        }
+        else
+        {
+            proveTempSortReverse = !proveTempSortReverse;
+            if (!proveTempSortReverse) // status before change
+            {
+                sortAmountImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortAmountImageView.startAnimation(rotateAnimation);
+            }
+        }
+    }
+
+    private void refreshData()
 	{
 		consumedItemList = dbManager.getUnarchivedConsumedItems(appPreference.getCurrentUserID());
 		proveAheadItemList = dbManager.getUnarchivedProveAheadItems(appPreference.getCurrentUserID());
@@ -744,9 +873,9 @@ public class PickItemsActivity extends Activity implements OnClickListener
 	{
 		int sortType;
 		boolean sortReverse;
-		List<Tag> filterTagList = new ArrayList<Tag>();
-		List<Category> filterCategoryList = new ArrayList<Category>();
-		List<Item> itemList = new ArrayList<Item>();
+		List<Tag> filterTagList;
+		List<Category> filterCategoryList;
+		List<Item> itemList;
 		List<Item> showList = new ArrayList<Item>();
 		
 		if (tabIndex == 0)
@@ -780,18 +909,17 @@ public class PickItemsActivity extends Activity implements OnClickListener
 			showList.add(item);
 		}
 
-		if (sortType == SORT_NULL)
-		{
-			Item.sortByUpdateDate(showList);
-		}
-		if (sortType == SORT_AMOUNT)
-		{
-			Item.sortByAmount(showList);
-		}
-		if (sortType == SORT_CONSUMED_DATE)
-		{
-			Item.sortByConsumedDate(showList);
-		}
+        switch (sortType)
+        {
+            case SORT_CONSUMED_DATE:
+                Item.sortByConsumedDate(showList);
+                break;
+            case SORT_AMOUNT:
+                Item.sortByAmount(showList);
+                break;
+            default:
+                break;
+        }
 		
 		if (sortReverse)
 		{

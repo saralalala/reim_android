@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -19,8 +21,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,7 +45,6 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import classes.widget.SegmentedGroup;
 import classes.widget.XListView;
 import classes.widget.XListView.IXListViewListener;
 import netUtils.HttpConnectionCallback;
@@ -60,15 +59,23 @@ import netUtils.SyncUtils;
 
 public class ReportFragment extends Fragment implements OnClickListener, IXListViewListener
 {
-	private static final int SORT_NULL = 0;	
-	private static final int SORT_ITEMS_COUNT = 1;	
-	private static final int SORT_AMOUNT = 2;	
-	private static final int SORT_CREATE_DATE = 3;
+	private static final int SORT_UPDATE_DATE = 0;
+    private static final int SORT_CREATE_DATE = 1;
+	private static final int SORT_AMOUNT = 2;
 
 	private boolean hasInit = false;
 	
 	private View view;
 	private PopupWindow filterPopupWindow;
+    private RadioButton sortUpdateDateRadio;
+    private RadioButton sortCreateDateRadio;
+    private RadioButton sortAmountRadio;
+    private ImageView sortUpdateImageView;
+    private ImageView sortCreateImageView;
+    private ImageView sortAmountImageView;
+    private ReportTagGridViewAdapter tagAdapter;
+    private RotateAnimation rotateAnimation;
+    private RotateAnimation rotateReverseAnimation;
 	private RelativeLayout noResultLayout;
 	private TextView myTitleTextView;
 	private TextView othersTitleTextView;
@@ -84,17 +91,19 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	
 	private List<Report> mineList = new ArrayList<Report>();
 	private List<Report> showMineList = new ArrayList<Report>();	
-	private int mineSortType = SORT_NULL;
-	private boolean mineSortReverse = false;
-	private int mineTempSortType = SORT_NULL;
+	private int mineSortType = SORT_UPDATE_DATE;
+	private int mineTempSortType = SORT_UPDATE_DATE;
+    private boolean mineSortReverse = false;
+    private boolean mineTempSortReverse = false;
 	private boolean[] mineCheck;
 	private List<Integer> mineFilterStatusList = new ArrayList<Integer>();
 	
 	private List<Report> othersList = new ArrayList<Report>();
 	private List<Report> showOthersList = new ArrayList<Report>();
-	private int othersSortType = SORT_NULL;
-	private boolean othersSortReverse = false;
-	private int othersTempSortType = SORT_NULL;
+	private int othersSortType = SORT_UPDATE_DATE;
+	private int othersTempSortType = SORT_UPDATE_DATE;
+    private boolean othersSortReverse = false;
+    private boolean othersTempSortReverse = false;
 	private boolean[] othersCheck;
 	private List<Integer> othersFilterStatusList = new ArrayList<Integer>();
 	
@@ -300,8 +309,197 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 	private void initFilterView()
 	{
 		noResultLayout = (RelativeLayout) view.findViewById(R.id.noResultLayout);
+
+        rotateAnimation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnimation.setDuration(200);
+        rotateAnimation.setFillAfter(true);
+
+        rotateReverseAnimation = new RotateAnimation(180, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateReverseAnimation.setDuration(200);
+        rotateReverseAnimation.setFillAfter(true);
 		
-		View filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);		
+		View filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);
+
+        sortUpdateDateRadio = (RadioButton) filterView.findViewById(R.id.sortUpdateDateRadio);
+        sortUpdateDateRadio.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                selectSortUpdateDateRadio();
+                if (ReimApplication.getReportTabIndex() == 0)
+                {
+                    MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_MODIFY_DATE");
+                    if (mineTempSortType != SORT_UPDATE_DATE)
+                    {
+                        mineTempSortReverse = false;
+                        mineTempSortType = SORT_UPDATE_DATE;
+                    }
+                    else
+                    {
+                        reverseSortUpdateImageView();
+                    }
+                }
+                else
+                {
+                    MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_MODIFY_DATE");
+                    if (othersTempSortType != SORT_UPDATE_DATE)
+                    {
+                        othersTempSortReverse = false;
+                        othersTempSortType = SORT_UPDATE_DATE;
+                    }
+                    else
+                    {
+                        reverseSortUpdateImageView();
+                    }
+                }
+            }
+        });
+        sortCreateDateRadio = (RadioButton) filterView.findViewById(R.id.sortCreateDateRadio);
+        sortCreateDateRadio.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                selectSortCreateDateRadio();
+                if (ReimApplication.getReportTabIndex() == 0)
+                {
+                    MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_CREATE_DATE");
+                    if (mineTempSortType != SORT_CREATE_DATE)
+                    {
+                        mineTempSortReverse = false;
+                        mineTempSortType = SORT_CREATE_DATE;
+                    }
+                    else
+                    {
+                        reverseSortCreateImageView();
+                    }
+                }
+                else
+                {
+                    MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_CREATE_DATE");
+                    if (othersTempSortType != SORT_CREATE_DATE)
+                    {
+                        othersTempSortReverse = false;
+                        othersTempSortType = SORT_CREATE_DATE;
+                    }
+                    else
+                    {
+                        reverseSortCreateImageView();
+                    }
+                }
+            }
+        });
+        sortAmountRadio = (RadioButton) filterView.findViewById(R.id.sortAmountRadio);
+        sortAmountRadio.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                selectSortAmountRadio();
+                if (ReimApplication.getReportTabIndex() == 0)
+                {
+                    MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_AMOUNT");
+                    if (mineTempSortType != SORT_AMOUNT)
+                    {
+                        mineTempSortReverse = false;
+                        mineTempSortType = SORT_AMOUNT;
+                    }
+                    else
+                    {
+                        reverseSortAmountImageView();
+                    }
+                }
+                else
+                {
+                    MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_AMOUNT");
+                    if (othersTempSortType != SORT_AMOUNT)
+                    {
+                        othersTempSortReverse = false;
+                        othersTempSortType = SORT_AMOUNT;
+                    }
+                    else
+                    {
+                        reverseSortAmountImageView();
+                    }
+                }
+            }
+        });
+
+        sortUpdateImageView = (ImageView) filterView.findViewById(R.id.sortUpdateImageView);
+        sortUpdateImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                reverseSortUpdateImageView();
+            }
+        });
+        sortCreateImageView = (ImageView) filterView.findViewById(R.id.sortCreateImageView);
+        sortCreateImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                reverseSortCreateImageView();
+            }
+        });
+        sortAmountImageView = (ImageView) filterView.findViewById(R.id.sortAmountImageView);
+        sortAmountImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                reverseSortAmountImageView();
+            }
+        });
+
+        tagAdapter = new ReportTagGridViewAdapter(getActivity());
+
+        GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
+        tagGridView.setAdapter(tagAdapter);
+        tagGridView.setOnItemClickListener(new OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_TAG");
+                tagAdapter.setSelection(position);
+                tagAdapter.notifyDataSetChanged();
+            }
+        });
+
+        ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
+        confirmImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (ReimApplication.getReportTabIndex() == 0)
+                {
+                    mineSortReverse = mineTempSortReverse;
+                    mineSortType = mineTempSortType;
+                    mineFilterStatusList.clear();
+                    mineFilterStatusList.addAll(tagAdapter.getFilterStatusList());
+                    mineCheck = tagAdapter.getCheckedTags();
+                }
+                else
+                {
+                    othersSortReverse = othersTempSortReverse;
+                    othersSortType = othersTempSortType;
+                    othersFilterStatusList.clear();
+                    othersFilterStatusList.addAll(tagAdapter.getFilterStatusList());
+                    othersCheck = tagAdapter.getCheckedTags();
+                }
+
+                filterPopupWindow.dismiss();
+                ReimProgressDialog.show();
+                refreshReportListView();
+                ReimProgressDialog.dismiss();
+            }
+        });
+
+        ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
+        cancelImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                filterPopupWindow.dismiss();
+            }
+        });
+
 		filterPopupWindow = ViewUtils.constructTopPopupWindow(getActivity(), filterView);
 	}
 	
@@ -481,7 +679,130 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			tipImageView.setVisibility(View.GONE);
 		}
 	}
-	
+
+    private void selectSortUpdateDateRadio()
+    {
+        sortUpdateDateRadio.setChecked(true);
+        sortCreateDateRadio.setChecked(false);
+        sortAmountRadio.setChecked(false);
+
+        sortUpdateImageView.setVisibility(View.VISIBLE);
+        sortCreateImageView.clearAnimation();
+        sortCreateImageView.setVisibility(View.GONE);
+        sortAmountImageView.clearAnimation();
+        sortAmountImageView.setVisibility(View.GONE);
+    }
+
+    private void selectSortCreateDateRadio()
+    {
+        sortUpdateDateRadio.setChecked(false);
+        sortCreateDateRadio.setChecked(true);
+        sortAmountRadio.setChecked(false);
+
+        sortUpdateImageView.clearAnimation();
+        sortUpdateImageView.setVisibility(View.GONE);
+        sortCreateImageView.setVisibility(View.VISIBLE);
+        sortAmountImageView.clearAnimation();
+        sortAmountImageView.setVisibility(View.GONE);
+    }
+
+    private void selectSortAmountRadio()
+    {
+        sortUpdateDateRadio.setChecked(false);
+        sortCreateDateRadio.setChecked(false);
+        sortAmountRadio.setChecked(true);
+
+        sortUpdateImageView.clearAnimation();
+        sortUpdateImageView.setVisibility(View.GONE);
+        sortCreateImageView.clearAnimation();
+        sortCreateImageView.setVisibility(View.GONE);
+        sortAmountImageView.setVisibility(View.VISIBLE);
+    }
+
+    private void reverseSortUpdateImageView()
+    {
+        if (ReimApplication.getReportTabIndex() == 0)
+        {
+            mineTempSortReverse = !mineTempSortReverse;
+            if (!mineTempSortReverse) // status before change
+            {
+                sortUpdateImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortUpdateImageView.startAnimation(rotateAnimation);
+            }
+        }
+        else
+        {
+            othersTempSortReverse = !othersTempSortReverse;
+            if (!othersTempSortReverse) // status before change
+            {
+                sortUpdateImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortUpdateImageView.startAnimation(rotateAnimation);
+            }
+        }
+    }
+
+    private void reverseSortCreateImageView()
+    {
+        if (ReimApplication.getReportTabIndex() == 0)
+        {
+            mineTempSortReverse = !mineTempSortReverse;
+            if (!mineTempSortReverse) // status before change
+            {
+                sortCreateImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortCreateImageView.startAnimation(rotateAnimation);
+            }
+        }
+        else
+        {
+            othersTempSortReverse = !othersTempSortReverse;
+            if (!othersTempSortReverse) // status before change
+            {
+                sortCreateImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortCreateImageView.startAnimation(rotateAnimation);
+            }
+        }
+    }
+
+    private void reverseSortAmountImageView()
+    {
+        if (ReimApplication.getReportTabIndex() == 0)
+        {
+            mineTempSortReverse = !mineTempSortReverse;
+            if (!mineTempSortReverse) // status before change
+            {
+                sortAmountImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortAmountImageView.startAnimation(rotateAnimation);
+            }
+        }
+        else
+        {
+            othersTempSortReverse = !othersTempSortReverse;
+            if (!othersTempSortReverse) // status before change
+            {
+                sortAmountImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortAmountImageView.startAnimation(rotateAnimation);
+            }
+        }
+    }
+
 	private List<Report> readMineReportList()
 	{
 		return dbManager.getUserReports(appPreference.getCurrentUserID());
@@ -507,23 +828,21 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			resultList.add(report);
 		}
 
-		if (sortType == SORT_NULL)
-		{
-			Report.sortByUpdateDate(resultList);
-		}
-		if (sortType == SORT_AMOUNT)
-		{
-			Report.sortByAmount(resultList);
-		}
-		if (sortType == SORT_ITEMS_COUNT)
-		{
-			Report.sortByItemsCount(resultList);
-		}
-		if (sortType == SORT_CREATE_DATE)
-		{
-			Report.sortByCreateDate(resultList);
-		}
-		
+        switch (sortType)
+        {
+            case SORT_UPDATE_DATE:
+                Report.sortByUpdateDate(resultList);
+                break;
+            case SORT_CREATE_DATE:
+                Report.sortByCreateDate(resultList);
+                break;
+            case SORT_AMOUNT:
+                Report.sortByAmount(resultList);
+                break;
+            default:
+                break;
+        }
+
 		if (sortReverse)
 		{
 			Collections.reverse(resultList);
@@ -574,159 +893,81 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 
     private void showFilterWindow()
     {
-    	View filterView = filterPopupWindow.getContentView();
-
-		final RadioButton sortNullRadio = (RadioButton)filterView.findViewById(R.id.sortNullRadio);
-		final RadioButton sortItemsCountRadio = (RadioButton)filterView.findViewById(R.id.sortItemsCountRadio);
-		final RadioButton sortAmountRadio = (RadioButton)filterView.findViewById(R.id.sortAmountRadio);	
-		final RadioButton sortCreateDateRadio = (RadioButton)filterView.findViewById(R.id.sortCreateDateRadio);
-		SegmentedGroup sortRadioGroup = (SegmentedGroup)filterView.findViewById(R.id.sortRadioGroup);
-		sortRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		{
-			public void onCheckedChanged(RadioGroup group, int checkedId)
-			{
-				if (ReimApplication.getReportTabIndex() == 0)
-				{
-					if (checkedId == sortNullRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_MODIFY_DATE");
-						mineTempSortType = SORT_NULL;
-					}
-					else if (checkedId == sortItemsCountRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_ITEMS_COUNT");
-						mineTempSortType = SORT_ITEMS_COUNT;
-					}
-					else if (checkedId == sortAmountRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_AMOUNT");
-						mineTempSortType = SORT_AMOUNT;
-					}
-					else if (checkedId == sortCreateDateRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_CREATE_DATE");
-						mineTempSortType = SORT_CREATE_DATE;
-					}						
-				}
-				else
-				{
-					if (checkedId == sortNullRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_MODIFY_DATE");
-						othersTempSortType = SORT_NULL;
-					}
-					else if (checkedId == sortItemsCountRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_ITEMS_COUNT");
-						othersTempSortType = SORT_ITEMS_COUNT;
-					}
-					else if (checkedId == sortAmountRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_AMOUNT");
-						othersTempSortType = SORT_AMOUNT;
-					}
-					else if (checkedId == sortCreateDateRadio.getId())
-					{
-						MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_CREATE_DATE");
-						othersTempSortType = SORT_CREATE_DATE;
-					}						
-				}
-			}
-		});
-
-		final ReportTagGridViewAdapter tagAdapter = new ReportTagGridViewAdapter(getActivity());
-		
-		GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
-		tagGridView.setAdapter(tagAdapter);
-		tagGridView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_TAG");
-				tagAdapter.setSelection(position);
-				tagAdapter.notifyDataSetChanged();
-			}
-		});
-		
-		ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
-		confirmImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (ReimApplication.getReportTabIndex() == 0)
-				{
-					mineSortReverse = mineSortType == mineTempSortType ? !mineSortReverse : false;
-					mineSortType = mineTempSortType;
-					mineFilterStatusList.clear();
-					mineFilterStatusList.addAll(tagAdapter.getFilterStatusList());
-					mineCheck = tagAdapter.getCheckedTags();
-				}
-				else
-				{
-					othersSortReverse = othersSortType == othersTempSortType ? !othersSortReverse : false;
-					othersSortType = othersTempSortType;
-					othersFilterStatusList.clear();
-					othersFilterStatusList.addAll(tagAdapter.getFilterStatusList());
-					othersCheck = tagAdapter.getCheckedTags();
-				}
-
-				filterPopupWindow.dismiss();
-				ReimProgressDialog.show();
-				refreshReportListView();
-				ReimProgressDialog.dismiss();
-			}
-		});
-
-		ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
-		cancelImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{				
-				filterPopupWindow.dismiss();
-			}
-		});
-		
 		if (ReimApplication.getReportTabIndex() == 0)
 		{
-			switch (mineSortType)
-			{
-				case SORT_NULL:
-					sortRadioGroup.check(sortNullRadio.getId());
-					break;
-				case SORT_ITEMS_COUNT:
-					sortRadioGroup.check(sortItemsCountRadio.getId());
-					break;
-				case SORT_AMOUNT:
-					sortRadioGroup.check(sortAmountRadio.getId());
-					break;
-				case SORT_CREATE_DATE:
-					sortRadioGroup.check(sortCreateDateRadio.getId());
-					break;
-				default:
-					break;
-			}
-			
+            mineTempSortReverse = false;
+            mineTempSortType = mineSortType;
+            switch (mineSortType)
+            {
+                case SORT_UPDATE_DATE:
+                {
+                    selectSortUpdateDateRadio();
+                    if (mineSortReverse)
+                    {
+                        reverseSortUpdateImageView();
+                    }
+                    break;
+                }
+                case SORT_CREATE_DATE:
+                {
+                    selectSortCreateDateRadio();
+                    if (mineSortReverse)
+                    {
+                        reverseSortCreateImageView();
+                    }
+                    break;
+                }
+                case SORT_AMOUNT:
+                {
+                    selectSortAmountRadio();
+                    if (mineSortReverse)
+                    {
+                        reverseSortAmountImageView();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+
 			tagAdapter.setCheck(mineCheck);
 			tagAdapter.notifyDataSetChanged();
 		}
 		else
 		{
+            othersTempSortReverse = false;
+            othersTempSortType = othersSortType;
 			switch (othersSortType)
 			{
-				case SORT_NULL:
-					sortRadioGroup.check(sortNullRadio.getId());
-					break;
-				case SORT_ITEMS_COUNT:
-					sortRadioGroup.check(sortItemsCountRadio.getId());
-					break;
-				case SORT_AMOUNT:
-					sortRadioGroup.check(sortAmountRadio.getId());
-					break;
-				case SORT_CREATE_DATE:
-					sortRadioGroup.check(sortCreateDateRadio.getId());
-					break;
-				default:
-					break;
+                case SORT_UPDATE_DATE:
+                {
+                    selectSortUpdateDateRadio();
+                    if (othersSortReverse)
+                    {
+                        reverseSortUpdateImageView();
+                    }
+                    break;
+                }
+                case SORT_CREATE_DATE:
+                {
+                    selectSortCreateDateRadio();
+                    if (othersSortReverse)
+                    {
+                        reverseSortCreateImageView();
+                    }
+                    break;
+                }
+                case SORT_AMOUNT:
+                {
+                    selectSortAmountRadio();
+                    if (othersSortReverse)
+                    {
+                        reverseSortAmountImageView();
+                    }
+                    break;
+                }
+                default:
+                    break;
 			}
 			
 			tagAdapter.setCheck(othersCheck);

@@ -390,26 +390,7 @@ public class Report implements Serializable
 				return R.string.not_available;
 		}
 	}
-	
-    public static void sortByItemsCount(List<Report> reportList)
-    {
-    	DBManager dbManager = DBManager.getDBManager();
-    	final SparseIntArray countArray = new SparseIntArray();
-    	for (Report report : reportList)
-		{
-    		int count = dbManager.getReportItemsCount(report.getLocalID());
-			countArray.put(report.getLocalID(), count);
-		}
-    	
-    	Collections.sort(reportList, new Comparator<Report>()
-		{
-			public int compare(Report report1, Report report2)
-			{
-				return (int) (countArray.get(report2.getLocalID()) - countArray.get(report1.getLocalID()));
-			}
-		});
-    }
-    
+
     public static void sortByAmount(List<Report> reportList)
     {
     	DBManager dbManager = DBManager.getDBManager();

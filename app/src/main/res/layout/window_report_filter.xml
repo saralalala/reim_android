@@ -55,33 +55,33 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         layout="@layout/view_divider"/>
-    
+
     <classes.widget.SegmentedGroup
         android:id="@+id/sortRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/sortDivider"
         android:layout_marginTop="22dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-    	android:orientation="horizontal" >
+        android:orientation="horizontal" >
 
         <RadioButton
-            android:id="@+id/sortNullRadio"
+            android:id="@+id/sortUpdateDateRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checked="true"
-            android:text="@string/sort_null"
+            android:text="@string/sort_update_date"
             style="@style/RadioButton" />
 
         <RadioButton
-            android:id="@+id/sortItemsCountRadio"
+            android:id="@+id/sortCreateDateRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/sort_item_count"
+            android:text="@string/sort_create_date"
             style="@style/RadioButton" />
 
         <RadioButton
@@ -92,15 +92,72 @@
             android:text="@string/sort_amount"
             style="@style/RadioButton" />
 
-        <RadioButton
-            android:id="@+id/sortCreateDateRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/sort_create_date"
-            style="@style/RadioButton" />
-        
     </classes.widget.SegmentedGroup>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/sortRadioGroup"
+        android:layout_alignBottom="@id/sortRadioGroup"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp" >
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/sortUpdateImageView"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/sort_consumed_date"
+                android:src="@drawable/arrow" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/sortCreateImageView"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/sort_consumed_date"
+                android:src="@drawable/arrow" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/sortAmountImageView"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/sort_consumed_date"
+                android:src="@drawable/arrow" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tagTextView"

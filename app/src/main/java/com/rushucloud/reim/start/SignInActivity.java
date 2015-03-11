@@ -314,6 +314,11 @@ public class SignInActivity extends Activity
                 }
                 else
                 {
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    appPreference.setUsername("");
+                    appPreference.setPassword("");
+                    appPreference.saveAppPreference();
+
                     runOnUiThread(new Runnable()
                     {
                         public void run()
