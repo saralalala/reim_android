@@ -80,7 +80,6 @@ public class WelcomeActivity extends Activity
 				finish();
 			}			
 		});
-		signInButton = ViewUtils.resizeLongButton(signInButton);
 
 		final int buttonHeight = signInButton.getLayoutParams().height;
 		

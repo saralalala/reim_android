@@ -566,7 +566,6 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				}
 			}
 		});
-		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
 		
 		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -576,7 +575,6 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				deletePopupWindow.dismiss();
 			}
 		});
-		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
 		deletePopupWindow = ViewUtils.constructBottomPopupWindow(getActivity(), deleteView);
 	}

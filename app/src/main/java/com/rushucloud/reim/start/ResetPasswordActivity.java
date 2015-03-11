@@ -127,7 +127,6 @@ public class ResetPasswordActivity extends Activity
 				}
 			}
 		});
-		completeButton = ViewUtils.resizeLongButton(completeButton);
 		
     	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()

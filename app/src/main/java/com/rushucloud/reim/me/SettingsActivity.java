@@ -140,7 +140,6 @@ public class SettingsActivity extends Activity
 				}
 			}
 		});
-        signOutButton = ViewUtils.resizeLongButton(signOutButton);
 	}
 	
 	private void sendSignOutRequest()

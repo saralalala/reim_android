@@ -114,7 +114,6 @@ public class MessageDetailActivity extends Activity
 				}
 			}
 		});
-		agreeButton = ViewUtils.resizeLongButton(agreeButton);
 		
 		Button rejectButton = (Button) findViewById(R.id.rejectButton);
 		rejectButton.setOnClickListener(new View.OnClickListener()
@@ -131,7 +130,6 @@ public class MessageDetailActivity extends Activity
 				}
 			}
 		});
-		rejectButton = ViewUtils.resizeLongButton(rejectButton);
 
         String currentNickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
 		if (invite.getTypeCode() != Invite.TYPE_NEW || invite.getInvitor().equals(currentNickname))

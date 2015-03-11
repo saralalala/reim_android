@@ -27,9 +27,13 @@
     <color name="hint_grey">#FF999999</color>
     <color name="hint_dark_grey">#CC000000</color>
     <color name="hint_light_grey">#66000000</color>
-    
-    <color name="button_text_dark">#FFFF898C</color>
+
+    <color name="button_dark">#FFFF575B</color>
+    <color name="button_light">#FFFFFFFF</color>
+    <color name="button_text_dark">#FFFF575B</color>
     <color name="button_text_light">#FFFFFFFF</color>
+    <color name="button_window_selected">#FFE7E9EB</color>
+    <color name="button_window_unselected">#FFFFFFFF</color>
     
     <color name="list_item_header">#FFE9E9EB</color>
     <color name="list_item_selected">#FFFBE2E3</color>

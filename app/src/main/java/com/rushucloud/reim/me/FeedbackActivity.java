@@ -93,7 +93,6 @@ public class FeedbackActivity extends Activity
 				}
 			}
 		});
-		submitButton = ViewUtils.resizeLongButton(submitButton);
 		
 		LinearLayout layout = (LinearLayout) findViewById(R.id.baseLayout);
 		layout.setOnClickListener(new View.OnClickListener()

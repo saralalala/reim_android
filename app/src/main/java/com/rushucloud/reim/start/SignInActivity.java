@@ -142,7 +142,7 @@ public class SignInActivity extends Activity
 				}
 			}
 		});
-		signInButton = ViewUtils.resizeLongButton(signInButton);
+
 
         TextView forgorPasswordTextView = (TextView) findViewById(R.id.forgotTextView);
 		forgorPasswordTextView.setOnClickListener(new View.OnClickListener()
@@ -188,7 +188,6 @@ public class SignInActivity extends Activity
 				finish();
 			}
 		});
-		phoneButton = ViewUtils.resizeWindowButton(phoneButton);
 		
 		Button emailButton = (Button) forgorView.findViewById(R.id.emailButton);
 		emailButton.setOnClickListener(new View.OnClickListener()
@@ -202,7 +201,6 @@ public class SignInActivity extends Activity
 				finish();
 			}
 		});
-		emailButton = ViewUtils.resizeWindowButton(emailButton);
 		
 		Button cancelButton = (Button) forgorView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -212,7 +210,6 @@ public class SignInActivity extends Activity
 				forgotPopupWindow.dismiss();
 			}
 		});
-		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
 		forgotPopupWindow = ViewUtils.constructBottomPopupWindow(this, forgorView);
 	}

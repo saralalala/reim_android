@@ -489,7 +489,6 @@ public class EditReportActivity extends Activity
 				refreshView();
 			}
 		});
-		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
 		
 		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -499,7 +498,6 @@ public class EditReportActivity extends Activity
 				deletePopupWindow.dismiss();
 			}
 		});
-		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
 		deletePopupWindow = ViewUtils.constructBottomPopupWindow(this, deleteView);		
 	}

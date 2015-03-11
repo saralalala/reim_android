@@ -112,6 +112,10 @@ public class ItemListViewAdapter extends BaseAdapter
 					categoryImageView.setImageBitmap(bitmap);				
 				}
 			}
+            else if (category == null)
+            {
+                categoryImageView.setVisibility(View.INVISIBLE);
+            }
 			
 			return view;
 		}

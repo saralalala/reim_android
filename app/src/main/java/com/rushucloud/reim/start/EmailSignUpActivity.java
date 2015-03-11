@@ -138,8 +138,7 @@ public class EmailSignUpActivity extends Activity
 					sendRegisterRequest(user);
 				}
 			}
-		});		
-		signUpButton = ViewUtils.resizeLongButton(signUpButton);
+		});
 		
     	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()

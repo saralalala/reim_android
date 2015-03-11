@@ -130,64 +130,6 @@ public class ViewUtils
 		activity.getWindow().setAttributes(params);
 	}
 
-	public static Button resizeLongButton(Button button)
-	{
-		Context context = ReimApplication.getContext();
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		
-		int marginPixels = PhoneUtils.dpToPixel(context, 16);
-		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_long_solid_light);
-		double ratio = ((double) bitmap.getHeight()) / bitmap.getWidth();
-		
-		ViewGroup.LayoutParams params = button.getLayoutParams();
-		params.width = metrics.widthPixels - marginPixels * 2;
-		params.height = (int) (params.width * ratio);
-		
-		button.setLayoutParams(params);
-		return button;
-	}
-	
-	public static Button resizeShortButton(Button button, int length, boolean fixHeight)
-	{
-		Context context = ReimApplication.getContext();
-
-		int lengthPixels = PhoneUtils.dpToPixel(context, length);
-		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_short_solid_light);
-		double ratio = ((double) bitmap.getWidth()) / bitmap.getHeight();
-		
-		ViewGroup.LayoutParams params = button.getLayoutParams();
-		if (fixHeight)
-		{
-			params.width = (int) (lengthPixels * ratio);
-			params.height = lengthPixels;			
-		}
-		else
-		{
-			params.width = lengthPixels;
-			params.height = (int) (lengthPixels / ratio);			
-		}
-		
-		button.setLayoutParams(params);
-		return button;
-	}
-	
-	public static Button resizeWindowButton(Button button)
-	{
-		Context context = ReimApplication.getContext();
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		
-		int marginPixels = PhoneUtils.dpToPixel(context, 10);
-		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.window_button_selected);
-		double ratio = ((double) bitmap.getHeight()) / bitmap.getWidth();
-		
-		ViewGroup.LayoutParams params = button.getLayoutParams();
-		params.width = metrics.widthPixels - marginPixels * 2;
-		params.height = (int) (params.width * ratio);
-		
-		button.setLayoutParams(params);
-		return button;
-	}
-
 	public static OnFocusChangeListener onFocusChangeListener = new OnFocusChangeListener()
 	{
 		public void onFocusChange(View v, boolean hasFocus)

@@ -102,10 +102,10 @@
 			    <RelativeLayout
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
-			        android:layout_marginTop="22dp"
-			        android:layout_marginBottom="22dp"
+			        android:layout_marginTop="10dp"
+			        android:layout_marginBottom="10dp"
 			        android:layout_marginLeft="16dp"
-			        android:layout_marginRight="16dp" >
+			        android:layout_marginRight="4dp" >
 			
 				    <TextView
 				        android:id="@+id/timeTextView"
@@ -119,7 +119,7 @@
 				        android:id="@+id/approveInfoTextView"
 				        android:layout_width="wrap_content"
 				        android:layout_height="wrap_content"
-				        android:layout_alignParentTop="true"
+                        android:padding="12dp"
 				        android:layout_alignParentRight="true"
 				        android:text="@string/approve_info_hint"
 				        android:textColor="@color/major_dark"

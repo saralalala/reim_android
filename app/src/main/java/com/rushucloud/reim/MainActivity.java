@@ -306,7 +306,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				}
 			}
 		});
-		ViewUtils.resizeShortButton(submitButton, 90, false);
 		
 		Button cancelButton = (Button) feedbackView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new OnClickListener()
@@ -317,7 +316,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				feedbackPopupWindow.dismiss();
 			}
 		});
-		ViewUtils.resizeShortButton(cancelButton, 90, false);
 
 		feedbackPopupWindow = ViewUtils.constructCenterPopupWindow(this, feedbackView);
 	}
@@ -357,7 +355,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				}
 			}
 		});
-		ViewUtils.resizeShortButton(submitButton, 90, false);
 		
 		Button skipButton = (Button) phoneView.findViewById(R.id.skipButton);
 		skipButton.setOnClickListener(new OnClickListener()
@@ -367,7 +364,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				sendFeedbackRequest(feedbackEditText.getText().toString(), "");
 			}
 		});
-		ViewUtils.resizeShortButton(skipButton, 90, false);
 
 		phonePopupWindow = ViewUtils.constructCenterPopupWindow(this, phoneView);
 	}

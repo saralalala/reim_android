@@ -102,7 +102,6 @@ public class EmailFindActivity extends Activity
 				}
 			}
 		});
-    	confirmButton = ViewUtils.resizeLongButton(confirmButton);
 		
     	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()

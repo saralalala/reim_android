@@ -349,7 +349,6 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				}
 			}
 		});
-		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
 		
 		Button exportButton = (Button) operationView.findViewById(R.id.exportButton);
 		exportButton.setOnClickListener(new View.OnClickListener()
@@ -373,7 +372,6 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				}
 			}
 		});
-		exportButton = ViewUtils.resizeWindowButton(exportButton);
 		
 		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -383,7 +381,6 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				operationPopupWindow.dismiss();
 			}
 		});
-		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
 		operationPopupWindow = ViewUtils.constructBottomPopupWindow(getActivity(), operationView);  
 	}
@@ -437,7 +434,6 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				}
 			}
 		});
-		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
 		
 		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -447,7 +443,6 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 				deletePopupWindow.dismiss();
 			}
 		});
-		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
 		deletePopupWindow = ViewUtils.constructBottomPopupWindow(getActivity(), deleteView);  
 	}

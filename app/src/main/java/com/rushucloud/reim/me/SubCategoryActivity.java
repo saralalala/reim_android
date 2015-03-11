@@ -160,7 +160,6 @@ public class SubCategoryActivity extends Activity
 				}
 			}
 		});
-		modifyButton = ViewUtils.resizeWindowButton(modifyButton);
 		
 		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
 		deleteButton.setOnClickListener(new View.OnClickListener()
@@ -190,7 +189,6 @@ public class SubCategoryActivity extends Activity
 				}
 			}
 		});
-		deleteButton = ViewUtils.resizeWindowButton(deleteButton);
 		
 		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -200,7 +198,6 @@ public class SubCategoryActivity extends Activity
 				operationPopupWindow.dismiss();
 			}
 		});
-		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
 		operationPopupWindow = ViewUtils.constructBottomPopupWindow(this, operationView);
 	}

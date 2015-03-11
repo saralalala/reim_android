@@ -619,7 +619,6 @@ public class EditItemActivity extends Activity
 				startActivityForResult(intent, TAKE_PHOTO);
 			}
 		});
-		cameraButton = ViewUtils.resizeWindowButton(cameraButton);
 		
 		Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
 		galleryButton.setOnClickListener(new View.OnClickListener()
@@ -633,7 +632,6 @@ public class EditItemActivity extends Activity
 				startActivityForResult(intent, PICK_IMAGE);
 			}
 		});
-		galleryButton = ViewUtils.resizeWindowButton(galleryButton);
 		
 		Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -643,7 +641,6 @@ public class EditItemActivity extends Activity
 				picturePopupWindow.dismiss();
 			}
 		});
-		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
 		picturePopupWindow = ViewUtils.constructBottomPopupWindow(this, pictureView);
 
@@ -694,7 +691,6 @@ public class EditItemActivity extends Activity
 				timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
 			}
 		});
-		confirmButton = ViewUtils.resizeShortButton(confirmButton, 30, true);
 		
 		datePicker = (DatePicker) timeView.findViewById(R.id.datePicker);
 		
@@ -807,7 +803,8 @@ public class EditItemActivity extends Activity
 		}
 		else
 		{
-			categoryTextView.setText(R.string.not_available);			
+            categoryImageView.setVisibility(View.INVISIBLE);
+			categoryTextView.setVisibility(View.INVISIBLE);
 		}
 	}
 	

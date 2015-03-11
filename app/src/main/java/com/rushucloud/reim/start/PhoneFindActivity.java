@@ -110,7 +110,6 @@ public class PhoneFindActivity extends Activity
 				}
 			}
 		});
-		acquireCodeButton = ViewUtils.resizeShortButton(acquireCodeButton, 32, true);
     	
     	Button nextButton = (Button) findViewById(R.id.nextButton);
     	nextButton.setOnClickListener(new View.OnClickListener()
@@ -139,7 +138,6 @@ public class PhoneFindActivity extends Activity
 				}
 			}
 		});
-    	nextButton = ViewUtils.resizeLongButton(nextButton);
 		
     	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()

@@ -72,15 +72,18 @@ public class ReportItemListViewAdapter extends BaseAdapter
 				Category category = item.getCategory();
 				
 				categoryImageView.setImageResource(R.drawable.default_icon);
-				if (!category.getIconPath().isEmpty())
+				if (category != null && !category.getIconPath().isEmpty())
 				{
 					Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
 					if (bitmap != null)
 					{
 						categoryImageView.setImageBitmap(bitmap);				
 					}
-					
 				}
+                else if (category == null)
+                {
+                    categoryImageView.setVisibility(View.INVISIBLE);
+                }
 			}
 			
 			return view;

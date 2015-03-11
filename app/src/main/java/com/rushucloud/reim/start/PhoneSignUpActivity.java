@@ -135,7 +135,6 @@ public class PhoneSignUpActivity extends Activity
 				}
 			}
 		});
-		acquireCodeButton = ViewUtils.resizeShortButton(acquireCodeButton, 32, true);
 		
 		Button signUpButton = (Button) findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()
@@ -200,7 +199,6 @@ public class PhoneSignUpActivity extends Activity
 				}
 			}
 		});
-		signUpButton = ViewUtils.resizeLongButton(signUpButton);
 		
     	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()

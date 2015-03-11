@@ -296,7 +296,6 @@ public class ProfileActivity extends Activity
 				startActivityForResult(intent, TAKE_PHOTO);
 			}
 		});
-		cameraButton = ViewUtils.resizeWindowButton(cameraButton);
 		
 		Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
 		galleryButton.setOnClickListener(new View.OnClickListener()
@@ -310,7 +309,6 @@ public class ProfileActivity extends Activity
 				startActivityForResult(intent, PICK_IMAGE);
 			}
 		});
-		galleryButton = ViewUtils.resizeWindowButton(galleryButton);
 		
 		Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener()
@@ -320,7 +318,6 @@ public class ProfileActivity extends Activity
 				picturePopupWindow.dismiss();
 			}
 		});
-		cancelButton = ViewUtils.resizeWindowButton(cancelButton);
 		
 		picturePopupWindow = ViewUtils.constructBottomPopupWindow(this, pictureView);        
 	}

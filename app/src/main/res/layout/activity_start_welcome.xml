@@ -33,10 +33,10 @@
         <Button
             android:id="@+id/phoneSignUpButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:layout_toLeftOf="@+id/pivotView"
             android:layout_marginRight="6dp"
-            android:background="@drawable/button_short_light_solid_drawable"
+            android:background="@drawable/button_light_solid_drawable"
             android:text="@string/sign_up_by_phone"
             android:textColor="@color/button_text_dark_color"
             android:textSize="20sp" />
@@ -50,10 +50,10 @@
         <Button
             android:id="@+id/emailSignUpButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:layout_toRightOf="@+id/pivotView"
             android:layout_marginLeft="6dp"
-            android:background="@drawable/button_short_light_solid_drawable"
+            android:background="@drawable/button_light_solid_drawable"
             android:text="@string/sign_up_by_email"
             android:textColor="@color/button_text_dark_color"
             android:textSize="20sp" />
@@ -73,12 +73,12 @@
     <Button
         android:id="@+id/signInButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="36dp"
-        android:background="@drawable/button_long_light_border_drawable"
+        android:background="@drawable/button_light_border_drawable"
         android:text="@string/sign_in"
         android:textColor="@color/button_text_light_color"
         android:textSize="20sp" />

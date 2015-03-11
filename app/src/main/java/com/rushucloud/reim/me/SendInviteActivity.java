@@ -106,7 +106,6 @@ public class SendInviteActivity extends Activity
 				}
 			}
 		});
-        inviteButton = ViewUtils.resizeLongButton(inviteButton);
         
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()
