@@ -184,11 +184,22 @@
 	                android:layout_width="match_parent"
 	                android:layout_height="wrap_content"
 	                android:orientation="vertical"
-	                android:layout_alignParentTop="true"
-	                android:paddingTop="3dp"
-	                android:paddingBottom="13dp" 
+                    android:layout_toLeftOf="@+id/addInvoiceImageView"
 	                android:layout_marginLeft="80dp"
-	                android:layout_marginRight="10dp" />
+                    android:paddingTop="3dp"
+                    android:paddingBottom="13dp"
+                    android:minHeight="56dp" />
+
+                <ImageView
+                    android:id="@+id/addInvoiceImageView"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:contentDescription="@string/add"
+                    android:src="@drawable/add_tag_button" />
 	
 	        </RelativeLayout>
             
@@ -310,9 +321,8 @@
 
 	            <RelativeLayout
 	                android:id="@+id/categoryLayout"
-	                android:layout_width="wrap_content"
+	                android:layout_width="match_parent"
 	                android:layout_height="match_parent"
-				    android:gravity="center_vertical"
 	                android:layout_marginLeft="90dp"
 	                android:layout_marginRight="16dp" >
 
@@ -320,14 +330,15 @@
 				        android:id="@+id/categoryImageView"
 				        android:layout_width="30dp"
 				        android:layout_height="30dp"
-				        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
 				        android:contentDescription="@string/icon"
 				        android:src="@drawable/default_icon" />
 	
 		            <TextView
 		                android:id="@+id/categoryTextView"
-		                android:layout_width="match_parent"
+		                android:layout_width="wrap_content"
 		                android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
 		                android:layout_toRightOf="@+id/categoryImageView"
 		                android:layout_marginLeft="10dp"
 		                android:text="@string/not_available"

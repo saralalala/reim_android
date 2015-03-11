@@ -83,7 +83,7 @@ public class Image
 		File file = new File(path);
 		if (file != null)
 		{
-			file.delete();			
+			file.delete();
 		}
 	}
 	

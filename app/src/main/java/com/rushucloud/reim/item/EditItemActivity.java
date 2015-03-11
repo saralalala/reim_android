@@ -107,10 +107,8 @@ public class EditItemActivity extends Activity
 	private TextView categoryTextView;
 	
 	private LinearLayout tagLayout;
-	private ImageView addTagImageView;
 	
 	private LinearLayout memberLayout;
-	private ImageView addMemberImageView;
 	
 	private EditText noteEditText;
 
@@ -192,9 +190,9 @@ public class EditItemActivity extends Activity
 
 						ReimProgressDialog.show();
 						Bitmap bitmap;
-						for (int i = 0; i < paths.length; i++)
+						for (String path : paths)
 						{
-							bitmap = BitmapFactory.decodeFile(paths[i]);
+							bitmap = BitmapFactory.decodeFile(path);
 							String invoicePath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
 							if (!invoicePath.isEmpty())
 							{
@@ -582,8 +580,7 @@ public class EditItemActivity extends Activity
 		// init invoice		
 		invoiceLayout = (LinearLayout) findViewById(R.id.invoiceLayout);
 				
-		addInvoiceImageView = new ImageView(this);
-		addInvoiceImageView.setImageResource(R.drawable.add_tag_button);
+		addInvoiceImageView = (ImageView) findViewById(R.id.addInvoiceImageView);
 		addInvoiceImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -811,8 +808,8 @@ public class EditItemActivity extends Activity
 	private void initTagView()
 	{
 		tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
-		
-		addTagImageView = (ImageView) findViewById(R.id.addTagImageView);
+
+        ImageView addTagImageView = (ImageView) findViewById(R.id.addTagImageView);
 		addTagImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -840,7 +837,7 @@ public class EditItemActivity extends Activity
 	{
 		memberLayout = (LinearLayout) findViewById(R.id.memberLayout);
 
-		addMemberImageView = (ImageView) findViewById(R.id.addMemberImageView);
+        ImageView addMemberImageView = (ImageView) findViewById(R.id.addMemberImageView);
 		addMemberImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -905,16 +902,16 @@ public class EditItemActivity extends Activity
 		removeList.clear();
 		
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 96);
+		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
 		int width = PhoneUtils.dpToPixel(getResources(), 40);
-		int verticalPadding = PhoneUtils.dpToPixel(getResources(), 5);
-		int horizontalPadding = PhoneUtils.dpToPixel(getResources(), 5);
-		int maxCount = (layoutMaxLength + horizontalPadding) / (width + horizontalPadding);
-		horizontalPadding = (layoutMaxLength - width * maxCount) / (maxCount - 1);
+		int verticalInterval = PhoneUtils.dpToPixel(getResources(), 5);
+		int horizontalInterval = PhoneUtils.dpToPixel(getResources(), 5);
+		int maxCount = (layoutMaxLength + horizontalInterval) / (width + horizontalInterval);
+		horizontalInterval = (layoutMaxLength - width * maxCount) / (maxCount - 1);
 
 		LinearLayout layout = new LinearLayout(this);
 		int invoiceCount = item.getInvoices() != null ? item.getInvoices().size() : 0;
-		for (int i = 0; i < invoiceCount + 1; i++)
+		for (int i = 0; i < invoiceCount; i++)
 		{
 			if (i > Item.MAX_INVOICE_COUNT)
 			{
@@ -927,108 +924,93 @@ public class EditItemActivity extends Activity
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 				if (i != 0)
 				{
-					params.topMargin = verticalPadding;					
+					params.topMargin = verticalInterval;
 				}
 				layout.setLayoutParams(params);
 				layout.setOrientation(LinearLayout.HORIZONTAL);
 				
 				invoiceLayout.addView(layout);
 			}
-			
-			if (i < invoiceCount)
-			{
-				final int index = i;
-				final Bitmap bitmap = item.getInvoices().get(index).getBitmap();
-				
-				View view = View.inflate(this, R.layout.grid_invoice, null);
 
-				final ImageView removeImageView = (ImageView) view.findViewById(R.id.removeImageView);
-				removeImageView.setOnClickListener(new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						item.getInvoices().remove(index);
-						refreshInvoiceView();
-					}
-				});
-				removeList.add(removeImageView);
-				
-				ImageView invoiceImageView = (ImageView) view.findViewById(R.id.invoiceImageView);
-				invoiceImageView.setOnClickListener(new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						if (bitmap != null && removeImageView.getVisibility() != View.VISIBLE)
-						{
-							hideSoftKeyboard();
-							removeImageView.setVisibility(View.INVISIBLE);
-							
-							ArrayList<String> pathList = new ArrayList<String>();
-							for (Image image : item.getInvoices())
-							{
-								if (!image.getPath().isEmpty())
-								{
-									pathList.add(image.getPath());
-								}
-							}
-							
-							int pageIndex = pathList.indexOf(item.getInvoices().get(index).getPath());
-							
-							Bundle bundle = new Bundle();
-							bundle.putStringArrayList("imagePath", pathList);
-							bundle.putInt("index", pageIndex);
-							
-							Intent intent = new Intent(EditItemActivity.this, MultipleImageActivity.class);
-							intent.putExtras(bundle);
-							startActivity(intent);
-						}
-					}
-				});
-				invoiceImageView.setOnLongClickListener(new View.OnLongClickListener()
-				{
-					public boolean onLongClick(View v)
-					{
-						for (ImageView removeImageView : removeList)
-						{
-							removeImageView.setVisibility(View.VISIBLE);
-						}
-						removeImageViewShown = true;
-						return false;
-					}
-				});
-							
-				if (bitmap == null)
-				{
-					invoiceImageView.setImageResource(R.drawable.default_invoice);				
-				}
-				else
-				{
-					invoiceImageView.setImageBitmap(bitmap);
-				}
+            final int index = i;
+            final Bitmap bitmap = item.getInvoices().get(index).getBitmap();
 
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, width);
-				if ((i + 1) % maxCount != 0)
-				{
-					params.rightMargin = horizontalPadding;				
-				}
-				layout.addView(view, params);
-			}
-			else
-			{
-				int addButtonWidth = PhoneUtils.dpToPixel(getResources(), 30);
-				int padding = PhoneUtils.dpToPixel(getResources(), 10);
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(addButtonWidth, addButtonWidth);
-				params.topMargin = padding;
-				
-				ViewGroup viewGroup = (ViewGroup) addInvoiceImageView.getParent();
-				if (viewGroup != null)
-				{
-					viewGroup.removeView(addInvoiceImageView);
-				}
-				layout.addView(addInvoiceImageView, params);
-			}
-			
+            View view = View.inflate(this, R.layout.grid_invoice, null);
+
+            final ImageView removeImageView = (ImageView) view.findViewById(R.id.removeImageView);
+            removeImageView.setOnClickListener(new View.OnClickListener()
+            {
+                public void onClick(View v)
+                {
+                    item.getInvoices().remove(index);
+                    refreshInvoiceView();
+                }
+            });
+            removeList.add(removeImageView);
+
+            ImageView invoiceImageView = (ImageView) view.findViewById(R.id.invoiceImageView);
+            invoiceImageView.setOnClickListener(new View.OnClickListener()
+            {
+                public void onClick(View v)
+                {
+                    if (bitmap != null && removeImageView.getVisibility() != View.VISIBLE)
+                    {
+                        hideSoftKeyboard();
+                        removeImageView.setVisibility(View.INVISIBLE);
+
+                        ArrayList<String> pathList = new ArrayList<String>();
+                        for (Image image : item.getInvoices())
+                        {
+                            if (!image.getPath().isEmpty())
+                            {
+                                pathList.add(image.getPath());
+                            }
+                        }
+
+                        int pageIndex = pathList.indexOf(item.getInvoices().get(index).getPath());
+
+                        Bundle bundle = new Bundle();
+                        bundle.putStringArrayList("imagePath", pathList);
+                        bundle.putInt("index", pageIndex);
+
+                        Intent intent = new Intent(EditItemActivity.this, MultipleImageActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                }
+            });
+            invoiceImageView.setOnLongClickListener(new View.OnLongClickListener()
+            {
+                public boolean onLongClick(View v)
+                {
+                    for (ImageView removeImageView : removeList)
+                    {
+                        removeImageView.setVisibility(View.VISIBLE);
+                    }
+                    removeImageViewShown = true;
+                    return false;
+                }
+            });
+
+            if (bitmap == null)
+            {
+                invoiceImageView.setImageResource(R.drawable.default_invoice);
+            }
+            else
+            {
+                invoiceImageView.setImageBitmap(bitmap);
+            }
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, width);
+            if ((i + 1) % maxCount != 0)
+            {
+                params.rightMargin = horizontalInterval;
+            }
+            layout.addView(view, params);
 		}
+
+        int visibility = invoiceCount < Item.MAX_INVOICE_COUNT ? View.VISIBLE : View.INVISIBLE;
+        addInvoiceImageView.setVisibility(visibility);
 	}
 
 	private void refreshTagView()
@@ -1036,9 +1018,9 @@ public class EditItemActivity extends Activity
 		tagLayout.removeAllViews();
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
-		int tagVerticalInterval = PhoneUtils.dpToPixel(getResources(), 17);
-		int tagHorizontalInterval = PhoneUtils.dpToPixel(getResources(), 10);
+		int layoutMaxWidth = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
+		int verticalInterval = PhoneUtils.dpToPixel(getResources(), 17);
+		int horizontalInterval = PhoneUtils.dpToPixel(getResources(), 10);
 		int padding = PhoneUtils.dpToPixel(getResources(), 24);
 		int textSize = PhoneUtils.dpToPixel(getResources(), 16);
 		
@@ -1060,11 +1042,11 @@ public class EditItemActivity extends Activity
 			textPaint.getTextBounds(name, 0, name.length(), textRect);
 			int width = textRect.width() + padding;
 			
-			if (space - width - tagHorizontalInterval <= 0)
+			if (space - width - horizontalInterval <= 0)
 			{
 				layout = new LinearLayout(this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				params.topMargin = tagVerticalInterval;
+				params.topMargin = verticalInterval;
 				layout.setLayoutParams(params);
 				layout.setOrientation(LinearLayout.HORIZONTAL);
 				
@@ -1072,14 +1054,14 @@ public class EditItemActivity extends Activity
 				
 				params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				layout.addView(view, params);
-				space = layoutMaxLength - width;
+				space = layoutMaxWidth - width;
 			}
 			else
 			{
 				LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				params.leftMargin = tagHorizontalInterval;
+				params.leftMargin = horizontalInterval;
 				layout.addView(view, params);
-				space -= width + tagHorizontalInterval;
+				space -= width + horizontalInterval;
 			}
 		}
 		
@@ -1090,22 +1072,22 @@ public class EditItemActivity extends Activity
 		memberLayout.removeAllViews();
 
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
-		int iconWidth = PhoneUtils.dpToPixel(getResources(), 50);
-		int iconVerticalInterval = PhoneUtils.dpToPixel(getResources(), 18);
-		int iconHorizontalInterval = PhoneUtils.dpToPixel(getResources(), 18);
-		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
-		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
+		int layoutMaxWidth = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
+		int width = PhoneUtils.dpToPixel(getResources(), 50);
+		int verticalInterval = PhoneUtils.dpToPixel(getResources(), 18);
+		int horizontalInterval = PhoneUtils.dpToPixel(getResources(), 18);
+		int maxCount = (layoutMaxWidth + horizontalInterval) / (width + horizontalInterval);
+		horizontalInterval = (layoutMaxWidth - width * maxCount) / (maxCount - 1);
 		
 		LinearLayout layout = new LinearLayout(this);
 		int memberCount = item.getRelevantUsers() != null ? item.getRelevantUsers().size() : 0;
 		for (int i = 0; i < memberCount; i++)
 		{
-			if (i % iconMaxCount == 0)
+			if (i % maxCount == 0)
 			{
 				layout = new LinearLayout(this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				params.topMargin = iconVerticalInterval;
+				params.topMargin = verticalInterval;
 				layout.setLayoutParams(params);
 				layout.setOrientation(LinearLayout.HORIZONTAL);
 				
@@ -1129,8 +1111,8 @@ public class EditItemActivity extends Activity
 			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
 			nameTextView.setText(user.getNickname());
 			
-			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
-			params.rightMargin = iconHorizontalInterval;
+			LayoutParams params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+			params.rightMargin = horizontalInterval;
 			
 			layout.addView(memberView, params);
 		}
