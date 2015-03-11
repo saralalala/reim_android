@@ -92,39 +92,24 @@ public class ResetPasswordActivity extends Activity
     	
 		confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
 		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        confirmPasswordEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
+                {
+                    resetPassword();
+                }
+                return false;
+            }
+        });
 		
 		Button completeButton = (Button) findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(ResetPasswordActivity.this, "UMENG_REGIST_FORGETPASSWORD-NEWPASSWORD");
-				final String newPassword = newPasswordEditText.getText().toString();
-				final String confirmPassword = confirmPasswordEditText.getText().toString();
-				
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_request_network_unavailable);
-				}
-				else if (newPassword.isEmpty())
-				{
-					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_new_password_empty);
-					newPasswordEditText.requestFocus();
-				}
-				else if (confirmPassword.isEmpty())
-				{
-					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_confirm_password_empty);
-					confirmPasswordEditText.requestFocus();
-				}
-				else if (!newPassword.equals(confirmPassword))
-				{
-					ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_wrong_confirm_password);
-					confirmPasswordEditText.requestFocus();
-				}
-				else
-				{
-					sendResetPasswordRequest(newPassword);
-				}
+                resetPassword();
 			}
 		});
 		
@@ -137,6 +122,38 @@ public class ResetPasswordActivity extends Activity
 			}
 		});
 	}
+
+    private void resetPassword()
+    {
+        MobclickAgent.onEvent(ResetPasswordActivity.this, "UMENG_REGIST_FORGETPASSWORD-NEWPASSWORD");
+
+        final String newPassword = newPasswordEditText.getText().toString();
+        final String confirmPassword = confirmPasswordEditText.getText().toString();
+
+        if (!PhoneUtils.isNetworkConnected())
+        {
+            ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_request_network_unavailable);
+        }
+        else if (newPassword.isEmpty())
+        {
+            ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_new_password_empty);
+            newPasswordEditText.requestFocus();
+        }
+        else if (confirmPassword.isEmpty())
+        {
+            ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_confirm_password_empty);
+            confirmPasswordEditText.requestFocus();
+        }
+        else if (!newPassword.equals(confirmPassword))
+        {
+            ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_wrong_confirm_password);
+            confirmPasswordEditText.requestFocus();
+        }
+        else
+        {
+            sendResetPasswordRequest(newPassword);
+        }
+    }
 
 	private void sendResetPasswordRequest(String password)
 	{

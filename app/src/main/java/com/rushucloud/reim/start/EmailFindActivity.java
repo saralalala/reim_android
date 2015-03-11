@@ -76,30 +76,24 @@ public class EmailFindActivity extends Activity
     	
     	emailEditText = (EditText) findViewById(R.id.emailEditText);
     	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        emailEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
+                {
+                    resetEmail();
+                }
+                return false;
+            }
+        });
 		
     	Button confirmButton = (Button) findViewById(R.id.confirmButton);
     	confirmButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				if (PhoneUtils.isNetworkConnected())
-				{
-					String emailAddress = emailEditText.getText().toString();
-					if (Utils.isEmail(emailAddress))
-					{
-						hideSoftKeyboard();
-						sendResetEmail();
-					}
-					else
-					{
-						ViewUtils.showToast(EmailFindActivity.this, R.string.error_email_wrong_format);
-						emailEditText.requestFocus();	
-					}					
-				}
-				else
-				{
-					ViewUtils.showToast(EmailFindActivity.this, R.string.error_request_network_unavailable);
-				}
+                resetEmail();
 			}
 		});
 		
@@ -112,8 +106,30 @@ public class EmailFindActivity extends Activity
 			}
 		});
     }
-    
-    private void sendResetEmail()
+
+    private void resetEmail()
+    {
+        if (PhoneUtils.isNetworkConnected())
+        {
+            String emailAddress = emailEditText.getText().toString();
+            if (Utils.isEmail(emailAddress))
+            {
+                hideSoftKeyboard();
+                sendResetEmailRequest();
+            }
+            else
+            {
+                ViewUtils.showToast(EmailFindActivity.this, R.string.error_email_wrong_format);
+                emailEditText.requestFocus();
+            }
+        }
+        else
+        {
+            ViewUtils.showToast(EmailFindActivity.this, R.string.error_request_network_unavailable);
+        }
+    }
+
+    private void sendResetEmailRequest()
     {
 		ForgotPasswordRequest request = new ForgotPasswordRequest(0, emailEditText.getText().toString());
 		request.sendRequest(new HttpConnectionCallback()

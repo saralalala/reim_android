@@ -192,12 +192,13 @@
 
                 <ImageView
                     android:id="@+id/addInvoiceImageView"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="46dp"
+                    android:layout_height="56dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="13dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
+                    android:paddingTop="13dp"
+                    android:paddingBottom="13dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
                     android:contentDescription="@string/add"
                     android:src="@drawable/add_tag_button" />
 	
@@ -381,12 +382,13 @@
 
 	            <ImageView
 	                android:id="@+id/addTagImageView"
-	                android:layout_width="30dp"
-	                android:layout_height="30dp"
-	                android:layout_alignParentRight="true"
-					android:layout_marginTop="13dp"
-	                android:layout_marginLeft="8dp"
-	                android:layout_marginRight="8dp"
+                    android:layout_width="46dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentRight="true"
+                    android:paddingTop="13dp"
+                    android:paddingBottom="13dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
 	                android:contentDescription="@string/add"
 	                android:src="@drawable/add_tag_button" />
 	            
@@ -425,12 +427,13 @@
 
 	            <ImageView
 	                android:id="@+id/addMemberImageView"
-	                android:layout_width="30dp"
-	                android:layout_height="30dp"
-	                android:layout_alignParentRight="true"
-					android:layout_marginTop="18dp"
-	                android:layout_marginLeft="8dp"
-	                android:layout_marginRight="8dp"
+                    android:layout_width="46dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentRight="true"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
 	                android:contentDescription="@string/add"
 	                android:src="@drawable/add_tag_button" />
 	

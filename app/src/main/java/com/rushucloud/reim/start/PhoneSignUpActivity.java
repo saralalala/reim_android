@@ -105,6 +105,17 @@ public class PhoneSignUpActivity extends Activity
 		
 		codeEditText = (EditText) findViewById(R.id.codeEditText);	
 		codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        codeEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
+                {
+                    signUp();
+                }
+                return false;
+            }
+        });
 
 		acquireCodeButton = (Button) findViewById(R.id.acquireCodeButton);
 		acquireCodeButton.setOnClickListener(new View.OnClickListener()
@@ -141,62 +152,7 @@ public class PhoneSignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(PhoneSignUpActivity.this, "UMENG_REGIST_TEL-SUBMIT");
-				
-				hideSoftKeyboard();
-				
-				String phoneNumber = phoneEditText.getText().toString();
-				String password = passwordEditText.getText().toString();
-				String confirmPassword = confirmPasswordEditText.getText().toString();
-				String inputCode = codeEditText.getText().toString();
-				
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
-				}
-				else if (!Utils.isPhone(phoneNumber))
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
-					phoneEditText.requestFocus();		
-				}
-				else if (phoneNumber.isEmpty())
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
-					phoneEditText.requestFocus();		
-				}
-				else if (password.isEmpty())
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_password_empty);
-					passwordEditText.requestFocus();	
-				}
-				else if (confirmPassword.isEmpty())
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_confirm_password_empty);
-					confirmPasswordEditText.requestFocus();
-				}
-				else if (!password.equals(confirmPassword))
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_confirm_password);
-					confirmPasswordEditText.requestFocus();
-				}
-				else if (inputCode.isEmpty())
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_code_empty);
-					codeEditText.requestFocus();	
-				}
-				else if (!inputCode.equals(code))
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_code);
-					codeEditText.requestFocus();
-				}
-				else
-				{
-					User user = new User();
-					user.setPhone(phoneNumber);
-					user.setPassword(password);
-					
-					sendRegisterRequest(user, inputCode);
-				}
+                signUp();
 			}
 		});
 		
@@ -287,7 +243,66 @@ public class PhoneSignUpActivity extends Activity
 			}
 		});
     }
-    
+
+    private void signUp()
+    {
+        MobclickAgent.onEvent(PhoneSignUpActivity.this, "UMENG_REGIST_TEL-SUBMIT");
+        hideSoftKeyboard();
+
+        String phoneNumber = phoneEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        String confirmPassword = confirmPasswordEditText.getText().toString();
+        String inputCode = codeEditText.getText().toString();
+
+        if (!PhoneUtils.isNetworkConnected())
+        {
+            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
+        }
+        else if (!Utils.isPhone(phoneNumber))
+        {
+            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
+            phoneEditText.requestFocus();
+        }
+        else if (phoneNumber.isEmpty())
+        {
+            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
+            phoneEditText.requestFocus();
+        }
+        else if (password.isEmpty())
+        {
+            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_password_empty);
+            passwordEditText.requestFocus();
+        }
+        else if (confirmPassword.isEmpty())
+        {
+            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_confirm_password_empty);
+            confirmPasswordEditText.requestFocus();
+        }
+        else if (!password.equals(confirmPassword))
+        {
+            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_confirm_password);
+            confirmPasswordEditText.requestFocus();
+        }
+        else if (inputCode.isEmpty())
+        {
+            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_code_empty);
+            codeEditText.requestFocus();
+        }
+        else if (!inputCode.equals(code))
+        {
+            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_code);
+            codeEditText.requestFocus();
+        }
+        else
+        {
+            User user = new User();
+            user.setPhone(phoneNumber);
+            user.setPassword(password);
+
+            sendRegisterRequest(user, inputCode);
+        }
+    }
+
 	private void sendRegisterRequest(final User user, String verifyCode)
 	{
 		ReimProgressDialog.show();

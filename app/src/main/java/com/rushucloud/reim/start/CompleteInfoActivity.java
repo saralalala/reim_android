@@ -165,39 +165,24 @@ public class CompleteInfoActivity extends Activity
 		
 		nicknameEditText = (EditText) findViewById(R.id.nicknameEditText);
 		nicknameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        nicknameEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
+                {
+                    completeInfo();
+                }
+                return false;
+            }
+        });
 
 		Button completeButton = (Button) findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(CompleteInfoActivity.this, "UMENG_LOGIN");
-				hideSoftKeyboard();
-				
-				String nickname = nicknameEditText.getText().toString();
-				currentUser.setNickname(nickname);
-				
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(CompleteInfoActivity.this, R.string.error_update_network_unavailable);
-					startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
-					finish();
-				}
-				else if (!newAvatar && nickname.isEmpty())
-				{
-					startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
-					finish();
-				}
-				else if (newAvatar)
-				{
-					ReimProgressDialog.show();
-					sendUploadAvatarRequest();
-				}
-				else
-				{
-					ReimProgressDialog.show();
-					sendModifyUserInfoRequest();
-				}
+                completeInfo();
 			}
 		});
 		
@@ -285,7 +270,38 @@ public class CompleteInfoActivity extends Activity
 
 		ViewUtils.dimBackground(this);
     }
-    
+
+    private void completeInfo()
+    {
+        MobclickAgent.onEvent(CompleteInfoActivity.this, "UMENG_LOGIN");
+        hideSoftKeyboard();
+
+        String nickname = nicknameEditText.getText().toString();
+        currentUser.setNickname(nickname);
+
+        if (!PhoneUtils.isNetworkConnected())
+        {
+            ViewUtils.showToast(CompleteInfoActivity.this, R.string.error_update_network_unavailable);
+            startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
+            finish();
+        }
+        else if (!newAvatar && nickname.isEmpty())
+        {
+            startActivity(new Intent(CompleteInfoActivity.this, MainActivity.class));
+            finish();
+        }
+        else if (newAvatar)
+        {
+            ReimProgressDialog.show();
+            sendUploadAvatarRequest();
+        }
+        else
+        {
+            ReimProgressDialog.show();
+            sendModifyUserInfoRequest();
+        }
+    }
+
     private void sendUploadAvatarRequest()
     {
 		UploadImageRequest request = new UploadImageRequest(avatarPath, NetworkConstant.IMAGE_TYPE_AVATAR);

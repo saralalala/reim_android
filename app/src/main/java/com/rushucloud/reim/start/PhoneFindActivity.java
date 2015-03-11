@@ -85,6 +85,17 @@ public class PhoneFindActivity extends Activity
 		
     	codeEditText = (EditText) findViewById(R.id.codeEditText);
     	codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        codeEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
+                {
+                    resetPassword();
+                }
+                return false;
+            }
+        });
     	
     	acquireCodeButton = (Button) findViewById(R.id.acquireCodeButton);
     	acquireCodeButton.setOnClickListener(new View.OnClickListener()
@@ -116,26 +127,7 @@ public class PhoneFindActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(PhoneFindActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL-SUBMIT");
-				
-				if (code.isEmpty())
-				{
-					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_no_code);
-				}
-				else if (!codeEditText.getText().toString().equals(code))
-				{
-					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_wrong_code);
-				}
-				else
-				{
-					Bundle bundle = new Bundle();
-					bundle.putInt("cid", cid);
-					bundle.putString("code", code);
-					Intent intent = new Intent(PhoneFindActivity.this, ResetPasswordActivity.class);
-					intent.putExtras(bundle);
-					startActivity(intent);
-					finish();					
-				}
+                resetPassword();
 			}
 		});
 		
@@ -148,7 +140,31 @@ public class PhoneFindActivity extends Activity
 			}
 		});
     }
-    
+
+    private void resetPassword()
+    {
+        MobclickAgent.onEvent(PhoneFindActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL-SUBMIT");
+
+        if (code.isEmpty())
+        {
+            ViewUtils.showToast(PhoneFindActivity.this, R.string.error_no_code);
+        }
+        else if (!codeEditText.getText().toString().equals(code))
+        {
+            ViewUtils.showToast(PhoneFindActivity.this, R.string.error_wrong_code);
+        }
+        else
+        {
+            Bundle bundle = new Bundle();
+            bundle.putInt("cid", cid);
+            bundle.putString("code", code);
+            Intent intent = new Intent(PhoneFindActivity.this, ResetPasswordActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            finish();
+        }
+    }
+
     private void sendTextMessage()
     {
 		waitingTime = 60;

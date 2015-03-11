@@ -94,6 +94,17 @@ public class SignInActivity extends Activity
 		
 		passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 		passwordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        passwordEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
+                {
+                    signIn();
+                }
+                return false;
+            }
+        });
 
 		if (username != null)
 		{
@@ -106,40 +117,7 @@ public class SignInActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(SignInActivity.this, "UMENG_LOGIN");
-				hideSoftKeyboard();
-				
-				final String username = usernameEditText.getText().toString();
-				final String password = passwordEditText.getText().toString();
-				
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(SignInActivity.this, R.string.error_request_network_unavailable);
-				}
-				else if (username.isEmpty())
-				{
-					ViewUtils.showToast(SignInActivity.this, R.string.error_username_empty);
-					usernameEditText.requestFocus();
-				}
-				else if (password.isEmpty())
-				{
-					ViewUtils.showToast(SignInActivity.this, R.string.error_password_empty);
-					passwordEditText.requestFocus();
-				}
-				else if (!Utils.isEmailOrPhone(username))
-				{
-					ViewUtils.showToast(SignInActivity.this, R.string.error_email_or_phone_wrong_format);
-					usernameEditText.requestFocus();
-				}
-				else
-				{
-					AppPreference appPreference = AppPreference.getAppPreference();
-					appPreference.setUsername(username);
-					appPreference.setPassword(password);
-					appPreference.saveAppPreference();
-
-					sendSignInRequest();
-				}
+                signIn();
 			}
 		});
 
@@ -221,7 +199,45 @@ public class SignInActivity extends Activity
 
 		ViewUtils.dimBackground(this);
     }
-	
+
+    private void signIn()
+    {
+        MobclickAgent.onEvent(SignInActivity.this, "UMENG_LOGIN");
+        hideSoftKeyboard();
+
+        final String username = usernameEditText.getText().toString();
+        final String password = passwordEditText.getText().toString();
+
+        if (!PhoneUtils.isNetworkConnected())
+        {
+            ViewUtils.showToast(SignInActivity.this, R.string.error_request_network_unavailable);
+        }
+        else if (username.isEmpty())
+        {
+            ViewUtils.showToast(SignInActivity.this, R.string.error_username_empty);
+            usernameEditText.requestFocus();
+        }
+        else if (password.isEmpty())
+        {
+            ViewUtils.showToast(SignInActivity.this, R.string.error_password_empty);
+            passwordEditText.requestFocus();
+        }
+        else if (!Utils.isEmailOrPhone(username))
+        {
+            ViewUtils.showToast(SignInActivity.this, R.string.error_email_or_phone_wrong_format);
+            usernameEditText.requestFocus();
+        }
+        else
+        {
+            AppPreference appPreference = AppPreference.getAppPreference();
+            appPreference.setUsername(username);
+            appPreference.setPassword(password);
+            appPreference.saveAppPreference();
+
+            sendSignInRequest();
+        }
+    }
+
 	private void sendSignInRequest()
 	{
 		ReimProgressDialog.show();

@@ -258,6 +258,9 @@ public class EditItemActivity extends Activity
 					
 					if (category != null)
 					{
+                        categoryTextView.setVisibility(View.VISIBLE);
+                        categoryImageView.setVisibility(View.VISIBLE);
+
 						categoryTextView.setText(category.getName());
 						categoryImageView.setImageResource(R.drawable.default_icon);
 						if (!category.getIconPath().isEmpty())
@@ -274,6 +277,12 @@ public class EditItemActivity extends Activity
 							sendDownloadCategoryIconRequest(category);
 						}
 					}
+                    else
+                    {
+                        categoryTextView.setVisibility(View.INVISIBLE);
+                        categoryImageView.setVisibility(View.INVISIBLE);
+                    }
+
 					break;
 				}
 				case PICK_TAG:

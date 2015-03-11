@@ -23,6 +23,7 @@ import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
@@ -91,52 +92,24 @@ public class EmailSignUpActivity extends Activity
 		
 		confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
 		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        confirmPasswordEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
+                {
+                    signUp();
+                }
+                return false;
+            }
+        });
 
 		Button signUpButton = (Button) findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(EmailSignUpActivity.this, "UMENG_REGIST_MAIL-SUBMIT");
-				
-				hideSoftKeyboard();
-				
-				String email = emailEditText.getText().toString();
-				String password = passwordEditText.getText().toString();
-				String confirmPassword = confirmPasswordEditText.getText().toString();
-				
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_request_network_unavailable);
-				}
-				else if (email.isEmpty())
-				{
-					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_email_empty);
-					emailEditText.requestFocus();
-				}
-				else if (password.isEmpty())
-				{
-					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_password_empty);
-					passwordEditText.requestFocus();
-				}
-				else if (confirmPassword.isEmpty())
-				{
-					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_confirm_password_empty);
-					confirmPasswordEditText.requestFocus();
-				}
-				else if (!password.equals(confirmPassword))
-				{
-					ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_wrong_confirm_password);
-					confirmPasswordEditText.requestFocus();
-				}
-				else
-				{
-					User user = new User();
-					user.setEmail(email);
-					user.setPassword(password);
-					
-					sendRegisterRequest(user);
-				}
+                signUp();
 			}
 		});
 		
@@ -149,7 +122,50 @@ public class EmailSignUpActivity extends Activity
 			}
 		}); 
 	}
-	
+
+    private void signUp()
+    {
+        MobclickAgent.onEvent(EmailSignUpActivity.this, "UMENG_REGIST_MAIL-SUBMIT");
+        hideSoftKeyboard();
+
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        String confirmPassword = confirmPasswordEditText.getText().toString();
+
+        if (!PhoneUtils.isNetworkConnected())
+        {
+            ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_request_network_unavailable);
+        }
+        else if (email.isEmpty())
+        {
+            ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_email_empty);
+            emailEditText.requestFocus();
+        }
+        else if (password.isEmpty())
+        {
+            ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_password_empty);
+            passwordEditText.requestFocus();
+        }
+        else if (confirmPassword.isEmpty())
+        {
+            ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_confirm_password_empty);
+            confirmPasswordEditText.requestFocus();
+        }
+        else if (!password.equals(confirmPassword))
+        {
+            ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_wrong_confirm_password);
+            confirmPasswordEditText.requestFocus();
+        }
+        else
+        {
+            User user = new User();
+            user.setEmail(email);
+            user.setPassword(password);
+
+            sendRegisterRequest(user);
+        }
+    }
+
 	private void sendRegisterRequest(final User user)
 	{
 		ReimProgressDialog.show();
