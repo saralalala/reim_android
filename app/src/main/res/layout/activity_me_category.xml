@@ -57,6 +57,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/titleLayout"
         android:gravity="center"
-        android:text="@string/no_categories" />
+        android:text="@string/no_categories"
+        android:textColor="@color/hint_light_grey" />
 
 </RelativeLayout>

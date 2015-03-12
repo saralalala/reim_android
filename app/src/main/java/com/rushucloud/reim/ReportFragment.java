@@ -78,8 +78,13 @@ public class ReportFragment extends Fragment implements OnClickListener
     private RotateAnimation rotateReverseAnimation;
 	private RelativeLayout noResultLayout;
 	private TextView myTitleTextView;
-	private TextView othersTitleTextView;
-	private ImageView tipImageView;
+    private TextView myShortTextView;
+    private TextView myMediumTextView;
+    private TextView myLongTextView;
+    private TextView othersTitleTextView;
+    private TextView othersShortTextView;
+    private TextView othersMediumTextView;
+    private TextView othersLongTextView;
 	private XListView reportListView;
 	private ReportListViewAdapter mineAdapter;
 	private OthersReportListViewAdapter othersAdapter;
@@ -195,10 +200,16 @@ public class ReportFragment extends Fragment implements OnClickListener
 		myTitleTextView = (TextView)getActivity().findViewById(R.id.myTitleTextView);
 		myTitleTextView.setOnClickListener(this);
 
+        myShortTextView = (TextView) view.findViewById(R.id.myShortTextView);
+        myMediumTextView = (TextView) view.findViewById(R.id.myMediumTextView);
+        myLongTextView = (TextView) view.findViewById(R.id.myLongTextView);
+
 		othersTitleTextView = (TextView)getActivity().findViewById(R.id.othersTitleTextView);
 		othersTitleTextView.setOnClickListener(this);
 
-		tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
+        othersShortTextView = (TextView) view.findViewById(R.id.othersShortTextView);
+        othersMediumTextView = (TextView) view.findViewById(R.id.othersMediumTextView);
+        othersLongTextView = (TextView) view.findViewById(R.id.othersLongTextView);
 		
 		ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 		filterImageView.setOnClickListener(new OnClickListener()
@@ -680,15 +691,61 @@ public class ReportFragment extends Fragment implements OnClickListener
 
 	private void showBadge()
 	{
-		int count = ReimApplication.getReportBadgeCount();
-		if (count > 0)
+		int count = ReimApplication.getMineUnreadList().size();
+		if (count == 0)
 		{
-			tipImageView.setVisibility(View.VISIBLE);
+			myShortTextView.setVisibility(View.GONE);
+            myMediumTextView.setVisibility(View.GONE);
+            myLongTextView.setVisibility(View.GONE);
 		}
-		else
+		else if (count < 10)
 		{
-			tipImageView.setVisibility(View.GONE);
+            myShortTextView.setVisibility(View.VISIBLE);
+            myShortTextView.setText(Integer.toString(count));
+            myMediumTextView.setVisibility(View.GONE);
+            myLongTextView.setVisibility(View.GONE);
 		}
+        else if (count < 100)
+        {
+            myShortTextView.setVisibility(View.GONE);
+            myMediumTextView.setVisibility(View.VISIBLE);
+            myMediumTextView.setText(Integer.toString(count));
+            myLongTextView.setVisibility(View.GONE);
+        }
+        else
+        {
+            myShortTextView.setVisibility(View.GONE);
+            myMediumTextView.setVisibility(View.GONE);
+            myLongTextView.setVisibility(View.VISIBLE);
+        }
+
+        count = ReimApplication.getOthersUnreadList().size();
+        if (count == 0)
+        {
+            othersShortTextView.setVisibility(View.GONE);
+            othersMediumTextView.setVisibility(View.GONE);
+            othersLongTextView.setVisibility(View.GONE);
+        }
+        else if (count < 10)
+        {
+            othersShortTextView.setVisibility(View.VISIBLE);
+            othersShortTextView.setText(Integer.toString(count));
+            othersMediumTextView.setVisibility(View.GONE);
+            othersLongTextView.setVisibility(View.GONE);
+        }
+        else if (count < 100)
+        {
+            othersShortTextView.setVisibility(View.GONE);
+            othersMediumTextView.setVisibility(View.VISIBLE);
+            othersMediumTextView.setText(Integer.toString(count));
+            othersLongTextView.setVisibility(View.GONE);
+        }
+        else
+        {
+            othersShortTextView.setVisibility(View.GONE);
+            othersMediumTextView.setVisibility(View.GONE);
+            othersLongTextView.setVisibility(View.VISIBLE);
+        }
 	}
 
     private void selectSortUpdateDateRadio()
@@ -870,7 +927,8 @@ public class ReportFragment extends Fragment implements OnClickListener
 			mineList.addAll(readMineReportList());
 			showMineList.clear();
 			showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
-			mineAdapter.set(showMineList);
+			mineAdapter.setReportList(showMineList);
+            mineAdapter.setUnreadList(ReimApplication.getMineUnreadList());
 			reportListView.setAdapter(mineAdapter);
 
 			if (!mineFilterStatusList.isEmpty() && showMineList.isEmpty())
@@ -889,6 +947,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 			showOthersList.clear();
 			showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
 			othersAdapter.set(showOthersList);
+            othersAdapter.setUnreadList(ReimApplication.getOthersUnreadList());
 			reportListView.setAdapter(othersAdapter);
 
 			if (!othersFilterStatusList.isEmpty() && showOthersList.isEmpty())
@@ -900,6 +959,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 				noResultLayout.setVisibility(View.GONE);
 			}
 		}
+        showBadge();
 	}
 
     private void showFilterWindow()
@@ -1320,8 +1380,6 @@ public class ReportFragment extends Fragment implements OnClickListener
 		}
 		else
 		{
-			ReimApplication.setReportBadgeCount(0);
-			showBadge();
 			setListView(1);
 		}
 	}

@@ -174,7 +174,7 @@ import com.rushucloud.reim.R;
 	}
 
 	/**
-	 * set last refresh time
+	 * setReportList last refresh time
 	 * 
 	 * @param time
 	 */

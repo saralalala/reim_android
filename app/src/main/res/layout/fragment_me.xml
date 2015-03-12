@@ -18,8 +18,8 @@
 	        android:layout_height="wrap_content"
 	        android:layout_centerInParent="true"
 	        android:text="@string/personal_center"
-	        android:textSize="20sp"
-	        android:textColor="@color/major_light" />
+            android:textColor="@color/major_light"
+            android:textSize="20sp" />
 
     </RelativeLayout>
 
@@ -128,16 +128,25 @@
 				android:background="@drawable/me_item_drawable" >
 					     
 				<TextView
+                    android:id="@+id/messageTextView"
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_centerVertical="true"
-				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
 				    android:text="@string/my_messages"
-				    android:textSize="16sp"
-				    android:textColor="@color/font_major_dark" />
-				
-				<ImageView
+                    android:textColor="@color/font_major_dark"
+				    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/tipImageView"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_alignTop="@+id/messageTextView"
+                    android:layout_toRightOf="@+id/messageTextView"
+                    android:contentDescription="@string/tip"
+                    android:src="@drawable/tip_dark" />
+
+                <ImageView
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_alignParentRight="true"
@@ -167,8 +176,8 @@
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
 				    android:text="@string/invite"
-				    android:textSize="16sp"
-				    android:textColor="@color/font_major_dark" />
+                    android:textColor="@color/font_major_dark"
+				    android:textSize="16sp" />
 				
 				<ImageView
 				    android:layout_width="wrap_content"
@@ -200,8 +209,8 @@
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
 				    android:text="@string/get_invoice"
-				    android:textSize="16sp"
-				    android:textColor="@color/font_major_dark" />
+                    android:textColor="@color/font_major_dark"
+				    android:textSize="16sp" />
 				
 			</RelativeLayout>
             
@@ -230,8 +239,8 @@
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
 				    android:text="@string/settings"
-				    android:textSize="16sp"
-				    android:textColor="@color/font_major_dark" />
+                    android:textColor="@color/font_major_dark"
+				    android:textSize="16sp" />
 				
 				<ImageView
 				    android:layout_width="wrap_content"
@@ -263,8 +272,8 @@
 				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
 				    android:text="@string/custom_service"
-				    android:textSize="16sp"
-				    android:textColor="@color/font_major_dark" />
+                    android:textColor="@color/font_major_dark"
+				    android:textSize="16sp" />
 				
 			</RelativeLayout>
             

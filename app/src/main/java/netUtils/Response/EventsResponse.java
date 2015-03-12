@@ -5,13 +5,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import classes.utils.AppPreference;
 
 public class EventsResponse extends BaseResponse
 {
-	private int reportEventCount;
-	private int approveEventCount;
-	private int inviteEventCount;
+    private List<Integer> mineUnreadList;
+    private List<Integer> othersUnreadList;
+    private boolean hasUnreadReports;
+    private boolean hasMessages;
 	private boolean needToRefresh;
 	
 	public EventsResponse(Object httpResponse)
@@ -24,25 +28,31 @@ public class EventsResponse extends BaseResponse
 		try
 		{
 			JSONObject jObject = getDataObject();
+            System.out.println(jObject.toString());
 			JSONArray invitesArray = jObject.getJSONArray("invites");
 			JSONArray reportsArray = jObject.getJSONArray("reports");	
 			JSONArray membersArray = jObject.getJSONArray("members");
 			JSONArray managersArray = jObject.getJSONArray("managers");
-			
-			reportEventCount = reportsArray.length();
-			inviteEventCount = invitesArray.length();
+
+            int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
+            mineUnreadList = new ArrayList<Integer>();
+            othersUnreadList = new ArrayList<Integer>();
+            for (int i = 0; i < reportsArray.length(); i++)
+            {
+                JSONObject object = reportsArray.getJSONObject(i);
+                if (object.getInt("uid") == currentUserID)
+                {
+                    mineUnreadList.add(object.getInt("fid"));
+                }
+                else
+                {
+                    othersUnreadList.add(object.getInt("fid"));
+                }
+            }
+
+            hasUnreadReports = reportsArray.length() > 0;
+            hasMessages = invitesArray.length() > 0;
 			needToRefresh = (membersArray.length() + managersArray.length()) > 0;
-			
-			approveEventCount = 0;
-			int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
-			for (int i = 0; i < reportEventCount; i++)
-			{
-				JSONObject object = reportsArray.getJSONObject(i);
-				if (object.getInt("suid") != currentUserID)
-				{
-					approveEventCount++;
-				}
-			}
 		}
 		catch (JSONException e)
 		{
@@ -50,22 +60,27 @@ public class EventsResponse extends BaseResponse
 		}
 	}
 
-	public int getReportEventCount()
-	{
-		return reportEventCount;
-	}
+    public List<Integer> getMineUnreadList()
+    {
+        return mineUnreadList;
+    }
 
-	public int getApproveEventCount()
-	{
-		return approveEventCount;
-	}
-	
-	public int getInviteEventCount()
-	{
-		return inviteEventCount;
-	}
+    public List<Integer> getOthersUnreadList()
+    {
+        return othersUnreadList;
+    }
 
-	public boolean isNeedToRefresh()
+    public boolean hasUnreadReports()
+    {
+        return hasUnreadReports;
+    }
+
+    public boolean hasMessages()
+    {
+        return hasMessages;
+    }
+
+	public boolean needToRefresh()
 	{
 		return needToRefresh;
 	}

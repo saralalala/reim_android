@@ -122,7 +122,7 @@ public class MessageListActivity extends Activity
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				Bundle bundle = new Bundle();
-				bundle.putSerializable("invite", messageList.get(position));
+				bundle.putSerializable("invite", messageList.get(position - 1));
 				Intent intent = new Intent(MessageListActivity.this, MessageActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);

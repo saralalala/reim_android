@@ -15,6 +15,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.facebook.rebound.ui.Util;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -152,7 +153,12 @@ public class EditCategoryActivity extends Activity
 			public void onClick(View v)
 			{
 				String name = nameEditText.getText().toString();
-				String limit = limitEditText.getText().toString();
+				String limitString = limitEditText.getText().toString();
+                double limit = limitString.isEmpty() ? 0 : Utils.stringToDouble(limitString);
+                boolean isProveAhead = proveAheadToggleButton.isChecked();
+                int iconIndex = checkList.indexOf(true);
+                int iconID = iconIndex == -1 ? -1 : iconIndex + 1;
+
 				if (name.isEmpty())
 				{
 					ViewUtils.showToast(EditCategoryActivity.this, R.string.error_category_name_empty);
@@ -161,22 +167,18 @@ public class EditCategoryActivity extends Activity
 				{
 					ViewUtils.showToast(EditCategoryActivity.this, R.string.error_add_network_unavailable);
 				}
-				else
+				else if (category.getName().equals(name) && category.getIconID() == iconID &&
+                                category.getLimit() == limit && category.isProveAhead() == isProveAhead)
+                {
+                    finish();
+                }
+                else
 				{
 					category.setName(name);
 					category.setGroupID(AppPreference.getAppPreference().getCurrentGroupID());
-					category.setIsProveAhead(proveAheadToggleButton.isChecked());
-
-   					if (!limit.isEmpty())
-					{
-						category.setLimit(Double.valueOf(limit));
-					}
-					
-					int iconIndex = checkList.indexOf(true);
-					if (iconIndex != -1)
-					{
-    					category.setIconID(iconIndex + 1);
-					}
+					category.setIsProveAhead(isProveAhead);
+                    category.setLimit(limit);
+                    category.setIconID(iconID);
 					
 					if (category.getServerID() == -1)
 					{

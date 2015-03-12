@@ -46,6 +46,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/titleLayout"
         android:gravity="center"
-        android:text="@string/no_messages" />
+        android:text="@string/no_messages"
+        android:textColor="@color/hint_light_grey"  />
 
 </RelativeLayout>

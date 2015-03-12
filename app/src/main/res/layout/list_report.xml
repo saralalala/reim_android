@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="84dp"
+    android:layout_height="80dp"
     android:orientation="vertical"
     android:background="@drawable/list_item_drawable"
-    android:baselineAligned="false"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp" >
+    android:baselineAligned="false" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:orientation="horizontal" >
 
         <TextView
@@ -47,8 +47,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp" >
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp" >
 
         <TextView
             android:id="@+id/titleTextView"
@@ -76,7 +79,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/font_major_dark"
-                android:textSize="22sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -87,5 +90,13 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/tipImageView"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_gravity="right"
+        android:contentDescription="@string/tip"
+        android:src="@drawable/tip_report"/>
 
 </LinearLayout>

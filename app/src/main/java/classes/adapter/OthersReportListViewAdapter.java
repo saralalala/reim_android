@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -21,12 +22,14 @@ public class OthersReportListViewAdapter extends BaseAdapter
 	private Context context;
 	private LayoutInflater layoutInflater;
 	private List<Report> reportList;
+    private List<Integer> unreadList;
 
 	public OthersReportListViewAdapter(Context context, List<Report> reports)
 	{
 		this.context = context;
 		this.layoutInflater = LayoutInflater.from(context);		
 		this.reportList = new ArrayList<Report>(reports);
+        this.unreadList = new ArrayList<Integer>();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -41,6 +44,7 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		TextView titleTextView = (TextView) convertView.findViewById(R.id.titleTextView);
 		TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
 		TextView amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
+        ImageView tipImageView = (ImageView) convertView.findViewById(R.id.tipImageView);
 
 		Report report = reportList.get(position);
 		
@@ -59,6 +63,9 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		double amount = Double.valueOf(report.getAmount());
 		amountTextView.setText(Utils.formatDouble(amount));
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+
+        int visibility = unreadList.contains(report.getServerID()) ? View.VISIBLE : View.INVISIBLE;
+        tipImageView.setVisibility(visibility);
 		
 		return convertView;
 	}
@@ -83,4 +90,10 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		reportList.clear();
 		reportList.addAll(reports);
 	}
+
+    public void setUnreadList(List<Integer> unreads)
+    {
+        unreadList.clear();
+        unreadList.addAll(unreads);
+    }
 }

@@ -151,7 +151,7 @@ public class ScaleImageView extends View {
     private PointF vTranslate;
     private PointF vTranslateStart;
 
-    // Source coordinate to center on, used when new position is set externally before view is ready
+    // Source coordinate to center on, used when new position is setReportList externally before view is ready
     private Float pendingScale;
     private PointF sPendingCenter;
     private PointF sRequestedCenter;
@@ -712,7 +712,7 @@ public class ScaleImageView extends View {
             return;
         }
 
-        // If waiting to translate to new center position, set translate now
+        // If waiting to translate to new center position, setReportList translate now
         if (sPendingCenter != null && pendingScale != null) {
             if (vTranslate == null) {
                 vTranslate = new PointF(0, 0);
@@ -725,10 +725,10 @@ public class ScaleImageView extends View {
             fitToBounds(true);
         }
 
-        // On first display of base image set up position, and in other cases make sure scale is correct.
+        // On first display of base image setReportList up position, and in other cases make sure scale is correct.
         fitToBounds(false);
 
-        // Everything is set up and coordinates are valid. Inform subclasses.
+        // Everything is setReportList up and coordinates are valid. Inform subclasses.
         if (!readySent) {
             readySent = true;
             new Thread(new Runnable() {
@@ -821,7 +821,7 @@ public class ScaleImageView extends View {
 
     /**
      * Adjusts hypothetical future scale and translate values to keep scale within the allowed range and the image on screen. Minimum scale
-     * is set so one dimension fills the view and the image is centered on the other dimension. Used to calculate what the target of an
+     * is setReportList so one dimension fills the view and the image is centered on the other dimension. Used to calculate what the target of an
      * animation should be.
      * @param center Whether the image should be centered in the dimension it's too small to fill. While animating this can be false to avoid changes in direction as bounds are reached.
      * @param scaleAndTranslate The scale we want and the translation we're aiming for. The values are adjusted to be valid.
@@ -872,7 +872,7 @@ public class ScaleImageView extends View {
 
     /**
      * Adjusts current scale and translate values to keep scale within the allowed range and the image on screen. Minimum scale
-     * is set so one dimension fills the view and the image is centered on the other dimension.
+     * is setReportList so one dimension fills the view and the image is centered on the other dimension.
      * @param center Whether the image should be centered in the dimension it's too small to fill. While animating this can be false to avoid changes in direction as bounds are reached.
      */
     private void fitToBounds(boolean center) {
@@ -1219,13 +1219,13 @@ public class ScaleImageView extends View {
 
     /**
      * Swap the default decoder implementation for one of your own. You must do this before setting the image file or
-     * asset, and you cannot use a custom decoder when using layout XML to set an asset name. Your class must have a
+     * asset, and you cannot use a custom decoder when using layout XML to setReportList an asset name. Your class must have a
      * public default constructor.
      * @param decoderClass The {@link ImageDecoder} implementation to use.
      */
     public final void setDecoderClass(Class<? extends ImageDecoder> decoderClass) {
         if (decoderClass == null) {
-            throw new IllegalArgumentException("Decoder class cannot be set to null");
+            throw new IllegalArgumentException("Decoder class cannot be setReportList to null");
         }
         this.decoderClass = decoderClass;
     }
@@ -1259,7 +1259,7 @@ public class ScaleImageView extends View {
     }
 
     /**
-     * Set the maximum scale allowed. A value of 1 means 1:1 pixels at maximum scale. You may wish to set this according
+     * Set the maximum scale allowed. A value of 1 means 1:1 pixels at maximum scale. You may wish to setReportList this according
      * to screen density - on a retina screen, 1:1 may still be too small. Consider using {@link #setMinimumDpi(int)},
      * which is density aware.
      */
@@ -1268,7 +1268,7 @@ public class ScaleImageView extends View {
     }
 
     /**
-     * Set the minimum scale allowed. A value of 1 means 1:1 pixels at minimum scale. You may wish to set this according
+     * Set the minimum scale allowed. A value of 1 means 1:1 pixels at minimum scale. You may wish to setReportList this according
      * to screen density. Consider using {@link #setMaximumDpi(int)}, which is density aware.
      */
     public final void setMinScale(float minScale) {
@@ -1331,7 +1331,7 @@ public class ScaleImageView extends View {
     /**
      * Externally change the scale and translation of the source image. This may be used with getCenter() and getScale()
      * to restore the scale and zoom after a screen rotate.
-     * @param scale New scale to set.
+     * @param scale New scale to setReportList.
      * @param sCenter New source image coordinate to center on the screen, subject to boundaries.
      */
     public final void setScaleAndCenter(float scale, PointF sCenter) {
@@ -1358,7 +1358,7 @@ public class ScaleImageView extends View {
     }
 
     /**
-     * Subclasses can override this method to be informed when the view is set up and ready for rendering, so they can
+     * Subclasses can override this method to be informed when the view is setReportList up and ready for rendering, so they can
      * skip their own rendering until the base layer (and its scale and translate) are known.
      */
     protected void onImageReady() {
@@ -1547,8 +1547,8 @@ public class ScaleImageView extends View {
     }
 
     /**
-     * Builder class used to set additional options for a scale animation. Create an instance using {@link #animateScale(float)},
-     * then set your options and call {@link #start()}.
+     * Builder class used to setReportList additional options for a scale animation. Create an instance using {@link #animateScale(float)},
+     * then setReportList your options and call {@link #start()}.
      */
     public final class AnimationBuilder {
 
@@ -1618,7 +1618,7 @@ public class ScaleImageView extends View {
         }
 
         /**
-         * Only for internal use. When set to true, the animation proceeds towards the actual end point - the nearest
+         * Only for internal use. When setReportList to true, the animation proceeds towards the actual end point - the nearest
          * point to the center allowed by pan limits. When false, animation is in the direction of the requested end
          * point and is stopped when the limit for each axis is reached. The latter behaviour is used for flings but
          * nothing else.

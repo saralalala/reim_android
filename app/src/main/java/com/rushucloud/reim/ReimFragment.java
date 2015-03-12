@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import classes.Category;
 import classes.Item;
@@ -480,10 +482,7 @@ public class ReimFragment extends Fragment
 		});
 
 		tagLayout = (LinearLayout) filterView.findViewById(R.id.tagLayout);
-		refreshTagView();
-		
 		categoryLayout = (LinearLayout) filterView.findViewById(R.id.categoryLayout);
-		refreshCategoryView();
 		
 		ImageView confirmImageView = (ImageView) filterView.findViewById(R.id.confirmImageView);
 		confirmImageView.setOnClickListener(new View.OnClickListener()
@@ -818,20 +817,41 @@ public class ReimFragment extends Fragment
 	
  	private void refreshItemListView()
 	{
+        SparseBooleanArray array = new SparseBooleanArray();
+        for (int i = 0; i < tagCheck.length; i++)
+        {
+            array.put(tagList.get(i).getServerID(), tagCheck[i]);
+        }
+        tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+        tagCheck = new boolean[tagList.size()];
+        for (int i = 0; i < tagCheck.length; i++)
+        {
+            tagCheck[i] = array.get(tagList.get(i).getServerID(), false);
+        }
+        tempTagCheck = tagCheck;
+
+        array.clear();
+        for (int i = 0; i < categoryCheck.length; i++)
+        {
+            array.put(categoryList.get(i).getServerID(), categoryCheck[i]);
+        }
+        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+        categoryCheck = new boolean[categoryList.size()];
+        for (int i = 0; i < categoryCheck.length; i++)
+        {
+            categoryCheck[i] = array.get(categoryList.get(i).getServerID(), false);
+        }
+        tempCategoryCheck = categoryCheck;
+
 		itemList.clear();
 		itemList.addAll(readItemList());
 		filterItemList();
 		adapter.set(showList);
 		adapter.notifyDataSetChanged();
 
-		if ((filterType != FILTER_STATUS_ALL || filterStatus != FILTER_STATUS_ALL || !filterCategoryList.isEmpty() || !filterTagList.isEmpty()) && showList.isEmpty())
-		{
-			noResultLayout.setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			noResultLayout.setVisibility(View.GONE);
-		}
+        int visibility = (filterType != FILTER_STATUS_ALL || filterStatus != FILTER_STATUS_ALL || !filterCategoryList.isEmpty() ||
+                !filterTagList.isEmpty()) && showList.isEmpty() ? View.VISIBLE : View.GONE;
+        noResultLayout.setVisibility(visibility);
 	}
 
 	private void refreshTagView()
@@ -981,7 +1001,10 @@ public class ReimFragment extends Fragment
     	{
     		sortAmountImageView.startAnimation(rotateAnimation);    		
 		}
-    	
+
+        refreshTagView();
+        refreshCategoryView();
+
 		filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		filterPopupWindow.update();
     }

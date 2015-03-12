@@ -36,7 +36,10 @@ public class ReimApplication extends Application
 	
 	private static int tabIndex = 0;
 	private static int reportTabIndex = 0;
-	private static int reportBadgeCount = 0;
+    private static List<Integer> mineUnreadList = new ArrayList<Integer>();
+    private static List<Integer> othersUnreadList = new ArrayList<Integer>();
+
+    private static boolean hasMessages = false;
 	
 	public void onCreate()
 	{
@@ -74,16 +77,36 @@ public class ReimApplication extends Application
 	{
 		ReimApplication.reportTabIndex = reportTabIndex;
 	}
-	
-	public static int getReportBadgeCount()
-	{
-		return reportBadgeCount;
-	}
 
-	public static void setReportBadgeCount(int reportBadgeCount)
-	{
-		ReimApplication.reportBadgeCount = reportBadgeCount;
-	}
+    public static List<Integer> getMineUnreadList()
+    {
+        return mineUnreadList;
+    }
+
+    public static void setMineUnreadList(List<Integer> mineUnreadList)
+    {
+        ReimApplication.mineUnreadList = mineUnreadList;
+    }
+
+    public static List<Integer> getOthersUnreadList()
+    {
+        return othersUnreadList;
+    }
+
+    public static void setOthersUnreadList(List<Integer> othersUnreadList)
+    {
+        ReimApplication.othersUnreadList = othersUnreadList;
+    }
+
+    public static boolean hasMessages()
+    {
+        return hasMessages;
+    }
+
+    public static void setHasMessages(boolean hasMessages)
+    {
+        ReimApplication.hasMessages = hasMessages;
+    }
 
 	public static String getDeviceInfo(Context context)
 	{

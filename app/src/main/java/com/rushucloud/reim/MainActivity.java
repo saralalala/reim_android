@@ -198,7 +198,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					int currentIndex = viewPager.getCurrentItem();
 					if (currentIndex == 1)
 					{
-						setReportBadge(0);	
+						showReportTip(false);
 						if (PhoneUtils.isNetworkConnected())
 						{
 							sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
@@ -206,7 +206,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					}
 					else if (currentIndex == 3)
 					{
-						setMeBadge(0);
+						showMeTip(false);
 						if (PhoneUtils.isNetworkConnected())
 						{
 							sendEventsReadRequest(EventsReadRequest.TYPE_INVITE);		
@@ -393,28 +393,16 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		}
 	}
 	
-	private void setReportBadge(int eventCount)
+	private void showReportTip(boolean hasUnreadReports)
 	{
-		if (eventCount > 0)
-		{
-			reportTipImageView.setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			reportTipImageView.setVisibility(View.GONE);
-		}
+        int visibility = hasUnreadReports ? View.VISIBLE : View.GONE;
+        reportTipImageView.setVisibility(visibility);
 	}
 	
-	private void setMeBadge(int eventCount)
+	private void showMeTip(boolean hasMessages)
 	{
-		if (eventCount > 0)
-		{
-			meTipImageView.setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			meTipImageView.setVisibility(View.GONE);
-		}
+        int visibility = hasMessages ? View.VISIBLE : View.GONE;
+        meTipImageView.setVisibility(visibility);
 	}
 
 	private void sendGetEventsRequest()
@@ -427,7 +415,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				final EventsResponse response = new EventsResponse(httpResponse);
 				if (response.getStatus())
 				{
-					if (response.isNeedToRefresh() && PhoneUtils.isNetworkConnected())
+					if (response.needToRefresh() && PhoneUtils.isNetworkConnected())
 					{
 						sendGetGroupRequest();
 					}
@@ -436,9 +424,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					{
 						public void run()
 						{
-							ReimApplication.setReportBadgeCount(response.getApproveEventCount());
-							setReportBadge(response.getReportEventCount());
-							setMeBadge(response.getInviteEventCount());
+							ReimApplication.setMineUnreadList(response.getMineUnreadList());
+                            ReimApplication.setOthersUnreadList(response.getOthersUnreadList());
+                            ReimApplication.setHasMessages(response.hasMessages());
+							showReportTip(response.hasUnreadReports());
+							showMeTip(response.hasMessages());
 						}
 					});
 				}
@@ -544,7 +534,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				MobclickAgent.onEvent(MainActivity.this, "UMENG_REPORT");
 				
 				position = 1;
-				setReportBadge(0);
+				showReportTip(false);
 				if (PhoneUtils.isNetworkConnected())
 				{
 					sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
@@ -559,7 +549,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			case R.id.tabItemMe:
 			{
 				position = 3;
-				setMeBadge(0);
+				showMeTip(false);
 				if (PhoneUtils.isNetworkConnected())
 				{
 					sendEventsReadRequest(EventsReadRequest.TYPE_INVITE);		

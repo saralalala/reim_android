@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import classes.Group;
+import classes.Image;
+import classes.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -65,6 +68,7 @@ public class MeFragment extends Fragment
 	private TextView nicknameTextView;
 	private TextView companyTextView;
 	private CircleImageView avatarImageView;
+    private ImageView tipImageView;
 	
 	private Group currentGroup;
 	private User currentUser;
@@ -150,14 +154,16 @@ public class MeFragment extends Fragment
 			}
 		});
 
-        RelativeLayout myInvitesLayout = (RelativeLayout) getActivity().findViewById(R.id.messageLayout);
-        myInvitesLayout.setOnClickListener(new View.OnClickListener()
+        RelativeLayout messageLayout = (RelativeLayout) getActivity().findViewById(R.id.messageLayout);
+        messageLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
 				startActivity(new Intent(getActivity(), MessageListActivity.class));
 			}
 		});
+
+        tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
 
         RelativeLayout inviteLayout = (RelativeLayout) getActivity().findViewById(R.id.inviteLayout);
         inviteLayout.setOnClickListener(new View.OnClickListener()
@@ -245,6 +251,9 @@ public class MeFragment extends Fragment
 		{
 			companyTextView.setText(R.string.not_available);
 		}
+
+        int visibility = ReimApplication.hasMessages() ? View.VISIBLE : View.GONE;
+        tipImageView.setVisibility(visibility);
 	}
 	
     private void sendDownloadAvatarRequest()

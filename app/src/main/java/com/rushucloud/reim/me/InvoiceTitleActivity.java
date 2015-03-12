@@ -3,6 +3,8 @@ package com.rushucloud.reim.me;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -47,9 +49,18 @@ public class InvoiceTitleActivity extends Activity
 	{
 		getActionBar().hide();
 
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                finish();
+            }
+        });
+
 		Group group = AppPreference.getAppPreference().getCurrentGroup();
+        String title = group == null ? getString(R.string.invoice_invalid) : group.getName();
 		TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
-		String title = group == null ? getString(R.string.invoice_invalid) : group.getName();
 		titleTextView.setText(title);
 	}
 }
