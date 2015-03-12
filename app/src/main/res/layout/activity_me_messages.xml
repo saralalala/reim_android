@@ -33,12 +33,12 @@
         
     </RelativeLayout>
 
-    <ListView
+    <classes.widget.XListView
         android:id="@+id/messageListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/titleLayout" >
-    </ListView>
+        android:layout_below="@+id/titleLayout"
+        android:cacheColorHint="@android:color/transparent" />
 
     <TextView
         android:id="@+id/messageTextView"

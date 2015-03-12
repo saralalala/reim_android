@@ -44,7 +44,7 @@ public class SendInviteActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("SendInviteActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()

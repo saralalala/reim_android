@@ -14,7 +14,6 @@ public class StatisticsResponse extends BaseResponse
 {
 	private double newAmount;
 	private double ongoingAmount;
-	private double doneAmount;
 	private List<StatisticsCategory> statCategoryList;
 	private HashMap<String, Double> monthsData;
 	
@@ -28,8 +27,7 @@ public class StatisticsResponse extends BaseResponse
 		try
 		{
 			JSONObject jObject = getDataObject();
-			
-			this.doneAmount = jObject.getDouble("done");
+
 			this.ongoingAmount = jObject.getDouble("process");
 			this.newAmount = jObject.getDouble("new");
 			
@@ -81,29 +79,9 @@ public class StatisticsResponse extends BaseResponse
 		return newAmount;
 	}
 
-	public void setNewAmount(double newAmount)
-	{
-		this.newAmount = newAmount;
-	}
-
 	public double getOngoingAmount()
 	{
 		return ongoingAmount;
-	}
-
-	public void setOngoingAmount(double ongoingAmount)
-	{
-		this.ongoingAmount = ongoingAmount;
-	}
-
-	public double getDoneAmount()
-	{
-		return doneAmount;
-	}
-
-	public void setDoneAmount(double doneAmount)
-	{
-		this.doneAmount = doneAmount;
 	}
 
 	public List<StatisticsCategory> getStatCategoryList()
@@ -111,18 +89,8 @@ public class StatisticsResponse extends BaseResponse
 		return statCategoryList;
 	}
 
-	public void setStatCategoryList(List<StatisticsCategory> statCategoryList)
-	{
-		this.statCategoryList = statCategoryList;
-	}
-
 	public HashMap<String, Double> getMonthsData()
 	{
 		return monthsData;
-	}
-
-	public void setMonthsData(HashMap<String, Double> monthsData)
-	{
-		this.monthsData = monthsData;
 	}
 }

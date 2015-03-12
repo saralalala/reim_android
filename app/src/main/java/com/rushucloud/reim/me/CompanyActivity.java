@@ -44,7 +44,7 @@ public class CompanyActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("CompanyActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()

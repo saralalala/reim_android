@@ -60,7 +60,7 @@ public class ManagerActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ManagerActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetGroupRequest();

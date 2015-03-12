@@ -28,7 +28,7 @@ public class ReimProgressDialog
 		animationDrawable = (AnimationDrawable) imageView.getDrawable();
 	}
 	
-	public static void setProgressDialog(Context context)
+	public static void setContext(Context context)
 	{
 		ViewGroup viewGroup = (ViewGroup) dialogView.getParent();
 		if (viewGroup != null)

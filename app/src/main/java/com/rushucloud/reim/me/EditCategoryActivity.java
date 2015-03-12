@@ -67,7 +67,7 @@ public class EditCategoryActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EditCategoryActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()

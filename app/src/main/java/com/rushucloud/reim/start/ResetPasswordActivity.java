@@ -46,7 +46,7 @@ public class ResetPasswordActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ResetPasswordActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()

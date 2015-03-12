@@ -57,7 +57,7 @@ import netUtils.Response.Report.SubordinatesReportResponse;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
 
-public class ReportFragment extends Fragment implements OnClickListener, IXListViewListener
+public class ReportFragment extends Fragment implements OnClickListener
 {
 	private static final int SORT_UPDATE_DATE = 0;
     private static final int SORT_CREATE_DATE = 1;
@@ -238,7 +238,18 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 		
 		reportListView = (XListView)getActivity().findViewById(R.id.reportListView);
 		reportListView.setAdapter(mineAdapter);
-		reportListView.setXListViewListener(this);
+		reportListView.setXListViewListener(new IXListViewListener()
+        {
+            public void onRefresh()
+            {
+                refreshReports();
+            }
+
+            public void onLoadMore()
+            {
+                refreshReports();
+            }
+        });
 		reportListView.setPullRefreshEnable(true);
 		reportListView.setPullLoadEnable(false);
 		reportListView.setOnItemClickListener(new OnItemClickListener()
@@ -1314,14 +1325,4 @@ public class ReportFragment extends Fragment implements OnClickListener, IXListV
 			setListView(1);
 		}
 	}
-	
-	public void onRefresh()
-	{
-		refreshReports();
-	}
-
-	public void onLoadMore()
-	{
-		refreshReports();
-	}	
 }

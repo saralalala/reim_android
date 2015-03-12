@@ -60,7 +60,7 @@ public class ShowReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ShowReportActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 		refreshView();
 	}
 

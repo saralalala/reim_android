@@ -142,7 +142,7 @@ public class EditItemActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EditItemActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 		locationClient.registerLocationListener(listener);
 		getLocation();
 	}

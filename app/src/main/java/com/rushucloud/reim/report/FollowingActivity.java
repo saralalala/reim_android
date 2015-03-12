@@ -54,7 +54,7 @@ public class FollowingActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("FollowingActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()

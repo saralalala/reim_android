@@ -58,7 +58,7 @@ public class PhoneSignUpActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("PhoneSignUpActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()

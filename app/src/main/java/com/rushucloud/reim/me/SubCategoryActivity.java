@@ -63,7 +63,7 @@ public class SubCategoryActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("SubCategoryActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 		refreshListView();
 	}
 

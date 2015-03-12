@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -119,7 +118,7 @@ public class EditReportActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EditReportActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 		refreshView();
 		
 		if (!hasInit && report.getServerID() != -1 && PhoneUtils.isNetworkConnected())

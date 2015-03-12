@@ -120,7 +120,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 		super.onResume();
 		MobclickAgent.onPageStart("PickItemsActivity");
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 		refreshData();
 		refreshView();
 	}

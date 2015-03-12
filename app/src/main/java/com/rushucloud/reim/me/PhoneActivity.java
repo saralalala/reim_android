@@ -45,7 +45,7 @@ public class PhoneActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("PhoneActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()

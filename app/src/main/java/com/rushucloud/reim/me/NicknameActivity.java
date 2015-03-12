@@ -44,7 +44,7 @@ public class NicknameActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("NicknameActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()

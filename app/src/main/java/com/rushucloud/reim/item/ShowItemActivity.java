@@ -60,7 +60,7 @@ public class ShowItemActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ShowItemActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()

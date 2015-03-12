@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Comment;
-import classes.Item;
 import classes.Report;
 import classes.User;
 import classes.adapter.CommentListViewAdapter;
@@ -68,7 +67,7 @@ public class CommentActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("CommentActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 		if (fromPush)
 		{
 			sendGetReportRequest(report.getServerID());

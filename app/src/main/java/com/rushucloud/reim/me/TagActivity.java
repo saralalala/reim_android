@@ -58,7 +58,7 @@ public class TagActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("TagActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 		refreshListView();
 	}
 

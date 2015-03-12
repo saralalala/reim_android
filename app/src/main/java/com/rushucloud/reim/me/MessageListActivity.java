@@ -1,8 +1,6 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -11,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -23,8 +20,10 @@ import java.util.List;
 import classes.Invite;
 import classes.adapter.MessageListViewAdapter;
 import classes.utils.PhoneUtils;
+import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
+import classes.widget.XListView;
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.User.GetInvitesRequest;
 import netUtils.Response.User.GetInvitesResponse;
@@ -32,7 +31,7 @@ import netUtils.Response.User.GetInvitesResponse;
 public class MessageListActivity extends Activity
 {
 	private TextView messageTextView;
-	private ListView messageListView;
+	private XListView messageListView;
 	private MessageListViewAdapter adapter;
 	
 	private List<Invite> messageList = new ArrayList<Invite>();
@@ -49,16 +48,15 @@ public class MessageListActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("MessageListActivity");
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 		if (PhoneUtils.isNetworkConnected())
 		{
-			sendGetInvitesRequest();			
+            ReimProgressDialog.show();
+			sendGetInvitesRequest();
 		}
 		else
 		{
 			ViewUtils.showToast(MessageListActivity.this, R.string.error_get_data_network_unavailable);
-			messageListView.setVisibility(View.GONE);
-			messageTextView.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -93,7 +91,32 @@ public class MessageListActivity extends Activity
 
 		messageTextView = (TextView) findViewById(R.id.messageTextView);
 
-		messageListView = (ListView) findViewById(R.id.messageListView);
+        adapter = new MessageListViewAdapter(MessageListActivity.this, messageList);
+		messageListView = (XListView) findViewById(R.id.messageListView);
+        messageListView.setAdapter(adapter);
+        messageListView.setXListViewListener(new XListView.IXListViewListener()
+        {
+            public void onRefresh()
+            {
+                if (PhoneUtils.isNetworkConnected())
+                {
+                    sendGetInvitesRequest();
+                }
+                else
+                {
+                    ViewUtils.showToast(MessageListActivity.this, R.string.error_get_data_network_unavailable);
+                    messageListView.stopRefresh();
+                }
+            }
+
+            public void onLoadMore()
+            {
+
+            }
+        });
+        messageListView.setPullRefreshEnable(true);
+        messageListView.setPullLoadEnable(false);
+        messageListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
 		messageListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -109,7 +132,6 @@ public class MessageListActivity extends Activity
 	
     private void sendGetInvitesRequest()
     {
-		ReimProgressDialog.show();
     	GetInvitesRequest request = new GetInvitesRequest();
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -118,27 +140,23 @@ public class MessageListActivity extends Activity
 				final GetInvitesResponse response = new GetInvitesResponse(httpResponse);
 				if (response.getStatus())
 				{
+                    messageList.clear();
+                    messageList.addAll(response.getInviteList());
+                    Invite.sortByUpdateDate(messageList);
+
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							messageList = response.getInviteList();
-							
-							if (messageList.isEmpty())
-							{
-								messageListView.setVisibility(View.GONE);
-								messageTextView.setVisibility(View.VISIBLE);
-							}
-							else
-							{
-								Invite.sortByUpdateDate(messageList);
-								adapter = new MessageListViewAdapter(MessageListActivity.this, messageList);
-								messageListView.setAdapter(adapter);
-								
-								messageTextView.setVisibility(View.GONE);
-								messageListView.setVisibility(View.VISIBLE);
-							}
+                            adapter.setMessages(messageList);
+                            adapter.notifyDataSetChanged();
+
+                            int visibility = messageList.isEmpty() ? View.VISIBLE : View.GONE;
+                            messageTextView.setVisibility(visibility);
+
+                            messageListView.stopRefresh();
+                            messageListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
 						}						
 					});
 				}
@@ -149,18 +167,9 @@ public class MessageListActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Builder builder = new Builder(MessageListActivity.this);
-							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.prompt_invite_list_failed);
-							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																finish();
-															}
-														});
-							builder.create().show();
-						}						
+                            ViewUtils.showToast(MessageListActivity.this, R.string.prompt_invite_list_failed);
+                            messageListView.stopRefresh();
+						}
 					});
 				}
 			}

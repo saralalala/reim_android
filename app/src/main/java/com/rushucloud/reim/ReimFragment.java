@@ -62,7 +62,7 @@ import netUtils.Response.Item.DeleteItemResponse;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
 
-public class ReimFragment extends Fragment implements IXListViewListener
+public class ReimFragment extends Fragment
 {
 	private static final int FILTER_TYPE_ALL = 0;
 	private static final int FILTER_TYPE_PROVE_AHEAD = 1;
@@ -214,7 +214,96 @@ public class ReimFragment extends Fragment implements IXListViewListener
 		adapter = new ItemListViewAdapter(getActivity(), itemList);
 		itemListView = (XListView) getActivity().findViewById(R.id.itemListView);
 		itemListView.setAdapter(adapter);
-		itemListView.setXListViewListener(this);
+		itemListView.setXListViewListener(new IXListViewListener()
+        {
+            public void onRefresh()
+            {
+                if (SyncUtils.canSyncToServer())
+                {
+                    SyncUtils.isSyncOnGoing = true;
+                    SyncUtils.syncFromServer(new SyncDataCallback()
+                    {
+                        public void execute()
+                        {
+                            getActivity().runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    itemListView.stopRefresh();
+                                    itemListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+                                    refreshItemListView();
+                                }
+                            });
+
+                            SyncUtils.syncAllToServer(new SyncDataCallback()
+                            {
+                                public void execute()
+                                {
+                                    SyncUtils.isSyncOnGoing = false;
+                                }
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            itemListView.stopRefresh();
+//					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+                            int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
+                            ViewUtils.showToast(getActivity(), prompt);
+                        }
+                    });
+                }
+            }
+
+            public void onLoadMore()
+            {
+                if (SyncUtils.canSyncToServer())
+                {
+                    SyncUtils.isSyncOnGoing = true;
+                    SyncUtils.syncFromServer(new SyncDataCallback()
+                    {
+                        public void execute()
+                        {
+                            getActivity().runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    itemListView.stopLoadMore();
+                                    itemListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+                                    refreshItemListView();
+                                }
+                            });
+
+                            SyncUtils.syncAllToServer(new SyncDataCallback()
+                            {
+                                public void execute()
+                                {
+                                    SyncUtils.isSyncOnGoing = false;
+                                }
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            itemListView.stopLoadMore();
+//					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+                            int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
+                            ViewUtils.showToast(getActivity(), prompt);
+                        }
+                    });
+                }
+            }
+        });
 		itemListView.setPullRefreshEnable(true);
 		itemListView.setPullLoadEnable(false);
 		itemListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastSyncTime()));
@@ -1008,93 +1097,5 @@ public class ReimFragment extends Fragment implements IXListViewListener
 				}
 			});
 		}
-	}
-	
-	public void onRefresh()
-	{
-		if (SyncUtils.canSyncToServer())
-		{
-			SyncUtils.isSyncOnGoing = true;
-			SyncUtils.syncFromServer(new SyncDataCallback()
-			{
-				public void execute()
-				{
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							itemListView.stopRefresh();
-							itemListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-							refreshItemListView();
-						}
-					});
-
-					SyncUtils.syncAllToServer(new SyncDataCallback()
-					{
-						public void execute()
-						{
-							SyncUtils.isSyncOnGoing = false;
-						}
-					});
-				}
-			});
-		}
-		else
-		{
-			getActivity().runOnUiThread(new Runnable()
-			{
-				public void run()
-				{
-					itemListView.stopRefresh();
-//					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-					int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
-					ViewUtils.showToast(getActivity(), prompt);
-				}
-			});
-		}		
-	}
-
-	public void onLoadMore()
-	{
-		if (SyncUtils.canSyncToServer())
-		{
-			SyncUtils.isSyncOnGoing = true;
-			SyncUtils.syncFromServer(new SyncDataCallback()
-			{
-				public void execute()
-				{
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							itemListView.stopLoadMore();
-							itemListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-							refreshItemListView();
-						}
-					});
-
-					SyncUtils.syncAllToServer(new SyncDataCallback()
-					{
-						public void execute()
-						{
-							SyncUtils.isSyncOnGoing = false;
-						}
-					});
-				}
-			});
-		}
-		else
-		{
-			getActivity().runOnUiThread(new Runnable()
-			{
-				public void run()
-				{
-					itemListView.stopLoadMore();
-//					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-					int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
-					ViewUtils.showToast(getActivity(), prompt);
-				}
-			});
-		}	
 	}
 }

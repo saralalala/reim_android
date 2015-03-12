@@ -57,7 +57,7 @@ public class ApproveInfoActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ApproveInfoActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 		refreshView();
 	}
 

@@ -49,7 +49,7 @@ public class EmailSignUpActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EmailSignUpActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setProgressDialog(this);
+		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()
