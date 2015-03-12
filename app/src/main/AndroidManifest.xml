@@ -94,8 +94,8 @@
         <activity android:name="com.rushucloud.reim.me.TagActivity" />
         <activity android:name="com.rushucloud.reim.me.EditTagActivity" />
         <activity android:name="com.rushucloud.reim.me.SendInviteActivity" />        
-        <activity android:name="com.rushucloud.reim.me.MessageActivity" />
-        <activity android:name="com.rushucloud.reim.me.MessageDetailActivity" />
+        <activity android:name=".me.MessageListActivity" />
+        <activity android:name=".me.MessageActivity" />
         <activity android:name="com.rushucloud.reim.me.SettingsActivity" />        
         <activity android:name="com.rushucloud.reim.me.AboutActivity" />
         <activity android:name="com.rushucloud.reim.me.FeedbackActivity" />

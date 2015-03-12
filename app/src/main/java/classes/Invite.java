@@ -68,23 +68,7 @@ public class Invite implements Serializable
 	{
 		this.typeCode = typeCode;
 	}
-	
-	public static List<Map<String, String>> getMessageList(List<Invite> inviteList)
-	{
-		List<Map<String, String>> resultList = new ArrayList<Map<String,String>>();
-		if (inviteList != null)
-		{
-			for (Invite invite : inviteList)
-			{
-				Map<String, String> map = new HashMap<String, String>();
-				map.put("message", invite.getMessage());
-				map.put("time", Utils.secondToStringUpToMinute(invite.getUpdateTime()));
-				resultList.add(map);
-			}
-		}
-		return resultList;
-	}
-	
+
 	public static void sortByUpdateDate(List<Invite> inviteList)
     {
     	Collections.sort(inviteList, new Comparator<Invite>()

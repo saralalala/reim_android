@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.rushucloud.reim.R;
-import com.rushucloud.reim.me.MessageDetailActivity;
+import com.rushucloud.reim.me.MessageActivity;
 import com.rushucloud.reim.report.ApproveReportActivity;
 import com.rushucloud.reim.report.CommentActivity;
 import com.rushucloud.reim.report.EditReportActivity;
@@ -146,7 +146,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					bundle.putSerializable("invite", invite);
 					bundle.putBoolean("fromPush", true);
 					
-					Intent newIntent = new Intent(context, MessageDetailActivity.class);
+					Intent newIntent = new Intent(context, MessageActivity.class);
 					newIntent.putExtras(bundle);
 					newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(newIntent);

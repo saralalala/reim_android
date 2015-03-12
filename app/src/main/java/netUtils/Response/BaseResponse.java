@@ -190,6 +190,12 @@ public abstract class BaseResponse
 			case NetworkConstant.ERROR_SIGN_IN:
 				result = "用户名或密码错误";
 				break;
+            case NetworkConstant.ERROR_NAME_EXCEED_LIMIT:
+                result = "报告名不能超过50个字";
+                break;
+            case NetworkConstant.ERROR_INVITE_DONE:
+                result = "此消息已被处理";
+                break;
 			default:
 				break;
 		}

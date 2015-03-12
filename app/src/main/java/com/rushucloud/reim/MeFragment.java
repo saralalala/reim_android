@@ -18,7 +18,7 @@ import com.mechat.mechatlibrary.MCClient;
 import com.mechat.mechatlibrary.MCOnlineConfig;
 import com.mechat.mechatlibrary.MCUserConfig;
 import com.rushucloud.reim.me.InvoiceTitleActivity;
-import com.rushucloud.reim.me.MessageActivity;
+import com.rushucloud.reim.me.MessageListActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.rushucloud.reim.me.SendInviteActivity;
 import com.rushucloud.reim.me.SettingsActivity;
@@ -155,7 +155,7 @@ public class MeFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(getActivity(), MessageActivity.class));
+				startActivity(new Intent(getActivity(), MessageListActivity.class));
 			}
 		});
 

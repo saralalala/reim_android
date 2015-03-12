@@ -280,20 +280,19 @@ public class ShowReportActivity extends Activity
 	
     private void goBackToMainActivity()
     {
+        int reportTabIndex = myReport ? 0 : 1;
+        ReimApplication.setReportTabIndex(reportTabIndex);
     	if (fromPush)
 		{
-    		int reportTabIndex = myReport ? 0 : 1;
         	ReimApplication.setTabIndex(1);
-        	ReimApplication.setReportTabIndex(reportTabIndex);
         	Intent intent = new Intent(ShowReportActivity.this, MainActivity.class);
-        	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         	startActivity(intent);
         	finish();
 		}
     	else
     	{
-    		int reportTabIndex = myReport ? 0 : 1;
-        	ReimApplication.setReportTabIndex(reportTabIndex);
         	finish();
 		}
     }

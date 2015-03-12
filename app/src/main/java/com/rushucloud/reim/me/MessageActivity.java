@@ -1,65 +1,53 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import classes.Invite;
-import classes.adapter.MessageListViewAdapter;
+import classes.ReimApplication;
+import classes.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.GetInvitesRequest;
-import netUtils.Response.User.GetInvitesResponse;
+import netUtils.NetworkConstant;
+import netUtils.Request.User.InviteReplyRequest;
+import netUtils.Response.User.InviteReplyResponse;
 
 public class MessageActivity extends Activity
-{
-	private TextView messageTextView;
-	private ListView messageListView;
-	private MessageListViewAdapter adapter;
+{	
+	private Invite invite;
 	
-	private List<Invite> messageList = new ArrayList<Invite>();
+	private boolean fromPush;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_messages);
+		setContentView(R.layout.activity_me_invite);
+		initData();
 		initView();
 	}
-
+  
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("MessageActivity");		
+		MobclickAgent.onPageStart("MessageActivity");
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setProgressDialog(this);
-		if (PhoneUtils.isNetworkConnected())
-		{
-			sendGetInvitesRequest();			
-		}
-		else
-		{
-			ViewUtils.showToast(MessageActivity.this, R.string.error_get_data_network_unavailable);
-			messageListView.setVisibility(View.GONE);
-			messageTextView.setVisibility(View.VISIBLE);
-		}
 	}
 
 	protected void onPause()
@@ -73,14 +61,24 @@ public class MessageActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+			goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 	
+	private void initData()
+	{
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null)
+		{
+			invite = (Invite) bundle.getSerializable("invite");
+			fromPush = bundle.getBoolean("fromPush", false);
+		}
+	}
+	
 	private void initView()
 	{	
-		getActionBar().hide();
+		getActionBar().hide();		
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
@@ -89,58 +87,141 @@ public class MessageActivity extends Activity
 			{
 				finish();
 			}
-		});	
+		});
+		
+		TextView inviteTextView = (TextView) findViewById(R.id.inviteTextView);
+		inviteTextView.setText(invite.getMessage());
 
-		messageTextView = (TextView) findViewById(R.id.messageTextView);
-
-		messageListView = (ListView) findViewById(R.id.messageListView);
-		messageListView.setOnItemClickListener(new OnItemClickListener()
+		TextView dateTextView = (TextView) findViewById(R.id.dateTextView);
+		dateTextView.setText(Utils.secondToStringUpToDay(invite.getUpdateTime()));
+		
+		Button agreeButton = (Button) findViewById(R.id.agreeButton);
+		agreeButton.setOnClickListener(new View.OnClickListener()
 		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			public void onClick(View v)
 			{
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("invite", messageList.get(position));
-				Intent intent = new Intent(MessageActivity.this, MessageDetailActivity.class);
-				intent.putExtras(bundle);
-				startActivity(intent);
+				if (PhoneUtils.isNetworkConnected())
+				{
+					sendInviteReplyRequest(Invite.TYPE_ACCEPTED, invite.getInviteCode());					
+				}
+				else
+				{
+					ViewUtils.showToast(MessageActivity.this, R.string.error_send_reply_network_unavailable);
+				}
 			}
 		});
+		
+		Button rejectButton = (Button) findViewById(R.id.rejectButton);
+		rejectButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				if (PhoneUtils.isNetworkConnected())
+				{
+					sendInviteReplyRequest(Invite.TYPE_REJECTED, invite.getInviteCode());				
+				}
+				else
+				{
+					ViewUtils.showToast(MessageActivity.this, R.string.error_send_reply_network_unavailable);
+				}
+			}
+		});
+
+        String currentNickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
+		if (invite.getTypeCode() != Invite.TYPE_NEW || invite.getInvitor().equals(currentNickname))
+		{
+			agreeButton.setVisibility(View.GONE);
+			rejectButton.setVisibility(View.GONE);
+		}
 	}
 	
-    private void sendGetInvitesRequest()
+    private void sendInviteReplyRequest(final int agree, String inviteCode)
     {
 		ReimProgressDialog.show();
-    	GetInvitesRequest request = new GetInvitesRequest();
+    	InviteReplyRequest request = new InviteReplyRequest(agree, inviteCode);
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
-				final GetInvitesResponse response = new GetInvitesResponse(httpResponse);
+				final InviteReplyResponse response = new InviteReplyResponse(httpResponse);
 				if (response.getStatus())
 				{
-					runOnUiThread(new Runnable()
+					if (agree == Invite.TYPE_ACCEPTED)
 					{
-						public void run()
+                        int currentUserID = response.getCurrentUser().getServerID();
+                        int currentGroupID = -1;
+
+                        DBManager dbManager = DBManager.getDBManager();
+                        AppPreference appPreference = AppPreference.getAppPreference();
+                        appPreference.setServerToken(response.getServerToken());
+                        appPreference.setCurrentUserID(currentUserID);
+                        appPreference.setSyncOnlyWithWifi(true);
+                        appPreference.setEnablePasswordProtection(true);
+
+                        if (response.getGroup() != null)
+                        {
+                            currentGroupID = response.getGroup().getServerID();
+
+                            // update AppPreference
+                            appPreference.setCurrentGroupID(currentGroupID);
+                            appPreference.saveAppPreference();
+
+                            // update members
+                            User currentUser = response.getCurrentUser();
+                            User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+                            if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+                            {
+                                currentUser.setAvatarPath(localUser.getAvatarPath());
+                            }
+
+                            dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+                            dbManager.syncUser(currentUser);
+
+                            // update categories
+                            dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+
+                            // update tags
+                            dbManager.updateGroupTags(response.getTagList(), currentGroupID);
+
+                            // update group info
+                            dbManager.syncGroup(response.getGroup());
+                        }
+                        else
+                        {
+                            // update AppPreference
+                            appPreference.setCurrentGroupID(currentGroupID);
+                            appPreference.saveAppPreference();
+
+                            // update current user
+                            dbManager.syncUser(response.getCurrentUser());
+
+                            // update categories
+                            dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+                        }
+
+                        runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                ReimProgressDialog.dismiss();
+                                ViewUtils.showToast(MessageActivity.this, R.string.prompt_invite_reply_sent);
+                                goBack();
+                            }
+                        });
+					}
+					else
+					{
+						runOnUiThread(new Runnable()
 						{
-							ReimProgressDialog.dismiss();
-							messageList = response.getInviteList();
-							
-							if (messageList.isEmpty())
+							public void run()
 							{
-								messageListView.setVisibility(View.GONE);
-								messageTextView.setVisibility(View.VISIBLE);
+								ReimProgressDialog.dismiss();
+                                ViewUtils.showToast(MessageActivity.this, R.string.prompt_invite_reply_sent);
+                                goBack();
 							}
-							else
-							{
-								Invite.sortByUpdateDate(messageList);
-								adapter = new MessageListViewAdapter(MessageActivity.this, messageList);
-								messageListView.setAdapter(adapter);
-								
-								messageTextView.setVisibility(View.GONE);
-								messageListView.setVisibility(View.VISIBLE);
-							}
-						}						
-					});
+						});
+					}
 				}
 				else
 				{
@@ -149,21 +230,34 @@ public class MessageActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Builder builder = new Builder(MessageActivity.this);
-							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.prompt_invite_list_failed);
-							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																finish();
-															}
-														});
-							builder.create().show();
+					    	ViewUtils.showToast(MessageActivity.this, R.string.failed_to_send_reply, response.getErrorMessage());
+                            if (response.getCode() == NetworkConstant.ERROR_INVITE_DONE)
+                            {
+                                goBack();
+                            }
 						}						
 					});
 				}
 			}
 		});
+    }
+
+    private void goBack()
+    {
+    	if (fromPush)
+		{
+        	ReimApplication.setTabIndex(3);
+        	Intent intent = new Intent(MessageActivity.this, MainActivity.class);
+    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    		Intent intent2 = new Intent(MessageActivity.this, MessageListActivity.class);
+    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        	startActivities(new Intent[] {intent, intent2});
+        	finish();
+		}
+    	else
+    	{
+			finish();
+		}
     }
 }
