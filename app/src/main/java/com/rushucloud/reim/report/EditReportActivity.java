@@ -65,7 +65,7 @@ public class EditReportActivity extends Activity
 {
 	private static final int PICK_MANAGER = 0;
 	private static final int PICK_CC = 1;
-	private static final int PICK_ITEM = 2;
+	private static final int PICK_ITEMS = 2;
 	
 	private AppPreference appPreference;
 	private DBManager dbManager;
@@ -171,11 +171,13 @@ public class EditReportActivity extends Activity
 					ccTextView.setText(report.getCCsName());
 					break;
 				}
-				case PICK_ITEM:
+				case PICK_ITEMS:
 				{
+                    Bundle bundle = data.getExtras();
 					chosenItemIDList.clear();
-					chosenItemIDList.addAll(data.getExtras().getIntegerArrayList("chosenItemIDList"));
-					itemList = dbManager.getItems(chosenItemIDList);
+					chosenItemIDList.addAll(bundle.getIntegerArrayList("chosenItemIDList"));
+                    itemList = dbManager.getItems(chosenItemIDList);
+                    report.setIsProveAhead(bundle.getBoolean("isProveAhead"));
 					refreshView();
 					break;
 				}
@@ -370,7 +372,7 @@ public class EditReportActivity extends Activity
 				bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
 				Intent intent = new Intent(EditReportActivity.this, PickItemsActivity.class);
 				intent.putExtras(bundle);
-				startActivityForResult(intent, PICK_ITEM);
+				startActivityForResult(intent, PICK_ITEMS);
 			}
 		});
 

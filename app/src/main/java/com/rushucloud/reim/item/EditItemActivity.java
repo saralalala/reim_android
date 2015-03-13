@@ -122,6 +122,7 @@ public class EditItemActivity extends Activity
 	private List<Image> originInvoiceList;
 
 	private boolean fromReim;
+    private boolean fromPickItems;
 	private boolean newItem = false;
 		
 	private LocationClient locationClient = null;
@@ -316,6 +317,7 @@ public class EditItemActivity extends Activity
 		
 		Intent intent = this.getIntent();
 		fromReim = intent.getBooleanExtra("fromReim", false);
+        fromPickItems = intent.getBooleanExtra("fromPickItems", false);
 		int itemLocalID = intent.getIntExtra("itemLocalID", -1);
 		if (itemLocalID == -1)
 		{
@@ -376,7 +378,7 @@ public class EditItemActivity extends Activity
 						item.setCreatedDate(item.getLocalUpdatedDate());
 					}
 					
-					if (fromReim && item.isProveAhead() && !item.isPaApproved())
+					if (fromReim && !fromPickItems && item.isProveAhead() && !item.isPaApproved())
 					{
 						Builder buider = new Builder(EditItemActivity.this);
 						buider.setTitle(R.string.option);
@@ -432,6 +434,16 @@ public class EditItemActivity extends Activity
 						buider.setNegativeButton(R.string.cancel, null);
 						buider.create().show();
 					}
+                    else if (fromPickItems)
+                    {
+                        item.setLocalID(dbManager.insertItem(item));
+                        ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+                        Intent intent = new Intent();
+                        intent.putExtra("itemID", item.getLocalID());
+                        intent.putExtra("isProveAhead", item.isProveAhead());
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
 					else
 					{
 			    		dbManager.syncItem(item);
@@ -519,7 +531,7 @@ public class EditItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (fromReim && !item.isPaApproved())
+				if (fromReim && !item.isPaApproved() || fromPickItems)
 				{
 					hideSoftKeyboard();
 					showTypeWindow();
@@ -1207,7 +1219,7 @@ public class EditItemActivity extends Activity
 				newImage.deleteFile();
 			}
 		}
-		finish();
+        finish();
     }
     
     private void sendDownloadInvoiceRequest(final Image image)

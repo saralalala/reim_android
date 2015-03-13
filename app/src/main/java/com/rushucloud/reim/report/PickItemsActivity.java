@@ -49,6 +49,8 @@ public class PickItemsActivity extends Activity implements OnClickListener
     private static final int SORT_CONSUMED_DATE = 0;
 	private static final int SORT_AMOUNT = 1;
 
+    private static final int NEW_ITEM = 0;
+
 	private PopupWindow filterPopupWindow;
     private RadioButton sortAmountRadio;
     private RadioButton sortConsumedDateRadio;
@@ -121,7 +123,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 		MobclickAgent.onPageStart("PickItemsActivity");
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setContext(this);
-		refreshData();
+        refreshData();
 		refreshView();
 	}
 
@@ -145,7 +147,39 @@ public class PickItemsActivity extends Activity implements OnClickListener
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == RESULT_OK)
+        {
+            switch (requestCode)
+            {
+                case NEW_ITEM:
+                {
+                    int itemID = data.getIntExtra("itemID", -1);
+                    if (itemID > 0)
+                    {
+                        boolean itemIsProveAhead = data.getBooleanExtra("isProveAhead", false);
+                        if (itemIsProveAhead && consumedChosenList.isEmpty())
+                        {
+                            proveChosenList.add(itemID);
+                            isProveAhead = true;
+                        }
+                        else if (!itemIsProveAhead && proveChosenList.isEmpty())
+                        {
+                            consumedChosenList.add(itemID);
+                            isProveAhead = false;
+                        }
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 	private void initData()
 	{		
 		Bundle bundle = this.getIntent().getExtras();
@@ -222,10 +256,10 @@ public class PickItemsActivity extends Activity implements OnClickListener
 			{
 				try
 				{
-					report.setIsProveAhead(isProveAhead);
 					chosenItemIDList = tabIndex == 0 ? consumedChosenList : proveChosenList;
 					Bundle bundle = new Bundle();
 					bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
+                    bundle.putBoolean("isProveAhead", isProveAhead);
 					Intent intent = new Intent();
 					intent.putExtras(bundle);
 					setResult(RESULT_OK, intent);
@@ -248,8 +282,8 @@ public class PickItemsActivity extends Activity implements OnClickListener
 				if (position == 0)
 				{
 					Intent intent = new Intent(PickItemsActivity.this, EditItemActivity.class);
-					intent.putExtra("fromReim", true);
-					startActivity(intent);
+					intent.putExtra("fromPickItems", true);
+					startActivityForResult(intent, NEW_ITEM);
 				}
 				else
 				{
