@@ -224,7 +224,7 @@ public class CompleteInfoActivity extends Activity
 			}
 		});
 		
-		picturePopupWindow = ViewUtils.constructBottomPopupWindow(this, pictureView);
+		picturePopupWindow = ViewUtils.buildBottomPopupWindow(this, pictureView);
 		
 		RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
 		baseLayout.setOnClickListener(new View.OnClickListener()

@@ -317,7 +317,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			}
 		});
 
-		feedbackPopupWindow = ViewUtils.constructCenterPopupWindow(this, feedbackView);
+		feedbackPopupWindow = ViewUtils.buildCenterPopupWindow(this, feedbackView);
 	}
 	
 	private void initPhoneWindow()
@@ -365,7 +365,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			}
 		});
 
-		phonePopupWindow = ViewUtils.constructCenterPopupWindow(this, phoneView);
+		phonePopupWindow = ViewUtils.buildCenterPopupWindow(this, phoneView);
 	}
 
     private void showFeedbackWindow()

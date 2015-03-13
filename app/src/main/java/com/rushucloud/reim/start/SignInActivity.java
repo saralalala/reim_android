@@ -186,7 +186,7 @@ public class SignInActivity extends Activity
 			}
 		});
 		
-		forgotPopupWindow = ViewUtils.constructBottomPopupWindow(this, forgorView);
+		forgotPopupWindow = ViewUtils.buildBottomPopupWindow(this, forgorView);
 	}
 
     private void showForgotWindow()

@@ -581,7 +581,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 
-		typePopupWindow = ViewUtils.constructBottomPopupWindow(this, typeView);
+		typePopupWindow = ViewUtils.buildBottomPopupWindow(this, typeView);
 	}
 	
 	private void initInvoiceView()
@@ -648,7 +648,7 @@ public class EditItemActivity extends Activity
 			}
 		});
 		
-		picturePopupWindow = ViewUtils.constructBottomPopupWindow(this, pictureView);
+		picturePopupWindow = ViewUtils.buildBottomPopupWindow(this, pictureView);
 
 		if (!PhoneUtils.isNetworkConnected())
 		{
@@ -705,7 +705,7 @@ public class EditItemActivity extends Activity
 		
 		resizePicker();
 		
-		timePopupWindow = ViewUtils.constructBottomPopupWindow(this, timeView);
+		timePopupWindow = ViewUtils.buildBottomPopupWindow(this, timeView);
 	}
 	
 	private void initVendorView()

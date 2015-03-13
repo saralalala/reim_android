@@ -522,7 +522,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             }
         });
 
-		filterPopupWindow = ViewUtils.constructTopPopupWindow(getActivity(), filterView);
+		filterPopupWindow = ViewUtils.buildTopPopupWindow(getActivity(), filterView);
 	}
 	
 	private void initOperationView()
@@ -602,7 +602,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 			}
 		});
 		
-		operationPopupWindow = ViewUtils.constructBottomPopupWindow(getActivity(), operationView);  
+		operationPopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), operationView);
 	}
 	
 	private void initDeleteView()
@@ -664,7 +664,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 			}
 		});
 		
-		deletePopupWindow = ViewUtils.constructBottomPopupWindow(getActivity(), deleteView);  
+		deletePopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), deleteView);
 	}
 	
 	private void setListView(int index)

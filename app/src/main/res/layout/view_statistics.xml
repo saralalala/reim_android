@@ -262,13 +262,13 @@
             android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             layout="@layout/view_divider" />
+
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/categoryLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    </LinearLayout>
+        android:orientation="vertical" />
 
 </LinearLayout>

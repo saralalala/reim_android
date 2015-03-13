@@ -80,6 +80,7 @@ public class EditReportActivity extends Activity
 	private TextView amountTextView;
 	private TextView itemCountTextView;
 	private LinearLayout itemLayout;
+    private ImageView commentTipImageView;
 	private PopupWindow deletePopupWindow;
 
 	private Report report;
@@ -92,6 +93,7 @@ public class EditReportActivity extends Activity
 	private boolean fromPush;
 	private boolean newReport;
 	private boolean hasInit = false;
+    private int lastCommentCount = 0;
 	
 	private List<Image> imageSyncList = new ArrayList<Image>();
 	private List<Item> itemSyncList = new ArrayList<Item>();
@@ -200,6 +202,10 @@ public class EditReportActivity extends Activity
             {
                 report = dbManager.getReportByServerID(report.getServerID());
             }
+            else
+            {
+                lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
+            }
 			newReport = report.getLocalID() == -1;
 			if (!newReport)
 			{
@@ -296,49 +302,47 @@ public class EditReportActivity extends Activity
 		
 		managerTextView = (TextView) findViewById(R.id.managerTextView);
 		managerTextView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (newReport)
-				{
-					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_SEND");
-				}
-				else
-				{
-					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_SEND");					
-				}
-				
-		    	hideSoftKeyboard();
-				Intent intent = new Intent(EditReportActivity.this, PickManagerActivity.class);
-				intent.putExtra("managers", (Serializable) report.getManagerList());
-				intent.putExtra("newReport", newReport);
-				startActivityForResult(intent, PICK_MANAGER);	
-			}
-		});
-		managerTextView.setText(report.getManagersName());		
+        {
+            public void onClick(View v)
+            {
+                if (newReport)
+                {
+                    MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_SEND");
+                }
+                else
+                {
+                    MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_SEND");
+                }
+
+                hideSoftKeyboard();
+                Intent intent = new Intent(EditReportActivity.this, PickManagerActivity.class);
+                intent.putExtra("managers", (Serializable) report.getManagerList());
+                intent.putExtra("newReport", newReport);
+                startActivityForResult(intent, PICK_MANAGER);
+            }
+        });
 		
 		ccTextView = (TextView) findViewById(R.id.ccTextView);
 		ccTextView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (newReport)
-				{
-					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_CC");
-				}
-				else
-				{
-					MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_CC");					
-				}
-				
-		    	hideSoftKeyboard();
-				Intent intent = new Intent(EditReportActivity.this, PickCCActivity.class);
-				intent.putExtra("ccs", (Serializable) report.getCCList());
-				intent.putExtra("newReport", newReport);
-				startActivityForResult(intent, PICK_CC);	
-			}
-		});
-		ccTextView.setText(report.getCCsName());
+        {
+            public void onClick(View v)
+            {
+                if (newReport)
+                {
+                    MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_CC");
+                }
+                else
+                {
+                    MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_CC");
+                }
+
+                hideSoftKeyboard();
+                Intent intent = new Intent(EditReportActivity.this, PickCCActivity.class);
+                intent.putExtra("ccs", (Serializable) report.getCCList());
+                intent.putExtra("newReport", newReport);
+                startActivityForResult(intent, PICK_CC);
+            }
+        });
 		
 		amountTextView = (TextView) findViewById(R.id.amountTextView);
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -370,7 +374,7 @@ public class EditReportActivity extends Activity
 			}
 		});
 
-		final ImageView commentTipImageView = (ImageView) findViewById(R.id.commentTipImageView);
+		commentTipImageView = (ImageView) findViewById(R.id.commentTipImageView);
 		if (getIntent().getExtras().getBoolean("commentPrompt", false))
 		{
 			commentTipImageView.setVisibility(View.VISIBLE);
@@ -498,7 +502,7 @@ public class EditReportActivity extends Activity
 			}
 		});
 		
-		deletePopupWindow = ViewUtils.constructBottomPopupWindow(this, deleteView);		
+		deletePopupWindow = ViewUtils.buildBottomPopupWindow(this, deleteView);
 	}
 	
 	private void refreshView()
@@ -510,6 +514,9 @@ public class EditReportActivity extends Activity
 
         statusTextView.setText(report.getStatusString());
         statusTextView.setBackgroundResource(report.getStatusBackground());
+
+        managerTextView.setText(report.getManagersName());
+        ccTextView.setText(report.getCCsName());
 
 		itemList = dbManager.getItems(Item.getItemsIDList(itemList));
 		
@@ -971,6 +978,10 @@ public class EditReportActivity extends Activity
 						report.setManagerList(response.getReport().getManagerList());
 						report.setCCList(response.getReport().getCCList());
 						report.setCommentList(response.getReport().getCommentList());
+                        if (report.getManagerList().isEmpty())
+                        {
+                            report.setManagerList(currentUser.buildBaseManagerList());
+                        }
 						dbManager.updateReportByLocalID(report);
 						
 						dbManager.deleteReportComments(report.getLocalID());
@@ -987,6 +998,12 @@ public class EditReportActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							refreshView();
+
+                            if (report.getCommentList().size() != lastCommentCount)
+                            {
+                                commentTipImageView.setVisibility(View.VISIBLE);
+                                lastCommentCount = report.getCommentList().size();
+                            }
 						}
 					});
 				}

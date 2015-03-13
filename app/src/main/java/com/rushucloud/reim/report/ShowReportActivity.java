@@ -44,7 +44,7 @@ public class ShowReportActivity extends Activity
 	private List<Item> itemList = null;
 	private boolean fromPush;
 	private boolean myReport;
-	private int lastCommentCount;	
+	private int lastCommentCount;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -253,7 +253,7 @@ public class ShowReportActivity extends Activity
 								{
 									tipImageView.setVisibility(View.VISIBLE);
 									lastCommentCount = report.getCommentList().size();
-								}					    		
+								}
 					    	}
 						}
 					});

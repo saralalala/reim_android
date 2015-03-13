@@ -40,7 +40,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import classes.Category;
 import classes.Item;
@@ -603,7 +602,7 @@ public class ReimFragment extends Fragment
 			}
 		});
 		
-		filterPopupWindow = ViewUtils.constructTopPopupWindow(getActivity(), filterView);
+		filterPopupWindow = ViewUtils.buildTopPopupWindow(getActivity(), filterView);
 	}
 
 	private void initDeleteView()
@@ -664,7 +663,7 @@ public class ReimFragment extends Fragment
 			}
 		});
 		
-		deletePopupWindow = ViewUtils.constructBottomPopupWindow(getActivity(), deleteView);
+		deletePopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), deleteView);
 	}
 	
 	private void initSearchView()

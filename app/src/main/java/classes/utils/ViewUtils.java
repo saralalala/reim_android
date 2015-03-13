@@ -45,7 +45,7 @@ public class ViewUtils
     	Toast.makeText(context, context.getString(resID) + "，" + errorMessage, Toast.LENGTH_SHORT).show();
     }
     
-	public static PopupWindow constructTopPopupWindow(final Activity activity, View view)
+	public static PopupWindow buildTopPopupWindow(final Activity activity, View view)
 	{
 		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
 		
@@ -61,7 +61,7 @@ public class ViewUtils
 		return popupWindow;
 	}
     
-	public static PopupWindow constructCenterPopupWindow(final Activity activity, View view)
+	public static PopupWindow buildCenterPopupWindow(final Activity activity, View view)
 	{
 		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
 		
@@ -77,7 +77,7 @@ public class ViewUtils
 		return popupWindow;
 	}
 	
-	public static PopupWindow constructBottomPopupWindow(final Activity activity, View view)
+	public static PopupWindow buildBottomPopupWindow(final Activity activity, View view)
 	{
 		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
 		
@@ -99,23 +99,7 @@ public class ViewUtils
 		
 		return popupWindow;
 	}
-	
-	public static PopupWindow constructHorizontalPopupWindow(final Activity activity, View view)
-	{
-		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
-		
-		PopupWindow popupWindow = new PopupWindow(activity);
-		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
-		popupWindow.setHeight(LayoutParams.MATCH_PARENT);
-		popupWindow.setContentView(view);
-		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
-		popupWindow.setFocusable(true);
-		popupWindow.setOutsideTouchable(true);
-		popupWindow.setAnimationStyle(R.style.WindowHorizontalAnimation);
-		
-		return popupWindow;
-	}
-	
+
 	public static void dimBackground(Activity activity)
 	{
 		WindowManager.LayoutParams params = activity.getWindow().getAttributes();

@@ -199,7 +199,7 @@ public class SubCategoryActivity extends Activity
 			}
 		});
 		
-		operationPopupWindow = ViewUtils.constructBottomPopupWindow(this, operationView);
+		operationPopupWindow = ViewUtils.buildBottomPopupWindow(this, operationView);
 	}
 	
 	private void refreshListView()

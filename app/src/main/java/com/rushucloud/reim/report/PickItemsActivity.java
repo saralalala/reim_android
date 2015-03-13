@@ -466,7 +466,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
             }
         });
 
-		filterPopupWindow = ViewUtils.constructTopPopupWindow(this, filterView);
+		filterPopupWindow = ViewUtils.buildTopPopupWindow(this, filterView);
 	}
 
 	private void refreshView()

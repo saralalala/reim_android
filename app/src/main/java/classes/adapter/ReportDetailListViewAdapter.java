@@ -93,7 +93,10 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			if (report.getSender() != null)
 			{
 				User user = dbManager.getUser(report.getSender().getServerID());
-				senderTextView.setText(user.getNickname());
+                if (user != null)
+                {
+                    senderTextView.setText(user.getNickname());
+                }
 			}
 
 			managerTextView.setText(report.getManagersName());

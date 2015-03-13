@@ -51,8 +51,8 @@ public class OthersReportListViewAdapter extends BaseAdapter
 		statusTextView.setText(report.getStatusString());
 		statusTextView.setBackgroundResource(report.getStatusBackground());
 
-		String sender = context.getString(R.string.prompt_sender) + report.getSender().getNickname();
-		senderTextView.setText(sender);
+        String nickname = report.getSender() == null? context.getString(R.string.null_string) : report.getSender().getNickname();
+        senderTextView.setText(context.getString(R.string.prompt_sender) + nickname);
 		
 		String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
 		titleTextView.setText(title);

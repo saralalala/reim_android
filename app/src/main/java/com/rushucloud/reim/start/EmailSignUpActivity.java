@@ -192,7 +192,7 @@ public class EmailSignUpActivity extends Activity
 					appPreference.setCurrentGroupID(-1);
 					appPreference.saveAppPreference();
 					
-					sendGetCommonInfoRequest();
+					sendSignInRequest();
 				}
 				else
 				{
@@ -209,7 +209,7 @@ public class EmailSignUpActivity extends Activity
 		});		
 	}
     
-    private void sendGetCommonInfoRequest()
+    private void sendSignInRequest()
     {
 		SignInRequest request = new SignInRequest();
 		request.sendRequest(new HttpConnectionCallback()
@@ -226,6 +226,9 @@ public class EmailSignUpActivity extends Activity
 					
 					// update categories
 					dbManager.updateGroupCategories(response.getCategoryList(), -1);
+
+                    // update tags
+                    dbManager.updateGroupTags(response.getTagList(), -1);
 					
 					// refresh UI
 					runOnUiThread(new Runnable()

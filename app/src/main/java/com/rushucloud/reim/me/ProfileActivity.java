@@ -319,7 +319,7 @@ public class ProfileActivity extends Activity
 			}
 		});
 		
-		picturePopupWindow = ViewUtils.constructBottomPopupWindow(this, pictureView);        
+		picturePopupWindow = ViewUtils.buildBottomPopupWindow(this, pictureView);
 	}
 	
 	private void loadInfoView()
