@@ -873,7 +873,7 @@ public class EditItemActivity extends Activity
 		{
 			for (User user : item.getRelevantUsers())
 			{
-				if (user.hasUndownloadedAvatar())
+				if (user != null && user.hasUndownloadedAvatar())
 				{
 					sendDownloadAvatarRequest(user);
 				}
@@ -1104,26 +1104,29 @@ public class EditItemActivity extends Activity
 			}
 			
 			User user = item.getRelevantUsers().get(i);
-			
-			View memberView = View.inflate(this, R.layout.grid_member, null);
-			
-			ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
-			if (!user.getAvatarPath().isEmpty())
-			{
-				Bitmap avatar = BitmapFactory.decodeFile(user.getAvatarPath());
-				if (avatar != null)
-				{
-					avatarImageView.setImageBitmap(avatar);
-				}				
-			}
-			
-			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
-			nameTextView.setText(user.getNickname());
-			
-			LayoutParams params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
-			params.rightMargin = horizontalInterval;
-			
-			layout.addView(memberView, params);
+
+            if (user != null)
+            {
+                View memberView = View.inflate(this, R.layout.grid_member, null);
+
+                ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
+                if (!user.getAvatarPath().isEmpty())
+                {
+                    Bitmap avatar = BitmapFactory.decodeFile(user.getAvatarPath());
+                    if (avatar != null)
+                    {
+                        avatarImageView.setImageBitmap(avatar);
+                    }
+                }
+
+                TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
+                nameTextView.setText(user.getNickname());
+
+                LayoutParams params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+                params.rightMargin = horizontalInterval;
+
+                layout.addView(memberView, params);
+            }
 		}
 	}
 

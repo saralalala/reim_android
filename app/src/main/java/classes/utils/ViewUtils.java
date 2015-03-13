@@ -47,7 +47,7 @@ public class ViewUtils
     
 	public static PopupWindow buildTopPopupWindow(final Activity activity, View view)
 	{
-		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
+		int backgroundColor = activity.getResources().getColor(android.R.color.transparent);
 		
 		PopupWindow popupWindow = new PopupWindow(activity);
 		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
@@ -63,7 +63,7 @@ public class ViewUtils
     
 	public static PopupWindow buildCenterPopupWindow(final Activity activity, View view)
 	{
-		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
+		int backgroundColor = activity.getResources().getColor(android.R.color.transparent);
 		
 		PopupWindow popupWindow = new PopupWindow(activity);
 		popupWindow.setWidth(PhoneUtils.dpToPixel(activity, 210));
@@ -79,7 +79,7 @@ public class ViewUtils
 	
 	public static PopupWindow buildBottomPopupWindow(final Activity activity, View view)
 	{
-		int backgroundColor = activity.getResources().getColor(R.color.hint_dark_grey);
+		int backgroundColor = activity.getResources().getColor(android.R.color.transparent);
 		
 		PopupWindow popupWindow = new PopupWindow(activity);
 		popupWindow.setWidth(LayoutParams.MATCH_PARENT);

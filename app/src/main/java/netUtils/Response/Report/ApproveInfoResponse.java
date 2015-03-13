@@ -34,8 +34,7 @@ public class ApproveInfoResponse extends BaseResponse
 			infoList = new ArrayList<ApproveInfo>();
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
-				JSONObject object = jsonArray.getJSONObject(i);
-				ApproveInfo info = new ApproveInfo(object);
+				ApproveInfo info = new ApproveInfo(jsonArray.getJSONObject(i));
 				infoList.add(info);
 			}
 			

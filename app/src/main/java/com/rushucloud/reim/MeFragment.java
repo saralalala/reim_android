@@ -242,15 +242,9 @@ public class MeFragment extends Fragment
 			avatarImageView.setImageResource(R.drawable.default_avatar);
 			nicknameTextView.setText(R.string.not_available);
 		}
-		
-		if (currentGroup != null)
-		{
-			companyTextView.setText(currentGroup.getName());
-		}
-		else
-		{
-			companyTextView.setText(R.string.not_available);
-		}
+
+        String company = currentGroup != null? currentGroup.getName() : getString(R.string.no_company);
+        companyTextView.setText(company);
 
         int visibility = ReimApplication.hasMessages() ? View.VISIBLE : View.GONE;
         tipImageView.setVisibility(visibility);

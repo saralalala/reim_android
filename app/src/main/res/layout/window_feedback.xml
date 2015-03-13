@@ -3,7 +3,7 @@
     android:id="@+id/baseLayout"
     android:layout_width="210dp"
     android:layout_height="wrap_content"
-    android:background="@color/background_grey"
+    android:background="@drawable/window_background"
     android:orientation="vertical"
     android:padding="10dp" >
 
@@ -58,10 +58,10 @@
         <Button
             android:id="@+id/submitButton"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="@dimen/window_button_height"
 			android:layout_toLeftOf="@+id/pivotView"
             android:layout_marginRight="5dp"
-            android:background="@drawable/button_dark_drawable"
+            android:background="@drawable/feedback_button_dark_drawable"
             android:text="@string/submit"
             android:textColor="@color/button_text_light_color" />
 
@@ -74,10 +74,10 @@
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="@dimen/window_button_height"
 			android:layout_toRightOf="@+id/pivotView"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/button_light_solid_drawable"
+            android:background="@drawable/feedback_button_light_drawable"
             android:text="@string/cancel"
             android:textColor="@color/button_text_dark_color" />
 

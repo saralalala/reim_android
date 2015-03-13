@@ -140,14 +140,23 @@ public class ApproveInfoActivity extends Activity
 				final ApproveInfoResponse response = new ApproveInfoResponse(httpResponse);
 				if (response.getStatus())
 				{
-					infoList.clear();
-					infoList.addAll(response.getInfoList());
+                    int senderID = report.getSender().getServerID();
 
+                    ApproveInfo submitInfo = new ApproveInfo();
+                    submitInfo.setUserID(senderID);
+                    submitInfo.setStatus(Report.STATUS_SUBMITTED + 100);
+                    submitInfo.setApproveDate(response.getSubmitDate().substring(0, 10));
+                    submitInfo.setApproveTime(response.getSubmitDate().substring(11, 16));
+                    submitInfo.setStep(0);
+
+                    infoList.clear();
+                    infoList.addAll(response.getInfoList());
+                    infoList.add(submitInfo);
 					adapter.setInfoList(infoList);
 					
 					for (ApproveInfo info : infoList)
 					{
-                        info.setReportSenderID(report.getSender().getServerID());
+                        info.setReportSenderID(senderID);
 						User user = dbManager.getUser(info.getUserID());
 						if (user != null && user.hasUndownloadedAvatar())
 						{

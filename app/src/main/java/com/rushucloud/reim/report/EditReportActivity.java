@@ -297,7 +297,7 @@ public class EditReportActivity extends Activity
 		});
 		if (report.getStatus() == Report.STATUS_DRAFT)
 		{
-			approveInfoTextView.setVisibility(View.GONE);
+			approveInfoTextView.setVisibility(View.INVISIBLE);
 		}
 		
 		managerTextView = (TextView) findViewById(R.id.managerTextView);
@@ -1134,9 +1134,10 @@ public class EditReportActivity extends Activity
 					comment.setReportID(report.getLocalID());
 					comment.setReviewer(currentUser);
 					dbManager.insertComment(comment);					
-					
+
 					report.setCommentList(dbManager.getReportComments(report.getLocalID()));
-					
+					lastCommentCount++;
+
 					runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -1187,6 +1188,7 @@ public class EditReportActivity extends Activity
 					dbManager.insertComment(comment);
 
 					report.setCommentList(dbManager.getReportComments(report.getLocalID()));
+                    lastCommentCount++;
 					
 					runOnUiThread(new Runnable()
 					{

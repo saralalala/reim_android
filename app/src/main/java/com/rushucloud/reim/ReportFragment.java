@@ -143,7 +143,6 @@ public class ReportFragment extends Fragment implements OnClickListener
 			setListView(ReimApplication.getReportTabIndex());
 			syncReports();	
 		}
-		showBadge();
 	}
 
 	public void onPause()
@@ -274,6 +273,14 @@ public class ReportFragment extends Fragment implements OnClickListener
 					if (ReimApplication.getReportTabIndex() == 0)
 					{
 						Report report = showMineList.get(position-1);
+
+                        List<Integer> mineUnreadList = ReimApplication.getMineUnreadList();
+                        if (mineUnreadList.contains(report.getServerID()))
+                        {
+                            mineUnreadList.remove(new Integer(report.getServerID()));
+                            ReimApplication.setMineUnreadList(mineUnreadList);
+                        }
+
 						Bundle bundle = new Bundle();
 						bundle.putSerializable("report", report);
 						Intent intent = new Intent();
@@ -292,6 +299,14 @@ public class ReportFragment extends Fragment implements OnClickListener
 					else
 					{
 						Report report = showOthersList.get(position-1);
+
+                        List<Integer> othersUnreadList = ReimApplication.getOthersUnreadList();
+                        if (othersUnreadList.contains(report.getServerID()))
+                        {
+                            othersUnreadList.remove(new Integer(report.getServerID()));
+                            ReimApplication.setOthersUnreadList(othersUnreadList);
+                        }
+
 						Bundle bundle = new Bundle();
 						bundle.putSerializable("report", report);
 						Intent intent = new Intent();
