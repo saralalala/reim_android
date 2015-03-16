@@ -173,7 +173,18 @@ public class ShowReportActivity extends Activity
 	}
 
 	private void refreshView()
-	{		
+	{
+        if (myReport)
+        {
+            List<Comment> commentList = dbManager.getReportComments(report.getLocalID());
+            lastCommentCount = commentList.size();
+        }
+        else
+        {
+            List<Comment> commentList = dbManager.getOthersReportComments(report.getServerID());
+            lastCommentCount = commentList.size();
+        }
+
 		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetReportRequest(report.getServerID());

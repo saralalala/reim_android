@@ -219,7 +219,10 @@ public class ApproveReportActivity extends Activity
 		itemList = dbManager.getOthersReportItems(reportServerID);
 		adapter.setItemList(itemList);
 		adapter.notifyDataSetChanged();
-		
+
+        List<Comment> commentList = dbManager.getOthersReportComments(report.getServerID());
+        lastCommentCount = commentList.size();
+
 		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetReportRequest(reportServerID);

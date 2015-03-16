@@ -122,7 +122,9 @@ public class EditReportActivity extends Activity
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setContext(this);
 		refreshView();
-		
+
+        List<Comment> commentList = dbManager.getReportComments(report.getLocalID());
+        lastCommentCount = commentList.size();
 		if (!hasInit && report.getServerID() != -1 && PhoneUtils.isNetworkConnected())
 		{
 			sendGetReportRequest(report.getServerID());

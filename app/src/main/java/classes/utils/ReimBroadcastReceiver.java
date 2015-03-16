@@ -67,7 +67,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				notification.tickerText = message;
 				notification.defaults = Notification.DEFAULT_ALL;
 				notification.flags |= Notification.FLAG_AUTO_CANCEL;
-				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent,
 																PendingIntent.FLAG_UPDATE_CURRENT);
 				
 				notification.setLatestEventInfo(context, context.getString(R.string.app_name), message, pendingIntent);

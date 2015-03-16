@@ -268,11 +268,11 @@ public class ReportFragment extends Fragment implements OnClickListener
 					int position, long id)
 			{
 				if ((operationPopupWindow == null || !operationPopupWindow.isShowing()) &&
-					(deletePopupWindow == null || !deletePopupWindow.isShowing()))
+					(deletePopupWindow == null || !deletePopupWindow.isShowing()) && position > 0)
 				{		
 					if (ReimApplication.getReportTabIndex() == 0)
 					{
-						Report report = showMineList.get(position-1);
+						Report report = showMineList.get(position - 1);
 
                         List<Integer> mineUnreadList = ReimApplication.getMineUnreadList();
                         if (mineUnreadList.contains(report.getServerID()))
@@ -298,7 +298,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 					}
 					else
 					{
-						Report report = showOthersList.get(position-1);
+						Report report = showOthersList.get(position - 1);
 
                         List<Integer> othersUnreadList = ReimApplication.getOthersUnreadList();
                         if (othersUnreadList.contains(report.getServerID()))

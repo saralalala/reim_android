@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -85,10 +86,8 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 				}
 			});
 
-			// init sender, manager and cc			
+			// init sender
 			TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);
-			TextView managerTextView = (TextView) view.findViewById(R.id.managerTextView);
-			TextView ccTextView = (TextView) view.findViewById(R.id.ccTextView);
 
 			if (report.getSender() != null)
 			{
@@ -99,8 +98,37 @@ public class ReportDetailListViewAdapter extends BaseAdapter
                 }
 			}
 
-			managerTextView.setText(report.getManagersName());
-			ccTextView.setText(report.getCCsName());
+            // init manager and cc
+            LinearLayout managerLayout = (LinearLayout) view.findViewById(R.id.managerLayout);
+            LinearLayout ccLayout = (LinearLayout) view.findViewById(R.id.ccLayout);
+            TextView managerTextView = (TextView) view.findViewById(R.id.managerTextView);
+            TextView ccTextView = (TextView) view.findViewById(R.id.ccTextView);
+
+            managerLayout.setVisibility(View.VISIBLE);
+            ccLayout.setVisibility(View.VISIBLE);
+
+            if (report.getStatus() == Report.STATUS_SUBMITTED || report.getStatus() == Report.STATUS_REJECTED)
+            {
+                managerTextView.setText(report.getManagersName());
+                if (report.getCCList() == null || report.getCCList().isEmpty())
+                {
+                    ccLayout.setVisibility(View.GONE);
+                }
+                else
+                {
+                    ccTextView.setText(report.getCCsName());
+                }
+            }
+            else if (report.getStatus() == Report.STATUS_APPROVED)
+            {
+                managerTextView.setText(R.string.admin);
+                ccLayout.setVisibility(View.GONE);
+            }
+            else
+            {
+                managerLayout.setVisibility(View.GONE);
+                ccLayout.setVisibility(View.GONE);
+            }
 			
 			// init amount and item count
 			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);

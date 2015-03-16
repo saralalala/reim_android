@@ -159,6 +159,7 @@ public class MeFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
+                ReimApplication.setHasMessages(false);
 				startActivity(new Intent(getActivity(), MessageListActivity.class));
 			}
 		});
@@ -192,14 +193,14 @@ public class MeFragment extends Fragment
 			}
 		});
         
-        RelativeLayout customServiceLayout = (RelativeLayout) getActivity().findViewById(R.id.customServiceLayout);
-        customServiceLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				showFeedbackDialog();
-			}
-		});        
+//        RelativeLayout customServiceLayout = (RelativeLayout) getActivity().findViewById(R.id.customServiceLayout);
+//        customServiceLayout.setOnClickListener(new View.OnClickListener()
+//		{
+//			public void onClick(View v)
+//			{
+//				showFeedbackDialog();
+//			}
+//		});
         
 //        RelativeLayout shareLayout = (RelativeLayout) getActivity().findViewById(R.id.shareLayout);
 //        shareLayout.setOnClickListener(new View.OnClickListener()
@@ -360,6 +361,7 @@ public class MeFragment extends Fragment
 		mController.openShare(getActivity(), false);
     }
 
+    @SuppressWarnings("unused")
     private void showFeedbackDialog()
     {
 		try
