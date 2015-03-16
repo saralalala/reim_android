@@ -40,7 +40,7 @@ public class ReimJWT
 		}
 	}
 
-	private static String sign(String inputdata)
+	private static String sign(String inputData)
 	{
 		String temp = null;
 		SecretKeySpec keySpec = new SecretKeySpec(PUBKEY.getBytes(), ALGORITHM);
@@ -48,7 +48,7 @@ public class ReimJWT
 		{
 			Mac mac = Mac.getInstance(ALGORITHM);
 			mac.init(keySpec);
-			mac.update(inputdata.getBytes());
+			mac.update(inputData.getBytes());
 			byte[] m = mac.doFinal();
 			temp = Base64.encodeToString(m, Base64.DEFAULT);
 		}
@@ -65,8 +65,7 @@ public class ReimJWT
 
 	private static String reimJWTReplace(String seed)
 	{
-		String seedOut = seed.replaceAll("/", "_").replaceAll("\\+", "-")
-				.replaceAll("=", "").replaceAll("\\n", "");
+		String seedOut = seed.replaceAll("/", "_").replaceAll("\\+", "-").replaceAll("=", "").replaceAll("\\n", "");
 		return seedOut;
 	}
 }

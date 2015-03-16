@@ -69,7 +69,7 @@ public class StatisticsResponse extends BaseResponse
 		}
 	}
 
-	public double getTotal()
+	public double getTotalAmount()
 	{
 		return newAmount + ongoingAmount;
 	}

@@ -40,8 +40,8 @@ public class EditCategoryActivity extends Activity
 {
 	private ImageView iconImageView;
 	private EditText nameEditText;
-	private EditText limitEditText;
-	private ToggleButton proveAheadToggleButton;
+//	private EditText limitEditText;
+//	private ToggleButton proveAheadToggleButton;
 	private LinearLayout iconLayout;
 
 	private DBManager dbManager;
@@ -153,9 +153,9 @@ public class EditCategoryActivity extends Activity
 			public void onClick(View v)
 			{
 				String name = nameEditText.getText().toString();
-				String limitString = limitEditText.getText().toString();
-                double limit = limitString.isEmpty() ? 0 : Utils.stringToDouble(limitString);
-                boolean isProveAhead = proveAheadToggleButton.isChecked();
+//				String limitString = limitEditText.getText().toString();
+//                double limit = limitString.isEmpty() ? 0 : Utils.stringToDouble(limitString);
+//                boolean isProveAhead = proveAheadToggleButton.isChecked();
                 int iconIndex = checkList.indexOf(true);
                 int iconID = iconIndex == -1 ? -1 : iconIndex + 1;
 
@@ -167,8 +167,8 @@ public class EditCategoryActivity extends Activity
 				{
 					ViewUtils.showToast(EditCategoryActivity.this, R.string.error_add_network_unavailable);
 				}
-				else if (category.getName().equals(name) && category.getIconID() == iconID &&
-                                category.getLimit() == limit && category.isProveAhead() == isProveAhead)
+				else if (category.getName().equals(name) && category.getIconID() == iconID)
+//                        && category.getLimit() == limit && category.isProveAhead() == isProveAhead)
                 {
                     finish();
                 }
@@ -176,8 +176,8 @@ public class EditCategoryActivity extends Activity
 				{
 					category.setName(name);
 					category.setGroupID(AppPreference.getAppPreference().getCurrentGroupID());
-					category.setIsProveAhead(isProveAhead);
-                    category.setLimit(limit);
+//					category.setIsProveAhead(isProveAhead);
+//                    category.setLimit(limit);
                     category.setIconID(iconID);
 					
 					if (category.getServerID() == -1)
@@ -197,10 +197,10 @@ public class EditCategoryActivity extends Activity
 		nameEditText = (EditText) findViewById(R.id.nameEditText);
 		nameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-		limitEditText = (EditText) findViewById(R.id.limitEditText);
-		limitEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
-		
-		proveAheadToggleButton = (ToggleButton) findViewById(R.id.proveAheadToggleButton);
+//		limitEditText = (EditText) findViewById(R.id.limitEditText);
+//		limitEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
+//
+//		proveAheadToggleButton = (ToggleButton) findViewById(R.id.proveAheadToggleButton);
 
 		iconLayout = (LinearLayout) findViewById(R.id.iconLayout);
 
@@ -216,8 +216,8 @@ public class EditCategoryActivity extends Activity
 		if (category.getServerID() != -1)
 		{
 			nameEditText.setText(category.getName());
-			limitEditText.setText(Utils.formatDouble(category.getLimit()));
-			proveAheadToggleButton.setChecked(category.isProveAhead());
+//			limitEditText.setText(Utils.formatDouble(category.getLimit()));
+//			proveAheadToggleButton.setChecked(category.isProveAhead());
 		}
 
 		if (category.getIconID() > 0)
@@ -291,7 +291,7 @@ public class EditCategoryActivity extends Activity
 	{
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(limitEditText.getWindowToken(), 0);
+//		imm.hideSoftInputFromWindow(limitEditText.getWindowToken(), 0);
 	}
 
 	private void sendCreateCategoryRequest(final Category category)

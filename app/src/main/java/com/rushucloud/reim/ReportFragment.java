@@ -1228,8 +1228,11 @@ public class ReportFragment extends Fragment implements OnClickListener
 						{
 							dbManager.insertOthersReport(report);
 						}
-						else if (report.getServerUpdatedDate() > localReport.getLocalUpdatedDate())
+						else
 						{
+                            report.setIsProveAhead(localReport.isProveAhead());
+                            report.setManagerList(localReport.getManagerList());
+                            report.setCCList(localReport.getCCList());
 							dbManager.updateOthersReport(report);
 						}
 					}

@@ -44,61 +44,214 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!--   start part   -->
+        <activity
+            android:name=".start.NewFeaturesActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.WelcomeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.SignInActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.PhoneSignUpActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.EmailSignUpActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.PhoneFindActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.EmailFindActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.ResetPasswordActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.CompleteInfoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+
+        <!--   public part   -->
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         
-        <activity android:name="com.rushucloud.reim.start.NewFeaturesActivity" />
-        <activity android:name="com.rushucloud.reim.start.WelcomeActivity" />
-        <activity android:name="com.rushucloud.reim.start.SignInActivity" />
-        <activity android:name="com.rushucloud.reim.start.PhoneSignUpActivity" />
-        <activity android:name="com.rushucloud.reim.start.EmailSignUpActivity" />
-        <activity android:name="com.rushucloud.reim.start.PhoneFindActivity" />
-        <activity android:name="com.rushucloud.reim.start.EmailFindActivity" />
-        <activity android:name="com.rushucloud.reim.start.ResetPasswordActivity" />
-        <activity android:name="com.rushucloud.reim.start.CompleteInfoActivity" />
-        
-        <activity android:name="com.rushucloud.reim.MainActivity" android:launchMode="singleTop" />
-        
-        <activity android:name="com.rushucloud.reim.GalleryActivity" />
-        <activity android:name="com.rushucloud.reim.MultipleImageActivity" />
-        <activity android:name="com.rushucloud.reim.SingleImageActivity" />
-        
-        <activity android:name="com.rushucloud.reim.item.EditItemActivity" />
-        <activity android:name="com.rushucloud.reim.item.ShowItemActivity" />
-        <activity android:name="com.rushucloud.reim.item.SearchItemActivity" />
-        <activity android:name="com.rushucloud.reim.item.PickVendorActivity" />
-        <activity android:name="com.rushucloud.reim.item.PickLocationActivity" />
-        <activity android:name="com.rushucloud.reim.item.PickCategoryActivity" />
-        <activity android:name="com.rushucloud.reim.item.PickTagActivity" />
-        <activity android:name="com.rushucloud.reim.item.PickMemberActivity" />
-        
-        <activity android:name="com.rushucloud.reim.report.EditReportActivity" />
-        <activity android:name="com.rushucloud.reim.report.PickManagerActivity" />
-        <activity android:name="com.rushucloud.reim.report.PickCCActivity" />
-        <activity android:name="com.rushucloud.reim.report.ApproveReportActivity" />
-        <activity android:name="com.rushucloud.reim.report.ShowReportActivity" />        
-        <activity android:name="com.rushucloud.reim.report.CommentActivity" />
-        <activity android:name=".report.PickItemsActivity" />
-        <activity android:name="com.rushucloud.reim.report.ApproveInfoActivity" />
-        <activity android:name="com.rushucloud.reim.report.FollowingActivity" />
-        
-        <activity android:name="com.rushucloud.reim.me.ProfileActivity" />
-        <activity android:name="com.rushucloud.reim.me.EmailActivity" />
-        <activity android:name="com.rushucloud.reim.me.PhoneActivity" />
-        <activity android:name="com.rushucloud.reim.me.NicknameActivity" />
-        <activity android:name="com.rushucloud.reim.me.CompanyActivity" />
-        <activity android:name="com.rushucloud.reim.me.InvoiceTitleActivity" />
-        <activity android:name="com.rushucloud.reim.me.ChangePasswordActivity" />        
-        <activity android:name="com.rushucloud.reim.me.ManagerActivity" />        
-        <activity android:name="com.rushucloud.reim.me.CategoryActivity" />
-        <activity android:name="com.rushucloud.reim.me.SubCategoryActivity" />
-        <activity android:name="com.rushucloud.reim.me.EditCategoryActivity" />
-        <activity android:name="com.rushucloud.reim.me.TagActivity" />
-        <activity android:name="com.rushucloud.reim.me.EditTagActivity" />
-        <activity android:name="com.rushucloud.reim.me.SendInviteActivity" />        
-        <activity android:name=".me.MessageListActivity" />
-        <activity android:name=".me.MessageActivity" />
-        <activity android:name="com.rushucloud.reim.me.SettingsActivity" />        
-        <activity android:name="com.rushucloud.reim.me.AboutActivity" />
-        <activity android:name="com.rushucloud.reim.me.FeedbackActivity" />
+        <activity
+            android:name=".GalleryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MultipleImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SingleImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+
+        <!--   item part   -->
+        <activity
+            android:name=".item.EditItemActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".item.ShowItemActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".item.SearchItemActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".item.PickVendorActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".item.PickLocationActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".item.PickCategoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".item.PickTagActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".item.PickMemberActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+
+        <!--   report part   -->
+        <activity
+            android:name=".report.EditReportActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".report.PickManagerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".report.PickCCActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".report.ApproveReportActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".report.ShowReportActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".report.CommentActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".report.PickItemsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".report.ApproveInfoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".report.FollowingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+
+        <!--   me part   -->
+        <activity
+            android:name=".me.ProfileActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.EmailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.PhoneActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.NicknameActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.CompanyActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.InvoiceTitleActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.ChangePasswordActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.ManagerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.CategoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.SubCategoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.EditCategoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.TagActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.EditTagActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.SendInviteActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.MessageListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.MessageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.SettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.AboutActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".me.FeedbackActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
         
         <!-- #######################  友盟UmengAppkey  ####################### -->
 	    <meta-data

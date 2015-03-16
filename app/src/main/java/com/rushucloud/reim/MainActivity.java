@@ -33,7 +33,6 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.TabItem;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.EventsReadRequest;
 import netUtils.Request.EventsRequest;
 import netUtils.Request.FeedbackRequest;
 import netUtils.Request.Group.GetGroupRequest;
@@ -199,18 +198,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					if (currentIndex == 1)
 					{
 						showReportTip(false);
-						if (PhoneUtils.isNetworkConnected())
-						{
-							sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
-						}					
 					}
 					else if (currentIndex == 3)
 					{
 						showMeTip(false);
-						if (PhoneUtils.isNetworkConnected())
-						{
-							sendEventsReadRequest(EventsReadRequest.TYPE_INVITE);		
-						}
 					}
 				}
 			}
@@ -435,12 +426,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			}
 		});
 	}
-
-	private void sendEventsReadRequest(int type)
-	{
-		EventsReadRequest request = new EventsReadRequest(type);
-		request.sendRequest(null);
-	}
 	
 	private void sendGetGroupRequest()
 	{
@@ -535,10 +520,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				
 				position = 1;
 				showReportTip(false);
-				if (PhoneUtils.isNetworkConnected())
-				{
-					sendEventsReadRequest(EventsReadRequest.TYPE_REPORT);		
-				}
 				break;							
 			}
 			case R.id.tabItemStat:
@@ -550,10 +531,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			{
 				position = 3;
 				showMeTip(false);
-				if (PhoneUtils.isNetworkConnected())
-				{
-					sendEventsReadRequest(EventsReadRequest.TYPE_INVITE);		
-				}
 				break;							
 			}
 			default:

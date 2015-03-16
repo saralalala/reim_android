@@ -314,7 +314,7 @@ public class StatisticsFragment extends Fragment
 						public void run()
 						{
 							resetView();
-							drawPie(response.getTotal(), response.getOngoingAmount(), response.getNewAmount());
+							drawPie(response.getTotalAmount(), response.getOngoingAmount(), response.getNewAmount());
 							drawMonthBar(response.getMonthsData());
 							drawCategory(response.getStatCategoryList());
 							adapter.notifyDataSetChanged();

@@ -5,6 +5,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -343,8 +344,15 @@ public class EditItemActivity extends Activity
 			originInvoiceList = new ArrayList<Image>(item.getInvoices());
 		}
 	}
-	
-	private void initView()
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        System.out.println("onConfigurationChanged");
+    }
+
+    private void initView()
 	{
 		getActionBar().hide();
 		
