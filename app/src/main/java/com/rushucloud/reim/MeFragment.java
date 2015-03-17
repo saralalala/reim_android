@@ -247,10 +247,15 @@ public class MeFragment extends Fragment
         String company = currentGroup != null? currentGroup.getName() : getString(R.string.no_company);
         companyTextView.setText(company);
 
+        showTip();
+	}
+
+    public  void showTip()
+    {
         int visibility = ReimApplication.hasMessages() ? View.VISIBLE : View.GONE;
         tipImageView.setVisibility(visibility);
-	}
-	
+    }
+
     private void sendDownloadAvatarRequest()
     {
     	DownloadImageRequest request = new DownloadImageRequest(currentUser.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);

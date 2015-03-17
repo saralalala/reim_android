@@ -47,6 +47,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	private long exitTime;
 
 	private ViewPager viewPager;
+    private FragmentPagerAdapter adapter;
 	private ImageView reportTipImageView;
 	private ImageView meTipImageView;
 	private PopupWindow feedbackPopupWindow;
@@ -152,25 +153,26 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		fragmentList.add(reportFragment);
 		fragmentList.add(statisticsFragment);
 		fragmentList.add(meFragment);
-		
-		viewPager = (ViewPager) findViewById(R.id.viewPager);
-		viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager())
-		{
-			public int getCount()
-			{
-				return fragmentList.size();
-			}
-			
-			public Fragment getItem(int arg0)
-			{
-				return fragmentList.get(arg0);
-			}
 
-			public void destroyItem(ViewGroup container, int position, Object object)
-			{
-				
-			}
-		});
+        adapter = new FragmentPagerAdapter(getSupportFragmentManager())
+        {
+            public int getCount()
+            {
+                return fragmentList.size();
+            }
+
+            public Fragment getItem(int arg0)
+            {
+                return fragmentList.get(arg0);
+            }
+
+            public void destroyItem(ViewGroup container, int position, Object object)
+            {
+
+            }
+        };
+		viewPager = (ViewPager) findViewById(R.id.viewPager);
+		viewPager.setAdapter(adapter);
 		viewPager.setOnPageChangeListener(new OnPageChangeListener()
 		{
 			public void onPageSelected(int arg0)
@@ -420,6 +422,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
                             ReimApplication.setHasMessages(response.hasMessages());
 							showReportTip(response.hasUnreadReports());
 							showMeTip(response.hasMessages());
+                            if (viewPager.getCurrentItem() == 3)
+                            {
+                                MeFragment fragment = (MeFragment) fragmentList.get(3);
+                                fragment.showTip();
+                            }
 						}
 					});
 				}
