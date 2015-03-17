@@ -38,7 +38,7 @@
     <string name="check">选中</string>
     <string name="skip">直接跳过</string>
     <string name="alarm">提醒</string>
-    <string name="finish">直接结束</string>
+    <string name="finish">直接通过</string>
     <string name="exit">退出</string>
     <string name="sign_in_again">重新登录</string>
     
@@ -106,8 +106,8 @@
     <string name="pick_image">选择图片</string>
     <string name="no_image">未找到图片</string>
     
-    <string name="my_report">我的</string>
-    <string name="others_report">需审批</string>
+    <string name="my_report">我的报告</string>
+    <string name="others_report">收到的报告</string>
     <string name="report_detail">报告详情</string>
     <string name="report_prove_ahead">预申请消费</string>
     <string name="comment">评论</string>
@@ -249,7 +249,7 @@
     <string name="prompt_feedback_phone">请留下联系方式，方便我们与你沟通</string>
     <string name="prompt_sender">发送者：</string>
     <string name="prompt_no_need_to_alarm">报告未在审核过程中，无需发送提醒</string>
-    <string name="prompt_choose_or_finish">您是继续选择后续审批人还是直接结束这个报告？</string>
+    <string name="prompt_choose_or_finish">您希望直接通过，还是选择其他人继续审批这份报告？</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>
