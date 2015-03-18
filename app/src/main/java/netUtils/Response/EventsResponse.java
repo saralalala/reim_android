@@ -30,7 +30,7 @@ public class EventsResponse extends BaseResponse
 			JSONObject jObject = getDataObject();
             System.out.println(jObject.toString());
 			JSONArray invitesArray = jObject.getJSONArray("invites");
-			JSONArray reportsArray = jObject.getJSONArray("reports");	
+			JSONArray reportsArray = jObject.getJSONArray("reports");
 			JSONArray membersArray = jObject.getJSONArray("members");
 			JSONArray managersArray = jObject.getJSONArray("managers");
 

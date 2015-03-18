@@ -211,7 +211,11 @@
     <string name="input_keyword">请输入关键字</string>
     <string name="input_vendor">请输入商家</string>
     <string name="input_location">请输入城市</string>
+    <string name="input_member">请输入参与者信息</string>
     <string name="input_report_title">请输入报告名称</string>
+    <string name="input_default_manager">请输入上级信息</string>
+    <string name="input_manager">请输入审批人信息</string>
+    <string name="input_cc">请输入抄送人信息</string>
     <string name="input_comment">请输入评论</string>
     <string name="input_nickname">请输入昵称</string>
     <string name="input_company_name">请输入公司名称</string>
@@ -409,6 +413,8 @@
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
     
-    <string name="versionControl">汉</string>
+    <string name="surprise">如果你能看到这个窗口，说明你是一个极有探索欲望的同学，如数科技就是喜欢这样的人。你有没有兴趣加入我们呢？请发送简历到hr@cloudbaoxiao.com。</string>
+    <string name="ok">好的我知道了</string>
+    <string name="versionControl">三国</string>
     
 </resources>

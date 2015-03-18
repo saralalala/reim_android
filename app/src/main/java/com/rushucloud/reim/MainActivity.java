@@ -363,7 +363,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 
     private void showFeedbackWindow()
     {
-    	feedbackEditText.setText("");
+    	feedbackEditText.setText(R.string.null_string);
     	
 		feedbackPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		feedbackPopupWindow.update();

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/baseLayout"
+    android:layout_width="210dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/window_background"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/surprise"
+        android:textColor="@color/font_major_dark"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/window_button_height"
+        android:layout_toLeftOf="@+id/pivotView"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/feedback_button_dark_drawable"
+        android:text="@string/ok"
+        android:textColor="@color/button_text_light_color" />
+
+</LinearLayout>

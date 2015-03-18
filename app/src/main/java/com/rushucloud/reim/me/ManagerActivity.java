@@ -1,14 +1,17 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import classes.User;
@@ -37,6 +41,7 @@ import netUtils.Response.User.DefaultManagerResponse;
 
 public class ManagerActivity extends Activity
 {
+    private EditText managerEditText;
 	private ListView managerListView;
 	private MemberListViewAdapter adapter;
 
@@ -46,7 +51,8 @@ public class ManagerActivity extends Activity
 	private int currentGroupID;
 	private User currentUser;
 	private List<User> userList;
-	private boolean[] checkList;
+    private List<User> showList = new ArrayList<User>();
+    private List<User> chosenList;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -97,7 +103,7 @@ public class ManagerActivity extends Activity
     	currentGroupID = appPreference.getCurrentGroupID();
     	
 		userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUser.getServerID());
-		checkList = User.getUsersCheck(userList, currentUser.buildBaseManagerList());
+        chosenList = currentUser.buildBaseManagerList();
 	}
 	
 	private void initView()
@@ -119,16 +125,13 @@ public class ManagerActivity extends Activity
 			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_BOSS_SETTING_SAVE");
-				
+                hideSoftKeyboard();
+
 				User manager = null;
-				for (int i = 0; i < checkList.length; i++)
-				{
-					if (checkList[i])
-					{
-						manager = userList.get(i);
-						break;
-					}
-				}
+                if (!adapter.getChosenList().isEmpty())
+                {
+                    manager = adapter.getChosenList().get(0);
+                }
 				
 				if (!PhoneUtils.isNetworkConnected())
 				{
@@ -152,28 +155,45 @@ public class ManagerActivity extends Activity
 				}
 			}
 		});
-		
+
+        managerEditText = (EditText) findViewById(R.id.managerEditText);
+        managerEditText.addTextChangedListener(new TextWatcher()
+        {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+
+            }
+
+            public void afterTextChanged(Editable s)
+            {
+                filterList();
+            }
+        });
+
 		managerListView = (ListView) findViewById(R.id.userListView);
 		managerListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_BOSS_SETTING_CHOOSE");
-				
-				for (int i = 0; i < checkList.length; i++)
-				{
-					checkList[i] = false;
-				}
-				checkList[position] = true;
-				adapter.setCheck(checkList);
+                hideSoftKeyboard();
+
+                chosenList.clear();
+                chosenList.add(adapter.getItem(position));
+				adapter.setChosenList(chosenList);
 				adapter.notifyDataSetChanged();
 			}
 		});	
 	}
-	
+
 	private void refreshListView()
 	{
-		adapter = new MemberListViewAdapter(this, userList, checkList);
+		adapter = new MemberListViewAdapter(this, userList, chosenList);
 		managerListView.setAdapter(adapter);
 		
 		if (PhoneUtils.isNetworkConnected())
@@ -187,6 +207,23 @@ public class ManagerActivity extends Activity
 			}
 		}
 	}
+
+    private void filterList()
+    {
+        String keyWord = managerEditText.getText().toString();
+
+        showList.clear();
+        for (User user : userList)
+        {
+            if (user.getNickname().contains(keyWord) || user.getEmail().contains(keyWord) || user.getPhone().contains(keyWord))
+            {
+                showList.add(user);
+            }
+        }
+
+        adapter.setMemberList(showList);
+        adapter.notifyDataSetChanged();
+    }
 
 	private void sendGetGroupRequest()
 	{
@@ -217,6 +254,7 @@ public class ManagerActivity extends Activity
 							ReimProgressDialog.dismiss();
 							initData();
 							refreshListView();
+                            filterList();
 						}
 					});
 				}
@@ -256,17 +294,8 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Builder builder = new Builder(ManagerActivity.this);
-							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.prompt_default_manager_changed);
-							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
-																{
-																	public void onClick(DialogInterface dialog, int which)
-																	{
-																		finish();
-																	}
-																});
-							builder.create().show();
+                            ViewUtils.showToast(ManagerActivity.this, R.string.prompt_default_manager_changed);
+                            finish();
 						}
 					});
 				}
@@ -306,12 +335,17 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUser.getServerID());
-							adapter.setMember(userList);
-							adapter.notifyDataSetChanged();
+                            filterList();
 						}
 					});	
 				}
 			}
 		});
+    }
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(managerEditText.getWindowToken(), 0);
     }
 }

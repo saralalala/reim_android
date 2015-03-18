@@ -90,6 +90,7 @@ public class PickVendorActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+                hideSoftKeyboard();
 				finish();
 			}
 		});
@@ -119,6 +120,8 @@ public class PickVendorActivity extends Activity
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
+                hideSoftKeyboard();
+
 				Vendor vendor = vendorAdapter.getItem(position);				
 				Intent intent = new Intent();
 				intent.putExtra("vendor", vendor.getName());

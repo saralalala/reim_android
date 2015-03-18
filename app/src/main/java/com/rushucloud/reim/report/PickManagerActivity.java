@@ -1,12 +1,17 @@
 package com.rushucloud.reim.report;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,12 +36,14 @@ import netUtils.Response.DownloadImageResponse;
 
 public class PickManagerActivity extends Activity
 {
+    private EditText managerEditText;
 	private MemberListViewAdapter adapter;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	private List<User> userList;
-	private boolean[] check;
+    private List<User> showList = new ArrayList<User>();
+    private List<User> chosenList;
 	private int senderID;
 	private boolean newReport;
 	private boolean fromFollowing;
@@ -89,15 +96,7 @@ public class PickManagerActivity extends Activity
 
 		List<User> managerList = (List<User>) getIntent().getSerializableExtra("managers");
 		User currentUser = AppPreference.getAppPreference().getCurrentUser();
-
-		if (managerList == null)
-		{
-			check = User.getUsersCheck(userList, currentUser.buildBaseManagerList());
-		}
-		else
-		{
-			check = User.getUsersCheck(userList, managerList);
-		}
+        chosenList = managerList == null? currentUser.buildBaseManagerList() : managerList;
 	}
 	
 	private void initView()
@@ -109,6 +108,7 @@ public class PickManagerActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+                hideSoftKeyboard();
 				finish();
 			}
 		});
@@ -118,6 +118,8 @@ public class PickManagerActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+                hideSoftKeyboard();
+
 				if (!fromFollowing && newReport)
 				{
 					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
@@ -131,34 +133,41 @@ public class PickManagerActivity extends Activity
 					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_NEXT_SEND_SUBMIT");					
 				}
 				
-				List<User> managerList = new ArrayList<User>();
-				if (check != null)
-				{
-					for (int i = 0; i < check.length; i++)
-					{
-						if (check[i])
-						{
-							managerList.add(userList.get(i));
-						}
-					}
-				}
-				
 				Intent intent = new Intent();
-				intent.putExtra("managers", (Serializable) managerList);
+				intent.putExtra("managers", (Serializable) adapter.getChosenList());
 				setResult(RESULT_OK, intent);
 				finish();
 			}
 		});
+
+        managerEditText = (EditText) findViewById(R.id.managerEditText);
+        managerEditText.addTextChangedListener(new TextWatcher()
+        {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+
+            }
+
+            public void afterTextChanged(Editable s)
+            {
+                filterList();
+            }
+        });
 		
-		adapter = new MemberListViewAdapter(this, userList, check);
+		adapter = new MemberListViewAdapter(this, userList, chosenList);
 		ListView managerListView = (ListView) findViewById(R.id.managerListView);
 		managerListView.setAdapter(adapter);
     	managerListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				check[position] = !check[position];
-				adapter.setCheck(check);
+                hideSoftKeyboard();
+				adapter.setCheck(position);
 				adapter.notifyDataSetChanged();
 			}
 		});
@@ -171,7 +180,24 @@ public class PickManagerActivity extends Activity
 			}
 		}
 	}
-	
+
+    private void filterList()
+    {
+        String keyWord = managerEditText.getText().toString();
+
+        showList.clear();
+        for (User user : userList)
+        {
+            if (user.getNickname().contains(keyWord) || user.getEmail().contains(keyWord) || user.getPhone().contains(keyWord))
+            {
+                showList.add(user);
+            }
+        }
+
+        adapter.setMemberList(showList);
+        adapter.notifyDataSetChanged();
+    }
+
     private void sendDownloadAvatarRequest(final User user)
     {
     	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
@@ -197,12 +223,17 @@ public class PickManagerActivity extends Activity
 							{
 								userList = User.removeUserFromList(userList, senderID);
 							}
-							adapter.setMember(userList);
-							adapter.notifyDataSetChanged();
+                            filterList();
 						}
 					});	
 				}
 			}
 		});
+    }
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(managerEditText.getWindowToken(), 0);
     }
 }

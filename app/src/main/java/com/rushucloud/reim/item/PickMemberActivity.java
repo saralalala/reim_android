@@ -1,12 +1,17 @@
 package com.rushucloud.reim.item;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,11 +36,13 @@ import netUtils.Response.DownloadImageResponse;
 
 public class PickMemberActivity extends Activity
 {
+    private EditText memberEditText;
 	private MemberListViewAdapter adapter;
 
 	private DBManager dbManager;
-	private List<User> userList = new ArrayList<User>();
-	private boolean[] check;
+	private List<User> userList;
+    private List<User> showList = new ArrayList<User>();
+    private List<User> chosenList;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -75,9 +82,7 @@ public class PickMemberActivity extends Activity
 		
 		int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
 		userList = dbManager.getGroupUsers(currentGroupID);
-
-		List<User> chosenMembers = (List<User>) getIntent().getSerializableExtra("users");
-		check = User.getUsersCheck(userList, chosenMembers);
+		chosenList = (List<User>) getIntent().getSerializableExtra("users");
 	}
 	
 	private void initView()
@@ -89,6 +94,7 @@ public class PickMemberActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+                hideSoftKeyboard();
 				finish();
 			}
 		});
@@ -97,22 +103,34 @@ public class PickMemberActivity extends Activity
 		confirmTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
-			{				
-				List<User> users = new ArrayList<User>();
-				for (int i = 0; i < userList.size(); i++)
-				{
-					if (check[i])
-					{
-						users.add(userList.get(i));
-					}
-				}
-				
+			{
+                hideSoftKeyboard();
+
 				Intent intent = new Intent();
-				intent.putExtra("users", (Serializable) users);
+				intent.putExtra("users", (Serializable) adapter.getChosenList());
 				setResult(RESULT_OK, intent);
 				finish();
 			}
 		});
+
+        memberEditText = (EditText) findViewById(R.id.memberEditText);
+        memberEditText.addTextChangedListener(new TextWatcher()
+        {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+
+            }
+
+            public void afterTextChanged(Editable s)
+            {
+                filterList();
+            }
+        });
 
     	ListView userListView = (ListView) findViewById(R.id.userListView);
 		TextView noMemberTextView = (TextView) findViewById(R.id.noMemberTextView);
@@ -127,15 +145,15 @@ public class PickMemberActivity extends Activity
 			noMemberTextView.setVisibility(View.INVISIBLE);
 			userListView.setVisibility(View.VISIBLE);
 			
-			adapter = new MemberListViewAdapter(this, userList, check);
+			adapter = new MemberListViewAdapter(this, userList, chosenList);
 
 	    	userListView.setAdapter(adapter);
 	    	userListView.setOnItemClickListener(new OnItemClickListener()
 			{
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 				{
-					check[position] = !check[position];
-					adapter.setCheck(check);
+                    hideSoftKeyboard();
+					adapter.setCheck(position);
 					adapter.notifyDataSetChanged();
 				}
 			});
@@ -149,6 +167,23 @@ public class PickMemberActivity extends Activity
 			}
 		}
 	}
+
+    private void filterList()
+    {
+        String keyWord = memberEditText.getText().toString();
+
+        showList.clear();
+        for (User user : userList)
+        {
+            if (user.getNickname().contains(keyWord) || user.getEmail().contains(keyWord) || user.getPhone().contains(keyWord))
+            {
+                showList.add(user);
+            }
+        }
+
+        adapter.setMemberList(showList);
+        adapter.notifyDataSetChanged();
+    }
 	
     private void sendDownloadAvatarRequest(final User user)
     {
@@ -172,12 +207,17 @@ public class PickMemberActivity extends Activity
 						{
 							int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
 							userList = dbManager.getGroupUsers(currentGroupID);
-							adapter.setMember(userList);
-							adapter.notifyDataSetChanged();
+                            filterList();
 						}
 					});	
 				}
 			}
 		});
+    }
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(memberEditText.getWindowToken(), 0);
     }
 }

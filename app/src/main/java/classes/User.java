@@ -226,7 +226,7 @@ public class User implements Serializable
 
 		if (o instanceof User)
 		{
-			User user = (User)o;
+			User user = (User) o;
 			return user.getServerID() == this.getServerID();
 		}
 		return super.equals(o);
@@ -292,23 +292,6 @@ public class User implements Serializable
 			}
 		}
 		return check;
-	}
-
-	public static int getIndexOfUser(List<User> userList, User user)
-	{
-		if (user == null)
-		{
-			return -1;
-		}
-		
-		for (int i = 0; i < userList.size(); i++)
-		{
-			if (user.getServerID() == userList.get(i).getServerID())
-			{
-				return i;
-			}
-		}
-		return -1;
 	}
 	
 	public static String[] getUsersName(List<User> userList)

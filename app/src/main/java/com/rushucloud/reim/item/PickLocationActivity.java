@@ -75,6 +75,7 @@ public class PickLocationActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+                hideSoftKeyboard();
 				finish();
 			}
 		});
@@ -105,7 +106,9 @@ public class PickLocationActivity extends Activity
 		locationListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{				
+			{
+                hideSoftKeyboard();
+
 				if (position == 0 && !currentCity.isEmpty())
 				{
 					locationEditText.setText(currentCity);

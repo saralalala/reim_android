@@ -45,6 +45,38 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="48dp" >
+
+        <EditText
+            android:id="@+id/memberEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@null"
+            android:hint="@string/input_member"
+            android:inputType="text" />
+
+    </RelativeLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="@color/list_item_header" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
         <ListView

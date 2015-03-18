@@ -1,12 +1,17 @@
 package com.rushucloud.reim.report;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,12 +36,14 @@ import netUtils.Response.DownloadImageResponse;
 
 public class PickCCActivity extends Activity
 {
+    private EditText ccEditText;
 	private MemberListViewAdapter adapter;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	private List<User> userList;
-	private boolean[] check;
+    private List<User> showList = new ArrayList<User>();
+    private List<User> chosenList;
 	private int senderID;
 	private boolean newReport;
 	private boolean fromFollowing;
@@ -88,7 +95,7 @@ public class PickCCActivity extends Activity
 		}
 
 		List<User> ccList = (List<User>) getIntent().getSerializableExtra("ccs");
-		check = User.getUsersCheck(userList, ccList);
+        chosenList = ccList == null? new ArrayList<User>() : ccList;
 	}
 	
 	private void initView()
@@ -100,6 +107,7 @@ public class PickCCActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+                hideSoftKeyboard();
 				finish();
 			}
 		});
@@ -109,6 +117,8 @@ public class PickCCActivity extends Activity
 		{
 			public void onClick(View v)
 			{
+                hideSoftKeyboard();
+
 				if (!fromFollowing && newReport)
 				{
 					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
@@ -121,35 +131,42 @@ public class PickCCActivity extends Activity
 				{
 					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEXT_CC_SUBMIT");					
 				}
-				
-				List<User> ccList = new ArrayList<User>();
-				if (check != null)
-				{
-					for (int i = 0; i < check.length; i++)
-					{
-						if (check[i])
-						{
-							ccList.add(userList.get(i));
-						}
-					}
-				}
-				
+
 				Intent intent = new Intent();
-				intent.putExtra("ccs", (Serializable) ccList);
+				intent.putExtra("ccs", (Serializable) adapter.getChosenList());
 				setResult(RESULT_OK, intent);
 				finish();
 			}
 		});
 
-		adapter = new MemberListViewAdapter(this, userList, check);
+        ccEditText = (EditText) findViewById(R.id.ccEditText);
+        ccEditText.addTextChangedListener(new TextWatcher()
+        {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+
+            }
+
+            public void afterTextChanged(Editable s)
+            {
+                filterList();
+            }
+        });
+
+		adapter = new MemberListViewAdapter(this, userList, chosenList);
 		ListView ccListView = (ListView) findViewById(R.id.ccListView);
 		ccListView.setAdapter(adapter);
     	ccListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				check[position] = !check[position];
-				adapter.setCheck(check);
+                hideSoftKeyboard();
+				adapter.setCheck(position);
 				adapter.notifyDataSetChanged();
 			}
 		});
@@ -162,6 +179,23 @@ public class PickCCActivity extends Activity
 			}
 		}
 	}
+
+    private void filterList()
+    {
+        String keyWord = ccEditText.getText().toString();
+
+        showList.clear();
+        for (User user : userList)
+        {
+            if (user.getNickname().contains(keyWord) || user.getEmail().contains(keyWord) || user.getPhone().contains(keyWord))
+            {
+                showList.add(user);
+            }
+        }
+
+        adapter.setMemberList(showList);
+        adapter.notifyDataSetChanged();
+    }
 	
     private void sendDownloadAvatarRequest(final User user)
     {
@@ -188,12 +222,17 @@ public class PickCCActivity extends Activity
 							{
 								userList = User.removeUserFromList(userList, senderID);
 							}
-							adapter.setMember(userList);
-							adapter.notifyDataSetChanged();
+                            filterList();
 						}
 					});	
 				}
 			}
 		});
+    }
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(ccEditText.getWindowToken(), 0);
     }
 }

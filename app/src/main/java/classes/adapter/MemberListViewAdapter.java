@@ -22,18 +22,17 @@ public class MemberListViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
 	private List<User> memberList;
-	private boolean[] check;
-	private int selectedColor;
-	private int unselectedColor;
+	private List<User> chosenList;
+    private int selectedColor;
+    private int unselectedColor;
 	
-	public MemberListViewAdapter(Context context, List<User> userList, boolean[] checkList)
+	public MemberListViewAdapter(Context context, List<User> userList, List<User> chosenList)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
-		
 		this.memberList = new ArrayList<User>(userList);
-		this.check = checkList;
-		this.selectedColor = ViewUtils.getColor(R.color.major_dark);
-		this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
+        this.chosenList = chosenList == null || chosenList.isEmpty()? new ArrayList<User>() : new ArrayList<User>(chosenList);
+        this.selectedColor = ViewUtils.getColor(R.color.major_dark);
+        this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -42,17 +41,15 @@ public class MemberListViewAdapter extends BaseAdapter
 		{
 			convertView = layoutInflater.inflate(R.layout.list_member, parent, false);
 		}
-		
-		if (check != null)
-		{
-			int color = check[position] ? R.color.list_item_selected : R.color.list_item_unselected;
-			convertView.setBackgroundResource(color);
-		}
+
+        User user = memberList.get(position);
+        boolean isChosen = chosenList.contains(user);
+
+        int color = isChosen ? R.color.list_item_selected : R.color.list_item_unselected;
+        convertView.setBackgroundResource(color);
 
 		ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
 		TextView nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
-				
-		User user = memberList.get(position);
 
 		imageView.setImageResource(R.drawable.default_avatar);
 		if (!user.getAvatarPath().isEmpty())
@@ -73,7 +70,7 @@ public class MemberListViewAdapter extends BaseAdapter
 			nicknameTextView.setText(user.getNickname());			
 		}
 
-		int color = check[position] ? selectedColor : unselectedColor;
+		color = isChosen? selectedColor : unselectedColor;
 		nicknameTextView.setTextColor(color);
 		
 		return convertView;
@@ -93,15 +90,34 @@ public class MemberListViewAdapter extends BaseAdapter
 	{
 		return position;
 	}
-	
-	public void setMember(List<User> userList)
+
+    public void setMemberList(List<User> userList)
+    {
+        memberList.clear();
+        memberList.addAll(userList);
+    }
+
+    public void setChosenList(List<User> userList)
+    {
+        chosenList.clear();
+        chosenList.addAll(userList);
+    }
+
+	public void setCheck(int position)
 	{
-		memberList.clear();
-		memberList.addAll(userList);
+        User user = memberList.get(position);
+        if (chosenList.contains(user))
+        {
+            chosenList.remove(user);
+        }
+        else
+        {
+            chosenList.add(user);
+        }
 	}
-	
-	public void setCheck(boolean[] checkList)
-	{
-		check = checkList;
-	}
+
+    public List<User> getChosenList()
+    {
+        return chosenList;
+    }
 }

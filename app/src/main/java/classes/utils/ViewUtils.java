@@ -100,7 +100,30 @@ public class ViewUtils
 		return popupWindow;
 	}
 
-	public static void dimBackground(Activity activity)
+    public static PopupWindow buildSurprisePopupWindow(final Activity activity, View view)
+    {
+        int backgroundColor = activity.getResources().getColor(android.R.color.transparent);
+
+        PopupWindow popupWindow = new PopupWindow(activity);
+        popupWindow.setWidth(PhoneUtils.dpToPixel(activity, 210));
+        popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(view);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+        popupWindow.setFocusable(false);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setAnimationStyle(R.style.WindowCenterAnimation);
+        popupWindow.setOnDismissListener(new OnDismissListener()
+        {
+            public void onDismiss()
+            {
+                recoverBackground(activity);
+            }
+        });
+
+        return popupWindow;
+    }
+
+    public static void dimBackground(Activity activity)
 	{
 		WindowManager.LayoutParams params = activity.getWindow().getAttributes();
 		params.alpha = 0.4f;
