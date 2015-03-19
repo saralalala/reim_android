@@ -19,7 +19,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/filter"
-            android:src="@drawable/filter_drawable" />
+            android:src="@drawable/filter_empty" />
 
         <TextView
             android:id="@+id/titleTextView"

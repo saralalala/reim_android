@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import classes.Category;
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.StatisticsCategory;
 import classes.adapter.StatisticsListViewAdapter;
 import classes.utils.AppPreference;

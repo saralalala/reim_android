@@ -13,7 +13,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.Report;
 import classes.utils.DBManager;
 import classes.utils.Utils;

@@ -2,17 +2,12 @@ package classes.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Selection;
 import android.text.Spannable;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupWindow;
@@ -20,8 +15,6 @@ import android.widget.PopupWindow.OnDismissListener;
 import android.widget.Toast;
 
 import com.rushucloud.reim.R;
-
-import classes.ReimApplication;
 
 public class ViewUtils
 {

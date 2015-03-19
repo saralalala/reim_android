@@ -90,6 +90,7 @@
     <string name="member">参与者</string>
     <string name="time">时　间</string>
     <string name="note">备　注</string>
+    <string name="transport">交通</string>
     <string name="choose_category">选择类别</string>
     <string name="choose_vendor">选择商家</string>
     <string name="choose_location">选择城市</string>

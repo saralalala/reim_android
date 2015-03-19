@@ -13,9 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
-import com.facebook.rebound.ui.Util;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -23,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Category;
-import classes.ReimApplication;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

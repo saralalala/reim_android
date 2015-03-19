@@ -108,7 +108,7 @@ public class Category implements Serializable
 	
 	public String getIconPath()
 	{
-		return iconID == -1 ? "" : PhoneUtils.getIconFilePath(iconID);
+		return iconID == -1 || iconID == 0? "" : PhoneUtils.getIconFilePath(iconID);
 	}
 	
 	public boolean isProveAhead()
@@ -137,7 +137,22 @@ public class Category implements Serializable
 	{
 		this.localUpdatedDate = localUpdatedDate;
 	}
-    
+
+    public boolean equals(Object o)
+    {
+        if (o == null)
+        {
+            return false;
+        }
+
+        if (o instanceof Category)
+        {
+            Category category = (Category) o;
+            return category.getName().equals(this.getName());
+        }
+        return super.equals(o);
+    }
+
 	public static List<Boolean> getCategoryCheck(List<Category> categoryList, Category category)
 	{	
 		if (categoryList == null)

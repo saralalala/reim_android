@@ -7,7 +7,7 @@ import com.rushucloud.reim.start.SignInActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.utils.AppPreference;
 import netUtils.NetworkConstant;
 

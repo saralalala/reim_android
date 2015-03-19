@@ -29,7 +29,7 @@ public class Item
 	private double amount = 0.0;
 	private double paAmount = 0.0;
 	private boolean isProveAhead = false;
-	private boolean needReimbursed = false;
+	private boolean needReimbursed = true;
 	private boolean paApproved = false;
 	private int status = STATUS_DRAFT;
 	private Category category = null;

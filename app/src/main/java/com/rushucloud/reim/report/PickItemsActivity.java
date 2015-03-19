@@ -51,6 +51,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 
     private static final int NEW_ITEM = 0;
 
+    private ImageView filterImageView;
 	private PopupWindow filterPopupWindow;
     private RadioButton sortAmountRadio;
     private RadioButton sortConsumedDateRadio;
@@ -233,7 +234,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 	{
 		getActionBar().hide();
 		
-		ImageView filterImageView = (ImageView) findViewById(R.id.filterImageView);
+		filterImageView = (ImageView) findViewById(R.id.filterImageView);
 		filterImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -531,6 +532,9 @@ public class PickItemsActivity extends Activity implements OnClickListener
             warningTextView.setVisibility(visibility);
             adapter.set(consumedShowList, consumedChosenList);
             adapter.notifyDataSetChanged();
+
+            int filterImage = !consumedFilterTagList.isEmpty() || !consumedFilterCategoryList.isEmpty()? R.drawable.filter_full : R.drawable.filter_empty;
+            filterImageView.setImageResource(filterImage);
 		}
 		else
 		{
@@ -543,6 +547,9 @@ public class PickItemsActivity extends Activity implements OnClickListener
             warningTextView.setVisibility(visibility);
             adapter.set(proveAheadShowList, proveChosenList);
             adapter.notifyDataSetChanged();
+
+            int filterImage = !proveFilterTagList.isEmpty() || !proveFilterCategoryList.isEmpty()? R.drawable.filter_full : R.drawable.filter_empty;
+            filterImageView.setImageResource(filterImage);
 		}
 
 		ReimProgressDialog.dismiss();

@@ -26,7 +26,7 @@ import java.util.List;
 
 import classes.Comment;
 import classes.Item;
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.adapter.ReportDetailListViewAdapter;

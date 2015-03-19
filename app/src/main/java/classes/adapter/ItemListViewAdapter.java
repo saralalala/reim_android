@@ -19,7 +19,7 @@ import java.util.Locale;
 
 import classes.Category;
 import classes.Item;
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.Tag;
 import classes.User;
 import classes.utils.Utils;

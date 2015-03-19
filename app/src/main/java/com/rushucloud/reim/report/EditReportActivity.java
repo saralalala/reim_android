@@ -35,7 +35,7 @@ import classes.Category;
 import classes.Comment;
 import classes.Image;
 import classes.Item;
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.utils.AppPreference;

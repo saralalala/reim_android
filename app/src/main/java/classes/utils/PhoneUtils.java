@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import classes.ReimApplication;
 import netUtils.NetworkConstant;
 
 public class PhoneUtils

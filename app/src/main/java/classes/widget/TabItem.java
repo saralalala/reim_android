@@ -18,7 +18,7 @@ import android.view.View;
 
 import com.rushucloud.reim.R;
 
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.utils.PhoneUtils;
 
 public class TabItem extends View

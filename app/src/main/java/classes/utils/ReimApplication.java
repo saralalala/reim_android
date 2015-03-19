@@ -1,4 +1,4 @@
-package classes;
+package classes.utils;
 
 import android.app.Application;
 import android.content.Context;
@@ -21,9 +21,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
 import classes.widget.ReimProgressDialog;
 import cn.beecloud.BeeCloud;
 

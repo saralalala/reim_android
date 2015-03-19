@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import classes.Category;
 import classes.Image;
 import classes.Item;
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.User;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

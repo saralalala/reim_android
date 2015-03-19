@@ -49,7 +49,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import classes.Group;
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;

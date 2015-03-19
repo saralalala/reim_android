@@ -15,7 +15,7 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Invite;
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;

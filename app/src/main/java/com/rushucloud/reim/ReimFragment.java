@@ -344,16 +344,16 @@ public class ReimFragment extends Fragment
 
 	private void initFilterView()
 	{
-		ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
-		filterImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
-				showFilterWindow();
-			}
-		});
-		
+        final ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
+        filterImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
+                showFilterWindow();
+            }
+        });
+
 		noResultLayout = (RelativeLayout) view.findViewById(R.id.noResultLayout);
 		
 		rotateAnimation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -521,6 +521,11 @@ public class ReimFragment extends Fragment
 				}
 
 				filterPopupWindow.dismiss();
+
+                int filterImage = filterType != FILTER_TYPE_ALL || filterStatus != FILTER_STATUS_ALL ||
+                        !filterTagList.isEmpty() || !filterCategoryList.isEmpty()? R.drawable.filter_full : R.drawable.filter_empty;
+                filterImageView.setImageResource(filterImage);
+
 				ReimProgressDialog.show();
 				refreshItemListView();
 				ReimProgressDialog.dismiss();
@@ -694,7 +699,7 @@ public class ReimFragment extends Fragment
 			{
 				continue;
 			}
-			if (filterType == FILTER_TYPE_CONSUMED && !item.needReimbursed())
+			if (filterType == FILTER_TYPE_CONSUMED && item.isProveAhead())
 			{
 				continue;
 			}			

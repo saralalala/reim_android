@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.adapter.OthersReportListViewAdapter;
@@ -66,6 +66,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 	private boolean hasInit = false;
 	
 	private View view;
+    private ImageView filterImageView;
 	private PopupWindow filterPopupWindow;
     private RadioButton sortUpdateDateRadio;
     private RadioButton sortCreateDateRadio;
@@ -210,7 +211,7 @@ public class ReportFragment extends Fragment implements OnClickListener
         othersMediumTextView = (TextView) view.findViewById(R.id.othersMediumTextView);
         othersLongTextView = (TextView) view.findViewById(R.id.othersLongTextView);
 		
-		ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
+		filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 		filterImageView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -946,14 +947,11 @@ public class ReportFragment extends Fragment implements OnClickListener
             mineAdapter.setUnreadList(ReimApplication.getMineUnreadList());
 			reportListView.setAdapter(mineAdapter);
 
-			if (!mineFilterStatusList.isEmpty() && showMineList.isEmpty())
-			{
-				noResultLayout.setVisibility(View.VISIBLE);
-			}
-			else
-			{
-				noResultLayout.setVisibility(View.GONE);
-			}
+            int visibility = !mineFilterStatusList.isEmpty() && showMineList.isEmpty()? View.VISIBLE : View.GONE;
+            noResultLayout.setVisibility(visibility);
+
+            int filterImage = mineFilterStatusList.isEmpty()? R.drawable.filter_empty : R.drawable.filter_full;
+            filterImageView.setImageResource(filterImage);
 		}
 		else
 		{
@@ -965,14 +963,11 @@ public class ReportFragment extends Fragment implements OnClickListener
             othersAdapter.setUnreadList(ReimApplication.getOthersUnreadList());
 			reportListView.setAdapter(othersAdapter);
 
-			if (!othersFilterStatusList.isEmpty() && showOthersList.isEmpty())
-			{
-				noResultLayout.setVisibility(View.VISIBLE);
-			}
-			else
-			{
-				noResultLayout.setVisibility(View.GONE);
-			}
+            int visibility = !othersFilterStatusList.isEmpty() && showOthersList.isEmpty()? View.VISIBLE : View.GONE;
+            noResultLayout.setVisibility(visibility);
+
+            int filterImage = othersFilterStatusList.isEmpty()? R.drawable.filter_empty : R.drawable.filter_full;
+            filterImageView.setImageResource(filterImage);
 		}
         showBadge();
 	}

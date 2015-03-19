@@ -5,7 +5,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -59,7 +58,7 @@ import java.util.List;
 import classes.Category;
 import classes.Image;
 import classes.Item;
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.Report;
 import classes.Tag;
 import classes.User;
@@ -122,6 +121,7 @@ public class EditItemActivity extends Activity
     private static AppPreference appPreference;
     private static DBManager dbManager;
 
+    private List<Category> categoryList;
     private List<Tag> tagList;
 
     private Item item;
@@ -247,8 +247,19 @@ public class EditItemActivity extends Activity
                 }
                 case PICK_VENDOR:
                 {
-                    item.setVendor(data.getStringExtra("vendor"));
-                    vendorTextView.setText(item.getVendor());
+                    String vendor = data.getStringExtra("vendor");
+                    item.setVendor(vendor);
+                    vendorTextView.setText(vendor);
+                    Category category = new Category();
+                    category.setName(getString(R.string.transport));
+                    int categoryIndex = categoryList.indexOf(category);
+                    if ((vendor.equals(getString(R.string.vendor_flight)) || vendor.equals(getString(R.string.vendor_train))
+                            || vendor.equals(getString(R.string.vendor_taxi))) && categoryIndex > 0)
+                    {
+                        category = categoryList.get(categoryIndex);
+                        item.setCategory(category);
+                        refreshCategoryView();
+                    }
                     break;
                 }
                 case PICK_LOCATION:
@@ -262,34 +273,7 @@ public class EditItemActivity extends Activity
                 {
                     Category category = (Category) data.getSerializableExtra("category");
                     item.setCategory(category);
-
-                    if (category != null)
-                    {
-                        categoryTextView.setVisibility(View.VISIBLE);
-                        categoryImageView.setVisibility(View.VISIBLE);
-
-                        categoryTextView.setText(category.getName());
-                        categoryImageView.setImageResource(R.drawable.default_icon);
-                        if (!category.getIconPath().isEmpty())
-                        {
-                            Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
-                            if (bitmap != null)
-                            {
-                                categoryImageView.setImageBitmap(bitmap);
-                            }
-                        }
-
-                        if (category.hasUndownloadedIcon())
-                        {
-                            sendDownloadCategoryIconRequest(category);
-                        }
-                    }
-                    else
-                    {
-                        categoryTextView.setVisibility(View.INVISIBLE);
-                        categoryImageView.setVisibility(View.INVISIBLE);
-                    }
-
+                    refreshCategoryView();
                     break;
                 }
                 case PICK_TAG:
@@ -319,7 +303,7 @@ public class EditItemActivity extends Activity
         dbManager = DBManager.getDBManager();
         locationClient = new LocationClient(getApplicationContext());
 
-        List<Category> categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
         tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
 
         Intent intent = this.getIntent();
@@ -849,29 +833,7 @@ public class EditItemActivity extends Activity
         categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
         categoryTextView = (TextView) findViewById(R.id.categoryTextView);
 
-        if (item.getCategory() != null)
-        {
-            categoryTextView.setText(item.getCategory().getName());
-
-            if (!item.getCategory().getIconPath().isEmpty())
-            {
-                Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
-                if (categoryIcon != null)
-                {
-                    categoryImageView.setImageBitmap(categoryIcon);
-                }
-            }
-
-            if (item.getCategory().hasUndownloadedIcon() && PhoneUtils.isNetworkConnected())
-            {
-                sendDownloadCategoryIconRequest(item.getCategory());
-            }
-        }
-        else
-        {
-            categoryImageView.setVisibility(View.INVISIBLE);
-            categoryTextView.setVisibility(View.INVISIBLE);
-        }
+        refreshCategoryView();
     }
 
     private void initTagView()
@@ -1089,6 +1051,37 @@ public class EditItemActivity extends Activity
 
         int visibility = invoiceCount < Item.MAX_INVOICE_COUNT ? View.VISIBLE : View.INVISIBLE;
         addInvoiceImageView.setVisibility(visibility);
+    }
+
+    private void refreshCategoryView()
+    {
+        if (item.getCategory() != null)
+        {
+            categoryTextView.setVisibility(View.VISIBLE);
+            categoryImageView.setVisibility(View.VISIBLE);
+
+            categoryTextView.setText(item.getCategory().getName());
+            categoryImageView.setImageResource(R.drawable.default_icon);
+
+            if (!item.getCategory().getIconPath().isEmpty())
+            {
+                Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
+                if (categoryIcon != null)
+                {
+                    categoryImageView.setImageBitmap(categoryIcon);
+                }
+            }
+
+            if (item.getCategory().hasUndownloadedIcon() && PhoneUtils.isNetworkConnected())
+            {
+                sendDownloadCategoryIconRequest(item.getCategory());
+            }
+        }
+        else
+        {
+            categoryImageView.setVisibility(View.INVISIBLE);
+            categoryTextView.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void refreshTagView()

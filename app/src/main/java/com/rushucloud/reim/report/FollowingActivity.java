@@ -17,7 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.utils.AppPreference;

@@ -21,7 +21,7 @@ import java.util.List;
 
 import classes.Category;
 import classes.Item;
-import classes.ReimApplication;
+import classes.utils.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.utils.AppPreference;
