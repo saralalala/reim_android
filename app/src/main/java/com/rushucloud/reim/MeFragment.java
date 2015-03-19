@@ -1,5 +1,7 @@
 package com.rushucloud.reim;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -18,11 +20,16 @@ import android.widget.TextView;
 import com.mechat.mechatlibrary.MCClient;
 import com.mechat.mechatlibrary.MCOnlineConfig;
 import com.mechat.mechatlibrary.MCUserConfig;
+import com.rushucloud.reim.me.AboutActivity;
+import com.rushucloud.reim.me.CategoryActivity;
+import com.rushucloud.reim.me.FeedbackActivity;
 import com.rushucloud.reim.me.InvoiceTitleActivity;
+import com.rushucloud.reim.me.ManagerActivity;
 import com.rushucloud.reim.me.MessageListActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.rushucloud.reim.me.SendInviteActivity;
-import com.rushucloud.reim.me.SettingsActivity;
+import com.rushucloud.reim.me.TagActivity;
+import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
@@ -42,7 +49,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import classes.Group;
-import classes.Image;
 import classes.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
@@ -51,10 +57,13 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
+import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.Request.DownloadImageRequest;
+import netUtils.Request.User.SignOutRequest;
 import netUtils.Response.DownloadImageResponse;
+import netUtils.Response.User.SignOutResponse;
 import netUtils.URLDef;
 
 public class MeFragment extends Fragment
@@ -69,14 +78,14 @@ public class MeFragment extends Fragment
 	private TextView companyTextView;
 	private CircleImageView avatarImageView;
     private ImageView tipImageView;
-	
-	private Group currentGroup;
+    private TextView managerTextView;
+
 	private User currentUser;
 	private String avatarPath;
 	
 	private UMSocialService mController;
-	
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		if (view == null)
 		{
@@ -139,6 +148,35 @@ public class MeFragment extends Fragment
 	
 	private void initView()
 	{
+        TextView signOutTextView = (TextView) getActivity().findViewById(R.id.signOutTextView);
+        signOutTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                String message = getString(R.string.prompt_sign_out) + currentUser.getNickname();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.tip);
+                builder.setMessage(message);
+                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        if (PhoneUtils.isNetworkConnected())
+                        {
+                            sendSignOutRequest();
+                        }
+                        else
+                        {
+                            ViewUtils.showToast(getActivity(), R.string.error_sign_out_network_unavailable);
+                        }
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, null);
+                builder.create().show();
+            }
+        });
+
+        // init profile
 		nicknameTextView = (TextView) getActivity().findViewById(R.id.nicknameTextView);
 		companyTextView = (TextView) getActivity().findViewById(R.id.companyTextView);	
 		
@@ -154,6 +192,7 @@ public class MeFragment extends Fragment
 			}
 		});
 
+        // init message
         RelativeLayout messageLayout = (RelativeLayout) getActivity().findViewById(R.id.messageLayout);
         messageLayout.setOnClickListener(new View.OnClickListener()
 		{
@@ -166,6 +205,7 @@ public class MeFragment extends Fragment
 
         tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
 
+        // init invite
         RelativeLayout inviteLayout = (RelativeLayout) getActivity().findViewById(R.id.inviteLayout);
         inviteLayout.setOnClickListener(new View.OnClickListener()
 		{
@@ -173,8 +213,28 @@ public class MeFragment extends Fragment
 			{
 				startActivity(new Intent(getActivity(), SendInviteActivity.class));
 			}
-		});        
-        
+		});
+
+        // init manager
+        managerTextView = (TextView) getActivity().findViewById(R.id.managerTextView);
+
+        RelativeLayout defaultManagerLayout = (RelativeLayout) getActivity().findViewById(R.id.defaultManagerLayout);
+        defaultManagerLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (currentUser.getGroupID() <= 0)
+                {
+                    ViewUtils.showToast(getActivity(), R.string.error_no_group);
+                }
+                else
+                {
+                    startActivity(new Intent(getActivity(), ManagerActivity.class));
+                }
+            }
+        });
+
+        // init invoice
         RelativeLayout invoiceLayout = (RelativeLayout) getActivity().findViewById(R.id.invoiceLayout);
         invoiceLayout.setOnClickListener(new View.OnClickListener()
 		{
@@ -183,15 +243,62 @@ public class MeFragment extends Fragment
 				startActivity(new Intent(getActivity(), InvoiceTitleActivity.class));
 			}
 		});
-        
-        RelativeLayout settingsLayout = (RelativeLayout) getActivity().findViewById(R.id.settingsLayout);
-        settingsLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				startActivity(new Intent(getActivity(), SettingsActivity.class));
-			}
-		});
+
+        // init category
+        RelativeLayout categoryLayout = (RelativeLayout) getActivity().findViewById(R.id.categoryLayout);
+        categoryLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(getActivity(), "UMENG_MINE_CATEGORT_SETTING");
+                startActivity(new Intent(getActivity(), CategoryActivity.class));
+            }
+        });
+
+        // init tag
+        RelativeLayout tagLayout = (RelativeLayout) getActivity().findViewById(R.id.tagLayout);
+        tagLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(getActivity(), "UMENG_MINE_TAG_SETTING");
+                startActivity(new Intent(getActivity(), TagActivity.class));
+            }
+        });
+
+        // init feedback
+        RelativeLayout feedbackLayout = (RelativeLayout) getActivity().findViewById(R.id.feedbackLayout);
+        feedbackLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_OPINION");
+                startActivity(new Intent(getActivity(), FeedbackActivity.class));
+            }
+        });
+
+        // init about
+        RelativeLayout aboutLayout = (RelativeLayout) getActivity().findViewById(R.id.aboutLayout);
+        aboutLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_ABOUT");
+                startActivity(new Intent(getActivity(), AboutActivity.class));
+            }
+        });
+
+        User currentUser = AppPreference.getAppPreference().getCurrentUser();
+        if (!currentUser.isAdmin() || currentUser.getGroupID() <= 0)
+        {
+            categoryLayout.setVisibility(View.GONE);
+            tagLayout.setVisibility(View.GONE);
+        }
+        else
+        {
+            categoryLayout.setVisibility(View.VISIBLE);
+            tagLayout.setVisibility(View.VISIBLE);
+        }
         
 //        RelativeLayout customServiceLayout = (RelativeLayout) getActivity().findViewById(R.id.customServiceLayout);
 //        customServiceLayout.setOnClickListener(new View.OnClickListener()
@@ -218,7 +325,7 @@ public class MeFragment extends Fragment
 	private void loadProfileView()
 	{	
 		currentUser = appPreference.getCurrentUser();
-		currentGroup = appPreference.getCurrentGroup();	
+        Group currentGroup = appPreference.getCurrentGroup();
 		
 		if (currentUser != null)
 		{
@@ -246,6 +353,12 @@ public class MeFragment extends Fragment
 
         String company = currentGroup != null? currentGroup.getName() : getString(R.string.no_company);
         companyTextView.setText(company);
+
+        User manager = dbManager.getUser(currentUser.getDefaultManagerID());
+        if (manager != null)
+        {
+            managerTextView.setText(manager.getNickname());
+        }
 
         showTip();
 	}
@@ -304,6 +417,55 @@ public class MeFragment extends Fragment
 				}
 			}
 		});
+    }
+
+    private void sendSignOutRequest()
+    {
+        ReimProgressDialog.show();
+        SignOutRequest request = new SignOutRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                SignOutResponse response = new SignOutResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    appPreference.setCurrentUserID(-1);
+                    appPreference.setCurrentGroupID(-1);
+                    appPreference.setUsername("");
+                    appPreference.setPassword("");
+                    appPreference.setServerToken("");
+                    appPreference.setLastSyncTime(0);
+                    appPreference.saveAppPreference();
+
+                    ReimApplication.setTabIndex(0);
+                    ReimApplication.setReportTabIndex(0);
+
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            Intent intent = new Intent(getActivity(), SignInActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
+                        }
+                    });
+                }
+                else
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(getActivity(), R.string.failed_to_sign_out);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unused")

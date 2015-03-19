@@ -101,6 +101,55 @@
 				android:layout_height="0.5dp"
 				android:layout_marginTop="24dp"
 		        layout="@layout/view_divider"/>
+
+            <RelativeLayout
+                android:id="@+id/nicknameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/me_item_drawable" >
+
+                <TextView
+                    android:id="@+id/nicknamePrompt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:text="@string/nickname"
+                    android:textColor="@color/font_major_dark"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/nicknameTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/nicknameNextImageView"
+                    android:layout_toRightOf="@+id/nicknamePrompt"
+                    android:gravity="right"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/hint_grey"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/nicknameNextImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="@string/next"
+                    android:src="@drawable/next" />
+
+            </RelativeLayout>
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                layout="@layout/view_divider"/>
 	        
 			<RelativeLayout
                 android:id="@+id/emailLayout"
@@ -194,57 +243,8 @@
                     android:src="@drawable/next" />
 			
 			</RelativeLayout>
-            
-		    <include                 
-				android:layout_width="match_parent"
-				android:layout_height="0.5dp"
-		        layout="@layout/view_divider"/>
-	        
-			<RelativeLayout
-                android:id="@+id/nicknameLayout"
-			    android:layout_width="match_parent"
-			    android:layout_height="50dp"
-			    android:background="@drawable/me_item_drawable" >
 
-                <TextView
-                    android:id="@+id/nicknamePrompt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:text="@string/nickname"
-                    android:textColor="@color/font_major_dark"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/nicknameTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/nicknameNextImageView"
-                    android:layout_toRightOf="@+id/nicknamePrompt"
-                    android:gravity="right"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:id="@+id/nicknameNextImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:contentDescription="@string/next"
-                    android:src="@drawable/next" />
-			
-			</RelativeLayout>
-            
-		    <include                 
+		    <include
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
 		        layout="@layout/view_divider"/>
@@ -297,54 +297,6 @@
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
 		        layout="@layout/view_divider"/>
-			
-            <RelativeLayout
-                android:id="@+id/defaultManagerLayout"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/me_item_drawable"
-                android:clickable="true" >
-
-                <TextView
-                    android:id="@+id/managerPrompt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:text="@string/default_manager"
-                    android:textColor="@color/font_major_dark"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/managerTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/managerNextImageView"
-                    android:layout_toRightOf="@+id/managerPrompt"
-                    android:gravity="right"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:id="@+id/managerNextImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:contentDescription="@string/next"
-                    android:src="@drawable/next" />
-                
-            </RelativeLayout>
-            
-	        <include                 
-				android:layout_width="match_parent"
-				android:layout_height="0.5dp"
-	        	layout="@layout/view_divider"/>
             
 	        <include                 
 				android:layout_width="match_parent"

@@ -89,7 +89,9 @@
                 android:text="@string/new_total"
                 android:textColor="@color/hint_grey"
                 android:textSize="16sp" />
+
         </RelativeLayout>
+
     </RelativeLayout>
 
     <RelativeLayout

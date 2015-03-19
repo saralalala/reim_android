@@ -40,7 +40,6 @@
     <string name="alarm">提醒</string>
     <string name="finish">直接通过</string>
     <string name="exit">退出</string>
-    <string name="sign_in_again">重新登录</string>
     
     <string name="sign_up">注册</string>
     <string name="sign_up_by_phone">手机注册</string>
@@ -89,7 +88,7 @@
     <string name="current_location">当前城市:</string>
     <string name="tag">标　签</string>
     <string name="member">参与者</string>
-    <string name="time">日　期</string>
+    <string name="time">时　间</string>
     <string name="note">备　注</string>
     <string name="choose_category">选择类别</string>
     <string name="choose_vendor">选择商家</string>
@@ -151,6 +150,7 @@
     <string name="stat_by_category">类别统计</string>
     
     <string name="personal_center">个人中心</string>
+    <string name="sign_out">切换账号</string>
     <string name="avatar">头像</string>
     <string name="enable_password_protection">开启密码保护</string>
     <string name="sync_without_wifi">仅WiFi开启时上传云端</string>
@@ -168,7 +168,7 @@
     <string name="company">公司</string>
     <string name="nickname">昵称</string>
     <string name="change_password">修改密码</string>
-    <string name="default_manager">我的上级</string>
+    <string name="default_manager">上级设置</string>
     <string name="not_binding">未绑定</string>
     <string name="icon">图标</string>
     <string name="sub_category">子类别</string>
@@ -186,7 +186,6 @@
     <string name="about_us">关于我们</string>
     <string name="feedback">意见反馈</string>
     <string name="feedback_code">+86</string>
-    <string name="sign_out">退出登录</string>
     <string name="current_version">当前版本：</string>
     <string name="about_content">瞎看什么看&#8230;</string>
     
@@ -228,6 +227,7 @@
     
     <string name="prompt_loading">正在努力加载中&#8230;</string>
     <string name="prompt_data_error">数据读取失败</string>
+    <string name="prompt_sign_out">确认要切换当前账号</string>
     <string name="prompt_sign_up_succeed">注册成功！</string>
     <string name="prompt_sign_up_succeed_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>
     <string name="prompt_email_sent">邮件已发送，查收你的邮箱！</string>

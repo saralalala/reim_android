@@ -54,8 +54,6 @@ public class ProfileActivity extends Activity
 	private TextView companyTextView;
 	private ImageView companyNextImageView;
 	private RelativeLayout companyLayout;
-	
-	private TextView managerTextView;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
@@ -170,7 +168,19 @@ public class ProfileActivity extends Activity
 		});
 		
 		initAvatarView();
-		
+
+        // init nickname
+        nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
+
+        RelativeLayout nicknameLayout = (RelativeLayout) findViewById(R.id.nicknameLayout);
+        nicknameLayout.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                startActivity(new Intent(ProfileActivity.this, NicknameActivity.class));
+            }
+        });
+
 		// init email
 		emailTextView = (TextView) findViewById(R.id.emailTextView);
 		
@@ -192,37 +202,6 @@ public class ProfileActivity extends Activity
 			public void onClick(View v)
 			{
 				startActivity(new Intent(ProfileActivity.this, PhoneActivity.class));
-			}
-		});
-		
-		// init nickname
-		nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
-		
-		RelativeLayout nicknameLayout = (RelativeLayout) findViewById(R.id.nicknameLayout);
-		nicknameLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				startActivity(new Intent(ProfileActivity.this, NicknameActivity.class));
-			}
-		});
-		
-		// init manager
-		managerTextView = (TextView) findViewById(R.id.managerTextView);
-		
-        RelativeLayout defaultManagerLayout = (RelativeLayout) findViewById(R.id.defaultManagerLayout);
-        defaultManagerLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (currentUser.getGroupID() <= 0)
-				{
-					ViewUtils.showToast(ProfileActivity.this, R.string.error_no_group);			
-				}
-				else
-				{
-					startActivity(new Intent(ProfileActivity.this, ManagerActivity.class));
-				}
 			}
 		});
 
@@ -345,12 +324,6 @@ public class ProfileActivity extends Activity
 		
 		String nickname = currentUser != null && !currentUser.getNickname().isEmpty() ? currentUser.getNickname() : getString(R.string.empty);
 		nicknameTextView.setText(nickname);
-		
-		User manager = dbManager.getUser(currentUser.getDefaultManagerID());
-		if (manager != null)
-		{
-			managerTextView.setText(manager.getNickname());			
-		}
 		
 		String companyName = currentGroup != null ? currentGroup.getName() : getString(R.string.empty);	
 		companyTextView.setText(companyName);

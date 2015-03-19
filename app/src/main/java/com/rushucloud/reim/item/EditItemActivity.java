@@ -109,6 +109,7 @@ public class EditItemActivity extends Activity
     private ImageView categoryImageView;
     private TextView categoryTextView;
 
+    private LinearLayout tagContainerLayout;
     private LinearLayout tagLayout;
 
     private LinearLayout memberLayout;
@@ -120,6 +121,8 @@ public class EditItemActivity extends Activity
 
     private static AppPreference appPreference;
     private static DBManager dbManager;
+
+    private List<Tag> tagList;
 
     private Item item;
     private List<Image> originInvoiceList;
@@ -317,6 +320,7 @@ public class EditItemActivity extends Activity
         locationClient = new LocationClient(getApplicationContext());
 
         List<Category> categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+        tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
 
         Intent intent = this.getIntent();
         fromReim = intent.getBooleanExtra("fromReim", false);
@@ -476,12 +480,12 @@ public class EditItemActivity extends Activity
         });
 
         initStatusView();
-        initTypeView();
         initInvoiceView();
-        initTimeView();
+        initCategoryView();
         initVendorView();
         initLocationView();
-        initCategoryView();
+        initTimeView();
+        initTypeView();
         initTagView();
         initMemberView();
         initNoteView();
@@ -872,30 +876,39 @@ public class EditItemActivity extends Activity
 
     private void initTagView()
     {
-        tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
-
-        ImageView addTagImageView = (ImageView) findViewById(R.id.addTagImageView);
-        addTagImageView.setOnClickListener(new View.OnClickListener()
+        tagContainerLayout = (LinearLayout) findViewById(R.id.tagContainerLayout);
+        if (tagList == null || tagList.isEmpty())
         {
-            public void onClick(View v)
+            tagContainerLayout.setVisibility(View.GONE);
+        }
+        else
+        {
+            tagContainerLayout.setVisibility(View.VISIBLE);
+            tagLayout = (LinearLayout) findViewById(R.id.tagLayout);
+
+            ImageView addTagImageView = (ImageView) findViewById(R.id.addTagImageView);
+            addTagImageView.setOnClickListener(new View.OnClickListener()
             {
-                if (newItem)
+                public void onClick(View v)
                 {
-                    MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_TAG");
-                }
-                else
-                {
-                    MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_TAG");
-                }
+                    if (newItem)
+                    {
+                        MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_TAG");
+                    }
+                    else
+                    {
+                        MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_TAG");
+                    }
 
-                hideSoftKeyboard();
-                Intent intent = new Intent(EditItemActivity.this, PickTagActivity.class);
-                intent.putExtra("tags", (Serializable) item.getTags());
-                startActivityForResult(intent, PICK_TAG);
-            }
-        });
+                    hideSoftKeyboard();
+                    Intent intent = new Intent(EditItemActivity.this, PickTagActivity.class);
+                    intent.putExtra("tags", (Serializable) item.getTags());
+                    startActivityForResult(intent, PICK_TAG);
+                }
+            });
 
-        refreshTagView();
+            refreshTagView();
+        }
     }
 
     private void initMemberView()
@@ -1080,56 +1093,58 @@ public class EditItemActivity extends Activity
 
     private void refreshTagView()
     {
-        tagLayout.removeAllViews();
-
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int layoutMaxWidth = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
-        int verticalInterval = PhoneUtils.dpToPixel(getResources(), 17);
-        int horizontalInterval = PhoneUtils.dpToPixel(getResources(), 10);
-        int padding = PhoneUtils.dpToPixel(getResources(), 24);
-        int textSize = PhoneUtils.dpToPixel(getResources(), 16);
-
-        int space = 0;
-        LinearLayout layout = new LinearLayout(this);
-        int tagCount = item.getTags() != null ? item.getTags().size() : 0;
-        for (int i = 0; i < tagCount; i++)
+        if (tagContainerLayout.getVisibility() == View.VISIBLE)
         {
-            String name = item.getTags().get(i).getName();
+            tagLayout.removeAllViews();
 
-            View view = View.inflate(this, R.layout.grid_item_tag, null);
+            DisplayMetrics metrics = getResources().getDisplayMetrics();
+            int layoutMaxWidth = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
+            int verticalInterval = PhoneUtils.dpToPixel(getResources(), 17);
+            int horizontalInterval = PhoneUtils.dpToPixel(getResources(), 10);
+            int padding = PhoneUtils.dpToPixel(getResources(), 24);
+            int textSize = PhoneUtils.dpToPixel(getResources(), 16);
 
-            TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
-            nameTextView.setText(name);
-
-            Paint textPaint = new Paint();
-            textPaint.setTextSize(textSize);
-            Rect textRect = new Rect();
-            textPaint.getTextBounds(name, 0, name.length(), textRect);
-            int width = textRect.width() + padding;
-
-            if (space - width - horizontalInterval <= 0)
+            int space = 0;
+            LinearLayout layout = new LinearLayout(this);
+            int tagCount = item.getTags() != null ? item.getTags().size() : 0;
+            for (int i = 0; i < tagCount; i++)
             {
-                layout = new LinearLayout(this);
-                LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-                params.topMargin = verticalInterval;
-                layout.setLayoutParams(params);
-                layout.setOrientation(LinearLayout.HORIZONTAL);
+                String name = item.getTags().get(i).getName();
 
-                tagLayout.addView(layout);
+                View view = View.inflate(this, R.layout.grid_item_tag, null);
 
-                params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                layout.addView(view, params);
-                space = layoutMaxWidth - width;
-            }
-            else
-            {
-                LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                params.leftMargin = horizontalInterval;
-                layout.addView(view, params);
-                space -= width + horizontalInterval;
+                TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+                nameTextView.setText(name);
+
+                Paint textPaint = new Paint();
+                textPaint.setTextSize(textSize);
+                Rect textRect = new Rect();
+                textPaint.getTextBounds(name, 0, name.length(), textRect);
+                int width = textRect.width() + padding;
+
+                if (space - width - horizontalInterval <= 0)
+                {
+                    layout = new LinearLayout(this);
+                    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                    params.topMargin = verticalInterval;
+                    layout.setLayoutParams(params);
+                    layout.setOrientation(LinearLayout.HORIZONTAL);
+
+                    tagLayout.addView(layout);
+
+                    params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                    layout.addView(view, params);
+                    space = layoutMaxWidth - width;
+                }
+                else
+                {
+                    LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                    params.leftMargin = horizontalInterval;
+                    layout.addView(view, params);
+                    space -= width + horizontalInterval;
+                }
             }
         }
-
     }
 
     private void refreshMemberView()
