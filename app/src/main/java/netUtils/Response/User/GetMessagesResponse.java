@@ -1,0 +1,63 @@
+package netUtils.Response.User;
+
+import android.content.res.Resources;
+
+import com.rushucloud.reim.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.Invite;
+import classes.Message;
+import classes.utils.AppPreference;
+import classes.utils.ReimApplication;
+import classes.utils.Utils;
+import netUtils.Response.BaseResponse;
+
+public class GetMessagesResponse extends BaseResponse
+{
+	private List<Message> messageList;
+	
+	public GetMessagesResponse(Object httpResponse)
+	{
+		super(httpResponse);
+	}
+
+	protected void constructData()
+	{
+		try
+		{
+            String currentNickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
+			
+			JSONArray jsonArray = getDataArray();
+			messageList = new ArrayList<Message>();
+			for (int i = 0 ; i < jsonArray.length() ; i++)
+			{
+				JSONObject jObject = jsonArray.getJSONObject(i);
+
+                int type = jObject.getInt("type");
+                if (type == Message.TYPE_MESSAGE)
+                {
+                    messageList.add(new Message(jObject));
+                }
+                else
+                {
+                    messageList.add(new Invite(jObject, currentNickname));
+                }
+			}			
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}		
+	}
+
+	public List<Message> getMessageList()
+	{
+		return messageList;
+	}
+}

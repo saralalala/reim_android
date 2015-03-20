@@ -1,7 +1,5 @@
 package com.rushucloud.reim;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -29,7 +27,6 @@ import com.rushucloud.reim.me.MessageListActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.rushucloud.reim.me.SendInviteActivity;
 import com.rushucloud.reim.me.TagActivity;
-import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
@@ -49,21 +46,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import classes.Group;
-import classes.utils.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
-import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.User.SignOutRequest;
 import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.User.SignOutResponse;
 import netUtils.URLDef;
 
 public class MeFragment extends Fragment
@@ -148,41 +142,13 @@ public class MeFragment extends Fragment
 	
 	private void initView()
 	{
-        TextView signOutTextView = (TextView) getActivity().findViewById(R.id.signOutTextView);
-        signOutTextView.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                String message = getString(R.string.prompt_sign_out) + currentUser.getNickname();
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.tip);
-                builder.setMessage(message);
-                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        if (PhoneUtils.isNetworkConnected())
-                        {
-                            sendSignOutRequest();
-                        }
-                        else
-                        {
-                            ViewUtils.showToast(getActivity(), R.string.error_sign_out_network_unavailable);
-                        }
-                    }
-                });
-                builder.setNegativeButton(R.string.cancel, null);
-                builder.create().show();
-            }
-        });
-
         // init profile
-		nicknameTextView = (TextView) getActivity().findViewById(R.id.nicknameTextView);
-		companyTextView = (TextView) getActivity().findViewById(R.id.companyTextView);	
+		nicknameTextView = (TextView) view.findViewById(R.id.nicknameTextView);
+		companyTextView = (TextView) view.findViewById(R.id.companyTextView);	
 		
-		avatarImageView = (CircleImageView) getActivity().findViewById(R.id.avatarImageView);
+		avatarImageView = (CircleImageView) view.findViewById(R.id.avatarImageView);
 		
-        RelativeLayout profileLayout = (RelativeLayout) getActivity().findViewById(R.id.profileLayout);
+        RelativeLayout profileLayout = (RelativeLayout) view.findViewById(R.id.profileLayout);
         profileLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -193,7 +159,7 @@ public class MeFragment extends Fragment
 		});
 
         // init message
-        RelativeLayout messageLayout = (RelativeLayout) getActivity().findViewById(R.id.messageLayout);
+        RelativeLayout messageLayout = (RelativeLayout) view.findViewById(R.id.messageLayout);
         messageLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -206,7 +172,7 @@ public class MeFragment extends Fragment
         tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
 
         // init invite
-        RelativeLayout inviteLayout = (RelativeLayout) getActivity().findViewById(R.id.inviteLayout);
+        RelativeLayout inviteLayout = (RelativeLayout) view.findViewById(R.id.inviteLayout);
         inviteLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -216,9 +182,9 @@ public class MeFragment extends Fragment
 		});
 
         // init manager
-        managerTextView = (TextView) getActivity().findViewById(R.id.managerTextView);
+        managerTextView = (TextView) view.findViewById(R.id.managerTextView);
 
-        RelativeLayout defaultManagerLayout = (RelativeLayout) getActivity().findViewById(R.id.defaultManagerLayout);
+        RelativeLayout defaultManagerLayout = (RelativeLayout) view.findViewById(R.id.defaultManagerLayout);
         defaultManagerLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -235,7 +201,7 @@ public class MeFragment extends Fragment
         });
 
         // init invoice
-        RelativeLayout invoiceLayout = (RelativeLayout) getActivity().findViewById(R.id.invoiceLayout);
+        RelativeLayout invoiceLayout = (RelativeLayout) view.findViewById(R.id.invoiceLayout);
         invoiceLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -245,7 +211,7 @@ public class MeFragment extends Fragment
 		});
 
         // init category
-        RelativeLayout categoryLayout = (RelativeLayout) getActivity().findViewById(R.id.categoryLayout);
+        RelativeLayout categoryLayout = (RelativeLayout) view.findViewById(R.id.categoryLayout);
         categoryLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -256,7 +222,7 @@ public class MeFragment extends Fragment
         });
 
         // init tag
-        RelativeLayout tagLayout = (RelativeLayout) getActivity().findViewById(R.id.tagLayout);
+        RelativeLayout tagLayout = (RelativeLayout) view.findViewById(R.id.tagLayout);
         tagLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -267,7 +233,7 @@ public class MeFragment extends Fragment
         });
 
         // init feedback
-        RelativeLayout feedbackLayout = (RelativeLayout) getActivity().findViewById(R.id.feedbackLayout);
+        RelativeLayout feedbackLayout = (RelativeLayout) view.findViewById(R.id.feedbackLayout);
         feedbackLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -278,7 +244,7 @@ public class MeFragment extends Fragment
         });
 
         // init about
-        RelativeLayout aboutLayout = (RelativeLayout) getActivity().findViewById(R.id.aboutLayout);
+        RelativeLayout aboutLayout = (RelativeLayout) view.findViewById(R.id.aboutLayout);
         aboutLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -300,7 +266,7 @@ public class MeFragment extends Fragment
             tagLayout.setVisibility(View.VISIBLE);
         }
         
-//        RelativeLayout customServiceLayout = (RelativeLayout) getActivity().findViewById(R.id.customServiceLayout);
+//        RelativeLayout customServiceLayout = (RelativeLayout) view.findViewById(R.id.customServiceLayout);
 //        customServiceLayout.setOnClickListener(new View.OnClickListener()
 //		{
 //			public void onClick(View v)
@@ -309,7 +275,7 @@ public class MeFragment extends Fragment
 //			}
 //		});
         
-//        RelativeLayout shareLayout = (RelativeLayout) getActivity().findViewById(R.id.shareLayout);
+//        RelativeLayout shareLayout = (RelativeLayout) view.findViewById(R.id.shareLayout);
 //        shareLayout.setOnClickListener(new View.OnClickListener()
 //		{
 //			public void onClick(View v)
@@ -417,55 +383,6 @@ public class MeFragment extends Fragment
 				}
 			}
 		});
-    }
-
-    private void sendSignOutRequest()
-    {
-        ReimProgressDialog.show();
-        SignOutRequest request = new SignOutRequest();
-        request.sendRequest(new HttpConnectionCallback()
-        {
-            public void execute(Object httpResponse)
-            {
-                SignOutResponse response = new SignOutResponse(httpResponse);
-                if (response.getStatus())
-                {
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    appPreference.setCurrentUserID(-1);
-                    appPreference.setCurrentGroupID(-1);
-                    appPreference.setUsername("");
-                    appPreference.setPassword("");
-                    appPreference.setServerToken("");
-                    appPreference.setLastSyncTime(0);
-                    appPreference.saveAppPreference();
-
-                    ReimApplication.setTabIndex(0);
-                    ReimApplication.setReportTabIndex(0);
-
-                    getActivity().runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            Intent intent = new Intent(getActivity(), SignInActivity.class);
-                            startActivity(intent);
-                            getActivity().finish();
-                        }
-                    });
-                }
-                else
-                {
-                    getActivity().runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(getActivity(), R.string.failed_to_sign_out);
-                        }
-                    });
-                }
-            }
-        });
     }
 
     @SuppressWarnings("unused")

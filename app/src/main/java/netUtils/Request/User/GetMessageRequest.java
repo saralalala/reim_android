@@ -4,13 +4,13 @@ import netUtils.HttpConnectionCallback;
 import netUtils.Request.BaseRequest;
 import netUtils.URLDef;
 
-public class GetInvitesRequest extends BaseRequest
+public class GetMessageRequest extends BaseRequest
 {
-	public GetInvitesRequest()
+	public GetMessageRequest(int type, int messageID)
 	{
 		super();
 
-		appendUrl(URLDef.URL_INVITE_LIST);
+		appendUrl(URLDef.URL_MESSAGE + "/" + type + "/" + messageID);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

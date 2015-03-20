@@ -1,6 +1,8 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.SingleImageActivity;
+import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.FileNotFoundException;
@@ -29,6 +32,7 @@ import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
@@ -36,7 +40,9 @@ import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.Request.UploadImageRequest;
+import netUtils.Request.User.SignOutRequest;
 import netUtils.Response.UploadImageResponse;
+import netUtils.Response.User.SignOutResponse;
 
 public class ProfileActivity extends Activity
 {
@@ -56,7 +62,6 @@ public class ProfileActivity extends Activity
 	private RelativeLayout companyLayout;
 
 	private AppPreference appPreference;
-	private DBManager dbManager;
 
 	private Group currentGroup;
 	private User currentUser;
@@ -148,8 +153,6 @@ public class ProfileActivity extends Activity
 	private void initData()
 	{
 		appPreference = AppPreference.getAppPreference();
-		dbManager = DBManager.getDBManager();
-		
 		currentUser = appPreference.getCurrentUser();
 		currentGroup = appPreference.getCurrentGroup();
 	}	
@@ -166,7 +169,35 @@ public class ProfileActivity extends Activity
 				finish();
 			}
 		});
-		
+
+        TextView signOutTextView = (TextView) findViewById(R.id.signOutTextView);
+        signOutTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                String message = getString(R.string.prompt_sign_out) + currentUser.getNickname();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                builder.setTitle(R.string.tip);
+                builder.setMessage(message);
+                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        if (PhoneUtils.isNetworkConnected())
+                        {
+                            sendSignOutRequest();
+                        }
+                        else
+                        {
+                            ViewUtils.showToast(ProfileActivity.this, R.string.error_sign_out_network_unavailable);
+                        }
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, null);
+                builder.create().show();
+            }
+        });
+
 		initAvatarView();
 
         // init nickname
@@ -416,4 +447,56 @@ public class ProfileActivity extends Activity
 			}
 		});
     }
+
+    private void sendSignOutRequest()
+    {
+        ReimProgressDialog.show();
+        SignOutRequest request = new SignOutRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                SignOutResponse response = new SignOutResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    appPreference.setCurrentUserID(-1);
+                    appPreference.setCurrentGroupID(-1);
+                    appPreference.setUsername("");
+                    appPreference.setPassword("");
+                    appPreference.setServerToken("");
+                    appPreference.setLastSyncTime(0);
+                    appPreference.saveAppPreference();
+
+                    ReimApplication.setTabIndex(0);
+                    ReimApplication.setReportTabIndex(0);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            Intent intent = new Intent(ProfileActivity.this, SignInActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_sign_out);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
 }

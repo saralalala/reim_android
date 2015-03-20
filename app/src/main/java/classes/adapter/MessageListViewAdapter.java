@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -13,17 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Invite;
+import classes.Message;
 import classes.utils.Utils;
 
 public class MessageListViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
-	private List<Invite> inviteList;
+	private List<Message> messageList;
 	
-	public MessageListViewAdapter(Context context, List<Invite> invites)
+	public MessageListViewAdapter(Context context, List<Message> messages)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
-		this.inviteList = new ArrayList<Invite>(invites);
+		this.messageList = new ArrayList<Message>(messages);
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -35,23 +37,27 @@ public class MessageListViewAdapter extends BaseAdapter
 
 		TextView messageTextView = (TextView) convertView.findViewById(R.id.messageTextView);
 		TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+        ImageView tipImageView = (ImageView) convertView.findViewById(R.id.tipImageView);
 		
-		Invite invite = inviteList.get(position);
+		Message message = messageList.get(position);
 
-		messageTextView.setText(invite.getMessage());
-		dateTextView.setText(Utils.secondToStringUpToDay(invite.getUpdateTime()));
-		
+		messageTextView.setText(message.getTitle());
+		dateTextView.setText(Utils.secondToStringUpToDay(message.getUpdateTime()));
+
+        int visibility = message.hasBeenRead()? View.GONE : View.VISIBLE;
+        tipImageView.setVisibility(visibility);
+
 		return convertView;
 	}
 	
 	public int getCount()
 	{
-		return inviteList.size();
+		return messageList.size();
 	}
 
-	public Invite getItem(int position)
+	public Message getItem(int position)
 	{
-		return inviteList.get(position);
+		return messageList.get(position);
 	}
 
 	public long getItemId(int position)
@@ -59,9 +65,9 @@ public class MessageListViewAdapter extends BaseAdapter
 		return position;
 	}
 	
-	public void setMessages(List<Invite> invites)
+	public void setMessages(List<Message> messages)
 	{
-		inviteList.clear();
-		inviteList.addAll(invites);
+		messageList.clear();
+		messageList.addAll(messages);
 	}
 }

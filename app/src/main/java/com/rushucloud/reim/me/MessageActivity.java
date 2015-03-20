@@ -15,6 +15,7 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Invite;
+import classes.Message;
 import classes.utils.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
@@ -25,13 +26,18 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
+import netUtils.Request.User.GetMessageRequest;
 import netUtils.Request.User.InviteReplyRequest;
+import netUtils.Response.User.GetMessageResponse;
 import netUtils.Response.User.InviteReplyResponse;
 
 public class MessageActivity extends Activity
-{	
-	private Invite invite;
-	
+{
+    private TextView contentTextView;
+    private TextView dateTextView;
+
+	private Message message;
+    private Invite invite;
 	private boolean fromPush;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -48,6 +54,10 @@ public class MessageActivity extends Activity
 		MobclickAgent.onPageStart("MessageActivity");
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setContext(this);
+        if (message.getType() == Message.TYPE_MESSAGE && PhoneUtils.isNetworkConnected())
+        {
+            sendGetMessageRequest();
+        }
 	}
 
 	protected void onPause()
@@ -71,8 +81,12 @@ public class MessageActivity extends Activity
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null)
 		{
-			invite = (Invite) bundle.getSerializable("invite");
+            message = (Message) bundle.getSerializable("message");
 			fromPush = bundle.getBoolean("fromPush", false);
+            if (message.getType() == Message.TYPE_INVITE)
+            {
+                invite = (Invite) message;
+            }
 		}
 	}
 	
@@ -89,11 +103,8 @@ public class MessageActivity extends Activity
 			}
 		});
 		
-		TextView inviteTextView = (TextView) findViewById(R.id.inviteTextView);
-		inviteTextView.setText(invite.getMessage());
-
-		TextView dateTextView = (TextView) findViewById(R.id.dateTextView);
-		dateTextView.setText(Utils.secondToStringUpToDay(invite.getUpdateTime()));
+		contentTextView = (TextView) findViewById(R.id.contentTextView);
+		dateTextView = (TextView) findViewById(R.id.dateTextView);
 		
 		Button agreeButton = (Button) findViewById(R.id.agreeButton);
 		agreeButton.setOnClickListener(new View.OnClickListener()
@@ -128,13 +139,61 @@ public class MessageActivity extends Activity
 		});
 
         String currentNickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
-		if (invite.getTypeCode() != Invite.TYPE_NEW || invite.getInvitor().equals(currentNickname))
+		if (invite == null || invite.getTypeCode() != Invite.TYPE_NEW || invite.getInvitor().equals(currentNickname))
 		{
 			agreeButton.setVisibility(View.GONE);
 			rejectButton.setVisibility(View.GONE);
 		}
+
+        refreshView();
 	}
-	
+
+    private void refreshView()
+    {
+        contentTextView.setText(message.getContent());
+        dateTextView.setText(Utils.secondToStringUpToDay(message.getUpdateTime()));
+    }
+
+    private void sendGetMessageRequest()
+    {
+        ReimProgressDialog.show();
+        final GetMessageRequest request = new GetMessageRequest(Message.TYPE_MESSAGE, message.getServerID());
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetMessageResponse response = new GetMessageResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            if (invite == null)
+                            {
+                                message = response.getMessage();
+                                refreshView();
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(MessageActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            goBack();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     private void sendInviteReplyRequest(final int agree, String inviteCode)
     {
 		ReimProgressDialog.show();

@@ -26,4 +26,12 @@
         android:textColor="@color/hint_light_grey"
         android:textSize="13sp" />
 
+    <ImageView
+        android:id="@+id/tipImageView"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_gravity="right"
+        android:contentDescription="@string/tip"
+        android:src="@drawable/tip_report"/>
+
 </LinearLayout>

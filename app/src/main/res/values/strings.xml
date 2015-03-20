@@ -158,7 +158,7 @@
     <string name="preference">偏好设置</string>
     <string name="get_invoice">我要开发票</string>
     <string name="my_messages">我的消息</string>
-    <string name="my_invites">收到的邀请</string>
+    <string name="message_from_admin">来自管理员的消息</string>
     <string name="invite">邀请好友</string>
     <string name="send_invite">发送邀请</string>
     <string name="share">分享</string>

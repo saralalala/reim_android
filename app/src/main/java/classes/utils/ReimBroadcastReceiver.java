@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.Invite;
+import classes.Message;
 import classes.Report;
 
 public class ReimBroadcastReceiver extends BroadcastReceiver
@@ -27,6 +28,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 	private static final int TYPE_REPORT = 2;
 	private static final int TYPE_INVITE = 3;
 	private static final int TYPE_INVITE_REPLY = 4;
+    private static final int TYPE_ADMIN_MESSAGE = 5;
 
 	public static final int REPORT_MINE_REJECTED = 0;
 	public static final int REPORT_MINE_REJECTED_WITH_COMMENT = 1;
@@ -132,18 +134,21 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					Invite invite = new Invite();
 					try
 					{
-						invite.setMessage(jObject.getString("msg"));
+                        invite.setType(Message.TYPE_INVITE);
+                        invite.setTitle(jObject.getString("msg"));
+						invite.setContent(jObject.getString("msg"));
 						invite.setInviteCode(jObject.getString("code"));
 						invite.setTypeCode(jObject.getInt("actived"));
 					}
 					catch (JSONException e)
 					{
-						invite.setMessage(context.getString(R.string.prompt_data_error));
+                        invite.setTitle(context.getString(R.string.prompt_data_error));
+						invite.setContent(context.getString(R.string.prompt_data_error));
 						invite.setInviteCode("");
 					}
 					
 					Bundle bundle = new Bundle();
-					bundle.putSerializable("invite", invite);
+					bundle.putSerializable("message", invite);
 					bundle.putBoolean("fromPush", true);
 					
 					Intent newIntent = new Intent(context, MessageActivity.class);
@@ -151,6 +156,30 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(newIntent);
 				}
+                else if (type == TYPE_ADMIN_MESSAGE)
+                {
+                    Message message = new Message();
+                    try
+                    {
+                        message.setType(Message.TYPE_MESSAGE);
+                        message.setTitle(jObject.getString("msg"));
+                        message.setServerID(jObject.getInt("args"));
+                    }
+                    catch (JSONException e)
+                    {
+                        message.setTitle(context.getString(R.string.prompt_data_error));
+                        message.setContent(context.getString(R.string.prompt_data_error));
+                    }
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("message", message);
+                    bundle.putBoolean("fromPush", true);
+
+                    Intent newIntent = new Intent(context, MessageActivity.class);
+                    newIntent.putExtras(bundle);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(newIntent);
+                }
 			}
 		}
 		catch (Exception e)

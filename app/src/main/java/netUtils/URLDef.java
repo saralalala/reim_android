@@ -27,7 +27,8 @@ public class URLDef
 	public static String URL_TAG = "/tags";
 	public static String URL_USER = "/users";
 	public static String URL_PASSWORD = "/password";
-	public static String URL_INVITE_LIST = "/invites";
+    public static String URL_MESSAGE = "/messages/single";
+	public static String URL_MESSAGE_LIST = "/messages/list";
 	public static String URL_INVITE = "/invite";
 	public static String URL_SIGN_IN = "/login";
 	public static String URL_SIGN_OUT = "/logout";

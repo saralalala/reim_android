@@ -30,6 +30,8 @@ public class EventsResponse extends BaseResponse
 			JSONObject jObject = getDataObject();
             System.out.println(jObject.toString());
 			JSONArray invitesArray = jObject.getJSONArray("invites");
+            JSONArray systemMessagesArray = jObject.getJSONArray("system");
+            JSONArray adminMessagesArray = jObject.getJSONArray("questions");
 			JSONArray reportsArray = jObject.getJSONArray("reports");
 			JSONArray membersArray = jObject.getJSONArray("members");
 			JSONArray managersArray = jObject.getJSONArray("managers");
@@ -51,7 +53,7 @@ public class EventsResponse extends BaseResponse
             }
 
             hasUnreadReports = reportsArray.length() > 0;
-            hasMessages = invitesArray.length() > 0;
+            hasMessages = invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length() > 0;
 			needToRefresh = (membersArray.length() + managersArray.length()) > 0;
 		}
 		catch (JSONException e)

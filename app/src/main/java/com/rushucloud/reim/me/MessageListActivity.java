@@ -17,7 +17,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Invite;
+import classes.Message;
 import classes.adapter.MessageListViewAdapter;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
@@ -25,8 +25,8 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.XListView;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.GetInvitesRequest;
-import netUtils.Response.User.GetInvitesResponse;
+import netUtils.Request.User.GetMessagesRequest;
+import netUtils.Response.User.GetMessagesResponse;
 
 public class MessageListActivity extends Activity
 {
@@ -34,7 +34,7 @@ public class MessageListActivity extends Activity
 	private XListView messageListView;
 	private MessageListViewAdapter adapter;
 	
-	private List<Invite> messageList = new ArrayList<Invite>();
+	private List<Message> messageList = new ArrayList<Message>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -124,7 +124,7 @@ public class MessageListActivity extends Activity
                 if (position > 0)
                 {
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("invite", messageList.get(position - 1));
+                    bundle.putSerializable("message", messageList.get(position - 1));
                     Intent intent = new Intent(MessageListActivity.this, MessageActivity.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
@@ -135,17 +135,17 @@ public class MessageListActivity extends Activity
 	
     private void sendGetInvitesRequest()
     {
-    	GetInvitesRequest request = new GetInvitesRequest();
+    	GetMessagesRequest request = new GetMessagesRequest();
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
-				final GetInvitesResponse response = new GetInvitesResponse(httpResponse);
+				final GetMessagesResponse response = new GetMessagesResponse(httpResponse);
 				if (response.getStatus())
 				{
                     messageList.clear();
-                    messageList.addAll(response.getInviteList());
-                    Invite.sortByUpdateDate(messageList);
+                    messageList.addAll(response.getMessageList());
+                    Message.sortByUpdateDate(messageList);
 
 					runOnUiThread(new Runnable()
 					{

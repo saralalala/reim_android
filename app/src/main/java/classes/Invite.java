@@ -1,16 +1,13 @@
 package classes;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import classes.utils.Utils;
 
-public class Invite implements Serializable
+public class Invite extends Message implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -20,10 +17,76 @@ public class Invite implements Serializable
 	
 	private String inviteCode = "";
     private String invitor = "";
-	private String message = "";
-	private int updateTime = -1;
 	private int typeCode = -1;
-	
+
+    public Invite()
+    {
+
+    }
+
+    public Invite(JSONObject jObject, String currentNickname)
+    {
+        try
+        {
+            String invitor = jObject.getString("invitor");
+            int activeType = jObject.getInt("actived");
+
+            setServerID(jObject.getInt("id"));
+            setInviteCode(jObject.getString("code"));
+            setTypeCode(activeType);
+            setInvitor(invitor);
+            setType(Message.TYPE_INVITE);
+            setHasBeenRead(Utils.intToBoolean(jObject.getInt("sread")));
+
+            if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_NEW)
+            {
+                String message = "用户" + invitor + "邀请您加入「" + jObject.getString("groupname") + "」";
+                setTitle(message);
+                setContent(message);
+                setUpdateTime(jObject.getInt("invitedt"));
+            }
+            else if (invitor.equals(currentNickname) && activeType == Invite.TYPE_NEW)
+            {
+                String message = "您邀请了用户" + invitor + "加入「" + jObject.getString("groupname" + "」");
+                setTitle(message);
+                setContent(message);
+                setUpdateTime(jObject.getInt("invitedt"));
+            }
+            else if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_REJECTED)
+            {
+                String message = "您拒绝了加入「" + jObject.getString("groupname") + "」的邀请";
+                setTitle(message);
+                setContent(message);
+                setUpdateTime(jObject.getInt("activedt"));
+            }
+            else if (invitor.equals(currentNickname) && activeType == Invite.TYPE_REJECTED)
+            {
+                String message = "用户" + jObject.getString("iname") + "拒绝了加入「" + jObject.getString("groupname") + "」的邀请";
+                setTitle(message);
+                setContent(message);
+                setUpdateTime(jObject.getInt("activedt"));
+            }
+            else if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_ACCEPTED)
+            {
+                String message = "您已加入「" + jObject.getString("groupname") + "」";
+                setTitle(message);
+                setContent(message);
+                setUpdateTime(jObject.getInt("activedt"));
+            }
+            else
+            {
+                String message = "用户" + jObject.getString("iname") + "已加入「" + jObject.getString("groupname") + "」";
+                setTitle(message);
+                setContent(message);
+                setUpdateTime(jObject.getInt("activedt"));
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 	public String getInviteCode()
 	{
 		return inviteCode;
@@ -42,24 +105,6 @@ public class Invite implements Serializable
         this.invitor = invitor;
     }
 
-	public String getMessage()
-	{
-		return message;
-	}
-	public void setMessage(String message)
-	{
-		this.message = message;
-	}
-	
-	public int getUpdateTime()
-	{
-		return updateTime;
-	}
-	public void setUpdateTime(int updateTime)
-	{
-		this.updateTime = updateTime;
-	}
-	
 	public int getTypeCode()
 	{
 		return typeCode;
@@ -68,15 +113,4 @@ public class Invite implements Serializable
 	{
 		this.typeCode = typeCode;
 	}
-
-	public static void sortByUpdateDate(List<Invite> inviteList)
-    {
-    	Collections.sort(inviteList, new Comparator<Invite>()
-		{
-			public int compare(Invite invite1, Invite invite2)
-			{
-				return (int) (invite2.getUpdateTime() - invite1.getUpdateTime());
-			}
-		});
-    }
 }
