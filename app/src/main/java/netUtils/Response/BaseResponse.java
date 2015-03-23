@@ -7,8 +7,8 @@ import com.rushucloud.reim.start.SignInActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import classes.utils.ReimApplication;
 import classes.utils.AppPreference;
+import classes.utils.ReimApplication;
 import netUtils.NetworkConstant;
 
 public abstract class BaseResponse

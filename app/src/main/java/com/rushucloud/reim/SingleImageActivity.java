@@ -46,7 +46,7 @@ public class SingleImageActivity extends Activity
 
 		String imagePath = getIntent().getStringExtra("imagePath");
 		
-		SubsamplingScaleImageView imageView = (SubsamplingScaleImageView) findViewById(R.id.imageView);
+		SubsamplingScaleImageView imageView = (SubsamplingScaleImageView) findViewById(R.id.avatarImageView);
 		imageView.setImageUri(imagePath);
 	}
 }

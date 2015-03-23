@@ -16,11 +16,11 @@ import com.umeng.analytics.MobclickAgent;
 
 import classes.Invite;
 import classes.Message;
-import classes.utils.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
@@ -264,7 +264,7 @@ public class MessageActivity extends Activity
                             public void run()
                             {
                                 ReimProgressDialog.dismiss();
-                                ViewUtils.showToast(MessageActivity.this, R.string.prompt_invite_reply_sent);
+                                ViewUtils.showToast(MessageActivity.this, R.string.succeed_in_sending_invite_reply);
                                 goBack();
                             }
                         });
@@ -276,7 +276,7 @@ public class MessageActivity extends Activity
 							public void run()
 							{
 								ReimProgressDialog.dismiss();
-                                ViewUtils.showToast(MessageActivity.this, R.string.prompt_invite_reply_sent);
+                                ViewUtils.showToast(MessageActivity.this, R.string.succeed_in_sending_invite_reply);
                                 goBack();
 							}
 						});

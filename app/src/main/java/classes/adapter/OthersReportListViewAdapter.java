@@ -13,8 +13,8 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.utils.ReimApplication;
 import classes.Report;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 
 public class OthersReportListViewAdapter extends BaseAdapter

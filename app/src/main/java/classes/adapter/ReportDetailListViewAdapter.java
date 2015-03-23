@@ -2,8 +2,6 @@ package classes.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +19,13 @@ import java.util.List;
 
 import classes.Category;
 import classes.Item;
-import classes.utils.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 
 public class ReportDetailListViewAdapter extends BaseAdapter
 {
@@ -165,14 +164,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			vendorTextView.setText(vendor);
 			
 			Category category = item.getCategory();
-			if (category != null && !category.getIconPath().isEmpty())
-			{
-				Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
-				if (bitmap != null)
-				{
-					categoryImageView.setImageBitmap(bitmap);				
-				}
-			}
+            ViewUtils.setImageViewBitmap(category, categoryImageView);
 			
 			return view;
 		}

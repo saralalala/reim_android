@@ -6,7 +6,7 @@
     android:background="@drawable/list_item_drawable" >
 
     <classes.widget.CircleImageView
-        android:id="@+id/imageView"
+        android:id="@+id/avatarImageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerVertical="true"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/imageView"
+        android:layout_toRightOf="@+id/avatarImageView"
         android:textColor="@color/font_major_dark"
         android:textSize="16sp" />
 

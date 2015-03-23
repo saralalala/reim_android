@@ -141,7 +141,7 @@ public class FeedbackActivity extends Activity
 						{
 							Builder builder = new Builder(FeedbackActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.prompt_feedback_sent);
+							builder.setMessage(R.string.succeed_in_sending_feedback);
 							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
 																{
 																	public void onClick(DialogInterface dialog, int which)

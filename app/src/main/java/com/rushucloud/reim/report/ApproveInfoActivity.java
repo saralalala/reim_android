@@ -80,9 +80,8 @@ public class ApproveInfoActivity extends Activity
 	private void initData()
 	{
 		dbManager = DBManager.getDBManager();
-		
+
 		reportServerID = getIntent().getIntExtra("reportServerID", -1);
-		
 		report = dbManager.getReportByServerID(reportServerID);
 		if (report == null)
 		{

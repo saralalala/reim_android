@@ -142,8 +142,8 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					}
 					catch (JSONException e)
 					{
-                        invite.setTitle(context.getString(R.string.prompt_data_error));
-						invite.setContent(context.getString(R.string.prompt_data_error));
+                        invite.setTitle(context.getString(R.string.failed_to_read_data));
+						invite.setContent(context.getString(R.string.failed_to_read_data));
 						invite.setInviteCode("");
 					}
 					
@@ -167,8 +167,8 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
                     }
                     catch (JSONException e)
                     {
-                        message.setTitle(context.getString(R.string.prompt_data_error));
-                        message.setContent(context.getString(R.string.prompt_data_error));
+                        message.setTitle(context.getString(R.string.failed_to_read_data));
+                        message.setContent(context.getString(R.string.failed_to_read_data));
                     }
 
                     Bundle bundle = new Bundle();

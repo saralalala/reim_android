@@ -224,7 +224,7 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.prompt_message_sent);
+							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_sending_message);
 						}
 					});
 				}
@@ -373,7 +373,7 @@ public class PhoneSignUpActivity extends Activity
 							ReimProgressDialog.dismiss();
 							Builder builder = new Builder(PhoneSignUpActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.prompt_sign_up_succeed);
+							builder.setMessage(R.string.succeed_in_sign_up);
 							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 													{
 														public void onClick(DialogInterface dialog, int which)

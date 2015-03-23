@@ -1,8 +1,6 @@
 package classes.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,14 +47,7 @@ public class CategoryListViewAdapter extends BaseAdapter
 		Category category = categoryList.get(position);
 		
 		iconImageView.setImageResource(R.drawable.default_icon);
-		if (!category.getIconPath().isEmpty())
-		{
-			Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
-			if (bitmap != null)
-			{
-				iconImageView.setImageBitmap(bitmap);
-			}
-		}
+        ViewUtils.setImageViewBitmap(category, iconImageView);
 		
 		if (category.getName().isEmpty())
 		{

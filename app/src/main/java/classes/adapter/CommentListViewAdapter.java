@@ -1,8 +1,6 @@
 package classes.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,7 @@ import classes.Comment;
 import classes.User;
 import classes.utils.DBManager;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 
 public class CommentListViewAdapter extends BaseAdapter
 {
@@ -52,14 +51,7 @@ public class CommentListViewAdapter extends BaseAdapter
 		User user = dbManager.getUser(comment.getReviewer().getServerID());
 		if (user != null)
 		{
-			if (!user.getAvatarPath().isEmpty())
-			{
-				Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
-				if (bitmap != null)
-				{
-					avatarImageView.setImageBitmap(bitmap);				
-				}
-			}
+            ViewUtils.setImageViewBitmap(user, avatarImageView);
 			
 			if (user.getNickname().isEmpty())
 			{

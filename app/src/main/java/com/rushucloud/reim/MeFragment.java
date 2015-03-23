@@ -3,8 +3,6 @@ package com.rushucloud.reim;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -295,15 +293,7 @@ public class MeFragment extends Fragment
 		
 		if (currentUser != null)
 		{
-			if (!currentUser.getAvatarPath().isEmpty())
-			{
-				Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
-				if (bitmap != null)
-				{
-					avatarImageView.setImageBitmap(bitmap);						
-				}
-			}
-			
+            ViewUtils.setImageViewBitmap(currentUser, avatarImageView);
 			nicknameTextView.setText(currentUser.getNickname());
 	        
 			if (currentUser.hasUndownloadedAvatar() && PhoneUtils.isNetworkConnected())
@@ -320,7 +310,7 @@ public class MeFragment extends Fragment
         String company = currentGroup != null? currentGroup.getName() : getString(R.string.no_company);
         companyTextView.setText(company);
 
-        User manager = dbManager.getUser(currentUser.getDefaultManagerID());
+        User manager = currentUser.getDefaultManager();
         if (manager != null)
         {
             managerTextView.setText(manager.getNickname());

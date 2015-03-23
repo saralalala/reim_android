@@ -26,13 +26,13 @@ import java.util.List;
 
 import classes.Comment;
 import classes.Item;
-import classes.utils.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.adapter.ReportDetailListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;

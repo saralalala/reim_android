@@ -1,13 +1,6 @@
 package netUtils.Response.User;
 
-import com.rushucloud.reim.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import classes.Message;
-import classes.utils.ReimApplication;
-import classes.utils.Utils;
 import netUtils.Response.BaseResponse;
 
 public class GetMessageResponse extends BaseResponse

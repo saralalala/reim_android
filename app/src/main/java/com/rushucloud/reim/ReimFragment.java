@@ -3,8 +3,6 @@ package com.rushucloud.reim;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -977,14 +975,7 @@ public class ReimFragment extends Fragment
 			}
 			else
 			{
-				if (!category.getIconPath().isEmpty())
-				{
-					Bitmap icon = BitmapFactory.decodeFile(category.getIconPath());
-					if (icon != null)
-					{
-						iconImageView.setImageBitmap(icon);		
-					}					
-				}
+                ViewUtils.setImageViewBitmap(category, iconImageView);
 				nameTextView.setTextColor(unselectedColor);
 			}			
 			
@@ -1074,7 +1065,7 @@ public class ReimFragment extends Fragment
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
+							ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
 						}
 					});
 				}
@@ -1088,12 +1079,12 @@ public class ReimFragment extends Fragment
 		{
 			refreshItemListView();
 			ReimProgressDialog.dismiss();
-			ViewUtils.showToast(getActivity(), R.string.prompt_delete_succeed);
+			ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
 		}
 		else
 		{
 			ReimProgressDialog.dismiss();
-			ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
+			ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
 		}
 	}
 	

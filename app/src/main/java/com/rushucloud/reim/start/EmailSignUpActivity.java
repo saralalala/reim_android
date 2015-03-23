@@ -238,7 +238,7 @@ public class EmailSignUpActivity extends Activity
 							ReimProgressDialog.dismiss();
 							Builder builder = new Builder(EmailSignUpActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.prompt_sign_up_succeed_with_email);
+							builder.setMessage(R.string.succeed_in_sign_up_with_email);
 							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 													{
 														public void onClick(DialogInterface dialog, int which)

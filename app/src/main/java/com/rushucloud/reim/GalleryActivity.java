@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.GridView;
@@ -35,7 +32,6 @@ import java.util.Collections;
 
 import classes.adapter.GalleryAdapter;
 import classes.utils.ExtraCallBack;
-import classes.utils.PhoneUtils;
 
 public class GalleryActivity extends Activity
 {

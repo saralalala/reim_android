@@ -24,7 +24,7 @@ public class ReimProgressDialog
 	public static void init(Context context)
 	{
 		dialogView = View.inflate(context, R.layout.progress_dialog, null);		
-		imageView = (ImageView) dialogView.findViewById(R.id.imageView);
+		imageView = (ImageView) dialogView.findViewById(R.id.avatarImageView);
 		animationDrawable = (AnimationDrawable) imageView.getDrawable();
 	}
 	

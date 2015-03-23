@@ -145,7 +145,7 @@ public class EmailFindActivity extends Activity
 						{
 							Builder builder = new Builder(EmailFindActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.prompt_email_sent);
+							builder.setMessage(R.string.succeed_in_sending_email);
 							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which)

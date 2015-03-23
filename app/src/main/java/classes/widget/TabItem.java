@@ -18,8 +18,8 @@ import android.view.View;
 
 import com.rushucloud.reim.R;
 
-import classes.utils.ReimApplication;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 
 public class TabItem extends View
 {

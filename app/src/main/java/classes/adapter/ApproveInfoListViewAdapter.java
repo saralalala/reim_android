@@ -1,8 +1,6 @@
 package classes.adapter;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +22,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
+import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.Request.Report.AlertRequest;
 import netUtils.Response.Report.AlertResponse;
@@ -115,15 +114,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 		final User user = dbManager.getUser(info.getUserID());
 		if (user != null)
 		{
-			if (!user.getAvatarPath().isEmpty())
-			{
-				Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
-				if (bitmap != null)
-				{
-					avatarImageView.setImageBitmap(bitmap);
-				}			
-			}
-			
+            ViewUtils.setImageViewBitmap(user, avatarImageView);
 			nicknameTextView.setText(user.getNickname());
 		}
         else
@@ -211,6 +202,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
                 {
                     if (report.getStatus() == Report.STATUS_SUBMITTED)
                     {
+                        ReimProgressDialog.show();
                         AlertRequest request = new AlertRequest(user.getServerID(), report.getServerID());
                         request.sendRequest(new HttpConnectionCallback()
                         {
@@ -221,6 +213,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
                                 {
                                     public void run()
                                     {
+                                        ReimProgressDialog.dismiss();
                                         if (response.getStatus())
                                         {
                                             ViewUtils.showToast(activity, R.string.succeed_in_alerting);

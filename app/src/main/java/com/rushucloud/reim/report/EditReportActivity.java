@@ -5,8 +5,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -35,12 +33,12 @@ import classes.Category;
 import classes.Comment;
 import classes.Image;
 import classes.Item;
-import classes.utils.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
@@ -573,14 +571,7 @@ public class EditReportActivity extends Activity
 			else
 			{
 				Category category = item.getCategory();
-				if (!category.getIconPath().isEmpty())
-				{
-					Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
-					if (bitmap != null)
-					{
-						categoryImageView.setImageBitmap(bitmap);				
-					}					
-				}
+                ViewUtils.setImageViewBitmap(category, categoryImageView);
 			}
 			
 			itemLayout.addView(view);

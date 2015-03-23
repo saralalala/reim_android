@@ -170,7 +170,7 @@ public class MessageListActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(MessageListActivity.this, R.string.prompt_invite_list_failed);
+                            ViewUtils.showToast(MessageListActivity.this, R.string.failed_to_get_invite_list);
                             messageListView.stopRefresh();
 						}
 					});

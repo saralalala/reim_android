@@ -173,7 +173,7 @@ public class ResetPasswordActivity extends Activity
 							ReimProgressDialog.dismiss();
 							Builder builder = new Builder(ResetPasswordActivity.this);
 							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.prompt_password_changed);
+							builder.setMessage(R.string.succeed_in_changing_password);
 							builder.setNegativeButton(R.string.confirm, new OnClickListener()
 														{
 															public void onClick(DialogInterface dialog, int which)

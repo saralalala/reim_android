@@ -3,7 +3,6 @@ package com.rushucloud.reim.item;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -24,10 +23,10 @@ import java.util.ArrayList;
 import classes.Category;
 import classes.Image;
 import classes.Item;
-import classes.utils.ReimApplication;
 import classes.User;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
@@ -189,14 +188,7 @@ public class ShowItemActivity extends Activity
 		TextView categoryTextView = (TextView) findViewById(R.id.categoryTextView);
 		if (item.getCategory() != null)
 		{
-			if (!item.getCategory().getIconPath().isEmpty())
-			{
-				Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
-				if (categoryIcon != null)
-				{
-					categoryImageView.setImageBitmap(categoryIcon);
-				}
-			}
+            ViewUtils.setImageViewBitmap(item.getCategory(), categoryImageView);
 			categoryTextView.setText(item.getCategory().getName());
 			
 			if (item.getCategory().hasUndownloadedIcon() && PhoneUtils.isNetworkConnected())
@@ -391,15 +383,8 @@ public class ShowItemActivity extends Activity
 			
 			View memberView = View.inflate(this, R.layout.grid_member, null);
 			
-			ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);			
-			if (!user.getAvatarPath().isEmpty())
-			{
-				Bitmap avatar = BitmapFactory.decodeFile(user.getAvatarPath());
-				if (avatar != null)
-				{
-					avatarImageView.setImageBitmap(avatar);		
-				}				
-			}
+			ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
+            ViewUtils.setImageViewBitmap(user, avatarImageView);
 			
 			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
 			nameTextView.setText(user.getNickname());

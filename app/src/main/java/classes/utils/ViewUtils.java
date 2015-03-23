@@ -2,6 +2,8 @@ package classes.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Selection;
 import android.text.Spannable;
@@ -9,12 +11,16 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.Toast;
 
 import com.rushucloud.reim.R;
+
+import classes.Category;
+import classes.User;
 
 public class ViewUtils
 {
@@ -129,6 +135,30 @@ public class ViewUtils
 		params.alpha = 1f;
 		activity.getWindow().setAttributes(params);
 	}
+
+    public static void setImageViewBitmap(User user, ImageView imageView)
+    {
+        if (!user.getAvatarPath().isEmpty())
+        {
+            Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
+            if (bitmap != null)
+            {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+    }
+
+    public static void setImageViewBitmap(Category category, ImageView imageView)
+    {
+        if (!category.getIconPath().isEmpty())
+        {
+            Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
+            if (bitmap != null)
+            {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+    }
 
 	public static OnFocusChangeListener onFocusChangeListener = new OnFocusChangeListener()
 	{

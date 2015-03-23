@@ -337,15 +337,8 @@ public class ProfileActivity extends Activity
 		currentUser = appPreference.getCurrentUser();
 		currentGroup = appPreference.getCurrentGroup();
 		currentUser.setIsAdmin(true);
-		
-		if (!currentUser.getAvatarPath().isEmpty())
-		{
-			Bitmap bitmap = BitmapFactory.decodeFile(currentUser.getAvatarPath());
-			if (bitmap != null)
-			{
-				avatarImageView.setImageBitmap(bitmap);
-			}
-		}
+
+        ViewUtils.setImageViewBitmap(currentUser, avatarImageView);
 		
 		String email = currentUser != null && !currentUser.getEmail().isEmpty() ? currentUser.getEmail() : getString(R.string.not_binding);
 		emailTextView.setText(email);

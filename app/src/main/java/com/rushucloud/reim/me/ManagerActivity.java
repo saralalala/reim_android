@@ -42,6 +42,8 @@ import netUtils.Response.User.DefaultManagerResponse;
 public class ManagerActivity extends Activity
 {
     private EditText managerEditText;
+    private ImageView avatarImageView;
+    private TextView nicknameTextView;
 	private ListView managerListView;
 	private MemberListViewAdapter adapter;
 
@@ -175,6 +177,9 @@ public class ManagerActivity extends Activity
             }
         });
 
+        avatarImageView = (ImageView) findViewById(R.id.avatarImageView);
+        nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
+
 		managerListView = (ListView) findViewById(R.id.userListView);
 		managerListView.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -187,12 +192,23 @@ public class ManagerActivity extends Activity
                 chosenList.add(adapter.getItem(position));
 				adapter.setChosenList(chosenList);
 				adapter.notifyDataSetChanged();
+
+                User manager = chosenList.get(0);
+                nicknameTextView.setText(manager.getNickname());
+                ViewUtils.setImageViewBitmap(manager, avatarImageView);
 			}
 		});	
 	}
 
 	private void refreshListView()
 	{
+        if (!chosenList.isEmpty())
+        {
+            User manager = chosenList.get(0);
+            nicknameTextView.setText(manager.getNickname());
+            ViewUtils.setImageViewBitmap(manager, avatarImageView);
+        }
+
 		adapter = new MemberListViewAdapter(this, userList, chosenList);
 		managerListView.setAdapter(adapter);
 		
@@ -254,6 +270,7 @@ public class ManagerActivity extends Activity
 							ReimProgressDialog.dismiss();
 							initData();
 							refreshListView();
+                            User.sortByNickname(userList);
                             filterList();
 						}
 					});
@@ -294,7 +311,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(ManagerActivity.this, R.string.prompt_default_manager_changed);
+                            ViewUtils.showToast(ManagerActivity.this, R.string.succeed_in_changing_default_manager);
                             finish();
 						}
 					});
@@ -335,6 +352,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUser.getServerID());
+                            User.sortByNickname(userList);
                             filterList();
 						}
 					});	

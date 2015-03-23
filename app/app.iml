@@ -87,6 +87,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="SocialSDK_renren_2" level="project" />
     <orderEntry type="library" exported="" name="SocialSDK_renren_1" level="project" />
+    <orderEntry type="library" exported="" name="pinyin4j-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="umeng-analytics-v5.4.1" level="project" />
     <orderEntry type="library" exported="" name="avoscloud-v2.6.6" level="project" />
     <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
@@ -113,8 +114,8 @@
     <orderEntry type="library" exported="" name="SocialSDK_WeiXin_2" level="project" />
     <orderEntry type="library" exported="" name="SocialSDK_WeiXin_1" level="project" />
     <orderEntry type="library" exported="" name="SocialSDK_Sina" level="project" />
-    <orderEntry type="library" exported="" name="SocialSDK_evernote" level="project" />
     <orderEntry type="library" exported="" name="httpcore-4.3.2" level="project" />
+    <orderEntry type="library" exported="" name="SocialSDK_evernote" level="project" />
     <orderEntry type="library" exported="" name="rebound-0.3.7" level="project" />
     <orderEntry type="library" exported="" name="SocialSDK_yixin_1" level="project" />
     <orderEntry type="library" exported="" name="SocialSDK_yixin_2" level="project" />

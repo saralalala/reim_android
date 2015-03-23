@@ -1,8 +1,6 @@
 package classes.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,7 @@ import classes.Category;
 import classes.Item;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 
 public class ReportItemListViewAdapter extends BaseAdapter
 {
@@ -72,13 +71,9 @@ public class ReportItemListViewAdapter extends BaseAdapter
 				Category category = item.getCategory();
 				
 				categoryImageView.setImageResource(R.drawable.default_icon);
-				if (category != null && !category.getIconPath().isEmpty())
+				if (category != null)
 				{
-					Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
-					if (bitmap != null)
-					{
-						categoryImageView.setImageBitmap(bitmap);				
-					}
+                    ViewUtils.setImageViewBitmap(category, categoryImageView);
 				}
                 else if (category == null)
                 {

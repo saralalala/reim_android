@@ -1,8 +1,6 @@
 package classes.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,18 +46,11 @@ public class MemberListViewAdapter extends BaseAdapter
         int color = isChosen ? R.color.list_item_selected : R.color.list_item_unselected;
         convertView.setBackgroundResource(color);
 
-		ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
+		ImageView imageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
 		TextView nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
 
 		imageView.setImageResource(R.drawable.default_avatar);
-		if (!user.getAvatarPath().isEmpty())
-		{
-			Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
-			if (bitmap != null)
-			{
-				imageView.setImageBitmap(bitmap);				
-			}
-		}
+        ViewUtils.setImageViewBitmap(user, imageView);
 
 		if (user.getNickname().isEmpty())
 		{

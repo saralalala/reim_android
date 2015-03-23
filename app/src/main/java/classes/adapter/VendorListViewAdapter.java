@@ -28,7 +28,7 @@ public class VendorListViewAdapter extends BaseAdapter
 		this.vendorList = new ArrayList<Vendor>();
 		
 		Vendor vendor = new Vendor(context.getString(R.string.vendor_taxi));
-		vendor.setPhotoResID(R.drawable.icon_taxi);
+		vendor.setPhotoResID(R.drawable.icon_transport);
 		defaultList.add(vendor);
 		
 		vendor = new Vendor(context.getString(R.string.vendor_flight));
@@ -54,7 +54,7 @@ public class VendorListViewAdapter extends BaseAdapter
 		{
 			View view = layoutInflater.inflate(R.layout.list_vendor_default, parent, false);			
 			
-			ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+			ImageView imageView = (ImageView) view.findViewById(R.id.avatarImageView);
 			imageView.setImageResource(vendor.getPhotoResID());
 			
 			TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
@@ -66,7 +66,7 @@ public class VendorListViewAdapter extends BaseAdapter
 		{
 			View view = layoutInflater.inflate(R.layout.list_vendor, parent, false);
 			
-			ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+			ImageView imageView = (ImageView) view.findViewById(R.id.avatarImageView);
 			if (vendor.getPhoto() != null)
 			{
 				imageView.setImageBitmap(vendor.getPhoto());					

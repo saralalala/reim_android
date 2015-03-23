@@ -9,8 +9,11 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import classes.utils.CharacterParser;
 import classes.utils.DBManager;
 import classes.utils.Utils;
 
@@ -23,6 +26,7 @@ public class User implements Serializable
 	private String email = "";
 	private String password = "";
 	private String nickname = "";
+    private String nicknameInitLetter = "";
 	private String phone = "";
 	private int avatarID = -1;
 	private String avatarPath = "";
@@ -126,8 +130,17 @@ public class User implements Serializable
 	{
 		this.nickname = nickname;
 	}
-	
-	public String getPhone()
+
+    public String getNicknameInitLetter()
+    {
+        return nicknameInitLetter;
+    }
+    public void setNicknameInitLetter(String nicknameInitLetter)
+    {
+        this.nicknameInitLetter = nicknameInitLetter;
+    }
+
+    public String getPhone()
 	{
 		return phone;
 	}
@@ -198,7 +211,18 @@ public class User implements Serializable
 	{
 		this.defaultManagerID = defaultManagerID;
 	}
-	
+	public User getDefaultManager()
+    {
+        if (defaultManagerID > 0)
+        {
+            return DBManager.getDBManager().getUser(defaultManagerID);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
 	public int getServerUpdatedDate()
 	{
 		return serverUpdatedDate;
@@ -253,47 +277,14 @@ public class User implements Serializable
 	public List<User> buildBaseManagerList()
 	{
 		List<User> tempList = new ArrayList<User>();
-		User defaultManager = DBManager.getDBManager().getUser(getDefaultManagerID());
+		User defaultManager = getDefaultManager();
 		if (defaultManager != null)
 		{
 			tempList.add(defaultManager);
 		}
 		return tempList;
 	}
-	
-	public static boolean[] getUsersCheck(List<User> allUsers, List<User> targetUsers)
-	{		
-		if (allUsers == null || allUsers.isEmpty())
-		{
-			return null;
-		}
-		
-		boolean[] check = new boolean[allUsers.size()];
-		if (targetUsers == null)
-		{
-			for (int i = 0; i < check.length; i++)
-			{
-				check[i] = false;
-			}
-			return check;
-		}
-		
-		for (int i = 0; i < allUsers.size(); i++)
-		{
-			check[i] = false;
-			User user = allUsers.get(i);
-			for (int j = 0; j < targetUsers.size(); j++)
-			{
-				if (user.getServerID() == targetUsers.get(j).getServerID())
-				{
-					check[i] = true;
-					break;
-				}
-			}
-		}
-		return check;
-	}
-	
+
 	public static String[] getUsersName(List<User> userList)
 	{
 		String[] userNames = new String[userList.size()];
@@ -364,4 +355,31 @@ public class User implements Serializable
 		
 		return tempList;
 	}
+
+    public static void sortByNickname(List<User> userList)
+    {
+        for(User user : userList)
+        {
+            user.setNicknameInitLetter(CharacterParser.getInitLetter(user.getNickname()));
+        }
+
+        Collections.sort(userList, new Comparator<User>()
+        {
+            public int compare(User lhs, User rhs)
+            {
+                if (!lhs.getNicknameInitLetter().equals("#") && rhs.getNicknameInitLetter().equals("#"))
+                {
+                    return 1;
+                }
+                else if (lhs.getNicknameInitLetter().equals("#") && !rhs.getNicknameInitLetter().equals("#"))
+                {
+                    return -1;
+                }
+                else
+                {
+                    return lhs.getNicknameInitLetter().compareTo(rhs.getNicknameInitLetter());
+                }
+            }
+        });
+    }
 }

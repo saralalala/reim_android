@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import classes.utils.ReimApplication;
 import classes.Report;
 import classes.User;
 import classes.adapter.OthersReportListViewAdapter;
@@ -42,6 +41,7 @@ import classes.adapter.ReportTagGridViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
@@ -1143,7 +1143,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-				            ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed, response.getErrorMessage());
+				            ViewUtils.showToast(getActivity(), R.string.failed_to_delete, response.getErrorMessage());
 						}
 					});		
 				}
@@ -1267,12 +1267,12 @@ public class ReportFragment extends Fragment implements OnClickListener
 			{
 				refreshReportListView();
 				ReimProgressDialog.dismiss();
-	            ViewUtils.showToast(getActivity(), R.string.prompt_delete_succeed);														
+	            ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
 			}
 			else
 			{
 				ReimProgressDialog.dismiss();
-	            ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
+	            ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
 			}			
 		}
 		else
@@ -1281,12 +1281,12 @@ public class ReportFragment extends Fragment implements OnClickListener
 			{
 				refreshReportListView();
 				ReimProgressDialog.dismiss();
-	            ViewUtils.showToast(getActivity(), R.string.prompt_delete_succeed);														
+	            ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
 			}
 			else
 			{
 				ReimProgressDialog.dismiss();
-	            ViewUtils.showToast(getActivity(), R.string.prompt_delete_failed);
+	            ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
 			}			
 		}
 	}

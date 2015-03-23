@@ -1,9 +1,5 @@
 package netUtils.Response.User;
 
-import android.content.res.Resources;
-
-import com.rushucloud.reim.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,8 +10,6 @@ import java.util.List;
 import classes.Invite;
 import classes.Message;
 import classes.utils.AppPreference;
-import classes.utils.ReimApplication;
-import classes.utils.Utils;
 import netUtils.Response.BaseResponse;
 
 public class GetMessagesResponse extends BaseResponse

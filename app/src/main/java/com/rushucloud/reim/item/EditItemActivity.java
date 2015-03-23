@@ -58,13 +58,13 @@ import java.util.List;
 import classes.Category;
 import classes.Image;
 import classes.Item;
-import classes.utils.ReimApplication;
 import classes.Report;
 import classes.Tag;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
@@ -515,7 +515,6 @@ public class EditItemActivity extends Activity
                     {
                         amountEditText.setText(s.subSequence(1, 2));
                         amountEditText.setSelection(1);
-                        return;
                     }
                 }
             }
@@ -1063,14 +1062,7 @@ public class EditItemActivity extends Activity
             categoryTextView.setText(item.getCategory().getName());
             categoryImageView.setImageResource(R.drawable.default_icon);
 
-            if (!item.getCategory().getIconPath().isEmpty())
-            {
-                Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
-                if (categoryIcon != null)
-                {
-                    categoryImageView.setImageBitmap(categoryIcon);
-                }
-            }
+            ViewUtils.setImageViewBitmap(item.getCategory(), categoryImageView);
 
             if (item.getCategory().hasUndownloadedIcon() && PhoneUtils.isNetworkConnected())
             {
@@ -1174,14 +1166,7 @@ public class EditItemActivity extends Activity
                 View memberView = View.inflate(this, R.layout.grid_member, null);
 
                 ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
-                if (!user.getAvatarPath().isEmpty())
-                {
-                    Bitmap avatar = BitmapFactory.decodeFile(user.getAvatarPath());
-                    if (avatar != null)
-                    {
-                        avatarImageView.setImageBitmap(avatar);
-                    }
-                }
+                ViewUtils.setImageViewBitmap(user, avatarImageView);
 
                 TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);
                 nameTextView.setText(user.getNickname());
@@ -1348,14 +1333,7 @@ public class EditItemActivity extends Activity
                         public void run()
                         {
                             item.setCategory(category);
-                            if (!category.getIconPath().isEmpty())
-                            {
-                                Bitmap categoryIcon = BitmapFactory.decodeFile(item.getCategory().getIconPath());
-                                if (categoryIcon != null)
-                                {
-                                    categoryImageView.setImageBitmap(categoryIcon);
-                                }
-                            }
+                            ViewUtils.setImageViewBitmap(item.getCategory(), categoryImageView);
                         }
                     });
                 }
@@ -1475,7 +1453,7 @@ public class EditItemActivity extends Activity
     private List<NumberPicker> findNumberPickers(ViewGroup viewGroup)
     {
         List<NumberPicker> pickerList = new ArrayList<NumberPicker>();
-        View child = null;
+        View child;
         if (null != viewGroup)
         {
             for (int i = 0; i < viewGroup.getChildCount(); i++)

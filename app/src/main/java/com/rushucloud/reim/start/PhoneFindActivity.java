@@ -225,7 +225,7 @@ public class PhoneFindActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(PhoneFindActivity.this, R.string.prompt_message_sent);
+							ViewUtils.showToast(PhoneFindActivity.this, R.string.succeed_in_sending_message);
 						}
 					});
 				}

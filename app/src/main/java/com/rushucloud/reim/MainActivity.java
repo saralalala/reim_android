@@ -23,11 +23,11 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.utils.ReimApplication;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
@@ -495,7 +495,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					    	ReimProgressDialog.dismiss();
 							feedbackPopupWindow.dismiss();
 							phonePopupWindow.dismiss();
-							ViewUtils.showToast(MainActivity.this, R.string.prompt_feedback_sent);
+							ViewUtils.showToast(MainActivity.this, R.string.succeed_in_sending_feedback);
 						}
 						else
 						{

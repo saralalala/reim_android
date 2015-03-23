@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,12 +16,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import classes.Category;
-import classes.utils.ReimApplication;
 import classes.StatisticsCategory;
 import classes.adapter.StatisticsListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimMonthBar;
@@ -278,7 +279,10 @@ public class StatisticsFragment extends Fragment
 				if (localCategory != null)
 				{
 					View view = View.inflate(getActivity(), R.layout.list_category_stat, null);
-					
+
+                    ImageView iconImageView = (ImageView) view.findViewById(R.id.iconImageView);
+                    ViewUtils.setImageViewBitmap(localCategory, iconImageView);
+
 					TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
 					titleTextView.setText(localCategory.getName());
 					

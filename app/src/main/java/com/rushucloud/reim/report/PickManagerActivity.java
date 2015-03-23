@@ -14,6 +14,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -29,6 +30,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.Request.DownloadImageRequest;
@@ -37,10 +39,15 @@ import netUtils.Response.DownloadImageResponse;
 public class PickManagerActivity extends Activity
 {
     private EditText managerEditText;
+    private RelativeLayout managerLayout;
+    private ImageView avatarImageView;
+    private TextView nicknameTextView;
 	private MemberListViewAdapter adapter;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
+    private User currentUser;
+    private User defaultManager;
 	private List<User> userList;
     private List<User> showList = new ArrayList<User>();
     private List<User> chosenList;
@@ -93,9 +100,11 @@ public class PickManagerActivity extends Activity
 		{
 			userList = User.removeUserFromList(userList, senderID);
 		}
+        User.sortByNickname(userList);
 
 		List<User> managerList = (List<User>) getIntent().getSerializableExtra("managers");
-		User currentUser = AppPreference.getAppPreference().getCurrentUser();
+		currentUser = AppPreference.getAppPreference().getCurrentUser();
+        defaultManager = currentUser.getDefaultManager();
         chosenList = managerList == null? currentUser.buildBaseManagerList() : managerList;
 	}
 	
@@ -158,7 +167,40 @@ public class PickManagerActivity extends Activity
                 filterList();
             }
         });
-		
+
+        managerLayout = (RelativeLayout) findViewById(R.id.managerLayout);
+        managerLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (chosenList.contains(defaultManager))
+                {
+                    chosenList.remove(defaultManager);
+                }
+                else
+                {
+                    chosenList.add(defaultManager);
+                }
+                adapter.setChosenList(chosenList);
+                refreshManagerView();
+                filterList();
+            }
+        });
+
+        avatarImageView = (ImageView) findViewById(R.id.avatarImageView);
+        nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
+
+        if (defaultManager != null)
+        {
+            ViewUtils.setImageViewBitmap(defaultManager, avatarImageView);
+            nicknameTextView.setText(defaultManager.getNickname());
+            refreshManagerView();
+        }
+        else
+        {
+            managerLayout.setClickable(false);
+        }
+
 		adapter = new MemberListViewAdapter(this, userList, chosenList);
 		ListView managerListView = (ListView) findViewById(R.id.managerListView);
 		managerListView.setAdapter(adapter);
@@ -168,7 +210,10 @@ public class PickManagerActivity extends Activity
 			{
                 hideSoftKeyboard();
 				adapter.setCheck(position);
-				adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
+                chosenList.clear();
+                chosenList.addAll(adapter.getChosenList());
+                refreshManagerView();
 			}
 		});
 
@@ -180,6 +225,21 @@ public class PickManagerActivity extends Activity
 			}
 		}
 	}
+
+    private void refreshManagerView()
+    {
+        defaultManager = currentUser.getDefaultManager();
+        if (defaultManager != null && chosenList.contains(defaultManager))
+        {
+            managerLayout.setBackgroundResource(R.color.list_item_selected);
+            nicknameTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
+        }
+        else if (defaultManager != null)
+        {
+            managerLayout.setBackgroundResource(R.color.list_item_unselected);
+            nicknameTextView.setTextColor(ViewUtils.getColor(R.color.font_major_dark));
+        }
+    }
 
     private void filterList()
     {
@@ -223,6 +283,8 @@ public class PickManagerActivity extends Activity
 							{
 								userList = User.removeUserFromList(userList, senderID);
 							}
+                            User.sortByNickname(userList);
+                            refreshManagerView();
                             filterList();
 						}
 					});	

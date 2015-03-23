@@ -698,14 +698,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 				}
 				else
 				{
-					if (!category.getIconPath().isEmpty())
-					{
-						Bitmap icon = BitmapFactory.decodeFile(category.getIconPath());
-						if (icon != null)
-						{
-							iconImageView.setImageBitmap(icon);		
-						}						
-					}
+                    ViewUtils.setImageViewBitmap(category, iconImageView);
 					nameTextView.setTextColor(unselectedColor);
 				}
 			}
