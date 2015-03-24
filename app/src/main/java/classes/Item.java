@@ -35,6 +35,8 @@ public class Item
 	private Category category = null;
 	private String vendor = "";
 	private String location = "";
+    private double latitude = -1;
+    private double longitude = -1;
 	private List<Image> invoices = null;
 	private List<User> relevantUsers = null;
 	private List<Tag> tags = null;
@@ -218,7 +220,25 @@ public class Item
 		this.location = location;
 	}
 
-	public List<Image> getInvoices()
+    public double getLatitude()
+    {
+        return latitude;
+    }
+    public void setLatitude(double latitude)
+    {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude()
+    {
+        return longitude;
+    }
+    public void setLongitude(double longitude)
+    {
+        this.longitude = longitude;
+    }
+
+    public List<Image> getInvoices()
 	{
 		return invoices;
 	}
@@ -466,39 +486,6 @@ public class Item
 			}
 		}
 		return false;
-	}
-	
-	public static boolean[] getItemsCheck(List<Item> allItems, List<Item> targetItems)
-	{		
-		if (allItems == null || allItems.isEmpty())
-		{
-			return null;
-		}
-		
-		boolean[] check = new boolean[allItems.size()];		
-		if (targetItems == null)
-		{
-			for (int i = 0; i < check.length; i++)
-			{
-				check[i] = false;
-			}
-			return check;
-		}
-		
-		for (int i = 0; i < allItems.size(); i++)
-		{
-			check[i] = false;
-			Item item = allItems.get(i);
-			for (int j = 0; j < targetItems.size(); j++)
-			{
-				if (item.getLocalID() == targetItems.get(j).getLocalID())
-				{
-					check[i] = true;
-					break;
-				}
-			}
-		}
-		return check;
 	}
 	
 	public static ArrayList<Integer> getItemsIDList(List<Item> items)

@@ -13,8 +13,8 @@
 
     <ImageView
         android:id="@+id/feedbackImageView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_above="@+id/tabLayout"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"

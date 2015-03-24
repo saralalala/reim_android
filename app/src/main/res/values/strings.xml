@@ -104,10 +104,11 @@
     <string name="report_not_available">未加入报告</string>
     <string name="vendor_not_available">未填写商家</string>
     <string name="pick_image">选择图片</string>
-    <string name="no_image">未找到图片</string>
     
     <string name="my_report">我的报告</string>
     <string name="others_report">收到的报告</string>
+    <string name="pending">待处理</string>
+    <string name="processed">已处理</string>
     <string name="report_detail">报告详情</string>
     <string name="report_prove_ahead">预申请消费</string>
     <string name="comment">评论</string>
@@ -343,7 +344,7 @@
     <string name="failed_to_read_data">数据读取失败</string>
     <string name="failed_to_get_code">获取验证码失败</string>
     <string name="failed_to_get_data">获取数据失败</string>
-    <string name="failed_to_get_vendor">获取商家列表失败, 请手动输入</string>
+    <string name="failed_to_get_vendor">获取商家列表失败</string>
     <string name="failed_to_get_vendor_no_data">没有获取到商家信息, 请手动输入</string>
     <string name="failed_to_get_gps_info">未能定位你的位置，请手动输入商家名或稍后再试</string>
     <string name="failed_to_get_version">获取版本号失败</string>
@@ -384,8 +385,11 @@
     <string name="failed_to_alert">提醒发送失败</string>
     <string name="failed_to_get_invite_list">获取邀请列表失败</string>
     <string name="failed_to_delete">删除失败</string>
-    
+
+    <string name="no_pending_reports">你没有任何需要处理的报告</string>
+    <string name="no_image">未找到图片</string>
     <string name="no_location">无法获取地点信息</string>
+    <string name="no_city">无法获取城市信息以进行搜索</string>
     <string name="no_company">尚未加入任何公司</string>
     <string name="no_member">当前公司没有其他成员</string>
     <string name="no_comment">当前没有任何评论</string>
@@ -409,6 +413,7 @@
     <string name="status_finished">完成</string>
     <string name="status_prove_ahead">预</string>
     <string name="status_prove_ahead_approved">(已审批)</string>
+    <string name="status_cc">抄送</string>
     
     <string name="xlistview_header_hint_normal">下拉更新</string>
     <string name="xlistview_header_hint_ready">释放更新</string>

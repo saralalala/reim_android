@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import classes.Vendor;
@@ -33,13 +34,16 @@ import netUtils.Response.Item.GetVendorsResponse;
 
 public class PickVendorActivity extends Activity
 {
+    private static final int INPUT_VENDOR = 0;
+
 	private VendorListViewAdapter vendorAdapter;
 	private EditText vendorEditText;
 	
 	private String category;
+    private String location;
 	private double latitude;
 	private double longitude;
-	private List<Vendor> vendorList = null;
+	private List<Vendor> vendorList = new ArrayList<Vendor>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -48,6 +52,7 @@ public class PickVendorActivity extends Activity
 		setContentView(R.layout.activity_reim_vendor);
 		initData();
 		initView();
+        getVendors();
 	}
 
 	protected void onResume()
@@ -55,7 +60,6 @@ public class PickVendorActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("PickVendorActivity");		
 		MobclickAgent.onResume(this);
-		getVendors();
 	}
 
 	protected void onPause()
@@ -73,10 +77,32 @@ public class PickVendorActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == Activity.RESULT_OK)
+        {
+            switch (requestCode)
+            {
+                case INPUT_VENDOR:
+                {
+                    Intent intent = new Intent();
+                    intent.putExtra("vendor", data.getStringExtra("vendor"));
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 	private void initData()
 	{
 		category = getIntent().getStringExtra("category");
+        location = getIntent().getStringExtra("location");
 		latitude = getIntent().getDoubleExtra("latitude", -1);
 		longitude = getIntent().getDoubleExtra("longitude", -1);
 	}
@@ -94,23 +120,41 @@ public class PickVendorActivity extends Activity
 				finish();
 			}
 		});
-		
-		TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
-		confirmTextView.setOnClickListener(new View.OnClickListener()
+
+        ImageView searchImageView = (ImageView) findViewById(R.id.searchImageView);
+        searchImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+                if (vendorEditText.getText().toString().isEmpty())
+                {
+                    ReimProgressDialog.show();
+                    sendVendorsRequest();
+                }
+                else if (!location.isEmpty())
+                {
+                    sendVendorsRequest(vendorEditText.getText().toString());
+                }
+                else
+                {
+                    ViewUtils.showToast(PickVendorActivity.this, R.string.no_city);
+                }
+            }
+        });
+
+		TextView addTextView = (TextView) findViewById(R.id.addTextView);
+        addTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				
-				Intent intent = new Intent();
-				intent.putExtra("vendor", vendorEditText.getText().toString());
-				setResult(RESULT_OK, intent);
-				finish();
+				Intent intent = new Intent(PickVendorActivity.this, InputVendorActivity.class);
+                startActivityForResult(intent, INPUT_VENDOR);
 			}
 		});
 		
 		vendorEditText = (EditText) findViewById(R.id.vendorEditText);
-		vendorEditText.setText(getIntent().getStringExtra("vendor"));
 		vendorEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
 		vendorAdapter = new VendorListViewAdapter(this);
@@ -125,6 +169,8 @@ public class PickVendorActivity extends Activity
 				Vendor vendor = vendorAdapter.getItem(position);				
 				Intent intent = new Intent();
 				intent.putExtra("vendor", vendor.getName());
+                intent.putExtra("latitude", vendor.getLatitude());
+                intent.putExtra("longitude", vendor.getLongitude());
 				setResult(RESULT_OK, intent);
 				finish();
 			}
@@ -149,37 +195,11 @@ public class PickVendorActivity extends Activity
 		}
 		else
 		{
-			sendVendorsRequest(category, latitude, longitude);   	
+			sendVendorsRequest();
 		}
     }
-    
-	private void sendDownloadVendorImageRequest(int index)
-	{
-		final Vendor vendor = vendorList.get(index);
-		DownloadImageRequest request = new DownloadImageRequest(vendor.getPhotoURL());
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-				if (response.getBitmap() != null)
-				{
-					vendor.setPhoto(response.getBitmap());
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							vendorAdapter.setVendorList(vendorList);
-							vendorAdapter.notifyDataSetChanged();
-						}
-					});
-				}
-			}
-		});
-	}
 	
-    private void sendVendorsRequest(String category, double latitude, double longitude)
+    private void sendVendorsRequest()
     {
 		GetVendorsRequest request = new GetVendorsRequest(category, latitude, longitude);
 		request.sendRequest(new HttpConnectionCallback()
@@ -193,11 +213,13 @@ public class PickVendorActivity extends Activity
 					{
 						public void run()
 						{
-							vendorList = response.getVendorList();
+							vendorList.clear();
+                            vendorList.addAll(response.getVendorList());
 							
 							if (!vendorList.isEmpty())
 							{
 								vendorAdapter.setVendorList(vendorList);
+                                vendorAdapter.setShowDistance(true);
 								vendorAdapter.notifyDataSetChanged();
 								
 								for (int i = 0 ; i < vendorList.size(); i++)
@@ -229,5 +251,88 @@ public class PickVendorActivity extends Activity
 				}
 			}
 		});
+    }
+
+    private void sendVendorsRequest(String keyword)
+    {
+        ReimProgressDialog.show();
+        GetVendorsRequest request = new GetVendorsRequest(location, keyword);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetVendorsResponse response = new GetVendorsResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+
+                            vendorList.clear();
+                            vendorList.addAll(response.getVendorList());
+
+                            if (!vendorList.isEmpty())
+                            {
+                                vendorAdapter.setVendorList(vendorList);
+                                vendorAdapter.setShowDistance(false);
+                                vendorAdapter.notifyDataSetChanged();
+
+                                for (int i = 0 ; i < vendorList.size(); i++)
+                                {
+                                    Vendor vendor = vendorList.get(i);
+                                    if (vendor.getPhoto() == null && !vendor.getPhotoURL().isEmpty())
+                                    {
+                                        sendDownloadVendorImageRequest(i);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                ViewUtils.showToast(PickVendorActivity.this, R.string.failed_to_get_vendor_no_data);
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(PickVendorActivity.this, R.string.failed_to_get_vendor);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendDownloadVendorImageRequest(int index)
+    {
+        final Vendor vendor = vendorList.get(index);
+        DownloadImageRequest request = new DownloadImageRequest(vendor.getPhotoURL());
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+                if (response.getBitmap() != null)
+                {
+                    vendor.setPhoto(response.getBitmap());
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            vendorAdapter.setVendorList(vendorList);
+                            vendorAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
     }
 }

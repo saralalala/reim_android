@@ -278,7 +278,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                         List<Integer> mineUnreadList = ReimApplication.getMineUnreadList();
                         if (mineUnreadList.contains(report.getServerID()))
                         {
-                            mineUnreadList.remove(new Integer(report.getServerID()));
+                            mineUnreadList.remove(Integer.valueOf(report.getServerID()));
                             ReimApplication.setMineUnreadList(mineUnreadList);
                         }
 
@@ -300,28 +300,30 @@ public class ReportFragment extends Fragment implements OnClickListener
 					else
 					{
 						Report report = showOthersList.get(position - 1);
-
-                        List<Integer> othersUnreadList = ReimApplication.getOthersUnreadList();
-                        if (othersUnreadList.contains(report.getServerID()))
+                        if (report.getSectionName().isEmpty())
                         {
-                            othersUnreadList.remove(new Integer(report.getServerID()));
-                            ReimApplication.setOthersUnreadList(othersUnreadList);
-                        }
+                            List<Integer> othersUnreadList = ReimApplication.getOthersUnreadList();
+                            if (othersUnreadList.contains(report.getServerID()))
+                            {
+                                othersUnreadList.remove(new Integer(report.getServerID()));
+                                ReimApplication.setOthersUnreadList(othersUnreadList);
+                            }
 
-						Bundle bundle = new Bundle();
-						bundle.putSerializable("report", report);
-						Intent intent = new Intent();
-						if (report.canBeApproved())
-						{
-							intent.setClass(getActivity(), ApproveReportActivity.class);
-						}
-						else
-						{
-							bundle.putBoolean("myReport", false);
-							intent.setClass(getActivity(), ShowReportActivity.class);
-						}
-						intent.putExtras(bundle);
-						startActivity(intent);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("report", report);
+                            Intent intent = new Intent();
+                            if (report.canBeApproved())
+                            {
+                                intent.setClass(getActivity(), ApproveReportActivity.class);
+                            }
+                            else
+                            {
+                                bundle.putBoolean("myReport", false);
+                                intent.setClass(getActivity(), ShowReportActivity.class);
+                            }
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
 					}
 				}
 			}
@@ -934,7 +936,51 @@ public class ReportFragment extends Fragment implements OnClickListener
 
 		return resultList;
 	}
-	
+
+    private void buildReportListByStatus()
+    {
+        Report.sortByUpdateDate(othersList);
+
+        List<Report> pendingList = new ArrayList<Report>();
+        List<Report> processedList = new ArrayList<Report>();
+        for (Report report : othersList)
+        {
+            if (report.canBeApproved() || (report.isCC() && report.getManagerList().isEmpty()))
+            {
+                pendingList.add(report);
+            }
+            else
+            {
+                processedList.add(report);
+            }
+        }
+
+        showOthersList.clear();
+
+        Report report = new Report();
+        report.setSectionName(getString(R.string.pending));
+        showOthersList.add(report);
+
+        if (pendingList.isEmpty())
+        {
+            Report noPendingReport = new Report();
+            noPendingReport.setSectionName(getString(R.string.no_pending_reports));
+            showOthersList.add(noPendingReport);
+        }
+        else
+        {
+            showOthersList.addAll(pendingList);
+        }
+
+        if (!processedList.isEmpty())
+        {
+            Report processedReport = new Report();
+            processedReport.setSectionName(getString(R.string.processed));
+            showOthersList.add(processedReport);
+            showOthersList.addAll(processedList);
+        }
+    }
+
 	private void refreshReportListView()
 	{
 		if (ReimApplication.getReportTabIndex() == 0)
@@ -957,9 +1003,17 @@ public class ReportFragment extends Fragment implements OnClickListener
 		{
 			othersList.clear();
 			othersList.addAll(readOthersReportList());
-			showOthersList.clear();
-			showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
-			othersAdapter.set(showOthersList);
+            if (!othersList.isEmpty() && othersFilterStatusList.isEmpty() && othersSortType == SORT_UPDATE_DATE && !othersSortReverse)
+            {
+                buildReportListByStatus();
+            }
+            else
+            {
+                showOthersList.clear();
+                showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
+            }
+
+            othersAdapter.set(showOthersList);
             othersAdapter.setUnreadList(ReimApplication.getOthersUnreadList());
 			reportListView.setAdapter(othersAdapter);
 

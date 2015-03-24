@@ -88,7 +88,7 @@ public class ItemListViewAdapter extends BaseAdapter
 			}
 			else
 			{
-				proveTextView.setVisibility(View.INVISIBLE);					
+				proveTextView.setVisibility(View.GONE);
 			}
 
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);

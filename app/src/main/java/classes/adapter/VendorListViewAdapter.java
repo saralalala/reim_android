@@ -20,6 +20,7 @@ public class VendorListViewAdapter extends BaseAdapter
 	private LayoutInflater layoutInflater;
 	private List<Vendor> defaultList;
 	private List<Vendor> vendorList;
+    private boolean showDistance;
 	
 	public VendorListViewAdapter(Context context)
 	{
@@ -80,7 +81,10 @@ public class VendorListViewAdapter extends BaseAdapter
 			
 			TextView distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);
 			distanceTextView.setText(Integer.toString(vendor.getDistance()) + "米");
-			
+
+            int visibility = showDistance? View.VISIBLE : View.INVISIBLE;
+            distanceTextView.setVisibility(visibility);
+
 			return view;
 		}
 	}
@@ -106,4 +110,9 @@ public class VendorListViewAdapter extends BaseAdapter
 		vendorList.addAll(defaultList);
 		vendorList.addAll(vendors);
 	}
+
+    public void setShowDistance(boolean showDistance)
+    {
+        this.showDistance = showDistance;
+    }
 }

@@ -313,19 +313,22 @@ public class ReimFragment extends Fragment
 				if (deletePopupWindow == null || !deletePopupWindow.isShowing() && position > 0)
 				{
 					Item item = showList.get(position - 1);
-					if (item.getBelongReport() == null || item.getBelongReport().isEditable())
-					{
-						Intent intent = new Intent(getActivity(), EditItemActivity.class);
-						intent.putExtra("itemLocalID", item.getLocalID());
-						intent.putExtra("fromReim", true);
-						startActivity(intent);
-					}
-					else
-					{
-						Intent intent = new Intent(getActivity(), ShowItemActivity.class);
-						intent.putExtra("itemLocalID", item.getLocalID());
-						startActivity(intent);
-					}					
+                    if (item.getConsumedDateGroup().isEmpty())
+                    {
+                        if (item.getBelongReport() == null || item.getBelongReport().isEditable())
+                        {
+                            Intent intent = new Intent(getActivity(), EditItemActivity.class);
+                            intent.putExtra("itemLocalID", item.getLocalID());
+                            intent.putExtra("fromReim", true);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(getActivity(), ShowItemActivity.class);
+                            intent.putExtra("itemLocalID", item.getLocalID());
+                            startActivity(intent);
+                        }
+                    }
 				}
 			}
 		});

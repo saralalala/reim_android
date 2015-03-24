@@ -9,6 +9,8 @@ public class Vendor
 {
 	private String name = "";
 	private String address = "";
+    private double latitude = -1;
+    private double longitude = -1;
 	private int distance = -1;
 	private int photoResID;
 	private String photoURL;
@@ -30,6 +32,8 @@ public class Vendor
 		{
 			setName(jObject.getString("name"));
 			setAddress(jObject.getString("address"));
+            setLatitude(jObject.getDouble("latitude"));
+            setLongitude(jObject.getDouble("longitude"));
 			setDistance(jObject.getInt("distance"));
 			setPhotoURL(jObject.getString("s_photo_url"));
 		}
@@ -57,7 +61,25 @@ public class Vendor
 		this.address = address;
 	}
 
-	public int getDistance()
+    public double getLatitude()
+    {
+        return latitude;
+    }
+    public void setLatitude(double latitude)
+    {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude()
+    {
+        return longitude;
+    }
+    public void setLongitude(double longitude)
+    {
+        this.longitude = longitude;
+    }
+
+    public int getDistance()
 	{
 		return distance;
 	}

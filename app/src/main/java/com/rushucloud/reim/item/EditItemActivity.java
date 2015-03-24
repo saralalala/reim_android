@@ -249,6 +249,8 @@ public class EditItemActivity extends Activity
                 {
                     String vendor = data.getStringExtra("vendor");
                     item.setVendor(vendor);
+                    item.setLatitude(data.getDoubleExtra("latitude", -1));
+                    item.setLongitude(data.getDoubleExtra("longitude", -1));
                     vendorTextView.setText(vendor);
                     Category category = new Category();
                     category.setName(getString(R.string.transport));
@@ -772,8 +774,8 @@ public class EditItemActivity extends Activity
 
                 String category = item.getCategory() != null ? item.getCategory().getName() : getString(R.string.null_string);
                 Intent intent = new Intent(EditItemActivity.this, PickVendorActivity.class);
-                intent.putExtra("vendor", item.getVendor());
                 intent.putExtra("category", category);
+                intent.putExtra("location", item.getLocation());
                 if (currentLocation != null)
                 {
                     intent.putExtra("latitude", currentLocation.getLatitude());
@@ -789,12 +791,13 @@ public class EditItemActivity extends Activity
         String cityName = item.getLocation().isEmpty() ? getString(R.string.no_location) : item.getLocation();
         locationTextView = (TextView) findViewById(R.id.locationTextView);
         locationTextView.setText(cityName);
-        locationTextView.setOnClickListener(new View.OnClickListener()
+
+        LinearLayout locationLayout = (LinearLayout) findViewById(R.id.locationLayout);
+        locationLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
                 hideSoftKeyboard();
-
                 Intent intent = new Intent(EditItemActivity.this, PickLocationActivity.class);
                 intent.putExtra("location", item.getLocation());
                 intent.putExtra("currentCity", currentCity);
@@ -1379,6 +1382,11 @@ public class EditItemActivity extends Activity
             public void run()
             {
                 currentCity = address.getCity();
+                int index = currentCity.indexOf("市");
+                if (index > 0)
+                {
+                    currentCity = currentCity.substring(0, index);
+                }
 
                 runOnUiThread(new Runnable()
                 {

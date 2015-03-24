@@ -42,6 +42,7 @@ public class Report implements Serializable
 	private int itemCount;
 	private String amount;
 	private boolean isCC;
+    private String sectionName = "";
 	
 	public Report()
 	{
@@ -279,7 +280,16 @@ public class Report implements Serializable
 		this.isCC = isCC;
 	}
 
-	public int getStatusBackground()
+    public String getSectionName()
+    {
+        return sectionName;
+    }
+    public void setSectionName(String sectionName)
+    {
+        this.sectionName = sectionName;
+    }
+
+    public int getStatusBackground()
     {
     	switch (getStatus())
 		{
@@ -315,16 +325,6 @@ public class Report implements Serializable
 			default:
 				return R.string.not_available;
 		}
-	}
-	
-	public boolean hasItems()
-	{
-		List<Item> itemList = DBManager.getDBManager().getReportItems(localID);
-		if (itemList.isEmpty())
-		{
-			return false;
-		}
-		return true;
 	}
 
 	public boolean canBeSubmitted()

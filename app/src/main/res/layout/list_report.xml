@@ -24,6 +24,19 @@
             android:textColor="@color/major_light" />
 
         <TextView
+            android:id="@+id/ccTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:gravity="center"
+            android:background="@drawable/status_cc"
+            android:text="@string/status_cc"
+            android:textColor="@color/major_light"
+            android:visibility="gone"/>
+
+        <TextView
             android:id="@+id/senderTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
