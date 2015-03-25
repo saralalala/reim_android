@@ -1,8 +1,8 @@
-package netUtils.Request.Item;
+package netUtils.request.item;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.BaseRequest;
 import netUtils.URLDef;
+import netUtils.request.BaseRequest;
 
 public class DeleteItemRequest extends BaseRequest
 {

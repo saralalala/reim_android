@@ -1,4 +1,4 @@
-package netUtils.Request;
+package netUtils.request;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;

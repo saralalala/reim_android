@@ -24,8 +24,8 @@ import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.Report.AlertRequest;
-import netUtils.Response.Report.AlertResponse;
+import netUtils.request.report.AlertRequest;
+import netUtils.response.report.AlertResponse;
 
 public class ApproveInfoListViewAdapter extends BaseAdapter
 {

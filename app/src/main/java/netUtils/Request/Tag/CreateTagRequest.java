@@ -1,4 +1,4 @@
-package netUtils.Request.Tag;
+package netUtils.request.tag;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -8,8 +8,8 @@ import java.util.List;
 
 import classes.Tag;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.BaseRequest;
 import netUtils.URLDef;
+import netUtils.request.BaseRequest;
 
 public class CreateTagRequest extends BaseRequest
 {

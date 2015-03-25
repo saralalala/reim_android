@@ -26,8 +26,8 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.Report.ApproveReportRequest;
-import netUtils.Response.Report.ApproveReportResponse;
+import netUtils.request.report.ApproveReportRequest;
+import netUtils.response.report.ApproveReportResponse;
 
 public class FollowingActivity extends Activity
 {

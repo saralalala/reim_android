@@ -1,5 +1,5 @@
 
-package netUtils.Response;
+package netUtils.response;
 
 import org.json.JSONArray;
 import org.json.JSONException;

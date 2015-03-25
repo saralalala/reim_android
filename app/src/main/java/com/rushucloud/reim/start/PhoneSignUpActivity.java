@@ -27,12 +27,12 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.RegisterRequest;
-import netUtils.Request.User.SignInRequest;
-import netUtils.Request.User.VerifyCodeRequest;
-import netUtils.Response.User.RegisterResponse;
-import netUtils.Response.User.SignInResponse;
-import netUtils.Response.User.VerifyCodeResponse;
+import netUtils.request.user.RegisterRequest;
+import netUtils.request.user.SignInRequest;
+import netUtils.request.user.VerifyCodeRequest;
+import netUtils.response.user.RegisterResponse;
+import netUtils.response.user.SignInResponse;
+import netUtils.response.user.VerifyCodeResponse;
 
 public class PhoneSignUpActivity extends Activity
 {	

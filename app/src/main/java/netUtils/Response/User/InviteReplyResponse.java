@@ -1,4 +1,4 @@
-package netUtils.Response.User;
+package netUtils.response.user;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,7 +12,7 @@ import classes.Group;
 import classes.Tag;
 import classes.User;
 import classes.utils.Utils;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class InviteReplyResponse extends BaseResponse
 {

@@ -1,9 +1,9 @@
-package netUtils.Response.Item;
+package netUtils.response.item;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class DeleteItemResponse extends BaseResponse
 {

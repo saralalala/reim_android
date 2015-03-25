@@ -1,4 +1,4 @@
-package netUtils.Response.User;
+package netUtils.response.user;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import classes.User;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class SubordinatesInfoResponse extends BaseResponse
 {

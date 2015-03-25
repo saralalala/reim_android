@@ -32,12 +32,12 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Group.GetGroupRequest;
-import netUtils.Request.User.DefaultManagerRequest;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Group.GetGroupResponse;
-import netUtils.Response.User.DefaultManagerResponse;
+import netUtils.request.DownloadImageRequest;
+import netUtils.request.group.GetGroupRequest;
+import netUtils.request.user.DefaultManagerRequest;
+import netUtils.response.DownloadImageResponse;
+import netUtils.response.group.GetGroupResponse;
+import netUtils.response.user.DefaultManagerResponse;
 
 public class ManagerActivity extends Activity
 {

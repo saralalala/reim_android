@@ -22,8 +22,8 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.ForgotPasswordRequest;
-import netUtils.Response.User.ForgotPasswordResponse;
+import netUtils.request.user.ForgotPasswordRequest;
+import netUtils.response.user.ForgotPasswordResponse;
 
 public class EmailFindActivity extends Activity
 {	

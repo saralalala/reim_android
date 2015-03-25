@@ -1,9 +1,9 @@
-package netUtils.Response.Group;
+package netUtils.response.group;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class DeleteGroupResponse extends BaseResponse
 {

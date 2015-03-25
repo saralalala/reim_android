@@ -18,21 +18,21 @@ import android.view.View;
 
 import com.rushucloud.reim.R;
 
-import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
+import classes.utils.ViewUtils;
 
 public class TabItem extends View
 {
 	private static final String INSTANCE_STATE = "instance_state";
 	private static final String STATE_ALPHA = "state_alpha";
 
-	private final int leftPadding = PhoneUtils.dpToPixel(getResources(), 15);
-	private final int rightPadding = PhoneUtils.dpToPixel(getResources(), 15);
-	private final int topPadding = PhoneUtils.dpToPixel(getResources(), 6);
-	private final int centralPadding = PhoneUtils.dpToPixel(getResources(), 2);
-	private final int bottomPadding = PhoneUtils.dpToPixel(getResources(), 3);
+	private final int leftPadding = ViewUtils.dpToPixel(getResources(), 15);
+	private final int rightPadding = ViewUtils.dpToPixel(getResources(), 15);
+	private final int topPadding = ViewUtils.dpToPixel(getResources(), 6);
+	private final int centralPadding = ViewUtils.dpToPixel(getResources(), 2);
+	private final int bottomPadding = ViewUtils.dpToPixel(getResources(), 3);
 	
-	private final int defaultTextSize = PhoneUtils.dpToPixel(getResources(), 10);
+	private final int defaultTextSize = ViewUtils.dpToPixel(getResources(), 10);
 
 	private float alpha = 0;
 	private Bitmap iconSelected;

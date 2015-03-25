@@ -191,7 +191,8 @@
     <string name="about_us">关于我们</string>
     <string name="feedback">意见反馈</string>
     <string name="feedback_code">+86</string>
-    <string name="current_version">当前版本：</string>
+    <string name="version">版本</string>
+    <string name="about_footer">Copyright&#169; 2014&#8211;2015 北京如数科技有限公司</string>
     <string name="about_content">瞎看什么看&#8230;</string>
     
     <string name="share_wechat">微信分享</string>
@@ -305,6 +306,7 @@
     <string name="error_gps_unavailable">定位服务不可用，请打开定位服务或手动输入商家名称</string>
     <string name="error_self_as_manager">不能选择自己作为上级</string>
     <string name="error_no_group">你还没加入任何公司</string>
+    <string name="error_item_not_found">未在本地找到消费</string>
     <string name="error_report_approved">报告已被审批</string>
     <string name="error_report_deleted">报告已被删除</string>
     <string name="error_operation_failed">操作失败</string>

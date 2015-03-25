@@ -18,10 +18,10 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.Tag.CreateTagRequest;
-import netUtils.Request.Tag.ModifyTagRequest;
-import netUtils.Response.Tag.CreateTagResponse;
-import netUtils.Response.Tag.ModifyTagResponse;
+import netUtils.request.tag.CreateTagRequest;
+import netUtils.request.tag.ModifyTagRequest;
+import netUtils.response.tag.CreateTagResponse;
+import netUtils.response.tag.ModifyTagResponse;
 
 public class EditTagActivity extends Activity
 {

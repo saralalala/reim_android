@@ -1,4 +1,4 @@
-package netUtils.Request.User;
+package netUtils.request.user;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.BaseRequest;
 import netUtils.URLDef;
+import netUtils.request.BaseRequest;
 
 public class ForgotPasswordRequest extends BaseRequest
 {

@@ -1,7 +1,7 @@
-package netUtils.Response.User;
+package netUtils.response.user;
 
 import classes.Message;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class GetMessageResponse extends BaseResponse
 {

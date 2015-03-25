@@ -22,8 +22,8 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.Group.ModifyGroupRequest;
-import netUtils.Response.Group.ModifyGroupResponse;
+import netUtils.request.group.ModifyGroupRequest;
+import netUtils.response.group.ModifyGroupResponse;
 
 public class CompanyActivity extends Activity
 {

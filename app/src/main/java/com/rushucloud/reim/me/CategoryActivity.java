@@ -32,10 +32,10 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.Category.DeleteCategoryRequest;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Response.Category.DeleteCategoryResponse;
-import netUtils.Response.DownloadImageResponse;
+import netUtils.request.DownloadImageRequest;
+import netUtils.request.category.DeleteCategoryRequest;
+import netUtils.response.DownloadImageResponse;
+import netUtils.response.category.DeleteCategoryResponse;
 
 public class CategoryActivity extends Activity
 {

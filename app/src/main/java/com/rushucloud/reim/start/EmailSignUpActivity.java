@@ -26,10 +26,10 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.RegisterRequest;
-import netUtils.Request.User.SignInRequest;
-import netUtils.Response.User.RegisterResponse;
-import netUtils.Response.User.SignInResponse;
+import netUtils.request.user.RegisterRequest;
+import netUtils.request.user.SignInRequest;
+import netUtils.response.user.RegisterResponse;
+import netUtils.response.user.SignInResponse;
 
 public class EmailSignUpActivity extends Activity
 {

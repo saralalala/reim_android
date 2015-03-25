@@ -1,10 +1,10 @@
-package netUtils.Response.User;
+package netUtils.response.user;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.User;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class UserInfoResponse extends BaseResponse
 {

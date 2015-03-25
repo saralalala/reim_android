@@ -26,10 +26,10 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.User.GetMessageRequest;
-import netUtils.Request.User.InviteReplyRequest;
-import netUtils.Response.User.GetMessageResponse;
-import netUtils.Response.User.InviteReplyResponse;
+import netUtils.request.user.GetMessageRequest;
+import netUtils.request.user.InviteReplyRequest;
+import netUtils.response.user.GetMessageResponse;
+import netUtils.response.user.InviteReplyResponse;
 
 public class MessageActivity extends Activity
 {

@@ -21,8 +21,8 @@ import classes.utils.AppPreference;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.ChangePasswordRequest;
-import netUtils.Response.User.ChangePasswordResponse;
+import netUtils.request.user.ChangePasswordRequest;
+import netUtils.response.user.ChangePasswordResponse;
 
 public class ChangePasswordActivity extends Activity
 {

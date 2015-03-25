@@ -109,7 +109,7 @@ public class ItemListViewAdapter extends BaseAdapter
 			}
             else if (category == null)
             {
-                categoryImageView.setVisibility(View.INVISIBLE);
+                categoryImageView.setVisibility(View.GONE);
             }
 			
 			return view;

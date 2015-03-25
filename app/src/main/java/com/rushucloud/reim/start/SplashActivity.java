@@ -14,8 +14,8 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.SignInRequest;
-import netUtils.Response.User.SignInResponse;
+import netUtils.request.user.SignInRequest;
+import netUtils.response.user.SignInResponse;
 
 public class SplashActivity extends Activity
 {

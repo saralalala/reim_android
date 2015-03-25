@@ -35,10 +35,10 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.User.ModifyUserRequest;
-import netUtils.Response.UploadImageResponse;
-import netUtils.Response.User.ModifyUserResponse;
+import netUtils.request.UploadImageRequest;
+import netUtils.request.user.ModifyUserRequest;
+import netUtils.response.UploadImageResponse;
+import netUtils.response.user.ModifyUserResponse;
 
 public class CompleteInfoActivity extends Activity
 {

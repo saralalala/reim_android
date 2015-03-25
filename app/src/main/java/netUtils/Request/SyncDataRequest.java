@@ -1,4 +1,4 @@
-package netUtils.Request;
+package netUtils.request;
 
 import java.sql.Date;
 

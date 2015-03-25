@@ -26,10 +26,10 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Report.ApproveInfoRequest;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Report.ApproveInfoResponse;
+import netUtils.request.DownloadImageRequest;
+import netUtils.request.report.ApproveInfoRequest;
+import netUtils.response.DownloadImageResponse;
+import netUtils.response.report.ApproveInfoResponse;
 
 public class ApproveInfoActivity extends Activity
 {

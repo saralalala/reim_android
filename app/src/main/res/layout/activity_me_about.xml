@@ -32,50 +32,32 @@
 
     </RelativeLayout>
 
-	<RelativeLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:orientation="vertical"
-	    android:padding="20dp" >
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/about"/>
 
-	    <TextView
-	        android:id="@+id/appNameTextView"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
-	        android:layout_centerHorizontal="true"
-	        android:layout_marginTop="20dp"
-	        android:text="@string/app_name"
-	        android:textColor="@color/major_dark"
-	        android:textSize="30sp" />
+    <TextView
+        android:id="@+id/currentVersionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="14dp"
+        android:text="@string/version"
+        android:textColor="@color/hint_grey" />
 
-	    <TextView
-	        android:id="@+id/currentVersionTextView"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/appNameTextView"
-	        android:layout_centerHorizontal="true"
-	        android:padding="14dp"
-	        android:text="@string/current_version" />
-
-	    <TextView
-	        android:id="@+id/contentTextView"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/currentVersionTextView"
-	        android:layout_centerHorizontal="true"
-	        android:layout_marginTop="14dp"
-	        android:text="@string/about_content"
-	        android:textSize="20sp" />
-
-	    <TextView
-	        android:id="@+id/textView1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentBottom="true"
-	        android:layout_alignParentLeft="true"
-	        android:text="@string/versionControl" />
-
-    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:gravity="bottom"
+        android:text="@string/about_footer"
+        android:textColor="@color/hint_grey"
+        android:textSize="14sp" />
 
 </LinearLayout>

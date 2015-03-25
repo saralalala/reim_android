@@ -8,7 +8,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
-import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 
 public class ReimPie extends View
 {
@@ -16,7 +16,7 @@ public class ReimPie extends View
 	private RectF pieRect = new RectF();
 	private float occupyAngle = 0;
 	private float startAngle = 0;
-	private int offset = PhoneUtils.dpToPixel(getResources(), 2);
+	private int offset = ViewUtils.dpToPixel(getResources(), 2);
 
 	public ReimPie(Context context, float start, float angle, int diameter, int colorResID)
 	{

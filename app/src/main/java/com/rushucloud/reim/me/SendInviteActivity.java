@@ -23,10 +23,10 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.CommonRequest;
-import netUtils.Request.User.InviteRequest;
-import netUtils.Response.CommonResponse;
-import netUtils.Response.User.InviteResponse;
+import netUtils.request.CommonRequest;
+import netUtils.request.user.InviteRequest;
+import netUtils.response.CommonResponse;
+import netUtils.response.user.InviteResponse;
 
 public class SendInviteActivity extends Activity
 {	

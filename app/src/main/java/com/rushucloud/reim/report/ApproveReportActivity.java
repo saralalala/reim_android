@@ -38,10 +38,10 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.Report.ApproveReportRequest;
-import netUtils.Request.Report.GetReportRequest;
-import netUtils.Response.Report.ApproveReportResponse;
-import netUtils.Response.Report.GetReportResponse;
+import netUtils.request.report.ApproveReportRequest;
+import netUtils.request.report.GetReportRequest;
+import netUtils.response.report.ApproveReportResponse;
+import netUtils.response.report.GetReportResponse;
 
 public class ApproveReportActivity extends Activity
 {

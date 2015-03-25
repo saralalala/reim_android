@@ -1,9 +1,9 @@
-package netUtils.Response.Tag;
+package netUtils.response.tag;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class CreateTagResponse extends BaseResponse
 {

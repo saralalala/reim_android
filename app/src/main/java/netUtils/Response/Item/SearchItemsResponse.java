@@ -1,4 +1,4 @@
-package netUtils.Response.Item;
+package netUtils.response.item;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Item;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class SearchItemsResponse extends BaseResponse
 {

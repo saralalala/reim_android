@@ -33,8 +33,8 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Response.DownloadImageResponse;
+import netUtils.request.DownloadImageRequest;
+import netUtils.response.DownloadImageResponse;
 
 public class PickManagerActivity extends Activity
 {

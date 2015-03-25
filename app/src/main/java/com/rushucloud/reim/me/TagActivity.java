@@ -30,8 +30,8 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.Tag.DeleteTagRequest;
-import netUtils.Response.Tag.DeleteTagResponse;
+import netUtils.request.tag.DeleteTagRequest;
+import netUtils.response.tag.DeleteTagResponse;
 
 public class TagActivity extends Activity
 {

@@ -1,4 +1,4 @@
-package netUtils.Response;
+package netUtils.response.statistics;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,16 +8,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import classes.StatisticsCategory;
+import classes.StatCategory;
+import netUtils.response.BaseResponse;
 
-public class StatisticsResponse extends BaseResponse
+public class MineStatResponse extends BaseResponse
 {
 	private double newAmount;
 	private double ongoingAmount;
-	private List<StatisticsCategory> statCategoryList;
+	private List<StatCategory> statCategoryList;
 	private HashMap<String, Double> monthsData;
 	
-	public StatisticsResponse(Object httpResponse)
+	public MineStatResponse(Object httpResponse)
 	{
 		super(httpResponse);
 	}
@@ -32,11 +33,11 @@ public class StatisticsResponse extends BaseResponse
 			this.newAmount = jObject.getDouble("new");
 			
 			JSONArray cates = jObject.getJSONArray("cates");
-			this.statCategoryList = new ArrayList<StatisticsCategory>();
+			this.statCategoryList = new ArrayList<StatCategory>();
 			for (int i = 0; i < cates.length(); i++)
 			{
 				JSONObject object = cates.getJSONObject(i);				
-				StatisticsCategory category = new StatisticsCategory();
+				StatCategory category = new StatCategory();
 				category.setCategoryID(object.getInt("id"));
 				category.setAmount(object.getDouble("amount"));
 				  
@@ -69,11 +70,6 @@ public class StatisticsResponse extends BaseResponse
 		}
 	}
 
-	public double getTotalAmount()
-	{
-		return newAmount + ongoingAmount;
-	}
-
 	public double getNewAmount()
 	{
 		return newAmount;
@@ -84,7 +80,7 @@ public class StatisticsResponse extends BaseResponse
 		return ongoingAmount;
 	}
 
-	public List<StatisticsCategory> getStatCategoryList()
+	public List<StatCategory> getStatCategoryList()
 	{
 		return statCategoryList;
 	}

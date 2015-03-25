@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -39,7 +38,6 @@ import classes.Tag;
 import classes.adapter.ReportItemListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
@@ -559,12 +557,11 @@ public class PickItemsActivity extends Activity implements OnClickListener
 	{
 		tagLayout.removeAllViews();
 
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 32);
-		int tagVerticalInterval = PhoneUtils.dpToPixel(getResources(), 16);
-		int tagHorizontalInterval = PhoneUtils.dpToPixel(getResources(), 10);
-		int padding = PhoneUtils.dpToPixel(getResources(), 24);
-		int textSize = PhoneUtils.dpToPixel(getResources(), 16);
+		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 32);
+		int tagVerticalInterval = ViewUtils.dpToPixel(getResources(), 16);
+		int tagHorizontalInterval = ViewUtils.dpToPixel(getResources(), 10);
+		int padding = ViewUtils.dpToPixel(getResources(), 24);
+		int textSize = ViewUtils.dpToPixel(getResources(), 16);
 
 		int space = 0;
 		LinearLayout layout = new LinearLayout(PickItemsActivity.this);
@@ -641,12 +638,10 @@ public class PickItemsActivity extends Activity implements OnClickListener
 		int selectedColor = ViewUtils.getColor(R.color.major_dark);
 		int unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		
-		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 32);
-		int iconWidth = PhoneUtils.dpToPixel(getResources(), 50);
-		int iconVerticalInterval = PhoneUtils.dpToPixel(getResources(), 16);
-		int iconHorizontalInterval = PhoneUtils.dpToPixel(getResources(), 18);
+		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 32);
+		int iconWidth = ViewUtils.dpToPixel(getResources(), 50);
+		int iconVerticalInterval = ViewUtils.dpToPixel(getResources(), 16);
+		int iconHorizontalInterval = ViewUtils.dpToPixel(getResources(), 18);
 		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
 		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
 

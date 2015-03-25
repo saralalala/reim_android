@@ -1,4 +1,4 @@
-package netUtils.Response.Report;
+package netUtils.response.report;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,7 +10,7 @@ import java.util.List;
 import classes.Report;
 import classes.User;
 import classes.utils.Utils;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class SubordinatesReportResponse extends BaseResponse
 {

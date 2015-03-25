@@ -32,12 +32,12 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Request.Report.GetReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
-import netUtils.Response.DownloadImageResponse;
-import netUtils.Response.Report.GetReportResponse;
-import netUtils.Response.Report.ModifyReportResponse;
+import netUtils.request.DownloadImageRequest;
+import netUtils.request.report.GetReportRequest;
+import netUtils.request.report.ModifyReportRequest;
+import netUtils.response.DownloadImageResponse;
+import netUtils.response.report.GetReportResponse;
+import netUtils.response.report.ModifyReportResponse;
 
 public class CommentActivity extends Activity
 {

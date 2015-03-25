@@ -22,8 +22,8 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.ResetPasswordRequest;
-import netUtils.Response.User.ResetPasswordResponse;
+import netUtils.request.user.ResetPasswordRequest;
+import netUtils.response.user.ResetPasswordResponse;
 
 public class ResetPasswordActivity extends Activity
 {

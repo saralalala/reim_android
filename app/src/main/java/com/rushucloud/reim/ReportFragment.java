@@ -48,14 +48,14 @@ import classes.widget.ReimProgressDialog;
 import classes.widget.XListView;
 import classes.widget.XListView.IXListViewListener;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.Report.DeleteReportRequest;
-import netUtils.Request.Report.ExportReportRequest;
-import netUtils.Request.Report.SubordinatesReportRequest;
-import netUtils.Response.Report.DeleteReportResponse;
-import netUtils.Response.Report.ExportReportResponse;
-import netUtils.Response.Report.SubordinatesReportResponse;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
+import netUtils.request.report.DeleteReportRequest;
+import netUtils.request.report.ExportReportRequest;
+import netUtils.request.report.SubordinatesReportRequest;
+import netUtils.response.report.DeleteReportResponse;
+import netUtils.response.report.ExportReportResponse;
+import netUtils.response.report.SubordinatesReportResponse;
 
 public class ReportFragment extends Fragment implements OnClickListener
 {

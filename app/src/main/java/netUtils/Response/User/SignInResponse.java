@@ -1,5 +1,5 @@
 
-package netUtils.Response.User;
+package netUtils.response.user;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,7 +12,7 @@ import classes.Category;
 import classes.Group;
 import classes.Tag;
 import classes.User;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class SignInResponse extends BaseResponse
 {

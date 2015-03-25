@@ -1,6 +1,6 @@
-package netUtils.Response.User;
+package netUtils.response.user;
 
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class SignOutResponse extends BaseResponse
 {

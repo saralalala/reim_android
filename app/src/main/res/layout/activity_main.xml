@@ -19,7 +19,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:contentDescription="@string/feedback"
-        android:src="@drawable/feedback" />
+        android:src="@drawable/feedback_drawable" />
 
     <LinearLayout
         android:id="@+id/tabLayout"

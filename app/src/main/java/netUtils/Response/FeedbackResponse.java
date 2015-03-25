@@ -1,4 +1,4 @@
-package netUtils.Response;
+package netUtils.response;
 
 public class FeedbackResponse extends BaseResponse
 {

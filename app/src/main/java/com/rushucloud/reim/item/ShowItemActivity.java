@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,8 +31,8 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Response.DownloadImageResponse;
+import netUtils.request.DownloadImageRequest;
+import netUtils.response.DownloadImageResponse;
 
 public class ShowItemActivity extends Activity
 {
@@ -225,11 +224,10 @@ public class ShowItemActivity extends Activity
 	{
 		invoiceLayout.removeAllViews();
 
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 96);
-		int width = PhoneUtils.dpToPixel(getResources(), 30);
-		int verticalPadding = PhoneUtils.dpToPixel(getResources(), 10);
-		int horizontalPadding = PhoneUtils.dpToPixel(getResources(), 10);
+		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 96);
+		int width = ViewUtils.dpToPixel(getResources(), 30);
+		int verticalPadding = ViewUtils.dpToPixel(getResources(), 10);
+		int horizontalPadding = ViewUtils.dpToPixel(getResources(), 10);
 		int maxCount = (layoutMaxLength + horizontalPadding) / (width + horizontalPadding);
 		horizontalPadding = (layoutMaxLength - width * maxCount) / (maxCount - 1);
 
@@ -303,12 +301,11 @@ public class ShowItemActivity extends Activity
 	{
 		tagLayout.removeAllViews();
 
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 96);
-		int verticalPadding = PhoneUtils.dpToPixel(getResources(), 17);
-		int horizontalPadding = PhoneUtils.dpToPixel(getResources(), 10);
-		int padding = PhoneUtils.dpToPixel(getResources(), 24);
-		int textSize = PhoneUtils.dpToPixel(getResources(), 16);
+		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 96);
+		int verticalPadding = ViewUtils.dpToPixel(getResources(), 17);
+		int horizontalPadding = ViewUtils.dpToPixel(getResources(), 10);
+		int padding = ViewUtils.dpToPixel(getResources(), 24);
+		int textSize = ViewUtils.dpToPixel(getResources(), 16);
 
 		int space = 0;
 		LinearLayout layout = new LinearLayout(this);
@@ -355,12 +352,11 @@ public class ShowItemActivity extends Activity
 	private void refreshMemberView()
 	{
 		memberLayout.removeAllViews();
-		
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 96);
-		int width = PhoneUtils.dpToPixel(getResources(), 50);
-		int verticalPadding = PhoneUtils.dpToPixel(getResources(), 18);
-		int horizontalPadding = PhoneUtils.dpToPixel(getResources(), 18);
+
+		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 96);
+		int width = ViewUtils.dpToPixel(getResources(), 50);
+		int verticalPadding = ViewUtils.dpToPixel(getResources(), 18);
+		int horizontalPadding = ViewUtils.dpToPixel(getResources(), 18);
 		int maxCount = (layoutMaxLength + horizontalPadding) / (width + horizontalPadding);
 		horizontalPadding = (layoutMaxLength - width * maxCount) / (maxCount - 1);
 

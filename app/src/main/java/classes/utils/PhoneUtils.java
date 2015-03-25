@@ -235,22 +235,4 @@ public class PhoneUtils
 			return false;
 		}
 	}
-    
-    public static int dpToPixel(Context context, int dp)
-    {
-    	DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
-    }
-    
-    public static int dpToPixel(Resources resources, int dp)
-    {
-    	DisplayMetrics metrics = resources.getDisplayMetrics();
-    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
-    }
-    
-    public static int dpToPixel(Resources resources, double dp)
-    {
-    	DisplayMetrics metrics = resources.getDisplayMetrics();
-    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, metrics);
-    }
 }

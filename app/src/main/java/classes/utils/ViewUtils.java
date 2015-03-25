@@ -2,11 +2,14 @@ package classes.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Selection;
 import android.text.Spannable;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager;
@@ -24,6 +27,18 @@ import classes.User;
 
 public class ViewUtils
 {
+    public static OnFocusChangeListener onFocusChangeListener = new OnFocusChangeListener()
+    {
+        public void onFocusChange(View v, boolean hasFocus)
+        {
+            if (v instanceof EditText && hasFocus)
+            {
+                Spannable spanText = ((EditText)v).getText();
+                Selection.setSelection(spanText, spanText.length());
+            }
+        }
+    };
+
 	public static int getColor(int colorResID)
 	{
 		return ReimApplication.getContext().getResources().getColor(colorResID);
@@ -65,7 +80,7 @@ public class ViewUtils
 		int backgroundColor = activity.getResources().getColor(android.R.color.transparent);
 		
 		PopupWindow popupWindow = new PopupWindow(activity);
-		popupWindow.setWidth(PhoneUtils.dpToPixel(activity, 210));
+        popupWindow.setWidth(getPhoneWindowWidth(activity) - dpToPixel(activity, 70));
 		popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
 		popupWindow.setContentView(view);
 		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
@@ -104,7 +119,7 @@ public class ViewUtils
         int backgroundColor = activity.getResources().getColor(android.R.color.transparent);
 
         PopupWindow popupWindow = new PopupWindow(activity);
-        popupWindow.setWidth(PhoneUtils.dpToPixel(activity, 210));
+        popupWindow.setWidth(getPhoneWindowWidth(activity) - dpToPixel(activity, 100));
         popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
         popupWindow.setContentView(view);
         popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
@@ -160,15 +175,27 @@ public class ViewUtils
         }
     }
 
-	public static OnFocusChangeListener onFocusChangeListener = new OnFocusChangeListener()
-	{
-		public void onFocusChange(View v, boolean hasFocus)
-		{
-			if (v instanceof EditText && hasFocus)
-			{
-				Spannable spanText = ((EditText)v).getText();
-				Selection.setSelection(spanText, spanText.length());
-			}
-		}
-	};
+    public static int getPhoneWindowWidth(Context context)
+    {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return metrics.widthPixels;
+    }
+
+    public static int dpToPixel(Context context, int dp)
+    {
+    	DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
+    }
+
+    public static int dpToPixel(Resources resources, int dp)
+    {
+    	DisplayMetrics metrics = resources.getDisplayMetrics();
+    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
+    }
+
+    public static int dpToPixel(Resources resources, double dp)
+    {
+    	DisplayMetrics metrics = resources.getDisplayMetrics();
+    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, metrics);
+    }
 }

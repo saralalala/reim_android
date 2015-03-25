@@ -1,4 +1,4 @@
-package netUtils.Response.Report;
+package netUtils.response.report;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import classes.Report;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class SingleSubReportResponse extends BaseResponse
 {

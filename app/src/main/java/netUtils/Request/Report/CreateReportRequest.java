@@ -1,4 +1,4 @@
-package netUtils.Request.Report;
+package netUtils.request.report;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -11,8 +11,8 @@ import classes.User;
 import classes.utils.DBManager;
 import classes.utils.Utils;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.BaseRequest;
 import netUtils.URLDef;
+import netUtils.request.BaseRequest;
 
 public class CreateReportRequest extends BaseRequest
 {

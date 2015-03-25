@@ -1,4 +1,4 @@
-package netUtils.Response;
+package netUtils.response;
 
 import java.io.InputStream;
 

@@ -1,4 +1,4 @@
-package netUtils.Response.Group;
+package netUtils.response.group;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import classes.Group;
 import classes.User;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class GetGroupResponse extends BaseResponse
 {

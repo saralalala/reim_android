@@ -16,7 +16,7 @@ import android.widget.RadioGroup;
 
 import com.rushucloud.reim.R;
 
-import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 
 public class SegmentedGroup extends RadioGroup
 {
@@ -31,7 +31,7 @@ public class SegmentedGroup extends RadioGroup
 		super(context);
 		resources = getResources();
 		mTintColor = resources.getColor(R.color.radio_button_selected_color);
-		borderWidth = PhoneUtils.dpToPixel(resources, 1.5);
+		borderWidth = ViewUtils.dpToPixel(resources, 1.5);
 		textSize = 14;
 	}
 
@@ -40,7 +40,7 @@ public class SegmentedGroup extends RadioGroup
 		super(context, attrs);
 		resources = getResources();
 		mTintColor = resources.getColor(R.color.radio_button_selected_color);
-		borderWidth = PhoneUtils.dpToPixel(resources, 1.5);
+		borderWidth = ViewUtils.dpToPixel(resources, 1.5);
 		textSize = 14;
 	}
 

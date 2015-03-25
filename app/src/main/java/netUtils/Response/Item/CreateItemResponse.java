@@ -1,11 +1,11 @@
-package netUtils.Response.Item;
+package netUtils.response.item;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.utils.Utils;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class CreateItemResponse extends BaseResponse
 {

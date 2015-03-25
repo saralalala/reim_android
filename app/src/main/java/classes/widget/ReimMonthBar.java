@@ -9,7 +9,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
-import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 
 public class ReimMonthBar extends View
 {
@@ -17,8 +17,8 @@ public class ReimMonthBar extends View
 	private RectF rect = new RectF();
 	private double ratio;
 	private int width;
-	private int height = PhoneUtils.dpToPixel(getResources(), 18);
-	private int radius = PhoneUtils.dpToPixel(getResources(), 2);
+	private int height = ViewUtils.dpToPixel(getResources(), 18);
+	private int radius = ViewUtils.dpToPixel(getResources(), 2);
 	
 	public ReimMonthBar(Context context, double ratio)
 	{

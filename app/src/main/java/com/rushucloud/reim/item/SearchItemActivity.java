@@ -29,8 +29,8 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.Item.SearchItemsRequest;
-import netUtils.Response.Item.SearchItemsResponse;
+import netUtils.request.item.SearchItemsRequest;
+import netUtils.response.item.SearchItemsResponse;
 
 public class SearchItemActivity extends Activity
 {

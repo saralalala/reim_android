@@ -1,4 +1,4 @@
-package netUtils.Response.User;
+package netUtils.response.user;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,7 +10,7 @@ import java.util.List;
 import classes.Invite;
 import classes.Message;
 import classes.utils.AppPreference;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class GetMessagesResponse extends BaseResponse
 {

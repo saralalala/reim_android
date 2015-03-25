@@ -1,8 +1,8 @@
-package netUtils.Request.Group;
+package netUtils.request.group;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.BaseRequest;
 import netUtils.URLDef;
+import netUtils.request.BaseRequest;
 
 public class GetGroupRequest extends BaseRequest
 {

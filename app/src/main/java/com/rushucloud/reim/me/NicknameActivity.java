@@ -22,8 +22,8 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.ModifyUserRequest;
-import netUtils.Response.User.ModifyUserResponse;
+import netUtils.request.user.ModifyUserRequest;
+import netUtils.response.user.ModifyUserResponse;
 
 public class NicknameActivity extends Activity
 {

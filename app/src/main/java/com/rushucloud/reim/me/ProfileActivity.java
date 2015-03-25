@@ -39,10 +39,10 @@ import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Request.User.SignOutRequest;
-import netUtils.Response.UploadImageResponse;
-import netUtils.Response.User.SignOutResponse;
+import netUtils.request.UploadImageRequest;
+import netUtils.request.user.SignOutRequest;
+import netUtils.response.UploadImageResponse;
+import netUtils.response.user.SignOutResponse;
 
 public class ProfileActivity extends Activity
 {

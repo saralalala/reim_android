@@ -1,4 +1,4 @@
-package netUtils.Response.Item;
+package netUtils.response.item;
 
 import org.json.JSONArray;
 import org.json.JSONException;

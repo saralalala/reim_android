@@ -1,4 +1,4 @@
-package netUtils.Request.Item;
+package netUtils.request.item;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -13,8 +13,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.BaseRequest;
 import netUtils.URLDef;
+import netUtils.request.BaseRequest;
 
 public class GetVendorsRequest extends BaseRequest
 {

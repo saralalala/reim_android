@@ -68,7 +68,7 @@ public class AppPreference
 		appPreference.setLastSyncTime(preferences.getInt("lastSyncTime", 0));
 		appPreference.setLastGetStatTime(preferences.getInt("lastGetStatTime", 0));
 		
-		appPreference.setAppDirectory(Environment.getExternalStorageDirectory() + "/如数云报销");
+		appPreference.setAppDirectory(Environment.getExternalStorageDirectory() + "/cloudbaoxiao");
 		appPreference.setAppImageDirectory(appPreference.getAppDirectory() + "/images");
 		appPreference.setAvatarImageDirectory(appPreference.getAppImageDirectory() + "/avatar");
 		appPreference.setInvoiceImageDirectory(appPreference.getAppImageDirectory() + "/invoice");

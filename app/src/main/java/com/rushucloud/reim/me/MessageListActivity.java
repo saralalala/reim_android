@@ -25,8 +25,8 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.XListView;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.GetMessagesRequest;
-import netUtils.Response.User.GetMessagesResponse;
+import netUtils.request.user.GetMessagesRequest;
+import netUtils.response.user.GetMessagesResponse;
 
 public class MessageListActivity extends Activity
 {

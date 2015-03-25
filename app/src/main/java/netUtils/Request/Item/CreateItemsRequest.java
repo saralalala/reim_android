@@ -1,4 +1,4 @@
-package netUtils.Request.Item;
+package netUtils.request.item;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -14,8 +14,8 @@ import classes.Tag;
 import classes.User;
 import classes.utils.Utils;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.BaseRequest;
 import netUtils.URLDef;
+import netUtils.request.BaseRequest;
 
 public class CreateItemsRequest extends BaseRequest
 {

@@ -44,20 +44,20 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.Item.CreateItemRequest;
-import netUtils.Request.Item.ModifyItemRequest;
-import netUtils.Request.Report.CreateReportRequest;
-import netUtils.Request.Report.GetReportRequest;
-import netUtils.Request.Report.ModifyReportRequest;
-import netUtils.Request.UploadImageRequest;
-import netUtils.Response.Item.CreateItemResponse;
-import netUtils.Response.Item.ModifyItemResponse;
-import netUtils.Response.Report.CreateReportResponse;
-import netUtils.Response.Report.GetReportResponse;
-import netUtils.Response.Report.ModifyReportResponse;
-import netUtils.Response.UploadImageResponse;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
+import netUtils.request.UploadImageRequest;
+import netUtils.request.item.CreateItemRequest;
+import netUtils.request.item.ModifyItemRequest;
+import netUtils.request.report.CreateReportRequest;
+import netUtils.request.report.GetReportRequest;
+import netUtils.request.report.ModifyReportRequest;
+import netUtils.response.UploadImageResponse;
+import netUtils.response.item.CreateItemResponse;
+import netUtils.response.item.ModifyItemResponse;
+import netUtils.response.report.CreateReportResponse;
+import netUtils.response.report.GetReportResponse;
+import netUtils.response.report.ModifyReportResponse;
 
 public class EditReportActivity extends Activity
 {

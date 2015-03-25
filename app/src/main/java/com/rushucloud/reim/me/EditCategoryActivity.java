@@ -3,7 +3,6 @@ package com.rushucloud.reim.me;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,10 +27,10 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.Category.CreateCategoryRequest;
-import netUtils.Request.Category.ModifyCategoryRequest;
-import netUtils.Response.Category.CreateCategoryResponse;
-import netUtils.Response.Category.ModifyCategoryResponse;
+import netUtils.request.category.CreateCategoryRequest;
+import netUtils.request.category.ModifyCategoryRequest;
+import netUtils.response.category.CreateCategoryResponse;
+import netUtils.response.category.ModifyCategoryResponse;
 
 public class EditCategoryActivity extends Activity
 {
@@ -127,13 +126,13 @@ public class EditCategoryActivity extends Activity
 	{		
 		getActionBar().hide();
 
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int padding = PhoneUtils.dpToPixel(getResources(), 32);
-		iconWidth = PhoneUtils.dpToPixel(getResources(), 40);
-		iconHorizontalInterval = PhoneUtils.dpToPixel(getResources(), 20);
-		iconMaxCount = (metrics.widthPixels - padding + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
-		iconHorizontalInterval = (metrics.widthPixels - padding - iconWidth * iconMaxCount) / (iconMaxCount - 1);
-		iconVerticalInterval = PhoneUtils.dpToPixel(getResources(), 20);
+		int widthPixels = ViewUtils.getPhoneWindowWidth(this);
+		int padding = ViewUtils.dpToPixel(getResources(), 32);
+		iconWidth = ViewUtils.dpToPixel(getResources(), 40);
+		iconHorizontalInterval = ViewUtils.dpToPixel(getResources(), 20);
+		iconMaxCount = (widthPixels - padding + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
+		iconHorizontalInterval = (widthPixels - padding - iconWidth * iconMaxCount) / (iconMaxCount - 1);
+		iconVerticalInterval = ViewUtils.dpToPixel(getResources(), 20);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()

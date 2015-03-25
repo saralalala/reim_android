@@ -15,7 +15,6 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -71,8 +70,8 @@ import classes.widget.ReimProgressDialog;
 import cn.beecloud.BCLocation;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Response.DownloadImageResponse;
+import netUtils.request.DownloadImageRequest;
+import netUtils.response.DownloadImageResponse;
 
 public class EditItemActivity extends Activity
 {
@@ -333,7 +332,15 @@ public class EditItemActivity extends Activity
             newItem = false;
             MobclickAgent.onEvent(this, "UMENG_EDIT_ITEM");
             item = dbManager.getItemByLocalID(itemLocalID);
-            originInvoiceList = new ArrayList<Image>(item.getInvoices());
+            if (item == null)
+            {
+                ViewUtils.showToast(this, R.string.error_item_not_found);
+                goBack();
+            }
+            else
+            {
+                originInvoiceList = new ArrayList<Image>(item.getInvoices());
+            }
         }
     }
 
@@ -940,14 +947,12 @@ public class EditItemActivity extends Activity
     private void refreshInvoiceView()
     {
         invoiceLayout.removeAllViews();
-
         removeList.clear();
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int layoutMaxLength = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
-        int width = PhoneUtils.dpToPixel(getResources(), 40);
-        int verticalInterval = PhoneUtils.dpToPixel(getResources(), 5);
-        int horizontalInterval = PhoneUtils.dpToPixel(getResources(), 5);
+        int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 126);
+        int width = ViewUtils.dpToPixel(getResources(), 40);
+        int verticalInterval = ViewUtils.dpToPixel(getResources(), 5);
+        int horizontalInterval = ViewUtils.dpToPixel(getResources(), 5);
         int maxCount = (layoutMaxLength + horizontalInterval) / (width + horizontalInterval);
         horizontalInterval = (layoutMaxLength - width * maxCount) / (maxCount - 1);
 
@@ -1085,12 +1090,11 @@ public class EditItemActivity extends Activity
         {
             tagLayout.removeAllViews();
 
-            DisplayMetrics metrics = getResources().getDisplayMetrics();
-            int layoutMaxWidth = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
-            int verticalInterval = PhoneUtils.dpToPixel(getResources(), 17);
-            int horizontalInterval = PhoneUtils.dpToPixel(getResources(), 10);
-            int padding = PhoneUtils.dpToPixel(getResources(), 24);
-            int textSize = PhoneUtils.dpToPixel(getResources(), 16);
+            int layoutMaxWidth = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 126);
+            int verticalInterval = ViewUtils.dpToPixel(getResources(), 17);
+            int horizontalInterval = ViewUtils.dpToPixel(getResources(), 10);
+            int padding = ViewUtils.dpToPixel(getResources(), 24);
+            int textSize = ViewUtils.dpToPixel(getResources(), 16);
 
             int space = 0;
             LinearLayout layout = new LinearLayout(this);
@@ -1139,11 +1143,10 @@ public class EditItemActivity extends Activity
     {
         memberLayout.removeAllViews();
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int layoutMaxWidth = metrics.widthPixels - PhoneUtils.dpToPixel(getResources(), 126);
-        int width = PhoneUtils.dpToPixel(getResources(), 50);
-        int verticalInterval = PhoneUtils.dpToPixel(getResources(), 18);
-        int horizontalInterval = PhoneUtils.dpToPixel(getResources(), 18);
+        int layoutMaxWidth = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 126);
+        int width = ViewUtils.dpToPixel(getResources(), 50);
+        int verticalInterval = ViewUtils.dpToPixel(getResources(), 18);
+        int horizontalInterval = ViewUtils.dpToPixel(getResources(), 18);
         int maxCount = (layoutMaxWidth + horizontalInterval) / (width + horizontalInterval);
         horizontalInterval = (layoutMaxWidth - width * maxCount) / (maxCount - 1);
 
@@ -1419,10 +1422,10 @@ public class EditItemActivity extends Activity
 
     private void resizePicker()
     {
-        int yearWidth = PhoneUtils.dpToPixel(this, 60);
-        int width = PhoneUtils.dpToPixel(this, 40);
-        int dateMargin = PhoneUtils.dpToPixel(this, 15);
-        int timeMargin = PhoneUtils.dpToPixel(this, 5);
+        int yearWidth = ViewUtils.dpToPixel(this, 60);
+        int width = ViewUtils.dpToPixel(this, 40);
+        int dateMargin = ViewUtils.dpToPixel(this, 15);
+        int timeMargin = ViewUtils.dpToPixel(this, 5);
 
         LinearLayout datePickerContainer = (LinearLayout) datePicker.getChildAt(0);
         LinearLayout dateSpinner = (LinearLayout) datePickerContainer.getChildAt(0);

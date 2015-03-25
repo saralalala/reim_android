@@ -11,6 +11,7 @@ public class URLDef
 	public static String URL_EVENT = "/events";
 	public static String URL_FEEDBACK = "/feedback";
 	public static String URL_STATISTICS = "/stat";
+    public static String URL_STATISTICS_OTHERS = "/stat_others";
 	public static String URL_SYNC = "/sync";
 	public static String URL_STATIC = "/static";
 	public static String URL_IMAGE = "/images";

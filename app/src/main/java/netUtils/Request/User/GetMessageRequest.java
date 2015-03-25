@@ -1,8 +1,8 @@
-package netUtils.Request.User;
+package netUtils.request.user;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.BaseRequest;
 import netUtils.URLDef;
+import netUtils.request.BaseRequest;
 
 public class GetMessageRequest extends BaseRequest
 {

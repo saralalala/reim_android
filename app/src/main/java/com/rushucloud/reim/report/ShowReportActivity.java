@@ -29,8 +29,8 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.Report.GetReportRequest;
-import netUtils.Response.Report.GetReportResponse;
+import netUtils.request.report.GetReportRequest;
+import netUtils.response.report.GetReportResponse;
 
 public class ShowReportActivity extends Activity
 {

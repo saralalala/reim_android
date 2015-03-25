@@ -1,8 +1,8 @@
-package netUtils.Request.Category;
+package netUtils.request.category;
 
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.BaseRequest;
 import netUtils.URLDef;
+import netUtils.request.BaseRequest;
 
 public class DeleteCategoryRequest extends BaseRequest
 {

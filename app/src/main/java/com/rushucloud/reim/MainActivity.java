@@ -33,14 +33,14 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.TabItem;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.EventsRequest;
-import netUtils.Request.FeedbackRequest;
-import netUtils.Request.Group.GetGroupRequest;
-import netUtils.Response.EventsResponse;
-import netUtils.Response.FeedbackResponse;
-import netUtils.Response.Group.GetGroupResponse;
 import netUtils.UDPClient;
 import netUtils.UDPConnectionCallback;
+import netUtils.request.EventsRequest;
+import netUtils.request.FeedbackRequest;
+import netUtils.request.group.GetGroupRequest;
+import netUtils.response.EventsResponse;
+import netUtils.response.FeedbackResponse;
+import netUtils.response.group.GetGroupResponse;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener
 {

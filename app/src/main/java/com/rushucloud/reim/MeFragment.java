@@ -54,9 +54,9 @@ import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.Request.DownloadImageRequest;
-import netUtils.Response.DownloadImageResponse;
 import netUtils.URLDef;
+import netUtils.request.DownloadImageRequest;
+import netUtils.response.DownloadImageResponse;
 
 public class MeFragment extends Fragment
 {
@@ -300,6 +300,12 @@ public class MeFragment extends Fragment
 			{
 		        sendDownloadAvatarRequest();
 			}
+
+            User manager = currentUser.getDefaultManager();
+            if (manager != null)
+            {
+                managerTextView.setText(manager.getNickname());
+            }
 		}
 		else
 		{
@@ -310,19 +316,20 @@ public class MeFragment extends Fragment
         String company = currentGroup != null? currentGroup.getName() : getString(R.string.no_company);
         companyTextView.setText(company);
 
-        User manager = currentUser.getDefaultManager();
-        if (manager != null)
-        {
-            managerTextView.setText(manager.getNickname());
-        }
-
         showTip();
 	}
 
     public  void showTip()
     {
-        int visibility = ReimApplication.hasMessages() ? View.VISIBLE : View.GONE;
-        tipImageView.setVisibility(visibility);
+        if (tipImageView == null)
+        {
+            tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
+        }
+        else
+        {
+            int visibility = ReimApplication.hasMessages() ? View.VISIBLE : View.GONE;
+            tipImageView.setVisibility(visibility);
+        }
     }
 
     private void sendDownloadAvatarRequest()
@@ -361,16 +368,16 @@ public class MeFragment extends Fragment
 						});						
 					}
 				}
-				else
+				else if (getUserVisibleHint())
 				{
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ViewUtils.showToast(getActivity(), R.string.failed_to_download_avatar);
-						}
-					});						
-				}
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ViewUtils.showToast(getActivity(), R.string.failed_to_download_avatar);
+                        }
+                    });
+                }
 			}
 		});
     }

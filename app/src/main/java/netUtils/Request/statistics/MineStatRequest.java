@@ -1,12 +1,13 @@
-package netUtils.Request;
+package netUtils.request.statistics;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
+import netUtils.request.BaseRequest;
 
-public class StatisticsRequest extends BaseRequest
+public class MineStatRequest extends BaseRequest
 {
 
-	public StatisticsRequest()
+	public MineStatRequest()
 	{
 		super();
 

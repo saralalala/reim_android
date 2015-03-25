@@ -2,7 +2,6 @@ package classes.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,7 +20,7 @@ import com.rushucloud.reim.SingleImageActivity;
 import java.util.ArrayList;
 
 import classes.utils.ExtraCallBack;
-import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 
 public class GalleryAdapter extends BaseAdapter
 {
@@ -40,9 +39,7 @@ public class GalleryAdapter extends BaseAdapter
 		this.imageLoader = imageLoader;
 		this.layoutInflater = LayoutInflater.from(context);
 		this.maxChosenCount = maxCount;
-		
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		this.height = (metrics.widthPixels - PhoneUtils.dpToPixel(context, 2) * 4) / 3;
+		this.height = (ViewUtils.getPhoneWindowWidth(context) - ViewUtils.dpToPixel(context, 2) * 4) / 3;
 		this.callBack = callBack;
 	}
 

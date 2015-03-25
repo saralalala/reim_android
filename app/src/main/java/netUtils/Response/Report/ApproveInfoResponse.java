@@ -1,4 +1,4 @@
-package netUtils.Response.Report;
+package netUtils.response.report;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import classes.ApproveInfo;
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class ApproveInfoResponse extends BaseResponse
 {

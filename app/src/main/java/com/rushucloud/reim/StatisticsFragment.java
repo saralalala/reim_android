@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import classes.Category;
-import classes.StatisticsCategory;
+import classes.StatCategory;
 import classes.adapter.StatisticsListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -30,8 +30,8 @@ import classes.widget.ReimProgressDialog;
 import classes.widget.XListView;
 import classes.widget.XListView.IXListViewListener;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.StatisticsRequest;
-import netUtils.Response.StatisticsResponse;
+import netUtils.request.statistics.MineStatRequest;
+import netUtils.response.statistics.MineStatResponse;
 
 public class StatisticsFragment extends Fragment
 {
@@ -165,8 +165,9 @@ public class StatisticsFragment extends Fragment
 		}		
 	}
 	
-	private void drawPie(double totalAmount, double ongoingAmount, double newAmount)
+	private void drawPie(double ongoingAmount, double newAmount)
 	{
+        double totalAmount = ongoingAmount + newAmount;
 		double ongoingRatio, newRatio;
 		if (totalAmount == 0)
 		{
@@ -269,11 +270,11 @@ public class StatisticsFragment extends Fragment
 		}
 	}
 	
-	private void drawCategory(List<StatisticsCategory> categoryList)
+	private void drawCategory(List<StatCategory> categoryList)
 	{
 		if (!categoryList.isEmpty())
 		{			
-			for (StatisticsCategory category : categoryList)
+			for (StatCategory category : categoryList)
 			{
 				Category localCategory = dbManager.getCategory(category.getCategoryID());
 				if (localCategory != null)
@@ -300,12 +301,12 @@ public class StatisticsFragment extends Fragment
 
 	private void sendGetDataRequest()
 	{
-		StatisticsRequest request = new StatisticsRequest();
+		MineStatRequest request = new MineStatRequest();
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
 			{
-				final StatisticsResponse response = new StatisticsResponse(httpResponse);
+				final MineStatResponse response = new MineStatResponse(httpResponse);
 				if (response.getStatus())
 				{
 					hasData = true;
@@ -318,7 +319,7 @@ public class StatisticsFragment extends Fragment
 						public void run()
 						{
 							resetView();
-							drawPie(response.getTotalAmount(), response.getOngoingAmount(), response.getNewAmount());
+							drawPie(response.getOngoingAmount(), response.getNewAmount());
 							drawMonthBar(response.getMonthsData());
 							drawCategory(response.getStatCategoryList());
 							adapter.notifyDataSetChanged();

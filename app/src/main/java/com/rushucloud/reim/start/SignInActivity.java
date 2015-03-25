@@ -28,8 +28,8 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.User.SignInRequest;
-import netUtils.Response.User.SignInResponse;
+import netUtils.request.user.SignInRequest;
+import netUtils.response.user.SignInResponse;
 
 public class SignInActivity extends Activity
 {

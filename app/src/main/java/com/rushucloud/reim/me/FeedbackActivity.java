@@ -20,8 +20,8 @@ import com.umeng.analytics.MobclickAgent;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import netUtils.HttpConnectionCallback;
-import netUtils.Request.FeedbackRequest;
-import netUtils.Response.FeedbackResponse;
+import netUtils.request.FeedbackRequest;
+import netUtils.response.FeedbackResponse;
 
 public class FeedbackActivity extends Activity
 {

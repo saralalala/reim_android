@@ -1,4 +1,4 @@
-package netUtils.Request;
+package netUtils.request;
 
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;

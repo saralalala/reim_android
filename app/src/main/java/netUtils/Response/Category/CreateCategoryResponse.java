@@ -1,9 +1,9 @@
-package netUtils.Response.Category;
+package netUtils.response.category;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import netUtils.Response.BaseResponse;
+import netUtils.response.BaseResponse;
 
 public class CreateCategoryResponse extends BaseResponse
 {
