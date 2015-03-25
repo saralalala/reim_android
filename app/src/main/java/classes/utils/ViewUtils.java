@@ -138,7 +138,7 @@ public class ViewUtils
 
     public static void setImageViewBitmap(User user, ImageView imageView)
     {
-        if (!user.getAvatarPath().isEmpty())
+        if (user != null && !user.getAvatarPath().isEmpty())
         {
             Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
             if (bitmap != null)
@@ -150,7 +150,7 @@ public class ViewUtils
 
     public static void setImageViewBitmap(Category category, ImageView imageView)
     {
-        if (!category.getIconPath().isEmpty())
+        if (category != null && !category.getIconPath().isEmpty())
         {
             Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
             if (bitmap != null)

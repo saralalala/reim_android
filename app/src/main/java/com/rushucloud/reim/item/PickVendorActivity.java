@@ -126,20 +126,7 @@ public class PickVendorActivity extends Activity
         {
             public void onClick(View v)
             {
-                hideSoftKeyboard();
-                if (vendorEditText.getText().toString().isEmpty())
-                {
-                    ReimProgressDialog.show();
-                    sendVendorsRequest();
-                }
-                else if (!location.isEmpty())
-                {
-                    sendVendorsRequest(vendorEditText.getText().toString());
-                }
-                else
-                {
-                    ViewUtils.showToast(PickVendorActivity.this, R.string.no_city);
-                }
+                searchVendors();
             }
         });
 
@@ -156,6 +143,17 @@ public class PickVendorActivity extends Activity
 		
 		vendorEditText = (EditText) findViewById(R.id.vendorEditText);
 		vendorEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        vendorEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
+                {
+                    searchVendors();
+                }
+                return false;
+            }
+        });
 		
 		vendorAdapter = new VendorListViewAdapter(this);
 		ListView vendorListView = (ListView) findViewById(R.id.vendorListView);
@@ -198,7 +196,25 @@ public class PickVendorActivity extends Activity
 			sendVendorsRequest();
 		}
     }
-	
+
+    private void searchVendors()
+    {
+        hideSoftKeyboard();
+        if (vendorEditText.getText().toString().isEmpty())
+        {
+            ReimProgressDialog.show();
+            sendVendorsRequest();
+        }
+        else if (!location.isEmpty())
+        {
+            sendVendorsRequest(vendorEditText.getText().toString());
+        }
+        else
+        {
+            ViewUtils.showToast(PickVendorActivity.this, R.string.no_city);
+        }
+    }
+
     private void sendVendorsRequest()
     {
 		GetVendorsRequest request = new GetVendorsRequest(category, latitude, longitude);

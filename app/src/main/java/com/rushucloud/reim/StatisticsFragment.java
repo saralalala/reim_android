@@ -104,12 +104,12 @@ public class StatisticsFragment extends Fragment
 		mainAmountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
 		unitTextView = (TextView) view.findViewById(R.id.unitTextView);
+
+        newPercentTextView = (TextView) view.findViewById(R.id.newPercentTextView);
+        newPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
 		ongoingPercentTextView = (TextView) view.findViewById(R.id.ongoingPercentTextView);
 		ongoingPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-		
-		newPercentTextView = (TextView) view.findViewById(R.id.newPercentTextView);
-		newPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 
 		totalTextView = (TextView) view.findViewById(R.id.totalTextView);
 		totalUnitTextView = (TextView) view.findViewById(R.id.totalUnitTextView);
@@ -198,17 +198,17 @@ public class StatisticsFragment extends Fragment
 
 		float totalAngle = 262;
 		float startAngle = 139;
+        float ongoingAngle = (float) ongoingRatio * totalAngle / 100;
 		float newAngle = (float) newRatio * totalAngle / 100;
-		float ongoingAngle = (float) ongoingRatio * totalAngle / 100;
+
+        // Draw new pie
+        ReimPie newReimPie = new ReimPie(getActivity(), startAngle, newAngle, statContainer.getWidth(), R.color.stat_new);
+        statContainer.addView(newReimPie);
 
 		// Draw ongoing pie
+        startAngle += newAngle;
 		ReimPie ongoingReimPie = new ReimPie(getActivity(), startAngle, ongoingAngle, statContainer.getWidth(), R.color.stat_ongoing);
-		statContainer.addView(ongoingReimPie);	
-
-		// Draw new pie
-		startAngle += ongoingAngle;
-		ReimPie newReimPie = new ReimPie(getActivity(), startAngle, newAngle, statContainer.getWidth(), R.color.stat_new);
-		statContainer.addView(newReimPie);
+		statContainer.addView(ongoingReimPie);
 	}
 
 	private void drawMonthBar(HashMap<String, Double> monthsData)

@@ -945,7 +945,7 @@ public class ReportFragment extends Fragment implements OnClickListener
         List<Report> processedList = new ArrayList<Report>();
         for (Report report : othersList)
         {
-            if (report.canBeApproved() || (report.isCC() && report.getManagerList().isEmpty()))
+            if (report.canBeApproved() || (report.isCC() && report.getStatus() == Report.STATUS_SUBMITTED && report.getManagerList().isEmpty()))
             {
                 pendingList.add(report);
             }
