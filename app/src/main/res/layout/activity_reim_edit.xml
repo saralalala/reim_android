@@ -334,7 +334,6 @@
 		                android:id="@+id/typeTextView"
 		                android:layout_width="wrap_content"
 		                android:layout_height="wrap_content"
-		                android:layout_marginRight="10dp"
 		                android:textColor="@color/font_major_dark"
 		                android:textSize="18sp" />
 	
@@ -342,6 +341,7 @@
 		                android:id="@+id/approvedTextView"
 		                android:layout_width="wrap_content"
 		                android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
 		                android:gravity="center"
 		                android:text="@string/status_prove_ahead_approved"
 		                android:textColor="@color/item_approved"

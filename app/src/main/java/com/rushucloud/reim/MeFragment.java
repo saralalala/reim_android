@@ -19,11 +19,11 @@ import com.mechat.mechatlibrary.MCUserConfig;
 import com.rushucloud.reim.me.AboutActivity;
 import com.rushucloud.reim.me.CategoryActivity;
 import com.rushucloud.reim.me.FeedbackActivity;
+import com.rushucloud.reim.me.InviteActivity;
 import com.rushucloud.reim.me.InvoiceTitleActivity;
 import com.rushucloud.reim.me.ManagerActivity;
 import com.rushucloud.reim.me.MessageListActivity;
 import com.rushucloud.reim.me.ProfileActivity;
-import com.rushucloud.reim.me.SendInviteActivity;
 import com.rushucloud.reim.me.TagActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -175,7 +175,7 @@ public class MeFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(getActivity(), SendInviteActivity.class));
+				startActivity(new Intent(getActivity(), InviteActivity.class));
 			}
 		});
 
@@ -287,7 +287,7 @@ public class MeFragment extends Fragment
 	}
 
 	private void loadProfileView()
-	{	
+	{
 		currentUser = appPreference.getCurrentUser();
         Group currentGroup = appPreference.getCurrentGroup();
 		
@@ -305,6 +305,10 @@ public class MeFragment extends Fragment
             if (manager != null)
             {
                 managerTextView.setText(manager.getNickname());
+            }
+            else
+            {
+                managerTextView.setText(R.string.null_string);
             }
 		}
 		else

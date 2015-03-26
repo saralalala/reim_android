@@ -13,10 +13,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.me.InviteActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
@@ -133,51 +136,76 @@ public class PickCCActivity extends Activity
 				}
 
 				Intent intent = new Intent();
-				intent.putExtra("ccs", (Serializable) adapter.getChosenList());
+				intent.putExtra("ccs", (Serializable) chosenList);
 				setResult(RESULT_OK, intent);
 				finish();
 			}
 		});
 
-        ccEditText = (EditText) findViewById(R.id.ccEditText);
-        ccEditText.addTextChangedListener(new TextWatcher()
+        ListView ccListView = (ListView) findViewById(R.id.ccListView);
+
+        if (userList.isEmpty())
         {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            LinearLayout inviteContainer = (LinearLayout) findViewById(R.id.inviteContainer);
+            inviteContainer.setVisibility(View.VISIBLE);
+
+            RelativeLayout inviteLayout = (RelativeLayout) findViewById(R.id.inviteLayout);
+            inviteLayout.setOnClickListener(new View.OnClickListener()
             {
+                public void onClick(View v)
+                {
+                    startActivity(new Intent(PickCCActivity.this, InviteActivity.class));
+                }
+            });
 
-            }
+            LinearLayout searchContainer = (LinearLayout) findViewById(R.id.searchContainer);
+            searchContainer.setVisibility(View.GONE);
 
-            public void onTextChanged(CharSequence s, int start, int before, int count)
+            ccListView.setVisibility(View.GONE);
+        }
+        else
+        {
+            ccEditText = (EditText) findViewById(R.id.ccEditText);
+            ccEditText.addTextChangedListener(new TextWatcher()
             {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after)
+                {
 
-            }
+                }
 
-            public void afterTextChanged(Editable s)
+                public void onTextChanged(CharSequence s, int start, int before, int count)
+                {
+
+                }
+
+                public void afterTextChanged(Editable s)
+                {
+                    filterList();
+                }
+            });
+
+            adapter = new MemberListViewAdapter(this, userList, chosenList);
+            ccListView.setAdapter(adapter);
+            ccListView.setOnItemClickListener(new OnItemClickListener()
             {
-                filterList();
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
+                    hideSoftKeyboard();
+                    adapter.setCheck(position);
+                    adapter.notifyDataSetChanged();
+                    chosenList.clear();
+                    chosenList.addAll(adapter.getChosenList());
+                }
+            });
+
+            for (User user : userList)
+            {
+                if (user.hasUndownloadedAvatar())
+                {
+                    sendDownloadAvatarRequest(user);
+                }
             }
-        });
-
-		adapter = new MemberListViewAdapter(this, userList, chosenList);
-		ListView ccListView = (ListView) findViewById(R.id.ccListView);
-		ccListView.setAdapter(adapter);
-    	ccListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-                hideSoftKeyboard();
-				adapter.setCheck(position);
-				adapter.notifyDataSetChanged();
-			}
-		});
-
-		for (User user : userList)
-		{
-			if (user.hasUndownloadedAvatar())
-			{
-				sendDownloadAvatarRequest(user);
-			}
-		}
+        }
 	}
 
     private void filterList()
@@ -232,7 +260,10 @@ public class PickCCActivity extends Activity
 
     private void hideSoftKeyboard()
     {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(ccEditText.getWindowToken(), 0);
+        if (ccEditText != null)
+        {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(ccEditText.getWindowToken(), 0);
+        }
     }
 }

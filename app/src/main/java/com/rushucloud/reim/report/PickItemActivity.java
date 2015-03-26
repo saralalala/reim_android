@@ -42,7 +42,7 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
-public class PickItemsActivity extends Activity implements OnClickListener
+public class PickItemActivity extends Activity implements OnClickListener
 {
     private static final int SORT_CONSUMED_DATE = 0;
 	private static final int SORT_AMOUNT = 1;
@@ -119,7 +119,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("PickItemsActivity");
+		MobclickAgent.onPageStart("PickItemActivity");
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setContext(this);
         refreshData();
@@ -129,7 +129,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("PickItemsActivity");
+		MobclickAgent.onPageEnd("PickItemActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -280,7 +280,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 			{
 				if (position == 0)
 				{
-					Intent intent = new Intent(PickItemsActivity.this, EditItemActivity.class);
+					Intent intent = new Intent(PickItemActivity.this, EditItemActivity.class);
 					intent.putExtra("fromPickItems", true);
 					startActivityForResult(intent, NEW_ITEM);
 				}
@@ -360,7 +360,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
         {
             public void onClick(View v)
             {
-                MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_TIME");
+                MobclickAgent.onEvent(PickItemActivity.this, "UMENG_SHEET_TIME");
                 selectSortDateRadio();
                 if (tabIndex == 0)
                 {
@@ -394,7 +394,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
         {
             public void onClick(View v)
             {
-                MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_AMOUNT");
+                MobclickAgent.onEvent(PickItemActivity.this, "UMENG_SHEET_AMOUNT");
                 selectSortAmountRadio();
                 if (tabIndex == 0)
                 {
@@ -510,11 +510,11 @@ public class PickItemsActivity extends Activity implements OnClickListener
 		{
 			if (isProveAhead)
 			{
-				adapter = new ReportItemListViewAdapter(PickItemsActivity.this, proveAheadShowList, proveChosenList);
+				adapter = new ReportItemListViewAdapter(PickItemActivity.this, proveAheadShowList, proveChosenList);
 			}
 			else
 			{
-				adapter = new ReportItemListViewAdapter(PickItemsActivity.this, consumedShowList, consumedChosenList);
+				adapter = new ReportItemListViewAdapter(PickItemActivity.this, consumedShowList, consumedChosenList);
 			}
 			itemListView.setAdapter(adapter);			
 		}
@@ -564,7 +564,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 		int textSize = ViewUtils.dpToPixel(getResources(), 16);
 
 		int space = 0;
-		LinearLayout layout = new LinearLayout(PickItemsActivity.this);
+		LinearLayout layout = new LinearLayout(PickItemActivity.this);
 		for (int i = 0; i < tagList.size(); i++)
 		{
 			String name = tagList.get(i).getName();
@@ -573,12 +573,12 @@ public class PickItemsActivity extends Activity implements OnClickListener
 			if (tabIndex == 0)
 			{
 				int layoutID = consumedTempTagCheck[i] ? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
-				view = View.inflate(PickItemsActivity.this, layoutID, null);
+				view = View.inflate(PickItemActivity.this, layoutID, null);
 			}
 			else
 			{
 				int layoutID = proveTempTagCheck[i] ? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
-				view = View.inflate(PickItemsActivity.this, layoutID, null);
+				view = View.inflate(PickItemActivity.this, layoutID, null);
 			}
 
 			final int index = i;
@@ -588,7 +588,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 			{
 				public void onClick(View v)
 				{
-					MobclickAgent.onEvent(PickItemsActivity.this, "UMENG_SHEET_TAG");
+					MobclickAgent.onEvent(PickItemActivity.this, "UMENG_SHEET_TAG");
 					if (tabIndex == 0)
 					{
 						consumedTempTagCheck[index] = !consumedTempTagCheck[index];			
@@ -609,7 +609,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 			
 			if (space - width - tagHorizontalInterval <= 0)
 			{
-				layout = new LinearLayout(PickItemsActivity.this);
+				layout = new LinearLayout(PickItemActivity.this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 				params.topMargin = tagVerticalInterval;
 				layout.setLayoutParams(params);
@@ -645,12 +645,12 @@ public class PickItemsActivity extends Activity implements OnClickListener
 		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
 		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
 
-		LinearLayout layout = new LinearLayout(PickItemsActivity.this);
+		LinearLayout layout = new LinearLayout(PickItemActivity.this);
 		for (int i = 0; i < categoryList.size(); i++)
 		{
 			if (i % iconMaxCount == 0)
 			{
-				layout = new LinearLayout(PickItemsActivity.this);
+				layout = new LinearLayout(PickItemActivity.this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 				params.topMargin = iconVerticalInterval;
 				layout.setLayoutParams(params);
@@ -662,7 +662,7 @@ public class PickItemsActivity extends Activity implements OnClickListener
 			Category category = categoryList.get(i);
 
 			final int index = i;
-			View view = View.inflate(PickItemsActivity.this, R.layout.grid_category, null);
+			View view = View.inflate(PickItemActivity.this, R.layout.grid_category, null);
 			view.setOnClickListener(new OnClickListener()
 			{
 				public void onClick(View v)

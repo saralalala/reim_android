@@ -370,7 +370,7 @@ public class EditReportActivity extends Activity
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("report", report);
 				bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
-				Intent intent = new Intent(EditReportActivity.this, PickItemsActivity.class);
+				Intent intent = new Intent(EditReportActivity.this, PickItemActivity.class);
 				intent.putExtras(bundle);
 				startActivityForResult(intent, PICK_ITEMS);
 			}

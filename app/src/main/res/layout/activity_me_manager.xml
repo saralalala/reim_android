@@ -141,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:text="@string/all_members"
+            android:text="@string/my_colleagues"
             android:textColor="@color/font_list_item_header"
             android:textSize="14sp" />
 

@@ -339,7 +339,7 @@ public class User implements Serializable
 
 	public static List<User> removeUserFromList(List<User> userList, int userID)
 	{
-		if (userList == null)
+		if (userList == null || userList.isEmpty())
 		{
 			return new ArrayList<User>();
 		}

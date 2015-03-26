@@ -28,7 +28,7 @@ import netUtils.request.user.InviteRequest;
 import netUtils.response.CommonResponse;
 import netUtils.response.user.InviteResponse;
 
-public class SendInviteActivity extends Activity
+public class InviteActivity extends Activity
 {	
 	private EditText usernameEditText;
 	
@@ -42,7 +42,7 @@ public class SendInviteActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("SendInviteActivity");		
+		MobclickAgent.onPageStart("InviteActivity");
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setContext(this);
 	}
@@ -50,7 +50,7 @@ public class SendInviteActivity extends Activity
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("SendInviteActivity");
+		MobclickAgent.onPageEnd("InviteActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -84,20 +84,20 @@ public class SendInviteActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				MobclickAgent.onEvent(SendInviteActivity.this, "UMENG_MINE_INVITE");
+				MobclickAgent.onEvent(InviteActivity.this, "UMENG_MINE_INVITE");
 
 				String username = usernameEditText.getText().toString();
 				if (!PhoneUtils.isNetworkConnected())
 				{
-					ViewUtils.showToast(SendInviteActivity.this, R.string.error_send_invite_network_unavailable);			
+					ViewUtils.showToast(InviteActivity.this, R.string.error_send_invite_network_unavailable);
 				}
 				if (username.isEmpty())
 				{
-					ViewUtils.showToast(SendInviteActivity.this, R.string.error_email_or_phone_empty);
+					ViewUtils.showToast(InviteActivity.this, R.string.error_email_or_phone_empty);
 				}
 				else if (!Utils.isEmailOrPhone(username))
 				{
-					ViewUtils.showToast(SendInviteActivity.this, R.string.error_email_or_phone_wrong_format);
+					ViewUtils.showToast(InviteActivity.this, R.string.error_email_or_phone_wrong_format);
 				}
 				else
 				{
@@ -137,7 +137,7 @@ public class SendInviteActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(SendInviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
+							ViewUtils.showToast(InviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
 						}
 					});
 				}
@@ -189,7 +189,7 @@ public class SendInviteActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(SendInviteActivity.this, R.string.succeed_in_sending_invite);
+							ViewUtils.showToast(InviteActivity.this, R.string.succeed_in_sending_invite);
 							finish();
 						}
 					});
@@ -201,7 +201,7 @@ public class SendInviteActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(SendInviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
+							ViewUtils.showToast(InviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
 						}
 					});
 				}

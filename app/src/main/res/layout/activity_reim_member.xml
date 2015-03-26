@@ -43,7 +43,37 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/inviteLayout"
+        android:layout_width="match_parent"
+        android:layout_height="66.5dp"
+        android:orientation="vertical"
+        android:background="@drawable/list_item_drawable"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical"
+            android:text="@string/invite"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:contentDescription="@string/next"
+            android:src="@drawable/next" />
+
+    </RelativeLayout>
+
     <LinearLayout
+        android:id="@+id/searchContainer"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal" >
@@ -84,26 +114,10 @@
         android:layout_height="0.5dp"
         layout="@layout/view_divider"/>
 
-    <RelativeLayout
+    <ListView
+        android:id="@+id/userListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <ListView
-            android:id="@+id/userListView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:listSelector="@drawable/list_item_drawable" />
-        
-        <TextView
-            android:id="@+id/noMemberTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="5dp"
-            android:text="@string/no_member"
-            android:textColor="@color/hint_light_grey"
-            android:textSize="16sp" />
-
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:listSelector="@drawable/list_item_drawable" />
 
 </LinearLayout>

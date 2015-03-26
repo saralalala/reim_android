@@ -52,6 +52,7 @@ public class ManagerActivity extends Activity
 
 	private int currentGroupID;
 	private User currentUser;
+    private User manager;
 	private List<User> userList;
     private List<User> showList = new ArrayList<User>();
     private List<User> chosenList;
@@ -61,6 +62,17 @@ public class ManagerActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_me_manager);
 		initView();
+        ReimProgressDialog.setContext(this);
+        if (PhoneUtils.isNetworkConnected())
+        {
+            sendGetGroupRequest();
+        }
+        else
+        {
+            initData();
+            refreshManagerView();
+            initListView();
+        }
 	}
 
 	protected void onResume()
@@ -68,16 +80,6 @@ public class ManagerActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ManagerActivity");		
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-		if (PhoneUtils.isNetworkConnected())
-		{
-			sendGetGroupRequest();
-		}
-		else
-		{
-			initData();
-			refreshListView();
-		}
 	}
 
 	protected void onPause()
@@ -100,11 +102,13 @@ public class ManagerActivity extends Activity
 	{
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
-		
-		currentUser = appPreference.getCurrentUser();		
-    	currentGroupID = appPreference.getCurrentGroupID();
-    	
+
+        currentGroupID = appPreference.getCurrentGroupID();
+		currentUser = appPreference.getCurrentUser();
+        manager = currentUser != null? currentUser.getDefaultManager() : null;
+
 		userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUser.getServerID());
+        User.sortByNickname(userList);
         chosenList = currentUser.buildBaseManagerList();
 	}
 	
@@ -128,12 +132,6 @@ public class ManagerActivity extends Activity
 			{
 				MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_BOSS_SETTING_SAVE");
                 hideSoftKeyboard();
-
-				User manager = null;
-                if (!adapter.getChosenList().isEmpty())
-                {
-                    manager = adapter.getChosenList().get(0);
-                }
 				
 				if (!PhoneUtils.isNetworkConnected())
 				{
@@ -188,27 +186,42 @@ public class ManagerActivity extends Activity
 				MobclickAgent.onEvent(ManagerActivity.this, "UMENG_MINE_BOSS_SETTING_CHOOSE");
                 hideSoftKeyboard();
 
-                chosenList.clear();
-                chosenList.add(adapter.getItem(position));
+                User user = adapter.getItem(position);
+                if (!chosenList.contains(user))
+                {
+                    chosenList.clear();
+                    chosenList.add(adapter.getItem(position));
+                    manager = user;
+                }
+                else
+                {
+                    chosenList.clear();
+                    manager = null;
+                }
 				adapter.setChosenList(chosenList);
 				adapter.notifyDataSetChanged();
 
-                User manager = chosenList.get(0);
-                nicknameTextView.setText(manager.getNickname());
-                ViewUtils.setImageViewBitmap(manager, avatarImageView);
+                refreshManagerView();
 			}
 		});	
 	}
 
-	private void refreshListView()
-	{
-        if (!chosenList.isEmpty())
+    private void refreshManagerView()
+    {
+        if (manager != null)
         {
-            User manager = chosenList.get(0);
             nicknameTextView.setText(manager.getNickname());
             ViewUtils.setImageViewBitmap(manager, avatarImageView);
         }
+        else
+        {
+            nicknameTextView.setText(R.string.manager_not_set);
+            avatarImageView.setImageResource(R.drawable.default_avatar);
+        }
+    }
 
+	private void initListView()
+	{
 		adapter = new MemberListViewAdapter(this, userList, chosenList);
 		managerListView.setAdapter(adapter);
 		
@@ -269,9 +282,8 @@ public class ManagerActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							initData();
-							refreshListView();
-                            User.sortByNickname(userList);
-                            filterList();
+                            refreshManagerView();
+							initListView();
 						}
 					});
 				}
@@ -354,6 +366,11 @@ public class ManagerActivity extends Activity
 							userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUser.getServerID());
                             User.sortByNickname(userList);
                             filterList();
+                            if (manager != null && manager.equals(user))
+                            {
+                                manager = user;
+                                refreshManagerView();
+                            }
 						}
 					});	
 				}

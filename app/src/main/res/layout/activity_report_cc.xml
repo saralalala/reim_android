@@ -44,46 +44,106 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/inviteContainer"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="horizontal" >
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:contentDescription="@string/search"
-            android:src="@drawable/search" />
+        <RelativeLayout
+            android:id="@+id/inviteLayout"
+            android:layout_width="match_parent"
+            android:layout_height="66.5dp"
+            android:orientation="vertical"
+            android:background="@drawable/list_item_drawable">
 
-        <EditText
-            android:id="@+id/ccEditText"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/invite"
+                android:textColor="@color/font_major_dark"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:contentDescription="@string/next"
+                android:src="@drawable/next" />
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_alignParentBottom="true"
+                layout="@layout/view_divider"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/noMemberTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@null"
-            android:hint="@string/input_cc"
-            android:inputType="text" />
+            android:gravity="center"
+            android:text="@string/no_member"
+            android:textColor="@color/hint_light_grey"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/searchContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:contentDescription="@string/search"
+                android:src="@drawable/search" />
+
+            <EditText
+                android:id="@+id/ccEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@null"
+                android:hint="@string/input_cc"
+                android:inputType="text" />
+
+        </LinearLayout>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            layout="@layout/view_divider"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:background="@color/list_item_header" />
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            layout="@layout/view_divider"/>
 
     </LinearLayout>
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        layout="@layout/view_divider"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:background="@color/list_item_header" />
-
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        layout="@layout/view_divider"/>
-    
     <ListView
         android:id="@+id/ccListView"
         android:layout_width="match_parent"

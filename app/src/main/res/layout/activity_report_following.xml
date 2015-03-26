@@ -44,19 +44,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@+id/divider" >
+        android:layout_below="@+id/divider"
+        android:background="@color/major_light" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/major_light" >
+            android:orientation="horizontal" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="22dp"
                 android:text="@string/submit_to"
                 android:textColor="@color/hint_grey"
                 android:textSize="14sp" />
@@ -65,10 +64,10 @@
                 android:id="@+id/managerTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="22dp"
                 android:layout_marginLeft="22dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="22dp"
+                android:paddingTop="22dp"
+                android:paddingBottom="22dp"
                 android:textColor="@color/font_major_dark"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -83,14 +82,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/major_light" >
+            android:orientation="horizontal" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="22dp"
                 android:text="@string/cc"
                 android:textColor="@color/hint_grey"
                 android:textSize="14sp" />
@@ -99,10 +96,10 @@
                 android:id="@+id/ccTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="22dp"
                 android:layout_marginLeft="22dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="22dp"
+                android:paddingTop="22dp"
+                android:paddingBottom="22dp"
                 android:textColor="@color/font_major_dark"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -111,6 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             layout="@layout/view_divider" />
+
     </LinearLayout>
             
 	<include                 

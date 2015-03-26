@@ -87,8 +87,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 		TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
 		
 		Category category = categoryList.get(groupPosition);
-		
-		iconImageView.setImageResource(R.drawable.default_icon);
+
         ViewUtils.setImageViewBitmap(category, iconImageView);
 		
 		if (category.getName().isEmpty())
@@ -117,8 +116,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 		TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
 		
 		Category category = subCategoryList.get(groupPosition).get(childPosition);
-		
-		iconImageView.setImageResource(R.drawable.default_icon);
+
         ViewUtils.setImageViewBitmap(category, iconImageView);
 		
 		if (category.getName().isEmpty())

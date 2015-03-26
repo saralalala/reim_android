@@ -49,7 +49,6 @@ public class MemberListViewAdapter extends BaseAdapter
 		ImageView imageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
 		TextView nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
 
-		imageView.setImageResource(R.drawable.default_avatar);
         ViewUtils.setImageViewBitmap(user, imageView);
 
 		if (user.getNickname().isEmpty())

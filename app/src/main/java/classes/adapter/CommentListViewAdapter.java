@@ -46,8 +46,6 @@ public class CommentListViewAdapter extends BaseAdapter
 		
 		Comment comment = commentList.get(position);
 		
-		avatarImageView.setImageResource(R.drawable.default_avatar);
-		
 		User user = dbManager.getUser(comment.getReviewer().getServerID());
 		if (user != null)
 		{

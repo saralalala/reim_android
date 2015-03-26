@@ -13,10 +13,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.me.InviteActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
@@ -113,59 +116,64 @@ public class PickMemberActivity extends Activity
 			}
 		});
 
-        memberEditText = (EditText) findViewById(R.id.memberEditText);
-        memberEditText.addTextChangedListener(new TextWatcher()
+        if (userList.size() == 1)
         {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            RelativeLayout inviteLayout = (RelativeLayout) findViewById(R.id.inviteLayout);
+            inviteLayout.setOnClickListener(new View.OnClickListener()
             {
+                public void onClick(View v)
+                {
+                    startActivity(new Intent(PickMemberActivity.this, InviteActivity.class));
+                }
+            });
+            inviteLayout.setVisibility(View.VISIBLE);
 
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count)
+            LinearLayout searchContainer = (LinearLayout) findViewById(R.id.searchContainer);
+            searchContainer.setVisibility(View.GONE);
+        }
+        else
+        {
+            memberEditText = (EditText) findViewById(R.id.memberEditText);
+            memberEditText.addTextChangedListener(new TextWatcher()
             {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after)
+                {
 
-            }
+                }
 
-            public void afterTextChanged(Editable s)
+                public void onTextChanged(CharSequence s, int start, int before, int count)
+                {
+
+                }
+
+                public void afterTextChanged(Editable s)
+                {
+                    filterList();
+                }
+            });
+        }
+
+        adapter = new MemberListViewAdapter(this, userList, chosenList);
+
+        ListView userListView = (ListView) findViewById(R.id.userListView);
+        userListView.setAdapter(adapter);
+        userListView.setOnItemClickListener(new OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                filterList();
+                hideSoftKeyboard();
+                adapter.setCheck(position);
+                adapter.notifyDataSetChanged();
             }
         });
 
-    	ListView userListView = (ListView) findViewById(R.id.userListView);
-		TextView noMemberTextView = (TextView) findViewById(R.id.noMemberTextView);
-		
-		if (userList.isEmpty())
-		{
-			noMemberTextView.setVisibility(View.VISIBLE);
-			userListView.setVisibility(View.INVISIBLE);
-		}
-		else
-		{
-			noMemberTextView.setVisibility(View.INVISIBLE);
-			userListView.setVisibility(View.VISIBLE);
-			
-			adapter = new MemberListViewAdapter(this, userList, chosenList);
-
-	    	userListView.setAdapter(adapter);
-	    	userListView.setOnItemClickListener(new OnItemClickListener()
-			{
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-				{
-                    hideSoftKeyboard();
-					adapter.setCheck(position);
-					adapter.notifyDataSetChanged();
-				}
-			});
-		}
-
-		for (User user : userList)
-		{
-			if (user.hasUndownloadedAvatar())
-			{
-				sendDownloadAvatarRequest(user);
-			}
-		}
+        for (User user : userList)
+        {
+            if (user.hasUndownloadedAvatar())
+            {
+                sendDownloadAvatarRequest(user);
+            }
+        }
 	}
 
     private void filterList()
@@ -217,7 +225,10 @@ public class PickMemberActivity extends Activity
 
     private void hideSoftKeyboard()
     {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(memberEditText.getWindowToken(), 0);
+        if (memberEditText != null)
+        {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(memberEditText.getWindowToken(), 0);
+        }
     }
 }

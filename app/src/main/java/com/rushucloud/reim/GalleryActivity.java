@@ -25,6 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,6 +51,20 @@ public class GalleryActivity extends Activity
 		initView();
 		loadImages();
 	}
+
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("GalleryActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("GalleryActivity");
+        MobclickAgent.onPause(this);
+    }
 
 	private void initImageLoader()
 	{

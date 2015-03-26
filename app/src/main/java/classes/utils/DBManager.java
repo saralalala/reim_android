@@ -635,30 +635,40 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		List<User> userList = new ArrayList<User>();
 		try
-		{
+        {
+            if (groupServerID != -1 && groupServerID != 0)
+            {
+                Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_id, avatar_path, privilege, manager_id, " +
+                                                          "group_id, admin, local_updatedt, server_updatedt " +
+                                                          "FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
+                while (cursor.moveToNext())
+                {
+                    User user = new User();
+                    user.setServerID(getIntFromCursor(cursor, "server_id"));
+                    user.setEmail(getStringFromCursor(cursor, "email"));
+                    user.setPhone(getStringFromCursor(cursor, "phone"));
+                    user.setNickname(getStringFromCursor(cursor, "nickname"));
+                    user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
+                    user.setAvatarPath(getStringFromCursor(cursor, "avatar_path"));
+                    user.setPrivilege(getIntFromCursor(cursor, "privilege"));
+                    user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
+                    user.setGroupID(getIntFromCursor(cursor, "group_id"));
+                    user.setIsAdmin(getBooleanFromCursor(cursor, "admin"));
+                    user.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+                    user.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+                    userList.add(user);
+                }
 
-			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_id, avatar_path, privilege, manager_id, " +
-											  "group_id, admin, local_updatedt, server_updatedt " +
-					                          "FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
-			while (cursor.moveToNext())
-			{
-				User user = new User();
-				user.setServerID(getIntFromCursor(cursor, "server_id"));
-				user.setEmail(getStringFromCursor(cursor, "email"));
-				user.setPhone(getStringFromCursor(cursor, "phone"));
-				user.setNickname(getStringFromCursor(cursor, "nickname"));
-				user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
-				user.setAvatarPath(getStringFromCursor(cursor, "avatar_path"));
-				user.setPrivilege(getIntFromCursor(cursor, "privilege"));
-				user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
-				user.setGroupID(getIntFromCursor(cursor, "group_id"));
-				user.setIsAdmin(getBooleanFromCursor(cursor, "admin"));
-				user.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				user.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
-				userList.add(user);
-			}
-			
-			cursor.close();
+                cursor.close();
+            }
+            else
+            {
+                User user = AppPreference.getAppPreference().getCurrentUser();
+                if (user != null)
+                {
+                    userList.add(user);
+                }
+            }
 			return userList;
 		}
 		catch (Exception e)

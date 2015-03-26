@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.rushucloud.reim.report.ApproveReportActivity;
 import com.rushucloud.reim.report.EditReportActivity;
+import com.rushucloud.reim.report.ExportActivity;
 import com.rushucloud.reim.report.ShowReportActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -595,19 +596,23 @@ public class ReportFragment extends Fragment implements OnClickListener
 			{
 				operationPopupWindow.dismiss();
 				
-		    	final Report report = showMineList.get(reportIndex);
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(getActivity(), R.string.error_export_network_unavailable);
-				}
-				else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
-				{
-					ViewUtils.showToast(getActivity(), R.string.error_export_not_finished);					
-				}
-				else
-				{
-					showExportDialog(report.getServerID());
-				}
+		    	Report report = showMineList.get(reportIndex);
+                if (report.getServerID() == -1 || report.getServerID() == 0)
+                {
+                    ViewUtils.showToast(getActivity(), R.string.error_export_report_not_uploaded);
+                }
+                else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
+                {
+                    ViewUtils.showToast(getActivity(), R.string.error_export_not_finished);
+                }
+                else
+                {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("report", report);
+                    Intent intent = new Intent(getActivity(), ExportActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
 			}
 		});
 		
@@ -1128,48 +1133,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 		
 		ViewUtils.dimBackground(getActivity());
     }
-    
-	private void showExportDialog(final int reportID)
-    {
-		View view = View.inflate(getActivity(), R.layout.dialog_report_export, null);
-		
-		final EditText emailEditText = (EditText) view.findViewById(R.id.emailEditText);
-		emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		
-		User user = appPreference.getCurrentUser();
-		if (!user.getEmail().isEmpty())
-		{
-			emailEditText.setText(user.getEmail());
-		}
-		emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		emailEditText.requestFocus();
-		
-    	Builder builder = new Builder(getActivity());
-    	builder.setTitle(R.string.export_report);
-    	builder.setView(view);
-    	builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-								{
-									public void onClick(DialogInterface dialog, int which)
-									{
-										String email = emailEditText.getText().toString();
-										if (email.isEmpty())
-										{
-											ViewUtils.showToast(getActivity(), R.string.error_email_empty);
-										}
-										else if (!Utils.isEmail(email))
-										{
-											ViewUtils.showToast(getActivity(), R.string.error_email_wrong_format);
-										}
-										else
-										{
-											sendExportReportRequest(reportID, email);
-										}
-									}
-								});
-    	builder.setNegativeButton(R.string.cancel, null);
-    	builder.create().show();
-    }
-	
+
 	private void sendDeleteReportRequest(final Report report)
 	{
 		ReimProgressDialog.show();
@@ -1200,41 +1164,6 @@ public class ReportFragment extends Fragment implements OnClickListener
 				            ViewUtils.showToast(getActivity(), R.string.failed_to_delete, response.getErrorMessage());
 						}
 					});		
-				}
-			}
-		});
-	}
-
-	private void sendExportReportRequest(int reportID, String email)
-	{
-		ReimProgressDialog.show();
-		ExportReportRequest request = new ExportReportRequest(reportID, email);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				ExportReportResponse response = new ExportReportResponse(httpResponse);
-				if (response.getStatus())
-				{
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(getActivity(), R.string.succeed_in_exporting);
-						}
-					});
-				}
-				else
-				{
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(getActivity(), R.string.failed_to_export);
-						}
-					});
 				}
 			}
 		});

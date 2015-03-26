@@ -65,6 +65,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 		TextView statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
 		LinearLayout timeLayout = (LinearLayout) convertView.findViewById(R.id.timeLayout);
 		ImageView alarmImageView = (ImageView) convertView.findViewById(R.id.alarmImageView);
+        LinearLayout divider = (LinearLayout) convertView.findViewById(R.id.divider);
 		
 		ApproveInfo info = getItem(position);
 				
@@ -106,9 +107,17 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 		if (position == infoList.size() - 1)
 		{
 			lowerLayout.setVisibility(View.GONE);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) divider.getLayoutParams();
+            params.setMargins(0, 0, 0, 0);
 		}
+        else
+        {
+            ApproveInfo nextInfo = infoList.get(position + 1);
+            int margin = info.getStep() != nextInfo.getStep()? 0 : 64;
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) divider.getLayoutParams();
+            params.setMargins(ViewUtils.dpToPixel(activity, margin), 0, 0, 0);
+        }
 
-		avatarImageView.setImageResource(R.drawable.default_avatar);
 		nicknameTextView.setText(R.string.not_available);	
 
 		final User user = dbManager.getUser(info.getUserID());

@@ -153,6 +153,7 @@ public class ViewUtils
 
     public static void setImageViewBitmap(User user, ImageView imageView)
     {
+        imageView.setImageResource(R.drawable.default_avatar);
         if (user != null && !user.getAvatarPath().isEmpty())
         {
             Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
@@ -165,6 +166,7 @@ public class ViewUtils
 
     public static void setImageViewBitmap(Category category, ImageView imageView)
     {
+        imageView.setImageResource(R.drawable.default_icon);
         if (category != null && !category.getIconPath().isEmpty())
         {
             Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());

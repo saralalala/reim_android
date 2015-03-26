@@ -31,14 +31,14 @@ public class WelcomeActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("WelcomActivity");		
+		MobclickAgent.onPageStart("WelcomeActivity");
 		MobclickAgent.onResume(this);
 	}
 
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("WelcomActivity");
+		MobclickAgent.onPageEnd("WelcomeActivity");
 		MobclickAgent.onPause(this);
 	}
 
