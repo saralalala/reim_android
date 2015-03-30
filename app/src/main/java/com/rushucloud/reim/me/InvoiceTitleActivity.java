@@ -2,6 +2,7 @@ package com.rushucloud.reim.me;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,7 +37,7 @@ public class InvoiceTitleActivity extends Activity
 		MobclickAgent.onPause(this);
 	}
 	
-	public boolean onKeyDown(int keyCode, KeyEvent event)
+	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{

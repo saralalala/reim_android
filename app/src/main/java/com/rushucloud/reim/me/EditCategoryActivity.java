@@ -3,6 +3,7 @@ package com.rushucloud.reim.me;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,7 +47,7 @@ public class EditCategoryActivity extends Activity
 	private List<Boolean> checkList;
 	private Category category;
 	
-	private int iconWidth;
+	private int iconSideLength;
 	private int iconHorizontalInterval;
 	private int iconVerticalInterval;
 	private int iconMaxCount;
@@ -74,7 +75,7 @@ public class EditCategoryActivity extends Activity
 		MobclickAgent.onPause(this);
 	}
 	
-	public boolean onKeyDown(int keyCode, KeyEvent event)
+	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
@@ -128,10 +129,10 @@ public class EditCategoryActivity extends Activity
 
 		int widthPixels = ViewUtils.getPhoneWindowWidth(this);
 		int padding = ViewUtils.dpToPixel(getResources(), 32);
-		iconWidth = ViewUtils.dpToPixel(getResources(), 40);
+		iconSideLength = ViewUtils.dpToPixel(getResources(), 40);
 		iconHorizontalInterval = ViewUtils.dpToPixel(getResources(), 20);
-		iconMaxCount = (widthPixels - padding + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
-		iconHorizontalInterval = (widthPixels - padding - iconWidth * iconMaxCount) / (iconMaxCount - 1);
+		iconMaxCount = (widthPixels - padding + iconHorizontalInterval) / (iconSideLength + iconHorizontalInterval);
+		iconHorizontalInterval = (widthPixels - padding - iconSideLength * iconMaxCount) / (iconMaxCount - 1);
 		iconVerticalInterval = ViewUtils.dpToPixel(getResources(), 20);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -266,7 +267,7 @@ public class EditCategoryActivity extends Activity
 				imageView.setImageResource(iconList.get(i));
 			}
 			
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(iconWidth, iconWidth);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(iconSideLength, iconSideLength);
 			if (i % iconMaxCount != 0)
 			{
 				params.leftMargin = iconHorizontalInterval;

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -34,7 +35,6 @@ import netUtils.response.item.SearchItemsResponse;
 
 public class SearchItemActivity extends Activity
 {
-	private SearchView searchView;
 	private ItemListViewAdapter adapter;
 	
 	private List<Item> itemList = null;
@@ -62,7 +62,7 @@ public class SearchItemActivity extends Activity
 		MobclickAgent.onPause(this);
 	}
 	
-	public boolean onKeyDown(int keyCode, KeyEvent event)
+	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
@@ -76,7 +76,7 @@ public class SearchItemActivity extends Activity
 		getMenuInflater().inflate(R.menu.searchview, menu);
 		MenuItem menuItem = menu.getItem(0);
 		menuItem.expandActionView();
-		searchView = (SearchView)MenuItemCompat.getActionView(menuItem);
+        SearchView searchView = (SearchView)MenuItemCompat.getActionView(menuItem);
 		searchView.setQueryHint(getString(R.string.input_keyword));
 		searchView.setOnQueryTextListener(new OnQueryTextListener()
 		{

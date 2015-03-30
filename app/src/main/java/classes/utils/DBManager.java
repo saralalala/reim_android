@@ -2232,15 +2232,26 @@ public class DBManager extends SQLiteOpenHelper
 	public double getReportAmount(int reportLocalID)
 	{
 		double amount = 0;
-		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id = ?", 
-												new String[]{Integer.toString(reportLocalID)});
-		while (cursor.moveToNext())
-		{
-			amount += getDoubleFromCursor(cursor, "amount");
-		}
+		Cursor cursor = null;
 
-		cursor.close();
-		return amount;
+        try
+        {
+            cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id = ?",
+                              new String[]{Integer.toString(reportLocalID)});
+
+            while (cursor.moveToNext())
+            {
+                amount += getDoubleFromCursor(cursor, "amount");
+            }
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+            return amount;
+        }
 	}
 	
 	public int getReportItemsCount(int reportLocalID)

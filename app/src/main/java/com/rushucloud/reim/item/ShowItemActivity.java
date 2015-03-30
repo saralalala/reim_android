@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -68,7 +69,7 @@ public class ShowItemActivity extends Activity
 		MobclickAgent.onPause(this);
 	}
 	
-	public boolean onKeyDown(int keyCode, KeyEvent event)
+	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
@@ -225,11 +226,11 @@ public class ShowItemActivity extends Activity
 		invoiceLayout.removeAllViews();
 
 		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 96);
-		int width = ViewUtils.dpToPixel(getResources(), 30);
+		int sideLength = ViewUtils.dpToPixel(getResources(), 30);
 		int verticalPadding = ViewUtils.dpToPixel(getResources(), 10);
 		int horizontalPadding = ViewUtils.dpToPixel(getResources(), 10);
-		int maxCount = (layoutMaxLength + horizontalPadding) / (width + horizontalPadding);
-		horizontalPadding = (layoutMaxLength - width * maxCount) / (maxCount - 1);
+		int maxCount = (layoutMaxLength + horizontalPadding) / (sideLength + horizontalPadding);
+		horizontalPadding = (layoutMaxLength - sideLength * maxCount) / (maxCount - 1);
 
 		LinearLayout layout = new LinearLayout(this);
 		int invoiceCount = item.getInvoices() != null ? item.getInvoices().size() : 0;
@@ -287,7 +288,7 @@ public class ShowItemActivity extends Activity
 				invoiceImageView.setImageBitmap(bitmap);
 			}
 
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, width);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
 			if ((i + 1) % maxCount != 0)
 			{
 				params.rightMargin = horizontalPadding;				

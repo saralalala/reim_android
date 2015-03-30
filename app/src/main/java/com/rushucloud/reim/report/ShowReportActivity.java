@@ -3,6 +3,7 @@ package com.rushucloud.reim.report;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,7 +38,6 @@ public class ShowReportActivity extends Activity
 	private DBManager dbManager;
 
 	private ImageView tipImageView;
-	private ListView detailListView;
 	private ReportDetailListViewAdapter adapter;
 	
 	private Report report;
@@ -71,7 +71,7 @@ public class ShowReportActivity extends Activity
 		MobclickAgent.onPause(this);
 	}
 	
-	public boolean onKeyDown(int keyCode, KeyEvent event)
+	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
@@ -148,7 +148,7 @@ public class ShowReportActivity extends Activity
 		tipImageView = (ImageView) findViewById(R.id.tipImageView);
 		
 		adapter = new ReportDetailListViewAdapter(ShowReportActivity.this, report, itemList);
-		detailListView = (ListView) findViewById(R.id.detailListView);
+        ListView detailListView = (ListView) findViewById(R.id.detailListView);
 		detailListView.setAdapter(adapter);
 		detailListView.setOnItemClickListener(new OnItemClickListener()
 		{

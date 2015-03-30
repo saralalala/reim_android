@@ -83,7 +83,7 @@ public class TagListViewAdapter extends BaseAdapter
 		return position;
 	}
 	
-	public void setTag(List<Tag> tags)
+	public void setTagList(List<Tag> tags)
 	{
 		tagList.clear();
 		tagList.addAll(tags);

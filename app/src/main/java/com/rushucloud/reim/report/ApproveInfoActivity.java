@@ -2,6 +2,7 @@ package com.rushucloud.reim.report;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,8 +34,6 @@ import netUtils.response.report.ApproveInfoResponse;
 
 public class ApproveInfoActivity extends Activity
 {
-	private TextView statusTextView;
-	private TextView senderTextView;
 	private TextView timeTextView;
 	private ApproveInfoListViewAdapter adapter;
 	
@@ -68,7 +67,7 @@ public class ApproveInfoActivity extends Activity
 		MobclickAgent.onPause(this);
 	}
 	
-	public boolean onKeyDown(int keyCode, KeyEvent event)
+	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
@@ -102,10 +101,10 @@ public class ApproveInfoActivity extends Activity
 			}
 		});
 		
-		statusTextView = (TextView) findViewById(R.id.statusTextView);
+		TextView statusTextView = (TextView) findViewById(R.id.statusTextView);
 		statusTextView.setText(report.getStatusString());
 		
-		senderTextView = (TextView) findViewById(R.id.senderTextView);
+		TextView senderTextView = (TextView) findViewById(R.id.senderTextView);
 		senderTextView.setText(report.getSender().getNickname());
 		
 		timeTextView = (TextView) findViewById(R.id.timeTextView);

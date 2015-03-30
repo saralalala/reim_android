@@ -47,7 +47,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	private long exitTime;
 
 	private ViewPager viewPager;
-    private FragmentPagerAdapter adapter;
 	private ImageView reportTipImageView;
 	private ImageView meTipImageView;
 	private PopupWindow feedbackPopupWindow;
@@ -57,7 +56,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	private EditText phoneEditText;
 	
 	private DBManager dbManager;
-	private UDPClient udpClient;
+//	private UDPClient udpClient;
 	
 	private List<Fragment> fragmentList = new ArrayList<Fragment>();
 	private List<TabItem> tabItemList = new ArrayList<TabItem>();
@@ -85,20 +84,20 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			sendGetEventsRequest();
 			
-			if (udpClient == null)
-			{
-				udpClient = new UDPClient();
-				udpClient.send(new UDPConnectionCallback()
-				{
-					public void execute(Object udpResponse)
-					{
-						if (PhoneUtils.isNetworkConnected())
-						{
-							sendGetEventsRequest();
-						}
-					}
-				});
-			}
+//			if (udpClient == null)
+//			{
+//				udpClient = new UDPClient();
+//				udpClient.send(new UDPConnectionCallback()
+//				{
+//					public void execute(Object udpResponse)
+//					{
+//						if (PhoneUtils.isNetworkConnected())
+//						{
+//							sendGetEventsRequest();
+//						}
+//					}
+//				});
+//			}
 		}
 	}
 
@@ -121,10 +120,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			{
 				finish();
 				dbManager.closeDatabase();
-				if (udpClient != null)
-				{
-					udpClient.close();					
-				}
+//				if (udpClient != null)
+//				{
+//					udpClient.close();
+//				}
 				android.os.Process.killProcess(android.os.Process.myPid());
 			}
 			return true;
@@ -154,7 +153,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		fragmentList.add(statisticsFragment);
 		fragmentList.add(meFragment);
 
-        adapter = new FragmentPagerAdapter(getSupportFragmentManager())
+        FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager())
         {
             public int getCount()
             {

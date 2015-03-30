@@ -157,7 +157,7 @@ public class GalleryActivity extends Activity
 					}
 				});
 				Looper.loop();
-			};
+			}
 		}.start();
 	}
 
@@ -165,6 +165,7 @@ public class GalleryActivity extends Activity
 	{
 		ArrayList<String> pathList = new ArrayList<String>();
 
+        Cursor cursor = null;
 		try
 		{
 			// only looking for jpg and png files
@@ -173,7 +174,7 @@ public class GalleryActivity extends Activity
 			selection.append(" or ");
 			selection.append(Media.MIME_TYPE).append("=?");
 
-			Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection.toString(), 
+			cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection.toString(),
 														new String[] { "image/jpeg", "image/png" }, Media.DATE_TAKEN);
 
 			if (cursor != null && cursor.getCount() > 0)
@@ -188,6 +189,13 @@ public class GalleryActivity extends Activity
 		{
 			e.printStackTrace();
 		}
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
 
 		// show the latest photo on top
 		Collections.reverse(pathList);

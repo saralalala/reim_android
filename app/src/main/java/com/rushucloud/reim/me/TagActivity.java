@@ -5,6 +5,7 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -69,7 +70,7 @@ public class TagActivity extends Activity
 		MobclickAgent.onPause(this);
 	}
 	
-	public boolean onKeyDown(int keyCode, KeyEvent event)
+	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
@@ -116,8 +117,10 @@ public class TagActivity extends Activity
 		});
 		
 		tagTextView = (TextView) findViewById(R.id.tagTextView);
-		
-		tagListView = (ListView) findViewById(R.id.tagListView);
+
+        adapter = new TagListViewAdapter(this, tagList, null);
+        tagListView = (ListView) findViewById(R.id.tagListView);
+        tagListView.setAdapter(adapter);
 		tagListView.setOnItemLongClickListener(new OnItemLongClickListener()
 		{
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
@@ -210,8 +213,8 @@ public class TagActivity extends Activity
 			tagListView.setVisibility(View.VISIBLE);
 			tagTextView.setVisibility(View.INVISIBLE);
 			
-			adapter = new TagListViewAdapter(this, tagList, null);
-			tagListView.setAdapter(adapter);	
+			adapter.setTagList(tagList);
+            adapter.notifyDataSetChanged();
 		}
 	}
 

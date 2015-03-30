@@ -2,13 +2,21 @@ package netUtils;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.security.KeyStore;
 
 import classes.utils.AppPreference;
 import classes.utils.PhoneUtils;
@@ -26,9 +34,7 @@ public class HttpUtils
 		HttpClientParams.setRedirecting(httpParams, true);
 		
 		HttpProtocolParams.setUserAgent(httpParams, getUserAgent());
-		HttpClient client=new DefaultHttpClient(httpParams);
-		
-		return client;
+        return wrapClient(httpParams);
 	}
 
     public static HttpClient getHttpClient(int connectTimeout, int socketTimeout)
@@ -42,9 +48,7 @@ public class HttpUtils
         HttpClientParams.setRedirecting(httpParams, true);
 
         HttpProtocolParams.setUserAgent(httpParams, getUserAgent());
-        HttpClient client=new DefaultHttpClient(httpParams);
-
-        return client;
+        return wrapClient(httpParams);
     }
 	
 	public static String getJWTString()
@@ -77,4 +81,28 @@ public class HttpUtils
 		result += AppPreference.getAppPreference().getUsername();
 		return result;
 	}
+
+    public static HttpClient wrapClient(HttpParams params)
+    {
+        try
+        {
+            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            trustStore.load(null, null);
+
+            SSLSocketFactory sf = new ReimSSLSocketFactory(trustStore);
+            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+
+            SchemeRegistry registry = new SchemeRegistry();
+            registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+            registry.register(new Scheme("https", sf, 443));
+
+            ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
+            return new DefaultHttpClient(ccm, params);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return new DefaultHttpClient(params);
+        }
+    }
 }

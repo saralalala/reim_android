@@ -104,7 +104,6 @@ public abstract class BaseRequest
 		catch (UnsupportedEncodingException e)
 		{
 			e.printStackTrace();
-			return;
 		}
 	}
 	
