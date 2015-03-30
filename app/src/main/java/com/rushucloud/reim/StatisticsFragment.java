@@ -133,7 +133,7 @@ public class StatisticsFragment extends Fragment
 		});
 		statListView.setPullRefreshEnable(true);
 		statListView.setPullLoadEnable(false);
-		statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetStatTime()));
+		statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetMineStatTime()));
 	}
 
 	private void resetView()
@@ -145,7 +145,7 @@ public class StatisticsFragment extends Fragment
 
 	private boolean needToGetData()
 	{
-		return !hasData || Utils.getCurrentTime() - appPreference.getLastGetStatTime() > GET_DATA_INTERVAL;
+		return !hasData || Utils.getCurrentTime() - appPreference.getLastGetMineStatTime() > GET_DATA_INTERVAL;
 	}
 	
 	private void getData()
@@ -311,7 +311,7 @@ public class StatisticsFragment extends Fragment
 				{
 					hasData = true;
 
-					appPreference.setLastGetStatTime(Utils.getCurrentTime());
+					appPreference.setLastGetMineStatTime(Utils.getCurrentTime());
 					appPreference.saveAppPreference();
 					
 					getActivity().runOnUiThread(new Runnable()
@@ -324,7 +324,7 @@ public class StatisticsFragment extends Fragment
 							drawCategory(response.getStatCategoryList());
 							adapter.notifyDataSetChanged();
 							statListView.stopRefresh();
-							statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetStatTime()));
+							statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetMineStatTime()));
 							ReimProgressDialog.dismiss();
 						}
 					});

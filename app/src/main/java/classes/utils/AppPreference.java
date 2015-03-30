@@ -28,7 +28,8 @@ public class AppPreference
 	private boolean syncOnlyWithWifi = true;
 	private boolean enablePasswordProtection = true;
 	private int lastSyncTime = 0;
-	private int lastGetStatTime = 0;
+	private int lastGetMineStatTime = 0;
+    private int lastGetOthersStatTime = 0;
 	private String appDirectory = "";
 	private String appImageDirectory = "";
 	private String avatarImageDirectory = "";
@@ -66,7 +67,8 @@ public class AppPreference
 		appPreference.setSyncOnlyWithWifi(preferences.getBoolean("syncOnlyWithWifi", true));
 		appPreference.setEnablePasswordProtection(preferences.getBoolean("enablePasswordProtection", true));
 		appPreference.setLastSyncTime(preferences.getInt("lastSyncTime", 0));
-		appPreference.setLastGetStatTime(preferences.getInt("lastGetStatTime", 0));
+		appPreference.setLastGetMineStatTime(preferences.getInt("lastGetMineStatTime", 0));
+        appPreference.setLastGetOthersStatTime(preferences.getInt("lastGetOthersStatTime", 0));
 		
 		appPreference.setAppDirectory(Environment.getExternalStorageDirectory() + "/cloudbaoxiao");
 		appPreference.setAppImageDirectory(appPreference.getAppDirectory() + "/images");
@@ -89,7 +91,7 @@ public class AppPreference
 		editor.putBoolean("syncOnlyWithWifi", appPreference.syncOnlyWithWifi());
 		editor.putBoolean("enablePasswordProtection", appPreference.passwordProtectionEnabled());
 		editor.putInt("lastSyncTime", appPreference.getLastSyncTime());
-		editor.putInt("lastGetStatTime", appPreference.getLastGetStatTime());
+		editor.putInt("lastGetMineStatTime", appPreference.getLastGetMineStatTime());
 		editor.commit();
 	}
 	
@@ -182,16 +184,25 @@ public class AppPreference
 		this.lastSyncTime = lastSyncTime;
 	}
 	
-	public int getLastGetStatTime()
+	public int getLastGetMineStatTime()
 	{
-		return lastGetStatTime;
+		return lastGetMineStatTime;
 	}
-	public void setLastGetStatTime(int lastGetStatTime)
+	public void setLastGetMineStatTime(int lastGetMineStatTime)
 	{
-		this.lastGetStatTime = lastGetStatTime;
+		this.lastGetMineStatTime = lastGetMineStatTime;
 	}
 
-	public String getAppDirectory()
+    public int getLastGetOthersStatTime()
+    {
+        return lastGetOthersStatTime;
+    }
+    public void setLastGetOthersStatTime(int lastGetOthersStatTime)
+    {
+        this.lastGetOthersStatTime = lastGetOthersStatTime;
+    }
+
+    public String getAppDirectory()
 	{
 		return appDirectory;
 	}

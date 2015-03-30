@@ -9,10 +9,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import classes.StatCategory;
+import classes.utils.Utils;
 import netUtils.response.BaseResponse;
 
 public class MineStatResponse extends BaseResponse
 {
+    private boolean hasStaffData;
 	private double newAmount;
 	private double ongoingAmount;
 	private List<StatCategory> statCategoryList;
@@ -29,6 +31,7 @@ public class MineStatResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 
+            this.hasStaffData = Utils.intToBoolean(jObject.getInt("staff"));
 			this.ongoingAmount = jObject.getDouble("process");
 			this.newAmount = jObject.getDouble("new");
 			
@@ -70,7 +73,12 @@ public class MineStatResponse extends BaseResponse
 		}
 	}
 
-	public double getNewAmount()
+    public boolean hasStaffData()
+    {
+        return hasStaffData;
+    }
+
+    public double getNewAmount()
 	{
 		return newAmount;
 	}
