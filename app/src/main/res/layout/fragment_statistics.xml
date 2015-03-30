@@ -19,41 +19,43 @@
             android:textSize="20sp"
             android:textColor="@color/major_light" />
 
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
+        <RelativeLayout
+            android:id="@+id/titleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
-            <!--<TextView-->
-                <!--android:id="@+id/myTitleTextView"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_toLeftOf="@+id/pivotView"-->
-                <!--android:layout_marginRight="13dp"-->
-                <!--android:gravity="center"-->
-                <!--android:text="@string/my_report"-->
-                <!--android:textColor="@color/major_light"-->
-                <!--android:textSize="20sp" />-->
+            <TextView
+                android:id="@+id/myTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/pivotView"
+                android:layout_marginRight="13dp"
+                android:gravity="center"
+                android:text="@string/individual"
+                android:textColor="@color/major_light"
+                android:textSize="20sp" />
 
-            <!--<View-->
-                <!--android:id="@+id/pivotView"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_centerInParent="true" />-->
+            <View
+                android:id="@+id/pivotView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true" />
 
-            <!--<TextView-->
-                <!--android:id="@+id/othersTitleTextView"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_toRightOf="@+id/pivotView"-->
-                <!--android:layout_marginLeft="13dp"-->
-                <!--android:gravity="center"-->
-                <!--android:text="@string/others_report"-->
-                <!--android:textColor="@color/hint_white"-->
-                <!--android:textSize="20sp" />-->
+            <TextView
+                android:id="@+id/othersTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/pivotView"
+                android:layout_marginLeft="13dp"
+                android:gravity="center"
+                android:text="@string/group"
+                android:textColor="@color/hint_white"
+                android:textSize="20sp" />
 
-        <!--</RelativeLayout>-->
+        </RelativeLayout>
 
     </RelativeLayout>
 

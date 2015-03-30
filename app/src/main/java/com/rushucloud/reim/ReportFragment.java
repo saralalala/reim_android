@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -52,13 +51,11 @@ import netUtils.HttpConnectionCallback;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
 import netUtils.request.report.DeleteReportRequest;
-import netUtils.request.report.ExportReportRequest;
 import netUtils.request.report.SubordinatesReportRequest;
 import netUtils.response.report.DeleteReportResponse;
-import netUtils.response.report.ExportReportResponse;
 import netUtils.response.report.SubordinatesReportResponse;
 
-public class ReportFragment extends Fragment implements OnClickListener
+public class ReportFragment extends Fragment
 {
 	private static final int SORT_UPDATE_DATE = 0;
     private static final int SORT_CREATE_DATE = 1;
@@ -199,14 +196,26 @@ public class ReportFragment extends Fragment implements OnClickListener
 	private void initTitleView()
 	{
 		myTitleTextView = (TextView)getActivity().findViewById(R.id.myTitleTextView);
-		myTitleTextView.setOnClickListener(this);
+		myTitleTextView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                setListView(0);
+            }
+        });
 
         myShortTextView = (TextView) view.findViewById(R.id.myShortTextView);
         myMediumTextView = (TextView) view.findViewById(R.id.myMediumTextView);
         myLongTextView = (TextView) view.findViewById(R.id.myLongTextView);
 
 		othersTitleTextView = (TextView)getActivity().findViewById(R.id.othersTitleTextView);
-		othersTitleTextView.setOnClickListener(this);
+        othersTitleTextView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                setListView(1);
+            }
+        });
 
         othersShortTextView = (TextView) view.findViewById(R.id.othersShortTextView);
         othersMediumTextView = (TextView) view.findViewById(R.id.othersMediumTextView);
@@ -306,7 +315,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                             List<Integer> othersUnreadList = ReimApplication.getOthersUnreadList();
                             if (othersUnreadList.contains(report.getServerID()))
                             {
-                                othersUnreadList.remove(new Integer(report.getServerID()));
+                                othersUnreadList.remove(Integer.valueOf(report.getServerID()));
                                 ReimApplication.setOthersUnreadList(othersUnreadList);
                             }
 
@@ -1366,17 +1375,5 @@ public class ReportFragment extends Fragment implements OnClickListener
 				});
 			}			
 		}		
-	}
-		
-	public void onClick(View v)
-	{
-		if (v.equals(myTitleTextView))
-		{
-			setListView(0);
-		}
-		else
-		{
-			setListView(1);
-		}
 	}
 }

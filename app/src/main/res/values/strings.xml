@@ -141,7 +141,9 @@
     <string name="report_no_name">无标题报告</string>
     <string name="continue_to_choose">继续选择</string>
     <string name="choose_following_managers">选择后续审批人</string>
-    
+
+    <string name="individual">个人</string>
+    <string name="group">团队</string>
     <string name="mark">标记</string>
     <string name="stat_ongoing">报销中</string>
     <string name="stat_new">待提交</string>

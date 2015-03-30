@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
@@ -36,10 +37,16 @@ import netUtils.response.statistics.MineStatResponse;
 public class StatisticsFragment extends Fragment
 {
 	private static final int GET_DATA_INTERVAL = 600;
-	
-	private XListView statListView;
+
+    private View view;
+    private TextView statTitleTextView;
+    private RelativeLayout titleLayout;
+    private TextView myTitleTextView;
+    private TextView othersTitleTextView;
 	private StatisticsListViewAdapter adapter;
-	private View view;
+    private XListView statListView;
+
+	private View mineView;
 	private FrameLayout statContainer;
 	private TextView mainAmountTextView;
 	private TextView unitTextView;
@@ -58,7 +65,19 @@ public class StatisticsFragment extends Fragment
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		return inflater.inflate(R.layout.fragment_statistics, container, false);
+        if (view == null)
+        {
+            view = inflater.inflate(R.layout.fragment_statistics, container, false);
+        }
+        else
+        {
+            ViewGroup viewGroup = (ViewGroup) view.getParent();
+            if (viewGroup != null)
+            {
+                viewGroup.removeView(view);
+            }
+        }
+        return view;
 	}
 	
 	public void onResume()
@@ -75,7 +94,7 @@ public class StatisticsFragment extends Fragment
 		
 		if (getUserVisibleHint() && needToGetData())
 		{
-			getData();			
+			getMineData();
 		}
 	}
 
@@ -90,40 +109,61 @@ public class StatisticsFragment extends Fragment
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit && needToGetData())
 		{
-			getData();
+			getMineData();
 		}
 	}
 	
 	private void initView()
-	{		
-		view = View.inflate(getActivity(), R.layout.view_statistics, null);
+	{
+        statTitleTextView = (TextView) view.findViewById(R.id.statTitleTextView);
+        titleLayout = (RelativeLayout) view.findViewById(R.id.titleLayout);
+
+        myTitleTextView = (TextView) view.findViewById(R.id.myTitleTextView);
+        myTitleTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                setListView(0);
+            }
+        });
+
+        othersTitleTextView = (TextView) view.findViewById(R.id.othersTitleTextView);
+        othersTitleTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                setListView(1);
+            }
+        });
+
+		mineView = View.inflate(getActivity(), R.layout.view_stat_mine, null);
 		
-		statContainer = (FrameLayout) view.findViewById(R.id.statContainer);
+		statContainer = (FrameLayout) mineView.findViewById(R.id.statContainer);
 		
-		mainAmountTextView = (TextView) view.findViewById(R.id.mainAmountTextView);
+		mainAmountTextView = (TextView) mineView.findViewById(R.id.mainAmountTextView);
 		mainAmountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
-		unitTextView = (TextView) view.findViewById(R.id.unitTextView);
+		unitTextView = (TextView) mineView.findViewById(R.id.unitTextView);
 
-        newPercentTextView = (TextView) view.findViewById(R.id.newPercentTextView);
+        newPercentTextView = (TextView) mineView.findViewById(R.id.newPercentTextView);
         newPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
-		ongoingPercentTextView = (TextView) view.findViewById(R.id.ongoingPercentTextView);
+		ongoingPercentTextView = (TextView) mineView.findViewById(R.id.ongoingPercentTextView);
 		ongoingPercentTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 
-		totalTextView = (TextView) view.findViewById(R.id.totalTextView);
-		totalUnitTextView = (TextView) view.findViewById(R.id.totalUnitTextView);
-		monthLayout = (LinearLayout) view.findViewById(R.id.monthLayout);
-		categoryLayout = (LinearLayout) view.findViewById(R.id.categoryLayout);
+		totalTextView = (TextView) mineView.findViewById(R.id.totalTextView);
+		totalUnitTextView = (TextView) mineView.findViewById(R.id.totalUnitTextView);
+		monthLayout = (LinearLayout) mineView.findViewById(R.id.monthLayout);
+		categoryLayout = (LinearLayout) mineView.findViewById(R.id.categoryLayout);
 		
-		adapter = new StatisticsListViewAdapter(getActivity(), view);
+		adapter = new StatisticsListViewAdapter(getActivity(), mineView);
 		statListView = (XListView) getActivity().findViewById(R.id.statListView);
 		statListView.setAdapter(adapter);
 		statListView.setXListViewListener(new IXListViewListener()
 		{
 			public void onRefresh()
 			{
-				getData();
+				getMineData();
 			}
 			
 			public void onLoadMore()
@@ -143,12 +183,27 @@ public class StatisticsFragment extends Fragment
 		categoryLayout.removeAllViews();
 	}
 
+    private void setListView(int index)
+    {
+        ReimApplication.setStatTabIndex(index);
+        if (index == 0)
+        {
+            myTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
+            othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
+        }
+        else
+        {
+            myTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
+            othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
+        }
+    }
+
 	private boolean needToGetData()
 	{
 		return !hasData || Utils.getCurrentTime() - appPreference.getLastGetMineStatTime() > GET_DATA_INTERVAL;
 	}
 	
-	private void getData()
+	private void getMineData()
 	{		
 		if (PhoneUtils.isNetworkConnected())
 		{
@@ -318,6 +373,17 @@ public class StatisticsFragment extends Fragment
 					{
 						public void run()
 						{
+                            if (!response.hasStaffData())
+                            {
+                                statTitleTextView.setVisibility(View.VISIBLE);
+                                titleLayout.setVisibility(View.GONE);
+                            }
+                            else
+                            {
+                                statTitleTextView.setVisibility(View.GONE);
+                                titleLayout.setVisibility(View.VISIBLE);
+                            }
+
 							resetView();
 							drawPie(response.getOngoingAmount(), response.getNewAmount());
 							drawMonthBar(response.getMonthsData());

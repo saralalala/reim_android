@@ -33,6 +33,7 @@ public class ReimApplication extends Application
 	
 	private static int tabIndex = 0;
 	private static int reportTabIndex = 0;
+    private static int statTabIndex = 0;
     private static List<Integer> mineUnreadList = new ArrayList<Integer>();
     private static List<Integer> othersUnreadList = new ArrayList<Integer>();
 
@@ -59,7 +60,6 @@ public class ReimApplication extends Application
 	{
 		return tabIndex;
 	}
-
 	public static void setTabIndex(int tabIndex)
 	{
 		ReimApplication.tabIndex = tabIndex;
@@ -69,17 +69,24 @@ public class ReimApplication extends Application
 	{
 		return reportTabIndex;
 	}
-
 	public static void setReportTabIndex(int reportTabIndex)
 	{
 		ReimApplication.reportTabIndex = reportTabIndex;
 	}
 
+    public static int getStatTabIndex()
+    {
+        return statTabIndex;
+    }
+    public static void setStatTabIndex(int statTabIndex)
+    {
+        ReimApplication.statTabIndex = statTabIndex;
+    }
+
     public static List<Integer> getMineUnreadList()
     {
         return mineUnreadList;
     }
-
     public static void setMineUnreadList(List<Integer> mineUnreadList)
     {
         ReimApplication.mineUnreadList = mineUnreadList;
@@ -89,7 +96,6 @@ public class ReimApplication extends Application
     {
         return othersUnreadList;
     }
-
     public static void setOthersUnreadList(List<Integer> othersUnreadList)
     {
         ReimApplication.othersUnreadList = othersUnreadList;
@@ -99,7 +105,6 @@ public class ReimApplication extends Application
     {
         return hasMessages;
     }
-
     public static void setHasMessages(boolean hasMessages)
     {
         ReimApplication.hasMessages = hasMessages;
