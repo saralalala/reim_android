@@ -1,4 +1,6 @@
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
 
     <string name="ynote_showword">有道云笔记</string>
     <string name="ynote_no_client">未安装有道云笔记客户端</string>

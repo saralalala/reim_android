@@ -9,7 +9,7 @@ public class StatisticsListViewAdapter extends BaseAdapter
 {
 	private View view;
 	
-	public StatisticsListViewAdapter(Context context, View view)
+	public StatisticsListViewAdapter(View view)
 	{
 		this.view = view;
 	}

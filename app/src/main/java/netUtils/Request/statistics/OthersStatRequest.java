@@ -16,12 +16,7 @@ public class OthersStatRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("year", Integer.toString(year)));
-        params.add(new BasicNameValuePair("month", Integer.toString(month)));
-        setParams(params);
-
-        appendUrl(URLDef.URL_STATISTICS_OTHERS);
+        appendUrl(URLDef.URL_STATISTICS_OTHERS + "/" + year + "/" + month);
     }
 
 	public OthersStatRequest(int year, int month, int categoryID, int subCategoryID, int tagID, int userID)

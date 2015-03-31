@@ -31,6 +31,19 @@ public class Category implements Serializable
 	{
 		
 	}
+
+    public Category(Category category)
+    {
+        setServerID(category.getServerID());
+        setName(category.getName());
+        setLimit(category.getLimit());
+        setGroupID(category.getGroupID());
+        setParentID(category.getParentID());
+        setLocalUpdatedDate(category.getLocalUpdatedDate());
+        setServerUpdatedDate(category.getServerUpdatedDate());
+        setIsProveAhead(category.isProveAhead());
+        setIconID(category.getIconID());
+    }
 	
 	public Category(JSONObject jObject)
 	{

@@ -2,6 +2,7 @@ package classes.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
@@ -18,22 +19,22 @@ public class ReimPie extends View
 	private float startAngle = 0;
 	private int offset = ViewUtils.dpToPixel(getResources(), 2);
 
-	public ReimPie(Context context, float start, float angle, int diameter, int colorResID)
-	{
-		super(context);
-		
-		paint.setColor(getResources().getColor(colorResID));
-		paint.setStyle(Style.FILL_AND_STROKE);
-		paint.setAntiAlias(true);
-		
-		startAngle = start;
-		occupyAngle = angle;
-		
-		pieRect.left = offset;
-		pieRect.top = offset;
-		pieRect.right = diameter - offset;
-		pieRect.bottom = diameter - offset;
-	}
+    public ReimPie(Context context, float start, float angle, int diameter, int color)
+    {
+        super(context);
+
+        paint.setColor(color);
+        paint.setStyle(Style.FILL_AND_STROKE);
+        paint.setAntiAlias(true);
+
+        startAngle = start;
+        occupyAngle = angle;
+
+        pieRect.left = offset;
+        pieRect.top = offset;
+        pieRect.right = diameter - offset;
+        pieRect.bottom = diameter - offset;
+    }
 
 	public ReimPie(Context context, AttributeSet attrs)
 	{

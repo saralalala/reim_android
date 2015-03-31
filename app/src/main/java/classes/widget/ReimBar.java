@@ -11,7 +11,7 @@ import android.view.View;
 
 import classes.utils.ViewUtils;
 
-public class ReimMonthBar extends View
+public class ReimBar extends View
 {
 	private Paint paint = new Paint();
 	private RectF rect = new RectF();
@@ -20,7 +20,7 @@ public class ReimMonthBar extends View
 	private int height = ViewUtils.dpToPixel(getResources(), 18);
 	private int radius = ViewUtils.dpToPixel(getResources(), 2);
 	
-	public ReimMonthBar(Context context, double ratio)
+	public ReimBar(Context context, double ratio)
 	{
 		super(context);
 		
@@ -31,7 +31,7 @@ public class ReimMonthBar extends View
 		paint.setAntiAlias(true);
 	}
 
-	public ReimMonthBar(Context context, AttributeSet attrs)
+	public ReimBar(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}

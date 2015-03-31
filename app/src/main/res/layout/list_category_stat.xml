@@ -20,7 +20,7 @@
             android:src="@drawable/default_icon"/>
 
         <TextView
-	        android:id="@+id/titleTextView"
+	        android:id="@+id/nameTextView"
 	        android:layout_width="0dp"
 	        android:layout_height="match_parent"
 	        android:layout_weight="3"

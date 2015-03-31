@@ -45,6 +45,7 @@ public class EditCategoryActivity extends Activity
 	
 	private List<Integer> iconList;
 	private List<Boolean> checkList;
+    private Category originalCategory;
 	private Category category;
 	
 	private int iconSideLength;
@@ -87,8 +88,9 @@ public class EditCategoryActivity extends Activity
 	private void initData()
 	{
 		dbManager = DBManager.getDBManager();
-		
-		category = (Category) getIntent().getSerializableExtra("category");
+
+        originalCategory = (Category) getIntent().getSerializableExtra("category");
+        category = new Category(originalCategory);
 		
 		iconList = new ArrayList<Integer>();
 		iconList.add(R.drawable.icon_food);
@@ -156,6 +158,12 @@ public class EditCategoryActivity extends Activity
                 int iconIndex = checkList.indexOf(true);
                 int iconID = iconIndex == -1 ? -1 : iconIndex + 1;
 
+                category.setName(name);
+                category.setGroupID(AppPreference.getAppPreference().getCurrentGroupID());
+//					category.setIsProveAhead(isProveAhead);
+//                    category.setLimit(limit);
+                category.setIconID(iconID);
+
 				if (name.isEmpty())
 				{
 					ViewUtils.showToast(EditCategoryActivity.this, R.string.error_category_name_empty);
@@ -164,27 +172,18 @@ public class EditCategoryActivity extends Activity
 				{
 					ViewUtils.showToast(EditCategoryActivity.this, R.string.error_add_network_unavailable);
 				}
-				else if (category.getName().equals(name) && category.getIconID() == iconID)
+				else if (category.getName().equals(originalCategory.getName()) && category.getIconID() == originalCategory.getIconID())
 //                        && category.getLimit() == limit && category.isProveAhead() == isProveAhead)
                 {
                     finish();
                 }
-                else
+                else if (category.getServerID() == -1)
+			    {
+					sendCreateCategoryRequest(category);
+				}
+				else
 				{
-					category.setName(name);
-					category.setGroupID(AppPreference.getAppPreference().getCurrentGroupID());
-//					category.setIsProveAhead(isProveAhead);
-//                    category.setLimit(limit);
-                    category.setIconID(iconID);
-					
-					if (category.getServerID() == -1)
-					{
-						sendCreateCategoryRequest(category);
-					}
-					else
-					{
-						sendModifyCategoryRequest(category);
-					}
+					sendModifyCategoryRequest(category);
 				}
 			}
 		});

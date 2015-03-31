@@ -19,7 +19,7 @@
             android:src="@drawable/arc" />
 
         <FrameLayout
-            android:id="@+id/statContainer"
+            android:id="@+id/mineStatContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp" />
@@ -63,7 +63,7 @@
 	                android:textSize="50sp" />
                 
 	            <TextView
-	                android:id="@+id/unitTextView"
+	                android:id="@+id/mineUnitTextView"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:textColor="@color/major_dark"
@@ -201,7 +201,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/totalTextView"
+            android:id="@+id/monthTotalTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -43,7 +43,12 @@ public class ViewUtils
 	{
 		return ReimApplication.getContext().getResources().getColor(colorResID);
 	}
-	
+
+    public static String getString(int stringResID)
+    {
+        return ReimApplication.getContext().getResources().getString(stringResID);
+    }
+
     public static void showToast(Context context, String content)
     {
     	Toast.makeText(context, content, Toast.LENGTH_SHORT).show();

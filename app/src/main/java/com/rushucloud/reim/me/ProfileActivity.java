@@ -334,10 +334,9 @@ public class ProfileActivity extends Activity
 	}
 	
 	private void loadInfoView()
-	{		
+	{
 		currentUser = appPreference.getCurrentUser();
 		currentGroup = appPreference.getCurrentGroup();
-		currentUser.setIsAdmin(true);
 
         ViewUtils.setImageViewBitmap(currentUser, avatarImageView);
 		
@@ -353,7 +352,7 @@ public class ProfileActivity extends Activity
 		String companyName = currentGroup != null ? currentGroup.getName() : getString(R.string.empty);	
 		companyTextView.setText(companyName);
 		
-        if (!currentUser.isAdmin() || currentUser.getGroupID() <= 0)
+        if (!currentUser.isAdmin())
 		{
         	companyLayout.setClickable(false);
         	companyNextImageView.setVisibility(View.INVISIBLE);			

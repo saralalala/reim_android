@@ -255,7 +255,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         
-        <!-- #######################  友盟UmengAppkey  ####################### -->
+        <!-- #######################  友盟Umeng  ####################### -->
 	    <meta-data
 	        android:name="UMENG_APPKEY" 
 	        android:value="543bf20efd98c544b9002d11" >
@@ -266,8 +266,18 @@
 	        android:name="UMENG_CHANNEL" 
 	        android:value="Wandoujia" >
 	    </meta-data>-->
-	    
-        <!-- ###################注册SDK使用的Activity###################### -->
+
+        <service
+            android:name="com.umeng.update.net.DownloadingService"
+            android:process=":DownloadingService" >
+        </service>
+
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+
+        <!-- ###################  注册SDK使用的Activity  ###################### -->
 		<activity 
 		    android:configChanges="orientation|keyboard" 
 		    android:launchMode="singleTask" 

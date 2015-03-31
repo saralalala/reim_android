@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
 
     <string name="app_name">云报销</string>
     <string name="background">背景</string>
@@ -14,6 +16,8 @@
     <string name="percent">%</string>
     <string name="ten_thousand">万</string>
     <string name="one_hundred_million">亿</string>
+    <string name="year">年</string>
+    <string name="month">月</string>
     
     <string name="confirm">确定</string>
     <string name="save">保存</string>
@@ -151,6 +155,9 @@
     <string name="last_12_months">近12个月</string>
     <string name="cost_total">费用汇总</string>
     <string name="stat_by_category">类别统计</string>
+    <string name="stat_by_tag">标签统计</string>
+    <string name="stat_by_member">人员统计</string>
+    <string name="choose_month">选择月份</string>
     
     <string name="personal_center">个人中心</string>
     <string name="sign_out">切换账号</string>
@@ -249,6 +256,7 @@
     <string name="prompt_sender">发送者：</string>
     <string name="prompt_no_need_to_alarm">报告未在审核过程中，无需发送提醒</string>
     <string name="prompt_choose_or_finish">您希望直接通过，还是选择其他人继续审批这份报告？</string>
+    <string name="prompt_no_lastest_data">还没到下个月呢</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>
@@ -330,6 +338,7 @@
     <string name="succeed_in_saving_report">报告保存成功</string>
     <string name="succeed_in_saving_avatar">头像保存成功</string>
     <string name="succeed_in_uploading_avatar">上传成功</string>
+    <string name="succeed_in_creating_company">公司创建成功</string>
     <string name="succeed_in_creating_category">创建类别成功</string>
     <string name="succeed_in_creating_tag">创建标签成功</string>
     <string name="succeed_in_modifying">修改成功</string>
@@ -362,6 +371,7 @@
     <string name="failed_to_download_invoice">照片下载失败</string>
     <string name="failed_to_upload_invoice">照片上传失败</string>
     <string name="failed_to_upload_avatar">头像上传失败</string>
+    <string name="failed_to_create_company">公司创建失败</string>
     <string name="failed_to_create_item">创建消费失败</string>
     <string name="failed_to_create_report">创建失败</string>
     <string name="failed_to_create_category">创建失败</string>

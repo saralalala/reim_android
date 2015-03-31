@@ -65,7 +65,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/invite"
                 android:textColor="@color/font_major_dark"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:layout_width="16dp"
@@ -74,7 +74,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
                 android:contentDescription="@string/next"
-                android:src="@drawable/next" />
+                android:src="@drawable/next"/>
 
             <include
                 android:layout_width="match_parent"

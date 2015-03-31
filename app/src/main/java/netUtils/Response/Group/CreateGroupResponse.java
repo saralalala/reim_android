@@ -8,6 +8,7 @@ import netUtils.response.BaseResponse;
 public class CreateGroupResponse extends BaseResponse
 {
 	private int groupID;
+    private int date;
 
 	public CreateGroupResponse(Object httpResponse)
 	{
@@ -20,6 +21,7 @@ public class CreateGroupResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			setGroupID(Integer.valueOf(jObject.getString("id")));
+            setDate(Integer.valueOf(jObject.getString("dt")));
 		}
 		catch (JSONException e)
 		{
@@ -36,4 +38,14 @@ public class CreateGroupResponse extends BaseResponse
 	{
 		this.groupID = groupID;
 	}
+
+    public int getDate()
+    {
+        return date;
+    }
+
+    public void setDate(int date)
+    {
+        this.date = date;
+    }
 }

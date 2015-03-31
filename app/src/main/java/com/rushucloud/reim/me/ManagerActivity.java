@@ -42,6 +42,7 @@ import netUtils.response.user.DefaultManagerResponse;
 
 public class ManagerActivity extends Activity
 {
+    private TextView noMemberTextView;
     private EditText managerEditText;
     private ImageView avatarImageView;
     private TextView nicknameTextView;
@@ -138,6 +139,10 @@ public class ManagerActivity extends Activity
 				{
 					ViewUtils.showToast(ManagerActivity.this, R.string.error_save_network_unavailable);
 				}
+                else if (manager == null && (currentUser.getDefaultManagerID() == -1 || currentUser.getDefaultManagerID() == 0))
+                {
+                    finish();
+                }
 				else if (manager == null)
 				{
 					sendDefaultManagerRequest(-1);			
@@ -156,6 +161,8 @@ public class ManagerActivity extends Activity
 				}
 			}
 		});
+
+        noMemberTextView = (TextView) findViewById(R.id.noMemberTextView);
 
         managerEditText = (EditText) findViewById(R.id.managerEditText);
         managerEditText.addTextChangedListener(new TextWatcher()
@@ -223,19 +230,28 @@ public class ManagerActivity extends Activity
 
 	private void initListView()
 	{
-		adapter = new MemberListViewAdapter(this, userList, chosenList);
-		managerListView.setAdapter(adapter);
-		
-		if (PhoneUtils.isNetworkConnected())
-		{
-			for (User user : userList)
-			{
-				if (user.hasUndownloadedAvatar())
-				{
-					sendDownloadAvatarRequest(user);
-				}
-			}
-		}
+        if (userList.isEmpty())
+        {
+            noMemberTextView.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            noMemberTextView.setVisibility(View.GONE);
+
+            adapter = new MemberListViewAdapter(this, userList, chosenList);
+            managerListView.setAdapter(adapter);
+
+            if (PhoneUtils.isNetworkConnected())
+            {
+                for (User user : userList)
+                {
+                    if (user.hasUndownloadedAvatar())
+                    {
+                        sendDownloadAvatarRequest(user);
+                    }
+                }
+            }
+        }
 	}
 
     private void filterList()

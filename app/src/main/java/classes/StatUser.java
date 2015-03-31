@@ -9,11 +9,6 @@ public class StatUser
 	private double amount = 0;
     private int itemCount =  -1;
 
-    public StatUser()
-    {
-
-    }
-
     public StatUser(JSONObject jObject)
     {
         try

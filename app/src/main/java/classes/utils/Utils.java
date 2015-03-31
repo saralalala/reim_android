@@ -2,6 +2,8 @@ package classes.utils;
 
 import android.text.TextUtils;
 
+import com.rushucloud.reim.R;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,7 +25,26 @@ public class Utils
 		long result = date.getTime() / 1000;
 		return (int) result;
 	}
-	
+
+    public static int getCurrentYear()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis((long) getCurrentTime() * 1000);
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public static int getCurrentMonth()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis((long) getCurrentTime() * 1000);
+        return calendar.get(Calendar.MONTH) + 1;
+    }
+
+    public static String getMonthString(int year, int month)
+    {
+        return year + ViewUtils.getString(R.string.year) + month + ViewUtils.getString(R.string.month);
+    }
+
 	public static String secondToStringUpToMinute(int second)
 	{
 		if (second <= 0)

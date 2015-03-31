@@ -19,6 +19,7 @@ import android.widget.PopupWindow;
 
 import com.rushucloud.reim.item.EditItemActivity;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +34,6 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.TabItem;
 import netUtils.HttpConnectionCallback;
-import netUtils.UDPClient;
-import netUtils.UDPConnectionCallback;
 import netUtils.request.EventsRequest;
 import netUtils.request.FeedbackRequest;
 import netUtils.request.group.GetGroupRequest;
@@ -65,6 +64,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+        UmengUpdateAgent.update(this);
 		initData();
 		initView();
 	}

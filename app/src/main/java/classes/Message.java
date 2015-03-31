@@ -12,6 +12,7 @@ import java.util.List;
 
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 
 public class Message implements Serializable
 {
@@ -37,7 +38,7 @@ public class Message implements Serializable
         try
         {
             setServerID(jObject.getInt("id"));
-            setTitle(ReimApplication.getContext().getString(R.string.message_from_admin));
+            setTitle(ViewUtils.getString(R.string.message_from_admin));
             setUpdateTime(jObject.getInt("feedts"));
             setType(TYPE_MESSAGE);
             setHasBeenRead(Utils.intToBoolean(jObject.getInt("sread")));

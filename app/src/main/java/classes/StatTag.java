@@ -9,11 +9,6 @@ public class StatTag
 	private double amount = 0;
     private int itemCount =  -1;
 
-    public StatTag()
-    {
-
-    }
-
     public StatTag(JSONObject jObject)
     {
         try

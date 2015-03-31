@@ -17,19 +17,24 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Group;
+import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
+import netUtils.request.group.CreateGroupRequest;
 import netUtils.request.group.ModifyGroupRequest;
+import netUtils.response.group.CreateGroupResponse;
 import netUtils.response.group.ModifyGroupResponse;
 
 public class CompanyActivity extends Activity
 {
 	private EditText companyEditText;
 
+    private AppPreference appPreference;
+    private DBManager dbManager;
 	private Group currentGroup;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -66,7 +71,9 @@ public class CompanyActivity extends Activity
 	
 	private void initData()
 	{
-		currentGroup = AppPreference.getAppPreference().getCurrentGroup();
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+		currentGroup = appPreference.getCurrentGroup();
 	}
 	
 	private void initView()
@@ -90,7 +97,11 @@ public class CompanyActivity extends Activity
 			{
 				hideSoftKeyboard();
 				
-				String originalName = currentGroup.getName();
+				String originalName = "";
+                if (currentGroup != null)
+                {
+                    originalName = currentGroup.getName();
+                }
 				String newName = companyEditText.getText().toString();
 				if (!PhoneUtils.isNetworkConnected())
 				{
@@ -107,14 +118,24 @@ public class CompanyActivity extends Activity
 				else
 				{
 					ReimProgressDialog.show();
-					sendModifyGroupRequest(newName);
+                    if (currentGroup == null)
+                    {
+                        sendCreateGroupRequest(newName);
+                    }
+                    else
+                    {
+                        sendModifyGroupRequest(newName);
+                    }
 				}
 			}
 		});
 		
 		companyEditText = (EditText) findViewById(R.id.companyEditText);
 		companyEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		companyEditText.setText(currentGroup.getName());
+        if (currentGroup != null)
+        {
+            companyEditText.setText(currentGroup.getName());
+        }
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
@@ -125,6 +146,55 @@ public class CompanyActivity extends Activity
 			}
 		});        
 	}
+
+    private void sendCreateGroupRequest(final String newName)
+    {
+        CreateGroupRequest request = new CreateGroupRequest(newName);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final CreateGroupResponse response = new CreateGroupResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    Group group = new Group();
+                    group.setName(newName);
+                    group.setServerID(response.getGroupID());
+                    group.setLocalUpdatedDate(response.getDate());
+                    group.setServerUpdatedDate(response.getDate());
+
+                    User currentUser = appPreference.getCurrentUser();
+                    currentUser.setGroupID(group.getServerID());
+
+                    dbManager.insertGroup(group);
+                    dbManager.updateUser(currentUser);
+                    appPreference.setCurrentGroupID(group.getServerID());
+                    appPreference.saveAppPreference();
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(CompanyActivity.this, R.string.succeed_in_creating_company);
+                            finish();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(CompanyActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
 	
 	private void sendModifyGroupRequest(final String newName)
 	{
@@ -133,11 +203,11 @@ public class CompanyActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				ModifyGroupResponse response = new ModifyGroupResponse(httpResponse);
+				final ModifyGroupResponse response = new ModifyGroupResponse(httpResponse);
 				if (response.getStatus())
 				{
 					currentGroup.setName(newName);
-					DBManager.getDBManager().updateGroup(currentGroup);
+					dbManager.updateGroup(currentGroup);
 					
 					runOnUiThread(new Runnable()
 					{
@@ -156,7 +226,7 @@ public class CompanyActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(CompanyActivity.this, R.string.failed_to_modify);
+							ViewUtils.showToast(CompanyActivity.this, R.string.failed_to_modify, response.getErrorMessage());
 						}
 					});
 				}
