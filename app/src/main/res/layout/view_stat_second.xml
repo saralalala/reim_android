@@ -5,49 +5,56 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/overviewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="center_horizontal">
-
-        <ImageView
-            android:id="@+id/leftArrowImageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:padding="10dp"
-            android:contentDescription="@string/choose_month"
-            android:src="@drawable/left_arrow"/>
+        android:gravity="center_vertical"
+        android:visibility="gone">
 
         <TextView
-            android:id="@+id/monthTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="6dp"
-            android:text="2015年3月"
-            android:textColor="@color/major_dark"
-            android:textSize="16sp"/>
+            android:layout_marginLeft="16dp"
+            android:text="@string/total"
+            android:textColor="@color/font_major_dark"
+            android:textSize="20sp" />
 
-        <ImageView
-            android:id="@+id/rightArrowImageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:padding="10dp"
-            android:layout_marginLeft="6dp"
-            android:contentDescription="@string/choose_month"
-            android:src="@drawable/right_arrow"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="16dp"
+            android:gravity="right">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rmb_symbol"
+                android:textColor="@color/font_major_dark"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/overviewTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/font_major_dark"
+                android:textSize="20sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/pieLayout"
         android:layout_width="286dp"
         android:layout_height="286dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp">
 
         <FrameLayout
-            android:id="@+id/othersStatContainer"
+            android:id="@+id/statContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
@@ -62,21 +69,21 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:baselineAligned="false" >
-                
-	            <TextView
-	                android:id="@+id/othersTotalTextView"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:textColor="@color/major_dark"
-	                android:textSize="50sp" />
-                
-	            <TextView
-	                android:id="@+id/othersUnitTextView"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:textColor="@color/major_dark"
-	                android:textSize="38sp" />
-	            
+
+                <TextView
+                    android:id="@+id/totalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/major_dark"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/unitTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/major_dark"
+                    android:textSize="38sp" />
+
             </LinearLayout>
 
             <TextView
@@ -103,6 +110,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/categoryLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -129,8 +137,7 @@
         android:id="@+id/tagTitleLayout"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:orientation="horizontal"
-        android:background="@color/list_item_header" >
+        android:background="@color/list_item_header">
 
         <include
             android:layout_width="match_parent"
@@ -154,40 +161,52 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tagTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="@string/no_tag_cost"
+        android:textColor="@color/font_list_item_header"
+        android:textSize="14sp"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:id="@+id/tagLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical"/>
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        layout="@layout/view_divider" />
-
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/memberTitleLayout"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:background="@color/list_item_header"
-        android:orientation="vertical" >
+        android:background="@color/list_item_header">
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            layout="@layout/view_divider" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:gravity="center_vertical"
             android:text="@string/stat_by_member"
             android:textColor="@color/font_list_item_header"
             android:textSize="14sp" />
 
-    </LinearLayout>
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            layout="@layout/view_divider" />
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_alignParentBottom="true"
-        layout="@layout/view_divider" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/memberLayout"

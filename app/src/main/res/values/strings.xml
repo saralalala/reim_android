@@ -14,11 +14,12 @@
     <string name="rmb">元</string>
     <string name="rmb_symbol">¥</string>
     <string name="percent">%</string>
-    <string name="point">·</string>
+    <string name="dash">-</string>
     <string name="ten_thousand">万</string>
     <string name="one_hundred_million">亿</string>
     <string name="year">年</string>
     <string name="month">月</string>
+    <string name="total">总计</string>
     
     <string name="confirm">确定</string>
     <string name="save">保存</string>
@@ -160,6 +161,10 @@
     <string name="stat_by_member">人员统计</string>
     <string name="choose_month">选择月份</string>
     <string name="deleted_category">已删除类别</string>
+    <string name="stat_category">类别-</string>
+    <string name="stat_tag">标签-</string>
+    <string name="stat_user">人员-</string>
+    <string name="no_tag_cost">目前没有任何属于标签下的花费</string>
     
     <string name="personal_center">个人中心</string>
     <string name="sign_out">切换账号</string>

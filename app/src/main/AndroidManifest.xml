@@ -180,6 +180,12 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
 
+        <!--   statistics part   -->
+        <activity
+            android:name=".StatisticsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+
         <!--   me part   -->
         <activity
             android:name=".me.ProfileActivity"

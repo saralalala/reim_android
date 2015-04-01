@@ -1,5 +1,6 @@
 package com.rushucloud.reim;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -47,6 +48,7 @@ import netUtils.response.statistics.OthersStatResponse;
 public class StatisticsFragment extends Fragment
 {
 	private static final int GET_DATA_INTERVAL = 600;
+    private static final int DEFAULT_ICON_ID = 11;
 
     private View view;
     private TextView statTitleTextView;
@@ -79,12 +81,12 @@ public class StatisticsFragment extends Fragment
 	private AppPreference appPreference;
 	private DBManager dbManager;
 
-    private int colorR[] = {56, 60, 181, 232, 181, 141, 62, 255, 138, 238, 125};
-    private int colorG[] = {56, 183, 112, 140, 184, 192, 119, 196, 118, 149, 173};
-    private int colorB[] = {56, 152, 178, 191, 69, 219, 219, 0, 203, 50, 165};
-    private int colorRDiff[] = {169, 137, 52, 16, 52, 80, 135, 0, 82, 12, 91};
-    private int colorGDiff[] = {169, 51, 100, 81, 50, 44, 95, 41, 96, 74, 58};
-    private int colorBDiff[] = {169, 72, 54, 45, 131, 25, 25, 179, 37, 144, 63};
+    private int colorR[] = {60, 181, 232, 181, 141, 62, 255, 138, 238, 125, 56};
+    private int colorG[] = {183, 112, 140, 184, 192, 119, 196, 118, 149, 173, 56};
+    private int colorB[] = {152, 178, 191, 69, 219, 219, 0, 203, 50, 165, 56};
+    private int colorRDiff[] = {137, 52, 16, 52, 80, 135, 0, 82, 12, 91, 169};
+    private int colorGDiff[] = {51, 100, 81, 50, 44, 95, 41, 96, 74, 58, 169};
+    private int colorBDiff[] = {72, 54, 45, 131, 25, 25, 179, 37, 144, 63, 169};
     private int year;
     private int month;
 	private boolean hasInit = false;
@@ -523,7 +525,7 @@ public class StatisticsFragment extends Fragment
             totalAmount += category.getAmount();
             if (localCategory != null)
             {
-                int iconID = localCategory.getIconID() < 1? 0 : localCategory.getIconID();
+                int iconID = localCategory.getIconID() < 1? DEFAULT_ICON_ID : localCategory.getIconID();
                 category.setIconID(iconID);
                 category.setName(localCategory.getName());
                 if (categoryArray.indexOfKey(localCategory.getIconID()) < 0)
@@ -540,11 +542,11 @@ public class StatisticsFragment extends Fragment
         }
         if (deletedCategory.getAmount() > 0)
         {
-            if (categoryArray.indexOfKey(0) < 0)
+            if (categoryArray.indexOfKey(DEFAULT_ICON_ID) < 0)
             {
-                categoryArray.put(0, new ArrayList<StatCategory>());
+                categoryArray.put(DEFAULT_ICON_ID, new ArrayList<StatCategory>());
             }
-            List<StatCategory> list = categoryArray.get(0);
+            List<StatCategory> list = categoryArray.get(DEFAULT_ICON_ID);
             list.add(deletedCategory);
         }
 
@@ -574,22 +576,25 @@ public class StatisticsFragment extends Fragment
         for (int i = 0; i < categoryArray.size(); i++)
         {
             int key = categoryArray.keyAt(i);
+            int colorIndex = key - 1;
             List<StatCategory> categories = categoryArray.get(key);
-            int rDiff = categories.size() == 1? colorRDiff[key] : colorRDiff[key] / (categories.size() - 1);
-            int gDiff = categories.size() == 1? colorGDiff[key] : colorGDiff[key] / (categories.size() - 1);
-            int bDiff = categories.size() == 1? colorBDiff[key] : colorBDiff[key] / (categories.size() - 1);
+            int rDiff = categories.size() == 1? colorRDiff[colorIndex] : colorRDiff[colorIndex] / (categories.size() - 1);
+            int gDiff = categories.size() == 1? colorGDiff[colorIndex] : colorGDiff[colorIndex] / (categories.size() - 1);
+            int bDiff = categories.size() == 1? colorBDiff[colorIndex] : colorBDiff[colorIndex] / (categories.size() - 1);
             for (int j = 0; j < categories.size(); j++)
             {
-                StatCategory category = categories.get(j);
-                if (key != 0)
+                final StatCategory category = categories.get(j);
+                if (key != DEFAULT_ICON_ID)
                 {
-                    category.setColor(Color.rgb(colorR[key] + j * rDiff, colorG[key] + j * gDiff, colorB[key] + j * bDiff));
+                    category.setColor(Color.rgb(colorR[colorIndex] + j * rDiff,
+                                                colorG[colorIndex] + j * gDiff,
+                                                colorB[colorIndex] + j * bDiff));
                 }
                 else
                 {
-                    category.setColor(Color.rgb(colorR[key] + colorRDiff[key] - j * rDiff,
-                                                colorG[key] + colorGDiff[key] - j * gDiff,
-                                                colorB[key] + colorBDiff[key] - j * bDiff));
+                    category.setColor(Color.rgb(colorR[colorIndex] + colorRDiff[colorIndex] - j * rDiff,
+                                                colorG[colorIndex] + colorGDiff[colorIndex] - j * gDiff,
+                                                colorB[colorIndex] + colorBDiff[colorIndex] - j * bDiff));
                 }
 
                 float angle = i == categoryArray.size() - 1 && j == categories.size() - 1?
@@ -601,13 +606,23 @@ public class StatisticsFragment extends Fragment
                 startAngle += angle;
 
                 View categoryView = View.inflate(getActivity(), R.layout.list_category_stat_others, null);
-                categoryView.setOnClickListener(new View.OnClickListener()
+                if (!category.getName().equals(getString(R.string.deleted_category)))
                 {
-                    public void onClick(View v)
+                    categoryView.setBackgroundResource(R.drawable.list_item_drawable);
+                    categoryView.setOnClickListener(new View.OnClickListener()
                     {
-
-                    }
-                });
+                        public void onClick(View v)
+                        {
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("year", year);
+                            bundle.putInt("month", month);
+                            bundle.putInt("categoryID", category.getCategoryID());
+                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    });
+                }
 
                 ImageView iconImageView = (ImageView) categoryView.findViewById(R.id.iconImageView);
                 ViewUtils.setImageViewBitmap(category, iconImageView);
@@ -659,13 +674,27 @@ public class StatisticsFragment extends Fragment
 
             for (StatTag tag : tagList)
             {
-                Tag localTag = dbManager.getTag(tag.getTagID());
+                final Tag localTag = dbManager.getTag(tag.getTagID());
                 if (localTag != null)
                 {
                     double amount = tag.getAmount();
                     ReimBar tagBar = new ReimBar(getActivity(), amount / max);
 
                     View view = View.inflate(getActivity(), R.layout.list_tag_stat, null);
+                    view.setBackgroundResource(R.drawable.list_item_drawable);
+                    view.setOnClickListener(new View.OnClickListener()
+                    {
+                        public void onClick(View v)
+                        {
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("year", year);
+                            bundle.putInt("month", month);
+                            bundle.putInt("tagID", localTag.getServerID());
+                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    });
 
                     TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
                     nameTextView.setText(localTag.getName());
@@ -709,10 +738,24 @@ public class StatisticsFragment extends Fragment
         {
             for (StatUser user : userList)
             {
-                User localUser = dbManager.getUser(user.getUserID());
+                final User localUser = dbManager.getUser(user.getUserID());
                 if (localUser != null)
                 {
                     View view = View.inflate(getActivity(), R.layout.list_member_stat, null);
+                    view.setBackgroundResource(R.drawable.list_item_drawable);
+                    view.setOnClickListener(new View.OnClickListener()
+                    {
+                        public void onClick(View v)
+                        {
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("year", year);
+                            bundle.putInt("month", month);
+                            bundle.putInt("userID", localUser.getServerID());
+                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    });
 
                     TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
                     nameTextView.setText(localUser.getNickname());
