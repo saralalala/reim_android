@@ -46,23 +46,10 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/statistics"
-            android:src="@drawable/pie" />
-
         <FrameLayout
             android:id="@+id/othersStatContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/statistics"
-            android:src="@drawable/pie_cover" />
+            android:layout_height="match_parent"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -116,50 +103,68 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/categoryLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="30dp"
-        layout="@layout/view_divider" />
+        <LinearLayout
+            android:id="@+id/leftCategoryLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"/>
 
-    <LinearLayout
+        <LinearLayout
+            android:id="@+id/rightCategoryLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/tagTitleLayout"
         android:layout_width="match_parent"
-        android:layout_height="24dp"
+        android:layout_height="25dp"
         android:orientation="horizontal"
         android:background="@color/list_item_header" >
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="16dp"
+            layout="@layout/view_divider" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:text="@string/stat_by_tag"
             android:textColor="@color/font_list_item_header"
             android:textSize="14sp" />
 
-    </LinearLayout>
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            layout="@layout/view_divider" />
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        layout="@layout/view_divider" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/tagLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
         android:orientation="vertical" />
 
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:layout_marginTop="16dp"
         layout="@layout/view_divider" />
 
     <LinearLayout

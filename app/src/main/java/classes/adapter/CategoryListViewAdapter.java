@@ -59,7 +59,7 @@ public class CategoryListViewAdapter extends BaseAdapter
 
 		if (check != null)
 		{
-			int color = check[position] ? selectedColor : unselectedColor;
+			int color = check[position]? selectedColor : unselectedColor;
 			nameTextView.setTextColor(color);
 		}
 		

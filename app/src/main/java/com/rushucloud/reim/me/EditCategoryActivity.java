@@ -153,10 +153,10 @@ public class EditCategoryActivity extends Activity
 			{
 				String name = nameEditText.getText().toString();
 //				String limitString = limitEditText.getText().toString();
-//                double limit = limitString.isEmpty() ? 0 : Utils.stringToDouble(limitString);
+//                double limit = limitString.isEmpty()? 0 : Utils.stringToDouble(limitString);
 //                boolean isProveAhead = proveAheadToggleButton.isChecked();
                 int iconIndex = checkList.indexOf(true);
-                int iconID = iconIndex == -1 ? -1 : iconIndex + 1;
+                int iconID = iconIndex == -1? -1 : iconIndex + 1;
 
                 category.setName(name);
                 category.setGroupID(AppPreference.getAppPreference().getCurrentGroupID());

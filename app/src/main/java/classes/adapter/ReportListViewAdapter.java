@@ -53,17 +53,17 @@ public class ReportListViewAdapter extends BaseAdapter
 		statusTextView.setText(report.getStatusString());
 		statusTextView.setBackgroundResource(report.getStatusBackground());
 		
-		String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
+		String title = report.getTitle().isEmpty()? context.getString(R.string.report_no_name) : report.getTitle();
 		titleTextView.setText(title);
 
 		String date = Utils.secondToStringUpToDay(report.getCreatedDate());
-		dateTextView.setText(date.isEmpty() ? context.getString(R.string.not_available) : date);
+		dateTextView.setText(date.isEmpty()? context.getString(R.string.not_available) : date);
 		
 		double amount = dbManager.getReportAmount(report.getLocalID());
 		amountTextView.setText(Utils.formatDouble(amount));
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 
-        int visibility = unreadList.contains(report.getServerID()) ? View.VISIBLE : View.INVISIBLE;
+        int visibility = unreadList.contains(report.getServerID())? View.VISIBLE : View.INVISIBLE;
         tipImageView.setVisibility(visibility);
 
 		return convertView;

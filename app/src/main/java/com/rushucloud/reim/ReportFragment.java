@@ -1158,7 +1158,7 @@ public class ReportFragment extends Fragment
 					{
 						public void run()
 						{
-							int reportID = ReimApplication.getReportTabIndex() == 0 ? report.getLocalID() : report.getServerID();
+							int reportID = ReimApplication.getReportTabIndex() == 0? report.getLocalID() : report.getServerID();
 							deleteLocalReport(reportID);
 						}
 					});
@@ -1350,8 +1350,8 @@ public class ReportFragment extends Fragment
 					public void run()
 					{
 						reportListView.stopRefresh();
-//						String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-						int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
+//						String prompt = SyncUtils.isSyncOnGoing? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+						int prompt = SyncUtils.isSyncOnGoing? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
 						ViewUtils.showToast(getActivity(), prompt);
 					}
 				});

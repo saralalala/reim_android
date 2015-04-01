@@ -42,7 +42,7 @@ public class TagListViewAdapter extends BaseAdapter
 		
 		if (check != null)
 		{
-			int color = check[position] ? R.color.list_item_selected : R.color.list_item_unselected;
+			int color = check[position]? R.color.list_item_selected : R.color.list_item_unselected;
 			convertView.setBackgroundResource(color);
 		}
 
@@ -61,7 +61,7 @@ public class TagListViewAdapter extends BaseAdapter
 
 		if (check != null)
 		{
-			int color = check[position] ? selectedColor : unselectedColor;
+			int color = check[position]? selectedColor : unselectedColor;
 			nameTextView.setTextColor(color);			
 		}
 		

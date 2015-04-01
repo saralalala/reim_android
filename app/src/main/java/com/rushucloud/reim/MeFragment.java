@@ -331,7 +331,7 @@ public class MeFragment extends Fragment
         }
         else
         {
-            int visibility = ReimApplication.hasMessages() ? View.VISIBLE : View.GONE;
+            int visibility = ReimApplication.hasMessages()? View.VISIBLE : View.GONE;
             tipImageView.setVisibility(visibility);
         }
     }

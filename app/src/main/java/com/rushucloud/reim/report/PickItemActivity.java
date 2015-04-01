@@ -256,7 +256,7 @@ public class PickItemActivity extends Activity implements OnClickListener
 			{
 				try
 				{
-					chosenItemIDList = tabIndex == 0 ? consumedChosenList : proveChosenList;
+					chosenItemIDList = tabIndex == 0? consumedChosenList : proveChosenList;
 					Bundle bundle = new Bundle();
 					bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
                     bundle.putBoolean("isProveAhead", isProveAhead);
@@ -527,7 +527,7 @@ public class PickItemActivity extends Activity implements OnClickListener
 			consumedTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
 			proveAheadTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
 
-            int visibility = consumedItemList.isEmpty() ? View.VISIBLE : View.INVISIBLE;
+            int visibility = consumedItemList.isEmpty()? View.VISIBLE : View.INVISIBLE;
             warningTextView.setVisibility(visibility);
             adapter.set(consumedShowList, consumedChosenList);
             adapter.notifyDataSetChanged();
@@ -542,7 +542,7 @@ public class PickItemActivity extends Activity implements OnClickListener
 			consumedTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
 			proveAheadTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
 
-            int visibility = proveAheadItemList.isEmpty() ? View.VISIBLE : View.INVISIBLE;
+            int visibility = proveAheadItemList.isEmpty()? View.VISIBLE : View.INVISIBLE;
             warningTextView.setVisibility(visibility);
             adapter.set(proveAheadShowList, proveChosenList);
             adapter.notifyDataSetChanged();
@@ -573,12 +573,12 @@ public class PickItemActivity extends Activity implements OnClickListener
 			View view;
 			if (tabIndex == 0)
 			{
-				int layoutID = consumedTempTagCheck[i] ? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
+				int layoutID = consumedTempTagCheck[i]? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
 				view = View.inflate(PickItemActivity.this, layoutID, null);
 			}
 			else
 			{
-				int layoutID = proveTempTagCheck[i] ? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
+				int layoutID = proveTempTagCheck[i]? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
 				view = View.inflate(PickItemActivity.this, layoutID, null);
 			}
 

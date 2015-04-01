@@ -60,7 +60,7 @@ public class InvoiceTitleActivity extends Activity
         });
 
 		Group group = AppPreference.getAppPreference().getCurrentGroup();
-        String title = group == null ? getString(R.string.invoice_invalid) : group.getName();
+        String title = group == null? getString(R.string.invoice_invalid) : group.getName();
 		TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
 		titleTextView.setText(title);
 	}

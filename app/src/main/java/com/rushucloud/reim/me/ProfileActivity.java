@@ -340,16 +340,16 @@ public class ProfileActivity extends Activity
 
         ViewUtils.setImageViewBitmap(currentUser, avatarImageView);
 		
-		String email = currentUser != null && !currentUser.getEmail().isEmpty() ? currentUser.getEmail() : getString(R.string.not_binding);
+		String email = currentUser != null && !currentUser.getEmail().isEmpty()? currentUser.getEmail() : getString(R.string.not_binding);
 		emailTextView.setText(email);
 		
-		String phone = currentUser != null && !currentUser.getPhone().isEmpty() ? currentUser.getPhone() : getString(R.string.not_binding);
+		String phone = currentUser != null && !currentUser.getPhone().isEmpty()? currentUser.getPhone() : getString(R.string.not_binding);
 		phoneTextView.setText(phone);
 		
-		String nickname = currentUser != null && !currentUser.getNickname().isEmpty() ? currentUser.getNickname() : getString(R.string.empty);
+		String nickname = currentUser != null && !currentUser.getNickname().isEmpty()? currentUser.getNickname() : getString(R.string.empty);
 		nicknameTextView.setText(nickname);
 		
-		String companyName = currentGroup != null ? currentGroup.getName() : getString(R.string.empty);	
+		String companyName = currentGroup != null? currentGroup.getName() : getString(R.string.empty);
 		companyTextView.setText(companyName);
 		
         if (!currentUser.isAdmin())

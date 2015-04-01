@@ -57,7 +57,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
 			TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
 
-			String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
+			String title = report.getTitle().isEmpty()? context.getString(R.string.report_no_name) : report.getTitle();
 			titleTextView.setText(title);
 			
 			timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
@@ -160,7 +160,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-			String vendor = item.getVendor().isEmpty() ? context.getString(R.string.vendor_not_available) : item.getVendor();
+			String vendor = item.getVendor().isEmpty()? context.getString(R.string.vendor_not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
 			Category category = item.getCategory();

@@ -207,7 +207,7 @@ public class EditReportActivity extends Activity
             }
             else
             {
-                lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
+                lastCommentCount = report.getCommentList() != null? report.getCommentList().size() : 0;
             }
 			newReport = report.getLocalID() == -1;
 			if (!newReport)
@@ -279,7 +279,7 @@ public class EditReportActivity extends Activity
 			titleEditText.requestFocus();
 		}
 
-		int createDate = report.getCreatedDate() == -1 ? Utils.getCurrentTime() : report.getCreatedDate();
+		int createDate = report.getCreatedDate() == -1? Utils.getCurrentTime() : report.getCreatedDate();
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
 		timeTextView.setText(Utils.secondToStringUpToMinute(createDate));
 		
@@ -562,7 +562,7 @@ public class EditReportActivity extends Activity
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-			String vendor = item.getVendor().isEmpty() ? getString(R.string.vendor_not_available) : item.getVendor();
+			String vendor = item.getVendor().isEmpty()? getString(R.string.vendor_not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
 			if (item.missingInfo())

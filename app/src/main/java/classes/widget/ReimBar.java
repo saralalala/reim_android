@@ -16,7 +16,6 @@ public class ReimBar extends View
 	private Paint paint = new Paint();
 	private RectF rect = new RectF();
 	private double ratio;
-	private int width;
 	private int height = ViewUtils.dpToPixel(getResources(), 18);
 	private int radius = ViewUtils.dpToPixel(getResources(), 2);
 	
@@ -38,11 +37,9 @@ public class ReimBar extends View
 
 	public void onDraw(Canvas canvas)
 	{
-		width = canvas.getWidth();
-		
 		rect.left = 0;
 		rect.top = 0;
-		rect.right = (float) (width * ratio);
+		rect.right = (float) (canvas.getWidth() * ratio);
 		rect.bottom = height;
 		
 		canvas.drawRoundRect(rect, radius, radius, paint);

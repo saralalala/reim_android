@@ -1,7 +1,9 @@
 package com.rushucloud.reim;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,6 +33,7 @@ import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimBar;
+import classes.widget.ReimCircle;
 import classes.widget.ReimPie;
 import classes.widget.ReimProgressDialog;
 import classes.widget.XListView;
@@ -66,13 +70,21 @@ public class StatisticsFragment extends Fragment
     private FrameLayout othersStatContainer;
     private TextView othersTotalTextView;
     private TextView othersUnitTextView;
-    private LinearLayout othersCategoryLayout;
+    private LinearLayout leftCategoryLayout;
+    private LinearLayout rightCategoryLayout;
+    private RelativeLayout tagTitleLayout;
     private LinearLayout tagLayout;
     private LinearLayout memberLayout;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
 
+    private int colorR[] = {56, 60, 181, 232, 181, 141, 62, 255, 138, 238, 125};
+    private int colorG[] = {56, 183, 112, 140, 184, 192, 119, 196, 118, 149, 173};
+    private int colorB[] = {56, 152, 178, 191, 69, 219, 219, 0, 203, 50, 165};
+    private int colorRDiff[] = {169, 137, 52, 16, 52, 80, 135, 0, 82, 12, 91};
+    private int colorGDiff[] = {169, 51, 100, 81, 50, 44, 95, 41, 96, 74, 58};
+    private int colorBDiff[] = {169, 72, 54, 45, 131, 25, 25, 179, 37, 144, 63};
     private int year;
     private int month;
 	private boolean hasInit = false;
@@ -280,7 +292,9 @@ public class StatisticsFragment extends Fragment
 
         othersUnitTextView = (TextView) othersView.findViewById(R.id.othersUnitTextView);
 
-        othersCategoryLayout = (LinearLayout) othersView.findViewById(R.id.categoryLayout);
+        leftCategoryLayout = (LinearLayout) othersView.findViewById(R.id.leftCategoryLayout);
+        rightCategoryLayout = (LinearLayout) othersView.findViewById(R.id.rightCategoryLayout);
+        tagTitleLayout = (RelativeLayout) othersView.findViewById(R.id.tagTitleLayout);
         tagLayout = (LinearLayout) othersView.findViewById(R.id.tagLayout);
         memberLayout = (LinearLayout) othersView.findViewById(R.id.memberLayout);
 
@@ -297,7 +311,8 @@ public class StatisticsFragment extends Fragment
     private void resetOthersView()
     {
         othersStatContainer.removeAllViews();
-        othersCategoryLayout.removeAllViews();
+        leftCategoryLayout.removeAllViews();
+        rightCategoryLayout.removeAllViews();
         tagLayout.removeAllViews();
         memberLayout.removeAllViews();
     }
@@ -399,12 +414,12 @@ public class StatisticsFragment extends Fragment
 		float newAngle = (float) newRatio * totalAngle / 100;
 
         // Draw new pie
-        ReimPie newReimPie = new ReimPie(getActivity(), startAngle, newAngle, mineStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_new));
+        ReimPie newReimPie = new ReimPie(getActivity(), startAngle, newAngle, mineStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_new), 2);
         mineStatContainer.addView(newReimPie);
 
 		// Draw ongoing pie
         startAngle += newAngle;
-		ReimPie ongoingReimPie = new ReimPie(getActivity(), startAngle, ongoingAngle, mineStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_ongoing));
+		ReimPie ongoingReimPie = new ReimPie(getActivity(), startAngle, ongoingAngle, mineStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_ongoing), 2);
         mineStatContainer.addView(ongoingReimPie);
 	}
 
@@ -497,10 +512,40 @@ public class StatisticsFragment extends Fragment
 
     private void drawCategoryPie(List<StatCategory> categoryList)
     {
+        SparseArray<List<StatCategory>> categoryArray = new SparseArray<List<StatCategory>>();
+
         double totalAmount = 0;
+        StatCategory deletedCategory = new StatCategory();
+        deletedCategory.setName(getString(R.string.deleted_category));
         for (StatCategory category : categoryList)
         {
+            Category localCategory = dbManager.getCategory(category.getCategoryID());
             totalAmount += category.getAmount();
+            if (localCategory != null)
+            {
+                int iconID = localCategory.getIconID() < 1? 0 : localCategory.getIconID();
+                category.setIconID(iconID);
+                category.setName(localCategory.getName());
+                if (categoryArray.indexOfKey(localCategory.getIconID()) < 0)
+                {
+                    categoryArray.put(localCategory.getIconID(), new ArrayList<StatCategory>());
+                }
+                List<StatCategory> list = categoryArray.get(localCategory.getIconID());
+                list.add(category);
+            }
+            else
+            {
+                deletedCategory.setAmount(deletedCategory.getAmount() + category.getAmount());
+            }
+        }
+        if (deletedCategory.getAmount() > 0)
+        {
+            if (categoryArray.indexOfKey(0) < 0)
+            {
+                categoryArray.put(0, new ArrayList<StatCategory>());
+            }
+            List<StatCategory> list = categoryArray.get(0);
+            list.add(deletedCategory);
         }
 
         if (totalAmount < 10000)
@@ -519,22 +564,90 @@ public class StatisticsFragment extends Fragment
             othersUnitTextView.setText(R.string.one_hundred_million);
         }
 
+        ReimPie reimPie = new ReimPie(getActivity(), 0, 360, othersStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_pie), 1);
+        othersStatContainer.addView(reimPie);
+
         float startAngle = -90;
 
-        // Draw new pie
-//        ReimPie newReimPie = new ReimPie(getActivity(), startAngle, newAngle, mineStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_new));
-//        mineStatContainer.addView(newReimPie);
+        int legendWidth = ViewUtils.dpToPixel(getActivity(), 10);
+        int count = 0;
+        for (int i = 0; i < categoryArray.size(); i++)
+        {
+            int key = categoryArray.keyAt(i);
+            List<StatCategory> categories = categoryArray.get(key);
+            int rDiff = categories.size() == 1? colorRDiff[key] : colorRDiff[key] / (categories.size() - 1);
+            int gDiff = categories.size() == 1? colorGDiff[key] : colorGDiff[key] / (categories.size() - 1);
+            int bDiff = categories.size() == 1? colorBDiff[key] : colorBDiff[key] / (categories.size() - 1);
+            for (int j = 0; j < categories.size(); j++)
+            {
+                StatCategory category = categories.get(j);
+                if (key != 0)
+                {
+                    category.setColor(Color.rgb(colorR[key] + j * rDiff, colorG[key] + j * gDiff, colorB[key] + j * bDiff));
+                }
+                else
+                {
+                    category.setColor(Color.rgb(colorR[key] + colorRDiff[key] - j * rDiff,
+                                                colorG[key] + colorGDiff[key] - j * gDiff,
+                                                colorB[key] + colorBDiff[key] - j * bDiff));
+                }
 
-        // Draw ongoing pie
-//        startAngle += newAngle;
-//        ReimPie ongoingReimPie = new ReimPie(getActivity(), startAngle, ongoingAngle, mineStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_ongoing));
-//        mineStatContainer.addView(ongoingReimPie);
+                float angle = i == categoryArray.size() - 1 && j == categories.size() - 1?
+                                    270 - startAngle : (float) (360 * category.getAmount() / totalAmount);
+
+                reimPie = new ReimPie(getActivity(), startAngle, angle, othersStatContainer.getWidth(), category.getColor(), 1);
+                othersStatContainer.addView(reimPie);
+
+                startAngle += angle;
+
+                View categoryView = View.inflate(getActivity(), R.layout.list_category_stat_others, null);
+                categoryView.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+
+                    }
+                });
+
+                ImageView iconImageView = (ImageView) categoryView.findViewById(R.id.iconImageView);
+                ViewUtils.setImageViewBitmap(category, iconImageView);
+
+                TextView amountTextView = (TextView) categoryView.findViewById(R.id.amountTextView);
+                amountTextView.setText(Utils.formatDouble(category.getAmount()));
+
+                FrameLayout legendLayout = (FrameLayout) categoryView.findViewById(R.id.legendLayout);
+                ReimPie legendPie = new ReimPie(getActivity(), 0, 360, legendWidth, category.getColor(), 0);
+                legendLayout.addView(legendPie);
+
+                TextView nameTextView = (TextView) categoryView.findViewById(R.id.nameTextView);
+                nameTextView.setText(category.getName());
+
+                if (count % 2 == 0)
+                {
+                    leftCategoryLayout.addView(categoryView);
+                }
+                else
+                {
+                    rightCategoryLayout.addView(categoryView);
+                }
+                count++;
+            }
+        }
+
+        ReimCircle reimCircle = new ReimCircle(getActivity(), 12, othersStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_pie_border), 1);
+        othersStatContainer.addView(reimCircle);
+
+        reimPie = new ReimPie(getActivity(), 0, 360, othersStatContainer.getWidth(), ViewUtils.getColor(R.color.background), 40);
+        othersStatContainer.addView(reimPie);
     }
 
     private void drawTagBar(List<StatTag> tagList)
     {
         if (!tagList.isEmpty())
         {
+            tagTitleLayout.setVisibility(View.VISIBLE);
+            tagLayout.setVisibility(View.VISIBLE);
+
             double max = 0;
             for (StatTag tag : tagList)
             {
@@ -582,6 +695,11 @@ public class StatisticsFragment extends Fragment
                     tagLayout.addView(view);
                 }
             }
+        }
+        else
+        {
+            tagTitleLayout.setVisibility(View.GONE);
+            tagLayout.setVisibility(View.GONE);
         }
     }
 

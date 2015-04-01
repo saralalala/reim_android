@@ -12,7 +12,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="16dp"
         android:text="@string/no_pending_reports"
-        android:textColor="@color/font_major_dark"
+        android:textColor="@color/hint_light_grey"
         android:textSize="16sp" />
 
 </LinearLayout>

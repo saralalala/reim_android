@@ -267,7 +267,7 @@ public class EditItemActivity extends Activity
                 case PICK_LOCATION:
                 {
                     item.setLocation(data.getStringExtra("location"));
-                    String location = item.getLocation().isEmpty() ? getString(R.string.no_location) : item.getLocation();
+                    String location = item.getLocation().isEmpty()? getString(R.string.no_location) : item.getLocation();
                     locationTextView.setText(location);
                     break;
                 }
@@ -558,7 +558,7 @@ public class EditItemActivity extends Activity
     private void initTypeView()
     {
         // init type
-        String temp = item.isProveAhead() ? getString(R.string.prove_ahead) : getString(R.string.consumed);
+        String temp = item.isProveAhead()? getString(R.string.prove_ahead) : getString(R.string.consumed);
         if (item.needReimbursed())
         {
             temp += "/" + getString(R.string.need_reimburse);
@@ -625,7 +625,7 @@ public class EditItemActivity extends Activity
                 item.setIsProveAhead(proveAheadRadio.isChecked());
                 item.setNeedReimbursed(needReimToggleButton.isChecked());
 
-                String temp = item.isProveAhead() ? getString(R.string.prove_ahead) : getString(R.string.consumed);
+                String temp = item.isProveAhead()? getString(R.string.prove_ahead) : getString(R.string.consumed);
                 if (item.needReimbursed())
                 {
                     temp += "/" + getString(R.string.need_reimburse);
@@ -722,7 +722,7 @@ public class EditItemActivity extends Activity
     private void initTimeView()
     {
         // init time
-        int time = item.getConsumedDate() > 0 ? item.getConsumedDate() : Utils.getCurrentTime();
+        int time = item.getConsumedDate() > 0? item.getConsumedDate() : Utils.getCurrentTime();
         timeTextView = (TextView) findViewById(R.id.timeTextView);
         timeTextView.setOnClickListener(new View.OnClickListener()
         {
@@ -780,7 +780,7 @@ public class EditItemActivity extends Activity
                     MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_MERCHANT");
                 }
 
-                String category = item.getCategory() != null ? item.getCategory().getName() : getString(R.string.null_string);
+                String category = item.getCategory() != null? item.getCategory().getName() : getString(R.string.null_string);
                 Intent intent = new Intent(EditItemActivity.this, PickVendorActivity.class);
                 intent.putExtra("category", category);
                 intent.putExtra("location", item.getLocation());
@@ -796,7 +796,7 @@ public class EditItemActivity extends Activity
 
     private void initLocationView()
     {
-        String cityName = item.getLocation().isEmpty() ? getString(R.string.no_location) : item.getLocation();
+        String cityName = item.getLocation().isEmpty()? getString(R.string.no_location) : item.getLocation();
         locationTextView = (TextView) findViewById(R.id.locationTextView);
         locationTextView.setText(cityName);
 
@@ -958,7 +958,7 @@ public class EditItemActivity extends Activity
         horizontalInterval = (layoutMaxLength - width * maxCount) / (maxCount - 1);
 
         LinearLayout layout = new LinearLayout(this);
-        int invoiceCount = item.getInvoices() != null ? item.getInvoices().size() : 0;
+        int invoiceCount = item.getInvoices() != null? item.getInvoices().size() : 0;
         for (int i = 0; i < invoiceCount; i++)
         {
             if (i > Item.MAX_INVOICE_COUNT)
@@ -1057,7 +1057,7 @@ public class EditItemActivity extends Activity
             layout.addView(view, params);
         }
 
-        int visibility = invoiceCount < Item.MAX_INVOICE_COUNT ? View.VISIBLE : View.INVISIBLE;
+        int visibility = invoiceCount < Item.MAX_INVOICE_COUNT? View.VISIBLE : View.INVISIBLE;
         addInvoiceImageView.setVisibility(visibility);
     }
 
@@ -1099,7 +1099,7 @@ public class EditItemActivity extends Activity
 
             int space = 0;
             LinearLayout layout = new LinearLayout(this);
-            int tagCount = item.getTags() != null ? item.getTags().size() : 0;
+            int tagCount = item.getTags() != null? item.getTags().size() : 0;
             for (int i = 0; i < tagCount; i++)
             {
                 String name = item.getTags().get(i).getName();
@@ -1152,7 +1152,7 @@ public class EditItemActivity extends Activity
         horizontalInterval = (layoutMaxWidth - width * maxCount) / (maxCount - 1);
 
         LinearLayout layout = new LinearLayout(this);
-        int memberCount = item.getRelevantUsers() != null ? item.getRelevantUsers().size() : 0;
+        int memberCount = item.getRelevantUsers() != null? item.getRelevantUsers().size() : 0;
         for (int i = 0; i < memberCount; i++)
         {
             if (i % maxCount == 0)

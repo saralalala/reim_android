@@ -43,7 +43,7 @@ public class MemberListViewAdapter extends BaseAdapter
         User user = memberList.get(position);
         boolean isChosen = chosenList.contains(user);
 
-        int color = isChosen ? R.color.list_item_selected : R.color.list_item_unselected;
+        int color = isChosen? R.color.list_item_selected : R.color.list_item_unselected;
         convertView.setBackgroundResource(color);
 
 		ImageView imageView = (ImageView) convertView.findViewById(R.id.avatarImageView);

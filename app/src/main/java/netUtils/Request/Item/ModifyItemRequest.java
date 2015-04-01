@@ -27,7 +27,7 @@ public class ModifyItemRequest extends BaseRequest
 		{
 			JSONArray jsonArray = new JSONArray();
 
-			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
+			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			JSONObject jObject = new JSONObject();
 			jObject.put("id", Integer.toString(item.getServerID()));
 			jObject.put("amount", Utils.formatDouble(item.getAmount()));

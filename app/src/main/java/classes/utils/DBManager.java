@@ -778,8 +778,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			System.out.println("insert item: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
-			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
-			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
+			int reportID = item.getBelongReport() == null? -1 : item.getBelongReport().getLocalID();
+			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			String sqlString = "INSERT INTO tbl_item (server_id, vendor, report_local_id, category_id, amount, pa_amount, " +
 							   							"user_id, consumed_date, note, status, location, createdt, server_updatedt, " +
 							   							"local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" + 
@@ -824,7 +824,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();			
+			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			String sqlString = "INSERT INTO tbl_others_item (server_id, vendor, report_server_id, category_id, tags_id, users_id, " +
 							   							"amount, pa_amount, user_id, consumed_date, note, status, location, createdt, " +
 							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" + 
@@ -877,8 +877,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			System.out.println("update item by local id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
-			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
-			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
+			int reportID = item.getBelongReport() == null? -1 : item.getBelongReport().getLocalID();
+			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			String sqlString = "UPDATE tbl_item SET " +
 								"server_id = '" + item.getServerID() + "'," +
 								"vendor = '" + item.getVendor() + "'," +
@@ -917,8 +917,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			System.out.println("update item by server id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
-			int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
-			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
+			int reportID = item.getBelongReport() == null? -1 : item.getBelongReport().getLocalID();
+			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			String sqlString = "UPDATE tbl_item SET " +
 								"server_id = '" + item.getServerID() + "'," +
 								"vendor = '" + item.getVendor() + "'," +
@@ -980,7 +980,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String idString = !remainingList.isEmpty() ? TextUtils.join(",", remainingList) + ", -1" : "-1";
+			String idString = !remainingList.isEmpty()? TextUtils.join(",", remainingList) + ", -1" : "-1";
 			List<Integer> itemIDList = new ArrayList<Integer>();
 
 			String command = "SELECT id FROM tbl_item WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
@@ -1850,7 +1850,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String idString = !remainingList.isEmpty() ? TextUtils.join(",", remainingList) + ",-1" : "-1";			
+			String idString = !remainingList.isEmpty()? TextUtils.join(",", remainingList) + ",-1" : "-1";
 			List<Integer> reportIDList = new ArrayList<Integer>();
 
 			String command = "SELECT id FROM tbl_report WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
@@ -2968,7 +2968,7 @@ public class DBManager extends SQLiteOpenHelper
 				}
 			}
 			
-			return !tags.isEmpty() ? tags : null;
+			return !tags.isEmpty()? tags : null;
 		}
 		catch (Exception e)
 		{

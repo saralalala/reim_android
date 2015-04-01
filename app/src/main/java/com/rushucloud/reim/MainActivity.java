@@ -387,13 +387,13 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	
 	private void showReportTip(boolean hasUnreadReports)
 	{
-        int visibility = hasUnreadReports ? View.VISIBLE : View.GONE;
+        int visibility = hasUnreadReports? View.VISIBLE : View.GONE;
         reportTipImageView.setVisibility(visibility);
 	}
 	
 	private void showMeTip(boolean hasMessages)
 	{
-        int visibility = hasMessages ? View.VISIBLE : View.GONE;
+        int visibility = hasMessages? View.VISIBLE : View.GONE;
         meTipImageView.setVisibility(visibility);
 	}
 
@@ -443,7 +443,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				GetGroupResponse response = new GetGroupResponse(httpResponse);
 				if (response.getStatus())
 				{
-					int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
+					int currentGroupID = response.getGroup() == null? -1 : response.getGroup().getServerID();
 					
 					// update members
 					List<User> memberList = response.getMemberList();

@@ -29,7 +29,7 @@ public class ModifyItemsRequest extends BaseRequest
 			
 			for (Item item : itemList)
 			{
-				int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();				
+				int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 				JSONObject jObject = new JSONObject();
 				jObject.put("id", item.getServerID());
 				jObject.put("amount", item.getAmount());

@@ -136,7 +136,7 @@ public class ShowItemActivity extends Activity
 		}
 		
 		// init type
-		String temp = item.isProveAhead() ? getString(R.string.prove_ahead) : getString(R.string.consumed);
+		String temp = item.isProveAhead()? getString(R.string.prove_ahead) : getString(R.string.consumed);
 		if (item.needReimbursed())
 		{
 			temp += "/" + getString(R.string.need_reimburse);
@@ -179,7 +179,7 @@ public class ShowItemActivity extends Activity
 		vendorTextView.setText(item.getVendor());
 
 		// init location
-		String cityName = item.getLocation().isEmpty() ? getString(R.string.not_available) : item.getLocation();
+		String cityName = item.getLocation().isEmpty()? getString(R.string.not_available) : item.getLocation();
 		TextView locationTextView = (TextView) findViewById(R.id.locationTextView);
 		locationTextView.setText(cityName);
 
@@ -233,7 +233,7 @@ public class ShowItemActivity extends Activity
 		horizontalPadding = (layoutMaxLength - sideLength * maxCount) / (maxCount - 1);
 
 		LinearLayout layout = new LinearLayout(this);
-		int invoiceCount = item.getInvoices() != null ? item.getInvoices().size() : 0;
+		int invoiceCount = item.getInvoices() != null? item.getInvoices().size() : 0;
 		for (int i = 0; i < invoiceCount; i++)
 		{
 			if (i % maxCount == 0)
@@ -310,7 +310,7 @@ public class ShowItemActivity extends Activity
 
 		int space = 0;
 		LinearLayout layout = new LinearLayout(this);
-		int tagCount = item.getTags() != null ? item.getTags().size() : 0;
+		int tagCount = item.getTags() != null? item.getTags().size() : 0;
 		for (int i = 0; i < tagCount; i++)
 		{
 			String name = item.getTags().get(i).getName();
@@ -362,7 +362,7 @@ public class ShowItemActivity extends Activity
 		horizontalPadding = (layoutMaxLength - width * maxCount) / (maxCount - 1);
 
 		LinearLayout layout = new LinearLayout(this);
-		int memberCount = item.getRelevantUsers() != null ? item.getRelevantUsers().size() : 0;
+		int memberCount = item.getRelevantUsers() != null? item.getRelevantUsers().size() : 0;
 		for (int i = 0; i < memberCount; i++)
 		{
 			if (i % maxCount == 0)

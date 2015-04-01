@@ -66,5 +66,7 @@
     <color name="stat_title">#FFECD4D5</color>
     <color name="stat_ongoing">#FF45A3D2</color>
     <color name="stat_new">#FFF6575B</color>
+    <color name="stat_pie">#FFD0D4D7</color>
+    <color name="stat_pie_border">#7FFFFFFF</color>
         
 </resources>

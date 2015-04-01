@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.rushucloud.reim.R;
 
 import classes.Category;
+import classes.StatCategory;
 import classes.User;
 
 public class ViewUtils
@@ -170,6 +171,19 @@ public class ViewUtils
     }
 
     public static void setImageViewBitmap(Category category, ImageView imageView)
+    {
+        imageView.setImageResource(R.drawable.default_icon);
+        if (category != null && !category.getIconPath().isEmpty())
+        {
+            Bitmap bitmap = BitmapFactory.decodeFile(category.getIconPath());
+            if (bitmap != null)
+            {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+    }
+
+    public static void setImageViewBitmap(StatCategory category, ImageView imageView)
     {
         imageView.setImageResource(R.drawable.default_icon);
         if (category != null && !category.getIconPath().isEmpty())

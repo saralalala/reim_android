@@ -104,7 +104,7 @@ public class ApproveReportActivity extends Activity
 			fromPush = bundle.getBoolean("fromPush", false);
 			reportServerID = report.getServerID();
 			itemList = dbManager.getOthersReportItems(reportServerID);		
-			lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;			
+			lastCommentCount = report.getCommentList() != null? report.getCommentList().size() : 0;
 		}
 	}
 	

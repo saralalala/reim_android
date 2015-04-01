@@ -136,7 +136,7 @@ public class CommentActivity extends Activity
 				if (myReport)
 				{
 					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_MINE_COMMENT_CLOSE");
-					String event = newReport ? "UMENG_REPORT_NEW_COMMENT_CANCEL" : "UMENG_REPORT_EDIT_COMMENT_CANCEL";
+					String event = newReport? "UMENG_REPORT_NEW_COMMENT_CANCEL" : "UMENG_REPORT_EDIT_COMMENT_CANCEL";
 					MobclickAgent.onEvent(CommentActivity.this, event);
 				}
 				else 
@@ -164,7 +164,7 @@ public class CommentActivity extends Activity
 				if (myReport)
 				{
 					MobclickAgent.onEvent(CommentActivity.this, "UMENG_REPORT_MINE_COMMENT_SEND");
-					String event = newReport ? "UMENG_REPORT_NEW_COMMENT_SUBMIT" : "UMENG_REPORT_EDIT_COMMENT_SUBMIT";
+					String event = newReport? "UMENG_REPORT_NEW_COMMENT_SUBMIT" : "UMENG_REPORT_EDIT_COMMENT_SUBMIT";
 					MobclickAgent.onEvent(CommentActivity.this, event);
 				}
 				else 

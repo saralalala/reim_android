@@ -17,7 +17,7 @@ public class CreateCategoryRequest extends BaseRequest
 	{
 		super();
 		
-		String pbFlag = category.isProveAhead() ? "1" : "0";
+		String pbFlag = category.isProveAhead()? "1" : "0";
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("name", category.getName()));
 		params.add(new BasicNameValuePair("limit", Double.toString(category.getLimit())));

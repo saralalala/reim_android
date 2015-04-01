@@ -156,7 +156,7 @@ public class MessageListActivity extends Activity
                             adapter.setMessages(messageList);
                             adapter.notifyDataSetChanged();
 
-                            int visibility = messageList.isEmpty() ? View.VISIBLE : View.GONE;
+                            int visibility = messageList.isEmpty()? View.VISIBLE : View.GONE;
                             messageTextView.setVisibility(visibility);
 
                             messageListView.stopRefresh();

@@ -27,7 +27,7 @@ public class CreateItemRequest extends BaseRequest
 		{
 			JSONArray jsonArray = new JSONArray();
 
-			int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
+			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			JSONObject jObject = new JSONObject();
 			jObject.put("amount", item.getAmount());
 			jObject.put("category", categoryID);

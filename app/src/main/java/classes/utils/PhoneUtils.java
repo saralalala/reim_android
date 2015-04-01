@@ -96,7 +96,7 @@ public class PhoneUtils
 		boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-		return gpsEnabled || networkEnabled ? true : false;
+		return gpsEnabled || networkEnabled? true : false;
 	}
 
 	public static String getPathFromUri(Activity activity, Uri uri)

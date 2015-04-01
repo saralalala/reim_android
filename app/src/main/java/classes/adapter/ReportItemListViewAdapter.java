@@ -53,13 +53,13 @@ public class ReportItemListViewAdapter extends BaseAdapter
 			
 			Item item = itemList.get(position - 1);
 
-			int color = chosenIDList.contains(item.getLocalID()) ? R.color.list_item_selected : R.color.list_item_unselected;
+			int color = chosenIDList.contains(item.getLocalID())? R.color.list_item_selected : R.color.list_item_unselected;
 			view.setBackgroundResource(color);
 
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-			String vendor = item.getVendor().isEmpty() ? context.getString(R.string.vendor_not_available) : item.getVendor();
+			String vendor = item.getVendor().isEmpty()? context.getString(R.string.vendor_not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
 			if (item.missingInfo())

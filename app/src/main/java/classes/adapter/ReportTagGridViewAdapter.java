@@ -46,7 +46,7 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 		statusTextView.setBackgroundResource(backgrounds[position]);
 		
 		RelativeLayout coverLayout = (RelativeLayout) convertView.findViewById(R.id.coverLayout);
-		int visibility = check[position] ? View.VISIBLE : View.INVISIBLE;
+		int visibility = check[position]? View.VISIBLE : View.INVISIBLE;
 		coverLayout.setVisibility(visibility);
 		
 		return convertView;

@@ -99,7 +99,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 			nameTextView.setText(category.getName());			
 		}
 
-		int color = checkList.get(groupPosition) ? selectedColor : unselectedColor;
+		int color = checkList.get(groupPosition)? selectedColor : unselectedColor;
 		nameTextView.setTextColor(color);
 		
 		return convertView;
@@ -128,7 +128,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 			nameTextView.setText(category.getName());			
 		}
 
-		int color = subCheckList.get(groupPosition).get(childPosition) ? selectedColor : unselectedColor;
+		int color = subCheckList.get(groupPosition).get(childPosition)? selectedColor : unselectedColor;
 		nameTextView.setTextColor(color);
 		
 		return convertView;

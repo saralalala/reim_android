@@ -164,7 +164,7 @@ public class Utils
 
 	public static int booleanToInt(boolean b)
 	{
-		return b ? 1 : 0;
+		return b? 1 : 0;
 	}
 
 	public static boolean intToBoolean(int i)
@@ -174,7 +174,7 @@ public class Utils
 
 	public static String booleanToString(boolean b)
 	{
-		return b ? "1" : "0";
+		return b? "1" : "0";
 	}
 
     public static List<Integer> stringToIntList(String idString)

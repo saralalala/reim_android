@@ -103,7 +103,7 @@ public class ShowReportActivity extends Activity
 				itemList = dbManager.getOthersReportItems(report.getServerID());
 			}
 
-			lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
+			lastCommentCount = report.getCommentList() != null? report.getCommentList().size() : 0;
 		}
 	}
 	
@@ -291,7 +291,7 @@ public class ShowReportActivity extends Activity
 	
     private void goBackToMainActivity()
     {
-        int reportTabIndex = myReport ? 0 : 1;
+        int reportTabIndex = myReport? 0 : 1;
         ReimApplication.setReportTabIndex(reportTabIndex);
     	if (fromPush)
 		{

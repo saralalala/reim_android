@@ -250,8 +250,8 @@ public class ReimFragment extends Fragment
                         public void run()
                         {
                             itemListView.stopRefresh();
-//					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-                            int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
+//					String prompt = SyncUtils.isSyncOnGoing? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+                            int prompt = SyncUtils.isSyncOnGoing? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
                             ViewUtils.showToast(getActivity(), prompt);
                         }
                     });
@@ -294,8 +294,8 @@ public class ReimFragment extends Fragment
                         public void run()
                         {
                             itemListView.stopLoadMore();
-//					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-                            int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
+//					String prompt = SyncUtils.isSyncOnGoing? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+                            int prompt = SyncUtils.isSyncOnGoing? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
                             ViewUtils.showToast(getActivity(), prompt);
                         }
                     });
@@ -854,7 +854,7 @@ public class ReimFragment extends Fragment
 		adapter.notifyDataSetChanged();
 
         int visibility = (filterType != FILTER_STATUS_ALL || filterStatus != FILTER_STATUS_ALL || !filterCategoryList.isEmpty() ||
-                !filterTagList.isEmpty()) && showList.isEmpty() ? View.VISIBLE : View.GONE;
+                !filterTagList.isEmpty()) && showList.isEmpty()? View.VISIBLE : View.GONE;
         noResultLayout.setVisibility(visibility);
 	}
 
@@ -874,7 +874,7 @@ public class ReimFragment extends Fragment
 		{
 			String name = tagList.get(i).getName();
 			
-			int layoutID = tempTagCheck[i] ? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
+			int layoutID = tempTagCheck[i]? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
 			View view = View.inflate(getActivity(), layoutID, null);
 
 			final int index = i;

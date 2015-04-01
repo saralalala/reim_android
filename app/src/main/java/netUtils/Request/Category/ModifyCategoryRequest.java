@@ -17,7 +17,7 @@ public class ModifyCategoryRequest extends BaseRequest
 	{
 		super();
 
-		String pbFlag = category.isProveAhead() ? "1" : "0";
+		String pbFlag = category.isProveAhead()? "1" : "0";
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("name", category.getName()));
