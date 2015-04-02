@@ -529,11 +529,11 @@ public class StatisticsFragment extends Fragment
                 int iconID = localCategory.getIconID() < 1? DEFAULT_ICON_ID : localCategory.getIconID();
                 category.setIconID(iconID);
                 category.setName(localCategory.getName());
-                if (categoryArray.indexOfKey(localCategory.getIconID()) < 0)
+                if (categoryArray.indexOfKey(iconID) < 0)
                 {
-                    categoryArray.put(localCategory.getIconID(), new ArrayList<StatCategory>());
+                    categoryArray.put(iconID, new ArrayList<StatCategory>());
                 }
-                List<StatCategory> list = categoryArray.get(localCategory.getIconID());
+                List<StatCategory> list = categoryArray.get(iconID);
                 list.add(category);
             }
             else

@@ -371,7 +371,7 @@ public class ProfileActivity extends Activity
         if (!currentUser.isAdmin())
 		{
         	companyLayout.setClickable(false);
-        	companyNextImageView.setVisibility(View.INVISIBLE);			
+        	companyNextImageView.setVisibility(View.GONE);
 		}
         else
         {

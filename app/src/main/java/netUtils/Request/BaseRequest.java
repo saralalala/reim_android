@@ -68,6 +68,11 @@ public abstract class BaseRequest
 	{
 		this.url += suffix;
 	}
+
+    protected void appendUrlSuffix(String suffix)
+    {
+        this.url += "/" + suffix;
+    }
 	
 	protected void setParams(List<NameValuePair> params)
 	{

@@ -822,7 +822,7 @@ public class DBManager extends SQLiteOpenHelper
 			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			String sqlString = "INSERT INTO tbl_others_item (server_id, vendor, report_server_id, category_id, tags_id, users_id, " +
 							   							"amount, pa_amount, user_id, consumed_date, note, status, location, createdt, " +
-							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" + 
+							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" +
 														"'" + item.getServerID() + "'," +
 														"'" + item.getVendor() + "'," +
 														"'" + item.getBelongReport().getServerID() + "'," +
@@ -833,7 +833,7 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + item.getPaAmount() + "'," +
 														"'" + item.getConsumer().getServerID() + "'," +
 														"'" + item.getConsumedDate() + "'," +
-														"'" + item.getNote() + "'," +
+														"'" + sqliteEscape(item.getNote()) + "'," +
 														"'" + item.getStatus() + "'," +
 														"'" + item.getLocation() + "'," +
 														"'" + item.getCreatedDate() + "'," +
@@ -842,7 +842,7 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + Utils.booleanToInt(item.isProveAhead()) + "'," +
 														"'" + Utils.booleanToInt(item.needReimbursed()) + "'," +
 														"'" + Utils.booleanToInt(item.isPaApproved()) + "')";
-			database.execSQL(sqlString);			
+			database.execSQL(sqlString);
 
 			updateOthersItemImages(item);
 			
@@ -3038,7 +3038,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			String sqlString = "UPDATE tbl_image SET " + 
 								"path = '" + image.getPath() + "'," +
-								"item_server_id = '" + image.getItemID() + "'," +
+								"item_server_id = '" + image.getItemID() + "' " +
 								"WHERE server_id = '" + image.getServerID() + "'";		
 			database.execSQL(sqlString);
 			return true;
@@ -3366,4 +3366,18 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		return cursor.getInt(cursor.getColumnIndex(columnName)) > 0;
 	}
+
+    private String sqliteEscape(String keyWord)
+    {
+        keyWord = keyWord.replace("/", "//");
+        keyWord = keyWord.replace("'", "''");
+        keyWord = keyWord.replace("[", "/[");
+        keyWord = keyWord.replace("]", "/]");
+        keyWord = keyWord.replace("%", "/%");
+        keyWord = keyWord.replace("&","/&");
+        keyWord = keyWord.replace("_", "/_");
+        keyWord = keyWord.replace("(", "/(");
+        keyWord = keyWord.replace(")", "/)");
+        return keyWord;
+    }
 }

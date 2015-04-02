@@ -88,10 +88,10 @@ public class GetReportResponse extends BaseResponse
 			double amount = 0;
 			
 			itemList = new ArrayList<Item>();
-			JSONArray jsonArray = jObject.getJSONArray("items");
-			for (int i = 0; i < jsonArray.length(); i++)
+			JSONArray itemArray = jObject.getJSONArray("items");
+			for (int i = 0; i < itemArray.length(); i++)
 			{
-				Item item = new Item(jsonArray.getJSONObject(i));			
+				Item item = new Item(itemArray.getJSONObject(i));
 				itemList.add(item);
 				itemCount++;
 				amount += item.getAmount();

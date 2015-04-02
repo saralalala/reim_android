@@ -73,6 +73,7 @@ public class Item
 			setNeedReimbursed(Utils.intToBoolean(jObject.getInt("reimbursed")));
 			setPaApproved(Utils.intToBoolean(jObject.getInt("pa_approval")));
 			setTags(Tag.idStringToTagList(jObject.getString("tags")));
+            setTagsID(jObject.getString("tags"));
 			setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
 			
 			List<Integer> idList = Utils.stringToIntList(jObject.getString("image_id"));

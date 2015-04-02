@@ -179,9 +179,8 @@ public class ShowItemActivity extends Activity
 		vendorTextView.setText(item.getVendor());
 
 		// init location
-		String cityName = item.getLocation().isEmpty()? getString(R.string.not_available) : item.getLocation();
 		TextView locationTextView = (TextView) findViewById(R.id.locationTextView);
-		locationTextView.setText(cityName);
+		locationTextView.setText(item.getLocation());
 
 		// init category
 		categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
