@@ -27,17 +27,17 @@ import netUtils.HttpConnectionCallback;
 import netUtils.request.user.ModifyUserRequest;
 import netUtils.response.user.ModifyUserResponse;
 
-public class EmailActivity extends Activity
+public class BankActivity extends Activity
 {
-	private EditText emailEditText;
+	private EditText bankEditText;
 
 	private User currentUser;
-    private String originalEmail;
-	
+    private String originalBankAccount;
+
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_email);
+		setContentView(R.layout.activity_me_bank);
 		initData();
 		initView();
 	}
@@ -45,7 +45,7 @@ public class EmailActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("EmailActivity");		
+		MobclickAgent.onPageStart("BankActivity");
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setContext(this);
 	}
@@ -53,10 +53,10 @@ public class EmailActivity extends Activity
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("EmailActivity");
+		MobclickAgent.onPageEnd("BankActivity");
 		MobclickAgent.onPause(this);
 	}
-	
+
 	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
@@ -65,19 +65,19 @@ public class EmailActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	private void initData()
 	{
 		currentUser = AppPreference.getAppPreference().getCurrentUser();
-        originalEmail = currentUser.getEmail();
+        originalBankAccount = currentUser.getBankAccount();
 	}
-	
+
 	private void initView()
-	{		
+	{
 		getActionBar().hide();
-		
+
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
+		backImageView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -85,45 +85,41 @@ public class EmailActivity extends Activity
 				finish();
 			}
 		});
-		
+
 		TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new View.OnClickListener()
+		saveTextView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
 
-				String newEmail = emailEditText.getText().toString();
+				String newBankAccount = bankEditText.getText().toString();
 				if (PhoneUtils.isNetworkConnected())
-				{	
-					if (newEmail.equals(originalEmail))
+				{
+					if (newBankAccount.equals(originalBankAccount))
 					{
 						finish();
 					}
-					else if (newEmail.isEmpty() && currentUser.getPhone().isEmpty())
+					else if (!newBankAccount.isEmpty() && !Utils.isBankAccount(newBankAccount))
 					{
-						ViewUtils.showToast(EmailActivity.this, R.string.error_new_email_empty);
-					}
-					else if (!newEmail.isEmpty() && !Utils.isEmail(newEmail))
-					{
-						ViewUtils.showToast(EmailActivity.this, R.string.error_email_wrong_format);
+						ViewUtils.showToast(BankActivity.this, R.string.error_bank_account_wrong_format);
 					}
 					else
 					{
-						currentUser.setEmail(newEmail);
-						sendModifyUserInfoRequest();					
+						currentUser.setBankAccount(newBankAccount);
+						sendModifyUserInfoRequest();						
 					}
 				}
 				else
 				{
-					ViewUtils.showToast(EmailActivity.this, R.string.error_modify_network_unavailable);
+					ViewUtils.showToast(BankActivity.this, R.string.error_modify_network_unavailable);
 				}
 			}
 		});
-		
-		emailEditText = (EditText) findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-    	emailEditText.setText(currentUser.getEmail());
+
+        bankEditText = (EditText) findViewById(R.id.bankEditText);
+        bankEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        bankEditText.setText(currentUser.getBankAccount());
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
@@ -147,19 +143,13 @@ public class EmailActivity extends Activity
 				if (response.getStatus())
 				{
 					DBManager.getDBManager().updateUser(currentUser);
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    if (appPreference.getUsername().equals(originalEmail))
-                    {
-                        appPreference.setUsername(currentUser.getEmail());
-                        appPreference.saveAppPreference();
-                    }
 					
 					runOnUiThread(new Runnable()
 					{
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EmailActivity.this, R.string.succeed_in_modifying_user_info);
+							ViewUtils.showToast(BankActivity.this, R.string.succeed_in_modifying_user_info);
 							finish();
 						}
 					});
@@ -171,7 +161,7 @@ public class EmailActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EmailActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
+							ViewUtils.showToast(BankActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
 							finish();
 						}
 					});						
@@ -183,6 +173,6 @@ public class EmailActivity extends Activity
 	private void hideSoftKeyboard()
 	{
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(bankEditText.getWindowToken(), 0);
 	}
 }

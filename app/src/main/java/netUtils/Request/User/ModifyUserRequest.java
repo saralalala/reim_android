@@ -21,6 +21,7 @@ public class ModifyUserRequest extends BaseRequest
 		params.add(new BasicNameValuePair("email", user.getEmail()));
 		params.add(new BasicNameValuePair("phone", user.getPhone()));
 		params.add(new BasicNameValuePair("nickname", user.getNickname()));
+        params.add(new BasicNameValuePair("credit_card", user.getBankAccount()));
 		setParams(params);
 
 		appendUrl(URLDef.URL_USER);

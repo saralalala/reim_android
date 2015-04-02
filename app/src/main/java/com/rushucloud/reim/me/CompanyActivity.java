@@ -36,6 +36,7 @@ public class CompanyActivity extends Activity
     private AppPreference appPreference;
     private DBManager dbManager;
 	private Group currentGroup;
+    private String originalName;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -74,6 +75,7 @@ public class CompanyActivity extends Activity
         appPreference = AppPreference.getAppPreference();
         dbManager = DBManager.getDBManager();
 		currentGroup = appPreference.getCurrentGroup();
+        originalName = currentGroup != null? currentGroup.getName() : "";
 	}
 	
 	private void initView()
@@ -96,12 +98,7 @@ public class CompanyActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				
-				String originalName = "";
-                if (currentGroup != null)
-                {
-                    originalName = currentGroup.getName();
-                }
+
 				String newName = companyEditText.getText().toString();
 				if (!PhoneUtils.isNetworkConnected())
 				{

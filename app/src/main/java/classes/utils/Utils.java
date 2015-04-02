@@ -15,9 +15,9 @@ import java.util.regex.Pattern;
 
 public class Utils
 {
-	private static String regexEmail = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-			 
-	private static String regexPhone = "[1]+\\d{10}";
+	private static String regexEmail = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$";
+	private static String regexPhone = "^[1]+\\d{10}$";
+    private static String regexBankAccount = "^\\d{12,19}$";
 
 	public static int getCurrentTime()
 	{
@@ -161,6 +161,13 @@ public class Utils
 		Matcher matcher = pattern.matcher(source);
 		return matcher.find();
 	}
+
+    public static boolean isBankAccount(String source)
+    {
+        Pattern pattern = Pattern.compile(regexBankAccount);
+        Matcher matcher = pattern.matcher(source);
+        return matcher.find();
+    }
 
 	public static int booleanToInt(boolean b)
 	{

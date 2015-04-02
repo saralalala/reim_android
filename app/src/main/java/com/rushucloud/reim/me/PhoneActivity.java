@@ -32,6 +32,7 @@ public class PhoneActivity extends Activity
 	private EditText phoneEditText;
 
 	private User currentUser;
+    private String originalPhone;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -68,6 +69,7 @@ public class PhoneActivity extends Activity
 	private void initData()
 	{
 		currentUser = AppPreference.getAppPreference().getCurrentUser();
+        originalPhone = currentUser.getPhone();
 	}
 	
 	private void initView()
@@ -90,8 +92,7 @@ public class PhoneActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				
-				String originalPhone = currentUser.getPhone();
+
 				String newPhone = phoneEditText.getText().toString();
 				if (PhoneUtils.isNetworkConnected())
 				{
@@ -146,6 +147,12 @@ public class PhoneActivity extends Activity
 				if (response.getStatus())
 				{
 					DBManager.getDBManager().updateUser(currentUser);
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    if (appPreference.getUsername().equals(originalPhone))
+                    {
+                        appPreference.setUsername(currentUser.getPhone());
+                        appPreference.saveAppPreference();
+                    }
 					
 					runOnUiThread(new Runnable()
 					{

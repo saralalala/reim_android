@@ -28,6 +28,7 @@ public class User implements Serializable
 	private String nickname = "";
     private String nicknameInitLetter = "";
 	private String phone = "";
+    private String bankAccount = "";
 	private int avatarID = -1;
 	private String avatarPath = "";
 	private int privilege = 0;
@@ -69,6 +70,7 @@ public class User implements Serializable
 			setEmail(jObject.getString("email"));
 			setPhone(jObject.getString("phone"));
 			setNickname(jObject.getString("nickname"));
+            setBankAccount(jObject.getString("credit_card"));
 			setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
 			setDefaultManagerID(jObject.getInt("manager_id"));
 			setGroupID(groupID);
@@ -148,8 +150,17 @@ public class User implements Serializable
 	{
 		this.phone = phone;
 	}
-	
-	public int getAvatarID()
+
+    public String getBankAccount()
+    {
+        return bankAccount;
+    }
+    public void setBankAccount(String bankAccount)
+    {
+        this.bankAccount = bankAccount;
+    }
+
+    public int getAvatarID()
 	{
 		return avatarID;
 	}

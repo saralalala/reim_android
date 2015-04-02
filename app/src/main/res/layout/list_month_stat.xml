@@ -35,6 +35,13 @@
 	    android:gravity="right"
 	    android:baselineAligned="true" >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rmb_symbol"
+            android:textColor="@color/font_month_data"
+            android:textSize="14sp" />
+
 	    <TextView
 	        android:id="@+id/dataTextView"
 	        android:layout_width="wrap_content"

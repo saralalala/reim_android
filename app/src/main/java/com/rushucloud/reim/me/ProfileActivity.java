@@ -53,10 +53,11 @@ public class ProfileActivity extends Activity
 	
 	private CircleImageView avatarImageView;
 	private PopupWindow picturePopupWindow;
-	
+
+    private TextView nicknameTextView;
 	private TextView emailTextView;
 	private TextView phoneTextView;
-	private TextView nicknameTextView;
+    private TextView bankTextView;
 	
 	private TextView companyTextView;
 	private ImageView companyNextImageView;
@@ -237,6 +238,18 @@ public class ProfileActivity extends Activity
 			}
 		});
 
+        // init bank
+        bankTextView = (TextView) findViewById(R.id.bankTextView);
+
+        RelativeLayout bankLayout = (RelativeLayout) findViewById(R.id.bankLayout);
+        bankLayout.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                startActivity(new Intent(ProfileActivity.this, BankActivity.class));
+            }
+        });
+
 		// init company
 		companyTextView = (TextView) findViewById(R.id.companyTextView);
 		companyNextImageView = (ImageView) findViewById(R.id.companyNextImageView);
@@ -339,15 +352,18 @@ public class ProfileActivity extends Activity
 		currentGroup = appPreference.getCurrentGroup();
 
         ViewUtils.setImageViewBitmap(currentUser, avatarImageView);
+
+        String nickname = currentUser != null && !currentUser.getNickname().isEmpty()? currentUser.getNickname() : getString(R.string.empty);
+        nicknameTextView.setText(nickname);
 		
 		String email = currentUser != null && !currentUser.getEmail().isEmpty()? currentUser.getEmail() : getString(R.string.not_binding);
 		emailTextView.setText(email);
 		
 		String phone = currentUser != null && !currentUser.getPhone().isEmpty()? currentUser.getPhone() : getString(R.string.not_binding);
 		phoneTextView.setText(phone);
-		
-		String nickname = currentUser != null && !currentUser.getNickname().isEmpty()? currentUser.getNickname() : getString(R.string.empty);
-		nicknameTextView.setText(nickname);
+
+        String bankAccount = currentUser != null && !currentUser.getBankAccount().isEmpty()? currentUser.getBankAccount() : getString(R.string.not_binding);
+        bankTextView.setText(bankAccount);
 		
 		String companyName = currentGroup != null? currentGroup.getName() : getString(R.string.empty);
 		companyTextView.setText(companyName);

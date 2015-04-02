@@ -53,6 +53,7 @@ public class InviteReplyResponse extends BaseResponse
             currentUser.setNickname(profileObject.getString("nickname"));
             currentUser.setEmail(profileObject.getString("email"));
             currentUser.setPhone(profileObject.getString("phone"));
+            currentUser.setBankAccount(profileObject.getString("credit_card"));
             currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
             currentUser.setAvatarPath("");
             currentUser.setIsAdmin(Utils.intToBoolean(profileObject.getInt("admin")));

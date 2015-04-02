@@ -389,10 +389,7 @@ public class EditItemActivity extends Activity
                             public void onClick(DialogInterface dialog, int which)
                             {
                                 MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_PROVEAHEAD_SAVE");
-
-                                dbManager.syncItem(item);
-                                ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
-                                finish();
+                                saveItem();
                             }
                         });
                         buider.setNeutralButton(R.string.send_to_approve, new DialogInterface.OnClickListener()
@@ -447,9 +444,7 @@ public class EditItemActivity extends Activity
                     }
                     else
                     {
-                        dbManager.syncItem(item);
-                        ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
-                        finish();
+                        saveItem();
                     }
                 }
                 catch (NumberFormatException e)
@@ -1243,6 +1238,14 @@ public class EditItemActivity extends Activity
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(amountEditText.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(noteEditText.getWindowToken(), 0);
+    }
+
+    private void saveItem()
+    {
+        dbManager.syncItem(item);
+        ReimApplication.setTabIndex(0);
+        ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+        finish();
     }
 
     private void goBack()

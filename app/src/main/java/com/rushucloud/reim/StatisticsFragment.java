@@ -439,7 +439,7 @@ public class StatisticsFragment extends Fragment
 					max = data;
 				}
 			}
-            monthTotalTextView.setText(Double.toString(total));
+            monthTotalTextView.setText(Utils.formatDouble(total));
 			
 			for (String month : monthsData.keySet())
 			{
@@ -504,6 +504,7 @@ public class StatisticsFragment extends Fragment
 					countTextView.setText(Integer.toString(category.getItems().size()));
 					
 					TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                    amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 					amountTextView.setText(Utils.formatDouble(category.getAmount()));
 					
 					categoryLayout.addView(view);					
@@ -764,6 +765,7 @@ public class StatisticsFragment extends Fragment
                     countTextView.setText(Integer.toString(user.getItemCount()));
 
                     TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                    amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
                     amountTextView.setText(Utils.formatDouble(user.getAmount()));
 
                     memberLayout.addView(view);

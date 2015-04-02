@@ -30,9 +30,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
                 android:text="@string/rmb_symbol"
                 android:textColor="@color/font_major_dark"
-                android:textSize="20sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/overviewTextView"
@@ -40,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:textColor="@color/font_major_dark"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
 
         </LinearLayout>
 
@@ -160,18 +161,6 @@
             layout="@layout/view_divider" />
 
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/tagTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:text="@string/no_tag_cost"
-        android:textColor="@color/font_list_item_header"
-        android:textSize="14sp"
-        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/tagLayout"

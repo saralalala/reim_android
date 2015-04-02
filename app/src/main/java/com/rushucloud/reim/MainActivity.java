@@ -75,7 +75,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setContext(this);
 
-		viewPager.setCurrentItem(ReimApplication.getTabIndex());
+		viewPager.setCurrentItem(ReimApplication.getTabIndex(), false);
 		resetTabItems();
 		tabItemList.get(ReimApplication.getTabIndex()).setIconAlpha(1);
 		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);

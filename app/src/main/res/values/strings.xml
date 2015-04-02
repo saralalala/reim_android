@@ -164,7 +164,6 @@
     <string name="stat_category">类别-</string>
     <string name="stat_tag">标签-</string>
     <string name="stat_user">人员-</string>
-    <string name="no_tag_cost">目前没有任何属于标签下的花费</string>
     
     <string name="personal_center">个人中心</string>
     <string name="sign_out">切换账号</string>
@@ -182,6 +181,7 @@
     <string name="personal_info">个人信息</string>
     <string name="email">邮箱</string>
     <string name="phone">手机</string>
+    <string name="bank_account">银行账号</string>
     <string name="company">公司</string>
     <string name="nickname">昵称</string>
     <string name="change_password">修改密码</string>
@@ -225,6 +225,7 @@
     <string name="input_confirm_password">请确认密码</string>
     <string name="input_email">请输入邮箱</string>
     <string name="input_phone">请输入手机号</string>
+    <string name="input_bank_account">请输入银行账号</string>
     <string name="input_code">请输入验证码</string>
     <string name="input_amount">请输入金额</string>
     <string name="input_note">请输入备注</string>
@@ -260,7 +261,7 @@
     <string name="prompt_max_image_count">对不起，最多只能添加16张图片</string>
     <string name="prompt_feedback">告诉我们你在使用过程中遇到的问题，或对产品提出你的建议。我们会在1个工作日内给你答复。</string>
     <string name="prompt_feedback_phone">请留下联系方式，方便我们与你沟通</string>
-    <string name="prompt_sender">发送者：</string>
+    <string name="prompt_sender">创建人：</string>
     <string name="prompt_no_need_to_alarm">报告未在审核过程中，无需发送提醒</string>
     <string name="prompt_choose_or_finish">您希望直接通过，还是选择其他人继续审批这份报告？</string>
     <string name="prompt_no_lastest_data">还没到下个月呢</string>
@@ -275,6 +276,7 @@
     <string name="error_phone_empty">请输入手机号</string>
     <string name="error_new_phone_empty">请输入新手机号</string>
     <string name="error_phone_wrong_format">手机号格式不正确</string>
+    <string name="error_bank_account_wrong_format">银行账号格式不正确</string>
     <string name="error_new_nickname_empty">请输入新昵称</string>
     <string name="error_new_company_name_empty">请输入公司新名称</string>
     <string name="error_number_wrong_format">请输入消费金额</string>

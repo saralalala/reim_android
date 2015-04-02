@@ -25,7 +25,7 @@ public class DBManager extends SQLiteOpenHelper
 	private static SQLiteDatabase database = null;
 	
 	private static final String DATABASE_NAME = "reim.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	private DBManager(Context context)
 	{
@@ -56,6 +56,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "email TEXT DEFAULT(''),"
 										+ "phone TEXT DEFAULT(''),"
 										+ "nickname TEXT DEFAULT(''),"
+                                        + "bank_account TEXT DEFAULT(''),"
 										+ "avatar_id INT DEFAULT(0),"
 										+ "avatar_path TEXT DEFAULT(''),"
 										+ "privilege INT DEFAULT(0),"
@@ -278,9 +279,15 @@ public class DBManager extends SQLiteOpenHelper
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
 		Log.w("TaskDBAdapter", "Upgrading from version " + oldVersion + " to " + newVersion);
-		
-		// do upgrade here
-		
+
+        if (newVersion > oldVersion)
+        {
+            if (oldVersion < 2)
+            {
+                String command = "ALTER TABLE tbl_user ADD COLUMN bank_account TEXT DEFAULT('')";
+                db.execSQL(command);
+            }
+        }
 		onCreate(db);
 	}
 	
@@ -452,12 +459,13 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, avatar_id, avatar_path, privilege, manager_id, " +
-								"group_id, admin, local_updatedt, server_updatedt) VALUES (" +
+			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, bank_account, avatar_id, avatar_path, privilege, " +
+								"manager_id, group_id, admin, local_updatedt, server_updatedt) VALUES (" +
 								"'" + user.getServerID() + "'," +
 								"'" + user.getEmail() + "'," +
 								"'" + user.getPhone() + "'," +
 								"'" + user.getNickname() + "'," +
+                                "'" + user.getBankAccount() + "'," +
 								"'" + user.getAvatarID() + "'," +
 								"'" + user.getAvatarPath() + "'," +
 								"'" + user.getPrivilege() + "'," +
@@ -485,6 +493,7 @@ public class DBManager extends SQLiteOpenHelper
 								"email = '" + user.getEmail() + "'," +
 								"phone = '" + user.getPhone() + "'," +
 								"nickname = '" + user.getNickname() + "'," +
+                                "bank_account = '" + user.getBankAccount() + "'," +
 								"avatar_id = '" + user.getAvatarID() + "'," +
 								"avatar_path = '" + user.getAvatarPath() + "'," +
 								"manager_id = '" + user.getDefaultManagerID() + "'," +
@@ -550,8 +559,8 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_id, avatar_path, privilege, " +
-											  "manager_id, group_id, admin, local_updatedt, server_updatedt " +
+			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, bank_account, avatar_id, avatar_path, " +
+											  "privilege, manager_id, group_id, admin, local_updatedt, server_updatedt " +
 					                          "FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
 			if (cursor.moveToNext())
 			{
@@ -560,6 +569,7 @@ public class DBManager extends SQLiteOpenHelper
 				user.setEmail(getStringFromCursor(cursor, "email"));
 				user.setPhone(getStringFromCursor(cursor, "phone"));
 				user.setNickname(getStringFromCursor(cursor, "nickname"));
+                user.setBankAccount(getStringFromCursor(cursor, "bank_account"));
 				user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
 				user.setAvatarPath(getStringFromCursor(cursor, "avatar_path"));
 				user.setPrivilege(getIntFromCursor(cursor, "privilege"));
@@ -582,22 +592,6 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			Log.i("reim", e.toString());
 			return null;
-		}
-	}
-	
-	public boolean insertUserList(List<User> userList)
-	{
-		try
-		{
-			for (int i = 0; i < userList.size(); i++)
-			{
-				insertUser(userList.get(i));
-			}
-			return true;
-		}
-		catch (Exception e)
-		{
-			return false;
 		}
 	}
 
@@ -638,8 +632,8 @@ public class DBManager extends SQLiteOpenHelper
         {
             if (groupServerID != -1 && groupServerID != 0)
             {
-                Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_id, avatar_path, privilege, manager_id, " +
-                                                          "group_id, admin, local_updatedt, server_updatedt " +
+                Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, bank_account, avatar_id, avatar_path, privilege, " +
+                                                          "manager_id, group_id, admin, local_updatedt, server_updatedt " +
                                                           "FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
                 while (cursor.moveToNext())
                 {
@@ -648,6 +642,7 @@ public class DBManager extends SQLiteOpenHelper
                     user.setEmail(getStringFromCursor(cursor, "email"));
                     user.setPhone(getStringFromCursor(cursor, "phone"));
                     user.setNickname(getStringFromCursor(cursor, "nickname"));
+                    user.setBankAccount(getStringFromCursor(cursor, "bank_account"));
                     user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
                     user.setAvatarPath(getStringFromCursor(cursor, "avatar_path"));
                     user.setPrivilege(getIntFromCursor(cursor, "privilege"));
@@ -1451,24 +1446,7 @@ public class DBManager extends SQLiteOpenHelper
 			return false;
 		}
 	}
-	
-	public boolean deleteReportItem(int itemLocalID)
-	{
-		try
-		{
-			String sqlString = "UPDATE tbl_item SET " +
-								"report_local_id = '" + -1 + "' " +
-								"WHERE id = '" + itemLocalID + "'";			
-			database.execSQL(sqlString);
-			return true;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
+
 	public boolean insertReportItems(ArrayList<Integer> itemIDList, int reportLocalID)
 	{
 		try
@@ -1643,16 +1621,7 @@ public class DBManager extends SQLiteOpenHelper
 			return itemList;
 		}
 	}
-	
-	public int getLastInsertItemID()
-	{
-		Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_item", null);
-		cursor.moveToFirst();
-		int result = cursor.getInt(0);
-		cursor.close();
-		return result;
-	}
-	
+
 	// Report
 	public boolean insertReport(Report report)
 	{

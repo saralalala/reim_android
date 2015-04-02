@@ -27,6 +27,7 @@ import classes.User;
 import classes.adapter.StatisticsListViewAdapter;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimBar;
@@ -40,6 +41,9 @@ import netUtils.response.statistics.OthersStatResponse;
 
 public class StatisticsActivity extends Activity
 {
+    private static final int GET_DATA_INTERVAL = 600;
+    private static final int DEFAULT_ICON_ID = 11;
+
     private StatisticsListViewAdapter adapter;
     private XListView statListView;
 
@@ -53,24 +57,24 @@ public class StatisticsActivity extends Activity
     private LinearLayout leftCategoryLayout;
     private LinearLayout rightCategoryLayout;
     private RelativeLayout tagTitleLayout;
-    private TextView tagTextView;
     private LinearLayout tagLayout;
     private RelativeLayout memberTitleLayout;
     private LinearLayout memberLayout;
 
     private DBManager dbManager;
 
-    private int colorR[] = {56, 60, 181, 232, 181, 141, 62, 255, 138, 238, 125};
-    private int colorG[] = {56, 183, 112, 140, 184, 192, 119, 196, 118, 149, 173};
-    private int colorB[] = {56, 152, 178, 191, 69, 219, 219, 0, 203, 50, 165};
-    private int colorRDiff[] = {169, 137, 52, 16, 52, 80, 135, 0, 82, 12, 91};
-    private int colorGDiff[] = {169, 51, 100, 81, 50, 44, 95, 41, 96, 74, 58};
-    private int colorBDiff[] = {169, 72, 54, 45, 131, 25, 25, 179, 37, 144, 63};
+    private int colorR[] = {60, 181, 232, 181, 141, 62, 255, 138, 238, 125, 56};
+    private int colorG[] = {183, 112, 140, 184, 192, 119, 196, 118, 149, 173, 56};
+    private int colorB[] = {152, 178, 191, 69, 219, 219, 0, 203, 50, 165, 56};
+    private int colorRDiff[] = {137, 52, 16, 52, 80, 135, 0, 82, 12, 91, 169};
+    private int colorGDiff[] = {51, 100, 81, 50, 44, 95, 41, 96, 74, 58, 169};
+    private int colorBDiff[] = {72, 54, 45, 131, 25, 25, 179, 37, 144, 63, 169};
     private int year;
     private int month;
     private int categoryID;
     private int tagID;
     private int userID;
+    private int lastUpdateTime = 0;
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -85,6 +89,16 @@ public class StatisticsActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("StatisticsActivity");
 		MobclickAgent.onResume(this);
+
+        if (PhoneUtils.isNetworkConnected() && needToGetData())
+        {
+            ReimProgressDialog.show();
+            sendGetDataRequest();
+        }
+        else if (!PhoneUtils.isNetworkConnected() && needToGetData())
+        {
+            ViewUtils.showToast(this, R.string.error_get_data_network_unavailable);
+        }
 	}
 
 	protected void onPause()
@@ -178,15 +192,16 @@ public class StatisticsActivity extends Activity
 
         overviewLayout = (LinearLayout) view.findViewById(R.id.overviewLayout);
         overviewTextView = (TextView) view.findViewById(R.id.overviewTextView);
+        overviewTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
         pieLayout = (RelativeLayout) view.findViewById(R.id.pieLayout);
         statContainer = (FrameLayout) view.findViewById(R.id.statContainer);
         totalTextView = (TextView) view.findViewById(R.id.totalTextView);
+        totalTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
         unitTextView = (TextView) view.findViewById(R.id.unitTextView);
         categoryLayout = (LinearLayout) view.findViewById(R.id.categoryLayout);
         leftCategoryLayout = (LinearLayout) view.findViewById(R.id.leftCategoryLayout);
         rightCategoryLayout = (LinearLayout) view.findViewById(R.id.rightCategoryLayout);
         tagTitleLayout = (RelativeLayout) view.findViewById(R.id.tagTitleLayout);
-        tagTextView = (TextView) view.findViewById(R.id.tagTextView);
         tagLayout = (LinearLayout) view.findViewById(R.id.tagLayout);
         memberTitleLayout = (RelativeLayout) view.findViewById(R.id.memberTitleLayout);
         memberLayout = (LinearLayout) view.findViewById(R.id.memberLayout);
@@ -228,6 +243,11 @@ public class StatisticsActivity extends Activity
         memberLayout.removeAllViews();
     }
 
+    private boolean needToGetData()
+    {
+        return Utils.getCurrentTime() - lastUpdateTime > GET_DATA_INTERVAL;
+    }
+
     private void drawCategoryPie(List<StatCategory> categoryList)
     {
         if (categoryID != -1 && categoryList.size() <= 1)
@@ -260,7 +280,7 @@ public class StatisticsActivity extends Activity
                 totalAmount += category.getAmount();
                 if (localCategory != null)
                 {
-                    int iconID = localCategory.getIconID() < 1? 0 : localCategory.getIconID();
+                    int iconID = localCategory.getIconID() < 1? DEFAULT_ICON_ID : localCategory.getIconID();
                     category.setIconID(iconID);
                     category.setName(localCategory.getName());
                     if (categoryArray.indexOfKey(localCategory.getIconID()) < 0)
@@ -277,11 +297,11 @@ public class StatisticsActivity extends Activity
             }
             if (deletedCategory.getAmount() > 0)
             {
-                if (categoryArray.indexOfKey(0) < 0)
+                if (categoryArray.indexOfKey(DEFAULT_ICON_ID) < 0)
                 {
-                    categoryArray.put(0, new ArrayList<StatCategory>());
+                    categoryArray.put(DEFAULT_ICON_ID, new ArrayList<StatCategory>());
                 }
-                List<StatCategory> list = categoryArray.get(0);
+                List<StatCategory> list = categoryArray.get(DEFAULT_ICON_ID);
                 list.add(deletedCategory);
             }
 
@@ -311,22 +331,25 @@ public class StatisticsActivity extends Activity
             for (int i = 0; i < categoryArray.size(); i++)
             {
                 int key = categoryArray.keyAt(i);
+                int colorIndex = key - 1;
                 List<StatCategory> categories = categoryArray.get(key);
-                int rDiff = categories.size() == 1? colorRDiff[key] : colorRDiff[key] / (categories.size() - 1);
-                int gDiff = categories.size() == 1? colorGDiff[key] : colorGDiff[key] / (categories.size() - 1);
-                int bDiff = categories.size() == 1? colorBDiff[key] : colorBDiff[key] / (categories.size() - 1);
+                int rDiff = categories.size() == 1? colorRDiff[colorIndex] : colorRDiff[colorIndex] / (categories.size() - 1);
+                int gDiff = categories.size() == 1? colorGDiff[colorIndex] : colorGDiff[colorIndex] / (categories.size() - 1);
+                int bDiff = categories.size() == 1? colorBDiff[colorIndex] : colorBDiff[colorIndex] / (categories.size() - 1);
                 for (int j = 0; j < categories.size(); j++)
                 {
                     StatCategory category = categories.get(j);
-                    if (key != 0)
+                    if (key != DEFAULT_ICON_ID)
                     {
-                        category.setColor(Color.rgb(colorR[key] + j * rDiff, colorG[key] + j * gDiff, colorB[key] + j * bDiff));
+                        category.setColor(Color.rgb(colorR[colorIndex] + j * rDiff,
+                                                    colorG[colorIndex] + j * gDiff,
+                                                    colorB[colorIndex] + j * bDiff));
                     }
                     else
                     {
-                        category.setColor(Color.rgb(colorR[key] + colorRDiff[key] - j * rDiff,
-                                                    colorG[key] + colorGDiff[key] - j * gDiff,
-                                                    colorB[key] + colorBDiff[key] - j * bDiff));
+                        category.setColor(Color.rgb(colorR[colorIndex] + colorRDiff[colorIndex] - j * rDiff,
+                                                    colorG[colorIndex] + colorGDiff[colorIndex] - j * gDiff,
+                                                    colorB[colorIndex] + colorBDiff[colorIndex] - j * bDiff));
                     }
 
                     float angle = i == categoryArray.size() - 1 && j == categories.size() - 1?
@@ -381,22 +404,14 @@ public class StatisticsActivity extends Activity
 
     private void drawTagBar(List<StatTag> tagList)
     {
-        if (tagID != -1)
+        if (tagID != -1 || tagList.isEmpty())
         {
             tagTitleLayout.setVisibility(View.GONE);
-            tagTextView.setVisibility(View.GONE);
-            tagLayout.setVisibility(View.GONE);
-        }
-        else if (tagList.isEmpty())
-        {
-            tagTitleLayout.setVisibility(View.VISIBLE);
-            tagTextView.setVisibility(View.VISIBLE);
             tagLayout.setVisibility(View.GONE);
         }
         else
         {
             tagTitleLayout.setVisibility(View.VISIBLE);
-            tagTextView.setVisibility(View.GONE);
             tagLayout.setVisibility(View.VISIBLE);
 
             double max = 0;
@@ -477,6 +492,7 @@ public class StatisticsActivity extends Activity
                         countTextView.setText(Integer.toString(user.getItemCount()));
 
                         TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                        amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
                         amountTextView.setText(Utils.formatDouble(user.getAmount()));
 
                         memberLayout.addView(view);
@@ -500,6 +516,7 @@ public class StatisticsActivity extends Activity
                     {
                         public void run()
                         {
+                            lastUpdateTime = Utils.getCurrentTime();
                             resetView();
                             drawCategoryPie(response.getStatCategoryList());
                             drawTagBar(response.getStatTagList());
