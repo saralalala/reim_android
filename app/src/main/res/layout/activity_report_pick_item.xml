@@ -23,33 +23,47 @@
             android:contentDescription="@string/filter"
             android:src="@drawable/filter_empty" />
 
-        <TextView
-            android:id="@+id/consumedTextView"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/pivotView"
-            android:layout_marginRight="13dp"
-            android:text="@string/consumed"
-            android:textSize="20sp"
-            android:textColor="@color/major_light" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true">
 
-        <View
-            android:id="@+id/pivotView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_centerInParent="true" />
+            <TextView
+                android:id="@+id/consumedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/consumed"
+                android:textSize="20sp"
+                android:textColor="@color/major_light" />
 
-        <TextView
-            android:id="@+id/proveAheadTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/pivotView"
-            android:layout_marginLeft="13dp"
-            android:text="@string/prove_ahead"
-            android:textSize="20sp"
-            android:textColor="@color/hint_white" />
+            <TextView
+                android:id="@+id/budgetTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/budget"
+                android:textSize="20sp"
+                android:textColor="@color/hint_white" />
+
+            <TextView
+                android:id="@+id/borrowingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/borrowing"
+                android:textSize="20sp"
+                android:textColor="@color/hint_white" />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"

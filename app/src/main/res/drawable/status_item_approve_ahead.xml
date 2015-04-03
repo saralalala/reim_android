@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
     
     <corners android:radius="@dimen/status_corner_radius" />
-    <solid android:color="@color/status_item_prove_ahead"/>
+    <solid android:color="@color/status_item_approve_ahead"/>
 
 </shape>

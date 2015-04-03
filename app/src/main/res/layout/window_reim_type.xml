@@ -45,11 +45,18 @@
 	            style="@style/RadioButton" />
 	
 	        <RadioButton
-	            android:id="@+id/proveAheadRadio"
+	            android:id="@+id/budgetRadio"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/prove_ahead"
+	            android:text="@string/budget"
 	            style="@style/RadioButton" />
+
+            <RadioButton
+                android:id="@+id/borrowingRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/borrowing"
+                style="@style/RadioButton" />
 	        
 	    </classes.widget.SegmentedGroup>
 	

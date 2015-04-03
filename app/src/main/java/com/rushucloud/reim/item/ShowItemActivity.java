@@ -124,9 +124,9 @@ public class ShowItemActivity extends Activity
 		amountTextView.setText(Utils.formatDouble(item.getAmount()));
 		amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 		
-		if (item.isPaApproved())
+		if (item.isAaApproved())
 		{
-			budgetTextView.setText(getString(R.string.budget) + " " + Utils.formatDouble(item.getPaAmount()));
+			budgetTextView.setText(getString(R.string.budget) + " " + Utils.formatDouble(item.getAaAmount()));
 		}
 		else
 		{
@@ -136,7 +136,7 @@ public class ShowItemActivity extends Activity
 		}
 		
 		// init type
-		String temp = item.isProveAhead()? getString(R.string.prove_ahead) : getString(R.string.consumed);
+		String temp = getString(item.getTypeString());
 		if (item.needReimbursed())
 		{
 			temp += "/" + getString(R.string.need_reimburse);
@@ -259,13 +259,13 @@ public class ShowItemActivity extends Activity
 						ArrayList<String> pathList = new ArrayList<String>();
 						for (Image image : item.getInvoices())
 						{
-							if (!image.getPath().isEmpty())
+							if (!image.getLocalPath().isEmpty())
 							{
-								pathList.add(image.getPath());
+								pathList.add(image.getLocalPath());
 							}
 						}
 						
-						int pageIndex = pathList.indexOf(item.getInvoices().get(index).getPath());
+						int pageIndex = pathList.indexOf(item.getInvoices().get(index).getLocalPath());
 						
 						Bundle bundle = new Bundle();
 						bundle.putStringArrayList("imagePath", pathList);
@@ -408,7 +408,7 @@ public class ShowItemActivity extends Activity
 					final String invoicePath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE);
 					if (!invoicePath.isEmpty())
 					{
-						image.setPath(invoicePath);
+						image.setLocalPath(invoicePath);
 						dbManager.updateImageByServerID(image);
 						
 						runOnUiThread(new Runnable()

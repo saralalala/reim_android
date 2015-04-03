@@ -11,7 +11,8 @@ public class Image
 {
 	private int localID = -1;
 	private int serverID = -1;
-	private String path = "";
+    private String serverPath = "";
+	private String localPath = "";
 	private int itemID = -1;
 	
 	public Image()
@@ -36,14 +37,23 @@ public class Image
 	{
 		this.serverID = serverID;
 	}
-	
-	public String getPath()
+
+    public String getServerPath()
+    {
+        return serverPath;
+    }
+    public void setServerPath(String serverPath)
+    {
+        this.serverPath = serverPath;
+    }
+
+    public String getLocalPath()
 	{
-		return path;
+		return localPath;
 	}
-	public void setPath(String path)
+	public void setLocalPath(String localPath)
 	{
-		this.path = path;
+		this.localPath = localPath;
 	}
 	
 	public int getItemID()
@@ -75,21 +85,18 @@ public class Image
 	{
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize = 8;
-		return BitmapFactory.decodeFile(path, options);
+		return BitmapFactory.decodeFile(localPath, options);
 	}
 	
 	public void deleteFile()
 	{
-		File file = new File(path);
-		if (file != null)
-		{
-			file.delete();
-		}
+		File file = new File(localPath);
+        file.delete();
 	}
 	
 	public boolean isNotDownloaded()
 	{
-		return getPath().isEmpty() || getBitmap() == null;
+		return getLocalPath().isEmpty() || getBitmap() == null;
 	}
 	
 	public boolean isNotUploaded()

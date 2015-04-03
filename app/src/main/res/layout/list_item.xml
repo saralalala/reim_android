@@ -28,14 +28,13 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/proveTextView"
+                android:id="@+id/typeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="6dp"
                 android:paddingLeft="1dp"
                 android:paddingRight="1dp"
-                android:text="@string/status_prove_ahead"
                 android:textColor="@color/major_light"
                 android:textSize="14sp" />
 

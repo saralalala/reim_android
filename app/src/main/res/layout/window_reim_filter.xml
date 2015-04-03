@@ -170,22 +170,30 @@
 		            android:checked="true"
 		            android:text="@string/filter_all"
 		            style="@style/RadioButton" />
+
+                <RadioButton
+                    android:id="@+id/filterConsumedRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/filter_consumed"
+                    style="@style/RadioButton" />
 		
 		        <RadioButton
-		            android:id="@+id/filterProveAheadRadio"
+		            android:id="@+id/filterBudgetRadio"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            android:layout_weight="1"
-		            android:text="@string/filter_prove_ahead"
+		            android:text="@string/filter_budget"
 		            style="@style/RadioButton" />
-		
-		        <RadioButton
-		            android:id="@+id/filterConsumedRadio"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_weight="1"
-		            android:text="@string/filter_consumed"
-		            style="@style/RadioButton" />
+
+                <RadioButton
+                    android:id="@+id/filterBorrowingRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/filter_borrowing"
+                    style="@style/RadioButton" />
 		        
 		    </classes.widget.SegmentedGroup>
 		    

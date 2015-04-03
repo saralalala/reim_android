@@ -47,7 +47,7 @@ public class Invite extends Message implements Serializable
             }
             else if (invitor.equals(currentNickname) && activeType == Invite.TYPE_NEW)
             {
-                String message = "您邀请了用户" + invitor + "加入「" + jObject.getString("groupname") + "」";
+                String message = "您邀请了用户" + jObject.getString("iname") + "加入「" + jObject.getString("groupname") + "」";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("invitedt"));

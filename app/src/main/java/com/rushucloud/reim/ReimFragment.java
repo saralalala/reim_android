@@ -63,8 +63,9 @@ import netUtils.response.item.DeleteItemResponse;
 public class ReimFragment extends Fragment
 {
 	private static final int FILTER_TYPE_ALL = 0;
-	private static final int FILTER_TYPE_PROVE_AHEAD = 1;
-	private static final int FILTER_TYPE_CONSUMED = 2;
+	private static final int FILTER_TYPE_CONSUMED = 1;
+    private static final int FILTER_TYPE_BUDGET = 2;
+    private static final int FILTER_TYPE_BORROWING = 3;
 	private static final int FILTER_STATUS_ALL = 0;
 	private static final int FILTER_STATUS_FREE = 1;
 	private static final int FILTER_STATUS_ADDED = 2;
@@ -431,8 +432,9 @@ public class ReimFragment extends Fragment
 		});
 
 		final RadioButton filterTypeAllRadio = (RadioButton) filterView.findViewById(R.id.filterTypeAllRadio);
-		final RadioButton filterProveAheadRadio = (RadioButton) filterView.findViewById(R.id.filterProveAheadRadio);
-		final RadioButton filterConsumedRadio = (RadioButton) filterView.findViewById(R.id.filterConsumedRadio);			
+        final RadioButton filterConsumedRadio = (RadioButton) filterView.findViewById(R.id.filterConsumedRadio);
+        final RadioButton filterBudgetRadio = (RadioButton) filterView.findViewById(R.id.filterBudgetRadio);
+        final RadioButton filterBorrowingRadio = (RadioButton) filterView.findViewById(R.id.filterBorrowingRadio);
 		final SegmentedGroup filterTypeRadioGroup = (SegmentedGroup) filterView.findViewById(R.id.filterTypeRadioGroup);
 		filterTypeRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
@@ -442,16 +444,21 @@ public class ReimFragment extends Fragment
 				{
 					tempFilterType = FILTER_TYPE_ALL;
 				}
-				else if (checkedId == filterProveAheadRadio.getId())
-				{
-					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PROVE_AHEAD");
-					tempFilterType = FILTER_TYPE_PROVE_AHEAD;
-				}
 				else if (checkedId == filterConsumedRadio.getId())
 				{
 					MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PAY");
 					tempFilterType = FILTER_TYPE_CONSUMED;
 				}
+                else if (checkedId == filterBudgetRadio.getId())
+                {
+                    MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PROVE_AHEAD");
+                    tempFilterType = FILTER_TYPE_BUDGET;
+                }
+                else if (checkedId == filterBorrowingRadio.getId())
+                {
+                    MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PROVE_AHEAD");
+                    tempFilterType = FILTER_TYPE_BORROWING;
+                }
 			}
 		});
 
@@ -572,12 +579,15 @@ public class ReimFragment extends Fragment
 					case FILTER_TYPE_ALL:
 						filterTypeRadioGroup.check(filterTypeAllRadio.getId());
 						break;
-					case FILTER_TYPE_PROVE_AHEAD:
-						filterTypeRadioGroup.check(filterProveAheadRadio.getId());
+                    case FILTER_TYPE_CONSUMED:
+                        filterTypeRadioGroup.check(filterConsumedRadio.getId());
+                        break;
+					case FILTER_TYPE_BUDGET:
+						filterTypeRadioGroup.check(filterBudgetRadio.getId());
 						break;
-					case FILTER_TYPE_CONSUMED:
-						filterTypeRadioGroup.check(filterConsumedRadio.getId());
-						break;
+                    case FILTER_TYPE_BORROWING:
+                        filterTypeRadioGroup.check(filterBorrowingRadio.getId());
+                        break;
 					default:
 						break;
 				}
@@ -695,14 +705,18 @@ public class ReimFragment extends Fragment
 		showList.clear();
 		for (Item item : itemList)
 		{
-			if (filterType == FILTER_TYPE_PROVE_AHEAD && !item.isProveAhead())
+			if (filterType == FILTER_TYPE_CONSUMED && item.getType() != Item.TYPE_REIM)
 			{
 				continue;
 			}
-			if (filterType == FILTER_TYPE_CONSUMED && item.isProveAhead())
-			{
-				continue;
-			}			
+            if (filterType == FILTER_TYPE_BUDGET && item.getType() != Item.TYPE_BUDGET)
+            {
+                continue;
+            }
+            if (filterType == FILTER_TYPE_BORROWING && item.getType() != Item.TYPE_BORROWING)
+            {
+                continue;
+            }
 			if (filterStatus == FILTER_STATUS_FREE && item.getBelongReport() != null && item.getBelongReport().getLocalID() != -1)
 			{
 				continue;

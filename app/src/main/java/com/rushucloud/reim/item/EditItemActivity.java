@@ -89,7 +89,8 @@ public class EditItemActivity extends Activity
     private PopupWindow typePopupWindow;
     private TextView typeTextView;
     private RadioButton consumedRadio;
-    private RadioButton proveAheadRadio;
+    private RadioButton budgetRadio;
+    private RadioButton borrowingRadio;
     private ToggleButton needReimToggleButton;
 
     private LinearLayout invoiceLayout;
@@ -204,7 +205,7 @@ public class EditItemActivity extends Activity
                             if (!invoicePath.isEmpty())
                             {
                                 Image image = new Image();
-                                image.setPath(invoicePath);
+                                image.setLocalPath(invoicePath);
                                 item.getInvoices().add(image);
                             }
                         }
@@ -228,7 +229,7 @@ public class EditItemActivity extends Activity
                         if (!invoicePath.isEmpty())
                         {
                             Image image = new Image();
-                            image.setPath(invoicePath);
+                            image.setLocalPath(invoicePath);
                             item.getInvoices().add(image);
                         }
                         else
@@ -323,6 +324,10 @@ public class EditItemActivity extends Activity
             }
             item.setConsumedDate(Utils.getCurrentTime());
             item.setInvoices(new ArrayList<Image>());
+            if (fromPickItems)
+            {
+                item.setType(intent.getIntExtra("type", 0));
+            }
             List<User> relevantUsers = new ArrayList<User>();
             relevantUsers.add(appPreference.getCurrentUser());
             item.setRelevantUsers(relevantUsers);
@@ -379,11 +384,11 @@ public class EditItemActivity extends Activity
                         item.setCreatedDate(item.getLocalUpdatedDate());
                     }
 
-                    if (fromReim && !fromPickItems && item.isProveAhead() && !item.isPaApproved())
+                    if (fromReim && !fromPickItems && item.getType() != Item.TYPE_REIM && !item.isAaApproved())
                     {
                         Builder buider = new Builder(EditItemActivity.this);
                         buider.setTitle(R.string.option);
-                        buider.setMessage(R.string.prompt_save_prove_ahead_item);
+                        buider.setMessage(R.string.prompt_save_approve_ahead_item);
                         buider.setPositiveButton(R.string.only_save, new DialogInterface.OnClickListener()
                         {
                             public void onClick(DialogInterface dialog, int which)
@@ -402,11 +407,11 @@ public class EditItemActivity extends Activity
                                 if (item.getBelongReport() == null)
                                 {
                                     report = new Report();
-                                    report.setTitle(getString(R.string.report_prove_ahead));
+                                    report.setTitle(getString(R.string.report_approve_ahead));
                                     report.setSender(appPreference.getCurrentUser());
                                     report.setCreatedDate(Utils.getCurrentTime());
                                     report.setLocalUpdatedDate(Utils.getCurrentTime());
-                                    report.setIsProveAhead(true);
+                                    report.setType(item.getType());
                                     report.setManagerList(appPreference.getCurrentUser().buildBaseManagerList());
                                     report.setLocalID(dbManager.insertReport(report));
 
@@ -437,7 +442,7 @@ public class EditItemActivity extends Activity
                         ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
                         Intent intent = new Intent();
                         intent.putExtra("itemID", item.getLocalID());
-                        intent.putExtra("isProveAhead", item.isProveAhead());
+                        intent.putExtra("type", item.getType());
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -537,9 +542,9 @@ public class EditItemActivity extends Activity
             amountEditText.setText(Utils.formatDouble(item.getAmount()));
         }
 
-        if (item.isPaApproved())
+        if (item.isAaApproved())
         {
-            budgetTextView.setText(getString(R.string.budget) + " " + Utils.formatDouble(item.getPaAmount()));
+            budgetTextView.setText(getString(R.string.budget) + " " + Utils.formatDouble(item.getAaAmount()));
         }
         else
         {
@@ -552,7 +557,7 @@ public class EditItemActivity extends Activity
     private void initTypeView()
     {
         // init type
-        String temp = item.isProveAhead()? getString(R.string.prove_ahead) : getString(R.string.consumed);
+        String temp = getString(item.getTypeString());
         if (item.needReimbursed())
         {
             temp += "/" + getString(R.string.need_reimburse);
@@ -566,7 +571,7 @@ public class EditItemActivity extends Activity
         {
             public void onClick(View v)
             {
-                if (fromReim && !item.isPaApproved() || fromPickItems)
+                if (fromReim && !item.isAaApproved() || fromPickItems)
                 {
                     hideSoftKeyboard();
                     showTypeWindow();
@@ -577,8 +582,9 @@ public class EditItemActivity extends Activity
         // init type window
         View typeView = View.inflate(this, R.layout.window_reim_type, null);
         consumedRadio = (RadioButton) typeView.findViewById(R.id.consumedRadio);
-        proveAheadRadio = (RadioButton) typeView.findViewById(R.id.proveAheadRadio);
-        proveAheadRadio.setOnCheckedChangeListener(new OnCheckedChangeListener()
+        budgetRadio = (RadioButton) typeView.findViewById(R.id.budgetRadio);
+        borrowingRadio = (RadioButton) typeView.findViewById(R.id.borrowingRadio);
+        budgetRadio.setOnCheckedChangeListener(new OnCheckedChangeListener()
         {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             {
@@ -616,10 +622,21 @@ public class EditItemActivity extends Activity
             {
                 typePopupWindow.dismiss();
 
-                item.setIsProveAhead(proveAheadRadio.isChecked());
+                if (consumedRadio.isChecked())
+                {
+                    item.setType(Item.TYPE_REIM);
+                }
+                else if (budgetRadio.isChecked())
+                {
+                    item.setType(Item.TYPE_BUDGET);
+                }
+                else
+                {
+                    item.setType(Item.TYPE_BORROWING);
+                }
                 item.setNeedReimbursed(needReimToggleButton.isChecked());
 
-                String temp = item.isProveAhead()? getString(R.string.prove_ahead) : getString(R.string.consumed);
+                String temp = getString(item.getTypeString());
                 if (item.needReimbursed())
                 {
                     temp += "/" + getString(R.string.need_reimburse);
@@ -815,7 +832,7 @@ public class EditItemActivity extends Activity
         {
             public void onClick(View v)
             {
-                if (!item.isPaApproved())
+                if (!item.isAaApproved())
                 {
                     if (newItem)
                     {
@@ -1003,13 +1020,13 @@ public class EditItemActivity extends Activity
                         ArrayList<String> pathList = new ArrayList<String>();
                         for (Image image : item.getInvoices())
                         {
-                            if (!image.getPath().isEmpty())
+                            if (!image.getLocalPath().isEmpty())
                             {
-                                pathList.add(image.getPath());
+                                pathList.add(image.getLocalPath());
                             }
                         }
 
-                        int pageIndex = pathList.indexOf(item.getInvoices().get(index).getPath());
+                        int pageIndex = pathList.indexOf(item.getInvoices().get(index).getLocalPath());
 
                         Bundle bundle = new Bundle();
                         bundle.putStringArrayList("imagePath", pathList);
@@ -1182,8 +1199,24 @@ public class EditItemActivity extends Activity
 
     private void showTypeWindow()
     {
-        consumedRadio.setChecked(!item.isProveAhead());
-        proveAheadRadio.setChecked(item.isProveAhead());
+        if (item.getType() == Item.TYPE_REIM)
+        {
+            consumedRadio.setChecked(true);
+            budgetRadio.setChecked(false);
+            borrowingRadio.setChecked(false);
+        }
+        else if (item.getType() == Item.TYPE_BUDGET)
+        {
+            consumedRadio.setChecked(false);
+            budgetRadio.setChecked(true);
+            borrowingRadio.setChecked(false);
+        }
+        else
+        {
+            consumedRadio.setChecked(false);
+            budgetRadio.setChecked(false);
+            borrowingRadio.setChecked(true);
+        }
         needReimToggleButton.setChecked(item.needReimbursed());
 
         typePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
@@ -1254,7 +1287,7 @@ public class EditItemActivity extends Activity
             boolean imageExists = false;
             for (Image oldImage : originInvoiceList)
             {
-                if (newImage.getPath().equals(oldImage.getPath()))
+                if (newImage.getLocalPath().equals(oldImage.getLocalPath()))
                 {
                     imageExists = true;
                     break;
@@ -1281,7 +1314,7 @@ public class EditItemActivity extends Activity
                     final String invoicePath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE);
                     if (!invoicePath.isEmpty())
                     {
-                        image.setPath(invoicePath);
+                        image.setLocalPath(invoicePath);
                         dbManager.updateImageByServerID(image);
 
                         runOnUiThread(new Runnable()

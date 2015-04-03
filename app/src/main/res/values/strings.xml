@@ -72,8 +72,9 @@
     <string name="sort_create_date">创建时间</string>
     <string name="filter">筛选</string>
     <string name="filter_all">全部</string>
-    <string name="filter_prove_ahead">预申请</string>
-    <string name="filter_consumed">已消费</string>
+    <string name="filter_consumed">报销</string>
+    <string name="filter_budget">预算</string>
+    <string name="filter_borrowing">借款</string>
     <string name="filter_added">已加入报告</string>
     <string name="filter_free">未加入报告</string>
     <string name="filter_tag">标签</string>
@@ -81,11 +82,11 @@
     
     <string name="invoice">发票</string>
     <string name="reim_type">报销类型</string>
-    <string name="consumed">已消费</string>
-    <string name="prove_ahead">预申请</string>
-    <string name="need_reimburse">需要报销</string>
-    <string name="actual_cost">实际消费</string>
+    <string name="consumed">报销</string>
     <string name="budget">预算</string>
+    <string name="borrowing">借款</string>
+    <string name="need_reimburse">需支付</string>
+    <string name="actual_cost">实际消费</string>
     <string name="type">类　型</string>
     <string name="photo">照　片</string>
     <string name="category">类　别</string>
@@ -116,7 +117,7 @@
     <string name="pending">待处理</string>
     <string name="processed">已处理</string>
     <string name="report_detail">报告详情</string>
-    <string name="report_prove_ahead">预申请消费</string>
+    <string name="report_approve_ahead">预申请消费</string>
     <string name="comment">评论</string>
     <string name="add_comment">添加评论</string>
     <string name="check_comment">查看评论</string>
@@ -141,7 +142,7 @@
     <string name="approve_info">审批情况</string>
     <string name="ready_to_submitted">待提交</string>
     <string name="submitted">已提交</string>
-    <string name="ready_to_approved">待审批</string>
+    <string name="ready_to_approve">待审批</string>
     <string name="approved">已通过</string>
     <string name="rejected">已退回</string>
     <string name="report_no_name">无标题报告</string>
@@ -249,7 +250,7 @@
     
     <string name="prompt_loading">正在努力加载中&#8230;</string>
     <string name="prompt_sign_out">确认要切换当前账号</string>
-    <string name="prompt_save_prove_ahead_item">这是一笔预申请的消费，您是想仅保存此笔消费还是要直接发送给上级审批？</string>
+    <string name="prompt_save_approve_ahead_item">这是一笔预申请的消费，您是想仅保存此笔消费还是要直接发送给上级审批？</string>
     <string name="prompt_delete_item">是否要删除此笔消费？</string>
     <string name="prompt_delete_report">是否要删除此报告？</string>
     <string name="prompt_delete_category">是否要删除此类别？</string>
@@ -434,8 +435,9 @@
     <string name="status_approved">待结算</string>
     <string name="status_rejected">退回</string>
     <string name="status_finished">完成</string>
-    <string name="status_prove_ahead">预</string>
-    <string name="status_prove_ahead_approved">(已审批)</string>
+    <string name="status_budget">预</string>
+    <string name="status_borrowing">借</string>
+    <string name="status_approve_ahead_approved">(已审批)</string>
     <string name="status_cc">抄送</string>
     
     <string name="xlistview_header_hint_normal">下拉更新</string>

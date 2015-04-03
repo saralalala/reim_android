@@ -178,7 +178,7 @@ public class EditReportActivity extends Activity
 					chosenItemIDList.clear();
 					chosenItemIDList.addAll(bundle.getIntegerArrayList("chosenItemIDList"));
                     itemList = dbManager.getItems(chosenItemIDList);
-                    report.setIsProveAhead(bundle.getBoolean("isProveAhead"));
+                    report.setType(bundle.getInt("type"));
 					refreshView();
 					break;
 				}
@@ -773,7 +773,7 @@ public class EditReportActivity extends Activity
 	private void sendUploadImageRequest(final Image image)
 	{
     	System.out.println("upload image：local id " + image.getLocalID());
-		UploadImageRequest request = new UploadImageRequest(image.getPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
+		UploadImageRequest request = new UploadImageRequest(image.getLocalPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

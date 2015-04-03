@@ -58,7 +58,7 @@ public class ItemListViewAdapter extends BaseAdapter
 			
 			ImageView photoImageView = (ImageView) view.findViewById(R.id.photoImageView);
 			TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
-			TextView proveTextView = (TextView) view.findViewById(R.id.proveTextView);
+			TextView typeTextView = (TextView) view.findViewById(R.id.typeTextView);
 			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
 			TextView reportTextView = (TextView) view.findViewById(R.id.reportTextView);
 			TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
@@ -75,21 +75,30 @@ public class ItemListViewAdapter extends BaseAdapter
 
 			statusTextView.setText(item.getStatusString());
 			statusTextView.setBackgroundResource(item.getStatusBackground());
-			
-			if (item.isProveAhead() && item.isPaApproved())
+
+            int visibility = item.getType() == Item.TYPE_REIM? View.GONE : View.VISIBLE;
+            typeTextView.setVisibility(visibility);
+
+			if (item.getType() == Item.TYPE_BUDGET && item.isAaApproved())
 			{
-				proveTextView.setVisibility(View.VISIBLE);
-				proveTextView.setBackgroundResource(R.drawable.status_item_approved);
+                typeTextView.setText(R.string.status_budget);
+                typeTextView.setBackgroundResource(R.drawable.status_item_approved);
 			}
-			else if (item.isProveAhead())
+			else if (item.getType() == Item.TYPE_BUDGET)
 			{
-				proveTextView.setVisibility(View.VISIBLE);
-				proveTextView.setBackgroundResource(R.drawable.status_item_prove_ahead);
+                typeTextView.setText(R.string.status_budget);
+                typeTextView.setBackgroundResource(R.drawable.status_item_approve_ahead);
 			}
-			else
-			{
-				proveTextView.setVisibility(View.GONE);
-			}
+			else if (item.getType() == Item.TYPE_BORROWING && item.isAaApproved())
+            {
+                typeTextView.setText(R.string.status_borrowing);
+                typeTextView.setBackgroundResource(R.drawable.status_item_approved);
+            }
+            else if (item.getType() == Item.TYPE_BORROWING)
+            {
+                typeTextView.setText(R.string.status_borrowing);
+                typeTextView.setBackgroundResource(R.drawable.status_item_approve_ahead);
+            }
 
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
@@ -101,7 +110,6 @@ public class ItemListViewAdapter extends BaseAdapter
 			reportTextView.setText(reportTitle);
 			
 			Category category = item.getCategory();
-
 			if (category != null)
 			{
                 ViewUtils.setImageViewBitmap(category, categoryImageView);
@@ -206,7 +214,6 @@ public class ItemListViewAdapter extends BaseAdapter
 					if (tagCanBeFiltered(item, constraintString))
 					{
 						newValues.add(item);
-						continue;
 					}
 				}
 				

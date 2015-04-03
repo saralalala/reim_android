@@ -189,7 +189,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
             }
             else
             {
-                statusTextView.setText(R.string.ready_to_approved);
+                statusTextView.setText(R.string.ready_to_approve);
                 statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
 
                 alarmImageView.setVisibility(View.GONE);
@@ -198,7 +198,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
         }
         else
         {
-            statusTextView.setText(R.string.ready_to_approved);
+            statusTextView.setText(R.string.ready_to_approve);
             statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
 
             timeLayout.setVisibility(View.GONE);

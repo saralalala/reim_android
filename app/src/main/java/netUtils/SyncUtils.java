@@ -233,7 +233,7 @@ public abstract class SyncUtils
     private static void sendUploadImageRequest(final Image image, final SyncDataCallback callback)
     {
     	System.out.println("upload image：local id " + image.getLocalID());
-		UploadImageRequest request = new UploadImageRequest(image.getPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
+		UploadImageRequest request = new UploadImageRequest(image.getLocalPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

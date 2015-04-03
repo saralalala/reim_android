@@ -9,7 +9,6 @@ import java.util.List;
 import classes.Report;
 import classes.User;
 import classes.utils.DBManager;
-import classes.utils.Utils;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
 import netUtils.request.BaseRequest;
@@ -29,7 +28,7 @@ public class CreateReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("status", Integer.toString(report.getStatus())));
 		params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
 		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
-		params.add(new BasicNameValuePair("prove_ahead", Utils.booleanToString(report.isProveAhead())));
+		params.add(new BasicNameValuePair("prove_ahead", Integer.toString(report.getType())));
 		params.add(new BasicNameValuePair("createdt", Integer.toString(report.getCreatedDate())));
 		setParams(params);
 
@@ -49,7 +48,7 @@ public class CreateReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("status", Integer.toString(report.getStatus())));
 		params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
 		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
-		params.add(new BasicNameValuePair("prove_ahead", Utils.booleanToString(report.isProveAhead())));
+		params.add(new BasicNameValuePair("prove_ahead", Integer.toString(report.getType())));
 		params.add(new BasicNameValuePair("createdt", Integer.toString(report.getCreatedDate())));
 		params.add(new BasicNameValuePair("comment", commentContent));
 		setParams(params);

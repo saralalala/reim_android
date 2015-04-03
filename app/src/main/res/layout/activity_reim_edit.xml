@@ -343,7 +343,7 @@
 		                android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
 		                android:gravity="center"
-		                android:text="@string/status_prove_ahead_approved"
+		                android:text="@string/status_approve_ahead_approved"
 		                android:textColor="@color/item_approved"
 		                android:textSize="18sp" />
 	            </LinearLayout>

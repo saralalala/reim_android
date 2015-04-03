@@ -25,7 +25,7 @@ public class DBManager extends SQLiteOpenHelper
 	private static SQLiteDatabase database = null;
 	
 	private static final String DATABASE_NAME = "reim.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 1;
 	
 	private DBManager(Context context)
 	{
@@ -74,6 +74,7 @@ public class DBManager extends SQLiteOpenHelper
 			String createItemTable="CREATE TABLE IF NOT EXISTS tbl_item ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
+                                    + "type INT DEFAULT(0),"
 									+ "vendor TEXT DEFAULT(''),"
 									+ "report_local_id INT DEFAULT(0),"
 									+ "category_id INT DEFAULT(0),"
@@ -82,9 +83,8 @@ public class DBManager extends SQLiteOpenHelper
 									+ "user_id INT DEFAULT(0),"
 									+ "consumed_date INT DEFAULT(0),"
 									+ "note TEXT DEFAULT(''),"
-									+ "prove_ahead INT DEFAULT(0),"
 									+ "need_reimbursed INT DEFAULT(0),"
-									+ "pa_approved INT DEFAULT(0),"
+									+ "aa_approved INT DEFAULT(0),"
 									+ "status INT DEFAULT(0),"
 									+ "location TEXT DEFAULT(''),"
 									+ "createdt INT DEFAULT(0),"
@@ -121,6 +121,7 @@ public class DBManager extends SQLiteOpenHelper
 			String createOthersItemTable="CREATE TABLE IF NOT EXISTS tbl_others_item ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
+                                    + "type INT DEFAULT(0),"
 									+ "vendor TEXT DEFAULT(''),"
 									+ "report_server_id INT DEFAULT(0),"
 									+ "category_id INT DEFAULT(0),"
@@ -131,9 +132,8 @@ public class DBManager extends SQLiteOpenHelper
 									+ "user_id INT DEFAULT(0),"
 									+ "consumed_date INT DEFAULT(0),"
 									+ "note TEXT DEFAULT(''),"
-									+ "prove_ahead INT DEFAULT(0),"
 									+ "need_reimbursed INT DEFAULT(0),"
-									+ "pa_approved INT DEFAULT(0),"
+									+ "aa_approved INT DEFAULT(0),"
 									+ "status INT DEFAULT(0),"
 									+ "location TEXT DEFAULT(''),"
 									+ "createdt INT DEFAULT(0),"
@@ -153,7 +153,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "manager_id TEXT DEFAULT(''),"
 										+ "cc_id TEXT DEFAULT(''),"
 										+ "status INT DEFAULT(0),"
-										+ "prove_ahead INT DEFAULT(0),"
+										+ "type INT DEFAULT(0),"
 										+ "created_date INT DEFAULT(0),"
 										+ "server_updatedt INT DEFAULT(0),"
 										+ "local_updatedt INT DEFAULT(0),"
@@ -173,7 +173,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "cc_id TEXT DEFAULT(''),"
 										+ "status INT DEFAULT(0),"
 										+ "my_decision INT DEFAULT(0),"
-										+ "prove_ahead INT DEFAULT(0),"
+										+ "type INT DEFAULT(0),"
 										+ "item_count INT DEFAULT(0),"
 										+ "amount TEXT DEFAULT(''),"
 										+ "is_cc INT DEFAULT(0),"
@@ -224,7 +224,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "group_id INT DEFAULT(0),"
 										+ "parent_id INT DEFAULT(0),"
 										+ "icon_id INT DEFAULT(0),"
-										+ "prove_ahead INT DEFAULT(0),"
+										+ "type INT DEFAULT(0),"
 										+ "server_updatedt INT DEFAULT(0),"
 										+ "local_updatedt INT DEFAULT(0),"
 										+ "backup1 INT DEFAULT(0),"
@@ -251,7 +251,8 @@ public class DBManager extends SQLiteOpenHelper
 			String createImageTable="CREATE TABLE IF NOT EXISTS tbl_image ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
-									+ "path TEXT DEFAULT(''),"
+                                    + "server_path TEXT DEFAULT(''),"
+									+ "local_path TEXT DEFAULT(''),"
 									+ "item_local_id INT DEFAULT(0),"
 									+ "backup1 INT DEFAULT(0),"
 									+ "backup2 TEXT DEFAULT(''),"
@@ -262,7 +263,8 @@ public class DBManager extends SQLiteOpenHelper
 			String createOthersImageTable="CREATE TABLE IF NOT EXISTS tbl_others_image ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 									+ "server_id INT DEFAULT(0),"
-									+ "path TEXT DEFAULT(''),"
+                                    + "server_path TEXT DEFAULT(''),"
+									+ "local_path TEXT DEFAULT(''),"
 									+ "item_server_id INT DEFAULT(0),"
 									+ "backup1 INT DEFAULT(0),"
 									+ "backup2 TEXT DEFAULT(''),"
@@ -282,11 +284,11 @@ public class DBManager extends SQLiteOpenHelper
 
         if (newVersion > oldVersion)
         {
-            if (oldVersion < 2)
-            {
-                String command = "ALTER TABLE tbl_user ADD COLUMN bank_account TEXT DEFAULT('')";
-                db.execSQL(command);
-            }
+//            if (oldVersion < 2)
+//            {
+//                String command = "ALTER TABLE tbl_user ADD COLUMN bank_account TEXT DEFAULT('')";
+//                db.execSQL(command);
+//            }
         }
 		onCreate(db);
 	}
@@ -777,13 +779,13 @@ public class DBManager extends SQLiteOpenHelper
 			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			String sqlString = "INSERT INTO tbl_item (server_id, vendor, report_local_id, category_id, amount, pa_amount, " +
 							   							"user_id, consumed_date, note, status, location, createdt, server_updatedt, " +
-							   							"local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" + 
+							   							"local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
 														"'" + item.getServerID() + "'," +
 														"'" + sqliteEscape(item.getVendor()) + "'," +
 														"'" + reportID + "'," +
 														"'" + categoryID + "'," +
 														"'" + item.getAmount() + "'," +
-														"'" + item.getPaAmount() + "'," +
+														"'" + item.getAaAmount() + "'," +
 														"'" + item.getConsumer().getServerID() + "'," +
 														"'" + item.getConsumedDate() + "'," +
 														"'" + sqliteEscape(item.getNote()) + "'," +
@@ -792,9 +794,9 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + item.getCreatedDate() + "'," +
 														"'" + item.getServerUpdatedDate() + "'," +
 														"'" + item.getLocalUpdatedDate() + "'," +
-														"'" + Utils.booleanToInt(item.isProveAhead()) + "'," +
+														"'" + item.getType() + "'," +
 														"'" + Utils.booleanToInt(item.needReimbursed()) + "'," +
-														"'" + Utils.booleanToInt(item.isPaApproved()) + "')";
+														"'" + Utils.booleanToInt(item.isAaApproved()) + "')";
 			database.execSQL(sqlString);
 			
 			Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_item", null);
@@ -822,7 +824,7 @@ public class DBManager extends SQLiteOpenHelper
 			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			String sqlString = "INSERT INTO tbl_others_item (server_id, vendor, report_server_id, category_id, tags_id, users_id, " +
 							   							"amount, pa_amount, user_id, consumed_date, note, status, location, createdt, " +
-							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" +
+							   							"server_updatedt, local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
 														"'" + item.getServerID() + "'," +
 														"'" + sqliteEscape(item.getVendor()) + "'," +
 														"'" + item.getBelongReport().getServerID() + "'," +
@@ -830,7 +832,7 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + item.getTagsID() + "'," +
 														"'" + item.getRelevantUsersID() + "'," +
 														"'" + item.getAmount() + "'," +
-														"'" + item.getPaAmount() + "'," +
+														"'" + item.getAaAmount() + "'," +
 														"'" + item.getConsumer().getServerID() + "'," +
 														"'" + item.getConsumedDate() + "'," +
 														"'" + sqliteEscape(item.getNote()) + "'," +
@@ -839,9 +841,9 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + item.getCreatedDate() + "'," +
 														"'" + item.getServerUpdatedDate() + "'," +
 														"'" + item.getLocalUpdatedDate() + "'," +
-														"'" + Utils.booleanToInt(item.isProveAhead()) + "'," +
+														"'" + item.getType() + "'," +
 														"'" + Utils.booleanToInt(item.needReimbursed()) + "'," +
-														"'" + Utils.booleanToInt(item.isPaApproved()) + "')";
+														"'" + Utils.booleanToInt(item.isAaApproved()) + "')";
 			database.execSQL(sqlString);
 
 			updateOthersItemImages(item);
@@ -880,7 +882,7 @@ public class DBManager extends SQLiteOpenHelper
 								"report_local_id = '" + reportID + "'," +
 								"category_id = '" + categoryID + "'," +
 								"amount = '" + item.getAmount() + "'," +
-								"pa_amount = '" + item.getPaAmount() + "'," +
+								"pa_amount = '" + item.getAaAmount() + "'," +
 								"user_id = '" + item.getConsumer().getServerID() + "'," +
 								"consumed_date = '" + item.getConsumedDate() + "'," +
 								"note = '" + sqliteEscape(item.getNote()) + "'," +
@@ -889,9 +891,9 @@ public class DBManager extends SQLiteOpenHelper
 								"createdt = '" + item.getCreatedDate() + "'," +
 								"server_updatedt = '" + item.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
-								"prove_ahead = '" + Utils.booleanToInt(item.isProveAhead()) + "'," +
+								"type = '" + item.getType() + "'," +
 								"need_reimbursed = '" + Utils.booleanToInt(item.needReimbursed()) + "'," +
-								"pa_approved = '" + Utils.booleanToInt(item.isPaApproved()) + "' " +
+								"aa_approved = '" + Utils.booleanToInt(item.isAaApproved()) + "' " +
 								"WHERE id = '" + item.getLocalID() + "'";			
 			database.execSQL(sqlString);
 
@@ -920,7 +922,7 @@ public class DBManager extends SQLiteOpenHelper
 								"report_local_id = '" + reportID + "'," +
 								"category_id = '" + categoryID + "'," +
 								"amount = '" + item.getAmount() + "'," +
-								"pa_amount = '" + item.getPaAmount() + "'," +
+								"pa_amount = '" + item.getAaAmount() + "'," +
 								"user_id = '" + item.getConsumer().getServerID() + "'," +
 								"consumed_date = '" + item.getConsumedDate() + "'," +
 								"note = '" + sqliteEscape(item.getNote()) + "'," +
@@ -929,9 +931,9 @@ public class DBManager extends SQLiteOpenHelper
 								"createdt = '" + item.getCreatedDate() + "'," +
 								"server_updatedt = '" + item.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
-								"prove_ahead = '" + Utils.booleanToInt(item.isProveAhead()) + "'," +
+								"type = '" + item.getType() + "'," +
 								"need_reimbursed = '" + Utils.booleanToInt(item.needReimbursed()) + "'," +
-								"pa_approved = '" + Utils.booleanToInt(item.isPaApproved()) + "' " +
+								"aa_approved = '" + Utils.booleanToInt(item.isAaApproved()) + "' " +
 								"WHERE server_id = '" + item.getServerID() + "'";			
 			database.execSQL(sqlString);
 			
@@ -1088,7 +1090,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
-				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
+				item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1096,9 +1098,9 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setType(getIntFromCursor(cursor, "type"));
 				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
-				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
+				item.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
@@ -1135,7 +1137,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
-				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
+				item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1143,9 +1145,9 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setType(getIntFromCursor(cursor, "type"));
 				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
-				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
+				item.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
@@ -1183,7 +1185,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
-				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
+				item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1191,9 +1193,9 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setType(getIntFromCursor(cursor, "type"));
 				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
-				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
+				item.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getOthersReport(getIntFromCursor(cursor, "report_server_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
@@ -1231,7 +1233,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
-				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
+				item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1239,9 +1241,9 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setType(getIntFromCursor(cursor, "type"));
 				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
-				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
+				item.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
@@ -1269,7 +1271,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
 												"(report_local_id = -1 OR report_local_id = 0) AND " +
-												"(prove_ahead = 0 OR (prove_ahead = 1 AND pa_approved = 1))", 
+												"(type = 0 OR (type = 1 AND aa_approved = 1) OR (type = 2 AND aa_approved = 1))",
 													new String[]{Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())
@@ -1279,7 +1281,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
-				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
+				item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1287,9 +1289,9 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setType(getIntFromCursor(cursor, "type"));
 				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
-				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
+				item.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
@@ -1310,14 +1312,14 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public List<Item> getUnarchivedProveAheadItems(int userServerID)
+	public List<Item> getUnarchivedBudgetItems(int userServerID)
 	{
 		List<Item> itemList = new ArrayList<Item>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
 												"(report_local_id = -1 OR report_local_id = 0) AND " +
-												"prove_ahead = 1 AND pa_approved = 0", 
+												"type = 1 AND aa_approved = 0",
 													new String[]{Integer.toString(userServerID)});
 
 			while (cursor.moveToNext())
@@ -1327,7 +1329,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
-				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
+				item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1335,9 +1337,9 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setType(getIntFromCursor(cursor, "type"));
 				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
-				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
+				item.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
@@ -1357,7 +1359,55 @@ public class DBManager extends SQLiteOpenHelper
 			return itemList;
 		}
 	}
-	
+
+    public List<Item> getUnarchivedBorrowingItems(int userServerID)
+    {
+        List<Item> itemList = new ArrayList<Item>();
+        try
+        {
+            Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
+                                                      "(report_local_id = -1 OR report_local_id = 0) AND " +
+                                                      "type = 2 AND aa_approved = 0",
+                                              new String[]{Integer.toString(userServerID)});
+
+            while (cursor.moveToNext())
+            {
+                Item item = new Item();
+                item.setLocalID(getIntFromCursor(cursor, "id"));
+                item.setServerID(getIntFromCursor(cursor, "server_id"));
+                item.setVendor(getStringFromCursor(cursor, "vendor"));
+                item.setAmount(getDoubleFromCursor(cursor, "amount"));
+                item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
+                item.setNote(getStringFromCursor(cursor, "note"));
+                item.setStatus(getIntFromCursor(cursor, "status"));
+                item.setLocation(getStringFromCursor(cursor, "location"));
+                item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
+                item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
+                item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+                item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
+                item.setType(getIntFromCursor(cursor, "type"));
+                item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
+                item.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
+                item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
+                item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
+                item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
+                item.setInvoices(getItemImages(item.getLocalID()));
+                item.setRelevantUsers(getRelevantUsers(item.getLocalID()));
+                item.setTags(getItemTags(item.getLocalID()));
+
+                itemList.add(item);
+            }
+
+            cursor.close();
+            return itemList;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return itemList;
+        }
+    }
+
 	public List<Item> getUnsyncedItems(int userServerID)
 	{
 		List<Item> itemList = new ArrayList<Item>();
@@ -1373,7 +1423,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
-				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
+				item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1381,9 +1431,9 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setType(getIntFromCursor(cursor, "type"));
 				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
-				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
+				item.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
@@ -1527,7 +1577,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
-				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
+				item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1535,9 +1585,9 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setType(getIntFromCursor(cursor, "type"));
 				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
-				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
+				item.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getReportByLocalID(getIntFromCursor(cursor, "report_local_id")));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
@@ -1573,7 +1623,7 @@ public class DBManager extends SQLiteOpenHelper
 				item.setServerID(getIntFromCursor(cursor, "server_id"));
 				item.setVendor(getStringFromCursor(cursor, "vendor"));
 				item.setAmount(getDoubleFromCursor(cursor, "amount"));
-				item.setPaAmount(getDoubleFromCursor(cursor, "pa_amount"));
+				item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
 				item.setNote(getStringFromCursor(cursor, "note"));
 				item.setStatus(getIntFromCursor(cursor, "status"));
 				item.setLocation(getStringFromCursor(cursor, "location"));
@@ -1581,9 +1631,9 @@ public class DBManager extends SQLiteOpenHelper
 				item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
 				item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				item.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
-				item.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				item.setType(getIntFromCursor(cursor, "type"));
 				item.setNeedReimbursed(getBooleanFromCursor(cursor, "need_reimbursed"));
-				item.setPaApproved(getBooleanFromCursor(cursor, "pa_approved"));
+				item.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				item.setConsumer(getUser(getIntFromCursor(cursor, "user_id")));
 				item.setBelongReport(getOthersReport(reportServerID));
 				item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
@@ -1628,7 +1678,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
             System.out.println("insert report: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
-			String sqlString = "INSERT INTO tbl_report (server_id, title, user_id, status, manager_id, cc_id, prove_ahead, created_date, " +
+			String sqlString = "INSERT INTO tbl_report (server_id, title, user_id, status, manager_id, cc_id, type, created_date, " +
 							   							"server_updatedt, local_updatedt) VALUES (" + 
 														"'" + report.getServerID() + "'," +
 														"'" + sqliteEscape(report.getTitle()) + "'," +
@@ -1636,7 +1686,7 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + report.getStatus() + "'," +
 														"'" + User.getUsersIDString(report.getManagerList()) + "'," +
 														"'" + User.getUsersIDString(report.getCCList()) + "'," +
-														"'" + Utils.booleanToInt(report.isProveAhead()) + "'," +
+														"'" + report.getType() + "'," +
 														"'" + report.getCreatedDate() + "'," +
 														"'" + report.getServerUpdatedDate() + "'," +
 														"'" + report.getLocalUpdatedDate() + "')";
@@ -1662,7 +1712,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "INSERT INTO tbl_others_report (server_id, owner_id, title, user_id, status, my_decision, manager_id, cc_id, " +
-									"prove_ahead, amount, item_count, is_cc, created_date, server_updatedt, local_updatedt) VALUES (" + 
+									"type, amount, item_count, is_cc, created_date, server_updatedt, local_updatedt) VALUES (" +
 								"'" + report.getServerID() + "'," +
 								"'" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
 								"'" + sqliteEscape(report.getTitle()) + "'," +
@@ -1671,7 +1721,7 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + report.getMyDecision() + "'," +
 								"'" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"'" + User.getUsersIDString(report.getCCList()) + "'," +
-								"'" + Utils.booleanToInt(report.isProveAhead()) + "'," +
+								"'" + report.getType() + "'," +
 								"'" + report.getAmount() + "'," +
 								"'" + report.getItemCount() + "'," +
 								"'" + Utils.booleanToInt(report.isCC()) + "'," +
@@ -1700,7 +1750,7 @@ public class DBManager extends SQLiteOpenHelper
 								"status = '" + report.getStatus() + "'," +
 								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
-								"prove_ahead = '" + Utils.booleanToInt(report.isProveAhead()) + "'," +
+								"type = '" + report.getType() + "'," +
 								"created_date = '" + report.getCreatedDate() + "'," +
 								"server_updatedt = '" + report.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
@@ -1727,7 +1777,7 @@ public class DBManager extends SQLiteOpenHelper
 								"status = '" + report.getStatus() + "'," +
 								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
-								"prove_ahead = '" + Utils.booleanToInt(report.isProveAhead()) + "'," +
+								"type = '" + report.getType() + "'," +
 								"created_date = '" + report.getCreatedDate() + "'," +
 								"server_updatedt = '" + report.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
@@ -1754,7 +1804,7 @@ public class DBManager extends SQLiteOpenHelper
 								"my_decision = '" + report.getMyDecision() + "'," +
 								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
-								"prove_ahead = '" + Utils.booleanToInt(report.isProveAhead()) + "'," +
+								"type = '" + report.getType() + "'," +
 								"created_date = '" + report.getCreatedDate() + "'," +
 								"server_updatedt = '" + report.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
@@ -1869,7 +1919,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setCommentList(getReportComments(report.getLocalID()));
-				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				report.setType(getIntFromCursor(cursor, "type"));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1907,7 +1957,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setCommentList(getReportComments(report.getLocalID()));
-				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				report.setType(getIntFromCursor(cursor, "type"));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -1947,7 +1997,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCommentList(getOthersReportComments(report.getServerID()));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setMyDecision(getIntFromCursor(cursor, "my_decision"));
-				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				report.setType(getIntFromCursor(cursor, "type"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
 				report.setAmount(getStringFromCursor(cursor, "amount"));
 				report.setIsCC(Utils.intToBoolean(getIntFromCursor(cursor, "is_cc")));
@@ -2062,7 +2112,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
-				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				report.setType(getIntFromCursor(cursor, "type"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -2125,7 +2175,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setCommentList(getReportComments(report.getLocalID()));
 				report.setStatus(getIntFromCursor(cursor, "status"));
-				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				report.setType(getIntFromCursor(cursor, "type"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -2162,7 +2212,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCommentList(getOthersReportComments(report.getServerID()));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setMyDecision(getIntFromCursor(cursor, "my_decision"));
-				report.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				report.setType(getIntFromCursor(cursor, "type"));
 				report.setItemCount(getIntFromCursor(cursor, "item_count"));
 				report.setAmount(getStringFromCursor(cursor, "amount"));
 				report.setIsCC(Utils.intToBoolean(getIntFromCursor(cursor, "is_cc")));
@@ -2455,14 +2505,14 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "INSERT INTO tbl_category (server_id, category_name, max_limit, group_id, " +
-								"parent_id, icon_id, prove_ahead, local_updatedt, server_updatedt) VALUES (" +
+								"parent_id, icon_id, type, local_updatedt, server_updatedt) VALUES (" +
 								"'" + category.getServerID() + "'," +
 								"'" + sqliteEscape(category.getName()) + "'," +
 								"'" + category.getLimit() + "'," +
 								"'" + category.getGroupID() + "'," +
 								"'" + category.getParentID() + "'," +
 								"'" + category.getIconID() + "'," +
-								"'" + Utils.booleanToInt(category.isProveAhead()) + "'," +
+								"'" + category.getType() + "'," +
 								"'" + category.getLocalUpdatedDate() + "'," +
 								"'" + category.getServerUpdatedDate() + "')";			
 			database.execSQL(sqlString);
@@ -2485,7 +2535,7 @@ public class DBManager extends SQLiteOpenHelper
 								"group_id = '" + category.getGroupID() + "'," +
 								"parent_id = '" + category.getParentID() + "'," +
 								"icon_id = '" + category.getIconID() + "'," +
-								"prove_ahead = '" + Utils.booleanToInt(category.isProveAhead()) + "'," +
+								"type = '" + category.getType() + "'," +
 								"local_updatedt = '" + category.getLocalUpdatedDate() + "'," +
 								"server_updatedt = '" + category.getServerUpdatedDate() + "' " +
 								"WHERE server_id = '" + category.getServerID() + "'";			
@@ -2529,7 +2579,7 @@ public class DBManager extends SQLiteOpenHelper
 				category.setGroupID(getIntFromCursor(cursor, "group_id"));
 				category.setParentID(getIntFromCursor(cursor, "parent_id"));
 				category.setIconID(getIntFromCursor(cursor, "icon_id"));
-				category.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+                category.setType(getIntFromCursor(cursor, "type"));
 				category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				
@@ -2595,7 +2645,7 @@ public class DBManager extends SQLiteOpenHelper
 				category.setGroupID(getIntFromCursor(cursor, "group_id"));
 				category.setParentID(getIntFromCursor(cursor, "parent_id"));
 				category.setIconID(getIntFromCursor(cursor, "icon_id"));
-				category.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				category.setType(getIntFromCursor(cursor, "type"));
 				category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				categoryList.add(category);
@@ -2627,7 +2677,7 @@ public class DBManager extends SQLiteOpenHelper
 				category.setGroupID(getIntFromCursor(cursor, "group_id"));
 				category.setParentID(getIntFromCursor(cursor, "parent_id"));
 				category.setIconID(getIntFromCursor(cursor, "icon_id"));
-				category.setIsProveAhead(getBooleanFromCursor(cursor, "prove_ahead"));
+				category.setType(getIntFromCursor(cursor, "type"));
 				category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				categoryList.add(category);
@@ -2950,9 +3000,10 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_image (server_id, path, item_local_id) VALUES (" + 
+			String sqlString = "INSERT INTO tbl_image (server_id, server_path, local_path, item_local_id) VALUES (" +
 								"'" + image.getServerID() + "'," +
-								"'" + image.getPath() + "'," +
+                                "'" + image.getServerPath() + "'," +
+								"'" + image.getLocalPath() + "'," +
 								"'" + image.getItemID() + "')";
 			database.execSQL(sqlString);
 			return true;
@@ -2967,9 +3018,10 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_others_image (server_id, path, item_server_id) VALUES (" + 
+			String sqlString = "INSERT INTO tbl_others_image (server_id, server_path, local_path, item_server_id) VALUES (" +
 								"'" + image.getServerID() + "'," +
-								"'" + image.getPath() + "'," +
+                                "'" + image.getServerPath() + "'," +
+								"'" + image.getLocalPath() + "'," +
 								"'" + image.getItemID() + "')";
 			database.execSQL(sqlString);
 			return true;
@@ -2986,7 +3038,8 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			String sqlString = "UPDATE tbl_image SET " + 
 								"server_id = '" + image.getServerID() + "'," +
-								"path = '" + image.getPath() + "'," +
+                                "server_path = '" + image.getServerPath() + "'," +
+								"local_path = '" + image.getLocalPath() + "'," +
 								"item_local_id = '" + image.getItemID() + "' " +
 								"WHERE id = '" + image.getLocalID() + "'";		
 			database.execSQL(sqlString);
@@ -3004,7 +3057,8 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			String sqlString = "UPDATE tbl_image SET " + 
 								"server_id = '" + image.getServerID() + "'," +
-								"path = '" + image.getPath() + "'," +
+                                "server_path = '" + image.getServerPath() + "'," +
+								"local_path = '" + image.getLocalPath() + "'," +
 								"item_local_id = '" + image.getItemID() + "' " +
 								"WHERE server_id = '" + image.getServerID() + "'";		
 			database.execSQL(sqlString);
@@ -3021,7 +3075,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_others_image SET " +
-								"path = '" + image.getPath() + "'," +
+                                "server_path = '" + image.getServerPath() + "'," +
+								"local_path = '" + image.getLocalPath() + "'," +
 								"item_server_id = '" + image.getItemID() + "' " +
 								"WHERE server_id = '" + image.getServerID() + "'";		
 			database.execSQL(sqlString);
@@ -3058,7 +3113,7 @@ public class DBManager extends SQLiteOpenHelper
 				if (localImage.equals(image))
 				{
 					imageExists = true;
-					image.setPath(localImage.getPath());
+					image.setLocalPath(localImage.getLocalPath());
 					updateImageByServerID(image);
 					break;
 				}
@@ -3095,7 +3150,7 @@ public class DBManager extends SQLiteOpenHelper
 				if (localImage.equals(image))
 				{
 					imageExists = true;
-					image.setPath(localImage.getPath());
+					image.setLocalPath(localImage.getLocalPath());
 					updateOthersImage(image);
 					break;
 				}
@@ -3191,7 +3246,8 @@ public class DBManager extends SQLiteOpenHelper
 				Image image = new Image();
 				image.setLocalID(getIntFromCursor(cursor, "id"));
 				image.setServerID(getIntFromCursor(cursor, "server_id"));
-				image.setPath(getStringFromCursor(cursor, "path"));
+                image.setServerPath(getStringFromCursor(cursor, "server_path"));
+				image.setLocalPath(getStringFromCursor(cursor, "local_path"));
 				image.setItemID(getIntFromCursor(cursor, "item_local_id"));
 
 				cursor.close();
@@ -3222,7 +3278,8 @@ public class DBManager extends SQLiteOpenHelper
 				Image image = new Image();
 				image.setLocalID(getIntFromCursor(cursor, "id"));
 				image.setServerID(getIntFromCursor(cursor, "server_id"));
-				image.setPath(getStringFromCursor(cursor, "path"));
+                image.setServerPath(getStringFromCursor(cursor, "server_path"));
+				image.setLocalPath(getStringFromCursor(cursor, "local_path"));
 				image.setItemID(getIntFromCursor(cursor, "item_local_id"));
 
 				cursor.close();
@@ -3253,7 +3310,8 @@ public class DBManager extends SQLiteOpenHelper
 				Image image = new Image();
 				image.setLocalID(getIntFromCursor(cursor, "id"));
 				image.setServerID(getIntFromCursor(cursor, "server_id"));
-				image.setPath(getStringFromCursor(cursor, "path"));
+                image.setServerPath(getStringFromCursor(cursor, "server_path"));
+				image.setLocalPath(getStringFromCursor(cursor, "local_path"));
 				image.setItemID(getIntFromCursor(cursor, "item_server_id"));
 
 				cursor.close();
@@ -3285,7 +3343,8 @@ public class DBManager extends SQLiteOpenHelper
 				Image image = new Image();
 				image.setLocalID(getIntFromCursor(cursor, "id"));
 				image.setServerID(getIntFromCursor(cursor, "server_id"));
-				image.setPath(getStringFromCursor(cursor, "path"));
+                image.setServerPath(getStringFromCursor(cursor, "server_path"));
+				image.setLocalPath(getStringFromCursor(cursor, "local_path"));
 				image.setItemID(getIntFromCursor(cursor, "item_local_id"));
 				
 				imageList.add(image);
@@ -3314,7 +3373,8 @@ public class DBManager extends SQLiteOpenHelper
 				Image image = new Image();
 				image.setLocalID(getIntFromCursor(cursor, "id"));
 				image.setServerID(getIntFromCursor(cursor, "server_id"));
-				image.setPath(getStringFromCursor(cursor, "path"));
+                image.setServerPath(getStringFromCursor(cursor, "server_path"));
+				image.setLocalPath(getStringFromCursor(cursor, "local_path"));
 				image.setItemID(getIntFromCursor(cursor, "item_server_id"));
 				
 				imageList.add(image);

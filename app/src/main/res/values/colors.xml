@@ -49,7 +49,7 @@
     <color name="radio_button_unselected_color">@android:color/transparent</color>
     
     <color name="item_approved">#FF3CB798</color>
-    <color name="item_prove_ahead">#FFFF575B</color>
+    <color name="item_approve_ahead">#FFFF575B</color>
     
     <color name="tag">#FFABABAB</color>
     
@@ -59,7 +59,7 @@
     <color name="status_approved">#FF3CB798</color>
     <color name="status_rejected">#FFB570B2</color>
     <color name="status_finished">#FFCCCECF</color>  
-    <color name="status_item_prove_ahead">#FFFF5857</color>      
+    <color name="status_item_approve_ahead">#FFFF5857</color>
     <color name="status_item_approved">#FF3CB798</color>
     <color name="status_cc">#FFFDCA49</color>
     

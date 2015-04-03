@@ -19,7 +19,11 @@ import classes.utils.DBManager;
 public class Report implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	
+
+    public static final int TYPE_REIM = 0;
+    public static final int TYPE_BUDGET = 1;
+    public static final int TYPE_BORROWING = 2;
+
 	public static final int STATUS_DRAFT = 0;
 	public static final int STATUS_SUBMITTED = 1;
 	public static final int STATUS_APPROVED = 2;
@@ -28,6 +32,7 @@ public class Report implements Serializable
 	
 	private int localID = -1;
 	private int serverID = -1;
+    private int type = TYPE_REIM;
 	private String title = "";
 	private int status = Report.STATUS_DRAFT;
 	private int myDecision = Report.STATUS_SUBMITTED;
@@ -35,7 +40,6 @@ public class Report implements Serializable
 	private List<User> ccList = null;
 	private List<Comment> commentList = null;
 	private User sender = null;
-	private boolean isProveAhead = false;
 	private int createdDate = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
@@ -60,7 +64,7 @@ public class Report implements Serializable
 		ccList = new ArrayList<User>(report.getCCList());
 		commentList = new ArrayList<Comment>(report.getCommentList());
 		sender = new User(report.getSender());
-		isProveAhead = report.isProveAhead();
+        type = report.getType();
 		createdDate = report.getCreatedDate();
 		serverUpdatedDate = report.getServerUpdatedDate();
 		localUpdatedDate = report.getLocalUpdatedDate();
@@ -107,8 +111,17 @@ public class Report implements Serializable
 	{
 		this.serverID = serverID;
 	}
-	
-	public String getTitle()
+
+    public int getType()
+    {
+        return type;
+    }
+    public void setType(int type)
+    {
+        this.type = type;
+    }
+
+    public String getTitle()
 	{
 		return title;
 	}
@@ -217,15 +230,6 @@ public class Report implements Serializable
 		this.sender = sender;
 	}
 
-	public boolean isProveAhead()
-	{
-		return isProveAhead;
-	}
-	public void setIsProveAhead(boolean isProveAhead)
-	{
-		this.isProveAhead = isProveAhead;
-	}
-	
 	public int getCreatedDate()
 	{
 		return createdDate;
@@ -339,13 +343,8 @@ public class Report implements Serializable
 			}
 			amount += item.getAmount();
 		}
-		
-		if (amount == 0)
-		{
-			return false;
-		}
-		
-		return true;
+
+        return amount != 0;
 	}
     
 	public boolean isEditable()
@@ -415,7 +414,7 @@ public class Report implements Serializable
 		{
 			public int compare(Report report1, Report report2)
 			{
-				return (int) (report2.getCreatedDate() - report1.getCreatedDate());
+				return report2.getCreatedDate() - report1.getCreatedDate();
 			}
 		});
     }
@@ -426,7 +425,7 @@ public class Report implements Serializable
 		{
 			public int compare(Report report1, Report report2)
 			{
-				return (int) (report2.getLocalUpdatedDate() - report1.getLocalUpdatedDate());
+				return report2.getLocalUpdatedDate() - report1.getLocalUpdatedDate();
 			}
 		});
     }

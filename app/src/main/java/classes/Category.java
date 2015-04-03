@@ -11,19 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.utils.PhoneUtils;
-import classes.utils.Utils;
 
 public class Category implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	
+
+    public static final int TYPE_REIM = 0;
+    public static final int TYPE_BUDGET = 1;
+    public static final int TYPE_BORROWING = 2;
+
 	private int serverID = -1;
 	private String name = "";
 	private double limit = 0;
 	private int groupID = -1;
 	private int parentID = 0;
 	private int iconID = -1;
-	private boolean isProveAhead = false;
+    private int type = TYPE_REIM;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
 
@@ -41,7 +44,7 @@ public class Category implements Serializable
         setParentID(category.getParentID());
         setLocalUpdatedDate(category.getLocalUpdatedDate());
         setServerUpdatedDate(category.getServerUpdatedDate());
-        setIsProveAhead(category.isProveAhead());
+        setType(category.getType());
         setIconID(category.getIconID());
     }
 	
@@ -56,7 +59,7 @@ public class Category implements Serializable
 			setParentID(jObject.optInt("pid", -1));
 			setLocalUpdatedDate(jObject.getInt("lastdt"));
 			setServerUpdatedDate(jObject.getInt("lastdt"));
-			setIsProveAhead(Utils.intToBoolean(jObject.getInt("prove_before")));
+            setType(jObject.getInt("prove_before"));
 			setIconID(jObject.optInt("avatar", -1));
 		}
 		catch (JSONException e)
@@ -123,17 +126,17 @@ public class Category implements Serializable
 	{
 		return iconID == -1 || iconID == 0? "" : PhoneUtils.getIconFilePath(iconID);
 	}
-	
-	public boolean isProveAhead()
-	{
-		return isProveAhead;
-	}
-	public void setIsProveAhead(boolean isProveAhead)
-	{
-		this.isProveAhead = isProveAhead;
-	}
-	
-	public int getServerUpdatedDate()
+
+    public int getType()
+    {
+        return type;
+    }
+    public void setType(int type)
+    {
+        this.type = type;
+    }
+
+    public int getServerUpdatedDate()
 	{
 		return serverUpdatedDate;
 	}

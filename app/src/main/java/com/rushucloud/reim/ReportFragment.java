@@ -1217,7 +1217,7 @@ public class ReportFragment extends Fragment
 						}
 						else
 						{
-                            report.setIsProveAhead(localReport.isProveAhead());
+                            report.setType(localReport.getType());
                             report.setManagerList(localReport.getManagerList());
                             report.setCCList(localReport.getCCList());
 							dbManager.updateOthersReport(report);

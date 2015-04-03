@@ -2,8 +2,6 @@ package com.rushucloud.reim.report;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -39,7 +37,6 @@ import classes.Tag;
 import classes.adapter.ReportItemListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
-import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
@@ -61,7 +58,8 @@ public class PickItemActivity extends Activity implements OnClickListener
 	private LinearLayout tagLayout;
 	private LinearLayout categoryLayout;
 	private TextView consumedTextView;
-	private TextView proveAheadTextView;
+	private TextView budgetTextView;
+    private TextView borrowingTextView;
 	private TextView itemCountTextView;
 	private TextView warningTextView;
 	private ListView itemListView;
@@ -72,13 +70,13 @@ public class PickItemActivity extends Activity implements OnClickListener
 	
 	private Report report;
 	private ArrayList<Integer> chosenItemIDList = null;
-	private boolean isProveAhead;
+	private int type;
 	private int tabIndex = 0;
 	private List<Tag> tagList = new ArrayList<Tag>();
 	private List<Category> categoryList = new ArrayList<Category>();
 	
 	private List<Item> consumedItemList;
-	private List<Item> consumedShowList;
+	private List<Item> consumedShowList = new ArrayList<Item>();
 	private ArrayList<Integer> consumedChosenList = null;
 
 	private int consumedSortType = SORT_CONSUMED_DATE;
@@ -93,26 +91,42 @@ public class PickItemActivity extends Activity implements OnClickListener
 	private boolean[] consumedTempTagCheck;
 	private boolean[] consumedTempCategoryCheck;
 	
-	private List<Item> proveAheadItemList;
-	private List<Item> proveAheadShowList;
-	private ArrayList<Integer> proveChosenList = null;
+	private List<Item> budgetItemList;
+	private List<Item> budgetShowList = new ArrayList<Item>();
+	private ArrayList<Integer> budgetChosenList = null;
 
-	private int proveSortType = SORT_CONSUMED_DATE;
-	private boolean proveSortReverse = false;
-	private boolean[] proveTagCheck;
-	private boolean[] proveCategoryCheck;
-	private List<Tag> proveFilterTagList = new ArrayList<Tag>();
-	private List<Category> proveFilterCategoryList = new ArrayList<Category>();
+	private int budgetSortType = SORT_CONSUMED_DATE;
+	private boolean budgetSortReverse = false;
+	private boolean[] budgetTagCheck;
+	private boolean[] budgetCategoryCheck;
+	private List<Tag> budgetFilterTagList = new ArrayList<Tag>();
+	private List<Category> budgetFilterCategoryList = new ArrayList<Category>();
 	
-	private int proveTempSortType = SORT_CONSUMED_DATE;
-    private boolean proveTempSortReverse = false;
-	private boolean[] proveTempTagCheck;
-	private boolean[] proveTempCategoryCheck;
+	private int budgetTempSortType = SORT_CONSUMED_DATE;
+    private boolean budgetTempSortReverse = false;
+	private boolean[] budgetTempTagCheck;
+	private boolean[] budgetTempCategoryCheck;
+
+    private List<Item> borrowingItemList;
+    private List<Item> borrowingShowList = new ArrayList<Item>();
+    private ArrayList<Integer> borrowingChosenList = null;
+
+    private int borrowingSortType = SORT_CONSUMED_DATE;
+    private boolean borrowingSortReverse = false;
+    private boolean[] borrowingTagCheck;
+    private boolean[] borrowingCategoryCheck;
+    private List<Tag> borrowingFilterTagList = new ArrayList<Tag>();
+    private List<Category> borrowingFilterCategoryList = new ArrayList<Category>();
+
+    private int borrowingTempSortType = SORT_CONSUMED_DATE;
+    private boolean borrowingTempSortReverse = false;
+    private boolean[] borrowingTempTagCheck;
+    private boolean[] borrowingTempCategoryCheck;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_report_unarchived_items);
+		setContentView(R.layout.activity_report_pick_item);
 		initData();
 		initView();
 	}
@@ -159,16 +173,18 @@ public class PickItemActivity extends Activity implements OnClickListener
                     int itemID = data.getIntExtra("itemID", -1);
                     if (itemID > 0)
                     {
-                        boolean itemIsProveAhead = data.getBooleanExtra("isProveAhead", false);
-                        if (itemIsProveAhead && consumedChosenList.isEmpty())
-                        {
-                            proveChosenList.add(itemID);
-                            isProveAhead = true;
-                        }
-                        else if (!itemIsProveAhead && proveChosenList.isEmpty())
+                        type = data.getIntExtra("type", Item.TYPE_REIM);
+                        if (type == Item.TYPE_REIM && budgetChosenList.isEmpty() && borrowingChosenList.isEmpty())
                         {
                             consumedChosenList.add(itemID);
-                            isProveAhead = false;
+                        }
+                        else if (type == Item.TYPE_BUDGET && consumedChosenList.isEmpty() && borrowingChosenList.isEmpty())
+                        {
+                            budgetChosenList.add(itemID);
+                        }
+                        else if (type == Item.TYPE_BORROWING && consumedChosenList.isEmpty() && budgetChosenList.isEmpty())
+                        {
+                            borrowingChosenList.add(itemID);
                         }
                     }
                     break;
@@ -193,40 +209,53 @@ public class PickItemActivity extends Activity implements OnClickListener
 		appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 
-		isProveAhead = report.isProveAhead();
-		tabIndex = Utils.booleanToInt(isProveAhead);
+		tabIndex = report.getType();
 		if (tabIndex == 0)
 		{
 			consumedChosenList = new ArrayList<Integer>(chosenItemIDList);
-			proveChosenList = new ArrayList<Integer>();
+			budgetChosenList = new ArrayList<Integer>();
+            borrowingChosenList = new ArrayList<Integer>();
 		}
-		else
+		else if (tabIndex == 1)
 		{
-			proveChosenList = new ArrayList<Integer>(chosenItemIDList);
-			consumedChosenList = new ArrayList<Integer>();
+            consumedChosenList = new ArrayList<Integer>();
+			budgetChosenList = new ArrayList<Integer>(chosenItemIDList);
+            borrowingChosenList = new ArrayList<Integer>();
 		}
+        else
+        {
+            consumedChosenList = new ArrayList<Integer>();
+            budgetChosenList = new ArrayList<Integer>();
+            borrowingChosenList = new ArrayList<Integer>(chosenItemIDList);
+        }
 		
 		tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
 		consumedTagCheck = new boolean[tagList.size()];
-		proveTagCheck = new boolean[tagList.size()];
+        budgetTagCheck = new boolean[tagList.size()];
+        borrowingTagCheck = new boolean[tagList.size()];
 		for (int i = 0; i < consumedTagCheck.length; i++)
 		{
 			consumedTagCheck[i] = false;
-			proveTagCheck[i] = false;
+			budgetTagCheck[i] = false;
+            borrowingTagCheck[i] = false;
 		}
 		consumedTempTagCheck = consumedTagCheck;
-		proveTempTagCheck = proveTagCheck;
+		budgetTempTagCheck = budgetTagCheck;
+        borrowingTempTagCheck = borrowingTagCheck;
 		
 		categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
 		consumedCategoryCheck = new boolean[categoryList.size()];
-		proveCategoryCheck = new boolean[categoryList.size()];
+		budgetCategoryCheck = new boolean[categoryList.size()];
+        borrowingCategoryCheck = new boolean[categoryList.size()];
 		for (int i = 0; i < consumedCategoryCheck.length; i++)
 		{
 			consumedCategoryCheck[i] = false;
-			proveCategoryCheck[i] = false;
+			budgetCategoryCheck[i] = false;
+            borrowingCategoryCheck[i] = false;
 		}
 		consumedTempCategoryCheck = consumedCategoryCheck;
-		proveTempCategoryCheck = proveCategoryCheck;
+		budgetTempCategoryCheck = budgetCategoryCheck;
+        borrowingTempCategoryCheck = borrowingCategoryCheck;
 	}
 	
 	private void initView()
@@ -244,8 +273,10 @@ public class PickItemActivity extends Activity implements OnClickListener
 
 		consumedTextView = (TextView) findViewById(R.id.consumedTextView);
 		consumedTextView.setOnClickListener(this);
-		proveAheadTextView = (TextView) findViewById(R.id.proveAheadTextView);
-		proveAheadTextView.setOnClickListener(this);
+		budgetTextView = (TextView) findViewById(R.id.budgetTextView);
+		budgetTextView.setOnClickListener(this);
+        borrowingTextView = (TextView) findViewById(R.id.borrowingTextView);
+        borrowingTextView.setOnClickListener(this);
 		
 		itemCountTextView = (TextView) findViewById(R.id.itemCountTextView);
 		
@@ -256,10 +287,21 @@ public class PickItemActivity extends Activity implements OnClickListener
 			{
 				try
 				{
-					chosenItemIDList = tabIndex == 0? consumedChosenList : proveChosenList;
+                    if (tabIndex == 0)
+                    {
+                        chosenItemIDList = consumedChosenList;
+                    }
+                    else if (tabIndex == 1)
+                    {
+                        chosenItemIDList = budgetChosenList;
+                    }
+                    else
+                    {
+                        chosenItemIDList = borrowingChosenList;
+                    }
 					Bundle bundle = new Bundle();
 					bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
-                    bundle.putBoolean("isProveAhead", isProveAhead);
+                    bundle.putInt("type", type);
 					Intent intent = new Intent();
 					intent.putExtras(bundle);
 					setResult(RESULT_OK, intent);
@@ -283,11 +325,13 @@ public class PickItemActivity extends Activity implements OnClickListener
 				{
 					Intent intent = new Intent(PickItemActivity.this, EditItemActivity.class);
 					intent.putExtra("fromPickItems", true);
+                    intent.putExtra("type", tabIndex);
 					startActivityForResult(intent, NEW_ITEM);
 				}
 				else
 				{
-					if (tabIndex == 0)
+                    type = tabIndex;
+                    if (tabIndex == 0)
 					{
 						int localID = consumedShowList.get(position - 1).getLocalID();
 						if (consumedChosenList.contains(localID))
@@ -298,27 +342,43 @@ public class PickItemActivity extends Activity implements OnClickListener
 						{
 							consumedChosenList.add(localID);
 						}
-						isProveAhead = false;
-						proveChosenList.clear();
+						budgetChosenList.clear();
+                        borrowingChosenList.clear();
 						itemCountTextView.setText(Integer.toString(consumedChosenList.size()));
 						adapter.setChosenList(consumedChosenList);
 					}
-					else
+					else if (tabIndex == 1)
 					{
-						int localID = proveAheadShowList.get(position - 1).getLocalID();
-						if (proveChosenList.contains(localID))
+						int localID = budgetShowList.get(position - 1).getLocalID();
+						if (budgetChosenList.contains(localID))
 						{
-							proveChosenList.remove(Integer.valueOf(localID));
+							budgetChosenList.remove(Integer.valueOf(localID));
 						}
 						else
 						{
-							proveChosenList.add(localID);
+							budgetChosenList.add(localID);
 						}
-						isProveAhead = true;
 						consumedChosenList.clear();
-						itemCountTextView.setText(Integer.toString(proveChosenList.size()));
-						adapter.setChosenList(proveChosenList);
+                        borrowingChosenList.clear();
+						itemCountTextView.setText(Integer.toString(budgetChosenList.size()));
+						adapter.setChosenList(budgetChosenList);
 					}
+                    else
+                    {
+                        int localID = borrowingShowList.get(position - 1).getLocalID();
+                        if (borrowingChosenList.contains(localID))
+                        {
+                            borrowingChosenList.remove(Integer.valueOf(localID));
+                        }
+                        else
+                        {
+                            borrowingChosenList.add(localID);
+                        }
+                        consumedChosenList.clear();
+                        budgetChosenList.clear();
+                        itemCountTextView.setText(Integer.toString(borrowingChosenList.size()));
+                        adapter.setChosenList(borrowingChosenList);
+                    }
 					adapter.notifyDataSetChanged();					
 				}
 			}
@@ -375,12 +435,24 @@ public class PickItemActivity extends Activity implements OnClickListener
                         reverseSortDateImageView();
                     }
                 }
+                else if (tabIndex == 1)
+                {
+                    if (budgetTempSortType != SORT_CONSUMED_DATE)
+                    {
+                        budgetTempSortReverse = false;
+                        budgetTempSortType = SORT_CONSUMED_DATE;
+                    }
+                    else
+                    {
+                        reverseSortDateImageView();
+                    }
+                }
                 else
                 {
-                    if (proveTempSortType != SORT_CONSUMED_DATE)
+                    if (borrowingTempSortType != SORT_CONSUMED_DATE)
                     {
-                        proveTempSortReverse = false;
-                        proveTempSortType = SORT_CONSUMED_DATE;
+                        borrowingTempSortReverse = false;
+                        borrowingTempSortType = SORT_CONSUMED_DATE;
                     }
                     else
                     {
@@ -409,12 +481,24 @@ public class PickItemActivity extends Activity implements OnClickListener
                         reverseSortAmountImageView();
                     }
                 }
+                else if (tabIndex == 1)
+                {
+                    if (budgetTempSortType != SORT_AMOUNT)
+                    {
+                        budgetTempSortReverse = false;
+                        budgetTempSortType = SORT_AMOUNT;
+                    }
+                    else
+                    {
+                        reverseSortAmountImageView();
+                    }
+                }
                 else
                 {
-                    if (proveTempSortType != SORT_AMOUNT)
+                    if (borrowingTempSortType != SORT_AMOUNT)
                     {
-                        proveTempSortReverse = false;
-                        proveTempSortType = SORT_AMOUNT;
+                        borrowingTempSortReverse = false;
+                        borrowingTempSortType = SORT_AMOUNT;
                     }
                     else
                     {
@@ -458,29 +542,55 @@ public class PickItemActivity extends Activity implements OnClickListener
                         }
                     }
                 }
-                else
+                else if (tabIndex == 1)
                 {
-                    proveSortReverse = proveTempSortReverse;
-                    proveSortType = proveTempSortType;
+                    budgetSortReverse = budgetTempSortReverse;
+                    budgetSortType = budgetTempSortType;
 
-                    proveTagCheck = proveTempTagCheck;
-                    proveCategoryCheck = proveTempCategoryCheck;
+                    budgetTagCheck = budgetTempTagCheck;
+                    budgetCategoryCheck = budgetTempCategoryCheck;
 
-                    proveFilterTagList.clear();
-                    for (int i = 0; i < proveTagCheck.length; i++)
+                    budgetFilterTagList.clear();
+                    for (int i = 0; i < budgetTagCheck.length; i++)
                     {
-                        if (proveTagCheck[i])
+                        if (budgetTagCheck[i])
                         {
-                            proveFilterTagList.add(tagList.get(i));
+                            budgetFilterTagList.add(tagList.get(i));
                         }
                     }
 
-                    proveFilterCategoryList.clear();
-                    for (int i = 0; i < proveCategoryCheck.length; i++)
+                    budgetFilterCategoryList.clear();
+                    for (int i = 0; i < budgetCategoryCheck.length; i++)
                     {
-                        if (proveCategoryCheck[i])
+                        if (budgetCategoryCheck[i])
                         {
-                            proveFilterCategoryList.add(categoryList.get(i));
+                            budgetFilterCategoryList.add(categoryList.get(i));
+                        }
+                    }
+                }
+                else
+                {
+                    borrowingSortReverse = borrowingTempSortReverse;
+                    borrowingSortType = borrowingTempSortType;
+
+                    borrowingTagCheck = borrowingTempTagCheck;
+                    borrowingCategoryCheck = borrowingTempCategoryCheck;
+
+                    borrowingFilterTagList.clear();
+                    for (int i = 0; i < borrowingTagCheck.length; i++)
+                    {
+                        if (borrowingTagCheck[i])
+                        {
+                            borrowingFilterTagList.add(tagList.get(i));
+                        }
+                    }
+
+                    borrowingFilterCategoryList.clear();
+                    for (int i = 0; i < borrowingCategoryCheck.length; i++)
+                    {
+                        if (borrowingCategoryCheck[i])
+                        {
+                            borrowingFilterCategoryList.add(categoryList.get(i));
                         }
                     }
                 }
@@ -509,14 +619,18 @@ public class PickItemActivity extends Activity implements OnClickListener
 		
 		if (adapter == null)
 		{
-			if (isProveAhead)
+			if (type == Item.TYPE_REIM)
 			{
-				adapter = new ReportItemListViewAdapter(PickItemActivity.this, proveAheadShowList, proveChosenList);
+                adapter = new ReportItemListViewAdapter(PickItemActivity.this, consumedShowList, consumedChosenList);
 			}
-			else
+			else if (type == Item.TYPE_BUDGET)
 			{
-				adapter = new ReportItemListViewAdapter(PickItemActivity.this, consumedShowList, consumedChosenList);
+                adapter = new ReportItemListViewAdapter(PickItemActivity.this, budgetShowList, budgetChosenList);
 			}
+            else if (type == Item.TYPE_BORROWING)
+            {
+                adapter = new ReportItemListViewAdapter(PickItemActivity.this, borrowingShowList, borrowingChosenList);
+            }
 			itemListView.setAdapter(adapter);			
 		}
 		
@@ -525,7 +639,8 @@ public class PickItemActivity extends Activity implements OnClickListener
 			itemCountTextView.setText(Integer.toString(consumedChosenList.size()));
 			
 			consumedTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
-			proveAheadTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
+			budgetTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
+            borrowingTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
 
             int visibility = consumedItemList.isEmpty()? View.VISIBLE : View.INVISIBLE;
             warningTextView.setVisibility(visibility);
@@ -535,21 +650,38 @@ public class PickItemActivity extends Activity implements OnClickListener
             int filterImage = !consumedFilterTagList.isEmpty() || !consumedFilterCategoryList.isEmpty()? R.drawable.filter_full : R.drawable.filter_empty;
             filterImageView.setImageResource(filterImage);
 		}
-		else
+		else if (tabIndex == 1)
 		{
-			itemCountTextView.setText(Integer.toString(proveChosenList.size()));
+			itemCountTextView.setText(Integer.toString(budgetChosenList.size()));
 			
 			consumedTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
-			proveAheadTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
+			budgetTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
+            borrowingTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
 
-            int visibility = proveAheadItemList.isEmpty()? View.VISIBLE : View.INVISIBLE;
+            int visibility = budgetItemList.isEmpty()? View.VISIBLE : View.INVISIBLE;
             warningTextView.setVisibility(visibility);
-            adapter.set(proveAheadShowList, proveChosenList);
+            adapter.set(budgetShowList, budgetChosenList);
             adapter.notifyDataSetChanged();
 
-            int filterImage = !proveFilterTagList.isEmpty() || !proveFilterCategoryList.isEmpty()? R.drawable.filter_full : R.drawable.filter_empty;
+            int filterImage = !budgetFilterTagList.isEmpty() || !budgetFilterCategoryList.isEmpty()? R.drawable.filter_full : R.drawable.filter_empty;
             filterImageView.setImageResource(filterImage);
 		}
+        else
+        {
+            itemCountTextView.setText(Integer.toString(borrowingChosenList.size()));
+
+            consumedTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
+            budgetTextView.setTextColor(ViewUtils.getColor(R.color.hint_white));
+            borrowingTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
+
+            int visibility = borrowingItemList.isEmpty()? View.VISIBLE : View.INVISIBLE;
+            warningTextView.setVisibility(visibility);
+            adapter.set(borrowingShowList, borrowingChosenList);
+            adapter.notifyDataSetChanged();
+
+            int filterImage = !borrowingFilterTagList.isEmpty() || !borrowingFilterCategoryList.isEmpty()? R.drawable.filter_full : R.drawable.filter_empty;
+            filterImageView.setImageResource(filterImage);
+        }
 
 		ReimProgressDialog.dismiss();
 	}
@@ -576,11 +708,17 @@ public class PickItemActivity extends Activity implements OnClickListener
 				int layoutID = consumedTempTagCheck[i]? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
 				view = View.inflate(PickItemActivity.this, layoutID, null);
 			}
-			else
+			else if (tabIndex == 1)
 			{
-				int layoutID = proveTempTagCheck[i]? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
+				int layoutID = budgetTempTagCheck[i]? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
 				view = View.inflate(PickItemActivity.this, layoutID, null);
 			}
+            else
+            {
+                int layoutID = borrowingTempTagCheck[i]? R.layout.grid_item_tag : R.layout.grid_item_tag_unselected;
+                view = View.inflate(PickItemActivity.this, layoutID, null);
+            }
+
 
 			final int index = i;
 			TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
@@ -594,10 +732,14 @@ public class PickItemActivity extends Activity implements OnClickListener
 					{
 						consumedTempTagCheck[index] = !consumedTempTagCheck[index];			
 					}
-					else
+					else if (tabIndex == 1)
 					{
-						proveTempTagCheck[index] = !proveTempTagCheck[index];
+						budgetTempTagCheck[index] = !budgetTempTagCheck[index];
 					}
+                    else
+                    {
+                        borrowingTempTagCheck[index] = !borrowingTempTagCheck[index];
+                    }
 					refreshTagView();
 				}
 			});
@@ -672,10 +814,14 @@ public class PickItemActivity extends Activity implements OnClickListener
 					{
 						consumedTempCategoryCheck[index] = !consumedTempCategoryCheck[index];			
 					}
-					else
+					else if (tabIndex == 1)
 					{
-						proveTempCategoryCheck[index] = !proveTempCategoryCheck[index];
+						budgetTempCategoryCheck[index] = !budgetTempCategoryCheck[index];
 					}
+                    else
+                    {
+                        borrowingTempCategoryCheck[index] = !borrowingTempCategoryCheck[index];
+                    }
 					refreshCategoryView();
 				}
 			});
@@ -698,26 +844,32 @@ public class PickItemActivity extends Activity implements OnClickListener
 					nameTextView.setTextColor(unselectedColor);
 				}
 			}
-			else
+			else if (tabIndex == 1)
 			{
-				if (proveTempCategoryCheck[i])
+				if (budgetTempCategoryCheck[i])
 				{
 					iconImageView.setImageResource(R.drawable.icon_chosen);
 					nameTextView.setTextColor(selectedColor);
 				}
 				else
 				{
-					if (!category.getIconPath().isEmpty())
-					{
-						Bitmap icon = BitmapFactory.decodeFile(category.getIconPath());
-						if (icon != null)
-						{
-							iconImageView.setImageBitmap(icon);		
-						}				
-					}
+                    ViewUtils.setImageViewBitmap(category, iconImageView);
 					nameTextView.setTextColor(unselectedColor);
 				}				
 			}
+            else
+            {
+                if (borrowingTempCategoryCheck[i])
+                {
+                    iconImageView.setImageResource(R.drawable.icon_chosen);
+                    nameTextView.setTextColor(selectedColor);
+                }
+                else
+                {
+                    ViewUtils.setImageViewBitmap(category, iconImageView);
+                    nameTextView.setTextColor(unselectedColor);
+                }
+            }
 			
 			LayoutParams params = new LayoutParams(iconWidth, LayoutParams.WRAP_CONTENT);
 			params.rightMargin = iconHorizontalInterval;
@@ -758,16 +910,16 @@ public class PickItemActivity extends Activity implements OnClickListener
             consumedTempTagCheck = consumedTagCheck;
             consumedTempCategoryCheck = consumedCategoryCheck;
         }
-        else
+        else if (tabIndex == 1)
         {
-            proveTempSortReverse = false;
-            proveTempSortType = proveSortType;
-            switch (proveSortType)
+            budgetTempSortReverse = false;
+            budgetTempSortType = budgetSortType;
+            switch (budgetSortType)
             {
                 case SORT_CONSUMED_DATE:
                 {
                     selectSortDateRadio();
-                    if (proveSortReverse)
+                    if (budgetSortReverse)
                     {
                         reverseSortDateImageView();
                     }
@@ -776,7 +928,7 @@ public class PickItemActivity extends Activity implements OnClickListener
                 case SORT_AMOUNT:
                 {
                     selectSortAmountRadio();
-                    if (proveSortReverse)
+                    if (budgetSortReverse)
                     {
                         reverseSortAmountImageView();
                     }
@@ -785,8 +937,38 @@ public class PickItemActivity extends Activity implements OnClickListener
                 default:
                     break;
             }
-            proveTempTagCheck = proveTagCheck;
-            proveTempCategoryCheck = proveCategoryCheck;
+            budgetTempTagCheck = budgetTagCheck;
+            budgetTempCategoryCheck = budgetCategoryCheck;
+        }
+        else
+        {
+            borrowingTempSortReverse = false;
+            borrowingTempSortType = borrowingSortType;
+            switch (borrowingSortType)
+            {
+                case SORT_CONSUMED_DATE:
+                {
+                    selectSortDateRadio();
+                    if (borrowingSortReverse)
+                    {
+                        reverseSortDateImageView();
+                    }
+                    break;
+                }
+                case SORT_AMOUNT:
+                {
+                    selectSortAmountRadio();
+                    if (borrowingSortReverse)
+                    {
+                        reverseSortAmountImageView();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            borrowingTempTagCheck = borrowingTagCheck;
+            borrowingTempCategoryCheck = borrowingCategoryCheck;
         }
 
 		refreshTagView();
@@ -830,10 +1012,22 @@ public class PickItemActivity extends Activity implements OnClickListener
                 sortDateImageView.startAnimation(rotateAnimation);
             }
         }
+        else if (tabIndex == 1)
+        {
+            budgetTempSortReverse = !budgetTempSortReverse;
+            if (!budgetTempSortReverse) // status before change
+            {
+                sortDateImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortDateImageView.startAnimation(rotateAnimation);
+            }
+        }
         else
         {
-            proveTempSortReverse = !proveTempSortReverse;
-            if (!proveTempSortReverse) // status before change
+            borrowingTempSortReverse = !borrowingTempSortReverse;
+            if (!borrowingTempSortReverse) // status before change
             {
                 sortDateImageView.startAnimation(rotateReverseAnimation);
             }
@@ -858,10 +1052,22 @@ public class PickItemActivity extends Activity implements OnClickListener
                 sortAmountImageView.startAnimation(rotateAnimation);
             }
         }
+        else if (tabIndex == 1)
+        {
+            budgetTempSortReverse = !budgetTempSortReverse;
+            if (!budgetTempSortReverse) // status before change
+            {
+                sortAmountImageView.startAnimation(rotateReverseAnimation);
+            }
+            else
+            {
+                sortAmountImageView.startAnimation(rotateAnimation);
+            }
+        }
         else
         {
-            proveTempSortReverse = !proveTempSortReverse;
-            if (!proveTempSortReverse) // status before change
+            borrowingTempSortReverse = !borrowingTempSortReverse;
+            if (!borrowingTempSortReverse) // status before change
             {
                 sortAmountImageView.startAnimation(rotateReverseAnimation);
             }
@@ -875,7 +1081,8 @@ public class PickItemActivity extends Activity implements OnClickListener
     private void refreshData()
 	{
 		consumedItemList = dbManager.getUnarchivedConsumedItems(appPreference.getCurrentUserID());
-		proveAheadItemList = dbManager.getUnarchivedProveAheadItems(appPreference.getCurrentUserID());
+		budgetItemList = dbManager.getUnarchivedBudgetItems(appPreference.getCurrentUserID());
+        borrowingItemList = dbManager.getUnarchivedBorrowingItems(appPreference.getCurrentUserID());
 		
 		if (report.getLocalID() != -1)
 		{
@@ -883,11 +1090,16 @@ public class PickItemActivity extends Activity implements OnClickListener
 			if (!items.isEmpty())
 			{
 				Item item = items.get(0);
-				if (item.isProveAhead() && !item.isPaApproved())
+				if (item.getType() == Item.TYPE_BUDGET && !item.isAaApproved())
 				{
-					proveAheadItemList.addAll(items);
-					Item.sortByUpdateDate(proveAheadItemList);
+					budgetItemList.addAll(items);
+					Item.sortByUpdateDate(budgetItemList);
 				}
+                else if (item.getType() == Item.TYPE_BORROWING && !item.isAaApproved())
+                {
+                    borrowingItemList.addAll(items);
+                    Item.sortByUpdateDate(borrowingItemList);
+                }
 				else
 				{
 					consumedItemList.addAll(items);
@@ -916,14 +1128,22 @@ public class PickItemActivity extends Activity implements OnClickListener
 			filterCategoryList = new ArrayList<Category>(consumedFilterCategoryList);
 			itemList = new ArrayList<Item>(consumedItemList);
 		}
-		else
+		else if (tabIndex == 1)
 		{
-			sortType = proveSortType;
-			sortReverse = proveSortReverse;
-			filterTagList = new ArrayList<Tag>(proveFilterTagList);
-			filterCategoryList = new ArrayList<Category>(proveFilterCategoryList);
-			itemList = new ArrayList<Item>(proveAheadItemList);
+			sortType = budgetSortType;
+			sortReverse = budgetSortReverse;
+			filterTagList = new ArrayList<Tag>(budgetFilterTagList);
+			filterCategoryList = new ArrayList<Category>(budgetFilterCategoryList);
+			itemList = new ArrayList<Item>(budgetItemList);
 		}
+        else
+        {
+            sortType = borrowingSortType;
+            sortReverse = borrowingSortReverse;
+            filterTagList = new ArrayList<Tag>(borrowingFilterTagList);
+            filterCategoryList = new ArrayList<Category>(borrowingFilterCategoryList);
+            itemList = new ArrayList<Item>(borrowingItemList);
+        }
 
 		for (Item item : itemList)
 		{			
@@ -958,12 +1178,19 @@ public class PickItemActivity extends Activity implements OnClickListener
 		
 		if (tabIndex == 0)
 		{
-			consumedShowList = new ArrayList<Item>(showList);
+            consumedShowList.clear();
+			consumedShowList.addAll(showList);
 		}
-		else
+		else if (tabIndex == 1)
 		{
-			proveAheadShowList = new ArrayList<Item>(showList);		
+            budgetShowList.clear();
+            budgetShowList.addAll(showList);
 		}
+        else
+        {
+            borrowingShowList.clear();
+            borrowingShowList.addAll(showList);
+        }
 	}
 
 	public void onClick(View v)
@@ -972,10 +1199,14 @@ public class PickItemActivity extends Activity implements OnClickListener
 		{
 			tabIndex = 0;		
 		}
-		else
+		else if (v.equals(budgetTextView))
 		{
 			tabIndex = 1;
 		}
+        else
+        {
+            tabIndex = 2;
+        }
 		filterItemList();
 		refreshView();
 	}

@@ -17,14 +17,12 @@ public class ModifyCategoryRequest extends BaseRequest
 	{
 		super();
 
-		String pbFlag = category.isProveAhead()? "1" : "0";
-		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("name", category.getName()));
 		params.add(new BasicNameValuePair("limit", Double.toString(category.getLimit())));
 		params.add(new BasicNameValuePair("pid", Integer.toString(category.getParentID())));
 		params.add(new BasicNameValuePair("gid", Integer.toString(category.getGroupID())));
-		params.add(new BasicNameValuePair("pb", pbFlag));
+        params.add(new BasicNameValuePair("pb", Integer.toString(category.getType())));
 		params.add(new BasicNameValuePair("avatar", Integer.toString(category.getIconID())));
 		setParams(params);
 

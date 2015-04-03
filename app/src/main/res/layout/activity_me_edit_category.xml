@@ -180,7 +180,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_centerVertical="true"
 			        android:layout_marginLeft="20dp"
-			        android:text="@string/prove_ahead"
+			        android:text="@string/budget"
 		            android:textColor="@color/font_major_dark"
 		            android:textSize="16sp" />
 

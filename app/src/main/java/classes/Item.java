@@ -10,11 +10,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 
 public class Item
 {
-	public static final int STATUS_DRAFT = 0;
+    public static final int TYPE_REIM = 0;
+    public static final int TYPE_BUDGET = 1;
+    public static final int TYPE_BORROWING = 2;
+
+    public static final int STATUS_DRAFT = 0;
 	public static final int STATUS_SUBMITTED = 1;
 	public static final int STATUS_APPROVED = 2;
 	public static final int STATUS_REJECTED = 3;
@@ -24,13 +29,13 @@ public class Item
 	
 	private int localID = -1;
 	private int serverID = -1;
+    private int type = TYPE_REIM;
 	private Report belongReport = null;
 	private User consumer;
 	private double amount = 0.0;
-	private double paAmount = 0.0;
-	private boolean isProveAhead = false;
+	private double aaAmount = 0.0;
 	private boolean needReimbursed = true;
-	private boolean paApproved = false;
+	private boolean aaApproved = false;
 	private int status = STATUS_DRAFT;
 	private Category category = null;
 	private String vendor = "";
@@ -60,7 +65,7 @@ public class Item
 		{
 			setServerID(jObject.getInt("id"));
 			setAmount(jObject.getDouble("amount"));
-			setPaAmount(jObject.getDouble("pa_amount"));
+			setAaAmount(jObject.getDouble("pa_amount"));
 			setVendor(jObject.getString("merchants"));
 			setNote(jObject.getString("note"));
 			setStatus(jObject.getInt("status"));
@@ -69,9 +74,9 @@ public class Item
 			setCreatedDate(jObject.getInt("createdt"));		
 			setServerUpdatedDate(jObject.getInt("lastdt"));				
 			setLocalUpdatedDate(jObject.getInt("lastdt"));
-			setIsProveAhead(Utils.intToBoolean(jObject.getInt("prove_ahead")));
+			setType(jObject.getInt("prove_ahead"));
 			setNeedReimbursed(Utils.intToBoolean(jObject.getInt("reimbursed")));
-			setPaApproved(Utils.intToBoolean(jObject.getInt("pa_approval")));
+			setAaApproved(Utils.intToBoolean(jObject.getInt("pa_approval")));
 			setTags(Tag.idStringToTagList(jObject.getString("tags")));
             setTagsID(jObject.getString("tags"));
 			setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
@@ -122,7 +127,31 @@ public class Item
 		this.serverID = serverID;
 	}
 
-	public Report getBelongReport()
+    public int getType()
+    {
+        return type;
+    }
+    public int getTypeString()
+    {
+        switch (getType())
+        {
+            case Item.TYPE_REIM:
+                return R.string.consumed;
+            case Item.TYPE_BUDGET:
+                return R.string.budget;
+            case Item.TYPE_BORROWING:
+                return R.string.borrowing;
+            default:
+                return R.string.not_available;
+        }
+    }
+
+    public void setType(int type)
+    {
+        this.type = type;
+    }
+
+    public Report getBelongReport()
 	{
 		return belongReport;
 	}
@@ -149,22 +178,13 @@ public class Item
 		this.amount = amount;
 	}
 
-	public double getPaAmount()
+	public double getAaAmount()
 	{
-		return paAmount;
+		return aaAmount;
 	}
-	public void setPaAmount(double paAmount)
+	public void setAaAmount(double aaAmount)
 	{
-		this.paAmount = paAmount;
-	}
-
-	public boolean isProveAhead()
-	{
-		return isProveAhead;
-	}
-	public void setIsProveAhead(boolean isProveAhead)
-	{
-		this.isProveAhead = isProveAhead;
+		this.aaAmount = aaAmount;
 	}
 
 	public boolean needReimbursed()
@@ -176,13 +196,13 @@ public class Item
 		this.needReimbursed = needReimbursed;
 	}
 
-	public boolean isPaApproved()
+	public boolean isAaApproved()
 	{
-		return paApproved;
+		return aaApproved;
 	}
-	public void setPaApproved(boolean paApproved)
+	public void setAaApproved(boolean aaApproved)
 	{
-		this.paApproved = paApproved;
+		this.aaApproved = aaApproved;
 	}
 
 	public int getStatus()
@@ -402,16 +422,8 @@ public class Item
     
 	public boolean canBeSubmitWithReport()
 	{
-		if (serverID == -1)
-		{
-			return false;
-		}
-		if (hasUnuploadedInvoice())
-		{
-			return false;
-		}
-		return true;
-	}
+        return serverID != -1 && !hasUnuploadedInvoice();
+    }
 
 	public boolean containsCategory(List<Category> categories)
 	{
@@ -454,24 +466,7 @@ public class Item
 	{
 		return getInvoices() != null && !getInvoices().isEmpty();
 	}
-	
-	public boolean hasUndownloadedInvoice()
-	{
-		if (getInvoices() == null || getInvoices().isEmpty())
-		{
-			return false;
-		}	
-		
-		for (Image image : getInvoices())
-		{
-			if (image.isNotDownloaded())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
 	public boolean hasUnuploadedInvoice()
 	{
 		if (getInvoices() == null || getInvoices().isEmpty())
@@ -510,7 +505,7 @@ public class Item
 		{
 			public int compare(Item item1, Item item2)
 			{
-				return (int) (item2.getConsumedDate() - item1.getConsumedDate());
+				return item2.getConsumedDate() - item1.getConsumedDate();
 			}
 		});
     }
@@ -532,7 +527,7 @@ public class Item
 		{
 			public int compare(Item item1, Item item2)
 			{
-				return (int) (item2.getLocalUpdatedDate() - item1.getLocalUpdatedDate());
+				return item2.getLocalUpdatedDate() - item1.getLocalUpdatedDate();
 			}
 		});
     }
