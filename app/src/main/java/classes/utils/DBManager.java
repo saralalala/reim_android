@@ -351,7 +351,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			String sqlString = "INSERT INTO tbl_group (server_id, group_name, local_updatedt, server_updatedt) VALUES (" +
 								"'" + group.getServerID() + "'," +
-								"'" + group.getName() + "'," +
+								"'" + sqliteEscape(group.getName()) + "'," +
 								"'" + group.getLocalUpdatedDate() + "'," +
 								"'" + group.getServerUpdatedDate() + "')";
 			database.execSQL(sqlString);
@@ -369,7 +369,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_group SET " +
-								"group_name = '" + group.getName() + "'," +
+								"group_name = '" + sqliteEscape(group.getName()) + "'," +
 								"local_updatedt = '" + group.getLocalUpdatedDate() + "'," +
 								"server_updatedt = '" + group.getServerUpdatedDate() + "' " +
 								"WHERE server_id = '" + group.getServerID() + "'";
@@ -464,7 +464,7 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + user.getServerID() + "'," +
 								"'" + user.getEmail() + "'," +
 								"'" + user.getPhone() + "'," +
-								"'" + user.getNickname() + "'," +
+								"'" + sqliteEscape(user.getNickname()) + "'," +
                                 "'" + user.getBankAccount() + "'," +
 								"'" + user.getAvatarID() + "'," +
 								"'" + user.getAvatarPath() + "'," +
@@ -492,7 +492,7 @@ public class DBManager extends SQLiteOpenHelper
 								"server_id = '" + user.getServerID() + "'," +
 								"email = '" + user.getEmail() + "'," +
 								"phone = '" + user.getPhone() + "'," +
-								"nickname = '" + user.getNickname() + "'," +
+								"nickname = '" + sqliteEscape(user.getNickname()) + "'," +
                                 "bank_account = '" + user.getBankAccount() + "'," +
 								"avatar_id = '" + user.getAvatarID() + "'," +
 								"avatar_path = '" + user.getAvatarPath() + "'," +
@@ -779,16 +779,16 @@ public class DBManager extends SQLiteOpenHelper
 							   							"user_id, consumed_date, note, status, location, createdt, server_updatedt, " +
 							   							"local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" + 
 														"'" + item.getServerID() + "'," +
-														"'" + item.getVendor() + "'," +
+														"'" + sqliteEscape(item.getVendor()) + "'," +
 														"'" + reportID + "'," +
 														"'" + categoryID + "'," +
 														"'" + item.getAmount() + "'," +
 														"'" + item.getPaAmount() + "'," +
 														"'" + item.getConsumer().getServerID() + "'," +
 														"'" + item.getConsumedDate() + "'," +
-														"'" + item.getNote() + "'," +
+														"'" + sqliteEscape(item.getNote()) + "'," +
 														"'" + item.getStatus() + "'," +
-														"'" + item.getLocation() + "'," +
+														"'" + sqliteEscape(item.getLocation()) + "'," +
 														"'" + item.getCreatedDate() + "'," +
 														"'" + item.getServerUpdatedDate() + "'," +
 														"'" + item.getLocalUpdatedDate() + "'," +
@@ -824,7 +824,7 @@ public class DBManager extends SQLiteOpenHelper
 							   							"amount, pa_amount, user_id, consumed_date, note, status, location, createdt, " +
 							   							"server_updatedt, local_updatedt, prove_ahead, need_reimbursed, pa_approved) VALUES (" +
 														"'" + item.getServerID() + "'," +
-														"'" + item.getVendor() + "'," +
+														"'" + sqliteEscape(item.getVendor()) + "'," +
 														"'" + item.getBelongReport().getServerID() + "'," +
 														"'" + categoryID + "'," +
 														"'" + item.getTagsID() + "'," +
@@ -835,7 +835,7 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + item.getConsumedDate() + "'," +
 														"'" + sqliteEscape(item.getNote()) + "'," +
 														"'" + item.getStatus() + "'," +
-														"'" + item.getLocation() + "'," +
+														"'" + sqliteEscape(item.getLocation()) + "'," +
 														"'" + item.getCreatedDate() + "'," +
 														"'" + item.getServerUpdatedDate() + "'," +
 														"'" + item.getLocalUpdatedDate() + "'," +
@@ -876,16 +876,16 @@ public class DBManager extends SQLiteOpenHelper
 			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			String sqlString = "UPDATE tbl_item SET " +
 								"server_id = '" + item.getServerID() + "'," +
-								"vendor = '" + item.getVendor() + "'," +
+								"vendor = '" + sqliteEscape(item.getVendor()) + "'," +
 								"report_local_id = '" + reportID + "'," +
 								"category_id = '" + categoryID + "'," +
 								"amount = '" + item.getAmount() + "'," +
 								"pa_amount = '" + item.getPaAmount() + "'," +
 								"user_id = '" + item.getConsumer().getServerID() + "'," +
 								"consumed_date = '" + item.getConsumedDate() + "'," +
-								"note = '" + item.getNote() + "'," +
+								"note = '" + sqliteEscape(item.getNote()) + "'," +
 								"status = '" + item.getStatus() + "'," +
-								"location = '" + item.getLocation() + "'," +
+								"location = '" + sqliteEscape(item.getLocation()) + "'," +
 								"createdt = '" + item.getCreatedDate() + "'," +
 								"server_updatedt = '" + item.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
@@ -916,16 +916,16 @@ public class DBManager extends SQLiteOpenHelper
 			int categoryID = item.getCategory() == null? -1 : item.getCategory().getServerID();
 			String sqlString = "UPDATE tbl_item SET " +
 								"server_id = '" + item.getServerID() + "'," +
-								"vendor = '" + item.getVendor() + "'," +
+								"vendor = '" + sqliteEscape(item.getVendor()) + "'," +
 								"report_local_id = '" + reportID + "'," +
 								"category_id = '" + categoryID + "'," +
 								"amount = '" + item.getAmount() + "'," +
 								"pa_amount = '" + item.getPaAmount() + "'," +
 								"user_id = '" + item.getConsumer().getServerID() + "'," +
 								"consumed_date = '" + item.getConsumedDate() + "'," +
-								"note = '" + item.getNote() + "'," +
+								"note = '" + sqliteEscape(item.getNote()) + "'," +
 								"status = '" + item.getStatus() + "'," +
-								"location = '" + item.getLocation() + "'," +
+								"location = '" + sqliteEscape(item.getLocation()) + "'," +
 								"createdt = '" + item.getCreatedDate() + "'," +
 								"server_updatedt = '" + item.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
@@ -1007,7 +1007,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			if (item.getLocalID() == -1 && item.getServerID() == -1)
 			{
-				return insertItem(item) > 0;
+				return Utils.intToBoolean(insertItem(item));
 			}
 			else if (item.getLocalID() != -1 && item.getServerID() == -1)
 			{
@@ -1018,7 +1018,7 @@ public class DBManager extends SQLiteOpenHelper
 				Item localItem = getItemByServerID(item.getServerID());
 				if (localItem == null)
 				{
-					return insertItem(item) > 0;
+                    return Utils.intToBoolean(insertItem(item));
 				}
 				else if (item.getServerUpdatedDate() > localItem.getLocalUpdatedDate())
 				{
@@ -1623,7 +1623,7 @@ public class DBManager extends SQLiteOpenHelper
 	}
 
 	// Report
-	public boolean insertReport(Report report)
+	public int insertReport(Report report)
 	{
 		try
 		{
@@ -1631,7 +1631,7 @@ public class DBManager extends SQLiteOpenHelper
 			String sqlString = "INSERT INTO tbl_report (server_id, title, user_id, status, manager_id, cc_id, prove_ahead, created_date, " +
 							   							"server_updatedt, local_updatedt) VALUES (" + 
 														"'" + report.getServerID() + "'," +
-														"'" + report.getTitle() + "'," +
+														"'" + sqliteEscape(report.getTitle()) + "'," +
 														"'" + report.getSender().getServerID() + "'," +
 														"'" + report.getStatus() + "'," +
 														"'" + User.getUsersIDString(report.getManagerList()) + "'," +
@@ -1640,13 +1640,20 @@ public class DBManager extends SQLiteOpenHelper
 														"'" + report.getCreatedDate() + "'," +
 														"'" + report.getServerUpdatedDate() + "'," +
 														"'" + report.getLocalUpdatedDate() + "')";
-			database.execSQL(sqlString);			
-			return true;
+			database.execSQL(sqlString);
+
+
+            Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_report", null);
+            cursor.moveToFirst();
+            report.setLocalID(cursor.getInt(0));
+            cursor.close();
+
+            return report.getLocalID();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			return false;
+			return -1;
 		}
 	}
 	
@@ -1658,7 +1665,7 @@ public class DBManager extends SQLiteOpenHelper
 									"prove_ahead, amount, item_count, is_cc, created_date, server_updatedt, local_updatedt) VALUES (" + 
 								"'" + report.getServerID() + "'," +
 								"'" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
-								"'" + report.getTitle() + "'," +
+								"'" + sqliteEscape(report.getTitle()) + "'," +
 								"'" + report.getSender().getServerID() + "'," +
 								"'" + report.getStatus() + "'," +
 								"'" + report.getMyDecision() + "'," +
@@ -1688,7 +1695,7 @@ public class DBManager extends SQLiteOpenHelper
             System.out.println("update report by local id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
 			String sqlString = "UPDATE tbl_report SET " +
 								"server_id = '" + report.getServerID() + "'," +
-								"title = '" + report.getTitle() + "'," +
+								"title = '" + sqliteEscape(report.getTitle()) + "'," +
 								"user_id = '" + report.getSender().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
 								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
@@ -1715,7 +1722,7 @@ public class DBManager extends SQLiteOpenHelper
             System.out.println("update report by server id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
 			String sqlString = "UPDATE tbl_report SET " +
 								"server_id = '" + report.getServerID() + "'," +
-								"title = '" + report.getTitle() + "'," +
+								"title = '" + sqliteEscape(report.getTitle()) + "'," +
 								"user_id = '" + report.getSender().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
 								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
@@ -1741,7 +1748,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			String sqlString = "UPDATE tbl_others_report SET " +
 								"server_id = '" + report.getServerID() + "'," +
-								"title = '" + report.getTitle() + "'," +
+								"title = '" + sqliteEscape(report.getTitle()) + "'," +
 								"user_id = '" + report.getSender().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
 								"my_decision = '" + report.getMyDecision() + "'," +
@@ -1969,7 +1976,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			if (report.getLocalID() == -1 && report.getServerID() == -1)
 			{
-				return insertReport(report);
+				return Utils.intToBoolean(insertReport(report));
 			}
 			else if (report.getLocalID() != -1 && report.getServerID() == -1)
 			{
@@ -1980,7 +1987,7 @@ public class DBManager extends SQLiteOpenHelper
 				Report localReport = getReportByServerID(report.getServerID());
 				if (localReport == null)
 				{
-					return insertReport(report);
+                    return Utils.intToBoolean(insertReport(report));
 				}
 				else if (report.getServerUpdatedDate() > localReport.getLocalUpdatedDate())
 				{
@@ -2188,16 +2195,7 @@ public class DBManager extends SQLiteOpenHelper
 		cursor.close();
 		return TextUtils.join(",", idList);
 	}
-	
-	public int getLastInsertReportID()
-	{
-		Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_report", null);
-		cursor.moveToFirst();
-		int result = cursor.getInt(0);
-		cursor.close();
-		return result;
-	}
-	
+
 	public double getReportAmount(int reportLocalID)
 	{
 		double amount = 0;
@@ -2222,21 +2220,7 @@ public class DBManager extends SQLiteOpenHelper
             return amount;
         }
 	}
-	
-	public int getReportItemsCount(int reportLocalID)
-	{
-		int count = 0;
-		Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id = ?", 
-												new String[]{Integer.toString(reportLocalID)});
-		while (cursor.moveToNext())
-		{
-			count++;
-		}
 
-		cursor.close();
-		return count;
-	}
-	
 	// Comment
 	public boolean insertComment(Comment comment)
 	{
@@ -2247,7 +2231,7 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + comment.getServerID() + "'," +
 								"'" + comment.getReportID() + "'," +
 								"'" + comment.getReviewer().getServerID() + "'," +
-								"'" + comment.getContent() + "'," +
+								"'" + sqliteEscape(comment.getContent()) + "'," +
 								"'" + comment.getCreatedDate() + "'," +
 								"'" + comment.getServerUpdatedDate() + "'," +
 								"'" + comment.getLocalUpdatedDate() + "')";
@@ -2269,7 +2253,7 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + comment.getServerID() + "'," +
 								"'" + comment.getReportID() + "'," +
 								"'" + comment.getReviewer().getServerID() + "'," +
-								"'" + comment.getContent() + "'," +
+								"'" + sqliteEscape(comment.getContent()) + "'," +
 								"'" + comment.getCreatedDate() + "'," +
 								"'" + comment.getServerUpdatedDate() + "'," +
 								"'" + comment.getLocalUpdatedDate() + "')";
@@ -2290,7 +2274,7 @@ public class DBManager extends SQLiteOpenHelper
 								"server_id = '" + comment.getServerID() + "'," +
 								"report_local_id = '" + comment.getReportID() + "'," +
 								"user_id = '" + comment.getReviewer().getServerID() + "'," +
-								"comment = '" + comment.getContent() + "'," +
+								"comment = '" + sqliteEscape(comment.getContent()) + "'," +
 								"comment_date = '" + comment.getCreatedDate() + "'," +
 								"server_updatedt = '" + comment.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + comment.getLocalUpdatedDate() + "' " +
@@ -2473,7 +2457,7 @@ public class DBManager extends SQLiteOpenHelper
 			String sqlString = "INSERT INTO tbl_category (server_id, category_name, max_limit, group_id, " +
 								"parent_id, icon_id, prove_ahead, local_updatedt, server_updatedt) VALUES (" +
 								"'" + category.getServerID() + "'," +
-								"'" + category.getName() + "'," +
+								"'" + sqliteEscape(category.getName()) + "'," +
 								"'" + category.getLimit() + "'," +
 								"'" + category.getGroupID() + "'," +
 								"'" + category.getParentID() + "'," +
@@ -2496,7 +2480,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_category SET " +
-								"category_name = '" + category.getName() + "'," +
+								"category_name = '" + sqliteEscape(category.getName()) + "'," +
 								"max_limit = '" + category.getLimit() + "'," +
 								"group_id = '" + category.getGroupID() + "'," +
 								"parent_id = '" + category.getParentID() + "'," +
@@ -2697,7 +2681,7 @@ public class DBManager extends SQLiteOpenHelper
 		{
 			String sqlString = "INSERT INTO tbl_tag (server_id, tag_name, group_id, icon_id, icon_path, local_updatedt, server_updatedt) VALUES (" +
 								"'" + tag.getServerID() + "'," +
-								"'" + tag.getName() + "'," +
+								"'" + sqliteEscape(tag.getName()) + "'," +
 								"'" + tag.getGroupID() + "'," +
 								"'" + tag.getIconID() + "'," +
 								"'" + tag.getIconPath() + "'," +
@@ -2718,7 +2702,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "UPDATE tbl_tag SET " +
-								"tag_name = '" + tag.getName() + "'," +
+								"tag_name = '" + sqliteEscape(tag.getName()) + "'," +
 								"group_id = '" + tag.getGroupID() + "'," +
 								"icon_id = '" + tag.getIconID() + "'," +
 								"icon_path = '" + tag.getIconPath() + "'," +
@@ -3036,7 +3020,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "UPDATE tbl_image SET " + 
+			String sqlString = "UPDATE tbl_others_image SET " +
 								"path = '" + image.getPath() + "'," +
 								"item_server_id = '" + image.getItemID() + "' " +
 								"WHERE server_id = '" + image.getServerID() + "'";		

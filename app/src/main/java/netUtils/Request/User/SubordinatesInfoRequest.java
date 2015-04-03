@@ -10,7 +10,9 @@ public class SubordinatesInfoRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl(URLDef.URL_SUBORDINATE + "/" + pageIndex + "/" + pageSize);
+        appendUrl(URLDef.URL_SUBORDINATE);
+        appendUrl(pageIndex);
+        appendUrl(pageSize);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

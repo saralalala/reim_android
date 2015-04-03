@@ -10,7 +10,8 @@ public class ApproveInfoRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl(URLDef.URL_APPROVE_INFO + "/" + reportID);
+        appendUrl(URLDef.URL_APPROVE_INFO);
+        appendUrl(reportID);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

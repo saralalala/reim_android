@@ -408,8 +408,7 @@ public class EditItemActivity extends Activity
                                     report.setLocalUpdatedDate(Utils.getCurrentTime());
                                     report.setIsProveAhead(true);
                                     report.setManagerList(appPreference.getCurrentUser().buildBaseManagerList());
-                                    dbManager.insertReport(report);
-                                    report.setLocalID(dbManager.getLastInsertReportID());
+                                    report.setLocalID(dbManager.insertReport(report));
 
                                     item.setBelongReport(report);
                                 }
@@ -946,11 +945,11 @@ public class EditItemActivity extends Activity
         removeList.clear();
 
         int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 126);
-        int width = ViewUtils.dpToPixel(getResources(), 40);
+        int sideLength = ViewUtils.dpToPixel(getResources(), 40);
         int verticalInterval = ViewUtils.dpToPixel(getResources(), 5);
         int horizontalInterval = ViewUtils.dpToPixel(getResources(), 5);
-        int maxCount = (layoutMaxLength + horizontalInterval) / (width + horizontalInterval);
-        horizontalInterval = (layoutMaxLength - width * maxCount) / (maxCount - 1);
+        int maxCount = (layoutMaxLength + horizontalInterval) / (sideLength + horizontalInterval);
+        horizontalInterval = (layoutMaxLength - sideLength * maxCount) / (maxCount - 1);
 
         LinearLayout layout = new LinearLayout(this);
         int invoiceCount = item.getInvoices() != null? item.getInvoices().size() : 0;
@@ -1044,7 +1043,7 @@ public class EditItemActivity extends Activity
                 invoiceImageView.setImageBitmap(bitmap);
             }
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, width);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
             if ((i + 1) % maxCount != 0)
             {
                 params.rightMargin = horizontalInterval;

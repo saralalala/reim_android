@@ -30,7 +30,8 @@ public class ModifyReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
 		setParams(params);
 
-		appendUrl(URLDef.URL_REPORT + "/" + report.getServerID());
+        appendUrl(URLDef.URL_REPORT);
+        appendUrl(report.getServerID());
 	}
 	
 	public ModifyReportRequest(Report report, String commentContent)
@@ -49,7 +50,8 @@ public class ModifyReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("comment", commentContent));
 		setParams(params);
 
-		appendUrl(URLDef.URL_REPORT + "/" + report.getServerID());
+        appendUrl(URLDef.URL_REPORT);
+        appendUrl(report.getServerID());
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

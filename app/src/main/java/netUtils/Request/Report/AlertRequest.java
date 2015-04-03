@@ -10,7 +10,9 @@ public class AlertRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl(URLDef.URL_ALERT + "/" + userID + "/" + reportID);
+        appendUrl(URLDef.URL_ALERT);
+        appendUrl(userID);
+        appendUrl(reportID);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

@@ -21,7 +21,8 @@ public class ModifyTagRequest extends BaseRequest
 		params.add(new BasicNameValuePair("name", tag.getName()));
 		setParams(params);
 
-		appendUrl(URLDef.URL_TAG + "/" + tag.getServerID());
+        appendUrl(URLDef.URL_TAG);
+        appendUrl(tag.getServerID());
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

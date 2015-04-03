@@ -661,8 +661,7 @@ public class EditReportActivity extends Activity
 		if (report.getLocalID() == -1)
 		{
 			report.setCreatedDate(Utils.getCurrentTime());
-			dbManager.insertReport(report);
-			report.setLocalID(dbManager.getLastInsertReportID());								
+            report.setLocalID(dbManager.insertReport(report));
 		}
 		else
 		{

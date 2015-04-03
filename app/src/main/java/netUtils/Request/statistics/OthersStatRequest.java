@@ -10,14 +10,21 @@ public class OthersStatRequest extends BaseRequest
     {
         super();
 
-        appendUrl(URLDef.URL_STATISTICS_OTHERS + "/" + year + "/" + month);
+        appendUrl(URLDef.URL_STATISTICS_OTHERS);
+        appendUrl(year);
+        appendUrl(month);
     }
 
 	public OthersStatRequest(int year, int month, int categoryID, int tagID, int userID)
 	{
 		super();
 
-		appendUrl(URLDef.URL_STATISTICS_OTHERS + "/" + year + "/" + month + "/" + categoryID + "/" + tagID + "/" + userID);
+        appendUrl(URLDef.URL_STATISTICS_OTHERS);
+        appendUrl(year);
+        appendUrl(month);
+        appendUrl(categoryID);
+        appendUrl(tagID);
+        appendUrl(userID);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

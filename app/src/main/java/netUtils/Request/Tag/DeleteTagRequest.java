@@ -10,7 +10,8 @@ public class DeleteTagRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl(URLDef.URL_TAG + "/" + tagID);
+        appendUrl(URLDef.URL_TAG);
+        appendUrl(tagID);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

@@ -10,7 +10,9 @@ public class GetMessageRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl(URLDef.URL_MESSAGE + "/" + type + "/" + messageID);
+        appendUrl(URLDef.URL_MESSAGE);
+        appendUrl(type);
+        appendUrl(messageID);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

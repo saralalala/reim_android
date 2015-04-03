@@ -27,7 +27,8 @@ public class ApproveReportRequest extends BaseRequest
         }
 		setParams(params);
 
-		appendUrl(URLDef.URL_REPORT + "/" + report.getServerID());
+        appendUrl(URLDef.URL_REPORT);
+        appendUrl(report.getServerID());
 	}
 	
 	public ApproveReportRequest(Report report, String commentContent)
@@ -41,7 +42,8 @@ public class ApproveReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("comment", commentContent));
 		setParams(params);
 
-		appendUrl(URLDef.URL_REPORT + "/" + report.getServerID());
+		appendUrl(URLDef.URL_REPORT);
+        appendUrl(report.getServerID());
 	}	
 	
 	public void sendRequest(HttpConnectionCallback callback)

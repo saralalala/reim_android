@@ -28,7 +28,8 @@ public class ModifyCategoryRequest extends BaseRequest
 		params.add(new BasicNameValuePair("avatar", Integer.toString(category.getIconID())));
 		setParams(params);
 
-		appendUrl(URLDef.URL_CATEGORY + "/" + category.getServerID());
+        appendUrl(URLDef.URL_CATEGORY);
+        appendUrl(category.getServerID());
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

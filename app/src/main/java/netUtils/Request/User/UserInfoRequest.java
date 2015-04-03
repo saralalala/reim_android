@@ -10,7 +10,8 @@ public class UserInfoRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl(URLDef.URL_USER + "/" + userID);
+        appendUrl(URLDef.URL_USER);
+        appendUrl(userID);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

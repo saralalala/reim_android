@@ -10,7 +10,8 @@ public class DeleteCategoryRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl(URLDef.URL_CATEGORY + "/" + categoryID);
+		appendUrl(URLDef.URL_CATEGORY);
+        appendUrl(categoryID);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

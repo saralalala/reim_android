@@ -54,9 +54,7 @@ public class CreateReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("comment", commentContent));
 		setParams(params);
 
-		String requestUrl = getUrl();
-		requestUrl += "/report";
-		setUrl(requestUrl);
+        appendUrl(URLDef.URL_REPORT);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

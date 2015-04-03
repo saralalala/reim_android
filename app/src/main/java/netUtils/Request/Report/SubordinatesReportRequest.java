@@ -9,8 +9,12 @@ public class SubordinatesReportRequest extends BaseRequest
 	public SubordinatesReportRequest(int pageIndex, int pageSize, int status)
 	{
 		super();
-		
-		appendUrl(URLDef.URL_SUBORDINATE_REPORT + "/1/" + pageIndex + "/" + pageSize + "/" + status);
+
+        appendUrl(URLDef.URL_SUBORDINATE_REPORT);
+        appendUrl(1);
+        appendUrl(pageIndex);
+        appendUrl(pageSize);
+        appendUrl(status);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

@@ -20,8 +20,10 @@ public class SingleSubReportRequest extends BaseRequest
 		params.add(new BasicNameValuePair("uid", Integer.toString(userID)));
 		params.add(new BasicNameValuePair("status", Integer.toString(status)));
 		setParams(params);
-		
-		appendUrl(URLDef.URL_SUBORDINATE_REPORT + "/" + pageIndex + "/" + pageSize);
+
+        appendUrl(URLDef.URL_SUBORDINATE_REPORT);
+        appendUrl(pageIndex);
+        appendUrl(pageSize);
 	}
 
 	public void sendRequest(HttpConnectionCallback callback)

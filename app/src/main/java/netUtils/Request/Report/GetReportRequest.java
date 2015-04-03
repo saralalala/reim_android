@@ -10,7 +10,8 @@ public class GetReportRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl(URLDef.URL_REPORT + "/" + reportID);
+        appendUrl(URLDef.URL_REPORT);
+        appendUrl(reportID);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

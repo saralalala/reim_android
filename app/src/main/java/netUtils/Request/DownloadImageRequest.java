@@ -21,15 +21,18 @@ public class DownloadImageRequest extends BaseRequest
 	public DownloadImageRequest(int iconID)
 	{
 		super();
-		
-		appendUrl(URLDef.URL_STATIC + "/" + iconID + ".png");
+
+        appendUrl(URLDef.URL_STATIC);
+        appendUrl(iconID + ".png");
 	}
 	
 	public DownloadImageRequest(int imageID, int type)
 	{
 		super();
-		
-		appendUrl(URLDef.URL_IMAGE + "/" + imageID + "/" + type);
+
+        appendUrl(URLDef.URL_IMAGE);
+        appendUrl(imageID);
+        appendUrl(type);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

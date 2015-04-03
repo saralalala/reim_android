@@ -66,14 +66,19 @@ public abstract class BaseRequest
 	
 	protected void appendUrl(String suffix)
 	{
-		this.url += suffix;
+        this.url += "/" + suffix;
 	}
 
-    protected void appendUrlSuffix(String suffix)
+    protected void appendUrl(int suffix)
     {
         this.url += "/" + suffix;
     }
-	
+
+    protected void appendUrl(long suffix)
+    {
+        this.url += "/" + suffix;
+    }
+
 	protected void setParams(List<NameValuePair> params)
 	{
 		this.params = new ArrayList<NameValuePair>(params);

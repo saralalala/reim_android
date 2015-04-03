@@ -10,7 +10,8 @@ public class DeleteItemRequest extends BaseRequest
 	{
 		super();
 
-		appendUrl(URLDef.URL_ITEM + "/" + itemID);
+        appendUrl(URLDef.URL_ITEM);
+        appendUrl(itemID);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)
