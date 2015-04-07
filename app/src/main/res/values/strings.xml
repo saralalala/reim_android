@@ -117,7 +117,8 @@
     <string name="pending">待处理</string>
     <string name="processed">已处理</string>
     <string name="report_detail">报告详情</string>
-    <string name="report_approve_ahead">预申请消费</string>
+    <string name="report_budget">预算申请</string>
+    <string name="report_borrowing">借款申请</string>
     <string name="comment">评论</string>
     <string name="add_comment">添加评论</string>
     <string name="check_comment">查看评论</string>

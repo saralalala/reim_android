@@ -99,7 +99,7 @@ public class ApproveInfo implements Comparable<ApproveInfo>
         }
         else if (userID == reportSenderID)
         {
-            return getRealStatus() != Report.STATUS_SUBMITTED;
+            return getRealStatus() != Report.STATUS_DRAFT && getRealStatus() != Report.STATUS_SUBMITTED;
         }
         else
         {

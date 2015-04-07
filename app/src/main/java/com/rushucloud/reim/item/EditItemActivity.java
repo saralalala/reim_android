@@ -406,8 +406,9 @@ public class EditItemActivity extends Activity
                                 Report report;
                                 if (item.getBelongReport() == null)
                                 {
+                                    int title = item.getType() == Item.TYPE_BUDGET? R.string.report_budget : R.string.report_borrowing;
                                     report = new Report();
-                                    report.setTitle(getString(R.string.report_approve_ahead));
+                                    report.setTitle(getString(title));
                                     report.setSender(appPreference.getCurrentUser());
                                     report.setCreatedDate(Utils.getCurrentTime());
                                     report.setLocalUpdatedDate(Utils.getCurrentTime());
@@ -544,7 +545,8 @@ public class EditItemActivity extends Activity
 
         if (item.isAaApproved())
         {
-            budgetTextView.setText(getString(R.string.budget) + " " + Utils.formatDouble(item.getAaAmount()));
+            int title = item.getType() == Item.TYPE_BUDGET? R.string.budget : R.string.borrowing;
+            budgetTextView.setText(getString(title) + " " + Utils.formatDouble(item.getAaAmount()));
         }
         else
         {

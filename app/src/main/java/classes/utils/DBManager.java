@@ -154,6 +154,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "cc_id TEXT DEFAULT(''),"
 										+ "status INT DEFAULT(0),"
 										+ "type INT DEFAULT(0),"
+                                        + "aa_approved INT DEFAULT(0),"
 										+ "created_date INT DEFAULT(0),"
 										+ "server_updatedt INT DEFAULT(0),"
 										+ "local_updatedt INT DEFAULT(0),"
@@ -1678,12 +1679,13 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
             System.out.println("insert report: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
-			String sqlString = "INSERT INTO tbl_report (server_id, title, user_id, status, manager_id, cc_id, type, created_date, " +
-							   							"server_updatedt, local_updatedt) VALUES (" + 
+			String sqlString = "INSERT INTO tbl_report (server_id, title, user_id, status, aa_approved, manager_id, cc_id, type, " +
+							   							"created_date, server_updatedt, local_updatedt) VALUES (" +
 														"'" + report.getServerID() + "'," +
 														"'" + sqliteEscape(report.getTitle()) + "'," +
 														"'" + report.getSender().getServerID() + "'," +
 														"'" + report.getStatus() + "'," +
+                                                        "'" + Utils.booleanToInt(report.isAaApproved()) + "'," +
 														"'" + User.getUsersIDString(report.getManagerList()) + "'," +
 														"'" + User.getUsersIDString(report.getCCList()) + "'," +
 														"'" + report.getType() + "'," +
@@ -1748,6 +1750,7 @@ public class DBManager extends SQLiteOpenHelper
 								"title = '" + sqliteEscape(report.getTitle()) + "'," +
 								"user_id = '" + report.getSender().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
+                                "aa_approved = '" + Utils.booleanToInt(report.isAaApproved()) + "'," +
 								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
 								"type = '" + report.getType() + "'," +
@@ -1775,6 +1778,7 @@ public class DBManager extends SQLiteOpenHelper
 								"title = '" + sqliteEscape(report.getTitle()) + "'," +
 								"user_id = '" + report.getSender().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
+                                "aa_approved = '" + Utils.booleanToInt(report.isAaApproved()) + "'," +
 								"manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
 								"cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
 								"type = '" + report.getType() + "'," +
@@ -1921,6 +1925,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCommentList(getReportComments(report.getLocalID()));
 				report.setType(getIntFromCursor(cursor, "type"));
 				report.setStatus(getIntFromCursor(cursor, "status"));
+                report.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -1959,6 +1964,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCommentList(getReportComments(report.getLocalID()));
 				report.setType(getIntFromCursor(cursor, "type"));
 				report.setStatus(getIntFromCursor(cursor, "status"));
+                report.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -2113,6 +2119,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setType(getIntFromCursor(cursor, "type"));
+                report.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -2176,6 +2183,7 @@ public class DBManager extends SQLiteOpenHelper
 				report.setCommentList(getReportComments(report.getLocalID()));
 				report.setStatus(getIntFromCursor(cursor, "status"));
 				report.setType(getIntFromCursor(cursor, "type"));
+                report.setAaApproved(getBooleanFromCursor(cursor, "aa_approved"));
 				report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
 				report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 				report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));

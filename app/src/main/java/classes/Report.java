@@ -15,6 +15,7 @@ import java.util.List;
 
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.Utils;
 
 public class Report implements Serializable
 {
@@ -36,6 +37,7 @@ public class Report implements Serializable
 	private String title = "";
 	private int status = Report.STATUS_DRAFT;
 	private int myDecision = Report.STATUS_SUBMITTED;
+    private boolean aaApproved = false;
 	private List<User> managerList = null;
 	private List<User> ccList = null;
 	private List<Comment> commentList = null;
@@ -81,6 +83,7 @@ public class Report implements Serializable
 			setTitle(jObject.getString("title"));
 			setCreatedDate(jObject.getInt("createdt"));
 			setStatus(jObject.getInt("status"));
+            setAaApproved(Utils.intToBoolean(jObject.getInt("pa_approval")));
 			setLocalUpdatedDate(jObject.getInt("lastdt"));
 			setServerUpdatedDate(jObject.getInt("lastdt"));
 			
@@ -148,7 +151,16 @@ public class Report implements Serializable
 		this.myDecision = myDecision;
 	}
 
-	public List<User> getManagerList()
+    public boolean isAaApproved()
+    {
+        return aaApproved;
+    }
+    public void setAaApproved(boolean aaApproved)
+    {
+        this.aaApproved = aaApproved;
+    }
+
+    public List<User> getManagerList()
 	{
 		return managerList;
 	}

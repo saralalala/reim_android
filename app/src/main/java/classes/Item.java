@@ -145,7 +145,6 @@ public class Item
                 return R.string.not_available;
         }
     }
-
     public void setType(int type)
     {
         this.type = type;

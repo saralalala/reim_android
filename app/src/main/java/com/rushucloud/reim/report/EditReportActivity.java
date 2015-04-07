@@ -298,7 +298,7 @@ public class EditReportActivity extends Activity
 				startActivity(intent);
 			}
 		});
-		if (report.getStatus() == Report.STATUS_DRAFT)
+		if (report.getStatus() == Report.STATUS_DRAFT && !report.isAaApproved())
 		{
 			approveInfoTextView.setVisibility(View.INVISIBLE);
 		}
@@ -970,6 +970,7 @@ public class EditReportActivity extends Activity
 					}
 					else if (report.getLocalUpdatedDate() <= response.getReport().getServerUpdatedDate())
 					{
+                        report.setAaApproved(response.getReport().isAaApproved());
 						report.setManagerList(response.getReport().getManagerList());
 						report.setCCList(response.getReport().getCCList());
 						report.setCommentList(response.getReport().getCommentList());
@@ -978,6 +979,13 @@ public class EditReportActivity extends Activity
                             report.setManagerList(currentUser.buildBaseManagerList());
                         }
 						dbManager.updateReportByLocalID(report);
+
+                        for (Item item : response.getItemList())
+                        {
+                            item.setBelongReport(report);
+                            dbManager.updateItemByServerID(item);
+                        }
+                        itemList = dbManager.getReportItems(report.getLocalID());
 						
 						dbManager.deleteReportComments(report.getLocalID());
 						for (Comment comment : report.getCommentList())

@@ -6,7 +6,7 @@ public class URLDef
 //	public static String TEST_URL_PREFIX = "http://stage.rushucloud.com/stage";
 //	public static String URL_PREFIX = "http://api.rushucloud.com/stage";
 	
-	public static String URL_PREFIX = "http://api.cloudbaoxiao.com/online";
+	public static String URL_PREFIX = "https://api.cloudbaoxiao.com/online";
 	public static String URL_COMMON = "common/0";
 	public static String URL_EVENT = "events";
 	public static String URL_FEEDBACK = "feedback";
