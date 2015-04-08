@@ -237,18 +237,9 @@ public class EmailSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Builder builder = new Builder(EmailSignUpActivity.this);
-							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.succeed_in_sign_up_with_email);
-							builder.setNegativeButton(R.string.confirm, new OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															startActivity(new Intent(EmailSignUpActivity.this, MainActivity.class));
-															finish();
-														}
-													});
-							builder.create().show();
+                            ViewUtils.showToast(EmailSignUpActivity.this, R.string.succeed_in_sign_up_with_email);
+                            startActivity(new Intent(EmailSignUpActivity.this, MainActivity.class));
+                            finish();
 						}
 					});
 				}

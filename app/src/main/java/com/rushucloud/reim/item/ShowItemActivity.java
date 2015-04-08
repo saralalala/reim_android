@@ -397,7 +397,7 @@ public class ShowItemActivity extends Activity
 	
 	private void sendDownloadInvoiceRequest(final Image image)
 	{
-		DownloadImageRequest request = new DownloadImageRequest(image.getServerID(), DownloadImageRequest.INVOICE_QUALITY_ORIGINAL);
+		DownloadImageRequest request = new DownloadImageRequest(image.getServerPath());
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
@@ -409,7 +409,7 @@ public class ShowItemActivity extends Activity
 					if (!invoicePath.isEmpty())
 					{
 						image.setLocalPath(invoicePath);
-						dbManager.updateImageByServerID(image);
+						dbManager.updateImageLocalPath(image);
 						
 						runOnUiThread(new Runnable()
 						{
@@ -483,7 +483,7 @@ public class ShowItemActivity extends Activity
 				if (response.getBitmap() != null)
 				{
 					String avatarPath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
-					user.setAvatarPath(avatarPath);
+					user.setAvatarLocalPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
 					dbManager.updateUser(user);

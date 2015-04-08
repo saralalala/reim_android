@@ -372,19 +372,10 @@ public class PhoneSignUpActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Builder builder = new Builder(PhoneSignUpActivity.this);
-							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.succeed_in_sign_up);
-							builder.setNegativeButton(R.string.confirm, new OnClickListener()
-													{
-														public void onClick(DialogInterface dialog, int which)
-														{
-															waitingTime = -1;
-															startActivity(new Intent(PhoneSignUpActivity.this, MainActivity.class));
-															finish();
-														}
-													});
-							builder.create().show();
+                            waitingTime = -1;
+                            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_sign_up);
+                            startActivity(new Intent(PhoneSignUpActivity.this, MainActivity.class));
+                            finish();
 						}
 					});
 				}

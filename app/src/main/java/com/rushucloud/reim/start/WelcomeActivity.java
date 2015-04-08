@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
 
 import com.rushucloud.reim.R;
@@ -50,7 +48,7 @@ public class WelcomeActivity extends Activity
         	if(System.currentTimeMillis() - exitTime > 2000)
         	{
         		ViewUtils.showToast(WelcomeActivity.this, R.string.prompt_press_back_to_exit);
-        		exitTime=System.currentTimeMillis();
+        		exitTime = System.currentTimeMillis();
         	}
         	else 
         	{
@@ -81,45 +79,25 @@ public class WelcomeActivity extends Activity
 				finish();
 			}			
 		});
-
-		final int buttonHeight = signInButton.getLayoutParams().height;
 		
-		final Button phoneSignUpButton = (Button) findViewById(R.id.phoneSignUpButton);
+		Button phoneSignUpButton = (Button) findViewById(R.id.phoneSignUpButton);
 		phoneSignUpButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				startActivity(new Intent(WelcomeActivity.this, PhoneSignUpActivity.class));
-				finish();
-			}			
-		});
-		phoneSignUpButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				ViewGroup.LayoutParams params = phoneSignUpButton.getLayoutParams();
-				params.height = buttonHeight;
-				phoneSignUpButton.setLayoutParams(params);
-			}
-		});
+        {
+            public void onClick(View v)
+            {
+                startActivity(new Intent(WelcomeActivity.this, PhoneSignUpActivity.class));
+                finish();
+            }
+        });
 		
-		final Button emailSignUpButton = (Button) findViewById(R.id.emailSignUpButton);
+		Button emailSignUpButton = (Button) findViewById(R.id.emailSignUpButton);
 		emailSignUpButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				startActivity(new Intent(WelcomeActivity.this, EmailSignUpActivity.class));
-				finish();
-			}			
-		});
-		emailSignUpButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			public void onGlobalLayout()
-			{
-				ViewGroup.LayoutParams params = emailSignUpButton.getLayoutParams();
-				params.height = buttonHeight;
-				emailSignUpButton.setLayoutParams(params);
-			}
-		});
+        {
+            public void onClick(View v)
+            {
+                startActivity(new Intent(WelcomeActivity.this, EmailSignUpActivity.class));
+                finish();
+            }
+        });
 	}
 }

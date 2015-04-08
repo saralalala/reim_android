@@ -457,7 +457,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 							{
 								if (user.getAvatarID() == currentUser.getAvatarID())
 								{
-									user.setAvatarPath(currentUser.getAvatarPath());								
+									user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
 								}								
 							}
 							else

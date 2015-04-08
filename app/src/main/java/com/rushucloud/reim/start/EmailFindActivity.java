@@ -22,6 +22,7 @@ import com.umeng.analytics.MobclickAgent;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.ForgotPasswordRequest;
 import netUtils.response.user.ForgotPasswordResponse;
@@ -42,6 +43,7 @@ public class EmailFindActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("EmailFindActivity");		
 		MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()
@@ -132,6 +134,7 @@ public class EmailFindActivity extends Activity
 
     private void sendResetEmailRequest()
     {
+        ReimProgressDialog.show();
 		ForgotPasswordRequest request = new ForgotPasswordRequest(0, emailEditText.getText().toString());
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -144,18 +147,10 @@ public class EmailFindActivity extends Activity
 					{
 						public void run()
 						{
-							Builder builder = new Builder(EmailFindActivity.this);
-							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.succeed_in_sending_email);
-							builder.setNegativeButton(R.string.confirm, new OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																startActivity(new Intent(EmailFindActivity.this, SignInActivity.class));
-																finish();
-															}
-														});
-							builder.create().show();
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(EmailFindActivity.this, R.string.succeed_in_sending_email);
+                            startActivity(new Intent(EmailFindActivity.this, SignInActivity.class));
+                            finish();
 						}
 					});					
 				}
@@ -165,6 +160,7 @@ public class EmailFindActivity extends Activity
 					{
 						public void run()
 						{
+                            ReimProgressDialog.dismiss();
 							ViewUtils.showToast(EmailFindActivity.this, R.string.failed_to_send_email, response.getErrorMessage());
 						}
 					});

@@ -1,9 +1,7 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -140,17 +138,8 @@ public class FeedbackActivity extends Activity
 					{
 						if (response.getStatus())
 						{
-							Builder builder = new Builder(FeedbackActivity.this);
-							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.succeed_in_sending_feedback);
-							builder.setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener()
-																{
-																	public void onClick(DialogInterface dialog, int which)
-																	{
-																		finish();
-																	}
-																});
-							builder.create().show();
+                            ViewUtils.showToast(FeedbackActivity.this, R.string.succeed_in_sending_feedback);
+                            finish();
 						}
 						else
 						{

@@ -30,7 +30,8 @@ public class User implements Serializable
 	private String phone = "";
     private String bankAccount = "";
 	private int avatarID = -1;
-	private String avatarPath = "";
+    private String avatarServerPath = "";
+	private String avatarLocalPath = "";
 	private int privilege = 0;
 	private boolean isActive = false;
 	private boolean isAdmin = false;
@@ -52,7 +53,8 @@ public class User implements Serializable
 		nickname = user.getNickname();
 		phone = user.getPhone();
 		avatarID = user.getAvatarID();
-		avatarPath = user.getAvatarPath();
+        avatarServerPath = user.getAvatarServerPath();
+		avatarLocalPath = user.getAvatarLocalPath();
 		privilege = user.getPrivilege();
 		isActive = user.isActive();
 		isAdmin = user.isAdmin();
@@ -74,7 +76,8 @@ public class User implements Serializable
 			setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
 			setDefaultManagerID(jObject.getInt("manager_id"));
 			setGroupID(groupID);
-			setAvatarPath("");
+            setAvatarServerPath(jObject.getString("apath"));
+			setAvatarLocalPath("");
 			setLocalUpdatedDate(jObject.getInt("dt"));
 			setServerUpdatedDate(jObject.getInt("dt"));
 			String imageID = jObject.getString("avatar");
@@ -168,14 +171,23 @@ public class User implements Serializable
 	{
 		this.avatarID = avatarID;
 	}
-	
-	public String getAvatarPath()
+
+    public String getAvatarServerPath()
+    {
+        return avatarServerPath;
+    }
+    public void setAvatarServerPath(String avatarServerPath)
+    {
+        this.avatarServerPath = avatarServerPath;
+    }
+
+    public String getAvatarLocalPath()
 	{
-		return avatarPath;
+		return avatarLocalPath;
 	}
-	public void setAvatarPath(String avatarPath)
+	public void setAvatarLocalPath(String avatarLocalPath)
 	{
-		this.avatarPath = avatarPath;
+		this.avatarLocalPath = avatarLocalPath;
 	}
 	
 	public int getPrivilege()
@@ -269,14 +281,14 @@ public class User implements Serializable
 	
 	public boolean hasUndownloadedAvatar()
 	{
-		if (getAvatarPath().isEmpty() && getAvatarID() > 0)
+		if (getAvatarLocalPath().isEmpty() && getAvatarID() > 0)
 		{
 			return true;
 		}
 		
-		if (!getAvatarPath().isEmpty())
+		if (!getAvatarLocalPath().isEmpty())
 		{
-			Bitmap bitmap = BitmapFactory.decodeFile(getAvatarPath());
+			Bitmap bitmap = BitmapFactory.decodeFile(getAvatarLocalPath());
 			if (bitmap == null)
 			{
 				return true;

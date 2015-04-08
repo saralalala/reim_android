@@ -58,7 +58,8 @@ public class DBManager extends SQLiteOpenHelper
 										+ "nickname TEXT DEFAULT(''),"
                                         + "bank_account TEXT DEFAULT(''),"
 										+ "avatar_id INT DEFAULT(0),"
-										+ "avatar_path TEXT DEFAULT(''),"
+                                        + "avatar_server_path TEXT DEFAULT(''),"
+										+ "avatar_local_path TEXT DEFAULT(''),"
 										+ "privilege INT DEFAULT(0),"
 										+ "manager_id INT DEFAULT(0),"
 										+ "group_id INT DEFAULT(0),"
@@ -462,15 +463,16 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, bank_account, avatar_id, avatar_path, privilege, " +
-								"manager_id, group_id, admin, local_updatedt, server_updatedt) VALUES (" +
+			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, bank_account, avatar_id, avatar_server_path, avatar_local_path, " +
+								"privilege, manager_id, group_id, admin, local_updatedt, server_updatedt) VALUES (" +
 								"'" + user.getServerID() + "'," +
 								"'" + user.getEmail() + "'," +
 								"'" + user.getPhone() + "'," +
 								"'" + sqliteEscape(user.getNickname()) + "'," +
                                 "'" + user.getBankAccount() + "'," +
 								"'" + user.getAvatarID() + "'," +
-								"'" + user.getAvatarPath() + "'," +
+                                "'" + user.getAvatarServerPath() + "'," +
+								"'" + user.getAvatarLocalPath() + "'," +
 								"'" + user.getPrivilege() + "'," +
 								"'" + user.getDefaultManagerID() + "'," +
 								"'" + user.getGroupID() + "'," +
@@ -498,7 +500,8 @@ public class DBManager extends SQLiteOpenHelper
 								"nickname = '" + sqliteEscape(user.getNickname()) + "'," +
                                 "bank_account = '" + user.getBankAccount() + "'," +
 								"avatar_id = '" + user.getAvatarID() + "'," +
-								"avatar_path = '" + user.getAvatarPath() + "'," +
+                                "avatar_server_path = '" + user.getAvatarServerPath() + "'," +
+								"avatar_local_path = '" + user.getAvatarLocalPath() + "'," +
 								"manager_id = '" + user.getDefaultManagerID() + "'," +
 								"group_id = '" + user.getGroupID() + "'," +
 								"admin = '" + Utils.booleanToInt(user.isAdmin()) + "'," +
@@ -543,7 +546,7 @@ public class DBManager extends SQLiteOpenHelper
 			{
 				if (user.getAvatarID() == localUser.getAvatarID())
 				{
-					user.setAvatarPath(localUser.getAvatarPath());
+					user.setAvatarLocalPath(localUser.getAvatarLocalPath());
 				}
 				return updateUser(user);
 			}
@@ -562,8 +565,8 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, bank_account, avatar_id, avatar_path, " +
-											  "privilege, manager_id, group_id, admin, local_updatedt, server_updatedt " +
+			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, bank_account, avatar_id, avatar_server_path, " +
+											  "avatar_local_path, privilege, manager_id, group_id, admin, local_updatedt, server_updatedt " +
 					                          "FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
 			if (cursor.moveToNext())
 			{
@@ -574,7 +577,8 @@ public class DBManager extends SQLiteOpenHelper
 				user.setNickname(getStringFromCursor(cursor, "nickname"));
                 user.setBankAccount(getStringFromCursor(cursor, "bank_account"));
 				user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
-				user.setAvatarPath(getStringFromCursor(cursor, "avatar_path"));
+                user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));
+				user.setAvatarLocalPath(getStringFromCursor(cursor, "avatar_local_path"));
 				user.setPrivilege(getIntFromCursor(cursor, "privilege"));
 				user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
 				user.setGroupID(getIntFromCursor(cursor, "group_id"));
@@ -609,7 +613,7 @@ public class DBManager extends SQLiteOpenHelper
 				{
 					if (localUser.getServerID() == user.getServerID() && localUser.getAvatarID() == user.getAvatarID())
 					{
-						user.setAvatarPath(localUser.getAvatarPath());
+						user.setAvatarLocalPath(localUser.getAvatarLocalPath());
 						break;
 					}
 				}
@@ -635,8 +639,8 @@ public class DBManager extends SQLiteOpenHelper
         {
             if (groupServerID != -1 && groupServerID != 0)
             {
-                Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, bank_account, avatar_id, avatar_path, privilege, " +
-                                                          "manager_id, group_id, admin, local_updatedt, server_updatedt " +
+                Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, bank_account, avatar_id, avatar_server_path, avatar_local_path, " +
+                                                          "privilege, manager_id, group_id, admin, local_updatedt, server_updatedt " +
                                                           "FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
                 while (cursor.moveToNext())
                 {
@@ -647,7 +651,8 @@ public class DBManager extends SQLiteOpenHelper
                     user.setNickname(getStringFromCursor(cursor, "nickname"));
                     user.setBankAccount(getStringFromCursor(cursor, "bank_account"));
                     user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
-                    user.setAvatarPath(getStringFromCursor(cursor, "avatar_path"));
+                    user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));
+                    user.setAvatarLocalPath(getStringFromCursor(cursor, "avatar_local_path"));
                     user.setPrivilege(getIntFromCursor(cursor, "privilege"));
                     user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
                     user.setGroupID(getIntFromCursor(cursor, "group_id"));
@@ -3040,15 +3045,12 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 
-	public boolean updateImageByLocalID(Image image)
+	public boolean updateImageServerID(Image image)
 	{
 		try
 		{
 			String sqlString = "UPDATE tbl_image SET " + 
-								"server_id = '" + image.getServerID() + "'," +
-                                "server_path = '" + image.getServerPath() + "'," +
-								"local_path = '" + image.getLocalPath() + "'," +
-								"item_local_id = '" + image.getItemID() + "' " +
+								"server_id = '" + image.getServerID() + "' " +
 								"WHERE id = '" + image.getLocalID() + "'";		
 			database.execSQL(sqlString);
 			return true;
@@ -3058,16 +3060,29 @@ public class DBManager extends SQLiteOpenHelper
 			return false;
 		}
 	}
+
+    public boolean updateImageLocalPath(Image image)
+    {
+        try
+        {
+            String sqlString = "UPDATE tbl_image SET " +
+                    "local_path = '" + image.getLocalPath() + "' " +
+                    "WHERE server_id = '" + image.getServerID() + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
 	
-	public boolean updateImageByServerID(Image image)
+	public boolean updateImageServerPath(Image image)
 	{
 		try
 		{
-			String sqlString = "UPDATE tbl_image SET " + 
-								"server_id = '" + image.getServerID() + "'," +
-                                "server_path = '" + image.getServerPath() + "'," +
-								"local_path = '" + image.getLocalPath() + "'," +
-								"item_local_id = '" + image.getItemID() + "' " +
+			String sqlString = "UPDATE tbl_image SET " +
+                                "server_path = '" + image.getServerPath() + "' " +
 								"WHERE server_id = '" + image.getServerID() + "'";		
 			database.execSQL(sqlString);
 			return true;
@@ -3078,14 +3093,12 @@ public class DBManager extends SQLiteOpenHelper
 		}
 	}
 	
-	public boolean updateOthersImage(Image image)
+	public boolean updateOthersImageServerPath(Image image)
 	{
 		try
 		{
 			String sqlString = "UPDATE tbl_others_image SET " +
-                                "server_path = '" + image.getServerPath() + "'," +
-								"local_path = '" + image.getLocalPath() + "'," +
-								"item_server_id = '" + image.getItemID() + "' " +
+                                "server_path = '" + image.getServerPath() + "' " +
 								"WHERE server_id = '" + image.getServerID() + "'";		
 			database.execSQL(sqlString);
 			return true;
@@ -3114,20 +3127,19 @@ public class DBManager extends SQLiteOpenHelper
 		localImages = getItemImages(itemLocalID);
 		for (Image image : images)
 		{
-			image.setItemID(itemLocalID);
 			boolean imageExists = false;
 			for (Image localImage : localImages)
 			{
 				if (localImage.equals(image))
 				{
 					imageExists = true;
-					image.setLocalPath(localImage.getLocalPath());
-					updateImageByServerID(image);
+					updateImageServerPath(image);
 					break;
 				}
 			}
 			if (!imageExists)
 			{
+                image.setItemID(itemLocalID);
 				insertImage(image);				
 			}
 		}
@@ -3151,20 +3163,19 @@ public class DBManager extends SQLiteOpenHelper
 		localImages = getOthersItemImages(itemServerID);
 		for (Image image : images)
 		{
-			image.setItemID(itemServerID);
 			boolean imageExists = false;
 			for (Image localImage : localImages)
 			{
 				if (localImage.equals(image))
 				{
 					imageExists = true;
-					image.setLocalPath(localImage.getLocalPath());
-					updateOthersImage(image);
+					updateOthersImageServerPath(image);
 					break;
 				}
 			}
 			if (!imageExists)
 			{
+                image.setItemID(itemServerID);
 				insertOthersImage(image);				
 			}
 		}

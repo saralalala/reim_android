@@ -783,7 +783,7 @@ public class EditReportActivity extends Activity
 				{
 			    	System.out.println("upload image：local id " + image.getLocalID() + " *Succeed*");
 					image.setServerID(response.getImageID());
-					dbManager.updateImageByLocalID(image);
+					dbManager.updateImageServerID(image);
 					
 					imageTaskCount--;
 					imageTaskSuccessCount--;

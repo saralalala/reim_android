@@ -237,7 +237,7 @@ public class PickCCActivity extends Activity
 				if (response.getBitmap() != null)
 				{
 					String avatarPath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
-					user.setAvatarPath(avatarPath);
+					user.setAvatarLocalPath(avatarPath);
 					user.setLocalUpdatedDate(Utils.getCurrentTime());
 					user.setServerUpdatedDate(user.getLocalUpdatedDate());
 					dbManager.updateUser(user);

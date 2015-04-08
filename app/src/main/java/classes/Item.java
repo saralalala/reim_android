@@ -2,6 +2,7 @@ package classes;
 
 import com.rushucloud.reim.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,13 +81,12 @@ public class Item
 			setTags(Tag.idStringToTagList(jObject.getString("tags")));
             setTagsID(jObject.getString("tags"));
 			setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
-			
-			List<Integer> idList = Utils.stringToIntList(jObject.getString("image_id"));
+
+            JSONArray invoiceArray = jObject.getJSONArray("images");
 			List<Image> invoiceList = new ArrayList<Image>();
-			for (Integer integer : idList)
+			for (int i = 0; i < invoiceArray.length(); i++)
 			{
-				Image image = new Image();
-				image.setServerID(integer);
+				Image image = new Image(invoiceArray.getJSONObject(i));
 				invoiceList.add(image);
 			}
 			setInvoices(invoiceList);

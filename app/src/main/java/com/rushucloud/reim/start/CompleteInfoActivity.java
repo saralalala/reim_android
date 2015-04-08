@@ -315,7 +315,7 @@ public class CompleteInfoActivity extends Activity
 				{
 					int currentTime = Utils.getCurrentTime();
 					currentUser.setAvatarID(response.getImageID());
-					currentUser.setAvatarPath(avatarPath);
+					currentUser.setAvatarLocalPath(avatarPath);
 					currentUser.setLocalUpdatedDate(currentTime);
 					currentUser.setServerUpdatedDate(currentTime);
 					dbManager.updateUser(currentUser);

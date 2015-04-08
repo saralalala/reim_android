@@ -292,10 +292,10 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (currentUser != null && !currentUser.getAvatarPath().isEmpty())
+				if (currentUser != null && !currentUser.getAvatarLocalPath().isEmpty())
 				{
 					Intent intent = new Intent(ProfileActivity.this, SingleImageActivity.class);
-					intent.putExtra("imagePath", currentUser.getAvatarPath());
+					intent.putExtra("imagePath", currentUser.getAvatarLocalPath());
 					startActivity(intent);
 				}
 				else if (currentUser != null)
@@ -428,7 +428,7 @@ public class ProfileActivity extends Activity
 					int currentTime = Utils.getCurrentTime();
 					DBManager dbManager = DBManager.getDBManager();
 					currentUser.setAvatarID(response.getImageID());
-					currentUser.setAvatarPath(avatarPath);
+					currentUser.setAvatarLocalPath(avatarPath);
 					currentUser.setLocalUpdatedDate(currentTime);
 					currentUser.setServerUpdatedDate(currentTime);
 					dbManager.updateUser(currentUser);

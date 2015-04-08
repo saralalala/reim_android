@@ -160,9 +160,9 @@ public class ViewUtils
     public static void setImageViewBitmap(User user, ImageView imageView)
     {
         imageView.setImageResource(R.drawable.default_avatar);
-        if (user != null && !user.getAvatarPath().isEmpty())
+        if (user != null && !user.getAvatarLocalPath().isEmpty())
         {
-            Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarPath());
+            Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarLocalPath());
             if (bitmap != null)
             {
                 imageView.setImageBitmap(bitmap);

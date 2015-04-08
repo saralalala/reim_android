@@ -169,7 +169,7 @@ public class InviteActivity extends Activity
 					User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
 					if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
 					{
-						currentUser.setAvatarPath(localUser.getAvatarPath());
+						currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
 					}
 					
 					dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);

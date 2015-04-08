@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.List;
 
@@ -19,6 +22,19 @@ public class Image
 	{
 		
 	}
+
+    public Image(JSONObject jObject)
+    {
+        try
+        {
+            setServerID(jObject.getInt("id"));
+            setServerPath(jObject.getString("path"));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 	
 	public int getLocalID()
 	{

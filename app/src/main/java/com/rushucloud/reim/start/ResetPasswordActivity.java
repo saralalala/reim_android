@@ -172,18 +172,9 @@ public class ResetPasswordActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							Builder builder = new Builder(ResetPasswordActivity.this);
-							builder.setTitle(R.string.tip);
-							builder.setMessage(R.string.succeed_in_changing_password);
-							builder.setNegativeButton(R.string.confirm, new OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																startActivity(new Intent(ResetPasswordActivity.this, SignInActivity.class));
-																finish();
-															}
-														});
-							builder.create().show();
+                            ViewUtils.showToast(ResetPasswordActivity.this, R.string.succeed_in_changing_password);
+                            startActivity(new Intent(ResetPasswordActivity.this, SignInActivity.class));
+                            finish();
 						}
 					});
 				}

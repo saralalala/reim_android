@@ -270,7 +270,7 @@ public class SignInActivity extends Activity
                         User localUser = dbManager.getUser(currentUser.getServerID());
                         if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
                         {
-                            currentUser.setAvatarPath(localUser.getAvatarPath());
+                            currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
                         }
 
                         dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);

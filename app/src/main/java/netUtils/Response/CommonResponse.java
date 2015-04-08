@@ -54,7 +54,7 @@ public class CommonResponse extends BaseResponse
 			currentUser.setEmail(profileObject.getString("email"));
 			currentUser.setPhone(profileObject.getString("phone"));
 			currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
-			currentUser.setAvatarPath("");
+			currentUser.setAvatarLocalPath("");
 			currentUser.setIsAdmin(Utils.intToBoolean(profileObject.getInt("admin")));
 			currentUser.setIsActive(Utils.intToBoolean(profileObject.getInt("active")));
 			currentUser.setGroupID(groupID);
