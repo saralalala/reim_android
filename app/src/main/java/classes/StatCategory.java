@@ -1,7 +1,5 @@
 package classes;
 
-import android.graphics.Color;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
