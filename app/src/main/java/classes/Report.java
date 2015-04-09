@@ -83,6 +83,7 @@ public class Report implements Serializable
 			setTitle(jObject.getString("title"));
 			setCreatedDate(jObject.getInt("createdt"));
 			setStatus(jObject.getInt("status"));
+            setType(jObject.getInt("prove_ahead"));
             setAaApproved(Utils.intToBoolean(jObject.getInt("pa_approval")));
 			setLocalUpdatedDate(jObject.getInt("lastdt"));
 			setServerUpdatedDate(jObject.getInt("lastdt"));

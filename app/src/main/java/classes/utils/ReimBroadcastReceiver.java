@@ -81,12 +81,12 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
                     try
                     {
                         int number = ReimApplication.getMineUnreadList().size() + ReimApplication.getOthersUnreadList().size() +
-                                ReimApplication.getUnreadMessagesCount();
+                                ReimApplication.getUnreadMessagesCount() + 1;
                         Class miuiNotificationClass = Class.forName("android.app.MiuiNotification");
                         Object miuiNotification = miuiNotificationClass.newInstance();
                         Field field = miuiNotification.getClass().getDeclaredField("messageCount");
                         field.setAccessible(true);
-                        field.set(miuiNotification, number);//设置信息数
+                        field.set(miuiNotification, number);
                         field = notification.getClass().getField("extraNotification");
                         field.set(notification, miuiNotification);
                     }

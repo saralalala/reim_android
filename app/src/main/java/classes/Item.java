@@ -81,6 +81,7 @@ public class Item
 			setTags(Tag.idStringToTagList(jObject.getString("tags")));
             setTagsID(jObject.getString("tags"));
 			setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
+            setRelevantUsersID(jObject.getString("relates"));
 
             JSONArray invoiceArray = jObject.getJSONArray("images");
 			List<Image> invoiceList = new ArrayList<Image>();

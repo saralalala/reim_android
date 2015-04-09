@@ -35,7 +35,10 @@ public class ApproveInfoResponse extends BaseResponse
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
 				ApproveInfo info = new ApproveInfo(jsonArray.getJSONObject(i));
-				infoList.add(info);
+                if (info.getStep() != 0)
+                {
+                    infoList.add(info);
+                }
 			}
 			
 			Collections.sort(infoList);

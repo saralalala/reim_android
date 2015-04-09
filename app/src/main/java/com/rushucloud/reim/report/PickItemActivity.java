@@ -174,17 +174,29 @@ public class PickItemActivity extends Activity implements OnClickListener
                     if (itemID > 0)
                     {
                         type = data.getIntExtra("type", Item.TYPE_REIM);
-                        if (type == Item.TYPE_REIM && budgetChosenList.isEmpty() && borrowingChosenList.isEmpty())
+                        if (type == Item.TYPE_REIM)
                         {
-                            consumedChosenList.add(itemID);
+                            tabIndex = 0;
+                            if (budgetChosenList.isEmpty() && borrowingChosenList.isEmpty())
+                            {
+                                consumedChosenList.add(itemID);
+                            }
                         }
-                        else if (type == Item.TYPE_BUDGET && consumedChosenList.isEmpty() && borrowingChosenList.isEmpty())
+                        else if (type == Item.TYPE_BUDGET)
                         {
-                            budgetChosenList.add(itemID);
+                            tabIndex = 1;
+                            if (consumedChosenList.isEmpty() && borrowingChosenList.isEmpty())
+                            {
+                                budgetChosenList.add(itemID);
+                            }
                         }
-                        else if (type == Item.TYPE_BORROWING && consumedChosenList.isEmpty() && budgetChosenList.isEmpty())
+                        else if (type == Item.TYPE_BORROWING)
                         {
-                            borrowingChosenList.add(itemID);
+                            tabIndex = 2;
+                            if (consumedChosenList.isEmpty() && budgetChosenList.isEmpty())
+                            {
+                                borrowingChosenList.add(itemID);
+                            }
                         }
                     }
                     break;

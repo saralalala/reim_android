@@ -44,6 +44,7 @@ public class ShowItemActivity extends Activity
 	
 	private DBManager dbManager;
 	private Item item;
+    private boolean myItem;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -85,6 +86,7 @@ public class ShowItemActivity extends Activity
 		int itemID = intent.getIntExtra("itemLocalID", -1);
 		if (itemID == -1)
 		{
+            myItem = false;
 			itemID = intent.getIntExtra("othersItemServerID", -1);
 			item = dbManager.getOthersItem(itemID);
 			if (item == null)
@@ -94,6 +96,7 @@ public class ShowItemActivity extends Activity
 		}
 		else
 		{
+            myItem = true;
 			item = dbManager.getItemByLocalID(itemID);
 			if (item == null)
 			{
@@ -409,7 +412,14 @@ public class ShowItemActivity extends Activity
 					if (!invoicePath.isEmpty())
 					{
 						image.setLocalPath(invoicePath);
-						dbManager.updateImageLocalPath(image);
+                        if (myItem)
+                        {
+                            dbManager.updateImageLocalPath(image);
+                        }
+                        else
+                        {
+                            dbManager.updateOthersImageLocalPath(image);
+                        }
 						
 						runOnUiThread(new Runnable()
 						{

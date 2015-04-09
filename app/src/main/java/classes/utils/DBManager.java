@@ -3092,6 +3092,22 @@ public class DBManager extends SQLiteOpenHelper
 			return false;
 		}
 	}
+
+    public boolean updateOthersImageLocalPath(Image image)
+    {
+        try
+        {
+            String sqlString = "UPDATE tbl_others_image SET " +
+                    "local_path = '" + image.getLocalPath() + "' " +
+                    "WHERE server_id = '" + image.getServerID() + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
 	
 	public boolean updateOthersImageServerPath(Image image)
 	{
