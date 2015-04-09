@@ -62,7 +62,7 @@
             android:textColor="@color/font_major_light"
             android:textColorHint="@color/hint_white"
             android:background="@null"
-            android:textCursorDrawable="@null" />
+            android:textCursorDrawable="@null"/>
 
         <include
             android:layout_width="match_parent"

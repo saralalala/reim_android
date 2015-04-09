@@ -95,7 +95,8 @@
             android:layout_marginRight="16dp"
             android:background="@null"
             android:hint="@string/input_member"
-            android:inputType="text" />
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
 
     </LinearLayout>
 

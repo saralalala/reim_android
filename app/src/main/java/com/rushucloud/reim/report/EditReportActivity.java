@@ -656,6 +656,11 @@ public class EditReportActivity extends Activity
 
     private boolean saveReport()
     {
+        Report localReport = dbManager.getReportByLocalID(report.getLocalID());
+        if (localReport != null)
+        {
+            report.setServerID(localReport.getServerID());
+        }
         report.setTitle(titleEditText.getText().toString());
     	report.setLocalUpdatedDate(Utils.getCurrentTime());
 		if (report.getLocalID() == -1)
@@ -752,7 +757,7 @@ public class EditReportActivity extends Activity
 		{
 			report.setStatus(Report.STATUS_SUBMITTED);
 		}
-		
+
 		if (report.canBeSubmitted())
 		{
 			if (report.getServerID() == -1)

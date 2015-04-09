@@ -14,8 +14,8 @@ public class EventsResponse extends BaseResponse
 {
     private List<Integer> mineUnreadList;
     private List<Integer> othersUnreadList;
+    private int unreadMessagesCount;
     private boolean hasUnreadReports;
-    private boolean hasMessages;
 	private boolean needToRefresh;
 	
 	public EventsResponse(Object httpResponse)
@@ -52,8 +52,8 @@ public class EventsResponse extends BaseResponse
                 }
             }
 
+            unreadMessagesCount = invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length();
             hasUnreadReports = reportsArray.length() > 0;
-            hasMessages = invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length() > 0;
 			needToRefresh = (membersArray.length() + managersArray.length()) > 0;
 		}
 		catch (JSONException e)
@@ -72,14 +72,14 @@ public class EventsResponse extends BaseResponse
         return othersUnreadList;
     }
 
+    public int getUnreadMessagesCount()
+    {
+        return unreadMessagesCount;
+    }
+
     public boolean hasUnreadReports()
     {
         return hasUnreadReports;
-    }
-
-    public boolean hasMessages()
-    {
-        return hasMessages;
     }
 
 	public boolean needToRefresh()

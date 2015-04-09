@@ -71,12 +71,13 @@
             android:id="@+id/managerEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:gravity="center_vertical"
             android:background="@null"
             android:hint="@string/input_default_manager"
-            android:inputType="text" />
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
 
     </LinearLayout>
 

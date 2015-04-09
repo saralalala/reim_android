@@ -13,17 +13,21 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 
 import com.rushucloud.reim.R;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.Properties;
 
 import netUtils.NetworkConstant;
 
@@ -232,4 +236,42 @@ public class PhoneUtils
 			return false;
 		}
 	}
+
+    public static boolean isMIUIV6()
+    {
+        return Build.MANUFACTURER.equals("Xiaomi") && getSystemProperty("ro.miui.ui.version.name").equals("V6");
+    }
+
+    public static String getSystemProperty(String propName)
+    {
+        String line = "";
+        BufferedReader input = null;
+        try
+        {
+            Process process = Runtime.getRuntime().exec("getprop " + propName);
+            input = new BufferedReader(new InputStreamReader(process.getInputStream()), 1024);
+            line = input.readLine();
+            input.close();
+        }
+        catch (IOException ex)
+        {
+            System.out.println("Unable to read sysprop " + propName);
+            return line;
+        }
+        finally
+        {
+            if(input != null)
+            {
+                try
+                {
+                    input.close();
+                }
+                catch (IOException e)
+                {
+                    System.out.println("Exception while closing InputStream");
+                }
+            }
+        }
+        return line;
+    }
 }

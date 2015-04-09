@@ -42,7 +42,7 @@
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:hint="@string/input_username"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:textColor="@color/font_major_light"
             android:textColorHint="@color/hint_white"
             android:textSize="18sp"

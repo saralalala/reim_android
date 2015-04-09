@@ -270,7 +270,6 @@ public class ProfileActivity extends Activity
 			public void onClick(View v)
 			{
 				startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
-				overridePendingTransition(R.anim.window_horizontal_in, 0);
 			}
 		});
 	}

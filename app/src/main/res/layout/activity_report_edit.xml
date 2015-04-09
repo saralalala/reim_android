@@ -84,7 +84,7 @@
 			            android:inputType="textMultiLine"			            
 			            android:hint="@string/input_report_title"
 			            android:textColor="@color/font_major_dark"
-			            android:textSize="20sp" />
+			            android:textSize="20sp"/>
 			
 			        <TextView
 			            android:id="@+id/statusTextView"
@@ -95,7 +95,7 @@
 			            android:paddingLeft="3dp"
 			            android:paddingRight="3dp"
 			            android:gravity="center"
-			            android:textColor="@color/major_light" />
+			            android:textColor="@color/major_light"/>
 			
 			    </LinearLayout>
 

@@ -73,8 +73,8 @@
 		            android:layout_marginRight="16dp"
 		            android:background="@null"
 		            android:hint="@string/input_company_name"
-		            android:textSize="14sp"
-		            android:textColor="@color/font_major_dark" />
+                    android:textColor="@color/font_major_dark"
+                    android:textSize="16sp"/>
 		        
 		    </RelativeLayout>
 		

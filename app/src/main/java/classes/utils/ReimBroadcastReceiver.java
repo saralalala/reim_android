@@ -18,6 +18,8 @@ import com.rushucloud.reim.report.ShowReportActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
+
 import classes.Invite;
 import classes.Message;
 import classes.Report;
@@ -74,6 +76,26 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				
 				notification.setLatestEventInfo(context, context.getString(R.string.app_name), message, pendingIntent);
 
+                if (PhoneUtils.isMIUIV6())
+                {
+                    try
+                    {
+                        int number = ReimApplication.getMineUnreadList().size() + ReimApplication.getOthersUnreadList().size() +
+                                ReimApplication.getUnreadMessagesCount();
+                        Class miuiNotificationClass = Class.forName("android.app.MiuiNotification");
+                        Object miuiNotification = miuiNotificationClass.newInstance();
+                        Field field = miuiNotification.getClass().getDeclaredField("messageCount");
+                        field.setAccessible(true);
+                        field.set(miuiNotification, number);//设置信息数
+                        field = notification.getClass().getField("extraNotification");
+                        field.set(notification, miuiNotification);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+
 				if (manager == null)
 				{
 					manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -102,7 +124,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					bundle.putBoolean("myReport", myReport);
 
 					Intent newIntent = new Intent();
-					int pushType = judgeReportType(jObject);
+					int pushType = classifyReportType(jObject);
 					if (pushType == REPORT_MINE_REJECTED || pushType == REPORT_MINE_REJECTED_WITH_COMMENT)
 					{
 						if (pushType == REPORT_MINE_REJECTED_WITH_COMMENT)
@@ -188,7 +210,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 		}
 	}
 	
-	private int judgeReportType(JSONObject jObject)
+	private int classifyReportType(JSONObject jObject)
 	{
 		try
 		{

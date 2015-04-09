@@ -162,7 +162,7 @@ public class MeFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-                ReimApplication.setHasMessages(false);
+                ReimApplication.setUnreadMessagesCount(0);
 				startActivity(new Intent(getActivity(), MessageListActivity.class));
 			}
 		});
@@ -331,7 +331,7 @@ public class MeFragment extends Fragment
         }
         else
         {
-            int visibility = ReimApplication.hasMessages()? View.VISIBLE : View.GONE;
+            int visibility = ReimApplication.getUnreadMessagesCount() > 0? View.VISIBLE : View.GONE;
             tipImageView.setVisibility(visibility);
         }
     }

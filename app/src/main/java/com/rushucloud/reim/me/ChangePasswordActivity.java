@@ -76,7 +76,15 @@ public class ChangePasswordActivity extends Activity
 		
 		oldPasswordEditText = (EditText) findViewById(R.id.oldPasswordEditText);
 		oldPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		
+        oldPasswordEditText.postDelayed(new Runnable()
+        {
+            public void run()
+            {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(oldPasswordEditText, 0);
+            }
+        }, 200);
+
 		newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
 		newPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		

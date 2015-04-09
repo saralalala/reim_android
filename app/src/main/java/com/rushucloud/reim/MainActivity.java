@@ -418,9 +418,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 						{
 							ReimApplication.setMineUnreadList(response.getMineUnreadList());
                             ReimApplication.setOthersUnreadList(response.getOthersUnreadList());
-                            ReimApplication.setHasMessages(response.hasMessages());
+                            ReimApplication.setUnreadMessagesCount(response.getUnreadMessagesCount());
 							showReportTip(response.hasUnreadReports());
-							showMeTip(response.hasMessages());
+							showMeTip(response.getUnreadMessagesCount() > 0);
                             if (viewPager.getCurrentItem() == 3)
                             {
                                 MeFragment fragment = (MeFragment) fragmentList.get(3);

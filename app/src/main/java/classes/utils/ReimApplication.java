@@ -36,8 +36,7 @@ public class ReimApplication extends Application
     private static int statTabIndex = 0;
     private static List<Integer> mineUnreadList = new ArrayList<Integer>();
     private static List<Integer> othersUnreadList = new ArrayList<Integer>();
-
-    private static boolean hasMessages = false;
+    private static int unreadMessagesCount;
 	
 	public void onCreate()
 	{
@@ -101,13 +100,13 @@ public class ReimApplication extends Application
         ReimApplication.othersUnreadList = othersUnreadList;
     }
 
-    public static boolean hasMessages()
+    public static int getUnreadMessagesCount()
     {
-        return hasMessages;
+        return unreadMessagesCount;
     }
-    public static void setHasMessages(boolean hasMessages)
+    public static void setUnreadMessagesCount(int unreadMessagesCount)
     {
-        ReimApplication.hasMessages = hasMessages;
+        ReimApplication.unreadMessagesCount = unreadMessagesCount;
     }
 
 	public static String getDeviceInfo(Context context)

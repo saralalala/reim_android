@@ -1276,6 +1276,11 @@ public class EditItemActivity extends Activity
 
     private void saveItem()
     {
+        Item localItem = dbManager.getItemByLocalID(item.getLocalID());
+        if (localItem != null)
+        {
+            item.setServerID(localItem.getServerID());
+        }
         dbManager.syncItem(item);
         ReimApplication.setTabIndex(0);
         ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
