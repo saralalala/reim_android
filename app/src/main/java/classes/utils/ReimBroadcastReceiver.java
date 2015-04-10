@@ -46,7 +46,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 	public static final int REPORT_OTHERS_APPROVED_ONLY_COMMENT = 11;
 	
 	private static NotificationManager manager = null;
-	private static int messageNumber = 0;
+	private static int notificationID = 0;
 	
 	@SuppressWarnings("deprecation")
 	public void onReceive(Context context, Intent intent)
@@ -56,7 +56,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 			String action = intent.getAction();
 			if (action.equals("com.avos.UPDATE_STATUS"))
 			{
-				messageNumber++;
+				notificationID++;
 				JSONObject jObject = new JSONObject(intent.getExtras().getString("com.avos.avoscloud.Data"));
 				int type = jObject.getInt("type");
 				String message = jObject.getString("msg");
@@ -71,7 +71,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				notification.tickerText = message;
 				notification.defaults = Notification.DEFAULT_ALL;
 				notification.flags |= Notification.FLAG_AUTO_CANCEL;
-				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent,
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent,
 																PendingIntent.FLAG_UPDATE_CURRENT);
 				
 				notification.setLatestEventInfo(context, context.getString(R.string.app_name), message, pendingIntent);
@@ -100,7 +100,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				{
 					manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 				}
-				manager.notify(messageNumber, notification);
+				manager.notify(notificationID, notification);
 			}
 			else if (action.equals("com.rushucloud.reim.NOTIFICATION_CLICKED"))
 			{

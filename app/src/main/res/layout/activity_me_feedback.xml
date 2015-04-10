@@ -80,7 +80,7 @@
         android:layout_height="50dp"
         android:background="@color/major_light" >
 
-        <EditText
+        <classes.widget.ClearEditText
             android:id="@+id/contactEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

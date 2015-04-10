@@ -242,8 +242,8 @@
     <string name="input_comment">请输入评论</string>
     <string name="input_nickname">请输入昵称</string>
     <string name="input_company_name">请输入公司名称</string>
-    <string name="input_feedback">请输入您的意见或建议</string>
-    <string name="input_contact_info">请输入您的联系方式</string>
+    <string name="input_feedback">请输入你的意见或建议</string>
+    <string name="input_contact_info">请输入你的联系方式</string>
     <string name="input_category_name">请输入类别名称</string>
     <string name="input_category_limit">请输入类别限额</string>
     <string name="input_tag_name">请输入标签名称</string>

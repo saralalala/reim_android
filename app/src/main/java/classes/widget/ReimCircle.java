@@ -24,11 +24,11 @@ public class ReimCircle extends View
         paint.setStyle(Style.STROKE);
         paint.setAntiAlias(true);
         paint.setDither(true);
-        paint.setStrokeWidth(ViewUtils.dpToPixel(getResources(), circleWidth));
+        paint.setStrokeWidth(ViewUtils.dpToPixel(circleWidth));
 
         cx = diameter / 2;
         cy = diameter / 2;
-        radius = diameter / 2 - ViewUtils.dpToPixel(getResources(), offset + circleWidth / 2);
+        radius = diameter / 2 - ViewUtils.dpToPixel(offset + circleWidth / 2);
     }
 
 	public ReimCircle(Context context, AttributeSet attrs)

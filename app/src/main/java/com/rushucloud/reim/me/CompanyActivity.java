@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,16 +21,19 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
+import netUtils.request.CommonRequest;
 import netUtils.request.group.CreateGroupRequest;
 import netUtils.request.group.ModifyGroupRequest;
+import netUtils.response.CommonResponse;
 import netUtils.response.group.CreateGroupResponse;
 import netUtils.response.group.ModifyGroupResponse;
 
 public class CompanyActivity extends Activity
 {
-	private EditText companyEditText;
+	private ClearEditText companyEditText;
 
     private AppPreference appPreference;
     private DBManager dbManager;
@@ -127,8 +129,7 @@ public class CompanyActivity extends Activity
 			}
 		});
 		
-		companyEditText = (EditText) findViewById(R.id.companyEditText);
-		companyEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		companyEditText = (ClearEditText) findViewById(R.id.companyEditText);
         if (currentGroup != null)
         {
             companyEditText.setText(currentGroup.getName());
@@ -168,15 +169,7 @@ public class CompanyActivity extends Activity
                     appPreference.setCurrentGroupID(group.getServerID());
                     appPreference.saveAppPreference();
 
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(CompanyActivity.this, R.string.succeed_in_creating_company);
-                            finish();
-                        }
-                    });
+                    sendCommonRequest();
                 }
                 else
                 {
@@ -231,7 +224,72 @@ public class CompanyActivity extends Activity
 		});
 	}
 
-	private void hideSoftKeyboard()
+    private void sendCommonRequest()
+    {
+        CommonRequest request = new CommonRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final CommonResponse response = new CommonResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = response.getGroup().getServerID();
+
+                    // update AppPreference
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    appPreference.setCurrentGroupID(currentGroupID);
+                    appPreference.saveAppPreference();
+
+                    // update members
+                    DBManager dbManager = DBManager.getDBManager();
+                    User currentUser = response.getCurrentUser();
+                    User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+                    if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+                    {
+                        currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
+                    }
+
+                    dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+                    dbManager.syncUser(currentUser);
+
+                    // update categories
+                    dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+
+                    // update tags
+                    dbManager.updateGroupTags(response.getTagList(), currentGroupID);
+
+                    // update group info
+                    dbManager.syncGroup(response.getGroup());
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(CompanyActivity.this, R.string.succeed_in_creating_company);
+                            finish();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(CompanyActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            finish();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void hideSoftKeyboard()
 	{
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);

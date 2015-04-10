@@ -11,7 +11,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +25,7 @@ import classes.Vendor;
 import classes.adapter.VendorListViewAdapter;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.DownloadImageRequest;
@@ -38,7 +38,7 @@ public class PickVendorActivity extends Activity
     private static final int INPUT_VENDOR = 0;
 
 	private VendorListViewAdapter vendorAdapter;
-	private EditText vendorEditText;
+	private ClearEditText vendorEditText;
 	
 	private String category;
     private String location;
@@ -142,8 +142,7 @@ public class PickVendorActivity extends Activity
 			}
 		});
 		
-		vendorEditText = (EditText) findViewById(R.id.vendorEditText);
-		vendorEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		vendorEditText = (ClearEditText) findViewById(R.id.vendorEditText);
         vendorEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)

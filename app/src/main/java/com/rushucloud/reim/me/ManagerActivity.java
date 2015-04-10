@@ -12,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +29,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
@@ -43,7 +43,7 @@ import netUtils.response.user.DefaultManagerResponse;
 public class ManagerActivity extends Activity
 {
     private TextView noMemberTextView;
-    private EditText managerEditText;
+    private ClearEditText managerEditText;
     private ImageView avatarImageView;
     private TextView nicknameTextView;
 	private ListView managerListView;
@@ -164,7 +164,7 @@ public class ManagerActivity extends Activity
 
         noMemberTextView = (TextView) findViewById(R.id.noMemberTextView);
 
-        managerEditText = (EditText) findViewById(R.id.managerEditText);
+        managerEditText = (ClearEditText) findViewById(R.id.managerEditText);
         managerEditText.addTextChangedListener(new TextWatcher()
         {
             public void beforeTextChanged(CharSequence s, int start, int count, int after)
@@ -174,7 +174,10 @@ public class ManagerActivity extends Activity
 
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-
+                if (managerEditText.hasFocus())
+                {
+                    managerEditText.setClearIconVisible(s.length() > 0);
+                }
             }
 
             public void afterTextChanged(Editable s)

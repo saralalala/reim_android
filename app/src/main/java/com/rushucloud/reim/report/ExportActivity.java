@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import classes.utils.AppPreference;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.report.ExportReportRequest;
@@ -29,7 +29,7 @@ import netUtils.response.report.ExportReportResponse;
 
 public class ExportActivity extends Activity
 {
-	private EditText emailEditText;
+	private ClearEditText emailEditText;
 
 	private User currentUser;
     private Report report;
@@ -115,8 +115,7 @@ public class ExportActivity extends Activity
 			}
 		});
 		
-		emailEditText = (EditText) findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		emailEditText = (ClearEditText) findViewById(R.id.emailEditText);
     	emailEditText.setText(currentUser.getEmail());
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);

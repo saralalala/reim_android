@@ -2,7 +2,6 @@ package classes.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -34,7 +33,7 @@ public class ViewUtils
         {
             if (v instanceof EditText && hasFocus)
             {
-                Spannable spanText = ((EditText)v).getText();
+                Spannable spanText = ((EditText) v).getText();
                 Selection.setSelection(spanText, spanText.length());
             }
         }
@@ -65,11 +64,11 @@ public class ViewUtils
     	Toast.makeText(context, context.getString(resID) + "，" + errorMessage, Toast.LENGTH_SHORT).show();
     }
     
-	public static PopupWindow buildTopPopupWindow(final Activity activity, View view)
+	public static PopupWindow buildTopPopupWindow(final Context context, View view)
 	{
-		int backgroundColor = activity.getResources().getColor(android.R.color.transparent);
+		int backgroundColor = ViewUtils.getColor(android.R.color.transparent);
 		
-		PopupWindow popupWindow = new PopupWindow(activity);
+		PopupWindow popupWindow = new PopupWindow(context);
 		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
 		popupWindow.setHeight(LayoutParams.MATCH_PARENT);
 		popupWindow.setContentView(view);
@@ -81,12 +80,12 @@ public class ViewUtils
 		return popupWindow;
 	}
     
-	public static PopupWindow buildCenterPopupWindow(final Activity activity, View view)
+	public static PopupWindow buildCenterPopupWindow(final Context context, View view)
 	{
-		int backgroundColor = activity.getResources().getColor(android.R.color.transparent);
+		int backgroundColor = ViewUtils.getColor(android.R.color.transparent);
 		
-		PopupWindow popupWindow = new PopupWindow(activity);
-        popupWindow.setWidth(getPhoneWindowWidth(activity) - dpToPixel(activity, 70));
+		PopupWindow popupWindow = new PopupWindow(context);
+        popupWindow.setWidth(getPhoneWindowWidth(context) - dpToPixel(70));
 		popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
 		popupWindow.setContentView(view);
 		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
@@ -99,7 +98,7 @@ public class ViewUtils
 	
 	public static PopupWindow buildBottomPopupWindow(final Activity activity, View view)
 	{
-		int backgroundColor = activity.getResources().getColor(android.R.color.transparent);
+		int backgroundColor = ViewUtils.getColor(android.R.color.transparent);
 		
 		PopupWindow popupWindow = new PopupWindow(activity);
 		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
@@ -122,10 +121,10 @@ public class ViewUtils
 
     public static PopupWindow buildSurprisePopupWindow(final Activity activity, View view)
     {
-        int backgroundColor = activity.getResources().getColor(android.R.color.transparent);
+        int backgroundColor = ViewUtils.getColor(android.R.color.transparent);
 
         PopupWindow popupWindow = new PopupWindow(activity);
-        popupWindow.setWidth(getPhoneWindowWidth(activity) - dpToPixel(activity, 100));
+        popupWindow.setWidth(getPhoneWindowWidth(activity) - dpToPixel(100));
         popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
         popupWindow.setContentView(view);
         popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
@@ -202,21 +201,9 @@ public class ViewUtils
         return metrics.widthPixels;
     }
 
-    public static int dpToPixel(Context context, int dp)
+    public static int dpToPixel(double dp)
     {
-    	DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
-    }
-
-    public static int dpToPixel(Resources resources, int dp)
-    {
-    	DisplayMetrics metrics = resources.getDisplayMetrics();
-    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
-    }
-
-    public static int dpToPixel(Resources resources, double dp)
-    {
-    	DisplayMetrics metrics = resources.getDisplayMetrics();
+    	DisplayMetrics metrics = ReimApplication.getContext().getResources().getDisplayMetrics();
     	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, metrics);
     }
 }

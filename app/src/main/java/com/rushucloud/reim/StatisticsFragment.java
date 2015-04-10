@@ -572,7 +572,7 @@ public class StatisticsFragment extends Fragment
 
         float startAngle = -90;
 
-        int legendWidth = ViewUtils.dpToPixel(getActivity(), 10);
+        int legendWidth = ViewUtils.dpToPixel(10);
         int count = 0;
         for (int i = 0; i < categoryArray.size(); i++)
         {

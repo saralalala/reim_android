@@ -31,7 +31,7 @@ public class SegmentedGroup extends RadioGroup
 		super(context);
 		resources = getResources();
 		mTintColor = resources.getColor(R.color.radio_button_selected_color);
-		borderWidth = ViewUtils.dpToPixel(resources, 1.5);
+		borderWidth = ViewUtils.dpToPixel(1.5);
 		textSize = 14;
 	}
 
@@ -40,7 +40,7 @@ public class SegmentedGroup extends RadioGroup
 		super(context, attrs);
 		resources = getResources();
 		mTintColor = resources.getColor(R.color.radio_button_selected_color);
-		borderWidth = ViewUtils.dpToPixel(resources, 1.5);
+		borderWidth = ViewUtils.dpToPixel(1.5);
 		textSize = 14;
 	}
 

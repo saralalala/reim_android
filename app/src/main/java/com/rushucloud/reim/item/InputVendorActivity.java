@@ -9,7 +9,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,11 +16,11 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 
 public class InputVendorActivity extends Activity
 {
-	private EditText vendorEditText;
+	private ClearEditText vendorEditText;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -84,8 +83,7 @@ public class InputVendorActivity extends Activity
 			}
 		});
 		
-		vendorEditText = (EditText) findViewById(R.id.vendorEditText);
-		vendorEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		vendorEditText = (ClearEditText) findViewById(R.id.vendorEditText);
         vendorEditText.postDelayed(new Runnable()
         {
             public void run()

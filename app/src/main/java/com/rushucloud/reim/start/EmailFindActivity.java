@@ -9,7 +9,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -19,6 +18,7 @@ import com.umeng.analytics.MobclickAgent;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.ForgotPasswordRequest;
@@ -26,7 +26,7 @@ import netUtils.response.user.ForgotPasswordResponse;
 
 public class EmailFindActivity extends Activity
 {	
-	private EditText emailEditText;
+	private ClearEditText emailEditText;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -74,8 +74,7 @@ public class EmailFindActivity extends Activity
 			}
 		});
     	
-    	emailEditText = (EditText) findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+    	emailEditText = (ClearEditText) findViewById(R.id.emailEditText);
         emailEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)

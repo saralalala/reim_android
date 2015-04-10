@@ -29,7 +29,7 @@ public class ReimPie extends View
         startAngle = start;
         occupyAngle = angle;
 
-        int pieOffset = ViewUtils.dpToPixel(getResources(), offset);
+        int pieOffset = ViewUtils.dpToPixel(offset);
 
         pieRect.left = pieOffset;
         pieRect.top = pieOffset;

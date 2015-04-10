@@ -39,7 +39,7 @@ public class GalleryAdapter extends BaseAdapter
 		this.imageLoader = imageLoader;
 		this.layoutInflater = LayoutInflater.from(context);
 		this.maxChosenCount = maxCount;
-		this.height = (ViewUtils.getPhoneWindowWidth(context) - ViewUtils.dpToPixel(context, 2) * 4) / 3;
+		this.height = (ViewUtils.getPhoneWindowWidth(context) - ViewUtils.dpToPixel(2) * 4) / 3;
 		this.callBack = callBack;
 	}
 

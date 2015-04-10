@@ -115,7 +115,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
             ApproveInfo nextInfo = infoList.get(position + 1);
             int margin = info.getStep() != nextInfo.getStep()? 0 : 64;
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) divider.getLayoutParams();
-            params.setMargins(ViewUtils.dpToPixel(activity, margin), 0, 0, 0);
+            params.setMargins(ViewUtils.dpToPixel(margin), 0, 0, 0);
         }
 
 		nicknameTextView.setText(R.string.not_available);	

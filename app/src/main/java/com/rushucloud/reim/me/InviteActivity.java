@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -22,6 +21,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.CommonRequest;
@@ -31,12 +31,12 @@ import netUtils.response.user.InviteResponse;
 
 public class InviteActivity extends Activity
 {	
-	private EditText usernameEditText;
+	private ClearEditText usernameEditText;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_send_invite);
+		setContentView(R.layout.activity_me_invite);
 		initView();
 	}
 
@@ -77,8 +77,16 @@ public class InviteActivity extends Activity
 			}
 		});
 		
-		usernameEditText = (EditText) findViewById(R.id.usernameEditText);
-		usernameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		usernameEditText = (ClearEditText) findViewById(R.id.usernameEditText);
+        usernameEditText.requestFocus();
+        usernameEditText.postDelayed(new Runnable()
+        {
+            public void run()
+            {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(usernameEditText, 0);
+            }
+        }, 200);
 
         Button inviteButton = (Button) findViewById(R.id.inviteButton);
         inviteButton.setOnClickListener(new OnClickListener()

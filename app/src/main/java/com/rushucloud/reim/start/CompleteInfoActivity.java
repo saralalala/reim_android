@@ -14,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -30,6 +29,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
@@ -48,7 +48,7 @@ public class CompleteInfoActivity extends Activity
 	private DBManager dbManager;
 
 	private ImageView avatarImageView;
-	private EditText nicknameEditText;
+	private ClearEditText nicknameEditText;
 	private PopupWindow picturePopupWindow;
 
 	private User currentUser;
@@ -161,8 +161,7 @@ public class CompleteInfoActivity extends Activity
 			}
 		});
 		
-		nicknameEditText = (EditText) findViewById(R.id.nicknameEditText);
-		nicknameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		nicknameEditText = (ClearEditText) findViewById(R.id.nicknameEditText);
         nicknameEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)

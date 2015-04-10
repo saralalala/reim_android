@@ -50,7 +50,7 @@
             android:contentDescription="@string/app_name"
             android:src="@drawable/info_avatar" />
 
-        <EditText
+        <classes.widget.ClearEditText
             android:id="@+id/nicknameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,6 +59,7 @@
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:hint="@string/input_nickname"
+            android:drawableRight="@drawable/delete_start_drawable"
             android:textColor="@color/font_major_light"
             android:textColorHint="@color/hint_white"
             android:background="@null"

@@ -326,7 +326,7 @@ public class StatisticsActivity extends Activity
 
             float startAngle = -90;
 
-            int legendWidth = ViewUtils.dpToPixel(this, 10);
+            int legendWidth = ViewUtils.dpToPixel(10);
             int count = 0;
             for (int i = 0; i < categoryArray.size(); i++)
             {

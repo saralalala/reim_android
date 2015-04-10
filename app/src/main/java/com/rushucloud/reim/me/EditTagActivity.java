@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +16,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.tag.CreateTagRequest;
@@ -26,7 +26,7 @@ import netUtils.response.tag.ModifyTagResponse;
 
 public class EditTagActivity extends Activity
 {
-	private EditText nameEditText;
+	private ClearEditText nameEditText;
 
 	private DBManager dbManager;
 	private Tag tag;
@@ -113,8 +113,7 @@ public class EditTagActivity extends Activity
 			}
 		});
 		
-		nameEditText = (EditText) findViewById(R.id.nameEditText);
-		nameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		nameEditText = (ClearEditText) findViewById(R.id.nameEditText);
 		nameEditText.setText(tag.getName());
 	}
 	

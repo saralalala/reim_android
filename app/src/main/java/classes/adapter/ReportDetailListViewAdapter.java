@@ -106,7 +106,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
             managerLayout.setVisibility(View.VISIBLE);
             ccLayout.setVisibility(View.VISIBLE);
 
-            if (report.getStatus() == Report.STATUS_SUBMITTED || report.getStatus() == Report.STATUS_REJECTED)
+            if (report.getStatus() == Report.STATUS_SUBMITTED)
             {
                 managerTextView.setText(report.getManagersName());
                 if (report.getCCList() == null || report.getCCList().isEmpty())

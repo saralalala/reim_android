@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.ModifyUserRequest;
@@ -29,7 +29,7 @@ import netUtils.response.user.ModifyUserResponse;
 
 public class PhoneActivity extends Activity
 {
-	private EditText phoneEditText;
+	private ClearEditText phoneEditText;
 
 	private User currentUser;
     private String originalPhone;
@@ -121,8 +121,7 @@ public class PhoneActivity extends Activity
 			}
 		});
 		
-		phoneEditText = (EditText) findViewById(R.id.phoneEditText);
-		phoneEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
 		phoneEditText.setText(currentUser.getPhone());
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);

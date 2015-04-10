@@ -227,10 +227,10 @@ public class ShowItemActivity extends Activity
 	{
 		invoiceLayout.removeAllViews();
 
-		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 96);
-		int sideLength = ViewUtils.dpToPixel(getResources(), 30);
-		int verticalPadding = ViewUtils.dpToPixel(getResources(), 10);
-		int horizontalPadding = ViewUtils.dpToPixel(getResources(), 10);
+		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(96);
+		int sideLength = ViewUtils.dpToPixel(30);
+		int verticalPadding = ViewUtils.dpToPixel(10);
+		int horizontalPadding = ViewUtils.dpToPixel(10);
 		int maxCount = (layoutMaxLength + horizontalPadding) / (sideLength + horizontalPadding);
 		horizontalPadding = (layoutMaxLength - sideLength * maxCount) / (maxCount - 1);
 
@@ -304,11 +304,11 @@ public class ShowItemActivity extends Activity
 	{
 		tagLayout.removeAllViews();
 
-		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 96);
-		int verticalPadding = ViewUtils.dpToPixel(getResources(), 17);
-		int horizontalPadding = ViewUtils.dpToPixel(getResources(), 10);
-		int padding = ViewUtils.dpToPixel(getResources(), 24);
-		int textSize = ViewUtils.dpToPixel(getResources(), 16);
+		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(96);
+		int verticalPadding = ViewUtils.dpToPixel(17);
+		int horizontalPadding = ViewUtils.dpToPixel(10);
+		int padding = ViewUtils.dpToPixel(24);
+		int textSize = ViewUtils.dpToPixel(16);
 
 		int space = 0;
 		LinearLayout layout = new LinearLayout(this);
@@ -356,10 +356,10 @@ public class ShowItemActivity extends Activity
 	{
 		memberLayout.removeAllViews();
 
-		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(getResources(), 96);
-		int width = ViewUtils.dpToPixel(getResources(), 50);
-		int verticalPadding = ViewUtils.dpToPixel(getResources(), 18);
-		int horizontalPadding = ViewUtils.dpToPixel(getResources(), 18);
+		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(96);
+		int width = ViewUtils.dpToPixel(50);
+		int verticalPadding = ViewUtils.dpToPixel(18);
+		int horizontalPadding = ViewUtils.dpToPixel(18);
 		int maxCount = (layoutMaxLength + horizontalPadding) / (width + horizontalPadding);
 		horizontalPadding = (layoutMaxLength - width * maxCount) / (maxCount - 1);
 

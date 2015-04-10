@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.method.PasswordTransformationMethod;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -27,6 +27,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.SignInRequest;
@@ -34,8 +35,8 @@ import netUtils.response.user.SignInResponse;
 
 public class SignInActivity extends Activity
 {
-	private EditText usernameEditText;
-	private EditText passwordEditText;
+	private ClearEditText usernameEditText;
+	private ClearEditText passwordEditText;
 	private PopupWindow forgotPopupWindow;
 
 	protected void onCreate(Bundle savedInstanceState)
@@ -87,11 +88,10 @@ public class SignInActivity extends Activity
 		String username = getIntent().getStringExtra("username");
 		String password = getIntent().getStringExtra("password");
 		
-		usernameEditText = (EditText) findViewById(R.id.usernameEditText);
-		usernameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		usernameEditText = (ClearEditText) findViewById(R.id.usernameEditText);
 		
-		passwordEditText = (EditText) findViewById(R.id.passwordEditText);
-		passwordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
+        passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
         passwordEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)

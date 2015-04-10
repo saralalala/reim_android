@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -18,6 +18,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.ResetPasswordRequest;
@@ -25,8 +26,8 @@ import netUtils.response.user.ResetPasswordResponse;
 
 public class ResetPasswordActivity extends Activity
 {
-	private EditText newPasswordEditText;
-	private EditText confirmPasswordEditText;
+	private ClearEditText newPasswordEditText;
+	private ClearEditText confirmPasswordEditText;
 	
 	private int cid;
 	private String code;
@@ -85,11 +86,11 @@ public class ResetPasswordActivity extends Activity
 			}
 		});
 		
-		newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
-		newPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		newPasswordEditText = (ClearEditText) findViewById(R.id.newPasswordEditText);
+        newPasswordEditText.setTransformationMethod(new PasswordTransformationMethod());
     	
-		confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		confirmPasswordEditText = (ClearEditText) findViewById(R.id.confirmPasswordEditText);
+        confirmPasswordEditText.setTransformationMethod(new PasswordTransformationMethod());
         confirmPasswordEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)

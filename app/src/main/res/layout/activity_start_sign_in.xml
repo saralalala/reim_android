@@ -32,7 +32,7 @@
             android:contentDescription="@string/app_name"
             android:src="@drawable/start_icon" />
 
-        <EditText
+        <classes.widget.ClearEditText
             android:id="@+id/usernameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,6 +43,7 @@
             android:paddingBottom="12dp"
             android:hint="@string/input_username"
             android:inputType="textEmailAddress"
+            android:drawableRight="@drawable/delete_start_drawable"
             android:textColor="@color/font_major_light"
             android:textColorHint="@color/hint_white"
             android:textSize="18sp"
@@ -56,7 +57,7 @@
             android:layout_marginRight="10dp"
             layout="@layout/view_start_divider"/>
 
-        <EditText
+        <classes.widget.ClearEditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +66,7 @@
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:hint="@string/input_password"
-            android:inputType="textPassword"
+            android:drawableRight="@drawable/delete_start_drawable"
             android:textColor="@color/font_major_light"
             android:textColorHint="@color/hint_white"
             android:background="@null"

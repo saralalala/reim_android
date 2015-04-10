@@ -19,6 +19,7 @@ import com.umeng.analytics.MobclickAgent;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.ForgotPasswordRequest;
@@ -26,7 +27,7 @@ import netUtils.response.user.ForgotPasswordResponse;
 
 public class PhoneFindActivity extends Activity
 {	
-	private EditText phoneEditText;
+	private ClearEditText phoneEditText;
 	private EditText codeEditText;
 	private Button acquireCodeButton;
 	
@@ -81,8 +82,7 @@ public class PhoneFindActivity extends Activity
 			}
 		});
     	
-		phoneEditText = (EditText) findViewById(R.id.phoneEditText);
-		phoneEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
 		
     	codeEditText = (EditText) findViewById(R.id.codeEditText);
     	codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);

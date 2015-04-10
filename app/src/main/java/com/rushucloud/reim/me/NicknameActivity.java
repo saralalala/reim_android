@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +20,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.ModifyUserRequest;
@@ -28,7 +28,7 @@ import netUtils.response.user.ModifyUserResponse;
 
 public class NicknameActivity extends Activity
 {
-	private EditText nicknameEditText;
+	private ClearEditText nicknameEditText;
 
 	private User currentUser;
 	
@@ -112,8 +112,7 @@ public class NicknameActivity extends Activity
 			}
 		});
 		
-		nicknameEditText = (EditText) findViewById(R.id.nicknameEditText);
-		nicknameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		nicknameEditText = (ClearEditText) findViewById(R.id.nicknameEditText);
 		nicknameEditText.setText(currentUser.getNickname());
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);

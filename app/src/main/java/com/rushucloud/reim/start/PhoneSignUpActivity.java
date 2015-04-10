@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -23,6 +24,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.RegisterRequest;
@@ -34,9 +36,9 @@ import netUtils.response.user.VerifyCodeResponse;
 
 public class PhoneSignUpActivity extends Activity
 {	
-	private EditText phoneEditText;
-	private EditText passwordEditText;
-	private EditText confirmPasswordEditText;
+	private ClearEditText phoneEditText;
+	private ClearEditText passwordEditText;
+	private ClearEditText confirmPasswordEditText;
 	private EditText codeEditText;
 	private Button acquireCodeButton;
 	
@@ -92,14 +94,13 @@ public class PhoneSignUpActivity extends Activity
 			}
 		});
 		
-		phoneEditText = (EditText) findViewById(R.id.phoneEditText);
-		phoneEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
 		
-		passwordEditText = (EditText) findViewById(R.id.passwordEditText);
-		passwordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
+        passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
 		
-		confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		confirmPasswordEditText = (ClearEditText) findViewById(R.id.confirmPasswordEditText);
+        confirmPasswordEditText.setTransformationMethod(new PasswordTransformationMethod());
 		
 		codeEditText = (EditText) findViewById(R.id.codeEditText);	
 		codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
@@ -312,14 +313,6 @@ public class PhoneSignUpActivity extends Activity
 				final RegisterResponse response = new RegisterResponse(httpResponse);
 				if (response.getStatus())
 				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_signing_up);
-						}
-					});
-					
 					AppPreference appPreference = AppPreference.getAppPreference();
 					appPreference.setUsername(user.getPhone());	
 					appPreference.setPassword(user.getPassword());
@@ -328,7 +321,7 @@ public class PhoneSignUpActivity extends Activity
 					appPreference.setCurrentGroupID(-1);
 					appPreference.saveAppPreference();
 					
-					getCommonInfo();
+					sendCommonRequest();
 				}
 				else
 				{
@@ -345,7 +338,7 @@ public class PhoneSignUpActivity extends Activity
 		});		
 	}
 
-    private void getCommonInfo()
+    private void sendCommonRequest()
     {
 		SignInRequest request = new SignInRequest();
 		request.sendRequest(new HttpConnectionCallback()

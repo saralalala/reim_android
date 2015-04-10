@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp" >
 
-        <EditText
+        <classes.widget.ClearEditText
             android:id="@+id/locationEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

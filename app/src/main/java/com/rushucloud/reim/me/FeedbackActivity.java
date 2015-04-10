@@ -18,6 +18,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.FeedbackRequest;
 import netUtils.response.FeedbackResponse;
@@ -25,7 +26,7 @@ import netUtils.response.FeedbackResponse;
 public class FeedbackActivity extends Activity
 {
 	private EditText feedbackEditText;
-	private EditText contactEditText;	
+	private ClearEditText contactEditText;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -73,8 +74,7 @@ public class FeedbackActivity extends Activity
 		feedbackEditText = (EditText) findViewById(R.id.feedbackEditText);
 		feedbackEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
 		
-		contactEditText = (EditText) findViewById(R.id.contactEditText);
-		contactEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		contactEditText = (ClearEditText) findViewById(R.id.contactEditText);
 
 		Button submitButton = (Button) findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new View.OnClickListener()

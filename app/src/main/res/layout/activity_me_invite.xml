@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background" >
+    android:background="@color/background"
+    android:id="@+id/baseLayout" >
 
     <RelativeLayout
-        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/major_dark" >
@@ -27,59 +27,53 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/detail"
+            android:text="@string/invite"
             android:textColor="@color/major_light"
             android:textSize="20sp" />
+
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/contentTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:textColor="@color/font_major_dark"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/dateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="22dp"
-        android:layout_marginRight="16dp"
-        android:textColor="@color/hint_light_grey"
-        android:textSize="12sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="50.5dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/me_item_drawable"
+        android:focusable="true"
+        android:focusableInTouchMode="true" >
 
-        <Button
-            android:id="@+id/agreeButton"
+	    <include
+	        android:layout_width="match_parent"
+	        android:layout_height="0.5dp"
+	        layout="@layout/view_divider" />
+
+        <classes.widget.ClearEditText
+            android:id="@+id/usernameEditText"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_above="@+id/rejectButton"
-            android:layout_marginBottom="16dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/button_dark_drawable"
-            android:text="@string/join_group"
-            android:textColor="@color/button_text_light_color" />
+            android:background="@null"
+            android:inputType="textEmailAddress"
+            android:hint="@string/input_username"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
 
-        <Button
-            android:id="@+id/rejectButton"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="22dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/button_light_solid_drawable"
-            android:text="@string/reject_invite"
-            android:textColor="@color/hint_grey" />
-        
     </RelativeLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider" />
+
+    <Button
+		android:id="@+id/inviteButton"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/button_height"
+		android:layout_marginTop="22dp"
+		android:layout_marginLeft="16dp"
+		android:layout_marginRight="16dp"
+		android:background="@drawable/button_dark_drawable"
+		android:text="@string/send_invite"
+		android:textColor="@color/button_text_light_color" />
 
 </LinearLayout>

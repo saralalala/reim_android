@@ -71,6 +71,8 @@ public class MeFragment extends Fragment
 	private CircleImageView avatarImageView;
     private ImageView tipImageView;
     private TextView managerTextView;
+    private RelativeLayout categoryLayout;
+    private RelativeLayout tagLayout;
 
 	private User currentUser;
 	private String avatarPath;
@@ -209,7 +211,7 @@ public class MeFragment extends Fragment
 		});
 
         // init category
-        RelativeLayout categoryLayout = (RelativeLayout) view.findViewById(R.id.categoryLayout);
+        categoryLayout = (RelativeLayout) view.findViewById(R.id.categoryLayout);
         categoryLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -220,7 +222,7 @@ public class MeFragment extends Fragment
         });
 
         // init tag
-        RelativeLayout tagLayout = (RelativeLayout) view.findViewById(R.id.tagLayout);
+        tagLayout = (RelativeLayout) view.findViewById(R.id.tagLayout);
         tagLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -251,18 +253,6 @@ public class MeFragment extends Fragment
                 startActivity(new Intent(getActivity(), AboutActivity.class));
             }
         });
-
-        User currentUser = AppPreference.getAppPreference().getCurrentUser();
-        if (!currentUser.isAdmin() || currentUser.getGroupID() <= 0)
-        {
-            categoryLayout.setVisibility(View.GONE);
-            tagLayout.setVisibility(View.GONE);
-        }
-        else
-        {
-            categoryLayout.setVisibility(View.VISIBLE);
-            tagLayout.setVisibility(View.VISIBLE);
-        }
         
 //        RelativeLayout customServiceLayout = (RelativeLayout) view.findViewById(R.id.customServiceLayout);
 //        customServiceLayout.setOnClickListener(new View.OnClickListener()
@@ -309,6 +299,17 @@ public class MeFragment extends Fragment
             else
             {
                 managerTextView.setText(R.string.null_string);
+            }
+
+            if (!currentUser.isAdmin() || currentUser.getGroupID() <= 0)
+            {
+                categoryLayout.setVisibility(View.GONE);
+                tagLayout.setVisibility(View.GONE);
+            }
+            else
+            {
+                categoryLayout.setVisibility(View.VISIBLE);
+                tagLayout.setVisibility(View.VISIBLE);
             }
 		}
 		else

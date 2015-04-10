@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -19,6 +19,7 @@ import com.umeng.analytics.MobclickAgent;
 import classes.utils.AppPreference;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.ChangePasswordRequest;
 import netUtils.response.user.ChangePasswordResponse;
@@ -26,9 +27,9 @@ import netUtils.response.user.ChangePasswordResponse;
 public class ChangePasswordActivity extends Activity
 {
 	private AppPreference appPreference;
-	private EditText oldPasswordEditText;
-	private EditText newPasswordEditText;
-	private EditText confirmPasswordEditText;
+	private ClearEditText oldPasswordEditText;
+	private ClearEditText newPasswordEditText;
+	private ClearEditText confirmPasswordEditText;
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -74,8 +75,8 @@ public class ChangePasswordActivity extends Activity
 			}
 		});
 		
-		oldPasswordEditText = (EditText) findViewById(R.id.oldPasswordEditText);
-		oldPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		oldPasswordEditText = (ClearEditText) findViewById(R.id.oldPasswordEditText);
+        oldPasswordEditText.setTransformationMethod(new PasswordTransformationMethod());
         oldPasswordEditText.postDelayed(new Runnable()
         {
             public void run()
@@ -85,11 +86,11 @@ public class ChangePasswordActivity extends Activity
             }
         }, 200);
 
-		newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
-		newPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		newPasswordEditText = (ClearEditText) findViewById(R.id.newPasswordEditText);
+        newPasswordEditText.setTransformationMethod(new PasswordTransformationMethod());
 		
-		confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		confirmPasswordEditText = (ClearEditText) findViewById(R.id.confirmPasswordEditText);
+        confirmPasswordEditText.setTransformationMethod(new PasswordTransformationMethod());
 		
 		Button submitButton = (Button) findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new OnClickListener()

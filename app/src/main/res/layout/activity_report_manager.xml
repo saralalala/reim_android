@@ -111,7 +111,7 @@
             android:contentDescription="@string/search"
             android:src="@drawable/search" />
 
-        <EditText
+        <classes.widget.ClearEditText
             android:id="@+id/managerEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

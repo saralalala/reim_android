@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,6 +33,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.request.DownloadImageRequest;
@@ -41,7 +41,7 @@ import netUtils.response.DownloadImageResponse;
 
 public class PickManagerActivity extends Activity
 {
-    private EditText managerEditText;
+    private ClearEditText managerEditText;
     private RelativeLayout managerLayout;
     private ImageView avatarImageView;
     private TextView nicknameTextView;
@@ -173,7 +173,7 @@ public class PickManagerActivity extends Activity
         }
         else
         {
-            managerEditText = (EditText) findViewById(R.id.managerEditText);
+            managerEditText = (ClearEditText) findViewById(R.id.managerEditText);
             managerEditText.addTextChangedListener(new TextWatcher()
             {
                 public void beforeTextChanged(CharSequence s, int start, int count, int after)
@@ -183,7 +183,10 @@ public class PickManagerActivity extends Activity
 
                 public void onTextChanged(CharSequence s, int start, int before, int count)
                 {
-
+                    if (managerEditText.hasFocus())
+                    {
+                        managerEditText.setClearIconVisible(s.length() > 0);
+                    }
                 }
 
                 public void afterTextChanged(Editable s)

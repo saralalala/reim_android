@@ -74,7 +74,7 @@
 			        android:contentDescription="@string/icon"
 			        android:src="@drawable/default_icon" />
 
-		        <EditText
+		        <classes.widget.ClearEditText
 		            android:id="@+id/nameEditText"
 		            android:layout_width="match_parent"
 		            android:layout_height="match_parent"

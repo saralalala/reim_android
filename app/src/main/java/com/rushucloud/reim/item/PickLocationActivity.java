@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,12 +18,12 @@ import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.adapter.LocationListViewAdapter;
-import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 
 public class PickLocationActivity extends Activity
 {
 	private LocationListViewAdapter locationAdapter;
-	private EditText locationEditText;
+	private ClearEditText locationEditText;
 
 	private String location;
 	private String currentCity;
@@ -95,8 +94,7 @@ public class PickLocationActivity extends Activity
 			}
 		});
 		
-		locationEditText = (EditText) findViewById(R.id.locationEditText);
-		locationEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		locationEditText = (ClearEditText) findViewById(R.id.locationEditText);
     	locationEditText.setText(location);
 
 		locationAdapter = new LocationListViewAdapter(this, location, currentCity);

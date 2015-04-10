@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -26,6 +25,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.category.CreateCategoryRequest;
@@ -36,7 +36,7 @@ import netUtils.response.category.ModifyCategoryResponse;
 public class EditCategoryActivity extends Activity
 {
 	private ImageView iconImageView;
-	private EditText nameEditText;
+	private ClearEditText nameEditText;
 //	private EditText limitEditText;
 //	private ToggleButton proveAheadToggleButton;
 	private LinearLayout iconLayout;
@@ -130,12 +130,12 @@ public class EditCategoryActivity extends Activity
 		getActionBar().hide();
 
 		int widthPixels = ViewUtils.getPhoneWindowWidth(this);
-		int padding = ViewUtils.dpToPixel(getResources(), 32);
-		iconSideLength = ViewUtils.dpToPixel(getResources(), 40);
-		iconHorizontalInterval = ViewUtils.dpToPixel(getResources(), 20);
+		int padding = ViewUtils.dpToPixel(32);
+		iconSideLength = ViewUtils.dpToPixel(40);
+		iconHorizontalInterval = ViewUtils.dpToPixel(20);
 		iconMaxCount = (widthPixels - padding + iconHorizontalInterval) / (iconSideLength + iconHorizontalInterval);
 		iconHorizontalInterval = (widthPixels - padding - iconSideLength * iconMaxCount) / (iconMaxCount - 1);
-		iconVerticalInterval = ViewUtils.dpToPixel(getResources(), 20);
+		iconVerticalInterval = ViewUtils.dpToPixel(20);
 		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
@@ -190,8 +190,7 @@ public class EditCategoryActivity extends Activity
 		
 		iconImageView = (ImageView) findViewById(R.id.iconImageView);
 		
-		nameEditText = (EditText) findViewById(R.id.nameEditText);
-		nameEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		nameEditText = (ClearEditText) findViewById(R.id.nameEditText);
 		
 //		limitEditText = (EditText) findViewById(R.id.limitEditText);
 //		limitEditText.setTypeface(ReimApplication.TypeFaceAleoLight);

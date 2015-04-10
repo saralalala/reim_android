@@ -876,11 +876,11 @@ public class ReimFragment extends Fragment
 	{
 		tagLayout.removeAllViews();
 
-		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(getActivity()) - ViewUtils.dpToPixel(getResources(), 32);
-		int tagVerticalInterval = ViewUtils.dpToPixel(getResources(), 16);
-		int tagHorizontalInterval = ViewUtils.dpToPixel(getResources(), 10);
-		int padding = ViewUtils.dpToPixel(getResources(), 24);
-		int textSize = ViewUtils.dpToPixel(getResources(), 16);
+		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(getActivity()) - ViewUtils.dpToPixel(32);
+		int tagVerticalInterval = ViewUtils.dpToPixel(16);
+		int tagHorizontalInterval = ViewUtils.dpToPixel(10);
+		int padding = ViewUtils.dpToPixel(24);
+		int textSize = ViewUtils.dpToPixel(16);
 
 		int space = 0;
 		LinearLayout layout = new LinearLayout(getActivity());
@@ -941,10 +941,10 @@ public class ReimFragment extends Fragment
 		int selectedColor = ViewUtils.getColor(R.color.major_dark);
 		int unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 
-		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(getActivity()) - ViewUtils.dpToPixel(getResources(), 32);
-		int iconWidth = ViewUtils.dpToPixel(getResources(), 50);
-		int iconVerticalInterval = ViewUtils.dpToPixel(getResources(), 16);
-		int iconHorizontalInterval = ViewUtils.dpToPixel(getResources(), 18);
+		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(getActivity()) - ViewUtils.dpToPixel(32);
+		int iconWidth = ViewUtils.dpToPixel(50);
+		int iconVerticalInterval = ViewUtils.dpToPixel(16);
+		int iconHorizontalInterval = ViewUtils.dpToPixel(18);
 		int iconMaxCount = (layoutMaxLength + iconHorizontalInterval) / (iconWidth + iconHorizontalInterval);
 		iconHorizontalInterval = (layoutMaxLength - iconWidth * iconMaxCount) / (iconMaxCount - 1);
 

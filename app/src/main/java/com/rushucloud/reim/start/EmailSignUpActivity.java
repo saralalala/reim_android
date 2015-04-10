@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -22,6 +22,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
+import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.RegisterRequest;
@@ -31,9 +32,9 @@ import netUtils.response.user.SignInResponse;
 
 public class EmailSignUpActivity extends Activity
 {
-	private EditText emailEditText;
-	private EditText passwordEditText;
-	private EditText confirmPasswordEditText;
+	private ClearEditText emailEditText;
+	private ClearEditText passwordEditText;
+	private ClearEditText confirmPasswordEditText;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -81,14 +82,13 @@ public class EmailSignUpActivity extends Activity
 			}
 		});
 
-		emailEditText = (EditText) findViewById(R.id.emailEditText);
-    	emailEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-    	
-		passwordEditText = (EditText) findViewById(R.id.passwordEditText);
-		passwordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		
-		confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
-		confirmPasswordEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+		emailEditText = (ClearEditText) findViewById(R.id.emailEditText);
+
+		passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
+        passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
+
+		confirmPasswordEditText = (ClearEditText) findViewById(R.id.confirmPasswordEditText);
+        confirmPasswordEditText.setTransformationMethod(new PasswordTransformationMethod());
         confirmPasswordEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)
@@ -174,14 +174,6 @@ public class EmailSignUpActivity extends Activity
 				final RegisterResponse response = new RegisterResponse(httpResponse);
 				if (response.getStatus())
 				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ViewUtils.showToast(EmailSignUpActivity.this, R.string.succeed_in_signing_up);
-						}
-					});
-					
 					AppPreference appPreference = AppPreference.getAppPreference();
 					appPreference.setUsername(user.getEmail());	
 					appPreference.setPassword(user.getPassword());

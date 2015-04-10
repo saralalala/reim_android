@@ -16,8 +16,8 @@ public class ReimBar extends View
 	private Paint paint = new Paint();
 	private RectF rect = new RectF();
 	private double ratio;
-	private int height = ViewUtils.dpToPixel(getResources(), 18);
-	private int radius = ViewUtils.dpToPixel(getResources(), 2);
+	private int height = ViewUtils.dpToPixel(18);
+	private int radius = ViewUtils.dpToPixel(2);
 	
 	public ReimBar(Context context, double ratio)
 	{

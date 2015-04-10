@@ -42,7 +42,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <EditText
+        <classes.widget.ClearEditText
             android:id="@+id/phoneEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,6 +53,7 @@
             android:paddingBottom="12dp"
             android:hint="@string/input_phone"
             android:inputType="phone"
+            android:drawableRight="@drawable/delete_start_drawable"
             android:textColor="@color/font_major_light"
             android:textColorHint="@color/hint_white"
             android:background="@null"

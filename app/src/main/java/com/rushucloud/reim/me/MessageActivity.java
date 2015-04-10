@@ -44,7 +44,7 @@ public class MessageActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_invite);
+		setContentView(R.layout.activity_me_message);
 		initData();
 		initView();
 	}
