@@ -133,8 +133,8 @@
     <string name="admin">公司管理员</string>
     <string name="submit">提交</string>
     <string name="approve">通过</string>
-    <string name="reject">拒绝</string>
-    <string name="reject_reason">拒绝理由：</string>
+    <string name="reject">退回</string>
+    <string name="reject_reason">退回理由：</string>
     <string name="message">留言</string>
     <string name="report_over_flow">99+</string>
     <string name="export">导出</string>

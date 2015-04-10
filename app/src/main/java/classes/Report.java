@@ -370,7 +370,17 @@ public class Report implements Serializable
 		return getSender() != null && !getSender().equals(AppPreference.getAppPreference().getCurrentUser()) && !isCC  &&
 				status == Report.STATUS_SUBMITTED && myDecision == Report.STATUS_SUBMITTED;
 	}
-	
+
+    public boolean canBeApprovedByMe()
+    {
+        return !isCC && status == Report.STATUS_SUBMITTED && myDecision == Report.STATUS_SUBMITTED;
+    }
+
+    public boolean isPending()
+    {
+        return canBeApprovedByMe() || (isCC && status == Report.STATUS_SUBMITTED && managerList.isEmpty()); // 刚取的报告，还没获取详细数据，因此没managerList
+    }
+
 	public boolean isInSpecificStatus(List<Integer> statusList)
 	{
 		for (Integer integer : statusList)

@@ -21,6 +21,7 @@ import java.util.List;
 import classes.Comment;
 import classes.Item;
 import classes.Report;
+import classes.User;
 import classes.adapter.ReportDetailListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -30,7 +31,9 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
+import netUtils.request.group.GetGroupRequest;
 import netUtils.request.report.GetReportRequest;
+import netUtils.response.group.GetGroupResponse;
 import netUtils.response.report.GetReportResponse;
 
 public class ShowReportActivity extends Activity
@@ -187,7 +190,7 @@ public class ShowReportActivity extends Activity
 
 		if (PhoneUtils.isNetworkConnected())
 		{
-			sendGetReportRequest(report.getServerID());
+            sendGetGroupRequest();
 		}
 		else
 		{
@@ -197,7 +200,6 @@ public class ShowReportActivity extends Activity
 	
     private void sendGetReportRequest(final int reportServerID)
     {
-		ReimProgressDialog.show();
     	GetReportRequest request = new GetReportRequest(reportServerID);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -244,7 +246,7 @@ public class ShowReportActivity extends Activity
 					{
 						public void run()
 						{
-							ReimProgressDialog.dismiss();
+                            ReimProgressDialog.dismiss();
 							if (report.canBeApproved())
 					    	{
 								Bundle bundle = new Bundle();
@@ -256,15 +258,25 @@ public class ShowReportActivity extends Activity
 							}
 					    	else
 					    	{
-						    	adapter.setReport(report);
-						    	adapter.setItemList(itemList);
-						    	adapter.notifyDataSetChanged();
-								
-								if (report.getCommentList().size() != lastCommentCount)
-								{
-									tipImageView.setVisibility(View.VISIBLE);
-									lastCommentCount = report.getCommentList().size();
-								}
+                                User user = dbManager.getUser(report.getSender().getServerID());
+                                if (user != null)
+                                {
+                                    report.setSender(user);
+                                    adapter.setReport(report);
+                                    adapter.setItemList(itemList);
+                                    adapter.notifyDataSetChanged();
+
+                                    if (report.getCommentList().size() != lastCommentCount)
+                                    {
+                                        tipImageView.setVisibility(View.VISIBLE);
+                                        lastCommentCount = report.getCommentList().size();
+                                    }
+                                }
+                                else
+                                {
+                                    ViewUtils.showToast(ShowReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                                    goBackToMainActivity();
+                                }
 					    	}
 						}
 					});
@@ -288,7 +300,65 @@ public class ShowReportActivity extends Activity
 			}
 		});
     }
-	
+
+    private void sendGetGroupRequest()
+    {
+        ReimProgressDialog.show();
+        GetGroupRequest request = new GetGroupRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetGroupResponse response = new GetGroupResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = response.getGroup() == null? -1 : response.getGroup().getServerID();
+
+                    // update members
+                    List<User> memberList = response.getMemberList();
+                    User currentUser = AppPreference.getAppPreference().getCurrentUser();
+
+                    for (User user : memberList)
+                    {
+                        if (currentUser != null && user.getServerID() == currentUser.getServerID())
+                        {
+                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+                            {
+                                if (user.getAvatarID() == currentUser.getAvatarID())
+                                {
+                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
+                                }
+                            }
+                            else
+                            {
+                                user = currentUser;
+                            }
+                        }
+                    }
+
+                    dbManager.updateGroupUsers(memberList, currentGroupID);
+
+                    // update group info
+                    dbManager.syncGroup(response.getGroup());
+
+                    sendGetReportRequest(report.getServerID());
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ShowReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            goBackToMainActivity();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     private void goBackToMainActivity()
     {
         int reportTabIndex = myReport? 0 : 1;

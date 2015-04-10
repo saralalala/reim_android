@@ -39,8 +39,10 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
+import netUtils.request.group.GetGroupRequest;
 import netUtils.request.report.ApproveReportRequest;
 import netUtils.request.report.GetReportRequest;
+import netUtils.response.group.GetGroupResponse;
 import netUtils.response.report.ApproveReportResponse;
 import netUtils.response.report.GetReportResponse;
 
@@ -226,7 +228,7 @@ public class ApproveReportActivity extends Activity
 
 		if (PhoneUtils.isNetworkConnected())
 		{
-			sendGetReportRequest(reportServerID);
+            sendGetGroupRequest();
 		}
 		else if (itemList.isEmpty())
 		{
@@ -268,7 +270,6 @@ public class ApproveReportActivity extends Activity
     
     private void sendGetReportRequest(final int reportServerID)
     {
-		ReimProgressDialog.show();
     	GetReportRequest request = new GetReportRequest(reportServerID);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -299,7 +300,7 @@ public class ApproveReportActivity extends Activity
 					{
 						public void run()
 						{
-							ReimProgressDialog.dismiss();
+                            ReimProgressDialog.dismiss();
 					    	if (report.getStatus() != Report.STATUS_SUBMITTED)
 							{
 					    		ViewUtils.showToast(ApproveReportActivity.this, R.string.error_report_approved);
@@ -307,7 +308,7 @@ public class ApproveReportActivity extends Activity
 							}
 					    	else if (fromPush && !report.canBeApproved())
 					    	{
-					        	ReimApplication.setTabIndex(1);
+                                ReimApplication.setTabIndex(1);
 					        	ReimApplication.setReportTabIndex(1);
 					        	
 								Bundle bundle = new Bundle();
@@ -322,15 +323,25 @@ public class ApproveReportActivity extends Activity
 							}
 					    	else
 					    	{
-					    		adapter.setReport(report);
-								adapter.setItemList(itemList);
-								adapter.notifyDataSetChanged();
-								
-								if (report.getCommentList().size() != lastCommentCount)
-								{
-									tipImageView.setVisibility(View.VISIBLE);
-									lastCommentCount = report.getCommentList().size();
-								}
+                                User user = dbManager.getUser(report.getSender().getServerID());
+                                if (user != null)
+                                {
+                                    report.setSender(user);
+                                    adapter.setReport(report);
+                                    adapter.setItemList(itemList);
+                                    adapter.notifyDataSetChanged();
+
+                                    if (report.getCommentList().size() != lastCommentCount)
+                                    {
+                                        tipImageView.setVisibility(View.VISIBLE);
+                                        lastCommentCount = report.getCommentList().size();
+                                    }
+                                }
+                                else
+                                {
+                                    ViewUtils.showToast(ApproveReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                                    goBackToMainActivity();
+                                }
 					    	}				
 						}
 					});
@@ -448,7 +459,65 @@ public class ApproveReportActivity extends Activity
 			}
 		});
     }
-    
+
+    private void sendGetGroupRequest()
+    {
+        ReimProgressDialog.show();
+        GetGroupRequest request = new GetGroupRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetGroupResponse response = new GetGroupResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = response.getGroup() == null? -1 : response.getGroup().getServerID();
+
+                    // update members
+                    List<User> memberList = response.getMemberList();
+                    User currentUser = AppPreference.getAppPreference().getCurrentUser();
+
+                    for (User user : memberList)
+                    {
+                        if (currentUser != null && user.getServerID() == currentUser.getServerID())
+                        {
+                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+                            {
+                                if (user.getAvatarID() == currentUser.getAvatarID())
+                                {
+                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
+                                }
+                            }
+                            else
+                            {
+                                user = currentUser;
+                            }
+                        }
+                    }
+
+                    dbManager.updateGroupUsers(memberList, currentGroupID);
+
+                    // update group info
+                    dbManager.syncGroup(response.getGroup());
+
+                    sendGetReportRequest(reportServerID);
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ApproveReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            goBackToMainActivity();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     private void jumpToFollowingActivity()
     {
 		Intent intent = new Intent(ApproveReportActivity.this, FollowingActivity.class);

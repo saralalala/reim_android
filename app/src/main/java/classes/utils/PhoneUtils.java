@@ -122,14 +122,12 @@ public class PhoneUtils
 
 	public static String getAvatarFilePath()
 	{
-		AppPreference appPreference = AppPreference.getAppPreference();
-		return appPreference.getAvatarImageDirectory() + "/" + getImageName();
+		return AppPreference.getAppPreference().getAvatarImageDirectory() + "/" + getImageName();
 	}
 
 	public static String getInvoiceFilePath()
 	{
-		AppPreference appPreference = AppPreference.getAppPreference();
-		return appPreference.getInvoiceImageDirectory() + "/" + getImageName();
+		return AppPreference.getAppPreference().getInvoiceImageDirectory() + "/" + getImageName();
 	}
 
 	public static String getIconFilePath(int iconID)

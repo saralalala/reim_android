@@ -50,8 +50,10 @@ import classes.widget.XListView.IXListViewListener;
 import netUtils.HttpConnectionCallback;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
+import netUtils.request.EventsRequest;
 import netUtils.request.report.DeleteReportRequest;
 import netUtils.request.report.SubordinatesReportRequest;
+import netUtils.response.EventsResponse;
 import netUtils.response.report.DeleteReportResponse;
 import netUtils.response.report.SubordinatesReportResponse;
 
@@ -263,12 +265,26 @@ public class ReportFragment extends Fragment
         {
             public void onRefresh()
             {
-                refreshReports();
+                if (PhoneUtils.isNetworkConnected())
+                {
+                    sendGetEventsRequest();
+                }
+                else
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            reportListView.stopRefresh();
+                            ViewUtils.showToast(getActivity(), R.string.error_refresh_network_unavailable);
+                        }
+                    });
+                }
             }
 
             public void onLoadMore()
             {
-                refreshReports();
+
             }
         });
 		reportListView.setPullRefreshEnable(true);
@@ -322,7 +338,7 @@ public class ReportFragment extends Fragment
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("report", report);
                             Intent intent = new Intent();
-                            if (report.canBeApproved())
+                            if (report.canBeApprovedByMe())
                             {
                                 intent.setClass(getActivity(), ApproveReportActivity.class);
                             }
@@ -959,7 +975,7 @@ public class ReportFragment extends Fragment
         List<Report> processedList = new ArrayList<Report>();
         for (Report report : othersList)
         {
-            if (report.canBeApproved() || (report.isCC() && report.getStatus() == Report.STATUS_SUBMITTED && report.getManagerList().isEmpty()))
+            if (report.isPending())
             {
                 pendingList.add(report);
             }
@@ -1250,8 +1266,38 @@ public class ReportFragment extends Fragment
 			}
 		});
 	}
-	
-	private void deleteLocalReport(int reportID)
+
+    private void sendGetEventsRequest()
+    {
+        EventsRequest request = new EventsRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final EventsResponse response = new EventsResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    ReimApplication.setMineUnreadList(response.getMineUnreadList());
+                    ReimApplication.setOthersUnreadList(response.getOthersUnreadList());
+                    ReimApplication.setUnreadMessagesCount(response.getUnreadMessagesCount());
+                    refreshReports();
+                }
+                else
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            reportListView.stopRefresh();
+                            ViewUtils.showToast(getActivity(), R.string.failed_to_get_data);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void deleteLocalReport(int reportID)
 	{
 		if (ReimApplication.getReportTabIndex() == 0)
 		{
@@ -1373,7 +1419,7 @@ public class ReportFragment extends Fragment
 						ViewUtils.showToast(getActivity(), R.string.error_refresh_network_unavailable);
 					}
 				});
-			}			
+			}
 		}		
 	}
 }

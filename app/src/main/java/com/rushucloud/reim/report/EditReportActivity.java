@@ -48,12 +48,14 @@ import netUtils.NetworkConstant;
 import netUtils.SyncDataCallback;
 import netUtils.SyncUtils;
 import netUtils.request.UploadImageRequest;
+import netUtils.request.group.GetGroupRequest;
 import netUtils.request.item.CreateItemRequest;
 import netUtils.request.item.ModifyItemRequest;
 import netUtils.request.report.CreateReportRequest;
 import netUtils.request.report.GetReportRequest;
 import netUtils.request.report.ModifyReportRequest;
 import netUtils.response.UploadImageResponse;
+import netUtils.response.group.GetGroupResponse;
 import netUtils.response.item.CreateItemResponse;
 import netUtils.response.item.ModifyItemResponse;
 import netUtils.response.report.CreateReportResponse;
@@ -126,7 +128,7 @@ public class EditReportActivity extends Activity
         lastCommentCount = commentList.size();
 		if (!hasInit && report.getServerID() != -1 && PhoneUtils.isNetworkConnected())
 		{
-			sendGetReportRequest(report.getServerID());
+            sendGetGroupRequest();
 		}
 		else if (report.getLocalID() == -1 && report.getServerID() == -1 && fromPush)
 		{
@@ -950,7 +952,6 @@ public class EditReportActivity extends Activity
     
     private void sendGetReportRequest(final int reportServerID)
     {
-		ReimProgressDialog.show();
     	GetReportRequest request = new GetReportRequest(reportServerID);
     	request.sendRequest(new HttpConnectionCallback()
 		{
@@ -1029,7 +1030,65 @@ public class EditReportActivity extends Activity
 			}
 		});
     }
-    
+
+    private void sendGetGroupRequest()
+    {
+        ReimProgressDialog.show();
+        GetGroupRequest request = new GetGroupRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetGroupResponse response = new GetGroupResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = response.getGroup() == null? -1 : response.getGroup().getServerID();
+
+                    // update members
+                    List<User> memberList = response.getMemberList();
+                    User currentUser = AppPreference.getAppPreference().getCurrentUser();
+
+                    for (User user : memberList)
+                    {
+                        if (currentUser != null && user.getServerID() == currentUser.getServerID())
+                        {
+                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+                            {
+                                if (user.getAvatarID() == currentUser.getAvatarID())
+                                {
+                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
+                                }
+                            }
+                            else
+                            {
+                                user = currentUser;
+                            }
+                        }
+                    }
+
+                    dbManager.updateGroupUsers(memberList, currentGroupID);
+
+                    // update group info
+                    dbManager.syncGroup(response.getGroup());
+
+                    sendGetReportRequest(report.getServerID());
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            goBackToMainActivity();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     private void sendCreateReportRequest()
     {
     	CreateReportRequest request = new CreateReportRequest(report);

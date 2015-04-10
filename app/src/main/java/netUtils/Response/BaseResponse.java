@@ -51,7 +51,7 @@ public abstract class BaseResponse
 				}
 				
 				if (code == NetworkConstant.ERROR_AUTH_TIMEOUT)
-				{					
+				{
 					Intent intent = new Intent(ReimApplication.getContext(), SignInActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -122,7 +122,7 @@ public abstract class BaseResponse
 		switch (code)
 		{
 			case NetworkConstant.ERROR_SYSTEM_ERROR:
-				result = "系统错误，请稍候尝试";
+				result = "系统错误，请稍后尝试";
 				break;
 			case NetworkConstant.ERROR_USER_NOT_EXISTS:
 				result = "用户不存在或密码错误";

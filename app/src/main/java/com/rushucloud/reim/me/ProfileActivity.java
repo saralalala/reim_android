@@ -25,9 +25,6 @@ import com.rushucloud.reim.SingleImageActivity;
 import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import classes.Group;
 import classes.User;
 import classes.utils.AppPreference;
@@ -389,29 +386,18 @@ public class ProfileActivity extends Activity
     
     private void cropImage(Uri uri)
     {
-		try
-		{
-	    	Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-	    	Intent intent = new Intent("com.android.camera.action.CROP");
-	    	intent.setDataAndType(uri, "image/*");
-	    	intent.putExtra("crop", "true");
-	    	intent.putExtra("aspectX", 1);
-	    	intent.putExtra("aspectY", 1);
-	    	intent.putExtra("outputX", bitmap.getWidth());
-	    	intent.putExtra("outputY", bitmap.getWidth());
-	    	intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
-	    	intent.putExtra("return-data", false);
-	    	intent.putExtra("noFaceDetection", true);
-	    	startActivityForResult(intent, CROP_IMAGE);
-		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+        int width = ViewUtils.getPhoneWindowWidth(this);
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", width);
+        intent.putExtra("outputY", width);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
+        intent.putExtra("return-data", false);
+        intent.putExtra("noFaceDetection", true);
+        startActivityForResult(intent, CROP_IMAGE);
     }
 
     private void sendUploadAvatarRequest()
