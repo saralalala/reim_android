@@ -1,5 +1,6 @@
 package classes.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -29,17 +30,17 @@ import classes.utils.ViewUtils;
 
 public class ReportDetailListViewAdapter extends BaseAdapter
 {
-	private Context context;
+	private Activity activity;
 	private LayoutInflater layoutInflater;
 	
 	private DBManager dbManager;
 	private Report report;
 	private List<Item> itemList;
 	
-	public ReportDetailListViewAdapter(Context context, Report report, List<Item> items)
+	public ReportDetailListViewAdapter(Activity activity, Report report, List<Item> items)
 	{
-		this.context = context;
-		this.layoutInflater = LayoutInflater.from(context);
+		this.activity = activity;
+		this.layoutInflater = LayoutInflater.from(activity);
 		
 		this.report = report;
 		this.itemList = new ArrayList<Item>(items);
@@ -57,7 +58,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
 			TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
 
-			String title = report.getTitle().isEmpty()? context.getString(R.string.report_no_name) : report.getTitle();
+			String title = report.getTitle().isEmpty()? activity.getString(R.string.report_no_name) : report.getTitle();
 			titleTextView.setText(title);
 			
 			timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
@@ -67,23 +68,24 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			
 			TextView approveInfoTextView = (TextView) view.findViewById(R.id.approveInfoTextView);
 			approveInfoTextView.setOnClickListener(new View.OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					if (report.getSender() != null && report.getSender().getServerID() == AppPreference.getAppPreference().getCurrentUserID())
-					{
-						MobclickAgent.onEvent(context, "UMENG_REPORT_MINE_STATUS");
-					}
-					else
-					{
-						MobclickAgent.onEvent(context, "UMENG_REPORT_OTHER_STATUS");
-					}
-						
-					Intent intent = new Intent(context, ApproveInfoActivity.class);
-					intent.putExtra("reportServerID", report.getServerID());
-					context.startActivity(intent);
-				}
-			});
+            {
+                public void onClick(View v)
+                {
+                    if (report.getSender() != null && report.getSender().getServerID() == AppPreference.getAppPreference().getCurrentUserID())
+                    {
+                        MobclickAgent.onEvent(activity, "UMENG_REPORT_MINE_STATUS");
+                    }
+                    else
+                    {
+                        MobclickAgent.onEvent(activity, "UMENG_REPORT_OTHER_STATUS");
+                    }
+
+                    Intent intent = new Intent(activity, ApproveInfoActivity.class);
+                    intent.putExtra("reportServerID", report.getServerID());
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.window_right_in, R.anim.window_left_out);
+                }
+            });
 
 			// init sender
 			TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);
@@ -143,7 +145,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(amount));
-			itemCountTextView.setText(itemCount + context.getString(R.string.item_count));
+			itemCountTextView.setText(itemCount + activity.getString(R.string.item_count));
 			
 			return view;
 		}
@@ -160,7 +162,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 			amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
-			String vendor = item.getVendor().isEmpty()? context.getString(R.string.vendor_not_available) : item.getVendor();
+			String vendor = item.getVendor().isEmpty()? activity.getString(R.string.vendor_not_available) : item.getVendor();
 			vendorTextView.setText(vendor);
 			
 			Category category = item.getCategory();

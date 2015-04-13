@@ -75,9 +75,8 @@ public class WelcomeActivity extends Activity
 
 			public void onClick(View v)
 			{
-				startActivity(new Intent(WelcomeActivity.this, SignInActivity.class));
-				finish();
-			}			
+                ViewUtils.goForwardAndFinish(WelcomeActivity.this, SignInActivity.class);
+			}
 		});
 		
 		Button phoneSignUpButton = (Button) findViewById(R.id.phoneSignUpButton);
@@ -85,8 +84,7 @@ public class WelcomeActivity extends Activity
         {
             public void onClick(View v)
             {
-                startActivity(new Intent(WelcomeActivity.this, PhoneSignUpActivity.class));
-                finish();
+                ViewUtils.goForwardAndFinish(WelcomeActivity.this, PhoneSignUpActivity.class);
             }
         });
 		
@@ -95,8 +93,7 @@ public class WelcomeActivity extends Activity
         {
             public void onClick(View v)
             {
-                startActivity(new Intent(WelcomeActivity.this, EmailSignUpActivity.class));
-                finish();
+                ViewUtils.goForwardAndFinish(WelcomeActivity.this, EmailSignUpActivity.class);
             }
         });
 	}

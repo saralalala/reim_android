@@ -320,13 +320,13 @@ public class ReimFragment extends Fragment
                             Intent intent = new Intent(getActivity(), EditItemActivity.class);
                             intent.putExtra("itemLocalID", item.getLocalID());
                             intent.putExtra("fromReim", true);
-                            startActivity(intent);
+                            ViewUtils.goForward(getActivity(), intent);
                         }
                         else
                         {
                             Intent intent = new Intent(getActivity(), ShowItemActivity.class);
                             intent.putExtra("itemLocalID", item.getLocalID());
-                            startActivity(intent);
+                            ViewUtils.goForward(getActivity(), intent);
                         }
                     }
 				}
@@ -689,8 +689,7 @@ public class ReimFragment extends Fragment
 			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
-				Intent intent = new Intent(getActivity(), SearchItemActivity.class);
-				startActivity(intent);
+                ViewUtils.goForward(getActivity(), SearchItemActivity.class);
 			}
 		});		
 	}

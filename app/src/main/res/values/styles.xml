@@ -48,11 +48,6 @@
         <item name="android:windowExitAnimation">@anim/window_center_out</item>
     </style>
     
-    <style name="WindowHorizontalAnimation" parent="android:Animation">
-        <item name="android:windowEnterAnimation">@anim/window_horizontal_in</item>  
-        <item name="android:windowExitAnimation">@anim/window_horizontal_out</item>
-    </style>
-    
     <style name="ProgressDialog" parent="android:Theme.Dialog">  
         <item name="android:windowFrame">@null</item>       <!-- Dialog的windowFrame框为无 -->  
         <item name="android:windowBackground">@android:color/transparent</item> <!-- 设置dialog的背景 -->  

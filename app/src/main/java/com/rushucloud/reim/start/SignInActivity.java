@@ -133,8 +133,7 @@ public class SignInActivity extends Activity
         {
             public void onClick(View v)
             {
-                startActivity(new Intent(SignInActivity.this, WelcomeActivity.class));
-                finish();
+                goBack();
             }
         });
 
@@ -157,9 +156,7 @@ public class SignInActivity extends Activity
 			{
 				MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL");
 				forgotPopupWindow.dismiss();
-				
-				startActivity(new Intent(SignInActivity.this, PhoneFindActivity.class));
-				finish();
+				ViewUtils.goForwardAndFinish(SignInActivity.this, PhoneFindActivity.class);
 			}
 		});
 		
@@ -170,9 +167,7 @@ public class SignInActivity extends Activity
 			{
 				MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD_MAIL");
 				forgotPopupWindow.dismiss();
-				
-				startActivity(new Intent(SignInActivity.this, EmailFindActivity.class));
-				finish();
+                ViewUtils.goForwardAndFinish(SignInActivity.this, EmailFindActivity.class);
 			}
 		});
 		
@@ -303,8 +298,7 @@ public class SignInActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                            finish();
+                            ViewUtils.goForwardAndFinish(SignInActivity.this, MainActivity.class);
                         }
                     });
                 }
@@ -337,7 +331,6 @@ public class SignInActivity extends Activity
 
     private void goBack()
     {
-        startActivity(new Intent(SignInActivity.this, WelcomeActivity.class));
-        finish();
+        ViewUtils.goBackWithIntent(SignInActivity.this, WelcomeActivity.class);
     }
 }

@@ -67,8 +67,7 @@ public class SplashActivity extends Activity
 					}
 					finally
 					{
-						startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
-						finish();
+                        ViewUtils.goForwardAndFinish(SplashActivity.this, WelcomeActivity.class);
 					}
 				}
 			};
@@ -102,8 +101,7 @@ public class SplashActivity extends Activity
 						}
 						finally
 						{
-							startActivity(new Intent(SplashActivity.this, MainActivity.class));
-							finish();
+                            ViewUtils.goForwardAndFinish(SplashActivity.this, MainActivity.class);
 						}
 					}
 				};
@@ -178,8 +176,7 @@ public class SplashActivity extends Activity
 					{
 						public void run()
 						{
-							startActivity(new Intent(SplashActivity.this, MainActivity.class));
-							finish();
+                            ViewUtils.goForwardAndFinish(SplashActivity.this, MainActivity.class);
 						}
 					});
 				}
@@ -193,12 +190,11 @@ public class SplashActivity extends Activity
 							Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
 							intent.putExtra("username", AppPreference.getAppPreference().getUsername());
 							intent.putExtra("password", AppPreference.getAppPreference().getPassword());
-							startActivity(intent);
-							finish();
+                            ViewUtils.goForwardAndFinish(SplashActivity.this, intent);
 						}
 					});
 				}
 			}
-		});		
+		});
 	}
 }

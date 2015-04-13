@@ -362,8 +362,7 @@ public class PhoneSignUpActivity extends Activity
 							ReimProgressDialog.dismiss();
                             waitingTime = -1;
                             ViewUtils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_sign_up);
-                            startActivity(new Intent(PhoneSignUpActivity.this, MainActivity.class));
-                            finish();
+                            ViewUtils.goForwardAndFinish(PhoneSignUpActivity.this, MainActivity.class);
 						}
 					});
 				}
@@ -398,7 +397,6 @@ public class PhoneSignUpActivity extends Activity
 
     private void goBack()
     {
-        startActivity(new Intent(PhoneSignUpActivity.this, WelcomeActivity.class));
-        finish();
+        ViewUtils.goBackWithIntent(PhoneSignUpActivity.this, WelcomeActivity.class);
     }
 }

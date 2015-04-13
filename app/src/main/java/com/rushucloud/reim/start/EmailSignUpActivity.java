@@ -225,8 +225,7 @@ public class EmailSignUpActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
                             ViewUtils.showToast(EmailSignUpActivity.this, R.string.succeed_in_sign_up_with_email);
-                            startActivity(new Intent(EmailSignUpActivity.this, MainActivity.class));
-                            finish();
+                            ViewUtils.goForwardAndFinish(EmailSignUpActivity.this, MainActivity.class);
 						}
 					});
 				}
@@ -259,7 +258,6 @@ public class EmailSignUpActivity extends Activity
 
     private void goBack()
     {
-        startActivity(new Intent(EmailSignUpActivity.this, WelcomeActivity.class));
-        finish();
+        ViewUtils.goBackWithIntent(EmailSignUpActivity.this, WelcomeActivity.class);
     }
 }

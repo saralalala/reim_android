@@ -235,7 +235,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			{
 				Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
 				intent.putExtra("fromReim", true);
-				startActivity(intent);
+                ViewUtils.goForward(MainActivity.this, intent);
 			}
 		});
 	

@@ -1,7 +1,9 @@
 package classes.utils;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -205,5 +207,58 @@ public class ViewUtils
     {
     	DisplayMetrics metrics = ReimApplication.getContext().getResources().getDisplayMetrics();
     	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, metrics);
+    }
+
+    public static void goForward(Activity activity, Intent intent)
+    {
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.window_right_in, R.anim.window_left_out);
+    }
+
+    public static void goForward(Activity activity, Class cls)
+    {
+        activity.startActivity(new Intent(activity, cls));
+        activity.overridePendingTransition(R.anim.window_right_in, R.anim.window_left_out);
+    }
+
+    public static void goForwardAndFinish(Activity activity, Intent intent)
+    {
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.window_right_in, R.anim.window_left_out);
+        activity.finish();
+    }
+
+    public static void goForwardAndFinish(Activity activity, Class cls)
+    {
+        activity.startActivity(new Intent(activity, cls));
+        activity.overridePendingTransition(R.anim.window_right_in, R.anim.window_left_out);
+        activity.finish();
+    }
+
+    public static void goBack(Activity activity)
+    {
+        activity.overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
+        activity.finish();
+    }
+
+    public static void goBackWithIntent(Activity activity, Intent intent)
+    {
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
+        activity.finish();
+    }
+
+    public static void goBackWithIntent(Activity activity, Class cls)
+    {
+        activity.startActivity(new Intent(activity, cls));
+        activity.overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
+        activity.finish();
+    }
+
+    public static void goBackWithResult(Activity activity, Intent intent)
+    {
+        activity.setResult(Activity.RESULT_OK, intent);
+        activity.overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
+        activity.finish();
     }
 }

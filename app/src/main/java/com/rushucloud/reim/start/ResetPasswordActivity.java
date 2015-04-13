@@ -169,8 +169,7 @@ public class ResetPasswordActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
                             ViewUtils.showToast(ResetPasswordActivity.this, R.string.succeed_in_changing_password);
-                            startActivity(new Intent(ResetPasswordActivity.this, SignInActivity.class));
-                            finish();
+                            ViewUtils.goBackWithIntent(ResetPasswordActivity.this, SignInActivity.class);
 						}
 					});
 				}
@@ -198,7 +197,6 @@ public class ResetPasswordActivity extends Activity
 
     private void goBack()
     {
-        startActivity(new Intent(ResetPasswordActivity.this, PhoneFindActivity.class));
-        finish();
+        ViewUtils.goBackWithIntent(ResetPasswordActivity.this, PhoneFindActivity.class);
     }
 }

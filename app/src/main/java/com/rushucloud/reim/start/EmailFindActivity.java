@@ -143,8 +143,7 @@ public class EmailFindActivity extends Activity
 						{
                             ReimProgressDialog.dismiss();
                             ViewUtils.showToast(EmailFindActivity.this, R.string.succeed_in_sending_email);
-                            startActivity(new Intent(EmailFindActivity.this, SignInActivity.class));
-                            finish();
+                            goBack();
 						}
 					});					
 				}
@@ -171,7 +170,6 @@ public class EmailFindActivity extends Activity
 
     private void goBack()
     {
-        startActivity(new Intent(EmailFindActivity.this, SignInActivity.class));
-        finish();
+        ViewUtils.goBackWithIntent(EmailFindActivity.this, SignInActivity.class);
     }
 }

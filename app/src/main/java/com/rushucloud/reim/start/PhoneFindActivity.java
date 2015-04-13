@@ -159,8 +159,7 @@ public class PhoneFindActivity extends Activity
             bundle.putString("code", code);
             Intent intent = new Intent(PhoneFindActivity.this, ResetPasswordActivity.class);
             intent.putExtras(bundle);
-            startActivity(intent);
-            finish();
+            ViewUtils.goForwardAndFinish(PhoneFindActivity.this, intent);
         }
     }
 
@@ -253,7 +252,6 @@ public class PhoneFindActivity extends Activity
 
     private void goBack()
     {
-        startActivity(new Intent(PhoneFindActivity.this, SignInActivity.class));
-        finish();
+        ViewUtils.goBackWithIntent(PhoneFindActivity.this, SignInActivity.class);
     }
 }
