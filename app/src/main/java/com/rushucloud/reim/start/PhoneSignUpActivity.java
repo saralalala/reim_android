@@ -73,8 +73,7 @@ public class PhoneSignUpActivity extends Activity
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
 			waitingTime = -1;
-			startActivity(new Intent(PhoneSignUpActivity.this, WelcomeActivity.class));
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -89,8 +88,7 @@ public class PhoneSignUpActivity extends Activity
 			public void onClick(View v)
 			{
 				waitingTime = -1;
-				startActivity(new Intent(PhoneSignUpActivity.this, WelcomeActivity.class));
-				finish();
+                goBack();
 			}
 		});
 		
@@ -396,5 +394,11 @@ public class PhoneSignUpActivity extends Activity
 		imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        startActivity(new Intent(PhoneSignUpActivity.this, WelcomeActivity.class));
+        finish();
     }
 }

@@ -19,7 +19,7 @@ public class UploadImageResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			setImageID(Integer.valueOf(jObject.getString("id")));
-			setPath(jObject.getString("avatar"));
+			setPath(jObject.getString("url"));
 		}
 		catch (JSONException e)
 		{

@@ -243,6 +243,7 @@ public abstract class SyncUtils
 				{
 			    	System.out.println("upload image：local id " + image.getLocalID() + " *Succeed*");
 					image.setServerID(response.getImageID());
+                    image.setServerPath(response.getPath());
 					DBManager.getDBManager().updateImageServerID(image);
 				}
 				else

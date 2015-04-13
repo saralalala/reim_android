@@ -62,8 +62,7 @@ public class EmailSignUpActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			startActivity(new Intent(EmailSignUpActivity.this, WelcomeActivity.class));
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -77,8 +76,7 @@ public class EmailSignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(EmailSignUpActivity.this, WelcomeActivity.class));
-				finish();
+                goBack();
 			}
 		});
 
@@ -257,5 +255,11 @@ public class EmailSignUpActivity extends Activity
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);  
 		imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);    	
+    }
+
+    private void goBack()
+    {
+        startActivity(new Intent(EmailSignUpActivity.this, WelcomeActivity.class));
+        finish();
     }
 }

@@ -54,8 +54,7 @@ public class EmailFindActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			startActivity(new Intent(EmailFindActivity.this, SignInActivity.class));
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -69,8 +68,7 @@ public class EmailFindActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(EmailFindActivity.this, SignInActivity.class));
-				finish();
+                goBack();
 			}
 		});
     	
@@ -169,5 +167,11 @@ public class EmailFindActivity extends Activity
     {
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        startActivity(new Intent(EmailFindActivity.this, SignInActivity.class));
+        finish();
     }
 }

@@ -65,8 +65,7 @@ public class SignInActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			startActivity(new Intent(SignInActivity.this, WelcomeActivity.class));
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -80,8 +79,7 @@ public class SignInActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(SignInActivity.this, WelcomeActivity.class));
-				finish();
+                goBack();
 			}
 		});
 		
@@ -336,4 +334,10 @@ public class SignInActivity extends Activity
 		imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
 	}
+
+    private void goBack()
+    {
+        startActivity(new Intent(SignInActivity.this, WelcomeActivity.class));
+        finish();
+    }
 }

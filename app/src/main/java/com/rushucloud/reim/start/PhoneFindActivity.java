@@ -62,8 +62,7 @@ public class PhoneFindActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			startActivity(new Intent(PhoneFindActivity.this, SignInActivity.class));
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -77,8 +76,7 @@ public class PhoneFindActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(PhoneFindActivity.this, SignInActivity.class));
-				finish();
+                goBack();
 			}
 		});
     	
@@ -251,5 +249,11 @@ public class PhoneFindActivity extends Activity
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);	
 		imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        startActivity(new Intent(PhoneFindActivity.this, SignInActivity.class));
+        finish();
     }
 }

@@ -112,8 +112,7 @@ public class CompleteInfoActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			startActivity(new Intent(CompleteInfoActivity.this, SignInActivity.class));
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -134,8 +133,7 @@ public class CompleteInfoActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(CompleteInfoActivity.this, SignInActivity.class));
-				finish();
+                goBack();
 			}
 		});
 
@@ -382,4 +380,10 @@ public class CompleteInfoActivity extends Activity
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
 	}
+
+    private void goBack()
+    {
+        startActivity(new Intent(CompleteInfoActivity.this, SignInActivity.class));
+        finish();
+    }
 }

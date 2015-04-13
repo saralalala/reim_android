@@ -59,8 +59,7 @@ public class ResetPasswordActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			startActivity(new Intent(ResetPasswordActivity.this, PhoneFindActivity.class));
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -81,8 +80,7 @@ public class ResetPasswordActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(ResetPasswordActivity.this, PhoneFindActivity.class));
-				finish();
+                goBack();
 			}
 		});
 		
@@ -196,5 +194,11 @@ public class ResetPasswordActivity extends Activity
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(newPasswordEditText.getWindowToken(), 0);					
 		imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        startActivity(new Intent(ResetPasswordActivity.this, PhoneFindActivity.class));
+        finish();
     }
 }
