@@ -163,6 +163,7 @@ public class CompanyActivity extends Activity
 
                     User currentUser = appPreference.getCurrentUser();
                     currentUser.setGroupID(group.getServerID());
+                    currentUser.setIsAdmin(true);
 
                     dbManager.insertGroup(group);
                     dbManager.updateUser(currentUser);

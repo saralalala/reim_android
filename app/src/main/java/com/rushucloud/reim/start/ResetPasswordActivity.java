@@ -59,7 +59,7 @@ public class ResetPasswordActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			startActivity(new Intent(ResetPasswordActivity.this, EmailFindActivity.class));
+			startActivity(new Intent(ResetPasswordActivity.this, PhoneFindActivity.class));
 			finish();
 		}
 		return super.onKeyDown(keyCode, event);

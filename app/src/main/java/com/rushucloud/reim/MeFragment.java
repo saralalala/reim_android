@@ -348,7 +348,7 @@ public class MeFragment extends Fragment
 				if (response.getBitmap() != null)
 				{
 					int currentTime = Utils.getCurrentTime();
-					avatarPath = PhoneUtils.saveBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
+					avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					currentUser.setAvatarLocalPath(avatarPath);
 					currentUser.setLocalUpdatedDate(currentTime);
 					currentUser.setServerUpdatedDate(currentTime);

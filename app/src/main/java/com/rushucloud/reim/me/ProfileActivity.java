@@ -364,7 +364,7 @@ public class ProfileActivity extends Activity
 		String companyName = currentGroup != null? currentGroup.getName() : getString(R.string.empty);
 		companyTextView.setText(companyName);
 		
-        if (!currentUser.isAdmin())
+        if (!currentUser.isAdmin() && currentGroup != null)
 		{
         	companyLayout.setClickable(false);
         	companyNextImageView.setVisibility(View.GONE);

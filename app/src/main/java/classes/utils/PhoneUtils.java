@@ -158,7 +158,7 @@ public class PhoneUtils
 			compressedBitmapFile.createNewFile();
 
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			bitmap.compress(CompressFormat.JPEG, 90, outputStream);
+			bitmap.compress(CompressFormat.JPEG, 50, outputStream);
 			byte[] bitmapData = outputStream.toByteArray();
 
 			FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
@@ -174,6 +174,46 @@ public class PhoneUtils
 			return "";
 		}
 	}
+
+    public static String saveOriginalBitmapToFile(Bitmap bitmap, int type)
+    {
+        try
+        {
+            Matrix matrix = new Matrix();
+            matrix.postScale(0.5f, 0.5f);
+
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+            String path;
+            if (type == NetworkConstant.IMAGE_TYPE_AVATAR)
+            {
+                path = getAvatarFilePath();
+            }
+            else
+            {
+                path = getInvoiceFilePath();
+            }
+
+            File compressedBitmapFile = new File(path);
+            compressedBitmapFile.createNewFile();
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(CompressFormat.JPEG, 95, outputStream);
+            byte[] bitmapData = outputStream.toByteArray();
+
+            FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
+            fileOutputStream.write(bitmapData);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+            return path;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
 	public static String saveIconToFile(Bitmap bitmap, int iconID)
 	{
