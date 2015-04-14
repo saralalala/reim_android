@@ -31,6 +31,7 @@ public class NicknameActivity extends Activity
 	private ClearEditText nicknameEditText;
 
 	private User currentUser;
+    private String originalNickname;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -59,7 +60,7 @@ public class NicknameActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -67,6 +68,7 @@ public class NicknameActivity extends Activity
 	private void initData()
 	{
 		currentUser = AppPreference.getAppPreference().getCurrentUser();
+        originalNickname = currentUser.getNickname();
 	}
 	
 	private void initView()
@@ -78,8 +80,7 @@ public class NicknameActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				hideSoftKeyboard();
-				finish();
+                goBack();
 			}
 		});
 		
@@ -89,8 +90,7 @@ public class NicknameActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				
-				String originalNickname = currentUser.getNickname();
+
 				String newNickname = nicknameEditText.getText().toString();
 				if (!PhoneUtils.isNetworkConnected())
 				{
@@ -98,7 +98,7 @@ public class NicknameActivity extends Activity
 				}
 				else if (newNickname.equals(originalNickname))
 				{
-					finish();
+                    goBack();
 				}
 				else if (newNickname.isEmpty())
 				{
@@ -144,7 +144,7 @@ public class NicknameActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(NicknameActivity.this, R.string.succeed_in_modifying_user_info);
-							finish();
+                            goBack();
 						}
 					});
 				}
@@ -156,7 +156,6 @@ public class NicknameActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(NicknameActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
-							finish();
 						}
 					});						
 				}
@@ -169,4 +168,10 @@ public class NicknameActivity extends Activity
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
 	}
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
 }

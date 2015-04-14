@@ -24,6 +24,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.DownloadImageRequest;
 import netUtils.response.DownloadImageResponse;
@@ -64,7 +65,7 @@ public class PickCategoryActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -94,7 +95,7 @@ public class PickCategoryActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -138,8 +139,7 @@ public class PickCategoryActivity extends Activity
 
 				Intent intent = new Intent();
 				intent.putExtra("category", category);
-				setResult(RESULT_OK, intent);
-				finish();
+                ViewUtils.goBackWithResult(PickCategoryActivity.this, intent);
 			}
 		});	
 		
@@ -268,4 +268,9 @@ public class PickCategoryActivity extends Activity
 			}
 		}
 	}
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
 }

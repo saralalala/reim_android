@@ -401,13 +401,12 @@ public class CommentActivity extends Activity
         	{
         		intent.setClass(this, ShowReportActivity.class);
         	}
-        	
-        	startActivity(intent);
-        	finish();
+
+            ViewUtils.goBackWithIntent(this, intent);
 		}
     	else
     	{
-			finish();
+            ViewUtils.goBack(this);
 		}
     }
 }

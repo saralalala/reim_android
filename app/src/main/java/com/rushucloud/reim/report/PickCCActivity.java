@@ -32,6 +32,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
@@ -78,7 +79,7 @@ public class PickCCActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -111,8 +112,7 @@ public class PickCCActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-                hideSoftKeyboard();
-				finish();
+                goBack();
 			}
 		});
 		
@@ -138,8 +138,7 @@ public class PickCCActivity extends Activity
 
 				Intent intent = new Intent();
 				intent.putExtra("ccs", (Serializable) chosenList);
-				setResult(RESULT_OK, intent);
-				finish();
+                ViewUtils.goBackWithResult(PickCCActivity.this, intent);
 			}
 		});
 
@@ -155,7 +154,7 @@ public class PickCCActivity extends Activity
             {
                 public void onClick(View v)
                 {
-                    startActivity(new Intent(PickCCActivity.this, InviteActivity.class));
+                    ViewUtils.goForward(PickCCActivity.this, InviteActivity.class);
                 }
             });
 
@@ -214,17 +213,8 @@ public class PickCCActivity extends Activity
 
     private void filterList()
     {
-        String keyWord = ccEditText.getText().toString();
-
         showList.clear();
-        for (User user : userList)
-        {
-            if (user.getNickname().contains(keyWord) || user.getEmail().contains(keyWord) || user.getPhone().contains(keyWord))
-            {
-                showList.add(user);
-            }
-        }
-
+        showList.addAll(User.filterList(userList, ccEditText.getText().toString()));
         adapter.setMemberList(showList);
         adapter.notifyDataSetChanged();
     }
@@ -269,5 +259,11 @@ public class PickCCActivity extends Activity
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(ccEditText.getWindowToken(), 0);
         }
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
     }
 }

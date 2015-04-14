@@ -154,7 +154,7 @@ public class MeFragment extends Fragment
 			public void onClick(View v)
 			{
 				MobclickAgent.onEvent(getActivity(), "UMENG_MINE_CHANGE_USERINFO");
-				startActivity(new Intent(getActivity(), ProfileActivity.class));
+                ViewUtils.goForward(getActivity(), ProfileActivity.class);
 			}
 		});
 
@@ -165,7 +165,7 @@ public class MeFragment extends Fragment
 			public void onClick(View v)
 			{
                 ReimApplication.setUnreadMessagesCount(0);
-				startActivity(new Intent(getActivity(), MessageListActivity.class));
+                ViewUtils.goForward(getActivity(), MessageListActivity.class);
 			}
 		});
 
@@ -177,7 +177,7 @@ public class MeFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(getActivity(), InviteActivity.class));
+                ViewUtils.goForward(getActivity(), InviteActivity.class);
 			}
 		});
 
@@ -195,7 +195,7 @@ public class MeFragment extends Fragment
                 }
                 else
                 {
-                    startActivity(new Intent(getActivity(), ManagerActivity.class));
+                    ViewUtils.goForward(getActivity(), ManagerActivity.class);
                 }
             }
         });
@@ -206,7 +206,7 @@ public class MeFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(getActivity(), InvoiceTitleActivity.class));
+                ViewUtils.goForward(getActivity(), InvoiceTitleActivity.class);
 			}
 		});
 
@@ -217,7 +217,7 @@ public class MeFragment extends Fragment
             public void onClick(View v)
             {
                 MobclickAgent.onEvent(getActivity(), "UMENG_MINE_CATEGORT_SETTING");
-                startActivity(new Intent(getActivity(), CategoryActivity.class));
+                ViewUtils.goForward(getActivity(), CategoryActivity.class);
             }
         });
 
@@ -228,18 +228,7 @@ public class MeFragment extends Fragment
             public void onClick(View v)
             {
                 MobclickAgent.onEvent(getActivity(), "UMENG_MINE_TAG_SETTING");
-                startActivity(new Intent(getActivity(), TagActivity.class));
-            }
-        });
-
-        // init feedback
-        RelativeLayout feedbackLayout = (RelativeLayout) view.findViewById(R.id.feedbackLayout);
-        feedbackLayout.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_OPINION");
-                startActivity(new Intent(getActivity(), FeedbackActivity.class));
+                ViewUtils.goForward(getActivity(), TagActivity.class);
             }
         });
 
@@ -250,7 +239,18 @@ public class MeFragment extends Fragment
             public void onClick(View v)
             {
                 MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_ABOUT");
-                startActivity(new Intent(getActivity(), AboutActivity.class));
+                ViewUtils.goForward(getActivity(), AboutActivity.class);
+            }
+        });
+
+        // init feedback
+        RelativeLayout feedbackLayout = (RelativeLayout) view.findViewById(R.id.feedbackLayout);
+        feedbackLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_OPINION");
+                ViewUtils.goForward(getActivity(), FeedbackActivity.class);
             }
         });
         

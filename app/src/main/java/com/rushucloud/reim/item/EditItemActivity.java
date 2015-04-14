@@ -430,8 +430,7 @@ public class EditItemActivity extends Activity
                                 bundle.putSerializable("report", report);
                                 Intent intent = new Intent(EditItemActivity.this, EditReportActivity.class);
                                 intent.putExtras(bundle);
-                                startActivity(intent);
-                                finish();
+                                ViewUtils.goForwardAndFinish(EditItemActivity.this, intent);
                             }
                         });
                         buider.setNegativeButton(R.string.cancel, null);
@@ -444,8 +443,7 @@ public class EditItemActivity extends Activity
                         Intent intent = new Intent();
                         intent.putExtra("itemID", item.getLocalID());
                         intent.putExtra("type", item.getType());
-                        setResult(RESULT_OK, intent);
-                        finish();
+                        ViewUtils.goBackWithResult(EditItemActivity.this, intent);
                     }
                     else
                     {
@@ -802,7 +800,7 @@ public class EditItemActivity extends Activity
                     intent.putExtra("latitude", currentLocation.getLatitude());
                     intent.putExtra("longitude", currentLocation.getLongitude());
                 }
-                startActivityForResult(intent, PICK_VENDOR);
+                ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_VENDOR);
             }
         });
     }
@@ -822,7 +820,7 @@ public class EditItemActivity extends Activity
                 Intent intent = new Intent(EditItemActivity.this, PickLocationActivity.class);
                 intent.putExtra("location", item.getLocation());
                 intent.putExtra("currentCity", currentCity);
-                startActivityForResult(intent, PICK_LOCATION);
+                ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_LOCATION);
             }
         });
     }
@@ -848,7 +846,7 @@ public class EditItemActivity extends Activity
                     hideSoftKeyboard();
                     Intent intent = new Intent(EditItemActivity.this, PickCategoryActivity.class);
                     intent.putExtra("category", item.getCategory());
-                    startActivityForResult(intent, PICK_CATEGORY);
+                    ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_CATEGORY);
                 }
             }
         });
@@ -888,7 +886,7 @@ public class EditItemActivity extends Activity
                     hideSoftKeyboard();
                     Intent intent = new Intent(EditItemActivity.this, PickTagActivity.class);
                     intent.putExtra("tags", (Serializable) item.getTags());
-                    startActivityForResult(intent, PICK_TAG);
+                    ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_TAG);
                 }
             });
 
@@ -917,7 +915,7 @@ public class EditItemActivity extends Activity
                 hideSoftKeyboard();
                 Intent intent = new Intent(EditItemActivity.this, PickMemberActivity.class);
                 intent.putExtra("users", (Serializable) item.getRelevantUsers());
-                startActivityForResult(intent, PICK_MEMBER);
+                ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_MEMBER);
             }
         });
 
@@ -1036,7 +1034,7 @@ public class EditItemActivity extends Activity
 
                         Intent intent = new Intent(EditItemActivity.this, MultipleImageActivity.class);
                         intent.putExtras(bundle);
-                        startActivity(intent);
+                        ViewUtils.goForward(EditItemActivity.this, intent);
                     }
                 }
             });
@@ -1284,7 +1282,7 @@ public class EditItemActivity extends Activity
         dbManager.syncItem(item);
         ReimApplication.setTabIndex(0);
         ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
-        finish();
+        ViewUtils.goBack(this);
     }
 
     private void goBack()
@@ -1305,7 +1303,7 @@ public class EditItemActivity extends Activity
                 newImage.deleteFile();
             }
         }
-        finish();
+        ViewUtils.goBack(this);
     }
 
     private void sendDownloadInvoiceRequest(final Image image)

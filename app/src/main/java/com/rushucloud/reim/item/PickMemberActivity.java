@@ -182,17 +182,8 @@ public class PickMemberActivity extends Activity
 
     private void filterList()
     {
-        String keyWord = memberEditText.getText().toString();
-
         showList.clear();
-        for (User user : userList)
-        {
-            if (user.getNickname().contains(keyWord) || user.getEmail().contains(keyWord) || user.getPhone().contains(keyWord))
-            {
-                showList.add(user);
-            }
-        }
-
+        showList.addAll(User.filterList(userList, memberEditText.getText().toString()));
         adapter.setMemberList(showList);
         adapter.notifyDataSetChanged();
     }

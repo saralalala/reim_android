@@ -61,7 +61,7 @@ public class EmailActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -81,8 +81,7 @@ public class EmailActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				hideSoftKeyboard();
-				finish();
+				goBack();
 			}
 		});
 		
@@ -94,30 +93,27 @@ public class EmailActivity extends Activity
 				hideSoftKeyboard();
 
 				String newEmail = emailEditText.getText().toString();
-				if (PhoneUtils.isNetworkConnected())
-				{	
-					if (newEmail.equals(originalEmail))
-					{
-						finish();
-					}
-					else if (newEmail.isEmpty() && currentUser.getPhone().isEmpty())
-					{
-						ViewUtils.showToast(EmailActivity.this, R.string.error_new_email_empty);
-					}
-					else if (!newEmail.isEmpty() && !Utils.isEmail(newEmail))
-					{
-						ViewUtils.showToast(EmailActivity.this, R.string.error_email_wrong_format);
-					}
-					else
-					{
-						currentUser.setEmail(newEmail);
-						sendModifyUserInfoRequest();					
-					}
-				}
-				else
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					ViewUtils.showToast(EmailActivity.this, R.string.error_modify_network_unavailable);
+                    ViewUtils.showToast(EmailActivity.this, R.string.error_modify_network_unavailable);
 				}
+                else if (newEmail.equals(originalEmail))
+                {
+                    goBack();
+                }
+                else if (newEmail.isEmpty() && currentUser.getPhone().isEmpty())
+                {
+                    ViewUtils.showToast(EmailActivity.this, R.string.error_new_email_empty);
+                }
+                else if (!newEmail.isEmpty() && !Utils.isEmail(newEmail))
+                {
+                    ViewUtils.showToast(EmailActivity.this, R.string.error_email_wrong_format);
+                }
+                else
+                {
+                    currentUser.setEmail(newEmail);
+                    sendModifyUserInfoRequest();
+                }
 			}
 		});
 		
@@ -159,7 +155,7 @@ public class EmailActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(EmailActivity.this, R.string.succeed_in_modifying_user_info);
-							finish();
+							goBack();
 						}
 					});
 				}
@@ -171,7 +167,6 @@ public class EmailActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(EmailActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
-							finish();
 						}
 					});						
 				}
@@ -184,4 +179,10 @@ public class EmailActivity extends Activity
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
 	}
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
 }

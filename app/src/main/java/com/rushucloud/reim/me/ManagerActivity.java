@@ -95,7 +95,7 @@ public class ManagerActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -123,7 +123,7 @@ public class ManagerActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -141,7 +141,7 @@ public class ManagerActivity extends Activity
 				}
                 else if (manager == null && (currentUser.getDefaultManagerID() == -1 || currentUser.getDefaultManagerID() == 0))
                 {
-                    finish();
+                    goBack();
                 }
 				else if (manager == null)
 				{
@@ -153,7 +153,7 @@ public class ManagerActivity extends Activity
 				}
 				else if (manager.getServerID() == currentUser.getDefaultManagerID())
 				{
-					finish();
+                    goBack();
 				}
 				else
 				{
@@ -259,17 +259,8 @@ public class ManagerActivity extends Activity
 
     private void filterList()
     {
-        String keyWord = managerEditText.getText().toString();
-
         showList.clear();
-        for (User user : userList)
-        {
-            if (user.getNickname().contains(keyWord) || user.getEmail().contains(keyWord) || user.getPhone().contains(keyWord))
-            {
-                showList.add(user);
-            }
-        }
-
+        showList.addAll(User.filterList(userList, managerEditText.getText().toString()));
         adapter.setMemberList(showList);
         adapter.notifyDataSetChanged();
     }
@@ -344,7 +335,7 @@ public class ManagerActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
                             ViewUtils.showToast(ManagerActivity.this, R.string.succeed_in_changing_default_manager);
-                            finish();
+                            goBack();
 						}
 					});
 				}
@@ -402,5 +393,11 @@ public class ManagerActivity extends Activity
     {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(managerEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
     }
 }

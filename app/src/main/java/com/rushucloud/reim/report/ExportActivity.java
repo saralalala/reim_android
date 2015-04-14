@@ -61,7 +61,7 @@ public class ExportActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -81,8 +81,7 @@ public class ExportActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				hideSoftKeyboard();
-				finish();
+                goBack();
 			}
 		});
 
@@ -151,7 +150,7 @@ public class ExportActivity extends Activity
                         {
                             ReimProgressDialog.dismiss();
                             ViewUtils.showToast(ExportActivity.this, R.string.succeed_in_exporting);
-                            finish();
+                            goBack();
                         }
                     });
                 }
@@ -168,5 +167,11 @@ public class ExportActivity extends Activity
                 }
             }
         });
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
     }
 }

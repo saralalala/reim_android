@@ -144,7 +144,7 @@ public class ShowReportActivity extends Activity
 				bundle.putBoolean("myReport", myReport);
 				Intent intent = new Intent(ShowReportActivity.this, CommentActivity.class);
 				intent.putExtras(bundle);
-				startActivity(intent);
+                ViewUtils.goForward(ShowReportActivity.this, intent);
 			}
 		});
 		
@@ -169,7 +169,7 @@ public class ShowReportActivity extends Activity
 					{
 						intent.putExtra("othersItemServerID", itemList.get(position - 1).getServerID());					
 					}
-					startActivity(intent);	
+                    ViewUtils.goForward(ShowReportActivity.this, intent);
 				}
 			}
 		});
@@ -370,12 +370,11 @@ public class ShowReportActivity extends Activity
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        	startActivity(intent);
-        	finish();
+            ViewUtils.goBackWithIntent(this, intent);
 		}
     	else
     	{
-        	finish();
+            ViewUtils.goBack(this);
 		}
     }
 }

@@ -13,6 +13,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import classes.Group;
 import classes.utils.AppPreference;
+import classes.utils.ViewUtils;
 
 public class InvoiceTitleActivity extends Activity
 {	
@@ -41,7 +42,7 @@ public class InvoiceTitleActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-	    	finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -55,7 +56,7 @@ public class InvoiceTitleActivity extends Activity
         {
             public void onClick(View v)
             {
-                finish();
+                goBack();
             }
         });
 
@@ -64,4 +65,9 @@ public class InvoiceTitleActivity extends Activity
 		TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
 		titleTextView.setText(title);
 	}
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
 }

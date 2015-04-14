@@ -26,6 +26,7 @@ import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Group;
+import classes.Image;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -144,7 +145,7 @@ public class ProfileActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-	    	finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -165,7 +166,7 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 
@@ -207,7 +208,7 @@ public class ProfileActivity extends Activity
         {
             public void onClick(View v)
             {
-                startActivity(new Intent(ProfileActivity.this, NicknameActivity.class));
+                ViewUtils.goForward(ProfileActivity.this, NicknameActivity.class);
             }
         });
 
@@ -219,7 +220,7 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(ProfileActivity.this, EmailActivity.class));
+                ViewUtils.goForward(ProfileActivity.this, EmailActivity.class);
 			}
 		});
 
@@ -231,7 +232,7 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(ProfileActivity.this, PhoneActivity.class));
+                ViewUtils.goForward(ProfileActivity.this, PhoneActivity.class);
 			}
 		});
 
@@ -243,7 +244,7 @@ public class ProfileActivity extends Activity
         {
             public void onClick(View v)
             {
-                startActivity(new Intent(ProfileActivity.this, BankActivity.class));
+                ViewUtils.goForward(ProfileActivity.this, BankActivity.class);
             }
         });
 
@@ -256,7 +257,7 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(ProfileActivity.this, CompanyActivity.class));
+                ViewUtils.goForward(ProfileActivity.this, CompanyActivity.class);
 			}
 		});
 
@@ -266,7 +267,7 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
+                ViewUtils.goForward(ProfileActivity.this, ChangePasswordActivity.class);
 			}
 		});
 	}
@@ -292,7 +293,7 @@ public class ProfileActivity extends Activity
 				{
 					Intent intent = new Intent(ProfileActivity.this, SingleImageActivity.class);
 					intent.putExtra("imagePath", currentUser.getAvatarLocalPath());
-					startActivity(intent);
+                    ViewUtils.goForward(ProfileActivity.this, intent);
 				}
 				else if (currentUser != null)
 				{
@@ -473,8 +474,7 @@ public class ProfileActivity extends Activity
                             Intent intent = new Intent(ProfileActivity.this, SignInActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
+                            ViewUtils.goBackWithIntent(ProfileActivity.this, intent);
                         }
                     });
                 }
@@ -493,4 +493,8 @@ public class ProfileActivity extends Activity
         });
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
 }

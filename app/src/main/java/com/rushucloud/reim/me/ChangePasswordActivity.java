@@ -20,6 +20,7 @@ import classes.utils.AppPreference;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
+import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.ChangePasswordRequest;
 import netUtils.response.user.ChangePasswordResponse;
@@ -44,6 +45,7 @@ public class ChangePasswordActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ChangePasswordActivity");		
 		MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()
@@ -57,7 +59,7 @@ public class ChangePasswordActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -71,7 +73,7 @@ public class ChangePasswordActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -157,6 +159,7 @@ public class ChangePasswordActivity extends Activity
 
 	private void sendChangePasswordRequest(String oldPassword, final String newPassword)
 	{
+        ReimProgressDialog.show();
 		ChangePasswordRequest request = new ChangePasswordRequest(oldPassword, newPassword);
 		request.sendRequest(new HttpConnectionCallback()
 		{
@@ -172,11 +175,23 @@ public class ChangePasswordActivity extends Activity
 					{
 						public void run()
 						{
+                            ReimProgressDialog.show();
                             ViewUtils.showToast(ChangePasswordActivity.this, R.string.succeed_in_changing_password);
-                            finish();
+                            goBack();
 						}
-					});					
+					});
 				}
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.show();
+                            ViewUtils.showToast(ChangePasswordActivity.this, R.string.failed_to_change_password);
+                        }
+                    });
+                }
 			}
 		});
 	}
@@ -187,5 +202,11 @@ public class ChangePasswordActivity extends Activity
 		imm.hideSoftInputFromWindow(oldPasswordEditText.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(newPasswordEditText.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
     }
 }

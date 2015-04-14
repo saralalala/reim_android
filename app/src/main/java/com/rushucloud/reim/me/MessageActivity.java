@@ -100,7 +100,7 @@ public class MessageActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -317,7 +317,7 @@ public class MessageActivity extends Activity
 		}
     	else
     	{
-			finish();
+            ViewUtils.goBack(this);
 		}
     }
 }

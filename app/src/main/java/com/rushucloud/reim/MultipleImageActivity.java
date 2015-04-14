@@ -9,6 +9,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
+import classes.utils.ViewUtils;
 import classes.widget.galleryWidget.FilePagerAdapter;
 import classes.widget.galleryWidget.GalleryViewPager;
 
@@ -39,7 +40,7 @@ public class MultipleImageActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            ViewUtils.goBack(this);
 		}
 		return super.onKeyDown(keyCode, event);
 	}

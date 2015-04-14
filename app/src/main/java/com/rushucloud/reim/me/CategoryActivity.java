@@ -79,7 +79,7 @@ public class CategoryActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -101,7 +101,7 @@ public class CategoryActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -112,7 +112,7 @@ public class CategoryActivity extends Activity
 			{
 				Intent intent = new Intent(CategoryActivity.this, EditCategoryActivity.class);
 				intent.putExtra("category", new Category());
-				startActivity(intent);
+                ViewUtils.goForward(CategoryActivity.this, intent);
 			}
 		});
 
@@ -129,7 +129,7 @@ public class CategoryActivity extends Activity
 				{
 					Intent intent = new Intent(CategoryActivity.this, SubCategoryActivity.class);
 					intent.putExtra("parentID", categoryList.get(position).getServerID());
-					startActivity(intent);					
+                    ViewUtils.goForward(CategoryActivity.this, intent);
 				}
 			}
 		});
@@ -156,17 +156,10 @@ public class CategoryActivity extends Activity
 			public void onClick(View v)
 			{
 				operationPopupWindow.dismiss();
-				
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(CategoryActivity.this, R.string.error_modify_network_unavailable);
-				}
-				else
-				{
-					Intent intent = new Intent(CategoryActivity.this, EditCategoryActivity.class);
-					intent.putExtra("category", currentCategory);
-					startActivity(intent);
-				}
+
+                Intent intent = new Intent(CategoryActivity.this, EditCategoryActivity.class);
+                intent.putExtra("category", currentCategory);
+                ViewUtils.goForward(CategoryActivity.this, intent);
 			}
 		});
 		
@@ -313,5 +306,10 @@ public class CategoryActivity extends Activity
 				}
 			}
 		});
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
     }
 }

@@ -620,7 +620,7 @@ public class StatisticsFragment extends Fragment
                             bundle.putInt("categoryID", category.getCategoryID());
                             Intent intent = new Intent(getActivity(), StatisticsActivity.class);
                             intent.putExtras(bundle);
-                            startActivity(intent);
+                            ViewUtils.goForward(getActivity(), intent);
                         }
                     });
                 }
@@ -693,7 +693,7 @@ public class StatisticsFragment extends Fragment
                             bundle.putInt("tagID", localTag.getServerID());
                             Intent intent = new Intent(getActivity(), StatisticsActivity.class);
                             intent.putExtras(bundle);
-                            startActivity(intent);
+                            ViewUtils.goForward(getActivity(), intent);
                         }
                     });
 
@@ -754,7 +754,7 @@ public class StatisticsFragment extends Fragment
                             bundle.putInt("userID", localUser.getServerID());
                             Intent intent = new Intent(getActivity(), StatisticsActivity.class);
                             intent.putExtras(bundle);
-                            startActivity(intent);
+                            ViewUtils.goForward(getActivity(), intent);
                         }
                     });
 

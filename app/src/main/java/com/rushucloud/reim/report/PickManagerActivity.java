@@ -84,7 +84,7 @@ public class PickManagerActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -116,8 +116,7 @@ public class PickManagerActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-                hideSoftKeyboard();
-				finish();
+                goBack();
 			}
 		});
 		
@@ -143,8 +142,7 @@ public class PickManagerActivity extends Activity
 				
 				Intent intent = new Intent();
 				intent.putExtra("managers", (Serializable) chosenList);
-				setResult(RESULT_OK, intent);
-				finish();
+                ViewUtils.goBackWithResult(PickManagerActivity.this, intent);
 			}
 		});
 
@@ -158,7 +156,7 @@ public class PickManagerActivity extends Activity
             {
                 public void onClick(View v)
                 {
-                    startActivity(new Intent(PickManagerActivity.this, InviteActivity.class));
+                    ViewUtils.goForward(PickManagerActivity.this, InviteActivity.class);
                 }
             });
 
@@ -295,17 +293,8 @@ public class PickManagerActivity extends Activity
 
     private void filterList()
     {
-        String keyWord = managerEditText.getText().toString();
-
         showList.clear();
-        for (User user : userList)
-        {
-            if (user.getNickname().contains(keyWord) || user.getEmail().contains(keyWord) || user.getPhone().contains(keyWord))
-            {
-                showList.add(user);
-            }
-        }
-
+        showList.addAll(User.filterList(userList, managerEditText.getText().toString()));
         adapter.setMemberList(showList);
         adapter.notifyDataSetChanged();
     }
@@ -353,5 +342,11 @@ public class PickManagerActivity extends Activity
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(managerEditText.getWindowToken(), 0);
         }
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
     }
 }

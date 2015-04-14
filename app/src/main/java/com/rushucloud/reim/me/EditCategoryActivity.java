@@ -80,7 +80,7 @@ public class EditCategoryActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -142,7 +142,7 @@ public class EditCategoryActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -164,26 +164,30 @@ public class EditCategoryActivity extends Activity
 //                    category.setLimit(limit);
                 category.setIconID(iconID);
 
-				if (name.isEmpty())
-				{
-					ViewUtils.showToast(EditCategoryActivity.this, R.string.error_category_name_empty);
-				}
-				else if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(EditCategoryActivity.this, R.string.error_add_network_unavailable);
-				}
+                if (!PhoneUtils.isNetworkConnected() && category.getServerID() == -1)
+                {
+                    ViewUtils.showToast(EditCategoryActivity.this, R.string.error_add_network_unavailable);
+                }
+                else if (!PhoneUtils.isNetworkConnected())
+                {
+                    ViewUtils.showToast(EditCategoryActivity.this, R.string.error_modify_network_unavailable);
+                }
+				else if (name.isEmpty())
+                {
+                    ViewUtils.showToast(EditCategoryActivity.this, R.string.error_category_name_empty);
+                }
 				else if (category.getName().equals(originalCategory.getName()) && category.getIconID() == originalCategory.getIconID())
 //                        && category.getLimit() == limit && category.isProveAhead() == isProveAhead)
                 {
-                    finish();
+                    goBack();
                 }
                 else if (category.getServerID() == -1)
 			    {
-					sendCreateCategoryRequest(category);
+					sendCreateCategoryRequest();
 				}
 				else
 				{
-					sendModifyCategoryRequest(category);
+					sendModifyCategoryRequest();
 				}
 			}
 		});
@@ -289,7 +293,7 @@ public class EditCategoryActivity extends Activity
 //		imm.hideSoftInputFromWindow(limitEditText.getWindowToken(), 0);
 	}
 
-	private void sendCreateCategoryRequest(final Category category)
+	private void sendCreateCategoryRequest()
 	{
 		ReimProgressDialog.show();
 		CreateCategoryRequest request = new CreateCategoryRequest(category);
@@ -311,7 +315,7 @@ public class EditCategoryActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(EditCategoryActivity.this, R.string.succeed_in_creating_category);
-							finish();
+                            goBack();
 						}
 					});
 				}
@@ -330,7 +334,7 @@ public class EditCategoryActivity extends Activity
 		});
 	}
 
-	private void sendModifyCategoryRequest(final Category category)
+	private void sendModifyCategoryRequest()
 	{
 		ReimProgressDialog.show();
 		ModifyCategoryRequest request = new ModifyCategoryRequest(category);
@@ -351,7 +355,7 @@ public class EditCategoryActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(EditCategoryActivity.this, R.string.succeed_in_modifying_category);
-							finish();
+                            goBack();
 						}
 					});
 				}
@@ -369,4 +373,10 @@ public class EditCategoryActivity extends Activity
 			}
 		});
 	}
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
 }

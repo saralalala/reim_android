@@ -53,7 +53,7 @@ public class FeedbackActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -67,7 +67,7 @@ public class FeedbackActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -139,7 +139,7 @@ public class FeedbackActivity extends Activity
 						if (response.getStatus())
 						{
                             ViewUtils.showToast(FeedbackActivity.this, R.string.succeed_in_sending_feedback);
-                            finish();
+                            goBack();
 						}
 						else
 						{
@@ -149,5 +149,11 @@ public class FeedbackActivity extends Activity
 				});
 			}
 		});
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
     }
 }

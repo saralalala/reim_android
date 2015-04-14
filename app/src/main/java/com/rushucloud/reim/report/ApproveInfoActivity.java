@@ -71,7 +71,7 @@ public class ApproveInfoActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -97,7 +97,7 @@ public class ApproveInfoActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -213,5 +213,10 @@ public class ApproveInfoActivity extends Activity
 				}
 			}
 		});
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
     }
 }

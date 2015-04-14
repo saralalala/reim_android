@@ -23,6 +23,7 @@ import classes.Tag;
 import classes.adapter.TagListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.ViewUtils;
 
 public class PickTagActivity extends Activity
 {
@@ -57,7 +58,7 @@ public class PickTagActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -82,7 +83,7 @@ public class PickTagActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -102,8 +103,7 @@ public class PickTagActivity extends Activity
 				
 				Intent intent = new Intent();
 				intent.putExtra("tags", (Serializable) tags);
-				setResult(RESULT_OK, intent);
-				finish();
+                ViewUtils.goBackWithResult(PickTagActivity.this, intent);
 			}
 		});
 
@@ -134,4 +134,9 @@ public class PickTagActivity extends Activity
 			});			
 		}
 	}
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
 }

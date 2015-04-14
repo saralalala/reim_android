@@ -1,19 +1,23 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
+import classes.Category;
 import classes.Tag;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
@@ -29,6 +33,7 @@ public class EditTagActivity extends Activity
 	private ClearEditText nameEditText;
 
 	private DBManager dbManager;
+    private String originalName;
 	private Tag tag;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -58,7 +63,7 @@ public class EditTagActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -66,8 +71,8 @@ public class EditTagActivity extends Activity
 	private void initData()
 	{
 		dbManager = DBManager.getDBManager();
-		
 		tag = (Tag) getIntent().getSerializableExtra("tag");
+        originalName = tag.getName();
 	}
 	
 	private void initView()
@@ -79,7 +84,7 @@ public class EditTagActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});    		
 		
@@ -89,35 +94,47 @@ public class EditTagActivity extends Activity
 			public void onClick(View v)
 			{
 				String name = nameEditText.getText().toString();
-				if (name.isEmpty())
+                tag.setName(name);
+                tag.setGroupID(AppPreference.getAppPreference().getCurrentGroupID());
+
+                if (!PhoneUtils.isNetworkConnected() && tag.getServerID() == -1)
+                {
+                    ViewUtils.showToast(EditTagActivity.this, R.string.error_add_network_unavailable);
+                }
+                else if (!PhoneUtils.isNetworkConnected())
+                {
+                    ViewUtils.showToast(EditTagActivity.this, R.string.error_modify_network_unavailable);
+                }
+				else if (name.isEmpty())
 				{
 					ViewUtils.showToast(EditTagActivity.this, R.string.error_tag_name_empty);
 				}
-				else if (tag.getName().equals(name))
+				else if (tag.getName().equals(originalName))
 				{
-					finish();
+                    goBack();
 				}
-				else
+				else if (tag.getServerID() == -1)
 				{
-					tag.setName(name);
-					tag.setGroupID(AppPreference.getAppPreference().getCurrentGroupID());
-					if (tag.getServerID() == -1)
-					{
-						sendCreateTagRequest();															
-					}
-					else
-					{
-						sendModifyTagRequest();
-					}
+                    sendCreateTagRequest();
 				}
+                else
+                {
+                    sendModifyTagRequest();
+                }
 			}
 		});
 		
 		nameEditText = (ClearEditText) findViewById(R.id.nameEditText);
 		nameEditText.setText(tag.getName());
 	}
-	
-	private void sendCreateTagRequest()
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
+    }
+
+    private void sendCreateTagRequest()
 	{
 		ReimProgressDialog.show();
 		CreateTagRequest request = new CreateTagRequest(tag);
@@ -139,7 +156,7 @@ public class EditTagActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(EditTagActivity.this, R.string.succeed_in_creating_tag);
-							finish();
+                            goBack();
 						}
 					});
 				}
@@ -179,7 +196,7 @@ public class EditTagActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(EditTagActivity.this, R.string.succeed_in_modifying_tag);
-							finish();
+                            goBack();
 						}
 					});
 				}
@@ -197,4 +214,10 @@ public class EditTagActivity extends Activity
 			}
 		});
 	}
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
 }

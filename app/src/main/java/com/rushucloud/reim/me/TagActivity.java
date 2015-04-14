@@ -74,7 +74,7 @@ public class TagActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -94,7 +94,7 @@ public class TagActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -103,16 +103,9 @@ public class TagActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(TagActivity.this, R.string.error_add_network_unavailable);
-				}
-				else
-				{
-					Intent intent = new Intent(TagActivity.this, EditTagActivity.class);
-					intent.putExtra("tag", new Tag());
-					startActivity(intent);
-				}
+                Intent intent = new Intent(TagActivity.this, EditTagActivity.class);
+                intent.putExtra("tag", new Tag());
+                ViewUtils.goForward(TagActivity.this, intent);
 			}
 		});
 		
@@ -144,17 +137,10 @@ public class TagActivity extends Activity
 			public void onClick(View v)
 			{
 				operationPopupWindow.dismiss();
-				
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(TagActivity.this, R.string.error_modify_network_unavailable);
-				}
-				else
-				{
-					Intent intent = new Intent(TagActivity.this, EditTagActivity.class);
-					intent.putExtra("tag", currentTag);
-					startActivity(intent);
-				}
+
+                Intent intent = new Intent(TagActivity.this, EditTagActivity.class);
+                intent.putExtra("tag", currentTag);
+                ViewUtils.goForward(TagActivity.this, intent);
 			}
 		});
 		
@@ -262,4 +248,9 @@ public class TagActivity extends Activity
 			}
 		});
 	}
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
 }

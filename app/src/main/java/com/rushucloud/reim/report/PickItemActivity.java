@@ -156,8 +156,7 @@ public class PickItemActivity extends Activity implements OnClickListener
 			bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
 			Intent intent = new Intent();
 			intent.putExtras(bundle);
-			setResult(RESULT_OK, intent);
-			finish();
+            ViewUtils.goBackWithResult(this, intent);
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -316,8 +315,7 @@ public class PickItemActivity extends Activity implements OnClickListener
                     bundle.putInt("type", type);
 					Intent intent = new Intent();
 					intent.putExtras(bundle);
-					setResult(RESULT_OK, intent);
-					finish();
+                    ViewUtils.goBackWithResult(PickItemActivity.this, intent);
 				}
 				catch (Exception e)
 				{
@@ -338,7 +336,7 @@ public class PickItemActivity extends Activity implements OnClickListener
 					Intent intent = new Intent(PickItemActivity.this, EditItemActivity.class);
 					intent.putExtra("fromPickItems", true);
                     intent.putExtra("type", tabIndex);
-					startActivityForResult(intent, NEW_ITEM);
+                    ViewUtils.goForwardForResult(PickItemActivity.this, intent, NEW_ITEM);
 				}
 				else
 				{

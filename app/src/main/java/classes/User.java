@@ -379,6 +379,24 @@ public class User implements Serializable
 		return tempList;
 	}
 
+    public static List<User> filterList(List<User> userList, String keyword)
+    {
+        List<User> resultList = new ArrayList<User>();
+        keyword = keyword.toLowerCase();
+
+        for (User user : userList)
+        {
+            if (user.getNickname().toLowerCase().contains(keyword) ||
+                    user.getEmail().toLowerCase().contains(keyword) ||
+                    user.getPhone().toLowerCase().contains(keyword))
+            {
+                resultList.add(user);
+            }
+        }
+
+        return resultList;
+    }
+
     public static void sortByNickname(List<User> userList)
     {
         for(User user : userList)

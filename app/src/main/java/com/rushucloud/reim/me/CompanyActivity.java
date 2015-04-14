@@ -67,7 +67,7 @@ public class CompanyActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -89,8 +89,7 @@ public class CompanyActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				hideSoftKeyboard();
-				finish();
+                goBack();
 			}
 		});
 		
@@ -108,7 +107,7 @@ public class CompanyActivity extends Activity
 				}
 				else if (newName.equals(originalName))
 				{
-					finish();
+                    goBack();
 				}
 				else if (newName.isEmpty())
 				{
@@ -206,7 +205,7 @@ public class CompanyActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(CompanyActivity.this, R.string.succeed_in_modifying);
-							finish();
+                            goBack();
 						}
 					});
 				}
@@ -270,7 +269,7 @@ public class CompanyActivity extends Activity
                         {
                             ReimProgressDialog.dismiss();
                             ViewUtils.showToast(CompanyActivity.this, R.string.succeed_in_creating_company);
-                            finish();
+                            goBack();
                         }
                     });
                 }
@@ -282,7 +281,7 @@ public class CompanyActivity extends Activity
                         {
                             ReimProgressDialog.dismiss();
                             ViewUtils.showToast(CompanyActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
-                            finish();
+                            goBack();
                         }
                     });
                 }
@@ -295,4 +294,10 @@ public class CompanyActivity extends Activity
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
 	}
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
 }

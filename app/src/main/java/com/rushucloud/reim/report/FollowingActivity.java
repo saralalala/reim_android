@@ -133,7 +133,7 @@ public class FollowingActivity extends Activity
 				intent.putExtra("managers", (Serializable) report.getManagerList());
 				intent.putExtra("sender", report.getSender().getServerID());
 				intent.putExtra("fromFollowing", true);
-				startActivityForResult(intent, PICK_MANAGER);
+                ViewUtils.goForwardForResult(FollowingActivity.this, intent, PICK_MANAGER);
 			}
 		});
 		managerTextView.setText(report.getManagersName());
@@ -148,7 +148,7 @@ public class FollowingActivity extends Activity
 				intent.putExtra("ccs", (Serializable) report.getCCList());
 				intent.putExtra("sender", report.getSender().getServerID());
 				intent.putExtra("fromFollowing", true);
-				startActivityForResult(intent, PICK_CC);
+                ViewUtils.goForwardForResult(FollowingActivity.this, intent, PICK_CC);
 			}
 		});
 		
@@ -225,14 +225,13 @@ public class FollowingActivity extends Activity
 		bundle.putSerializable("report", report);
 		Intent intent = new Intent(FollowingActivity.this, ApproveReportActivity.class);
 		intent.putExtras(bundle);
-		startActivity(intent);
-		finish();
+        ViewUtils.goBackWithIntent(this, intent);
     }
  
     private void goBackToMainActivity()
     {
     	ReimApplication.setTabIndex(1);
     	ReimApplication.setReportTabIndex(1);
-		finish();
+        ViewUtils.goBack(this);
     }
 }

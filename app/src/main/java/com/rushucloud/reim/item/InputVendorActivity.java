@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
+import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 
 public class InputVendorActivity extends Activity
@@ -48,7 +49,7 @@ public class InputVendorActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -62,8 +63,7 @@ public class InputVendorActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-                hideSoftKeyboard();
-				finish();
+                goBack();
 			}
 		});
 		
@@ -77,9 +77,12 @@ public class InputVendorActivity extends Activity
                 {
                     Intent intent = new Intent();
                     intent.putExtra("vendor", vendorEditText.getText().toString());
-                    setResult(RESULT_OK, intent);
+                    ViewUtils.goBackWithResult(InputVendorActivity.this, intent);
                 }
-				finish();
+                else
+                {
+                    goBack();
+                }
 			}
 		});
 		
@@ -107,5 +110,11 @@ public class InputVendorActivity extends Activity
     {
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(vendorEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
     }
 }

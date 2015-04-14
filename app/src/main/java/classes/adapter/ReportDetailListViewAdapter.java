@@ -82,8 +82,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 
                     Intent intent = new Intent(activity, ApproveInfoActivity.class);
                     intent.putExtra("reportServerID", report.getServerID());
-                    activity.startActivity(intent);
-                    activity.overridePendingTransition(R.anim.window_right_in, R.anim.window_left_out);
+                    ViewUtils.goForward(activity, intent);
                 }
             });
 

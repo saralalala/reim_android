@@ -61,7 +61,7 @@ public class PhoneActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -81,8 +81,7 @@ public class PhoneActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				hideSoftKeyboard();
-				finish();
+                goBack();
 			}
 		});
 		
@@ -94,30 +93,27 @@ public class PhoneActivity extends Activity
 				hideSoftKeyboard();
 
 				String newPhone = phoneEditText.getText().toString();
-				if (PhoneUtils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					if (newPhone.equals(originalPhone))
-					{
-						finish();
-					}
-					else if (newPhone.isEmpty() && currentUser.getEmail().isEmpty())
-					{
-						ViewUtils.showToast(PhoneActivity.this, R.string.error_new_phone_empty);
-					}
-					else if (!newPhone.isEmpty() && !Utils.isPhone(newPhone))
-					{
-						ViewUtils.showToast(PhoneActivity.this, R.string.error_phone_wrong_format);
-					}
-					else
-					{
-						currentUser.setPhone(newPhone);
-						sendModifyUserInfoRequest();						
-					}
-				}
-				else
-				{
-					ViewUtils.showToast(PhoneActivity.this, R.string.error_modify_network_unavailable);						
-				}
+                    ViewUtils.showToast(PhoneActivity.this, R.string.error_modify_network_unavailable);
+                }
+                else if (newPhone.equals(originalPhone))
+                {
+                    goBack();
+                }
+                else if (newPhone.isEmpty() && currentUser.getEmail().isEmpty())
+                {
+                    ViewUtils.showToast(PhoneActivity.this, R.string.error_new_phone_empty);
+                }
+                else if (!newPhone.isEmpty() && !Utils.isPhone(newPhone))
+                {
+                    ViewUtils.showToast(PhoneActivity.this, R.string.error_phone_wrong_format);
+                }
+                else
+                {
+                    currentUser.setPhone(newPhone);
+                    sendModifyUserInfoRequest();
+                }
 			}
 		});
 		
@@ -159,7 +155,7 @@ public class PhoneActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(PhoneActivity.this, R.string.succeed_in_modifying_user_info);
-							finish();
+                            goBack();
 						}
 					});
 				}
@@ -171,7 +167,6 @@ public class PhoneActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(PhoneActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
-							finish();
 						}
 					});						
 				}
@@ -184,4 +179,10 @@ public class PhoneActivity extends Activity
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
 	}
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
 }

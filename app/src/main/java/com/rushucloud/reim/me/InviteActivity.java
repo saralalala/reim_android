@@ -59,7 +59,7 @@ public class InviteActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-	    	finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -73,7 +73,7 @@ public class InviteActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -199,7 +199,7 @@ public class InviteActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(InviteActivity.this, R.string.succeed_in_sending_invite);
-							finish();
+                            goBack();
 						}
 					});
 				}
@@ -210,7 +210,8 @@ public class InviteActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(InviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
+                            ViewUtils.showToast(InviteActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            goBack();
 						}
 					});
 				}
@@ -223,4 +224,10 @@ public class InviteActivity extends Activity
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);
 	}
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
 }

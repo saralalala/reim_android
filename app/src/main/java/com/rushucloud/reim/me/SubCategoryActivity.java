@@ -79,7 +79,7 @@ public class SubCategoryActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -101,7 +101,7 @@ public class SubCategoryActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -118,7 +118,7 @@ public class SubCategoryActivity extends Activity
 				
 				Intent intent = new Intent(SubCategoryActivity.this, EditCategoryActivity.class);
 				intent.putExtra("category", category);
-				startActivity(intent);
+                ViewUtils.goForward(SubCategoryActivity.this, intent);
 			}
 		});
 
@@ -157,7 +157,7 @@ public class SubCategoryActivity extends Activity
 				{
 					Intent intent = new Intent(SubCategoryActivity.this, EditCategoryActivity.class);
 					intent.putExtra("category", currentCategory);
-					startActivity(intent);
+                    ViewUtils.goForward(SubCategoryActivity.this, intent);
 				}
 			}
 		});
@@ -305,5 +305,10 @@ public class SubCategoryActivity extends Activity
 				}
 			}
 		});
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
     }
 }

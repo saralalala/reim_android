@@ -140,7 +140,7 @@
                     android:layout_marginLeft="80dp"
                     android:paddingTop="3dp"
                     android:paddingBottom="13dp"
-                    android:minHeight="56dp" />
+                    android:minHeight="56dp"/>
 
                 <ImageView
                     android:id="@+id/addInvoiceImageView"

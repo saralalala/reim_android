@@ -74,7 +74,7 @@ public class PickVendorActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -89,8 +89,7 @@ public class PickVendorActivity extends Activity
                 {
                     Intent intent = new Intent();
                     intent.putExtra("vendor", data.getStringExtra("vendor"));
-                    setResult(RESULT_OK, intent);
-                    finish();
+                    ViewUtils.goBackWithResult(PickVendorActivity.this, intent);
                     break;
                 }
                 default:
@@ -117,8 +116,7 @@ public class PickVendorActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-                hideSoftKeyboard();
-				finish();
+                goBack();
 			}
 		});
 
@@ -138,7 +136,7 @@ public class PickVendorActivity extends Activity
 			{
 				hideSoftKeyboard();
 				Intent intent = new Intent(PickVendorActivity.this, InputVendorActivity.class);
-                startActivityForResult(intent, INPUT_VENDOR);
+                ViewUtils.goForwardForResult(PickVendorActivity.this, intent, INPUT_VENDOR);
 			}
 		});
 		
@@ -169,8 +167,7 @@ public class PickVendorActivity extends Activity
 				intent.putExtra("vendor", vendor.getName());
                 intent.putExtra("latitude", vendor.getLatitude());
                 intent.putExtra("longitude", vendor.getLongitude());
-				setResult(RESULT_OK, intent);
-				finish();
+                ViewUtils.goBackWithResult(PickVendorActivity.this, intent);
 			}
 		});
 	}
@@ -350,5 +347,11 @@ public class PickVendorActivity extends Activity
                 }
             }
         });
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
     }
 }

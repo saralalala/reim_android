@@ -249,7 +249,7 @@ public class ReportFragment extends Fragment
 				bundle.putSerializable("report", report);				
 				Intent intent = new Intent(getActivity(), EditReportActivity.class);
 				intent.putExtras(bundle);
-				startActivity(intent);
+                ViewUtils.goForward(getActivity(), intent);
 			}
 		});
 	}
@@ -321,7 +321,7 @@ public class ReportFragment extends Fragment
 							intent.setClass(getActivity(), ShowReportActivity.class);						
 						}
 						intent.putExtras(bundle);
-						startActivity(intent);
+                        ViewUtils.goForward(getActivity(), intent);
 					}
 					else
 					{
@@ -348,7 +348,7 @@ public class ReportFragment extends Fragment
                                 intent.setClass(getActivity(), ShowReportActivity.class);
                             }
                             intent.putExtras(bundle);
-                            startActivity(intent);
+                            ViewUtils.goForward(getActivity(), intent);
                         }
 					}
 				}
@@ -636,7 +636,7 @@ public class ReportFragment extends Fragment
                     bundle.putSerializable("report", report);
                     Intent intent = new Intent(getActivity(), ExportActivity.class);
                     intent.putExtras(bundle);
-                    startActivity(intent);
+                    ViewUtils.goForward(getActivity(), intent);
                 }
 			}
 		});

@@ -215,6 +215,12 @@ public class ViewUtils
         activity.overridePendingTransition(R.anim.window_right_in, R.anim.window_left_out);
     }
 
+    public static void goForwardForResult(Activity activity, Intent intent, int requestCode)
+    {
+        activity.startActivityForResult(intent, requestCode);
+        activity.overridePendingTransition(R.anim.window_right_in, R.anim.window_left_out);
+    }
+
     public static void goForward(Activity activity, Class cls)
     {
         activity.startActivity(new Intent(activity, cls));

@@ -74,7 +74,7 @@ public class ShowItemActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -114,7 +114,7 @@ public class ShowItemActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 
@@ -229,10 +229,10 @@ public class ShowItemActivity extends Activity
 
 		int layoutMaxLength = ViewUtils.getPhoneWindowWidth(this) - ViewUtils.dpToPixel(96);
 		int sideLength = ViewUtils.dpToPixel(30);
-		int verticalPadding = ViewUtils.dpToPixel(10);
-		int horizontalPadding = ViewUtils.dpToPixel(10);
-		int maxCount = (layoutMaxLength + horizontalPadding) / (sideLength + horizontalPadding);
-		horizontalPadding = (layoutMaxLength - sideLength * maxCount) / (maxCount - 1);
+		int verticalInterval = ViewUtils.dpToPixel(10);
+		int horizontalInterval = ViewUtils.dpToPixel(10);
+		int maxCount = (layoutMaxLength + horizontalInterval) / (sideLength + horizontalInterval);
+		horizontalInterval = (layoutMaxLength - sideLength * maxCount) / (maxCount - 1);
 
 		LinearLayout layout = new LinearLayout(this);
 		int invoiceCount = item.getInvoices() != null? item.getInvoices().size() : 0;
@@ -242,7 +242,7 @@ public class ShowItemActivity extends Activity
 			{
 				layout = new LinearLayout(this);
 				LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				params.topMargin = verticalPadding;
+				params.topMargin = verticalInterval;
 				layout.setLayoutParams(params);
 				layout.setOrientation(LinearLayout.HORIZONTAL);
 				
@@ -276,7 +276,7 @@ public class ShowItemActivity extends Activity
 						
 						Intent intent = new Intent(ShowItemActivity.this, MultipleImageActivity.class);
 						intent.putExtras(bundle);
-						startActivity(intent);
+                        ViewUtils.goForward(ShowItemActivity.this, intent);
 					}
 				}
 			});
@@ -293,7 +293,7 @@ public class ShowItemActivity extends Activity
 			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sideLength, sideLength);
 			if ((i + 1) % maxCount != 0)
 			{
-				params.rightMargin = horizontalPadding;				
+				params.rightMargin = horizontalInterval;
 			}
 			
 			layout.addView(invoiceImageView, params);
@@ -509,5 +509,10 @@ public class ShowItemActivity extends Activity
 				}
 			}
 		});
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
     }
 }

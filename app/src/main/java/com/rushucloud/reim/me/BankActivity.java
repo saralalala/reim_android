@@ -61,7 +61,7 @@ public class BankActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -81,8 +81,7 @@ public class BankActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				hideSoftKeyboard();
-				finish();
+                goBack();
 			}
 		});
 
@@ -94,26 +93,23 @@ public class BankActivity extends Activity
 				hideSoftKeyboard();
 
 				String newBankAccount = bankEditText.getText().toString();
-				if (PhoneUtils.isNetworkConnected())
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					if (newBankAccount.equals(originalBankAccount))
-					{
-						finish();
-					}
-					else if (!newBankAccount.isEmpty() && !Utils.isBankAccount(newBankAccount))
-					{
-						ViewUtils.showToast(BankActivity.this, R.string.error_bank_account_wrong_format);
-					}
-					else
-					{
-						currentUser.setBankAccount(newBankAccount);
-						sendModifyUserInfoRequest();						
-					}
+                    ViewUtils.showToast(BankActivity.this, R.string.error_modify_network_unavailable);
 				}
-				else
-				{
-					ViewUtils.showToast(BankActivity.this, R.string.error_modify_network_unavailable);
-				}
+                else if (newBankAccount.equals(originalBankAccount))
+                {
+                    finish();
+                }
+                else if (!newBankAccount.isEmpty() && !Utils.isBankAccount(newBankAccount))
+                {
+                    ViewUtils.showToast(BankActivity.this, R.string.error_bank_account_wrong_format);
+                }
+                else
+                {
+                    currentUser.setBankAccount(newBankAccount);
+                    sendModifyUserInfoRequest();
+                }
 			}
 		});
 
@@ -149,7 +145,7 @@ public class BankActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(BankActivity.this, R.string.succeed_in_modifying_user_info);
-							finish();
+                            goBack();
 						}
 					});
 				}
@@ -161,7 +157,6 @@ public class BankActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
 							ViewUtils.showToast(BankActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
-							finish();
 						}
 					});						
 				}
@@ -174,4 +169,10 @@ public class BankActivity extends Activity
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
 		imm.hideSoftInputFromWindow(bankEditText.getWindowToken(), 0);
 	}
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
 }

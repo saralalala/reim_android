@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 
 import com.umeng.analytics.MobclickAgent;
 
+import classes.utils.ViewUtils;
 import classes.widget.subscaleview.SubsamplingScaleImageView;
 
 public class SingleImageActivity extends Activity
@@ -36,7 +37,7 @@ public class SingleImageActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            ViewUtils.goBack(this);
 		}
 		return super.onKeyDown(keyCode, event);
 	}

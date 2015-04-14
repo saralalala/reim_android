@@ -137,7 +137,7 @@ public class ApproveReportActivity extends Activity
 				bundle.putBoolean("myReport", false);
 				Intent intent = new Intent(ApproveReportActivity.this, CommentActivity.class);
 				intent.putExtras(bundle);
-				startActivity(intent);
+                ViewUtils.goForward(ApproveReportActivity.this, intent);
 			}
 		});
 
@@ -211,7 +211,7 @@ public class ApproveReportActivity extends Activity
 				{
 					Intent intent = new Intent(ApproveReportActivity.this, ShowItemActivity.class);
 					intent.putExtra("othersItemServerID", itemList.get(position - 1).getServerID());
-					startActivity(intent);	
+                    ViewUtils.goForward(ApproveReportActivity.this, intent);
 				}
 			}
 		});
@@ -278,10 +278,8 @@ public class ApproveReportActivity extends Activity
 				final GetReportResponse response = new GetReportResponse(httpResponse);
 				if (response.getStatus())
 				{
-					int ownerID = appPreference.getCurrentUserID();
-
-					report = new Report(response.getReport());
-					dbManager.deleteOthersReport(reportServerID, ownerID);
+                    report = new Report(response.getReport());
+					dbManager.deleteOthersReport(reportServerID, appPreference.getCurrentUserID());
 					dbManager.insertOthersReport(report);					
 					
 					for (Item item : response.getItemList())
@@ -522,8 +520,7 @@ public class ApproveReportActivity extends Activity
     {
 		Intent intent = new Intent(ApproveReportActivity.this, FollowingActivity.class);
 		intent.putExtra("report", report);
-		startActivity(intent);
-		finish();
+        ViewUtils.goForwardAndFinish(this, intent);
     }
 
     private void goBackToMainActivity()
@@ -537,12 +534,11 @@ public class ApproveReportActivity extends Activity
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        	startActivity(intent);
-        	finish();
+            ViewUtils.goBackWithIntent(this, intent);
 		}
     	else
     	{
-			finish();
+            ViewUtils.goBack(this);
 		}
     }
 }

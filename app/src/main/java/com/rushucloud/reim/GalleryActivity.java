@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
+import android.support.annotation.NonNull;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -33,6 +35,7 @@ import java.util.Collections;
 
 import classes.adapter.GalleryAdapter;
 import classes.utils.ExtraCallBack;
+import classes.utils.ViewUtils;
 
 public class GalleryActivity extends Activity
 {
@@ -66,6 +69,15 @@ public class GalleryActivity extends Activity
         MobclickAgent.onPause(this);
     }
 
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            goBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 	private void initImageLoader()
 	{
 		try
@@ -97,7 +109,7 @@ public class GalleryActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});
 		
@@ -126,8 +138,7 @@ public class GalleryActivity extends Activity
 				ArrayList<String> selectedList = adapter.getSelectedList();
 				Intent intent = new Intent();
 				intent.putExtra("paths", selectedList.toArray(new String[selectedList.size()]));
-				setResult(RESULT_OK, intent);
-				finish();
+                ViewUtils.goBackWithResult(GalleryActivity.this, intent);
 			}
 		});
 	}
@@ -201,4 +212,9 @@ public class GalleryActivity extends Activity
 		Collections.reverse(pathList);
 		return pathList;
 	}
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
 }

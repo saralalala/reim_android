@@ -112,7 +112,7 @@ public class StatisticsActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -138,7 +138,7 @@ public class StatisticsActivity extends Activity
         {
             public void onClick(View v)
             {
-                finish();
+                goBack();
             }
         });
 
@@ -153,7 +153,7 @@ public class StatisticsActivity extends Activity
             else
             {
                 ViewUtils.showToast(this, R.string.failed_to_read_data);
-                finish();
+                goBack();
             }
         }
         else if (tagID != -1)
@@ -166,7 +166,7 @@ public class StatisticsActivity extends Activity
             else
             {
                 ViewUtils.showToast(this, R.string.failed_to_read_data);
-                finish();
+                goBack();
             }
         }
         else if (userID != -1)
@@ -179,13 +179,13 @@ public class StatisticsActivity extends Activity
             else
             {
                 ViewUtils.showToast(this, R.string.failed_to_read_data);
-                finish();
+                goBack();
             }
         }
         else
         {
             ViewUtils.showToast(this, R.string.failed_to_read_data);
-            finish();
+            goBack();
         }
 
         View view = View.inflate(this, R.layout.view_stat_second, null);
@@ -542,5 +542,10 @@ public class StatisticsActivity extends Activity
                 }
             }
         });
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
     }
 }

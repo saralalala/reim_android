@@ -49,7 +49,7 @@ public class AboutActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -63,7 +63,7 @@ public class AboutActivity extends Activity
         {
             public void onClick(View v)
             {
-                finish();
+                goBack();
             }
         });
 		
@@ -115,5 +115,10 @@ public class AboutActivity extends Activity
         surprisePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
         surprisePopupWindow.update();
         ViewUtils.dimBackground(this);
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
     }
 }

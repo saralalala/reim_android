@@ -297,7 +297,7 @@ public class EditReportActivity extends Activity
 				MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_MINE_STATUS");
 				Intent intent = new Intent(EditReportActivity.this, ApproveInfoActivity.class);
 				intent.putExtra("reportServerID", report.getServerID());
-				startActivity(intent);
+                ViewUtils.goForward(EditReportActivity.this, intent);
 			}
 		});
 		if (report.getStatus() == Report.STATUS_DRAFT && !report.isAaApproved())
@@ -323,7 +323,7 @@ public class EditReportActivity extends Activity
                 Intent intent = new Intent(EditReportActivity.this, PickManagerActivity.class);
                 intent.putExtra("managers", (Serializable) report.getManagerList());
                 intent.putExtra("newReport", newReport);
-                startActivityForResult(intent, PICK_MANAGER);
+                ViewUtils.goForwardForResult(EditReportActivity.this, intent, PICK_MANAGER);
             }
         });
 		
@@ -345,7 +345,7 @@ public class EditReportActivity extends Activity
                 Intent intent = new Intent(EditReportActivity.this, PickCCActivity.class);
                 intent.putExtra("ccs", (Serializable) report.getCCList());
                 intent.putExtra("newReport", newReport);
-                startActivityForResult(intent, PICK_CC);
+                ViewUtils.goForwardForResult(EditReportActivity.this, intent, PICK_CC);
             }
         });
 		
@@ -375,7 +375,7 @@ public class EditReportActivity extends Activity
 				bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
 				Intent intent = new Intent(EditReportActivity.this, PickItemActivity.class);
 				intent.putExtras(bundle);
-				startActivityForResult(intent, PICK_ITEMS);
+                ViewUtils.goForwardForResult(EditReportActivity.this, intent, PICK_ITEMS);
 			}
 		});
 
@@ -421,7 +421,7 @@ public class EditReportActivity extends Activity
 					bundle.putBoolean("newReport", newReport);
 					Intent intent = new Intent(EditReportActivity.this, CommentActivity.class);
 					intent.putExtras(bundle);
-					startActivity(intent);					
+                    ViewUtils.goForward(EditReportActivity.this, intent);
 				}
 			}
 		});
@@ -543,7 +543,7 @@ public class EditReportActivity extends Activity
 				{
 					Intent intent = new Intent(EditReportActivity.this, EditItemActivity.class);
 					intent.putExtra("itemLocalID", item.getLocalID());
-					startActivity(intent);
+                    ViewUtils.goForward(EditReportActivity.this, intent);
 				}
 			});
 			view.setOnLongClickListener(new OnLongClickListener()
@@ -1290,14 +1290,11 @@ public class EditReportActivity extends Activity
 		{
         	Intent intent = new Intent(EditReportActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        	startActivity(intent);
-        	finish();
+            ViewUtils.goBackWithIntent(this, intent);
 		}
     	else
     	{
-			finish();
+            ViewUtils.goBack(this);
 		}
     }
 }

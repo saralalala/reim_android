@@ -72,7 +72,7 @@ public class MessageListActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            goBack();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -86,7 +86,7 @@ public class MessageListActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				finish();
+                goBack();
 			}
 		});	
 
@@ -128,7 +128,7 @@ public class MessageListActivity extends Activity
                     bundle.putSerializable("message", messageList.get(position - 1));
                     Intent intent = new Intent(MessageListActivity.this, MessageActivity.class);
                     intent.putExtras(bundle);
-                    startActivity(intent);
+                    ViewUtils.goForward(MessageListActivity.this, intent);
                 }
 			}
 		});
@@ -178,5 +178,10 @@ public class MessageListActivity extends Activity
 				}
 			}
 		});
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
     }
 }
