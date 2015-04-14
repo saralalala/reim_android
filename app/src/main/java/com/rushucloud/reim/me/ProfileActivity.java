@@ -26,7 +26,6 @@ import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.Group;
-import classes.Image;
 import classes.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -395,6 +394,8 @@ public class ProfileActivity extends Activity
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", width);
         intent.putExtra("outputY", width);
+        intent.putExtra("scale", true);
+        intent.putExtra("scaleUpIfNeeded", true);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
         intent.putExtra("return-data", false);
         intent.putExtra("noFaceDetection", true);

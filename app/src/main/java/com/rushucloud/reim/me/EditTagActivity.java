@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.Category;
 import classes.Tag;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
