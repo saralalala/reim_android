@@ -665,7 +665,7 @@ public class ReportFragment extends Fragment
 				deletePopupWindow.dismiss();
 
 		    	final Report report = showOthersList.get(reportIndex);
-		    	if (report.getStatus() == Report.STATUS_REJECTED)
+		    	if (!report.isPending())
 				{
 //					Builder builder = new Builder(getActivity());
 //					builder.setTitle(R.string.warning);

@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="50.5dp"
         android:layout_marginTop="18dp"
-        android:background="@drawable/me_item_drawable"
+        android:background="@color/major_light"
         android:focusable="true"
         android:focusableInTouchMode="true" >
 
