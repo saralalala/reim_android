@@ -1223,7 +1223,7 @@ public class ReportFragment extends Fragment
 							dbManager.deleteOthersReport(localReport.getServerID(), managerID);
 						}
 					}
-					
+
 					for (Report report : response.getReportList())
 					{
 						Report localReport = dbManager.getOthersReport(report.getServerID());

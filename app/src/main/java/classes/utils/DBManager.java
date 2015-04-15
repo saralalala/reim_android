@@ -1808,6 +1808,7 @@ public class DBManager extends SQLiteOpenHelper
 			String sqlString = "UPDATE tbl_others_report SET " +
 								"server_id = '" + report.getServerID() + "'," +
 								"title = '" + sqliteEscape(report.getTitle()) + "'," +
+                                "owner_id = '" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
 								"user_id = '" + report.getSender().getServerID() + "'," +
 								"status = '" + report.getStatus() + "'," +
 								"my_decision = '" + report.getMyDecision() + "'," +
@@ -1817,7 +1818,7 @@ public class DBManager extends SQLiteOpenHelper
 								"created_date = '" + report.getCreatedDate() + "'," +
 								"server_updatedt = '" + report.getServerUpdatedDate() + "'," +
 								"local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
-								"WHERE server_id = '" + report.getServerID() + "'";			
+								"WHERE server_id = '" + report.getServerID() + "'";
 			database.execSQL(sqlString);			
 			return true;
 		}

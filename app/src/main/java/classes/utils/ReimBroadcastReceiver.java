@@ -35,15 +35,17 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 	public static final int REPORT_MINE_REJECTED = 0;
 	public static final int REPORT_MINE_REJECTED_WITH_COMMENT = 1;
 	public static final int REPORT_MINE_APPROVED = 2;
-	public static final int REPORT_MINE_SUBMMITED_ONLY_COMMENT = 3;
-	public static final int REPORT_MINE_REJECTED_ONLY_COMMENT = 4;
-	public static final int REPORT_MINE_APPROVED_ONLY_COMMENT = 5;
-	public static final int REPORT_OTHERS_SUBMMITED = 6;
-	public static final int REPORT_OTHERS_SUBMMITED_CC = 7;
-	public static final int REPORT_OTHERS_CAN_BE_APPROVED_ONLY_COMMENT = 8;
-	public static final int REPORT_OTHERS_SUBMITTED_ONLY_COMMENT = 9;
-	public static final int REPORT_OTHERS_REJECTED_ONLY_COMMENT = 10;
-	public static final int REPORT_OTHERS_APPROVED_ONLY_COMMENT = 11;
+    public static final int REPORT_MINE_FINISHED = 3;
+	public static final int REPORT_MINE_SUBMMITED_ONLY_COMMENT = 4;
+	public static final int REPORT_MINE_REJECTED_ONLY_COMMENT = 5;
+	public static final int REPORT_MINE_APPROVED_ONLY_COMMENT = 6;
+    public static final int REPORT_MINE_FINISHED_ONLY_COMMENT = 7;
+	public static final int REPORT_OTHERS_SUBMMITED = 8;
+	public static final int REPORT_OTHERS_SUBMMITED_CC = 9;
+	public static final int REPORT_OTHERS_CAN_BE_APPROVED_ONLY_COMMENT = 10;
+	public static final int REPORT_OTHERS_SUBMITTED_ONLY_COMMENT = 11;
+	public static final int REPORT_OTHERS_REJECTED_ONLY_COMMENT = 12;
+	public static final int REPORT_OTHERS_APPROVED_ONLY_COMMENT = 13;
 	
 	private static NotificationManager manager = null;
 	private static int notificationID = 0;
@@ -133,7 +135,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 						}
 						newIntent.setClass(context, EditReportActivity.class);						
 					}
-					else if (pushType == REPORT_MINE_APPROVED || pushType == REPORT_OTHERS_SUBMMITED_CC)
+					else if (pushType == REPORT_MINE_APPROVED || pushType == REPORT_MINE_FINISHED || pushType == REPORT_OTHERS_SUBMMITED_CC)
 					{
 						newIntent.setClass(context, ShowReportActivity.class);						
 					}
@@ -233,6 +235,10 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 			{
 				return REPORT_MINE_APPROVED;
 			}
+            else if (myReport && !hasComment && status == Report.STATUS_FINISHED)
+            {
+                return REPORT_MINE_FINISHED;
+            }
 			else if (myReport && hasComment && status == Report.STATUS_SUBMITTED)
 			{
 				return REPORT_MINE_SUBMMITED_ONLY_COMMENT;
@@ -245,6 +251,10 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 			{
 				return REPORT_MINE_APPROVED_ONLY_COMMENT;
 			}
+            else if (myReport && hasComment && status == Report.STATUS_FINISHED)
+            {
+                return REPORT_MINE_FINISHED_ONLY_COMMENT;
+            }
 			else if (!myReport && !hasComment && !isCC && status == Report.STATUS_SUBMITTED && myDecision == Report.STATUS_SUBMITTED)
 			{
 				return REPORT_OTHERS_SUBMMITED;

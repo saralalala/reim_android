@@ -107,7 +107,13 @@ public class FollowingActivity extends Activity
 		report = (Report) getIntent().getSerializableExtra("report");
 		managerList.addAll(report.getManagerList());
 		ccList.addAll(report.getCCList());
-		report.setManagerList(AppPreference.getAppPreference().getCurrentUser().buildBaseManagerList());
+        User currentUser = AppPreference.getAppPreference().getCurrentUser();
+        List<User> managerList = new ArrayList<User>();
+        if (report.getSender().getServerID() != currentUser.getDefaultManagerID())
+        {
+            managerList.addAll(currentUser.buildBaseManagerList());
+        }
+		report.setManagerList(managerList);
 	}
 	
 	private void initView()

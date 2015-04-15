@@ -102,7 +102,18 @@ public class PickManagerActivity extends Activity
 		List<User> managerList = (List<User>) getIntent().getSerializableExtra("managers");
 		currentUser = AppPreference.getAppPreference().getCurrentUser();
         defaultManager = currentUser.getDefaultManager();
-        chosenList = managerList == null? currentUser.buildBaseManagerList() : managerList;
+        if (managerList != null)
+        {
+            chosenList = managerList;
+        }
+        else if (senderID == currentUser.getDefaultManagerID())
+        {
+            chosenList = new ArrayList<User>();
+        }
+        else
+        {
+            chosenList = currentUser.buildBaseManagerList();
+        }
 
         buildUserList();
 	}
@@ -193,7 +204,7 @@ public class PickManagerActivity extends Activity
                 }
             });
 
-            if (defaultManager == null)
+            if (defaultManager == null || senderID == currentUser.getDefaultManagerID())
             {
                 LinearLayout managerContainer = (LinearLayout) findViewById(R.id.managerContainer);
                 managerContainer.setVisibility(View.GONE);
