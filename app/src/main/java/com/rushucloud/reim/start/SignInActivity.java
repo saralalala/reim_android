@@ -248,6 +248,10 @@ public class SignInActivity extends Activity
                     appPreference.setCurrentUserID(currentUserID);
                     appPreference.setSyncOnlyWithWifi(true);
                     appPreference.setEnablePasswordProtection(true);
+                    appPreference.setLastSyncTime(0);
+                    appPreference.setLastGetOthersReportTime(0);
+                    appPreference.setLastGetMineStatTime(0);
+                    appPreference.setLastGetOthersStatTime(0);
 
                     if (response.getGroup() != null)
                     {

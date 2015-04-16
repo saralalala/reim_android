@@ -28,6 +28,7 @@ public class AppPreference
 	private boolean syncOnlyWithWifi = true;
 	private boolean enablePasswordProtection = true;
 	private int lastSyncTime = 0;
+    private int lastGetOthersReportTime = 0;
 	private int lastGetMineStatTime = 0;
     private int lastGetOthersStatTime = 0;
 	private String appDirectory = "";
@@ -67,6 +68,7 @@ public class AppPreference
 		appPreference.setSyncOnlyWithWifi(preferences.getBoolean("syncOnlyWithWifi", true));
 		appPreference.setEnablePasswordProtection(preferences.getBoolean("enablePasswordProtection", true));
 		appPreference.setLastSyncTime(preferences.getInt("lastSyncTime", 0));
+        appPreference.setLastGetOthersReportTime(preferences.getInt("lastGetOthersReportTime", 0));
 		appPreference.setLastGetMineStatTime(preferences.getInt("lastGetMineStatTime", 0));
         appPreference.setLastGetOthersStatTime(preferences.getInt("lastGetOthersStatTime", 0));
 		
@@ -90,7 +92,8 @@ public class AppPreference
 		editor.putString("serverToken", appPreference.getServerToken());
 		editor.putBoolean("syncOnlyWithWifi", appPreference.syncOnlyWithWifi());
 		editor.putBoolean("enablePasswordProtection", appPreference.passwordProtectionEnabled());
-		editor.putInt("lastSyncTime", appPreference.getLastSyncTime());
+        editor.putInt("lastSyncTime", appPreference.getLastSyncTime());
+		editor.putInt("lastGetOthersReportTime", appPreference.getLastGetOthersReportTime());
 		editor.putInt("lastGetMineStatTime", appPreference.getLastGetMineStatTime());
 		editor.commit();
 	}
@@ -183,8 +186,17 @@ public class AppPreference
 	{
 		this.lastSyncTime = lastSyncTime;
 	}
-	
-	public int getLastGetMineStatTime()
+
+    public int getLastGetOthersReportTime()
+    {
+        return lastGetOthersReportTime;
+    }
+    public void setLastGetOthersReportTime(int lastGetOthersReportTime)
+    {
+        this.lastGetOthersReportTime = lastGetOthersReportTime;
+    }
+
+    public int getLastGetMineStatTime()
 	{
 		return lastGetMineStatTime;
 	}

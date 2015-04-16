@@ -99,7 +99,7 @@ public class ShowReportActivity extends Activity
                 {
                     report = dbManager.getReportByServerID(report.getServerID());
                 }
-				itemList = dbManager.getReportItems(report.getLocalID());	
+				itemList = dbManager.getReportItems(report.getLocalID());
 			}		
 			else
 			{

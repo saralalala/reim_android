@@ -59,6 +59,8 @@ import netUtils.response.report.SubordinatesReportResponse;
 
 public class ReportFragment extends Fragment
 {
+    private static final int GET_DATA_INTERVAL = 600;
+
 	private static final int SORT_UPDATE_DATE = 0;
     private static final int SORT_CREATE_DATE = 1;
 	private static final int SORT_AMOUNT = 2;
@@ -725,7 +727,7 @@ public class ReportFragment extends Fragment
 		}
 		else
 		{
-			if (PhoneUtils.isNetworkConnected())
+			if (PhoneUtils.isNetworkConnected() && Utils.getCurrentTime() - appPreference.getLastGetOthersReportTime() > GET_DATA_INTERVAL)
 			{
 				sendSubordinatesReportsRequest();
 			}
@@ -1244,6 +1246,8 @@ public class ReportFragment extends Fragment
 					{
 						public void run()
 						{
+                            appPreference.setLastGetOthersReportTime(Utils.getCurrentTime());
+                            appPreference.saveAppPreference();
 							reportListView.stopRefresh();
 							reportListView.stopLoadMore();
 							reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
