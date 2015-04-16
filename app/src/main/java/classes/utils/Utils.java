@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class Utils
 {
-	private static String regexEmail = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$";
+    private static String regexEmail = "^([a-z0-9A-Z]+[_|-|\\.]?)+[a-z0-9A-Z]?@([a-z0-9A-Z]+([-|_]?[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
 	private static String regexPhone = "^[1]+\\d{10}$";
     private static String regexBankAccount = "^\\d{12,19}$";
 
@@ -188,10 +188,10 @@ public class Utils
     {
     	List<Integer> resultList = new ArrayList<Integer>();
     	String[] result = TextUtils.split(idString, ",");
-    	for (int i = 0; i < result.length; i++)
-		{
-    		resultList.add(Integer.valueOf(result[i].trim()));
-		}
+        for (String resultString : result)
+        {
+            resultList.add(Integer.valueOf(resultString.trim()));
+        }
     	return resultList;
     } 
 
