@@ -41,4 +41,94 @@ public class NetworkConstant
 	public static final int ERROR_SIGN_IN = -31;
 	public static final int ERROR_NAME_EXCEED_LIMIT = -33;
     public static final int ERROR_INVITE_DONE = -38;
+    public static final int ERROR_NOT_UNIQUE = -42;
+
+    public static String errorCodeToString(int code)
+    {
+        String result = null;
+        switch (code)
+        {
+            case NetworkConstant.ERROR_SYSTEM_ERROR:
+                result = "系统错误，请稍后尝试";
+                break;
+            case NetworkConstant.ERROR_USER_NOT_EXISTS:
+                result = "用户不存在或密码错误";
+                break;
+            case NetworkConstant.ERROR_MAIL_SEND_ERROR:
+                result = "邮件发送错误";
+                break;
+            case NetworkConstant.ERROR_PARAMETER_ERROR:
+                result = "参数错误";
+                break;
+            case NetworkConstant.ERROR_EMPTY_HEADER:
+                result = "非法请求";
+                break;
+            case NetworkConstant.ERROR_AUTH_FAIL:
+                result = "认证失败";
+                break;
+            case NetworkConstant.ERROR_USER_EXISTS:
+                result = "用户已经存在";
+                break;
+            case NetworkConstant.ERROR_AUTH_TIMEOUT:
+                result = "认证超时";
+                break;
+            case NetworkConstant.ERROR_BAD_PERMISSION:
+                result = "权限不足本次操作";
+                break;
+            case NetworkConstant.ERROR_ALREADY_BOUND:
+                result = "用户已绑定";
+                break;
+            case NetworkConstant.ERROR_USER_AUTH_ERROR:
+                result = "用户认证失败";
+                break;
+            case NetworkConstant.ERROR_BAD_ITEMS:
+                result = "条目信息不齐全，请重新填写";
+                break;
+            case NetworkConstant.ERROR_EMPTY_BIND:
+                result = "尚未绑定账号";
+                break;
+            case NetworkConstant.ERROR_CLOSE_REPORT:
+                result = "您提交的报告已经处于关闭状态";
+                break;
+            case NetworkConstant.ERROR_EMPTY_CATEGORY:
+                result = "没有选定分类";
+                break;
+            case NetworkConstant.ERROR_ZERO_AMOUNT:
+                result = "没有报销额度";
+                break;
+            case NetworkConstant.ERROR_OLDER_COMPANY:
+                result = "报销中有条目不属于当前公司";
+                break;
+            case NetworkConstant.ERROR_EMPTY_REPORT:
+                result = "报销不存在";
+                break;
+            case NetworkConstant.ERROR_EMPTY_ITEMS:
+                result = "没有提交项目";
+                break;
+            case NetworkConstant.ERROR_ITEM_ADDED:
+                result = "条目已加入报销";
+                break;
+            case NetworkConstant.ERROR_REPORT_DELETED:
+                result = "报告已被删除";
+                break;
+            case NetworkConstant.ERROR_REPORT_NOT_EXISTS:
+                result = "报告不存在";
+                break;
+            case NetworkConstant.ERROR_SIGN_IN:
+                result = "用户名或密码错误";
+                break;
+            case NetworkConstant.ERROR_NAME_EXCEED_LIMIT:
+                result = "报告名不能超过50个字";
+                break;
+            case NetworkConstant.ERROR_INVITE_DONE:
+                result = "此消息已被处理";
+                break;
+            case NetworkConstant.ERROR_NOT_UNIQUE:
+                result = "";
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
 }

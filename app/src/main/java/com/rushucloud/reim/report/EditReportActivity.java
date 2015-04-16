@@ -1126,7 +1126,10 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+                            if (response.getCode() != NetworkConstant.ERROR_NOT_UNIQUE)
+                            {
+                                ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+                            }
 						}
 					});					
 				}
@@ -1169,7 +1172,10 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+                            if (response.getCode() != NetworkConstant.ERROR_NOT_UNIQUE)
+                            {
+                                ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+                            }
 						}
 					});					
 				}
