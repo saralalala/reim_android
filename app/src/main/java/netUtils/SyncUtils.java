@@ -51,19 +51,8 @@ public abstract class SyncUtils
 //		{
 //			return false;
 //		}
-		if (isSyncOnGoing)
-		{
-			return false;
-		}
-		else if (PhoneUtils.isNetworkConnected())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+        return !isSyncOnGoing && PhoneUtils.isNetworkConnected();
+    }
 	
 	public static void syncFromServer(final SyncDataCallback callback)
 	{
@@ -182,7 +171,6 @@ public abstract class SyncUtils
 					{
 						syncReportsToServer(callback);
 					}
-					continue;
     			}
     			else if (item.getServerID() == -1)
     			{

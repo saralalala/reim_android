@@ -734,9 +734,7 @@ public class ReportFragment extends Fragment
 			myTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
 			othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
 		}
-		ReimProgressDialog.show();
 		refreshReportListView();
-		ReimProgressDialog.dismiss();
 	}
 
 	private void showBadge()
