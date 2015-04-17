@@ -33,10 +33,6 @@
         
         <activity android:name="com.rushucloud.reim.start.SplashActivity"
             android:theme="@style/AppSplash" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <!--   start part   -->
@@ -76,6 +72,23 @@
             android:name=".start.CompleteInfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+
+        <!--   guide part   -->
+        <activity
+            android:name=".guide.GuideStartActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".guide.CreateCompanyActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
 
         <!--   public part   -->
         <activity

@@ -59,6 +59,12 @@
     <string name="send_verify_email">发送验证邮件</string>
     <string name="reset_password">设置新密码</string>
     <string name="complete_info">完善个人信息</string>
+
+    <string name="welcome_to_use">欢迎使用云报销</string>
+    <string name="introduction">云报销是专门为企业和组织设计的财务工具。它可以对企业和组织内部的费用支出进行有效的管理，让员工随时随地进行费用申请、审批。</string>
+    <string name="join_company">加入公司</string>
+    <string name="are_you_admin">您是管理员？</string>
+    <string name="create_new_company">创建新公司</string>
     
     <string name="reimbursement">消费</string>
     <string name="report">报告</string>
@@ -280,6 +286,7 @@
     <string name="error_phone_wrong_format">手机号格式不正确</string>
     <string name="error_bank_account_wrong_format">银行账号格式不正确</string>
     <string name="error_new_nickname_empty">请输入新昵称</string>
+    <string name="error_company_name_empty">请输入公司名称</string>
     <string name="error_new_company_name_empty">请输入公司新名称</string>
     <string name="error_number_wrong_format">请输入消费金额</string>
     <string name="error_password_empty">请输入密码</string>
@@ -299,6 +306,7 @@
     <string name="error_feedback_contact_empty">请输入你的意见或者联系方式</string>
     <string name="error_feedback_code_empty">请输入区号</string>
     <string name="error_refresh_network_unavailable">网络未连接，无法刷新</string>
+    <string name="error_create_network_unavailable">网络未连接，无法创建</string>
     <string name="error_add_network_unavailable">网络未连接，无法添加</string>
     <string name="error_modify_network_unavailable">网络未连接，无法修改</string>
     <string name="error_delete_network_unavailable">网络未连接，无法删除</string>
@@ -408,7 +416,7 @@
     <string name="failed_to_sign_out">登出失败</string>
     <string name="failed_to_change_password">修改密码失败</string>
     <string name="failed_to_alert">提醒发送失败</string>
-    <string name="failed_to_get_invite_list">获取邀请列表失败</string>
+    <string name="failed_to_get_message_list">获取消息列表失败</string>
     <string name="failed_to_delete">删除失败</string>
 
     <string name="no_pending_reports">你没有任何需要处理的报告</string>

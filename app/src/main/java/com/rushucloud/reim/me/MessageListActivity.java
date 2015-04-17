@@ -53,7 +53,7 @@ public class MessageListActivity extends Activity
 		if (PhoneUtils.isNetworkConnected())
 		{
             ReimProgressDialog.show();
-			sendGetInvitesRequest();
+			sendGetMessagesRequest();
 		}
 		else
 		{
@@ -101,7 +101,7 @@ public class MessageListActivity extends Activity
             {
                 if (PhoneUtils.isNetworkConnected())
                 {
-                    sendGetInvitesRequest();
+                    sendGetMessagesRequest();
                 }
                 else
                 {
@@ -134,7 +134,7 @@ public class MessageListActivity extends Activity
 		});
 	}
 	
-    private void sendGetInvitesRequest()
+    private void sendGetMessagesRequest()
     {
     	GetMessagesRequest request = new GetMessagesRequest();
     	request.sendRequest(new HttpConnectionCallback()
@@ -171,7 +171,7 @@ public class MessageListActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(MessageListActivity.this, R.string.failed_to_get_invite_list);
+                            ViewUtils.showToast(MessageListActivity.this, R.string.failed_to_get_message_list);
                             messageListView.stopRefresh();
 						}
 					});

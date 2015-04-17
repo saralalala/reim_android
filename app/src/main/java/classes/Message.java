@@ -19,6 +19,7 @@ public class Message implements Serializable
 
     public static final int TYPE_MESSAGE = 1;
     public static final int TYPE_INVITE = 2;
+    public static final int TYPE_APPLY = 3;
 
     private int serverID = -1;
     private String title = "";
