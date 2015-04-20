@@ -15,7 +15,6 @@ public class Apply extends Message implements Serializable
 	public static final int TYPE_REJECTED = 1;
 	public static final int TYPE_ACCEPTED = 2;
 
-	private String applyCode = "";
     private String applicant = "";
 	private int typeCode = -1;
 
@@ -29,10 +28,9 @@ public class Apply extends Message implements Serializable
         try
         {
             String applicant = jObject.getString("applicant");
-            int activeType = jObject.getInt("actived");
+            int activeType = jObject.getInt("permit");
 
             setServerID(jObject.getInt("id"));
-            setApplyCode(jObject.getString("code"));
             setTypeCode(activeType);
             setApplicant(applicant);
             setType(Message.TYPE_APPLY);
@@ -43,57 +41,48 @@ public class Apply extends Message implements Serializable
                 String message = "用户" + applicant + "申请加入「" + jObject.getString("groupname") + "」";
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("invitedt"));
+                setUpdateTime(jObject.getInt("updatedt"));
             }
             else if (applicant.equals(currentNickname) && activeType == Apply.TYPE_NEW)
             {
                 String message = "您发送了加入「" + jObject.getString("groupname") + "」的申请";
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("invitedt"));
+                setUpdateTime(jObject.getInt("updatedt"));
             }
             else if (!applicant.equals(currentNickname) && activeType == Apply.TYPE_REJECTED)
             {
                 String message = "您拒绝了" + applicant + "加入「" + jObject.getString("groupname") + "」的申请";
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("activedt"));
+                setUpdateTime(jObject.getInt("updatedt"));
             }
             else if (applicant.equals(currentNickname) && activeType == Apply.TYPE_REJECTED)
             {
                 String message = "您加入「" + jObject.getString("groupname") + "」的申请被拒绝";
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("activedt"));
+                setUpdateTime(jObject.getInt("updatedt"));
             }
             else if (!applicant.equals(currentNickname) && activeType == Apply.TYPE_ACCEPTED)
             {
                 String message = "您批准了" + applicant + "加入「" + jObject.getString("groupname") + "」的申请";
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("activedt"));
+                setUpdateTime(jObject.getInt("updatedt"));
             }
             else
             {
                 String message = "您加入「" + jObject.getString("groupname") + "」的申请已通过";
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("activedt"));
+                setUpdateTime(jObject.getInt("updatedt"));
             }
         }
         catch (JSONException e)
         {
             e.printStackTrace();
         }
-    }
-
-    public String getApplyCode()
-    {
-        return applyCode;
-    }
-    public void setApplyCode(String applyCode)
-    {
-        this.applyCode = applyCode;
     }
 
     public String getApplicant()

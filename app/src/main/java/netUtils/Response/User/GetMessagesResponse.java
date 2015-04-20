@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.Apply;
 import classes.Invite;
 import classes.Message;
 import classes.utils.AppPreference;
@@ -38,9 +39,13 @@ public class GetMessagesResponse extends BaseResponse
                 {
                     messageList.add(new Message(jObject));
                 }
-                else
+                else if (type == Message.TYPE_APPLY)
                 {
                     messageList.add(new Invite(jObject, currentNickname));
+                }
+                else
+                {
+                    messageList.add(new Apply(jObject, currentNickname));
                 }
 			}			
 		}

@@ -1,0 +1,163 @@
+package com.rushucloud.reim.guide;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.rushucloud.reim.R;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+
+import classes.utils.Utils;
+import classes.utils.ViewUtils;
+
+public class InputContactActivity extends Activity
+{
+	private EditText contactEditText;
+
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_guide_input_contact);
+		initView();
+	}
+
+	protected void onResume()
+	{
+		super.onResume();
+		MobclickAgent.onPageStart("InputContactActivity");
+		MobclickAgent.onResume(this);
+	}
+
+	protected void onPause()
+	{
+		super.onPause();
+		MobclickAgent.onPageEnd("InputContactActivity");
+		MobclickAgent.onPause(this);
+	}
+
+	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+	{
+		if (keyCode == KeyEvent.KEYCODE_BACK)
+		{
+            goBack();
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	private void initView()
+	{
+		getActionBar().hide();
+
+		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+		backImageView.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+                goBack();
+			}
+		});
+
+        TextView completeTextView = (TextView) findViewById(R.id.completeTextView);
+        completeTextView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+
+                String contactString = contactEditText.getText().toString();
+                SpannableString text = new SpannableString(contactString);
+                contactString.replace("，", ",");
+                contactString.replace("　", ",");
+                contactString.replace("\n", ",");
+                String[] contacts = TextUtils.split(contactString, ",");
+                ArrayList<String> contactList = new ArrayList<String>();
+                for (String contact : contacts)
+                {
+                    if (!contact.trim().isEmpty())
+                    {
+                        contactList.add(contact.trim());
+                    }
+                }
+
+                boolean contactsInvalid = false;
+                for (String contact : contactList)
+                {
+                    if (!Utils.isEmailOrPhone(contact))
+                    {
+                        int index = contactString.indexOf(contact);
+                        if (index != -1)
+                        {
+                            String prefix = "<a style=\"border-bottom:1px dashed #FF575B>\"";
+                            String suffix = "</a";
+                            text.setSpan(new UnderlineSpan(), index, index + contact.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_dark)),
+                                         index, index + contact.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        contactsInvalid = true;
+                    }
+                }
+
+                if (contactsInvalid)
+                {
+                    contactEditText.setText(text);
+                }
+                else
+                {
+                    Intent intent = new Intent();
+                    intent.putStringArrayListExtra("inputList", contactList);
+                    ViewUtils.goBackWithResult(InputContactActivity.this, intent);
+                }
+            }
+        });
+
+        contactEditText = (EditText) findViewById(R.id.contactEditText);
+        contactEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        contactEditText.setText(getIntent().getStringExtra("inviteList"));
+
+        TextView promptTextView = (TextView) findViewById(R.id.promptTextView);
+        SpannableString text = new SpannableString(promptTextView.getText());
+        text.setSpan(new StyleSpan(Typeface.BOLD), 5, 8, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new UnderlineSpan(), 5, 8, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        promptTextView.setText(text);
+
+		LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
+        baseLayout.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				hideSoftKeyboard();
+			}
+		});
+	}
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(contactEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+}

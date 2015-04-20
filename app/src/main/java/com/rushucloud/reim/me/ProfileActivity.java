@@ -456,6 +456,10 @@ public class ProfileActivity extends Activity
                 if (response.getStatus())
                 {
                     AppPreference appPreference = AppPreference.getAppPreference();
+
+                    final String username = appPreference.getUsername();
+                    final String password = appPreference.getPassword();
+
                     appPreference.setCurrentUserID(-1);
                     appPreference.setCurrentGroupID(-1);
                     appPreference.setUsername("");
@@ -475,6 +479,8 @@ public class ProfileActivity extends Activity
                             Intent intent = new Intent(ProfileActivity.this, SignInActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.putExtra("username", username);
+                            intent.putExtra("password", password);
                             ViewUtils.goBackWithIntent(ProfileActivity.this, intent);
                         }
                     });

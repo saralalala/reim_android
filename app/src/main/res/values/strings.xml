@@ -65,6 +65,18 @@
     <string name="join_company">加入公司</string>
     <string name="are_you_admin">您是管理员？</string>
     <string name="create_new_company">创建新公司</string>
+    <string name="input_contact_manually">手动填写手机或邮箱</string>
+    <string name="invite_contact">邀请联系人</string>
+    <string name="contact">通讯录</string>
+    <string name="no_contacts">没有检索到联系人</string>
+    <string name="open_settings">打开设置</string>
+    <string name="input_contact">填写手机号或邮箱</string>
+    <string name="input_contact_manually_and_divided">请手动填写手机号或邮箱，用逗号分开</string>
+    <string name="invite_by_pc">可通过访问PC端批量邀请其他同事加入</string>
+    <string name="sending_invitation_first_part">正在向你的</string>
+    <string name="sending_invitation_second_part">位同事发送邀请，</string>
+    <string name="start_to_use">开始使用</string>
+    <string name="full_prompt">你可以在个人中心邀请您的同事加入你的公司，也可以在PC端进行批量邀请操作。</string>
     
     <string name="reimbursement">消费</string>
     <string name="report">报告</string>
@@ -343,6 +355,7 @@
     <string name="error_submit_report_item_not_uploaded">消费未被上传，报告不可被提交</string>
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>
     <string name="error_timeout">你的账号已经其他地方登录，本地已经下线。</string>
+    <string name="error_contact_no_permission">云报销没有读取手机通讯录的权限，无法导入联系方式</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>
@@ -419,7 +432,7 @@
     <string name="failed_to_get_message_list">获取消息列表失败</string>
     <string name="failed_to_delete">删除失败</string>
 
-    <string name="no_pending_reports">你没有任何需要处理的报告</string>
+    <string name="no_pending_reports">报告都已处理完毕</string>
     <string name="no_image">未找到图片</string>
     <string name="no_location">无法获取地点信息</string>
     <string name="no_city">无法获取城市信息以进行搜索</string>

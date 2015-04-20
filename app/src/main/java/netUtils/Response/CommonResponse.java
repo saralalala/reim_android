@@ -92,7 +92,7 @@ public class CommonResponse extends BaseResponse
 			{
 				User user = new User(memberArray.getJSONObject(i), groupID);
 				memberList.add(user);
-			}			
+			}
 		}
 		catch (JSONException e)
 		{

@@ -2,6 +2,7 @@ package com.rushucloud.reim.guide;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -15,26 +16,22 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.Group;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
-import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.request.CommonRequest;
-import netUtils.request.group.CreateGroupRequest;
-import netUtils.response.CommonResponse;
-import netUtils.response.group.CreateGroupResponse;
 
 public class CreateCompanyActivity extends Activity
 {
 	private ClearEditText companyEditText;
 
-    private AppPreference appPreference;
-    private DBManager dbManager;
+    private String companyName;
+    private ArrayList<String> inputList;
+    private ArrayList<String> inputChosenList = new ArrayList<String>();
+    private List<User> contactChosenList;
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -49,7 +46,6 @@ public class CreateCompanyActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("CreateCompanyActivity");
 		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
 	}
 
 	protected void onPause()
@@ -68,10 +64,14 @@ public class CreateCompanyActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 
+    @SuppressWarnings("unchecked")
 	private void initData()
 	{
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
+        Bundle bundle = getIntent().getExtras();
+        companyName = bundle.getString("companyName", "");
+        inputList = bundle.getStringArrayList("inputList");
+        inputChosenList = bundle.getStringArrayList("inputChosenList");
+        contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
 	}
 
 	private void initView()
@@ -94,24 +94,27 @@ public class CreateCompanyActivity extends Activity
 			{
 				hideSoftKeyboard();
 
-				String newName = companyEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(CreateCompanyActivity.this, R.string.error_create_network_unavailable);
-				}
-				else if (newName.isEmpty())
+				companyName = companyEditText.getText().toString();
+                if (companyName.isEmpty())
 				{
 					ViewUtils.showToast(CreateCompanyActivity.this, R.string.error_company_name_empty);
 				}
 				else
 				{
-					ReimProgressDialog.show();
-                    sendCreateGroupRequest(newName);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("companyName", companyName);
+                    bundle.putStringArrayList("inputList", inputList);
+                    bundle.putStringArrayList("inputChosenList", inputChosenList);
+                    bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
+                    Intent intent = new Intent(CreateCompanyActivity.this, InviteContactActivity.class);
+                    intent.putExtras(bundle);
+                    ViewUtils.goForwardAndFinish(CreateCompanyActivity.this, intent);
 				}
 			}
 		});
 		
 		companyEditText = (ClearEditText) findViewById(R.id.companyEditText);
+        companyEditText.setText(companyName);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
@@ -122,113 +125,6 @@ public class CreateCompanyActivity extends Activity
 			}
 		});        
 	}
-
-    private void sendCreateGroupRequest(final String newName)
-    {
-        CreateGroupRequest request = new CreateGroupRequest(newName);
-        request.sendRequest(new HttpConnectionCallback()
-        {
-            public void execute(Object httpResponse)
-            {
-                final CreateGroupResponse response = new CreateGroupResponse(httpResponse);
-                if (response.getStatus())
-                {
-                    Group group = new Group();
-                    group.setName(newName);
-                    group.setServerID(response.getGroupID());
-                    group.setLocalUpdatedDate(response.getDate());
-                    group.setServerUpdatedDate(response.getDate());
-
-                    User currentUser = appPreference.getCurrentUser();
-                    currentUser.setGroupID(group.getServerID());
-                    currentUser.setIsAdmin(true);
-
-                    dbManager.insertGroup(group);
-                    dbManager.updateUser(currentUser);
-                    appPreference.setCurrentGroupID(group.getServerID());
-                    appPreference.saveAppPreference();
-
-                    sendCommonRequest();
-                }
-                else
-                {
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(CreateCompanyActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    private void sendCommonRequest()
-    {
-        CommonRequest request = new CommonRequest();
-        request.sendRequest(new HttpConnectionCallback()
-        {
-            public void execute(Object httpResponse)
-            {
-                final CommonResponse response = new CommonResponse(httpResponse);
-                if (response.getStatus())
-                {
-                    int currentGroupID = response.getGroup().getServerID();
-
-                    // update AppPreference
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    appPreference.setCurrentGroupID(currentGroupID);
-                    appPreference.saveAppPreference();
-
-                    // update members
-                    DBManager dbManager = DBManager.getDBManager();
-                    User currentUser = response.getCurrentUser();
-                    User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-                    if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
-                    {
-                        currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
-                    }
-
-                    dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-
-                    dbManager.syncUser(currentUser);
-
-                    // update categories
-                    dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-
-                    // update tags
-                    dbManager.updateGroupTags(response.getTagList(), currentGroupID);
-
-                    // update group info
-                    dbManager.syncGroup(response.getGroup());
-
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(CreateCompanyActivity.this, R.string.succeed_in_creating_company);
-                            goBack();
-                        }
-                    });
-                }
-                else
-                {
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(CreateCompanyActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
-                            goBack();
-                        }
-                    });
-                }
-            }
-        });
-    }
 
     private void hideSoftKeyboard()
 	{

@@ -27,16 +27,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/feedback"
+            android:text="@string/input_contact"
             android:textColor="@color/major_light"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/completeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:gravity="center"
+            android:text="@string/complete"
+            android:textColor="@color/title_text_color"
+            android:textSize="16sp" />
         
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:text="@string/input_contact_manually_and_divided"
+        android:textColor="@color/hint_grey"
+        android:textSize="16sp"/>
 
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="10dp"
         layout="@layout/view_divider" />
 
     <ScrollView
@@ -51,17 +72,17 @@
             android:orientation="vertical" >
 
             <EditText
-                android:id="@+id/feedbackEditText"
+                android:id="@+id/contactEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:gravity="top"
-                android:hint="@string/input_feedback"
                 android:inputType="textMultiLine"
                 android:minLines="8"
                 android:textColor="@color/font_major_dark"
                 android:textSize="16sp" />
         </LinearLayout>
+
     </ScrollView>
 
     <include
@@ -69,50 +90,15 @@
         android:layout_height="0.5dp"
         layout="@layout/view_divider" />
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="18dp"
-        layout="@layout/view_divider" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/major_light" >
-
-        <classes.widget.ClearEditText
-            android:id="@+id/contactEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@null"
-            android:hint="@string/input_contact_info"
-            android:textColor="@color/font_major_dark"
-            android:textSize="16sp" />
-    </RelativeLayout>
-
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        layout="@layout/view_divider" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="22dp" >
-
-        <Button
-            android:id="@+id/submitButton"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/button_dark_drawable"
-            android:text="@string/submit"
-            android:textColor="@color/button_text_light_color" />
-        
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/promptTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/invite_by_pc"
+        android:textColor="@color/hint_grey"
+        android:textSize="16sp"/>
 
 </LinearLayout>

@@ -24,10 +24,10 @@ public class User implements Serializable
 	
 	private int serverID = -1;
 	private String email = "";
+    private String phone = "";
 	private String password = "";
 	private String nickname = "";
     private String nicknameInitLetter = "";
-	private String phone = "";
     private String bankAccount = "";
 	private int avatarID = -1;
     private String avatarServerPath = "";
@@ -117,8 +117,22 @@ public class User implements Serializable
 	{
 		this.email = email;
 	}
-	
-	public String getPassword()
+
+    public String getPhone()
+    {
+        return phone;
+    }
+    public void setPhone(String phone)
+    {
+        this.phone = phone;
+    }
+
+    public String getContact()
+    {
+        return getPhone().isEmpty()? getEmail() : getPhone();
+    }
+
+    public String getPassword()
 	{
 		return password;
 	}
@@ -144,15 +158,6 @@ public class User implements Serializable
     {
         this.nicknameInitLetter = nicknameInitLetter;
     }
-
-    public String getPhone()
-	{
-		return phone;
-	}
-	public void setPhone(String phone)
-	{
-		this.phone = phone;
-	}
 
     public String getBankAccount()
     {
@@ -422,5 +427,19 @@ public class User implements Serializable
                 }
             }
         });
+    }
+
+    public static boolean existsInList(List<User> userList, User targetUser)
+    {
+        for (User user : userList)
+        {
+            String contact = user.getContact();
+            String targetContact = targetUser.getContact();
+            if (contact.equals(targetContact) && user.getNickname().equals(targetUser.getNickname()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

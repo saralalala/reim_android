@@ -82,19 +82,26 @@ public class FeedbackActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-				if (PhoneUtils.isNetworkConnected())
+
+                String feedback = feedbackEditText.getText().toString();
+                String contactInfo = contactEditText.getText().toString();
+				if (!PhoneUtils.isNetworkConnected())
 				{
-					sendFeedBack();
+                    ViewUtils.showToast(FeedbackActivity.this, R.string.error_feedback_network_unavailable);
 				}
+                else if (feedback.isEmpty() && contactInfo.isEmpty())
+                {
+                    ViewUtils.showToast(FeedbackActivity.this, R.string.error_feedback_contact_empty);
+                }
 				else
 				{
-					ViewUtils.showToast(FeedbackActivity.this, R.string.error_feedback_network_unavailable);
+                    sendFeedbackRequest(feedback, contactInfo);
 				}
 			}
 		});
 		
-		LinearLayout layout = (LinearLayout) findViewById(R.id.baseLayout);
-		layout.setOnClickListener(new View.OnClickListener()
+		LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
+        baseLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -102,27 +109,6 @@ public class FeedbackActivity extends Activity
 			}
 		});
 	}
-	
-    private void hideSoftKeyboard()
-    {
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(feedbackEditText.getWindowToken(), 0);					
-		imm.hideSoftInputFromWindow(contactEditText.getWindowToken(), 0);  	
-    }
-    
-    private void sendFeedBack()
-    {
-		final String feedback = feedbackEditText.getText().toString();
-		final String contactInfo = contactEditText.getText().toString();
-		if (feedback.isEmpty() && contactInfo.isEmpty())
-		{
-			ViewUtils.showToast(this, R.string.error_feedback_contact_empty);
-		}
-		else
-		{
-	    	sendFeedbackRequest(feedback, contactInfo);
-		}    	
-    }
     
     private void sendFeedbackRequest(String feedback, String contactInfo)
     {
@@ -149,6 +135,13 @@ public class FeedbackActivity extends Activity
 				});
 			}
 		});
+    }
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(feedbackEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(contactEditText.getWindowToken(), 0);
     }
 
     private void goBack()

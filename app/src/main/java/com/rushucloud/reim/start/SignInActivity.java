@@ -104,8 +104,12 @@ public class SignInActivity extends Activity
 		if (username != null)
 		{
 			usernameEditText.setText(username);
-			passwordEditText.setText(password);
 		}
+
+        if (password != null)
+        {
+            passwordEditText.setText(password);
+        }
 
 		Button signInButton = (Button) findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()

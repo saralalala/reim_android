@@ -1,6 +1,7 @@
 package com.rushucloud.reim.guide;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
+
+import classes.User;
 import classes.utils.ViewUtils;
 
 public class GuideStartActivity extends Activity
@@ -45,7 +49,7 @@ public class GuideStartActivity extends Activity
         {
             public void onClick(View v)
             {
-                ViewUtils.goForwardAndFinish(GuideStartActivity.this, CreateCompanyActivity.class);
+
             }
         });
 		
@@ -55,7 +59,14 @@ public class GuideStartActivity extends Activity
         {
             public void onClick(View v)
             {
-
+                Bundle bundle = new Bundle();
+                bundle.putString("companyName", "");
+                bundle.putStringArrayList("inputList", new ArrayList<String>());
+                bundle.putStringArrayList("inputChosenList", new ArrayList<String>());
+                bundle.putSerializable("contactChosenList", new ArrayList<User>());
+                Intent intent = new Intent(GuideStartActivity.this, CreateCompanyActivity.class);
+                intent.putExtras(bundle);
+                ViewUtils.goForwardAndFinish(GuideStartActivity.this, intent);
             }
         });
 	}

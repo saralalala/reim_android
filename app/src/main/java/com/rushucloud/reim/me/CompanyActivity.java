@@ -24,10 +24,8 @@ import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.request.CommonRequest;
 import netUtils.request.group.CreateGroupRequest;
 import netUtils.request.group.ModifyGroupRequest;
-import netUtils.response.CommonResponse;
 import netUtils.response.group.CreateGroupResponse;
 import netUtils.response.group.ModifyGroupResponse;
 
@@ -169,7 +167,44 @@ public class CompanyActivity extends Activity
                     appPreference.setCurrentGroupID(group.getServerID());
                     appPreference.saveAppPreference();
 
-                    sendCommonRequest();
+                    int currentGroupID = response.getGroup().getServerID();
+
+                    // update AppPreference
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    appPreference.setCurrentGroupID(currentGroupID);
+                    appPreference.saveAppPreference();
+
+                    // update members
+                    DBManager dbManager = DBManager.getDBManager();
+                    currentUser = response.getCurrentUser();
+                    User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+                    if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+                    {
+                        currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
+                    }
+
+                    dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+                    dbManager.syncUser(currentUser);
+
+                    // update categories
+                    dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+
+                    // update tags
+                    dbManager.updateGroupTags(response.getTagList(), currentGroupID);
+
+                    // update group info
+                    dbManager.syncGroup(response.getGroup());
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(CompanyActivity.this, R.string.succeed_in_creating_company);
+                            goBack();
+                        }
+                    });
                 }
                 else
                 {
@@ -223,71 +258,6 @@ public class CompanyActivity extends Activity
 			}
 		});
 	}
-
-    private void sendCommonRequest()
-    {
-        CommonRequest request = new CommonRequest();
-        request.sendRequest(new HttpConnectionCallback()
-        {
-            public void execute(Object httpResponse)
-            {
-                final CommonResponse response = new CommonResponse(httpResponse);
-                if (response.getStatus())
-                {
-                    int currentGroupID = response.getGroup().getServerID();
-
-                    // update AppPreference
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    appPreference.setCurrentGroupID(currentGroupID);
-                    appPreference.saveAppPreference();
-
-                    // update members
-                    DBManager dbManager = DBManager.getDBManager();
-                    User currentUser = response.getCurrentUser();
-                    User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-                    if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
-                    {
-                        currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
-                    }
-
-                    dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-
-                    dbManager.syncUser(currentUser);
-
-                    // update categories
-                    dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-
-                    // update tags
-                    dbManager.updateGroupTags(response.getTagList(), currentGroupID);
-
-                    // update group info
-                    dbManager.syncGroup(response.getGroup());
-
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(CompanyActivity.this, R.string.succeed_in_creating_company);
-                            goBack();
-                        }
-                    });
-                }
-                else
-                {
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(CompanyActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
-                            goBack();
-                        }
-                    });
-                }
-            }
-        });
-    }
 
     private void hideSoftKeyboard()
 	{

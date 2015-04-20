@@ -1,4 +1,4 @@
-package netUtils.response.group;
+package netUtils.response.user;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,29 +14,24 @@ import classes.User;
 import classes.utils.Utils;
 import netUtils.response.BaseResponse;
 
-public class CreateGroupResponse extends BaseResponse
+public class ApplyReplyResponse extends BaseResponse
 {
-	private int groupID;
-    private int date;
-
     private List<Category> categoryList;
     private List<Tag> tagList;
     private List<User> memberList;
     private User currentUser;
     private Group group;
 
-	public CreateGroupResponse(Object httpResponse)
+	public ApplyReplyResponse(Object httpResponse)
 	{
 		super(httpResponse);
 	}
 
 	protected void constructData()
 	{
-		try
-		{
-			JSONObject jObject = getDataObject();
-			setGroupID(Integer.valueOf(jObject.getString("id")));
-            setDate(Integer.valueOf(jObject.getString("dt")));
+        try
+        {
+            JSONObject jObject = getDataObject();
 
             JSONObject profileObject = jObject.getJSONObject("profile");
 
@@ -58,6 +53,7 @@ public class CreateGroupResponse extends BaseResponse
             currentUser.setNickname(profileObject.getString("nickname"));
             currentUser.setEmail(profileObject.getString("email"));
             currentUser.setPhone(profileObject.getString("phone"));
+            currentUser.setBankAccount(profileObject.getString("credit_card"));
             currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
             currentUser.setAvatarLocalPath("");
             currentUser.setIsAdmin(Utils.intToBoolean(profileObject.getInt("admin")));
@@ -98,32 +94,12 @@ public class CreateGroupResponse extends BaseResponse
                 User user = new User(memberArray.getJSONObject(i), groupID);
                 memberList.add(user);
             }
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
 	}
-
-	public int getGroupID()
-	{
-		return groupID;
-	}
-
-	public void setGroupID(int groupID)
-	{
-		this.groupID = groupID;
-	}
-
-    public int getDate()
-    {
-        return date;
-    }
-
-    public void setDate(int date)
-    {
-        this.date = date;
-    }
 
     public List<Category> getCategoryList()
     {

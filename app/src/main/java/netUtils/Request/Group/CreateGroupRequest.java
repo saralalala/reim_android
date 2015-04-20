@@ -23,6 +23,21 @@ public class CreateGroupRequest extends BaseRequest
 		appendUrl(URLDef.URL_GROUP);
 	}
 
+    public CreateGroupRequest(String groupName, String inviteList)
+    {
+        super();
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("name", groupName));
+        if (!inviteList.isEmpty())
+        {
+            params.add(new BasicNameValuePair("invites", inviteList));
+        }
+        setParams(params);
+
+        appendUrl(URLDef.URL_GROUP);
+    }
+
 	public void sendRequest(HttpConnectionCallback callback)
 	{
 		doPost(callback);

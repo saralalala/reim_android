@@ -48,19 +48,19 @@ public class PhoneUtils
 		}
 	}
 
+    public static boolean hasReadContactsPermission()
+    {
+        Context context = ReimApplication.getContext();
+        PackageManager packageManager = context.getPackageManager();
+        return PackageManager.PERMISSION_GRANTED == packageManager.checkPermission("android.permission.READ_CONTACTS", context.getPackageName());
+    }
+
 	public static boolean isWiFiConnected()
 	{
 		ConnectivityManager manager = (ConnectivityManager) ReimApplication.getContext()
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		if (networkInfo != null)
-		{
-			return networkInfo.isConnected();
-		}
-		else
-		{
-			return false;
-		}
+        return networkInfo != null && networkInfo.isConnected();
 	}
 
 	public static boolean isDataConnected()
@@ -68,14 +68,7 @@ public class PhoneUtils
 		ConnectivityManager manager = (ConnectivityManager) ReimApplication.getContext()
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-		if (networkInfo != null)
-		{
-			return networkInfo.isConnected();
-		}
-		else
-		{
-			return false;
-		}
+        return networkInfo != null && networkInfo.isConnected();
 	}
 
 	public static boolean isNetworkConnected()
@@ -83,14 +76,7 @@ public class PhoneUtils
 		ConnectivityManager manager = (ConnectivityManager) ReimApplication.getContext()
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-		if (networkInfo != null)
-		{
-			return networkInfo.isAvailable();
-		}
-		else
-		{
-			return false;
-		}
+        return networkInfo != null && networkInfo.isAvailable();
 	}
 
 	public static boolean isLocalisationEnabled()
@@ -99,7 +85,7 @@ public class PhoneUtils
 		boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-		return gpsEnabled || networkEnabled? true : false;
+		return gpsEnabled || networkEnabled;
 	}
 
 	public static String getPathFromUri(Activity activity, Uri uri)
@@ -251,7 +237,7 @@ public class PhoneUtils
 	{
 		try
 		{
-			int byteRead = 0;
+			int byteRead;
 			File oldfile = new File(oldPath);
 			if (oldfile.exists())
 			{
