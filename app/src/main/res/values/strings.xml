@@ -46,6 +46,7 @@
     <string name="alarm">提醒</string>
     <string name="finish">直接通过</string>
     <string name="exit">退出</string>
+    <string name="join">加入</string>
     
     <string name="sign_up">注册</string>
     <string name="sign_up_by_phone">手机注册</string>
@@ -76,7 +77,13 @@
     <string name="sending_invitation_first_part">正在向你的</string>
     <string name="sending_invitation_second_part">位同事发送邀请，</string>
     <string name="start_to_use">开始使用</string>
-    <string name="full_prompt">你可以在个人中心邀请您的同事加入你的公司，也可以在PC端进行批量邀请操作。</string>
+    <string name="create_prompt">你可以在个人中心邀请您的同事加入你的公司，也可以在PC端进行批量邀请操作。</string>
+    <string name="modify_name">修改姓名</string>
+    <string name="choose_company">选择公司</string>
+    <string name="search_result">搜索结果</string>
+    <string name="search_result_empty">没有符合条件的公司</string>
+    <string name="applied_to_join">已申请加入</string>
+    <string name="join_prompt">你的申请被通过后，才能正常的提交报销申请，或者审核他人报告。\n\n在这之前，你可以用云报销，将需要报销的消费记录下来。</string>
     
     <string name="reimbursement">消费</string>
     <string name="report">报告</string>
@@ -432,6 +439,8 @@
     <string name="failed_to_alert">提醒发送失败</string>
     <string name="failed_to_get_message_list">获取消息列表失败</string>
     <string name="failed_to_delete">删除失败</string>
+    <string name="failed_to_search_companies">搜索公司失败</string>
+    <string name="failed_to_apply">申请加入公司失败</string>
 
     <string name="no_pending_reports">报告都已处理完毕</string>
     <string name="no_image">未找到图片</string>

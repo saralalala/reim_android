@@ -34,6 +34,11 @@
         
         <activity android:name="com.rushucloud.reim.start.SplashActivity"
             android:theme="@style/AppSplash" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
         <!--   start part   -->
@@ -78,14 +83,7 @@
         <activity
             android:name=".guide.GuideStartActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".guide.CreateCompanyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -99,7 +97,19 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".guide.GuideCompleteActivity"
+            android:name=".guide.CreateCompleteActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".guide.ModifyNicknameActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".guide.PickCompanyActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".guide.JoinCompleteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
 

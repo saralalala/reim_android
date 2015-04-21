@@ -20,12 +20,12 @@ import com.umeng.analytics.MobclickAgent;
 
 import classes.utils.ViewUtils;
 
-public class GuideCompleteActivity extends Activity
+public class CreateCompleteActivity extends Activity
 {
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_complete);
+		setContentView(R.layout.activity_guide_create_complete);
 		initView();
 	}
 
@@ -78,7 +78,7 @@ public class GuideCompleteActivity extends Activity
         }
         else
         {
-            String content = ViewUtils.getString(R.string.full_prompt);
+            String content = ViewUtils.getString(R.string.create_prompt);
             SpannableString text = new SpannableString(content);
             text.setSpan(new StyleSpan(Typeface.BOLD), 4, 8, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             text.setSpan(new UnderlineSpan(), 4, 8, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -93,7 +93,7 @@ public class GuideCompleteActivity extends Activity
         {
             public void onClick(View v)
             {
-                ViewUtils.goForwardAndFinish(GuideCompleteActivity.this, MainActivity.class);
+                ViewUtils.goForwardAndFinish(CreateCompleteActivity.this, MainActivity.class);
             }
         });
 	}

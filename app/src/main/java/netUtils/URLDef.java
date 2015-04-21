@@ -15,8 +15,8 @@ public class URLDef
 	public static String URL_SYNC = "sync";
 	public static String URL_STATIC = "static";
 	public static String URL_IMAGE = "images";
-    public static String URL_IMAGE_OSS = "http://reim-avatar.oss-cn-beijing.aliyuncs.com/";
 	public static String URL_GROUP = "groups";
+    public static String URL_SEARCH_COMPANY = "search_company";
 	public static String URL_ITEM = "item";
 	public static String URL_DIANPING = "http://api.dianping.com/v1/business/find_businesses";
 	public static String URL_SEARCH = "search";

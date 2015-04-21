@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import classes.User;
@@ -49,7 +50,10 @@ public class GuideStartActivity extends Activity
         {
             public void onClick(View v)
             {
-
+                Intent intent = new Intent(GuideStartActivity.this, ModifyNicknameActivity.class);
+                intent.putExtra("nickname", "");
+                intent.putExtra("group", (Serializable) null);
+                ViewUtils.goForwardAndFinish(GuideStartActivity.this, intent);
             }
         });
 		

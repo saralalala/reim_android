@@ -30,12 +30,10 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 														  List<Boolean> check, List<List<Boolean>> subCheck)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
-		
 		this.categoryList = new ArrayList<Category>(categories);
 		this.subCategoryList = new ArrayList<List<Category>>(subCategories);
 		this.checkList = new ArrayList<Boolean>(check);
 		this.subCheckList = new ArrayList<List<Boolean>>(subCheck);
-		
 		this.selectedColor = ViewUtils.getColor(R.color.major_dark);
 		this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 	}

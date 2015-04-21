@@ -14,7 +14,7 @@
     <color name="font_major_dark">#FF373737</color>
     <color name="font_minor_dark">#FF333333</color>
     <color name="font_major_light">#CCFFFFFF</color>
-    <color name="font_title_selected">#FFE9E9E9</color>
+    <color name="font_title_selected">#77FFFFFF</color>
     <color name="font_reim_number">#FFFF5353</color>
     <color name="font_budget">#FF3CB798</color>
     <color name="font_list_item_header">#FF999999</color>

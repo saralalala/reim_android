@@ -90,7 +90,6 @@ public class InviteContactActivity extends Activity
     @SuppressWarnings("unchecked")
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        System.out.println("onActivityResult");
         if (resultCode == Activity.RESULT_OK)
         {
             switch (requestCode)
@@ -366,7 +365,7 @@ public class InviteContactActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            Intent intent = new Intent(InviteContactActivity.this, GuideCompleteActivity.class);
+                            Intent intent = new Intent(InviteContactActivity.this, CreateCompleteActivity.class);
                             intent.putExtra("count", count);
                             intent.putExtra("companyName", companyName);
                             ViewUtils.goForwardAndFinish(InviteContactActivity.this, intent);

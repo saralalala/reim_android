@@ -31,7 +31,6 @@ public class ReportItemListViewAdapter extends BaseAdapter
 	{
 		this.context = context;
 		this.layoutInflater = LayoutInflater.from(context);
-		
 		this.itemList = new ArrayList<Item>(items);
 		this.chosenIDList = new ArrayList<Integer>(chosenList);
 	}

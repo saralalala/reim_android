@@ -13,8 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.guide.GuideStartActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.User;
@@ -225,7 +225,7 @@ public class EmailSignUpActivity extends Activity
 						{
 							ReimProgressDialog.dismiss();
                             ViewUtils.showToast(EmailSignUpActivity.this, R.string.succeed_in_sign_up_with_email);
-                            ViewUtils.goForwardAndFinish(EmailSignUpActivity.this, MainActivity.class);
+                            ViewUtils.goForwardAndFinish(EmailSignUpActivity.this, GuideStartActivity.class);
 						}
 					});
 				}

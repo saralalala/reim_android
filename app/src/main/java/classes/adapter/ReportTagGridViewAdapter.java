@@ -29,7 +29,6 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 		{
 			check[i] = false;
 		}
-		
 		backgrounds = new int[]{ R.drawable.tag_draft, R.drawable.tag_submitted, R.drawable.tag_approved,
 				 				 R.drawable.tag_rejected, R.drawable.tag_finished };
 	}

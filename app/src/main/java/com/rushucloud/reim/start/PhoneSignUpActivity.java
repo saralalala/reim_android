@@ -14,8 +14,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.guide.GuideStartActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.User;
@@ -362,7 +362,7 @@ public class PhoneSignUpActivity extends Activity
 							ReimProgressDialog.dismiss();
                             waitingTime = -1;
                             ViewUtils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_sign_up);
-                            ViewUtils.goForwardAndFinish(PhoneSignUpActivity.this, MainActivity.class);
+                            ViewUtils.goForwardAndFinish(PhoneSignUpActivity.this, GuideStartActivity.class);
 						}
 					});
 				}
