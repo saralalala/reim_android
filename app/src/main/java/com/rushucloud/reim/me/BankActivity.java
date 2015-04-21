@@ -115,6 +115,7 @@ public class BankActivity extends Activity
 
         bankEditText = (ClearEditText) findViewById(R.id.bankEditText);
         bankEditText.setText(currentUser.getBankAccount());
+        ViewUtils.requestFocus(this, bankEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()

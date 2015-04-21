@@ -114,6 +114,7 @@ public class NicknameActivity extends Activity
 		
 		nicknameEditText = (ClearEditText) findViewById(R.id.nicknameEditText);
 		nicknameEditText.setText(currentUser.getNickname());
+        ViewUtils.requestFocus(this, nicknameEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()

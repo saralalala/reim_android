@@ -203,7 +203,7 @@
     <string name="phone">手机</string>
     <string name="bank_account">银行账号</string>
     <string name="company">公司</string>
-    <string name="nickname">昵称</string>
+    <string name="nickname">姓名</string>
     <string name="change_password">修改密码</string>
     <string name="default_manager">上级设置</string>
     <string name="my_manager">我的上级</string>
@@ -258,7 +258,7 @@
     <string name="input_manager">请输入审批人信息</string>
     <string name="input_cc">请输入抄送人信息</string>
     <string name="input_comment">请输入评论</string>
-    <string name="input_nickname">请输入昵称</string>
+    <string name="input_nickname">请输入姓名</string>
     <string name="input_company_name">请输入公司名称</string>
     <string name="input_feedback">请输入你的意见或建议</string>
     <string name="input_contact_info">请输入你的联系方式</string>
@@ -290,6 +290,7 @@
     <string name="error_no_code">未获取到任何验证码</string>
     <string name="error_code_empty">验证码不能为空</string>
     <string name="error_username_empty">请输入用户名</string>
+    <string name="error_username_wrong_format">输入内容有错误，请修正标红部分后再邀请</string>
     <string name="error_email_empty">请输入邮箱</string>
     <string name="error_new_email_empty">请输入新邮箱</string>
     <string name="error_email_wrong_format">邮箱格式不正确</string>
@@ -297,7 +298,7 @@
     <string name="error_new_phone_empty">请输入新手机号</string>
     <string name="error_phone_wrong_format">手机号格式不正确</string>
     <string name="error_bank_account_wrong_format">银行账号格式不正确</string>
-    <string name="error_new_nickname_empty">请输入新昵称</string>
+    <string name="error_new_nickname_empty">请输入新姓名</string>
     <string name="error_company_name_empty">请输入公司名称</string>
     <string name="error_new_company_name_empty">请输入公司新名称</string>
     <string name="error_number_wrong_format">请输入消费金额</string>
@@ -471,6 +472,5 @@
     
     <string name="surprise">如果你能看到这个窗口，说明你是一个极有探索欲望的同学，如数科技就是喜欢这样的人。你有没有兴趣加入我们呢？请发送简历到hr@cloudbaoxiao.com。</string>
     <string name="ok">好的我知道了</string>
-    <string name="versionControl">三国</string>
-    
+
 </resources>

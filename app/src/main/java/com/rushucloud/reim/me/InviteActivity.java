@@ -74,14 +74,7 @@ public class InviteActivity extends Activity
 		
 		usernameEditText = (ClearEditText) findViewById(R.id.usernameEditText);
         usernameEditText.requestFocus();
-        usernameEditText.postDelayed(new Runnable()
-        {
-            public void run()
-            {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(usernameEditText, 0);
-            }
-        }, 200);
+        ViewUtils.requestFocus(this, usernameEditText);
 
         Button inviteButton = (Button) findViewById(R.id.inviteButton);
         inviteButton.setOnClickListener(new OnClickListener()

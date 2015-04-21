@@ -45,47 +45,27 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <include
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="0.5dp"
+        android:layout_marginTop="18dp"
+        layout="@layout/view_divider" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-		
-		    <RelativeLayout
-		        android:layout_width="match_parent"
-		        android:layout_height="50.5dp"
-		        android:layout_marginTop="18dp"
-        		android:background="@color/major_light" >
-		
-			    <include
-			        android:layout_width="match_parent"
-			        android:layout_height="0.5dp"
-			        layout="@layout/view_divider" />
-		
-		        <classes.widget.ClearEditText
-		            android:id="@+id/emailEditText"
-		            android:layout_width="match_parent"
-		            android:layout_height="match_parent"
-		            android:layout_marginLeft="16dp"
-		            android:layout_marginRight="16dp"
-		            android:background="@null"
-		            android:hint="@string/input_email"
-		            android:inputType="text|textEmailAddress"
-                    android:textColor="@color/font_major_dark"
-                    android:textSize="16sp"/>
-		        
-		    </RelativeLayout>
-		
-		    <include
-		        android:layout_width="match_parent"
-		        android:layout_height="0.5dp"
-		        layout="@layout/view_divider" />
-		    
-        </LinearLayout>
-        
-    </ScrollView>
+    <classes.widget.ClearEditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@color/major_light"
+        android:hint="@string/input_email"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/font_major_dark"
+        android:textSize="16sp"/>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider" />
 
 </LinearLayout>

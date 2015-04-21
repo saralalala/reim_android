@@ -115,6 +115,7 @@ public class CreateCompanyActivity extends Activity
 		
 		companyEditText = (ClearEditText) findViewById(R.id.companyEditText);
         companyEditText.setText(companyName);
+        ViewUtils.requestFocus(this, companyEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()

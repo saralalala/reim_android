@@ -1,5 +1,6 @@
 package classes.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -47,13 +48,6 @@ public class PhoneUtils
 			return context.getString(R.string.failed_to_get_version);
 		}
 	}
-
-    public static boolean hasReadContactsPermission()
-    {
-        Context context = ReimApplication.getContext();
-        PackageManager packageManager = context.getPackageManager();
-        return PackageManager.PERMISSION_GRANTED == packageManager.checkPermission("android.permission.READ_CONTACTS", context.getPackageName());
-    }
 
 	public static boolean isWiFiConnected()
 	{

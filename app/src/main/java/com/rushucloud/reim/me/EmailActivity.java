@@ -119,6 +119,7 @@ public class EmailActivity extends Activity
 		
 		emailEditText = (ClearEditText) findViewById(R.id.emailEditText);
     	emailEditText.setText(currentUser.getEmail());
+        ViewUtils.requestFocus(this, emailEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()

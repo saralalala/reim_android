@@ -60,30 +60,16 @@
         android:layout_marginTop="10dp"
         layout="@layout/view_divider" />
 
-    <ScrollView
+    <EditText
+        android:id="@+id/contactEditText"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:padding="16dp"
         android:background="@color/major_light"
-        android:padding="16dp" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <EditText
-                android:id="@+id/contactEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:gravity="top"
-                android:inputType="textMultiLine"
-                android:minLines="8"
-                android:textColor="@color/font_major_dark"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-    </ScrollView>
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:textColor="@color/font_major_dark"
+        android:textSize="16sp" />
 
     <include
         android:layout_width="match_parent"

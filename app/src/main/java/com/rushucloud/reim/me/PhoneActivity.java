@@ -119,6 +119,7 @@ public class PhoneActivity extends Activity
 		
 		phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
 		phoneEditText.setText(currentUser.getPhone());
+        ViewUtils.requestFocus(this, phoneEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()

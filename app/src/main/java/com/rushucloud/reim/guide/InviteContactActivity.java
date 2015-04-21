@@ -48,6 +48,7 @@ public class InviteContactActivity extends Activity
     private List<User> contactList = new ArrayList<User>();
     private List<User> contactChosenList = new ArrayList<User>();
     private int count = 0;
+    private boolean hasInit = false;
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -63,8 +64,11 @@ public class InviteContactActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("InviteContactActivity");
 		MobclickAgent.onResume(this);
-        adapter.setHasReadContactsPermission(PhoneUtils.hasReadContactsPermission());
-        adapter.notifyDataSetChanged();
+        if (contactList.isEmpty() && hasInit)
+        {
+            readContacts();
+        }
+        hasInit = true;
 	}
 
 	protected void onPause()
@@ -86,6 +90,7 @@ public class InviteContactActivity extends Activity
     @SuppressWarnings("unchecked")
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        System.out.println("onActivityResult");
         if (resultCode == Activity.RESULT_OK)
         {
             switch (requestCode)

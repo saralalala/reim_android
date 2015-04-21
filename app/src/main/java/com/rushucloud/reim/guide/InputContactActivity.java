@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Html;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -24,7 +27,9 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
+import java.awt.font.TextAttribute;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
@@ -101,24 +106,24 @@ public class InputContactActivity extends Activity
                 boolean contactsInvalid = false;
                 for (String contact : contactList)
                 {
-                    if (!Utils.isEmailOrPhone(contact))
+                    int index = contactString.indexOf(contact);
+                    if (index != -1)
                     {
-                        int index = contactString.indexOf(contact);
-                        if (index != -1)
+                        if (!Utils.isEmailOrPhone(contact))
                         {
-                            String prefix = "<a style=\"border-bottom:1px dashed #FF575B>\"";
-                            String suffix = "</a";
-                            text.setSpan(new UnderlineSpan(), index, index + contact.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            contactsInvalid = true;
                             text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_dark)),
                                          index, index + contact.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
-                        contactsInvalid = true;
                     }
                 }
 
                 if (contactsInvalid)
                 {
                     contactEditText.setText(text);
+                    Spannable spanText = contactEditText.getText();
+                    Selection.setSelection(spanText, spanText.length());
+                    ViewUtils.showToast(InputContactActivity.this, R.string.error_username_wrong_format);
                 }
                 else
                 {
@@ -132,6 +137,7 @@ public class InputContactActivity extends Activity
         contactEditText = (EditText) findViewById(R.id.contactEditText);
         contactEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
         contactEditText.setText(getIntent().getStringExtra("inviteList"));
+        ViewUtils.requestFocus(this, contactEditText);
 
         TextView promptTextView = (TextView) findViewById(R.id.promptTextView);
         SpannableString text = new SpannableString(promptTextView.getText());

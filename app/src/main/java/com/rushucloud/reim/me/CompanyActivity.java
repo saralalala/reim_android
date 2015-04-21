@@ -131,6 +131,7 @@ public class CompanyActivity extends Activity
         {
             companyEditText.setText(currentGroup.getName());
         }
+        ViewUtils.requestFocus(this, companyEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()

@@ -125,6 +125,7 @@ public class EditTagActivity extends Activity
 		
 		nameEditText = (ClearEditText) findViewById(R.id.nameEditText);
 		nameEditText.setText(tag.getName());
+        ViewUtils.requestFocus(this, nameEditText);
 	}
 
     private void hideSoftKeyboard()

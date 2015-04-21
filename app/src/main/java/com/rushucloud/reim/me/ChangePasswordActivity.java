@@ -79,14 +79,7 @@ public class ChangePasswordActivity extends Activity
 		
 		oldPasswordEditText = (ClearEditText) findViewById(R.id.oldPasswordEditText);
         oldPasswordEditText.setTransformationMethod(new PasswordTransformationMethod());
-        oldPasswordEditText.postDelayed(new Runnable()
-        {
-            public void run()
-            {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(oldPasswordEditText, 0);
-            }
-        }, 200);
+        ViewUtils.requestFocus(this, oldPasswordEditText);
 
 		newPasswordEditText = (ClearEditText) findViewById(R.id.newPasswordEditText);
         newPasswordEditText.setTransformationMethod(new PasswordTransformationMethod());

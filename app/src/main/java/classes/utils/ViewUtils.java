@@ -13,6 +13,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
@@ -64,7 +65,19 @@ public class ViewUtils
     {
     	Toast.makeText(context, context.getString(resID) + "，" + errorMessage, Toast.LENGTH_SHORT).show();
     }
-    
+
+    public static void requestFocus(final Context context, final EditText editText)
+    {
+        editText.postDelayed(new Runnable()
+        {
+            public void run()
+            {
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(editText, 0);
+            }
+        }, 200);
+    }
+
 	public static PopupWindow buildTopPopupWindow(final Context context, View view)
 	{
 		int backgroundColor = ViewUtils.getColor(android.R.color.transparent);

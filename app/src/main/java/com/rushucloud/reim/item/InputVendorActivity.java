@@ -87,14 +87,7 @@ public class InputVendorActivity extends Activity
 		});
 		
 		vendorEditText = (ClearEditText) findViewById(R.id.vendorEditText);
-        vendorEditText.postDelayed(new Runnable()
-        {
-            public void run()
-            {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(vendorEditText, 0);
-            }
-        }, 200);
+        ViewUtils.requestFocus(this, vendorEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new View.OnClickListener()

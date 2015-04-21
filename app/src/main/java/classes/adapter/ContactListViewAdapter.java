@@ -1,6 +1,8 @@
 package classes.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.User;
-import classes.utils.PhoneUtils;
-import classes.utils.ViewUtils;
 
 public class ContactListViewAdapter extends BaseAdapter
 {
 	private Context context;
 	private LayoutInflater layoutInflater;
-    private boolean hasReadContactsPermission;
     private ArrayList<String> inputList = new ArrayList<String>();
     private ArrayList<String> inputChosenList = new ArrayList<String>();
     private List<User> contactList = new ArrayList<User>();
@@ -31,7 +30,6 @@ public class ContactListViewAdapter extends BaseAdapter
 	{
         this.context = context;
 		this.layoutInflater = LayoutInflater.from(context);
-        this.hasReadContactsPermission = PhoneUtils.hasReadContactsPermission();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -83,10 +81,6 @@ public class ContactListViewAdapter extends BaseAdapter
 
             return view;
         }
-        else if (hasReadContactsPermission)
-        {
-            return layoutInflater.inflate(R.layout.list_contact_empty, parent, false);
-        }
         else
         {
             View view = layoutInflater.inflate(R.layout.list_contact_no_permission, parent, false);
@@ -96,7 +90,7 @@ public class ContactListViewAdapter extends BaseAdapter
             {
                 public void onClick(View v)
                 {
-                    ViewUtils.showToast(context, R.string.no_categories);
+                    context.startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
                 }
             });
 
@@ -118,11 +112,6 @@ public class ContactListViewAdapter extends BaseAdapter
 	{
 		return position;
 	}
-
-    public void setHasReadContactsPermission(boolean hasReadContactsPermission)
-    {
-        this.hasReadContactsPermission = hasReadContactsPermission;
-    }
 
     public void setInputList(ArrayList<String> inputs)
     {
