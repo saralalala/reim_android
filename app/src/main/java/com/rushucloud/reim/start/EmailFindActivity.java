@@ -83,6 +83,7 @@ public class EmailFindActivity extends Activity
                 return false;
             }
         });
+        ViewUtils.requestFocus(this, emailEditText);
 		
     	Button confirmButton = (Button) findViewById(R.id.confirmButton);
     	confirmButton.setOnClickListener(new View.OnClickListener()

@@ -32,6 +32,7 @@ public class URLDef
     public static String URL_MESSAGE = "messages/single";
 	public static String URL_MESSAGE_LIST = "messages/list";
 	public static String URL_INVITE = "invite";
+    public static String URL_INVITED_COMPANY = "invites";
     public static String URL_APPLY = "apply";
 	public static String URL_SIGN_IN = "login";
 	public static String URL_SIGN_OUT = "logout";

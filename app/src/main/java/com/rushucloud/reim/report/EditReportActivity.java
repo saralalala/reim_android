@@ -278,7 +278,7 @@ public class EditReportActivity extends Activity
 		titleEditText.setText(report.getTitle());
 		if (report.getTitle().isEmpty())
 		{
-			titleEditText.requestFocus();
+            ViewUtils.requestFocus(this, titleEditText);
 		}
 
 		int createDate = report.getCreatedDate() == -1? Utils.getCurrentTime() : report.getCreatedDate();

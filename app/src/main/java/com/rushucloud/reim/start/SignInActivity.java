@@ -86,6 +86,7 @@ public class SignInActivity extends Activity
 		String password = getIntent().getStringExtra("password");
 		
 		usernameEditText = (ClearEditText) findViewById(R.id.usernameEditText);
+        ViewUtils.requestFocus(this, usernameEditText);
 		
 		passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
         passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
@@ -243,13 +244,12 @@ public class SignInActivity extends Activity
                 final SignInResponse response = new SignInResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    int currentUserID = response.getCurrentUser().getServerID();
                     int currentGroupID = -1;
 
                     DBManager dbManager = DBManager.getDBManager();
                     AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setServerToken(response.getServerToken());
-                    appPreference.setCurrentUserID(currentUserID);
+                    appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
                     appPreference.setSyncOnlyWithWifi(true);
                     appPreference.setEnablePasswordProtection(true);
                     appPreference.setLastSyncTime(0);

@@ -120,13 +120,12 @@ public class SplashActivity extends Activity
 				final SignInResponse response = new SignInResponse(httpResponse);				
 				if (response.getStatus())
 				{
-					int currentUserID = response.getCurrentUser().getServerID();
 					int currentGroupID = -1;
 
 					DBManager dbManager = DBManager.getDBManager();
 					AppPreference appPreference = AppPreference.getAppPreference();
 					appPreference.setServerToken(response.getServerToken());
-					appPreference.setCurrentUserID(currentUserID);
+					appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
 					appPreference.setSyncOnlyWithWifi(true);
 					appPreference.setEnablePasswordProtection(true);
 					

@@ -2,7 +2,6 @@ package com.rushucloud.reim.start;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.method.PasswordTransformationMethod;
@@ -28,10 +27,8 @@ import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.RegisterRequest;
-import netUtils.request.user.SignInRequest;
 import netUtils.request.user.VerifyCodeRequest;
 import netUtils.response.user.RegisterResponse;
-import netUtils.response.user.SignInResponse;
 import netUtils.response.user.VerifyCodeResponse;
 
 public class PhoneSignUpActivity extends Activity
@@ -93,6 +90,7 @@ public class PhoneSignUpActivity extends Activity
 		});
 		
 		phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
+        ViewUtils.requestFocus(this, phoneEditText);
 		
 		passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
         passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
@@ -311,15 +309,74 @@ public class PhoneSignUpActivity extends Activity
 				final RegisterResponse response = new RegisterResponse(httpResponse);
 				if (response.getStatus())
 				{
-					AppPreference appPreference = AppPreference.getAppPreference();
-					appPreference.setUsername(user.getPhone());	
-					appPreference.setPassword(user.getPassword());
-					appPreference.setServerToken(response.getServerToken());
-					appPreference.setCurrentUserID(response.getUserID());
-					appPreference.setCurrentGroupID(-1);
-					appPreference.saveAppPreference();
-					
-					sendCommonRequest();
+                    int currentGroupID = -1;
+
+                    DBManager dbManager = DBManager.getDBManager();
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    appPreference.setUsername(user.getPhone());
+                    appPreference.setPassword(user.getPassword());
+                    appPreference.setServerToken(response.getServerToken());
+                    appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
+                    appPreference.setSyncOnlyWithWifi(true);
+                    appPreference.setEnablePasswordProtection(true);
+                    appPreference.setLastSyncTime(0);
+                    appPreference.setLastGetOthersReportTime(0);
+                    appPreference.setLastGetMineStatTime(0);
+                    appPreference.setLastGetOthersStatTime(0);
+
+                    if (response.getGroup() != null)
+                    {
+                        currentGroupID = response.getGroup().getServerID();
+
+                        // update AppPreference
+                        appPreference.setCurrentGroupID(currentGroupID);
+                        appPreference.saveAppPreference();
+
+                        // update members
+                        User currentUser = response.getCurrentUser();
+                        User localUser = dbManager.getUser(currentUser.getServerID());
+                        if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+                        {
+                            currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
+                        }
+
+                        dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+                        dbManager.syncUser(currentUser);
+
+                        // update categories
+                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+
+                        // update tags
+                        dbManager.updateGroupTags(response.getTagList(), currentGroupID);
+
+                        // update group info
+                        dbManager.syncGroup(response.getGroup());
+                    }
+                    else
+                    {
+                        // update AppPreference
+                        appPreference.setCurrentGroupID(currentGroupID);
+                        appPreference.saveAppPreference();
+
+                        // update current user
+                        dbManager.syncUser(response.getCurrentUser());
+
+                        // update categories
+                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+                    }
+
+                    // refresh UI
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            waitingTime = -1;
+                            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_sign_up);
+                            ViewUtils.goForwardAndFinish(PhoneSignUpActivity.this, GuideStartActivity.class);
+                        }
+                    });
 				}
 				else
 				{
@@ -335,56 +392,6 @@ public class PhoneSignUpActivity extends Activity
 			}
 		});		
 	}
-
-    private void sendCommonRequest()
-    {
-		SignInRequest request = new SignInRequest();
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final SignInResponse response = new SignInResponse(httpResponse);				
-				if (response.getStatus())
-				{
-					DBManager dbManager = DBManager.getDBManager();
-					
-					// update current user
-					dbManager.syncUser(response.getCurrentUser());
-					
-					// update categories
-					dbManager.updateGroupCategories(response.getCategoryList(), -1);
-					
-					// refresh UI
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-                            waitingTime = -1;
-                            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_sign_up);
-                            ViewUtils.goForwardAndFinish(PhoneSignUpActivity.this, GuideStartActivity.class);
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_data);
-							Intent intent = new Intent(PhoneSignUpActivity.this, SignInActivity.class);
-							intent.putExtra("username", AppPreference.getAppPreference().getUsername());
-							intent.putExtra("password", AppPreference.getAppPreference().getPassword());
-							startActivity(intent);
-							finish();
-						}
-					});								
-				}			
-			}
-		});
-    }
 
     private void hideSoftKeyboard()
     {

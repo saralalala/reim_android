@@ -22,23 +22,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Group;
+import classes.Invite;
+import classes.User;
 import classes.adapter.CompanyListViewAdapter;
 import classes.utils.AppPreference;
+import classes.utils.DBManager;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
+import netUtils.request.group.GetInvitedGroupRequest;
 import netUtils.request.group.SearchGroupRequest;
 import netUtils.request.user.ApplyRequest;
+import netUtils.request.user.InviteReplyRequest;
+import netUtils.response.group.GetInvitedGroupResponse;
 import netUtils.response.group.SearchGroupResponse;
 import netUtils.response.user.ApplyResponse;
+import netUtils.response.user.InviteReplyResponse;
 
 public class PickCompanyActivity extends Activity
 {
     private TextView completeTextView;
     private EditText companyEditText;
+    private TextView sectionTextView;
     private CompanyListViewAdapter adapter;
 
     private List<Group> companyList = new ArrayList<Group>();
+    private List<Group> invitedList = new ArrayList<Group>();
+    private List<Invite> inviteList = new ArrayList<Invite>();
     private Group company;
 
 	protected void onCreate(Bundle savedInstanceState)
@@ -51,15 +61,16 @@ public class PickCompanyActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("ChooseCompanyActivity");
+		MobclickAgent.onPageStart("PickCompanyActivity");
 		MobclickAgent.onResume(this);
         ReimProgressDialog.setContext(this);
+        sendGetInvitedGroupRequest();
 	}
 
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("ChooseCompanyActivity");
+		MobclickAgent.onPageEnd("PickCompanyActivity");
 		MobclickAgent.onPause(this);
 	}
 
@@ -93,7 +104,15 @@ public class PickCompanyActivity extends Activity
                 if (company != null)
                 {
                     hideSoftKeyboard();
-                    sendApplyRequest();
+                    int index = invitedList.indexOf(company);
+                    if (index != -1)
+                    {
+                        sendInviteReplyRequest(inviteList.get(index));
+                    }
+                    else
+                    {
+                        sendApplyRequest();
+                    }
                 }
             }
         });
@@ -104,6 +123,7 @@ public class PickCompanyActivity extends Activity
             public void onClick(View v)
             {
                 hideSoftKeyboard();
+                sectionTextView.setText(R.string.search_result);
                 if (companyEditText.getText().toString().isEmpty())
                 {
                     ViewUtils.showToast(PickCompanyActivity.this, R.string.input_company_name);
@@ -118,6 +138,8 @@ public class PickCompanyActivity extends Activity
         companyEditText = (EditText) findViewById(R.id.companyEditText);
         companyEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
         ViewUtils.requestFocus(this, companyEditText);
+
+        sectionTextView = (TextView) findViewById(R.id.sectionTextView);
 
         adapter = new CompanyListViewAdapter(this, companyList, company);
         ListView companyListView = (ListView) findViewById(R.id.companyListView);
@@ -144,6 +166,52 @@ public class PickCompanyActivity extends Activity
             }
         });
 	}
+
+    private void sendGetInvitedGroupRequest()
+    {
+        ReimProgressDialog.show();
+        GetInvitedGroupRequest request = new GetInvitedGroupRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetInvitedGroupResponse response = new GetInvitedGroupResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    inviteList.clear();
+                    inviteList.addAll(response.getInviteList());
+                    invitedList.clear();
+                    invitedList.addAll(response.getGroupList());
+                    companyList.clear();
+                    companyList.addAll(response.getGroupList());
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            if (!companyList.isEmpty())
+                            {
+                                sectionTextView.setText(R.string.invited_company);
+                                adapter.setCompanyList(companyList);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                        }
+                    });
+                }
+            }
+        });
+    }
 
     private void sendSearchGroupRequest()
     {
@@ -179,6 +247,93 @@ public class PickCompanyActivity extends Activity
                         {
                             ReimProgressDialog.dismiss();
                             ViewUtils.showToast(PickCompanyActivity.this, R.string.failed_to_search_companies, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendInviteReplyRequest(Invite invite)
+    {
+        InviteReplyRequest request = new InviteReplyRequest(Invite.TYPE_ACCEPTED, invite.getInviteCode());
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                InviteReplyResponse response = new InviteReplyResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = -1;
+
+                    DBManager dbManager = DBManager.getDBManager();
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    appPreference.setServerToken(response.getServerToken());
+                    appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
+                    appPreference.setSyncOnlyWithWifi(true);
+                    appPreference.setEnablePasswordProtection(true);
+
+                    if (response.getGroup() != null)
+                    {
+                        currentGroupID = response.getGroup().getServerID();
+
+                        // update AppPreference
+                        appPreference.setCurrentGroupID(currentGroupID);
+                        appPreference.saveAppPreference();
+
+                        // update members
+                        User currentUser = response.getCurrentUser();
+                        User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+                        if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+                        {
+                            currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
+                        }
+
+                        dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+                        dbManager.syncUser(currentUser);
+
+                        // update categories
+                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+
+                        // update tags
+                        dbManager.updateGroupTags(response.getTagList(), currentGroupID);
+
+                        // update group info
+                        dbManager.syncGroup(response.getGroup());
+                    }
+                    else
+                    {
+                        // update AppPreference
+                        appPreference.setCurrentGroupID(currentGroupID);
+                        appPreference.saveAppPreference();
+
+                        // update current user
+                        dbManager.syncUser(response.getCurrentUser());
+
+                        // update categories
+                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+                    }
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            Intent intent = new Intent(PickCompanyActivity.this, JoinedActivity.class);
+                            intent.putExtra("companyName", company.getName());
+                            ViewUtils.goForwardAndFinish(PickCompanyActivity.this, intent);
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(PickCompanyActivity.this, R.string.failed_to_apply);
                         }
                     });
                 }

@@ -38,42 +38,42 @@ public class Apply extends Message implements Serializable
 
             if (!applicant.equals(currentNickname) && activeType == Apply.TYPE_NEW)
             {
-                String message = "用户" + applicant + "申请加入「" + jObject.getString("groupname") + "」";
+                String message = applicant + " 申请加入「" + jObject.getString("groupname") + "」";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("updatedt"));
             }
             else if (applicant.equals(currentNickname) && activeType == Apply.TYPE_NEW)
             {
-                String message = "您发送了加入「" + jObject.getString("groupname") + "」的申请";
+                String message = "你发送了加入「" + jObject.getString("groupname") + "」的申请";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("updatedt"));
             }
             else if (!applicant.equals(currentNickname) && activeType == Apply.TYPE_REJECTED)
             {
-                String message = "您拒绝了" + applicant + "加入「" + jObject.getString("groupname") + "」的申请";
+                String message = "你拒绝了 " + applicant + " 加入「" + jObject.getString("groupname") + "」的申请";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("updatedt"));
             }
             else if (applicant.equals(currentNickname) && activeType == Apply.TYPE_REJECTED)
             {
-                String message = "您加入「" + jObject.getString("groupname") + "」的申请被拒绝";
+                String message = "你加入「" + jObject.getString("groupname") + "」的申请被拒绝";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("updatedt"));
             }
             else if (!applicant.equals(currentNickname) && activeType == Apply.TYPE_ACCEPTED)
             {
-                String message = "您批准了" + applicant + "加入「" + jObject.getString("groupname") + "」的申请";
+                String message = "你同意了 " + applicant + " 加入「" + jObject.getString("groupname") + "」的申请";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("updatedt"));
             }
             else
             {
-                String message = "您加入「" + jObject.getString("groupname") + "」的申请已通过";
+                String message = "你加入「" + jObject.getString("groupname") + "」的申请已通过";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("updatedt"));

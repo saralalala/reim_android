@@ -31,6 +31,8 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 	private static final int TYPE_INVITE = 3;
 	private static final int TYPE_INVITE_REPLY = 4;
     private static final int TYPE_ADMIN_MESSAGE = 5;
+    private static final int TYPE_APPLY = 6;
+    private static final int TYPE_APPLY_REPLY = 7;
 
 	public static final int REPORT_MINE_REJECTED = 0;
 	public static final int REPORT_MINE_REJECTED_WITH_COMMENT = 1;

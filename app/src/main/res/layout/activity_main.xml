@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:reim="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/containerLayout" >
@@ -20,6 +19,47 @@
         android:layout_marginRight="20dp"
         android:contentDescription="@string/feedback"
         android:src="@drawable/feedback_drawable" />
+
+    <RelativeLayout
+        android:id="@+id/reimGuideLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/hint_light_grey"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/reimGuideImageView"
+            android:layout_width="290dp"
+            android:layout_height="57dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="80dp"
+            android:contentDescription="@string/guide"
+            android:src="@drawable/reim_guide"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/reimGuideImageView"
+            android:layout_alignTop="@id/reimGuideImageView"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:text="@string/reim_guide"
+            android:textColor="@color/major_light"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/reimGuideImageView"
+            android:layout_alignTop="@id/reimGuideImageView"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="24dp"
+            android:text="@string/ok"
+            android:textColor="@color/major_light"
+            android:textSize="14sp"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/tabLayout"
@@ -75,10 +115,10 @@
 
         <RelativeLayout
             android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1" >
+            android:layout_marginRight="10dp">
 
             <Button
                 android:id="@+id/addButton"

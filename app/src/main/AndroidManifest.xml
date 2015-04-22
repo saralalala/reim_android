@@ -112,6 +112,10 @@
             android:name=".guide.JoinCompleteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".guide.JoinedActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
 
         <!--   public part   -->
         <activity

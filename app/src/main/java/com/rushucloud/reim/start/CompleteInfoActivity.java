@@ -171,6 +171,7 @@ public class CompleteInfoActivity extends Activity
                 return false;
             }
         });
+        ViewUtils.requestFocus(this, nicknameEditText);
 
 		Button completeButton = (Button) findViewById(R.id.completeButton);
 		completeButton.setOnClickListener(new View.OnClickListener()

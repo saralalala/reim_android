@@ -22,7 +22,7 @@
         android:layout_toLeftOf="@+id/pivotView"
         android:layout_marginTop="10dp"
         android:background="@drawable/feedback_button_dark_drawable"
-        android:text="@string/ok"
+        android:text="@string/surprise_ok"
         android:textColor="@color/button_text_light_color" />
 
 </LinearLayout>

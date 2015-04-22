@@ -31,6 +31,8 @@ public class AppPreference
     private int lastGetOthersReportTime = 0;
 	private int lastGetMineStatTime = 0;
     private int lastGetOthersStatTime = 0;
+    private boolean needToShowReimGuide = true;
+    private boolean needToShowReportGuide = true;
 	private String appDirectory = "";
 	private String appImageDirectory = "";
 	private String avatarImageDirectory = "";
@@ -71,6 +73,8 @@ public class AppPreference
         appPreference.setLastGetOthersReportTime(preferences.getInt("lastGetOthersReportTime", 0));
 		appPreference.setLastGetMineStatTime(preferences.getInt("lastGetMineStatTime", 0));
         appPreference.setLastGetOthersStatTime(preferences.getInt("lastGetOthersStatTime", 0));
+        appPreference.setNeedToShowReimGuide(preferences.getBoolean("needToShowReimGuide", true));
+        appPreference.setNeedToShowReportGuide(preferences.getBoolean("needToShowReportGuide", true));
 		
 		appPreference.setAppDirectory(Environment.getExternalStorageDirectory() + "/cloudbaoxiao");
 		appPreference.setAppImageDirectory(appPreference.getAppDirectory() + "/images");
@@ -95,6 +99,8 @@ public class AppPreference
         editor.putInt("lastSyncTime", appPreference.getLastSyncTime());
 		editor.putInt("lastGetOthersReportTime", appPreference.getLastGetOthersReportTime());
 		editor.putInt("lastGetMineStatTime", appPreference.getLastGetMineStatTime());
+        editor.putBoolean("needToShowReimGuide", appPreference.needToShowReimGuide());
+        editor.putBoolean("needToShowReportGuide", appPreference.needToShowReportGuide());
 		editor.commit();
 	}
 	
@@ -212,6 +218,24 @@ public class AppPreference
     public void setLastGetOthersStatTime(int lastGetOthersStatTime)
     {
         this.lastGetOthersStatTime = lastGetOthersStatTime;
+    }
+
+    public boolean needToShowReimGuide()
+    {
+        return needToShowReimGuide;
+    }
+    public void setNeedToShowReimGuide(boolean needToShowReimGuide)
+    {
+        this.needToShowReimGuide = needToShowReimGuide;
+    }
+
+    public boolean needToShowReportGuide()
+    {
+        return needToShowReportGuide;
+    }
+    public void setNeedToShowReportGuide(boolean needToShowReportGuide)
+    {
+        this.needToShowReportGuide = needToShowReportGuide;
     }
 
     public String getAppDirectory()
