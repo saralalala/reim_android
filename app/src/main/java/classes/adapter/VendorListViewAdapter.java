@@ -82,7 +82,7 @@ public class VendorListViewAdapter extends BaseAdapter
 			TextView distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);
 			distanceTextView.setText(Integer.toString(vendor.getDistance()) + "米");
 
-            int visibility = showDistance? View.VISIBLE : View.INVISIBLE;
+            int visibility = showDistance? View.VISIBLE : View.GONE;
             distanceTextView.setVisibility(visibility);
 
 			return view;

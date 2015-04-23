@@ -58,7 +58,7 @@ public class CompanyListViewAdapter extends BaseAdapter
             Group company = companyList.get(position);
             iconImageView.setImageResource(R.drawable.default_company_icon);
             nameTextView.setText(company.getName());
-            timeTextView.setText(Utils.secondToStringUpToDay(company.getCreatedDate()) + ViewUtils.getString(R.string.join));
+            timeTextView.setText(Utils.secondToStringUpToDay(company.getCreatedDate()) + ViewUtils.getString(R.string.create));
             timeTextView.setVisibility(View.VISIBLE);
         }
 		

@@ -47,7 +47,7 @@
     <string name="alarm">提醒</string>
     <string name="finish">直接通过</string>
     <string name="exit">退出</string>
-    <string name="join">加入</string>
+    <string name="create">创建</string>
     <string name="guide">指导</string>
     
     <string name="sign_up">注册</string>
@@ -63,7 +63,13 @@
     <string name="reset_password">设置新密码</string>
     <string name="complete_info">完善个人信息</string>
 
-    <string name="welcome_to_use">欢迎使用云报销</string>
+    <string name="welcome_to_use_1">欢</string>
+    <string name="welcome_to_use_2">迎</string>
+    <string name="welcome_to_use_3">使</string>
+    <string name="welcome_to_use_4">用</string>
+    <string name="welcome_to_use_5">云</string>
+    <string name="welcome_to_use_6">报</string>
+    <string name="welcome_to_use_7">销</string>
     <string name="introduction">云报销是专门为企业和组织设计的财务工具。它可以对企业和组织内部的费用支出进行有效的管理，让员工随时随地进行费用申请、审批。</string>
     <string name="join_company">加入公司</string>
     <string name="are_you_admin">您是管理员？</string>
@@ -76,17 +82,30 @@
     <string name="input_contact">填写手机号或邮箱</string>
     <string name="input_contact_manually_and_divided">请手动填写手机号或邮箱，用逗号分开</string>
     <string name="invite_by_pc">可通过访问PC端批量邀请其他同事加入</string>
-    <string name="sending_invitation_first_part">正在向你的</string>
-    <string name="sending_invitation_second_part">位同事发送邀请，</string>
+    <string name="sending_invitation_1">正在向你的</string>
+    <string name="sending_invitation_2">位同事发送邀请，</string>
     <string name="start_to_use">开始使用</string>
     <string name="create_prompt">你可以在个人中心邀请您的同事加入你的公司，也可以在PC端进行批量邀请操作。</string>
-    <string name="modify_name">修改姓名</string>
+    <string name="modify_name">设置姓名</string>
     <string name="choose_company">选择公司</string>
     <string name="invited_company">邀请过你的公司</string>
     <string name="search_result">搜索结果</string>
     <string name="search_result_empty">没有符合条件的公司</string>
-    <string name="applied_to_join">已申请加入</string>
-    <string name="joined">你已加入</string>
+    <string name="applied_to_join_1">已</string>
+    <string name="applied_to_join_2">申</string>
+    <string name="applied_to_join_3">请</string>
+    <string name="applied_to_join_4">加</string>
+    <string name="applied_to_join_5">入</string>
+    <string name="succeed_in_creating_company_1">公</string>
+    <string name="succeed_in_creating_company_2">司</string>
+    <string name="succeed_in_creating_company_3">创</string>
+    <string name="succeed_in_creating_company_4">建</string>
+    <string name="succeed_in_creating_company_5">成</string>
+    <string name="succeed_in_creating_company_6">功</string>
+    <string name="joined_1">你</string>
+    <string name="joined_2">已</string>
+    <string name="joined_3">加</string>
+    <string name="joined_4">入</string>
     
     <string name="reimbursement">消费</string>
     <string name="report">报告</string>
@@ -270,8 +289,8 @@
     <string name="input_manager">请输入审批人信息</string>
     <string name="input_cc">请输入抄送人信息</string>
     <string name="input_comment">请输入评论</string>
-    <string name="input_nickname">请输入姓名</string>
-    <string name="input_company_name">请输入公司名称</string>
+    <string name="input_nickname">请填写你的真实姓名</string>
+    <string name="input_company_name">请设置公司名称</string>
     <string name="input_feedback">请输入你的意见或建议</string>
     <string name="input_contact_info">请输入你的联系方式</string>
     <string name="input_category_name">请输入类别名称</string>
@@ -312,8 +331,8 @@
     <string name="error_new_phone_empty">请输入新手机号</string>
     <string name="error_phone_wrong_format">手机号格式不正确</string>
     <string name="error_bank_account_wrong_format">银行账号格式不正确</string>
-    <string name="error_new_nickname_empty">请输入新姓名</string>
-    <string name="error_company_name_empty">请输入公司名称</string>
+    <string name="error_new_nickname_empty">请填写姓名</string>
+    <string name="error_company_name_empty">请设置公司名称</string>
     <string name="error_new_company_name_empty">请输入公司新名称</string>
     <string name="error_number_wrong_format">请输入消费金额</string>
     <string name="error_password_empty">请输入密码</string>

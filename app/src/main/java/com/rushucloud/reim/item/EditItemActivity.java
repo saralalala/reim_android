@@ -534,6 +534,7 @@ public class EditItemActivity extends Activity
         });
         if (item.getAmount() == 0)
         {
+            amountEditText.requestFocus();
             ViewUtils.requestFocus(this, amountEditText);
         }
         else

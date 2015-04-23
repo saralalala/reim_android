@@ -64,8 +64,8 @@ public class CreateCompleteActivity extends Activity
         int count = getIntent().getIntExtra("count", 0);
         if (count > 0)
         {
-            String firstPart = ViewUtils.getString(R.string.sending_invitation_first_part);
-            String secondPart = ViewUtils.getString(R.string.sending_invitation_second_part);
+            String firstPart = ViewUtils.getString(R.string.sending_invitation_1);
+            String secondPart = ViewUtils.getString(R.string.sending_invitation_2);
             String thirdPart = ViewUtils.getString(R.string.invite_by_pc);
             String content = firstPart + count + secondPart + thirdPart;
             SpannableString text = new SpannableString(content);
@@ -86,7 +86,6 @@ public class CreateCompleteActivity extends Activity
             text.setSpan(new UnderlineSpan(), 25, 28, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             promptTextView.setText(text);
         }
-
 
         Button startButton = (Button) findViewById(R.id.startButton);
         startButton.setOnClickListener(new OnClickListener()

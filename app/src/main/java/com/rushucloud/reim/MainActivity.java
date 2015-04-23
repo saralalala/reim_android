@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 
 import com.rushucloud.reim.item.EditItemActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -32,6 +34,7 @@ import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
+import classes.widget.Spotlight;
 import classes.widget.TabItem;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.EventsRequest;
@@ -48,12 +51,14 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	private ViewPager viewPager;
 	private ImageView reportTipImageView;
 	private ImageView meTipImageView;
+    private RelativeLayout reimGuideLayout;
 	private PopupWindow feedbackPopupWindow;
 	private EditText feedbackEditText;
 	private PopupWindow phonePopupWindow;
 	private EditText codeEditText;
 	private EditText phoneEditText;
-	
+
+    private AppPreference appPreference;
 	private DBManager dbManager;
 //	private UDPClient udpClient;
 	
@@ -79,6 +84,16 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		resetTabItems();
 		tabItemList.get(ReimApplication.getTabIndex()).setIconAlpha(1);
 		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
+
+        appPreference = AppPreference.getAppPreference();
+        if (ReimApplication.getTabIndex() == ReimApplication.TAB_REIM)
+        {
+            dealWithReimGuideLayout();
+        }
+        else if (ReimApplication.getTabIndex() == ReimApplication.TAB_REPORT)
+        {
+            dealWithReportGuideLayout();
+        }
 		
 		if (PhoneUtils.isNetworkConnected())
 		{
@@ -196,17 +211,31 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				if (arg0 == 2)
 				{
 					int currentIndex = viewPager.getCurrentItem();
-					if (currentIndex == 1)
+                    if (currentIndex == ReimApplication.TAB_REIM)
+                    {
+                        dealWithReimGuideLayout();
+                    }
+					else if (currentIndex == ReimApplication.TAB_REPORT)
 					{
 						showReportTip(false);
+                        dealWithReportGuideLayout();
 					}
-					else if (currentIndex == 3)
+					else if (currentIndex == ReimApplication.TAB_ME)
 					{
 						showMeTip(false);
 					}
 				}
 			}
 		});
+
+        LinearLayout tabLayout = (LinearLayout) findViewById(R.id.tabLayout);
+        tabLayout.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideReimGuideLayout();
+            }
+        });
 
 		TabItem tabItemReim = (TabItem) findViewById(R.id.tabItemReim);
 		TabItem tabItemReport = (TabItem) findViewById(R.id.tabItemReport);
@@ -233,6 +262,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			public void onClick(View v)
 			{
+                hideReimGuideLayout();
 				Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
 				intent.putExtra("fromReim", true);
                 ViewUtils.goForward(MainActivity.this, intent);
@@ -256,7 +286,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				}
 			}
 		});
-		
+
+        reimGuideLayout = (RelativeLayout) findViewById(R.id.reimGuideLayout);
+
 		initFeedbackWindow();
 		initPhoneWindow();
 	}
@@ -384,7 +416,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			tabItemList.get(i).setIconAlpha(0);
 		}
 	}
-	
+
 	private void showReportTip(boolean hasUnreadReports)
 	{
         int visibility = hasUnreadReports? View.VISIBLE : View.GONE;
@@ -396,6 +428,58 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
         int visibility = hasMessages? View.VISIBLE : View.GONE;
         meTipImageView.setVisibility(visibility);
 	}
+
+    private void dealWithReimGuideLayout()
+    {
+        if (appPreference.needToShowReimGuide())
+        {
+            reimGuideLayout.setVisibility(View.VISIBLE);
+            reimGuideLayout.setOnClickListener(new OnClickListener()
+            {
+                public void onClick(View v)
+                {
+                    hideReimGuideLayout();
+                }
+            });
+        }
+    }
+
+    private void dealWithReportGuideLayout()
+    {
+        if (appPreference.needToShowReportGuide())
+        {
+            int width = ViewUtils.getPhoneWindowWidth(this);
+            int height = ViewUtils.getPhoneWindowHeight(this);
+            float radius = ViewUtils.dpToPixel(21);
+            int margin = ViewUtils.dpToPixel(25);
+            RelativeLayout spotlightLayout = (RelativeLayout) findViewById(R.id.spotlightLayout);
+            spotlightLayout.addView(new Spotlight(this, width, height, width - margin, margin, radius, ViewUtils.getColor(R.color.hint_light_grey)));
+
+            final RelativeLayout reportGuideLayout = (RelativeLayout) findViewById(R.id.reportGuideLayout);
+            reportGuideLayout.setVisibility(View.VISIBLE);
+            reportGuideLayout.setOnClickListener(new OnClickListener()
+            {
+                public void onClick(View v)
+                {
+                    reportGuideLayout.setVisibility(View.GONE);
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    appPreference.setNeedToShowReportGuide(false);
+                    appPreference.saveAppPreference();
+                }
+            });
+        }
+    }
+
+    private void hideReimGuideLayout()
+    {
+        if (reimGuideLayout.getVisibility() == View.VISIBLE)
+        {
+            reimGuideLayout.setVisibility(View.GONE);
+            AppPreference appPreference = AppPreference.getAppPreference();
+            appPreference.setNeedToShowReimGuide(false);
+            appPreference.saveAppPreference();
+        }
+    }
 
 	private void sendGetEventsRequest()
 	{
@@ -421,7 +505,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
                             ReimApplication.setUnreadMessagesCount(response.getUnreadMessagesCount());
 							showReportTip(response.hasUnreadReports());
 							showMeTip(response.getUnreadMessagesCount() > 0);
-                            if (viewPager.getCurrentItem() == 3)
+                            if (viewPager.getCurrentItem() == ReimApplication.TAB_ME)
                             {
                                 MeFragment fragment = (MeFragment) fragmentList.get(3);
                                 fragment.showTip();
@@ -451,7 +535,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					
 					for (User user : memberList)
 					{
-						if (currentUser != null && user.getServerID() == currentUser.getServerID())
+						if (currentUser != null && user.equals(currentUser))
 						{
 							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
 							{
@@ -510,6 +594,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	public void onClick(View v)
 	{
 		resetTabItems();
+        hideReimGuideLayout();
 		
 		int position = 0;
 		switch (v.getId())
@@ -517,25 +602,27 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			case R.id.tabItemReim:
 			{
 				MobclickAgent.onEvent(MainActivity.this, "UMENG_ITEM");				
-				position = 0;
+				position = ReimApplication.TAB_REIM;
+                dealWithReimGuideLayout();
 				break;
 			}
 			case R.id.tabItemReport:
 			{
 				MobclickAgent.onEvent(MainActivity.this, "UMENG_REPORT");
 				
-				position = 1;
+				position = ReimApplication.TAB_REPORT;
 				showReportTip(false);
+                dealWithReportGuideLayout();
 				break;							
 			}
 			case R.id.tabItemStat:
 			{
-				position = 2;
+				position = ReimApplication.TAB_STATISTICS;
 				break;							
 			}
 			case R.id.tabItemMe:
 			{
-				position = 3;
+				position = ReimApplication.TAB_ME;
 				showMeTip(false);
 				break;							
 			}

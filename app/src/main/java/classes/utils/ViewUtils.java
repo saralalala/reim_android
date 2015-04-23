@@ -215,6 +215,12 @@ public class ViewUtils
         return metrics.widthPixels;
     }
 
+    public static int getPhoneWindowHeight(Context context)
+    {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return metrics.heightPixels;
+    }
+
     public static int dpToPixel(double dp)
     {
     	DisplayMetrics metrics = ReimApplication.getContext().getResources().getDisplayMetrics();

@@ -3,6 +3,7 @@ package com.rushucloud.reim.item;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -152,7 +153,7 @@ public class PickVendorActivity extends Activity
                 return false;
             }
         });
-		
+
 		vendorAdapter = new VendorListViewAdapter(this);
 		ListView vendorListView = (ListView) findViewById(R.id.vendorListView);
 		vendorListView.setAdapter(vendorAdapter);

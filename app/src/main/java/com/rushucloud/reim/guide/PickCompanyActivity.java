@@ -27,6 +27,7 @@ import classes.User;
 import classes.adapter.CompanyListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
@@ -122,21 +123,23 @@ public class PickCompanyActivity extends Activity
         {
             public void onClick(View v)
             {
-                hideSoftKeyboard();
-                sectionTextView.setText(R.string.search_result);
-                if (companyEditText.getText().toString().isEmpty())
-                {
-                    ViewUtils.showToast(PickCompanyActivity.this, R.string.input_company_name);
-                }
-                else
-                {
-                    sendSearchGroupRequest();
-                }
+                searchGroups();
             }
         });
 
         companyEditText = (EditText) findViewById(R.id.companyEditText);
         companyEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+        companyEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
+                {
+                    searchGroups();
+                }
+                return false;
+            }
+        });
         ViewUtils.requestFocus(this, companyEditText);
 
         sectionTextView = (TextView) findViewById(R.id.sectionTextView);
@@ -166,6 +169,23 @@ public class PickCompanyActivity extends Activity
             }
         });
 	}
+
+    private void searchGroups()
+    {
+        sectionTextView.setText(R.string.search_result);
+        if (companyEditText.getText().toString().isEmpty())
+        {
+            ViewUtils.showToast(PickCompanyActivity.this, R.string.input_company_name);
+        }
+        else if (!PhoneUtils.isNetworkConnected())
+        {
+            ViewUtils.showToast(PickCompanyActivity.this, R.string.error_search_network_unavailable);
+        }
+        else
+        {
+            sendSearchGroupRequest();
+        }
+    }
 
     private void sendGetInvitedGroupRequest()
     {

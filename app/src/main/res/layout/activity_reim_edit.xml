@@ -5,12 +5,12 @@
     android:orientation="vertical"
 	android:focusable="true"
 	android:focusableInTouchMode="true"
-    android:id="@+id/containerLayout" >
+    android:id="@+id/containerLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -21,7 +21,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:id="@+id/titleTextView"
@@ -30,7 +30,7 @@
             android:layout_centerInParent="true"
             android:text="@string/detail"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/saveTextView"
@@ -42,24 +42,24 @@
 			android:gravity="center"
             android:text="@string/save"
             android:textColor="@color/title_text_color"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
     </RelativeLayout>
 
 	<ScrollView
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:orientation="vertical" >
+	    android:orientation="vertical">
 	
 	    <LinearLayout
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"
-	        android:id="@+id/baseLayout" >
+	        android:id="@+id/baseLayout">
 
 	        <RelativeLayout
 	            android:layout_width="match_parent"
-	            android:layout_height="108dp" >
+	            android:layout_height="108dp">
 
 	            <TextView
 	                android:id="@+id/actualCostTextView"
@@ -69,7 +69,7 @@
 	                android:layout_marginLeft="16dp"
 	                android:text="@string/actual_cost"
 	                android:textColor="@color/major_dark"
-	                android:textSize="14sp" />
+	                android:textSize="14sp"/>
 
 	            <LinearLayout
 	                android:layout_width="match_parent"
@@ -83,18 +83,18 @@
                         android:layout_height="wrap_content"
                         android:text="@string/rmb_symbol"
                         android:textColor="@color/major_dark"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"/>
 	
 		            <EditText
 		                android:id="@+id/amountEditText"
 		                android:layout_width="0dp"
 		                android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginLeft="6dp"
+                        android:paddingLeft="6dp"
 		                android:inputType="numberDecimal"
 		                android:background="@null"
 	                    android:textColor="@color/font_reim_number"
-	                    android:textSize="54sp" />
+	                    android:textSize="54sp"/>
 
 	            </LinearLayout>
 
@@ -106,7 +106,7 @@
 	                android:layout_marginTop="8dp"
 	                android:layout_marginRight="16dp"
 	                android:textColor="@color/font_budget"
-	                android:textSize="14sp" />
+	                android:textSize="14sp"/>
 	            
 	        </RelativeLayout>
             
@@ -117,7 +117,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
                     android:layout_marginLeft="16dp"
                     android:text="@string/photo"
                     android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <LinearLayout
                     android:id="@+id/invoiceLayout"
@@ -150,7 +150,7 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:contentDescription="@string/add"
-                    android:src="@drawable/add_tag_button" />
+                    android:src="@drawable/add_tag_button"/>
 
             </RelativeLayout>
 
@@ -162,7 +162,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp" >
+                android:layout_height="56dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -172,14 +172,14 @@
                     android:layout_marginLeft="16dp"
                     android:text="@string/category"
                     android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <RelativeLayout
                     android:id="@+id/categoryLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="80dp"
-                    android:layout_marginRight="16dp" >
+                    android:layout_marginRight="16dp">
 
                     <ImageView
                         android:id="@+id/categoryImageView"
@@ -187,7 +187,7 @@
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
                         android:contentDescription="@string/icon"
-                        android:src="@drawable/default_icon" />
+                        android:src="@drawable/default_icon"/>
 
                     <TextView
                         android:id="@+id/categoryTextView"
@@ -198,7 +198,7 @@
                         android:layout_marginLeft="10dp"
                         android:text="@string/not_available"
                         android:textColor="@color/font_major_dark"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"/>
                 </RelativeLayout>
 
             </RelativeLayout>
@@ -211,7 +211,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -221,7 +221,7 @@
                     android:layout_marginLeft="16dp"
                     android:text="@string/vendor"
                     android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/vendorTextView"
@@ -234,7 +234,7 @@
                     android:layout_marginRight="6dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/font_major_dark"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
 
                 <LinearLayout
                     android:id="@+id/locationLayout"
@@ -250,7 +250,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:contentDescription="@string/location"
-                        android:src="@drawable/location" />
+                        android:src="@drawable/location"/>
 
                     <TextView
                         android:id="@+id/locationTextView"
@@ -261,7 +261,7 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:textColor="@color/hint_grey"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -275,7 +275,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp" >
+                android:layout_height="56dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -285,7 +285,7 @@
                     android:layout_marginLeft="16dp"
                     android:text="@string/time"
                     android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/timeTextView"
@@ -296,7 +296,7 @@
                     android:layout_marginRight="16dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/font_major_dark"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
 
             </RelativeLayout>
 
@@ -308,7 +308,7 @@
 	
 	        <RelativeLayout
 	            android:layout_width="match_parent"
-	            android:layout_height="56dp" >
+	            android:layout_height="56dp">
 
 	            <TextView
 	                android:layout_width="wrap_content"
@@ -318,7 +318,7 @@
 	                android:layout_marginLeft="16dp"
 	                android:text="@string/type"
 	                android:textColor="@color/hint_grey"
-	                android:textSize="14sp" />
+	                android:textSize="14sp"/>
 
 	            <LinearLayout
 	                android:id="@+id/typeLayout"
@@ -326,14 +326,14 @@
 	                android:layout_height="match_parent"
 	                android:layout_marginLeft="80dp"
 	                android:layout_marginRight="10dp"
-	                android:gravity="center_vertical" >
+	                android:gravity="center_vertical">
 
 		            <TextView
 		                android:id="@+id/typeTextView"
 		                android:layout_width="wrap_content"
 		                android:layout_height="wrap_content"
 		                android:textColor="@color/font_major_dark"
-		                android:textSize="18sp" />
+		                android:textSize="18sp"/>
 	
 		            <TextView
 		                android:id="@+id/approvedTextView"
@@ -343,7 +343,7 @@
 		                android:gravity="center"
 		                android:text="@string/status_approve_ahead_approved"
 		                android:textColor="@color/item_approved"
-		                android:textSize="18sp" />
+		                android:textSize="18sp"/>
 	            </LinearLayout>
 	
 	        </RelativeLayout>
@@ -358,11 +358,11 @@
                 android:id="@+id/tagContainerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -372,7 +372,7 @@
                         android:layout_marginLeft="16dp"
                         android:text="@string/tag"
                         android:textColor="@color/hint_grey"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <LinearLayout
                         android:id="@+id/tagLayout"
@@ -383,7 +383,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_toLeftOf="@+id/addTagImageView"
                         android:paddingBottom="17dp"
-                        android:layout_marginLeft="80dp" />
+                        android:layout_marginLeft="80dp"/>
 
                     <ImageView
                         android:id="@+id/addTagImageView"
@@ -395,7 +395,7 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:contentDescription="@string/add"
-                        android:src="@drawable/add_tag_button" />
+                        android:src="@drawable/add_tag_button"/>
 
                 </RelativeLayout>
 
@@ -409,7 +409,7 @@
 	
 	        <RelativeLayout
 	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content" >
+	            android:layout_height="wrap_content">
 
 	            <TextView
 	                android:layout_width="wrap_content"
@@ -419,7 +419,7 @@
 	                android:layout_marginLeft="16dp"
 	                android:text="@string/member"
 	                android:textColor="@color/hint_grey"
-	                android:textSize="14sp" />
+	                android:textSize="14sp"/>
 
 	            <LinearLayout
 	                android:id="@+id/memberLayout"
@@ -430,7 +430,7 @@
                     android:minHeight="56dp"
 	            	android:orientation="vertical"
 	                android:layout_alignParentTop="true"
-	                android:layout_toLeftOf="@+id/addMemberImageView" />
+	                android:layout_toLeftOf="@+id/addMemberImageView"/>
 
 	            <ImageView
 	                android:id="@+id/addMemberImageView"
@@ -442,7 +442,7 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
 	                android:contentDescription="@string/add"
-	                android:src="@drawable/add_tag_button" />
+	                android:src="@drawable/add_tag_button"/>
 	
 	        </RelativeLayout>
             
@@ -455,7 +455,7 @@
 	        <RelativeLayout
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
-	            android:minHeight="56dp" >
+	            android:minHeight="56dp">
 
 	            <TextView
 	                android:layout_width="wrap_content"
@@ -465,7 +465,7 @@
 	                android:layout_marginLeft="16dp"
 	                android:text="@string/note"
 	                android:textColor="@color/hint_grey"
-	                android:textSize="14sp" />
+	                android:textSize="14sp"/>
 
 	            <EditText
 	                android:id="@+id/noteEditText"
@@ -479,7 +479,7 @@
 	                android:background="@null"
 	            	android:hint="@string/input_note"
 	                android:textColor="@color/font_major_dark"
-	                android:textSize="18sp" />
+	                android:textSize="18sp"/>
 	
 	        </RelativeLayout>
 	

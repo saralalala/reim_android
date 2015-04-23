@@ -5,22 +5,65 @@
     android:orientation="vertical"
     android:background="@color/major_dark">
 
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/sent"/>
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:text="@string/applied_to_join"
-        android:textColor="@color/major_light"
-        android:textSize="28sp"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1dp"
+            android:text="@string/applied_to_join_1"
+            android:textColor="@color/major_light"
+            android:textSize="28sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1dp"
+            android:text="@string/applied_to_join_2"
+            android:textColor="@color/major_light"
+            android:textSize="28sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1dp"
+            android:text="@string/applied_to_join_3"
+            android:textColor="@color/major_light"
+            android:textSize="28sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1dp"
+            android:text="@string/applied_to_join_4"
+            android:textColor="@color/major_light"
+            android:textSize="28sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/applied_to_join_5"
+            android:textColor="@color/major_light"
+            android:textSize="28sp"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/companyTextView"
@@ -35,15 +78,20 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:text="@string/prompt_join"
         android:textColor="@color/major_light"
-        android:textSize="14sp"/>
+        android:textSize="14sp"
+        android:lineSpacingMultiplier="1.1"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/startButton"

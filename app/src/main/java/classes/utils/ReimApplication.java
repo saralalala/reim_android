@@ -26,14 +26,23 @@ import cn.beecloud.BeeCloud;
 
 public class ReimApplication extends Application
 {
+    public static int TAB_REIM = 0;
+    public static int TAB_REPORT = 1;
+    public static int TAB_REPORT_MINE = 0;
+    public static int TAB_REPORT_OTHERS = 1;
+    public static int TAB_STATISTICS = 2;
+    public static int TAB_STATISTICS_MINE = 0;
+    public static int TAB_STATISTICS_OTHERS = 1;
+    public static int TAB_ME = 3;
+
 	public static Typeface TypeFaceYaHei;
 	public static Typeface TypeFaceAleoLight;
 
 	private static Context context;
 	
-	private static int tabIndex = 0;
-	private static int reportTabIndex = 0;
-    private static int statTabIndex = 0;
+	private static int tabIndex = TAB_REIM;
+	private static int reportTabIndex = TAB_REPORT_MINE;
+    private static int statTabIndex = TAB_STATISTICS_MINE;
     private static List<Integer> mineUnreadList = new ArrayList<Integer>();
     private static List<Integer> othersUnreadList = new ArrayList<Integer>();
     private static int unreadMessagesCount;

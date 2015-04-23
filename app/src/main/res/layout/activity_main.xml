@@ -2,13 +2,13 @@
     xmlns:reim="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/containerLayout" >
+    android:id="@+id/containerLayout">
     
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp" />
+        android:layout_marginBottom="50dp"/>
 
     <ImageView
         android:id="@+id/feedbackImageView"
@@ -18,7 +18,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:contentDescription="@string/feedback"
-        android:src="@drawable/feedback_drawable" />
+        android:src="@drawable/feedback_drawable"/>
 
     <RelativeLayout
         android:id="@+id/reimGuideLayout"
@@ -69,7 +69,7 @@
         android:background="@drawable/tab_background"
         android:gravity="bottom"
         android:padding="5dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <classes.widget.TabItem
             android:id="@+id/tabItemReim"
@@ -81,12 +81,12 @@
             reim:text="@string/reimbursement"
             reim:text_size="10sp"
             reim:text_color_selected="@color/tab_item_selected"
-            reim:text_color_unselected="@color/tab_item_unselected" />
+            reim:text_color_unselected="@color/tab_item_unselected"/>
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_weight="1" >
+            android:layout_weight="1">
 
             <classes.widget.TabItem
                 android:id="@+id/tabItemReport"
@@ -97,7 +97,7 @@
                 reim:text="@string/report"
                 reim:text_color_unselected="@color/tab_item_unselected"
                 reim:text_color_selected="@color/tab_item_selected"
-                reim:text_size="10sp" />
+                reim:text_size="10sp"/>
 
 			<ImageView
 			    android:id="@+id/reportTipImageView"
@@ -109,7 +109,7 @@
 				android:layout_marginRight="12dp"
 				android:contentDescription="@string/tip"
 				android:background="@drawable/tip_dark"
-				android:visibility="gone" />
+				android:visibility="gone"/>
 
         </RelativeLayout>
 
@@ -127,7 +127,7 @@
 				android:layout_marginBottom="1dp"
 				android:layout_alignParentBottom="true"
 				android:layout_centerHorizontal="true"
-                android:background="@drawable/add_button" />
+                android:background="@drawable/add_button"/>
 
         </RelativeLayout>
 
@@ -141,12 +141,12 @@
             reim:text="@string/statistics"
             reim:text_size="10sp"
             reim:text_color_selected="@color/tab_item_selected"
-            reim:text_color_unselected="@color/tab_item_unselected" />
+            reim:text_color_unselected="@color/tab_item_unselected"/>
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_weight="1" >
+            android:layout_weight="1">
 
             <classes.widget.TabItem
                 android:id="@+id/tabItemMe"
@@ -157,7 +157,7 @@
                 reim:text="@string/me"
                 reim:text_color_unselected="@color/tab_item_unselected"
                 reim:text_color_selected="@color/tab_item_selected"
-                reim:text_size="10sp" />
+                reim:text_size="10sp"/>
 
 			<ImageView
 			    android:id="@+id/meTipImageView"
@@ -169,10 +169,56 @@
 				android:layout_marginRight="12dp"
 				android:contentDescription="@string/tip"
 				android:background="@drawable/tip_dark"
-				android:visibility="gone" />
+				android:visibility="gone"/>
 
         </RelativeLayout>
         
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/reportGuideLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/spotlightLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/reportGuideImageView"
+            android:layout_width="290dp"
+            android:layout_height="57dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="55dp"
+            android:layout_marginRight="4dp"
+            android:contentDescription="@string/guide"
+            android:src="@drawable/report_guide"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/reportGuideImageView"
+            android:layout_alignTop="@id/reportGuideImageView"
+            android:layout_marginTop="21dp"
+            android:layout_marginLeft="10dp"
+            android:text="@string/report_guide"
+            android:textColor="@color/major_light"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/reportGuideImageView"
+            android:layout_alignTop="@id/reportGuideImageView"
+            android:layout_marginTop="21dp"
+            android:layout_marginRight="24dp"
+            android:text="@string/ok"
+            android:textColor="@color/major_light"
+            android:textSize="14sp"/>
+
+    </RelativeLayout>
     
 </RelativeLayout>

@@ -66,8 +66,10 @@
             android:paddingRight="16dp"
             android:background="@null"
             android:hint="@string/input_company_name"
+            android:singleLine="true"
             android:textColor="@color/font_major_dark"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:imeOptions="actionSearch"/>
 
     </LinearLayout>
             

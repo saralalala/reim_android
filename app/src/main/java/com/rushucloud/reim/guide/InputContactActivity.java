@@ -87,9 +87,9 @@ public class InputContactActivity extends Activity
 
                 String contactString = contactEditText.getText().toString();
                 SpannableString text = new SpannableString(contactString);
-                contactString.replace("，", ",");
-                contactString.replace("　", ",");
-                contactString.replace("\n", ",");
+                contactString = contactString.replace("，", ",");
+                contactString = contactString.replace("　", ",");
+                contactString = contactString.replace("\n", ",");
                 String[] contacts = TextUtils.split(contactString, ",");
                 ArrayList<String> contactList = new ArrayList<String>();
                 for (String contact : contacts)
@@ -100,18 +100,20 @@ public class InputContactActivity extends Activity
                     }
                 }
 
+                int count = 0;
                 boolean contactsInvalid = false;
                 for (String contact : contactList)
                 {
-                    int index = contactString.indexOf(contact);
+                    int index = contactString.substring(count).indexOf(contact);
                     if (index != -1)
                     {
                         if (!Utils.isEmailOrPhone(contact))
                         {
                             contactsInvalid = true;
                             text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_dark)),
-                                         index, index + contact.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                         index + count, index + count + contact.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
+                        count += contact.length();
                     }
                 }
 
@@ -135,6 +137,7 @@ public class InputContactActivity extends Activity
         contactEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
         contactEditText.setText(getIntent().getStringExtra("inviteList"));
         ViewUtils.requestFocus(this, contactEditText);
+        contactEditText.setText("123123，1231231　1231231");
 
         TextView promptTextView = (TextView) findViewById(R.id.promptTextView);
         SpannableString text = new SpannableString(promptTextView.getText());

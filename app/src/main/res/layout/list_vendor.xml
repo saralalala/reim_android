@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="66dp"
-    android:background="@color/major_light" >
+    android:background="@color/major_light"
+    android:paddingRight="16dp">
 
     <ImageView
         android:id="@+id/avatarImageView"
@@ -12,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="16dp"
         android:contentDescription="@string/icon"
-        android:src="@drawable/default_image" />
+        android:src="@drawable/default_image"/>
 
     <TextView
         android:id="@+id/nameTextView"
@@ -22,8 +23,22 @@
         android:layout_toRightOf="@+id/avatarImageView"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="asdfjaksdfjklasdfjlasdfjk"
         android:textColor="@color/font_major_dark"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/distanceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="132米"
+        android:textColor="@color/major_dark"
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/addressTextView"
@@ -33,21 +48,9 @@
         android:layout_below="@+id/nameTextView"
         android:layout_marginTop="3dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="16dp"
         android:ellipsize="end"
         android:singleLine="true"
         android:textColor="@color/hint_grey"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/distanceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="10dp"
-        android:textColor="@color/major_dark"
-        android:textSize="16sp" />
+        android:textSize="12sp"/>
 
 </RelativeLayout>
