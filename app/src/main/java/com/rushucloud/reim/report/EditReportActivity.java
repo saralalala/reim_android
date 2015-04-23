@@ -112,7 +112,7 @@ public class EditReportActivity extends Activity
 
         if (newReport)
         {
-            titleEditText.requestFocus();
+            ViewUtils.requestFocus(this, titleEditText);
         }
 	}
 	
@@ -601,7 +601,7 @@ public class EditReportActivity extends Activity
 		
 		final EditText commentEditText = (EditText) view.findViewById(R.id.commentEditText);
 		commentEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		commentEditText.requestFocus();
+        ViewUtils.requestFocus(this, commentEditText);
 		
     	Builder builder = new Builder(this);
     	builder.setView(view);

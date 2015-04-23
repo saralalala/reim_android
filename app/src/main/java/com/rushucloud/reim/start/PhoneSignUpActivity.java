@@ -69,7 +69,6 @@ public class PhoneSignUpActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			waitingTime = -1;
             goBack();
 		}
 		return super.onKeyDown(keyCode, event);
@@ -84,7 +83,6 @@ public class PhoneSignUpActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				waitingTime = -1;
                 goBack();
 			}
 		});
@@ -128,12 +126,12 @@ public class PhoneSignUpActivity extends Activity
 				else if (phoneNumber.isEmpty())
 				{
 					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
-					phoneEditText.requestFocus();
+                    ViewUtils.requestFocus(PhoneSignUpActivity.this, phoneEditText);
 				}
 				else if (!Utils.isPhone(phoneNumber))
 				{
 					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
-					phoneEditText.requestFocus();
+                    ViewUtils.requestFocus(PhoneSignUpActivity.this, phoneEditText);
 				}
 				else 
 				{
@@ -163,9 +161,10 @@ public class PhoneSignUpActivity extends Activity
 	  
     private void getVerifyCode(String phoneNumber)
     {
+        final String second = ViewUtils.getString(R.string.second);
 		waitingTime = 60;
 		acquireCodeButton.setEnabled(false);
-		acquireCodeButton.setText(waitingTime + "秒");
+		acquireCodeButton.setText(waitingTime + second);
 		thread = new Thread(new Runnable()
 		{
 			public void run()
@@ -180,7 +179,7 @@ public class PhoneSignUpActivity extends Activity
 						{
 							public void run()
 							{
-								acquireCodeButton.setText(waitingTime + "秒");
+								acquireCodeButton.setText(waitingTime + second);
 							}
 						});	
 					}
@@ -256,37 +255,37 @@ public class PhoneSignUpActivity extends Activity
         else if (!Utils.isPhone(phoneNumber))
         {
             ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
-            phoneEditText.requestFocus();
+            ViewUtils.requestFocus(PhoneSignUpActivity.this, phoneEditText);
         }
         else if (phoneNumber.isEmpty())
         {
             ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
-            phoneEditText.requestFocus();
+            ViewUtils.requestFocus(PhoneSignUpActivity.this, phoneEditText);
         }
         else if (password.isEmpty())
         {
             ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_password_empty);
-            passwordEditText.requestFocus();
+            ViewUtils.requestFocus(PhoneSignUpActivity.this, passwordEditText);
         }
         else if (confirmPassword.isEmpty())
         {
             ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_confirm_password_empty);
-            confirmPasswordEditText.requestFocus();
+            ViewUtils.requestFocus(PhoneSignUpActivity.this, confirmPasswordEditText);
         }
         else if (!password.equals(confirmPassword))
         {
             ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_confirm_password);
-            confirmPasswordEditText.requestFocus();
+            ViewUtils.requestFocus(PhoneSignUpActivity.this, confirmPasswordEditText);
         }
         else if (inputCode.isEmpty())
         {
             ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_code_empty);
-            codeEditText.requestFocus();
+            ViewUtils.requestFocus(PhoneSignUpActivity.this, codeEditText);
         }
         else if (!inputCode.equals(code))
         {
             ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_code);
-            codeEditText.requestFocus();
+            ViewUtils.requestFocus(PhoneSignUpActivity.this, codeEditText);
         }
         else
         {
@@ -404,6 +403,7 @@ public class PhoneSignUpActivity extends Activity
 
     private void goBack()
     {
+        waitingTime = -1;
         ViewUtils.goBackWithIntent(PhoneSignUpActivity.this, WelcomeActivity.class);
     }
 }

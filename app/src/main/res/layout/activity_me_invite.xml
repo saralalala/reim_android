@@ -33,32 +33,23 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <include
         android:layout_width="match_parent"
-        android:layout_height="50.5dp"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider" />
+
+    <classes.widget.ClearEditText
+        android:id="@+id/usernameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_marginTop="18dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:background="@color/major_light"
-        android:focusable="true"
-        android:focusableInTouchMode="true" >
-
-	    <include
-	        android:layout_width="match_parent"
-	        android:layout_height="0.5dp"
-	        layout="@layout/view_divider" />
-
-        <classes.widget.ClearEditText
-            android:id="@+id/usernameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@null"
-            android:inputType="textEmailAddress"
-            android:hint="@string/input_username"
-            android:textColor="@color/font_major_dark"
-            android:textSize="16sp"/>
-
-    </RelativeLayout>
+        android:inputType="textEmailAddress"
+        android:hint="@string/input_username"
+        android:textColor="@color/font_major_dark"
+        android:textSize="16sp"/>
 
     <include
         android:layout_width="match_parent"

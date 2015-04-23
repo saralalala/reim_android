@@ -112,7 +112,7 @@ public class PhoneFindActivity extends Activity
 				else if (!Utils.isPhone(phoneNumber))
 				{
 					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_phone_wrong_format);
-					phoneEditText.requestFocus();	
+                    ViewUtils.requestFocus(PhoneFindActivity.this, phoneEditText);
 				}
 				else
 				{
@@ -166,9 +166,10 @@ public class PhoneFindActivity extends Activity
 
     private void sendTextMessage()
     {
+        final String second = ViewUtils.getString(R.string.second);
 		waitingTime = 60;
 		acquireCodeButton.setEnabled(false);
-		acquireCodeButton.setText(waitingTime + "秒");
+		acquireCodeButton.setText(waitingTime + second);
 		thread = new Thread(new Runnable()
 		{
 			public void run()
@@ -183,9 +184,9 @@ public class PhoneFindActivity extends Activity
 						{
 							public void run()
 							{
-								acquireCodeButton.setText(waitingTime + "秒");
+								acquireCodeButton.setText(waitingTime + second);
 							}
-						});	
+						});
 					}
 				}
 				catch (Exception e)
@@ -201,12 +202,12 @@ public class PhoneFindActivity extends Activity
 							acquireCodeButton.setText(R.string.acquire_code);
 							acquireCodeButton.setEnabled(true);
 						}
-					});	
+					});
 				}
 			}
 		});
 		thread.start();
-		
+
 		ReimProgressDialog.show();
 		ForgotPasswordRequest request = new ForgotPasswordRequest(1, phoneEditText.getText().toString());
 		request.sendRequest(new HttpConnectionCallback()
@@ -218,7 +219,7 @@ public class PhoneFindActivity extends Activity
 				{
 					cid = response.getVerifyCodeID();
 					code = response.getVerifyCode();
-					
+
 					runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -253,6 +254,7 @@ public class PhoneFindActivity extends Activity
 
     private void goBack()
     {
+        waitingTime = -1;
         ViewUtils.goBackWithIntent(PhoneFindActivity.this, SignInActivity.class);
     }
 }

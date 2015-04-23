@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rushucloud.reim" >
+    package="com.rushucloud.reim">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
@@ -30,10 +30,10 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:name="classes.utils.ReimApplication"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         
         <activity android:name="com.rushucloud.reim.start.SplashActivity"
-            android:theme="@style/AppSplash" >
+            android:theme="@style/AppSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -44,39 +44,39 @@
         <activity
             android:name=".start.NewFeaturesActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".start.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".start.SignInActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".start.PhoneSignUpActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".start.EmailSignUpActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".start.PhoneFindActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".start.EmailFindActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".start.ResetPasswordActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".start.CompleteInfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
 
         <!--   guide part   -->
         <activity
@@ -121,209 +121,213 @@
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:configChanges="orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         
         <activity
             android:name=".GalleryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MultipleImageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SingleImageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
 
         <!--   item part   -->
         <activity
             android:name=".item.EditItemActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".item.ShowItemActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".item.SearchItemActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".item.PickVendorActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".item.InputVendorActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".item.PickLocationActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".item.PickCategoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".item.PickTagActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".item.PickMemberActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"/>
 
         <!--   report part   -->
         <activity
             android:name=".report.EditReportActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".report.PickManagerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".report.PickCCActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".report.ApproveReportActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".report.ShowReportActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".report.CommentActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".report.PickItemActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".report.ApproveInfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".report.FollowingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".report.ExportActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
 
         <!--   statistics part   -->
         <activity
             android:name=".StatisticsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
 
         <!--   me part   -->
         <activity
             android:name=".me.ProfileActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.EmailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.PhoneActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.BindPhoneActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.NicknameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.BankActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.CompanyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.InvoiceTitleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.ChangePasswordActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.ManagerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".me.CategoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.SubCategoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.EditCategoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.TagActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.EditTagActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.InviteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.MessageListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.MessageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.AboutActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".me.FeedbackActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         
         <!-- #######################  友盟Umeng  ####################### -->
 	    <meta-data
 	        android:name="UMENG_APPKEY" 
-	        android:value="543bf20efd98c544b9002d11" >
+	        android:value="543bf20efd98c544b9002d11">
 	    </meta-data>
 	    
 	    <!-- 推广渠道，Wandoujia之类的 
 	    <meta-data
 	        android:name="UMENG_CHANNEL" 
-	        android:value="Wandoujia" >
+	        android:value="Wandoujia">
 	    </meta-data>-->
 
         <service
             android:name="com.umeng.update.net.DownloadingService"
-            android:process=":DownloadingService" >
+            android:process=":DownloadingService">
         </service>
 
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
 
         <!-- ###################  注册SDK使用的Activity  ###################### -->
@@ -333,21 +337,21 @@
 		    android:name="com.umeng.socialize.view.ShareActivity" 
 		    android:noHistory="true" 
 		    android:theme="@style/Theme.UMDialog" 
-		    android:windowSoftInputMode="stateVisible|adjustResize" />
+		    android:windowSoftInputMode="stateVisible|adjustResize"/>
         
 		<activity 
 		    android:name=".wxapi.WXEntryActivity"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar"
 			android:configChanges="keyboardHidden|orientation|screenSize"
 			android:exported="true"
-			android:screenOrientation="portrait" />
+			android:screenOrientation="portrait"/>
         
         <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
 		<activity 
 		    android:configChanges="orientation|keyboard" 
 		    android:launchMode="singleTask" 
 		    android:name="com.tencent.tauth.AuthActivity" 
-		    android:noHistory="true" >
+		    android:noHistory="true">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW"/>
 				<category android:name="android.intent.category.DEFAULT"/>
@@ -359,26 +363,26 @@
 		<activity 
 		    android:name="com.tencent.connect.common.AssistActivity" 
 		    android:screenOrientation="portrait" 
-		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+		    android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
         
 		<!-- ################### AVOS推送 ################### -->
         <service android:name="com.avos.avoscloud.PushService"/>
         <receiver 
-            android:name="classes.utils.ReimBroadcastReceiver" >
+            android:name="classes.utils.ReimBroadcastReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="com.avos.UPDATE_STATUS" />
-                <action android:name="com.rushucloud.reim.NOTIFICATION_CLICKED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="com.avos.UPDATE_STATUS"/>
+                <action android:name="com.rushucloud.reim.NOTIFICATION_CLICKED"/>
             </intent-filter>
         </receiver>
         
         <!-- ################### 百度定位 ################## -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="isVHfH894tfsLVOVdXlGdlKz" />
-        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote" />
+            android:value="isVHfH894tfsLVOVdXlGdlKz"/>
+        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote"/>
         
         <!-- #################### 美洽 ################### -->
 		<activity
@@ -389,7 +393,7 @@
 		
 		<service
 		    android:name="com.mechat.mechatlibrary.MechatService"
-		    android:label="MechatService" >
+		    android:label="MechatService">
 		</service>
 	</application>
 </manifest>

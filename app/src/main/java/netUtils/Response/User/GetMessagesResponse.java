@@ -39,7 +39,7 @@ public class GetMessagesResponse extends BaseResponse
                 {
                     messageList.add(new Message(jObject));
                 }
-                else if (type == Message.TYPE_APPLY)
+                else if (type == Message.TYPE_INVITE)
                 {
                     messageList.add(new Invite(jObject, currentNickname));
                 }

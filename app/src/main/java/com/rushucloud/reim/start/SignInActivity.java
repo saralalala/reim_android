@@ -210,17 +210,17 @@ public class SignInActivity extends Activity
         else if (username.isEmpty())
         {
             ViewUtils.showToast(SignInActivity.this, R.string.error_username_empty);
-            usernameEditText.requestFocus();
+            ViewUtils.requestFocus(SignInActivity.this, usernameEditText);
         }
         else if (password.isEmpty())
         {
             ViewUtils.showToast(SignInActivity.this, R.string.error_password_empty);
-            passwordEditText.requestFocus();
+            ViewUtils.requestFocus(SignInActivity.this, passwordEditText);
         }
         else if (!Utils.isEmailOrPhone(username))
         {
             ViewUtils.showToast(SignInActivity.this, R.string.error_email_or_phone_wrong_format);
-            usernameEditText.requestFocus();
+            ViewUtils.requestFocus(SignInActivity.this, usernameEditText);
         }
         else
         {

@@ -132,22 +132,22 @@ public class EmailSignUpActivity extends Activity
         else if (email.isEmpty())
         {
             ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_email_empty);
-            emailEditText.requestFocus();
+            ViewUtils.requestFocus(this, emailEditText);
         }
         else if (password.isEmpty())
         {
             ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_password_empty);
-            passwordEditText.requestFocus();
+            ViewUtils.requestFocus(this, passwordEditText);
         }
         else if (confirmPassword.isEmpty())
         {
             ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_confirm_password_empty);
-            confirmPasswordEditText.requestFocus();
+            ViewUtils.requestFocus(this, confirmPasswordEditText);
         }
         else if (!password.equals(confirmPassword))
         {
             ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_wrong_confirm_password);
-            confirmPasswordEditText.requestFocus();
+            ViewUtils.requestFocus(this, confirmPasswordEditText);
         }
         else
         {

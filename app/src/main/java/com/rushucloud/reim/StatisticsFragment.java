@@ -141,12 +141,12 @@ public class StatisticsFragment extends Fragment
 		if (isVisibleToUser && hasInit)
 		{
             setListView(ReimApplication.getStatTabIndex());
-            if (ReimApplication.getStatTabIndex() == 0 && needToGetMineData())
+            if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_MINE && needToGetMineData())
             {
                 ReimProgressDialog.show();
                 sendGetMineDataRequest();
             }
-            else if (ReimApplication.getStatTabIndex() == 1 && needToGetOthersData())
+            else if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_OTHERS && needToGetOthersData())
             {
                 ReimProgressDialog.show();
                 sendGetOthersDataRequest();
@@ -187,7 +187,7 @@ public class StatisticsFragment extends Fragment
 			{
                 if (PhoneUtils.isNetworkConnected())
                 {
-                    if (ReimApplication.getStatTabIndex() == 0)
+                    if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_MINE)
                     {
                         sendGetMineDataRequest();
                     }
@@ -360,12 +360,12 @@ public class StatisticsFragment extends Fragment
 	{
 		if (PhoneUtils.isNetworkConnected())
 		{
-            if (ReimApplication.getStatTabIndex() == 0 && needToGetMineData())
+            if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_MINE && needToGetMineData())
             {
                 ReimProgressDialog.show();
                 sendGetMineDataRequest();
             }
-            else if (ReimApplication.getStatTabIndex() == 1 && needToGetOthersData())
+            else if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_OTHERS && needToGetOthersData())
             {
                 ReimProgressDialog.show();
                 sendGetOthersDataRequest();

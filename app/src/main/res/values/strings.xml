@@ -20,6 +20,7 @@
     <string name="one_hundred_million">亿</string>
     <string name="year">年</string>
     <string name="month">月</string>
+    <string name="second">秒</string>
     <string name="total">总计</string>
     
     <string name="confirm">确定</string>
@@ -232,6 +233,7 @@
     <string name="personal_info">个人信息</string>
     <string name="email">邮箱</string>
     <string name="phone">手机</string>
+    <string name="change_phone">更换绑定手机</string>
     <string name="bank_account">银行账号</string>
     <string name="company">公司</string>
     <string name="nickname">姓名</string>
@@ -259,7 +261,6 @@
     <string name="feedback_code">+86</string>
     <string name="version">版本</string>
     <string name="about_footer">Copyright&#169; 2014&#8211;2015 北京如数科技有限公司</string>
-    <string name="about_content">瞎看什么看&#8230;</string>
     
     <string name="share_wechat">微信分享</string>
     <string name="share_wechat_content">这是来自云报销的微信分享</string>

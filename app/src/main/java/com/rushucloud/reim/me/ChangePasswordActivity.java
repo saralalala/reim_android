@@ -106,32 +106,32 @@ public class ChangePasswordActivity extends Activity
 				else if (oldPassword.isEmpty())
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_old_password_empty);
-					oldPasswordEditText.requestFocus();
+                    ViewUtils.requestFocus(ChangePasswordActivity.this, oldPasswordEditText);
 				}
 				else if (newPassword.isEmpty())
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_new_password_empty);
-					newPasswordEditText.requestFocus();
+                    ViewUtils.requestFocus(ChangePasswordActivity.this, newPasswordEditText);
 				}
 				else if (confirmPassword.isEmpty())
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_confirm_password_empty);
-					confirmPasswordEditText.requestFocus();
+                    ViewUtils.requestFocus(ChangePasswordActivity.this, confirmPasswordEditText);
 				}
 				else if (oldPassword.equals(newPassword))
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_same_password);
-					newPasswordEditText.requestFocus();
+                    ViewUtils.requestFocus(ChangePasswordActivity.this, newPasswordEditText);
 				}
 				else if (!confirmPassword.equals(newPassword))
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_wrong_confirm_password);
-					confirmPasswordEditText.requestFocus();
+                    ViewUtils.requestFocus(ChangePasswordActivity.this, confirmPasswordEditText);
 				}
 				else if (!oldPassword.equals(appPreference.getPassword()))
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_wrong_old_password);
-					oldPasswordEditText.requestFocus();
+                    ViewUtils.requestFocus(ChangePasswordActivity.this, oldPasswordEditText);
 				}
 				else
 				{

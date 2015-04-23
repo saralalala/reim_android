@@ -299,7 +299,7 @@ public class ReportFragment extends Fragment
 				if ((operationPopupWindow == null || !operationPopupWindow.isShowing()) &&
 					(deletePopupWindow == null || !deletePopupWindow.isShowing()) && position > 0)
 				{		
-					if (ReimApplication.getReportTabIndex() == 0)
+					if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
 					{
 						Report report = showMineList.get(position - 1);
 
@@ -361,7 +361,7 @@ public class ReportFragment extends Fragment
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				reportIndex = position - 1;
-				if (ReimApplication.getReportTabIndex() == 0)
+				if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
 				{
 					showOperationWindow();
 				}
@@ -394,7 +394,7 @@ public class ReportFragment extends Fragment
             public void onClick(View v)
             {
                 selectSortUpdateDateRadio();
-                if (ReimApplication.getReportTabIndex() == 0)
+                if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_MODIFY_DATE");
                     if (mineTempSortType != SORT_UPDATE_DATE)
@@ -428,7 +428,7 @@ public class ReportFragment extends Fragment
             public void onClick(View v)
             {
                 selectSortCreateDateRadio();
-                if (ReimApplication.getReportTabIndex() == 0)
+                if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_CREATE_DATE");
                     if (mineTempSortType != SORT_CREATE_DATE)
@@ -462,7 +462,7 @@ public class ReportFragment extends Fragment
             public void onClick(View v)
             {
                 selectSortAmountRadio();
-                if (ReimApplication.getReportTabIndex() == 0)
+                if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_AMOUNT");
                     if (mineTempSortType != SORT_AMOUNT)
@@ -535,7 +535,7 @@ public class ReportFragment extends Fragment
         {
             public void onClick(View v)
             {
-                if (ReimApplication.getReportTabIndex() == 0)
+                if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
                 {
                     mineSortReverse = mineTempSortReverse;
                     mineSortType = mineTempSortType;
@@ -720,7 +720,7 @@ public class ReportFragment extends Fragment
 	private void setListView(int index)
 	{
 		ReimApplication.setReportTabIndex(index);
-		if (index == 0)
+		if (index == ReimApplication.TAB_REPORT_MINE)
 		{
 			myTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
 			othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
@@ -837,7 +837,7 @@ public class ReportFragment extends Fragment
 
     private void reverseSortUpdateImageView()
     {
-        if (ReimApplication.getReportTabIndex() == 0)
+        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
         {
             mineTempSortReverse = !mineTempSortReverse;
             if (!mineTempSortReverse) // status before change
@@ -865,7 +865,7 @@ public class ReportFragment extends Fragment
 
     private void reverseSortCreateImageView()
     {
-        if (ReimApplication.getReportTabIndex() == 0)
+        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
         {
             mineTempSortReverse = !mineTempSortReverse;
             if (!mineTempSortReverse) // status before change
@@ -893,7 +893,7 @@ public class ReportFragment extends Fragment
 
     private void reverseSortAmountImageView()
     {
-        if (ReimApplication.getReportTabIndex() == 0)
+        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
         {
             mineTempSortReverse = !mineTempSortReverse;
             if (!mineTempSortReverse) // status before change
@@ -1013,7 +1013,7 @@ public class ReportFragment extends Fragment
 
 	private void refreshReportListView()
 	{
-		if (ReimApplication.getReportTabIndex() == 0)
+		if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
 		{
 			mineList.clear();
 			mineList.addAll(readMineReportList());
@@ -1058,7 +1058,7 @@ public class ReportFragment extends Fragment
 
     private void showFilterWindow()
     {
-		if (ReimApplication.getReportTabIndex() == 0)
+		if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
 		{
             mineTempSortReverse = false;
             mineTempSortType = mineSortType;
@@ -1174,7 +1174,8 @@ public class ReportFragment extends Fragment
 					{
 						public void run()
 						{
-							int reportID = ReimApplication.getReportTabIndex() == 0? report.getLocalID() : report.getServerID();
+							int reportID = ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE?
+                                    report.getLocalID() : report.getServerID();
 							deleteLocalReport(reportID);
 						}
 					});
@@ -1301,7 +1302,7 @@ public class ReportFragment extends Fragment
 
     private void deleteLocalReport(int reportID)
 	{
-		if (ReimApplication.getReportTabIndex() == 0)
+		if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
 		{
 			if (dbManager.deleteReport(reportID))
 			{
@@ -1362,7 +1363,7 @@ public class ReportFragment extends Fragment
 
 	private void refreshReports()
 	{
-		if (ReimApplication.getReportTabIndex() == 0)
+		if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
 		{
 			if (SyncUtils.canSyncToServer())
 			{

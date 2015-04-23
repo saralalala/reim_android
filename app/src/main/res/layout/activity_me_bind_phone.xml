@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    android:id="@+id/containerLayout">
+    android:id="@+id/baseLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,7 +23,6 @@
             android:src="@drawable/back_drawable"/>
 
         <TextView
-            android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -39,35 +38,17 @@
         android:layout_marginTop="18dp"
         layout="@layout/view_divider"/>
 
-    <LinearLayout
+    <classes.widget.ClearEditText
+        android:id="@+id/phoneEditText"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="@drawable/me_item_drawable">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:text="@string/phone"
-            android:textColor="@color/font_major_dark"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/phoneTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="right"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textColor="@color/hint_grey"
-            android:textSize="14sp"/>
-
-    </LinearLayout>
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@color/major_light"
+        android:hint="@string/input_phone"
+        android:inputType="phone"
+        android:textColor="@color/font_major_dark"
+        android:textSize="16sp"/>
 
     <include
         android:layout_width="match_parent"
@@ -81,30 +62,33 @@
         layout="@layout/view_divider"/>
 
     <LinearLayout
-        android:id="@+id/bindPhoneLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
-        android:background="@drawable/me_item_drawable">
+        android:background="@color/major_light">
 
-        <TextView
+        <EditText
+            android:id="@+id/codeEditText"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:text="@string/change_phone"
+            android:paddingLeft="16dp"
+            android:paddingRight="10dp"
+            android:background="@color/major_light"
+            android:hint="@string/input_code"
+            android:inputType="phone"
             android:textColor="@color/font_major_dark"
             android:textSize="16sp"/>
 
-        <ImageView
-            android:id="@+id/phoneNextImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/acquireCodeButton"
+            android:layout_width="100dp"
+            android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="10dp"
-            android:contentDescription="@string/next"
-            android:src="@drawable/next"/>
+            android:background="@drawable/button_dark_drawable"
+            android:text="@string/acquire_code"
+            android:textColor="@color/button_text_light_color"/>
 
     </LinearLayout>
 
@@ -112,5 +96,16 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         layout="@layout/view_divider"/>
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/button_dark_drawable"
+        android:text="@string/confirm"
+        android:textColor="@color/button_text_light_color" />
 
 </LinearLayout>

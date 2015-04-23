@@ -68,6 +68,7 @@ public class ViewUtils
 
     public static void requestFocus(final Context context, final EditText editText)
     {
+        editText.requestFocus();
         editText.postDelayed(new Runnable()
         {
             public void run()

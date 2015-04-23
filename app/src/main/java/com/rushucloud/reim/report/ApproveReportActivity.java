@@ -245,7 +245,7 @@ public class ApproveReportActivity extends Activity
 		
 		final EditText commentEditText = (EditText) view.findViewById(R.id.commentEditText);
 		commentEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
-		commentEditText.requestFocus();
+        ViewUtils.requestFocus(this, commentEditText);
 		
     	Builder builder = new Builder(this);
     	builder.setView(view);

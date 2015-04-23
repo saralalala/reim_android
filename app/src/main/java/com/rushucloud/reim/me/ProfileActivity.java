@@ -231,7 +231,17 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-                ViewUtils.goForward(ProfileActivity.this, PhoneActivity.class);
+                String phone = appPreference.getCurrentUser().getPhone();
+                if (phone.isEmpty())
+                {
+                    ViewUtils.goForward(ProfileActivity.this, BindPhoneActivity.class);
+                }
+                else
+                {
+                    Intent intent = new Intent(ProfileActivity.this, PhoneActivity.class);
+                    intent.putExtra("phone", phone);
+                    ViewUtils.goForward(ProfileActivity.this, intent);
+                }
 			}
 		});
 

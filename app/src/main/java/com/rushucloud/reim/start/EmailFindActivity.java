@@ -117,7 +117,7 @@ public class EmailFindActivity extends Activity
             else
             {
                 ViewUtils.showToast(EmailFindActivity.this, R.string.error_email_wrong_format);
-                emailEditText.requestFocus();
+                ViewUtils.requestFocus(this, emailEditText);
             }
         }
         else

@@ -133,17 +133,17 @@ public class ResetPasswordActivity extends Activity
         else if (newPassword.isEmpty())
         {
             ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_new_password_empty);
-            newPasswordEditText.requestFocus();
+            ViewUtils.requestFocus(ResetPasswordActivity.this, newPasswordEditText);
         }
         else if (confirmPassword.isEmpty())
         {
             ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_confirm_password_empty);
-            confirmPasswordEditText.requestFocus();
+            ViewUtils.requestFocus(ResetPasswordActivity.this, confirmPasswordEditText);
         }
         else if (!newPassword.equals(confirmPassword))
         {
             ViewUtils.showToast(ResetPasswordActivity.this, R.string.error_wrong_confirm_password);
-            confirmPasswordEditText.requestFocus();
+            ViewUtils.requestFocus(ResetPasswordActivity.this, confirmPasswordEditText);
         }
         else
         {

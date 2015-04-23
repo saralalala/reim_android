@@ -73,7 +73,6 @@ public class InviteActivity extends Activity
 		});
 		
 		usernameEditText = (ClearEditText) findViewById(R.id.usernameEditText);
-        usernameEditText.requestFocus();
         ViewUtils.requestFocus(this, usernameEditText);
 
         Button inviteButton = (Button) findViewById(R.id.inviteButton);

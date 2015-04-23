@@ -5,23 +5,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    android:id="@+id/containerLayout" >
+    android:id="@+id/containerLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:id="@+id/titleTextView"
@@ -30,7 +29,7 @@
             android:layout_centerInParent="true"
             android:text="@string/personal_info"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/signOutTextView"
@@ -42,25 +41,25 @@
             android:gravity="center"
             android:text="@string/sign_out"
             android:textColor="@color/title_text_color"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
     </RelativeLayout>
 
     <ScrollView
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
+	    android:layout_height="match_parent">
 
         <LinearLayout
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:orientation="vertical" >
+	        android:orientation="vertical">
 	        
 			<RelativeLayout
                 android:id="@+id/avatarLayout"
 			    android:layout_width="match_parent"
 			    android:layout_height="99dp"
 			    android:layout_marginTop="18dp"
-			    android:background="@drawable/me_item_drawable" >
+			    android:background="@drawable/me_item_drawable">
             
 		        <include
 					android:layout_width="match_parent"
@@ -71,12 +70,11 @@
                     android:id="@+id/avatarPrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:text="@string/avatar"
                     android:textColor="@color/font_major_dark"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
                 
 			    <classes.widget.CircleImageView
 				    android:id="@+id/avatarImageView"
@@ -88,7 +86,7 @@
 					android:clickable="true"
 				    android:contentDescription="@string/avatar"
 				    android:src="@drawable/default_avatar"
-				    reim:border_width="0dp" />
+				    reim:border_width="0dp"/>
 
                 <ImageView
                     android:id="@+id/avatarNextImageView"
@@ -98,7 +96,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
-                    android:src="@drawable/next" />
+                    android:src="@drawable/next"/>
             
 			    <include                 
 					android:layout_width="match_parent"
@@ -118,18 +116,17 @@
                 android:id="@+id/nicknameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/me_item_drawable" >
+                android:background="@drawable/me_item_drawable">
 
                 <TextView
                     android:id="@+id/nicknamePrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:text="@string/nickname"
                     android:textColor="@color/font_major_dark"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/nicknameTextView"
@@ -144,7 +141,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <ImageView
                     android:id="@+id/nicknameNextImageView"
@@ -154,7 +151,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
-                    android:src="@drawable/next" />
+                    android:src="@drawable/next"/>
 
             </RelativeLayout>
 
@@ -167,18 +164,17 @@
                 android:id="@+id/emailLayout"
 			    android:layout_width="match_parent"
 			    android:layout_height="50dp"
-			    android:background="@drawable/me_item_drawable" >
+			    android:background="@drawable/me_item_drawable">
 
                 <TextView
                     android:id="@+id/emailPrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:text="@string/email"
                     android:textColor="@color/font_major_dark"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/emailTextView"
@@ -193,7 +189,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <ImageView
                     android:id="@+id/emailNextImageView"
@@ -203,7 +199,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
-                    android:src="@drawable/next" />
+                    android:src="@drawable/next"/>
 			
 			</RelativeLayout>
             
@@ -216,18 +212,17 @@
                 android:id="@+id/phoneLayout"
 			    android:layout_width="match_parent"
 			    android:layout_height="50dp"
-			    android:background="@drawable/me_item_drawable" >
+			    android:background="@drawable/me_item_drawable">
 
                 <TextView
                     android:id="@+id/phonePrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:text="@string/phone"
                     android:textColor="@color/font_major_dark"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/phoneTextView"
@@ -242,7 +237,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <ImageView
                     android:id="@+id/phoneNextImageView"
@@ -252,7 +247,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
-                    android:src="@drawable/next" />
+                    android:src="@drawable/next"/>
 			
 			</RelativeLayout>
 
@@ -265,18 +260,17 @@
                 android:id="@+id/bankLayout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/me_item_drawable" >
+                android:background="@drawable/me_item_drawable">
 
                 <TextView
                     android:id="@+id/bankPrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:text="@string/bank_account"
                     android:textColor="@color/font_major_dark"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/bankTextView"
@@ -291,7 +285,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <ImageView
                     android:id="@+id/bankNextImageView"
@@ -301,7 +295,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
-                    android:src="@drawable/next" />
+                    android:src="@drawable/next"/>
 
             </RelativeLayout>
 
@@ -313,19 +307,18 @@
 			<RelativeLayout
 			    android:id="@+id/companyLayout"
 			    android:layout_width="match_parent"
-			    android:layout_height="50.5dp"
-			    android:background="@drawable/me_item_drawable" >
+			    android:layout_height="50dp"
+			    android:background="@drawable/me_item_drawable">
 
                 <TextView
                     android:id="@+id/companyPrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:text="@string/company"
                     android:textColor="@color/font_major_dark"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/companyTextView"
@@ -340,7 +333,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/hint_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <ImageView
                     android:id="@+id/companyNextImageView"
@@ -350,7 +343,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
-                    android:src="@drawable/next" />
+                    android:src="@drawable/next"/>
 			
 			</RelativeLayout>
             
@@ -370,17 +363,16 @@
 				android:layout_width="match_parent"
 				android:layout_height="50dp"
 				android:clickable="true"
-				android:background="@drawable/me_item_drawable" >
+				android:background="@drawable/me_item_drawable">
 					     
 				<TextView
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_centerVertical="true"
-				    android:layout_alignParentLeft="true"
 				    android:layout_marginLeft="16dp"
 				    android:text="@string/change_password"
 				    android:textSize="16sp"
-				    android:textColor="@color/font_major_dark" />
+				    android:textColor="@color/font_major_dark"/>
 				
 				<ImageView
 				    android:layout_width="wrap_content"
@@ -389,7 +381,7 @@
 				    android:layout_centerVertical="true"
 				    android:layout_marginRight="10dp"
 				    android:contentDescription="@string/next"
-				    android:src="@drawable/next" />
+				    android:src="@drawable/next"/>
 				
 			</RelativeLayout>
             

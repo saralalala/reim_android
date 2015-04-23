@@ -453,7 +453,7 @@ public class EditItemActivity extends Activity
                 catch (NumberFormatException e)
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.error_number_wrong_format);
-                    amountEditText.requestFocus();
+                    ViewUtils.requestFocus(EditItemActivity.this, amountEditText);
                 }
                 catch (Exception e)
                 {
@@ -534,7 +534,6 @@ public class EditItemActivity extends Activity
         });
         if (item.getAmount() == 0)
         {
-            amountEditText.requestFocus();
             ViewUtils.requestFocus(this, amountEditText);
         }
         else

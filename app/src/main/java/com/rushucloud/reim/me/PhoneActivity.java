@@ -1,13 +1,11 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,37 +13,22 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
-import classes.utils.Utils;
 import classes.utils.ViewUtils;
-import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.request.user.ModifyUserRequest;
-import netUtils.response.user.ModifyUserResponse;
 
 public class PhoneActivity extends Activity
 {
-	private ClearEditText phoneEditText;
-
-	private User currentUser;
-    private String originalPhone;
-	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_me_phone);
-		initData();
 		initView();
 	}
 
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("PhoneActivity");		
+		MobclickAgent.onPageStart("PhoneActivity");
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setContext(this);
 	}
@@ -56,7 +39,7 @@ public class PhoneActivity extends Activity
 		MobclickAgent.onPageEnd("PhoneActivity");
 		MobclickAgent.onPause(this);
 	}
-	
+
 	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
@@ -65,125 +48,35 @@ public class PhoneActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	private void initData()
-	{
-		currentUser = AppPreference.getAppPreference().getCurrentUser();
-        originalPhone = currentUser.getPhone();
-	}
-	
+
 	private void initView()
-	{		
+	{
 		getActionBar().hide();
-		
+
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+		backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new View.OnClickListener()
+            }
+        });
+
+		TextView phoneTextView = (TextView) findViewById(R.id.phoneTextView);
+        phoneTextView.setText(getIntent().getStringExtra("phone"));
+
+        LinearLayout bindPhoneLayout = (LinearLayout) findViewById(R.id.bindPhoneLayout);
+        bindPhoneLayout.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				hideSoftKeyboard();
-
-				String newPhone = phoneEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
-				{
-                    ViewUtils.showToast(PhoneActivity.this, R.string.error_modify_network_unavailable);
-                }
-                else if (newPhone.equals(originalPhone))
-                {
-                    goBack();
-                }
-                else if (newPhone.isEmpty() && currentUser.getEmail().isEmpty())
-                {
-                    ViewUtils.showToast(PhoneActivity.this, R.string.error_new_phone_empty);
-                }
-                else if (!newPhone.isEmpty() && !Utils.isPhone(newPhone))
-                {
-                    ViewUtils.showToast(PhoneActivity.this, R.string.error_phone_wrong_format);
-                }
-                else
-                {
-                    currentUser.setPhone(newPhone);
-                    sendModifyUserInfoRequest();
-                }
-			}
-		});
-		
-		phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
-		phoneEditText.setText(currentUser.getPhone());
-        ViewUtils.requestFocus(this, phoneEditText);
-
-        LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
-        baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
+                ViewUtils.goForward(PhoneActivity.this, BindPhoneActivity.class);
 			}
 		});        
-	}
-	
-	private void sendModifyUserInfoRequest()
-	{
-		ReimProgressDialog.show();		
-		ModifyUserRequest request = new ModifyUserRequest(currentUser);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ModifyUserResponse response = new ModifyUserResponse(httpResponse);
-				if (response.getStatus())
-				{
-					DBManager.getDBManager().updateUser(currentUser);
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    if (appPreference.getUsername().equals(originalPhone))
-                    {
-                        appPreference.setUsername(currentUser.getPhone());
-                        appPreference.saveAppPreference();
-                    }
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(PhoneActivity.this, R.string.succeed_in_modifying_user_info);
-                            goBack();
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(PhoneActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
-						}
-					});						
-				}
-			}
-		});
-	}
-
-	private void hideSoftKeyboard()
-	{
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
 	}
 
     private void goBack()
     {
-        hideSoftKeyboard();
         ViewUtils.goBack(this);
     }
 }
