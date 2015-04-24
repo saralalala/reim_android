@@ -83,6 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:paddingLeft="16dp"
+        android:gravity="center_vertical"
         android:background="@color/list_item_header"
         android:text="@string/search_result"
         android:textColor="@color/font_list_item_header"

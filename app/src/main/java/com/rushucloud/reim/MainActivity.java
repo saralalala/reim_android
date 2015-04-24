@@ -37,9 +37,11 @@ import classes.widget.ReimProgressDialog;
 import classes.widget.Spotlight;
 import classes.widget.TabItem;
 import netUtils.HttpConnectionCallback;
+import netUtils.request.CommonRequest;
 import netUtils.request.EventsRequest;
 import netUtils.request.FeedbackRequest;
 import netUtils.request.group.GetGroupRequest;
+import netUtils.response.CommonResponse;
 import netUtils.response.EventsResponse;
 import netUtils.response.FeedbackResponse;
 import netUtils.response.group.GetGroupResponse;
@@ -491,10 +493,19 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				final EventsResponse response = new EventsResponse(httpResponse);
 				if (response.getStatus())
 				{
+                    User currentUser = AppPreference.getAppPreference().getCurrentUser();
+                    currentUser.setAppliedCompany(response.getAppliedCompany());
+                    DBManager.getDBManager().updateUser(currentUser);
+
 					if (response.needToRefresh() && PhoneUtils.isNetworkConnected())
 					{
 						sendGetGroupRequest();
 					}
+
+                    if (response.isGroupChanged() && PhoneUtils.isNetworkConnected())
+                    {
+                        sendCommonRequest();
+                    }
 					
 					runOnUiThread(new Runnable()
 					{
@@ -516,6 +527,68 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			}
 		});
 	}
+
+    private void sendCommonRequest()
+    {
+        CommonRequest request = new CommonRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final CommonResponse response = new CommonResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = -1;
+
+                    DBManager dbManager = DBManager.getDBManager();
+                    appPreference.setServerToken(response.getServerToken());
+                    appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
+
+                    if (response.getGroup() != null)
+                    {
+                        currentGroupID = response.getGroup().getServerID();
+
+                        // update AppPreference
+                        appPreference.setCurrentGroupID(currentGroupID);
+                        appPreference.saveAppPreference();
+
+                        // update members
+                        User currentUser = response.getCurrentUser();
+                        User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+                        if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+                        {
+                            currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
+                        }
+
+                        dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+                        dbManager.syncUser(currentUser);
+
+                        // update categories
+                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+
+                        // update tags
+                        dbManager.updateGroupTags(response.getTagList(), currentGroupID);
+
+                        // update group info
+                        dbManager.syncGroup(response.getGroup());
+                    }
+                    else
+                    {
+                        // update AppPreference
+                        appPreference.setCurrentGroupID(currentGroupID);
+                        appPreference.saveAppPreference();
+
+                        // update current user
+                        dbManager.syncUser(response.getCurrentUser());
+
+                        // update categories
+                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+                    }
+                }
+            }
+        });
+    }
 	
 	private void sendGetGroupRequest()
 	{

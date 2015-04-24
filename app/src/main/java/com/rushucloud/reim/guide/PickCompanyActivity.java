@@ -51,6 +51,7 @@ public class PickCompanyActivity extends Activity
     private List<Group> invitedList = new ArrayList<Group>();
     private List<Invite> inviteList = new ArrayList<Invite>();
     private Group company;
+    private boolean hasInit = false;
     private boolean fromGuide = false;
 
 	protected void onCreate(Bundle savedInstanceState)
@@ -67,7 +68,11 @@ public class PickCompanyActivity extends Activity
 		MobclickAgent.onPageStart("PickCompanyActivity");
 		MobclickAgent.onResume(this);
         ReimProgressDialog.setContext(this);
-        sendGetInvitedGroupRequest();
+        if (!hasInit)
+        {
+            hasInit = true;
+            sendGetInvitedGroupRequest();
+        }
 	}
 
 	protected void onPause()
@@ -288,8 +293,8 @@ public class PickCompanyActivity extends Activity
                 {
                     int currentGroupID = -1;
 
-                    DBManager dbManager = DBManager.getDBManager();
-                    AppPreference appPreference = AppPreference.getAppPreference();
+                    final DBManager dbManager = DBManager.getDBManager();
+                    final AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
                     appPreference.setSyncOnlyWithWifi(true);
@@ -394,6 +399,9 @@ public class PickCompanyActivity extends Activity
                             }
                             else
                             {
+                                User currentUser = AppPreference.getAppPreference().getCurrentUser();
+                                currentUser.setAppliedCompany(company.getName());
+                                DBManager.getDBManager().updateUser(currentUser);
                                 ViewUtils.showToast(PickCompanyActivity.this, R.string.succeed_in_applying);
                                 ViewUtils.goBack(PickCompanyActivity.this);
                             }
