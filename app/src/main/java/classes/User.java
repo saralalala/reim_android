@@ -36,6 +36,7 @@ public class User implements Serializable
 	private boolean isActive = false;
 	private boolean isAdmin = false;
 	private int groupID = -1;
+    private String appliedCompany = "";
 	private int defaultManagerID = -1;
 	private int serverUpdatedDate = -1;
 	private int localUpdatedDate = -1;
@@ -59,6 +60,7 @@ public class User implements Serializable
 		isActive = user.isActive();
 		isAdmin = user.isAdmin();
 		groupID = user.getGroupID();
+        appliedCompany = user.getAppliedCompany();
 		defaultManagerID = user.getDefaultManagerID();
 		serverUpdatedDate = user.getServerUpdatedDate();
 		localUpdatedDate = user.getLocalUpdatedDate();
@@ -76,6 +78,7 @@ public class User implements Serializable
 			setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
 			setDefaultManagerID(jObject.getInt("manager_id"));
 			setGroupID(groupID);
+            setAppliedCompany(jObject.getString("apply"));
             setAvatarServerPath(jObject.getString("apath"));
 			setAvatarLocalPath("");
 			setLocalUpdatedDate(jObject.getInt("dt"));
@@ -230,8 +233,17 @@ public class User implements Serializable
 	{
 		this.groupID = groupID;
 	}
-	
-	public int getDefaultManagerID()
+
+    public String getAppliedCompany()
+    {
+        return appliedCompany;
+    }
+    public void setAppliedCompany(String appliedCompany)
+    {
+        this.appliedCompany = appliedCompany;
+    }
+
+    public int getDefaultManagerID()
 	{
 		return defaultManagerID;
 	}
@@ -283,7 +295,41 @@ public class User implements Serializable
 		}
 		return super.equals(o);
 	}
-	
+
+    public void parse(JSONObject jObject, int groupID)
+    {
+        try
+        {
+            setServerID(jObject.getInt("id"));
+            setNickname(jObject.getString("nickname"));
+            setEmail(jObject.getString("email"));
+            setPhone(jObject.getString("phone"));
+            setBankAccount(jObject.getString("credit_card"));
+            setDefaultManagerID(jObject.getInt("manager_id"));
+            setAvatarLocalPath("");
+            setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
+            setIsActive(Utils.intToBoolean(jObject.getInt("active")));
+            setGroupID(groupID);
+            setAppliedCompany(jObject.getString("apply"));
+            setLocalUpdatedDate(jObject.getInt("lastdt"));
+            setServerUpdatedDate(jObject.getInt("lastdt"));
+            String imageID = jObject.getString("avatar");
+            if (imageID.isEmpty())
+            {
+                setAvatarID(-1);
+            }
+            else
+            {
+                setAvatarID(Integer.valueOf(imageID));
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
 	public boolean hasUndownloadedAvatar()
 	{
 		if (getAvatarLocalPath().isEmpty() && getAvatarID() > 0)

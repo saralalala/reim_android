@@ -69,6 +69,7 @@
         android:textSize="18sp"/>
 
     <TextView
+        android:id="@+id/contentTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -76,7 +77,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:text="@string/prompt_joined"
-        android:textColor="@color/major_light"
+        android:textColor="@color/hint_white"
         android:textSize="14sp"/>
 
     <View

@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 
+import classes.Apply;
 import classes.Invite;
 import classes.Message;
 import classes.Report;
@@ -199,6 +200,32 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("message", message);
+                    bundle.putBoolean("fromPush", true);
+
+                    Intent newIntent = new Intent(context, MessageActivity.class);
+                    newIntent.putExtras(bundle);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(newIntent);
+                }
+                else if (type == TYPE_APPLY || type == TYPE_APPLY_REPLY)
+                {
+                    Apply apply = new Apply();
+                    try
+                    {
+                        apply.setType(Message.TYPE_APPLY);
+                        apply.setTitle(jObject.getString("msg"));
+                        apply.setContent(jObject.getString("msg"));
+                        apply.setTypeCode(jObject.getInt("permit"));
+                        apply.setServerID(jObject.getInt("id"));
+                    }
+                    catch (JSONException e)
+                    {
+                        apply.setTitle(context.getString(R.string.failed_to_read_data));
+                        apply.setContent(context.getString(R.string.failed_to_read_data));
+                    }
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("message", apply);
                     bundle.putBoolean("fromPush", true);
 
                     Intent newIntent = new Intent(context, MessageActivity.class);

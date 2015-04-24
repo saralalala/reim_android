@@ -137,7 +137,6 @@ public class InputContactActivity extends Activity
         contactEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
         contactEditText.setText(getIntent().getStringExtra("inviteList"));
         ViewUtils.requestFocus(this, contactEditText);
-        contactEditText.setText("123123，1231231　1231231");
 
         TextView promptTextView = (TextView) findViewById(R.id.promptTextView);
         SpannableString text = new SpannableString(promptTextView.getText());

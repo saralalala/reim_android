@@ -63,6 +63,7 @@ public class DBManager extends SQLiteOpenHelper
 										+ "privilege INT DEFAULT(0),"
 										+ "manager_id INT DEFAULT(0),"
 										+ "group_id INT DEFAULT(0),"
+                                        + "applied_company TEXT DEFAULT(''),"
 										+ "admin INT DEFAULT(0),"
 										+ "server_updatedt INT DEFAULT(0),"
 										+ "local_updatedt INT DEFAULT(0),"
@@ -464,7 +465,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, bank_account, avatar_id, avatar_server_path, avatar_local_path, " +
-								"privilege, manager_id, group_id, admin, local_updatedt, server_updatedt) VALUES (" +
+								"privilege, manager_id, group_id, applied_company, admin, local_updatedt, server_updatedt) VALUES (" +
 								"'" + user.getServerID() + "'," +
 								"'" + user.getEmail() + "'," +
 								"'" + user.getPhone() + "'," +
@@ -476,6 +477,7 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + user.getPrivilege() + "'," +
 								"'" + user.getDefaultManagerID() + "'," +
 								"'" + user.getGroupID() + "'," +
+                                "'" + user.getAppliedCompany() + "'," +
 								"'" + Utils.booleanToInt(user.isAdmin()) + "'," +
 								"'" + user.getLocalUpdatedDate() + "'," +
 								"'" + user.getServerUpdatedDate() + "')";			
@@ -504,6 +506,7 @@ public class DBManager extends SQLiteOpenHelper
 								"avatar_local_path = '" + user.getAvatarLocalPath() + "'," +
 								"manager_id = '" + user.getDefaultManagerID() + "'," +
 								"group_id = '" + user.getGroupID() + "'," +
+                                "applied_company = '" + user.getAppliedCompany() + "'," +
 								"admin = '" + Utils.booleanToInt(user.isAdmin()) + "'," +
 								"local_updatedt = '" + user.getLocalUpdatedDate() + "'," +
 								"server_updatedt = '" + user.getServerUpdatedDate() + "' " +
@@ -566,8 +569,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, bank_account, avatar_id, avatar_server_path, " +
-											  "avatar_local_path, privilege, manager_id, group_id, admin, local_updatedt, server_updatedt " +
-					                          "FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
+											  "avatar_local_path, privilege, manager_id, group_id, applied_company, admin, local_updatedt, " +
+					                          "server_updatedt FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
 			if (cursor.moveToNext())
 			{
 				User user = new User();
@@ -582,6 +585,7 @@ public class DBManager extends SQLiteOpenHelper
 				user.setPrivilege(getIntFromCursor(cursor, "privilege"));
 				user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
 				user.setGroupID(getIntFromCursor(cursor, "group_id"));
+                user.setAppliedCompany(getStringFromCursor(cursor, "applied_company"));
 				user.setIsAdmin(getBooleanFromCursor(cursor, "admin"));
 				user.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 				user.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -640,7 +644,7 @@ public class DBManager extends SQLiteOpenHelper
             if (groupServerID != -1 && groupServerID != 0)
             {
                 Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, bank_account, avatar_id, avatar_server_path, avatar_local_path, " +
-                                                          "privilege, manager_id, group_id, admin, local_updatedt, server_updatedt " +
+                                                          "privilege, manager_id, group_id, applied_company, admin, local_updatedt, server_updatedt " +
                                                           "FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
                 while (cursor.moveToNext())
                 {
@@ -656,6 +660,7 @@ public class DBManager extends SQLiteOpenHelper
                     user.setPrivilege(getIntFromCursor(cursor, "privilege"));
                     user.setDefaultManagerID(getIntFromCursor(cursor, "manager_id"));
                     user.setGroupID(getIntFromCursor(cursor, "group_id"));
+                    user.setAppliedCompany(getStringFromCursor(cursor, "applied_company"));
                     user.setIsAdmin(getBooleanFromCursor(cursor, "admin"));
                     user.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
                     user.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));

@@ -51,12 +51,14 @@ public class PickCompanyActivity extends Activity
     private List<Group> invitedList = new ArrayList<Group>();
     private List<Invite> inviteList = new ArrayList<Invite>();
     private Group company;
+    private boolean fromGuide = false;
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_guide_pick_company);
 		initView();
+        fromGuide = getIntent().getBooleanExtra("fromGuide", false);
 	}
 
 	protected void onResume()
@@ -340,9 +342,16 @@ public class PickCompanyActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            Intent intent = new Intent(PickCompanyActivity.this, JoinedActivity.class);
-                            intent.putExtra("companyName", company.getName());
-                            ViewUtils.goForwardAndFinish(PickCompanyActivity.this, intent);
+                            if (fromGuide)
+                            {
+                                Intent intent = new Intent(PickCompanyActivity.this, JoinedActivity.class);
+                                intent.putExtra("companyName", company.getName());
+                                ViewUtils.goForwardAndFinish(PickCompanyActivity.this, intent);
+                            }
+                            else
+                            {
+                                ViewUtils.goBack(PickCompanyActivity.this);
+                            }
                         }
                     });
                 }
@@ -377,9 +386,17 @@ public class PickCompanyActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            Intent intent = new Intent(PickCompanyActivity.this, JoinCompleteActivity.class);
-                            intent.putExtra("companyName", company.getName());
-                            ViewUtils.goForwardAndFinish(PickCompanyActivity.this, intent);
+                            if (fromGuide)
+                            {
+                                Intent intent = new Intent(PickCompanyActivity.this, JoinCompleteActivity.class);
+                                intent.putExtra("companyName", company.getName());
+                                ViewUtils.goForwardAndFinish(PickCompanyActivity.this, intent);
+                            }
+                            else
+                            {
+                                ViewUtils.showToast(PickCompanyActivity.this, R.string.succeed_in_applying);
+                                ViewUtils.goBack(PickCompanyActivity.this);
+                            }
                         }
                     });
                 }
@@ -406,8 +423,15 @@ public class PickCompanyActivity extends Activity
 
     private void goBack()
     {
-        Intent intent = new Intent(this, ModifyNicknameActivity.class);
-        intent.putExtra("nickname", AppPreference.getAppPreference().getCurrentUser().getNickname());
-        ViewUtils.goBackWithIntent(this, intent);
+        if (fromGuide)
+        {
+            Intent intent = new Intent(this, ModifyNicknameActivity.class);
+            intent.putExtra("nickname", AppPreference.getAppPreference().getCurrentUser().getNickname());
+            ViewUtils.goBackWithIntent(this, intent);
+        }
+        else
+        {
+            ViewUtils.goBack(this);
+        }
     }
 }

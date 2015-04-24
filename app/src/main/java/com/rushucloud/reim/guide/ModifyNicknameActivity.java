@@ -2,6 +2,7 @@ package com.rushucloud.reim.guide;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -141,7 +142,9 @@ public class ModifyNicknameActivity extends Activity
                         {
                             ReimProgressDialog.dismiss();
                             ViewUtils.showToast(ModifyNicknameActivity.this, R.string.succeed_in_modifying_user_info);
-                            ViewUtils.goForwardAndFinish(ModifyNicknameActivity.this, PickCompanyActivity.class);
+                            Intent intent = new Intent(ModifyNicknameActivity.this, PickCompanyActivity.class);
+                            intent.putExtra("fromGuide", true);
+                            ViewUtils.goForwardAndFinish(ModifyNicknameActivity.this, intent);
                         }
                     });
                 }

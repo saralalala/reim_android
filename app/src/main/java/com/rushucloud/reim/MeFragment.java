@@ -318,8 +318,18 @@ public class MeFragment extends Fragment
 			nicknameTextView.setText(R.string.not_available);
 		}
 
-        String company = currentGroup != null? currentGroup.getName() : getString(R.string.no_company);
-        companyTextView.setText(company);
+        if (currentGroup != null)
+        {
+            companyTextView.setText(currentGroup.getName());
+        }
+        else if (!currentUser.getAppliedCompany().isEmpty())
+        {
+            companyTextView.setText(currentUser.getAppliedCompany() + ViewUtils.getString(R.string.waiting_for_approve));
+        }
+        else
+        {
+            companyTextView.setText(R.string.no_company);
+        }
 
         showTip();
 	}

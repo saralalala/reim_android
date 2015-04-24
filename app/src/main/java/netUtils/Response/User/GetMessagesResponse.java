@@ -47,7 +47,7 @@ public class GetMessagesResponse extends BaseResponse
                 {
                     messageList.add(new Apply(jObject, currentNickname));
                 }
-			}			
+			}
 		}
 		catch (JSONException e)
 		{

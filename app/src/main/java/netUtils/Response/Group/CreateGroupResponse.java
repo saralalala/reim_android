@@ -54,26 +54,7 @@ public class CreateGroupResponse extends BaseResponse
             }
 
             currentUser = new User();
-            currentUser.setServerID(profileObject.getInt("id"));
-            currentUser.setNickname(profileObject.getString("nickname"));
-            currentUser.setEmail(profileObject.getString("email"));
-            currentUser.setPhone(profileObject.getString("phone"));
-            currentUser.setDefaultManagerID(profileObject.getInt("manager_id"));
-            currentUser.setAvatarLocalPath("");
-            currentUser.setIsAdmin(Utils.intToBoolean(profileObject.getInt("admin")));
-            currentUser.setIsActive(Utils.intToBoolean(profileObject.getInt("active")));
-            currentUser.setGroupID(groupID);
-            currentUser.setLocalUpdatedDate(profileObject.getInt("lastdt"));
-            currentUser.setServerUpdatedDate(profileObject.getInt("lastdt"));
-            String imageID = profileObject.getString("avatar");
-            if (imageID.isEmpty())
-            {
-                currentUser.setAvatarID(-1);
-            }
-            else
-            {
-                currentUser.setAvatarID(Integer.valueOf(imageID));
-            }
+            currentUser.parse(profileObject, groupID);
 
             JSONArray categoryArray = jObject.getJSONArray("categories");
             categoryList = new ArrayList<Category>();

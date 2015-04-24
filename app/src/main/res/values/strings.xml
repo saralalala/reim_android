@@ -71,9 +71,10 @@
     <string name="welcome_to_use_5">云</string>
     <string name="welcome_to_use_6">报</string>
     <string name="welcome_to_use_7">销</string>
-    <string name="introduction">云报销是专门为企业和组织设计的财务工具。它可以对企业和组织内部的费用支出进行有效的管理，让员工随时随地进行费用申请、审批。</string>
+    <string name="introduction">「云报销」是一款财务报销管理工具。你可以在这里随时进行费用记录、申请和审批，也可以更好地管理企业的支出。开始使用前，请先用30秒设置你的账户。</string>
     <string name="join_company">加入公司</string>
     <string name="are_you_admin">您是管理员？</string>
+    <string name="search_company_name">搜索公司名称</string>
     <string name="create_new_company">创建新公司</string>
     <string name="input_contact_manually">手动填写手机或邮箱</string>
     <string name="invite_contact">邀请联系人</string>
@@ -83,10 +84,10 @@
     <string name="input_contact">填写手机号或邮箱</string>
     <string name="input_contact_manually_and_divided">请手动填写手机号或邮箱，用逗号分开</string>
     <string name="invite_by_pc">可通过访问PC端批量邀请其他同事加入</string>
-    <string name="sending_invitation_1">正在向你的</string>
-    <string name="sending_invitation_2">位同事发送邀请，</string>
+    <string name="sending_invitation_1">已经向你的</string>
+    <string name="sending_invitation_2">个同事发送邀请。他们接受邀请后，就能加入你创建的公司。你也可以通过我们的网页端批量邀请其他同事加入。</string>
     <string name="start_to_use">开始使用</string>
-    <string name="create_prompt">你可以在个人中心邀请您的同事加入你的公司，也可以在PC端进行批量邀请操作。</string>
+    <string name="create_prompt">你可以之后在 App 中通过短信或者邮件的方式邀请其他同事加入，也可以通过我们的网页端批量邀请他人</string>
     <string name="modify_name">设置姓名</string>
     <string name="choose_company">选择公司</string>
     <string name="invited_company">邀请过你的公司</string>
@@ -236,6 +237,9 @@
     <string name="change_phone">更换绑定手机</string>
     <string name="bank_account">银行账号</string>
     <string name="company">公司</string>
+    <string name="change_company">更换公司</string>
+    <string name="not_joined">未加入</string>
+    <string name="waiting_for_approve">（待批准）</string>
     <string name="nickname">姓名</string>
     <string name="change_password">修改密码</string>
     <string name="default_manager">上级设置</string>
@@ -247,6 +251,8 @@
     <string name="sub_category">子类别</string>
     <string name="join_group">加入团队</string>
     <string name="reject_invite">拒绝邀请</string>
+    <string name="approve_apply">批准申请</string>
+    <string name="reject_apply">拒绝申请</string>
     <string name="get_invoice_prompt">发票抬头：</string>
     <string name="invoice_invalid">尚未加入任何公司</string>
     <string name="powered_by">Powered by 云报销</string>
@@ -317,8 +323,8 @@
     <string name="prompt_no_need_to_alarm">报告未在审核过程中，无需发送提醒</string>
     <string name="prompt_choose_or_finish">您希望直接通过，还是选择其他人继续审批这份报告？</string>
     <string name="prompt_no_lastest_data">还没到下个月呢</string>
-    <string name="prompt_join">你的申请被通过后，才能正常的提交报销申请，或者审核他人报告。\n\n在这之前，你可以用云报销，将需要报销的消费记录下来。</string>
-    <string name="prompt_joined">现在你可以使用云报销记录你的消费，向你的上级提交报销申请，或者审批他人的报销。</string>
+    <string name="prompt_join">管理员通过申请后你就可以使用「云报销」了。在此之前，你也可以记录自己的消费，加入公司后记录可以迁移。</string>
+    <string name="prompt_joined">现在你可以使用「云报销」，记录你的消费，提交报销申请，或者审批他人的报销了。</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>
@@ -400,6 +406,7 @@
     <string name="succeed_in_changing_default_manager">默认上级修改成功</string>
     <string name="succeed_in_sending_feedback">反馈发送成功！</string>
     <string name="succeed_in_sending_invite_reply">邀请回复发送成功！</string>
+    <string name="succeed_in_sending_apply_reply">申请回复发送成功！</string>
     <string name="succeed_in_exporting">报告导出成功</string>
     <string name="succeed_in_saving_item">保存成功</string>
     <string name="succeed_in_saving_report">报告保存成功</string>
@@ -419,6 +426,7 @@
     <string name="succeed_in_submitting_report">提交成功</string>
     <string name="succeed_in_alerting">已提醒对方审批报告</string>
     <string name="succeed_in_deleting">删除成功</string>
+    <string name="succeed_in_applying">申请加入成功</string>
 
     <string name="failed_to_read_data">数据读取失败</string>
     <string name="failed_to_get_code">获取验证码失败</string>
@@ -451,7 +459,8 @@
     <string name="failed_to_send_feedback">反馈发送失败</string>
     <string name="failed_to_change_manager">默认上级修改失败</string>
     <string name="failed_to_send_invite">邀请发送失败</string>
-    <string name="failed_to_send_reply">邀请回复发送失败</string>
+    <string name="failed_to_send_invite_reply">邀请回复发送失败</string>
+    <string name="failed_to_send_apply_reply">申请回复发送失败</string>
     <string name="failed_to_send_comment">评论发表失败</string>
     <string name="failed_to_submit_report">提交报告失败</string>
     <string name="failed_to_send_email">邮件发送失败</string>

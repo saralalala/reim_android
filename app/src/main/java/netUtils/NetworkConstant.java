@@ -40,7 +40,7 @@ public class NetworkConstant
 	public static final int ERROR_REPORT_NOT_EXISTS = -25;
 	public static final int ERROR_SIGN_IN = -31;
 	public static final int ERROR_NAME_EXCEED_LIMIT = -33;
-    public static final int ERROR_INVITE_DONE = -38;
+    public static final int ERROR_MESSAGE_DONE = -38;
     public static final int ERROR_NOT_UNIQUE = -42;
 
     public static String errorCodeToString(int code)
@@ -120,7 +120,7 @@ public class NetworkConstant
             case NetworkConstant.ERROR_NAME_EXCEED_LIMIT:
                 result = "报告名不能超过50个字";
                 break;
-            case NetworkConstant.ERROR_INVITE_DONE:
+            case NetworkConstant.ERROR_MESSAGE_DONE:
                 result = "此消息已被处理";
                 break;
             case NetworkConstant.ERROR_NOT_UNIQUE:

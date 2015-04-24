@@ -1290,8 +1290,8 @@ public class EditReportActivity extends Activity
 
     private void goBackToMainActivity()
     {
-    	ReimApplication.setTabIndex(1);
-    	ReimApplication.setReportTabIndex(0);
+    	ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
+    	ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_MINE);
     	if (fromPush)
 		{
         	Intent intent = new Intent(EditReportActivity.this, MainActivity.class);

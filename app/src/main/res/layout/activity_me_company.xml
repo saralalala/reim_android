@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    android:id="@+id/baseLayout" >
+    android:id="@+id/containerLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -20,7 +20,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:id="@+id/titleTextView"
@@ -29,17 +29,17 @@
             android:layout_centerInParent="true"
             android:text="@string/company"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <TextView
-            android:id="@+id/saveTextView"
+            android:id="@+id/addTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:gravity="center"
-            android:text="@string/save"
+            android:text="@string/establish"
             android:textColor="@color/title_text_color"
             android:textSize="16sp" />
 
@@ -49,22 +49,80 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="18dp"
-        layout="@layout/view_divider" />
+        layout="@layout/view_divider"/>
 
-    <classes.widget.ClearEditText
-        android:id="@+id/companyEditText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:background="@color/major_light"
-        android:hint="@string/input_company_name"
-        android:textColor="@color/font_major_dark"
-        android:textSize="16sp"/>
+        android:orientation="horizontal"
+        android:background="@drawable/me_item_drawable">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:text="@string/company"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/companyTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/hint_grey"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
 
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        layout="@layout/view_divider" />
+        layout="@layout/view_divider"/>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="24dp"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/changeCompanyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@drawable/me_item_drawable">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:text="@string/change_company"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/phoneNextImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@string/next"
+            android:src="@drawable/next"/>
+
+    </LinearLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
 
 </LinearLayout>

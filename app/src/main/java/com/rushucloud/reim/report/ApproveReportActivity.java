@@ -306,8 +306,8 @@ public class ApproveReportActivity extends Activity
 							}
 					    	else if (fromPush && !report.canBeApproved())
 					    	{
-                                ReimApplication.setTabIndex(1);
-					        	ReimApplication.setReportTabIndex(1);
+                                ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
+					        	ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_OTHERS);
 					        	
 								Bundle bundle = new Bundle();
 								bundle.putSerializable("report", report);
@@ -525,8 +525,8 @@ public class ApproveReportActivity extends Activity
 
     private void goBackToMainActivity()
     {
-        ReimApplication.setTabIndex(1);
-        ReimApplication.setReportTabIndex(1);
+        ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
+        ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_OTHERS);
 
     	if (fromPush)
 		{

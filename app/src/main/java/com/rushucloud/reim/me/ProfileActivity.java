@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.SingleImageActivity;
+import com.rushucloud.reim.guide.PickCompanyActivity;
 import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -266,7 +267,14 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-                ViewUtils.goForward(ProfileActivity.this, CompanyActivity.class);
+                if (currentGroup == null && currentUser.getAppliedCompany().isEmpty())
+                {
+                    ViewUtils.goForward(ProfileActivity.this, PickCompanyActivity.class);
+                }
+                else
+                {
+                    ViewUtils.goForward(ProfileActivity.this, CompanyActivity.class);
+                }
 			}
 		});
 
@@ -370,9 +378,19 @@ public class ProfileActivity extends Activity
 
         String bankAccount = currentUser != null && !currentUser.getBankAccount().isEmpty()? currentUser.getBankAccount() : getString(R.string.not_binding);
         bankTextView.setText(bankAccount);
-		
-		String companyName = currentGroup != null? currentGroup.getName() : getString(R.string.empty);
-		companyTextView.setText(companyName);
+
+        if (currentGroup != null)
+        {
+            companyTextView.setText(currentGroup.getName());
+        }
+        else if (!currentUser.getAppliedCompany().isEmpty())
+        {
+            companyTextView.setText(currentUser.getAppliedCompany() + ViewUtils.getString(R.string.waiting_for_approve));
+        }
+        else
+        {
+            companyTextView.setText(R.string.not_joined);
+        }
 		
         if (!currentUser.isAdmin() && currentGroup != null)
 		{
@@ -478,8 +496,8 @@ public class ProfileActivity extends Activity
                     appPreference.setLastSyncTime(0);
                     appPreference.saveAppPreference();
 
-                    ReimApplication.setTabIndex(0);
-                    ReimApplication.setReportTabIndex(0);
+                    ReimApplication.setTabIndex(ReimApplication.TAB_REIM);
+                    ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_MINE);
 
                     runOnUiThread(new Runnable()
                     {

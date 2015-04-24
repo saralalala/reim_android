@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background" >
+    android:background="@color/background">
 
     <RelativeLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -20,7 +20,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:id="@+id/titleTextView"
@@ -29,7 +29,7 @@
             android:layout_centerInParent="true"
             android:text="@string/detail"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
     </RelativeLayout>
 
     <TextView
@@ -40,7 +40,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:textColor="@color/font_major_dark"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/dateTextView"
@@ -50,11 +50,11 @@
         android:layout_marginTop="22dp"
         android:layout_marginRight="16dp"
         android:textColor="@color/hint_light_grey"
-        android:textSize="12sp" />
+        android:textSize="12sp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <Button
             android:id="@+id/agreeButton"
@@ -66,7 +66,8 @@
             android:layout_marginRight="16dp"
             android:background="@drawable/button_dark_drawable"
             android:text="@string/join_group"
-            android:textColor="@color/button_text_light_color" />
+            android:textColor="@color/button_text_light_color"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/rejectButton"
@@ -78,7 +79,8 @@
             android:layout_marginRight="16dp"
             android:background="@drawable/button_light_solid_drawable"
             android:text="@string/reject_invite"
-            android:textColor="@color/hint_grey" />
+            android:textColor="@color/hint_grey"
+            android:visibility="gone"/>
         
     </RelativeLayout>
 

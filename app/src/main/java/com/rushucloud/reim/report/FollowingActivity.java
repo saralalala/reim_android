@@ -236,8 +236,8 @@ public class FollowingActivity extends Activity
  
     private void goBackToMainActivity()
     {
-    	ReimApplication.setTabIndex(1);
-    	ReimApplication.setReportTabIndex(1);
+    	ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
+    	ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_OTHERS);
         ViewUtils.goBack(this);
     }
 }
