@@ -88,7 +88,8 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/button_dark_drawable"
             android:text="@string/acquire_code"
-            android:textColor="@color/button_text_light_color"/>
+            android:textColor="@color/button_text_light_color"
+            android:textSize="16sp"/>
 
     </LinearLayout>
 
@@ -106,6 +107,7 @@
         android:layout_marginRight="16dp"
         android:background="@drawable/button_dark_drawable"
         android:text="@string/confirm"
-        android:textColor="@color/button_text_light_color" />
+        android:textColor="@color/button_text_light_color"
+        android:textSize="16sp"/>
 
 </LinearLayout>

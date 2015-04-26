@@ -276,7 +276,7 @@ public class MeFragment extends Fragment
         mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 	}
 
-	private void loadProfileView()
+	public void loadProfileView()
 	{
 		currentUser = appPreference.getCurrentUser();
         Group currentGroup = appPreference.getCurrentGroup();

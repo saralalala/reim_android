@@ -475,17 +475,18 @@ public class User implements Serializable
         });
     }
 
-    public static boolean existsInList(List<User> userList, User targetUser)
+    public static int indexOfContactList(List<User> userList, User targetUser)
     {
-        for (User user : userList)
+        for (int i = 0; i < userList.size(); i++)
         {
+            User user = userList.get(i);
             String contact = user.getContact();
             String targetContact = targetUser.getContact();
             if (contact.equals(targetContact) && user.getNickname().equals(targetUser.getNickname()))
             {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 }

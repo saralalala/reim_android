@@ -68,7 +68,7 @@ public class ContactListViewAdapter extends BaseAdapter
 
             View view = layoutInflater.inflate(R.layout.list_contact, parent, false);
 
-            int visibility = User.existsInList(contactChosenList, user)? View.VISIBLE : View.INVISIBLE;
+            int visibility = User.indexOfContactList(contactChosenList, user) > -1? View.VISIBLE : View.INVISIBLE;
             ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
             checkImageView.setVisibility(visibility);
 

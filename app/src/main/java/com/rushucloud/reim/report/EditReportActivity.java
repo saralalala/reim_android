@@ -1049,9 +1049,10 @@ public class EditReportActivity extends Activity
                     List<User> memberList = response.getMemberList();
                     User currentUser = AppPreference.getAppPreference().getCurrentUser();
 
-                    for (User user : memberList)
+                    for (int i = 0; i < memberList.size(); i++)
                     {
-                        if (currentUser != null && user.getServerID() == currentUser.getServerID())
+                        User user = memberList.get(i);
+                        if (currentUser != null && user.equals(currentUser))
                         {
                             if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
                             {
@@ -1062,7 +1063,7 @@ public class EditReportActivity extends Activity
                             }
                             else
                             {
-                                user = currentUser;
+                                memberList.set(i, currentUser);
                             }
                         }
                     }

@@ -39,9 +39,7 @@ public class URLDef
 	public static String URL_SUBORDINATE = "subordinate";
 	public static String URL_CODE = "vcode";
 	
-	public static final String UDP_SERVER_ADDRESS = "online.rushucloud.com";
-	
-	public static final int UDP_SERVER_PORT = 4888;
+	public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com:12588/msg";
 
 	public static String SHARE_TARGET = "http://www.rushucloud.com";
 }

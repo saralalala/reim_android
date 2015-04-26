@@ -172,6 +172,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
                         invite.setTitle(context.getString(R.string.failed_to_read_data));
 						invite.setContent(context.getString(R.string.failed_to_read_data));
 						invite.setInviteCode("");
+                        invite.setTypeCode(Invite.TYPE_REJECTED);
 					}
 					
 					Bundle bundle = new Bundle();
@@ -216,12 +217,13 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
                         apply.setTitle(jObject.getString("msg"));
                         apply.setContent(jObject.getString("msg"));
                         apply.setTypeCode(jObject.getInt("permit"));
-                        apply.setServerID(jObject.getInt("id"));
+                        apply.setServerID(jObject.getInt("args"));
                     }
                     catch (JSONException e)
                     {
                         apply.setTitle(context.getString(R.string.failed_to_read_data));
                         apply.setContent(context.getString(R.string.failed_to_read_data));
+                        apply.setTypeCode(Apply.TYPE_REJECTED);
                     }
 
                     Bundle bundle = new Bundle();

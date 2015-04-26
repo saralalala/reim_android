@@ -70,9 +70,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
+        android:text="阿斯顿家乐福哈时间看到"
         android:textColor="@color/major_light"
         android:textSize="18sp"/>
 

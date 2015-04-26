@@ -23,6 +23,10 @@ import com.rushucloud.reim.item.EditItemActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +41,8 @@ import classes.widget.ReimProgressDialog;
 import classes.widget.Spotlight;
 import classes.widget.TabItem;
 import netUtils.HttpConnectionCallback;
+import netUtils.HttpUtils;
+import netUtils.URLDef;
 import netUtils.request.CommonRequest;
 import netUtils.request.EventsRequest;
 import netUtils.request.FeedbackRequest;
@@ -62,7 +68,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 
     private AppPreference appPreference;
 	private DBManager dbManager;
-//	private UDPClient udpClient;
+    private WebSocketClient webSocketClient;
+    private boolean webSocketIsClosed = true;
 	
 	private List<Fragment> fragmentList = new ArrayList<Fragment>();
 	private List<TabItem> tabItemList = new ArrayList<TabItem>();
@@ -87,7 +94,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		tabItemList.get(ReimApplication.getTabIndex()).setIconAlpha(1);
 		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
 
-        appPreference = AppPreference.getAppPreference();
+        initData();
         if (ReimApplication.getTabIndex() == ReimApplication.TAB_REIM)
         {
             dealWithReimGuideLayout();
@@ -100,21 +107,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		if (PhoneUtils.isNetworkConnected())
 		{
 			sendGetEventsRequest();
-			
-//			if (udpClient == null)
-//			{
-//				udpClient = new UDPClient();
-//				udpClient.send(new UDPConnectionCallback()
-//				{
-//					public void execute(Object udpResponse)
-//					{
-//						if (PhoneUtils.isNetworkConnected())
-//						{
-//							sendGetEventsRequest();
-//						}
-//					}
-//				});
-//			}
+            if (webSocketClient == null || webSocketIsClosed)
+            {
+                connectWebSocket();
+            }
 		}
 	}
 
@@ -153,6 +149,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 
 	private void initData()
 	{
+        appPreference = AppPreference.getAppPreference();
 		dbManager = DBManager.getDBManager();
 	}
 	
@@ -518,7 +515,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 							showMeTip(response.getUnreadMessagesCount() > 0);
                             if (viewPager.getCurrentItem() == ReimApplication.TAB_ME)
                             {
-                                MeFragment fragment = (MeFragment) fragmentList.get(3);
+                                MeFragment fragment = (MeFragment) fragmentList.get(ReimApplication.TAB_ME);
                                 fragment.showTip();
                             }
 						}
@@ -572,6 +569,18 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 
                         // update group info
                         dbManager.syncGroup(response.getGroup());
+
+                        if (viewPager.getCurrentItem() == ReimApplication.TAB_ME)
+                        {
+                            runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    MeFragment fragment = (MeFragment) fragmentList.get(ReimApplication.TAB_ME);
+                                    fragment.loadProfileView();
+                                }
+                            });
+                        }
                     }
                     else
                     {
@@ -604,10 +613,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 					
 					// update members
 					List<User> memberList = response.getMemberList();
-					User currentUser = AppPreference.getAppPreference().getCurrentUser();
+					User currentUser = appPreference.getCurrentUser();
 					
-					for (User user : memberList)
+					for (int i = 0; i < memberList.size(); i++)
 					{
+                        User user = memberList.get(i);
 						if (currentUser != null && user.equals(currentUser))
 						{
 							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
@@ -619,7 +629,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 							}
 							else
 							{
-								user = currentUser;
+                                memberList.set(i, currentUser);
 							}
 						}
 					}
@@ -662,6 +672,44 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 				});
 			}
 		});
+    }
+
+    private void connectWebSocket()
+    {
+        try
+        {
+            URI uri = new URI(URLDef.WEBSOCKET_URI);
+            webSocketClient = new WebSocketClient(uri)
+            {
+                public void onOpen(ServerHandshake handShakeData)
+                {
+                    System.out.println("onOpen");
+                    webSocketIsClosed = true;
+                    webSocketClient.send(HttpUtils.getJWTString());
+                }
+
+                public void onMessage(String message)
+                {
+                    System.out.println(message);
+                }
+
+                public void onClose(int code, String reason, boolean remote)
+                {
+                    System.out.println("onClose");
+                    webSocketIsClosed = true;
+                }
+
+                public void onError(Exception ex)
+                {
+                    System.out.println("onError");
+                }
+            };
+            webSocketClient.connect();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     
 	public void onClick(View v)

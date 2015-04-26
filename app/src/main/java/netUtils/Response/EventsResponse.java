@@ -60,7 +60,7 @@ public class EventsResponse extends BaseResponse
 
             unreadMessagesCount = appliesArray.length() + invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length();
             hasUnreadReports = reportsArray.length() > 0;
-			needToRefresh = (membersArray.length() + managersArray.length()) > 0;
+			needToRefresh = (membersArray.length() + managersArray.length()) > 0 && !groupChanged;
 		}
 		catch (JSONException e)
 		{

@@ -157,7 +157,7 @@ public class InviteContactActivity extends Activity
 
                 for (User user : contactList)
                 {
-                    if (User.existsInList(contactChosenList, user))
+                    if (User.indexOfContactList(contactChosenList, user) > -1)
                     {
                         inviteList += user.getContact() + ",";
                         count++;
@@ -226,9 +226,10 @@ public class InviteContactActivity extends Activity
                 else if (position > inputList.size() + 1 && !contactList.isEmpty())
                 {
                     User user = contactList.get(position - inputList.size() - 2);
-                    if (User.existsInList(contactChosenList, user))
+                    int index = User.indexOfContactList(contactChosenList, user);
+                    if (index > -1)
                     {
-                        contactChosenList.remove(user);
+                        contactChosenList.remove(index);
                     }
                     else
                     {
