@@ -45,7 +45,7 @@ public class PickMemberActivity extends Activity
 
 	private DBManager dbManager;
 	private List<User> userList;
-    private List<User> showList = new ArrayList<User>();
+    private List<User> showList = new ArrayList<>();
     private List<User> chosenList;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -78,7 +78,7 @@ public class PickMemberActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void initData()
 	{
@@ -90,9 +90,7 @@ public class PickMemberActivity extends Activity
 	}
 	
 	private void initView()
-	{		
-		getActionBar().hide();
-		
+	{
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{

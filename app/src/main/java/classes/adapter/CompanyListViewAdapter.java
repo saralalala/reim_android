@@ -26,7 +26,7 @@ public class CompanyListViewAdapter extends BaseAdapter
 	public CompanyListViewAdapter(Context context, List<Group> companies, Group company)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
-		this.companyList = new ArrayList<Group>(companies);
+		this.companyList = new ArrayList<>(companies);
 		this.company = company;
 	}
 	

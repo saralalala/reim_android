@@ -27,7 +27,7 @@ public class GalleryAdapter extends BaseAdapter
 	private Context context;
 	private LayoutInflater layoutInflater;
 	private ImageLoader imageLoader;
-	private ArrayList<String> pathList = new ArrayList<String>();
+	private ArrayList<String> pathList = new ArrayList<>();
 	private boolean[] checkList;
 	private int maxChosenCount;
 	private int height;
@@ -131,19 +131,19 @@ public class GalleryAdapter extends BaseAdapter
 		return position;
 	}
 
-	public void selectAll(boolean selection)
-	{
-		for (int i = 0; i < pathList.size(); i++)
-		{
-			checkList[i] = selection;
+    public void selectAll(boolean selection)
+    {
+        for (int i = 0; i < pathList.size(); i++)
+        {
+            checkList[i] = selection;
 
-		}
-		notifyDataSetChanged();
-	}
+        }
+        notifyDataSetChanged();
+    }
 
 	public ArrayList<String> getSelectedList()
 	{
-		ArrayList<String> selectedList = new ArrayList<String>();
+		ArrayList<String> selectedList = new ArrayList<>();
 
 		for (int i = 0; i < pathList.size(); i++)
 		{

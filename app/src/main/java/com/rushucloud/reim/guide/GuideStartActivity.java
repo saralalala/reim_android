@@ -43,8 +43,6 @@ public class GuideStartActivity extends Activity
 
 	private void initView()
 	{
-		getActionBar().hide();
-
         Button joinButton = (Button) findViewById(R.id.joinButton);
         joinButton.setOnClickListener(new OnClickListener()
         {

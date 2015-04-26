@@ -97,23 +97,23 @@ public class ReportFragment extends Fragment
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	
-	private List<Report> mineList = new ArrayList<Report>();
-	private List<Report> showMineList = new ArrayList<Report>();	
+	private List<Report> mineList = new ArrayList<>();
+	private List<Report> showMineList = new ArrayList<>();
 	private int mineSortType = SORT_UPDATE_DATE;
 	private int mineTempSortType = SORT_UPDATE_DATE;
     private boolean mineSortReverse = false;
     private boolean mineTempSortReverse = false;
 	private boolean[] mineCheck;
-	private List<Integer> mineFilterStatusList = new ArrayList<Integer>();
+	private List<Integer> mineFilterStatusList = new ArrayList<>();
 	
-	private List<Report> othersList = new ArrayList<Report>();
-	private List<Report> showOthersList = new ArrayList<Report>();
+	private List<Report> othersList = new ArrayList<>();
+	private List<Report> showOthersList = new ArrayList<>();
 	private int othersSortType = SORT_UPDATE_DATE;
 	private int othersTempSortType = SORT_UPDATE_DATE;
     private boolean othersSortReverse = false;
     private boolean othersTempSortReverse = false;
 	private boolean[] othersCheck;
-	private List<Integer> othersFilterStatusList = new ArrayList<Integer>();
+	private List<Integer> othersFilterStatusList = new ArrayList<>();
 	
 	private int reportIndex;
 	
@@ -931,7 +931,7 @@ public class ReportFragment extends Fragment
 
 	private List<Report> filterReportList(List<Report> reportList, int sortType, boolean sortReverse, List<Integer> filterStatusList)
 	{
-		List<Report> resultList = new ArrayList<Report>();
+		List<Report> resultList = new ArrayList<>();
 		for (Report report : reportList)
 		{
 			if (!filterStatusList.isEmpty() && filterStatusList.size() < 5)
@@ -971,8 +971,8 @@ public class ReportFragment extends Fragment
     {
         Report.sortByUpdateDate(othersList);
 
-        List<Report> pendingList = new ArrayList<Report>();
-        List<Report> processedList = new ArrayList<Report>();
+        List<Report> pendingList = new ArrayList<>();
+        List<Report> processedList = new ArrayList<>();
         for (Report report : othersList)
         {
             if (report.isPending())

@@ -85,8 +85,8 @@ public class EditReportActivity extends Activity
 	private PopupWindow deletePopupWindow;
 
 	private Report report;
-	private List<Item> itemList = new ArrayList<Item>();
-	private ArrayList<Integer> chosenItemIDList = new ArrayList<Integer>();
+	private List<Item> itemList = new ArrayList<>();
+	private ArrayList<Integer> chosenItemIDList = new ArrayList<>();
 	
 	private User currentUser;
 	
@@ -96,8 +96,8 @@ public class EditReportActivity extends Activity
 	private boolean hasInit = false;
     private int lastCommentCount = 0;
 	
-	private List<Image> imageSyncList = new ArrayList<Image>();
-	private List<Item> itemSyncList = new ArrayList<Item>();
+	private List<Image> imageSyncList = new ArrayList<>();
+	private List<Item> itemSyncList = new ArrayList<>();
 	private int imageTaskCount;
 	private int imageTaskSuccessCount;
 	private int itemTaskCount;
@@ -222,8 +222,6 @@ public class EditReportActivity extends Activity
 	
 	private void initView()
 	{
-		getActionBar().hide();
-		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{
@@ -799,7 +797,7 @@ public class EditReportActivity extends Activity
 					{
 						syncItems();
 					}
-					else if (imageTaskCount == 0 && imageTaskSuccessCount != 0)
+					else if (imageTaskCount == 0)
 					{
 						runOnUiThread(new Runnable()
 						{
@@ -858,7 +856,7 @@ public class EditReportActivity extends Activity
 					{
 						syncReport();
 					}
-					else if (itemTaskCount == 0 && itemTaskSuccessCount != 0)
+					else if (itemTaskCount == 0)
 					{
 						runOnUiThread(new Runnable()
 						{
@@ -916,7 +914,7 @@ public class EditReportActivity extends Activity
 					{
 						syncReport();
 					}
-					else if (itemTaskCount == 0 && itemTaskSuccessCount != 0)
+					else if (itemTaskCount == 0)
 					{
 						runOnUiThread(new Runnable()
 						{

@@ -56,7 +56,7 @@ public class ApproveReportActivity extends Activity
 	
 	private int reportServerID;
 	private Report report;
-	private List<Item> itemList = new ArrayList<Item>();
+	private List<Item> itemList = new ArrayList<>();
 	private int lastCommentCount;
 	
 	private boolean fromPush;
@@ -112,8 +112,6 @@ public class ApproveReportActivity extends Activity
 	
 	private void initView()
 	{
-		getActionBar().hide();
-		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{

@@ -13,7 +13,7 @@ import netUtils.request.BaseRequest;
 
 public class CreateCategoryRequest extends BaseRequest
 {
-	public CreateCategoryRequest(Category category)
+    public CreateCategoryRequest(Category category)
 	{
 		super();
 

@@ -174,18 +174,13 @@ public class GalleryActivity extends Activity
 
 	private ArrayList<String> getGalleryPaths()
 	{
-		ArrayList<String> pathList = new ArrayList<String>();
+		ArrayList<String> pathList = new ArrayList<>();
 
         Cursor cursor = null;
 		try
 		{
 			// only looking for jpg and png files
-			StringBuilder selection = new StringBuilder();
-			selection.append(Media.MIME_TYPE).append("=?");
-			selection.append(" or ");
-			selection.append(Media.MIME_TYPE).append("=?");
-
-			cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection.toString(),
+            cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, Media.MIME_TYPE + "=?" + " or " + Media.MIME_TYPE + "=?",
 														new String[] { "image/jpeg", "image/png" }, Media.DATE_TAKEN);
 
 			if (cursor != null && cursor.getCount() > 0)

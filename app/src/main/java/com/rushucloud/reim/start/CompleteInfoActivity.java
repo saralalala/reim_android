@@ -126,9 +126,7 @@ public class CompleteInfoActivity extends Activity
 	
 	private void initView()
 	{
-		getActionBar().hide();
-
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

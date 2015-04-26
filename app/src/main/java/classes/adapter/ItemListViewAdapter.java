@@ -36,7 +36,7 @@ public class ItemListViewAdapter extends BaseAdapter
 	{
 		this.context = context;
 		this.layoutInflater = LayoutInflater.from(context);		
-		this.itemList = new ArrayList<Item>(items);
+		this.itemList = new ArrayList<>(items);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -162,14 +162,14 @@ public class ItemListViewAdapter extends BaseAdapter
 			{
 				synchronized (mLock)
 				{
-					originalList = new ArrayList<Item>(itemList);
+					originalList = new ArrayList<>(itemList);
 				}
 			}
 			if (constraint == null || constraint.length() == 0)
 			{
 				synchronized (mLock)
 				{
-					ArrayList<Item> list = new ArrayList<Item>(originalList);
+					ArrayList<Item> list = new ArrayList<>(originalList);
 					results.values = list;
 					results.count = list.size();
 				}
@@ -178,7 +178,7 @@ public class ItemListViewAdapter extends BaseAdapter
 			{
 				Locale locale = Locale.getDefault();
 				String constraintString = constraint.toString().toLowerCase(locale);
-				ArrayList<Item> newValues = new ArrayList<Item>();
+				ArrayList<Item> newValues = new ArrayList<>();
 				for (Item item : originalList)
 				{
 					if (item.getNote().contains(constraintString))

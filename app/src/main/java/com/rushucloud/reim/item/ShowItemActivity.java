@@ -106,9 +106,7 @@ public class ShowItemActivity extends Activity
 	}
 	
 	private void initView()
-	{		
-		getActionBar().hide();
-		
+	{
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{
@@ -259,7 +257,7 @@ public class ShowItemActivity extends Activity
 				{
 					if (bitmap != null)
 					{
-						ArrayList<String> pathList = new ArrayList<String>();
+						ArrayList<String> pathList = new ArrayList<>();
 						for (Image image : item.getInvoices())
 						{
 							if (!image.getLocalPath().isEmpty())

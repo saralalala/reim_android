@@ -12,7 +12,6 @@ import classes.Category;
 import classes.Group;
 import classes.Tag;
 import classes.User;
-import classes.utils.Utils;
 
 public class CommonResponse extends BaseResponse
 {

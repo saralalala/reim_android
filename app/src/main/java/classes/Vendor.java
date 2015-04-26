@@ -16,11 +16,6 @@ public class Vendor
 	private String photoURL;
 	private Bitmap photo;
 	
-	public Vendor()
-	{
-		
-	}
-	
 	public Vendor(String name)
 	{
 		this.name = name;

@@ -47,9 +47,9 @@ public class PickCompanyActivity extends Activity
     private TextView sectionTextView;
     private CompanyListViewAdapter adapter;
 
-    private List<Group> companyList = new ArrayList<Group>();
-    private List<Group> invitedList = new ArrayList<Group>();
-    private List<Invite> inviteList = new ArrayList<Invite>();
+    private List<Group> companyList = new ArrayList<>();
+    private List<Group> invitedList = new ArrayList<>();
+    private List<Invite> inviteList = new ArrayList<>();
     private Group company;
     private boolean hasInit = false;
     private boolean fromGuide = false;
@@ -93,8 +93,6 @@ public class PickCompanyActivity extends Activity
 
 	private void initView()
 	{
-		getActionBar().hide();
-
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
 		{

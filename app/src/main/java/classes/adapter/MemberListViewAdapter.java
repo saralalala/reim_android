@@ -27,8 +27,8 @@ public class MemberListViewAdapter extends BaseAdapter
 	public MemberListViewAdapter(Context context, List<User> userList, List<User> chosenList)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
-		this.memberList = new ArrayList<User>(userList);
-        this.chosenList = chosenList == null || chosenList.isEmpty()? new ArrayList<User>() : new ArrayList<User>(chosenList);
+		this.memberList = new ArrayList<>(userList);
+        this.chosenList = chosenList == null || chosenList.isEmpty()? new ArrayList<User>() : new ArrayList<>(chosenList);
         this.selectedColor = ViewUtils.getColor(R.color.major_dark);
         this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
 	}

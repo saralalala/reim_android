@@ -52,7 +52,7 @@ public class PickManagerActivity extends Activity
     private User currentUser;
     private User defaultManager;
 	private List<User> userList;
-    private List<User> showList = new ArrayList<User>();
+    private List<User> showList = new ArrayList<>();
     private List<User> chosenList;
 	private int senderID;
 	private boolean newReport;
@@ -108,7 +108,7 @@ public class PickManagerActivity extends Activity
         }
         else if (senderID == currentUser.getDefaultManagerID())
         {
-            chosenList = new ArrayList<User>();
+            chosenList = new ArrayList<>();
         }
         else
         {
@@ -119,9 +119,7 @@ public class PickManagerActivity extends Activity
 	}
 	
 	private void initView()
-	{		
-		getActionBar().hide();
-
+	{
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{
@@ -142,7 +140,7 @@ public class PickManagerActivity extends Activity
 				{
 					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
 				}
-				else if (!fromFollowing && !newReport)
+				else if (!fromFollowing)
 				{
 					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_EDIT_SEND_SUBMIT");					
 				}

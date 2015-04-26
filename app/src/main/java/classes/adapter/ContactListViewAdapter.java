@@ -21,10 +21,10 @@ public class ContactListViewAdapter extends BaseAdapter
 {
 	private Context context;
 	private LayoutInflater layoutInflater;
-    private ArrayList<String> inputList = new ArrayList<String>();
-    private ArrayList<String> inputChosenList = new ArrayList<String>();
-    private List<User> contactList = new ArrayList<User>();
-    private List<User> contactChosenList = new ArrayList<User>();
+    private ArrayList<String> inputList = new ArrayList<>();
+    private ArrayList<String> inputChosenList = new ArrayList<>();
+    private List<User> contactList = new ArrayList<>();
+    private List<User> contactChosenList = new ArrayList<>();
 
 	public ContactListViewAdapter(Context context)
 	{

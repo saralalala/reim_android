@@ -176,7 +176,7 @@ public class Category implements Serializable
 			return null;
 		}
 		
-		List<Boolean> check = new ArrayList<Boolean>();
+		List<Boolean> check = new ArrayList<>();
 		for (int i = 0; i < categoryList.size(); i++)
 		{
 			check.add(category != null && category.getServerID() == categoryList.get(i).getServerID());

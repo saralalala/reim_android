@@ -31,8 +31,8 @@ public class ReportListViewAdapter extends BaseAdapter
 		this.context = context;
 		this.layoutInflater = LayoutInflater.from(context);
         this.dbManager = DBManager.getDBManager();
-		this.reportList = new ArrayList<Report>(reports);
-        this.unreadList = new ArrayList<Integer>();
+		this.reportList = new ArrayList<>(reports);
+        this.unreadList = new ArrayList<>();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)

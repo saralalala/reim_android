@@ -67,9 +67,7 @@ public class InputContactActivity extends Activity
 
 	private void initView()
 	{
-		getActionBar().hide();
-
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -91,7 +89,7 @@ public class InputContactActivity extends Activity
                 contactString = contactString.replace("　", ",");
                 contactString = contactString.replace("\n", ",");
                 String[] contacts = TextUtils.split(contactString, ",");
-                ArrayList<String> contactList = new ArrayList<String>();
+                ArrayList<String> contactList = new ArrayList<>();
                 for (String contact : contacts)
                 {
                     if (!contact.trim().isEmpty())

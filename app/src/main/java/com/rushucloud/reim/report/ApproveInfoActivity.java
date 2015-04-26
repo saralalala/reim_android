@@ -41,7 +41,7 @@ public class ApproveInfoActivity extends Activity
 	
 	private int reportServerID;
 	private Report report;
-	private List<ApproveInfo> infoList = new ArrayList<ApproveInfo>();
+	private List<ApproveInfo> infoList = new ArrayList<>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -90,8 +90,6 @@ public class ApproveInfoActivity extends Activity
 	
 	private void initView()
 	{
-		getActionBar().hide();
-		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
 		{

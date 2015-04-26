@@ -3,7 +3,6 @@ package com.rushucloud.reim.item;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -45,7 +44,7 @@ public class PickVendorActivity extends Activity
     private String location;
 	private double latitude;
 	private double longitude;
-	private List<Vendor> vendorList = new ArrayList<Vendor>();
+	private List<Vendor> vendorList = new ArrayList<>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -109,9 +108,7 @@ public class PickVendorActivity extends Activity
 	}
 	
 	private void initView()
-	{		
-		getActionBar().hide();
-		
+	{
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{

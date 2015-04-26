@@ -29,7 +29,7 @@ public class PickTagActivity extends Activity
 {
 	private TagListViewAdapter tagAdapter;
 	
-	private List<Tag> tagList = new ArrayList<Tag>();
+	private List<Tag> tagList = new ArrayList<>();
 	private boolean[] check;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -75,9 +75,7 @@ public class PickTagActivity extends Activity
 	}
 	
 	private void initView()
-	{		
-		getActionBar().hide();
-		
+	{
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{
@@ -92,7 +90,7 @@ public class PickTagActivity extends Activity
 		{
 			public void onClick(View v)
 			{				
-				List<Tag> tags = new ArrayList<Tag>();
+				List<Tag> tags = new ArrayList<>();
 				for (int i = 0; i < tagList.size(); i++)
 				{
 					if (check[i])

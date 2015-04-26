@@ -49,7 +49,7 @@ public class CommentActivity extends Activity
 
 	private DBManager dbManager;
 	private Report report;
-	private List<Comment> commentList = new ArrayList<Comment>();
+	private List<Comment> commentList = new ArrayList<>();
 	private boolean myReport;
 	private boolean newReport;
 	private boolean fromPush;
@@ -126,8 +126,6 @@ public class CommentActivity extends Activity
 	
 	private void initView()
 	{
-		getActionBar().hide();
-		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{

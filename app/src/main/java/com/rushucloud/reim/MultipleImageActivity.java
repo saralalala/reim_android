@@ -47,8 +47,6 @@ public class MultipleImageActivity extends Activity
 	
 	private void initView()
 	{
-		getActionBar().hide();
-		
 		Bundle bundle = getIntent().getExtras();
 		List<String> pathList = bundle.getStringArrayList("imagePath");		
 		int index = bundle.getInt("index", 0);

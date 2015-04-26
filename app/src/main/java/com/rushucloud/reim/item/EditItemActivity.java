@@ -328,10 +328,10 @@ public class EditItemActivity extends Activity
             {
                 item.setType(intent.getIntExtra("type", 0));
             }
-            List<User> relevantUsers = new ArrayList<User>();
+            List<User> relevantUsers = new ArrayList<>();
             relevantUsers.add(appPreference.getCurrentUser());
             item.setRelevantUsers(relevantUsers);
-            originInvoiceList = new ArrayList<Image>();
+            originInvoiceList = new ArrayList<>();
         }
         else
         {
@@ -345,14 +345,14 @@ public class EditItemActivity extends Activity
             }
             else
             {
-                originInvoiceList = new ArrayList<Image>(item.getInvoices());
+                originInvoiceList = new ArrayList<>(item.getInvoices());
             }
         }
     }
 
     private void initView()
     {
-        getActionBar().hide();
+//        getActionBar().hide();
 
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
         backImageView.setOnClickListener(new View.OnClickListener()
@@ -670,7 +670,7 @@ public class EditItemActivity extends Activity
             }
         });
 
-        removeList = new ArrayList<ImageView>();
+        removeList = new ArrayList<>();
 
         refreshInvoiceView();
 
@@ -1017,7 +1017,7 @@ public class EditItemActivity extends Activity
                         hideSoftKeyboard();
                         removeImageView.setVisibility(View.INVISIBLE);
 
-                        ArrayList<String> pathList = new ArrayList<String>();
+                        ArrayList<String> pathList = new ArrayList<>();
                         for (Image image : item.getInvoices())
                         {
                             if (!image.getLocalPath().isEmpty())
@@ -1504,7 +1504,7 @@ public class EditItemActivity extends Activity
 
     private List<NumberPicker> findNumberPickers(ViewGroup viewGroup)
     {
-        List<NumberPicker> pickerList = new ArrayList<NumberPicker>();
+        List<NumberPicker> pickerList = new ArrayList<>();
         View child;
         if (null != viewGroup)
         {

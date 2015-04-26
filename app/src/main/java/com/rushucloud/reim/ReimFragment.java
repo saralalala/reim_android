@@ -88,10 +88,10 @@ public class ReimFragment extends Fragment
 	private AppPreference appPreference;
 	private DBManager dbManager;
 
-	private List<Item> itemList = new ArrayList<Item>();
-	private List<Item> showList = new ArrayList<Item>();
-	private List<Tag> tagList = new ArrayList<Tag>();
-	private List<Category> categoryList = new ArrayList<Category>();
+	private List<Item> itemList = new ArrayList<>();
+	private List<Item> showList = new ArrayList<>();
+	private List<Tag> tagList = new ArrayList<>();
+	private List<Category> categoryList = new ArrayList<>();
 
 	private int sortType = SORT_CONSUMED_DATE;
 	private boolean sortReverse = false;
@@ -99,8 +99,8 @@ public class ReimFragment extends Fragment
 	private int filterStatus = FILTER_STATUS_ALL;
 	private boolean[] tagCheck;
 	private boolean[] categoryCheck;
-	private List<Tag> filterTagList = new ArrayList<Tag>();
-	private List<Category> filterCategoryList = new ArrayList<Category>();
+	private List<Tag> filterTagList = new ArrayList<>();
+	private List<Category> filterCategoryList = new ArrayList<>();
 	
 	private int tempFilterType = FILTER_TYPE_ALL;
 	private boolean tempSortReverse = false;
@@ -765,7 +765,7 @@ public class ReimFragment extends Fragment
 	
 	private void buildItemListByConsumedDate()
 	{
-		List<String> timeList = new ArrayList<String>();
+		List<String> timeList = new ArrayList<>();
 		for (Item item : showList)
 		{
 			String time = Utils.secondToStringUpToDay(item.getConsumedDate());
@@ -775,13 +775,13 @@ public class ReimFragment extends Fragment
 			}
 		}
 		
-		List<List<Item>> collectList = new ArrayList<List<Item>>();
+		List<List<Item>> collectList = new ArrayList<>();
 		for (String time : timeList)
 		{
 			Item item = new Item();
 			item.setConsumedDateGroup(time);
 			
-			List<Item> subList = new ArrayList<Item>();
+			List<Item> subList = new ArrayList<>();
 			subList.add(item);
 			
 			collectList.add(subList);

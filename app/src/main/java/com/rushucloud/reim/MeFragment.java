@@ -468,7 +468,7 @@ public class MeFragment extends Fragment
 			MCClient.getInstance().startMCConversationActivity(onlineConfig);
 			
 			MCUserConfig mcUserConfig = new MCUserConfig();
-			Map<String, String> userInfoExtra = new HashMap<String, String>();
+			Map<String, String> userInfoExtra = new HashMap<>();
 			userInfoExtra.put("AndroidVersion",Integer.toString(Build.VERSION.SDK_INT));
 			userInfoExtra.put("AppVersion", info.versionName);
 			mcUserConfig.setUserInfo(getActivity(), null, userInfoExtra, null);

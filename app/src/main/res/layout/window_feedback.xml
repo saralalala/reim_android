@@ -34,7 +34,8 @@
         android:hint="@string/input_feedback"
         android:inputType="textMultiLine"
         android:textColor="@color/font_major_dark"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:textCursorDrawable="@null"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

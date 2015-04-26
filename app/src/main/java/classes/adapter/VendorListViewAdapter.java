@@ -25,8 +25,8 @@ public class VendorListViewAdapter extends BaseAdapter
 	public VendorListViewAdapter(Context context)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
-		this.defaultList = new ArrayList<Vendor>();
-		this.vendorList = new ArrayList<Vendor>();
+		this.defaultList = new ArrayList<>();
+		this.vendorList = new ArrayList<>();
 		
 		Vendor vendor = new Vendor(context.getString(R.string.vendor_taxi));
 		vendor.setPhotoResID(R.drawable.icon_transport);

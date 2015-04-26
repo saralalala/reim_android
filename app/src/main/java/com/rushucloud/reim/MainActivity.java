@@ -3,10 +3,10 @@ package com.rushucloud.reim;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -52,7 +52,7 @@ import netUtils.response.EventsResponse;
 import netUtils.response.FeedbackResponse;
 import netUtils.response.group.GetGroupResponse;
 
-public class MainActivity extends ActionBarActivity implements OnClickListener
+public class MainActivity extends FragmentActivity implements OnClickListener
 {
 	private long exitTime;
 
@@ -71,8 +71,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
     private WebSocketClient webSocketClient;
     private boolean webSocketIsClosed = true;
 	
-	private List<Fragment> fragmentList = new ArrayList<Fragment>();
-	private List<TabItem> tabItemList = new ArrayList<TabItem>();
+	private List<Fragment> fragmentList = new ArrayList<>();
+	private List<TabItem> tabItemList = new ArrayList<>();
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -133,10 +133,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 			{
 				finish();
 				dbManager.closeDatabase();
-//				if (udpClient != null)
-//				{
-//					udpClient.close();
-//				}
+				if (webSocketClient != null && !webSocketIsClosed)
+				{
+                    webSocketClient.close();
+				}
 				android.os.Process.killProcess(android.os.Process.myPid());
 			}
 			return true;
@@ -155,8 +155,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 	
 	private void initView()
 	{
-		getActionBar().hide();
-		
 		ReimFragment reimFragment = new ReimFragment();
 		ReportFragment reportFragment = new ReportFragment();
 		StatisticsFragment statisticsFragment = new StatisticsFragment();
@@ -684,12 +682,13 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
                 public void onOpen(ServerHandshake handShakeData)
                 {
                     System.out.println("onOpen");
-                    webSocketIsClosed = true;
+                    webSocketIsClosed = false;
                     webSocketClient.send(HttpUtils.getJWTString());
                 }
 
                 public void onMessage(String message)
                 {
+                    System.out.println("onMessage");
                     System.out.println(message);
                 }
 
@@ -701,13 +700,15 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 
                 public void onError(Exception ex)
                 {
-                    System.out.println("onError");
+                    System.out.println("onError:" + ex.getLocalizedMessage());
+                    webSocketIsClosed = true;
                 }
             };
             webSocketClient.connect();
         }
         catch (Exception e)
         {
+            System.out.println(e.getLocalizedMessage());
             e.printStackTrace();
         }
     }

@@ -94,7 +94,8 @@
 		                android:inputType="numberDecimal"
 		                android:background="@null"
 	                    android:textColor="@color/font_reim_number"
-	                    android:textSize="54sp"/>
+	                    android:textSize="54sp"
+                        android:textCursorDrawable="@null"/>
 
 	            </LinearLayout>
 

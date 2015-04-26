@@ -29,7 +29,7 @@ public class CommentListViewAdapter extends BaseAdapter
 	{
 		this.layoutInflater = LayoutInflater.from(context);
         this.dbManager = DBManager.getDBManager();
-		this.commentList = new ArrayList<Comment>(comments);
+		this.commentList = new ArrayList<>(comments);
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)

@@ -56,7 +56,7 @@ public class ManagerActivity extends Activity
 	private User currentUser;
     private User manager;
 	private List<User> userList;
-    private List<User> showList = new ArrayList<User>();
+    private List<User> showList = new ArrayList<>();
     private List<User> chosenList;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -116,8 +116,6 @@ public class ManagerActivity extends Activity
 	
 	private void initView()
 	{
-		getActionBar().hide();
-		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
 		{

@@ -83,7 +83,7 @@ public class Item
             setRelevantUsersID(jObject.getString("relates"));
 
             JSONArray invoiceArray = jObject.getJSONArray("images");
-			List<Image> invoiceList = new ArrayList<Image>();
+			List<Image> invoiceList = new ArrayList<>();
 			for (int i = 0; i < invoiceArray.length(); i++)
 			{
 				Image image = new Image(invoiceArray.getJSONObject(i));
@@ -485,7 +485,7 @@ public class Item
 	
 	public static ArrayList<Integer> getItemsIDList(List<Item> items)
 	{
-		ArrayList<Integer> result = new ArrayList<Integer>();
+		ArrayList<Integer> result = new ArrayList<>();
 		if (items == null || items.isEmpty())
 		{
 			return  result;

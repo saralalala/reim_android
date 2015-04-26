@@ -41,7 +41,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 		this.activity = activity;
 		this.layoutInflater = LayoutInflater.from(activity);
 		this.report = report;
-		this.itemList = new ArrayList<Item>(items);
+		this.itemList = new ArrayList<>(items);
 		this.dbManager = DBManager.getDBManager();
 	}
 

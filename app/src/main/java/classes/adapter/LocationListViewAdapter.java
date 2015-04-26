@@ -39,7 +39,7 @@ public class LocationListViewAdapter extends BaseAdapter
 	
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		View view = null;
+		View view;
 		switch (position)
 		{
 			case 0:

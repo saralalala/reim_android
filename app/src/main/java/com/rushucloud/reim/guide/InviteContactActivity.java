@@ -43,10 +43,10 @@ public class InviteContactActivity extends Activity
     private AppPreference appPreference;
     private DBManager dbManager;
     private String companyName;
-    private ArrayList<String> inputList = new ArrayList<String>();
-    private ArrayList<String> inputChosenList = new ArrayList<String>();
-    private List<User> contactList = new ArrayList<User>();
-    private List<User> contactChosenList = new ArrayList<User>();
+    private ArrayList<String> inputList = new ArrayList<>();
+    private ArrayList<String> inputChosenList = new ArrayList<>();
+    private List<User> contactList = new ArrayList<>();
+    private List<User> contactChosenList = new ArrayList<>();
     private int count = 0;
     private boolean hasInit = false;
 
@@ -127,8 +127,6 @@ public class InviteContactActivity extends Activity
 
 	private void initView()
 	{
-		getActionBar().hide();
-
         ReimProgressDialog.setContext(this);
 
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);

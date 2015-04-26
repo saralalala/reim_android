@@ -66,8 +66,6 @@ public class WelcomeActivity extends Activity
 	
 	private void initView()
 	{
-		getActionBar().hide();
-		
 		Button signInButton = (Button) findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(new View.OnClickListener()
 		{

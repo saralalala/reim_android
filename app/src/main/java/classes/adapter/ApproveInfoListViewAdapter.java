@@ -44,8 +44,8 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 		this.dbManager = DBManager.getDBManager();
         this.currentUser = AppPreference.getAppPreference().getCurrentUser();
 		this.report = report;
-		this.infoList = new ArrayList<ApproveInfo>(infos);
-		this.stepStartList = new ArrayList<Integer>();
+		this.infoList = new ArrayList<>(infos);
+		this.stepStartList = new ArrayList<>();
 		initStepList();
 	}
 

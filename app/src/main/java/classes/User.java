@@ -93,15 +93,11 @@ public class User implements Serializable
 				setAvatarID(Integer.valueOf(imageID));
 			}
 		}
-		catch (NumberFormatException e)
+		catch (NumberFormatException | JSONException e)
 		{
 			e.printStackTrace();
 		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}		
-	}
+    }
 	
 	public int getServerID()
 	{

@@ -45,27 +45,21 @@ public class JoinedActivity extends Activity
 
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
     {
-        if (keyCode == KeyEvent.KEYCODE_BACK)
-        {
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
+        return keyCode != KeyEvent.KEYCODE_BACK && super.onKeyDown(keyCode, event);
     }
 
 	private void initView()
 	{
-		getActionBar().hide();
-
         TextView companyTextView = (TextView) findViewById(R.id.companyTextView);
         companyTextView.setText(getIntent().getStringExtra("companyName"));
 
         SpannableString text = new SpannableString(ViewUtils.getString(R.string.prompt_joined));
-        text.setSpan(new StyleSpan(Typeface.BOLD), 17, 19, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 17, 19, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new StyleSpan(Typeface.BOLD), 22, 26, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 22, 26, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new StyleSpan(Typeface.BOLD), 29, 31, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 29, 31, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new StyleSpan(Typeface.BOLD), 18, 20, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 18, 20, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new StyleSpan(Typeface.BOLD), 24, 26, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 24, 26, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new StyleSpan(Typeface.BOLD), 33, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 33, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         TextView contentTextView = (TextView) findViewById(R.id.contentTextView);
         contentTextView.setText(text);

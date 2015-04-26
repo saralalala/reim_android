@@ -62,9 +62,9 @@ public class Report implements Serializable
 		title = report.getTitle();
 		status = report.getStatus();
 		myDecision = report.getMyDecision();
-		managerList = new ArrayList<User>(report.getManagerList());
-		ccList = new ArrayList<User>(report.getCCList());
-		commentList = new ArrayList<Comment>(report.getCommentList());
+		managerList = new ArrayList<>(report.getManagerList());
+		ccList = new ArrayList<>(report.getCCList());
+		commentList = new ArrayList<>(report.getCommentList());
 		sender = new User(report.getSender());
         type = report.getType();
 		createdDate = report.getCreatedDate();
@@ -180,7 +180,7 @@ public class Report implements Serializable
 	{
 		if (managerList == null)
 		{
-			this.managerList = new ArrayList<User>();
+			this.managerList = new ArrayList<>();
 		}
 		else if (this.managerList != null)
 		{
@@ -212,7 +212,7 @@ public class Report implements Serializable
 	{
 		if (ccList == null)
 		{
-			this.ccList = new ArrayList<User>();
+			this.ccList = new ArrayList<>();
 		}
 		else if (this.ccList != null)
 		{
@@ -415,7 +415,7 @@ public class Report implements Serializable
     public static void sortByAmount(List<Report> reportList)
     {
     	DBManager dbManager = DBManager.getDBManager();
-    	final SparseArray<Double> countArray = new SparseArray<Double>();
+    	final SparseArray<Double> countArray = new SparseArray<>();
     	for (Report report : reportList)
 		{
     		double amount = dbManager.getReportAmount(report.getLocalID());

@@ -46,17 +46,11 @@ public class CreateCompleteActivity extends Activity
 
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
     {
-        if (keyCode == KeyEvent.KEYCODE_BACK)
-        {
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
+        return keyCode != KeyEvent.KEYCODE_BACK && super.onKeyDown(keyCode, event);
     }
 
 	private void initView()
 	{
-		getActionBar().hide();
-
         TextView companyTextView = (TextView) findViewById(R.id.companyTextView);
         companyTextView.setText(getIntent().getStringExtra("companyName"));
 
@@ -71,19 +65,19 @@ public class CreateCompleteActivity extends Activity
 
             SpannableString text = new SpannableString(content);
             int index = content.indexOf(secondPart);
-            text.setSpan(new StyleSpan(Typeface.BOLD), 5, index, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 5, index, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new StyleSpan(Typeface.BOLD), index + 36, index + 39, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new UnderlineSpan(), index + 36, index + 39, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), index + 36, index + 39, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            text.setSpan(new StyleSpan(Typeface.BOLD), 6, index - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 6, index - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            text.setSpan(new StyleSpan(Typeface.BOLD), index + 38, index + 41, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            text.setSpan(new UnderlineSpan(), index + 38, index + 41, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), index + 38, index + 41, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             promptTextView.setText(text);
         }
         else
         {
             SpannableString text = new SpannableString(ViewUtils.getString(R.string.create_prompt));
-            text.setSpan(new StyleSpan(Typeface.BOLD), 40, 43, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new UnderlineSpan(), 40, 43, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 40, 43, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            text.setSpan(new StyleSpan(Typeface.BOLD), 41, 44, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            text.setSpan(new UnderlineSpan(), 41, 44, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 41, 44, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             promptTextView.setText(text);
         }
 

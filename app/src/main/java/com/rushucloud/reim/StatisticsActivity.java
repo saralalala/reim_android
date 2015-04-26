@@ -131,8 +131,6 @@ public class StatisticsActivity extends Activity
 
 	private void initView()
 	{
-		getActionBar().hide();
-
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
         backImageView.setOnClickListener(new View.OnClickListener()
         {
@@ -269,7 +267,7 @@ public class StatisticsActivity extends Activity
             pieLayout.setVisibility(View.VISIBLE);
             categoryLayout.setVisibility(View.VISIBLE);
 
-            SparseArray<List<StatCategory>> categoryArray = new SparseArray<List<StatCategory>>();
+            SparseArray<List<StatCategory>> categoryArray = new SparseArray<>();
 
             double totalAmount = 0;
             StatCategory deletedCategory = new StatCategory();

@@ -31,8 +31,8 @@ public class ReportItemListViewAdapter extends BaseAdapter
 	{
 		this.context = context;
 		this.layoutInflater = LayoutInflater.from(context);
-		this.itemList = new ArrayList<Item>(items);
-		this.chosenIDList = new ArrayList<Integer>(chosenList);
+		this.itemList = new ArrayList<>(items);
+		this.chosenIDList = new ArrayList<>(chosenList);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -73,7 +73,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
 				{
                     ViewUtils.setImageViewBitmap(category, categoryImageView);
 				}
-                else if (category == null)
+                else
                 {
                     categoryImageView.setVisibility(View.INVISIBLE);
                 }

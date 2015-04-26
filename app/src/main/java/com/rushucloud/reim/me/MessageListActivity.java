@@ -35,7 +35,7 @@ public class MessageListActivity extends Activity
 	private XListView messageListView;
 	private MessageListViewAdapter adapter;
 	
-	private List<Message> messageList = new ArrayList<Message>();
+	private List<Message> messageList = new ArrayList<>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -78,9 +78,7 @@ public class MessageListActivity extends Activity
 	}
 	
 	private void initView()
-	{	
-		getActionBar().hide();
-		
+	{
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
 		{

@@ -79,7 +79,7 @@ public class PickCategoryActivity extends Activity
 		readCategoryList();
 		
 		check = Category.getCategoryCheck(categoryList, chosenCategory);
-		subCheck = new ArrayList<List<Boolean>>();
+		subCheck = new ArrayList<>();
 		for (List<Category> categories : subCategoryList)
 		{
 			subCheck.add(Category.getCategoryCheck(categories, chosenCategory));
@@ -87,9 +87,7 @@ public class PickCategoryActivity extends Activity
 	}
 	
 	private void initView()
-	{		
-		getActionBar().hide();
-    	
+	{
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{
@@ -239,7 +237,7 @@ public class PickCategoryActivity extends Activity
 
 		if (subCategoryList == null)
 		{
-			subCategoryList = new ArrayList<List<Category>>();
+			subCategoryList = new ArrayList<>();
 		}
 		else
 		{

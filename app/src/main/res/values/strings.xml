@@ -84,10 +84,10 @@
     <string name="input_contact">填写手机号或邮箱</string>
     <string name="input_contact_manually_and_divided">请手动填写手机号或邮箱，用逗号分开</string>
     <string name="invite_by_pc">可通过访问PC端批量邀请其他同事加入</string>
-    <string name="sending_invitation_1">已经向你的</string>
-    <string name="sending_invitation_2">个同事发送邀请。他们接受邀请后，就能加入你创建的公司。你也可以通过我们的网页端批量邀请其他同事加入。</string>
+    <string name="sending_invitation_1">已经向你的 </string>
+    <string name="sending_invitation_2"> 个同事发送邀请。他们接受邀请后，就能加入你创建的公司。你也可以通过我们的 网页端 批量邀请其他同事加入。</string>
     <string name="start_to_use">开始使用</string>
-    <string name="create_prompt">你可以之后在 App 中通过短信或者邮件的方式邀请其他同事加入，也可以通过我们的网页端批量邀请他人</string>
+    <string name="create_prompt">你可以之后在 App 中通过短信或者邮件的方式邀请其他同事加入，也可以通过我们的 网页端 批量邀请他人</string>
     <string name="modify_name">设置姓名</string>
     <string name="choose_company">选择公司</string>
     <string name="invited_company">邀请过你的公司</string>
@@ -323,8 +323,8 @@
     <string name="prompt_no_need_to_alarm">报告未在审核过程中，无需发送提醒</string>
     <string name="prompt_choose_or_finish">您希望直接通过，还是选择其他人继续审批这份报告？</string>
     <string name="prompt_no_lastest_data">还没到下个月呢</string>
-    <string name="prompt_join">管理员通过申请后你就可以使用「云报销」了。在此之前，你也可以记录自己的消费，加入公司后记录可以迁移。</string>
-    <string name="prompt_joined">现在你可以使用「云报销」，记录你的消费，提交报销申请，或者审批他人的报销了。</string>
+    <string name="prompt_join">管理员通过申请后你就可以使用「云报销」了。在此之前，你也可以记录自己的 消费 ，加入公司后记录可以迁移。</string>
+    <string name="prompt_joined">现在你可以使用「云报销」，记录你的 消费 ， 提交报销 申请，或者 审批 他人的报销了。</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>

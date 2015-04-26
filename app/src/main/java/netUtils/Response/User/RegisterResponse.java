@@ -11,7 +11,6 @@ import classes.Category;
 import classes.Group;
 import classes.Tag;
 import classes.User;
-import classes.utils.Utils;
 import netUtils.response.BaseResponse;
 
 public class RegisterResponse extends BaseResponse

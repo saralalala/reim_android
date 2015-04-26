@@ -186,7 +186,7 @@ public class Utils
 
     public static List<Integer> stringToIntList(String idString)
     {
-    	List<Integer> resultList = new ArrayList<Integer>();
+    	List<Integer> resultList = new ArrayList<>();
     	String[] result = TextUtils.split(idString, ",");
         for (String resultString : result)
         {

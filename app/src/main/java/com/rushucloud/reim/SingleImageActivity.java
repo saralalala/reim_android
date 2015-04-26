@@ -44,8 +44,6 @@ public class SingleImageActivity extends Activity
 	
 	private void initView()
 	{
-		getActionBar().hide();
-
 		String imagePath = getIntent().getStringExtra("imagePath");
 		
 		SubsamplingScaleImageView imageView = (SubsamplingScaleImageView) findViewById(R.id.avatarImageView);

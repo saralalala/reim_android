@@ -72,19 +72,19 @@ public class PickItemActivity extends Activity implements OnClickListener
 	private ArrayList<Integer> chosenItemIDList = null;
 	private int type;
 	private int tabIndex = 0;
-	private List<Tag> tagList = new ArrayList<Tag>();
-	private List<Category> categoryList = new ArrayList<Category>();
+	private List<Tag> tagList = new ArrayList<>();
+	private List<Category> categoryList = new ArrayList<>();
 	
 	private List<Item> consumedItemList;
-	private List<Item> consumedShowList = new ArrayList<Item>();
+	private List<Item> consumedShowList = new ArrayList<>();
 	private ArrayList<Integer> consumedChosenList = null;
 
 	private int consumedSortType = SORT_CONSUMED_DATE;
 	private boolean consumedSortReverse = false;
 	private boolean[] consumedTagCheck;
 	private boolean[] consumedCategoryCheck;
-	private List<Tag> consumedFilterTagList = new ArrayList<Tag>();
-	private List<Category> consumedFilterCategoryList = new ArrayList<Category>();
+	private List<Tag> consumedFilterTagList = new ArrayList<>();
+	private List<Category> consumedFilterCategoryList = new ArrayList<>();
 	
 	private int consumedTempSortType = SORT_CONSUMED_DATE;
     private boolean consumedTempSortReverse = false;
@@ -92,15 +92,15 @@ public class PickItemActivity extends Activity implements OnClickListener
 	private boolean[] consumedTempCategoryCheck;
 	
 	private List<Item> budgetItemList;
-	private List<Item> budgetShowList = new ArrayList<Item>();
+	private List<Item> budgetShowList = new ArrayList<>();
 	private ArrayList<Integer> budgetChosenList = null;
 
 	private int budgetSortType = SORT_CONSUMED_DATE;
 	private boolean budgetSortReverse = false;
 	private boolean[] budgetTagCheck;
 	private boolean[] budgetCategoryCheck;
-	private List<Tag> budgetFilterTagList = new ArrayList<Tag>();
-	private List<Category> budgetFilterCategoryList = new ArrayList<Category>();
+	private List<Tag> budgetFilterTagList = new ArrayList<>();
+	private List<Category> budgetFilterCategoryList = new ArrayList<>();
 	
 	private int budgetTempSortType = SORT_CONSUMED_DATE;
     private boolean budgetTempSortReverse = false;
@@ -108,15 +108,15 @@ public class PickItemActivity extends Activity implements OnClickListener
 	private boolean[] budgetTempCategoryCheck;
 
     private List<Item> borrowingItemList;
-    private List<Item> borrowingShowList = new ArrayList<Item>();
+    private List<Item> borrowingShowList = new ArrayList<>();
     private ArrayList<Integer> borrowingChosenList = null;
 
     private int borrowingSortType = SORT_CONSUMED_DATE;
     private boolean borrowingSortReverse = false;
     private boolean[] borrowingTagCheck;
     private boolean[] borrowingCategoryCheck;
-    private List<Tag> borrowingFilterTagList = new ArrayList<Tag>();
-    private List<Category> borrowingFilterCategoryList = new ArrayList<Category>();
+    private List<Tag> borrowingFilterTagList = new ArrayList<>();
+    private List<Category> borrowingFilterCategoryList = new ArrayList<>();
 
     private int borrowingTempSortType = SORT_CONSUMED_DATE;
     private boolean borrowingTempSortReverse = false;
@@ -214,7 +214,7 @@ public class PickItemActivity extends Activity implements OnClickListener
 		chosenItemIDList = bundle.getIntegerArrayList("chosenItemIDList");
 		if (chosenItemIDList == null)
 		{
-			chosenItemIDList = new ArrayList<Integer>();
+			chosenItemIDList = new ArrayList<>();
 		}
 
 		appPreference = AppPreference.getAppPreference();
@@ -223,21 +223,21 @@ public class PickItemActivity extends Activity implements OnClickListener
 		tabIndex = report.getType();
 		if (tabIndex == 0)
 		{
-			consumedChosenList = new ArrayList<Integer>(chosenItemIDList);
-			budgetChosenList = new ArrayList<Integer>();
-            borrowingChosenList = new ArrayList<Integer>();
+			consumedChosenList = new ArrayList<>(chosenItemIDList);
+			budgetChosenList = new ArrayList<>();
+            borrowingChosenList = new ArrayList<>();
 		}
 		else if (tabIndex == 1)
 		{
-            consumedChosenList = new ArrayList<Integer>();
-			budgetChosenList = new ArrayList<Integer>(chosenItemIDList);
-            borrowingChosenList = new ArrayList<Integer>();
+            consumedChosenList = new ArrayList<>();
+			budgetChosenList = new ArrayList<>(chosenItemIDList);
+            borrowingChosenList = new ArrayList<>();
 		}
         else
         {
-            consumedChosenList = new ArrayList<Integer>();
-            budgetChosenList = new ArrayList<Integer>();
-            borrowingChosenList = new ArrayList<Integer>(chosenItemIDList);
+            consumedChosenList = new ArrayList<>();
+            budgetChosenList = new ArrayList<>();
+            borrowingChosenList = new ArrayList<>(chosenItemIDList);
         }
 		
 		tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
@@ -271,8 +271,6 @@ public class PickItemActivity extends Activity implements OnClickListener
 	
 	private void initView()
 	{
-		getActionBar().hide();
-		
 		filterImageView = (ImageView) findViewById(R.id.filterImageView);
 		filterImageView.setOnClickListener(new View.OnClickListener()
 		{
@@ -1128,31 +1126,31 @@ public class PickItemActivity extends Activity implements OnClickListener
 		List<Tag> filterTagList;
 		List<Category> filterCategoryList;
 		List<Item> itemList;
-		List<Item> showList = new ArrayList<Item>();
+		List<Item> showList = new ArrayList<>();
 		
 		if (tabIndex == 0)
 		{
 			sortType = consumedSortType;
 			sortReverse = consumedSortReverse;
-			filterTagList = new ArrayList<Tag>(consumedFilterTagList);
-			filterCategoryList = new ArrayList<Category>(consumedFilterCategoryList);
-			itemList = new ArrayList<Item>(consumedItemList);
+			filterTagList = new ArrayList<>(consumedFilterTagList);
+			filterCategoryList = new ArrayList<>(consumedFilterCategoryList);
+			itemList = new ArrayList<>(consumedItemList);
 		}
 		else if (tabIndex == 1)
 		{
 			sortType = budgetSortType;
 			sortReverse = budgetSortReverse;
-			filterTagList = new ArrayList<Tag>(budgetFilterTagList);
-			filterCategoryList = new ArrayList<Category>(budgetFilterCategoryList);
-			itemList = new ArrayList<Item>(budgetItemList);
+			filterTagList = new ArrayList<>(budgetFilterTagList);
+			filterCategoryList = new ArrayList<>(budgetFilterCategoryList);
+			itemList = new ArrayList<>(budgetItemList);
 		}
         else
         {
             sortType = borrowingSortType;
             sortReverse = borrowingSortReverse;
-            filterTagList = new ArrayList<Tag>(borrowingFilterTagList);
-            filterCategoryList = new ArrayList<Category>(borrowingFilterCategoryList);
-            itemList = new ArrayList<Item>(borrowingItemList);
+            filterTagList = new ArrayList<>(borrowingFilterTagList);
+            filterCategoryList = new ArrayList<>(borrowingFilterCategoryList);
+            itemList = new ArrayList<>(borrowingItemList);
         }
 
 		for (Item item : itemList)

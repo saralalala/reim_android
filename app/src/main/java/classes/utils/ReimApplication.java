@@ -43,8 +43,8 @@ public class ReimApplication extends Application
 	private static int tabIndex = TAB_REIM;
 	private static int reportTabIndex = TAB_REPORT_MINE;
     private static int statTabIndex = TAB_STATISTICS_MINE;
-    private static List<Integer> mineUnreadList = new ArrayList<Integer>();
-    private static List<Integer> othersUnreadList = new ArrayList<Integer>();
+    private static List<Integer> mineUnreadList = new ArrayList<>();
+    private static List<Integer> othersUnreadList = new ArrayList<>();
     private static int unreadMessagesCount;
 	
 	public void onCreate()

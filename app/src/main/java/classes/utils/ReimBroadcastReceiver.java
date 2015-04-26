@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.MessageActivity;
@@ -52,8 +53,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 	
 	private static NotificationManager manager = null;
 	private static int notificationID = 0;
-	
-	@SuppressWarnings("deprecation")
+
 	public void onReceive(Context context, Intent intent)
 	{
 		try
@@ -66,20 +66,24 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				int type = jObject.getInt("type");
 				String message = jObject.getString("msg");
 
+                System.out.println("ReimBroadcastReceiver");
 				System.out.println(jObject.toString());
 				Intent notificationIntent = new Intent("com.rushucloud.reim.NOTIFICATION_CLICKED");
 				notificationIntent.putExtra("type",  type);
 				notificationIntent.putExtra("data", jObject.toString());
-				
-				Notification notification = new Notification();
-				notification.icon = R.drawable.ic_launcher;
-				notification.tickerText = message;
-				notification.defaults = Notification.DEFAULT_ALL;
-				notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent,
 																PendingIntent.FLAG_UPDATE_CURRENT);
-				
-				notification.setLatestEventInfo(context, context.getString(R.string.app_name), message, pendingIntent);
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+                builder.setSmallIcon(R.drawable.ic_launcher);
+                builder.setContentTitle(context.getString(R.string.app_name));
+                builder.setContentText(message);
+                builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+                builder.setContentIntent(pendingIntent);
+                builder.setAutoCancel(true);
+
+                Notification notification = builder.build();
 
                 if (PhoneUtils.isMIUIV6())
                 {

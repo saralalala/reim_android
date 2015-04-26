@@ -30,7 +30,7 @@ public class CreateCompanyActivity extends Activity
 
     private String companyName;
     private ArrayList<String> inputList;
-    private ArrayList<String> inputChosenList = new ArrayList<String>();
+    private ArrayList<String> inputChosenList = new ArrayList<>();
     private List<User> contactChosenList;
 
 	protected void onCreate(Bundle savedInstanceState)
@@ -76,8 +76,6 @@ public class CreateCompanyActivity extends Activity
 
 	private void initView()
 	{
-		getActionBar().hide();
-
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new OnClickListener()
 		{

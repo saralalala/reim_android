@@ -24,7 +24,7 @@ public class MessageListViewAdapter extends BaseAdapter
 	public MessageListViewAdapter(Context context, List<Message> messages)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
-		this.messageList = new ArrayList<Message>(messages);
+		this.messageList = new ArrayList<>(messages);
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)

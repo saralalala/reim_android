@@ -114,7 +114,7 @@ public class Message implements Serializable
 		{
 			public int compare(Message message1, Message message2)
 			{
-				return (int) (message2.getUpdateTime() - message1.getUpdateTime());
+				return message2.getUpdateTime() - message1.getUpdateTime();
 			}
 		});
     }

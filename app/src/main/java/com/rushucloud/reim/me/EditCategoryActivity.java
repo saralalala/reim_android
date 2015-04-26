@@ -92,7 +92,7 @@ public class EditCategoryActivity extends Activity
         originalCategory = (Category) getIntent().getSerializableExtra("category");
         category = new Category(originalCategory);
 		
-		iconList = new ArrayList<Integer>();
+		iconList = new ArrayList<>();
 		iconList.add(R.drawable.icon_food);
 		iconList.add(R.drawable.icon_transport);
 		iconList.add(R.drawable.icon_office_supplies);
@@ -104,7 +104,7 @@ public class EditCategoryActivity extends Activity
 		iconList.add(R.drawable.icon_entertainment);
 		iconList.add(R.drawable.icon_others);
 		
-		checkList = new ArrayList<Boolean>();
+		checkList = new ArrayList<>();
 		for (int i = 0; i < iconList.size(); i++)
 		{
 			checkList.add(false);
@@ -126,10 +126,8 @@ public class EditCategoryActivity extends Activity
 	}
 	
 	private void initView()
-	{		
-		getActionBar().hide();
-
-		int widthPixels = ViewUtils.getPhoneWindowWidth(this);
+	{
+        int widthPixels = ViewUtils.getPhoneWindowWidth(this);
 		int padding = ViewUtils.dpToPixel(32);
 		iconSideLength = ViewUtils.dpToPixel(40);
 		iconHorizontalInterval = ViewUtils.dpToPixel(20);

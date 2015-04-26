@@ -47,7 +47,7 @@ public class PickCCActivity extends Activity
 	private AppPreference appPreference;
 	private DBManager dbManager;
 	private List<User> userList;
-    private List<User> showList = new ArrayList<User>();
+    private List<User> showList = new ArrayList<>();
     private List<User> chosenList;
 	private int senderID;
 	private boolean newReport;
@@ -104,9 +104,7 @@ public class PickCCActivity extends Activity
 	}
 	
 	private void initView()
-	{		
-		getActionBar().hide();
-
+	{
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{
@@ -127,7 +125,7 @@ public class PickCCActivity extends Activity
 				{
 					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
 				}
-				else if (!fromFollowing && !newReport)
+				else if (!fromFollowing)
 				{
 					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_EDIT_SEND_SUBMIT");					
 				}

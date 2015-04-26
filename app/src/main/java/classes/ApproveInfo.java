@@ -1,5 +1,7 @@
 package classes;
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -107,7 +109,7 @@ public class ApproveInfo implements Comparable<ApproveInfo>
         }
 	}
 	
-	public int compareTo(ApproveInfo another)
+	public int compareTo(@NonNull ApproveInfo another)
 	{
 		if (getStep() != another.getStep())
 		{

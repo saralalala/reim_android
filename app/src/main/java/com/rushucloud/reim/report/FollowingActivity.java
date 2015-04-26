@@ -39,8 +39,8 @@ public class FollowingActivity extends Activity
 	private TextView ccTextView;
 	
 	private Report report;
-	private	List<User> managerList = new ArrayList<User>();
-	private List<User> ccList = new ArrayList<User>();
+	private	List<User> managerList = new ArrayList<>();
+	private List<User> ccList = new ArrayList<>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -108,7 +108,7 @@ public class FollowingActivity extends Activity
 		managerList.addAll(report.getManagerList());
 		ccList.addAll(report.getCCList());
         User currentUser = AppPreference.getAppPreference().getCurrentUser();
-        List<User> managerList = new ArrayList<User>();
+        List<User> managerList = new ArrayList<>();
         if (report.getSender().getServerID() != currentUser.getDefaultManagerID())
         {
             managerList.addAll(currentUser.buildBaseManagerList());
@@ -118,8 +118,6 @@ public class FollowingActivity extends Activity
 	
 	private void initView()
 	{
-		getActionBar().hide();
-		
 		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
 		backImageView.setOnClickListener(new View.OnClickListener()
 		{
