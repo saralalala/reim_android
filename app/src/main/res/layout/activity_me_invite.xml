@@ -36,13 +36,13 @@
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:layout_marginTop="18dp"
         layout="@layout/view_divider"/>
 
     <classes.widget.ClearEditText
         android:id="@+id/usernameEditText"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="18dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:background="@color/major_light"

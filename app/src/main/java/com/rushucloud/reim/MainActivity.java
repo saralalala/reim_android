@@ -521,6 +521,11 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                                 MeFragment fragment = (MeFragment) fragmentList.get(ReimApplication.TAB_ME);
                                 fragment.showTip();
                             }
+                            else if (viewPager.getCurrentItem() == ReimApplication.TAB_REPORT)
+                            {
+                                ReportFragment fragment = (ReportFragment) fragmentList.get(ReimApplication.TAB_REPORT);
+                                fragment.showBadge();
+                            }
 						}
 					});
 				}
@@ -698,14 +703,28 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     try
                     {
                         JSONObject jObject = new JSONObject(message);
-                        int type = jObject.getJSONObject("msg").getInt("type");
+                        int type = jObject.getJSONObject("extra").getInt("type");
                         if (type > 0 && type == NetworkConstant.PUSH_TYPE_REPORT)
                         {
+                            final boolean myReport = jObject.getJSONObject("extra").getInt("uid") == appPreference.getCurrentUserID();
                             runOnUiThread(new Runnable()
                             {
                                 public void run()
                                 {
                                     sendGetEventsRequest();
+                                    ReportFragment fragment = (ReportFragment) fragmentList.get(ReimApplication.TAB_REPORT);
+                                    if (myReport && viewPager.getCurrentItem() == ReimApplication.TAB_REPORT &&
+                                            ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+                                    {
+                                        fragment.syncReports();
+                                    }
+                                    else if (!myReport && viewPager.getCurrentItem() == ReimApplication.TAB_REPORT &&
+                                            ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_OTHERS)
+                                    {
+                                        appPreference.setLastGetOthersReportTime(0);
+                                        appPreference.saveAppPreference();
+                                        fragment.setListView(ReimApplication.TAB_REPORT_OTHERS);
+                                    }
                                     showReportTip(true);
                                 }
                             });

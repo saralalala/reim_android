@@ -717,7 +717,7 @@ public class ReportFragment extends Fragment
 		deletePopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), deleteView);
 	}
 	
-	private void setListView(int index)
+	public void setListView(int index)
 	{
 		ReimApplication.setReportTabIndex(index);
 		if (index == ReimApplication.TAB_REPORT_MINE)
@@ -737,7 +737,7 @@ public class ReportFragment extends Fragment
 		refreshReportListView();
 	}
 
-	private void showBadge()
+	public void showBadge()
 	{
 		int count = ReimApplication.getMineUnreadList().size();
 		if (count == 0)
@@ -1333,7 +1333,7 @@ public class ReportFragment extends Fragment
 		}
 	}
 
-	private void syncReports()
+	public void syncReports()
 	{
 		if (SyncUtils.canSyncToServer())
 		{

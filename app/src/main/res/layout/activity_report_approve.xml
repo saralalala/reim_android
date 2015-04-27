@@ -81,7 +81,8 @@
             style="?android:attr/buttonBarButtonStyle"
             android:background="@drawable/bar_button_drawable"
             android:text="@string/reject"
-            android:textColor="@color/hint_grey"/>
+            android:textColor="@color/hint_grey"
+            android:textSize="18sp"/>
 
         <Button
             android:id="@+id/approveButton"
@@ -91,7 +92,9 @@
             style="?android:attr/buttonBarButtonStyle"
             android:background="@drawable/bar_button_drawable"
             android:text="@string/approve" 
-            android:textColor="@color/start_button_text_color"/>
+            android:textColor="@color/start_button_text_color"
+            android:textSize="18sp"/>
+
     </LinearLayout>
 
 </LinearLayout>

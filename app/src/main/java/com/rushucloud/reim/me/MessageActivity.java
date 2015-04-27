@@ -92,7 +92,7 @@ public class MessageActivity extends Activity
             {
                 invite = (Invite) message;
             }
-            if (message.getType() == Message.TYPE_APPLY)
+            else if (message.getType() == Message.TYPE_APPLY)
             {
                 apply = (Apply) message;
             }
