@@ -27,7 +27,7 @@ import netUtils.HttpConnectionCallback;
 import netUtils.request.user.ModifyUserRequest;
 import netUtils.response.user.ModifyUserResponse;
 
-public class ModifyNicknameActivity extends Activity
+public class SetNicknameActivity extends Activity
 {
 	private ClearEditText nicknameEditText;
 
@@ -37,7 +37,7 @@ public class ModifyNicknameActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_change_nickname);
+		setContentView(R.layout.activity_guide_set_nickname);
 		initData();
 		initView();
 	}
@@ -93,11 +93,11 @@ public class ModifyNicknameActivity extends Activity
 				nickname = nicknameEditText.getText().toString();
                 if (!PhoneUtils.isNetworkConnected())
                 {
-                    ViewUtils.showToast(ModifyNicknameActivity.this, R.string.error_modify_network_unavailable);
+                    ViewUtils.showToast(SetNicknameActivity.this, R.string.error_modify_network_unavailable);
                 }
                 else if (nickname.isEmpty())
                 {
-                    ViewUtils.showToast(ModifyNicknameActivity.this, R.string.error_new_nickname_empty);
+                    ViewUtils.showToast(SetNicknameActivity.this, R.string.error_new_nickname_empty);
                 }
                 else
                 {
@@ -139,10 +139,10 @@ public class ModifyNicknameActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(ModifyNicknameActivity.this, R.string.succeed_in_modifying_user_info);
-                            Intent intent = new Intent(ModifyNicknameActivity.this, PickCompanyActivity.class);
+                            ViewUtils.showToast(SetNicknameActivity.this, R.string.succeed_in_modifying_user_info);
+                            Intent intent = new Intent(SetNicknameActivity.this, PickCompanyActivity.class);
                             intent.putExtra("fromGuide", true);
-                            ViewUtils.goForwardAndFinish(ModifyNicknameActivity.this, intent);
+                            ViewUtils.goForwardAndFinish(SetNicknameActivity.this, intent);
                         }
                     });
                 }
@@ -153,7 +153,7 @@ public class ModifyNicknameActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(ModifyNicknameActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
+                            ViewUtils.showToast(SetNicknameActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
                         }
                     });
                 }

@@ -100,7 +100,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".guide.ModifyNicknameActivity"
+            android:name=".guide.SetNicknameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity

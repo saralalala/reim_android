@@ -401,13 +401,13 @@ public class MeFragment extends Fragment
     @SuppressWarnings("unused")
 	private void showShareDialog()
     {
-    	String appID = "wx16afb8ec2cc4dc19";
-    	String appSecret = "2e97f0d75dd7f371803785172682893a";
+    	String wxAppID = "wx16afb8ec2cc4dc19";
+    	String wxAppSecret = "2e97f0d75dd7f371803785172682893a";
     	
-    	UMWXHandler wxHandler = new UMWXHandler(getActivity(), appID, appSecret);
+    	UMWXHandler wxHandler = new UMWXHandler(getActivity(), wxAppID, wxAppSecret);
     	wxHandler.addToSocialSDK();
     	
-    	UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(), appID, appSecret);
+    	UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(), wxAppID, wxAppSecret);
     	wxCircleHandler.setToCircle(true);
     	wxCircleHandler.addToSocialSDK();
     	

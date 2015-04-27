@@ -432,7 +432,7 @@ public class PickCompanyActivity extends Activity
     {
         if (fromGuide)
         {
-            Intent intent = new Intent(this, ModifyNicknameActivity.class);
+            Intent intent = new Intent(this, SetNicknameActivity.class);
             intent.putExtra("nickname", AppPreference.getAppPreference().getCurrentUser().getNickname());
             ViewUtils.goBackWithIntent(this, intent);
         }

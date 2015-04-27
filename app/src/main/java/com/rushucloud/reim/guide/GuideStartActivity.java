@@ -71,7 +71,7 @@ public class GuideStartActivity extends Activity
         {
             public void onClick(View v)
             {
-                Intent intent = new Intent(GuideStartActivity.this, ModifyNicknameActivity.class);
+                Intent intent = new Intent(GuideStartActivity.this, SetNicknameActivity.class);
                 intent.putExtra("nickname", "");
                 intent.putExtra("group", (Serializable) null);
                 ViewUtils.goForwardAndFinish(GuideStartActivity.this, intent);
