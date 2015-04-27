@@ -5,6 +5,15 @@
     android:orientation="vertical"
     android:background="@color/major_dark">
 
+    <ImageView
+        android:id="@+id/backImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:padding="16dp"
+        android:contentDescription="@string/back"
+        android:src="@drawable/back_drawable"/>
+
     <View
         android:layout_width="wrap_content"
         android:layout_height="0dp"

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/titleTextView"
@@ -12,7 +12,7 @@
 		android:layout_marginLeft="16dp"
 		android:layout_marginRight="16dp"
         android:textColor="@color/font_major_dark"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/commentEditText"
@@ -21,6 +21,7 @@
         android:layout_margin="16dp"
         android:hint="@string/input_comment"
         android:textColor="@color/font_major_dark"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textCursorDrawable="@null"/>
 
 </LinearLayout>

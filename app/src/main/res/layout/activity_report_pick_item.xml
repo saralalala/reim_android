@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" 
     android:background="@color/background"
-    android:id="@+id/containerLayout" >
+    android:id="@+id/containerLayout">
 
     <RelativeLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/filterImageView"
@@ -21,7 +21,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/filter"
-            android:src="@drawable/filter_empty" />
+            android:src="@drawable/filter_empty"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/consumed"
                 android:textSize="20sp"
-                android:textColor="@color/major_light" />
+                android:textColor="@color/major_light"/>
 
             <TextView
                 android:id="@+id/budgetTextView"
@@ -49,7 +49,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/budget"
                 android:textSize="20sp"
-                android:textColor="@color/hint_white" />
+                android:textColor="@color/hint_white"/>
 
             <TextView
                 android:id="@+id/borrowingTextView"
@@ -60,7 +60,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/borrowing"
                 android:textSize="20sp"
-                android:textColor="@color/hint_white" />
+                android:textColor="@color/hint_white"/>
 
 
         </LinearLayout>
@@ -70,7 +70,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:gravity="right|center_vertical" >
+            android:gravity="right|center_vertical">
 
 	        <TextView
 	            android:id="@+id/itemCountTextView"
@@ -78,7 +78,7 @@
 	            android:layout_height="wrap_content"
 	            android:layout_marginRight="6dp"
 	            android:textColor="@color/major_light"
-	            android:textSize="16sp" />
+	            android:textSize="16sp"/>
 	
 	        <TextView
 	            android:id="@+id/confirmTextView"
@@ -88,7 +88,7 @@
 				android:gravity="center"
 	            android:text="@string/confirm"
             	android:textColor="@color/title_text_color"
-	            android:textSize="16sp" />
+	            android:textSize="16sp"/>
         
         </LinearLayout>
 
@@ -101,7 +101,7 @@
         android:layout_below="@+id/titleLayout"
         android:divider="@null"
         android:cacheColorHint="@android:color/transparent"
-        android:listSelector="@drawable/list_item_drawable" />
+        android:listSelector="@drawable/list_item_drawable"/>
 
     <TextView
         android:id="@+id/warningTextView"
@@ -109,6 +109,6 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/titleLayout"
         android:gravity="center"
-        android:text="@string/no_unarchived_items" />
+        android:text="@string/no_unarchived_items"/>
 
 </RelativeLayout>

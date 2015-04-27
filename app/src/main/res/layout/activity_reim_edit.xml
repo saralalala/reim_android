@@ -480,7 +480,8 @@
 	                android:background="@null"
 	            	android:hint="@string/input_note"
 	                android:textColor="@color/font_major_dark"
-	                android:textSize="18sp"/>
+	                android:textSize="18sp"
+                    android:textCursorDrawable="@null"/>
 	
 	        </RelativeLayout>
 	

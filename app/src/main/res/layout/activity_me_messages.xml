@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background" >
+    android:background="@color/background">
 
     <RelativeLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -20,7 +20,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:id="@+id/titleTextView"
@@ -29,7 +29,7 @@
             android:layout_centerInParent="true"
             android:text="@string/my_messages"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
         
     </RelativeLayout>
 
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/titleLayout"
-        android:cacheColorHint="@android:color/transparent" />
+        android:cacheColorHint="@android:color/transparent"/>
 
     <TextView
         android:id="@+id/messageTextView"
@@ -47,6 +47,6 @@
         android:layout_below="@+id/titleLayout"
         android:gravity="center"
         android:text="@string/no_messages"
-        android:textColor="@color/hint_light_grey"  />
+        android:textColor="@color/hint_light_grey" />
 
 </RelativeLayout>

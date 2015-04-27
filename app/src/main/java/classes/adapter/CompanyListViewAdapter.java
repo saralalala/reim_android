@@ -13,7 +13,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Group;
+import classes.base.Group;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 
@@ -22,6 +22,7 @@ public class CompanyListViewAdapter extends BaseAdapter
 	private LayoutInflater layoutInflater;
 	private List<Group> companyList;
 	private Group company;
+    private boolean hasInit = false;
 
 	public CompanyListViewAdapter(Context context, List<Group> companies, Group company)
 	{
@@ -67,7 +68,18 @@ public class CompanyListViewAdapter extends BaseAdapter
 	
 	public int getCount()
 	{
-		return companyList.isEmpty()? 1 : companyList.size();
+        if (!companyList.isEmpty())
+        {
+            return companyList.size();
+        }
+        else if (hasInit)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
 	}
 
 	public Object getItem(int position)
@@ -89,5 +101,10 @@ public class CompanyListViewAdapter extends BaseAdapter
 	public void setCompany(Group company)
     {
         this.company = company;
+    }
+
+    public void setHasInit(boolean hasInit)
+    {
+        this.hasInit = hasInit;
     }
 }

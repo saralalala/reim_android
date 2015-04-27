@@ -2,28 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/baseLayout" >
+    android:id="@+id/baseLayout">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/background"
         android:scaleType="fitXY"
-        android:src="@drawable/start_background" />
+        android:src="@drawable/start_background"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp" >
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/backImageView"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:padding="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:id="@+id/titleTextView"
@@ -32,7 +31,7 @@
             android:layout_centerInParent="true"
             android:text="@string/complete_info"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
     </RelativeLayout>
 
@@ -48,7 +47,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/info_avatar" />
+            android:src="@drawable/info_avatar"/>
 
         <classes.widget.ClearEditText
             android:id="@+id/nicknameEditText"
@@ -82,7 +81,7 @@
             android:background="@drawable/button_light_solid_drawable"
             android:text="@string/complete"
             android:textColor="@color/start_button_text_color"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
     </LinearLayout>
 

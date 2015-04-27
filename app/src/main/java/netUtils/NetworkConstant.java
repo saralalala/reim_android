@@ -2,20 +2,28 @@ package netUtils;
 
 public class NetworkConstant
 {	
-	public static String USER_AGENT = "ReimApp";
-	public static String X_REIM_JWT = "X-reim-jwt";
+	public static final String USER_AGENT = "ReimApp";
+	public static final String X_REIM_JWT = "X-reim-jwt";
 	
-	public static String USERNAME = "email";
-	public static String PASSWORD = "password";
-	public static String DEVICE_TYPE = "device_type";
-	public static String DEVICE_TYPE_ANDROID = "android";
-	public static String DEVICE_TOKEN = "device_token";
-	public static String SERVER_TOKEN = "server_token";
+	public static final String USERNAME = "email";
+	public static final String PASSWORD = "password";
+	public static final String DEVICE_TYPE = "device_type";
+	public static final String DEVICE_TYPE_ANDROID = "android";
+	public static final String DEVICE_TOKEN = "device_token";
+	public static final String SERVER_TOKEN = "server_token";
 
-	public static int IMAGE_TYPE_AVATAR = 0;
-	public static int IMAGE_TYPE_INVOICE = 1;
-	public static int IMAGE_TYPE_ICON = 2;
-	
+	public static final int IMAGE_TYPE_AVATAR = 0;
+	public static final int IMAGE_TYPE_INVOICE = 1;
+	public static final int IMAGE_TYPE_ICON = 2;
+
+    public static final int PUSH_TYPE_SYSTEM_MESSAGE = 1;
+    public static final int PUSH_TYPE_REPORT = 2;
+    public static final int PUSH_TYPE_INVITE = 3;
+    public static final int PUSH_TYPE_INVITE_REPLY = 4;
+    public static final int PUSH_TYPE_ADMIN_MESSAGE = 5;
+    public static final int PUSH_TYPE_APPLY = 6;
+    public static final int PUSH_TYPE_APPLY_REPLY = 7;
+
 	public static final int ERROR_SYSTEM_ERROR = -1;
 	public static final int ERROR_USER_NOT_EXISTS = -3;
 	public static final int ERROR_MAIL_SEND_ERROR = -5;

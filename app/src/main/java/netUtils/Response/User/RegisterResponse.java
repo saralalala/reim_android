@@ -7,10 +7,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Category;
-import classes.Group;
-import classes.Tag;
-import classes.User;
+import classes.base.Category;
+import classes.base.Group;
+import classes.base.Tag;
+import classes.base.User;
 import netUtils.response.BaseResponse;
 
 public class RegisterResponse extends BaseResponse
@@ -20,6 +20,7 @@ public class RegisterResponse extends BaseResponse
     private List<User> memberList;
     private User currentUser;
     private Group group;
+    private int lastShownGuideVersion;
 	
 	public RegisterResponse(Object httpResponse)
 	{
@@ -49,6 +50,7 @@ public class RegisterResponse extends BaseResponse
 
             currentUser = new User();
             currentUser.parse(profileObject, groupID);
+            lastShownGuideVersion = profileObject.getInt("guide_version");
 
             JSONArray categoryArray = jObject.getJSONArray("categories");
             categoryList = new ArrayList<Category>();
@@ -103,5 +105,10 @@ public class RegisterResponse extends BaseResponse
     public Group getGroup()
     {
         return group;
+    }
+
+    public int getLastShownGuideVersion()
+    {
+        return lastShownGuideVersion;
     }
 }

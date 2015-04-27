@@ -13,7 +13,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Category;
+import classes.base.Category;
 import classes.utils.ViewUtils;
 
 public class CategoryListViewAdapter extends BaseAdapter

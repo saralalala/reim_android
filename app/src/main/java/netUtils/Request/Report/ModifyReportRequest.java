@@ -6,8 +6,8 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Report;
-import classes.User;
+import classes.base.Report;
+import classes.base.User;
 import classes.utils.DBManager;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;

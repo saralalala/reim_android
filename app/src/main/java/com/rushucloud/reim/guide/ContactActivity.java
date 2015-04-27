@@ -22,8 +22,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Group;
-import classes.User;
+import classes.base.Group;
+import classes.base.User;
 import classes.adapter.ContactListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -34,7 +34,7 @@ import netUtils.HttpConnectionCallback;
 import netUtils.request.group.CreateGroupRequest;
 import netUtils.response.group.CreateGroupResponse;
 
-public class InviteContactActivity extends Activity
+public class ContactActivity extends Activity
 {
     private static final int INPUT_CONTACT = 0;
 
@@ -62,7 +62,7 @@ public class InviteContactActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("InviteContactActivity");
+		MobclickAgent.onPageStart("ContactActivity");
 		MobclickAgent.onResume(this);
         if (contactList.isEmpty() && hasInit)
         {
@@ -74,7 +74,7 @@ public class InviteContactActivity extends Activity
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("InviteContactActivity");
+		MobclickAgent.onPageEnd("ContactActivity");
 		MobclickAgent.onPause(this);
 	}
 
@@ -168,7 +168,7 @@ public class InviteContactActivity extends Activity
 
 				if (!PhoneUtils.isNetworkConnected())
 				{
-					ViewUtils.showToast(InviteContactActivity.this, R.string.error_create_network_unavailable);
+					ViewUtils.showToast(ContactActivity.this, R.string.error_create_network_unavailable);
 				}
                 else
                 {
@@ -203,9 +203,9 @@ public class InviteContactActivity extends Activity
                     {
                         inviteList = inviteList.substring(0, inviteList.length() - 2);
                     }
-                    Intent intent = new Intent(InviteContactActivity.this, InputContactActivity.class);
+                    Intent intent = new Intent(ContactActivity.this, InputContactActivity.class);
                     intent.putExtra("inviteList", inviteList);
-                    ViewUtils.goForwardForResult(InviteContactActivity.this, intent, INPUT_CONTACT);
+                    ViewUtils.goForwardForResult(ContactActivity.this, intent, INPUT_CONTACT);
                 }
                 else if (position > 0 && position < inputList.size() + 1)
                 {
@@ -295,6 +295,7 @@ public class InviteContactActivity extends Activity
                     public void run()
                     {
                         adapter.setContactList(contactList);
+                        adapter.setNoPermission(contactList.isEmpty());
                         adapter.notifyDataSetChanged();
 
                         ReimProgressDialog.dismiss();
@@ -307,7 +308,7 @@ public class InviteContactActivity extends Activity
     private void sendCreateGroupRequest(String inviteList)
     {
         ReimProgressDialog.show();
-        CreateGroupRequest request = new CreateGroupRequest(companyName, inviteList);
+        CreateGroupRequest request = new CreateGroupRequest(companyName, inviteList, 1);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -364,10 +365,10 @@ public class InviteContactActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            Intent intent = new Intent(InviteContactActivity.this, CreateCompleteActivity.class);
+                            Intent intent = new Intent(ContactActivity.this, CreateCompleteActivity.class);
                             intent.putExtra("count", count);
                             intent.putExtra("companyName", companyName);
-                            ViewUtils.goForwardAndFinish(InviteContactActivity.this, intent);
+                            ViewUtils.goForwardAndFinish(ContactActivity.this, intent);
                         }
                     });
                 }
@@ -378,7 +379,7 @@ public class InviteContactActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(InviteContactActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
+                            ViewUtils.showToast(ContactActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
                         }
                     });
                 }
@@ -393,7 +394,7 @@ public class InviteContactActivity extends Activity
         bundle.putStringArrayList("inputList", inputList);
         bundle.putStringArrayList("inputChosenList", inputChosenList);
         bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
-        Intent intent = new Intent(InviteContactActivity.this, CreateCompanyActivity.class);
+        Intent intent = new Intent(ContactActivity.this, CreateCompanyActivity.class);
         intent.putExtras(bundle);
         ViewUtils.goBackWithIntent(this, intent);
     }

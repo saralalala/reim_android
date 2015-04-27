@@ -84,10 +84,9 @@
     <string name="input_contact">填写手机号或邮箱</string>
     <string name="input_contact_manually_and_divided">请手动填写手机号或邮箱，用逗号分开</string>
     <string name="invite_by_pc">可通过访问PC端批量邀请其他同事加入</string>
-    <string name="sending_invitation_1">已经向你的 </string>
-    <string name="sending_invitation_2"> 个同事发送邀请。他们接受邀请后，就能加入你创建的公司。你也可以通过我们的 网页端 批量邀请其他同事加入。</string>
+    <string name="invitation_sent">已经向你的 %1$d 个同事发送邀请。他们接受邀请后，就能加入你创建的公司。你也可以通过我们的 网页端 批量邀请其他同事加入。</string>
     <string name="start_to_use">开始使用</string>
-    <string name="create_prompt">你可以之后在 App 中通过短信或者邮件的方式邀请其他同事加入，也可以通过我们的 网页端 批量邀请他人</string>
+    <string name="create_prompt">你可以之后在应用中通过短信或者邮件的方式邀请其他同事加入，也可以通过我们的 网页端 批量邀请他人。</string>
     <string name="modify_name">设置姓名</string>
     <string name="choose_company">选择公司</string>
     <string name="invited_company">邀请过你的公司</string>
@@ -340,7 +339,7 @@
     <string name="error_bank_account_wrong_format">银行账号格式不正确</string>
     <string name="error_new_nickname_empty">请填写姓名</string>
     <string name="error_company_name_empty">请设置公司名称</string>
-    <string name="error_new_company_name_empty">请输入公司新名称</string>
+    <string name="error_search_company_name_empty">请输入搜索内容</string>
     <string name="error_number_wrong_format">请输入消费金额</string>
     <string name="error_password_empty">请输入密码</string>
     <string name="error_old_password_empty">请输入旧密码</string>
@@ -396,7 +395,7 @@
     <string name="error_submit_report_item_not_uploaded">消费未被上传，报告不可被提交</string>
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>
     <string name="error_timeout">你的账号已经其他地方登录，本地已经下线。</string>
-    <string name="error_contact_no_permission">云报销没有读取手机通讯录的权限，无法导入联系方式</string>
+    <string name="error_contact_no_permission">未能读取到你的通讯录信息，可能是由于你未授权「云报销」读取你的通讯录所致。</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>

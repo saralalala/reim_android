@@ -15,8 +15,8 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.Report;
-import classes.User;
+import classes.base.Report;
+import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;

@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background" >
+    android:background="@color/background">
 
     <RelativeLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -20,7 +20,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:text="@string/choose_following_managers"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
     </RelativeLayout>
 
@@ -38,19 +38,19 @@
         android:layout_height="0.5dp"
         android:layout_below="@+id/titleLayout"
         android:layout_marginTop="18dp"
-        layout="@layout/view_divider" />
+        layout="@layout/view_divider"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_below="@+id/divider"
-        android:background="@color/major_light" >
+        android:background="@color/major_light">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
                 android:layout_marginLeft="16dp"
                 android:text="@string/submit_to"
                 android:textColor="@color/hint_grey"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/managerTextView"
@@ -69,7 +69,7 @@
                 android:paddingTop="22dp"
                 android:paddingBottom="22dp"
                 android:textColor="@color/font_major_dark"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </LinearLayout>
         
 		<LinearLayout
@@ -77,12 +77,12 @@
 		    android:layout_height="0.5dp"
 		    android:layout_marginLeft="82dp"
 		    android:orientation="vertical"
-		    android:background="@color/divider" />
+		    android:background="@color/divider"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
                 android:layout_marginLeft="16dp"
                 android:text="@string/cc"
                 android:textColor="@color/hint_grey"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/ccTextView"
@@ -101,26 +101,26 @@
                 android:paddingTop="22dp"
                 android:paddingBottom="22dp"
                 android:textColor="@color/font_major_dark"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <include
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            layout="@layout/view_divider" />
+            layout="@layout/view_divider"/>
 
     </LinearLayout>
             
 	<include                 
 		android:layout_width="match_parent"
 		android:layout_height="0.5dp"
-		layout="@layout/view_divider" />
+		layout="@layout/view_divider"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        style="?android:attr/buttonBarStyle" >
+        style="?android:attr/buttonBarStyle">
 
         <Button
             android:id="@+id/finishButton"
@@ -130,7 +130,7 @@
             style="?android:attr/buttonBarButtonStyle"
             android:background="@drawable/bar_button_drawable"
             android:text="@string/finish"
-            android:textColor="@color/font_major_dark" />
+            android:textColor="@color/font_major_dark"/>
 
         <Button
             android:id="@+id/submitButton"

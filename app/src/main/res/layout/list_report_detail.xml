@@ -4,21 +4,21 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:clickable="false"
-    android:background="@color/major_light" >
+    android:background="@color/major_light">
     
     <LinearLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical"
 	    android:clickable="false"
-	    android:background="@color/major_light" >
+	    android:background="@color/major_light">
 	
 	    <RelativeLayout
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="40dp"
 	        android:layout_marginLeft="16dp"
-	        android:layout_marginRight="16dp" >
+	        android:layout_marginRight="16dp">
 	
 	        <TextView
 	            android:id="@+id/titleTextView"
@@ -28,7 +28,7 @@
 	            android:layout_toLeftOf="@+id/statusTextView"
 	            android:layout_marginRight="14dp"
 	            android:textColor="@color/font_major_dark"
-	            android:textSize="20sp" />
+	            android:textSize="20sp"/>
 
 	        <TextView
 	            android:id="@+id/statusTextView"
@@ -39,7 +39,7 @@
 	            android:paddingLeft="3dp"
 	            android:paddingRight="3dp"
 	            android:gravity="center"
-	            android:textColor="@color/major_light" />
+	            android:textColor="@color/major_light"/>
 	
 	    </RelativeLayout>
 
@@ -48,7 +48,7 @@
 		    android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="4dp" >
+            android:layout_marginRight="4dp">
 			
 			<TextView
 			    android:id="@+id/timeTextView"
@@ -56,7 +56,7 @@
 			    android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
 			    android:textColor="@color/hint_grey"
-			    android:textSize="14sp" />
+			    android:textSize="14sp"/>
 			
 			<TextView
 			    android:id="@+id/approveInfoTextView"
@@ -66,7 +66,7 @@
                 android:padding="12dp"
 			    android:text="@string/approve_info_hint"
 			    android:textColor="@color/major_dark"
-			    android:textSize="14sp" />
+			    android:textSize="14sp"/>
 			
 		</RelativeLayout>
 	
@@ -86,11 +86,11 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
 	    android:clickable="false"
-	    android:background="@color/major_light" >
+	    android:background="@color/major_light">
 	
 	    <LinearLayout
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
+	        android:layout_height="wrap_content">
 	
 	        <TextView
 	            android:id="@+id/senderPrompt"
@@ -98,7 +98,7 @@
 	            android:layout_height="wrap_content"
 	            android:text="@string/sender"
 	            android:textColor="@color/hint_grey"
-	            android:textSize="14sp" />
+	            android:textSize="14sp"/>
 	
 	        <TextView
 	            android:id="@+id/senderTextView"
@@ -106,7 +106,7 @@
 	            android:layout_height="wrap_content"
 	            android:layout_marginLeft="14dp"
 	            android:textColor="@color/font_major_dark"
-	            android:textSize="14sp" />
+	            android:textSize="14sp"/>
 	
 	    </LinearLayout>
 	
@@ -114,7 +114,7 @@
             android:id="@+id/managerLayout"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="14dp" >
+	        android:layout_marginTop="14dp">
 	
 	        <TextView
 	            android:id="@+id/managerPrompt"
@@ -122,7 +122,7 @@
 	            android:layout_height="wrap_content"
 	            android:text="@string/approver"
 	            android:textColor="@color/hint_grey"
-	            android:textSize="14sp" />
+	            android:textSize="14sp"/>
 	
 	        <TextView
 	            android:id="@+id/managerTextView"
@@ -130,7 +130,7 @@
 	            android:layout_height="wrap_content"
 	            android:layout_marginLeft="14dp"
 	            android:textColor="@color/font_major_dark"
-	            android:textSize="14sp" />
+	            android:textSize="14sp"/>
 	
 	    </LinearLayout>
 	
@@ -138,7 +138,7 @@
             android:id="@+id/ccLayout"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="14dp" >
+	        android:layout_marginTop="14dp">
 	
 	        <TextView
 	            android:id="@+id/ccPrompt"
@@ -146,7 +146,7 @@
 	            android:layout_height="wrap_content"
 	            android:text="@string/cc"
 	            android:textColor="@color/hint_grey"
-	            android:textSize="14sp" />
+	            android:textSize="14sp"/>
 	
 	        <TextView
 	            android:id="@+id/ccTextView"
@@ -154,7 +154,7 @@
 	            android:layout_height="wrap_content"
 	            android:layout_marginLeft="14dp"
 	            android:textColor="@color/font_major_dark"
-	            android:textSize="14sp" />
+	            android:textSize="14sp"/>
 	
 	    </LinearLayout>
 	
@@ -167,7 +167,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
 	    <TextView
 	        android:layout_width="wrap_content"
@@ -177,7 +177,7 @@
 	        android:layout_marginLeft="16dp"
 	        android:text="@string/total_amount"
 	        android:textColor="@color/hint_grey"
-	        android:textSize="14sp" />
+	        android:textSize="14sp"/>
 	
 	    <LinearLayout
 	        android:layout_width="0dp"
@@ -185,7 +185,7 @@
 	        android:layout_weight="1"
 	        android:layout_gravity="center_vertical"
 	        android:gravity="bottom"
-	        android:layout_marginLeft="14dp" >
+	        android:layout_marginLeft="14dp">
 	
 	        <TextView
 	            android:id="@+id/amountTextView"
@@ -195,7 +195,7 @@
 	            android:ellipsize="end"
 	            android:singleLine="true"
 	            android:textColor="@color/font_reim_number"
-	            android:textSize="24sp" />
+	            android:textSize="24sp"/>
 	
 	        <TextView
 	            android:layout_width="wrap_content"
@@ -203,7 +203,7 @@
 	            android:layout_marginLeft="3dp"
 	            android:text="@string/rmb_symbol"
 	            android:textColor="@color/font_major_dark"
-	            android:textSize="16sp" />
+	            android:textSize="16sp"/>
 	
 	    </LinearLayout>
 	
@@ -217,7 +217,7 @@
 	        android:layout_marginRight="16dp"
 	        android:text="@string/item_count"
 	        android:textColor="@color/hint_grey"
-	        android:textSize="14sp" />
+	        android:textSize="14sp"/>
     
     </LinearLayout>
 

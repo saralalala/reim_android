@@ -23,7 +23,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
-import classes.Tag;
+import classes.base.Tag;
 import classes.adapter.TagListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;

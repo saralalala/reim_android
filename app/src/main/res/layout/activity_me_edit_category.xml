@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    android:id="@+id/baseLayout" >
+    android:id="@+id/baseLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -20,7 +20,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:text="@string/edit_category"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/saveTextView"
@@ -40,29 +40,29 @@
             android:gravity="center"
             android:text="@string/save"
             android:textColor="@color/title_text_color"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 		
 		    <RelativeLayout
 		        android:layout_width="match_parent"
 		        android:layout_height="50.5dp"
 		        android:layout_marginTop="18dp"
-        		android:background="@color/major_light" >
+        		android:background="@color/major_light">
 		
 			    <include
 			        android:layout_width="match_parent"
 			        android:layout_height="0.5dp"
-			        layout="@layout/view_divider" />
+			        layout="@layout/view_divider"/>
 
 			    <ImageView
 			        android:id="@+id/iconImageView"
@@ -72,7 +72,7 @@
 			        android:layout_alignParentLeft="true"
 			        android:layout_marginLeft="20dp"
 			        android:contentDescription="@string/icon"
-			        android:src="@drawable/default_icon" />
+			        android:src="@drawable/default_icon"/>
 
 		        <classes.widget.ClearEditText
 		            android:id="@+id/nameEditText"
@@ -84,14 +84,15 @@
 		            android:background="@null"
 		            android:hint="@string/input_category_name"
                     android:textColor="@color/font_major_dark"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:textCursorDrawable="@null"/>
 		        
 		    </RelativeLayout>
 		
 		    <include
 		        android:layout_width="match_parent"
 		        android:layout_height="0.5dp"
-		        layout="@layout/view_divider" />
+		        layout="@layout/view_divider"/>
 
 		    <TextView
 		        android:layout_width="wrap_content"
@@ -100,7 +101,7 @@
 		        android:layout_marginLeft="20dp"
 		        android:text="@string/choose_icon"
 		        android:textColor="@color/hint_grey"
-		        android:textSize="14sp" />
+		        android:textSize="14sp"/>
 		
 		    <include
 		        android:layout_width="match_parent"
@@ -108,26 +109,26 @@
 		        android:layout_marginTop="6dp"
 		        android:layout_marginLeft="12dp"
 		        android:layout_marginRight="12dp"
-		        layout="@layout/view_divider" />
+		        layout="@layout/view_divider"/>
 
 		    <LinearLayout
 		        android:id="@+id/iconLayout"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:orientation="vertical"
-		        android:layout_margin="16dp" />
+		        android:layout_margin="16dp"/>
 
             <!--
 			<include
 			    android:layout_width="match_parent"
 			    android:layout_height="0.5dp"
-			    layout="@layout/view_divider" />
+			    layout="@layout/view_divider"/>
 
 		    <LinearLayout
 		        android:layout_width="match_parent"
 		        android:layout_height="50dp"
 		        android:orientation="horizontal"
-        		android:background="@color/major_light" >
+        		android:background="@color/major_light">
 
 			    <TextView
         			android:id="@+id/limitTextView"
@@ -137,7 +138,7 @@
 			        android:layout_marginLeft="20dp"
 			        android:text="@string/category_limit"
 		            android:textColor="@color/font_major_dark"
-		            android:textSize="16sp" />
+		            android:textSize="16sp"/>
 
 		        <EditText
 		            android:id="@+id/limitEditText"
@@ -150,7 +151,8 @@
 		            android:hint="@string/input_category_limit"
         			android:inputType="numberDecimal"
 		            android:textSize="16sp"
-		            android:textColor="@color/font_major_dark" />
+		            android:textColor="@color/font_major_dark"
+                    android:textCursorDrawable="@null"/>
 
 			    <TextView
 			        android:layout_width="wrap_content"
@@ -160,20 +162,20 @@
 		            android:layout_marginRight="16dp"
 			        android:text="@string/rmb"
 		            android:textColor="@color/hint_grey"
-		            android:textSize="14sp" />
+		            android:textSize="14sp"/>
 
 		    </LinearLayout>
 
 			<include
 			    android:layout_width="match_parent"
 			    android:layout_height="0.5dp"
-			    layout="@layout/view_divider" />
+			    layout="@layout/view_divider"/>
 
 		    <RelativeLayout
 		        android:layout_width="match_parent"
 		        android:layout_height="50dp"
 		        android:orientation="horizontal"
-        		android:background="@color/major_light" >
+        		android:background="@color/major_light">
 
 			    <TextView
 			        android:layout_width="wrap_content"
@@ -182,7 +184,7 @@
 			        android:layout_marginLeft="20dp"
 			        android:text="@string/budget"
 		            android:textColor="@color/font_major_dark"
-		            android:textSize="16sp" />
+		            android:textSize="16sp"/>
 
 			    <ToggleButton
 			        android:id="@+id/proveAheadToggleButton"
@@ -193,7 +195,7 @@
 			        android:layout_marginRight="16dp"
 			        android:background="@drawable/toggle_drawable"
 			        android:textOn=""
-			        android:textOff="" />
+			        android:textOff=""/>
 
 		    </RelativeLayout>
 
@@ -201,7 +203,7 @@
 			    android:layout_width="match_parent"
 			    android:layout_height="0.5dp"
 			    android:layout_marginBottom="24dp"
-			    layout="@layout/view_divider" /> -->
+			    layout="@layout/view_divider"/> -->
 		    
         </LinearLayout>
         

@@ -15,6 +15,7 @@ public class EventsResponse extends BaseResponse
     private List<Integer> mineUnreadList;
     private List<Integer> othersUnreadList;
     private int unreadMessagesCount;
+    private boolean hasUnreadMessages;
     private boolean hasUnreadReports;
 	private boolean needToRefresh;
     private boolean groupChanged;
@@ -30,7 +31,7 @@ public class EventsResponse extends BaseResponse
 		try
 		{
 			JSONObject jObject = getDataObject();
-            System.out.println(jObject.toString());
+            System.out.println("Events:" + jObject.toString());
             JSONArray appliesArray = jObject.getJSONArray("applies");
 			JSONArray invitesArray = jObject.getJSONArray("invites");
             JSONArray systemMessagesArray = jObject.getJSONArray("system");
@@ -43,8 +44,8 @@ public class EventsResponse extends BaseResponse
             appliedCompany = jObject.getString("apply");
 
             int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
-            mineUnreadList = new ArrayList<Integer>();
-            othersUnreadList = new ArrayList<Integer>();
+            mineUnreadList = new ArrayList<>();
+            othersUnreadList = new ArrayList<>();
             for (int i = 0; i < reportsArray.length(); i++)
             {
                 JSONObject object = reportsArray.getJSONObject(i);
@@ -59,6 +60,7 @@ public class EventsResponse extends BaseResponse
             }
 
             unreadMessagesCount = appliesArray.length() + invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length();
+            hasUnreadMessages = appliesArray.length() + invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length() > 0;
             hasUnreadReports = reportsArray.length() > 0;
 			needToRefresh = (membersArray.length() + managersArray.length()) > 0 && !groupChanged;
 		}
@@ -81,6 +83,11 @@ public class EventsResponse extends BaseResponse
     public int getUnreadMessagesCount()
     {
         return unreadMessagesCount;
+    }
+
+    public boolean hasUnreadMessages()
+    {
+        return hasUnreadMessages;
     }
 
     public boolean hasUnreadReports()

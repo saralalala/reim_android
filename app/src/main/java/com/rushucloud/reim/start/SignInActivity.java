@@ -18,9 +18,10 @@ import android.widget.TextView;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.guide.GuideStartActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.User;
+import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -245,9 +246,10 @@ public class SignInActivity extends Activity
                     int currentGroupID = -1;
 
                     DBManager dbManager = DBManager.getDBManager();
-                    AppPreference appPreference = AppPreference.getAppPreference();
+                    final AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
+                    appPreference.setLastShownGuideVersion(response.getLastShownGuideVersion());
                     appPreference.setSyncOnlyWithWifi(true);
                     appPreference.setEnablePasswordProtection(true);
                     appPreference.setLastSyncTime(0);
@@ -303,7 +305,14 @@ public class SignInActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.goForwardAndFinish(SignInActivity.this, MainActivity.class);
+                            if (appPreference.getLastShownGuideVersion() < appPreference.getGuideVersion())
+                            {
+                                ViewUtils.goForwardAndFinish(SignInActivity.this, GuideStartActivity.class);
+                            }
+                            else
+                            {
+                                ViewUtils.goForwardAndFinish(SignInActivity.this, MainActivity.class);
+                            }
                         }
                     });
                 }

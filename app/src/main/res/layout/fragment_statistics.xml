@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background" >
+    android:background="@color/background">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <TextView
             android:id="@+id/statTitleTextView"
@@ -17,7 +17,7 @@
             android:layout_centerInParent="true"
             android:text="@string/statistics"
             android:textSize="20sp"
-            android:textColor="@color/major_light" />
+            android:textColor="@color/major_light"/>
 
         <RelativeLayout
             android:id="@+id/titleLayout"
@@ -35,13 +35,13 @@
                 android:gravity="center"
                 android:text="@string/individual"
                 android:textColor="@color/major_light"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
 
             <View
                 android:id="@+id/pivotView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"/>
 
             <TextView
                 android:id="@+id/othersTitleTextView"
@@ -53,7 +53,7 @@
                 android:gravity="center"
                 android:text="@string/group"
                 android:textColor="@color/hint_white"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
 
         </RelativeLayout>
 
@@ -65,6 +65,6 @@
         android:layout_height="match_parent"
         android:cacheColorHint="@android:color/transparent"
         android:listSelector="@android:color/transparent"
-        android:divider="@null" />
+        android:divider="@null"/>
 
 </LinearLayout>

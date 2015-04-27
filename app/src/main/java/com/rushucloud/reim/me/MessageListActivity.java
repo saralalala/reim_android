@@ -18,7 +18,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Message;
+import classes.base.Message;
 import classes.adapter.MessageListViewAdapter;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;

@@ -14,8 +14,8 @@ import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.PickCompanyActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.Group;
-import classes.User;
+import classes.base.Group;
+import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;

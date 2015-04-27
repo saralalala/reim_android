@@ -1,4 +1,4 @@
-package classes;
+package classes.base;
 
 import java.util.List;
 

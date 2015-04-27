@@ -1,4 +1,4 @@
-package classes;
+package classes.base;
 
 import java.io.Serializable;
 import java.util.Collections;

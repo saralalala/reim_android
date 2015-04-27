@@ -1,4 +1,4 @@
-package classes;
+package classes.base;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

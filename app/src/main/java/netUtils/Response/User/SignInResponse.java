@@ -8,10 +8,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Category;
-import classes.Group;
-import classes.Tag;
-import classes.User;
+import classes.base.Category;
+import classes.base.Group;
+import classes.base.Tag;
+import classes.base.User;
 import netUtils.response.BaseResponse;
 
 public class SignInResponse extends BaseResponse
@@ -21,6 +21,7 @@ public class SignInResponse extends BaseResponse
 	private List<User> memberList;
 	private User currentUser;
 	private Group group;
+    private int lastShownGuideVersion;
 	
 	public SignInResponse(Object httpResponse)
 	{
@@ -44,9 +45,10 @@ public class SignInResponse extends BaseResponse
 			}
 
 			currentUser = new User(profileObject, groupID);
+            lastShownGuideVersion = profileObject.getInt("guide_version");
 			
 			JSONArray categoryArray = jObject.getJSONArray("categories");
-			categoryList = new ArrayList<Category>();
+			categoryList = new ArrayList<>();
 			for (int i = 0; i < categoryArray.length(); i++)
 			{
 				Category category =new Category(categoryArray.getJSONObject(i));
@@ -54,7 +56,7 @@ public class SignInResponse extends BaseResponse
 			}
 			
 			JSONArray tagArray = jObject.getJSONArray("tags");
-			tagList = new ArrayList<Tag>();
+			tagList = new ArrayList<>();
 			for (int i = 0; i < tagArray.length(); i++)
 			{
 				Tag tag = new Tag(tagArray.getJSONObject(i));
@@ -62,7 +64,7 @@ public class SignInResponse extends BaseResponse
 			}
 			
 			JSONArray memberArray = jObject.getJSONArray("members");
-			memberList = new ArrayList<User>();
+			memberList = new ArrayList<>();
 			for (int i = 0; i < memberArray.length(); i++)
 			{
 				User user = new User(memberArray.getJSONObject(i), groupID);
@@ -100,4 +102,9 @@ public class SignInResponse extends BaseResponse
 	{
 		return group;
 	}
+
+    public int getLastShownGuideVersion()
+    {
+        return lastShownGuideVersion;
+    }
 }

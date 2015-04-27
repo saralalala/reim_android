@@ -11,8 +11,8 @@ import com.avos.avoscloud.AVInstallation;
 
 import java.io.File;
 
-import classes.Group;
-import classes.User;
+import classes.base.Group;
+import classes.base.User;
 
 public class AppPreference
 {
@@ -31,6 +31,8 @@ public class AppPreference
     private int lastGetOthersReportTime = 0;
 	private int lastGetMineStatTime = 0;
     private int lastGetOthersStatTime = 0;
+    private int guideVersion = 1;
+    private int lastShownGuideVersion = 0;
     private boolean needToShowReimGuide = true;
     private boolean needToShowReportGuide = true;
 	private String appDirectory = "";
@@ -73,6 +75,7 @@ public class AppPreference
         appPreference.setLastGetOthersReportTime(preferences.getInt("lastGetOthersReportTime", 0));
 		appPreference.setLastGetMineStatTime(preferences.getInt("lastGetMineStatTime", 0));
         appPreference.setLastGetOthersStatTime(preferences.getInt("lastGetOthersStatTime", 0));
+        appPreference.setLastShownGuideVersion(preferences.getInt("lastShownGuideVersion", 0));
         appPreference.setNeedToShowReimGuide(preferences.getBoolean("needToShowReimGuide", true));
         appPreference.setNeedToShowReportGuide(preferences.getBoolean("needToShowReportGuide", true));
 		
@@ -96,6 +99,7 @@ public class AppPreference
 		editor.putString("serverToken", appPreference.getServerToken());
 		editor.putBoolean("syncOnlyWithWifi", appPreference.syncOnlyWithWifi());
 		editor.putBoolean("enablePasswordProtection", appPreference.passwordProtectionEnabled());
+        editor.putInt("lastShownGuideVersion", appPreference.getLastShownGuideVersion());
         editor.putInt("lastSyncTime", appPreference.getLastSyncTime());
 		editor.putInt("lastGetOthersReportTime", appPreference.getLastGetOthersReportTime());
 		editor.putInt("lastGetMineStatTime", appPreference.getLastGetMineStatTime());
@@ -218,6 +222,20 @@ public class AppPreference
     public void setLastGetOthersStatTime(int lastGetOthersStatTime)
     {
         this.lastGetOthersStatTime = lastGetOthersStatTime;
+    }
+
+    public int getGuideVersion()
+    {
+        return guideVersion;
+    }
+
+    public int getLastShownGuideVersion()
+    {
+        return lastShownGuideVersion;
+    }
+    public void setLastShownGuideVersion(int lastShownGuideVersion)
+    {
+        this.lastShownGuideVersion = lastShownGuideVersion;
     }
 
     public boolean needToShowReimGuide()

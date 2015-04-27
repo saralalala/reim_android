@@ -21,9 +21,9 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Group;
-import classes.Invite;
-import classes.User;
+import classes.base.Group;
+import classes.base.Invite;
+import classes.base.User;
 import classes.adapter.CompanyListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -177,10 +177,9 @@ public class PickCompanyActivity extends Activity
 
     private void searchGroups()
     {
-        sectionTextView.setText(R.string.search_result);
         if (companyEditText.getText().toString().isEmpty())
         {
-            ViewUtils.showToast(PickCompanyActivity.this, R.string.input_company_name);
+            ViewUtils.showToast(PickCompanyActivity.this, R.string.error_search_company_name_empty);
         }
         else if (!PhoneUtils.isNetworkConnected())
         {
@@ -258,8 +257,10 @@ public class PickCompanyActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
+                            sectionTextView.setText(R.string.search_result);
                             adapter.setCompany(company);
                             adapter.setCompanyList(companyList);
+                            adapter.setHasInit(true);
                             adapter.notifyDataSetChanged();
                         }
                     });
@@ -281,7 +282,7 @@ public class PickCompanyActivity extends Activity
 
     private void sendInviteReplyRequest(Invite invite)
     {
-        InviteReplyRequest request = new InviteReplyRequest(Invite.TYPE_ACCEPTED, invite.getInviteCode());
+        InviteReplyRequest request = new InviteReplyRequest(Invite.TYPE_ACCEPTED, invite.getInviteCode(), 1);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -376,7 +377,7 @@ public class PickCompanyActivity extends Activity
     private void sendApplyRequest()
     {
         ReimProgressDialog.show();
-        ApplyRequest request = new ApplyRequest(company.getServerID());
+        ApplyRequest request = new ApplyRequest(company.getServerID(), 1);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)

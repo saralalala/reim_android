@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.User;
+import classes.base.User;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 
@@ -104,7 +104,7 @@ public class CreateCompanyActivity extends Activity
                     bundle.putStringArrayList("inputList", inputList);
                     bundle.putStringArrayList("inputChosenList", inputChosenList);
                     bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
-                    Intent intent = new Intent(CreateCompanyActivity.this, InviteContactActivity.class);
+                    Intent intent = new Intent(CreateCompanyActivity.this, ContactActivity.class);
                     intent.putExtras(bundle);
                     ViewUtils.goForwardAndFinish(CreateCompanyActivity.this, intent);
 				}

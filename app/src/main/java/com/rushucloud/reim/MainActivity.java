@@ -25,12 +25,14 @@ import com.umeng.update.UmengUpdateAgent;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.User;
+import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -42,6 +44,7 @@ import classes.widget.Spotlight;
 import classes.widget.TabItem;
 import netUtils.HttpConnectionCallback;
 import netUtils.HttpUtils;
+import netUtils.NetworkConstant;
 import netUtils.URLDef;
 import netUtils.request.CommonRequest;
 import netUtils.request.EventsRequest;
@@ -509,8 +512,10 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 							ReimApplication.setMineUnreadList(response.getMineUnreadList());
                             ReimApplication.setOthersUnreadList(response.getOthersUnreadList());
                             ReimApplication.setUnreadMessagesCount(response.getUnreadMessagesCount());
+                            ReimApplication.setHasUnreadMessages(response.hasUnreadMessages());
 							showReportTip(response.hasUnreadReports());
-							showMeTip(response.getUnreadMessagesCount() > 0);
+							showMeTip(response.hasUnreadMessages());
+
                             if (viewPager.getCurrentItem() == ReimApplication.TAB_ME)
                             {
                                 MeFragment fragment = (MeFragment) fragmentList.get(ReimApplication.TAB_ME);
@@ -688,13 +693,55 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
                 public void onMessage(String message)
                 {
-                    System.out.println("onMessage");
-                    System.out.println(message);
+                    System.out.println("onMessage:" + message);
+
+                    try
+                    {
+                        JSONObject jObject = new JSONObject(message);
+                        int type = jObject.getJSONObject("msg").getInt("type");
+                        if (type > 0 && type == NetworkConstant.PUSH_TYPE_REPORT)
+                        {
+                            runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    sendGetEventsRequest();
+                                    showReportTip(true);
+                                }
+                            });
+                        }
+                        else if (type > 0)
+                        {
+                            runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    ReimApplication.setHasUnreadMessages(true);
+                                    showMeTip(true);
+
+                                    if (viewPager.getCurrentItem() == ReimApplication.TAB_ME)
+                                    {
+                                        runOnUiThread(new Runnable()
+                                        {
+                                            public void run()
+                                            {
+                                                MeFragment fragment = (MeFragment) fragmentList.get(ReimApplication.TAB_ME);
+                                                fragment.showTip();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
 
                 public void onClose(int code, String reason, boolean remote)
                 {
-                    System.out.println("onClose");
                     webSocketIsClosed = true;
                 }
 

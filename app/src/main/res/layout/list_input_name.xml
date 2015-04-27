@@ -11,7 +11,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
         android:contentDescription="@string/contact"
-        android:src="@drawable/contact" />
+        android:src="@drawable/contact"/>
 
     <TextView
         android:layout_width="0dp"
@@ -24,7 +24,7 @@
         android:singleLine="true"
         android:text="@string/input_contact_manually"
         android:textColor="@color/major_dark"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -32,6 +32,6 @@
         android:layout_gravity="center_vertical"
         android:layout_marginRight="10dp"
         android:contentDescription="@string/next"
-        android:src="@drawable/next" />
+        android:src="@drawable/next"/>
 
 </LinearLayout>

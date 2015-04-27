@@ -13,7 +13,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Vendor;
+import classes.base.Vendor;
 
 public class VendorListViewAdapter extends BaseAdapter
 {

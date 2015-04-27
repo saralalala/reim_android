@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/containerLayout" >
+    android:id="@+id/containerLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -19,7 +19,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_centerInParent="true"
             android:text="@string/report_detail"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/saveTextView"
@@ -39,7 +39,7 @@
 			android:gravity="center"
             android:text="@string/save"
             android:textColor="@color/title_text_color"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
     </RelativeLayout>
 
@@ -47,19 +47,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/background" >
+        android:background="@color/background">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
             
 	        <LinearLayout
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:orientation="vertical"
 			    android:clickable="false"
-			    android:background="@color/major_light" >
+			    android:background="@color/major_light">
 			
 			    <LinearLayout
 			        android:layout_width="match_parent"
@@ -82,7 +82,8 @@
 			            android:inputType="textMultiLine"			            
 			            android:hint="@string/input_report_title"
 			            android:textColor="@color/font_major_dark"
-			            android:textSize="20sp"/>
+			            android:textSize="20sp"
+                        android:textCursorDrawable="@null"/>
 			
 			        <TextView
 			            android:id="@+id/statusTextView"
@@ -102,7 +103,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_marginBottom="10dp"
 			        android:layout_marginLeft="16dp"
-			        android:layout_marginRight="4dp" >
+			        android:layout_marginRight="4dp">
 			
 				    <TextView
 				        android:id="@+id/timeTextView"
@@ -110,7 +111,7 @@
 				        android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
 				        android:textColor="@color/hint_grey"
-				        android:textSize="14sp" />
+				        android:textSize="14sp"/>
 			
 				    <TextView
 				        android:id="@+id/approveInfoTextView"
@@ -120,7 +121,7 @@
 				        android:layout_alignParentRight="true"
 				        android:text="@string/approve_info_hint"
 				        android:textColor="@color/major_dark"
-				        android:textSize="14sp" />
+				        android:textSize="14sp"/>
 				    
 			    </RelativeLayout>
 			
@@ -129,18 +130,18 @@
 			<include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
-			  	layout="@layout/view_divider" />
+			  	layout="@layout/view_divider"/>
 
 			<LinearLayout
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:orientation="vertical"
-		        android:background="@color/major_light" >
+		        android:background="@color/major_light">
 	
 		        <LinearLayout
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content"
-		            android:orientation="horizontal" >
+		            android:orientation="horizontal">
 	
 		            <TextView
 		                android:layout_width="wrap_content"
@@ -148,7 +149,7 @@
 		                android:layout_marginLeft="16dp"
 		                android:text="@string/submit_to"
 		                android:textColor="@color/hint_grey"
-		                android:textSize="14sp" />
+		                android:textSize="14sp"/>
 	
 		            <TextView
 		                android:id="@+id/managerTextView"
@@ -159,7 +160,7 @@
 		                android:layout_marginLeft="22dp"
 		                android:layout_marginRight="16dp"
 		                android:textColor="@color/font_major_dark"
-		                android:textSize="16sp" />
+		                android:textSize="16sp"/>
 		
 		        </LinearLayout>
 	            
@@ -172,7 +173,7 @@
 		        <LinearLayout
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content"
-		            android:orientation="horizontal" >
+		            android:orientation="horizontal">
 	
 		            <TextView
 		                android:layout_width="wrap_content"
@@ -180,7 +181,7 @@
 		                android:layout_marginLeft="16dp"
 		                android:text="@string/cc"
 		                android:textColor="@color/hint_grey"
-		                android:textSize="14sp" />
+		                android:textSize="14sp"/>
 	
 		            <TextView
 		                android:id="@+id/ccTextView"
@@ -191,7 +192,7 @@
 		                android:layout_marginLeft="22dp"
 		                android:layout_marginRight="16dp"
 		                android:textColor="@color/font_major_dark"
-		                android:textSize="16sp" />
+		                android:textSize="16sp"/>
 		
 		        </LinearLayout>
 		        
@@ -200,14 +201,14 @@
 			<include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
-			  	layout="@layout/view_divider" />
+			  	layout="@layout/view_divider"/>
 			
 			<LinearLayout
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:orientation="horizontal"
 			    android:clickable="false"
-			    android:background="@color/major_light" >
+			    android:background="@color/major_light">
 			
 			    <TextView
 			        android:layout_width="wrap_content"
@@ -217,7 +218,7 @@
 			        android:layout_marginLeft="16dp"
 			        android:text="@string/total_amount"
 			        android:textColor="@color/hint_grey"
-			        android:textSize="14sp" />
+			        android:textSize="14sp"/>
 			
 			    <LinearLayout
 			        android:layout_width="0dp"
@@ -225,7 +226,7 @@
 			        android:layout_weight="1"
 			        android:layout_gravity="center_vertical"
 			        android:gravity="bottom"
-			        android:layout_marginLeft="14dp" >
+			        android:layout_marginLeft="14dp">
 			
 			        <TextView
 			            android:id="@+id/amountTextView"
@@ -235,7 +236,7 @@
 			            android:ellipsize="end"
 			            android:singleLine="true"
 			            android:textColor="@color/font_reim_number"
-			            android:textSize="24sp" />
+			            android:textSize="24sp"/>
 			
 			        <TextView
 			            android:layout_width="wrap_content"
@@ -243,7 +244,7 @@
 			            android:layout_marginLeft="3dp"
 			            android:text="@string/rmb_symbol"
 			            android:textColor="@color/font_major_dark"
-			            android:textSize="16sp" />
+			            android:textSize="16sp"/>
 			
 			    </LinearLayout>
 			
@@ -257,7 +258,7 @@
 			        android:layout_marginRight="10dp"
 			        android:text="@string/item_count"
 			        android:textColor="@color/hint_grey"
-			        android:textSize="14sp" />
+			        android:textSize="14sp"/>
 			
 			    <ImageView
 			        android:id="@+id/addImageView"
@@ -266,20 +267,20 @@
 			        android:layout_gravity="center_vertical"
 			        android:layout_marginRight="16dp"
 			        android:contentDescription="@string/add"
-			        android:src="@drawable/add_tag_button" />
+			        android:src="@drawable/add_tag_button"/>
 			
 			</LinearLayout>
             
 			<include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
-			  	layout="@layout/view_divider" />
+			  	layout="@layout/view_divider"/>
 
 			<LinearLayout
         		android:id="@+id/itemLayout"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
-			    android:orientation="vertical" />
+			    android:orientation="vertical"/>
 				    
         </LinearLayout>
         
@@ -288,16 +289,16 @@
 	<include                 
 		android:layout_width="match_parent"
 		android:layout_height="0.5dp"
-		layout="@layout/view_divider" />
+		layout="@layout/view_divider"/>
 
 	<RelativeLayout
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" >
+	    android:layout_height="wrap_content">
 
 		<LinearLayout
 		    style="?android:attr/buttonBarStyle"
 		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
+		    android:layout_height="wrap_content">
 
 		    <Button
 		        android:id="@+id/commentButton"
@@ -307,7 +308,7 @@
 		        android:layout_weight="1"
 		        android:background="@drawable/bar_button_drawable"
 		        android:text="@string/message"
-		        android:textColor="@color/font_major_dark" />
+		        android:textColor="@color/font_major_dark"/>
 
 		    <Button
 		        android:id="@+id/submitButton"
@@ -317,7 +318,7 @@
 		        android:layout_weight="1"
 		        android:background="@drawable/bar_button_drawable"
 		        android:text="@string/submit"
-		        android:textColor="@color/start_button_text_color" />
+		        android:textColor="@color/start_button_text_color"/>
 		</LinearLayout>
 
 		<ImageView
@@ -329,13 +330,13 @@
 			android:layout_marginRight="30dp"
 			android:contentDescription="@string/tip"
 			android:background="@drawable/tip_dark"
-			android:visibility="gone" />
+			android:visibility="gone"/>
 
 		<View
 		    android:id="@+id/pivotView"
 		    android:layout_width="0dp"
 		    android:layout_height="0dp"
-		    android:layout_centerInParent="true" />
+		    android:layout_centerInParent="true"/>
 
 		</RelativeLayout>
 

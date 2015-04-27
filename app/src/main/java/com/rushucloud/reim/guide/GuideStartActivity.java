@@ -4,18 +4,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import classes.User;
+import classes.base.User;
+import classes.utils.AppPreference;
 import classes.utils.ViewUtils;
 
 public class GuideStartActivity extends Activity
@@ -41,8 +46,26 @@ public class GuideStartActivity extends Activity
 		MobclickAgent.onPause(this);
 	}
 
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            goBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 	private void initView()
 	{
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                goBack();
+            }
+        });
+
         Button joinButton = (Button) findViewById(R.id.joinButton);
         joinButton.setOnClickListener(new OnClickListener()
         {
@@ -72,4 +95,12 @@ public class GuideStartActivity extends Activity
             }
         });
 	}
+
+    private void goBack()
+    {
+        Intent intent = new Intent(GuideStartActivity.this, SignInActivity.class);
+        intent.putExtra("username", AppPreference.getAppPreference().getUsername());
+        intent.putExtra("password", AppPreference.getAppPreference().getPassword());
+        ViewUtils.goBackWithIntent(GuideStartActivity.this, intent);
+    }
 }

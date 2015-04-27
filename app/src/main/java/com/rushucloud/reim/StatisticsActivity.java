@@ -18,12 +18,12 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Category;
-import classes.StatCategory;
-import classes.StatTag;
-import classes.StatUser;
-import classes.Tag;
-import classes.User;
+import classes.base.Category;
+import classes.base.StatCategory;
+import classes.base.StatTag;
+import classes.base.StatUser;
+import classes.base.Tag;
+import classes.base.User;
 import classes.adapter.StatisticsListViewAdapter;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

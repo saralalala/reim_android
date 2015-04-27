@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="169.5dp"
     android:orientation="vertical"
-    android:background="@color/background" >
+    android:background="@color/background">
     
     <RelativeLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="56.5dp"
 	    android:orientation="horizontal"
-	    android:background="@drawable/list_item_drawable" >
+	    android:background="@drawable/list_item_drawable">
             
 	    <include                 
 			android:layout_width="match_parent"
@@ -25,7 +25,7 @@
 	        android:layout_marginLeft="16dp"
 	        android:text="@string/reim_type"
 	        android:textColor="@color/font_major_dark"
-	        android:textSize="16sp" />
+	        android:textSize="16sp"/>
     
 	    <classes.widget.SegmentedGroup
 	        android:id="@+id/typeRadioGroup"
@@ -34,7 +34,7 @@
 			android:layout_centerVertical="true"
 	        android:layout_alignParentRight="true"
 	        android:layout_marginRight="16dp"
-	    	android:orientation="horizontal" >
+	    	android:orientation="horizontal">
 	
 	        <RadioButton
 	            android:id="@+id/consumedRadio"
@@ -42,21 +42,21 @@
 	            android:layout_height="wrap_content"
 	            android:checked="true"
 	            android:text="@string/consumed"
-	            style="@style/RadioButton" />
+	            style="@style/RadioButton"/>
 	
 	        <RadioButton
 	            android:id="@+id/budgetRadio"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/budget"
-	            style="@style/RadioButton" />
+	            style="@style/RadioButton"/>
 
             <RadioButton
                 android:id="@+id/borrowingRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/borrowing"
-                style="@style/RadioButton" />
+                style="@style/RadioButton"/>
 	        
 	    </classes.widget.SegmentedGroup>
 	
@@ -66,7 +66,7 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="56.5dp"
 	    android:orientation="horizontal"
-	    android:background="@drawable/list_item_drawable" >
+	    android:background="@drawable/list_item_drawable">
             
 	    <include                 
 			android:layout_width="match_parent"
@@ -82,7 +82,7 @@
 	        android:layout_marginLeft="16dp"
 	        android:text="@string/need_reimburse"
 	        android:textColor="@color/font_major_dark"
-	        android:textSize="16sp" />
+	        android:textSize="16sp"/>
 	
 	    <ToggleButton
 	        android:id="@+id/needReimToggleButton"
@@ -93,7 +93,7 @@
 	        android:layout_marginRight="16dp"
 	        android:background="@drawable/toggle_drawable"
 	        android:textOn=""
-	        android:textOff="" />
+	        android:textOff=""/>
 	
 	</RelativeLayout>
             
@@ -110,6 +110,6 @@
 	    android:background="@drawable/popup_drawable"
 	    android:text="@string/confirm"
 	    android:textColor="@color/button_text_dark_color"
-	    android:textSize="18sp" />
+	    android:textSize="18sp"/>
 
 </LinearLayout>

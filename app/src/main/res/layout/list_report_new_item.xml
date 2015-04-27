@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="80.5dp"
     android:orientation="vertical"
-    android:background="@drawable/list_item_drawable" >
+    android:background="@drawable/list_item_drawable">
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,7 +13,7 @@
         android:gravity="center_vertical"
         android:text="@string/new_item"
         android:textColor="@color/font_major_dark"
-        android:textSize="20sp" />
+        android:textSize="20sp"/>
 
     <ImageView
         android:layout_width="16dp"
@@ -22,7 +22,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
         android:contentDescription="@string/next"
-        android:src="@drawable/next" />
+        android:src="@drawable/next"/>
             
 	<include                 
 		android:layout_width="match_parent"

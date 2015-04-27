@@ -22,7 +22,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.User;
+import classes.base.User;
 import classes.adapter.MemberListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;

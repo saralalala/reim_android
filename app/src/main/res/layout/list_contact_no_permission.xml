@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/major_light" >
+    android:background="@color/major_light">
 
     <TextView
         android:id="@+id/nicknameTextView"
@@ -16,7 +16,7 @@
         android:layout_toRightOf="@+id/avatarImageView"
         android:text="@string/error_contact_no_permission"
         android:textColor="@color/hint_grey"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
     
     <Button
         android:id="@+id/settingsButton"

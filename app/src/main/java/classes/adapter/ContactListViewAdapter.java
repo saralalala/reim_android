@@ -15,7 +15,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.User;
+import classes.base.User;
 
 public class ContactListViewAdapter extends BaseAdapter
 {
@@ -25,6 +25,7 @@ public class ContactListViewAdapter extends BaseAdapter
     private ArrayList<String> inputChosenList = new ArrayList<>();
     private List<User> contactList = new ArrayList<>();
     private List<User> contactChosenList = new ArrayList<>();
+    private boolean noPermission = false;
 
 	public ContactListViewAdapter(Context context)
 	{
@@ -100,7 +101,18 @@ public class ContactListViewAdapter extends BaseAdapter
 	
 	public int getCount()
 	{
-		return contactList.isEmpty()? inputList.size() + 3 : inputList.size() + contactList.size() + 2;
+        if (contactList.isEmpty() && noPermission)
+        {
+            return inputList.size() + 3;
+        }
+        else if (contactList.isEmpty())
+        {
+            return inputList.size() + 2;
+        }
+        else
+        {
+            return inputList.size() + contactList.size() + 2;
+        }
 	}
 
 	public Object getItem(int position)
@@ -135,5 +147,10 @@ public class ContactListViewAdapter extends BaseAdapter
     {
         contactChosenList.clear();
         contactChosenList.addAll(contacts);
+    }
+
+    public void setNoPermission(boolean noPermission)
+    {
+        this.noPermission = noPermission;
     }
 }

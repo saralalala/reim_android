@@ -7,8 +7,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Report;
-import classes.User;
+import classes.base.Report;
+import classes.base.User;
 import classes.utils.Utils;
 import netUtils.response.BaseResponse;
 

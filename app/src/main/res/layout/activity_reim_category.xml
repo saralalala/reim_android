@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background" >
+    android:background="@color/background">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -19,7 +19,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_centerInParent="true"
             android:text="@string/choose_category"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/confirmTextView"
@@ -39,7 +39,7 @@
             android:gravity="center"
             android:text="@string/confirm"
             android:textColor="@color/title_text_color"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
     </RelativeLayout>
     
@@ -47,6 +47,6 @@
         android:id="@+id/categoryListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:listSelector="@drawable/list_item_drawable" />
+        android:listSelector="@drawable/list_item_drawable"/>
 
 </LinearLayout>

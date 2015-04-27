@@ -1,19 +1,19 @@
-package classes;
+package classes.base;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class StatUser
+public class StatTag
 {
-	private int userID = -1;
+	private int tagID = -1;
 	private double amount = 0;
     private int itemCount =  -1;
 
-    public StatUser(JSONObject jObject)
+    public StatTag(JSONObject jObject)
     {
         try
         {
-            setUserID(jObject.getInt("id"));
+            setTagID(jObject.getInt("id"));
             setAmount(jObject.getDouble("amount"));
             setItemCount(jObject.getInt("count"));
         }
@@ -23,13 +23,13 @@ public class StatUser
         }
     }
 
-	public int getUserID()
+	public int getTagID()
 	{
-		return userID;
+		return tagID;
 	}
-	public void setUserID(int userID)
+	public void setTagID(int tagID)
 	{
-		this.userID = userID;
+		this.tagID = tagID;
 	}
 
 	public double getAmount()

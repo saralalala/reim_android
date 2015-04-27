@@ -17,10 +17,10 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Category;
-import classes.Item;
-import classes.Report;
-import classes.User;
+import classes.base.Category;
+import classes.base.Item;
+import classes.base.Report;
+import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.ReimApplication;

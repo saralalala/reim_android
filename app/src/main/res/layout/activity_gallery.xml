@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -19,7 +19,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,14 +27,14 @@
             android:layout_centerInParent="true"
             android:text="@string/pick_image"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
         <GridView
             android:id="@+id/galleryGridView"
@@ -46,7 +46,7 @@
             android:scrollbarStyle="outsideOverlay"
             android:scrollbarSize="1dp"
             android:horizontalSpacing="2dp"
-            android:verticalSpacing="2dp" >
+            android:verticalSpacing="2dp">
         </GridView>
 
         <TextView
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/no_image" />
+            android:text="@string/no_image"/>
         
     </RelativeLayout>
 
@@ -68,6 +68,6 @@
         android:layout_marginRight="16dp"
         android:background="@drawable/button_dark_drawable"
         android:text="@string/confirm"
-        android:textColor="@color/button_text_light_color"  />
+        android:textColor="@color/button_text_light_color"/>
 
 </LinearLayout>

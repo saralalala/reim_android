@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
     
 	<TextView
 	    android:id="@+id/statusTextView"
@@ -10,7 +10,7 @@
 	    android:paddingTop="5dp"
 	    android:paddingBottom="5dp"
 	    android:gravity="center"
-	    android:textColor="@color/major_light" />
+	    android:textColor="@color/major_light"/>
 
 	<RelativeLayout
 	    android:id="@+id/coverLayout"
@@ -23,7 +23,7 @@
 		    android:layout_height="20dp"
 			android:layout_centerInParent="true"
 			android:contentDescription="@string/choose_tag"
-		    android:src="@drawable/selected" />
+		    android:src="@drawable/selected"/>
 	    
 	</RelativeLayout>
 

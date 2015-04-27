@@ -15,8 +15,8 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.Group;
-import classes.User;
+import classes.base.Group;
+import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -107,7 +107,7 @@ public class EstablishCompanyActivity extends Activity
 				}
 				else if (newName.isEmpty())
 				{
-					ViewUtils.showToast(EstablishCompanyActivity.this, R.string.error_new_company_name_empty);
+					ViewUtils.showToast(EstablishCompanyActivity.this, R.string.error_company_name_empty);
 				}
 				else
 				{

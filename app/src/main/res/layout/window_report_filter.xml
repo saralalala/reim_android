@@ -10,7 +10,7 @@
         android:layout_alignParentTop="true"
         android:contentDescription="@string/background"
         android:src="@drawable/filter_background"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"/>
 
     <ImageView
         android:id="@+id/cancelImageView"
@@ -21,7 +21,7 @@
         android:layout_marginTop="14dp"
         android:padding="16dp"
         android:contentDescription="@string/cancel"
-		android:src="@drawable/cancel_drawable" />
+		android:src="@drawable/cancel_drawable"/>
 
     <ImageView
         android:id="@+id/confirmImageView"
@@ -32,7 +32,7 @@
         android:layout_marginTop="14dp"
         android:padding="16dp"
         android:contentDescription="@string/confirm"
-		android:src="@drawable/confirm_drawable" />
+		android:src="@drawable/confirm_drawable"/>
 
     <TextView
         android:id="@+id/sortTextView"
@@ -44,7 +44,7 @@
         android:layout_marginLeft="16dp"
         android:text="@string/sort"
         android:textColor="@color/hint_light_grey"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <include 
         android:id="@+id/sortDivider"
@@ -65,7 +65,7 @@
         android:layout_marginTop="22dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/sortUpdateDateRadio"
@@ -74,7 +74,7 @@
             android:layout_weight="1"
             android:checked="true"
             android:text="@string/sort_update_date"
-            style="@style/RadioButton" />
+            style="@style/RadioButton"/>
 
         <RadioButton
             android:id="@+id/sortCreateDateRadio"
@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/sort_create_date"
-            style="@style/RadioButton" />
+            style="@style/RadioButton"/>
 
         <RadioButton
             android:id="@+id/sortAmountRadio"
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/sort_amount"
-            style="@style/RadioButton" />
+            style="@style/RadioButton"/>
 
     </classes.widget.SegmentedGroup>
 
@@ -101,13 +101,13 @@
         android:layout_alignTop="@id/sortRadioGroup"
         android:layout_alignBottom="@id/sortRadioGroup"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" >
+        android:layout_marginRight="16dp">
 
         <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/sortUpdateImageView"
@@ -117,7 +117,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/sort_consumed_date"
-                android:src="@drawable/arrow" />
+                android:src="@drawable/arrow"/>
 
         </RelativeLayout>
 
@@ -125,7 +125,7 @@
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/sortCreateImageView"
@@ -135,7 +135,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/sort_consumed_date"
-                android:src="@drawable/arrow" />
+                android:src="@drawable/arrow"/>
 
         </RelativeLayout>
 
@@ -143,7 +143,7 @@
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/sortAmountImageView"
@@ -153,7 +153,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/sort_consumed_date"
-                android:src="@drawable/arrow" />
+                android:src="@drawable/arrow"/>
 
         </RelativeLayout>
 
@@ -169,7 +169,7 @@
         android:layout_marginLeft="16dp"
         android:text="@string/filter_tag"
         android:textColor="@color/hint_light_grey"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <include 
         android:id="@+id/tagDivider"
@@ -195,6 +195,6 @@
         android:stretchMode="columnWidth"
         android:gravity="center"
         android:verticalSpacing="22dp"
-        android:horizontalSpacing="10dp" />
+        android:horizontalSpacing="10dp"/>
     
 </RelativeLayout>

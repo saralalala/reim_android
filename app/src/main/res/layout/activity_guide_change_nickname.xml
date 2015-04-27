@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    android:id="@+id/baseLayout" >
+    android:id="@+id/baseLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -20,7 +20,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:id="@+id/titleTextView"
@@ -29,7 +29,7 @@
             android:layout_centerInParent="true"
             android:text="@string/modify_name"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/nextTextView"
@@ -41,7 +41,7 @@
 			android:gravity="center"
             android:text="@string/next"
             android:textColor="@color/title_text_color"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
     </RelativeLayout>
 
@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="18dp"
-        layout="@layout/view_divider" />
+        layout="@layout/view_divider"/>
 
     <classes.widget.ClearEditText
         android:id="@+id/nicknameEditText"
@@ -60,11 +60,12 @@
         android:background="@color/major_light"
         android:hint="@string/input_nickname"
         android:textColor="@color/font_major_dark"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textCursorDrawable="@null"/>
 
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        layout="@layout/view_divider" />
+        layout="@layout/view_divider"/>
 
 </LinearLayout>

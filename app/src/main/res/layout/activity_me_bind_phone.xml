@@ -48,7 +48,8 @@
         android:hint="@string/input_phone"
         android:inputType="phone"
         android:textColor="@color/font_major_dark"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textCursorDrawable="@null"/>
 
     <include
         android:layout_width="match_parent"
@@ -78,7 +79,8 @@
             android:hint="@string/input_code"
             android:inputType="phone"
             android:textColor="@color/font_major_dark"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:textCursorDrawable="@null"/>
 
         <Button
             android:id="@+id/acquireCodeButton"

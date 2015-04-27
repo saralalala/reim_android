@@ -21,21 +21,14 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 
-import classes.Apply;
-import classes.Invite;
-import classes.Message;
-import classes.Report;
+import classes.base.Apply;
+import classes.base.Invite;
+import classes.base.Message;
+import classes.base.Report;
+import netUtils.NetworkConstant;
 
 public class ReimBroadcastReceiver extends BroadcastReceiver
 {
-	private static final int TYPE_SYSTEM_MESSAGE = 1;
-	private static final int TYPE_REPORT = 2;
-	private static final int TYPE_INVITE = 3;
-	private static final int TYPE_INVITE_REPLY = 4;
-    private static final int TYPE_ADMIN_MESSAGE = 5;
-    private static final int TYPE_APPLY = 6;
-    private static final int TYPE_APPLY_REPLY = 7;
-
 	public static final int REPORT_MINE_REJECTED = 0;
 	public static final int REPORT_MINE_REJECTED_WITH_COMMENT = 1;
 	public static final int REPORT_MINE_APPROVED = 2;
@@ -66,8 +59,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				int type = jObject.getInt("type");
 				String message = jObject.getString("msg");
 
-                System.out.println("ReimBroadcastReceiver");
-				System.out.println(jObject.toString());
+                System.out.println("ReimBroadcastReceiver:" + jObject.toString());
 				Intent notificationIntent = new Intent("com.rushucloud.reim.NOTIFICATION_CLICKED");
 				notificationIntent.putExtra("type",  type);
 				notificationIntent.putExtra("data", jObject.toString());
@@ -116,11 +108,11 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 				int type = intent.getIntExtra("type", -1);
 				JSONObject jObject = new JSONObject(intent.getStringExtra("data"));
 				
-				if (type == TYPE_SYSTEM_MESSAGE)
+				if (type == NetworkConstant.PUSH_TYPE_SYSTEM_MESSAGE)
 				{
 					ViewUtils.showToast(context, jObject.getString("message"));
 				}
-				else if (type == TYPE_REPORT)
+				else if (type == NetworkConstant.PUSH_TYPE_REPORT)
 				{
 					boolean myReport = jObject.getInt("uid") == AppPreference.getAppPreference().getCurrentUserID();
 					
@@ -160,7 +152,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					newIntent.putExtras(bundle);
 					context.startActivity(newIntent);						
 				}
-				else if (type == TYPE_INVITE || type == TYPE_INVITE_REPLY)
+				else if (type == NetworkConstant.PUSH_TYPE_INVITE || type == NetworkConstant.PUSH_TYPE_INVITE_REPLY)
 				{
 					Invite invite = new Invite();
 					try
@@ -188,7 +180,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 					newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(newIntent);
 				}
-                else if (type == TYPE_ADMIN_MESSAGE)
+                else if (type == NetworkConstant.PUSH_TYPE_ADMIN_MESSAGE)
                 {
                     Message message = new Message();
                     try
@@ -212,7 +204,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(newIntent);
                 }
-                else if (type == TYPE_APPLY || type == TYPE_APPLY_REPLY)
+                else if (type == NetworkConstant.PUSH_TYPE_APPLY || type == NetworkConstant.PUSH_TYPE_APPLY_REPLY)
                 {
                     Apply apply = new Apply();
                     try

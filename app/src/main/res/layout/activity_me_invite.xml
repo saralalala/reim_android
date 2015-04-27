@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    android:id="@+id/baseLayout" >
+    android:id="@+id/baseLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -20,7 +20,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:id="@+id/titleTextView"
@@ -29,14 +29,14 @@
             android:layout_centerInParent="true"
             android:text="@string/invite"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
     </RelativeLayout>
 
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        layout="@layout/view_divider" />
+        layout="@layout/view_divider"/>
 
     <classes.widget.ClearEditText
         android:id="@+id/usernameEditText"
@@ -49,12 +49,13 @@
         android:inputType="textEmailAddress"
         android:hint="@string/input_username"
         android:textColor="@color/font_major_dark"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textCursorDrawable="@null"/>
 
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        layout="@layout/view_divider" />
+        layout="@layout/view_divider"/>
 
     <Button
 		android:id="@+id/inviteButton"
@@ -65,6 +66,6 @@
 		android:layout_marginRight="16dp"
 		android:background="@drawable/button_dark_drawable"
 		android:text="@string/send_invite"
-		android:textColor="@color/button_text_light_color" />
+		android:textColor="@color/button_text_light_color"/>
 
 </LinearLayout>

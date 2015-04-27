@@ -5,9 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Selection;
 import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
@@ -23,9 +29,9 @@ import android.widget.Toast;
 
 import com.rushucloud.reim.R;
 
-import classes.Category;
-import classes.StatCategory;
-import classes.User;
+import classes.base.Category;
+import classes.base.StatCategory;
+import classes.base.User;
 
 public class ViewUtils
 {
@@ -208,6 +214,19 @@ public class ViewUtils
                 imageView.setImageBitmap(bitmap);
             }
         }
+    }
+
+    public static void setTextBold(SpannableString text, int start, int end)
+    {
+        text.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    public static void setTextBoldAndUnderlined(SpannableString text, int start, int end)
+    {
+        text.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     public static int getPhoneWindowWidth(Context context)

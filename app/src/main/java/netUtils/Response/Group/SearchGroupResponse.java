@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Group;
+import classes.base.Group;
 import netUtils.response.BaseResponse;
 
 public class SearchGroupResponse extends BaseResponse

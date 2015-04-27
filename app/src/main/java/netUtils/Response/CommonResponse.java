@@ -8,10 +8,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Category;
-import classes.Group;
-import classes.Tag;
-import classes.User;
+import classes.base.Category;
+import classes.base.Group;
+import classes.base.Tag;
+import classes.base.User;
 
 public class CommonResponse extends BaseResponse
 {

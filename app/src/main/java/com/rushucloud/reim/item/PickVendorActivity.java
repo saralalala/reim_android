@@ -21,7 +21,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Vendor;
+import classes.base.Vendor;
 import classes.adapter.VendorListViewAdapter;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;

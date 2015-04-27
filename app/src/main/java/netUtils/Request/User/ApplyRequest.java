@@ -23,6 +23,18 @@ public class ApplyRequest extends BaseRequest
 		appendUrl(URLDef.URL_APPLY);
 	}
 
+    public ApplyRequest(int groupID, int guideVersion)
+    {
+        super();
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("gid", Integer.toString(groupID)));
+        params.add(new BasicNameValuePair("version", Integer.toString(guideVersion)));
+        setParams(params);
+
+        appendUrl(URLDef.URL_APPLY);
+    }
+
 	public void sendRequest(HttpConnectionCallback callback)
 	{
 		doPost(callback);

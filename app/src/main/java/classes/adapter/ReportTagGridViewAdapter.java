@@ -13,7 +13,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Report;
+import classes.base.Report;
 
 public class ReportTagGridViewAdapter extends BaseAdapter
 {

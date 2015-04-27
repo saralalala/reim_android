@@ -7,15 +7,15 @@
     android:paddingTop="16dp"
     android:paddingBottom="14dp"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp" >
+    android:paddingRight="16dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/statusTextView"
@@ -25,7 +25,7 @@
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
                 android:textColor="@color/major_light"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/typeTextView"
@@ -36,7 +36,7 @@
                 android:paddingLeft="1dp"
                 android:paddingRight="1dp"
                 android:textColor="@color/major_light"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <ImageView
                 android:id="@+id/photoImageView"
@@ -45,7 +45,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="6dp"
                 android:contentDescription="@string/invoice"
-                android:src="@drawable/camera" />
+                android:src="@drawable/camera"/>
 
         </LinearLayout>
 
@@ -53,7 +53,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true" >
+            android:layout_alignParentRight="true">
 
             <TextView
                 android:id="@+id/reportTextView"
@@ -63,7 +63,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/hint_light_grey"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <ImageView
                 android:id="@+id/categoryImageView"
@@ -72,7 +72,7 @@
                 android:layout_marginLeft="6dp"
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/tag"
-                android:src="@drawable/default_icon" />
+                android:src="@drawable/default_icon"/>
 
         </LinearLayout>
 
@@ -82,13 +82,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:baselineAligned="false" >
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="bottom" >
+            android:gravity="bottom">
 
             <TextView
                 android:id="@+id/amountTextView"
@@ -97,7 +97,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/font_major_dark"
-                android:textSize="28sp" />
+                android:textSize="28sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -105,7 +105,7 @@
                 android:layout_marginLeft="3dp"
                 android:text="@string/rmb_symbol"
                 android:textColor="@color/font_major_dark"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </LinearLayout>
 
 	    <TextView
@@ -117,7 +117,7 @@
 	        android:ellipsize="end"
 	        android:singleLine="true"
 	        android:textColor="@color/font_major_dark"
-	        android:textSize="20sp" />
+	        android:textSize="20sp"/>
 
     </LinearLayout>
 

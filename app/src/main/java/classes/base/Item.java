@@ -1,4 +1,4 @@
-package classes;
+package classes.base;
 
 import com.rushucloud.reim.R;
 

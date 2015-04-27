@@ -7,10 +7,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Comment;
-import classes.Item;
-import classes.Report;
-import classes.User;
+import classes.base.Comment;
+import classes.base.Item;
+import classes.base.Report;
+import classes.base.User;
 import classes.utils.DBManager;
 import classes.utils.Utils;
 import netUtils.response.BaseResponse;

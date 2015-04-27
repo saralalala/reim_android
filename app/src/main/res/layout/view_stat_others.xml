@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -53,28 +53,28 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true" >
+            android:layout_centerVertical="true">
 
             <LinearLayout
                 android:id="@+id/amountLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:baselineAligned="false" >
+                android:baselineAligned="false">
                 
 	            <TextView
 	                android:id="@+id/othersTotalTextView"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:textColor="@color/major_dark"
-	                android:textSize="50sp" />
+	                android:textSize="50sp"/>
                 
 	            <TextView
 	                android:id="@+id/othersUnitTextView"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:textColor="@color/major_dark"
-	                android:textSize="38sp" />
+	                android:textSize="38sp"/>
 	            
             </LinearLayout>
 
@@ -86,7 +86,7 @@
                 android:layout_marginBottom="6dp"
                 android:text="@string/rmb_symbol"
                 android:textColor="@color/major_dark"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="@string/total"
                 android:textColor="@color/hint_grey"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
         </RelativeLayout>
 
@@ -129,12 +129,12 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:orientation="horizontal"
-        android:background="@color/list_item_header" >
+        android:background="@color/list_item_header">
 
         <include
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            layout="@layout/view_divider" />
+            layout="@layout/view_divider"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -143,13 +143,13 @@
             android:layout_marginLeft="16dp"
             android:text="@string/stat_by_tag"
             android:textColor="@color/font_list_item_header"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <include
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
-            layout="@layout/view_divider" />
+            layout="@layout/view_divider"/>
 
     </RelativeLayout>
 
@@ -157,18 +157,18 @@
         android:id="@+id/tagLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical"/>
 
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        layout="@layout/view_divider" />
+        layout="@layout/view_divider"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:background="@color/list_item_header"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
@@ -178,7 +178,7 @@
             android:gravity="center_vertical"
             android:text="@string/stat_by_member"
             android:textColor="@color/font_list_item_header"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
     </LinearLayout>
 
@@ -186,12 +186,12 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_alignParentBottom="true"
-        layout="@layout/view_divider" />
+        layout="@layout/view_divider"/>
 
     <LinearLayout
         android:id="@+id/memberLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical"/>
 
 </LinearLayout>

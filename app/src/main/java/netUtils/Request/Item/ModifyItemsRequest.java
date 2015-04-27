@@ -8,10 +8,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Image;
-import classes.Item;
-import classes.Tag;
-import classes.User;
+import classes.base.Image;
+import classes.base.Item;
+import classes.base.Tag;
+import classes.base.User;
 import classes.utils.Utils;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;

@@ -54,12 +54,9 @@ public class JoinedActivity extends Activity
         companyTextView.setText(getIntent().getStringExtra("companyName"));
 
         SpannableString text = new SpannableString(ViewUtils.getString(R.string.prompt_joined));
-        text.setSpan(new StyleSpan(Typeface.BOLD), 18, 20, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 18, 20, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new StyleSpan(Typeface.BOLD), 24, 26, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 24, 26, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new StyleSpan(Typeface.BOLD), 33, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 33, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ViewUtils.setTextBoldAndUnderlined(text, 18, 20);
+        ViewUtils.setTextBoldAndUnderlined(text, 28, 30);
+        ViewUtils.setTextBoldAndUnderlined(text, 34, 36);
 
         TextView contentTextView = (TextView) findViewById(R.id.contentTextView);
         contentTextView.setText(text);

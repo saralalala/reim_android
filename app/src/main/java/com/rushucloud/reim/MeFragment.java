@@ -43,8 +43,8 @@ import com.umeng.socialize.weixin.media.WeiXinShareContent;
 import java.util.HashMap;
 import java.util.Map;
 
-import classes.Group;
-import classes.User;
+import classes.base.Group;
+import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -165,6 +165,7 @@ public class MeFragment extends Fragment
 			public void onClick(View v)
 			{
                 ReimApplication.setUnreadMessagesCount(0);
+                ReimApplication.setHasUnreadMessages(false);
                 ViewUtils.goForward(getActivity(), MessageListActivity.class);
 			}
 		});
@@ -342,7 +343,7 @@ public class MeFragment extends Fragment
         }
         else
         {
-            int visibility = ReimApplication.getUnreadMessagesCount() > 0? View.VISIBLE : View.GONE;
+            int visibility = ReimApplication.hasUnreadMessages()? View.VISIBLE : View.GONE;
             tipImageView.setVisibility(visibility);
         }
     }

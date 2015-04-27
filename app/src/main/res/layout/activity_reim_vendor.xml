@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background" >
+    android:background="@color/background">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -19,7 +19,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_centerInParent="true"
             android:text="@string/choose_vendor"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/addTextView"
@@ -39,13 +39,13 @@
             android:gravity="center"
             android:text="@string/add"
             android:textColor="@color/title_text_color"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp" >
+        android:layout_height="48dp">
 
         <ImageView
             android:id="@+id/searchImageView"
@@ -57,7 +57,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/search"
-            android:src="@drawable/search" />
+            android:src="@drawable/search"/>
 
         <classes.widget.ClearEditText
             android:id="@+id/vendorEditText"
@@ -69,6 +69,7 @@
             android:singleLine="true"
             android:textColor="@color/font_major_dark"
             android:textSize="16sp"
+            android:textCursorDrawable="@null"
             android:imeOptions="actionSearch"/>
 
     </LinearLayout>
@@ -81,7 +82,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
 	    android:layout_height="24dp"
-		android:background="@color/list_item_header" />
+		android:background="@color/list_item_header"/>
             
 	<include
 		android:layout_width="match_parent"

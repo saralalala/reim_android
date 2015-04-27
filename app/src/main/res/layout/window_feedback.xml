@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/window_background"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="10dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,7 +13,7 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/feedback"
         android:textColor="@color/font_major_dark"
-        android:textSize="20sp" />
+        android:textSize="20sp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:layout_marginTop="5dp"
         android:text="@string/prompt_feedback"
         android:textColor="@color/font_major_dark"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <EditText
         android:id="@+id/feedbackEditText"
@@ -40,7 +40,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" >
+        android:layout_marginTop="10dp">
 
         <Button
             android:id="@+id/submitButton"
@@ -50,13 +50,13 @@
             android:layout_marginRight="5dp"
             android:background="@drawable/feedback_button_dark_drawable"
             android:text="@string/submit"
-            android:textColor="@color/button_text_light_color" />
+            android:textColor="@color/button_text_light_color"/>
 
         <View
             android:id="@+id/pivotView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"/>
 
         <Button
             android:id="@+id/cancelButton"
@@ -66,7 +66,7 @@
             android:layout_marginLeft="5dp"
             android:background="@drawable/feedback_button_light_drawable"
             android:text="@string/cancel"
-            android:textColor="@color/button_text_dark_color" />
+            android:textColor="@color/button_text_dark_color"/>
 
     </RelativeLayout>
 

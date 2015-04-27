@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="40dp"
-    android:layout_height="40dp" >
+    android:layout_height="40dp">
 
     <ImageView
         android:id="@+id/invoiceImageView"
@@ -11,7 +11,7 @@
         android:layout_alignParentBottom="true"
         android:contentDescription="@string/tag"
         android:src="@drawable/default_invoice"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"/>
 
     <ImageView
         android:id="@+id/removeImageView"
@@ -21,6 +21,6 @@
         android:layout_alignParentTop="true"
         android:contentDescription="@string/delete"
         android:src="@drawable/remove"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
 </RelativeLayout>

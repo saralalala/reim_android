@@ -13,7 +13,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Message;
+import classes.base.Message;
 import classes.utils.Utils;
 
 public class MessageListViewAdapter extends BaseAdapter

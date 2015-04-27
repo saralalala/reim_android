@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="24dp"
     android:clickable="false"
-	android:background="@color/list_item_header" >
+	android:background="@color/list_item_header">
 
 	<TextView
         android:id="@+id/headerTextView"
@@ -12,6 +12,6 @@
 		android:layout_centerVertical="true"
 		android:layout_marginLeft="16dp"
 		android:textColor="@color/font_list_item_header"
-		android:textSize="14sp" />
+		android:textSize="14sp"/>
 
 </RelativeLayout>

@@ -13,7 +13,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.User;
+import classes.base.User;
 import classes.utils.ViewUtils;
 
 public class MemberListViewAdapter extends BaseAdapter

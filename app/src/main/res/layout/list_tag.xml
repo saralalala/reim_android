@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:background="@drawable/list_item_drawable" >
+    android:background="@drawable/list_item_drawable">
 
     <TextView
         android:id="@+id/nameTextView"
@@ -11,6 +11,6 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
         android:textColor="@color/font_major_dark"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
 </RelativeLayout>

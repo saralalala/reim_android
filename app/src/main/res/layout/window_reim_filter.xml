@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="match_parent"
@@ -10,7 +10,7 @@
         android:layout_alignParentTop="true"
         android:contentDescription="@string/background"
         android:src="@drawable/filter_background"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"/>
 
     <ImageView
         android:id="@+id/cancelImageView"
@@ -21,7 +21,7 @@
         android:layout_marginTop="14dp"
         android:padding="16dp"
         android:contentDescription="@string/cancel"
-		android:src="@drawable/cancel_drawable" />
+		android:src="@drawable/cancel_drawable"/>
 
     <ImageView
         android:id="@+id/confirmImageView"
@@ -32,17 +32,17 @@
         android:layout_marginTop="14dp"
         android:padding="16dp"
         android:contentDescription="@string/confirm"
-		android:src="@drawable/confirm_drawable" />
+		android:src="@drawable/confirm_drawable"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/confirmImageView" >
+        android:layout_below="@+id/confirmImageView">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
 		    <TextView
 		        android:id="@+id/sortTextView"
@@ -54,7 +54,7 @@
 		        android:layout_marginLeft="16dp"
 		        android:text="@string/sort"
 		        android:textColor="@color/hint_light_grey"
-		        android:textSize="14sp" />
+		        android:textSize="14sp"/>
 		
 		    <include 
 		        android:id="@+id/sortDivider"
@@ -73,13 +73,13 @@
 		        android:layout_below="@+id/sortDivider"
 		        android:layout_marginTop="22dp"
 		        android:layout_marginLeft="16dp"
-		        android:layout_marginRight="16dp" >
+		        android:layout_marginRight="16dp">
 		    
 			    <classes.widget.SegmentedGroup
 			        android:id="@+id/sortRadioGroup"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
-			    	android:orientation="horizontal" >
+			    	android:orientation="horizontal">
 			
 			        <RadioButton
 			            android:id="@+id/sortConsumedDateRadio"
@@ -88,7 +88,7 @@
 			            android:layout_weight="1"
 			            android:checked="true"
 			            android:text="@string/sort_consumed_date"
-			            style="@style/RadioButton" />
+			            style="@style/RadioButton"/>
 			
 			        <RadioButton
 			            android:id="@+id/sortAmountRadio"
@@ -96,7 +96,7 @@
 			            android:layout_height="wrap_content"
 			            android:layout_weight="1"
 			            android:text="@string/sort_amount"
-			            style="@style/RadioButton" />
+			            style="@style/RadioButton"/>
 			        
 			    </classes.widget.SegmentedGroup>
 	
@@ -108,13 +108,13 @@
 					android:layout_marginRight="10dp"
 					android:layout_centerVertical="true"
 				    android:contentDescription="@string/sort_consumed_date"
-			        android:src="@drawable/arrow" />
+			        android:src="@drawable/arrow"/>
 
 			    <View
 			        android:id="@+id/pivotView"
 			        android:layout_width="0dp"
 			        android:layout_height="0dp"
-			        android:layout_centerInParent="true" />
+			        android:layout_centerInParent="true"/>
 			    
 			    <ImageView
 			        android:id="@+id/sortAmountImageView"
@@ -125,7 +125,7 @@
 					android:layout_centerVertical="true"
 				    android:contentDescription="@string/sort_consumed_date"
 			        android:src="@drawable/arrow"
-			        android:visibility="gone" />
+			        android:visibility="gone"/>
 
 		    </RelativeLayout>
 		
@@ -139,7 +139,7 @@
 		        android:layout_marginLeft="16dp"
 		        android:text="@string/filter"
 		        android:textColor="@color/hint_light_grey"
-		        android:textSize="14sp" />
+		        android:textSize="14sp"/>
 		
 		    <include 
 		        android:id="@+id/filterDivider"
@@ -160,7 +160,7 @@
 		        android:layout_marginTop="22dp"
 		        android:layout_marginLeft="16dp"
 		        android:layout_marginRight="16dp"
-		    	android:orientation="horizontal" >
+		    	android:orientation="horizontal">
 		
 		        <RadioButton
 		            android:id="@+id/filterTypeAllRadio"
@@ -169,7 +169,7 @@
 		            android:layout_weight="1"
 		            android:checked="true"
 		            android:text="@string/filter_all"
-		            style="@style/RadioButton" />
+		            style="@style/RadioButton"/>
 
                 <RadioButton
                     android:id="@+id/filterConsumedRadio"
@@ -177,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/filter_consumed"
-                    style="@style/RadioButton" />
+                    style="@style/RadioButton"/>
 		
 		        <RadioButton
 		            android:id="@+id/filterBudgetRadio"
@@ -185,7 +185,7 @@
 		            android:layout_height="wrap_content"
 		            android:layout_weight="1"
 		            android:text="@string/filter_budget"
-		            style="@style/RadioButton" />
+		            style="@style/RadioButton"/>
 
                 <RadioButton
                     android:id="@+id/filterBorrowingRadio"
@@ -193,7 +193,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/filter_borrowing"
-                    style="@style/RadioButton" />
+                    style="@style/RadioButton"/>
 		        
 		    </classes.widget.SegmentedGroup>
 		    
@@ -206,7 +206,7 @@
 		        android:layout_marginTop="28dp"
 		        android:layout_marginLeft="16dp"
 		        android:layout_marginRight="16dp"
-		    	android:orientation="horizontal" >
+		    	android:orientation="horizontal">
 		
 		        <RadioButton
 		            android:id="@+id/filterStatusAllRadio"
@@ -215,7 +215,7 @@
 		            android:layout_weight="1"
 		            android:checked="true"
 		            android:text="@string/filter_all"
-		            style="@style/RadioButton" />
+		            style="@style/RadioButton"/>
 		
 		        <RadioButton
 		            android:id="@+id/filterAddedRadio"
@@ -223,7 +223,7 @@
 		            android:layout_height="wrap_content"
 		            android:layout_weight="0.73"
 		            android:text="@string/filter_added"
-		            style="@style/RadioButton" />
+		            style="@style/RadioButton"/>
 		
 		        <RadioButton
 		            android:id="@+id/filterFreeRadio"
@@ -231,7 +231,7 @@
 		            android:layout_height="wrap_content"
 		            android:layout_weight="0.73"
 		            android:text="@string/filter_free"
-		            style="@style/RadioButton" />
+		            style="@style/RadioButton"/>
 		        
 		    </classes.widget.SegmentedGroup>
 		
@@ -245,7 +245,7 @@
 		        android:layout_marginLeft="16dp"
 		        android:text="@string/filter_tag"
 		        android:textColor="@color/hint_light_grey"
-		        android:textSize="14sp" />
+		        android:textSize="14sp"/>
 		
 		    <include 
 		        android:id="@+id/tagDivider"
@@ -265,7 +265,7 @@
 		        android:orientation="vertical"
 		        android:layout_marginTop="6dp"
 		        android:layout_marginLeft="16dp"
-		        android:layout_marginRight="16dp" />
+		        android:layout_marginRight="16dp"/>
 		
 		    <TextView
 		        android:id="@+id/categoryTextView"
@@ -277,7 +277,7 @@
 		        android:layout_marginLeft="16dp"
 		        android:text="@string/filter_category"
 		        android:textColor="@color/hint_light_grey"
-		        android:textSize="14sp" />
+		        android:textSize="14sp"/>
 		
 		    <include
 		        android:id="@+id/categoryDivider"
@@ -298,7 +298,7 @@
 		        android:paddingBottom="16dp"
 		        android:layout_marginTop="6dp"
 		        android:layout_marginLeft="16dp"
-		        android:layout_marginRight="16dp" >
+		        android:layout_marginRight="16dp">
 		    </LinearLayout>
 
         </RelativeLayout>

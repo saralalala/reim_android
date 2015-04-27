@@ -26,8 +26,8 @@ import com.rushucloud.reim.guide.PickCompanyActivity;
 import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.Group;
-import classes.User;
+import classes.base.Group;
+import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -265,14 +265,7 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-                if (currentGroup == null && currentUser.getAppliedCompany().isEmpty())
-                {
-                    ViewUtils.goForward(ProfileActivity.this, PickCompanyActivity.class);
-                }
-                else
-                {
-                    ViewUtils.goForward(ProfileActivity.this, CompanyActivity.class);
-                }
+                ViewUtils.goForward(ProfileActivity.this, CompanyActivity.class);
 			}
 		});
 

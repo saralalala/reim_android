@@ -33,8 +33,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import classes.Report;
-import classes.User;
+import classes.base.Report;
+import classes.base.User;
 import classes.adapter.OthersReportListViewAdapter;
 import classes.adapter.ReportListViewAdapter;
 import classes.adapter.ReportTagGridViewAdapter;
@@ -1277,12 +1277,13 @@ public class ReportFragment extends Fragment
         {
             public void execute(Object httpResponse)
             {
-                final EventsResponse response = new EventsResponse(httpResponse);
+                EventsResponse response = new EventsResponse(httpResponse);
                 if (response.getStatus())
                 {
                     ReimApplication.setMineUnreadList(response.getMineUnreadList());
                     ReimApplication.setOthersUnreadList(response.getOthersUnreadList());
                     ReimApplication.setUnreadMessagesCount(response.getUnreadMessagesCount());
+                    ReimApplication.setHasUnreadMessages(response.hasUnreadMessages());
                     refreshReports();
                 }
                 else

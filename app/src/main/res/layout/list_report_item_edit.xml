@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="80.5dp"
     android:orientation="vertical"
-    android:background="@drawable/list_item_drawable" >
+    android:background="@drawable/list_item_drawable">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
 	    <LinearLayout
 	        android:layout_width="0dp"
@@ -16,7 +16,7 @@
 	        android:layout_weight="1"
 	        android:layout_marginLeft="16dp"
 	        android:layout_gravity="center_vertical"
-	        android:gravity="bottom" >
+	        android:gravity="bottom">
 	
 	        <TextView
 	            android:id="@+id/amountTextView"
@@ -25,7 +25,7 @@
 	            android:ellipsize="end"
 	            android:singleLine="true"
 	            android:textColor="@color/font_major_dark"
-	            android:textSize="22sp" />
+	            android:textSize="22sp"/>
 	
 	        <TextView
 	            android:layout_width="wrap_content"
@@ -33,7 +33,8 @@
 	            android:layout_marginLeft="3dp"
 	            android:text="@string/rmb_symbol"
 	            android:textColor="@color/font_major_dark"
-	            android:textSize="14sp" />
+	            android:textSize="14sp"/>
+
 	    </LinearLayout>
 	
 	    <ImageView
@@ -43,14 +44,14 @@
 			android:layout_gravity="center"
 			android:contentDescription="@string/warning"
 	        android:src="@drawable/warning"
-	        android:visibility="invisible" />
+	        android:visibility="invisible"/>
 	    
 	    <RelativeLayout
 	        android:layout_width="0dp"
 	        android:layout_height="match_parent"
 	        android:layout_weight="1"
 	        android:orientation="vertical"
-	        android:layout_marginRight="16dp" >
+	        android:layout_marginRight="16dp">
 	
 	        <TextView
 	            android:id="@+id/vendorTextView"
@@ -61,7 +62,7 @@
 	            android:gravity="right"
 	            android:singleLine="true"
 	            android:textColor="@color/font_minor_dark"
-	            android:textSize="20sp" />
+	            android:textSize="20sp"/>
 	
 	        <ImageView
 	            android:id="@+id/categoryImageView"
@@ -71,7 +72,7 @@
 	            android:layout_alignParentRight="true"
 	            android:layout_marginTop="6dp"
 	            android:contentDescription="@string/category"
-	            android:src="@drawable/default_icon" />
+	            android:src="@drawable/default_icon"/>
 	        
 	    </RelativeLayout>
 	    

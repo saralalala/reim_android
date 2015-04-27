@@ -3,7 +3,7 @@
     xmlns:reim="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="66dp"
-    android:background="@drawable/list_item_drawable" >
+    android:background="@drawable/list_item_drawable">
 
     <classes.widget.CircleImageView
         android:id="@+id/avatarImageView"
@@ -14,7 +14,7 @@
         android:layout_marginLeft="16dp"
         android:contentDescription="@string/avatar"
         android:src="@drawable/default_avatar"
-        reim:border_width="0dp" />
+        reim:border_width="0dp"/>
 
     <TextView
         android:id="@+id/nicknameTextView"
@@ -24,6 +24,6 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/avatarImageView"
         android:textColor="@color/font_major_dark"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
 </RelativeLayout>

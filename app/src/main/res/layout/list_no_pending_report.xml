@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:clickable="false"
-    android:background="@drawable/list_item_drawable" >
+    android:background="@drawable/list_item_drawable">
 
     <TextView
         android:id="@+id/messageTextView"
@@ -13,6 +13,6 @@
         android:layout_marginLeft="16dp"
         android:text="@string/no_pending_reports"
         android:textColor="@color/hint_light_grey"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
 </LinearLayout>

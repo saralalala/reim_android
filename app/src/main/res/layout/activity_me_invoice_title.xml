@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background" >
+    android:background="@color/background">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -19,7 +19,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_centerInParent="true"
             android:text="@string/get_invoice"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
     </RelativeLayout>
 
@@ -39,7 +39,7 @@
         android:layout_marginLeft="16dp"
         android:text="@string/get_invoice_prompt"
         android:textColor="@color/hint_grey"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/titleTextView"
@@ -50,7 +50,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:textColor="@color/font_major_dark"
-        android:textSize="20sp" />
+        android:textSize="20sp"/>
 
     <ImageView
         android:layout_width="60dp"

@@ -4,11 +4,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:baselineAligned="false"
-    android:background="@color/list_item_unselected" >
+    android:background="@color/list_item_unselected">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iconImageView"
@@ -30,14 +30,14 @@
 	        android:ellipsize="end"
 	        android:singleLine="true"
 	        android:textColor="@color/font_major_dark"
-	        android:textSize="20sp" />
+	        android:textSize="20sp"/>
 	
 	    <LinearLayout
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="2"
 	        android:orientation="vertical"
-			android:layout_marginRight="16dp" >
+			android:layout_marginRight="16dp">
 	
 	        <LinearLayout
 	            android:layout_width="match_parent"
@@ -45,7 +45,7 @@
 	            android:orientation="horizontal"
 	            android:gravity="right|bottom"
 	            android:layout_marginTop="16dp"
-	            android:baselineAligned="true" >
+	            android:baselineAligned="true">
 	
 	            <TextView
 	                android:id="@+id/countTextView"
@@ -54,14 +54,14 @@
 	                android:ellipsize="end"
 	                android:singleLine="true"
 	                android:textColor="@color/hint_light_grey"
-	                android:textSize="14sp" />
+	                android:textSize="14sp"/>
 	
 	            <TextView
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:text="@string/item_count"
 	                android:textColor="@color/hint_light_grey"
-	                android:textSize="14sp" />
+	                android:textSize="14sp"/>
 	
 	        </LinearLayout>
 	
@@ -71,7 +71,7 @@
 	            android:orientation="horizontal"
 	            android:gravity="right|bottom"
 	            android:layout_marginTop="6dp"
-	            android:layout_marginBottom="16dp" >
+	            android:layout_marginBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
                     android:layout_marginRight="3dp"
                     android:text="@string/rmb_symbol"
                     android:textColor="@color/font_major_dark"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 	
 	            <TextView
 	                android:id="@+id/amountTextView"
@@ -88,7 +88,7 @@
 	                android:ellipsize="end"
 	                android:singleLine="true"
 	                android:textColor="@color/font_major_dark"
-	                android:textSize="22sp" />
+	                android:textSize="22sp"/>
 	
 	        </LinearLayout>
 	

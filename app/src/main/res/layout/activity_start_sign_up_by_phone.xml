@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/baseLayout" >
+    android:id="@+id/baseLayout">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/background"
         android:scaleType="fitXY"
-        android:src="@drawable/start_background" />
+        android:src="@drawable/start_background"/>
 
     <ImageView
         android:id="@+id/backImageView"
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:contentDescription="@string/back"
-        android:src="@drawable/back_drawable" />
+        android:src="@drawable/back_drawable"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -30,7 +30,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="32dp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/start_icon" />
+            android:src="@drawable/start_icon"/>
 
         <classes.widget.ClearEditText
             android:id="@+id/phoneEditText"
@@ -46,7 +46,7 @@
             android:textColor="@color/font_major_light"
             android:textColorHint="@color/hint_white"
             android:background="@null"
-            android:textCursorDrawable="@null" />
+            android:textCursorDrawable="@null"/>
 
         <include
             android:layout_width="match_parent"
@@ -68,7 +68,7 @@
             android:textColor="@color/font_major_light"
             android:textColorHint="@color/hint_white"
             android:background="@null"
-            android:textCursorDrawable="@null" />
+            android:textCursorDrawable="@null"/>
 
         <include
             android:layout_width="match_parent"
@@ -90,7 +90,7 @@
             android:textColor="@color/font_major_light"
             android:textColorHint="@color/hint_white"
             android:background="@null"
-            android:textCursorDrawable="@null" />
+            android:textCursorDrawable="@null"/>
 
         <include
             android:layout_width="match_parent"
@@ -103,7 +103,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp" >
+            android:layout_marginRight="10dp">
 
             <EditText
                 android:id="@+id/codeEditText"
@@ -119,7 +119,7 @@
                 android:textColor="@color/font_major_light"
                 android:textColorHint="@color/hint_white"
                 android:background="@null"
-                android:textCursorDrawable="@null" />
+                android:textCursorDrawable="@null"/>
 
             <Button
                 android:id="@+id/acquireCodeButton"
@@ -130,7 +130,7 @@
                 android:gravity="center"
                 android:text="@string/acquire_code"
                 android:textColor="@color/start_button_text_color"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <include
@@ -150,7 +150,7 @@
             android:background="@drawable/button_light_solid_drawable"
             android:text="@string/sign_up"
             android:textColor="@color/start_button_text_color"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
     </LinearLayout>
 
 </RelativeLayout>

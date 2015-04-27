@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent" >
+    android:background="@android:color/transparent">
     
     <ImageView
         android:id="@+id/avatarImageView"
@@ -11,7 +11,7 @@
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/loading"
-        android:src="@anim/loading" />
+        android:src="@anim/loading"/>
 
     <TextView
         android:id="@+id/textView"
@@ -21,6 +21,6 @@
         android:layout_marginTop="20dp"
         android:text="@string/prompt_loading"
         android:textColor="@color/font_major_light"
-        android:textSize="20sp" />
+        android:textSize="20sp"/>
 
 </RelativeLayout>

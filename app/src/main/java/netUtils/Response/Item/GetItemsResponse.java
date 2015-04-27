@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Item;
+import classes.base.Item;
 import netUtils.response.BaseResponse;
 
 public class GetItemsResponse extends BaseResponse

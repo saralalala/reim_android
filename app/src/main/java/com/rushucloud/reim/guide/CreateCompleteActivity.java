@@ -59,25 +59,18 @@ public class CreateCompleteActivity extends Activity
         int count = getIntent().getIntExtra("count", 0);
         if (count > 0)
         {
-            String firstPart = ViewUtils.getString(R.string.sending_invitation_1);
-            String secondPart = ViewUtils.getString(R.string.sending_invitation_2);
-            String content = firstPart + count + secondPart;
+            String content = String.format(ViewUtils.getString(R.string.invitation_sent), count);
+            int length = Integer.toString(count).length();
 
             SpannableString text = new SpannableString(content);
-            int index = content.indexOf(secondPart);
-            text.setSpan(new StyleSpan(Typeface.BOLD), 6, index - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 6, index - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new StyleSpan(Typeface.BOLD), index + 38, index + 41, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new UnderlineSpan(), index + 38, index + 41, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), index + 38, index + 41, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ViewUtils.setTextBold(text, 6, 6 + length);
+            ViewUtils.setTextBoldAndUnderlined(text, 44 + length, 47 + length);
             promptTextView.setText(text);
         }
         else
         {
             SpannableString text = new SpannableString(ViewUtils.getString(R.string.create_prompt));
-            text.setSpan(new StyleSpan(Typeface.BOLD), 41, 44, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new UnderlineSpan(), 41, 44, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_light)), 41, 44, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ViewUtils.setTextBoldAndUnderlined(text, 38, 41);
             promptTextView.setText(text);
         }
 

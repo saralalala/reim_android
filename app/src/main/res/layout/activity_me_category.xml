@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/containerLayout" >
+    android:id="@+id/containerLayout">
 
     <RelativeLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/major_dark" >
+        android:background="@color/major_dark">
 
         <ImageView
             android:id="@+id/backImageView"
@@ -19,7 +19,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable" />
+            android:src="@drawable/back_drawable"/>
 
         <TextView
             android:id="@+id/titleTextView"
@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:text="@string/category_management"
             android:textColor="@color/major_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/addTextView"
@@ -40,7 +40,7 @@
 			android:gravity="center"
             android:text="@string/establish"
             android:textColor="@color/title_text_color"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
     </RelativeLayout>
 
     <ListView
@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/titleLayout"
-        android:listSelector="@drawable/list_item_drawable" >
+        android:listSelector="@drawable/list_item_drawable">
     </ListView>
 
     <TextView
@@ -58,6 +58,6 @@
         android:layout_below="@+id/titleLayout"
         android:gravity="center"
         android:text="@string/no_categories"
-        android:textColor="@color/hint_light_grey" />
+        android:textColor="@color/hint_light_grey"/>
 
 </RelativeLayout>

@@ -10,4 +10,4 @@
     android:gravity="center"
     android:background="@drawable/tag_shape"
 	android:textColor="@color/major_light"
-	android:textSize="14sp" />
+	android:textSize="14sp"/>

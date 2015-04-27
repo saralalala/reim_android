@@ -22,8 +22,8 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
-import classes.Item;
-import classes.Report;
+import classes.base.Item;
+import classes.base.Report;
 import classes.adapter.ItemListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
