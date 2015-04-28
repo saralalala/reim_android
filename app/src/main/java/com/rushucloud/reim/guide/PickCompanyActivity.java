@@ -287,7 +287,7 @@ public class PickCompanyActivity extends Activity
         {
             public void execute(Object httpResponse)
             {
-                InviteReplyResponse response = new InviteReplyResponse(httpResponse);
+                final InviteReplyResponse response = new InviteReplyResponse(httpResponse);
                 if (response.getStatus())
                 {
                     int currentGroupID = -1;
@@ -366,7 +366,7 @@ public class PickCompanyActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(PickCompanyActivity.this, R.string.failed_to_apply);
+                            ViewUtils.showToast(PickCompanyActivity.this, R.string.failed_to_apply, response.getErrorMessage());
                         }
                     });
                 }
