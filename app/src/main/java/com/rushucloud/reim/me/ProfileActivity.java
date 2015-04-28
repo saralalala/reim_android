@@ -16,13 +16,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.SingleImageActivity;
-import com.rushucloud.reim.guide.PickCompanyActivity;
 import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -58,8 +58,6 @@ public class ProfileActivity extends Activity
     private TextView bankTextView;
 	
 	private TextView companyTextView;
-	private ImageView companyNextImageView;
-	private RelativeLayout companyLayout;
 
 	private AppPreference appPreference;
 
@@ -258,9 +256,8 @@ public class ProfileActivity extends Activity
 
 		// init company
 		companyTextView = (TextView) findViewById(R.id.companyTextView);
-		companyNextImageView = (ImageView) findViewById(R.id.companyNextImageView);
-		
-		companyLayout = (RelativeLayout) findViewById(R.id.companyLayout);
+
+        LinearLayout companyLayout = (LinearLayout) findViewById(R.id.companyLayout);
         companyLayout.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -381,17 +378,6 @@ public class ProfileActivity extends Activity
         else
         {
             companyTextView.setText(R.string.not_joined);
-        }
-		
-        if (!currentUser.isAdmin() && currentGroup != null)
-		{
-        	companyLayout.setClickable(false);
-        	companyNextImageView.setVisibility(View.GONE);
-		}
-        else
-        {
-        	companyLayout.setClickable(true);
-        	companyNextImageView.setVisibility(View.VISIBLE);
         }
 	}
 

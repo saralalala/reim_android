@@ -52,6 +52,7 @@
         layout="@layout/view_divider"/>
 
     <LinearLayout
+        android:id="@+id/companyLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"

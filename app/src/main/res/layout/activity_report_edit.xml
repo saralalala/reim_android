@@ -79,7 +79,8 @@
 						android:layout_marginRight="14dp"
                         android:gravity="bottom"
 			            android:background="@null"
-			            android:inputType="textMultiLine"			            
+			            android:inputType="textMultiLine"
+                        android:singleLine="true"
 			            android:hint="@string/input_report_title"
 			            android:textColor="@color/font_major_dark"
 			            android:textSize="20sp"
@@ -308,7 +309,8 @@
 		        android:layout_weight="1"
 		        android:background="@drawable/bar_button_drawable"
 		        android:text="@string/message"
-		        android:textColor="@color/font_major_dark"/>
+		        android:textColor="@color/font_major_dark"
+                android:textSize="18sp"/>
 
 		    <Button
 		        android:id="@+id/submitButton"
@@ -318,7 +320,9 @@
 		        android:layout_weight="1"
 		        android:background="@drawable/bar_button_drawable"
 		        android:text="@string/submit"
-		        android:textColor="@color/start_button_text_color"/>
+		        android:textColor="@color/start_button_text_color"
+                android:textSize="18sp"/>
+
 		</LinearLayout>
 
 		<ImageView

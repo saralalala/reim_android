@@ -52,11 +52,18 @@ public abstract class BaseResponse
 				
 				if (code == NetworkConstant.ERROR_AUTH_TIMEOUT)
 				{
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    String username = appPreference.getUsername();
+                    String password = appPreference.getPassword();
+                    appPreference.setUsername("");
+                    appPreference.setPassword("");
+                    appPreference.saveAppPreference();
+
 					Intent intent = new Intent(ReimApplication.getContext(), SignInActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-					intent.putExtra("username", AppPreference.getAppPreference().getUsername());
-					intent.putExtra("password", AppPreference.getAppPreference().getPassword());
+					intent.putExtra("username", username);
+					intent.putExtra("password", password);
 					ReimApplication.getContext().startActivity(intent);
 				}
 			}

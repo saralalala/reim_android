@@ -67,7 +67,7 @@
         android:padding="16dp"
         android:background="@color/major_light"
         android:gravity="top"
-        android:inputType="textMultiLine"
+        android:inputType="textMultiLine|textEmailAddress"
         android:textColor="@color/font_major_dark"
         android:textSize="16sp"
         android:textCursorDrawable="@null"/>

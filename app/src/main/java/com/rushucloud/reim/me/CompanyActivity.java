@@ -1,6 +1,7 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -72,11 +73,25 @@ public class CompanyActivity extends Activity
         {
             public void onClick(View v)
             {
-                ViewUtils.goForward(CompanyActivity.this, EstablishCompanyActivity.class);
+                ViewUtils.goForward(CompanyActivity.this, EditCompanyActivity.class);
             }
         });
 
         companyTextView = (TextView) findViewById(R.id.companyTextView);
+
+        User currentUser = AppPreference.getAppPreference().getCurrentUser();
+        Group currentGroup = AppPreference.getAppPreference().getCurrentGroup();
+        if (currentUser.isAdmin() || currentGroup == null)
+        {
+            LinearLayout companyLayout = (LinearLayout) findViewById(R.id.companyLayout);
+            companyLayout.setOnClickListener(new OnClickListener()
+            {
+                public void onClick(View v)
+                {
+                    ViewUtils.goForward(CompanyActivity.this, EditCompanyActivity.class);
+                }
+            });
+        }
 
         LinearLayout changeCompanyLayout = (LinearLayout) findViewById(R.id.changeCompanyLayout);
         changeCompanyLayout.setOnClickListener(new OnClickListener()
@@ -85,7 +100,7 @@ public class CompanyActivity extends Activity
 			{
                 ViewUtils.goForward(CompanyActivity.this, PickCompanyActivity.class);
 			}
-		});        
+		});
 	}
 
     private void loadCompanyName()

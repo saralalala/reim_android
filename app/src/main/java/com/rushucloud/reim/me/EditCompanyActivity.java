@@ -29,7 +29,7 @@ import netUtils.request.group.ModifyGroupRequest;
 import netUtils.response.group.CreateGroupResponse;
 import netUtils.response.group.ModifyGroupResponse;
 
-public class EstablishCompanyActivity extends Activity
+public class EditCompanyActivity extends Activity
 {
 	private ClearEditText companyEditText;
 
@@ -49,7 +49,7 @@ public class EstablishCompanyActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("EstablishCompanyActivity");
+		MobclickAgent.onPageStart("EditCompanyActivity");
 		MobclickAgent.onResume(this);
 		ReimProgressDialog.setContext(this);
 	}
@@ -57,7 +57,7 @@ public class EstablishCompanyActivity extends Activity
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("EstablishCompanyActivity");
+		MobclickAgent.onPageEnd("EditCompanyActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -99,7 +99,7 @@ public class EstablishCompanyActivity extends Activity
 				String newName = companyEditText.getText().toString();
 				if (!PhoneUtils.isNetworkConnected())
 				{
-					ViewUtils.showToast(EstablishCompanyActivity.this, R.string.error_modify_network_unavailable);
+					ViewUtils.showToast(EditCompanyActivity.this, R.string.error_modify_network_unavailable);
 				}
 				else if (newName.equals(originalName))
 				{
@@ -107,7 +107,7 @@ public class EstablishCompanyActivity extends Activity
 				}
 				else if (newName.isEmpty())
 				{
-					ViewUtils.showToast(EstablishCompanyActivity.this, R.string.error_company_name_empty);
+					ViewUtils.showToast(EditCompanyActivity.this, R.string.error_company_name_empty);
 				}
 				else
 				{
@@ -200,7 +200,7 @@ public class EstablishCompanyActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(EstablishCompanyActivity.this, R.string.succeed_in_creating_company);
+                            ViewUtils.showToast(EditCompanyActivity.this, R.string.succeed_in_creating_company);
                             goBack();
                         }
                     });
@@ -212,7 +212,7 @@ public class EstablishCompanyActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(EstablishCompanyActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
+                            ViewUtils.showToast(EditCompanyActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
                         }
                     });
                 }
@@ -238,7 +238,7 @@ public class EstablishCompanyActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EstablishCompanyActivity.this, R.string.succeed_in_modifying);
+							ViewUtils.showToast(EditCompanyActivity.this, R.string.succeed_in_modifying);
                             goBack();
 						}
 					});
@@ -250,7 +250,7 @@ public class EstablishCompanyActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EstablishCompanyActivity.this, R.string.failed_to_modify, response.getErrorMessage());
+							ViewUtils.showToast(EditCompanyActivity.this, R.string.failed_to_modify, response.getErrorMessage());
 						}
 					});
 				}

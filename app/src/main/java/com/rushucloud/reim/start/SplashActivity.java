@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.guide.GuideStartActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.base.User;
@@ -123,9 +124,10 @@ public class SplashActivity extends Activity
 					int currentGroupID = -1;
 
 					DBManager dbManager = DBManager.getDBManager();
-					AppPreference appPreference = AppPreference.getAppPreference();
+					final AppPreference appPreference = AppPreference.getAppPreference();
 					appPreference.setServerToken(response.getServerToken());
 					appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
+                    appPreference.setLastShownGuideVersion(response.getLastShownGuideVersion());
 					appPreference.setSyncOnlyWithWifi(true);
 					appPreference.setEnablePasswordProtection(true);
 					
@@ -175,7 +177,14 @@ public class SplashActivity extends Activity
 					{
 						public void run()
 						{
-                            ViewUtils.goForwardAndFinish(SplashActivity.this, MainActivity.class);
+                            if (appPreference.getLastShownGuideVersion() < appPreference.getGuideVersion())
+                            {
+                                ViewUtils.goForwardAndFinish(SplashActivity.this, GuideStartActivity.class);
+                            }
+                            else
+                            {
+                                ViewUtils.goForwardAndFinish(SplashActivity.this, MainActivity.class);
+                            }
 						}
 					});
 				}

@@ -255,7 +255,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".me.EstablishCompanyActivity"
+            android:name=".me.EditCompanyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity

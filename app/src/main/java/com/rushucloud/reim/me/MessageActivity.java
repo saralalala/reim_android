@@ -439,6 +439,7 @@ public class MessageActivity extends Activity
     		Intent intent2 = new Intent(MessageActivity.this, MessageListActivity.class);
     		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         	startActivities(new Intent[] {intent, intent2});
+            overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
         	finish();
 		}
     	else

@@ -304,17 +304,17 @@
 				android:layout_height="0.5dp"
 		        layout="@layout/view_divider"/>
 	        
-			<RelativeLayout
+			<LinearLayout
 			    android:id="@+id/companyLayout"
 			    android:layout_width="match_parent"
 			    android:layout_height="50dp"
+                android:orientation="horizontal"
 			    android:background="@drawable/me_item_drawable">
 
                 <TextView
-                    android:id="@+id/companyPrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="16dp"
                     android:text="@string/company"
                     android:textColor="@color/font_major_dark"
@@ -322,11 +322,10 @@
 
                 <TextView
                     android:id="@+id/companyTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/companyNextImageView"
-                    android:layout_toRightOf="@+id/companyPrompt"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
                     android:gravity="right"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -336,16 +335,14 @@
                     android:textSize="14sp"/>
 
                 <ImageView
-                    android:id="@+id/companyNextImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
                     android:src="@drawable/next"/>
 			
-			</RelativeLayout>
+			</LinearLayout>
             
 		    <include                 
 				android:layout_width="match_parent"

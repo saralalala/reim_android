@@ -541,6 +541,7 @@ public class EditReportActivity extends Activity
 				{
 					Intent intent = new Intent(EditReportActivity.this, EditItemActivity.class);
 					intent.putExtra("itemLocalID", item.getLocalID());
+                    intent.putExtra("fromEditReport", true);
                     ViewUtils.goForward(EditReportActivity.this, intent);
 				}
 			});

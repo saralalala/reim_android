@@ -83,7 +83,7 @@
     <string name="open_settings">打开设置</string>
     <string name="input_contact">填写手机号或邮箱</string>
     <string name="input_contact_manually_and_divided">请手动填写手机号或邮箱，用逗号分开</string>
-    <string name="invite_by_pc">可通过访问PC端批量邀请其他同事加入</string>
+    <string name="invite_by_pc">可通过访问网页端批量邀请其他同事加入</string>
     <string name="invitation_sent">已经向你的 %1$d 个同事发送邀请。他们接受邀请后，就能加入你创建的公司。你也可以通过我们的 网页端 批量邀请其他同事加入。</string>
     <string name="start_to_use">开始使用</string>
     <string name="create_prompt">你可以之后在应用中通过短信或者邮件的方式邀请其他同事加入，也可以通过我们的 网页端 批量邀请他人。</string>

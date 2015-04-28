@@ -85,6 +85,7 @@ public class EditItemActivity extends Activity
     private static final int PICK_MEMBER = 6;
 
     private EditText amountEditText;
+    private ImageView amountWarningImageView;
 
     private PopupWindow typePopupWindow;
     private TextView typeTextView;
@@ -108,6 +109,7 @@ public class EditItemActivity extends Activity
 
     private ImageView categoryImageView;
     private TextView categoryTextView;
+    private ImageView categoryWarningImageView;
 
     private LinearLayout tagContainerLayout;
     private LinearLayout tagLayout;
@@ -129,6 +131,7 @@ public class EditItemActivity extends Activity
     private List<Image> originInvoiceList;
 
     private boolean fromReim;
+    private boolean fromEditReport;
     private boolean fromPickItems;
     private boolean newItem = false;
 
@@ -311,6 +314,7 @@ public class EditItemActivity extends Activity
 
         Intent intent = this.getIntent();
         fromReim = intent.getBooleanExtra("fromReim", false);
+        fromEditReport = intent.getBooleanExtra("fromEditReport", false);
         fromPickItems = intent.getBooleanExtra("fromPickItems", false);
         int itemLocalID = intent.getIntExtra("itemLocalID", -1);
         if (itemLocalID == -1)
@@ -352,8 +356,6 @@ public class EditItemActivity extends Activity
 
     private void initView()
     {
-//        getActionBar().hide();
-
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
         backImageView.setOnClickListener(new View.OnClickListener()
         {
@@ -488,6 +490,7 @@ public class EditItemActivity extends Activity
         TextView actualCostTextView = (TextView) findViewById(R.id.actualCostTextView);
         TextView budgetTextView = (TextView) findViewById(R.id.budgetTextView);
         TextView approvedTextView = (TextView) findViewById(R.id.approvedTextView);
+        amountWarningImageView = (ImageView) findViewById(R.id.amountWarningImageView);
 
         amountEditText = (EditText) findViewById(R.id.amountEditText);
         amountEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -529,12 +532,17 @@ public class EditItemActivity extends Activity
 
             public void afterTextChanged(Editable s)
             {
-
+                int visibility = (s.toString().isEmpty() || Double.valueOf(s.toString()) == 0) && fromEditReport? View.VISIBLE : View.GONE;
+                amountWarningImageView.setVisibility(visibility);
             }
         });
         if (item.getAmount() == 0)
         {
             ViewUtils.requestFocus(this, amountEditText);
+            if (fromEditReport)
+            {
+                amountWarningImageView.setVisibility(View.VISIBLE);
+            }
         }
         else
         {
@@ -853,6 +861,7 @@ public class EditItemActivity extends Activity
 
         categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
         categoryTextView = (TextView) findViewById(R.id.categoryTextView);
+        categoryWarningImageView = (ImageView) findViewById(R.id.categoryWarningImageView);
 
         refreshCategoryView();
     }
@@ -1093,6 +1102,10 @@ public class EditItemActivity extends Activity
         {
             categoryImageView.setVisibility(View.INVISIBLE);
             categoryTextView.setVisibility(View.INVISIBLE);
+            if (fromEditReport)
+            {
+                categoryWarningImageView.setVisibility(View.GONE);
+            }
         }
     }
 
