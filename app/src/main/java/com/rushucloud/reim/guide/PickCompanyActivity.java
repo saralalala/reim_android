@@ -28,6 +28,7 @@ import classes.adapter.CompanyListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
@@ -71,7 +72,10 @@ public class PickCompanyActivity extends Activity
         if (!hasInit)
         {
             hasInit = true;
-            sendGetInvitedGroupRequest();
+            if (PhoneUtils.isNetworkConnected())
+            {
+                sendGetInvitedGroupRequest();
+            }
         }
 	}
 
@@ -111,7 +115,11 @@ public class PickCompanyActivity extends Activity
                 {
                     hideSoftKeyboard();
                     int index = invitedList.indexOf(company);
-                    if (index != -1)
+                    if (!PhoneUtils.isNetworkConnected())
+                    {
+                        ViewUtils.showToast(PickCompanyActivity.this, R.string.error_get_data_network_unavailable);
+                    }
+                    else if (index != -1)
                     {
                         sendInviteReplyRequest(inviteList.get(index));
                     }

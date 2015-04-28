@@ -278,6 +278,10 @@ public class EditReportActivity extends Activity
 		{
             ViewUtils.requestFocus(this, titleEditText);
 		}
+        else
+        {
+            hideSoftKeyboard();
+        }
 
 		int createDate = report.getCreatedDate() == -1? Utils.getCurrentTime() : report.getCreatedDate();
 		timeTextView = (TextView) findViewById(R.id.timeTextView);
@@ -456,6 +460,7 @@ public class EditReportActivity extends Activity
 				else if (titleEditText.getText().toString().isEmpty())
 				{
 					ViewUtils.showToast(EditReportActivity.this, R.string.error_report_title_empty);
+                    ViewUtils.requestFocus(EditReportActivity.this, titleEditText);
 				}
 				else if (report.getManagerList() == null || report.getManagerList().isEmpty())
 				{

@@ -122,7 +122,7 @@ public class StatisticsFragment extends Fragment
 			hasInit = true;
 		}
 
-        if (getUserVisibleHint() && needToGetMineData())
+        if (getUserVisibleHint() && PhoneUtils.isNetworkConnected() && needToGetMineData())
         {
             ReimProgressDialog.show();
             sendGetMineDataRequest();
@@ -140,16 +140,23 @@ public class StatisticsFragment extends Fragment
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser && hasInit)
 		{
-            setListView(ReimApplication.getStatTabIndex());
-            if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_MINE && needToGetMineData())
+            if (PhoneUtils.isNetworkConnected())
             {
-                ReimProgressDialog.show();
-                sendGetMineDataRequest();
+                setListView(ReimApplication.getStatTabIndex());
+                if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_MINE && needToGetMineData())
+                {
+                    ReimProgressDialog.show();
+                    sendGetMineDataRequest();
+                }
+                else if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_OTHERS && needToGetOthersData())
+                {
+                    ReimProgressDialog.show();
+                    sendGetOthersDataRequest();
+                }
             }
-            else if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_OTHERS && needToGetOthersData())
+            else
             {
-                ReimProgressDialog.show();
-                sendGetOthersDataRequest();
+                ViewUtils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
             }
 		}
 	}
@@ -253,14 +260,21 @@ public class StatisticsFragment extends Fragment
         {
             public void onClick(View v)
             {
-                month = month == 1? 12 : month - 1;
-                if (month == 12)
+                if (PhoneUtils.isNetworkConnected())
                 {
-                    year--;
+                    month = month == 1? 12 : month - 1;
+                    if (month == 12)
+                    {
+                        year--;
+                    }
+                    monthTextView.setText(Utils.getMonthString(year, month));
+                    ReimProgressDialog.show();
+                    sendGetOthersDataRequest();
                 }
-                monthTextView.setText(Utils.getMonthString(year, month));
-                ReimProgressDialog.show();
-                sendGetOthersDataRequest();
+                else
+                {
+                    ViewUtils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
+                }
             }
         });
 

@@ -2,6 +2,7 @@ package classes.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.base.User;
+import classes.utils.PhoneUtils;
 
 public class ContactListViewAdapter extends BaseAdapter
 {
@@ -91,7 +93,24 @@ public class ContactListViewAdapter extends BaseAdapter
             {
                 public void onClick(View v)
                 {
-                    context.startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+                    if (PhoneUtils.isMIUIV6())
+                    {
+                        try
+                        {
+                            Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
+                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                            intent.putExtra("extra_pkgname", context.getPackageName());
+                            context.startActivity(intent);
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        context.startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+                    }
                 }
             });
 

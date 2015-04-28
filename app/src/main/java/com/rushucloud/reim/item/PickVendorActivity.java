@@ -195,7 +195,11 @@ public class PickVendorActivity extends Activity
     private void searchVendors()
     {
         hideSoftKeyboard();
-        if (vendorEditText.getText().toString().isEmpty())
+        if (!PhoneUtils.isNetworkConnected())
+        {
+            ViewUtils.showToast(PickVendorActivity.this, R.string.error_get_vendor_network_unavailable);
+        }
+        else if (vendorEditText.getText().toString().isEmpty())
         {
             ReimProgressDialog.show();
             sendVendorsRequest();
