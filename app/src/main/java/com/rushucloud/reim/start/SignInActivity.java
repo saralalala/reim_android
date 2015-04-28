@@ -25,6 +25,7 @@ import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
@@ -305,7 +306,7 @@ public class SignInActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            if (appPreference.getLastShownGuideVersion() < appPreference.getGuideVersion())
+                            if (appPreference.getLastShownGuideVersion() < ReimApplication.GUIDE_VERSION)
                             {
                                 ViewUtils.goForwardAndFinish(SignInActivity.this, GuideStartActivity.class);
                             }

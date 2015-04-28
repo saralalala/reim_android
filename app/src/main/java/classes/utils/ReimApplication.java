@@ -38,6 +38,8 @@ public class ReimApplication extends Application
 	public static Typeface TypeFaceYaHei;
 	public static Typeface TypeFaceAleoLight;
 
+    public static int GUIDE_VERSION = 1;
+
 	private static Context context;
 	
 	private static int tabIndex = TAB_REIM;

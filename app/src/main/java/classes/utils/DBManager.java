@@ -1810,7 +1810,8 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "UPDATE tbl_others_report SET " +
+            String amountString = report.getAmount() == null? "" : "amount = '" + report.getAmount() + "',";
+			String sqlString = "UPDATE tbl_others_report SET " + amountString +
 								"server_id = '" + report.getServerID() + "'," +
 								"title = '" + sqliteEscape(report.getTitle()) + "'," +
                                 "owner_id = '" + AppPreference.getAppPreference().getCurrentUserID() + "'," +

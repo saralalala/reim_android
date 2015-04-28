@@ -31,7 +31,6 @@ public class AppPreference
     private int lastGetOthersReportTime = 0;
 	private int lastGetMineStatTime = 0;
     private int lastGetOthersStatTime = 0;
-    private int guideVersion = 1;
     private int lastShownGuideVersion = 0;
     private boolean needToShowReimGuide = true;
     private boolean needToShowReportGuide = true;
@@ -222,11 +221,6 @@ public class AppPreference
     public void setLastGetOthersStatTime(int lastGetOthersStatTime)
     {
         this.lastGetOthersStatTime = lastGetOthersStatTime;
-    }
-
-    public int getGuideVersion()
-    {
-        return guideVersion;
     }
 
     public int getLastShownGuideVersion()

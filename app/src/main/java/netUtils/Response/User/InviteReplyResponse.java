@@ -97,7 +97,7 @@ public class InviteReplyResponse extends BaseResponse
 
     public User getCurrentUser()
     {
-        return this.currentUser;
+        return currentUser;
     }
 
     public Group getGroup()

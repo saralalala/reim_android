@@ -13,6 +13,7 @@ import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.ViewUtils;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.SignInRequest;
@@ -177,7 +178,7 @@ public class SplashActivity extends Activity
 					{
 						public void run()
 						{
-                            if (appPreference.getLastShownGuideVersion() < appPreference.getGuideVersion())
+                            if (appPreference.getLastShownGuideVersion() < ReimApplication.GUIDE_VERSION)
                             {
                                 ViewUtils.goForwardAndFinish(SplashActivity.this, GuideStartActivity.class);
                             }
