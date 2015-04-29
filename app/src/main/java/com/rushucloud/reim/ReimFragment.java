@@ -863,7 +863,7 @@ public class ReimFragment extends Fragment
 		itemList.clear();
 		itemList.addAll(readItemList());
 		filterItemList();
-		adapter.set(showList);
+		adapter.setItemList(showList);
 		adapter.notifyDataSetChanged();
 
         int visibility = (filterType != FILTER_STATUS_ALL || filterStatus != FILTER_STATUS_ALL || !filterCategoryList.isEmpty() ||

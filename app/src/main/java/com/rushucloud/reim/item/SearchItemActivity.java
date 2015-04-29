@@ -174,7 +174,7 @@ public class SearchItemActivity extends Activity
 						item.setLocalID(localItem.getLocalID());
 					}
 					
-					adapter.set(itemList);
+					adapter.setItemList(itemList);
 					runOnUiThread(new Runnable()
 					{
 						public void run()

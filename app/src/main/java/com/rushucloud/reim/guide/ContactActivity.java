@@ -294,9 +294,8 @@ public class ContactActivity extends Activity
                 {
                     public void run()
                     {
-//                        adapter.setContactList(contactList);
-//                        adapter.setNoPermission(contactList.isEmpty());
-                        adapter.setNoPermission(true);
+                        adapter.setContactList(contactList);
+                        adapter.setNoPermission(contactList.isEmpty());
                         adapter.notifyDataSetChanged();
 
                         ReimProgressDialog.dismiss();

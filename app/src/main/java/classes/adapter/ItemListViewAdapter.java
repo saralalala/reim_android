@@ -138,7 +138,7 @@ public class ItemListViewAdapter extends BaseAdapter
 		return position;
 	}
 	
-	public void set(List<Item> items)
+	public void setItemList(List<Item> items)
 	{
 		itemList.clear();
 		itemList.addAll(items);
