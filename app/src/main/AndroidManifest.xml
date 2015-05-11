@@ -34,10 +34,6 @@
         
         <activity android:name="com.rushucloud.reim.start.SplashActivity"
             android:theme="@style/AppSplash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <!--   start part   -->
@@ -90,7 +86,11 @@
         <activity
             android:name=".guide.ContactActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter></activity>
         <activity
             android:name=".guide.InputContactActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

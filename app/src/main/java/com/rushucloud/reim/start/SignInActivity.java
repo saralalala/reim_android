@@ -121,7 +121,6 @@ public class SignInActivity extends Activity
 			}
 		});
 
-
         TextView forgorPasswordTextView = (TextView) findViewById(R.id.forgotTextView);
 		forgorPasswordTextView.setOnClickListener(new View.OnClickListener()
         {

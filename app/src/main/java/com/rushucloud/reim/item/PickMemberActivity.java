@@ -26,12 +26,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.User;
 import classes.adapter.MemberListViewAdapter;
+import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
@@ -42,6 +43,7 @@ public class PickMemberActivity extends Activity
 {
     private ClearEditText memberEditText;
 	private MemberListViewAdapter adapter;
+    private LinearLayout indexLayout;
 
 	private DBManager dbManager;
 	private List<User> userList;
@@ -150,24 +152,31 @@ public class PickMemberActivity extends Activity
 
                 public void afterTextChanged(Editable s)
                 {
+                    int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
+                    indexLayout.setVisibility(visibility);
                     filterList();
                 }
             });
-        }
 
-        adapter = new MemberListViewAdapter(this, userList, chosenList);
+            adapter = new MemberListViewAdapter(this, userList, chosenList);
 
-        ListView userListView = (ListView) findViewById(R.id.userListView);
-        userListView.setAdapter(adapter);
-        userListView.setOnItemClickListener(new OnItemClickListener()
-        {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            ListView userListView = (ListView) findViewById(R.id.userListView);
+            userListView.setAdapter(adapter);
+            userListView.setOnItemClickListener(new OnItemClickListener()
             {
-                hideSoftKeyboard();
-                adapter.setCheck(position);
-                adapter.notifyDataSetChanged();
-            }
-        });
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
+                    hideSoftKeyboard();
+                    adapter.setCheck(position);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+            indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+            TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
+
+            ViewUtils.initIndexLayout(this, 123, adapter.getSelector(), userListView, indexLayout, centralTextView);
+        }
 
         for (User user : userList)
         {

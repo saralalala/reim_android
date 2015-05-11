@@ -27,10 +27,6 @@ public class CharacterParser
             {
                 return String.valueOf(input[0]).toUpperCase();
             }
-            else if (input.length > 0 && Character.toString(input[0]).matches("[0-9]"))
-            {
-                return String.valueOf(input[0]);
-            }
             else
             {
                 return "#";

@@ -146,10 +146,39 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/ccListView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:listSelector="@drawable/list_item_drawable"/>
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/ccListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:listSelector="@drawable/list_item_drawable"/>
+
+        <TextView
+            android:id="@+id/centralTextView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/index"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textColor="@color/major_light"
+            android:textSize="30sp"
+            android:visibility="invisible"/>
+
+        <LinearLayout
+            android:id="@+id/indexLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="vertical"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

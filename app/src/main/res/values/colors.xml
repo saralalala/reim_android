@@ -50,7 +50,10 @@
     
     <color name="item_approved">#FF3CB798</color>
     <color name="item_approve_ahead">#FFFF575B</color>
-    
+
+    <color name="index_prompt">#AA000000</color>
+    <color name="index_layout_selected">#AAE9E9EB</color>
+
     <color name="tag">#FFABABAB</color>
     
     <color name="status_cover">#992B2D2F</color>

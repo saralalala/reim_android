@@ -132,104 +132,141 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/managerContainer"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:background="@color/list_item_header">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                android:text="@string/my_manager"
-                android:textColor="@color/font_list_item_header"
-                android:textSize="14sp"/>
-
-        </RelativeLayout>
-
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            layout="@layout/view_divider"/>
-
-        <RelativeLayout
-            android:id="@+id/managerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:background="@color/list_item_unselected">
-
-            <classes.widget.CircleImageView
-                android:id="@+id/avatarImageView"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="16dp"
-                android:contentDescription="@string/avatar"
-                android:src="@drawable/default_avatar"
-                reim:border_width="0dp"/>
-
-            <TextView
-                android:id="@+id/nicknameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/avatarImageView"
-                android:text="@string/manager_not_set"
-                android:textColor="@color/font_major_dark"
-                android:textSize="16sp"/>
-
-        </RelativeLayout>
-
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            layout="@layout/view_divider"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/colleagueContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:background="@color/list_item_header">
-
-            <TextView
-                android:id="@+id/colleagueTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                android:text="@string/my_colleagues"
-                android:textColor="@color/font_list_item_header"
-                android:textSize="14sp"/>
-
-        </RelativeLayout>
-
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            layout="@layout/view_divider"/>
-
-        <ListView
-            android:id="@+id/managerListView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:listSelector="@drawable/list_item_drawable"/>
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/managerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:background="@color/list_item_header">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="@string/my_manager"
+                        android:textColor="@color/font_list_item_header"
+                        android:textSize="14sp"/>
+
+                </RelativeLayout>
+
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    layout="@layout/view_divider"/>
+
+                <RelativeLayout
+                    android:id="@+id/managerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:background="@color/list_item_unselected">
+
+                    <classes.widget.CircleImageView
+                        android:id="@+id/avatarImageView"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="16dp"
+                        android:contentDescription="@string/avatar"
+                        android:src="@drawable/default_avatar"
+                        reim:border_width="0dp"/>
+
+                    <TextView
+                        android:id="@+id/nicknameTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/avatarImageView"
+                        android:text="@string/manager_not_set"
+                        android:textColor="@color/font_major_dark"
+                        android:textSize="16sp"/>
+
+                </RelativeLayout>
+
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    layout="@layout/view_divider"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/colleagueContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:background="@color/list_item_header">
+
+                    <TextView
+                        android:id="@+id/colleagueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="@string/my_colleagues"
+                        android:textColor="@color/font_list_item_header"
+                        android:textSize="14sp"/>
+
+                </RelativeLayout>
+
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    layout="@layout/view_divider"/>
+
+                <ListView
+                    android:id="@+id/managerListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:listSelector="@drawable/list_item_drawable"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/centralTextView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/index"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textColor="@color/major_light"
+            android:textSize="30sp"
+            android:visibility="invisible"/>
+
+        <LinearLayout
+            android:id="@+id/indexLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="25dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="vertical"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

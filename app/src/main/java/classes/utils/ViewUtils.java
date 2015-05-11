@@ -16,18 +16,26 @@ import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rushucloud.reim.R;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 import classes.base.Category;
 import classes.base.StatCategory;
@@ -35,6 +43,9 @@ import classes.base.User;
 
 public class ViewUtils
 {
+    public static String[] indexLetters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+            "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"};
+
     public static OnFocusChangeListener onFocusChangeListener = new OnFocusChangeListener()
     {
         public void onFocusChange(View v, boolean hasFocus)
@@ -241,6 +252,69 @@ public class ViewUtils
         return metrics.heightPixels;
     }
 
+    public static int getStatusBarHeight(Context context)
+    {
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        return resourceId > 0? context.getResources().getDimensionPixelSize(resourceId) : 0;
+    }
+
+    public static void initIndexLayout(Context context, int margin, final HashMap<String, Integer> selector,
+                                       final ListView listView, final LinearLayout indexLayout, final TextView centralTextView)
+    {
+        final int height = (getPhoneWindowHeight(context) - dpToPixel(margin) - getStatusBarHeight(context)) / indexLetters.length;
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, height);
+        for (String string : indexLetters)
+        {
+            TextView textView = new TextView(context);
+            textView.setLayoutParams(params);
+            textView.setTextColor(getColor(R.color.major_dark));
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            textView.setText(string);
+
+            indexLayout.addView(textView);
+            indexLayout.setOnTouchListener(new View.OnTouchListener()
+            {
+                public boolean onTouch(View v, MotionEvent event)
+                {
+                    float y = event.getY();
+                    int index = (int) (y / height);
+                    if (index > -1 && index < ViewUtils.indexLetters.length)
+                    {
+                        String key = ViewUtils.indexLetters[index];
+                        centralTextView.setVisibility(View.VISIBLE);
+                        centralTextView.setText(key);
+                        if (selector.containsKey(key))
+                        {
+                            int position = selector.get(key);
+                            if (listView.getHeaderViewsCount() > 0)
+                            {
+                                listView.setSelectionFromTop(position + listView.getHeaderViewsCount(), 0);
+                            }
+                            else
+                            {
+                                listView.setSelectionFromTop(position, 0);
+                            }
+                        }
+                    }
+                    switch (event.getAction())
+                    {
+                        case MotionEvent.ACTION_DOWN:
+                            indexLayout.setBackgroundColor(getColor(R.color.index_layout_selected));
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            indexLayout.setBackgroundColor(getColor(android.R.color.transparent));
+                            centralTextView.setVisibility(View.INVISIBLE);
+                            break;
+                        default:
+                            break;
+                    }
+                    return true;
+                }
+            });
+        }
+
+    }
     public static int dpToPixel(double dp)
     {
     	DisplayMetrics metrics = ReimApplication.getContext().getResources().getDisplayMetrics();

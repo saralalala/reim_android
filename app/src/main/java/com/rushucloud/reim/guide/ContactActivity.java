@@ -53,7 +53,7 @@ public class ContactActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_invite);
+		setContentView(R.layout.activity_guide_contact);
 		initData();
 		initView();
         readContacts();
@@ -118,11 +118,11 @@ public class ContactActivity extends Activity
         appPreference = AppPreference.getAppPreference();
         dbManager = DBManager.getDBManager();
 
-        Bundle bundle = getIntent().getExtras();
-        companyName = bundle.getString("companyName", "");
-        inputList = bundle.getStringArrayList("inputList");
-        inputChosenList = bundle.getStringArrayList("inputChosenList");
-        contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
+//        Bundle bundle = getIntent().getExtras();
+//        companyName = bundle.getString("companyName", "");
+//        inputList = bundle.getStringArrayList("inputList");
+//        inputChosenList = bundle.getStringArrayList("inputChosenList");
+//        contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
 	}
 
 	private void initView()

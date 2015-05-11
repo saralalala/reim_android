@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class ManagerActivity extends Activity
     private TextView nicknameTextView;
 	private ListView managerListView;
 	private MemberListViewAdapter adapter;
+    private LinearLayout indexLayout;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
@@ -180,6 +182,8 @@ public class ManagerActivity extends Activity
 
             public void afterTextChanged(Editable s)
             {
+                int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
+                indexLayout.setVisibility(visibility);
                 filterList();
             }
         });
@@ -241,6 +245,11 @@ public class ManagerActivity extends Activity
 
             adapter = new MemberListViewAdapter(this, userList, chosenList);
             managerListView.setAdapter(adapter);
+
+            indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+            TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
+
+            ViewUtils.initIndexLayout(this, 123, adapter.getSelector(), managerListView, indexLayout, centralTextView);
 
             if (PhoneUtils.isNetworkConnected())
             {

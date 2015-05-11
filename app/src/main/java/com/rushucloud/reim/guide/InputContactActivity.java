@@ -86,6 +86,7 @@ public class InputContactActivity extends Activity
                 String contactString = contactEditText.getText().toString();
                 SpannableString text = new SpannableString(contactString);
                 contactString = contactString.replace("，", ",");
+                contactString = contactString.replace(" ", ",");
                 contactString = contactString.replace("　", ",");
                 contactString = contactString.replace("\n", ",");
                 String[] contacts = TextUtils.split(contactString, ",");
@@ -134,6 +135,20 @@ public class InputContactActivity extends Activity
         contactEditText = (EditText) findViewById(R.id.contactEditText);
         contactEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
         contactEditText.setText(getIntent().getStringExtra("inviteList"));
+        contactEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
+                {
+                    String content = contactEditText.getText().toString() + "\n";
+                    contactEditText.setText(content);
+                    Spannable spanText = contactEditText.getText();
+                    Selection.setSelection(spanText, spanText.length());
+                }
+                return false;
+            }
+        });
         ViewUtils.requestFocus(this, contactEditText);
 
         TextView promptTextView = (TextView) findViewById(R.id.promptTextView);

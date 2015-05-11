@@ -46,6 +46,7 @@ public class PickManagerActivity extends Activity
     private ImageView avatarImageView;
     private TextView nicknameTextView;
 	private MemberListViewAdapter adapter;
+    private LinearLayout indexLayout;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
@@ -198,6 +199,8 @@ public class PickManagerActivity extends Activity
 
                 public void afterTextChanged(Editable s)
                 {
+                    int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
+                    indexLayout.setVisibility(visibility);
                     filterList();
                 }
             });
@@ -260,6 +263,11 @@ public class PickManagerActivity extends Activity
                     chosenList.addAll(adapter.getChosenList());
                 }
             });
+
+            indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+            TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
+
+            ViewUtils.initIndexLayout(this, 123, adapter.getSelector(), managerListView, indexLayout, centralTextView);
 
             for (User user : userList)
             {
