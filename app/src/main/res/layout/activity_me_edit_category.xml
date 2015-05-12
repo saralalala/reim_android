@@ -80,7 +80,7 @@
 		            android:layout_height="match_parent"
 		            android:layout_toRightOf="@+id/iconImageView"
 		            android:layout_marginLeft="16dp"
-		            android:layout_marginRight="16dp"
+		            android:paddingRight="16dp"
 		            android:background="@null"
 		            android:hint="@string/input_category_name"
                     android:textColor="@color/font_major_dark"

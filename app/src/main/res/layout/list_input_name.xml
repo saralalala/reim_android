@@ -26,12 +26,4 @@
         android:textColor="@color/major_dark"
         android:textSize="16sp"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="10dp"
-        android:contentDescription="@string/next"
-        android:src="@drawable/next"/>
-
 </LinearLayout>

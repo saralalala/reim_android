@@ -9,68 +9,60 @@ import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
+import classes.utils.CharacterParser;
 import classes.utils.ViewUtils;
 
 public class LocationListViewAdapter extends BaseAdapter
 {
 	private LayoutInflater layoutInflater;
+    private View hotCityView;
 	private List<String> cityList;
-	private String currentCity;
-	private boolean[] check;
-	private int selectedColor;
-	private int unselectedColor;
+    private HashMap<String, Integer> selector = new HashMap<>();
+    private ArrayList<Integer> indexList = new ArrayList<>();
 	
-	public LocationListViewAdapter(Context context, String location, String currentCity)
+	public LocationListViewAdapter(Context context, View hotCityView, List<String> cityList)
 	{
 		this.layoutInflater = LayoutInflater.from(context);
-		this.currentCity = !currentCity.isEmpty()? currentCity : context.getString(R.string.no_location);
-		this.selectedColor = ViewUtils.getColor(R.color.major_dark);
-		this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
-		this.cityList = Arrays.asList(context.getResources().getStringArray(R.array.cityArray));
-		this.check = new boolean[cityList.size()];
-		for (int i = 0; i < cityList.size(); i++)
-		{
-			check[i] = location.equals(cityList.get(i));
-		}
+        this.hotCityView = hotCityView;
+		this.cityList = new ArrayList<>(cityList);
+        initData();
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		View view;
-		switch (position)
-		{
-			case 0:
-			{
-				view = layoutInflater.inflate(R.layout.list_current_location, parent, false);
-				
-				TextView locationTextView = (TextView) view.findViewById(R.id.locationTextView);
-				locationTextView.setText(currentCity);
-				break;
-			}
-			case 1:
-			{
-				view = layoutInflater.inflate(R.layout.list_header, parent, false);
-				
-				TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
-				headerTextView.setText(R.string.all_cities);				
-				break;
-			}
-			default:
-			{
-				view = layoutInflater.inflate(R.layout.list_location, parent, false);
-				
-				TextView locationTextView = (TextView) view.findViewById(R.id.locationTextView);
-				locationTextView.setText(cityList.get(position - 2));
-
-				int color = check[position - 2]? selectedColor : unselectedColor;
-				locationTextView.setTextColor(color);
-				break;
-			}
-		}
-		return view;
+        if (position == 0)
+        {
+            View view = layoutInflater.inflate(R.layout.list_header, parent, false);
+            TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
+            headerTextView.setText(R.string.hot_cities);
+            return view;
+        }
+        else if (position == 1)
+        {
+            return hotCityView;
+        }
+        else if (indexList.contains(position))
+        {
+            View view = layoutInflater.inflate(R.layout.list_header, parent, false);
+            TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
+            headerTextView.setText(cityList.get(position - 2));
+            return view;
+        }
+        else
+        {
+            View view = layoutInflater.inflate(R.layout.list_location, parent, false);
+            TextView locationTextView = (TextView) view.findViewById(R.id.locationTextView);
+            locationTextView.setText(cityList.get(position - 2));
+            return view;
+        }
 	}
 	
 	public int getCount()
@@ -87,19 +79,78 @@ public class LocationListViewAdapter extends BaseAdapter
 	{
 		return position;
 	}
-	
-	public boolean[] getCheck()
-	{
-		return check;
-	}
-	
-	public void setCheck(boolean[] checkList)
-	{
-		check = checkList;
-	}
-	
+
+    private void initData()
+    {
+        TreeMap<String, ArrayList<String>> indexMap = new TreeMap<>(new Comparator<String>()
+        {
+            public int compare(String s, String s2)
+            {
+                if (s.equals(s2))
+                {
+                    return 0;
+                }
+                else if (s.equals("#"))
+                {
+                    return 1;
+                }
+                else if (s2.equals("#"))
+                {
+                    return -1;
+                }
+                else
+                {
+                    return s.compareTo(s2);
+                }
+            }
+        });
+
+        for (String city : cityList)
+        {
+            String initLetter = CharacterParser.getInitLetter(city);
+            ArrayList<String> letterCityList = indexMap.get(initLetter);
+            if (letterCityList == null)
+            {
+                letterCityList = new ArrayList<>();
+            }
+            letterCityList.add(city);
+            indexMap.put(initLetter, letterCityList);
+        }
+
+        int count = 2;
+        selector.clear();
+        selector.put(ViewUtils.getString(R.string.hot), 0);
+        cityList.clear();
+        for (Map.Entry<String, ArrayList<String>> entry: indexMap.entrySet())
+        {
+            String key = entry.getKey();
+            ArrayList<String> values = entry.getValue();
+            selector.put(key, count);
+            indexList.add(count);
+            cityList.add(key);
+            cityList.addAll(values);
+            count += values.size() + 1;
+        }
+    }
+
 	public List<String> getCityList()
 	{
 		return cityList;
 	}
+
+    public void setCityList(List<String> cityList)
+    {
+        this.cityList = cityList;
+        initData();
+    }
+
+    public HashMap<String, Integer> getSelector()
+    {
+        return selector;
+    }
+
+    public boolean isIndex(int position)
+    {
+        return indexList.contains(position);
+    }
 }

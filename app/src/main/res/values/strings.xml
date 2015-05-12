@@ -50,6 +50,8 @@
     <string name="exit">退出</string>
     <string name="create">创建</string>
     <string name="guide">指导</string>
+    <string name="manual">手动</string>
+    <string name="hot">热门</string>
     
     <string name="sign_up">注册</string>
     <string name="sign_up_by_phone">手机注册</string>
@@ -142,7 +144,6 @@
     <string name="category">类　别</string>
     <string name="vendor">商　家</string>
     <string name="location">地　点</string>
-    <string name="current_location">当前城市:</string>
     <string name="tag">标　签</string>
     <string name="member">参与者</string>
     <string name="time">时　间</string>
@@ -155,6 +156,8 @@
     <string name="choose_member">选择参与人</string>
     <string name="choose_from_camera">拍照</string>
     <string name="choose_from_gallery">从手机相册选择</string>
+    <string name="current_location">当前城市</string>
+    <string name="hot_cities">热门城市</string>
     <string name="all_cities">全部城市</string>
     <string name="only_save">仅保存</string>
     <string name="send_to_approve">发送审批</string>

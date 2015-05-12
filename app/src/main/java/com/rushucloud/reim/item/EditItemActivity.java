@@ -826,7 +826,6 @@ public class EditItemActivity extends Activity
             {
                 hideSoftKeyboard();
                 Intent intent = new Intent(EditItemActivity.this, PickLocationActivity.class);
-                intent.putExtra("location", item.getLocation());
                 intent.putExtra("currentCity", currentCity);
                 ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_LOCATION);
             }

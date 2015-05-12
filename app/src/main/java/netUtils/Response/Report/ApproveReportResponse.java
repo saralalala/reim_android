@@ -8,6 +8,7 @@ import netUtils.response.BaseResponse;
 public class ApproveReportResponse extends BaseResponse
 {
 	private int reportID;
+    private int reportStatus;
 	
 	public ApproveReportResponse(Object httpResponse)
 	{
@@ -20,6 +21,7 @@ public class ApproveReportResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			setReportID(Integer.valueOf(jObject.getString("id")));
+            setReportStatus(Integer.valueOf(jObject.getString("status")));
 		}
 		catch (JSONException e)
 		{
@@ -36,4 +38,14 @@ public class ApproveReportResponse extends BaseResponse
 	{
 		this.reportID = reportID;
 	}
+
+    public int getReportStatus()
+    {
+        return reportStatus;
+    }
+
+    public void setReportStatus(int reportStatus)
+    {
+        this.reportStatus = reportStatus;
+    }
 }

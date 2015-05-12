@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -216,7 +217,19 @@ public class ManagerActivity extends Activity
 
                 refreshManagerView();
 			}
-		});	
+		});
+        managerListView.setOnScrollListener(new AbsListView.OnScrollListener()
+        {
+            public void onScrollStateChanged(AbsListView absListView, int i)
+            {
+                hideSoftKeyboard();
+            }
+
+            public void onScroll(AbsListView absListView, int i, int i2, int i3)
+            {
+
+            }
+        });
 	}
 
     private void refreshManagerView()

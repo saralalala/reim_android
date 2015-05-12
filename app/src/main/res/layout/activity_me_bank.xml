@@ -60,8 +60,8 @@
         android:background="@color/major_light"
         android:hint="@string/input_bank_account"
         android:inputType="number"
-        android:textColor="@color/font_major_dark"
         android:textSize="16sp"
+        android:textColor="@color/font_major_dark"
         android:textCursorDrawable="@null"/>
 
     <include

@@ -2,7 +2,6 @@ package classes.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,17 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import classes.base.User;
+import classes.utils.CharacterParser;
 import classes.utils.PhoneUtils;
+import classes.utils.ViewUtils;
 
 public class ContactListViewAdapter extends BaseAdapter
 {
@@ -27,6 +33,8 @@ public class ContactListViewAdapter extends BaseAdapter
     private ArrayList<String> inputChosenList = new ArrayList<>();
     private List<User> contactList = new ArrayList<>();
     private List<User> contactChosenList = new ArrayList<>();
+    private HashMap<String, Integer> selector = new HashMap<>();
+    private ArrayList<Integer> indexList = new ArrayList<>();
     private boolean noPermission = false;
 
 	public ContactListViewAdapter(Context context)
@@ -56,18 +64,20 @@ public class ContactListViewAdapter extends BaseAdapter
 
             return view;
         }
-        else if (position == inputList.size() + 1)
+        else if (!contactList.isEmpty() && indexList.contains(position))
         {
+            User user = contactList.get(position - inputList.size() - 1);
+
             View view = layoutInflater.inflate(R.layout.list_header, parent, false);
 
             TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
-            headerTextView.setText(R.string.contact);
+            headerTextView.setText(user.getNickname());
 
             return view;
         }
         else if (!contactList.isEmpty())
         {
-            User user = contactList.get(position - inputList.size() - 2);
+            User user = contactList.get(position - inputList.size() - 1);
 
             View view = layoutInflater.inflate(R.layout.list_contact, parent, false);
 
@@ -122,15 +132,15 @@ public class ContactListViewAdapter extends BaseAdapter
 	{
         if (contactList.isEmpty() && noPermission)
         {
-            return inputList.size() + 3;
+            return inputList.size() + 2;
         }
         else if (contactList.isEmpty())
         {
-            return inputList.size() + 2;
+            return inputList.size() + 1;
         }
         else
         {
-            return inputList.size() + contactList.size() + 2;
+            return inputList.size() + contactList.size() + 1;
         }
 	}
 
@@ -143,6 +153,73 @@ public class ContactListViewAdapter extends BaseAdapter
 	{
 		return position;
 	}
+
+    public void initIndex()
+    {
+        TreeMap<String, ArrayList<User>> indexMap = new TreeMap<>(new Comparator<String>()
+        {
+            public int compare(String s, String s2)
+            {
+                if (s.equals(s2))
+                {
+                    return 0;
+                }
+                else if (s.equals("#"))
+                {
+                    return 1;
+                }
+                else if (s2.equals("#"))
+                {
+                    return -1;
+                }
+                else
+                {
+                    return s.compareTo(s2);
+                }
+            }
+        });
+
+        for (User user : contactList)
+        {
+            String initLetter = CharacterParser.getInitLetter(user.getNickname());
+            ArrayList<User> letterUserList = indexMap.get(initLetter);
+            if (letterUserList == null)
+            {
+                letterUserList = new ArrayList<>();
+            }
+            letterUserList.add(user);
+            indexMap.put(initLetter, letterUserList);
+        }
+
+        int count = inputList.size() + 1;
+        selector.clear();
+        selector.put(ViewUtils.getString(R.string.manual), 0);
+        contactList.clear();
+        indexList.clear();
+        for (Map.Entry<String, ArrayList<User>> entry: indexMap.entrySet())
+        {
+            String key = entry.getKey();
+            ArrayList<User> values = entry.getValue();
+            if (key.equals("#"))
+            {
+                Collections.sort(values, new Comparator<User>()
+                {
+                    public int compare(User user, User user2)
+                    {
+                        return user.getNickname().compareTo(user2.getNickname());
+                    }
+                });
+            }
+            selector.put(key, count);
+            indexList.add(count);
+
+            User header = new User();
+            header.setNickname(key);
+            contactList.add(header);
+            contactList.addAll(values);
+            count += values.size() + 1;
+        }
+    }
 
     public void setInputList(ArrayList<String> inputs)
     {
@@ -171,5 +248,15 @@ public class ContactListViewAdapter extends BaseAdapter
     public void setNoPermission(boolean noPermission)
     {
         this.noPermission = noPermission;
+    }
+
+    public HashMap<String, Integer> getSelector()
+    {
+        return selector;
+    }
+
+    public boolean isIndex(int position)
+    {
+        return indexList.contains(position);
     }
 }

@@ -33,11 +33,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import classes.base.Report;
-import classes.base.User;
 import classes.adapter.OthersReportListViewAdapter;
 import classes.adapter.ReportListViewAdapter;
 import classes.adapter.ReportTagGridViewAdapter;
+import classes.base.Report;
+import classes.base.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -68,6 +68,7 @@ public class ReportFragment extends Fragment
 	private boolean hasInit = false;
 	
 	private View view;
+
     private ImageView filterImageView;
 	private PopupWindow filterPopupWindow;
     private RadioButton sortUpdateDateRadio;
@@ -80,6 +81,7 @@ public class ReportFragment extends Fragment
     private RotateAnimation rotateAnimation;
     private RotateAnimation rotateReverseAnimation;
 	private RelativeLayout noResultLayout;
+
 	private TextView myTitleTextView;
     private TextView myShortTextView;
     private TextView myMediumTextView;
@@ -88,11 +90,13 @@ public class ReportFragment extends Fragment
     private TextView othersShortTextView;
     private TextView othersMediumTextView;
     private TextView othersLongTextView;
+
 	private XListView reportListView;
 	private ReportListViewAdapter mineAdapter;
 	private OthersReportListViewAdapter othersAdapter;
 	private PopupWindow operationPopupWindow;
-	private PopupWindow deletePopupWindow;
+    private Button exportButton;
+    private Button deleteButton;
 
 	private AppPreference appPreference;
 	private DBManager dbManager;
@@ -194,7 +198,6 @@ public class ReportFragment extends Fragment
 		initListView();	
 		initFilterView();
 		initOperationView();
-		initDeleteView();
 	}
 	
 	private void initTitleView()
@@ -237,23 +240,23 @@ public class ReportFragment extends Fragment
 		
 		ImageView addImageView = (ImageView) view.findViewById(R.id.addImageView);
 		addImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(getActivity(), "UMENG_REPORT_NEW");
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(getActivity(), "UMENG_REPORT_NEW");
 
-				User currentUser = appPreference.getCurrentUser();
-				Report report = new Report();
-				report.setSender(currentUser);
-				report.setManagerList(currentUser.buildBaseManagerList());
-				
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("report", report);				
-				Intent intent = new Intent(getActivity(), EditReportActivity.class);
-				intent.putExtras(bundle);
+                User currentUser = appPreference.getCurrentUser();
+                Report report = new Report();
+                report.setSender(currentUser);
+                report.setManagerList(currentUser.buildBaseManagerList());
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("report", report);
+                Intent intent = new Intent(getActivity(), EditReportActivity.class);
+                intent.putExtras(bundle);
                 ViewUtils.goForward(getActivity(), intent);
-			}
-		});
+            }
+        });
 	}
 	
 	private void initListView()
@@ -296,8 +299,7 @@ public class ReportFragment extends Fragment
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				if ((operationPopupWindow == null || !operationPopupWindow.isShowing()) &&
-					(deletePopupWindow == null || !deletePopupWindow.isShowing()) && position > 0)
+				if ((operationPopupWindow == null || !operationPopupWindow.isShowing()) && position > 0)
 				{		
 					if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
 					{
@@ -361,14 +363,7 @@ public class ReportFragment extends Fragment
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				reportIndex = position - 1;
-				if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
-				{
-					showOperationWindow();
-				}
-				else
-				{
-					showDeleteWindow();
-				}
+                showOperationWindow();
 				return false;
 			}
 		});
@@ -574,71 +569,80 @@ public class ReportFragment extends Fragment
 	private void initOperationView()
 	{
 		View operationView = View.inflate(getActivity(), R.layout.window_report_operation, null);
+
+        exportButton = (Button) operationView.findViewById(R.id.exportButton);
+        exportButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                operationPopupWindow.dismiss();
+
+                Report report = ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE?
+                        showMineList.get(reportIndex) : showOthersList.get(reportIndex);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("report", report);
+                Intent intent = new Intent(getActivity(), ExportActivity.class);
+                intent.putExtras(bundle);
+                ViewUtils.goForward(getActivity(), intent);
+            }
+        });
 		
-		Button deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
+		deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
 		deleteButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
 				operationPopupWindow.dismiss();
 
-		    	final Report report = showMineList.get(reportIndex);
-		    	if (report.isEditable())
-				{
-					Builder builder = new Builder(getActivity());
-					builder.setTitle(R.string.warning);
-					builder.setMessage(R.string.prompt_delete_report);
-					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-														{
-															public void onClick(DialogInterface dialog, int which)
-															{
-																if (report.getServerID() == -1)
-																{
-																	deleteLocalReport(report.getLocalID());
-																}
-																else if (!PhoneUtils.isNetworkConnected())
-																{
-																	ViewUtils.showToast(getActivity(), R.string.error_delete_network_unavailable);
-																}
-																else
-																{
-																	sendDeleteReportRequest(report);																		
-																}
-															}
-														});
-					builder.setNegativeButton(R.string.cancel, null);
-					builder.create().show();
-				}
-				else
-				{
-					ViewUtils.showToast(getActivity(), R.string.error_delete_report_submitted);
-				}
-			}
-		});
-		
-		Button exportButton = (Button) operationView.findViewById(R.id.exportButton);
-		exportButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				operationPopupWindow.dismiss();
-				
-		    	Report report = showMineList.get(reportIndex);
-                if (report.getServerID() == -1 || report.getServerID() == 0)
+                if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
                 {
-                    ViewUtils.showToast(getActivity(), R.string.error_export_report_not_uploaded);
-                }
-                else if (report.getStatus() != Report.STATUS_FINISHED && report.getStatus() != Report.STATUS_APPROVED)
-                {
-                    ViewUtils.showToast(getActivity(), R.string.error_export_not_finished);
+                    final Report report = showMineList.get(reportIndex);
+                    Builder builder = new Builder(getActivity());
+                    builder.setTitle(R.string.warning);
+                    builder.setMessage(R.string.prompt_delete_report);
+                    builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            if (report.getServerID() == -1)
+                            {
+                                deleteLocalReport(report.getLocalID());
+                            }
+                            else if (!PhoneUtils.isNetworkConnected())
+                            {
+                                ViewUtils.showToast(getActivity(), R.string.error_delete_network_unavailable);
+                            }
+                            else
+                            {
+                                sendDeleteReportRequest(report);
+                            }
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, null);
+                    builder.create().show();
                 }
                 else
                 {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("report", report);
-                    Intent intent = new Intent(getActivity(), ExportActivity.class);
-                    intent.putExtras(bundle);
-                    ViewUtils.goForward(getActivity(), intent);
+                    final Report report = showOthersList.get(reportIndex);
+                    Builder builder = new Builder(getActivity());
+                    builder.setTitle(R.string.warning);
+                    builder.setMessage(R.string.prompt_delete_report);
+                    builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            if (!PhoneUtils.isNetworkConnected())
+                            {
+                                ViewUtils.showToast(getActivity(), R.string.error_delete_network_unavailable);
+                            }
+                            else
+                            {
+                                sendDeleteReportRequest(report);
+                            }
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, null);
+                    builder.create().show();
                 }
 			}
 		});
@@ -653,68 +657,6 @@ public class ReportFragment extends Fragment
 		});
 		
 		operationPopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), operationView);
-	}
-	
-	private void initDeleteView()
-	{
-		View deleteView = View.inflate(getActivity(), R.layout.window_delete, null);
-		
-		Button deleteButton = (Button) deleteView.findViewById(R.id.deleteButton);
-		deleteButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				deletePopupWindow.dismiss();
-
-		    	final Report report = showOthersList.get(reportIndex);
-		    	if (!report.isPending())
-				{
-//					Builder builder = new Builder(getActivity());
-//					builder.setTitle(R.string.warning);
-//					builder.setMessage(R.string.prompt_delete_report);
-//					builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-//														{
-//															public void onClick(DialogInterface dialog, int which)
-//															{
-//																if (!PhoneUtils.isNetworkConnected())
-//																{
-//																	ViewUtils.showToast(getActivity(), R.string.error_delete_network_unavailable);
-//																}
-//																else
-//																{
-//																	sendDeleteReportRequest(report);																		
-//																}
-//															}
-//														});
-//					builder.setNegativeButton(R.string.cancel, null);
-//					builder.create().show();
-
-					if (!PhoneUtils.isNetworkConnected())
-					{
-						ViewUtils.showToast(getActivity(), R.string.error_delete_network_unavailable);
-					}
-					else
-					{
-						sendDeleteReportRequest(report);																		
-					}
-				}
-				else
-				{
-					ViewUtils.showToast(getActivity(), R.string.error_delete_report_submitted);
-				}
-			}
-		});
-		
-		Button cancelButton = (Button) deleteView.findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				deletePopupWindow.dismiss();
-			}
-		});
-		
-		deletePopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), deleteView);
 	}
 	
 	public void setListView(int index)
@@ -1144,17 +1086,68 @@ public class ReportFragment extends Fragment
     }
     
     private void showOperationWindow()
-    {    	
+    {
+        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        {
+            Report report = showMineList.get(reportIndex);
+            if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
+            {
+                exportButton.setEnabled(false);
+                exportButton.setBackgroundResource(R.drawable.window_button_selected);
+                exportButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
+            }
+            else
+            {
+                exportButton.setEnabled(true);
+                exportButton.setBackgroundResource(R.drawable.window_button_drawable);
+                exportButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
+            }
+
+            if (report.getStatus() == Report.STATUS_SUBMITTED || report.getStatus() == Report.STATUS_APPROVED)
+            {
+                deleteButton.setEnabled(false);
+                deleteButton.setBackgroundResource(R.drawable.window_button_selected);
+                deleteButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
+            }
+            else
+            {
+                deleteButton.setEnabled(true);
+                deleteButton.setBackgroundResource(R.drawable.window_button_drawable);
+                deleteButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
+            }
+        }
+        else
+        {
+            Report report = showOthersList.get(reportIndex);
+            if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
+            {
+                exportButton.setEnabled(false);
+                exportButton.setBackgroundResource(R.drawable.window_button_selected);
+                exportButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
+            }
+            else
+            {
+                exportButton.setEnabled(true);
+                exportButton.setBackgroundResource(R.drawable.window_button_drawable);
+                exportButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
+            }
+
+            if (report.getStatus() == Report.STATUS_SUBMITTED && report.getMyDecision() == Report.STATUS_SUBMITTED)
+            {
+                deleteButton.setEnabled(false);
+                deleteButton.setBackgroundResource(R.drawable.window_button_selected);
+                deleteButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
+            }
+            else
+            {
+                deleteButton.setEnabled(true);
+                deleteButton.setBackgroundResource(R.drawable.window_button_drawable);
+                deleteButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
+            }
+        }
+
 		operationPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
 		operationPopupWindow.update();
-		
-		ViewUtils.dimBackground(getActivity());
-    }
-
-    private void showDeleteWindow()
-    {    	
-		deletePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
-		deletePopupWindow.update();
 		
 		ViewUtils.dimBackground(getActivity());
     }

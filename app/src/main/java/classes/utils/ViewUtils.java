@@ -3,6 +3,7 @@ package classes.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -62,6 +63,11 @@ public class ViewUtils
 	{
 		return ReimApplication.getContext().getResources().getColor(colorResID);
 	}
+
+    public static ColorStateList getColorStateList(int colorResID)
+    {
+        return ReimApplication.getContext().getResources().getColorStateList(colorResID);
+    }
 
     public static String getString(int stringResID)
     {
@@ -313,8 +319,8 @@ public class ViewUtils
                 }
             });
         }
-
     }
+
     public static int dpToPixel(double dp)
     {
     	DisplayMetrics metrics = ReimApplication.getContext().getResources().getDisplayMetrics();

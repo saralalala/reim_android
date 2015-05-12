@@ -374,10 +374,7 @@ public class ApproveReportActivity extends Activity
 				final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
 				if (response.getStatus())
 				{
-                    if (report.getMyDecision() == Report.STATUS_REJECTED)
-                    {
-                        report.setStatus(Report.STATUS_REJECTED);
-                    }
+                    report.setStatus(response.getReportStatus());
 					dbManager.updateOthersReport(report);
 					
 					runOnUiThread(new Runnable()
@@ -417,6 +414,7 @@ public class ApproveReportActivity extends Activity
 				final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
 				if (response.getStatus())
 				{
+                    report.setStatus(response.getReportStatus());
 					dbManager.updateOthersReport(report);
 					
 					if (!commentContent.isEmpty())

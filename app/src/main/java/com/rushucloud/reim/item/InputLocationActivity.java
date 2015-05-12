@@ -19,28 +19,28 @@ import com.umeng.analytics.MobclickAgent;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 
-public class InputVendorActivity extends Activity
+public class InputLocationActivity extends Activity
 {
-	private ClearEditText vendorEditText;
+	private ClearEditText locationEditText;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_reim_input_vendor);
+		setContentView(R.layout.activity_reim_input_location);
 		initView();
 	}
 
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("InputVendorActivity");
+		MobclickAgent.onPageStart("InputLocationActivity");
 		MobclickAgent.onResume(this);
 	}
 
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("InputVendorActivity");
+		MobclickAgent.onPageEnd("InputLocationActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -70,11 +70,11 @@ public class InputVendorActivity extends Activity
 			public void onClick(View v)
 			{
 				hideSoftKeyboard();
-                if (!vendorEditText.getText().toString().isEmpty())
+                if (!locationEditText.getText().toString().isEmpty())
                 {
                     Intent intent = new Intent();
-                    intent.putExtra("vendor", vendorEditText.getText().toString());
-                    ViewUtils.goBackWithResult(InputVendorActivity.this, intent);
+                    intent.putExtra("location", locationEditText.getText().toString());
+                    ViewUtils.goBackWithResult(InputLocationActivity.this, intent);
                 }
                 else
                 {
@@ -83,8 +83,8 @@ public class InputVendorActivity extends Activity
 			}
 		});
 		
-		vendorEditText = (ClearEditText) findViewById(R.id.vendorEditText);
-        ViewUtils.requestFocus(this, vendorEditText);
+		locationEditText = (ClearEditText) findViewById(R.id.locationEditText);
+        ViewUtils.requestFocus(this, locationEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new View.OnClickListener()
@@ -99,7 +99,7 @@ public class InputVendorActivity extends Activity
     private void hideSoftKeyboard()
     {
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(vendorEditText.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(locationEditText.getWindowToken(), 0);
     }
 
     private void goBack()

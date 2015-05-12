@@ -7,11 +7,14 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,9 +25,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.adapter.ContactListViewAdapter;
 import classes.base.Group;
 import classes.base.User;
-import classes.adapter.ContactListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -39,6 +42,9 @@ public class ContactActivity extends Activity
     private static final int INPUT_CONTACT = 0;
 
     private ContactListViewAdapter adapter;
+    private ListView contactListView;
+    private LinearLayout indexLayout;
+    private TextView centralTextView;
 
     private AppPreference appPreference;
     private DBManager dbManager;
@@ -49,6 +55,9 @@ public class ContactActivity extends Activity
     private List<User> contactChosenList = new ArrayList<>();
     private int count = 0;
     private boolean hasInit = false;
+
+    public static String[] indexLetters = {"手动", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+            "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"};
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -102,6 +111,8 @@ public class ContactActivity extends Activity
                     inputChosenList.addAll((ArrayList<String>) data.getSerializableExtra("inputList"));
                     adapter.setInputList(inputList);
                     adapter.setInputChosenList(inputChosenList);
+                    adapter.setContactList(contactList);
+                    adapter.initIndex();
                     adapter.notifyDataSetChanged();
                     break;
                 }
@@ -118,11 +129,11 @@ public class ContactActivity extends Activity
         appPreference = AppPreference.getAppPreference();
         dbManager = DBManager.getDBManager();
 
-//        Bundle bundle = getIntent().getExtras();
-//        companyName = bundle.getString("companyName", "");
-//        inputList = bundle.getStringArrayList("inputList");
-//        inputChosenList = bundle.getStringArrayList("inputChosenList");
-//        contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
+        Bundle bundle = getIntent().getExtras();
+        companyName = bundle.getString("companyName", "");
+        inputList = bundle.getStringArrayList("inputList");
+        inputChosenList = bundle.getStringArrayList("inputChosenList");
+        contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
 	}
 
 	private void initView()
@@ -140,9 +151,9 @@ public class ContactActivity extends Activity
 
 		TextView completeTextView = (TextView) findViewById(R.id.completeTextView);
         completeTextView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        {
+            public void onClick(View v)
+            {
                 String inviteList = "";
                 for (String contact : inputList)
                 {
@@ -166,16 +177,16 @@ public class ContactActivity extends Activity
                     inviteList = inviteList.substring(0, inviteList.length() - 1);
                 }
 
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(ContactActivity.this, R.string.error_create_network_unavailable);
-				}
+                if (!PhoneUtils.isNetworkConnected())
+                {
+                    ViewUtils.showToast(ContactActivity.this, R.string.error_create_network_unavailable);
+                }
                 else
                 {
                     sendCreateGroupRequest(inviteList);
                 }
-			}
-		});
+            }
+        });
 
         adapter = new ContactListViewAdapter(this);
         adapter.setInputList(inputList);
@@ -183,7 +194,7 @@ public class ContactActivity extends Activity
         adapter.setContactList(contactList);
         adapter.setContactChosenList(contactChosenList);
 
-        ListView contactListView = (ListView) findViewById(R.id.contactListView);
+        contactListView = (ListView) findViewById(R.id.contactListView);
         contactListView.setAdapter(adapter);
         contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -221,9 +232,9 @@ public class ContactActivity extends Activity
                     adapter.setInputChosenList(inputChosenList);
                     adapter.notifyDataSetChanged();
                 }
-                else if (position > inputList.size() + 1 && !contactList.isEmpty())
+                else if (position > inputList.size() + 1 && !contactList.isEmpty() && !adapter.isIndex(position))
                 {
-                    User user = contactList.get(position - inputList.size() - 2);
+                    User user = contactList.get(position - inputList.size() - 1);
                     int index = User.indexOfContactList(contactChosenList, user);
                     if (index > -1)
                     {
@@ -238,7 +249,68 @@ public class ContactActivity extends Activity
                 }
             }
         });
+
+        indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+        centralTextView = (TextView) findViewById(R.id.centralTextView);
 	}
+
+    public void initIndexLayout()
+    {
+        final int height = (ViewUtils.getPhoneWindowHeight(this) - ViewUtils.dpToPixel(50) - ViewUtils.getStatusBarHeight(this)) / indexLetters.length;
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, height);
+        for (String string : indexLetters)
+        {
+            TextView textView = new TextView(this);
+            textView.setLayoutParams(params);
+            textView.setTextColor(ViewUtils.getColor(R.color.major_dark));
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            textView.setText(string);
+
+            indexLayout.addView(textView);
+            indexLayout.setOnTouchListener(new View.OnTouchListener()
+            {
+                public boolean onTouch(View v, MotionEvent event)
+                {
+                    float y = event.getY();
+                    int index = (int) (y / height);
+                    if (index > -1 && index < indexLetters.length)
+                    {
+                        String key = indexLetters[index];
+                        centralTextView.setVisibility(View.VISIBLE);
+                        centralTextView.setText(key);
+                        int fontSize = index == 0? 24 : 30;
+                        centralTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+                        if (adapter.getSelector().containsKey(key))
+                        {
+                            int position = adapter.getSelector().get(key);
+                            if (contactListView.getHeaderViewsCount() > 0)
+                            {
+                                contactListView.setSelectionFromTop(position + contactListView.getHeaderViewsCount(), 0);
+                            }
+                            else
+                            {
+                                contactListView.setSelectionFromTop(position, 0);
+                            }
+                        }
+                    }
+                    switch (event.getAction())
+                    {
+                        case MotionEvent.ACTION_DOWN:
+                            indexLayout.setBackgroundColor(ViewUtils.getColor(R.color.index_layout_selected));
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            indexLayout.setBackgroundColor(ViewUtils.getColor(android.R.color.transparent));
+                            centralTextView.setVisibility(View.INVISIBLE);
+                            break;
+                        default:
+                            break;
+                    }
+                    return true;
+                }
+            });
+        }
+    }
 
     private void readContacts()
     {
@@ -296,7 +368,13 @@ public class ContactActivity extends Activity
                     {
                         adapter.setContactList(contactList);
                         adapter.setNoPermission(contactList.isEmpty());
+                        adapter.initIndex();
                         adapter.notifyDataSetChanged();
+
+                        if (!contactList.isEmpty())
+                        {
+                            initIndexLayout();
+                        }
 
                         ReimProgressDialog.dismiss();
                     }

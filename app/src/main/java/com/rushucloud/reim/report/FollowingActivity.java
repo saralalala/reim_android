@@ -193,6 +193,7 @@ public class FollowingActivity extends Activity
                     report.setCCList(ccList);
 					report.setLocalUpdatedDate(currentTime);
 					report.setServerUpdatedDate(currentTime);
+                    report.setStatus(response.getReportStatus());
 					DBManager.getDBManager().updateOthersReport(report);
 					
 					runOnUiThread(new Runnable()

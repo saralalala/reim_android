@@ -160,7 +160,6 @@ public class MemberListViewAdapter extends BaseAdapter
             memberList.addAll(values);
             count += values.size() + 1;
         }
-
     }
 
     public void setMemberList(List<User> userList)

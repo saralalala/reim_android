@@ -6,6 +6,21 @@
     android:background="@color/major_light">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:gravity="center_vertical"
+        android:background="@color/list_item_header"
+        android:paddingLeft="16dp"
+        android:text="@string/contact"
+        android:textColor="@color/font_list_item_header"
+        android:textSize="14sp"/>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
+
+    <TextView
         android:id="@+id/nicknameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

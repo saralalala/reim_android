@@ -176,7 +176,7 @@ public class PickCompanyActivity extends Activity
                     }
                     else
                     {
-                        completeTextView.setTextColor(getResources().getColorStateList(R.color.title_text_color));
+                        completeTextView.setTextColor(ViewUtils.getColorStateList(R.color.title_text_color));
                     }
                 }
             }

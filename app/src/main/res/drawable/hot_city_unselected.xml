@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <stroke android:color="@color/list_item_header"
+            android:width="@dimen/button_stroke_width" />
+    <solid android:color="@color/major_light" />
+
+</shape>
