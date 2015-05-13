@@ -16,10 +16,10 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.adapter.ApproveInfoListViewAdapter;
 import classes.base.ApproveInfo;
 import classes.base.Report;
 import classes.base.User;
-import classes.adapter.ApproveInfoListViewAdapter;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;

@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,7 +34,8 @@ public class EmailSignUpActivity extends Activity
 {
 	private ClearEditText emailEditText;
 	private ClearEditText passwordEditText;
-	private ClearEditText confirmPasswordEditText;
+
+    private boolean showPassword = false;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -80,10 +84,7 @@ public class EmailSignUpActivity extends Activity
 
 		passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
         passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
-
-		confirmPasswordEditText = (ClearEditText) findViewById(R.id.confirmPasswordEditText);
-        confirmPasswordEditText.setTransformationMethod(new PasswordTransformationMethod());
-        confirmPasswordEditText.setOnKeyListener(new View.OnKeyListener()
+        passwordEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)
             {
@@ -95,6 +96,27 @@ public class EmailSignUpActivity extends Activity
             }
         });
 
+        final ImageView passwordImageView = (ImageView) findViewById(R.id.passwordImageView);
+        passwordImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (showPassword)
+                {
+                    passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    passwordImageView.setImageResource(R.drawable.eye_blank);
+                }
+                else
+                {
+                    passwordEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    passwordImageView.setImageResource(R.drawable.eye_white);
+                }
+                showPassword = !showPassword;
+                Spannable spanText = passwordEditText.getText();
+                Selection.setSelection(spanText, spanText.length());
+            }
+        });
+
 		Button signUpButton = (Button) findViewById(R.id.signUpButton);
 		signUpButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -103,6 +125,24 @@ public class EmailSignUpActivity extends Activity
                 signUp();
 			}
 		});
+
+        ImageView phoneImageView = (ImageView) findViewById(R.id.phoneImageView);
+        phoneImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                goBack();
+            }
+        });
+
+        ImageView wechatImageView = (ImageView) findViewById(R.id.wechatImageView);
+        wechatImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+//                ViewUtils.goForwardAndFinish(WelcomeActivity.this, SignInActivity.class);
+            }
+        });
 		
     	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
     	baseLayout.setOnClickListener(new View.OnClickListener()
@@ -121,7 +161,6 @@ public class EmailSignUpActivity extends Activity
 
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-        String confirmPassword = confirmPasswordEditText.getText().toString();
 
         if (!PhoneUtils.isNetworkConnected())
         {
@@ -136,16 +175,6 @@ public class EmailSignUpActivity extends Activity
         {
             ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_password_empty);
             ViewUtils.requestFocus(this, passwordEditText);
-        }
-        else if (confirmPassword.isEmpty())
-        {
-            ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_confirm_password_empty);
-            ViewUtils.requestFocus(this, confirmPasswordEditText);
-        }
-        else if (!password.equals(confirmPassword))
-        {
-            ViewUtils.showToast(EmailSignUpActivity.this, R.string.error_wrong_confirm_password);
-            ViewUtils.requestFocus(this, confirmPasswordEditText);
         }
         else
         {
@@ -261,6 +290,6 @@ public class EmailSignUpActivity extends Activity
 
     private void goBack()
     {
-        ViewUtils.goBackWithIntent(EmailSignUpActivity.this, WelcomeActivity.class);
+        ViewUtils.goBackWithIntent(EmailSignUpActivity.this, PhoneSignUpActivity.class);
     }
 }

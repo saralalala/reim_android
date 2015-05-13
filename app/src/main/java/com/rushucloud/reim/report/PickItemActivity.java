@@ -30,11 +30,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import classes.adapter.ReportItemListViewAdapter;
 import classes.base.Category;
 import classes.base.Item;
 import classes.base.Report;
 import classes.base.Tag;
-import classes.adapter.ReportItemListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.ViewUtils;
