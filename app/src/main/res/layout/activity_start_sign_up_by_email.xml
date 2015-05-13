@@ -55,43 +55,37 @@
             android:layout_marginRight="10dp"
             layout="@layout/view_start_divider"/>
 
-        <classes.widget.ClearEditText
-            android:id="@+id/passwordEditText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:hint="@string/input_password"
-            android:drawableRight="@drawable/delete_start_drawable"
-            android:textColor="@color/font_major_light"
-            android:textColorHint="@color/hint_white"
-            android:background="@null"
-            android:cursorVisible="true"
-            android:textCursorDrawable="@null"/>
+            android:orientation="horizontal">
 
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            layout="@layout/view_start_divider"/>
+            <classes.widget.ClearEditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:hint="@string/input_password"
+                android:drawableRight="@drawable/delete_start_drawable"
+                android:textColor="@color/font_major_light"
+                android:textColorHint="@color/hint_white"
+                android:background="@null"
+                android:textCursorDrawable="@null"/>
 
-        <classes.widget.ClearEditText
-            android:id="@+id/confirmPasswordEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:hint="@string/input_confirm_password"
-            android:drawableRight="@drawable/delete_start_drawable"
-            android:textColor="@color/font_major_light"
-            android:textColorHint="@color/hint_white"
-            android:background="@null"
-            android:textCursorDrawable="@null"/>
+            <ImageView
+                android:id="@+id/passwordImageView"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="16dp"
+                android:contentDescription="@string/password"
+                android:src="@drawable/eye_blank"/>
+
+        </LinearLayout>
 
         <include
             android:layout_width="match_parent"
@@ -111,6 +105,66 @@
             android:text="@string/sign_up"
             android:textColor="@color/start_button_text_color"
             android:textSize="20sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dividerLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/signUpLayout"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="6dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/start_divider"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:text="@string/other_sign_up_ways"
+            android:textColor="@color/start_divider"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/start_divider"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/signUpLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp">
+
+        <ImageView
+            android:id="@+id/phoneImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="12dp"
+            android:contentDescription="@string/phone"
+            android:src="@drawable/phone"/>
+
+        <ImageView
+            android:id="@+id/wechatImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/wechat"
+            android:src="@drawable/wechat"/>
 
     </LinearLayout>
 

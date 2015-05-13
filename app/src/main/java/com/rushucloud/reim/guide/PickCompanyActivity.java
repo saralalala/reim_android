@@ -21,14 +21,13 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.adapter.CompanyListViewAdapter;
 import classes.base.Group;
 import classes.base.Invite;
 import classes.base.User;
-import classes.adapter.CompanyListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
-import classes.utils.ReimApplication;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;

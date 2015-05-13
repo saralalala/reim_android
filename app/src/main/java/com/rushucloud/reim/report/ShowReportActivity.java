@@ -18,11 +18,11 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
+import classes.adapter.ReportDetailListViewAdapter;
 import classes.base.Comment;
 import classes.base.Item;
 import classes.base.Report;
 import classes.base.User;
-import classes.adapter.ReportDetailListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

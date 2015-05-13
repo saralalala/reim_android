@@ -21,66 +21,74 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/start_icon"/>
 
-    <RelativeLayout
+    <Button
+        android:id="@+id/signUpButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height"
+        android:layout_above="@+id/signInButton"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_above="@+id/hintTextView"
-        android:layout_centerHorizontal="true">
-
-        <Button
-            android:id="@+id/phoneSignUpButton"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_toLeftOf="@+id/pivotView"
-            android:layout_marginRight="6dp"
-            android:background="@drawable/button_light_solid_drawable"
-            android:text="@string/sign_up_by_phone"
-            android:textColor="@color/button_text_dark_color"
-            android:textSize="20sp"/>
-
-        <View
-            android:id="@+id/pivotView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_centerInParent="true"/>
-
-        <Button
-            android:id="@+id/emailSignUpButton"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_toRightOf="@+id/pivotView"
-            android:layout_marginLeft="6dp"
-            android:background="@drawable/button_light_solid_drawable"
-            android:text="@string/sign_up_by_email"
-            android:textColor="@color/button_text_dark_color"
-            android:textSize="20sp"/>
-
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/hintTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-		android:layout_above="@+id/signInButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="6dp"
-        android:text="@string/have_password"
-        android:textColor="@color/hint_white"/>
+        android:background="@drawable/button_light_solid_drawable"
+        android:text="@string/sign_up"
+        android:textColor="@color/button_text_dark_color"
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/signInButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
+        android:layout_above="@+id/dividerLayout"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_alignParentBottom="true"
         android:layout_marginBottom="36dp"
         android:background="@drawable/button_light_border_drawable"
         android:text="@string/sign_in"
         android:textColor="@color/button_text_light_color"
         android:textSize="20sp"/>
+
+    <LinearLayout
+        android:id="@+id/dividerLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/wechatImageView"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="6dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/start_divider"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:text="@string/third_party_sign_in"
+            android:textColor="@color/start_divider"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/start_divider"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/wechatImageView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:contentDescription="@string/wechat"
+        android:src="@drawable/wechat"/>
 
 </RelativeLayout>

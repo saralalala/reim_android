@@ -36,9 +36,6 @@ import com.umeng.socialize.media.SinaShareContent;
 import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
-import com.umeng.socialize.weixin.controller.UMWXHandler;
-import com.umeng.socialize.weixin.media.CircleShareContent;
-import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -401,33 +398,11 @@ public class MeFragment extends Fragment
     @SuppressWarnings("unused")
 	private void showShareDialog()
     {
-    	String wxAppID = "wx16afb8ec2cc4dc19";
-    	String wxAppSecret = "2e97f0d75dd7f371803785172682893a";
-    	
-    	UMWXHandler wxHandler = new UMWXHandler(getActivity(), wxAppID, wxAppSecret);
-    	wxHandler.addToSocialSDK();
-    	
-    	UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(), wxAppID, wxAppSecret);
-    	wxCircleHandler.setToCircle(true);
-    	wxCircleHandler.addToSocialSDK();
-    	
     	SinaSsoHandler sinaSsoHandler = new SinaSsoHandler();
     	sinaSsoHandler.addToSocialSDK();
     	
     	UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(getActivity(), "1103305832", "l8eKHcEiAMCnhV50");
     	qqSsoHandler.addToSocialSDK();
-
-    	WeiXinShareContent weiXinShareContent = new WeiXinShareContent();
-    	weiXinShareContent.setShareContent(getString(R.string.share_wechat_content));
-    	weiXinShareContent.setTitle(getString(R.string.share_wechat));
-    	weiXinShareContent.setTargetUrl(URLDef.SHARE_TARGET);    	
-    	mController.setShareMedia(weiXinShareContent);
-
-    	CircleShareContent circleShareContent = new CircleShareContent();
-    	circleShareContent.setShareContent(getString(R.string.share_moment_content));
-    	circleShareContent.setTitle(getString(R.string.share_moment));
-    	circleShareContent.setTargetUrl(URLDef.SHARE_TARGET);    
-    	mController.setShareMedia(circleShareContent);
 
     	SinaShareContent sinaShareContent = new SinaShareContent();
     	sinaShareContent.setShareContent(getString(R.string.share_weibo_content));

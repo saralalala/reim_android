@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -11,7 +14,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,6 +41,8 @@ public class SignInActivity extends Activity
 	private ClearEditText usernameEditText;
 	private ClearEditText passwordEditText;
 	private PopupWindow forgotPopupWindow;
+
+    private boolean showPassword = false;
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -82,14 +86,11 @@ public class SignInActivity extends Activity
 			}
 		});
 		
-		String username = getIntent().getStringExtra("username");
-		String password = getIntent().getStringExtra("password");
-		
 		usernameEditText = (ClearEditText) findViewById(R.id.usernameEditText);
         ViewUtils.requestFocus(this, usernameEditText);
 		
 		passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
-        passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
+        passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
         passwordEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)
@@ -101,6 +102,30 @@ public class SignInActivity extends Activity
                 return false;
             }
         });
+
+        final ImageView passwordImageView = (ImageView) findViewById(R.id.passwordImageView);
+        passwordImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (showPassword)
+                {
+                    passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    passwordImageView.setImageResource(R.drawable.eye_blank);
+                }
+                else
+                {
+                    passwordEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    passwordImageView.setImageResource(R.drawable.eye_white);
+                }
+                showPassword = !showPassword;
+                Spannable spanText = passwordEditText.getText();
+                Selection.setSelection(spanText, spanText.length());
+            }
+        });
+
+        String username = getIntent().getStringExtra("username");
+        String password = getIntent().getStringExtra("password");
 
 		if (username != null)
 		{
@@ -121,6 +146,15 @@ public class SignInActivity extends Activity
 			}
 		});
 
+        TextView signUpTextView = (TextView) findViewById(R.id.signUpTextView);
+        signUpTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                ViewUtils.goForwardAndFinish(SignInActivity.this, PhoneSignUpActivity.class);
+            }
+        });
+
         TextView forgorPasswordTextView = (TextView) findViewById(R.id.forgotTextView);
 		forgorPasswordTextView.setOnClickListener(new View.OnClickListener()
         {
@@ -128,15 +162,6 @@ public class SignInActivity extends Activity
             {
                 MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD");
                 showForgotWindow();
-            }
-        });
-
-        LinearLayout signUpLayout = (LinearLayout) findViewById(R.id.signUpLayout);
-        signUpLayout.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                goBack();
             }
         });
 

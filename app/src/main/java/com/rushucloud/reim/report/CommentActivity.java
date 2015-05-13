@@ -20,10 +20,10 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.adapter.CommentListViewAdapter;
 import classes.base.Comment;
 import classes.base.Report;
 import classes.base.User;
-import classes.adapter.CommentListViewAdapter;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

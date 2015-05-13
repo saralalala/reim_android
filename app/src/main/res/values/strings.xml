@@ -52,12 +52,16 @@
     <string name="guide">指导</string>
     <string name="manual">手动</string>
     <string name="hot">热门</string>
+    <string name="password">密码</string>
+    <string name="wechat">微信</string>
     
     <string name="sign_up">注册</string>
+    <string name="quick_sign_up">快速注册</string>
     <string name="sign_up_by_phone">手机注册</string>
     <string name="sign_up_by_email">邮箱注册</string>
-    <string name="have_password">已有云报销账号</string>
     <string name="sign_in">登录</string>
+    <string name="third_party_sign_in">第三方账号登录</string>
+    <string name="other_sign_up_ways">其它注册方式</string>
     <string name="forgot_password">忘记密码</string>
     <string name="find_password_by_phone">手机找回</string>
     <string name="find_password_by_email">邮箱找回</string>
@@ -399,6 +403,8 @@
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>
     <string name="error_timeout">你的账号已经其他地方登录，本地已经下线。</string>
     <string name="error_contact_no_permission">未能读取到你的通讯录信息，可能是由于你未授权「云报销」读取你的通讯录所致。</string>
+    <string name="error_wechat_auth">微信授权失败</string>
+    <string name="error_wechat_not_supported">微信未安装或当前微信版本不支持登录功能</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>

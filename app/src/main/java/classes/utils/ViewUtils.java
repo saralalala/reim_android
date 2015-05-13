@@ -34,8 +34,6 @@ import android.widget.Toast;
 
 import com.rushucloud.reim.R;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import classes.base.Category;

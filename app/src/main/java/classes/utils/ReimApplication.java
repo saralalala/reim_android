@@ -58,6 +58,7 @@ public class ReimApplication extends Application
 		initData();
 		initMeChat();
 		initBeeCloud();
+        WeChatUtils.regToWX();
 		MobclickAgent.openActivityDurationTrack(false);
 		createDirectories();
 		saveCategoryIcon();
@@ -172,8 +173,8 @@ public class ReimApplication extends Application
 	{
 		return context;
 	}
-	
-	private void createDirectories()
+
+    private void createDirectories()
 	{
 		try
 		{
@@ -303,4 +304,5 @@ public class ReimApplication extends Application
 	{
 		BeeCloud.setAppKey("02c6af87-8d5b-4d74-b086-d38359c297f3", this);
 	}
+
 }

@@ -15,10 +15,6 @@ import java.util.regex.Pattern;
 
 public class Utils
 {
-    private static String regexEmail = "^([a-z0-9A-Z]+[_|-|\\.]?)+[a-z0-9A-Z]?@([a-z0-9A-Z]+([-|_]?[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
-	private static String regexPhone = "^[1]+\\d{10}$";
-    private static String regexBankAccount = "^\\d{12,19}$";
-
 	public static int getCurrentTime()
 	{
 		Date date = new Date();
@@ -150,6 +146,7 @@ public class Utils
 	
 	public static boolean isEmail(String source)
 	{
+        String regexEmail = "^([a-z0-9A-Z]+[_\\-\\.]?)+[a-z0-9A-Z]?@([a-z0-9A-Z]+([-|_]?[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
 		Pattern pattern = Pattern.compile(regexEmail);
 		Matcher matcher = pattern.matcher(source);
 		return matcher.find();
@@ -157,6 +154,7 @@ public class Utils
 	
 	public static boolean isPhone(String source)
 	{
+        String regexPhone = "^[1]+\\d{10}$";
 		Pattern pattern = Pattern.compile(regexPhone);
 		Matcher matcher = pattern.matcher(source);
 		return matcher.find();
@@ -164,6 +162,7 @@ public class Utils
 
     public static boolean isBankAccount(String source)
     {
+        String regexBankAccount = "^\\d{12,19}$";
         Pattern pattern = Pattern.compile(regexBankAccount);
         Matcher matcher = pattern.matcher(source);
         return matcher.find();
