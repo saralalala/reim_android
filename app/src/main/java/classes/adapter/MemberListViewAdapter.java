@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import classes.base.User;
+import classes.model.User;
 import classes.utils.CharacterParser;
 import classes.utils.ViewUtils;
 

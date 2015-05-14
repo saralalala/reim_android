@@ -7,8 +7,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Group;
-import classes.base.User;
+import classes.model.Group;
+import classes.model.User;
 import netUtils.response.BaseResponse;
 
 public class GetGroupResponse extends BaseResponse

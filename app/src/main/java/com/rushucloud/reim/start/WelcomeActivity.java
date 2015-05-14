@@ -9,9 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.rushucloud.reim.R;
-import com.tencent.mm.sdk.modelmsg.SendAuth;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.utils.DBManager;
@@ -94,20 +91,7 @@ public class WelcomeActivity extends Activity
         {
             public void onClick(View v)
             {
-                IWXAPI api = WXAPIFactory.createWXAPI(WelcomeActivity.this, WeChatUtils.APP_ID, true);
-
-                if (api.isWXAppInstalled() && api.isWXAppSupportAPI())
-                {
-                    SendAuth.Req req = new SendAuth.Req();
-                    req.scope = "snsapi_userinfo";
-                    req.state = "reim_wechat_sign_in";
-                    api.sendReq(req);
-//                    WeChatUtils.sendAuthRequest(WelcomeActivity.this);
-                }
-                else
-                {
-                    ViewUtils.showToast(WelcomeActivity.this, R.string.error_wechat_not_supported);
-                }
+                WeChatUtils.sendAuthRequest(WelcomeActivity.this);
             }
         });
 	}

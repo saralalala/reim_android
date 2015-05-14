@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.VendorListViewAdapter;
-import classes.base.Vendor;
+import classes.model.Vendor;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;

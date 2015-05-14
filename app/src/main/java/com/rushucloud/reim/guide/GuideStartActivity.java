@@ -19,7 +19,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import classes.base.User;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.ViewUtils;
 

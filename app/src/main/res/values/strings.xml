@@ -404,6 +404,8 @@
     <string name="error_timeout">你的账号已经其他地方登录，本地已经下线。</string>
     <string name="error_contact_no_permission">未能读取到你的通讯录信息，可能是由于你未授权「云报销」读取你的通讯录所致。</string>
     <string name="error_wechat_auth">微信授权失败</string>
+    <string name="error_wechat_auth_denied">微信授权被拒绝</string>
+    <string name="error_wechat_auth_user_cancel">用户取消微信授权</string>
     <string name="error_wechat_not_supported">微信未安装或当前微信版本不支持登录功能</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>

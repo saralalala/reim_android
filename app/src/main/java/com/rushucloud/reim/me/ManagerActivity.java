@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.MemberListViewAdapter;
-import classes.base.User;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

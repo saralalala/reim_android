@@ -15,10 +15,10 @@ import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.base.Apply;
-import classes.base.Invite;
-import classes.base.Message;
-import classes.base.User;
+import classes.model.Apply;
+import classes.model.Invite;
+import classes.model.Message;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

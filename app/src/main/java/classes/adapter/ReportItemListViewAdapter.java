@@ -13,8 +13,8 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Category;
-import classes.base.Item;
+import classes.model.Category;
+import classes.model.Item;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;

@@ -21,10 +21,10 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 
-import classes.base.Apply;
-import classes.base.Invite;
-import classes.base.Message;
-import classes.base.Report;
+import classes.model.Apply;
+import classes.model.Invite;
+import classes.model.Message;
+import classes.model.Report;
 import netUtils.NetworkConstant;
 
 public class ReimBroadcastReceiver extends BroadcastReceiver

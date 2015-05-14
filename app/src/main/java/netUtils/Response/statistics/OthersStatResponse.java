@@ -6,9 +6,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.StatCategory;
-import classes.base.StatTag;
-import classes.base.StatUser;
+import classes.model.StatCategory;
+import classes.model.StatTag;
+import classes.model.StatUser;
 import netUtils.response.BaseResponse;
 
 public class OthersStatResponse extends BaseResponse

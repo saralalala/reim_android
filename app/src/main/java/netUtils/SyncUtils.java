@@ -5,9 +5,9 @@ import android.util.SparseIntArray;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Image;
-import classes.base.Item;
-import classes.base.Report;
+import classes.model.Image;
+import classes.model.Item;
+import classes.model.Report;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

@@ -7,8 +7,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Item;
-import classes.base.Report;
+import classes.model.Item;
+import classes.model.Report;
 
 public class SyncDataResponse extends BaseResponse
 {

@@ -6,7 +6,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Item;
+import classes.model.Item;
 import netUtils.response.BaseResponse;
 
 public class SearchItemsResponse extends BaseResponse

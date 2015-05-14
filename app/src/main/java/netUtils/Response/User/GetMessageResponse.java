@@ -1,6 +1,6 @@
 package netUtils.response.user;
 
-import classes.base.Message;
+import classes.model.Message;
 import netUtils.response.BaseResponse;
 
 public class GetMessageResponse extends BaseResponse

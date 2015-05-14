@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import classes.base.Category;
-import classes.base.Item;
-import classes.base.Tag;
-import classes.base.User;
+import classes.model.Category;
+import classes.model.Item;
+import classes.model.Tag;
+import classes.model.User;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;

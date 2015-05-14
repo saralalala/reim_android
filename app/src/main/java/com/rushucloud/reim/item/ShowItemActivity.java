@@ -20,10 +20,10 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
-import classes.base.Category;
-import classes.base.Image;
-import classes.base.Item;
-import classes.base.User;
+import classes.model.Category;
+import classes.model.Image;
+import classes.model.Item;
+import classes.model.User;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;

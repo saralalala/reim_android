@@ -7,9 +7,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Apply;
-import classes.base.Invite;
-import classes.base.Message;
+import classes.model.Apply;
+import classes.model.Invite;
+import classes.model.Message;
 import classes.utils.AppPreference;
 import netUtils.response.BaseResponse;
 

@@ -13,8 +13,8 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Comment;
-import classes.base.User;
+import classes.model.Comment;
+import classes.model.User;
 import classes.utils.DBManager;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;

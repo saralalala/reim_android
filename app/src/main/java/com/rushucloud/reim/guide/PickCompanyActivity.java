@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.CompanyListViewAdapter;
-import classes.base.Group;
-import classes.base.Invite;
-import classes.base.User;
+import classes.model.Group;
+import classes.model.Invite;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

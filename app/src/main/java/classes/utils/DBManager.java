@@ -10,14 +10,14 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Category;
-import classes.base.Comment;
-import classes.base.Group;
-import classes.base.Image;
-import classes.base.Item;
-import classes.base.Report;
-import classes.base.Tag;
-import classes.base.User;
+import classes.model.Category;
+import classes.model.Comment;
+import classes.model.Group;
+import classes.model.Image;
+import classes.model.Item;
+import classes.model.Report;
+import classes.model.Tag;
+import classes.model.User;
 
 public class DBManager extends SQLiteOpenHelper
 {

@@ -21,12 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import classes.adapter.StatisticsListViewAdapter;
-import classes.base.Category;
-import classes.base.StatCategory;
-import classes.base.StatTag;
-import classes.base.StatUser;
-import classes.base.Tag;
-import classes.base.User;
+import classes.model.Category;
+import classes.model.StatCategory;
+import classes.model.StatTag;
+import classes.model.StatUser;
+import classes.model.Tag;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

@@ -24,7 +24,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.List;
 
 import classes.adapter.TagListViewAdapter;
-import classes.base.Tag;
+import classes.model.Tag;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.ContactListViewAdapter;
-import classes.base.Group;
-import classes.base.User;
+import classes.model.Group;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

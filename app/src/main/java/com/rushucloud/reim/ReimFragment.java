@@ -39,10 +39,10 @@ import java.util.Collections;
 import java.util.List;
 
 import classes.adapter.ItemListViewAdapter;
-import classes.base.Category;
-import classes.base.Item;
-import classes.base.Report;
-import classes.base.Tag;
+import classes.model.Category;
+import classes.model.Item;
+import classes.model.Report;
+import classes.model.Tag;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

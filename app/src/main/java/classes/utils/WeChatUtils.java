@@ -5,14 +5,11 @@ import android.app.Activity;
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
-import com.tencent.mm.sdk.modelbase.BaseReq;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-import classes.base.User;
+import classes.model.User;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.WeChatAccessTokenRequest;
@@ -20,7 +17,7 @@ import netUtils.request.user.WeChatOAuthRequest;
 import netUtils.response.user.WeChatAccessTokenResponse;
 import netUtils.response.user.WeChatOAuthResponse;
 
-public class WeChatUtils implements IWXAPIEventHandler
+public class WeChatUtils
 {
     public static final String APP_ID = "wx0900af80a9517d1f";
     public static final String APP_SECRET = "268b6cb859b7ee49e643425401c17655";
@@ -39,26 +36,19 @@ public class WeChatUtils implements IWXAPIEventHandler
         api.registerApp(APP_ID);
     }
 
-    public void onReq(BaseReq baseReq)
-    {
-
-    }
-
-    public void onResp(BaseResp baseResp)
-    {
-        SendAuth.Resp resp = (SendAuth.Resp) baseResp;
-        if (resp.errCode == BaseResp.ErrCode.ERR_OK)
-        {
-            WeChatUtils.sendAccessTokenRequest(resp.code);
-        }
-        else
-        {
-            ViewUtils.showToast(activity, R.string.error_wechat_auth);
-        }
-    }
-
     public static void sendAuthRequest(Activity source)
     {
+        if (api == null)
+        {
+            regToWX();
+        }
+
+        if (!api.isWXAppInstalled() || !api.isWXAppSupportAPI())
+        {
+            ViewUtils.showToast(activity, R.string.error_wechat_not_supported);
+            return;
+        }
+
         activity = source;
         ReimProgressDialog.setContext(activity);
         SendAuth.Req req = new SendAuth.Req();
@@ -95,7 +85,7 @@ public class WeChatUtils implements IWXAPIEventHandler
         });
     }
 
-    public static void sendWeChatOAuthRequest(String accessToken, String openID)
+    public static void sendWeChatOAuthRequest(String accessToken, final String openID)
     {
         WeChatOAuthRequest request = new WeChatOAuthRequest(accessToken, openID);
         request.sendRequest(new HttpConnectionCallback()
@@ -110,6 +100,7 @@ public class WeChatUtils implements IWXAPIEventHandler
                     DBManager dbManager = DBManager.getDBManager();
                     final AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setServerToken(response.getServerToken());
+                    appPreference.setUsername(openID);
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
                     appPreference.setLastShownGuideVersion(response.getLastShownGuideVersion());
                     appPreference.setSyncOnlyWithWifi(true);

@@ -40,8 +40,8 @@ import com.umeng.socialize.sso.UMSsoHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-import classes.base.Group;
-import classes.base.User;
+import classes.model.Group;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

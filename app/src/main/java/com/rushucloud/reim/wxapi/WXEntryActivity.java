@@ -34,7 +34,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler
 
     public void onReq(BaseReq baseReq)
     {
-
+        finish();
     }
 
     public void onResp(BaseResp baseResp)
@@ -48,18 +48,29 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler
                     case ConstantsAPI.COMMAND_SENDAUTH:
                     {
                         SendAuth.Resp resp = (SendAuth.Resp) baseResp;
-                        Toast.makeText(this, "resp:"+resp.code, Toast.LENGTH_SHORT).show();
-//                        WeChatUtils.sendAccessTokenRequest(resp.code);
+                        WeChatUtils.sendAccessTokenRequest(resp.code);
                         break;
                     }
                     default:
                         break;
                 }
+                break;
+            }
+            case BaseResp.ErrCode.ERR_AUTH_DENIED:
+            {
+                ViewUtils.showToast(this, R.string.error_wechat_auth_denied);
+                break;
+            }
+            case BaseResp.ErrCode.ERR_USER_CANCEL:
+            {
+                ViewUtils.showToast(this, R.string.error_wechat_auth_user_cancel);
+                break;
             }
             default:
-                Toast.makeText(this, "type:"+baseResp.getType() + " code:"+baseResp.errCode, Toast.LENGTH_SHORT).show();
+            {
                 ViewUtils.showToast(this, R.string.error_wechat_auth);
                 break;
+            }
         }
         finish();
     }

@@ -23,8 +23,8 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.List;
 
 import classes.adapter.ItemListViewAdapter;
-import classes.base.Item;
-import classes.base.Report;
+import classes.model.Item;
+import classes.model.Report;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

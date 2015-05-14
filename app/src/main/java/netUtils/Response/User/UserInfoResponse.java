@@ -3,7 +3,7 @@ package netUtils.response.user;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.base.User;
+import classes.model.User;
 import netUtils.response.BaseResponse;
 
 public class UserInfoResponse extends BaseResponse

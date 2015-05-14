@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.User;
+import classes.model.User;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 

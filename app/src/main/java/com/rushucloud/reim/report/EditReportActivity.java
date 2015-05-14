@@ -30,12 +30,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Category;
-import classes.base.Comment;
-import classes.base.Image;
-import classes.base.Item;
-import classes.base.Report;
-import classes.base.User;
+import classes.model.Category;
+import classes.model.Comment;
+import classes.model.Image;
+import classes.model.Item;
+import classes.model.Report;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

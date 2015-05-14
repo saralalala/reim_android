@@ -13,7 +13,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Group;
+import classes.model.Group;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 

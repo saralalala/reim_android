@@ -24,7 +24,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.List;
 
 import classes.adapter.CategoryListViewAdapter;
-import classes.base.Category;
+import classes.model.Category;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

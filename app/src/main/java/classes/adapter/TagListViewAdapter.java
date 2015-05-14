@@ -12,7 +12,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Tag;
+import classes.model.Tag;
 import classes.utils.ViewUtils;
 
 public class TagListViewAdapter extends BaseAdapter

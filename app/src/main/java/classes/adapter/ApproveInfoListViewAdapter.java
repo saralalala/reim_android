@@ -15,9 +15,9 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.ApproveInfo;
-import classes.base.Report;
-import classes.base.User;
+import classes.model.ApproveInfo;
+import classes.model.Report;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.ViewUtils;

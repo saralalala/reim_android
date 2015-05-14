@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.base.User;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

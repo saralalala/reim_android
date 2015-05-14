@@ -13,7 +13,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Category;
+import classes.model.Category;
 import classes.utils.ViewUtils;
 
 public class CategoryExpandableListAdapter extends BaseExpandableListAdapter

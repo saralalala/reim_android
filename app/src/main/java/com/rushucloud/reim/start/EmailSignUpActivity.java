@@ -19,11 +19,12 @@ import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.base.User;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
+import classes.utils.WeChatUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
@@ -140,7 +141,7 @@ public class EmailSignUpActivity extends Activity
         {
             public void onClick(View v)
             {
-//                ViewUtils.goForwardAndFinish(WelcomeActivity.this, SignInActivity.class);
+                WeChatUtils.sendAuthRequest(EmailSignUpActivity.this);
             }
         });
 		

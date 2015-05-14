@@ -7,8 +7,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Group;
-import classes.base.Invite;
+import classes.model.Group;
+import classes.model.Invite;
 import netUtils.response.BaseResponse;
 
 public class GetInvitedGroupResponse extends BaseResponse

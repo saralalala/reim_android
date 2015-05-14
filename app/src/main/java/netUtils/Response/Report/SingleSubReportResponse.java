@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import classes.base.Report;
+import classes.model.Report;
 import netUtils.response.BaseResponse;
 
 public class SingleSubReportResponse extends BaseResponse

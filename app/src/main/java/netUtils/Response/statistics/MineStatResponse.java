@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import classes.base.StatCategory;
+import classes.model.StatCategory;
 import classes.utils.Utils;
 import netUtils.response.BaseResponse;
 

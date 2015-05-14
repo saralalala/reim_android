@@ -6,7 +6,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Category;
+import classes.model.Category;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
 import netUtils.request.BaseRequest;

@@ -7,10 +7,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.base.Category;
-import classes.base.Group;
-import classes.base.Tag;
-import classes.base.User;
+import classes.model.Category;
+import classes.model.Group;
+import classes.model.Tag;
+import classes.model.User;
 import netUtils.response.BaseResponse;
 
 public class ApplyReplyResponse extends BaseResponse

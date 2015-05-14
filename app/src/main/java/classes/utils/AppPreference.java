@@ -11,8 +11,8 @@ import com.avos.avoscloud.AVInstallation;
 
 import java.io.File;
 
-import classes.base.Group;
-import classes.base.User;
+import classes.model.Group;
+import classes.model.User;
 
 public class AppPreference
 {

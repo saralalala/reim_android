@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.ApproveInfoListViewAdapter;
-import classes.base.ApproveInfo;
-import classes.base.Report;
-import classes.base.User;
+import classes.model.ApproveInfo;
+import classes.model.Report;
+import classes.model.User;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;

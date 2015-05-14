@@ -9,7 +9,7 @@ import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.base.User;
+import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;

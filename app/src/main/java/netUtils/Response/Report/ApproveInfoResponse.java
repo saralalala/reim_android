@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import classes.base.ApproveInfo;
+import classes.model.ApproveInfo;
 import netUtils.response.BaseResponse;
 
 public class ApproveInfoResponse extends BaseResponse

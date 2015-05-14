@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import classes.base.User;
+import classes.model.User;
 import netUtils.response.BaseResponse;
 
 public class SubordinatesInfoResponse extends BaseResponse

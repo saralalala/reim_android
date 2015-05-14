@@ -36,9 +36,9 @@ import com.rushucloud.reim.R;
 
 import java.util.HashMap;
 
-import classes.base.Category;
-import classes.base.StatCategory;
-import classes.base.User;
+import classes.model.Category;
+import classes.model.StatCategory;
+import classes.model.User;
 
 public class ViewUtils
 {
