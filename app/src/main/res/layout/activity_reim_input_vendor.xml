@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/title_bar_height"
         android:background="@color/major_dark">
 
         <ImageView
@@ -54,7 +54,7 @@
     <classes.widget.ClearEditText
         android:id="@+id/vendorEditText"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/edittext_height"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:background="@color/major_light"

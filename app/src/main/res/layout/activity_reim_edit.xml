@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/title_bar_height"
         android:background="@color/major_dark">
 
         <ImageView
@@ -66,6 +66,7 @@
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
 	                android:text="@string/actual_cost"
 	                android:textColor="@color/major_dark"
 	                android:textSize="14sp"/>

@@ -255,8 +255,8 @@ public class ContactListViewAdapter extends BaseAdapter
         return selector;
     }
 
-    public boolean isIndex(int position)
+    public boolean isContact(int position)
     {
-        return indexList.contains(position);
+        return !indexList.contains(position);
     }
 }

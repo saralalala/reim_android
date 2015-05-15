@@ -245,7 +245,7 @@ public class PickLocationActivity extends Activity
             {
                 hideSoftKeyboard();
 
-                if (position > 1 && !adapter.isIndex(position))
+                if (position > 1 && adapter.isLocation(position))
                 {
                     Intent intent = new Intent();
                     intent.putExtra("location", adapter.getCityList().get(position - 2));

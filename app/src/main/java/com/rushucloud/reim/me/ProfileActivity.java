@@ -56,8 +56,8 @@ public class ProfileActivity extends Activity
 	private TextView emailTextView;
 	private TextView phoneTextView;
     private TextView bankTextView;
-	
 	private TextView companyTextView;
+	private RelativeLayout passwordLayout;
 
 	private AppPreference appPreference;
 
@@ -267,7 +267,7 @@ public class ProfileActivity extends Activity
 		});
 
         // init password
-        RelativeLayout passwordLayout = (RelativeLayout) findViewById(R.id.passwordLayout);
+        passwordLayout = (RelativeLayout) findViewById(R.id.passwordLayout);
         passwordLayout.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -298,11 +298,11 @@ public class ProfileActivity extends Activity
 				{
 					Intent intent = new Intent(ProfileActivity.this, SingleImageActivity.class);
 					intent.putExtra("imagePath", currentUser.getAvatarLocalPath());
-                    ViewUtils.goForward(ProfileActivity.this, intent);
+					ViewUtils.goForward(ProfileActivity.this, intent);
 				}
 				else if (currentUser != null)
 				{
-					showPictureWindow();					
+					showPictureWindow();
 				}
 			}
 		});
@@ -316,7 +316,7 @@ public class ProfileActivity extends Activity
 			public void onClick(View v)
 			{
 				picturePopupWindow.dismiss();
-				
+
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
 				intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
 				startActivityForResult(intent, TAKE_PHOTO);
@@ -329,7 +329,7 @@ public class ProfileActivity extends Activity
 			public void onClick(View v)
 			{
 				picturePopupWindow.dismiss();
-				
+
 				Intent intent = new Intent(Intent.ACTION_PICK, null);
 				intent.setType("image/*");
 				startActivityForResult(intent, PICK_IMAGE);
@@ -484,8 +484,11 @@ public class ProfileActivity extends Activity
                             Intent intent = new Intent(ProfileActivity.this, SignInActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.putExtra("username", username);
-                            intent.putExtra("password", password);
+							if (Utils.isEmailOrPhone(username))
+							{
+								intent.putExtra("username", username);
+								intent.putExtra("password", password);
+							}
                             ViewUtils.goBackWithIntent(ProfileActivity.this, intent);
                         }
                     });

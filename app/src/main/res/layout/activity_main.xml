@@ -8,7 +8,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginBottom="@dimen/tab_bar_height"/>
 
     <ImageView
         android:id="@+id/feedbackImageView"
@@ -74,7 +74,7 @@
         <classes.widget.TabItem
             android:id="@+id/tabItemReim"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/tab_bar_height"
             android:layout_weight="1"
             reim:tab_icon_selected="@drawable/tab_icon_reim_selected"
             reim:tab_icon_unselected="@drawable/tab_icon_reim_not_selected"
@@ -85,7 +85,7 @@
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/tab_bar_height"
             android:layout_weight="1">
 
             <classes.widget.TabItem
@@ -134,7 +134,7 @@
         <classes.widget.TabItem
             android:id="@+id/tabItemStat"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/tab_bar_height"
             android:layout_weight="1"
             reim:tab_icon_selected="@drawable/tab_icon_stat_selected"
             reim:tab_icon_unselected="@drawable/tab_icon_stat_not_selected"
@@ -145,7 +145,7 @@
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/tab_bar_height"
             android:layout_weight="1">
 
             <classes.widget.TabItem

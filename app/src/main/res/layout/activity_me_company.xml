@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/title_bar_height"
         android:background="@color/major_dark">
 
         <ImageView
@@ -54,7 +54,7 @@
     <LinearLayout
         android:id="@+id/companyLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/layout_height"
         android:orientation="horizontal"
         android:background="@drawable/me_item_drawable">
 
@@ -96,7 +96,7 @@
     <LinearLayout
         android:id="@+id/changeCompanyLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/layout_height"
         android:orientation="horizontal"
         android:background="@drawable/me_item_drawable">
 

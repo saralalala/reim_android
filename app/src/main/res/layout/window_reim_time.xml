@@ -7,7 +7,7 @@
     
     <RelativeLayout
 	    android:layout_width="match_parent"
-	    android:layout_height="50.5dp"
+	    android:layout_height="@dimen/layout_with_one_divider_height"
 	    android:orientation="horizontal"
 	    android:background="@drawable/list_item_drawable">
             
@@ -21,9 +21,8 @@
 	        android:id="@+id/confirmButton"
 	        android:layout_width="80dp"
 	        android:layout_height="30dp"
+			android:layout_centerVertical="true"
 	        android:layout_alignParentRight="true"
-	        android:layout_alignParentTop="true"
-	        android:layout_marginTop="10dp"
 	        android:layout_marginRight="16dp"
 	        android:background="@drawable/button_dark_drawable"
 	        android:text="@string/confirm"

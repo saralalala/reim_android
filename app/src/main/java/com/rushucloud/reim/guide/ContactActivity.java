@@ -232,7 +232,7 @@ public class ContactActivity extends Activity
                     adapter.setInputChosenList(inputChosenList);
                     adapter.notifyDataSetChanged();
                 }
-                else if (position > inputList.size() + 1 && !contactList.isEmpty() && !adapter.isIndex(position))
+                else if (position > inputList.size() + 1 && !contactList.isEmpty() && adapter.isContact(position))
                 {
                     User user = contactList.get(position - inputList.size() - 1);
                     int index = User.indexOfContactList(contactChosenList, user);

@@ -148,8 +148,8 @@ public class LocationListViewAdapter extends BaseAdapter
         return selector;
     }
 
-    public boolean isIndex(int position)
+    public boolean isLocation(int position)
     {
-        return indexList.contains(position);
+        return !indexList.contains(position);
     }
 }

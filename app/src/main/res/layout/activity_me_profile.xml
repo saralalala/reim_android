@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/title_bar_height"
         android:background="@color/major_dark">
 
         <ImageView
@@ -115,7 +115,7 @@
             <RelativeLayout
                 android:id="@+id/nicknameLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/layout_height"
                 android:background="@drawable/me_item_drawable">
 
                 <TextView
@@ -163,7 +163,7 @@
 			<RelativeLayout
                 android:id="@+id/emailLayout"
 			    android:layout_width="match_parent"
-			    android:layout_height="50dp"
+			    android:layout_height="@dimen/layout_height"
 			    android:background="@drawable/me_item_drawable">
 
                 <TextView
@@ -211,7 +211,7 @@
 			<RelativeLayout
                 android:id="@+id/phoneLayout"
 			    android:layout_width="match_parent"
-			    android:layout_height="50dp"
+			    android:layout_height="@dimen/layout_height"
 			    android:background="@drawable/me_item_drawable">
 
                 <TextView
@@ -259,7 +259,7 @@
             <RelativeLayout
                 android:id="@+id/bankLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/layout_height"
                 android:background="@drawable/me_item_drawable">
 
                 <TextView
@@ -307,7 +307,7 @@
 			<LinearLayout
 			    android:id="@+id/companyLayout"
 			    android:layout_width="match_parent"
-			    android:layout_height="50dp"
+			    android:layout_height="@dimen/layout_height"
                 android:orientation="horizontal"
 			    android:background="@drawable/me_item_drawable">
 
@@ -358,7 +358,7 @@
             <RelativeLayout
                 android:id="@+id/passwordLayout"
 				android:layout_width="match_parent"
-				android:layout_height="50dp"
+				android:layout_height="@dimen/layout_height"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable">
 					     

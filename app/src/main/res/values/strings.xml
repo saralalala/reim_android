@@ -248,6 +248,7 @@
     <string name="waiting_for_approve">（待批准）</string>
     <string name="nickname">姓名</string>
     <string name="change_password">修改密码</string>
+    <string name="set_password">设置密码</string>
     <string name="default_manager">上级设置</string>
     <string name="my_manager">我的上级</string>
     <string name="my_colleagues">我的同事</string>

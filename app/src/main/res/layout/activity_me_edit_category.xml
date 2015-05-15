@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/title_bar_height"
         android:background="@color/major_dark">
 
         <ImageView
@@ -55,7 +55,7 @@
 		
 		    <RelativeLayout
 		        android:layout_width="match_parent"
-		        android:layout_height="50.5dp"
+		        android:layout_height="@dimen/layout_with_one_divider_height"
 		        android:layout_marginTop="18dp"
         		android:background="@color/major_light">
 		
@@ -64,28 +64,34 @@
 			        android:layout_height="0.5dp"
 			        layout="@layout/view_divider"/>
 
-			    <ImageView
-			        android:id="@+id/iconImageView"
-			        android:layout_width="30dp"
-			        android:layout_height="30dp"
-			        android:layout_centerVertical="true"
-			        android:layout_alignParentLeft="true"
-			        android:layout_marginLeft="20dp"
-			        android:contentDescription="@string/icon"
-			        android:src="@drawable/default_icon"/>
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/edittext_height"
+					android:orientation="horizontal"
+					android:layout_alignParentBottom="true">
 
-		        <classes.widget.ClearEditText
-		            android:id="@+id/nameEditText"
-		            android:layout_width="match_parent"
-		            android:layout_height="match_parent"
-		            android:layout_toRightOf="@+id/iconImageView"
-		            android:layout_marginLeft="16dp"
-		            android:paddingRight="16dp"
-		            android:background="@null"
-		            android:hint="@string/input_category_name"
-                    android:textColor="@color/font_major_dark"
-                    android:textSize="16sp"
-                    android:textCursorDrawable="@null"/>
+					<ImageView
+						android:id="@+id/iconImageView"
+						android:layout_width="30dp"
+						android:layout_height="30dp"
+						android:layout_gravity="center_vertical"
+						android:layout_marginLeft="20dp"
+						android:contentDescription="@string/icon"
+						android:src="@drawable/default_icon"/>
+
+					<classes.widget.ClearEditText
+						android:id="@+id/nameEditText"
+						android:layout_width="match_parent"
+						android:layout_height="@dimen/edittext_height"
+						android:layout_marginLeft="16dp"
+						android:paddingRight="16dp"
+						android:background="@null"
+						android:hint="@string/input_category_name"
+						android:textColor="@color/font_major_dark"
+						android:textSize="16sp"
+						android:textCursorDrawable="@null"/>
+
+				</LinearLayout>
 		        
 		    </RelativeLayout>
 		
@@ -126,7 +132,7 @@
 
 		    <LinearLayout
 		        android:layout_width="match_parent"
-		        android:layout_height="50dp"
+		        android:layout_height="@dimen/layout_height"
 		        android:orientation="horizontal"
         		android:background="@color/major_light">
 
@@ -173,7 +179,7 @@
 
 		    <RelativeLayout
 		        android:layout_width="match_parent"
-		        android:layout_height="50dp"
+		        android:layout_height="@dimen/layout_height"
 		        android:orientation="horizontal"
         		android:background="@color/major_light">
 

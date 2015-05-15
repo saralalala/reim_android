@@ -9,7 +9,7 @@
 
     <RelativeLayout
 	    android:layout_width="match_parent"
-	    android:layout_height="50dp"
+	    android:layout_height="@dimen/title_bar_height"
 	    android:background="@color/major_dark">
 
 		<TextView
@@ -123,7 +123,7 @@
             <RelativeLayout
                 android:id="@+id/messageLayout"
 				android:layout_width="match_parent"
-				android:layout_height="50dp"
+				android:layout_height="@dimen/layout_height"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable">
 					     
@@ -165,7 +165,7 @@
             <RelativeLayout
                 android:id="@+id/inviteLayout"
 				android:layout_width="match_parent"
-				android:layout_height="50dp"
+				android:layout_height="@dimen/layout_height"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable">
 					     
@@ -198,7 +198,7 @@
             <RelativeLayout
                 android:id="@+id/defaultManagerLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/layout_height"
                 android:background="@drawable/me_item_drawable"
                 android:clickable="true">
 
@@ -246,7 +246,7 @@
             <RelativeLayout
                 android:id="@+id/invoiceLayout"
 				android:layout_width="match_parent"
-				android:layout_height="50dp"
+				android:layout_height="@dimen/layout_height"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable">
 					     
@@ -270,7 +270,7 @@
             <RelativeLayout
                 android:id="@+id/categoryLayout"
                 android:layout_width="match_parent"
-                android:layout_height="51dp"
+                android:layout_height="@dimen/layout_with_two_divider_height"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/me_item_drawable"
                 android:clickable="true">
@@ -304,12 +304,13 @@
                     android:layout_height="0.5dp"
                     android:layout_alignParentBottom="true"
                     layout="@layout/view_divider"/>
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/tagLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50.5dp"
+                android:layout_height="@dimen/layout_with_one_divider_height"
                 android:background="@drawable/me_item_drawable"
                 android:clickable="true">
 
@@ -343,7 +344,7 @@
             <RelativeLayout
                 android:id="@+id/aboutLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50.5dp"
+                android:layout_height="@dimen/layout_with_one_divider_height"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/me_item_drawable"
                 android:clickable="true">
@@ -372,7 +373,7 @@
             <RelativeLayout
                 android:id="@+id/feedbackLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50.5dp"
+                android:layout_height="@dimen/layout_with_one_divider_height"
                 android:background="@drawable/me_item_drawable"
                 android:clickable="true">
 
@@ -397,7 +398,7 @@
             <RelativeLayout
                 android:id="@+id/customServiceLayout"
 				android:layout_width="match_parent"
-				android:layout_height="50dp"
+				android:layout_height="@dimen/layout_height"
 				android:clickable="true"
 				android:background="@drawable/me_item_drawable">
 					     
