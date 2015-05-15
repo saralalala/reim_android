@@ -293,7 +293,7 @@ public class ManagerActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				GetGroupResponse response = new GetGroupResponse(httpResponse);
+				final GetGroupResponse response = new GetGroupResponse(httpResponse);
 				if (response.getStatus())
 				{
 					appPreference = AppPreference.getAppPreference();
@@ -325,7 +325,7 @@ public class ManagerActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(ManagerActivity.this, R.string.failed_to_get_data);
+							ViewUtils.showToast(ManagerActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
 						}
 					});
 				}

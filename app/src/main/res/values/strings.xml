@@ -353,9 +353,9 @@
     <string name="error_old_password_empty">请输入旧密码</string>
     <string name="error_new_password_empty">请输入新密码</string>
     <string name="error_confirm_password_empty">请再次输入密码</string>
-    <string name="error_same_password">新旧密码重复了，再选一个新密码吧：）</string>
-    <string name="error_wrong_old_password">旧密码有误</string>
+    <string name="error_same_password">新旧密码重复，请重新输入</string>
     <string name="error_wrong_confirm_password">新密码两次输入不一致</string>
+    <string name="error_wrong_set_password_confirm">密码两次输入不一致</string>
     <string name="error_email_or_phone_empty">请输入手机号或邮箱</string>
     <string name="error_email_or_phone_wrong_format">手机号或邮箱格式不正确</string>
     <string name="error_category_name_empty">请输入类别名称</string>
@@ -414,6 +414,7 @@
     <string name="succeed_in_sending_email">邮件已发送，查收你的邮箱！</string>
     <string name="succeed_in_sending_message">验证短信已发送</string>
     <string name="succeed_in_changing_password">密码修改成功</string>
+    <string name="succeed_in_setting_password">密码设置成功</string>
     <string name="succeed_in_changing_default_manager">默认上级修改成功</string>
     <string name="succeed_in_sending_feedback">反馈发送成功！</string>
     <string name="succeed_in_sending_invite_reply">邀请回复发送成功！</string>
@@ -482,6 +483,7 @@
     <string name="failed_to_sign_up">注册失败</string>
     <string name="failed_to_sign_out">登出失败</string>
     <string name="failed_to_change_password">修改密码失败</string>
+    <string name="failed_to_set_password">设置密码失败</string>
     <string name="failed_to_alert">提醒发送失败</string>
     <string name="failed_to_get_message_list">获取消息列表失败</string>
     <string name="failed_to_delete">删除失败</string>

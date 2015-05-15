@@ -218,7 +218,7 @@ public class TagActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				DeleteTagResponse response = new DeleteTagResponse(httpResponse);
+				final DeleteTagResponse response = new DeleteTagResponse(httpResponse);
 				if (response.getStatus())
 				{
 					dbManager.deleteTag(tag.getServerID());
@@ -239,7 +239,7 @@ public class TagActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(TagActivity.this, R.string.failed_to_delete_tag);					
+							ViewUtils.showToast(TagActivity.this, R.string.failed_to_delete_tag, response.getErrorMessage());
 						}
 					});
 				}

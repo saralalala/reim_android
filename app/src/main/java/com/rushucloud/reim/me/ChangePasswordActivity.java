@@ -116,20 +116,10 @@ public class ChangePasswordActivity extends Activity
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_confirm_password_empty);
                     ViewUtils.requestFocus(ChangePasswordActivity.this, confirmPasswordEditText);
 				}
-				else if (oldPassword.equals(newPassword))
-				{
-					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_same_password);
-                    ViewUtils.requestFocus(ChangePasswordActivity.this, newPasswordEditText);
-				}
 				else if (!confirmPassword.equals(newPassword))
 				{
 					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_wrong_confirm_password);
                     ViewUtils.requestFocus(ChangePasswordActivity.this, confirmPasswordEditText);
-				}
-				else if (!oldPassword.equals(appPreference.getPassword()))
-				{
-					ViewUtils.showToast(ChangePasswordActivity.this, R.string.error_wrong_old_password);
-                    ViewUtils.requestFocus(ChangePasswordActivity.this, oldPasswordEditText);
 				}
 				else
 				{
@@ -156,7 +146,7 @@ public class ChangePasswordActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				ChangePasswordResponse response = new ChangePasswordResponse(httpResponse);
+				final ChangePasswordResponse response = new ChangePasswordResponse(httpResponse);
 				if (response.getStatus())
 				{
 					appPreference.setPassword(newPassword);
@@ -179,7 +169,7 @@ public class ChangePasswordActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.show();
-                            ViewUtils.showToast(ChangePasswordActivity.this, R.string.failed_to_change_password);
+                            ViewUtils.showToast(ChangePasswordActivity.this, R.string.failed_to_change_password, response.getErrorMessage());
                         }
                     });
                 }

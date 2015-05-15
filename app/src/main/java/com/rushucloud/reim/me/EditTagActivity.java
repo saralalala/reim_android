@@ -140,7 +140,7 @@ public class EditTagActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				CreateTagResponse response = new CreateTagResponse(httpResponse);
+				final CreateTagResponse response = new CreateTagResponse(httpResponse);
 				if (response.getStatus())
 				{
 					tag.setServerID(response.getTagID());
@@ -165,7 +165,7 @@ public class EditTagActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditTagActivity.this, R.string.failed_to_create_tag);							
+							ViewUtils.showToast(EditTagActivity.this, R.string.failed_to_create_tag, response.getErrorMessage());
 						}
 					});
 				}
@@ -181,7 +181,7 @@ public class EditTagActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				ModifyTagResponse response = new ModifyTagResponse(httpResponse);
+				final ModifyTagResponse response = new ModifyTagResponse(httpResponse);
 				if (response.getStatus())
 				{
 					tag.setLocalUpdatedDate(Utils.getCurrentTime());
@@ -205,7 +205,7 @@ public class EditTagActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditTagActivity.this, R.string.failed_to_modify_tag);							
+							ViewUtils.showToast(EditTagActivity.this, R.string.failed_to_modify_tag, response.getErrorMessage());
 						}
 					});
 				}

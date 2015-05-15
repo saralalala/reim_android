@@ -42,7 +42,7 @@
     <classes.widget.ClearEditText
         android:id="@+id/usernameEditText"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
+        android:layout_height="@dimen/edittext_height"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:background="@color/major_light"
@@ -61,7 +61,7 @@
 		android:id="@+id/inviteButton"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/button_height"
-		android:layout_marginTop="22dp"
+		android:layout_marginTop="24dp"
 		android:layout_marginLeft="16dp"
 		android:layout_marginRight="16dp"
 		android:background="@drawable/button_dark_drawable"

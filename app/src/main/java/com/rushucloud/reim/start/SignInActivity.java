@@ -261,6 +261,7 @@ public class SignInActivity extends Activity
             AppPreference appPreference = AppPreference.getAppPreference();
             appPreference.setUsername(username);
             appPreference.setPassword(password);
+            appPreference.setHasPassword(true);
             appPreference.saveAppPreference();
 
             sendSignInRequest();

@@ -204,6 +204,7 @@ public class EmailSignUpActivity extends Activity
                     AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setUsername(user.getEmail());
                     appPreference.setPassword(user.getPassword());
+                    appPreference.setHasPassword(true);
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
                     appPreference.setLastShownGuideVersion(response.getLastShownGuideVersion());

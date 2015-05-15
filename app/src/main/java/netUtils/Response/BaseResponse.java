@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import classes.utils.AppPreference;
 import classes.utils.ReimApplication;
+import classes.utils.Utils;
 import netUtils.NetworkConstant;
 
 public abstract class BaseResponse
@@ -19,6 +20,7 @@ public abstract class BaseResponse
 	private String serverToken = "";
 	private JSONObject dataObject = null;
 	private JSONArray dataArray = null;
+	private boolean hasPassword = true;
 
 	public BaseResponse(Object httpResponse)
 	{
@@ -34,8 +36,9 @@ public abstract class BaseResponse
 				dataObject = object.optJSONObject("data");
 				if (dataObject == null)
 				{
-					setDataArray(object.getJSONArray("data"));
+					dataArray = object.getJSONArray("data");
 				}
+				hasPassword = object.getBoolean("wx");
 				constructData();
 			}
 			else 
@@ -43,7 +46,7 @@ public abstract class BaseResponse
 				dataObject = object.optJSONObject("data");
 				if (dataObject == null)
 				{
-					setDataArray(object.optJSONArray("data"));
+					dataArray = object.getJSONArray("data");
 				}
 				else
 				{
@@ -118,9 +121,8 @@ public abstract class BaseResponse
 		return dataArray;
 	}
 
-	public void setDataArray(JSONArray dataArray)
+	public boolean hasPassword()
 	{
-		this.dataArray = dataArray;
+		return hasPassword;
 	}
-
 }

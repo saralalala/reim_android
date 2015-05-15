@@ -58,6 +58,7 @@ public class ProfileActivity extends Activity
     private TextView bankTextView;
 	private TextView companyTextView;
 	private RelativeLayout passwordLayout;
+	private TextView passwordTextView;
 
 	private AppPreference appPreference;
 
@@ -272,9 +273,18 @@ public class ProfileActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-                ViewUtils.goForward(ProfileActivity.this, ChangePasswordActivity.class);
+				if (appPreference.hasPassword())
+				{
+					ViewUtils.goForward(ProfileActivity.this, ChangePasswordActivity.class);
+				}
+				else
+				{
+					ViewUtils.goForward(ProfileActivity.this, SetPasswordActivity.class);
+				}
 			}
 		});
+
+		passwordTextView = (TextView) findViewById(R.id.passwordTextView);
 	}
 	
 	private void initAvatarView()
@@ -379,6 +389,17 @@ public class ProfileActivity extends Activity
         {
             companyTextView.setText(R.string.not_joined);
         }
+
+		if (currentUser.getEmail().isEmpty() && currentUser.getPhone().isEmpty())
+		{
+			passwordLayout.setVisibility(View.GONE);
+		}
+		else
+		{
+			passwordLayout.setVisibility(View.VISIBLE);
+			int text = appPreference.hasPassword()? R.string.change_password : R.string.set_password;
+			passwordTextView.setText(text);
+		}
 	}
 
     private void showPictureWindow()
@@ -457,7 +478,7 @@ public class ProfileActivity extends Activity
         {
             public void execute(Object httpResponse)
             {
-                SignOutResponse response = new SignOutResponse(httpResponse);
+                final SignOutResponse response = new SignOutResponse(httpResponse);
                 if (response.getStatus())
                 {
                     AppPreference appPreference = AppPreference.getAppPreference();
@@ -469,6 +490,7 @@ public class ProfileActivity extends Activity
                     appPreference.setCurrentGroupID(-1);
                     appPreference.setUsername("");
                     appPreference.setPassword("");
+					appPreference.setHasPassword(true);
                     appPreference.setServerToken("");
                     appPreference.setLastSyncTime(0);
                     appPreference.saveAppPreference();
@@ -500,7 +522,7 @@ public class ProfileActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_sign_out);
+                            ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_sign_out, response.getErrorMessage());
                         }
                     });
                 }

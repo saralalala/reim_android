@@ -246,7 +246,7 @@ public class SubCategoryActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				DeleteCategoryResponse response = new DeleteCategoryResponse(httpResponse);
+				final DeleteCategoryResponse response = new DeleteCategoryResponse(httpResponse);
 				if (response.getStatus())
 				{
 					dbManager.deleteCategory(category.getServerID());
@@ -268,7 +268,7 @@ public class SubCategoryActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(SubCategoryActivity.this, R.string.failed_to_delete_category);					
+							ViewUtils.showToast(SubCategoryActivity.this, R.string.failed_to_delete_category, response.getErrorMessage());
 						}
 					});
 				}

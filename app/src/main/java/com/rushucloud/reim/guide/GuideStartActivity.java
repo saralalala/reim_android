@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Utils;
 import classes.utils.ViewUtils;
 
 public class GuideStartActivity extends Activity
@@ -99,8 +100,11 @@ public class GuideStartActivity extends Activity
     private void goBack()
     {
         Intent intent = new Intent(GuideStartActivity.this, SignInActivity.class);
-        intent.putExtra("username", AppPreference.getAppPreference().getUsername());
-        intent.putExtra("password", AppPreference.getAppPreference().getPassword());
+        if (Utils.isEmailOrPhone(AppPreference.getAppPreference().getUsername()))
+        {
+            intent.putExtra("username", AppPreference.getAppPreference().getUsername());
+            intent.putExtra("password", AppPreference.getAppPreference().getPassword());
+        }
         ViewUtils.goBackWithIntent(GuideStartActivity.this, intent);
     }
 }

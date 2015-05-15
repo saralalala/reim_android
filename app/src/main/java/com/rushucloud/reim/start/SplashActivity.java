@@ -195,7 +195,7 @@ public class SplashActivity extends Activity
 					{
 						public void run()
 						{
-							ViewUtils.showToast(SplashActivity.this, R.string.failed_to_sign_in);
+							ViewUtils.showToast(SplashActivity.this, R.string.failed_to_sign_in, response.getErrorMessage());
 							Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
 							intent.putExtra("username", AppPreference.getAppPreference().getUsername());
 							intent.putExtra("password", AppPreference.getAppPreference().getPassword());

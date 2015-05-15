@@ -92,7 +92,7 @@ public class WeChatUtils
         {
             public void execute(Object httpResponse)
             {
-                WeChatOAuthResponse response = new WeChatOAuthResponse(httpResponse);
+                final WeChatOAuthResponse response = new WeChatOAuthResponse(httpResponse);
                 if (response.getStatus())
                 {
                     int currentGroupID = -1;
@@ -101,6 +101,7 @@ public class WeChatUtils
                     final AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setUsername(openID);
+                    appPreference.setHasPassword(response.hasPassword());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
                     appPreference.setLastShownGuideVersion(response.getLastShownGuideVersion());
                     appPreference.setSyncOnlyWithWifi(true);
@@ -181,7 +182,7 @@ public class WeChatUtils
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(activity, R.string.failed_to_sign_in);
+                            ViewUtils.showToast(activity, R.string.failed_to_sign_in, response.getErrorMessage());
                         }
                     });
                 }

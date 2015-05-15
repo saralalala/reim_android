@@ -108,7 +108,7 @@ public class SetPasswordActivity extends Activity
 				}
 				else if (!confirmPassword.equals(password))
 				{
-					ViewUtils.showToast(SetPasswordActivity.this, R.string.error_wrong_confirm_password);
+					ViewUtils.showToast(SetPasswordActivity.this, R.string.error_wrong_set_password_confirm);
                     ViewUtils.requestFocus(SetPasswordActivity.this, confirmPasswordEditText);
 				}
 				else
@@ -136,10 +136,11 @@ public class SetPasswordActivity extends Activity
 		{
 			public void execute(Object httpResponse)
 			{
-				ChangePasswordResponse response = new ChangePasswordResponse(httpResponse);
+				final ChangePasswordResponse response = new ChangePasswordResponse(httpResponse);
 				if (response.getStatus())
 				{
 					appPreference.setPassword(password);
+					appPreference.setHasPassword(true);
 					appPreference.saveAppPreference();
 
 					runOnUiThread(new Runnable()
@@ -147,7 +148,7 @@ public class SetPasswordActivity extends Activity
 						public void run()
 						{
                             ReimProgressDialog.show();
-                            ViewUtils.showToast(SetPasswordActivity.this, R.string.succeed_in_changing_password);
+                            ViewUtils.showToast(SetPasswordActivity.this, R.string.succeed_in_setting_password);
                             goBack();
 						}
 					});
@@ -159,7 +160,7 @@ public class SetPasswordActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.show();
-                            ViewUtils.showToast(SetPasswordActivity.this, R.string.failed_to_change_password);
+                            ViewUtils.showToast(SetPasswordActivity.this, R.string.failed_to_change_password, response.getErrorMessage());
                         }
                     });
                 }

@@ -169,7 +169,7 @@ public class MessageListActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(MessageListActivity.this, R.string.failed_to_get_message_list);
+                            ViewUtils.showToast(MessageListActivity.this, R.string.failed_to_get_message_list, response.getErrorMessage());
                             messageListView.stopRefresh();
 						}
 					});

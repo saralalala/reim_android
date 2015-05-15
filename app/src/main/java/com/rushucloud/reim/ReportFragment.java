@@ -1270,7 +1270,7 @@ public class ReportFragment extends Fragment
         {
             public void execute(Object httpResponse)
             {
-                EventsResponse response = new EventsResponse(httpResponse);
+                final EventsResponse response = new EventsResponse(httpResponse);
                 if (response.getStatus())
                 {
                     ReimApplication.setMineUnreadList(response.getMineUnreadList());
@@ -1286,7 +1286,7 @@ public class ReportFragment extends Fragment
                         public void run()
                         {
                             reportListView.stopRefresh();
-                            ViewUtils.showToast(getActivity(), R.string.failed_to_get_data);
+                            ViewUtils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
                         }
                     });
                 }

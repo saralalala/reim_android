@@ -23,6 +23,7 @@ public class AppPreference
 	private int currentGroupID = -1;
 	private String username = "";
 	private String password = "";
+	private boolean hasPassword = true;
 	private String deviceToken = "";
 	private String serverToken = "";
 	private boolean syncOnlyWithWifi = true;
@@ -66,6 +67,7 @@ public class AppPreference
 		appPreference.setCurrentGroupID(preferences.getInt("currentGroupID", -1));
 		appPreference.setUsername(preferences.getString("username", ""));
 		appPreference.setPassword(preferences.getString("password", ""));
+		appPreference.setHasPassword(preferences.getBoolean("hasPassword", true));
 		appPreference.setDeviceToken(AVInstallation.getCurrentInstallation().getInstallationId());
 		appPreference.setServerToken(preferences.getString("serverToken", ""));
 		appPreference.setSyncOnlyWithWifi(preferences.getBoolean("syncOnlyWithWifi", true));
@@ -94,6 +96,7 @@ public class AppPreference
 		editor.putInt("currentGroupID", appPreference.getCurrentGroupID());
 		editor.putString("username", appPreference.getUsername());
 		editor.putString("password", appPreference.getPassword());
+		editor.putBoolean("hasPassword", appPreference.hasPassword());
 		editor.putString("deviceToken", appPreference.getDeviceToken());
 		editor.putString("serverToken", appPreference.getServerToken());
 		editor.putBoolean("syncOnlyWithWifi", appPreference.syncOnlyWithWifi());
@@ -150,7 +153,16 @@ public class AppPreference
 	{
 		this.password = password;
 	}
-	
+
+	public boolean hasPassword()
+	{
+		return hasPassword;
+	}
+	public void setHasPassword(boolean hasPassword)
+	{
+		this.hasPassword = hasPassword;
+	}
+
 	public String getDeviceToken()
 	{
 		return deviceToken;

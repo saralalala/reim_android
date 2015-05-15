@@ -1028,7 +1028,7 @@ public class EditReportActivity extends Activity
 						public void run()
 						{
 							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_get_data);
+							ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
 						}
 					});
 				}
