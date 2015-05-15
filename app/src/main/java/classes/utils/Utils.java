@@ -146,6 +146,11 @@ public class Utils
 	
 	public static boolean isEmail(String source)
 	{
+		if (!source.contains("@"))
+		{
+			return false;
+		}
+
         String regexEmail = "^([a-z0-9A-Z]+[_\\-\\.]?)+[a-z0-9A-Z]?@([a-z0-9A-Z]+([-|_]?[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
 		Pattern pattern = Pattern.compile(regexEmail);
 		Matcher matcher = pattern.matcher(source);
