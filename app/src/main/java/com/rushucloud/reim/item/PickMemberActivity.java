@@ -77,7 +77,7 @@ public class PickMemberActivity extends Activity
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			finish();
+            ViewUtils.goBack(this);
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -113,8 +113,7 @@ public class PickMemberActivity extends Activity
 
 				Intent intent = new Intent();
 				intent.putExtra("users", (Serializable) adapter.getChosenList());
-				setResult(RESULT_OK, intent);
-				finish();
+                ViewUtils.goBackWithResult(PickMemberActivity.this, intent);
 			}
 		});
 

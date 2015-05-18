@@ -251,7 +251,7 @@ public class ProfileActivity extends Activity
         {
             public void onClick(View v)
             {
-                ViewUtils.goForward(ProfileActivity.this, BankActivity.class);
+                ViewUtils.goForward(ProfileActivity.this, BankNumberActivity.class);
             }
         });
 

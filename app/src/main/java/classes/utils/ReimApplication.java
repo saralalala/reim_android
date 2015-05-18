@@ -10,8 +10,6 @@ import android.text.TextUtils;
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.PushService;
-import com.mechat.mechatlibrary.MCClient;
-import com.mechat.mechatlibrary.callback.OnInitCallback;
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -56,7 +54,6 @@ public class ReimApplication extends Application
 
 		initPushService();
 		initData();
-		initMeChat();
 		initBeeCloud();
         WeChatUtils.regToWX();
 		MobclickAgent.openActivityDurationTrack(false);
@@ -269,37 +266,17 @@ public class ReimApplication extends Application
 			field.setAccessible(true);
 			field.set(null, TypeFaceYaHei);
 		}
-		catch (NoSuchFieldException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-		catch (IllegalAccessException e)
-		{
-			e.printStackTrace();
-		}
-		
+
 		ReimProgressDialog.init(context);
 		
 		AppPreference.createAppPreference(getApplicationContext());
 		DBManager.createDBManager(getApplicationContext());
 	}
-	
-	private void initMeChat()
-	{
-		MCClient.init(this, "545ae26f3baac95161000001", new OnInitCallback()
-		{
-			public void onSuccess(String arg0)
-			{
 
-			}
-			
-			public void onFailed(String arg0)
-			{
-				
-			}
-		});
-	}
-	
 	private void initBeeCloud()
 	{
 		BeeCloud.setAppKey("02c6af87-8d5b-4d74-b086-d38359c297f3", this);

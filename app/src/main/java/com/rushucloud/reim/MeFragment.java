@@ -1,9 +1,6 @@
 package com.rushucloud.reim;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,9 +10,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mechat.mechatlibrary.MCClient;
-import com.mechat.mechatlibrary.MCOnlineConfig;
-import com.mechat.mechatlibrary.MCUserConfig;
 import com.rushucloud.reim.me.AboutActivity;
 import com.rushucloud.reim.me.CategoryActivity;
 import com.rushucloud.reim.me.FeedbackActivity;
@@ -36,9 +30,6 @@ import com.umeng.socialize.media.SinaShareContent;
 import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import classes.model.Group;
 import classes.model.User;
@@ -252,15 +243,6 @@ public class MeFragment extends Fragment
             }
         });
         
-//        RelativeLayout customServiceLayout = (RelativeLayout) view.findViewById(R.id.customServiceLayout);
-//        customServiceLayout.setOnClickListener(new View.OnClickListener()
-//		{
-//			public void onClick(View v)
-//			{
-//				showFeedbackDialog();
-//			}
-//		});
-        
 //        RelativeLayout shareLayout = (RelativeLayout) view.findViewById(R.id.shareLayout);
 //        shareLayout.setOnClickListener(new View.OnClickListener()
 //		{
@@ -431,27 +413,5 @@ public class MeFragment extends Fragment
     	});
     	
 		mController.openShare(getActivity(), false);
-    }
-
-    @SuppressWarnings("unused")
-    private void showFeedbackDialog()
-    {
-		try
-		{
-			PackageInfo info = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-	    	
-			MCOnlineConfig onlineConfig = new MCOnlineConfig();
-			MCClient.getInstance().startMCConversationActivity(onlineConfig);
-			
-			MCUserConfig mcUserConfig = new MCUserConfig();
-			Map<String, String> userInfoExtra = new HashMap<>();
-			userInfoExtra.put("AndroidVersion",Integer.toString(Build.VERSION.SDK_INT));
-			userInfoExtra.put("AppVersion", info.versionName);
-			mcUserConfig.setUserInfo(getActivity(), null, userInfoExtra, null);
-		}
-		catch (NameNotFoundException e)
-		{
-			e.printStackTrace();
-		}
     }
 }

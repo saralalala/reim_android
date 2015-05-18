@@ -76,7 +76,7 @@ public class VendorListViewAdapter extends BaseAdapter
 			TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
 			nameTextView.setText(vendor.getName());
 			
-			TextView addressTextView = (TextView) view.findViewById(R.id.addressTextView);
+			TextView addressTextView = (TextView) view.findViewById(R.id.locationTextView);
 			addressTextView.setText(vendor.getAddress());
 			
 			TextView distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);

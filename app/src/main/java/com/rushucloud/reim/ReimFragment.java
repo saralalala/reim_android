@@ -30,7 +30,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.item.EditItemActivity;
-import com.rushucloud.reim.item.SearchItemActivity;
 import com.rushucloud.reim.item.ShowItemActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -205,7 +204,6 @@ public class ReimFragment extends Fragment
 		initListView();
 		initFilterView();
 		initDeleteView();
-		initSearchView();
 	}
 	
 	private void initListView()
@@ -679,19 +677,6 @@ public class ReimFragment extends Fragment
 		});
 		
 		deletePopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), deleteView);
-	}
-	
-	private void initSearchView()
-	{		
-		ImageView searchImageView = (ImageView) getActivity().findViewById(R.id.searchImageView);
-		searchImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(getActivity(), "UMENG_SEARCH_LOCAL");
-                ViewUtils.goForward(getActivity(), SearchItemActivity.class);
-			}
-		});		
 	}
 	
 	private List<Item> readItemList()

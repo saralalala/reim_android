@@ -225,6 +225,7 @@ public class ContactListViewAdapter extends BaseAdapter
     {
         inputList.clear();
         inputList.addAll(inputs);
+        initIndex();
     }
 
     public void setInputChosenList(ArrayList<String> inputs)
@@ -237,6 +238,7 @@ public class ContactListViewAdapter extends BaseAdapter
     {
         contactList.clear();
         contactList.addAll(contacts);
+        initIndex();
     }
 
     public void setContactChosenList(List<User> contacts)

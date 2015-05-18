@@ -388,31 +388,6 @@
                     android:textSize="16sp"/>
 
             </RelativeLayout>
-
-            <!--
-	        <include                 
-				android:layout_width="match_parent"
-				android:layout_height="0.5dp"
-	        	layout="@layout/view_divider"/>
-
-            <RelativeLayout
-                android:id="@+id/customServiceLayout"
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/layout_height"
-				android:clickable="true"
-				android:background="@drawable/me_item_drawable">
-					     
-				<TextView
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_centerVertical="true"
-				    android:layout_alignParentLeft="true"
-				    android:layout_marginLeft="16dp"
-				    android:text="@string/custom_service"
-                    android:textColor="@color/font_major_dark"
-				    android:textSize="16sp"/>
-				
-			</RelativeLayout> -->
             
 	        <include                 
 				android:layout_width="match_parent"

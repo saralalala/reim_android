@@ -10,6 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.model.BankAccount;
 import classes.model.Category;
 import classes.model.Comment;
 import classes.model.Group;
@@ -56,7 +57,6 @@ public class DBManager extends SQLiteOpenHelper
 										+ "email TEXT DEFAULT(''),"
 										+ "phone TEXT DEFAULT(''),"
 										+ "nickname TEXT DEFAULT(''),"
-                                        + "bank_account TEXT DEFAULT(''),"
 										+ "avatar_id INT DEFAULT(0),"
                                         + "avatar_server_path TEXT DEFAULT(''),"
 										+ "avatar_local_path TEXT DEFAULT(''),"
@@ -188,6 +188,20 @@ public class DBManager extends SQLiteOpenHelper
 										+ "backup3 TEXT DEFAULT('')"
 										+ ")";
 			db.execSQL(createOthersReportTable);
+
+			String createBankTable="CREATE TABLE IF NOT EXISTS tbl_bank ("
+										+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+										+ "server_id INT DEFAULT(0),"
+										+ "user_id INT DEFAULT(0),"
+										+ "name TEXT DEFAULT(''),"
+										+ "number TEXT DEFAULT(''),"
+										+ "bank_name TEXT DEFAULT(''),"
+										+ "location TEXT DEFAULT(''),"
+										+ "backup1 INT DEFAULT(0),"
+										+ "backup2 TEXT DEFAULT(''),"
+										+ "backup3 TEXT DEFAULT('')"
+										+ ")";
+			db.execSQL(createBankTable);
 
 			String createCommentTable="CREATE TABLE IF NOT EXISTS tbl_comment ("
 											+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -464,13 +478,12 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, bank_account, avatar_id, avatar_server_path, avatar_local_path, " +
+			String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, avatar_id, avatar_server_path, avatar_local_path, " +
 								"privilege, manager_id, group_id, applied_company, admin, local_updatedt, server_updatedt) VALUES (" +
 								"'" + user.getServerID() + "'," +
 								"'" + user.getEmail() + "'," +
 								"'" + user.getPhone() + "'," +
 								"'" + sqliteEscape(user.getNickname()) + "'," +
-                                "'" + user.getBankAccount() + "'," +
 								"'" + user.getAvatarID() + "'," +
                                 "'" + user.getAvatarServerPath() + "'," +
 								"'" + user.getAvatarLocalPath() + "'," +
@@ -500,7 +513,6 @@ public class DBManager extends SQLiteOpenHelper
 								"email = '" + user.getEmail() + "'," +
 								"phone = '" + user.getPhone() + "'," +
 								"nickname = '" + sqliteEscape(user.getNickname()) + "'," +
-                                "bank_account = '" + user.getBankAccount() + "'," +
 								"avatar_id = '" + user.getAvatarID() + "'," +
                                 "avatar_server_path = '" + user.getAvatarServerPath() + "'," +
 								"avatar_local_path = '" + user.getAvatarLocalPath() + "'," +
@@ -568,7 +580,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, bank_account, avatar_id, avatar_server_path, " +
+			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_id, avatar_server_path, " +
 											  "avatar_local_path, privilege, manager_id, group_id, applied_company, admin, local_updatedt, " +
 					                          "server_updatedt FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
 			if (cursor.moveToNext())
@@ -578,7 +590,6 @@ public class DBManager extends SQLiteOpenHelper
 				user.setEmail(getStringFromCursor(cursor, "email"));
 				user.setPhone(getStringFromCursor(cursor, "phone"));
 				user.setNickname(getStringFromCursor(cursor, "nickname"));
-                user.setBankAccount(getStringFromCursor(cursor, "bank_account"));
 				user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
                 user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));
 				user.setAvatarLocalPath(getStringFromCursor(cursor, "avatar_local_path"));
@@ -643,7 +654,7 @@ public class DBManager extends SQLiteOpenHelper
         {
             if (groupServerID != -1 && groupServerID != 0)
             {
-                Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, bank_account, avatar_id, avatar_server_path, avatar_local_path, " +
+                Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_id, avatar_server_path, avatar_local_path, " +
                                                           "privilege, manager_id, group_id, applied_company, admin, local_updatedt, server_updatedt " +
                                                           "FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
                 while (cursor.moveToNext())
@@ -653,7 +664,6 @@ public class DBManager extends SQLiteOpenHelper
                     user.setEmail(getStringFromCursor(cursor, "email"));
                     user.setPhone(getStringFromCursor(cursor, "phone"));
                     user.setNickname(getStringFromCursor(cursor, "nickname"));
-                    user.setBankAccount(getStringFromCursor(cursor, "bank_account"));
                     user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
                     user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));
                     user.setAvatarLocalPath(getStringFromCursor(cursor, "avatar_local_path"));
@@ -1578,8 +1588,8 @@ public class DBManager extends SQLiteOpenHelper
 		List<Item> itemList = new ArrayList<Item>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE report_local_id = ?", 
-													new String[]{Integer.toString(reportLocalID)});
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE report_local_id = ?",
+											  new String[]{Integer.toString(reportLocalID)});
 
 			while (cursor.moveToNext())
 			{
@@ -2217,8 +2227,8 @@ public class DBManager extends SQLiteOpenHelper
 		List<Report> reportList = new ArrayList<Report>();
 		try
 		{
-			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE owner_id = ?", 
-											new String[]{Integer.toString(userServerID)});
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE owner_id = ?",
+											  new String[]{Integer.toString(userServerID)});
 			
 			while (cursor.moveToNext())
 			{
@@ -2289,6 +2299,102 @@ public class DBManager extends SQLiteOpenHelper
             }
             return amount;
         }
+	}
+
+	// Bank Account
+	public int insertBankAccount(BankAccount bankAccount, int userID)
+	{
+		try
+		{
+			String sqlString = "INSERT INTO tbl_bank (server_id, user_id, name, number, bank_name, location) VALUES (" +
+					"'" + bankAccount.getServerID() + "'," +
+					"'" + userID + "'," +
+					"'" + sqliteEscape(bankAccount.getName()) + "'," +
+					"'" + sqliteEscape(bankAccount.getNumber()) + "'," +
+					"'" + sqliteEscape(bankAccount.getBankName()) + "'," +
+					"'" + sqliteEscape(bankAccount.getLocation()) + "')";
+			database.execSQL(sqlString);
+
+            Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_bank", null);
+            cursor.moveToFirst();
+            bankAccount.setLocalID(cursor.getInt(0));
+            cursor.close();
+
+			return bankAccount.getLocalID();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	public boolean updateBankAccount(BankAccount bankAccount)
+	{
+		try
+		{
+			String sqlString = "UPDATE tbl_bank SET " +
+					"server_id = '" + bankAccount.getServerID() + "'," +
+					"name = '" + sqliteEscape(bankAccount.getName()) + "'," +
+					"number = '" + sqliteEscape(bankAccount.getNumber()) + "'," +
+					"bank_name = '" + sqliteEscape(bankAccount.getBankName()) + "'," +
+					"location = '" + sqliteEscape(bankAccount.getLocation()) + "' " +
+					"WHERE id = '" + bankAccount.getLocalID() + "'";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean deleteBankAccount(int accountLocalID)
+	{
+		try
+		{
+			String sqlString = "DELETE FROM tbl_bank WHERE id = '" + accountLocalID + "'";
+			database.execSQL(sqlString);
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public BankAccount getBankAccount(int userID)
+	{
+		try
+		{
+			Cursor cursor = database.rawQuery("SELECT * FROM tbl_bank WHERE user_id = ?",
+											  new String[]{Integer.toString(userID)});
+			if (cursor.moveToNext())
+			{
+				BankAccount bankAccount = new BankAccount();
+				bankAccount.setLocalID(getIntFromCursor(cursor, "id"));
+				bankAccount.setServerID(getIntFromCursor(cursor, "server_id"));
+				bankAccount.setName(getStringFromCursor(cursor, "name"));
+				bankAccount.setNumber(getStringFromCursor(cursor, "number"));
+				bankAccount.setBankName(getStringFromCursor(cursor, "bank_name"));
+				bankAccount.setLocation(getStringFromCursor(cursor, "location"));
+
+				cursor.close();
+				return bankAccount;
+			}
+			else
+			{
+				cursor.close();
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	// Comment

@@ -241,7 +241,11 @@
     <string name="email">邮箱</string>
     <string name="phone">手机</string>
     <string name="change_phone">更换绑定手机</string>
+    <string name="bank_info">银行账户</string>
     <string name="bank_account">银行账号</string>
+    <string name="bank_account_name">户名</string>
+    <string name="bank_location">开户地</string>
+    <string name="bank_branch">开户行</string>
     <string name="company">公司</string>
     <string name="change_company">更换公司</string>
     <string name="not_joined">未加入</string>
@@ -253,6 +257,7 @@
     <string name="my_manager">我的上级</string>
     <string name="my_colleagues">我的同事</string>
     <string name="manager_not_set">还没有设置上级</string>
+    <string name="not_set">未设置</string>
     <string name="not_binding">未绑定</string>
     <string name="icon">图标</string>
     <string name="sub_category">子类别</string>
@@ -290,6 +295,7 @@
     <string name="input_confirm_password">请确认密码</string>
     <string name="input_email">请输入邮箱</string>
     <string name="input_phone">请输入手机号</string>
+    <string name="input_account_name">请输入户名</string>
     <string name="input_bank_account">请输入银行账号</string>
     <string name="input_code">请输入验证码</string>
     <string name="input_amount">请输入金额</string>
@@ -439,6 +445,7 @@
     <string name="succeed_in_alerting">已提醒对方审批报告</string>
     <string name="succeed_in_deleting">删除成功</string>
     <string name="succeed_in_applying">申请加入成功</string>
+    <string name="succeed_in_setting_bank_account">银行账户设置成功</string>
 
     <string name="failed_to_read_data">数据读取失败</string>
     <string name="failed_to_get_code">获取验证码失败</string>
@@ -489,6 +496,7 @@
     <string name="failed_to_delete">删除失败</string>
     <string name="failed_to_search_companies">搜索公司失败</string>
     <string name="failed_to_apply">申请加入公司失败</string>
+    <string name="failed_to_set_bank_account">设置银行账户失败</string>
 
     <string name="no_pending_reports">报告都已处理完毕</string>
     <string name="no_image">未找到图片</string>

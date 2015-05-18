@@ -146,10 +146,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".item.SearchItemActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".item.PickVendorActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
@@ -251,7 +247,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".me.BankActivity"
+            android:name=".me.BankNumberActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity
@@ -394,17 +390,6 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="isVHfH894tfsLVOVdXlGdlKz"/>
         <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote"/>
-        
-        <!-- #################### 美洽 ################### -->
-		<activity
-		    android:name="com.mechat.mechatlibrary.ui.ConversationActivity"
-		    android:theme="@android:style/Theme.Light"
-		    android:launchMode="singleTask"/>
-		<activity android:name="com.mechat.mechatlibrary.ui.ZoomImageActivity"/>
-		
-		<service
-		    android:name="com.mechat.mechatlibrary.MechatService"
-		    android:label="MechatService">
-		</service>
+
 	</application>
 </manifest>

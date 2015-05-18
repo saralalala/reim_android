@@ -63,7 +63,6 @@ dependencies {
     compile files('libs/library-1.2.2.jar')
     compile files('libs/libammsdk.jar')
     compile files('libs/locSDK_4.2.jar')
-    compile files('libs/mechat_1.1.0.jar')
     compile files('libs/rebound-0.3.7.jar')
     compile files('libs/umeng-analytics-v5.4.1.jar')
     compile files('libs/umeng-update-v2.6.0.1.jar')

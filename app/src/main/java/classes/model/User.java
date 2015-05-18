@@ -28,7 +28,7 @@ public class User implements Serializable
 	private String password = "";
 	private String nickname = "";
     private String nicknameInitLetter = "";
-    private String bankAccount = "";
+    private BankAccount bankAccount;
 	private int avatarID = -1;
     private String avatarServerPath = "";
 	private String avatarLocalPath = "";
@@ -74,11 +74,11 @@ public class User implements Serializable
 			setEmail(jObject.getString("email"));
 			setPhone(jObject.getString("phone"));
 			setNickname(jObject.getString("nickname"));
-            setBankAccount(jObject.getString("credit_card"));
+//            setBankAccount(jObject.getString("credit_card"));
 			setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
 			setDefaultManagerID(jObject.getInt("manager_id"));
 			setGroupID(groupID);
-            setAppliedCompany(jObject.getString("apply"));
+            setAppliedCompany(jObject.optString("apply"));
             setAvatarServerPath(jObject.getString("apath"));
 			setAvatarLocalPath("");
 			setLocalUpdatedDate(jObject.getInt("dt"));
@@ -158,16 +158,16 @@ public class User implements Serializable
         this.nicknameInitLetter = nicknameInitLetter;
     }
 
-    public String getBankAccount()
-    {
-        return bankAccount;
-    }
-    public void setBankAccount(String bankAccount)
-    {
-        this.bankAccount = bankAccount;
-    }
+	public BankAccount getBankAccount()
+	{
+		return bankAccount;
+	}
+	public void setBankAccount(BankAccount bankAccount)
+	{
+		this.bankAccount = bankAccount;
+	}
 
-    public int getAvatarID()
+	public int getAvatarID()
 	{
 		return avatarID;
 	}
@@ -300,7 +300,7 @@ public class User implements Serializable
             setNickname(jObject.getString("nickname"));
             setEmail(jObject.getString("email"));
             setPhone(jObject.getString("phone"));
-            setBankAccount(jObject.getString("credit_card"));
+//            setBankAccount(jObject.getString("credit_card"));
             setDefaultManagerID(jObject.getInt("manager_id"));
             setAvatarLocalPath("");
             setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
