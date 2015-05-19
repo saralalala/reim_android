@@ -24,10 +24,10 @@ public class BankAccount implements Serializable
         try
         {
             setServerID(jObject.getInt("id"));
-            setName(jObject.getString("path"));
-			setNumber(jObject.getString("path"));
-			setBankName(jObject.getString("path"));
-			setLocation(jObject.getString("path"));
+            setName(jObject.getString("account"));
+			setNumber(jObject.getString("cardno"));
+			setBankName(jObject.getString("bankname"));
+			setLocation(jObject.getString("bankloc"));
         }
         catch (JSONException e)
         {

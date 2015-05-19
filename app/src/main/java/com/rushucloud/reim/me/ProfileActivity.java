@@ -55,7 +55,6 @@ public class ProfileActivity extends Activity
     private TextView nicknameTextView;
 	private TextView emailTextView;
 	private TextView phoneTextView;
-    private TextView bankTextView;
 	private TextView companyTextView;
 	private RelativeLayout passwordLayout;
 	private TextView passwordTextView;
@@ -244,14 +243,12 @@ public class ProfileActivity extends Activity
 		});
 
         // init bank
-        bankTextView = (TextView) findViewById(R.id.bankTextView);
-
         RelativeLayout bankLayout = (RelativeLayout) findViewById(R.id.bankLayout);
         bankLayout.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-                ViewUtils.goForward(ProfileActivity.this, BankNumberActivity.class);
+                ViewUtils.goForward(ProfileActivity.this, BankActivity.class);
             }
         });
 
@@ -373,9 +370,6 @@ public class ProfileActivity extends Activity
 		
 		String phone = currentUser != null && !currentUser.getPhone().isEmpty()? currentUser.getPhone() : getString(R.string.not_binding);
 		phoneTextView.setText(phone);
-
-        String bankAccount = currentUser != null && !currentUser.getBankAccount().isEmpty()? currentUser.getBankAccount() : getString(R.string.not_binding);
-        bankTextView.setText(bankAccount);
 
         if (currentGroup != null)
         {

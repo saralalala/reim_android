@@ -268,24 +268,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
-                    android:text="@string/bank_account"
+                    android:text="@string/bank_info"
                     android:textColor="@color/font_major_dark"
                     android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/bankTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/bankNextImageView"
-                    android:layout_toRightOf="@+id/bankPrompt"
-                    android:gravity="right"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textColor="@color/hint_grey"
-                    android:textSize="14sp"/>
 
                 <ImageView
                     android:id="@+id/bankNextImageView"

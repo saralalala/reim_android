@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.model.BankAccount;
 import classes.model.Category;
 import classes.model.Group;
 import classes.model.Tag;
@@ -45,6 +46,11 @@ public class WeChatOAuthResponse extends BaseResponse
 			}
 
 			currentUser = new User(profileObject, groupID);
+            JSONArray jsonArray = profileObject.getJSONArray("banks");
+            if (jsonArray.length() > 0)
+            {
+                currentUser.setBankAccount(new BankAccount(jsonArray.getJSONObject(0)));
+            }
             lastShownGuideVersion = profileObject.getInt("guide_version");
 			
 			JSONArray categoryArray = jObject.getJSONArray("categories");

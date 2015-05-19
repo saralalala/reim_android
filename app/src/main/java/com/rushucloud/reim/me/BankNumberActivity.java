@@ -80,7 +80,6 @@ public class BankNumberActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
 	private void initData()
 	{
         dbManager = DBManager.getDBManager();
@@ -92,8 +91,9 @@ public class BankNumberActivity extends Activity
         {
             codeMap.clear();
 
-            InputStream inputStream = getResources().openRawResource(R.raw.province);
+            InputStream inputStream = getResources().openRawResource(R.raw.bank_code);
             byte[] buffer = new byte[inputStream.available()];
+            //noinspection ResultOfMethodCallIgnored
             inputStream.read(buffer);
 
             String json = new String(buffer, "GB2312");
@@ -103,7 +103,7 @@ public class BankNumberActivity extends Activity
             while(iterator.hasNext())
             {
                 key = iterator.next().toString();
-                if(null != key && !key.isEmpty())
+                if(key != null && !key.isEmpty())
                 {
                     codeMap.put(key, jObject.getString(key));
                 }
@@ -145,6 +145,7 @@ public class BankNumberActivity extends Activity
                 else if (!newBankAccount.isEmpty() && !Utils.isBankAccount(newBankAccount))
                 {
                     ViewUtils.showToast(BankNumberActivity.this, R.string.error_bank_account_wrong_format);
+                    ViewUtils.requestFocus(BankNumberActivity.this, bankEditText);
                 }
                 else if (bankAccount == null && !newBankAccount.isEmpty())
                 {
@@ -187,7 +188,7 @@ public class BankNumberActivity extends Activity
     {
         bankAccount.setNumber(newBankAccount);
         String bankName = codeMap.get(newBankAccount.substring(0, 6));
-        if (!bankName.isEmpty())
+        if (bankName != null)
         {
             bankAccount.setBankName(bankName);
         }
@@ -201,7 +202,7 @@ public class BankNumberActivity extends Activity
         {
             public void execute(Object httpResponse)
             {
-                CreateBankAccountResponse response = new CreateBankAccountResponse(httpResponse);
+                final CreateBankAccountResponse response = new CreateBankAccountResponse(httpResponse);
                 if (response.getStatus())
                 {
                     bankAccount.setServerID(response.getAccountID());
@@ -225,7 +226,7 @@ public class BankNumberActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(BankNumberActivity.this, R.string.failed_to_set_bank_account);
+                            ViewUtils.showToast(BankNumberActivity.this, R.string.failed_to_set_bank_account, response.getErrorMessage());
                         }
                     });
                 }
@@ -235,12 +236,13 @@ public class BankNumberActivity extends Activity
 
     private void sendModifyBankAccountRequest()
     {
+        ReimProgressDialog.show();
         ModifyBankAccountRequest request = new ModifyBankAccountRequest(bankAccount);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
-                ModifyBankAccountResponse response = new ModifyBankAccountResponse(httpResponse);
+                final ModifyBankAccountResponse response = new ModifyBankAccountResponse(httpResponse);
                 if (response.getStatus())
                 {
                     dbManager.updateBankAccount(bankAccount);
@@ -262,7 +264,7 @@ public class BankNumberActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(BankNumberActivity.this, R.string.failed_to_set_bank_account);
+                            ViewUtils.showToast(BankNumberActivity.this, R.string.failed_to_set_bank_account, response.getErrorMessage());
                         }
                     });
                 }
@@ -272,6 +274,7 @@ public class BankNumberActivity extends Activity
 
     private void sendDeleteBankAccountRequest()
     {
+        ReimProgressDialog.show();
         DeleteBankAccountRequest request = new DeleteBankAccountRequest(bankAccount.getServerID());
         request.sendRequest(new HttpConnectionCallback()
         {

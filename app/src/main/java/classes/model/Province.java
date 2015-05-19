@@ -40,6 +40,10 @@ public class Province
     {
         return name;
     }
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
     public List<String> getCityList()
     {
@@ -59,5 +63,15 @@ public class Province
             result[i] = provinceList.get(i).getName();
         }
         return result;
+    }
+
+    public boolean equals(Object o)
+    {
+        if (o instanceof Province)
+        {
+            Province province = (Province) o;
+            return province.getName().equals(this.getName());
+        }
+        return super.equals(o);
     }
 }

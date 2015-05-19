@@ -51,7 +51,7 @@ public class ApplyReplyResponse extends BaseResponse
             currentUser.parse(profileObject, groupID);
 
             JSONArray categoryArray = jObject.getJSONArray("categories");
-            categoryList = new ArrayList<Category>();
+            categoryList = new ArrayList<>();
             for (int i = 0; i < categoryArray.length(); i++)
             {
                 Category category =new Category(categoryArray.getJSONObject(i));
@@ -59,7 +59,7 @@ public class ApplyReplyResponse extends BaseResponse
             }
 
             JSONArray tagArray = jObject.getJSONArray("tags");
-            tagList = new ArrayList<Tag>();
+            tagList = new ArrayList<>();
             for (int i = 0; i < tagArray.length(); i++)
             {
                 Tag tag = new Tag(tagArray.getJSONObject(i));
@@ -67,7 +67,7 @@ public class ApplyReplyResponse extends BaseResponse
             }
 
             JSONArray memberArray = jObject.getJSONArray("members");
-            memberList = new ArrayList<User>();
+            memberList = new ArrayList<>();
             for (int i = 0; i < memberArray.length(); i++)
             {
                 User user = new User(memberArray.getJSONObject(i), groupID);

@@ -20,13 +20,14 @@ import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
-import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
-import netUtils.request.user.ModifyUserRequest;
-import netUtils.response.user.ModifyUserResponse;
+import netUtils.request.bank.CreateBankAccountRequest;
+import netUtils.request.bank.ModifyBankAccountRequest;
+import netUtils.response.bank.CreateBankAccountResponse;
+import netUtils.response.bank.ModifyBankAccountResponse;
 
 public class BankNameActivity extends Activity
 {
@@ -74,7 +75,7 @@ public class BankNameActivity extends Activity
         dbManager = DBManager.getDBManager();
         currentUser = AppPreference.getAppPreference().getCurrentUser();
         bankAccount = dbManager.getBankAccount(currentUser.getServerID());
-        originalName = bankAccount != null && !bankAccount.getName().isEmpty()? bankAccount.getName() : currentUser.getNickname();
+        originalName = bankAccount != null && !bankAccount.getName().isEmpty()? bankAccount.getName() : "";
 	}
 
 	private void initView()
@@ -96,77 +97,130 @@ public class BankNameActivity extends Activity
 				hideSoftKeyboard();
 
 				String newName = nameEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
-				{
+                if (!PhoneUtils.isNetworkConnected())
+                {
                     ViewUtils.showToast(BankNameActivity.this, R.string.error_modify_network_unavailable);
-				}
+                }
                 else if (newName.equals(originalName))
                 {
-                    finish();
+                    goBack();
                 }
-                else if (!newName.isEmpty() && !Utils.isBankAccount(newName))
+                else if (newName.isEmpty())
                 {
-                    ViewUtils.showToast(BankNameActivity.this, R.string.error_bank_account_wrong_format);
+                    ViewUtils.showToast(BankNameActivity.this, R.string.error_account_name_empty);
+                    ViewUtils.requestFocus(BankNameActivity.this, nameEditText);
+                }
+                else if (bankAccount == null)
+                {
+                    bankAccount = new BankAccount();
+                    bankAccount.setName(newName);
+                    sendCreateBankAccountRequest();
+                }
+                else if (bankAccount.getServerID() == -1)
+                {
+                    bankAccount.setName(newName);
+                    sendCreateBankAccountRequest();
                 }
                 else
                 {
-                    currentUser.setBankAccount(newName);
-                    sendModifyUserInfoRequest();
+                    bankAccount.setName(newName);
+                    sendModifyBankAccountRequest();
                 }
 			}
 		});
 
         nameEditText = (ClearEditText) findViewById(R.id.nameEditText);
-        nameEditText.setText(originalName);
+        String text = originalName.isEmpty()? currentUser.getNickname() : originalName;
+        nameEditText.setText(text);
         ViewUtils.requestFocus(this, nameEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});        
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
 	}
-	
-	private void sendModifyUserInfoRequest()
-	{
-		ReimProgressDialog.show();		
-		ModifyUserRequest request = new ModifyUserRequest(currentUser);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ModifyUserResponse response = new ModifyUserResponse(httpResponse);
-				if (response.getStatus())
-				{
-					DBManager.getDBManager().updateUser(currentUser);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(BankNameActivity.this, R.string.succeed_in_modifying_user_info);
+
+    private void sendCreateBankAccountRequest()
+    {
+        ReimProgressDialog.show();
+        CreateBankAccountRequest request = new CreateBankAccountRequest(bankAccount);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final CreateBankAccountResponse response = new CreateBankAccountResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    bankAccount.setServerID(response.getAccountID());
+                    int localID = dbManager.insertBankAccount(bankAccount, currentUser.getServerID());
+                    bankAccount.setLocalID(localID);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(BankNameActivity.this, R.string.succeed_in_setting_account_name);
                             goBack();
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(BankNameActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
-						}
-					});						
-				}
-			}
-		});
-	}
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(BankNameActivity.this, R.string.failed_to_set_account_name, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendModifyBankAccountRequest()
+    {
+        ReimProgressDialog.show();
+        ModifyBankAccountRequest request = new ModifyBankAccountRequest(bankAccount);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                ModifyBankAccountResponse response = new ModifyBankAccountResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    dbManager.updateBankAccount(bankAccount);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(BankNameActivity.this, R.string.succeed_in_setting_account_name);
+                            goBack();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(BankNameActivity.this, R.string.failed_to_set_account_name);
+                        }
+                    });
+                }
+            }
+        });
+    }
 
 	private void hideSoftKeyboard()
 	{

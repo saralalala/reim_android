@@ -314,17 +314,20 @@ public class MeFragment extends Fragment
         showTip();
 	}
 
-    public  void showTip()
+    public void showTip()
     {
+        if (view == null)
+        {
+            return;
+        }
+
         if (tipImageView == null)
         {
             tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
         }
-        else
-        {
-            int visibility = ReimApplication.hasUnreadMessages()? View.VISIBLE : View.GONE;
-            tipImageView.setVisibility(visibility);
-        }
+
+        int visibility = ReimApplication.hasUnreadMessages()? View.VISIBLE : View.GONE;
+        tipImageView.setVisibility(visibility);
     }
 
     private void sendDownloadAvatarRequest()

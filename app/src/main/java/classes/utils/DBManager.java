@@ -448,7 +448,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{	
 			Cursor cursor = database.rawQuery("SELECT server_id, group_name, local_updatedt, server_updatedt" +
-											  " FROM tbl_group WHERE server_id = ?", new String[]{Integer.toString(groupServerID)});
+                                                      " FROM tbl_group WHERE server_id = ?", new String[]{Integer.toString(groupServerID)});
 			if (cursor.moveToNext())
 			{
 				Group group = new Group();
@@ -495,6 +495,12 @@ public class DBManager extends SQLiteOpenHelper
 								"'" + user.getLocalUpdatedDate() + "'," +
 								"'" + user.getServerUpdatedDate() + "')";			
 			database.execSQL(sqlString);
+
+            if (user.getBankAccount() != null)
+            {
+                deleteBankAccount(user.getServerID());
+                insertBankAccount(user.getBankAccount(), user.getServerID());
+            }
 			return true;
 		}
 		catch (Exception e)
@@ -524,6 +530,12 @@ public class DBManager extends SQLiteOpenHelper
 								"server_updatedt = '" + user.getServerUpdatedDate() + "' " +
 								"WHERE server_id = '" + user.getServerID() + "'";			
 			database.execSQL(sqlString);
+
+            if (user.getBankAccount() != null)
+            {
+                deleteBankAccount(user.getServerID());
+                insertBankAccount(user.getBankAccount(), user.getServerID());
+            }
 			return true;
 		}
 		catch (Exception e)
@@ -581,8 +593,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_id, avatar_server_path, " +
-											  "avatar_local_path, privilege, manager_id, group_id, applied_company, admin, local_updatedt, " +
-					                          "server_updatedt FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
+                                                      "avatar_local_path, privilege, manager_id, group_id, applied_company, admin, local_updatedt, " +
+                                                      "server_updatedt FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
 			if (cursor.moveToNext())
 			{
 				User user = new User();
@@ -2127,8 +2139,8 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE local_updatedt > server_updatedt AND " +
-												"(user_id = ? OR manager_id = ?)", 
-												new String[]{Integer.toString(userServerID), Integer.toString(userServerID)});
+                                                      "(user_id = ? OR manager_id = ?)",
+                                              new String[]{Integer.toString(userServerID), Integer.toString(userServerID)});
 			
 			while (cursor.moveToNext())
 			{
@@ -2349,6 +2361,21 @@ public class DBManager extends SQLiteOpenHelper
 			return false;
 		}
 	}
+
+    public boolean deleteUserBankAccount(int userID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_bank WHERE user_id = '" + userID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 	public boolean deleteBankAccount(int accountLocalID)
 	{

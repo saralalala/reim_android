@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -300,7 +301,6 @@ public class User implements Serializable
             setNickname(jObject.getString("nickname"));
             setEmail(jObject.getString("email"));
             setPhone(jObject.getString("phone"));
-//            setBankAccount(jObject.getString("credit_card"));
             setDefaultManagerID(jObject.getInt("manager_id"));
             setAvatarLocalPath("");
             setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
@@ -310,6 +310,11 @@ public class User implements Serializable
             setLocalUpdatedDate(jObject.getInt("lastdt"));
             setServerUpdatedDate(jObject.getInt("lastdt"));
             String imageID = jObject.getString("avatar");
+            JSONArray jsonArray = jObject.getJSONArray("banks");
+            if (jsonArray.length() > 0)
+            {
+                setBankAccount(new BankAccount(jsonArray.getJSONObject(0)));
+            }
             if (imageID.isEmpty())
             {
                 setAvatarID(-1);

@@ -40,21 +40,21 @@ public class Invite extends Message implements Serializable
 
             if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_NEW)
             {
-                String message = "用户" + invitor + "邀请您加入「" + jObject.getString("groupname") + "」";
+                String message = "用户" + invitor + "邀请你加入「" + jObject.getString("groupname") + "」";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("invitedt"));
             }
             else if (invitor.equals(currentNickname) && activeType == Invite.TYPE_NEW)
             {
-                String message = "您邀请了用户" + jObject.getString("iname") + "加入「" + jObject.getString("groupname") + "」";
+                String message = "你邀请了用户" + jObject.getString("iname") + "加入「" + jObject.getString("groupname") + "」";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("invitedt"));
             }
             else if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_REJECTED)
             {
-                String message = "您拒绝了加入「" + jObject.getString("groupname") + "」的邀请";
+                String message = "你拒绝了加入「" + jObject.getString("groupname") + "」的邀请";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("activedt"));
@@ -68,7 +68,7 @@ public class Invite extends Message implements Serializable
             }
             else if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_ACCEPTED)
             {
-                String message = "您已加入「" + jObject.getString("groupname") + "」";
+                String message = "你已加入「" + jObject.getString("groupname") + "」";
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("activedt"));
