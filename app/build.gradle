@@ -12,14 +12,14 @@ android {
         versionName "0.95"
     }
 
-//    signingConfigs {
-//        debug {
-//            storeFile file("android_keystore")
-//            storePassword "19901228"
-//            keyAlias "androidkey"
-//            keyPassword "19901228"
-//        }
-//    }
+    signingConfigs {
+        debug {
+            storeFile file("android_keystore")
+            storePassword "19901228"
+            keyAlias "androidkey"
+            keyPassword "19901228"
+        }
+    }
 
     buildTypes {
         release {

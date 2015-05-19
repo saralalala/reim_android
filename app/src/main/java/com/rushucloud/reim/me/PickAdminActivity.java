@@ -1,4 +1,4 @@
-package com.rushucloud.reim.item;
+package com.rushucloud.reim.me;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,11 +16,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
-import com.rushucloud.reim.me.InviteActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
@@ -40,7 +38,7 @@ import netUtils.NetworkConstant;
 import netUtils.request.DownloadImageRequest;
 import netUtils.response.DownloadImageResponse;
 
-public class PickMemberActivity extends Activity
+public class PickAdminActivity extends Activity
 {
     private ClearEditText memberEditText;
 	private MemberListViewAdapter adapter;
@@ -49,12 +47,12 @@ public class PickMemberActivity extends Activity
 	private DBManager dbManager;
 	private List<User> userList;
     private List<User> showList = new ArrayList<>();
-    private List<User> chosenList;
+    private List<User> chosenList = new ArrayList<>();
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_reim_member);
+		setContentView(R.layout.activity_me_admin);
 		initData();
 		initView();
 	}
@@ -62,14 +60,14 @@ public class PickMemberActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("PickMemberActivity");		
+		MobclickAgent.onPageStart("PickAdminActivity");
 		MobclickAgent.onResume(this);
 	}
 
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("PickMemberActivity");
+		MobclickAgent.onPageEnd("PickAdminActivity");
 		MobclickAgent.onPause(this);
 	}
 	
@@ -82,14 +80,13 @@ public class PickMemberActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void initData()
 	{
 		dbManager = DBManager.getDBManager();
 		
 		int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
-		userList = dbManager.getGroupUsers(currentGroupID);
-		chosenList = (List<User>) getIntent().getSerializableExtra("users");
+        int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
+        userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUserID);
 	}
 	
 	private void initView()
@@ -112,82 +109,64 @@ public class PickMemberActivity extends Activity
 
 				Intent intent = new Intent();
 				intent.putExtra("users", (Serializable) adapter.getChosenList());
-                ViewUtils.goBackWithResult(PickMemberActivity.this, intent);
+                ViewUtils.goBackWithResult(PickAdminActivity.this, intent);
 			}
 		});
 
-        if (userList.size() == 1)
+        memberEditText = (ClearEditText) findViewById(R.id.memberEditText);
+        memberEditText.addTextChangedListener(new TextWatcher()
         {
-            RelativeLayout inviteLayout = (RelativeLayout) findViewById(R.id.inviteLayout);
-            inviteLayout.setOnClickListener(new View.OnClickListener()
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
             {
-                public void onClick(View v)
-                {
-                    startActivity(new Intent(PickMemberActivity.this, InviteActivity.class));
-                }
-            });
-            inviteLayout.setVisibility(View.VISIBLE);
 
-            LinearLayout searchContainer = (LinearLayout) findViewById(R.id.searchContainer);
-            searchContainer.setVisibility(View.GONE);
-        }
-        else
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                if (memberEditText.hasFocus())
+                {
+                    memberEditText.setClearIconVisible(s.length() > 0);
+                }
+            }
+
+            public void afterTextChanged(Editable s)
+            {
+                int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
+                indexLayout.setVisibility(visibility);
+                filterList();
+            }
+        });
+
+        adapter = new MemberListViewAdapter(this, userList, chosenList);
+
+        ListView userListView = (ListView) findViewById(R.id.userListView);
+        userListView.setAdapter(adapter);
+        userListView.setOnItemClickListener(new OnItemClickListener()
         {
-            memberEditText = (ClearEditText) findViewById(R.id.memberEditText);
-            memberEditText.addTextChangedListener(new TextWatcher()
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                public void beforeTextChanged(CharSequence s, int start, int count, int after)
-                {
-
-                }
-
-                public void onTextChanged(CharSequence s, int start, int before, int count)
-                {
-                    if (memberEditText.hasFocus())
-                    {
-                        memberEditText.setClearIconVisible(s.length() > 0);
-                    }
-                }
-
-                public void afterTextChanged(Editable s)
-                {
-                    int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
-                    indexLayout.setVisibility(visibility);
-                    filterList();
-                }
-            });
-
-            adapter = new MemberListViewAdapter(this, userList, chosenList);
-
-            ListView userListView = (ListView) findViewById(R.id.userListView);
-            userListView.setAdapter(adapter);
-            userListView.setOnItemClickListener(new OnItemClickListener()
+                hideSoftKeyboard();
+                adapter.setCheck(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        userListView.setOnScrollListener(new AbsListView.OnScrollListener()
+        {
+            public void onScrollStateChanged(AbsListView absListView, int i)
             {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                {
-                    hideSoftKeyboard();
-                    adapter.setCheck(position);
-                    adapter.notifyDataSetChanged();
-                }
-            });
-            userListView.setOnScrollListener(new AbsListView.OnScrollListener()
+                hideSoftKeyboard();
+            }
+
+            public void onScroll(AbsListView absListView, int i, int i2, int i3)
             {
-                public void onScrollStateChanged(AbsListView absListView, int i)
-                {
-                    hideSoftKeyboard();
-                }
 
-                public void onScroll(AbsListView absListView, int i, int i2, int i3)
-                {
+            }
+        });
 
-                }
-            });
+        indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+        TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
 
-            indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
-            TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
-
-            ViewUtils.initIndexLayout(this, 123, adapter.getSelector(), userListView, indexLayout, centralTextView);
-        }
+        ViewUtils.initIndexLayout(this, 123, adapter.getSelector(), userListView, indexLayout, centralTextView);
 
         for (User user : userList)
         {

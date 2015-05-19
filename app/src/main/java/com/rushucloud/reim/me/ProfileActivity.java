@@ -199,7 +199,7 @@ public class ProfileActivity extends Activity
         // init nickname
         nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
 
-        RelativeLayout nicknameLayout = (RelativeLayout) findViewById(R.id.nicknameLayout);
+        LinearLayout nicknameLayout = (LinearLayout) findViewById(R.id.nicknameLayout);
         nicknameLayout.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
@@ -210,8 +210,8 @@ public class ProfileActivity extends Activity
 
 		// init email
 		emailTextView = (TextView) findViewById(R.id.emailTextView);
-		
-		RelativeLayout emailLayout = (RelativeLayout) findViewById(R.id.emailLayout);
+
+        LinearLayout emailLayout = (LinearLayout) findViewById(R.id.emailLayout);
 		emailLayout.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -222,8 +222,8 @@ public class ProfileActivity extends Activity
 
 		// init phone
 		phoneTextView = (TextView) findViewById(R.id.phoneTextView);
-		
-		RelativeLayout phoneLayout = (RelativeLayout) findViewById(R.id.phoneLayout);
+
+        LinearLayout phoneLayout = (LinearLayout) findViewById(R.id.phoneLayout);
 		phoneLayout.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -243,7 +243,7 @@ public class ProfileActivity extends Activity
 		});
 
         // init bank
-        RelativeLayout bankLayout = (RelativeLayout) findViewById(R.id.bankLayout);
+        LinearLayout bankLayout = (LinearLayout) findViewById(R.id.bankLayout);
         bankLayout.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)

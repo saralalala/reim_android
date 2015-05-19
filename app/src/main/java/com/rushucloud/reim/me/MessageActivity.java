@@ -1,6 +1,8 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
+
+import java.util.List;
 
 import classes.model.Apply;
 import classes.model.Invite;
@@ -37,6 +41,8 @@ import netUtils.response.user.InviteReplyResponse;
 
 public class MessageActivity extends Activity
 {
+    private static final int PICK_ADMIN = 0;
+
     private TextView contentTextView;
     private TextView dateTextView;
 
@@ -80,7 +86,27 @@ public class MessageActivity extends Activity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
+    @SuppressWarnings("unchecked")
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == Activity.RESULT_OK)
+        {
+            switch (requestCode)
+            {
+                case PICK_ADMIN:
+                {
+                    List<User> users = (List<User>) data.getSerializableExtra("users");
+
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 	private void initData()
 	{
 		Bundle bundle = getIntent().getExtras();
@@ -174,6 +200,22 @@ public class MessageActivity extends Activity
     {
         contentTextView.setText(message.getContent());
         dateTextView.setText(Utils.secondToStringUpToDay(message.getUpdateTime()));
+    }
+
+    private void showDialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.prompt_last_admin);
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                Intent intent = new Intent(MessageActivity.this, PickAdminActivity.class);
+                ViewUtils.goForwardForResult(MessageActivity.this, intent, PICK_ADMIN);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.create().show();
     }
 
     private void sendGetMessageRequest()
@@ -310,10 +352,17 @@ public class MessageActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(MessageActivity.this, R.string.failed_to_send_invite_reply, response.getErrorMessage());
-                            if (response.getCode() == NetworkConstant.ERROR_MESSAGE_DONE)
+                            if (response.getCode() == NetworkConstant.ERROR_LAST_ADMIN)
                             {
-                                goBack();
+                                showDialog();
+                            }
+                            else
+                            {
+                                ViewUtils.showToast(MessageActivity.this, R.string.failed_to_send_invite_reply, response.getErrorMessage());
+                                if (response.getCode() == NetworkConstant.ERROR_MESSAGE_DONE)
+                                {
+                                    goBack();
+                                }
                             }
                         }
                     });

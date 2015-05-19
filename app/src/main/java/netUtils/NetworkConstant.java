@@ -49,6 +49,7 @@ public class NetworkConstant
 	public static final int ERROR_SIGN_IN = -31;
 	public static final int ERROR_NAME_EXCEED_LIMIT = -33;
     public static final int ERROR_MESSAGE_DONE = -38;
+    public static final int ERROR_LAST_ADMIN = -39;
     public static final int ERROR_NOT_UNIQUE = -42;
 
     public static String errorCodeToString(int code)
@@ -130,6 +131,9 @@ public class NetworkConstant
                 break;
             case NetworkConstant.ERROR_MESSAGE_DONE:
                 result = "此消息已被处理";
+                break;
+            case NetworkConstant.ERROR_LAST_ADMIN:
+                result = "你是公司里最后一个管理员，请先指定公司里另一成员成为管理员";
                 break;
             case NetworkConstant.ERROR_NOT_UNIQUE:
                 result = "";

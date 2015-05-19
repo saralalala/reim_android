@@ -267,6 +267,7 @@
     <string name="reject_invite">拒绝邀请</string>
     <string name="approve_apply">批准申请</string>
     <string name="reject_apply">拒绝申请</string>
+    <string name="choose_admin">选择管理员</string>
     <string name="get_invoice_prompt">发票抬头：</string>
     <string name="invoice_invalid">尚未加入任何公司</string>
     <string name="powered_by">Powered by 云报销</string>
@@ -311,6 +312,7 @@
     <string name="input_manager">请输入审批人信息</string>
     <string name="input_cc">请输入抄送人信息</string>
     <string name="input_comment">请输入评论</string>
+    <string name="input_admin">请输入管理员信息</string>
     <string name="input_nickname">请填写你的真实姓名</string>
     <string name="input_company_name">请设置公司名称</string>
     <string name="input_feedback">请输入你的意见或建议</string>
@@ -340,6 +342,7 @@
     <string name="prompt_no_lastest_data">还没到下个月呢</string>
     <string name="prompt_join">管理员通过申请后你就可以使用「云报销」了。在此之前，你也可以记录自己的 消费 ，加入公司后记录可以迁移。</string>
     <string name="prompt_joined">现在你可以使用「云报销」，记录你的 消费 ， 提交报销 申请，或者 审批 他人的报销了。</string>
+    <string name="prompt_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>

@@ -112,17 +112,17 @@
 				android:layout_marginTop="24dp"
 		        layout="@layout/view_divider"/>
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/nicknameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/layout_height"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:background="@drawable/me_item_drawable">
 
                 <TextView
-                    android:id="@+id/nicknamePrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:text="@string/nickname"
                     android:textColor="@color/font_major_dark"
@@ -130,11 +130,9 @@
 
                 <TextView
                     android:id="@+id/nicknameTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/nicknameNextImageView"
-                    android:layout_toRightOf="@+id/nicknamePrompt"
+                    android:layout_weight="1"
                     android:gravity="right"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -144,33 +142,30 @@
                     android:textSize="14sp"/>
 
                 <ImageView
-                    android:id="@+id/nicknameNextImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
                     android:src="@drawable/next"/>
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <include
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 layout="@layout/view_divider"/>
-	        
-			<RelativeLayout
+
+            <LinearLayout
                 android:id="@+id/emailLayout"
-			    android:layout_width="match_parent"
-			    android:layout_height="@dimen/layout_height"
-			    android:background="@drawable/me_item_drawable">
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/me_item_drawable">
 
                 <TextView
-                    android:id="@+id/emailPrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:text="@string/email"
                     android:textColor="@color/font_major_dark"
@@ -178,11 +173,9 @@
 
                 <TextView
                     android:id="@+id/emailTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/emailNextImageView"
-                    android:layout_toRightOf="@+id/emailPrompt"
+                    android:layout_weight="1"
                     android:gravity="right"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -192,33 +185,30 @@
                     android:textSize="14sp"/>
 
                 <ImageView
-                    android:id="@+id/emailNextImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
                     android:src="@drawable/next"/>
-			
-			</RelativeLayout>
+
+            </LinearLayout>
             
 		    <include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
 		        layout="@layout/view_divider"/>
-	        
-			<RelativeLayout
+
+            <LinearLayout
                 android:id="@+id/phoneLayout"
-			    android:layout_width="match_parent"
-			    android:layout_height="@dimen/layout_height"
-			    android:background="@drawable/me_item_drawable">
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/me_item_drawable">
 
                 <TextView
-                    android:id="@+id/phonePrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:text="@string/phone"
                     android:textColor="@color/font_major_dark"
@@ -226,11 +216,9 @@
 
                 <TextView
                     android:id="@+id/phoneTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/phoneNextImageView"
-                    android:layout_toRightOf="@+id/phonePrompt"
+                    android:layout_weight="1"
                     android:gravity="right"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -240,49 +228,44 @@
                     android:textSize="14sp"/>
 
                 <ImageView
-                    android:id="@+id/phoneNextImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
                     android:src="@drawable/next"/>
-			
-			</RelativeLayout>
+
+            </LinearLayout>
 
             <include
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 layout="@layout/view_divider"/>
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/bankLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/layout_height"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:background="@drawable/me_item_drawable">
 
                 <TextView
-                    android:id="@+id/bankPrompt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_weight="1"
                     android:layout_marginLeft="16dp"
                     android:text="@string/bank_info"
                     android:textColor="@color/font_major_dark"
                     android:textSize="16sp"/>
 
                 <ImageView
-                    android:id="@+id/bankNextImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/next"
                     android:src="@drawable/next"/>
 
-            </RelativeLayout>
+            </LinearLayout>
 
 		    <include
 				android:layout_width="match_parent"
