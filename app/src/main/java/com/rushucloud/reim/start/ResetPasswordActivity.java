@@ -27,8 +27,7 @@ public class ResetPasswordActivity extends Activity
 {
 	private ClearEditText newPasswordEditText;
 	private ClearEditText confirmPasswordEditText;
-	
-	private int cid;
+
 	private String code;
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -65,9 +64,7 @@ public class ResetPasswordActivity extends Activity
 	
 	private void initData()
 	{
-		Bundle bundle = this.getIntent().getExtras();
-		cid = bundle.getInt("cid");
-		code = bundle.getString("code");
+		code = getIntent().getStringExtra("code");
 	}
 	
 	private void initView()
@@ -152,7 +149,7 @@ public class ResetPasswordActivity extends Activity
 	private void sendResetPasswordRequest(String password)
 	{
 		ReimProgressDialog.show();
-		ResetPasswordRequest request = new ResetPasswordRequest(password, cid, code);
+		ResetPasswordRequest request = new ResetPasswordRequest(password, code);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

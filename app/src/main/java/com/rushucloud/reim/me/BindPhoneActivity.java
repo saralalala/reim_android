@@ -39,7 +39,6 @@ public class BindPhoneActivity extends Activity
 	private User currentUser;
     private String originalPhone;
 
-    private String code = "";
     private int waitingTime;
     private Thread thread;
 	
@@ -153,15 +152,10 @@ public class BindPhoneActivity extends Activity
                     ViewUtils.showToast(BindPhoneActivity.this, R.string.error_code_empty);
                     ViewUtils.requestFocus(BindPhoneActivity.this, codeEditText);
                 }
-                else if (!inputCode.equals(code))
-                {
-                    ViewUtils.showToast(BindPhoneActivity.this, R.string.error_wrong_code);
-                    ViewUtils.requestFocus(BindPhoneActivity.this, codeEditText);
-                }
                 else
                 {
                     currentUser.setPhone(newPhone);
-                    sendModifyUserInfoRequest();
+                    sendModifyUserInfoRequest(inputCode);
                 }
             }
         });
@@ -229,7 +223,6 @@ public class BindPhoneActivity extends Activity
                 final VerifyCodeResponse response = new VerifyCodeResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    code = response.getVerifyCode();
                     runOnUiThread(new Runnable()
                     {
                         public void run()
@@ -255,10 +248,10 @@ public class BindPhoneActivity extends Activity
         });
     }
 	
-	private void sendModifyUserInfoRequest()
+	private void sendModifyUserInfoRequest(String verifyCode)
 	{
 		ReimProgressDialog.show();		
-		ModifyUserRequest request = new ModifyUserRequest(currentUser);
+		ModifyUserRequest request = new ModifyUserRequest(currentUser, verifyCode);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

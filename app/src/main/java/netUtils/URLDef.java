@@ -4,9 +4,9 @@ public class URLDef
 {
 //	public static final String TEST_URL_PREFIX = "http://api.1in1.cn/dev";
 //	public static final String TEST_URL_PREFIX = "http://stage.rushucloud.com/stage";
-	public static final String URL_PREFIX = "http://api.rushucloud.com/stage";
+//	public static final String URL_PREFIX = "http://api.rushucloud.com/stage";
 	
-//	public static final String URL_PREFIX = "https://api.cloudbaoxiao.com/online";
+	public static final String URL_PREFIX = "https://api.cloudbaoxiao.com/online";
 	public static final String URL_COMMON = "common/0";
 	public static final String URL_EVENT = "events";
 	public static final String URL_FEEDBACK = "feedback";
@@ -41,6 +41,8 @@ public class URLDef
 	public static final String URL_SIGN_OUT = "logout";
 	public static final String URL_SUBORDINATE = "subordinate";
 	public static final String URL_CODE = "vcode";
+    public static final String URL_SET_ADMIN = "set_admin";
+    public static final String URL_VALIDATE = "validate";
 	
 	public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com:12588/msg";
 

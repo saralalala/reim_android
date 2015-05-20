@@ -509,6 +509,8 @@
     <string name="failed_to_set_bank_account">设置银行账户失败</string>
     <string name="failed_to_set_bank_name">设置开户行失败</string>
     <string name="failed_to_set_bank_location">设置开户地失败</string>
+    <string name="failed_to_set_admin">设置管理员失败</string>
+    <string name="failed_to_verify_code">验证码验证错误</string>
 
     <string name="no_pending_reports">报告都已处理完毕</string>
     <string name="no_image">未找到图片</string>

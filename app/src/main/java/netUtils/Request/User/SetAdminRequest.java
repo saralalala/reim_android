@@ -6,26 +6,27 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.model.User;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
 import netUtils.request.BaseRequest;
 
-public class ResetPasswordRequest extends BaseRequest
+public class SetAdminRequest extends BaseRequest
 {
-	public ResetPasswordRequest(String password, String code)
+	public SetAdminRequest(List<User> userList)
 	{
 		super();
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("password", password));
-		params.add(new BasicNameValuePair("code", code));
+        params.add(new BasicNameValuePair("admin", Integer.toString(2)));
+		params.add(new BasicNameValuePair("uid", User.getUsersIDString(userList)));
 		setParams(params);
 
-		appendUrl(URLDef.URL_PASSWORD);
+		appendUrl(URLDef.URL_SET_ADMIN);
 	}
-
+	
 	public void sendRequest(HttpConnectionCallback callback)
 	{
-		doPut(callback);
+		doPost(callback);
 	}
 }

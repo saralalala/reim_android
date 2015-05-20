@@ -30,9 +30,7 @@ public class PhoneFindActivity extends Activity
 	private ClearEditText phoneEditText;
 	private EditText codeEditText;
 	private Button acquireCodeButton;
-	
-	private int cid = -1;
-	private String code = "";
+
 	private int waitingTime;
 	private Thread thread;
 	
@@ -89,7 +87,7 @@ public class PhoneFindActivity extends Activity
             {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER)
                 {
-                    resetPassword();
+                    verifyCode();
                 }
                 return false;
             }
@@ -125,7 +123,7 @@ public class PhoneFindActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-                resetPassword();
+                verifyCode();
 			}
 		});
 		
@@ -139,26 +137,17 @@ public class PhoneFindActivity extends Activity
 		});
     }
 
-    private void resetPassword()
+    private void verifyCode()
     {
         MobclickAgent.onEvent(PhoneFindActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL-SUBMIT");
 
-        if (code.isEmpty())
+        if (codeEditText.getText().toString().isEmpty())
         {
             ViewUtils.showToast(PhoneFindActivity.this, R.string.error_no_code);
         }
-        else if (!codeEditText.getText().toString().equals(code))
-        {
-            ViewUtils.showToast(PhoneFindActivity.this, R.string.error_wrong_code);
-        }
         else
         {
-            Bundle bundle = new Bundle();
-            bundle.putInt("cid", cid);
-            bundle.putString("code", code);
-            Intent intent = new Intent(PhoneFindActivity.this, ResetPasswordActivity.class);
-            intent.putExtras(bundle);
-            ViewUtils.goForwardAndFinish(PhoneFindActivity.this, intent);
+            sendVerifyRequest();
         }
     }
 
@@ -209,38 +198,72 @@ public class PhoneFindActivity extends Activity
 		ReimProgressDialog.show();
 		ForgotPasswordRequest request = new ForgotPasswordRequest(1, phoneEditText.getText().toString());
 		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ForgotPasswordResponse response = new ForgotPasswordResponse(httpResponse);
-				if (response.getStatus())
-				{
-					cid = response.getVerifyCodeID();
-					code = response.getVerifyCode();
+        {
+            public void execute(Object httpResponse)
+            {
+                final ForgotPasswordResponse response = new ForgotPasswordResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(PhoneFindActivity.this, R.string.succeed_in_sending_message);
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            thread.interrupt();
+                            ViewUtils.showToast(PhoneFindActivity.this, R.string.failed_to_send_message, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
 
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(PhoneFindActivity.this, R.string.succeed_in_sending_message);
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							thread.interrupt();
-							ViewUtils.showToast(PhoneFindActivity.this, R.string.failed_to_send_message, response.getErrorMessage());
-						}
-					});
-				}
-			}
-		});
+    private void sendVerifyRequest()
+    {
+        ReimProgressDialog.show();
+        ForgotPasswordRequest request = new ForgotPasswordRequest(phoneEditText.getText().toString(), codeEditText.getText().toString());
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final ForgotPasswordResponse response = new ForgotPasswordResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            Intent intent = new Intent(PhoneFindActivity.this, ResetPasswordActivity.class);
+                            intent.putExtra("code", codeEditText.getText().toString());
+                            ViewUtils.goForwardAndFinish(PhoneFindActivity.this, intent);
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(PhoneFindActivity.this, R.string.failed_to_verify_code, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
     }
 	
     private void hideSoftKeyboard()

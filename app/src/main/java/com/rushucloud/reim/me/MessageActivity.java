@@ -35,9 +35,11 @@ import netUtils.NetworkConstant;
 import netUtils.request.user.ApplyReplyRequest;
 import netUtils.request.user.GetMessageRequest;
 import netUtils.request.user.InviteReplyRequest;
+import netUtils.request.user.SetAdminRequest;
 import netUtils.response.user.ApplyReplyResponse;
 import netUtils.response.user.GetMessageResponse;
 import netUtils.response.user.InviteReplyResponse;
+import netUtils.response.user.SetAdminResponse;
 
 public class MessageActivity extends Activity
 {
@@ -97,7 +99,7 @@ public class MessageActivity extends Activity
                 case PICK_ADMIN:
                 {
                     List<User> users = (List<User>) data.getSerializableExtra("users");
-
+                    sendSetAdminRequest(users);
                     break;
                 }
                 default:
@@ -150,6 +152,7 @@ public class MessageActivity extends Activity
 				}
 				else if (invite != null)
 				{
+                    ReimProgressDialog.show();
                     sendInviteReplyRequest(Invite.TYPE_ACCEPTED, invite.getInviteCode());
 				}
                 else if (apply != null)
@@ -170,6 +173,7 @@ public class MessageActivity extends Activity
                 }
                 else if (invite != null)
                 {
+                    ReimProgressDialog.show();
                     sendInviteReplyRequest(Invite.TYPE_REJECTED, invite.getInviteCode());
                 }
                 else if (apply != null)
@@ -205,6 +209,7 @@ public class MessageActivity extends Activity
     private void showDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.warning);
         builder.setMessage(R.string.prompt_last_admin);
         builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
         {
@@ -260,7 +265,6 @@ public class MessageActivity extends Activity
 
     private void sendInviteReplyRequest(final int agree, String inviteCode)
     {
-        ReimProgressDialog.show();
         InviteReplyRequest request = new InviteReplyRequest(agree, inviteCode);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -470,6 +474,34 @@ public class MessageActivity extends Activity
                             {
                                 goBack();
                             }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendSetAdminRequest(List<User> userList)
+    {
+        ReimProgressDialog.show();
+        SetAdminRequest request = new SetAdminRequest(userList);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final SetAdminResponse response = new SetAdminResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    sendInviteReplyRequest(Invite.TYPE_ACCEPTED, invite.getInviteCode());
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(MessageActivity.this, R.string.failed_to_set_admin, response.getErrorMessage());
                         }
                     });
                 }

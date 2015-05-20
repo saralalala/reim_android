@@ -26,6 +26,18 @@ public class ModifyUserRequest extends BaseRequest
 		appendUrl(URLDef.URL_USER);
 	}
 
+    public ModifyUserRequest(User user, String verifyCode)
+    {
+        super();
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("phone", user.getPhone()));
+        params.add(new BasicNameValuePair("vcode", verifyCode));
+        setParams(params);
+
+        appendUrl(URLDef.URL_USER);
+    }
+
 	public void sendRequest(HttpConnectionCallback callback)
 	{
 		doPut(callback);

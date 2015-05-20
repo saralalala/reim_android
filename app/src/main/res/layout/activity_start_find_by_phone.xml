@@ -68,8 +68,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/codeEditText"
@@ -92,6 +91,7 @@
                 android:layout_width="100dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="16dp"
                 android:background="@drawable/button_light_solid_drawable"
                 android:gravity="center"
                 android:text="@string/acquire_code"

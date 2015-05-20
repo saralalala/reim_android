@@ -13,15 +13,26 @@ import netUtils.request.BaseRequest;
 
 public class RegisterRequest extends BaseRequest
 {
+    public RegisterRequest(User user)
+    {
+        super();
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("email", user.getEmail()));
+        params.add(new BasicNameValuePair("password", user.getPassword()));
+        setParams(params);
+
+        appendUrl(URLDef.URL_USER);
+    }
+
 	public RegisterRequest(User user, String verifyCode)
 	{
 		super();
 		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("email", user.getEmail()));
+		List<NameValuePair> params = new ArrayList<>();
 		params.add(new BasicNameValuePair("phone", user.getPhone()));
 		params.add(new BasicNameValuePair("password", user.getPassword()));	
-		params.add(new BasicNameValuePair("code", verifyCode));	
+		params.add(new BasicNameValuePair("vcode", verifyCode));
 		setParams(params);
 
 		appendUrl(URLDef.URL_USER);

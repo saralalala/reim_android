@@ -87,7 +87,7 @@
             android:layout_width="100dp"
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="16dp"
             android:background="@drawable/button_dark_drawable"
             android:text="@string/acquire_code"
             android:textColor="@color/button_text_light_color"

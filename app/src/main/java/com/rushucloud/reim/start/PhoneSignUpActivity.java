@@ -43,7 +43,6 @@ public class PhoneSignUpActivity extends Activity
 	private Button acquireCodeButton;
 
     private boolean showPassword = false;
-	private String code = "";
 	private int waitingTime;
 	private Thread thread;
 	
@@ -250,7 +249,6 @@ public class PhoneSignUpActivity extends Activity
 				final VerifyCodeResponse response = new VerifyCodeResponse(httpResponse);
 				if (response.getStatus())
 				{
-					code = response.getVerifyCode();
 					runOnUiThread(new Runnable()
 					{
 						public void run()
@@ -307,11 +305,6 @@ public class PhoneSignUpActivity extends Activity
         else if (inputCode.isEmpty())
         {
             ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_code_empty);
-            ViewUtils.requestFocus(PhoneSignUpActivity.this, codeEditText);
-        }
-        else if (!inputCode.equals(code))
-        {
-            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_wrong_code);
             ViewUtils.requestFocus(PhoneSignUpActivity.this, codeEditText);
         }
         else

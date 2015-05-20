@@ -190,7 +190,7 @@ public class EmailSignUpActivity extends Activity
 	private void sendRegisterRequest(final User user)
 	{
 		ReimProgressDialog.show();
-		RegisterRequest request = new RegisterRequest(user, "");
+		RegisterRequest request = new RegisterRequest(user);
 		request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)
