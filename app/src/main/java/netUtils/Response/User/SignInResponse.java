@@ -53,7 +53,7 @@ public class SignInResponse extends BaseResponse
                 currentUser.setBankAccount(bankAccount);
             }
             lastShownGuideVersion = profileObject.getInt("guide_version");
-			
+
 			JSONArray categoryArray = jObject.getJSONArray("categories");
 			categoryList = new ArrayList<>();
 			for (int i = 0; i < categoryArray.length(); i++)

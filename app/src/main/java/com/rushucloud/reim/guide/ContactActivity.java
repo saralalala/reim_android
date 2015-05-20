@@ -193,6 +193,7 @@ public class ContactActivity extends Activity
         adapter.setInputChosenList(inputChosenList);
         adapter.setContactList(contactList);
         adapter.setContactChosenList(contactChosenList);
+        adapter.initIndex();
 
         contactListView = (ListView) findViewById(R.id.contactListView);
         contactListView.setAdapter(adapter);
@@ -234,7 +235,7 @@ public class ContactActivity extends Activity
                 }
                 else if (position > inputList.size() + 1 && !contactList.isEmpty() && adapter.isContact(position))
                 {
-                    User user = contactList.get(position - inputList.size() - 1);
+                    User user = adapter.getItem(position);
                     int index = User.indexOfContactList(contactChosenList, user);
                     if (index > -1)
                     {

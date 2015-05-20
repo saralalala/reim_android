@@ -144,9 +144,9 @@ public class ContactListViewAdapter extends BaseAdapter
         }
 	}
 
-	public Object getItem(int position)
+	public User getItem(int position)
 	{
-		return null;
+		return contactList.get(position - inputList.size() - 1);
 	}
 
 	public long getItemId(int position)
@@ -225,7 +225,6 @@ public class ContactListViewAdapter extends BaseAdapter
     {
         inputList.clear();
         inputList.addAll(inputs);
-        initIndex();
     }
 
     public void setInputChosenList(ArrayList<String> inputs)
@@ -238,7 +237,6 @@ public class ContactListViewAdapter extends BaseAdapter
     {
         contactList.clear();
         contactList.addAll(contacts);
-        initIndex();
     }
 
     public void setContactChosenList(List<User> contacts)
