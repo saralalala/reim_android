@@ -292,6 +292,7 @@ public class SignInActivity extends Activity
                     appPreference.setLastGetOthersReportTime(0);
                     appPreference.setLastGetMineStatTime(0);
                     appPreference.setLastGetOthersStatTime(0);
+                    appPreference.setSandboxMode(false);
 
                     if (response.getGroup() != null)
                     {
