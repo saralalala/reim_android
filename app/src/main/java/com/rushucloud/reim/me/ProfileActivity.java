@@ -487,6 +487,7 @@ public class ProfileActivity extends Activity
 					appPreference.setHasPassword(true);
                     appPreference.setServerToken("");
                     appPreference.setLastSyncTime(0);
+                    appPreference.setSandboxMode(false);
                     appPreference.saveAppPreference();
 
                     ReimApplication.setTabIndex(ReimApplication.TAB_REIM);

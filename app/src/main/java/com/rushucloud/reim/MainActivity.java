@@ -57,7 +57,7 @@ import netUtils.response.group.GetGroupResponse;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
-	private long exitTime;
+	private long exitTime = 0;
 
 	private ViewPager viewPager;
 	private ImageView reportTipImageView;

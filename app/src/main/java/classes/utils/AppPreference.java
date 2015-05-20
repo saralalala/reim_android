@@ -35,6 +35,7 @@ public class AppPreference
     private int lastShownGuideVersion = 0;
     private boolean needToShowReimGuide = true;
     private boolean needToShowReportGuide = true;
+    private boolean sandboxMode = false;
 	private String appDirectory = "";
 	private String appImageDirectory = "";
 	private String avatarImageDirectory = "";
@@ -79,6 +80,7 @@ public class AppPreference
         appPreference.setLastShownGuideVersion(preferences.getInt("lastShownGuideVersion", 0));
         appPreference.setNeedToShowReimGuide(preferences.getBoolean("needToShowReimGuide", true));
         appPreference.setNeedToShowReportGuide(preferences.getBoolean("needToShowReportGuide", true));
+        appPreference.setSandboxMode(preferences.getBoolean("sandboxMode", false));
 		
 		appPreference.setAppDirectory(Environment.getExternalStorageDirectory() + "/cloudbaoxiao");
 		appPreference.setAppImageDirectory(appPreference.getAppDirectory() + "/images");
@@ -107,6 +109,7 @@ public class AppPreference
 		editor.putInt("lastGetMineStatTime", appPreference.getLastGetMineStatTime());
         editor.putBoolean("needToShowReimGuide", appPreference.needToShowReimGuide());
         editor.putBoolean("needToShowReportGuide", appPreference.needToShowReportGuide());
+        editor.putBoolean("sandboxMode", appPreference.isSandboxMode());
 		editor.commit();
 	}
 	
@@ -260,6 +263,15 @@ public class AppPreference
     public void setNeedToShowReportGuide(boolean needToShowReportGuide)
     {
         this.needToShowReportGuide = needToShowReportGuide;
+    }
+
+    public boolean isSandboxMode()
+    {
+        return sandboxMode;
+    }
+    public void setSandboxMode(boolean sandboxMode)
+    {
+        this.sandboxMode = sandboxMode;
     }
 
     public String getAppDirectory()

@@ -1,11 +1,16 @@
 package classes.utils;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
@@ -34,6 +39,24 @@ public class WeChatUtils
     {
         api = WXAPIFactory.createWXAPI(ReimApplication.getContext(), APP_ID, true);
         api.registerApp(APP_ID);
+    }
+
+    public static void shareToWX(String url, String title, String description, int resID)
+    {
+        Bitmap bitmap = BitmapFactory.decodeResource(ReimApplication.getContext().getResources(), resID);
+
+        WXWebpageObject webpage = new WXWebpageObject(url);
+
+        WXMediaMessage message = new WXMediaMessage(webpage);
+        message.title = title;
+        message.description = description;
+        message.setThumbImage(bitmap);
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = message;
+
+        api.sendReq(req);
     }
 
     public static void sendAuthRequest(Activity source)

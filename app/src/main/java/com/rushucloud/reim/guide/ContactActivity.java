@@ -26,16 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.ContactListViewAdapter;
-import classes.model.Group;
 import classes.model.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.request.group.CreateGroupRequest;
-import netUtils.response.group.CreateGroupResponse;
 
 public class ContactActivity extends Activity
 {
@@ -46,14 +39,11 @@ public class ContactActivity extends Activity
     private LinearLayout indexLayout;
     private TextView centralTextView;
 
-    private AppPreference appPreference;
-    private DBManager dbManager;
     private String companyName;
     private ArrayList<String> inputList = new ArrayList<>();
     private ArrayList<String> inputChosenList = new ArrayList<>();
     private List<User> contactList = new ArrayList<>();
     private List<User> contactChosenList = new ArrayList<>();
-    private int count = 0;
     private boolean hasInit = false;
 
     public static String[] indexLetters = {"手动", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
@@ -126,9 +116,6 @@ public class ContactActivity extends Activity
     @SuppressWarnings("unchecked")
 	private void initData()
 	{
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
         Bundle bundle = getIntent().getExtras();
         companyName = bundle.getString("companyName", "");
         inputList = bundle.getStringArrayList("inputList");
@@ -149,42 +136,19 @@ public class ContactActivity extends Activity
 			}
 		});
 
-		TextView completeTextView = (TextView) findViewById(R.id.completeTextView);
-        completeTextView.setOnClickListener(new OnClickListener()
+		TextView nextTextView = (TextView) findViewById(R.id.nextTextView);
+        nextTextView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-                String inviteList = "";
-                for (String contact : inputList)
-                {
-                    if (inputChosenList.contains(contact))
-                    {
-                        inviteList += contact + ",";
-                        count++;
-                    }
-                }
-
-                for (User user : contactList)
-                {
-                    if (User.indexOfContactList(contactChosenList, user) > -1)
-                    {
-                        inviteList += user.getContact() + ",";
-                        count++;
-                    }
-                }
-                if (!inviteList.isEmpty())
-                {
-                    inviteList = inviteList.substring(0, inviteList.length() - 1);
-                }
-
-                if (!PhoneUtils.isNetworkConnected())
-                {
-                    ViewUtils.showToast(ContactActivity.this, R.string.error_create_network_unavailable);
-                }
-                else
-                {
-                    sendCreateGroupRequest(inviteList);
-                }
+                Bundle bundle = new Bundle();
+                bundle.putString("companyName", companyName);
+                bundle.putStringArrayList("inputList", inputList);
+                bundle.putStringArrayList("inputChosenList", inputChosenList);
+                bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
+                Intent intent = new Intent(ContactActivity.this, WeChatShareActivity.class);
+                intent.putExtras(bundle);
+                ViewUtils.goForwardAndFinish(ContactActivity.this, intent);
             }
         });
 
@@ -382,88 +346,6 @@ public class ContactActivity extends Activity
                 });
             }
         }).start();
-    }
-
-    private void sendCreateGroupRequest(String inviteList)
-    {
-        ReimProgressDialog.show();
-        CreateGroupRequest request = new CreateGroupRequest(companyName, inviteList, 1);
-        request.sendRequest(new HttpConnectionCallback()
-        {
-            public void execute(Object httpResponse)
-            {
-                final CreateGroupResponse response = new CreateGroupResponse(httpResponse);
-                if (response.getStatus())
-                {
-                    Group group = new Group();
-                    group.setName(companyName);
-                    group.setServerID(response.getGroupID());
-                    group.setLocalUpdatedDate(response.getDate());
-                    group.setServerUpdatedDate(response.getDate());
-
-                    User currentUser = appPreference.getCurrentUser();
-                    currentUser.setGroupID(group.getServerID());
-                    currentUser.setIsAdmin(true);
-
-                    dbManager.insertGroup(group);
-                    dbManager.updateUser(currentUser);
-                    appPreference.setCurrentGroupID(group.getServerID());
-                    appPreference.saveAppPreference();
-
-                    int currentGroupID = response.getGroup().getServerID();
-
-                    // update AppPreference
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    appPreference.setCurrentGroupID(currentGroupID);
-                    appPreference.saveAppPreference();
-
-                    // update members
-                    DBManager dbManager = DBManager.getDBManager();
-                    currentUser = response.getCurrentUser();
-                    User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-                    if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
-                    {
-                        currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
-                    }
-
-                    dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-
-                    dbManager.syncUser(currentUser);
-
-                    // update categories
-                    dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-
-                    // update tags
-                    dbManager.updateGroupTags(response.getTagList(), currentGroupID);
-
-                    // update group info
-                    dbManager.syncGroup(response.getGroup());
-
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            Intent intent = new Intent(ContactActivity.this, CreateCompleteActivity.class);
-                            intent.putExtra("count", count);
-                            intent.putExtra("companyName", companyName);
-                            ViewUtils.goForwardAndFinish(ContactActivity.this, intent);
-                        }
-                    });
-                }
-                else
-                {
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(ContactActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
-                        }
-                    });
-                }
-            }
-        });
     }
 
     private void goBack()

@@ -62,6 +62,7 @@
     <string name="sign_up_by_phone">手机注册</string>
     <string name="sign_up_by_email">邮箱注册</string>
     <string name="sign_in">登录</string>
+    <string name="experience">直接体验>></string>
     <string name="third_party_sign_in">第三方账号登录</string>
     <string name="other_sign_up_ways">其它注册方式</string>
     <string name="forgot_password">忘记密码</string>
@@ -86,6 +87,8 @@
     <string name="create_new_company">创建新公司</string>
     <string name="input_contact_manually">手动填写手机或邮箱</string>
     <string name="invite_contact">邀请联系人</string>
+    <string name="invite_wechat">邀请微信好友</string>
+    <string name="share_to_wechat">分享给微信好友</string>
     <string name="contact">通讯录</string>
     <string name="no_contacts">没有检索到联系人</string>
     <string name="open_settings">打开设置</string>
@@ -100,6 +103,7 @@
     <string name="invited_company">邀请过你的公司</string>
     <string name="search_result">搜索结果</string>
     <string name="search_result_empty">没有符合条件的公司</string>
+    <string name="copy_link"><u>复制链接</u></string>
     <string name="applied_to_join_1">已</string>
     <string name="applied_to_join_2">申</string>
     <string name="applied_to_join_3">请</string>
@@ -343,6 +347,8 @@
     <string name="prompt_join">管理员通过申请后你就可以使用「云报销」了。在此之前，你也可以记录自己的 消费 ，加入公司后记录可以迁移。</string>
     <string name="prompt_joined">现在你可以使用「云报销」，记录你的 消费 ， 提交报销 申请，或者 审批 他人的报销了。</string>
     <string name="prompt_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
+    <string name="prompt_wechat_share">你可分享到同事和好友们使用的微信群，方便大家注册使用云报销。</string>
+    <string name="prompt_copied_to_clipboard">链接已复制到剪贴板</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>
@@ -416,6 +422,9 @@
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>
     <string name="error_timeout">你的账号已经其他地方登录，本地已经下线。</string>
     <string name="error_contact_no_permission">未能读取到你的通讯录信息，可能是由于你未授权「云报销」读取你的通讯录所致。</string>
+    <string name="error_wechat_common">微信错误</string>
+    <string name="error_wechat_sent_failed">微信发送失败</string>
+    <string name="error_wechat_sent_user_cancel">用户取消发送</string>
     <string name="error_wechat_auth">微信授权失败</string>
     <string name="error_wechat_auth_denied">微信授权被拒绝</string>
     <string name="error_wechat_auth_user_cancel">用户取消微信授权</string>
@@ -455,6 +464,7 @@
     <string name="succeed_in_setting_bank_account">银行账户设置成功</string>
     <string name="succeed_in_setting_bank_name">开户行设置成功</string>
     <string name="succeed_in_setting_bank_location">开户地设置成功</string>
+    <string name="succeed_in_sharing_url">微信分享成功</string>
 
     <string name="failed_to_read_data">数据读取失败</string>
     <string name="failed_to_get_code">获取验证码失败</string>
@@ -511,6 +521,7 @@
     <string name="failed_to_set_bank_location">设置开户地失败</string>
     <string name="failed_to_set_admin">设置管理员失败</string>
     <string name="failed_to_verify_code">验证码验证错误</string>
+    <string name="failed_to_experience">进入体验模式失败</string>
 
     <string name="no_pending_reports">报告都已处理完毕</string>
     <string name="no_image">未找到图片</string>

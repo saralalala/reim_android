@@ -15,8 +15,9 @@ import classes.model.Tag;
 import classes.model.User;
 import netUtils.response.BaseResponse;
 
-public class WeChatOAuthResponse extends BaseResponse
+public class SandboxOAuthResponse extends BaseResponse
 {
+    private String openID;
 	private List<Category> categoryList;
 	private List<Tag> tagList;
 	private List<User> memberList;
@@ -24,7 +25,7 @@ public class WeChatOAuthResponse extends BaseResponse
 	private Group group;
     private int lastShownGuideVersion;
 
-	public WeChatOAuthResponse(Object httpResponse)
+	public SandboxOAuthResponse(Object httpResponse)
 	{
 		super(httpResponse);
 	}
@@ -34,7 +35,9 @@ public class WeChatOAuthResponse extends BaseResponse
 		try
 		{
 			JSONObject jObject = getDataObject();
-			
+
+            openID = jObject.getString("openid");
+
 			JSONObject profileObject = jObject.getJSONObject("profile");
 			
 			int groupID = -1;
@@ -84,7 +87,12 @@ public class WeChatOAuthResponse extends BaseResponse
 		}
 	}
 
-	public List<Category> getCategoryList()
+    public String getOpenID()
+    {
+        return openID;
+    }
+
+    public List<Category> getCategoryList()
 	{
 		return categoryList;
 	}

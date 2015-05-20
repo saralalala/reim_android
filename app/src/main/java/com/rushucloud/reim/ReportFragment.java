@@ -681,6 +681,11 @@ public class ReportFragment extends Fragment
 
 	public void showBadge()
 	{
+        if (myShortTextView == null || myMediumTextView == null || myLongTextView == null)
+        {
+            return;
+        }
+
 		int count = ReimApplication.getMineUnreadList().size();
 		if (count == 0)
 		{

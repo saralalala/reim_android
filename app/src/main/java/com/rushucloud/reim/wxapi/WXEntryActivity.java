@@ -4,7 +4,6 @@ package com.rushucloud.reim.wxapi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.rushucloud.reim.R;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
@@ -45,6 +44,11 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler
             {
                 switch (baseResp.getType())
                 {
+                    case ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX:
+                    {
+                        ViewUtils.showToast(this, R.string.succeed_in_sharing_url);
+                        break;
+                    }
                     case ConstantsAPI.COMMAND_SENDAUTH:
                     {
                         SendAuth.Resp resp = (SendAuth.Resp) baseResp;
@@ -56,6 +60,16 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler
                 }
                 break;
             }
+            case BaseResp.ErrCode.ERR_COMM:
+            {
+                ViewUtils.showToast(this, R.string.error_wechat_common);
+                break;
+            }
+            case BaseResp.ErrCode.ERR_SENT_FAILED:
+            {
+                ViewUtils.showToast(this, R.string.error_wechat_sent_failed);
+                break;
+            }
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
             {
                 ViewUtils.showToast(this, R.string.error_wechat_auth_denied);
@@ -63,7 +77,21 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler
             }
             case BaseResp.ErrCode.ERR_USER_CANCEL:
             {
-                ViewUtils.showToast(this, R.string.error_wechat_auth_user_cancel);
+                switch (baseResp.getType())
+                {
+                    case ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX:
+                    {
+                        ViewUtils.showToast(this, R.string.error_wechat_sent_user_cancel);
+                        break;
+                    }
+                    case ConstantsAPI.COMMAND_SENDAUTH:
+                    {
+                        ViewUtils.showToast(this, R.string.error_wechat_auth_user_cancel);
+                        break;
+                    }
+                    default:
+                        break;
+                }
                 break;
             }
             default:

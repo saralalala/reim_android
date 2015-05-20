@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import classes.utils.AppPreference;
 import netUtils.HttpConnectionCallback;
 import netUtils.HttpUtils;
 import netUtils.NetworkConstant;
@@ -43,7 +44,7 @@ public abstract class BaseRequest
 	protected BaseRequest()
 	{
 		this.httpClient = HttpUtils.getHttpClient();
-		this.url = URLDef.URL_PREFIX;
+		this.url = AppPreference.getAppPreference().isSandboxMode()? URLDef.URL_PREFIX_SANDBOX : URLDef.URL_PREFIX;
 		params = null;
 	}
 
@@ -104,7 +105,7 @@ public abstract class BaseRequest
 				builder.addTextBody(params.get(2).getName(), params.get(2).getValue());
 				request.setEntity(builder.build());
 			}
-			else
+			else if (params != null)
 			{
 				request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
 			}
