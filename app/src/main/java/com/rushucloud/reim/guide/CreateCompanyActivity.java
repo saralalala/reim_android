@@ -30,7 +30,7 @@ public class CreateCompanyActivity extends Activity
 
     private String companyName;
     private ArrayList<String> inputList;
-    private ArrayList<String> inputChosenList = new ArrayList<>();
+    private ArrayList<String> inputChosenList;
     private List<User> contactChosenList;
 
 	protected void onCreate(Bundle savedInstanceState)
@@ -134,6 +134,13 @@ public class CreateCompanyActivity extends Activity
     private void goBack()
     {
         hideSoftKeyboard();
-        ViewUtils.goBackWithIntent(this, GuideStartActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("companyName", companyName);
+        bundle.putStringArrayList("inputList", inputList);
+        bundle.putStringArrayList("inputChosenList", inputChosenList);
+        bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
+        Intent intent = new Intent(this, SetNicknameActivity.class);
+        intent.putExtras(bundle);
+        ViewUtils.goBackWithIntent(this, intent);
     }
 }

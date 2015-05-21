@@ -88,11 +88,12 @@
     <string name="input_contact_manually">手动填写手机或邮箱</string>
     <string name="invite_contact">邀请联系人</string>
     <string name="invite_wechat">邀请微信好友</string>
-    <string name="share_to_wechat">分享给微信好友</string>
     <string name="contact">通讯录</string>
     <string name="no_contacts">没有检索到联系人</string>
     <string name="open_settings">打开设置</string>
     <string name="input_contact">填写手机号或邮箱</string>
+    <string name="wechat_title">你的同事 %1$s 邀请你加入「%2$s」</string>
+    <string name="wechat_description">你的同事 %1$s 邀请你加入「%2$s」。加入后，你就可以方便的使用「云报销」的移动端以及Web端，进行费用的报销和审批了。</string>
     <string name="input_contact_manually_and_divided">请手动填写手机号或邮箱，用逗号分开</string>
     <string name="invite_by_pc">可通过访问网页端批量邀请其他同事加入</string>
     <string name="invitation_sent">已经向你的 %1$d 个同事发送邀请。他们接受邀请后，就能加入你创建的公司。你也可以通过我们的 网页端 批量邀请其他同事加入。</string>

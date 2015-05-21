@@ -441,6 +441,7 @@ public class PickCompanyActivity extends Activity
         {
             Intent intent = new Intent(this, SetNicknameActivity.class);
             intent.putExtra("nickname", AppPreference.getAppPreference().getCurrentUser().getNickname());
+            intent.putExtra("join", true);
             ViewUtils.goBackWithIntent(this, intent);
         }
         else

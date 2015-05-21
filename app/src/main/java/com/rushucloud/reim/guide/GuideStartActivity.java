@@ -75,6 +75,7 @@ public class GuideStartActivity extends Activity
                 Intent intent = new Intent(GuideStartActivity.this, SetNicknameActivity.class);
                 intent.putExtra("nickname", "");
                 intent.putExtra("group", (Serializable) null);
+                intent.putExtra("join", true);
                 ViewUtils.goForwardAndFinish(GuideStartActivity.this, intent);
             }
         });
@@ -86,11 +87,12 @@ public class GuideStartActivity extends Activity
             public void onClick(View v)
             {
                 Bundle bundle = new Bundle();
+                bundle.putString("nickname", "");
                 bundle.putString("companyName", "");
                 bundle.putStringArrayList("inputList", new ArrayList<String>());
                 bundle.putStringArrayList("inputChosenList", new ArrayList<String>());
                 bundle.putSerializable("contactChosenList", new ArrayList<User>());
-                Intent intent = new Intent(GuideStartActivity.this, CreateCompanyActivity.class);
+                Intent intent = new Intent(GuideStartActivity.this, SetNicknameActivity.class);
                 intent.putExtras(bundle);
                 ViewUtils.goForwardAndFinish(GuideStartActivity.this, intent);
             }

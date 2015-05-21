@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.model.BankAccount;
-import classes.model.Category;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
 import netUtils.request.BaseRequest;

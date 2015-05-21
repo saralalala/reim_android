@@ -16,6 +16,10 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -32,7 +36,12 @@ public class SetNicknameActivity extends Activity
 	private ClearEditText nicknameEditText;
 
     private User currentUser;
+    private boolean join;
     private String nickname;
+    private String companyName;
+    private ArrayList<String> inputList = new ArrayList<>();
+    private ArrayList<String> inputChosenList = new ArrayList<>();
+    private List<User> contactChosenList = new ArrayList<>();
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -45,7 +54,7 @@ public class SetNicknameActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		MobclickAgent.onPageStart("ModifyNicknameActivity");
+		MobclickAgent.onPageStart("SetNicknameActivity");
 		MobclickAgent.onResume(this);
         ReimProgressDialog.setContext(this);
 	}
@@ -53,7 +62,7 @@ public class SetNicknameActivity extends Activity
 	protected void onPause()
 	{
 		super.onPause();
-		MobclickAgent.onPageEnd("ModifyNicknameActivity");
+		MobclickAgent.onPageEnd("SetNicknameActivity");
 		MobclickAgent.onPause(this);
 	}
 
@@ -66,10 +75,24 @@ public class SetNicknameActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 
+    @SuppressWarnings("unchecked")
 	private void initData()
 	{
         currentUser = AppPreference.getAppPreference().getCurrentUser();
-        nickname = getIntent().getStringExtra("nickname");
+        join = getIntent().getBooleanExtra("join", false);
+        if (join)
+        {
+            nickname = getIntent().getStringExtra("nickname");
+        }
+        else
+        {
+            Bundle bundle = getIntent().getExtras();
+            nickname = bundle.getString("nickname", currentUser.getNickname());
+            companyName = bundle.getString("companyName", "");
+            inputList = bundle.getStringArrayList("inputList");
+            inputChosenList = bundle.getStringArrayList("inputChosenList");
+            contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
+        }
 	}
 
 	private void initView()
@@ -113,12 +136,12 @@ public class SetNicknameActivity extends Activity
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});        
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
 	}
 
     private void sendModifyUserInfoRequest()
@@ -140,9 +163,23 @@ public class SetNicknameActivity extends Activity
                         {
                             ReimProgressDialog.dismiss();
                             ViewUtils.showToast(SetNicknameActivity.this, R.string.succeed_in_modifying_user_info);
-                            Intent intent = new Intent(SetNicknameActivity.this, PickCompanyActivity.class);
-                            intent.putExtra("fromGuide", true);
-                            ViewUtils.goForwardAndFinish(SetNicknameActivity.this, intent);
+                            if (join)
+                            {
+                                Intent intent = new Intent(SetNicknameActivity.this, PickCompanyActivity.class);
+                                intent.putExtra("fromGuide", true);
+                                ViewUtils.goForwardAndFinish(SetNicknameActivity.this, intent);
+                            }
+                            else
+                            {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("companyName", companyName);
+                                bundle.putStringArrayList("inputList", inputList);
+                                bundle.putStringArrayList("inputChosenList", inputChosenList);
+                                bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
+                                Intent intent = new Intent(SetNicknameActivity.this, CreateCompanyActivity.class);
+                                intent.putExtras(bundle);
+                                ViewUtils.goForwardAndFinish(SetNicknameActivity.this, intent);
+                            }
                         }
                     });
                 }

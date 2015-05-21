@@ -10,17 +10,6 @@
         android:layout_height="@dimen/title_bar_height"
         android:background="@color/major_dark">
 
-        <ImageView
-            android:id="@+id/backImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:contentDescription="@string/back"
-            android:src="@drawable/back_drawable"/>
-
         <TextView
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
@@ -72,13 +61,13 @@
         android:layout_weight="1"/>
 
     <Button
-        android:id="@+id/shareButton"
+        android:id="@+id/inviteButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:background="@drawable/button_dark_drawable"
-        android:text="@string/share_to_wechat"
+        android:text="@string/invite_wechat"
         android:textColor="@color/button_text_light_color"/>
 
     <TextView

@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import classes.utils.AppPreference;
 import classes.utils.ReimApplication;
-import classes.utils.Utils;
 import netUtils.NetworkConstant;
 
 public abstract class BaseResponse
