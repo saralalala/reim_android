@@ -16,9 +16,10 @@ import java.util.List;
 import classes.model.Report;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
 
-public class OthersReportListViewAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter
+public class OthersReportListViewAdapter extends BaseAdapter
 {
 	private Context context;
 	private LayoutInflater layoutInflater;
@@ -128,21 +129,5 @@ public class OthersReportListViewAdapter extends BaseAdapter implements PinnedSe
     {
         unreadList.clear();
         unreadList.addAll(unreads);
-    }
-
-    public int getViewTypeCount()
-    {
-        return 2;
-    }
-
-    public int getItemViewType(int position)
-    {
-        Report report = reportList.get(position);
-        return !report.getSectionName().isEmpty()? 1 : 0;
-    }
-
-    public boolean isItemViewTypePinned(int viewType)
-    {
-        return viewType == 1;
     }
 }
