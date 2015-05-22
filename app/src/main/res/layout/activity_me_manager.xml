@@ -52,7 +52,8 @@
         android:gravity="center"
         android:text="@string/no_member"
         android:textColor="@color/hint_light_grey"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"

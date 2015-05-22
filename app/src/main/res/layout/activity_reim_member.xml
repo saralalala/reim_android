@@ -108,16 +108,6 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:background="@color/list_item_header"/>
-
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        layout="@layout/view_divider"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ListView

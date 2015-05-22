@@ -284,7 +284,7 @@ public class CommentActivity extends Activity
     
 	private void sendDownloadAvatarRequest(final Comment comment, final User user)
     {
-    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
+    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

@@ -332,7 +332,7 @@ public class MeFragment extends Fragment
 
     private void sendDownloadAvatarRequest()
     {
-    	DownloadImageRequest request = new DownloadImageRequest(currentUser.getAvatarID(), DownloadImageRequest.IMAGE_QUALITY_VERY_HIGH);
+    	DownloadImageRequest request = new DownloadImageRequest(currentUser.getAvatarServerPath());
     	request.sendRequest(new HttpConnectionCallback()
 		{
 			public void execute(Object httpResponse)

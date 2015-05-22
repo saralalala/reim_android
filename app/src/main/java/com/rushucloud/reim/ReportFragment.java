@@ -182,6 +182,9 @@ public class ReportFragment extends Fragment
 		
 		mineList.addAll(readMineReportList());
 		showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
+
+        othersList.addAll(readOthersReportList());
+        showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
 		
 		mineCheck = new boolean[5];
 		othersCheck = new boolean[5];
@@ -549,7 +552,7 @@ public class ReportFragment extends Fragment
 
                 filterPopupWindow.dismiss();
                 ReimProgressDialog.show();
-                refreshReportListView();
+                refreshReportListView(false);
                 ReimProgressDialog.dismiss();
             }
         });
@@ -676,7 +679,7 @@ public class ReportFragment extends Fragment
 			myTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
 			othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
 		}
-		refreshReportListView();
+		refreshReportListView(false);
 	}
 
 	public void showBadge()
@@ -958,12 +961,15 @@ public class ReportFragment extends Fragment
         }
     }
 
-	private void refreshReportListView()
+	private void refreshReportListView(boolean readDatabase)
 	{
 		if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
 		{
-			mineList.clear();
-			mineList.addAll(readMineReportList());
+            if (readDatabase)
+            {
+                mineList.clear();
+                mineList.addAll(readMineReportList());
+            }
 			showMineList.clear();
 			showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
 			mineAdapter.setReportList(showMineList);
@@ -976,10 +982,13 @@ public class ReportFragment extends Fragment
             int filterImage = mineFilterStatusList.isEmpty()? R.drawable.filter_empty : R.drawable.filter_full;
             filterImageView.setImageResource(filterImage);
 		}
-		else
+        else
 		{
-			othersList.clear();
-			othersList.addAll(readOthersReportList());
+            if (readDatabase)
+            {
+                othersList.clear();
+                othersList.addAll(readOthersReportList());
+            }
             if (!othersList.isEmpty() && othersFilterStatusList.isEmpty() && othersSortType == SORT_UPDATE_DATE && !othersSortReverse)
             {
                 buildReportListByStatus();
@@ -1248,7 +1257,7 @@ public class ReportFragment extends Fragment
 							reportListView.stopRefresh();
 							reportListView.stopLoadMore();
 							reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-							refreshReportListView();
+							refreshReportListView(true);
 						}
 					});
 				}
@@ -1305,7 +1314,7 @@ public class ReportFragment extends Fragment
 		{
 			if (dbManager.deleteReport(reportID))
 			{
-				refreshReportListView();
+				refreshReportListView(true);
 				ReimProgressDialog.dismiss();
 	            ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
 			}
@@ -1319,7 +1328,7 @@ public class ReportFragment extends Fragment
 		{
 			if (dbManager.deleteOthersReport(reportID, appPreference.getCurrentUserID()))
 			{
-				refreshReportListView();
+				refreshReportListView(true);
 				ReimProgressDialog.dismiss();
 	            ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
 			}
@@ -1344,7 +1353,7 @@ public class ReportFragment extends Fragment
 					{
 						public void run()
 						{
-							refreshReportListView();
+							refreshReportListView(true);
 						}
 					});
 
@@ -1377,7 +1386,7 @@ public class ReportFragment extends Fragment
 							{
 								reportListView.stopRefresh();
 								reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-								refreshReportListView();
+								refreshReportListView(true);
 							}
 						});
 

@@ -5,12 +5,6 @@ import netUtils.URLDef;
 
 public class DownloadImageRequest extends BaseRequest
 {
-	public static final int IMAGE_QUALITY_VERY_HIGH = 0;
-	public static final int IMAGE_QUALITY_LOW = 1;
-	public static final int IMAGE_QUALITY_MEDIUM = 2;
-	public static final int IMAGE_QUALITY_HIGH = 3;
-	public static final int INVOICE_QUALITY_ORIGINAL = 4;
-	
 	public DownloadImageRequest(String url)
 	{
 		super();
@@ -24,15 +18,6 @@ public class DownloadImageRequest extends BaseRequest
 
         appendUrl(URLDef.URL_STATIC);
         appendUrl(iconID + ".png");
-	}
-	
-	public DownloadImageRequest(int imageID, int type)
-	{
-		super();
-
-        appendUrl(URLDef.URL_IMAGE);
-        appendUrl(imageID);
-        appendUrl(type);
 	}
 	
 	public void sendRequest(HttpConnectionCallback callback)

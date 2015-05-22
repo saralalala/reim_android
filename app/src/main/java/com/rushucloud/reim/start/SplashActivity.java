@@ -288,7 +288,6 @@ public class SplashActivity extends Activity
                     {
                         public void run()
                         {
-                            ReimProgressDialog.dismiss();
                             if (appPreference.getLastShownGuideVersion() < ReimApplication.GUIDE_VERSION)
                             {
                                 ViewUtils.goForwardAndFinish(SplashActivity.this, GuideStartActivity.class);
