@@ -35,6 +35,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
+import classes.widget.PinnedSectionListView;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.request.DownloadImageRequest;
@@ -142,7 +143,7 @@ public class PickCCActivity extends Activity
 			}
 		});
 
-        ListView ccListView = (ListView) findViewById(R.id.ccListView);
+        PinnedSectionListView ccListView = (PinnedSectionListView) findViewById(R.id.ccListView);
 
         if (userList.isEmpty())
         {

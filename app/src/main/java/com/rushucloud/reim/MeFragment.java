@@ -166,7 +166,14 @@ public class MeFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-                ViewUtils.goForward(getActivity(), InviteActivity.class);
+                if (appPreference.isSandboxMode())
+                {
+                    ViewUtils.showToast(getActivity(), R.string.error_trial_invite);
+                }
+                else
+                {
+                    ViewUtils.goForward(getActivity(), InviteActivity.class);
+                }
 			}
 		});
 

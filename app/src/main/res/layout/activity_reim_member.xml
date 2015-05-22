@@ -110,7 +110,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
+        <classes.widget.PinnedSectionListView
             android:id="@+id/userListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

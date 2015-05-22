@@ -91,7 +91,7 @@ public class WeChatUtils
                 WeChatAccessTokenResponse response = new WeChatAccessTokenResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    sendWeChatOAuthRequest(response.getAccessToken(), response.getOpenID());
+                    sendWeChatOAuthRequest(response.getAccessToken(), response.getOpenID(), response.getUnionID());
                 }
                 else
                 {
@@ -108,9 +108,9 @@ public class WeChatUtils
         });
     }
 
-    public static void sendWeChatOAuthRequest(String accessToken, final String openID)
+    public static void sendWeChatOAuthRequest(String accessToken, String openID, final String unionID)
     {
-        WeChatOAuthRequest request = new WeChatOAuthRequest(accessToken, openID);
+        WeChatOAuthRequest request = new WeChatOAuthRequest(accessToken, openID, unionID);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -123,7 +123,7 @@ public class WeChatUtils
                     DBManager dbManager = DBManager.getDBManager();
                     final AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setServerToken(response.getServerToken());
-                    appPreference.setUsername(openID);
+                    appPreference.setUsername(unionID);
                     appPreference.setHasPassword(response.hasPassword());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
                     appPreference.setLastShownGuideVersion(response.getLastShownGuideVersion());

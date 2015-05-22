@@ -999,7 +999,7 @@ public class ReportFragment extends Fragment
                 showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
             }
 
-            othersAdapter.set(showOthersList);
+            othersAdapter.setReportList(showOthersList);
             othersAdapter.setUnreadList(ReimApplication.getOthersUnreadList());
 			reportListView.setAdapter(othersAdapter);
 

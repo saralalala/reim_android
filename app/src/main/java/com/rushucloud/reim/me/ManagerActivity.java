@@ -32,6 +32,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
+import classes.widget.PinnedSectionListView;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
@@ -48,7 +49,7 @@ public class ManagerActivity extends Activity
     private ClearEditText managerEditText;
     private ImageView avatarImageView;
     private TextView nicknameTextView;
-	private ListView managerListView;
+	private PinnedSectionListView managerListView;
 	private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
 
@@ -192,7 +193,7 @@ public class ManagerActivity extends Activity
         avatarImageView = (ImageView) findViewById(R.id.avatarImageView);
         nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
 
-		managerListView = (ListView) findViewById(R.id.userListView);
+		managerListView = (PinnedSectionListView) findViewById(R.id.userListView);
 		managerListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)

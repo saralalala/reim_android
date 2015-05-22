@@ -21,8 +21,9 @@ import java.util.TreeMap;
 import classes.model.User;
 import classes.utils.CharacterParser;
 import classes.utils.ViewUtils;
+import classes.widget.PinnedSectionListView;
 
-public class MemberListViewAdapter extends BaseAdapter
+public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter
 {
 	private LayoutInflater layoutInflater;
 	private List<User> memberList;
@@ -199,5 +200,20 @@ public class MemberListViewAdapter extends BaseAdapter
     public HashMap<String, Integer> getSelector()
     {
         return selector;
+    }
+
+    public int getViewTypeCount()
+    {
+        return 2;
+    }
+
+    public int getItemViewType(int position)
+    {
+        return indexList.contains(position)? 1 : 0;
+    }
+
+    public boolean isItemViewTypePinned(int viewType)
+    {
+        return viewType == 1;
     }
 }

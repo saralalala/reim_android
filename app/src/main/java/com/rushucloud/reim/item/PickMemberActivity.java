@@ -35,6 +35,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
+import classes.widget.PinnedSectionListView;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.request.DownloadImageRequest;
@@ -159,7 +160,7 @@ public class PickMemberActivity extends Activity
 
             adapter = new MemberListViewAdapter(this, userList, chosenList);
 
-            ListView userListView = (ListView) findViewById(R.id.userListView);
+            PinnedSectionListView userListView = (PinnedSectionListView) findViewById(R.id.userListView);
             userListView.setAdapter(adapter);
             userListView.setOnItemClickListener(new OnItemClickListener()
             {

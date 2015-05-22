@@ -24,8 +24,9 @@ import classes.model.User;
 import classes.utils.CharacterParser;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
+import classes.widget.PinnedSectionListView;
 
-public class ContactListViewAdapter extends BaseAdapter
+public class ContactListViewAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter
 {
 	private Context context;
 	private LayoutInflater layoutInflater;
@@ -258,5 +259,20 @@ public class ContactListViewAdapter extends BaseAdapter
     public boolean isContact(int position)
     {
         return !indexList.contains(position);
+    }
+
+    public int getViewTypeCount()
+    {
+        return 2;
+    }
+
+    public int getItemViewType(int position)
+    {
+        return indexList.contains(position)? 1 : 0;
+    }
+
+    public boolean isItemViewTypePinned(int viewType)
+    {
+        return viewType == 1;
     }
 }

@@ -18,8 +18,9 @@ import java.util.TreeMap;
 
 import classes.utils.CharacterParser;
 import classes.utils.ViewUtils;
+import classes.widget.PinnedSectionListView;
 
-public class LocationListViewAdapter extends BaseAdapter
+public class LocationListViewAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter
 {
 	private LayoutInflater layoutInflater;
     private View hotCityView;
@@ -119,6 +120,7 @@ public class LocationListViewAdapter extends BaseAdapter
         int count = 2;
         selector.clear();
         selector.put(ViewUtils.getString(R.string.hot), 0);
+        indexList.add(0);
         cityList.clear();
         for (Map.Entry<String, ArrayList<String>> entry: indexMap.entrySet())
         {
@@ -151,5 +153,20 @@ public class LocationListViewAdapter extends BaseAdapter
     public boolean isLocation(int position)
     {
         return !indexList.contains(position);
+    }
+
+    public int getViewTypeCount()
+    {
+        return 2;
+    }
+
+    public int getItemViewType(int position)
+    {
+        return indexList.contains(position)? 1 : 0;
+    }
+
+    public boolean isItemViewTypePinned(int viewType)
+    {
+        return viewType == 1;
     }
 }

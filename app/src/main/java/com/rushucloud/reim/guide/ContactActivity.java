@@ -32,6 +32,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
+import classes.widget.PinnedSectionListView;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.group.CreateGroupRequest;
@@ -42,7 +43,7 @@ public class ContactActivity extends Activity
     private static final int INPUT_CONTACT = 0;
 
     private ContactListViewAdapter adapter;
-    private ListView contactListView;
+    private PinnedSectionListView contactListView;
     private LinearLayout indexLayout;
     private TextView centralTextView;
 
@@ -196,7 +197,7 @@ public class ContactActivity extends Activity
         adapter.setContactChosenList(contactChosenList);
         adapter.initIndex();
 
-        contactListView = (ListView) findViewById(R.id.contactListView);
+        contactListView = (PinnedSectionListView) findViewById(R.id.contactListView);
         contactListView.setAdapter(adapter);
         contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {

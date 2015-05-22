@@ -8,6 +8,7 @@ public class WeChatAccessTokenResponse
 	private boolean status;
     private String accessToken;
     private String openID;
+    private String unionID;
 
 	public WeChatAccessTokenResponse(Object httpResponse)
 	{
@@ -16,6 +17,7 @@ public class WeChatAccessTokenResponse
 			JSONObject jObject = new JSONObject((String)httpResponse);
             accessToken = jObject.getString("access_token");
             openID = jObject.getString("openid");
+            unionID = jObject.getString("unionid");
             status = true;
 		}
 		catch (JSONException e)
@@ -42,18 +44,13 @@ public class WeChatAccessTokenResponse
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken)
-    {
-        this.accessToken = accessToken;
-    }
-
     public String getOpenID()
     {
         return openID;
     }
 
-    public void setOpenID(String openID)
+    public String getUnionID()
     {
-        this.openID = openID;
+        return unionID;
     }
 }

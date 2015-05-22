@@ -1,5 +1,6 @@
 package com.rushucloud.reim.item;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import java.util.List;
 import classes.adapter.LocationListViewAdapter;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
+import classes.widget.PinnedSectionListView;
 
 public class PickLocationActivity extends Activity
 {
@@ -39,7 +41,7 @@ public class PickLocationActivity extends Activity
 
     private ClearEditText locationEditText;
 	private LocationListViewAdapter adapter;
-    private ListView locationListView;
+    private PinnedSectionListView locationListView;
     private LinearLayout indexLayout;
     private TextView centralTextView;
 
@@ -237,7 +239,7 @@ public class PickLocationActivity extends Activity
         }
 
         adapter = new LocationListViewAdapter(this, hotCityView, cityList);
-        locationListView = (ListView) findViewById(R.id.locationListView);
+        locationListView = (PinnedSectionListView) findViewById(R.id.locationListView);
         locationListView.setAdapter(adapter);
         locationListView.setOnItemClickListener(new OnItemClickListener()
         {
@@ -286,6 +288,7 @@ public class PickLocationActivity extends Activity
             indexLayout.addView(textView);
             indexLayout.setOnTouchListener(new View.OnTouchListener()
             {
+                @SuppressLint("NewApi")
                 public boolean onTouch(View v, MotionEvent event)
                 {
                     float y = event.getY();

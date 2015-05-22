@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,6 +34,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
+import classes.widget.PinnedSectionListView;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.request.DownloadImageRequest;
@@ -157,6 +157,8 @@ public class PickManagerActivity extends Activity
 			}
 		});
 
+        PinnedSectionListView managerListView = (PinnedSectionListView) findViewById(R.id.managerListView);
+
         if (userList.isEmpty())
         {
             LinearLayout inviteContainer = (LinearLayout) findViewById(R.id.inviteContainer);
@@ -177,8 +179,7 @@ public class PickManagerActivity extends Activity
             LinearLayout managerContainer = (LinearLayout) findViewById(R.id.managerContainer);
             managerContainer.setVisibility(View.GONE);
 
-            LinearLayout colleagueContainer = (LinearLayout) findViewById(R.id.colleagueContainer);
-            colleagueContainer.setVisibility(View.GONE);
+            managerListView.setVisibility(View.GONE);
         }
         else
         {
@@ -210,9 +211,6 @@ public class PickManagerActivity extends Activity
             {
                 LinearLayout managerContainer = (LinearLayout) findViewById(R.id.managerContainer);
                 managerContainer.setVisibility(View.GONE);
-
-                TextView colleagueTextView = (TextView) findViewById(R.id.colleagueTextView);
-                colleagueTextView.setVisibility(View.GONE);
             }
             else
             {
@@ -251,7 +249,6 @@ public class PickManagerActivity extends Activity
             }
 
             adapter = new MemberListViewAdapter(this, userList, chosenList);
-            ListView managerListView = (ListView) findViewById(R.id.managerListView);
             managerListView.setAdapter(adapter);
             managerListView.setOnItemClickListener(new OnItemClickListener()
             {
