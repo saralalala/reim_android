@@ -392,10 +392,10 @@ public class PickItemActivity extends Activity implements OnClickListener
 			}
 		});
 	
-		initFilterView();
+		initFilterWindow();
 	}
 
-	private void initFilterView()
+	private void initFilterWindow()
 	{
         rotateAnimation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateAnimation.setDuration(200);

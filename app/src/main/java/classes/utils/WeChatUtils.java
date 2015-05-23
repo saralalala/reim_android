@@ -41,9 +41,9 @@ public class WeChatUtils
         api.registerApp(APP_ID);
     }
 
-    public static void shareToWX(String url, String title, String description, int resID)
+    public static void shareToWX(String url, String title, String description, boolean isShareToMoments)
     {
-        Bitmap bitmap = BitmapFactory.decodeResource(ReimApplication.getContext().getResources(), resID);
+        Bitmap bitmap = BitmapFactory.decodeResource(ReimApplication.getContext().getResources(), R.drawable.wechat_share_thumb);
 
         WXWebpageObject webpage = new WXWebpageObject(url);
 
@@ -55,6 +55,10 @@ public class WeChatUtils
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = String.valueOf(System.currentTimeMillis());
         req.message = message;
+        if (isShareToMoments)
+        {
+            req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        }
 
         api.sendReq(req);
     }

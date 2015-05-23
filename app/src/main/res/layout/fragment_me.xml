@@ -37,7 +37,6 @@
 				android:layout_width="match_parent"
 				android:layout_height="99dp"
 				android:layout_marginTop="18dp"
-				android:clickable="true"
 				android:background="@drawable/me_item_drawable">
             
 	            <include                 
@@ -124,7 +123,6 @@
                 android:id="@+id/messageLayout"
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/layout_height"
-				android:clickable="true"
 				android:background="@drawable/me_item_drawable">
 					     
 				<TextView
@@ -166,7 +164,6 @@
                 android:id="@+id/inviteLayout"
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/layout_height"
-				android:clickable="true"
 				android:background="@drawable/me_item_drawable">
 					     
 				<TextView
@@ -199,8 +196,7 @@
                 android:id="@+id/defaultManagerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/layout_height"
-                android:background="@drawable/me_item_drawable"
-                android:clickable="true">
+                android:background="@drawable/me_item_drawable">
 
                 <TextView
                     android:id="@+id/managerPrompt"
@@ -242,26 +238,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 layout="@layout/view_divider"/>
-			
-            <RelativeLayout
-                android:id="@+id/invoiceLayout"
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/layout_height"
-				android:clickable="true"
-				android:background="@drawable/me_item_drawable">
-					     
-				<TextView
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_centerVertical="true"
-				    android:layout_alignParentLeft="true"
-				    android:layout_marginLeft="16dp"
-				    android:text="@string/get_invoice"
-                    android:textColor="@color/font_major_dark"
-				    android:textSize="16sp"/>
-				
-			</RelativeLayout>
-            
+
+            <TextView
+                android:id="@+id/invoiceTextView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:paddingLeft="16dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/me_item_drawable"
+                android:text="@string/get_invoice"
+                android:textColor="@color/font_major_dark"
+                android:textSize="16sp"/>
+
 	        <include                 
 				android:layout_width="match_parent"
 				android:layout_height="0.5dp"
@@ -272,8 +260,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/layout_with_two_divider_height"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/me_item_drawable"
-                android:clickable="true">
+                android:background="@drawable/me_item_drawable">
 
                 <include
                     android:layout_width="match_parent"
@@ -311,8 +298,7 @@
                 android:id="@+id/tagLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/layout_with_one_divider_height"
-                android:background="@drawable/me_item_drawable"
-                android:clickable="true">
+                android:background="@drawable/me_item_drawable">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -341,53 +327,54 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/aboutLayout"
+            <include
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/layout_with_one_divider_height"
+                android:layout_height="0.5dp"
                 android:layout_marginTop="24dp"
+                layout="@layout/view_divider"/>
+
+            <TextView
+                android:id="@+id/aboutTextView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:paddingLeft="16dp"
+                android:gravity="center_vertical"
                 android:background="@drawable/me_item_drawable"
-                android:clickable="true">
-
-                <include
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    layout="@layout/view_divider"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:text="@string/about_us"
-                    android:textColor="@color/font_major_dark"
-                    android:textSize="16sp"/>
-            </RelativeLayout>
+                android:text="@string/about_us"
+                android:textColor="@color/font_major_dark"
+                android:textSize="16sp"/>
 
             <include
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 layout="@layout/view_divider"/>
 
-            <RelativeLayout
-                android:id="@+id/feedbackLayout"
+            <TextView
+                android:id="@+id/feedbackTextView"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/layout_with_one_divider_height"
+                android:layout_height="@dimen/layout_height"
+                android:paddingLeft="16dp"
+                android:gravity="center_vertical"
                 android:background="@drawable/me_item_drawable"
-                android:clickable="true">
+                android:text="@string/feedback"
+                android:textColor="@color/font_major_dark"
+                android:textSize="16sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:text="@string/feedback"
-                    android:textColor="@color/font_major_dark"
-                    android:textSize="16sp"/>
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                layout="@layout/view_divider"/>
 
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/shareTextView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:paddingLeft="16dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/me_item_drawable"
+                android:text="@string/share"
+                android:textColor="@color/font_major_dark"
+                android:textSize="16sp"/>
             
 	        <include                 
 				android:layout_width="match_parent"

@@ -1,12 +1,14 @@
 package com.rushucloud.reim;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,16 +22,6 @@ import com.rushucloud.reim.me.MessageListActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.rushucloud.reim.me.TagActivity;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.bean.SocializeEntity;
-import com.umeng.socialize.controller.UMServiceFactory;
-import com.umeng.socialize.controller.UMSocialService;
-import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
-import com.umeng.socialize.media.QQShareContent;
-import com.umeng.socialize.media.SinaShareContent;
-import com.umeng.socialize.sso.SinaSsoHandler;
-import com.umeng.socialize.sso.UMQQSsoHandler;
-import com.umeng.socialize.sso.UMSsoHandler;
 
 import classes.model.Group;
 import classes.model.User;
@@ -39,10 +31,10 @@ import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.utils.WeChatUtils;
 import classes.widget.CircleImageView;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
-import netUtils.URLDef;
 import netUtils.request.DownloadImageRequest;
 import netUtils.response.DownloadImageResponse;
 
@@ -61,11 +53,10 @@ public class MeFragment extends Fragment
     private TextView managerTextView;
     private RelativeLayout categoryLayout;
     private RelativeLayout tagLayout;
+    private PopupWindow sharePopupWindow;
 
 	private User currentUser;
 	private String avatarPath;
-	
-	private UMSocialService mController;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -110,16 +101,6 @@ public class MeFragment extends Fragment
 		{
 	        loadProfileView();
 		}
-	}
-	
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		super.onActivityResult(requestCode, resultCode, data);
-		UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode);
-		if (ssoHandler != null)
-		{
-			ssoHandler.authorizeCallBack(requestCode, requestCode, data);
-		}		
 	}
 	
 	private void initData()
@@ -197,8 +178,8 @@ public class MeFragment extends Fragment
         });
 
         // init invoice
-        RelativeLayout invoiceLayout = (RelativeLayout) view.findViewById(R.id.invoiceLayout);
-        invoiceLayout.setOnClickListener(new View.OnClickListener()
+        TextView invoiceTextView = (TextView) view.findViewById(R.id.invoiceTextView);
+        invoiceTextView.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -229,8 +210,8 @@ public class MeFragment extends Fragment
         });
 
         // init about
-        RelativeLayout aboutLayout = (RelativeLayout) view.findViewById(R.id.aboutLayout);
-        aboutLayout.setOnClickListener(new View.OnClickListener()
+        TextView aboutTextView = (TextView) view.findViewById(R.id.aboutTextView);
+        aboutTextView.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
@@ -240,8 +221,8 @@ public class MeFragment extends Fragment
         });
 
         // init feedback
-        RelativeLayout feedbackLayout = (RelativeLayout) view.findViewById(R.id.feedbackLayout);
-        feedbackLayout.setOnClickListener(new View.OnClickListener()
+        TextView feedbackTextView = (TextView) view.findViewById(R.id.feedbackTextView);
+        feedbackTextView.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
@@ -249,21 +230,61 @@ public class MeFragment extends Fragment
                 ViewUtils.goForward(getActivity(), FeedbackActivity.class);
             }
         });
-        
-//        RelativeLayout shareLayout = (RelativeLayout) view.findViewById(R.id.shareLayout);
-//        shareLayout.setOnClickListener(new View.OnClickListener()
-//		{
-//			public void onClick(View v)
-//			{
-//				MobclickAgent.onEvent(getActivity(), "UMENG_MINE_RECOMMEND");
-//				showShareDialog();
-//			}
-//		});
-        
-        mController = UMServiceFactory.getUMSocialService("com.umeng.share");
+
+        // init share
+        TextView shareTextView = (TextView) view.findViewById(R.id.shareTextView);
+        shareTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                showShareWindow();
+            }
+        });
+
+        initShareWindow();
 	}
 
-	public void loadProfileView()
+    private void initShareWindow()
+    {
+        final String url = ViewUtils.getString(R.string.wechat_share_url_download);
+        final String title = ViewUtils.getString(R.string.wechat_share_title);
+        final String description = ViewUtils.getString(R.string.wechat_share_description);
+
+        View shareView = View.inflate(getActivity(), R.layout.window_me_share, null);
+
+        LinearLayout sessionLayout = (LinearLayout) shareView.findViewById(R.id.sessionLayout);
+        sessionLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                sharePopupWindow.dismiss();
+                WeChatUtils.shareToWX(url, title, description, false);
+            }
+        });
+
+        LinearLayout momentsLayout = (LinearLayout) shareView.findViewById(R.id.momentsLayout);
+        momentsLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                sharePopupWindow.dismiss();
+                WeChatUtils.shareToWX(url, title, description, true);
+            }
+        });
+
+        TextView cancelTextView = (TextView) shareView.findViewById(R.id.cancelTextView);
+        cancelTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                sharePopupWindow.dismiss();
+            }
+        });
+
+        sharePopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), shareView);
+    }
+
+    public void loadProfileView()
 	{
 		currentUser = appPreference.getCurrentUser();
         Group currentGroup = appPreference.getCurrentGroup();
@@ -320,6 +341,15 @@ public class MeFragment extends Fragment
 
         showTip();
 	}
+
+
+    private void showShareWindow()
+    {
+        sharePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+        sharePopupWindow.update();
+
+        ViewUtils.dimBackground(getActivity());
+    }
 
     public void showTip()
     {
@@ -385,43 +415,5 @@ public class MeFragment extends Fragment
                 }
 			}
 		});
-    }
-
-    @SuppressWarnings("unused")
-	private void showShareDialog()
-    {
-    	SinaSsoHandler sinaSsoHandler = new SinaSsoHandler();
-    	sinaSsoHandler.addToSocialSDK();
-    	
-    	UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(getActivity(), "1103305832", "l8eKHcEiAMCnhV50");
-    	qqSsoHandler.addToSocialSDK();
-
-    	SinaShareContent sinaShareContent = new SinaShareContent();
-    	sinaShareContent.setShareContent(getString(R.string.share_weibo_content));
-    	sinaShareContent.setTitle(getString(R.string.share_weibo));
-    	sinaShareContent.setTargetUrl(URLDef.SHARE_TARGET);    
-    	mController.setShareMedia(sinaShareContent);
-
-    	QQShareContent qqShareContent = new QQShareContent();
-    	qqShareContent.setShareContent(getString(R.string.share_qq_content));
-    	qqShareContent.setTitle(getString(R.string.share_qq));
-    	qqShareContent.setTargetUrl(URLDef.SHARE_TARGET);    
-    	mController.setShareMedia(qqShareContent);
-
-    	mController.getConfig().removePlatform(SHARE_MEDIA.QZONE, SHARE_MEDIA.TENCENT);
-    	mController.getConfig().registerListener(new SnsPostListener()
-    	{
-    		public void onStart()
-    		{
-    			
-    		}
-    		
-    		public void onComplete(SHARE_MEDIA platform, int stCode, SocializeEntity entity)
-    		{
-    			
-    		}
-    	});
-    	
-		mController.openShare(getActivity(), false);
     }
 }

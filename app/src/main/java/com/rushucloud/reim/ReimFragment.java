@@ -202,8 +202,8 @@ public class ReimFragment extends Fragment
 	private void initView()
 	{
 		initListView();
-		initFilterView();
-		initDeleteView();
+		initFilterWindow();
+		initDeleteWindow();
 	}
 	
 	private void initListView()
@@ -341,7 +341,7 @@ public class ReimFragment extends Fragment
 		});
 	}
 
-	private void initFilterView()
+	private void initFilterWindow()
 	{
         final ImageView filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
         filterImageView.setOnClickListener(new OnClickListener()
@@ -618,7 +618,7 @@ public class ReimFragment extends Fragment
 		filterPopupWindow = ViewUtils.buildTopPopupWindow(getActivity(), filterView);
 	}
 
-	private void initDeleteView()
+	private void initDeleteWindow()
 	{
 		View deleteView = View.inflate(getActivity(), R.layout.window_delete, null);
 		

@@ -56,7 +56,7 @@ public class WeChatShareActivity extends Activity
 
     private void initData()
     {
-        shareURL = "https://www.cloudbaoxiao.com";
+        shareURL = ViewUtils.getString(R.string.wechat_share_url_main);
         nickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
         companyName = getIntent().getStringExtra("companyName");
         count = getIntent().getIntExtra("count", 0);
@@ -83,7 +83,7 @@ public class WeChatShareActivity extends Activity
             {
                 String title = String.format(getString(R.string.wechat_title), nickname, companyName);
                 String description = String.format(getString(R.string.wechat_description), nickname, companyName);
-                WeChatUtils.shareToWX(shareURL, title, description, R.drawable.wechat_share_thumb);
+                WeChatUtils.shareToWX(shareURL, title, description, false);
             }
         });
 

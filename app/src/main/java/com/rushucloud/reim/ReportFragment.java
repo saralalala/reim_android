@@ -199,8 +199,8 @@ public class ReportFragment extends Fragment
 	{
 		initTitleView();
 		initListView();	
-		initFilterView();
-		initOperationView();
+		initFilterWindow();
+		initOperationWindow();
 	}
 	
 	private void initTitleView()
@@ -372,7 +372,7 @@ public class ReportFragment extends Fragment
 		});
 	}
 	
-	private void initFilterView()
+	private void initFilterWindow()
 	{
 		noResultLayout = (RelativeLayout) view.findViewById(R.id.noResultLayout);
 
@@ -569,7 +569,7 @@ public class ReportFragment extends Fragment
 		filterPopupWindow = ViewUtils.buildTopPopupWindow(getActivity(), filterView);
 	}
 	
-	private void initOperationView()
+	private void initOperationWindow()
 	{
 		View operationView = View.inflate(getActivity(), R.layout.window_report_operation, null);
 
