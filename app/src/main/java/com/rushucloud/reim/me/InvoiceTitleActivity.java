@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,13 +17,15 @@ import classes.utils.AppPreference;
 import classes.utils.ViewUtils;
 
 public class InvoiceTitleActivity extends Activity
-{	
+{
+
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.activity_me_invoice_title);
-		initView();
-	}
+        initView();
+    }
 
 	protected void onResume()
 	{

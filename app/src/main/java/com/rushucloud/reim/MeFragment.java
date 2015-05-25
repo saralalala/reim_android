@@ -342,7 +342,6 @@ public class MeFragment extends Fragment
         showTip();
 	}
 
-
     private void showShareWindow()
     {
         sharePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
