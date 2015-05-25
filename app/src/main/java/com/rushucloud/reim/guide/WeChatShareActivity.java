@@ -80,8 +80,8 @@ public class WeChatShareActivity extends Activity
         {
             public void onClick(View v)
             {
-                String title = String.format(getString(R.string.wechat_title), nickname, companyName);
-                String description = String.format(getString(R.string.wechat_description), nickname, companyName);
+                String title = String.format(getString(R.string.wechat_share_title), nickname, companyName);
+                String description = String.format(getString(R.string.wechat_invite_description), nickname, companyName);
                 WeChatUtils.shareToWX(URLDef.URL_MAIN_PAGE, title, description, false);
             }
         });

@@ -72,7 +72,6 @@ public class ContactActivity extends Activity
 		super.onResume();
 		MobclickAgent.onPageStart("ContactActivity");
 		MobclickAgent.onResume(this);
-        ReimProgressDialog.setContext(this);
         if (contactList.isEmpty() && hasInit)
         {
             readContacts();
