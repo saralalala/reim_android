@@ -36,7 +36,7 @@ public class MineStatResponse extends BaseResponse
 			this.newAmount = jObject.getDouble("new");
 			
 			JSONArray cates = jObject.getJSONArray("cates");
-			this.statCategoryList = new ArrayList<StatCategory>();
+			this.statCategoryList = new ArrayList<>();
 			for (int i = 0; i < cates.length(); i++)
 			{
 				JSONObject object = cates.getJSONObject(i);				
@@ -44,7 +44,7 @@ public class MineStatResponse extends BaseResponse
 				category.setCategoryID(object.getInt("id"));
 				category.setAmount(object.getDouble("amount"));
 				  
-				List<Integer> itemIDList = new ArrayList<Integer>();
+				List<Integer> itemIDList = new ArrayList<>();
 				JSONArray iids = object.getJSONArray("items");
 				for (int j = 0; j < iids.length(); j++)
 				{
@@ -56,7 +56,7 @@ public class MineStatResponse extends BaseResponse
 			}
 			
 			JSONObject months = jObject.optJSONObject("ms");
-			this.monthsData = new HashMap<String, Double>();
+			this.monthsData = new HashMap<>();
 			if (months != null)
 			{
 				for (Iterator<?> iterator = months.keys(); iterator.hasNext();)

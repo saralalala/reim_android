@@ -10,7 +10,6 @@
     <string name="on">开</string>
     <string name="off">关</string>
     <string name="not_available">N/A</string>
-    <string name="null_string"></string>
     <string name="empty">无</string>
     <string name="rmb">元</string>
     <string name="rmb_symbol">¥</string>
@@ -24,6 +23,13 @@
     <string name="total">总计</string>
     <string name="province">省</string>
     <string name="region">自治区</string>
+    <string name="monday">周一</string>
+    <string name="tuesday">周二</string>
+    <string name="wednesday">周三</string>
+    <string name="thursday">周四</string>
+    <string name="friday">周五</string>
+    <string name="saturday">周六</string>
+    <string name="sunday">周日</string>
 
     <string name="confirm">确定</string>
     <string name="save">保存</string>
@@ -242,6 +248,7 @@
     <string name="get_invoice">我要开发票</string>
     <string name="my_messages">我的消息</string>
     <string name="message_from_admin">来自管理员的消息</string>
+    <string name="message_reference">\n\n-----以下是你于%1$s发送的内容-----\n\n</string>
     <string name="invite">邀请好友</string>
     <string name="send_invite">发送邀请</string>
     <string name="custom_service">联系客服</string>
@@ -291,9 +298,6 @@
     <string name="about_footer">Copyright&#169; 2014&#8211;2015 北京如数科技有限公司</string>
     <string name="wechat_share_title">云报销 - 对报销的怨言到此为止</string>
     <string name="wechat_share_description">专注与解决企业的财务报销与审批问题，同时支持iOS、Android 以及 Web端。</string>
-    <string name="wechat_share_url_main">https://www.cloudbaoxiao.com</string>
-    <string name="wechat_share_url_download">https://admin.cloudbaoxiao.com/install/index</string>
-
     
     <string name="input_username">请输入手机/邮箱</string>
     <string name="input_password">请输入密码</string>
@@ -421,6 +425,7 @@
     <string name="error_submit_report_item_not_uploaded">消费未被上传，报告不可被提交</string>
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>
     <string name="error_timeout">你的账号已经其他地方登录，本地已经下线。</string>
+    <string name="error_images_maximum">最多只能选择%1$d张照片</string>
     <string name="error_contact_no_permission">未能读取到你的通讯录信息，可能是由于你未授权「云报销」读取你的通讯录所致。</string>
     <string name="error_wechat_common">微信错误</string>
     <string name="error_wechat_sent_failed">微信发送失败</string>
@@ -537,7 +542,21 @@
     <string name="no_categories">当前没有任何类别</string>
     <string name="no_tags">当前没有任何标签</string>
     <string name="no_filter_result">抱歉，没有找到符合的结果</string>
-    
+
+    <string name="apply_new">你发送了加入「%1$s」的申请</string>
+    <string name="apply_others_new">%1$s 申请加入「%2$s」</string>
+    <string name="apply_rejected">你加入「%1$s」的申请被拒绝</string>
+    <string name="apply_others_rejected">你拒绝了 %1$s 加入「%2$s」的申请</string>
+    <string name="apply_accepted">你加入「%1$s」的申请已通过</string>
+    <string name="apply_others_accepted">你同意了 %1$s 加入「%2$s」的申请</string>
+
+    <string name="invite_new">你邀请了用户%1$s加入「%2$s」</string>
+    <string name="invite_others_new">用户%1$s邀请你加入「%2$s」</string>
+    <string name="invite_rejected">用户%1$s拒绝了加入「%2$s」的邀请</string>
+    <string name="invite_others_rejected">你拒绝了加入「%1$s」的邀请</string>
+    <string name="invite_accepted">用户%1$s已加入「%2$s」</string>
+    <string name="invite_others_accepted">你已加入「%1$s」</string>
+
     <string name="vendor_taxi">出租车</string>
     <string name="vendor_flight">飞机票</string>
     <string name="vendor_train">火车票</string>

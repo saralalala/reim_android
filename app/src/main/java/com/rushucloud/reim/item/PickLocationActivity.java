@@ -20,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -303,14 +302,7 @@ public class PickLocationActivity extends Activity
                         if (adapter.getSelector().containsKey(key))
                         {
                             int position = adapter.getSelector().get(key);
-                            if (locationListView.getHeaderViewsCount() > 0)
-                            {
-                                locationListView.setSelectionFromTop(position + locationListView.getHeaderViewsCount(), 0);
-                            }
-                            else
-                            {
-                                locationListView.setSelectionFromTop(position, 0);
-                            }
+                            locationListView.setSelection(position + locationListView.getHeaderViewsCount());
                         }
                     }
                     switch (event.getAction())

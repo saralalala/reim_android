@@ -291,14 +291,7 @@ public class ViewUtils
                         if (selector.containsKey(key))
                         {
                             int position = selector.get(key);
-                            if (listView.getHeaderViewsCount() > 0)
-                            {
-                                listView.setSelectionFromTop(position + listView.getHeaderViewsCount(), 0);
-                            }
-                            else
-                            {
-                                listView.setSelectionFromTop(position, 0);
-                            }
+                            listView.setSelection(position + listView.getHeaderViewsCount());
                         }
                     }
                     switch (event.getAction())

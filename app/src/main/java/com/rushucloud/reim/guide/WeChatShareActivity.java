@@ -19,10 +19,10 @@ import com.umeng.analytics.MobclickAgent;
 import classes.utils.AppPreference;
 import classes.utils.ViewUtils;
 import classes.utils.WeChatUtils;
+import netUtils.URLDef;
 
 public class WeChatShareActivity extends Activity
 {
-    private String shareURL;
     private String nickname;
     private String companyName;
     private int count;
@@ -56,7 +56,6 @@ public class WeChatShareActivity extends Activity
 
     private void initData()
     {
-        shareURL = ViewUtils.getString(R.string.wechat_share_url_main);
         nickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
         companyName = getIntent().getStringExtra("companyName");
         count = getIntent().getIntExtra("count", 0);
@@ -83,7 +82,7 @@ public class WeChatShareActivity extends Activity
             {
                 String title = String.format(getString(R.string.wechat_title), nickname, companyName);
                 String description = String.format(getString(R.string.wechat_description), nickname, companyName);
-                WeChatUtils.shareToWX(shareURL, title, description, false);
+                WeChatUtils.shareToWX(URLDef.URL_MAIN_PAGE, title, description, false);
             }
         });
 
@@ -93,7 +92,7 @@ public class WeChatShareActivity extends Activity
             public void onClick(View v)
             {
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), shareURL);
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), URLDef.URL_MAIN_PAGE);
                 clipboardManager.setPrimaryClip(clip);
                 ViewUtils.showToast(WeChatShareActivity.this, R.string.prompt_copied_to_clipboard);
             }

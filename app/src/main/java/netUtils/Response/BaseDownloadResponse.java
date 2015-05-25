@@ -15,9 +15,4 @@ public class BaseDownloadResponse
 	{
 		return inputStream;
 	}
-
-	public void setInputStream(InputStream inputStream)
-	{
-		this.inputStream = inputStream;
-	}
 }

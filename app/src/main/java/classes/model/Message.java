@@ -43,10 +43,9 @@ public class Message implements Serializable
             setType(TYPE_MESSAGE);
             setHasBeenRead(Utils.intToBoolean(jObject.getInt("sread")));
 
-            int time = jObject.getInt("createdts");
-            String content = jObject.getString("feedback") + "\n\n-----以下是你于" +
-                    Utils.secondToStringUpToDay(time) + "发送的内容-----\n\n" + jObject.getString("content");
-            setContent(content);
+            String time = Utils.secondToStringUpToDay(jObject.getInt("createdts"));
+            content = jObject.getString("feedback") + String.format(ViewUtils.getString(R.string.message_reference), time) +
+                    jObject.getString("content");
         }
         catch (JSONException e)
         {

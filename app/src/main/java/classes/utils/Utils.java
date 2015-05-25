@@ -121,19 +121,19 @@ public class Utils
 		switch (calendar.get(GregorianCalendar.DAY_OF_WEEK))
 		{
 			case GregorianCalendar.SUNDAY:
-				return "周日";
+				return ViewUtils.getString(R.string.sunday);
 			case GregorianCalendar.MONDAY:
-				return "周一";
+                return ViewUtils.getString(R.string.monday);
 			case GregorianCalendar.TUESDAY:
-				return "周二";
+                return ViewUtils.getString(R.string.tuesday);
 			case GregorianCalendar.WEDNESDAY:
-				return "周三";
+                return ViewUtils.getString(R.string.wednesday);
 			case GregorianCalendar.THURSDAY:
-				return "周四";
+                return ViewUtils.getString(R.string.thursday);
 			case GregorianCalendar.FRIDAY:
-				return "周五";
+                return ViewUtils.getString(R.string.friday);
 			case GregorianCalendar.SATURDAY:
-				return "周六";
+                return ViewUtils.getString(R.string.saturday);
 			default:
 				return "";
 		}

@@ -513,7 +513,7 @@ public class EditItemActivity extends Activity
                         amountEditText.setSelection(s.length());
                     }
                 }
-                if (s.toString().trim().substring(0).equals("."))
+                if (s.toString().trim().equals("."))
                 {
                     s = "0" + s;
                     amountEditText.setText(s);
@@ -799,7 +799,7 @@ public class EditItemActivity extends Activity
                     MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_MERCHANT");
                 }
 
-                String category = item.getCategory() != null? item.getCategory().getName() : getString(R.string.null_string);
+                String category = item.getCategory() != null? item.getCategory().getName() : "";
                 Intent intent = new Intent(EditItemActivity.this, PickVendorActivity.class);
                 intent.putExtra("category", category);
                 intent.putExtra("location", item.getLocation());

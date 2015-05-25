@@ -44,5 +44,6 @@ public class URLDef
 	
 	public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com:12588/msg";
 
-	public static final String SHARE_TARGET = "http://www.rushucloud.com";
+	public static final String URL_MAIN_PAGE = "https://www.cloudbaoxiao.com";
+    public static final String URL_DOWNLOAD_PAGE = "https://admin.cloudbaoxiao.com/install/index";
 }

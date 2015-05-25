@@ -5,9 +5,6 @@ import android.util.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -19,8 +16,7 @@ public class ReimJWT
 	public static String Encode(String jsonPayload)
 	{
 		JSONObject header = new JSONObject();
-		String headerPart = "";
-		String bodyPart = "";
+		String headerPart, bodyPart;
 		try
 		{
 			header.put("typ", "JWT");
@@ -52,11 +48,7 @@ public class ReimJWT
 			byte[] m = mac.doFinal();
 			temp = Base64.encodeToString(m, Base64.DEFAULT);
 		}
-		catch (NoSuchAlgorithmException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (InvalidKeyException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}

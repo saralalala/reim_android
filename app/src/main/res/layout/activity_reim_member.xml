@@ -132,6 +132,7 @@
             android:id="@+id/indexLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:layout_alignParentRight="true"

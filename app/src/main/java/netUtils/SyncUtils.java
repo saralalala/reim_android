@@ -72,7 +72,7 @@ public abstract class SyncUtils
 					appPreference.saveAppPreference();
 					
 					DBManager dbManager = DBManager.getDBManager();
-					List<Integer> remainingList = new ArrayList<Integer>();
+					List<Integer> remainingList = new ArrayList<>();
 					SparseIntArray reportIDArray = new SparseIntArray();
 					for (Report report : response.getReportList())
 					{
@@ -123,7 +123,7 @@ public abstract class SyncUtils
     	AppPreference appPreference = AppPreference.getAppPreference();
     	DBManager dbManager = DBManager.getDBManager();
     	List<Item> itemList = dbManager.getUnsyncedItems(appPreference.getCurrentUserID());
-    	List<Image> imageList = new ArrayList<Image>();
+    	List<Image> imageList = new ArrayList<>();
     	
     	for (Item item : itemList)
 		{

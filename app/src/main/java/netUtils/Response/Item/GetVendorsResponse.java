@@ -21,7 +21,7 @@ public class GetVendorsResponse
 			JSONObject jObject = new JSONObject((String)httpResponse);
 			status = jObject.getString("status").equals("OK");
 			JSONArray jsonArray = jObject.getJSONArray("businesses");
-			vendorList = new ArrayList<Vendor>();
+			vendorList = new ArrayList<>();
 
 			int count = jsonArray.length();
 			for (int i = 0; i < count; i++)

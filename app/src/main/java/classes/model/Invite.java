@@ -1,11 +1,14 @@
 package classes.model;
 
+import com.rushucloud.reim.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 
 public class Invite extends Message implements Serializable
 {
@@ -29,6 +32,8 @@ public class Invite extends Message implements Serializable
         try
         {
             String invitor = jObject.getString("invitor");
+            String groupName = jObject.getString("groupname");
+            String iName = jObject.optString("iname", "");
             int activeType = jObject.getInt("actived");
 
             setServerID(jObject.getInt("id"));
@@ -40,42 +45,42 @@ public class Invite extends Message implements Serializable
 
             if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_NEW)
             {
-                String message = "用户" + invitor + "邀请你加入「" + jObject.getString("groupname") + "」";
+                String message = String.format(ViewUtils.getString(R.string.invite_others_new), invitor, groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("invitedt"));
             }
             else if (invitor.equals(currentNickname) && activeType == Invite.TYPE_NEW)
             {
-                String message = "你邀请了用户" + jObject.getString("iname") + "加入「" + jObject.getString("groupname") + "」";
+                String message = String.format(ViewUtils.getString(R.string.invite_new), iName, groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("invitedt"));
             }
             else if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_REJECTED)
             {
-                String message = "你拒绝了加入「" + jObject.getString("groupname") + "」的邀请";
+                String message = String.format(ViewUtils.getString(R.string.invite_others_rejected), groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("activedt"));
             }
             else if (invitor.equals(currentNickname) && activeType == Invite.TYPE_REJECTED)
             {
-                String message = "用户" + jObject.getString("iname") + "拒绝了加入「" + jObject.getString("groupname") + "」的邀请";
+                String message = String.format(ViewUtils.getString(R.string.invite_rejected), iName, groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("activedt"));
             }
             else if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_ACCEPTED)
             {
-                String message = "你已加入「" + jObject.getString("groupname") + "」";
+                String message = String.format(ViewUtils.getString(R.string.invite_others_accepted), groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("activedt"));
             }
             else
             {
-                String message = "用户" + jObject.getString("iname") + "已加入「" + jObject.getString("groupname") + "」";
+                String message = String.format(ViewUtils.getString(R.string.invite_accepted), iName, groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("activedt"));

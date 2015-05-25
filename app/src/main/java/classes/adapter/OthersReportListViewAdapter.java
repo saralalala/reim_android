@@ -16,8 +16,6 @@ import java.util.List;
 import classes.model.Report;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
-import classes.utils.ViewUtils;
-import classes.widget.PinnedSectionListView;
 
 public class OthersReportListViewAdapter extends BaseAdapter
 {
@@ -84,7 +82,7 @@ public class OthersReportListViewAdapter extends BaseAdapter
             int visibility = report.isCC()? View.VISIBLE : View.GONE;
             ccTextView.setVisibility(visibility);
 
-            String nickname = report.getSender() == null? context.getString(R.string.null_string) : report.getSender().getNickname();
+            String nickname = report.getSender() == null? "" : report.getSender().getNickname();
             senderTextView.setText(context.getString(R.string.prompt_sender) + nickname);
 
             String title = report.getTitle().isEmpty()? context.getString(R.string.report_no_name) : report.getTitle();

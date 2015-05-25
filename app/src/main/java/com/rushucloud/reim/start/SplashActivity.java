@@ -15,7 +15,6 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.ViewUtils;
-import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.request.user.SandboxOAuthRequest;
 import netUtils.request.user.SignInRequest;

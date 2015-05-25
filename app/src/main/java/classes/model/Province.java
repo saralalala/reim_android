@@ -22,7 +22,7 @@ public class Province
         try
         {
             name = jObject.getString("name");
-            cityList = new ArrayList<String>();
+            cityList = new ArrayList<>();
             JSONArray cityArray = jObject.getJSONArray("city");
             for (int i = 0; i < cityArray.length(); i++)
             {

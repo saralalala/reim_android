@@ -394,7 +394,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
     private void showFeedbackWindow()
     {
-    	feedbackEditText.setText(R.string.null_string);
+    	feedbackEditText.setText("");
     	
 		feedbackPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
 		feedbackPopupWindow.update();

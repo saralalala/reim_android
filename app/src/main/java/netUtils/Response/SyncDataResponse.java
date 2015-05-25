@@ -26,7 +26,7 @@ public class SyncDataResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			
-			reportList = new ArrayList<Report>();
+			reportList = new ArrayList<>();
 			JSONArray jsonArray = jObject.getJSONArray("reports");
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
@@ -34,7 +34,7 @@ public class SyncDataResponse extends BaseResponse
 				reportList.add(report);
 			}
 			
-			itemList = new ArrayList<Item>();
+			itemList = new ArrayList<>();
 			jsonArray = jObject.getJSONArray("items");
 			for (int i = 0; i < jsonArray.length(); i++)
 			{

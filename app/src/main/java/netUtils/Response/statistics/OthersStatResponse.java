@@ -29,7 +29,7 @@ public class OthersStatResponse extends BaseResponse
 			JSONObject jObject = getDataObject();
 			
 			JSONArray categories = jObject.getJSONArray("categories");
-			this.statCategoryList = new ArrayList<StatCategory>();
+			this.statCategoryList = new ArrayList<>();
 			for (int i = 0; i < categories.length(); i++)
 			{
 				JSONObject object = categories.getJSONObject(i);
@@ -37,7 +37,7 @@ public class OthersStatResponse extends BaseResponse
 			}
 
             JSONArray tags = jObject.getJSONArray("tags");
-            this.statTagList = new ArrayList<StatTag>();
+            this.statTagList = new ArrayList<>();
             for (int i = 0; i < tags.length(); i++)
             {
                 JSONObject object = tags.getJSONObject(i);
@@ -45,7 +45,7 @@ public class OthersStatResponse extends BaseResponse
             }
 
             JSONArray members = jObject.getJSONArray("members");
-            this.statUserList = new ArrayList<StatUser>();
+            this.statUserList = new ArrayList<>();
             for (int i = 0; i < members.length(); i++)
             {
                 JSONObject object = members.getJSONObject(i);

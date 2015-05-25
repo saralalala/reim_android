@@ -661,7 +661,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<User> getGroupUsers(int groupServerID)
 	{
-		List<User> userList = new ArrayList<User>();
+		List<User> userList = new ArrayList<>();
 		try
         {
             if (groupServerID != -1 && groupServerID != 0)
@@ -764,7 +764,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<User> getRelevantUsers(int itemLocalID)
 	{
-		List<User> relevantUsers = new ArrayList<User>();	
+		List<User> relevantUsers = new ArrayList<>();
 		try
 		{		
 			Cursor userCursor = database.rawQuery("SELECT user_id FROM tbl_item_user WHERE item_local_id = ?", 
@@ -1011,7 +1011,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String idString = !remainingList.isEmpty()? TextUtils.join(",", remainingList) + ", -1" : "-1";
-			List<Integer> itemIDList = new ArrayList<Integer>();
+			List<Integer> itemIDList = new ArrayList<>();
 
 			String command = "SELECT id FROM tbl_item WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
 			Cursor cursor = database.rawQuery(command, null);
@@ -1254,7 +1254,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Item> getUserItems(int userServerID)
 	{
-		List<Item> itemList = new ArrayList<Item>();
+		List<Item> itemList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ?", new String[]{Integer.toString(userServerID)});
@@ -1299,7 +1299,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Item> getUnarchivedConsumedItems(int userServerID)
 	{
-		List<Item> itemList = new ArrayList<Item>();
+		List<Item> itemList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
@@ -1347,7 +1347,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Item> getUnarchivedBudgetItems(int userServerID)
 	{
-		List<Item> itemList = new ArrayList<Item>();
+		List<Item> itemList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
@@ -1395,7 +1395,7 @@ public class DBManager extends SQLiteOpenHelper
 
     public List<Item> getUnarchivedBorrowingItems(int userServerID)
     {
-        List<Item> itemList = new ArrayList<Item>();
+        List<Item> itemList = new ArrayList<>();
         try
         {
             Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
@@ -1443,7 +1443,7 @@ public class DBManager extends SQLiteOpenHelper
 
 	public List<Item> getUnsyncedItems(int userServerID)
 	{
-		List<Item> itemList = new ArrayList<Item>();
+		List<Item> itemList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE local_updatedt > server_updatedt AND user_id = ?", 
@@ -1489,7 +1489,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Item> getExistsUserItems(int userServerID)
 	{
-		List<Item> itemList = new ArrayList<Item>();
+		List<Item> itemList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT id, server_id FROM tbl_item WHERE user_id = ? AND server_id != -1", 
@@ -1597,7 +1597,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Item> getReportItems(int reportLocalID)
 	{
-		List<Item> itemList = new ArrayList<Item>();
+		List<Item> itemList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE report_local_id = ?",
@@ -1643,7 +1643,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Item> getOthersReportItems(int reportServerID)
 	{
-		List<Item> itemList = new ArrayList<Item>();
+		List<Item> itemList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_item WHERE report_server_id = ?", 
@@ -1689,7 +1689,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Item> getItems(ArrayList<Integer> chosenItemIDList)
 	{
-		List<Item> itemList = new ArrayList<Item>();
+		List<Item> itemList = new ArrayList<>();
 		try
 		{
 			for (int i = 0; i < chosenItemIDList.size(); i++)
@@ -1915,7 +1915,7 @@ public class DBManager extends SQLiteOpenHelper
 		try
 		{
 			String idString = !remainingList.isEmpty()? TextUtils.join(",", remainingList) + ",-1" : "-1";
-			List<Integer> reportIDList = new ArrayList<Integer>();
+			List<Integer> reportIDList = new ArrayList<>();
 
 			String command = "SELECT id FROM tbl_report WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
 			Cursor cursor = database.rawQuery(command, null);
@@ -2135,7 +2135,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Report> getUnsyncedUserReports(int userServerID)
 	{
-		List<Report> reportList = new ArrayList<Report>();
+		List<Report> reportList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE local_updatedt > server_updatedt AND " +
@@ -2172,7 +2172,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Report> getExistsUserReports(int userServerID)
 	{
-		List<Report> reportList = new ArrayList<Report>();
+		List<Report> reportList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT id, server_id FROM tbl_report WHERE user_id = ? AND server_id != -1", 
@@ -2199,7 +2199,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Report> getUserReports(int userServerID)
 	{
-		List<Report> reportList = new ArrayList<Report>();
+		List<Report> reportList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE user_id = ?", 
@@ -2236,7 +2236,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Report> getOthersReports(int userServerID)
 	{
-		List<Report> reportList = new ArrayList<Report>();
+		List<Report> reportList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE owner_id = ?",
@@ -2276,7 +2276,7 @@ public class DBManager extends SQLiteOpenHelper
 
 	public String getReportItemIDs(int reportLocalID)
 	{
-		List<Integer> idList = new ArrayList<Integer>();
+		List<Integer> idList = new ArrayList<>();
 		Cursor cursor = database.rawQuery("SELECT server_id FROM tbl_item WHERE report_local_id = ?", 
 												new String[]{Integer.toString(reportLocalID)});
 		while (cursor.moveToNext())
@@ -2309,8 +2309,8 @@ public class DBManager extends SQLiteOpenHelper
             {
                 cursor.close();
             }
-            return amount;
         }
+        return amount;
 	}
 
 	// Bank Account
@@ -2588,7 +2588,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Comment> getReportComments(int reportLocalID)
 	{
-		List<Comment> commentList = new ArrayList<Comment>();
+		List<Comment> commentList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE report_local_id = ?", 
@@ -2621,7 +2621,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Comment> getOthersReportComments(int reportServerID)
 	{
-		List<Comment> commentList = new ArrayList<Comment>();
+		List<Comment> commentList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_comment WHERE report_server_id = ?", 
@@ -2784,7 +2784,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Category> getGroupCategories(int groupServerID)
 	{
-		List<Category> categoryList = new ArrayList<Category>();
+		List<Category> categoryList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE group_id = ? AND parent_id = 0", 
@@ -2816,7 +2816,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Category> getSubCategories(int parentServerID, int groupServerID)
 	{
-		List<Category> categoryList = new ArrayList<Category>();
+		List<Category> categoryList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE group_id = ? AND parent_id = ?", 
@@ -3026,7 +3026,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Tag> getGroupTags(int groupServerID)
 	{
-		List<Tag> tagList = new ArrayList<Tag>();
+		List<Tag> tagList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_tag WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
@@ -3112,7 +3112,7 @@ public class DBManager extends SQLiteOpenHelper
 	{
 		try
 		{
-			List<Tag> tags = new ArrayList<Tag>();			
+			List<Tag> tags = new ArrayList<>();
 			Cursor tagCursor = database.rawQuery("SELECT tag_id FROM tbl_item_tag WHERE item_local_id = ?", 
 													new String[]{Integer.toString(itemLocalID)});
 			while (tagCursor.moveToNext())
@@ -3507,7 +3507,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Image> getItemImages(int itemLocalID)
 	{
-		List<Image> imageList = new ArrayList<Image>();
+		List<Image> imageList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE item_local_id = ?", 
@@ -3537,7 +3537,7 @@ public class DBManager extends SQLiteOpenHelper
 	
 	public List<Image> getOthersItemImages(int itemServerID)
 	{
-		List<Image> imageList = new ArrayList<Image>();
+		List<Image> imageList = new ArrayList<>();
 		try
 		{
 			Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_image WHERE item_server_id = ?", 

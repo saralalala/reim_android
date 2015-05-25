@@ -24,7 +24,7 @@ public class SearchItemsResponse extends BaseResponse
 		{
 			JSONArray jsonArray = getDataArray();
 			
-			itemList = new ArrayList<Item>();
+			itemList = new ArrayList<>();
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
 				Item item = new Item(jsonArray.getJSONObject(i));				

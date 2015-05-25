@@ -21,6 +21,7 @@ import java.security.KeyStore;
 import classes.utils.AppPreference;
 import classes.utils.PhoneUtils;
 
+@SuppressWarnings("deprecation")
 public class HttpUtils
 {
 	public static HttpClient getHttpClient()

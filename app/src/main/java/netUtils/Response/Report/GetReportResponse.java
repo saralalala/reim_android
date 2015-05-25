@@ -39,7 +39,7 @@ public class GetReportResponse extends BaseResponse
 			JSONObject receiverObject = jObject.getJSONObject("receivers");
 			
 			JSONArray managerArray = receiverObject.getJSONArray("managers");
-			List<User> managerList = new ArrayList<User>();
+			List<User> managerList = new ArrayList<>();
 			for (int i = 0; i < managerArray.length(); i++)
 			{
 				JSONObject object = managerArray.getJSONObject(i);
@@ -52,7 +52,7 @@ public class GetReportResponse extends BaseResponse
 			report.setManagerList(managerList);
 			
 			JSONArray ccArray = receiverObject.getJSONArray("cc");
-			List<User> ccList = new ArrayList<User>();
+			List<User> ccList = new ArrayList<>();
 			for (int i = 0; i < ccArray.length(); i++)
 			{
 				JSONObject object = ccArray.getJSONObject(i);
@@ -65,7 +65,7 @@ public class GetReportResponse extends BaseResponse
 			report.setCCList(ccList);
 			
 			JSONArray commentArray = jObject.getJSONObject("comments").getJSONArray("data");
-			List<Comment> commentList = new ArrayList<Comment>();
+			List<Comment> commentList = new ArrayList<>();
 			for (int i = 0; i < commentArray.length(); i++)
 			{
 				JSONObject object = commentArray.getJSONObject(i);
@@ -87,7 +87,7 @@ public class GetReportResponse extends BaseResponse
 			int itemCount = 0;
 			double amount = 0;
 			
-			itemList = new ArrayList<Item>();
+			itemList = new ArrayList<>();
 			JSONArray itemArray = jObject.getJSONArray("items");
 			for (int i = 0; i < itemArray.length(); i++)
 			{

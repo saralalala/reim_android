@@ -35,6 +35,7 @@ import classes.utils.WeChatUtils;
 import classes.widget.CircleImageView;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
+import netUtils.URLDef;
 import netUtils.request.DownloadImageRequest;
 import netUtils.response.DownloadImageResponse;
 
@@ -246,7 +247,6 @@ public class MeFragment extends Fragment
 
     private void initShareWindow()
     {
-        final String url = ViewUtils.getString(R.string.wechat_share_url_download);
         final String title = ViewUtils.getString(R.string.wechat_share_title);
         final String description = ViewUtils.getString(R.string.wechat_share_description);
 
@@ -258,7 +258,7 @@ public class MeFragment extends Fragment
             public void onClick(View v)
             {
                 sharePopupWindow.dismiss();
-                WeChatUtils.shareToWX(url, title, description, false);
+                WeChatUtils.shareToWX(URLDef.URL_DOWNLOAD_PAGE, title, description, false);
             }
         });
 
@@ -268,7 +268,7 @@ public class MeFragment extends Fragment
             public void onClick(View v)
             {
                 sharePopupWindow.dismiss();
-                WeChatUtils.shareToWX(url, title, description, true);
+                WeChatUtils.shareToWX(URLDef.URL_DOWNLOAD_PAGE, title, description, true);
             }
         });
 
@@ -306,7 +306,7 @@ public class MeFragment extends Fragment
             }
             else
             {
-                managerTextView.setText(R.string.null_string);
+                managerTextView.setText("");
             }
 
             if (!currentUser.isAdmin() || currentUser.getGroupID() <= 0)

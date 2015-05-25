@@ -25,7 +25,7 @@ public class SubordinatesReportResponse extends BaseResponse
 	{
 		try
 		{			
-			reportList = new ArrayList<Report>();
+			reportList = new ArrayList<>();
 			JSONObject jObject = getDataObject();
 			if (jObject != null)
 			{
@@ -63,10 +63,5 @@ public class SubordinatesReportResponse extends BaseResponse
 	public List<Report> getReportList()
 	{
 		return reportList;
-	}
-
-	public void setReportList(List<Report> reportList)
-	{
-		this.reportList = reportList;
 	}
 }

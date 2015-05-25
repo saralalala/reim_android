@@ -29,7 +29,7 @@ public class GetMessagesResponse extends BaseResponse
             String currentNickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
 			
 			JSONArray jsonArray = getDataArray();
-			messageList = new ArrayList<Message>();
+			messageList = new ArrayList<>();
 			for (int i = 0 ; i < jsonArray.length() ; i++)
 			{
 				JSONObject jObject = jsonArray.getJSONObject(i);

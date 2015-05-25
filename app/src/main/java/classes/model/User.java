@@ -75,7 +75,6 @@ public class User implements Serializable
 			setEmail(jObject.getString("email"));
 			setPhone(jObject.getString("phone"));
 			setNickname(jObject.getString("nickname"));
-//            setBankAccount(jObject.getString("credit_card"));
 			setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
 			setDefaultManagerID(jObject.getInt("manager_id"));
 			setGroupID(groupID);
@@ -98,6 +97,43 @@ public class User implements Serializable
 		{
 			e.printStackTrace();
 		}
+    }
+
+    public void parse(JSONObject jObject, int groupID)
+    {
+        try
+        {
+            setServerID(jObject.getInt("id"));
+            setNickname(jObject.getString("nickname"));
+            setEmail(jObject.getString("email"));
+            setPhone(jObject.getString("phone"));
+            setDefaultManagerID(jObject.getInt("manager_id"));
+            setAvatarLocalPath("");
+            setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
+            setIsActive(Utils.intToBoolean(jObject.getInt("active")));
+            setGroupID(groupID);
+            setAppliedCompany(jObject.getString("apply"));
+            setLocalUpdatedDate(jObject.getInt("lastdt"));
+            setServerUpdatedDate(jObject.getInt("lastdt"));
+            String imageID = jObject.getString("avatar");
+            JSONArray jsonArray = jObject.getJSONArray("banks");
+            if (jsonArray.length() > 0)
+            {
+                setBankAccount(new BankAccount(jsonArray.getJSONObject(0)));
+            }
+            if (imageID.isEmpty())
+            {
+                setAvatarID(-1);
+            }
+            else
+            {
+                setAvatarID(Integer.valueOf(imageID));
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
     }
 	
 	public int getServerID()
@@ -293,44 +329,6 @@ public class User implements Serializable
 		return super.equals(o);
 	}
 
-    public void parse(JSONObject jObject, int groupID)
-    {
-        try
-        {
-            setServerID(jObject.getInt("id"));
-            setNickname(jObject.getString("nickname"));
-            setEmail(jObject.getString("email"));
-            setPhone(jObject.getString("phone"));
-            setDefaultManagerID(jObject.getInt("manager_id"));
-            setAvatarLocalPath("");
-            setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
-            setIsActive(Utils.intToBoolean(jObject.getInt("active")));
-            setGroupID(groupID);
-            setAppliedCompany(jObject.getString("apply"));
-            setLocalUpdatedDate(jObject.getInt("lastdt"));
-            setServerUpdatedDate(jObject.getInt("lastdt"));
-            String imageID = jObject.getString("avatar");
-            JSONArray jsonArray = jObject.getJSONArray("banks");
-            if (jsonArray.length() > 0)
-            {
-                setBankAccount(new BankAccount(jsonArray.getJSONObject(0)));
-            }
-            if (imageID.isEmpty())
-            {
-                setAvatarID(-1);
-            }
-            else
-            {
-                setAvatarID(Integer.valueOf(imageID));
-            }
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-
 	public boolean hasUndownloadedAvatar()
 	{
 		if (getAvatarLocalPath().isEmpty() && getAvatarID() > 0)
@@ -351,7 +349,7 @@ public class User implements Serializable
 	
 	public List<User> buildBaseManagerList()
 	{
-		List<User> tempList = new ArrayList<User>();
+		List<User> tempList = new ArrayList<>();
 		User defaultManager = getDefaultManager();
 		if (defaultManager != null)
 		{
@@ -398,7 +396,7 @@ public class User implements Serializable
 
 	public static List<User> idStringToUserList(String idString)
 	{
-		List<User> userList = new ArrayList<User>();
+		List<User> userList = new ArrayList<>();
 		DBManager dbManager = DBManager.getDBManager();
 		List<Integer> idList = Utils.stringToIntList(idString);
 		for (Integer integer : idList)
@@ -416,10 +414,10 @@ public class User implements Serializable
 	{
 		if (userList == null || userList.isEmpty())
 		{
-			return new ArrayList<User>();
+			return new ArrayList<>();
 		}
 		
-		List<User> tempList = new ArrayList<User>();
+		List<User> tempList = new ArrayList<>();
 		for (User user : userList)
 		{
 			if (user.getServerID() != userID)
@@ -433,7 +431,7 @@ public class User implements Serializable
 
     public static List<User> filterList(List<User> userList, String keyword)
     {
-        List<User> resultList = new ArrayList<User>();
+        List<User> resultList = new ArrayList<>();
         keyword = keyword.toLowerCase();
 
         for (User user : userList)

@@ -82,7 +82,8 @@ public class GalleryAdapter extends BaseAdapter
 			{
 				if (maxChosenCount != -1 && getSelectedCount() == maxChosenCount && !checkList[position])
 				{
-					Toast.makeText(context, "最多只能选择" + maxChosenCount + "张照片", Toast.LENGTH_SHORT).show();
+                    String content = String.format(ViewUtils.getString(R.string.error_images_maximum), maxChosenCount);
+					Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
 					holder.checkImageView.setSelected(false);
 				}
 				else

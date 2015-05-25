@@ -222,7 +222,7 @@ public class ReimApplication extends Application
 
 	private void saveCategoryIcon()
 	{
-		List<Integer> iconList= new ArrayList<Integer>();
+		List<Integer> iconList= new ArrayList<>();
 		iconList.add(R.drawable.icon_food);
 		iconList.add(R.drawable.icon_transport);
 		iconList.add(R.drawable.icon_office_supplies);

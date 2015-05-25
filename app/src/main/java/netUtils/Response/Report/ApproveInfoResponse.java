@@ -31,7 +31,7 @@ public class ApproveInfoResponse extends BaseResponse
 			submitDate = metaObject.getString("submitdt").substring(0, 16);
 			
 			JSONArray jsonArray = jObject.getJSONArray("data");
-			infoList = new ArrayList<ApproveInfo>();
+			infoList = new ArrayList<>();
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
 				ApproveInfo info = new ApproveInfo(jsonArray.getJSONObject(i));
@@ -49,7 +49,7 @@ public class ApproveInfoResponse extends BaseResponse
 			}
 			if (infoList == null)
 			{
-				infoList = new ArrayList<ApproveInfo>();				
+				infoList = new ArrayList<>();
 			}
 			e.printStackTrace();
 		}

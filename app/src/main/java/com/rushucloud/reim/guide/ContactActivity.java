@@ -15,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -287,14 +286,7 @@ public class ContactActivity extends Activity
                         if (adapter.getSelector().containsKey(key))
                         {
                             int position = adapter.getSelector().get(key);
-                            if (contactListView.getHeaderViewsCount() > 0)
-                            {
-                                contactListView.setSelectionFromTop(position + contactListView.getHeaderViewsCount(), 0);
-                            }
-                            else
-                            {
-                                contactListView.setSelectionFromTop(position, 0);
-                            }
+                            contactListView.setSelection(position + contactListView.getHeaderViewsCount());
                         }
                     }
                     switch (event.getAction())

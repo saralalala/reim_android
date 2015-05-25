@@ -169,7 +169,7 @@ public class Tag implements Serializable
 	
 	public static List<Tag> idStringToTagList(String idString)
 	{
-		List<Tag> tagList = new ArrayList<Tag>();
+		List<Tag> tagList = new ArrayList<>();
 		DBManager dbManager = DBManager.getDBManager();
 		List<Integer> idList = Utils.stringToIntList(idString);
 		for (Integer integer : idList)

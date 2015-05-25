@@ -25,7 +25,7 @@ public class GetItemsResponse extends BaseResponse
 		{
 			JSONObject jObject = getDataObject();
 			
-			itemList = new ArrayList<Item>();
+			itemList = new ArrayList<>();
 			JSONArray jsonArray = jObject.getJSONArray("items");
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
