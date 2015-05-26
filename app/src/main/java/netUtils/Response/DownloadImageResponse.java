@@ -2,6 +2,12 @@ package netUtils.response;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+
+import com.rushucloud.reim.R;
+
+import classes.utils.ViewUtils;
 
 public class DownloadImageResponse extends BaseDownloadResponse
 {
@@ -12,7 +18,7 @@ public class DownloadImageResponse extends BaseDownloadResponse
 		super(httpResponse);
 		if (getInputStream() != null)
 		{
-			bitmap = BitmapFactory.decodeStream(getInputStream());			
+            bitmap = BitmapFactory.decodeStream(getInputStream());
 		}
 	}
 
@@ -20,10 +26,4 @@ public class DownloadImageResponse extends BaseDownloadResponse
 	{
 		return bitmap;
 	}
-
-	public void setBitmap(Bitmap bitmap)
-	{
-		this.bitmap = bitmap;
-	}
-
 }

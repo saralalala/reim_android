@@ -18,6 +18,7 @@ import classes.model.User;
 import classes.utils.DBManager;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.CircleImageView;
 
 public class CommentListViewAdapter extends BaseAdapter
 {
@@ -39,7 +40,7 @@ public class CommentListViewAdapter extends BaseAdapter
 			convertView = layoutInflater.inflate(R.layout.list_comment, parent, false);
 		}
 
-		ImageView avatarImageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
+        CircleImageView avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
 		TextView reviewerTextView = (TextView) convertView.findViewById(R.id.reviewerTextView);
 		TextView commentTextView = (TextView) convertView.findViewById(R.id.commentTextView);
 		TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);

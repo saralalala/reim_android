@@ -29,6 +29,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
@@ -379,8 +380,8 @@ public class ShowItemActivity extends Activity
 			User user = item.getRelevantUsers().get(i);
 			
 			View memberView = View.inflate(this, R.layout.grid_member, null);
-			
-			ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
+
+            CircleImageView avatarImageView = (CircleImageView) memberView.findViewById(R.id.avatarImageView);
             ViewUtils.setImageViewBitmap(user, avatarImageView);
 			
 			TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);

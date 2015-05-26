@@ -303,11 +303,11 @@ public class AppPreference
 
 	public String getTempAvatarPath()
 	{
-		return getAvatarImageDirectory() + "/temp.jpg";
+		return getAvatarImageDirectory() + "/temp.png";
 	}
 	public Uri getTempAvatarUri()
 	{
-		return Uri.fromFile(new File(getAvatarImageDirectory() + "/temp.jpg"));
+		return Uri.fromFile(new File(getAvatarImageDirectory() + "/temp.png"));
 	}
 	
 	public String getInvoiceImageDirectory()
@@ -321,11 +321,11 @@ public class AppPreference
 
 	public String getTempInvoicePath()
 	{
-		return getInvoiceImageDirectory() + "/temp.jpg";
+		return getInvoiceImageDirectory() + "/temp.png";
 	}
 	public Uri getTempInvoiceUri()
 	{
-		return Uri.fromFile(new File(getInvoiceImageDirectory() + "/temp.jpg"));
+		return Uri.fromFile(new File(getInvoiceImageDirectory() + "/temp.png"));
 	}
 	
 	public String getIconImageDirectory()

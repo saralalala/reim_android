@@ -21,6 +21,7 @@ import java.util.TreeMap;
 import classes.model.User;
 import classes.utils.CharacterParser;
 import classes.utils.ViewUtils;
+import classes.widget.CircleImageView;
 import classes.widget.PinnedSectionListView;
 
 public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter
@@ -63,7 +64,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
             int color = isChosen? R.color.list_item_selected : R.color.list_item_unselected;
             view.setBackgroundResource(color);
 
-            ImageView imageView = (ImageView) view.findViewById(R.id.avatarImageView);
+            CircleImageView imageView = (CircleImageView) view.findViewById(R.id.avatarImageView);
             TextView nicknameTextView = (TextView) view.findViewById(R.id.nicknameTextView);
 
             ViewUtils.setImageViewBitmap(user, imageView);

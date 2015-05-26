@@ -30,6 +30,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.CircleImageView;
 import classes.widget.ClearEditText;
 import classes.widget.PinnedSectionListView;
 import classes.widget.ReimProgressDialog;
@@ -46,7 +47,7 @@ public class ManagerActivity extends Activity
 {
     private TextView noMemberTextView;
     private ClearEditText managerEditText;
-    private ImageView avatarImageView;
+    private CircleImageView avatarImageView;
     private TextView nicknameTextView;
 	private PinnedSectionListView managerListView;
 	private MemberListViewAdapter adapter;
@@ -189,7 +190,7 @@ public class ManagerActivity extends Activity
             }
         });
 
-        avatarImageView = (ImageView) findViewById(R.id.avatarImageView);
+        avatarImageView = (CircleImageView) findViewById(R.id.avatarImageView);
         nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
 
 		managerListView = (PinnedSectionListView) findViewById(R.id.userListView);

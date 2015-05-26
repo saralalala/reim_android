@@ -107,7 +107,7 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="56dp"
 	    android:gravity="center"
-	    android:background="@drawable/popup_drawable"
+	    android:background="@drawable/window_dismiss_drawable"
 	    android:text="@string/confirm"
 	    android:textColor="@color/button_text_dark_color"
 	    android:textSize="18sp"/>

@@ -94,10 +94,9 @@ public class CompleteInfoActivity extends Activity
 				}
 				else if (requestCode == CROP_IMAGE)
 				{
-					Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
-					avatarPath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
+					avatarPath = PhoneUtils.saveBitmapToFile(appPreference.getTempAvatarPath(), NetworkConstant.IMAGE_TYPE_AVATAR);
 					newAvatar = true;
-					avatarImageView.setImageBitmap(bitmap);
+					avatarImageView.setImageBitmap(BitmapFactory.decodeFile(avatarPath));
 				}
 			}
 			catch (Exception e)

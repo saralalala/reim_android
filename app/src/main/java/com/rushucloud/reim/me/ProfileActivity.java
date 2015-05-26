@@ -109,13 +109,12 @@ public class ProfileActivity extends Activity
 					}
 					case CROP_IMAGE:
 					{
-						Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempAvatarPath());
-						avatarPath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_AVATAR);
+						avatarPath = PhoneUtils.saveBitmapToFile(appPreference.getTempAvatarPath(), NetworkConstant.IMAGE_TYPE_AVATAR);
 						
 						if (!avatarPath.isEmpty() && PhoneUtils.isNetworkConnected())
 						{
 							ViewUtils.showToast(this, R.string.succeed_in_saving_avatar);
-							avatarImageView.setImageBitmap(bitmap);
+							avatarImageView.setImageBitmap(BitmapFactory.decodeFile(avatarPath));
 							sendUploadAvatarRequest();
 						}
 						else if (avatarPath.isEmpty())

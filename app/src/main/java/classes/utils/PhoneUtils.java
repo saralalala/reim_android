@@ -8,6 +8,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -114,26 +116,32 @@ public class PhoneUtils
 		return AppPreference.getAppPreference().getIconImageDirectory() + "/" + iconID + ".png";
 	}
 
-	public static String saveBitmapToFile(Bitmap bitmap, int type)
+	public static String saveBitmapToFile(String path, int type)
 	{
 		try
 		{
 			Matrix matrix = new Matrix();
 			matrix.postScale(0.5f, 0.5f);
 
-			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            Bitmap source = BitmapFactory.decodeFile(path);
+            source = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
 
-			String path;
-			if (type == NetworkConstant.IMAGE_TYPE_AVATAR)
-			{
-				path = getAvatarFilePath();
-			}
-			else
-			{
-				path = getInvoiceFilePath();
-			}
+            Bitmap bitmap;
+            if (path.endsWith(".png"))
+            {
+                bitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                canvas.drawColor(ViewUtils.getColor(R.color.major_light));
+                canvas.drawBitmap(source, 0, 0, null);
+            }
+            else
+            {
+                bitmap = source;
+            }
 
-			File compressedBitmapFile = new File(path);
+			String filePath = type == NetworkConstant.IMAGE_TYPE_AVATAR? getAvatarFilePath() : getInvoiceFilePath();
+
+			File compressedBitmapFile = new File(filePath);
 			compressedBitmapFile.createNewFile();
 
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -145,7 +153,7 @@ public class PhoneUtils
 			fileOutputStream.flush();
 			fileOutputStream.close();
 
-			return path;
+			return filePath;
 		}
 		catch (IOException e)
 		{

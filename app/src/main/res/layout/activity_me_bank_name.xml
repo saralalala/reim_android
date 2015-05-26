@@ -59,9 +59,8 @@
         android:paddingRight="16dp"
         android:background="@color/major_light"
         android:hint="@string/input_account_name"
-        android:inputType="number"
-        android:textSize="16sp"
         android:textColor="@color/font_major_dark"
+        android:textSize="16sp"
         android:textCursorDrawable="@null"/>
 
     <include

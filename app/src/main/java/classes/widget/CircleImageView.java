@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -113,7 +114,7 @@ public class CircleImageView extends ImageView
 	}
 
 	@Override
-	protected void onDraw(Canvas canvas)
+	protected void onDraw(@NonNull Canvas canvas)
 	{
 		if (getDrawable() == null)
 		{
@@ -208,7 +209,7 @@ public class CircleImageView extends ImageView
 
 		if (drawable instanceof BitmapDrawable)
 		{
-			return ((BitmapDrawable) drawable).getBitmap();
+            return ((BitmapDrawable) drawable).getBitmap();
 		}
 
 		try
@@ -299,5 +300,4 @@ public class CircleImageView extends ImageView
 
 		mBitmapShader.setLocalMatrix(mShaderMatrix);
 	}
-
 }

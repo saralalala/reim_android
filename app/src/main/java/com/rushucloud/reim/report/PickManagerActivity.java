@@ -33,6 +33,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.CircleImageView;
 import classes.widget.ClearEditText;
 import classes.widget.PinnedSectionListView;
 import netUtils.HttpConnectionCallback;
@@ -44,7 +45,7 @@ public class PickManagerActivity extends Activity
 {
     private ClearEditText managerEditText;
     private RelativeLayout managerLayout;
-    private ImageView avatarImageView;
+    private CircleImageView avatarImageView;
     private TextView nicknameTextView;
 	private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
@@ -232,7 +233,7 @@ public class PickManagerActivity extends Activity
                     }
                 });
 
-                avatarImageView = (ImageView) findViewById(R.id.avatarImageView);
+                avatarImageView = (CircleImageView) findViewById(R.id.avatarImageView);
                 nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
 
                 nicknameTextView.setText(defaultManager.getNickname());

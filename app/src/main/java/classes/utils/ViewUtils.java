@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Selection;
@@ -39,6 +40,7 @@ import java.util.HashMap;
 import classes.model.Category;
 import classes.model.StatCategory;
 import classes.model.User;
+import classes.widget.CircleImageView;
 
 public class ViewUtils
 {
@@ -192,12 +194,15 @@ public class ViewUtils
 		activity.getWindow().setAttributes(params);
 	}
 
-    public static void setImageViewBitmap(User user, ImageView imageView)
+    public static void setImageViewBitmap(User user, CircleImageView imageView)
     {
         imageView.setImageResource(R.drawable.default_avatar);
         if (user != null && !user.getAvatarLocalPath().isEmpty())
         {
-            Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarLocalPath());
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inDither = false;
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            Bitmap bitmap = BitmapFactory.decodeFile(user.getAvatarLocalPath(), options);
             if (bitmap != null)
             {
                 imageView.setImageBitmap(bitmap);

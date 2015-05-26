@@ -67,6 +67,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
 import cn.beecloud.BCLocation;
 import netUtils.HttpConnectionCallback;
@@ -200,11 +201,9 @@ public class EditItemActivity extends Activity
                         String[] paths = data.getStringArrayExtra("paths");
 
                         ReimProgressDialog.show();
-                        Bitmap bitmap;
                         for (String path : paths)
                         {
-                            bitmap = BitmapFactory.decodeFile(path);
-                            String invoicePath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
+                            String invoicePath = PhoneUtils.saveBitmapToFile(path, NetworkConstant.IMAGE_TYPE_INVOICE);
                             if (!invoicePath.isEmpty())
                             {
                                 Image image = new Image();
@@ -227,8 +226,7 @@ public class EditItemActivity extends Activity
                 {
                     try
                     {
-                        Bitmap bitmap = BitmapFactory.decodeFile(appPreference.getTempInvoicePath());
-                        String invoicePath = PhoneUtils.saveBitmapToFile(bitmap, NetworkConstant.IMAGE_TYPE_INVOICE);
+                        String invoicePath = PhoneUtils.saveBitmapToFile(appPreference.getTempInvoicePath(), NetworkConstant.IMAGE_TYPE_INVOICE);
                         if (!invoicePath.isEmpty())
                         {
                             Image image = new Image();
@@ -1195,7 +1193,7 @@ public class EditItemActivity extends Activity
             {
                 View memberView = View.inflate(this, R.layout.grid_member, null);
 
-                ImageView avatarImageView = (ImageView) memberView.findViewById(R.id.avatarImageView);
+                CircleImageView avatarImageView = (CircleImageView) memberView.findViewById(R.id.avatarImageView);
                 ViewUtils.setImageViewBitmap(user, avatarImageView);
 
                 TextView nameTextView = (TextView) memberView.findViewById(R.id.nameTextView);

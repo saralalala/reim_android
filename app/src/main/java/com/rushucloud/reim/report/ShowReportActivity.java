@@ -332,6 +332,7 @@ public class ShowReportActivity extends Activity
                             {
                                 memberList.set(i, currentUser);
                             }
+                            break;
                         }
                     }
 

@@ -238,7 +238,7 @@
     <string name="stat_user">人员-</string>
     
     <string name="personal_center">个人中心</string>
-    <string name="sign_out">切换账号</string>
+    <string name="sign_out">退出登录</string>
     <string name="avatar">头像</string>
     <string name="enable_password_protection">开启密码保护</string>
     <string name="sync_without_wifi">仅WiFi开启时上传云端</string>
@@ -463,7 +463,7 @@
     <string name="succeed_in_submitting_report">提交成功</string>
     <string name="succeed_in_alerting">已提醒对方审批报告</string>
     <string name="succeed_in_deleting">删除成功</string>
-    <string name="succeed_in_applying">申请加入成功</string>
+    <string name="succeed_in_applying">申请发送成功，管理员批准后可正式加入</string>
     <string name="succeed_in_setting_account_name">户名设置成功</string>
     <string name="succeed_in_setting_bank_account">银行账户设置成功</string>
     <string name="succeed_in_setting_bank_name">开户行设置成功</string>
