@@ -43,7 +43,7 @@
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/wechat"
-        android:src="@drawable/wechat_session"/>
+        android:src="@drawable/wechat_guide"/>
     
     <TextView
         android:layout_width="match_parent"

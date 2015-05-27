@@ -1463,8 +1463,8 @@ public class EditItemActivity extends Activity
         {
             LocationClientOption option = new LocationClientOption();
             option.setLocationMode(LocationMode.Hight_Accuracy);
-            option.setScanSpan(5000);
-            option.setIsNeedAddress(false);
+            option.setScanSpan(500);
+            option.setIsNeedAddress(true);
             option.setNeedDeviceDirect(false);
             locationClient.setLocOption(option);
             locationClient.start();
@@ -1545,6 +1545,8 @@ public class EditItemActivity extends Activity
             if (location != null)
             {
                 currentLocation = location;
+                String address = currentLocation.getAddrStr() == null? "no address" : currentLocation.getAddrStr();
+                System.out.println(address);
                 locationClient.stop();
                 if (PhoneUtils.isNetworkConnected())
                 {
