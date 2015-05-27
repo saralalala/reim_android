@@ -147,7 +147,7 @@ public class ReportFragment extends Fragment
             initView();
             initData();
             hasInit = true;
-            setListView(ReimApplication.getReportTabIndex());
+            setListView(ReimApplication.getReportTabIndex(), false);
             syncReports();
         }
     }
@@ -163,7 +163,7 @@ public class ReportFragment extends Fragment
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && hasInit)
         {
-            setListView(ReimApplication.getReportTabIndex());
+            setListView(ReimApplication.getReportTabIndex(), true);
             syncReports();
         }
     }
@@ -210,7 +210,7 @@ public class ReportFragment extends Fragment
         {
             public void onClick(View v)
             {
-                setListView(0);
+                setListView(0, false);
             }
         });
 
@@ -223,7 +223,7 @@ public class ReportFragment extends Fragment
         {
             public void onClick(View v)
             {
-                setListView(1);
+                setListView(1, false);
             }
         });
 
@@ -662,7 +662,7 @@ public class ReportFragment extends Fragment
         operationPopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), operationView);
     }
 
-    public void setListView(int index)
+    public void setListView(int index, boolean readDatabase)
     {
         ReimApplication.setReportTabIndex(index);
         if (index == ReimApplication.TAB_REPORT_MINE)
@@ -679,7 +679,7 @@ public class ReportFragment extends Fragment
             myTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
             othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
         }
-        refreshReportListView(false);
+        refreshReportListView(readDatabase);
     }
 
     public void showBadge()

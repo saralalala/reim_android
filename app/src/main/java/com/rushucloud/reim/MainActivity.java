@@ -723,7 +723,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                                     {
                                         appPreference.setLastGetOthersReportTime(0);
                                         appPreference.saveAppPreference();
-                                        fragment.setListView(ReimApplication.TAB_REPORT_OTHERS);
+                                        fragment.setListView(ReimApplication.TAB_REPORT_OTHERS, false);
                                     }
                                     showReportTip(true);
                                 }
