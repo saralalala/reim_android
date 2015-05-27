@@ -197,7 +197,8 @@
     <string name="approver">审核人</string>
     <string name="cc">抄　送</string>
     <string name="total_amount">总　额</string>
-    <string name="item_count">笔消费</string>
+    <string name="item_count">%1$d笔消费</string>
+    <string name="item_count_added">已添加%1$d笔消费</string>
     <string name="choose_manager">选择审批人</string>
     <string name="choose_cc">选择抄送人</string>
     <string name="admin">公司管理员</string>
@@ -295,7 +296,7 @@
     <string name="version">版本</string>
     <string name="about_footer">Copyright&#169; 2014&#8211;2015 北京如数科技有限公司</string>
     <string name="wechat_share_title">云报销 - 开启全新的报销体验</string>
-    <string name="wechat_share_description">点击使用「云报销」，结束你所有对报销的怨言。</string>
+    <string name="wechat_share_description">点击使用「云报销」，开启全新的报销体验。</string>
     <string name="wechat_invite_description">%1$s邀请你加入「%2$s」，点击加入就可以开始使用了。</string>
     
     <string name="input_username">请输入手机/邮箱</string>

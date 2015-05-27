@@ -168,19 +168,21 @@ public class ReimFragment extends Fragment
 
         tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
         tagCheck = new boolean[tagList.size()];
+        tempTagCheck = new boolean[tagList.size()];
         for (int i = 0; i < tagCheck.length; i++)
         {
             tagCheck[i] = false;
+            tempTagCheck[i] = false;
         }
-        tempTagCheck = tagCheck;
 
         categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
         categoryCheck = new boolean[categoryList.size()];
+        tempCategoryCheck = new boolean[categoryList.size()];
         for (int i = 0; i < categoryCheck.length; i++)
         {
             categoryCheck[i] = false;
+            tempCategoryCheck[i] = false;
         }
-        tempCategoryCheck = categoryCheck;
 
         itemList.clear();
         itemList.addAll(readItemList());
@@ -504,8 +506,8 @@ public class ReimFragment extends Fragment
                 filterType = tempFilterType;
                 filterStatus = tempFilterStatus;
 
-                tagCheck = tempTagCheck;
-                categoryCheck = tempCategoryCheck;
+                System.arraycopy(tagCheck, 0, tempTagCheck, 0, tagCheck.length);
+                System.arraycopy(categoryCheck, 0, tempCategoryCheck, 0, categoryCheck.length);
 
                 filterTagList.clear();
                 for (int i = 0; i < tagCheck.length; i++)
@@ -605,11 +607,11 @@ public class ReimFragment extends Fragment
                         break;
                 }
 
-                tempTagCheck = tagCheck;
-                refreshTagView();
+                System.arraycopy(tagCheck, 0, tempTagCheck, 0, tagCheck.length);
+                refreshFilterTagView();
 
-                tempCategoryCheck = categoryCheck;
-                refreshCategoryView();
+                System.arraycopy(categoryCheck, 0, tempCategoryCheck, 0, categoryCheck.length);
+                refreshFilterCategoryView();
 
                 filterPopupWindow.dismiss();
             }
@@ -826,11 +828,12 @@ public class ReimFragment extends Fragment
         }
         tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
         tagCheck = new boolean[tagList.size()];
+        tempTagCheck = new boolean[tagList.size()];
         for (int i = 0; i < tagCheck.length; i++)
         {
             tagCheck[i] = array.get(tagList.get(i).getServerID(), false);
         }
-        tempTagCheck = tagCheck;
+        System.arraycopy(tagCheck, 0, tempTagCheck, 0, tagCheck.length);
 
         array.clear();
         for (int i = 0; i < categoryCheck.length; i++)
@@ -839,11 +842,12 @@ public class ReimFragment extends Fragment
         }
         categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
         categoryCheck = new boolean[categoryList.size()];
+        tempCategoryCheck = new boolean[categoryList.size()];
         for (int i = 0; i < categoryCheck.length; i++)
         {
             categoryCheck[i] = array.get(categoryList.get(i).getServerID(), false);
         }
-        tempCategoryCheck = categoryCheck;
+        System.arraycopy(categoryCheck, 0, tempCategoryCheck, 0, categoryCheck.length);
 
         itemList.clear();
         itemList.addAll(readItemList());
@@ -856,7 +860,7 @@ public class ReimFragment extends Fragment
         noResultLayout.setVisibility(visibility);
     }
 
-    private void refreshTagView()
+    private void refreshFilterTagView()
     {
         tagLayout.removeAllViews();
 
@@ -884,7 +888,7 @@ public class ReimFragment extends Fragment
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TAG");
                     tempTagCheck[index] = !tempTagCheck[index];
-                    refreshTagView();
+                    refreshFilterTagView();
                 }
             });
 
@@ -918,7 +922,7 @@ public class ReimFragment extends Fragment
         }
     }
 
-    private void refreshCategoryView()
+    private void refreshFilterCategoryView()
     {
         categoryLayout.removeAllViews();
 
@@ -956,7 +960,7 @@ public class ReimFragment extends Fragment
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CATEGORY");
                     tempCategoryCheck[index] = !tempCategoryCheck[index];
-                    refreshCategoryView();
+                    refreshFilterCategoryView();
                 }
             });
 
@@ -994,8 +998,8 @@ public class ReimFragment extends Fragment
             sortAmountImageView.startAnimation(rotateAnimation);
         }
 
-        refreshTagView();
-        refreshCategoryView();
+        refreshFilterTagView();
+        refreshFilterCategoryView();
 
         filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
         filterPopupWindow.update();

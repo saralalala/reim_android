@@ -133,7 +133,6 @@ public class ReportDetailListViewAdapter extends BaseAdapter
             TextView itemCountTextView = (TextView) view.findViewById(R.id.itemCountTextView);
 
             double amount = 0;
-            int itemCount = itemList.size();
 
             for (Item item : itemList)
             {
@@ -142,7 +141,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
             amountTextView.setText(Utils.formatDouble(amount));
-            itemCountTextView.setText(itemCount + activity.getString(R.string.item_count));
+            itemCountTextView.setText(String.format(ViewUtils.getString(R.string.item_count), itemList.size()));
 
             return view;
         }

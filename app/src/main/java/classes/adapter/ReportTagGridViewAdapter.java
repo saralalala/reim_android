@@ -73,7 +73,7 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 
     public void setCheck(boolean[] checks)
     {
-        check = checks;
+        System.arraycopy(checks, 0, check, 0, checks.length);
     }
 
     public List<Integer> getFilterStatusList()

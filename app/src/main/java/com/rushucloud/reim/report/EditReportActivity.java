@@ -528,8 +528,7 @@ public class EditReportActivity extends Activity
 
         itemList = dbManager.getItems(Item.getItemsIDList(itemList));
 
-        int itemCount = itemList.size();
-        itemCountTextView.setText(itemCount + getString(R.string.item_count));
+        itemCountTextView.setText(String.format(getString(R.string.item_count_added), itemList.size()));
 
         itemLayout.removeAllViews();
 
