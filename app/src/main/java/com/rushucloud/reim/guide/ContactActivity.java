@@ -153,16 +153,6 @@ public class ContactActivity extends Activity
         {
             public void onClick(View v)
             {
-                Bundle bundle = new Bundle();
-                bundle.putString("companyName", companyName);
-                bundle.putStringArrayList("inputList", inputList);
-                bundle.putStringArrayList("inputChosenList", inputChosenList);
-                bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
-                Intent intent = new Intent(ContactActivity.this, ContactActivity.class);
-                intent.putExtras(bundle);
-                ViewUtils.goForwardAndFinish(ContactActivity.this, intent);
-
-
                 String inviteList = "";
                 for (String contact : inputChosenList)
                 {

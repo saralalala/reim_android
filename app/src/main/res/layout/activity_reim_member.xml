@@ -46,10 +46,10 @@
     <RelativeLayout
         android:id="@+id/inviteLayout"
         android:layout_width="match_parent"
-        android:layout_height="66.5dp"
+        android:layout_height="66dp"
         android:orientation="vertical"
         android:background="@drawable/list_item_drawable"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"

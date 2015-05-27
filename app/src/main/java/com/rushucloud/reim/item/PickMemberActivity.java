@@ -110,8 +110,9 @@ public class PickMemberActivity extends Activity
 			{
                 hideSoftKeyboard();
 
+                List<User> chosenList = adapter == null? new ArrayList<User>() : adapter.getChosenList();
 				Intent intent = new Intent();
-				intent.putExtra("users", (Serializable) adapter.getChosenList());
+				intent.putExtra("users", (Serializable) chosenList);
                 ViewUtils.goBackWithResult(PickMemberActivity.this, intent);
 			}
 		});
@@ -131,63 +132,62 @@ public class PickMemberActivity extends Activity
             LinearLayout searchContainer = (LinearLayout) findViewById(R.id.searchContainer);
             searchContainer.setVisibility(View.GONE);
         }
-        else
+
+        memberEditText = (ClearEditText) findViewById(R.id.memberEditText);
+        memberEditText.addTextChangedListener(new TextWatcher()
         {
-            memberEditText = (ClearEditText) findViewById(R.id.memberEditText);
-            memberEditText.addTextChangedListener(new TextWatcher()
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
             {
-                public void beforeTextChanged(CharSequence s, int start, int count, int after)
-                {
 
-                }
+            }
 
-                public void onTextChanged(CharSequence s, int start, int before, int count)
-                {
-                    if (memberEditText.hasFocus())
-                    {
-                        memberEditText.setClearIconVisible(s.length() > 0);
-                    }
-                }
-
-                public void afterTextChanged(Editable s)
-                {
-                    int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
-                    indexLayout.setVisibility(visibility);
-                    filterList();
-                }
-            });
-
-            adapter = new MemberListViewAdapter(this, userList, chosenList);
-
-            PinnedSectionListView userListView = (PinnedSectionListView) findViewById(R.id.userListView);
-            userListView.setAdapter(adapter);
-            userListView.setOnItemClickListener(new OnItemClickListener()
+            public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                if (memberEditText.hasFocus())
                 {
-                    hideSoftKeyboard();
-                    adapter.setCheck(position);
-                    adapter.notifyDataSetChanged();
+                    memberEditText.setClearIconVisible(s.length() > 0);
                 }
-            });
-            userListView.setOnScrollListener(new AbsListView.OnScrollListener()
+            }
+
+            public void afterTextChanged(Editable s)
             {
-                public void onScrollStateChanged(AbsListView absListView, int i)
-                {
-                    hideSoftKeyboard();
-                }
+                int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
+                indexLayout.setVisibility(visibility);
+                filterList();
+            }
+        });
 
-                public void onScroll(AbsListView absListView, int i, int i2, int i3)
-                {
+        adapter = new MemberListViewAdapter(this, userList, chosenList);
 
-                }
-            });
+        PinnedSectionListView userListView = (PinnedSectionListView) findViewById(R.id.userListView);
+        userListView.setAdapter(adapter);
+        userListView.setOnItemClickListener(new OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                hideSoftKeyboard();
+                adapter.setCheck(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        userListView.setOnScrollListener(new AbsListView.OnScrollListener()
+        {
+            public void onScrollStateChanged(AbsListView absListView, int i)
+            {
+                hideSoftKeyboard();
+            }
 
-            indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
-            TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
+            public void onScroll(AbsListView absListView, int i, int i2, int i3)
+            {
 
-            ViewUtils.initIndexLayout(this, 123, adapter.getSelector(), userListView, indexLayout, centralTextView);
-        }
+            }
+        });
+
+        int topMargin = userList.size() == 1? 140 : 123;
+        indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+        TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
+
+        ViewUtils.initIndexLayout(this, topMargin, adapter.getSelector(), userListView, indexLayout, centralTextView);
 
         for (User user : userList)
         {
