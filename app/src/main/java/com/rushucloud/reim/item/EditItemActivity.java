@@ -68,7 +68,6 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
-import cn.beecloud.BCLocation;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.request.DownloadImageRequest;
@@ -1427,35 +1426,6 @@ public class EditItemActivity extends Activity
         });
     }
 
-    private void sendLocationRequest(final double latitude, final double longitude)
-    {
-        final BCLocation address = BCLocation.locationWithLatitude(latitude, longitude);
-        new Thread(new Runnable()
-        {
-            public void run()
-            {
-                currentCity = address.getCity();
-                int index = currentCity.indexOf("市");
-                if (index > 0)
-                {
-                    currentCity = currentCity.substring(0, index);
-                }
-
-                runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        if (locationTextView.getText().toString().equals(getString(R.string.no_location)))
-                        {
-                            item.setLocation(currentCity);
-                            locationTextView.setText(currentCity);
-                        }
-                    }
-                });
-            }
-        }).start();
-    }
-
     private void getLocation()
     {
         if (PhoneUtils.isLocalisationEnabled() || PhoneUtils.isNetworkConnected())
@@ -1463,6 +1433,7 @@ public class EditItemActivity extends Activity
             LocationClientOption option = new LocationClientOption();
             option.setLocationMode(LocationMode.Hight_Accuracy);
             option.setScanSpan(500);
+            option.setOpenGps(false);
             option.setIsNeedAddress(true);
             option.setNeedDeviceDirect(false);
             locationClient.setLocOption(option);
@@ -1544,13 +1515,19 @@ public class EditItemActivity extends Activity
             if (location != null)
             {
                 currentLocation = location;
-                String address = currentLocation.getAddrStr() == null ? "no address" : currentLocation.getAddrStr();
-                System.out.println(address);
-                locationClient.stop();
-                if (PhoneUtils.isNetworkConnected())
+                currentCity = currentLocation.getCity() == null? "" : currentLocation.getCity();
+                int index = currentCity.indexOf("市");
+                if (index > 0)
                 {
-                    sendLocationRequest(currentLocation.getLatitude(), currentLocation.getLongitude());
+                    currentCity = currentCity.substring(0, index);
                 }
+
+                if (!currentCity.isEmpty() && locationTextView.getText().toString().equals(getString(R.string.no_location)))
+                {
+                    item.setLocation(currentCity);
+                    locationTextView.setText(currentCity);
+                }
+                locationClient.stop();
             }
         }
     }

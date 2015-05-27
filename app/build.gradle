@@ -45,7 +45,6 @@ android {
 dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile files('libs/BeeCloud.jar')
     compile files('libs/achartengine-1.1.0.jar')
     compile files('libs/android-async-http-1.4.4-fix.jar')
     compile files('libs/avoscloud-v2.6.6.jar')

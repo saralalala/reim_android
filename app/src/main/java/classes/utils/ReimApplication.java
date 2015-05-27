@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.widget.ReimProgressDialog;
-import cn.beecloud.BeeCloud;
 
 public class ReimApplication extends Application
 {
@@ -54,7 +53,6 @@ public class ReimApplication extends Application
 
         initPushService();
         initData();
-        initBeeCloud();
         WeChatUtils.regToWX();
         MobclickAgent.openActivityDurationTrack(false);
         createDirectories();
@@ -282,10 +280,5 @@ public class ReimApplication extends Application
 
         AppPreference.createAppPreference(getApplicationContext());
         DBManager.createDBManager(getApplicationContext());
-    }
-
-    private void initBeeCloud()
-    {
-        BeeCloud.setAppKey("02c6af87-8d5b-4d74-b086-d38359c297f3", this);
     }
 }
