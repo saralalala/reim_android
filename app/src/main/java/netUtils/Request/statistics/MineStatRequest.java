@@ -7,15 +7,15 @@ import netUtils.request.BaseRequest;
 public class MineStatRequest extends BaseRequest
 {
 
-	public MineStatRequest()
-	{
-		super();
+    public MineStatRequest()
+    {
+        super();
 
-		appendUrl(URLDef.URL_STATISTICS);
-	}
+        appendUrl(URLDef.URL_STATISTICS);
+    }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doGet(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doGet(callback);
+    }
 }

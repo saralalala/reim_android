@@ -12,19 +12,19 @@ import netUtils.request.BaseRequest;
 
 public class InviteRequest extends BaseRequest
 {
-	public InviteRequest(String username)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("name", username));
-		setParams(params);
+    public InviteRequest(String username)
+    {
+        super();
 
-		appendUrl(URLDef.URL_INVITE);
-	}
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("name", username));
+        setParams(params);
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+        appendUrl(URLDef.URL_INVITE);
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

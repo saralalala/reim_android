@@ -18,55 +18,55 @@ import classes.utils.Utils;
 
 public class MessageListViewAdapter extends BaseAdapter
 {
-	private LayoutInflater layoutInflater;
-	private List<Message> messageList;
-	
-	public MessageListViewAdapter(Context context, List<Message> messages)
-	{
-		this.layoutInflater = LayoutInflater.from(context);
-		this.messageList = new ArrayList<>(messages);
-	}
-	
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		if (convertView == null)
-		{
-			convertView = layoutInflater.inflate(R.layout.list_message, parent, false);
-		}
+    private LayoutInflater layoutInflater;
+    private List<Message> messageList;
 
-		TextView messageTextView = (TextView) convertView.findViewById(R.id.messageTextView);
-		TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+    public MessageListViewAdapter(Context context, List<Message> messages)
+    {
+        this.layoutInflater = LayoutInflater.from(context);
+        this.messageList = new ArrayList<>(messages);
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        if (convertView == null)
+        {
+            convertView = layoutInflater.inflate(R.layout.list_message, parent, false);
+        }
+
+        TextView messageTextView = (TextView) convertView.findViewById(R.id.messageTextView);
+        TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
         ImageView tipImageView = (ImageView) convertView.findViewById(R.id.tipImageView);
-		
-		Message message = messageList.get(position);
 
-		messageTextView.setText(message.getTitle());
-		dateTextView.setText(Utils.secondToStringUpToDay(message.getUpdateTime()));
+        Message message = messageList.get(position);
 
-        int visibility = message.hasBeenRead()? View.GONE : View.VISIBLE;
+        messageTextView.setText(message.getTitle());
+        dateTextView.setText(Utils.secondToStringUpToDay(message.getUpdateTime()));
+
+        int visibility = message.hasBeenRead() ? View.GONE : View.VISIBLE;
         tipImageView.setVisibility(visibility);
 
-		return convertView;
-	}
-	
-	public int getCount()
-	{
-		return messageList.size();
-	}
+        return convertView;
+    }
 
-	public Message getItem(int position)
-	{
-		return messageList.get(position);
-	}
+    public int getCount()
+    {
+        return messageList.size();
+    }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
-	
-	public void setMessages(List<Message> messages)
-	{
-		messageList.clear();
-		messageList.addAll(messages);
-	}
+    public Message getItem(int position)
+    {
+        return messageList.get(position);
+    }
+
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
+    public void setMessages(List<Message> messages)
+    {
+        messageList.clear();
+        messageList.addAll(messages);
+    }
 }

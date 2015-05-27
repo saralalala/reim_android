@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -269,7 +268,7 @@ public class EditItemActivity extends Activity
                 case PICK_LOCATION:
                 {
                     item.setLocation(data.getStringExtra("location"));
-                    String location = item.getLocation().isEmpty()? getString(R.string.no_location) : item.getLocation();
+                    String location = item.getLocation().isEmpty() ? getString(R.string.no_location) : item.getLocation();
                     locationTextView.setText(location);
                     break;
                 }
@@ -406,7 +405,7 @@ public class EditItemActivity extends Activity
                                 Report report;
                                 if (item.getBelongReport() == null)
                                 {
-                                    int title = item.getType() == Item.TYPE_BUDGET? R.string.report_budget : R.string.report_borrowing;
+                                    int title = item.getType() == Item.TYPE_BUDGET ? R.string.report_budget : R.string.report_borrowing;
                                     report = new Report();
                                     report.setTitle(getString(title));
                                     report.setSender(appPreference.getCurrentUser());
@@ -530,7 +529,7 @@ public class EditItemActivity extends Activity
 
             public void afterTextChanged(Editable s)
             {
-                int visibility = (s.toString().isEmpty() || Double.valueOf(s.toString()) == 0) && fromEditReport? View.VISIBLE : View.GONE;
+                int visibility = (s.toString().isEmpty() || Double.valueOf(s.toString()) == 0) && fromEditReport ? View.VISIBLE : View.GONE;
                 amountWarningImageView.setVisibility(visibility);
             }
         });
@@ -549,7 +548,7 @@ public class EditItemActivity extends Activity
 
         if (item.isAaApproved())
         {
-            int title = item.getType() == Item.TYPE_BUDGET? R.string.budget : R.string.borrowing;
+            int title = item.getType() == Item.TYPE_BUDGET ? R.string.budget : R.string.borrowing;
             budgetTextView.setText(getString(title) + " " + Utils.formatDouble(item.getAaAmount()));
         }
         else
@@ -739,7 +738,7 @@ public class EditItemActivity extends Activity
     private void initTimeView()
     {
         // init time
-        int time = item.getConsumedDate() > 0? item.getConsumedDate() : Utils.getCurrentTime();
+        int time = item.getConsumedDate() > 0 ? item.getConsumedDate() : Utils.getCurrentTime();
         timeTextView = (TextView) findViewById(R.id.timeTextView);
         timeTextView.setOnClickListener(new View.OnClickListener()
         {
@@ -797,7 +796,7 @@ public class EditItemActivity extends Activity
                     MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_MERCHANT");
                 }
 
-                String category = item.getCategory() != null? item.getCategory().getName() : "";
+                String category = item.getCategory() != null ? item.getCategory().getName() : "";
                 Intent intent = new Intent(EditItemActivity.this, PickVendorActivity.class);
                 intent.putExtra("category", category);
                 intent.putExtra("location", item.getLocation());
@@ -813,7 +812,7 @@ public class EditItemActivity extends Activity
 
     private void initLocationView()
     {
-        String cityName = item.getLocation().isEmpty()? getString(R.string.no_location) : item.getLocation();
+        String cityName = item.getLocation().isEmpty() ? getString(R.string.no_location) : item.getLocation();
         locationTextView = (TextView) findViewById(R.id.locationTextView);
         locationTextView.setText(cityName);
 
@@ -975,7 +974,7 @@ public class EditItemActivity extends Activity
         horizontalInterval = (layoutMaxLength - sideLength * maxCount) / (maxCount - 1);
 
         LinearLayout layout = new LinearLayout(this);
-        int invoiceCount = item.getInvoices() != null? item.getInvoices().size() : 0;
+        int invoiceCount = item.getInvoices() != null ? item.getInvoices().size() : 0;
         for (int i = 0; i < invoiceCount; i++)
         {
             if (i > Item.MAX_INVOICE_COUNT)
@@ -1074,7 +1073,7 @@ public class EditItemActivity extends Activity
             layout.addView(view, params);
         }
 
-        int visibility = invoiceCount < Item.MAX_INVOICE_COUNT? View.VISIBLE : View.INVISIBLE;
+        int visibility = invoiceCount < Item.MAX_INVOICE_COUNT ? View.VISIBLE : View.INVISIBLE;
         addInvoiceImageView.setVisibility(visibility);
     }
 
@@ -1120,7 +1119,7 @@ public class EditItemActivity extends Activity
 
             int space = 0;
             LinearLayout layout = new LinearLayout(this);
-            int tagCount = item.getTags() != null? item.getTags().size() : 0;
+            int tagCount = item.getTags() != null ? item.getTags().size() : 0;
             for (int i = 0; i < tagCount; i++)
             {
                 String name = item.getTags().get(i).getName();
@@ -1173,7 +1172,7 @@ public class EditItemActivity extends Activity
         horizontalInterval = (layoutMaxWidth - width * maxCount) / (maxCount - 1);
 
         LinearLayout layout = new LinearLayout(this);
-        int memberCount = item.getRelevantUsers() != null? item.getRelevantUsers().size() : 0;
+        int memberCount = item.getRelevantUsers() != null ? item.getRelevantUsers().size() : 0;
         for (int i = 0; i < memberCount; i++)
         {
             if (i % maxCount == 0)
@@ -1545,7 +1544,7 @@ public class EditItemActivity extends Activity
             if (location != null)
             {
                 currentLocation = location;
-                String address = currentLocation.getAddrStr() == null? "no address" : currentLocation.getAddrStr();
+                String address = currentLocation.getAddrStr() == null ? "no address" : currentLocation.getAddrStr();
                 System.out.println(address);
                 locationClient.stop();
                 if (PhoneUtils.isNetworkConnected())

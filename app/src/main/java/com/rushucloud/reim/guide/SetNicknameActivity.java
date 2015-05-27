@@ -33,7 +33,7 @@ import netUtils.response.user.ModifyUserResponse;
 
 public class SetNicknameActivity extends Activity
 {
-	private ClearEditText nicknameEditText;
+    private ClearEditText nicknameEditText;
 
     private User currentUser;
     private boolean join;
@@ -43,41 +43,41 @@ public class SetNicknameActivity extends Activity
     private ArrayList<String> inputChosenList = new ArrayList<>();
     private List<User> contactChosenList = new ArrayList<>();
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_set_nickname);
-		initData();
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_guide_set_nickname);
+        initData();
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("SetNicknameActivity");
-		MobclickAgent.onResume(this);
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("SetNicknameActivity");
+        MobclickAgent.onResume(this);
         ReimProgressDialog.setContext(this);
-	}
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("SetNicknameActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("SetNicknameActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @SuppressWarnings("unchecked")
-	private void initData()
-	{
+    private void initData()
+    {
         currentUser = AppPreference.getAppPreference().getCurrentUser();
         join = getIntent().getBooleanExtra("join", false);
         if (join)
@@ -93,27 +93,27 @@ public class SetNicknameActivity extends Activity
             inputChosenList = bundle.getStringArrayList("inputChosenList");
             contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
         }
-	}
+    }
 
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
+            }
+        });
 
-		TextView nextTextView = (TextView) findViewById(R.id.nextTextView);
+        TextView nextTextView = (TextView) findViewById(R.id.nextTextView);
         nextTextView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
 
-				nickname = nicknameEditText.getText().toString();
+                nickname = nicknameEditText.getText().toString();
                 if (!PhoneUtils.isNetworkConnected())
                 {
                     ViewUtils.showToast(SetNicknameActivity.this, R.string.error_modify_network_unavailable);
@@ -127,10 +127,10 @@ public class SetNicknameActivity extends Activity
                     currentUser.setNickname(nickname);
                     sendModifyUserInfoRequest();
                 }
-			}
-		});
-		
-		nicknameEditText = (ClearEditText) findViewById(R.id.nicknameEditText);
+            }
+        });
+
+        nicknameEditText = (ClearEditText) findViewById(R.id.nicknameEditText);
         nicknameEditText.setText(nickname);
         ViewUtils.requestFocus(this, nicknameEditText);
 
@@ -142,7 +142,7 @@ public class SetNicknameActivity extends Activity
                 hideSoftKeyboard();
             }
         });
-	}
+    }
 
     private void sendModifyUserInfoRequest()
     {
@@ -199,10 +199,10 @@ public class SetNicknameActivity extends Activity
     }
 
     private void hideSoftKeyboard()
-	{
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
-	}
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
+    }
 
     private void goBack()
     {

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Selection;
@@ -59,10 +58,10 @@ public class ViewUtils
         }
     };
 
-	public static int getColor(int colorResID)
-	{
-		return ReimApplication.getContext().getResources().getColor(colorResID);
-	}
+    public static int getColor(int colorResID)
+    {
+        return ReimApplication.getContext().getResources().getColor(colorResID);
+    }
 
     public static ColorStateList getColorStateList(int colorResID)
     {
@@ -76,17 +75,17 @@ public class ViewUtils
 
     public static void showToast(Context context, String content)
     {
-    	Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
     }
-    
+
     public static void showToast(Context context, int resID)
     {
-    	Toast.makeText(context, resID, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, resID, Toast.LENGTH_SHORT).show();
     }
 
     public static void showToast(Context context, int resID, String errorMessage)
     {
-    	Toast.makeText(context, context.getString(resID) + "，" + errorMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(resID) + "，" + errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     public static void requestFocus(final Context context, final EditText editText)
@@ -102,60 +101,60 @@ public class ViewUtils
         }, 200);
     }
 
-	public static PopupWindow buildTopPopupWindow(final Context context, View view)
-	{
-		int backgroundColor = ViewUtils.getColor(android.R.color.transparent);
-		
-		PopupWindow popupWindow = new PopupWindow(context);
-		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
-		popupWindow.setHeight(LayoutParams.MATCH_PARENT);
-		popupWindow.setContentView(view);
-		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
-		popupWindow.setFocusable(true);
-		popupWindow.setOutsideTouchable(true);
-		popupWindow.setAnimationStyle(R.style.WindowTopAnimation);
-		
-		return popupWindow;
-	}
-    
-	public static PopupWindow buildCenterPopupWindow(final Context context, View view)
-	{
-		int backgroundColor = ViewUtils.getColor(android.R.color.transparent);
-		
-		PopupWindow popupWindow = new PopupWindow(context);
+    public static PopupWindow buildTopPopupWindow(final Context context, View view)
+    {
+        int backgroundColor = ViewUtils.getColor(android.R.color.transparent);
+
+        PopupWindow popupWindow = new PopupWindow(context);
+        popupWindow.setWidth(LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(LayoutParams.MATCH_PARENT);
+        popupWindow.setContentView(view);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setAnimationStyle(R.style.WindowTopAnimation);
+
+        return popupWindow;
+    }
+
+    public static PopupWindow buildCenterPopupWindow(final Context context, View view)
+    {
+        int backgroundColor = ViewUtils.getColor(android.R.color.transparent);
+
+        PopupWindow popupWindow = new PopupWindow(context);
         popupWindow.setWidth(getPhoneWindowWidth(context) - dpToPixel(70));
-		popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
-		popupWindow.setContentView(view);
-		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
-		popupWindow.setFocusable(true);
-		popupWindow.setOutsideTouchable(false);
-		popupWindow.setAnimationStyle(R.style.WindowCenterAnimation);
-		
-		return popupWindow;
-	}
-	
-	public static PopupWindow buildBottomPopupWindow(final Activity activity, View view)
-	{
-		int backgroundColor = ViewUtils.getColor(android.R.color.transparent);
-		
-		PopupWindow popupWindow = new PopupWindow(activity);
-		popupWindow.setWidth(LayoutParams.MATCH_PARENT);
-		popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
-		popupWindow.setContentView(view);
-		popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
-		popupWindow.setFocusable(true);
-		popupWindow.setOutsideTouchable(true);
-		popupWindow.setAnimationStyle(R.style.WindowBottomAnimation);
-		popupWindow.setOnDismissListener(new OnDismissListener()
-		{
-			public void onDismiss()
-			{
-				recoverBackground(activity);
-			}
-		});
-		
-		return popupWindow;
-	}
+        popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(view);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setAnimationStyle(R.style.WindowCenterAnimation);
+
+        return popupWindow;
+    }
+
+    public static PopupWindow buildBottomPopupWindow(final Activity activity, View view)
+    {
+        int backgroundColor = ViewUtils.getColor(android.R.color.transparent);
+
+        PopupWindow popupWindow = new PopupWindow(activity);
+        popupWindow.setWidth(LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(view);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setAnimationStyle(R.style.WindowBottomAnimation);
+        popupWindow.setOnDismissListener(new OnDismissListener()
+        {
+            public void onDismiss()
+            {
+                recoverBackground(activity);
+            }
+        });
+
+        return popupWindow;
+    }
 
     public static PopupWindow buildSurprisePopupWindow(final Activity activity, View view)
     {
@@ -181,18 +180,18 @@ public class ViewUtils
     }
 
     public static void dimBackground(Activity activity)
-	{
-		WindowManager.LayoutParams params = activity.getWindow().getAttributes();
-		params.alpha = 0.4f;
-		activity.getWindow().setAttributes(params);		
-	}
-	
-	public static void recoverBackground(Activity activity)
-	{
-		WindowManager.LayoutParams params = activity.getWindow().getAttributes();
-		params.alpha = 1f;
-		activity.getWindow().setAttributes(params);
-	}
+    {
+        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+        params.alpha = 0.4f;
+        activity.getWindow().setAttributes(params);
+    }
+
+    public static void recoverBackground(Activity activity)
+    {
+        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+        params.alpha = 1f;
+        activity.getWindow().setAttributes(params);
+    }
 
     public static void setImageViewBitmap(User user, CircleImageView imageView)
     {
@@ -264,7 +263,7 @@ public class ViewUtils
     public static int getStatusBarHeight(Context context)
     {
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        return resourceId > 0? context.getResources().getDimensionPixelSize(resourceId) : 0;
+        return resourceId > 0 ? context.getResources().getDimensionPixelSize(resourceId) : 0;
     }
 
     public static void initIndexLayout(Context context, int margin, final HashMap<String, Integer> selector,
@@ -319,8 +318,8 @@ public class ViewUtils
 
     public static int dpToPixel(double dp)
     {
-    	DisplayMetrics metrics = ReimApplication.getContext().getResources().getDisplayMetrics();
-    	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, metrics);
+        DisplayMetrics metrics = ReimApplication.getContext().getResources().getDisplayMetrics();
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dp, metrics);
     }
 
     public static void goForward(Activity activity, Intent intent)

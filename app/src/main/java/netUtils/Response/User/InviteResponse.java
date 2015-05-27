@@ -4,13 +4,13 @@ import netUtils.response.BaseResponse;
 
 public class InviteResponse extends BaseResponse
 {
-	public InviteResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public InviteResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
-		
-	}
+    protected void constructData()
+    {
+
+    }
 }

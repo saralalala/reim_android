@@ -2,13 +2,13 @@ package netUtils.response;
 
 public class FeedbackResponse extends BaseResponse
 {
-	public FeedbackResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public FeedbackResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
-		
-	}
+    protected void constructData()
+    {
+
+    }
 }

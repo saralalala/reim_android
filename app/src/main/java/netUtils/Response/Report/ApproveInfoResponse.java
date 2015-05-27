@@ -13,55 +13,55 @@ import netUtils.response.BaseResponse;
 
 public class ApproveInfoResponse extends BaseResponse
 {
-	private String submitDate;
-	private List<ApproveInfo> infoList;
-	
-	public ApproveInfoResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    private String submitDate;
+    private List<ApproveInfo> infoList;
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONObject jObject = getDataObject();
-			
-			JSONObject metaObject = jObject.getJSONObject("meta");
-			submitDate = metaObject.getString("submitdt").substring(0, 16);
-			
-			JSONArray jsonArray = jObject.getJSONArray("data");
-			infoList = new ArrayList<>();
-			for (int i = 0; i < jsonArray.length(); i++)
-			{
-				ApproveInfo info = new ApproveInfo(jsonArray.getJSONObject(i));
+    public ApproveInfoResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
+
+    protected void constructData()
+    {
+        try
+        {
+            JSONObject jObject = getDataObject();
+
+            JSONObject metaObject = jObject.getJSONObject("meta");
+            submitDate = metaObject.getString("submitdt").substring(0, 16);
+
+            JSONArray jsonArray = jObject.getJSONArray("data");
+            infoList = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                ApproveInfo info = new ApproveInfo(jsonArray.getJSONObject(i));
                 infoList.add(info);
-			}
-			
-			Collections.sort(infoList);
-			Collections.reverse(infoList);
-		}
-		catch (JSONException e)
-		{
-			if (submitDate == null)
-			{
-				submitDate = "";
-			}
-			if (infoList == null)
-			{
-				infoList = new ArrayList<>();
-			}
-			e.printStackTrace();
-		}
-	}
+            }
 
-	public String getSubmitDate()
-	{
-		return submitDate;
-	}
+            Collections.sort(infoList);
+            Collections.reverse(infoList);
+        }
+        catch (JSONException e)
+        {
+            if (submitDate == null)
+            {
+                submitDate = "";
+            }
+            if (infoList == null)
+            {
+                infoList = new ArrayList<>();
+            }
+            e.printStackTrace();
+        }
+    }
 
-	public List<ApproveInfo> getInfoList()
-	{
-		return infoList;
-	}
+    public String getSubmitDate()
+    {
+        return submitDate;
+    }
+
+    public List<ApproveInfo> getInfoList()
+    {
+        return infoList;
+    }
 }

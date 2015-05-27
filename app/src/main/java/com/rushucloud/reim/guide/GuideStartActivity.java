@@ -26,26 +26,26 @@ import classes.utils.ViewUtils;
 
 public class GuideStartActivity extends Activity
 {
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_start);
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_guide_start);
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("GuideStartActivity");
-		MobclickAgent.onResume(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("GuideStartActivity");
+        MobclickAgent.onResume(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("GuideStartActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("GuideStartActivity");
+        MobclickAgent.onPause(this);
+    }
 
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
     {
@@ -56,8 +56,8 @@ public class GuideStartActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-	private void initView()
-	{
+    private void initView()
+    {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
         backImageView.setOnClickListener(new OnClickListener()
         {
@@ -79,9 +79,9 @@ public class GuideStartActivity extends Activity
                 ViewUtils.goForwardAndFinish(GuideStartActivity.this, intent);
             }
         });
-		
-		TextView createTextView = (TextView) findViewById(R.id.createTextView);
-        createTextView.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG|Paint.FAKE_BOLD_TEXT_FLAG);
+
+        TextView createTextView = (TextView) findViewById(R.id.createTextView);
+        createTextView.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG | Paint.FAKE_BOLD_TEXT_FLAG);
         createTextView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
@@ -97,7 +97,7 @@ public class GuideStartActivity extends Activity
                 ViewUtils.goForwardAndFinish(GuideStartActivity.this, intent);
             }
         });
-	}
+    }
 
     private void goBack()
     {

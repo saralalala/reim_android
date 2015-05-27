@@ -19,62 +19,71 @@ package classes.widget.touchView;
 
 import android.view.MotionEvent;
 
-public class WrapMotionEvent {
+public class WrapMotionEvent
+{
     protected MotionEvent event;
 
-
-
-
-    protected WrapMotionEvent(MotionEvent event) {
+    protected WrapMotionEvent(MotionEvent event)
+    {
         this.event = event;
     }
 
-    static public WrapMotionEvent wrap(MotionEvent event) {
-        try {
+    static public WrapMotionEvent wrap(MotionEvent event)
+    {
+        try
+        {
             return new EclairMotionEvent(event);
-        } catch (VerifyError e) {
+        }
+        catch (VerifyError e)
+        {
             return new WrapMotionEvent(event);
         }
     }
 
-
-
-    public int getAction() {
+    public int getAction()
+    {
         return event.getAction();
     }
 
-    public float getX() {
+    public float getX()
+    {
         return event.getX();
     }
 
-    public float getX(int pointerIndex) {
+    public float getX(int pointerIndex)
+    {
         verifyPointerIndex(pointerIndex);
         return getX();
     }
 
-    public float getY() {
+    public float getY()
+    {
         return event.getY();
     }
 
-    public float getY(int pointerIndex) {
+    public float getY(int pointerIndex)
+    {
         verifyPointerIndex(pointerIndex);
         return getY();
     }
 
-    public int getPointerCount() {
+    public int getPointerCount()
+    {
         return 1;
     }
 
-    public int getPointerId(int pointerIndex) {
+    public int getPointerId(int pointerIndex)
+    {
         verifyPointerIndex(pointerIndex);
         return 0;
     }
 
-    private void verifyPointerIndex(int pointerIndex) {
-        if (pointerIndex > 0) {
+    private void verifyPointerIndex(int pointerIndex)
+    {
+        if (pointerIndex > 0)
+        {
             throw new IllegalArgumentException(
                     "Invalid pointer index for Donut/Cupcake");
         }
     }
-
 }

@@ -4,13 +4,13 @@ import netUtils.response.BaseResponse;
 
 public class ForgotPasswordResponse extends BaseResponse
 {
-	public ForgotPasswordResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public ForgotPasswordResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
+    protected void constructData()
+    {
 
-	}
+    }
 }

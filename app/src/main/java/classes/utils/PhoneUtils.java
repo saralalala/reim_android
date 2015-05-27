@@ -34,94 +34,94 @@ import netUtils.NetworkConstant;
 
 public class PhoneUtils
 {
-	public static String getAppVersion()
-	{
-		Context context = ReimApplication.getContext();
-		try
-		{
-			PackageManager packageManager = context.getPackageManager();
-			PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-			return packageInfo.versionName;
-		}
-		catch (NameNotFoundException e)
-		{
-			e.printStackTrace();
-			return context.getString(R.string.failed_to_get_version);
-		}
-	}
+    public static String getAppVersion()
+    {
+        Context context = ReimApplication.getContext();
+        try
+        {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionName;
+        }
+        catch (NameNotFoundException e)
+        {
+            e.printStackTrace();
+            return context.getString(R.string.failed_to_get_version);
+        }
+    }
 
-	public static boolean isWiFiConnected()
-	{
-		ConnectivityManager manager = (ConnectivityManager) ReimApplication.getContext()
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+    public static boolean isWiFiConnected()
+    {
+        ConnectivityManager manager = (ConnectivityManager) ReimApplication.getContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return networkInfo != null && networkInfo.isConnected();
-	}
+    }
 
-	public static boolean isDataConnected()
-	{
-		ConnectivityManager manager = (ConnectivityManager) ReimApplication.getContext()
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+    public static boolean isDataConnected()
+    {
+        ConnectivityManager manager = (ConnectivityManager) ReimApplication.getContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         return networkInfo != null && networkInfo.isConnected();
-	}
+    }
 
-	public static boolean isNetworkConnected()
-	{
-		ConnectivityManager manager = (ConnectivityManager) ReimApplication.getContext()
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+    public static boolean isNetworkConnected()
+    {
+        ConnectivityManager manager = (ConnectivityManager) ReimApplication.getContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isAvailable();
-	}
+    }
 
-	public static boolean isLocalisationEnabled()
-	{
-		LocationManager locationManager = (LocationManager) ReimApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
-		boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-		boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    public static boolean isLocalisationEnabled()
+    {
+        LocationManager locationManager = (LocationManager) ReimApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
+        boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-		return gpsEnabled || networkEnabled;
-	}
+        return gpsEnabled || networkEnabled;
+    }
 
-	public static String getPathFromUri(Activity activity, Uri uri)
-	{
-		String[] projection = { MediaStore.Images.Media.DATA };
-		Cursor cursor = activity.getContentResolver().query(uri, projection, null, null, null);
-		cursor.moveToFirst();
-		int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-		String result = cursor.getString(index);
-		cursor.close();
-		return result;
-	}
+    public static String getPathFromUri(Activity activity, Uri uri)
+    {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = activity.getContentResolver().query(uri, projection, null, null, null);
+        cursor.moveToFirst();
+        int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+        String result = cursor.getString(index);
+        cursor.close();
+        return result;
+    }
 
-	public static String getImageName()
-	{
-		long currentTime = new Date().getTime();
+    public static String getImageName()
+    {
+        long currentTime = new Date().getTime();
 
-		return Long.toString(currentTime) + ".jpg";
-	}
+        return Long.toString(currentTime) + ".jpg";
+    }
 
-	public static String getAvatarFilePath()
-	{
-		return AppPreference.getAppPreference().getAvatarImageDirectory() + "/" + getImageName();
-	}
+    public static String getAvatarFilePath()
+    {
+        return AppPreference.getAppPreference().getAvatarImageDirectory() + "/" + getImageName();
+    }
 
-	public static String getInvoiceFilePath()
-	{
-		return AppPreference.getAppPreference().getInvoiceImageDirectory() + "/" + getImageName();
-	}
+    public static String getInvoiceFilePath()
+    {
+        return AppPreference.getAppPreference().getInvoiceImageDirectory() + "/" + getImageName();
+    }
 
-	public static String getIconFilePath(int iconID)
-	{
-		return AppPreference.getAppPreference().getIconImageDirectory() + "/" + iconID + ".png";
-	}
+    public static String getIconFilePath(int iconID)
+    {
+        return AppPreference.getAppPreference().getIconImageDirectory() + "/" + iconID + ".png";
+    }
 
-	public static String saveBitmapToFile(String path, int type)
-	{
-		try
-		{
-			Matrix matrix = new Matrix();
-			matrix.postScale(0.5f, 0.5f);
+    public static String saveBitmapToFile(String path, int type)
+    {
+        try
+        {
+            Matrix matrix = new Matrix();
+            matrix.postScale(0.5f, 0.5f);
 
             Bitmap source = BitmapFactory.decodeFile(path);
             source = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
@@ -139,28 +139,28 @@ public class PhoneUtils
                 bitmap = source;
             }
 
-			String filePath = type == NetworkConstant.IMAGE_TYPE_AVATAR? getAvatarFilePath() : getInvoiceFilePath();
+            String filePath = type == NetworkConstant.IMAGE_TYPE_AVATAR ? getAvatarFilePath() : getInvoiceFilePath();
 
-			File compressedBitmapFile = new File(filePath);
-			compressedBitmapFile.createNewFile();
+            File compressedBitmapFile = new File(filePath);
+            compressedBitmapFile.createNewFile();
 
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			bitmap.compress(CompressFormat.JPEG, 50, outputStream);
-			byte[] bitmapData = outputStream.toByteArray();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(CompressFormat.JPEG, 50, outputStream);
+            byte[] bitmapData = outputStream.toByteArray();
 
-			FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
-			fileOutputStream.write(bitmapData);
-			fileOutputStream.flush();
-			fileOutputStream.close();
+            FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
+            fileOutputStream.write(bitmapData);
+            fileOutputStream.flush();
+            fileOutputStream.close();
 
-			return filePath;
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			return "";
-		}
-	}
+            return filePath;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
     public static String saveOriginalBitmapToFile(Bitmap bitmap, int type)
     {
@@ -202,64 +202,64 @@ public class PhoneUtils
         }
     }
 
-	public static String saveIconToFile(Bitmap bitmap, int iconID)
-	{
-		try
-		{
-			Matrix matrix = new Matrix();
-			matrix.postScale(0.5f, 0.5f);
+    public static String saveIconToFile(Bitmap bitmap, int iconID)
+    {
+        try
+        {
+            Matrix matrix = new Matrix();
+            matrix.postScale(0.5f, 0.5f);
 
-			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-			String path = getIconFilePath(iconID);
+            String path = getIconFilePath(iconID);
 
-			File compressedBitmapFile = new File(path);
-			compressedBitmapFile.createNewFile();
+            File compressedBitmapFile = new File(path);
+            compressedBitmapFile.createNewFile();
 
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			bitmap.compress(CompressFormat.PNG, 100, outputStream);
-			byte[] bitmapData = outputStream.toByteArray();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(CompressFormat.PNG, 100, outputStream);
+            byte[] bitmapData = outputStream.toByteArray();
 
-			FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
-			fileOutputStream.write(bitmapData);
-			fileOutputStream.flush();
-			fileOutputStream.close();
+            FileOutputStream fileOutputStream = new FileOutputStream(compressedBitmapFile);
+            fileOutputStream.write(bitmapData);
+            fileOutputStream.flush();
+            fileOutputStream.close();
 
-			return path;
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			return "";
-		}
-	}
+            return path;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
-	public static boolean copyFile(String oldPath, String newPath)
-	{
-		try
-		{
-			int byteRead;
-			File oldfile = new File(oldPath);
-			if (oldfile.exists())
-			{
-				InputStream inputStream = new FileInputStream(oldPath);
-				FileOutputStream outputStream = new FileOutputStream(newPath);
-				byte[] buffer = new byte[1444];
-				while ((byteRead = inputStream.read(buffer)) != -1)
-				{
-					outputStream.write(buffer, 0, byteRead);
-				}
-				inputStream.close();
-				outputStream.close();
-			}
-			return true;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-	}
+    public static boolean copyFile(String oldPath, String newPath)
+    {
+        try
+        {
+            int byteRead;
+            File oldfile = new File(oldPath);
+            if (oldfile.exists())
+            {
+                InputStream inputStream = new FileInputStream(oldPath);
+                FileOutputStream outputStream = new FileOutputStream(newPath);
+                byte[] buffer = new byte[1444];
+                while ((byteRead = inputStream.read(buffer)) != -1)
+                {
+                    outputStream.write(buffer, 0, byteRead);
+                }
+                inputStream.close();
+                outputStream.close();
+            }
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public static boolean isMIUIV6()
     {
@@ -284,7 +284,7 @@ public class PhoneUtils
         }
         finally
         {
-            if(input != null)
+            if (input != null)
             {
                 try
                 {

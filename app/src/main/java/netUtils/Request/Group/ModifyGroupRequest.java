@@ -12,19 +12,19 @@ import netUtils.request.BaseRequest;
 
 public class ModifyGroupRequest extends BaseRequest
 {
-	public ModifyGroupRequest(String groupName)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("name", groupName));
-		setParams(params);
+    public ModifyGroupRequest(String groupName)
+    {
+        super();
 
-		appendUrl(URLDef.URL_GROUP);
-	}
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("name", groupName));
+        setParams(params);
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPut(callback);
-	}
+        appendUrl(URLDef.URL_GROUP);
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPut(callback);
+    }
 }

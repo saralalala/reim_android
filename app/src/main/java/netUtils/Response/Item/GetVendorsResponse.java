@@ -11,49 +11,49 @@ import classes.model.Vendor;
 
 public class GetVendorsResponse
 {
-	private boolean status;
-	private List<Vendor> vendorList;
-	
-	public GetVendorsResponse(Object httpResponse)
-	{
-		try
-		{
-			JSONObject jObject = new JSONObject((String)httpResponse);
-			status = jObject.getString("status").equals("OK");
-			JSONArray jsonArray = jObject.getJSONArray("businesses");
-			vendorList = new ArrayList<>();
+    private boolean status;
+    private List<Vendor> vendorList;
 
-			int count = jsonArray.length();
-			for (int i = 0; i < count; i++)
-			{
-				vendorList.add(new Vendor(jsonArray.getJSONObject(i))); 
-			}
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-			status = false;
-			setVendorList(null);
-		}
-	}
+    public GetVendorsResponse(Object httpResponse)
+    {
+        try
+        {
+            JSONObject jObject = new JSONObject((String) httpResponse);
+            status = jObject.getString("status").equals("OK");
+            JSONArray jsonArray = jObject.getJSONArray("businesses");
+            vendorList = new ArrayList<>();
 
-	public boolean getStatus()
-	{
-		return status;
-	}
+            int count = jsonArray.length();
+            for (int i = 0; i < count; i++)
+            {
+                vendorList.add(new Vendor(jsonArray.getJSONObject(i)));
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+            status = false;
+            setVendorList(null);
+        }
+    }
 
-	public void setStatus(boolean status)
-	{
-		this.status = status;
-	}
+    public boolean getStatus()
+    {
+        return status;
+    }
 
-	public List<Vendor> getVendorList()
-	{
-		return vendorList;
-	}
+    public void setStatus(boolean status)
+    {
+        this.status = status;
+    }
 
-	public void setVendorList(List<Vendor> vendorList)
-	{
-		this.vendorList = vendorList;
-	}
+    public List<Vendor> getVendorList()
+    {
+        return vendorList;
+    }
+
+    public void setVendorList(List<Vendor> vendorList)
+    {
+        this.vendorList = vendorList;
+    }
 }

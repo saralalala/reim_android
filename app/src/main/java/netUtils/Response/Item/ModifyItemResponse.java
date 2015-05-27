@@ -9,42 +9,42 @@ import netUtils.response.BaseResponse;
 
 public class ModifyItemResponse extends BaseResponse
 {
-	private int itemID;
-	
-	public ModifyItemResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    private int itemID;
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONArray jsonArray = getDataArray();
-			JSONObject jObject = jsonArray.getJSONObject(0);
-			setStatus(Utils.intToBoolean(jObject.getInt("status")));
-			if (getStatus())
-			{
-				setItemID(Integer.valueOf(jObject.getString("iid")));				
-			}
-			else
-			{
-				setErrorMessage(jObject.getString("msg"));				
-			}
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+    public ModifyItemResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	public int getItemID()
-	{
-		return itemID;
-	}
+    protected void constructData()
+    {
+        try
+        {
+            JSONArray jsonArray = getDataArray();
+            JSONObject jObject = jsonArray.getJSONObject(0);
+            setStatus(Utils.intToBoolean(jObject.getInt("status")));
+            if (getStatus())
+            {
+                setItemID(Integer.valueOf(jObject.getString("iid")));
+            }
+            else
+            {
+                setErrorMessage(jObject.getString("msg"));
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public void setItemID(int itemID)
-	{
-		this.itemID = itemID;
-	}
+    public int getItemID()
+    {
+        return itemID;
+    }
+
+    public void setItemID(int itemID)
+    {
+        this.itemID = itemID;
+    }
 }

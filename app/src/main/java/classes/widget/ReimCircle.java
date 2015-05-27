@@ -11,7 +11,7 @@ import classes.utils.ViewUtils;
 
 public class ReimCircle extends View
 {
-	private Paint paint = new Paint();
+    private Paint paint = new Paint();
     private float cx;
     private float cy;
     private float radius;
@@ -31,13 +31,13 @@ public class ReimCircle extends View
         radius = diameter / 2 - ViewUtils.dpToPixel(offset + circleWidth / 2);
     }
 
-	public ReimCircle(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public ReimCircle(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
-	public void onDraw(Canvas canvas)
-	{
+    public void onDraw(Canvas canvas)
+    {
         canvas.drawCircle(cx, cy, radius, paint);
-	}
+    }
 }

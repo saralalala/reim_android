@@ -11,39 +11,39 @@ import netUtils.response.BaseResponse;
 
 public class SearchItemsResponse extends BaseResponse
 {
-	List<Item> itemList;
-	
-	public SearchItemsResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    List<Item> itemList;
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONArray jsonArray = getDataArray();
-			
-			itemList = new ArrayList<>();
-			for (int i = 0; i < jsonArray.length(); i++)
-			{
-				Item item = new Item(jsonArray.getJSONObject(i));				
-				itemList.add(item);
-			}
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+    public SearchItemsResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	public List<Item> getItemList()
-	{
-		return itemList;
-	}
+    protected void constructData()
+    {
+        try
+        {
+            JSONArray jsonArray = getDataArray();
 
-	public void setItemList(List<Item> itemList)
-	{
-		this.itemList = itemList;
-	}
+            itemList = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                Item item = new Item(jsonArray.getJSONObject(i));
+                itemList.add(item);
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Item> getItemList()
+    {
+        return itemList;
+    }
+
+    public void setItemList(List<Item> itemList)
+    {
+        this.itemList = itemList;
+    }
 }

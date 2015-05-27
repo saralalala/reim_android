@@ -17,79 +17,79 @@ import classes.utils.ViewUtils;
 
 public class TagListViewAdapter extends BaseAdapter
 {
-	private LayoutInflater layoutInflater;
-	private List<Tag> tagList;
-	private boolean[] check;
-	private int selectedColor;
-	private int unselectedColor;
-	
-	public TagListViewAdapter(Context context, List<Tag> tags, boolean[] checkList)
-	{
-		this.layoutInflater = LayoutInflater.from(context);
-		this.tagList = new ArrayList<>(tags);
-		this.check = checkList;
-		this.selectedColor = ViewUtils.getColor(R.color.major_dark);
-		this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
-	}
-	
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		if (convertView == null)
-		{
-			convertView = layoutInflater.inflate(R.layout.list_tag, parent, false);
-		}
-		
-		if (check != null)
-		{
-			int color = check[position]? R.color.list_item_selected : R.color.list_item_unselected;
-			convertView.setBackgroundResource(color);
-		}
+    private LayoutInflater layoutInflater;
+    private List<Tag> tagList;
+    private boolean[] check;
+    private int selectedColor;
+    private int unselectedColor;
 
-		TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
-		
-		Tag tag = tagList.get(position);
-		
-		if (tag.getName().isEmpty())
-		{
-			nameTextView.setText(R.string.not_available);
-		}
-		else
-		{
-			nameTextView.setText(tag.getName());			
-		}
+    public TagListViewAdapter(Context context, List<Tag> tags, boolean[] checkList)
+    {
+        this.layoutInflater = LayoutInflater.from(context);
+        this.tagList = new ArrayList<>(tags);
+        this.check = checkList;
+        this.selectedColor = ViewUtils.getColor(R.color.major_dark);
+        this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
+    }
 
-		if (check != null)
-		{
-			int color = check[position]? selectedColor : unselectedColor;
-			nameTextView.setTextColor(color);			
-		}
-		
-		return convertView;
-	}
-	
-	public int getCount()
-	{
-		return tagList.size();
-	}
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        if (convertView == null)
+        {
+            convertView = layoutInflater.inflate(R.layout.list_tag, parent, false);
+        }
 
-	public Tag getItem(int position)
-	{
-		return tagList.get(position);
-	}
+        if (check != null)
+        {
+            int color = check[position] ? R.color.list_item_selected : R.color.list_item_unselected;
+            convertView.setBackgroundResource(color);
+        }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
-	
-	public void setTagList(List<Tag> tags)
-	{
-		tagList.clear();
-		tagList.addAll(tags);
-	}
-	
-	public void setCheck(boolean[] checkList)
-	{
-		check = checkList;
-	}
+        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+
+        Tag tag = tagList.get(position);
+
+        if (tag.getName().isEmpty())
+        {
+            nameTextView.setText(R.string.not_available);
+        }
+        else
+        {
+            nameTextView.setText(tag.getName());
+        }
+
+        if (check != null)
+        {
+            int color = check[position] ? selectedColor : unselectedColor;
+            nameTextView.setTextColor(color);
+        }
+
+        return convertView;
+    }
+
+    public int getCount()
+    {
+        return tagList.size();
+    }
+
+    public Tag getItem(int position)
+    {
+        return tagList.get(position);
+    }
+
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
+    public void setTagList(List<Tag> tags)
+    {
+        tagList.clear();
+        tagList.addAll(tags);
+    }
+
+    public void setCheck(boolean[] checkList)
+    {
+        check = checkList;
+    }
 }

@@ -6,16 +6,16 @@ import netUtils.request.BaseRequest;
 
 public class DeleteCategoryRequest extends BaseRequest
 {
-	public DeleteCategoryRequest(int categoryID)
-	{
-		super();
+    public DeleteCategoryRequest(int categoryID)
+    {
+        super();
 
-		appendUrl(URLDef.URL_CATEGORY);
+        appendUrl(URLDef.URL_CATEGORY);
         appendUrl(categoryID);
-	}
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doDelete(callback);
-	}
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doDelete(callback);
+    }
 }

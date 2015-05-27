@@ -29,66 +29,66 @@ import netUtils.response.report.ExportReportResponse;
 
 public class ExportActivity extends Activity
 {
-	private ClearEditText emailEditText;
+    private ClearEditText emailEditText;
 
-	private User currentUser;
+    private User currentUser;
     private Report report;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_report_export);
-		initData();
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_report_export);
+        initData();
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("ExportActivity");
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("ExportActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("ExportActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("ExportActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-	private void initData()
-	{
-		currentUser = AppPreference.getAppPreference().getCurrentUser();
+    private void initData()
+    {
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
         report = (Report) getIntent().getExtras().getSerializable("report");
-	}
+    }
 
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
+            }
+        });
 
-		TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
+        TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
         confirmTextView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
                 if (!PhoneUtils.isNetworkConnected())
                 {
                     ViewUtils.showToast(ExportActivity.this, R.string.error_export_network_unavailable);
@@ -109,27 +109,27 @@ public class ExportActivity extends Activity
                         sendExportReportRequest(report.getServerID(), email);
                     }
                 }
-			}
-		});
-		
-		emailEditText = (ClearEditText) findViewById(R.id.emailEditText);
-    	emailEditText.setText(currentUser.getEmail());
+            }
+        });
+
+        emailEditText = (ClearEditText) findViewById(R.id.emailEditText);
+        emailEditText.setText(currentUser.getEmail());
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});        
-	}
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
+    }
 
-	private void hideSoftKeyboard()
-	{
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
-	}
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+    }
 
     private void sendExportReportRequest(int reportID, String email)
     {

@@ -2,5 +2,5 @@ package netUtils;
 
 public interface HttpConnectionCallback
 {
-	void execute(Object httpResponse);
+    void execute(Object httpResponse);
 }

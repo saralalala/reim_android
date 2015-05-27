@@ -13,20 +13,20 @@ import netUtils.request.BaseRequest;
 
 public class ModifyTagRequest extends BaseRequest
 {
-	public ModifyTagRequest(Tag tag)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("name", tag.getName()));
-		setParams(params);
+    public ModifyTagRequest(Tag tag)
+    {
+        super();
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("name", tag.getName()));
+        setParams(params);
 
         appendUrl(URLDef.URL_TAG);
         appendUrl(tag.getServerID());
-	}
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPut(callback);
-	}
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPut(callback);
+    }
 }

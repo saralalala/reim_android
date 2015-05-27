@@ -24,38 +24,38 @@ public class AboutActivity extends Activity
     private int showCount;
     private PopupWindow surprisePopupWindow;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_about);
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_me_about);
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("AboutActivity");		
-		MobclickAgent.onResume(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("AboutActivity");
+        MobclickAgent.onResume(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("AboutActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("AboutActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	private void initView()
-	{
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void initView()
+    {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
         backImageView.setOnClickListener(new OnClickListener()
         {
@@ -64,10 +64,10 @@ public class AboutActivity extends Activity
                 goBack();
             }
         });
-		
-		TextView currentVersionTextView = (TextView) findViewById(R.id.currentVersionTextView);
-		String versionPrompt = currentVersionTextView.getText() + PhoneUtils.getAppVersion();
-		currentVersionTextView.setText(versionPrompt);
+
+        TextView currentVersionTextView = (TextView) findViewById(R.id.currentVersionTextView);
+        String versionPrompt = currentVersionTextView.getText() + PhoneUtils.getAppVersion();
+        currentVersionTextView.setText(versionPrompt);
         currentVersionTextView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
@@ -90,7 +90,7 @@ public class AboutActivity extends Activity
         });
 
         initSurpriseWindow();
-	}
+    }
 
     private void initSurpriseWindow()
     {

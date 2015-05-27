@@ -22,7 +22,8 @@ import java.util.List;
  * works well in most circumstances and has reasonable performance due to the cached decoder instance,
  * however it has some problems with grayscale, indexed and CMYK images.
  */
-public class SkiaImageRegionDecoder implements ImageRegionDecoder {
+public class SkiaImageRegionDecoder implements ImageRegionDecoder
+{
 
     private BitmapRegionDecoder decoder;
     private final Object decoderLock = new Object();
@@ -32,14 +33,19 @@ public class SkiaImageRegionDecoder implements ImageRegionDecoder {
     private static final String RESOURCE_PREFIX = ContentResolver.SCHEME_ANDROID_RESOURCE + "://";
 
     @Override
-    public Point init(Context context, Uri uri) throws Exception {
+    public Point init(Context context, Uri uri) throws Exception
+    {
         String uriString = uri.toString();
-        if (uriString.startsWith(RESOURCE_PREFIX)) {
+        if (uriString.startsWith(RESOURCE_PREFIX))
+        {
             Resources res;
             String packageName = uri.getAuthority();
-            if (context.getPackageName().equals(packageName)) {
+            if (context.getPackageName().equals(packageName))
+            {
                 res = context.getResources();
-            } else {
+            }
+            else
+            {
                 PackageManager pm = context.getPackageManager();
                 res = pm.getResourcesForApplication(packageName);
             }
@@ -47,23 +53,35 @@ public class SkiaImageRegionDecoder implements ImageRegionDecoder {
             int id = 0;
             List<String> segments = uri.getPathSegments();
             int size = segments.size();
-            if (size == 2 && segments.get(0).equals("drawable")) {
+            if (size == 2 && segments.get(0).equals("drawable"))
+            {
                 String resName = segments.get(1);
                 id = res.getIdentifier(resName, "drawable", packageName);
-            } else if (size == 1 && TextUtils.isDigitsOnly(segments.get(0))) {
-                try {
+            }
+            else if (size == 1 && TextUtils.isDigitsOnly(segments.get(0)))
+            {
+                try
+                {
                     id = Integer.parseInt(segments.get(0));
-                } catch (NumberFormatException ignored) {
+                }
+                catch (NumberFormatException ignored)
+                {
                 }
             }
 
             decoder = BitmapRegionDecoder.newInstance(context.getResources().openRawResource(id), false);
-        } else if (uriString.startsWith(ASSET_PREFIX)) {
+        }
+        else if (uriString.startsWith(ASSET_PREFIX))
+        {
             String assetName = uriString.substring(ASSET_PREFIX.length());
             decoder = BitmapRegionDecoder.newInstance(context.getAssets().open(assetName, AssetManager.ACCESS_RANDOM), false);
-        } else if (uriString.startsWith(FILE_PREFIX)) {
+        }
+        else if (uriString.startsWith(FILE_PREFIX))
+        {
             decoder = BitmapRegionDecoder.newInstance(uriString.substring(FILE_PREFIX.length()), false);
-        } else {
+        }
+        else
+        {
             ContentResolver contentResolver = context.getContentResolver();
             decoder = BitmapRegionDecoder.newInstance(contentResolver.openInputStream(uri), false);
         }
@@ -71,8 +89,10 @@ public class SkiaImageRegionDecoder implements ImageRegionDecoder {
     }
 
     @Override
-    public Bitmap decodeRegion(Rect sRect, int sampleSize) {
-        synchronized (decoderLock) {
+    public Bitmap decodeRegion(Rect sRect, int sampleSize)
+    {
+        synchronized (decoderLock)
+        {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = sampleSize;
             options.inPreferredConfig = Config.RGB_565;
@@ -82,12 +102,14 @@ public class SkiaImageRegionDecoder implements ImageRegionDecoder {
     }
 
     @Override
-    public boolean isReady() {
+    public boolean isReady()
+    {
         return decoder != null && !decoder.isRecycled();
     }
 
     @Override
-    public void recycle() {
+    public void recycle()
+    {
         decoder.recycle();
     }
 }

@@ -20,55 +20,55 @@ import classes.widget.ClearEditText;
 
 public class InputVendorActivity extends Activity
 {
-	private ClearEditText vendorEditText;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_reim_input_vendor);
-		initView();
-	}
+    private ClearEditText vendorEditText;
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("InputVendorActivity");
-		MobclickAgent.onResume(this);
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_reim_input_vendor);
+        initView();
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("InputVendorActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("InputVendorActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("InputVendorActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
-		confirmTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
+            }
+        });
+
+        TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
+        confirmTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
                 if (!vendorEditText.getText().toString().isEmpty())
                 {
                     Intent intent = new Intent();
@@ -79,10 +79,10 @@ public class InputVendorActivity extends Activity
                 {
                     goBack();
                 }
-			}
-		});
-		
-		vendorEditText = (ClearEditText) findViewById(R.id.vendorEditText);
+            }
+        });
+
+        vendorEditText = (ClearEditText) findViewById(R.id.vendorEditText);
         ViewUtils.requestFocus(this, vendorEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
@@ -93,12 +93,12 @@ public class InputVendorActivity extends Activity
                 hideSoftKeyboard();
             }
         });
-	}
-	
+    }
+
     private void hideSoftKeyboard()
     {
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(vendorEditText.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(vendorEditText.getWindowToken(), 0);
     }
 
     private void goBack()

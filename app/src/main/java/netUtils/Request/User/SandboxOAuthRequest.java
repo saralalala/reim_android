@@ -6,15 +6,15 @@ import netUtils.request.BaseRequest;
 
 public class SandboxOAuthRequest extends BaseRequest
 {
-	public SandboxOAuthRequest()
-	{
-		super();
-		
-		appendUrl(URLDef.URL_OAUTH);
-	}
+    public SandboxOAuthRequest()
+    {
+        super();
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+        appendUrl(URLDef.URL_OAUTH);
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

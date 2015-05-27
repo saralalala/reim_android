@@ -12,15 +12,15 @@ import classes.utils.ViewUtils;
 
 public class Invite extends Message implements Serializable
 {
-	private static final long serialVersionUID = 1L;
-	
-	public static final int TYPE_NEW = 0;
-	public static final int TYPE_REJECTED = 1;
-	public static final int TYPE_ACCEPTED = 2;
-	
-	private String inviteCode = "";
+    private static final long serialVersionUID = 1L;
+
+    public static final int TYPE_NEW = 0;
+    public static final int TYPE_REJECTED = 1;
+    public static final int TYPE_ACCEPTED = 2;
+
+    private String inviteCode = "";
     private String invitor = "";
-	private int typeCode = -1;
+    private int typeCode = -1;
 
     public Invite()
     {
@@ -92,30 +92,33 @@ public class Invite extends Message implements Serializable
         }
     }
 
-	public String getInviteCode()
-	{
-		return inviteCode;
-	}
-	public void setInviteCode(String inviteCode)
-	{
-		this.inviteCode = inviteCode;
-	}
+    public String getInviteCode()
+    {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode)
+    {
+        this.inviteCode = inviteCode;
+    }
 
     public String getInvitor()
     {
         return invitor;
     }
+
     public void setInvitor(String invitor)
     {
         this.invitor = invitor;
     }
 
-	public int getTypeCode()
-	{
-		return typeCode;
-	}
-	public void setTypeCode(int typeCode)
-	{
-		this.typeCode = typeCode;
-	}
+    public int getTypeCode()
+    {
+        return typeCode;
+    }
+
+    public void setTypeCode(int typeCode)
+    {
+        this.typeCode = typeCode;
+    }
 }

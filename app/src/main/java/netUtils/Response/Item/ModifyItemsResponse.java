@@ -7,33 +7,33 @@ import netUtils.response.BaseResponse;
 
 public class ModifyItemsResponse extends BaseResponse
 {
-	private int itemID;
-	
-	public ModifyItemsResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    private int itemID;
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONObject jObject = getDataObject();
-			setItemID(Integer.valueOf(jObject.getString("id")));
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+    public ModifyItemsResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	public int getItemID()
-	{
-		return itemID;
-	}
+    protected void constructData()
+    {
+        try
+        {
+            JSONObject jObject = getDataObject();
+            setItemID(Integer.valueOf(jObject.getString("id")));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public void setItemID(int itemID)
-	{
-		this.itemID = itemID;
-	}
+    public int getItemID()
+    {
+        return itemID;
+    }
+
+    public void setItemID(int itemID)
+    {
+        this.itemID = itemID;
+    }
 }

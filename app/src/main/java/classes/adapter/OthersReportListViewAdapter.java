@@ -19,21 +19,21 @@ import classes.utils.Utils;
 
 public class OthersReportListViewAdapter extends BaseAdapter
 {
-	private Context context;
-	private LayoutInflater layoutInflater;
-	private List<Report> reportList;
+    private Context context;
+    private LayoutInflater layoutInflater;
+    private List<Report> reportList;
     private List<Integer> unreadList;
 
-	public OthersReportListViewAdapter(Context context, List<Report> reports)
-	{
-		this.context = context;
-		this.layoutInflater = LayoutInflater.from(context);		
-		this.reportList = new ArrayList<>(reports);
+    public OthersReportListViewAdapter(Context context, List<Report> reports)
+    {
+        this.context = context;
+        this.layoutInflater = LayoutInflater.from(context);
+        this.reportList = new ArrayList<>(reports);
         this.unreadList = new ArrayList<>();
-	}
+    }
 
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         Report report = reportList.get(position);
         if (!report.getSectionName().isEmpty())
         {
@@ -48,7 +48,7 @@ public class OthersReportListViewAdapter extends BaseAdapter
             }
             else if (report.getSectionName().equals(context.getString(R.string.no_pending_reports)))
             {
-                return  layoutInflater.inflate(R.layout.list_no_pending_report, parent, false);
+                return layoutInflater.inflate(R.layout.list_no_pending_report, parent, false);
             }
             else if (report.getSectionName().equals(context.getString(R.string.processed)))
             {
@@ -79,49 +79,49 @@ public class OthersReportListViewAdapter extends BaseAdapter
             statusTextView.setText(report.getStatusString());
             statusTextView.setBackgroundResource(report.getStatusBackground());
 
-            int visibility = report.isCC()? View.VISIBLE : View.GONE;
+            int visibility = report.isCC() ? View.VISIBLE : View.GONE;
             ccTextView.setVisibility(visibility);
 
-            String nickname = report.getSender() == null? "" : report.getSender().getNickname();
+            String nickname = report.getSender() == null ? "" : report.getSender().getNickname();
             senderTextView.setText(context.getString(R.string.prompt_sender) + nickname);
 
-            String title = report.getTitle().isEmpty()? context.getString(R.string.report_no_name) : report.getTitle();
+            String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
             titleTextView.setText(title);
 
             String date = Utils.secondToStringUpToDay(report.getCreatedDate());
-            dateTextView.setText(date.isEmpty()? context.getString(R.string.not_available) : date);
+            dateTextView.setText(date.isEmpty() ? context.getString(R.string.not_available) : date);
 
             double amount = Double.valueOf(report.getAmount());
             amountTextView.setText(Utils.formatDouble(amount));
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 
-            visibility = unreadList.contains(report.getServerID())? View.VISIBLE : View.INVISIBLE;
+            visibility = unreadList.contains(report.getServerID()) ? View.VISIBLE : View.INVISIBLE;
             tipImageView.setVisibility(visibility);
 
             return view;
         }
-	}
-	
-	public int getCount()
-	{
-		return reportList.size();
-	}
+    }
 
-	public Report getItem(int position)
-	{
-		return reportList.get(position);
-	}
+    public int getCount()
+    {
+        return reportList.size();
+    }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
-	
-	public void setReportList(List<Report> reports)
-	{
-		reportList.clear();
-		reportList.addAll(reports);
-	}
+    public Report getItem(int position)
+    {
+        return reportList.get(position);
+    }
+
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
+    public void setReportList(List<Report> reports)
+    {
+        reportList.clear();
+        reportList.addAll(reports);
+    }
 
     public void setUnreadList(List<Integer> unreads)
     {

@@ -12,17 +12,17 @@ import netUtils.request.BaseRequest;
 
 public class SearchItemsRequest extends BaseRequest
 {
-	public SearchItemsRequest(String keyword)
-	{
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("keyword", keyword));
-		setParams(params);
+    public SearchItemsRequest(String keyword)
+    {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("keyword", keyword));
+        setParams(params);
 
-		appendUrl(URLDef.URL_SEARCH);
-	}
+        appendUrl(URLDef.URL_SEARCH);
+    }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

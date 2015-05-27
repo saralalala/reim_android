@@ -4,13 +4,13 @@ import netUtils.response.BaseResponse;
 
 public class SetAdminResponse extends BaseResponse
 {
-	public SetAdminResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public SetAdminResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
-		
-	}
+    protected void constructData()
+    {
+
+    }
 }

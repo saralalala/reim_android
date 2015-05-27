@@ -37,8 +37,8 @@ public class ForgotPasswordRequest extends BaseRequest
         appendUrl(URLDef.URL_PASSWORD);
     }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

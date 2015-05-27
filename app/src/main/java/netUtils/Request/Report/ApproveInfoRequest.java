@@ -6,16 +6,16 @@ import netUtils.request.BaseRequest;
 
 public class ApproveInfoRequest extends BaseRequest
 {
-	public ApproveInfoRequest(int reportID)
-	{
-		super();
+    public ApproveInfoRequest(int reportID)
+    {
+        super();
 
         appendUrl(URLDef.URL_APPROVE_INFO);
         appendUrl(reportID);
-	}
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doGet(callback);
-	}
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doGet(callback);
+    }
 }

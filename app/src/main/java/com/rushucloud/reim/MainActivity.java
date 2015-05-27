@@ -57,45 +57,45 @@ import netUtils.response.group.GetGroupResponse;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
-	private long exitTime = 0;
+    private long exitTime = 0;
 
-	private ViewPager viewPager;
-	private ImageView reportTipImageView;
-	private ImageView meTipImageView;
+    private ViewPager viewPager;
+    private ImageView reportTipImageView;
+    private ImageView meTipImageView;
     private RelativeLayout reimGuideLayout;
-	private PopupWindow feedbackPopupWindow;
-	private EditText feedbackEditText;
-	private PopupWindow phonePopupWindow;
-	private EditText codeEditText;
-	private EditText phoneEditText;
+    private PopupWindow feedbackPopupWindow;
+    private EditText feedbackEditText;
+    private PopupWindow phonePopupWindow;
+    private EditText codeEditText;
+    private EditText phoneEditText;
 
     private AppPreference appPreference;
-	private DBManager dbManager;
+    private DBManager dbManager;
     private WebSocketClient webSocketClient;
     private boolean webSocketIsClosed = true;
-	
-	private List<Fragment> fragmentList = new ArrayList<>();
-	private List<TabItem> tabItemList = new ArrayList<>();
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+    private List<Fragment> fragmentList = new ArrayList<>();
+    private List<TabItem> tabItemList = new ArrayList<>();
+
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         UmengUpdateAgent.update(this);
-		initData();
-		initView();
-	}
+        initData();
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
 
-		viewPager.setCurrentItem(ReimApplication.getTabIndex(), false);
-		resetTabItems();
-		tabItemList.get(ReimApplication.getTabIndex()).setIconAlpha(1);
-		fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
+        viewPager.setCurrentItem(ReimApplication.getTabIndex(), false);
+        resetTabItems();
+        tabItemList.get(ReimApplication.getTabIndex()).setIconAlpha(1);
+        fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
 
         initData();
         if (ReimApplication.getTabIndex() == ReimApplication.TAB_REIM)
@@ -106,67 +106,67 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         {
             dealWithReportGuideLayout();
         }
-		
-		if (PhoneUtils.isNetworkConnected())
-		{
-			sendGetEventsRequest();
+
+        if (PhoneUtils.isNetworkConnected())
+        {
+            sendGetEventsRequest();
             if (webSocketClient == null || webSocketIsClosed)
             {
                 connectWebSocket();
             }
-		}
-	}
+        }
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			if (System.currentTimeMillis() - exitTime > 2000)
-			{
-				ViewUtils.showToast(MainActivity.this, R.string.prompt_press_back_to_exit);
-				exitTime = System.currentTimeMillis();
-			}
-			else
-			{
-				finish();
-				dbManager.closeDatabase();
-				if (webSocketClient != null && !webSocketIsClosed)
-				{
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            if (System.currentTimeMillis() - exitTime > 2000)
+            {
+                ViewUtils.showToast(MainActivity.this, R.string.prompt_press_back_to_exit);
+                exitTime = System.currentTimeMillis();
+            }
+            else
+            {
+                finish();
+                dbManager.closeDatabase();
+                if (webSocketClient != null && !webSocketIsClosed)
+                {
                     webSocketClient.close();
-				}
-				android.os.Process.killProcess(android.os.Process.myPid());
-			}
-			return true;
-		}
-		else
-		{
-			return super.onKeyDown(keyCode, event);
-		}
-	}
+                }
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+            return true;
+        }
+        else
+        {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
 
-	private void initData()
-	{
+    private void initData()
+    {
         appPreference = AppPreference.getAppPreference();
-		dbManager = DBManager.getDBManager();
-	}
-	
-	private void initView()
-	{
-		ReimFragment reimFragment = new ReimFragment();
-		ReportFragment reportFragment = new ReportFragment();
-		StatisticsFragment statisticsFragment = new StatisticsFragment();
-		MeFragment meFragment = new MeFragment();
-		
-		fragmentList.add(reimFragment);
-		fragmentList.add(reportFragment);
-		fragmentList.add(statisticsFragment);
-		fragmentList.add(meFragment);
+        dbManager = DBManager.getDBManager();
+    }
+
+    private void initView()
+    {
+        ReimFragment reimFragment = new ReimFragment();
+        ReportFragment reportFragment = new ReportFragment();
+        StatisticsFragment statisticsFragment = new StatisticsFragment();
+        MeFragment meFragment = new MeFragment();
+
+        fragmentList.add(reimFragment);
+        fragmentList.add(reportFragment);
+        fragmentList.add(statisticsFragment);
+        fragmentList.add(meFragment);
 
         FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager())
         {
@@ -185,48 +185,48 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
             }
         };
-		viewPager = (ViewPager) findViewById(R.id.viewPager);
-		viewPager.setAdapter(adapter);
-		viewPager.setOnPageChangeListener(new OnPageChangeListener()
-		{
-			public void onPageSelected(int arg0)
-			{
-				ReimApplication.setTabIndex(arg0);
-			}
-			
-			public void onPageScrolled(int arg0, float arg1, int arg2)
-			{
-				if (arg1 > 0)
-				{
-					TabItem leftItem = tabItemList.get(arg0);
-					TabItem rightItem = tabItemList.get(arg0 + 1);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setAdapter(adapter);
+        viewPager.setOnPageChangeListener(new OnPageChangeListener()
+        {
+            public void onPageSelected(int arg0)
+            {
+                ReimApplication.setTabIndex(arg0);
+            }
 
-					leftItem.setIconAlpha(1 - arg1);
-					rightItem.setIconAlpha(arg1);
-				}
-			}
-			
-			public void onPageScrollStateChanged(int arg0)
-			{
-				if (arg0 == 2)
-				{
-					int currentIndex = viewPager.getCurrentItem();
+            public void onPageScrolled(int arg0, float arg1, int arg2)
+            {
+                if (arg1 > 0)
+                {
+                    TabItem leftItem = tabItemList.get(arg0);
+                    TabItem rightItem = tabItemList.get(arg0 + 1);
+
+                    leftItem.setIconAlpha(1 - arg1);
+                    rightItem.setIconAlpha(arg1);
+                }
+            }
+
+            public void onPageScrollStateChanged(int arg0)
+            {
+                if (arg0 == 2)
+                {
+                    int currentIndex = viewPager.getCurrentItem();
                     if (currentIndex == ReimApplication.TAB_REIM)
                     {
                         dealWithReimGuideLayout();
                     }
-					else if (currentIndex == ReimApplication.TAB_REPORT)
-					{
-						showReportTip(false);
+                    else if (currentIndex == ReimApplication.TAB_REPORT)
+                    {
+                        showReportTip(false);
                         dealWithReportGuideLayout();
-					}
-					else if (currentIndex == ReimApplication.TAB_ME)
-					{
-						showMeTip(false);
-					}
-				}
-			}
-		});
+                    }
+                    else if (currentIndex == ReimApplication.TAB_ME)
+                    {
+                        showMeTip(false);
+                    }
+                }
+            }
+        });
 
         LinearLayout tabLayout = (LinearLayout) findViewById(R.id.tabLayout);
         tabLayout.setOnClickListener(new OnClickListener()
@@ -237,197 +237,197 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             }
         });
 
-		TabItem tabItemReim = (TabItem) findViewById(R.id.tabItemReim);
-		TabItem tabItemReport = (TabItem) findViewById(R.id.tabItemReport);
-		TabItem tabItemStat = (TabItem) findViewById(R.id.tabItemStat);
-		TabItem tabItemMe = (TabItem) findViewById(R.id.tabItemMe);
-		
-		tabItemReim.setOnClickListener(this);
-		tabItemReport.setOnClickListener(this);
-		tabItemStat.setOnClickListener(this);
-		tabItemMe.setOnClickListener(this);
-		
-		tabItemList.add(tabItemReim);
-		tabItemList.add(tabItemReport);
-		tabItemList.add(tabItemStat);
-		tabItemList.add(tabItemMe);
-		
-		tabItemReim.setIconAlpha(1);
+        TabItem tabItemReim = (TabItem) findViewById(R.id.tabItemReim);
+        TabItem tabItemReport = (TabItem) findViewById(R.id.tabItemReport);
+        TabItem tabItemStat = (TabItem) findViewById(R.id.tabItemStat);
+        TabItem tabItemMe = (TabItem) findViewById(R.id.tabItemMe);
 
-		reportTipImageView = (ImageView) findViewById(R.id.reportTipImageView);
-		meTipImageView = (ImageView) findViewById(R.id.meTipImageView);
-		
-		Button addButton = (Button) findViewById(R.id.addButton);
-		addButton.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        tabItemReim.setOnClickListener(this);
+        tabItemReport.setOnClickListener(this);
+        tabItemStat.setOnClickListener(this);
+        tabItemMe.setOnClickListener(this);
+
+        tabItemList.add(tabItemReim);
+        tabItemList.add(tabItemReport);
+        tabItemList.add(tabItemStat);
+        tabItemList.add(tabItemMe);
+
+        tabItemReim.setIconAlpha(1);
+
+        reportTipImageView = (ImageView) findViewById(R.id.reportTipImageView);
+        meTipImageView = (ImageView) findViewById(R.id.meTipImageView);
+
+        Button addButton = (Button) findViewById(R.id.addButton);
+        addButton.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 hideReimGuideLayout();
-				Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
-				intent.putExtra("fromReim", true);
+                Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
+                intent.putExtra("fromReim", true);
                 ViewUtils.goForward(MainActivity.this, intent);
-			}
-		});
-	
-		ImageView feedbackImageView = (ImageView) findViewById(R.id.feedbackImageView);
-		feedbackImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(MainActivity.this, "UMENG_HELP");
-				
-				if (PhoneUtils.isNetworkConnected())
-				{
-					showFeedbackWindow();					
-				}
-				else
-				{
-					ViewUtils.showToast(MainActivity.this, R.string.error_feedback_network_unavailable);
-				}
-			}
-		});
+            }
+        });
+
+        ImageView feedbackImageView = (ImageView) findViewById(R.id.feedbackImageView);
+        feedbackImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(MainActivity.this, "UMENG_HELP");
+
+                if (PhoneUtils.isNetworkConnected())
+                {
+                    showFeedbackWindow();
+                }
+                else
+                {
+                    ViewUtils.showToast(MainActivity.this, R.string.error_feedback_network_unavailable);
+                }
+            }
+        });
 
         reimGuideLayout = (RelativeLayout) findViewById(R.id.reimGuideLayout);
 
-		initFeedbackWindow();
-		initPhoneWindow();
-	}
-	
-	private void initFeedbackWindow()
-	{
-		View feedbackView = View.inflate(this, R.layout.window_feedback, null);
+        initFeedbackWindow();
+        initPhoneWindow();
+    }
 
-		feedbackEditText = (EditText) feedbackView.findViewById(R.id.feedbackEditText);
-		
-		Button submitButton = (Button) feedbackView.findViewById(R.id.submitButton);
-		submitButton.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(MainActivity.this, "UMENG_HELP_SUBMIT");
-				
-				if (PhoneUtils.isNetworkConnected())
-				{
-					User user = AppPreference.getAppPreference().getCurrentUser();
-					String feedback = feedbackEditText.getText().toString();
-					if (feedback.isEmpty())
-					{
-						ViewUtils.showToast(MainActivity.this, R.string.error_feedback_empty);
-					}
-					else if (user != null && Utils.isPhone(user.getPhone()))
-					{
-						sendFeedbackRequest(feedbackEditText.getText().toString(), user.getPhone());
-					}
-					else
-					{
-						feedbackPopupWindow.dismiss();
-						showPhoneWindow();
-					}
-				}
-				else
-				{
-					ViewUtils.showToast(MainActivity.this, R.string.error_feedback_network_unavailable);
-				}
-			}
-		});
-		
-		Button cancelButton = (Button) feedbackView.findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(MainActivity.this, "UMENG_HELP_CANCEL");				
-				feedbackPopupWindow.dismiss();
-			}
-		});
+    private void initFeedbackWindow()
+    {
+        View feedbackView = View.inflate(this, R.layout.window_feedback, null);
 
-		feedbackPopupWindow = ViewUtils.buildCenterPopupWindow(this, feedbackView);
-	}
-	
-	private void initPhoneWindow()
-	{		
-		View phoneView = View.inflate(this, R.layout.window_feedback_phone, null);
+        feedbackEditText = (EditText) feedbackView.findViewById(R.id.feedbackEditText);
 
-		codeEditText = (EditText) phoneView.findViewById(R.id.codeEditText);
-		phoneEditText = (EditText) phoneView.findViewById(R.id.phoneEditText);
-		
-		Button submitButton = (Button) phoneView.findViewById(R.id.submitButton);
-		submitButton.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (PhoneUtils.isNetworkConnected())
-				{
-					String code = codeEditText.getText().toString();
-					String phone = phoneEditText.getText().toString();
-					if (code.isEmpty())
-					{
-						ViewUtils.showToast(MainActivity.this, R.string.error_feedback_code_empty);
-					}
-					else if (phone.isEmpty())
-					{
-						ViewUtils.showToast(MainActivity.this, R.string.error_phone_empty);
-					}
-					else
-					{
-						sendFeedbackRequest(feedbackEditText.getText().toString(), code + "-" + phone);
-					}
-				}
-				else
-				{
-					ViewUtils.showToast(MainActivity.this, R.string.error_feedback_network_unavailable);
-				}
-			}
-		});
-		
-		Button skipButton = (Button) phoneView.findViewById(R.id.skipButton);
-		skipButton.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				sendFeedbackRequest(feedbackEditText.getText().toString(), "");
-			}
-		});
+        Button submitButton = (Button) feedbackView.findViewById(R.id.submitButton);
+        submitButton.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(MainActivity.this, "UMENG_HELP_SUBMIT");
 
-		phonePopupWindow = ViewUtils.buildCenterPopupWindow(this, phoneView);
-	}
+                if (PhoneUtils.isNetworkConnected())
+                {
+                    User user = AppPreference.getAppPreference().getCurrentUser();
+                    String feedback = feedbackEditText.getText().toString();
+                    if (feedback.isEmpty())
+                    {
+                        ViewUtils.showToast(MainActivity.this, R.string.error_feedback_empty);
+                    }
+                    else if (user != null && Utils.isPhone(user.getPhone()))
+                    {
+                        sendFeedbackRequest(feedbackEditText.getText().toString(), user.getPhone());
+                    }
+                    else
+                    {
+                        feedbackPopupWindow.dismiss();
+                        showPhoneWindow();
+                    }
+                }
+                else
+                {
+                    ViewUtils.showToast(MainActivity.this, R.string.error_feedback_network_unavailable);
+                }
+            }
+        });
+
+        Button cancelButton = (Button) feedbackView.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(MainActivity.this, "UMENG_HELP_CANCEL");
+                feedbackPopupWindow.dismiss();
+            }
+        });
+
+        feedbackPopupWindow = ViewUtils.buildCenterPopupWindow(this, feedbackView);
+    }
+
+    private void initPhoneWindow()
+    {
+        View phoneView = View.inflate(this, R.layout.window_feedback_phone, null);
+
+        codeEditText = (EditText) phoneView.findViewById(R.id.codeEditText);
+        phoneEditText = (EditText) phoneView.findViewById(R.id.phoneEditText);
+
+        Button submitButton = (Button) phoneView.findViewById(R.id.submitButton);
+        submitButton.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (PhoneUtils.isNetworkConnected())
+                {
+                    String code = codeEditText.getText().toString();
+                    String phone = phoneEditText.getText().toString();
+                    if (code.isEmpty())
+                    {
+                        ViewUtils.showToast(MainActivity.this, R.string.error_feedback_code_empty);
+                    }
+                    else if (phone.isEmpty())
+                    {
+                        ViewUtils.showToast(MainActivity.this, R.string.error_phone_empty);
+                    }
+                    else
+                    {
+                        sendFeedbackRequest(feedbackEditText.getText().toString(), code + "-" + phone);
+                    }
+                }
+                else
+                {
+                    ViewUtils.showToast(MainActivity.this, R.string.error_feedback_network_unavailable);
+                }
+            }
+        });
+
+        Button skipButton = (Button) phoneView.findViewById(R.id.skipButton);
+        skipButton.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                sendFeedbackRequest(feedbackEditText.getText().toString(), "");
+            }
+        });
+
+        phonePopupWindow = ViewUtils.buildCenterPopupWindow(this, phoneView);
+    }
 
     private void showFeedbackWindow()
     {
-    	feedbackEditText.setText("");
-    	
-		feedbackPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-		feedbackPopupWindow.update();
+        feedbackEditText.setText("");
+
+        feedbackPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+        feedbackPopupWindow.update();
     }
 
     private void showPhoneWindow()
     {
-    	codeEditText.setText(R.string.feedback_code);
-    	phoneEditText.setText("");
-    	
-		phonePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-		phonePopupWindow.update();
-    }
-    
-	private void resetTabItems()
-	{
-		for (int i = 0; i < tabItemList.size(); i++)
-		{
-			tabItemList.get(i).setIconAlpha(0);
-		}
-	}
+        codeEditText.setText(R.string.feedback_code);
+        phoneEditText.setText("");
 
-	private void showReportTip(boolean hasUnreadReports)
-	{
-        int visibility = hasUnreadReports? View.VISIBLE : View.GONE;
+        phonePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+        phonePopupWindow.update();
+    }
+
+    private void resetTabItems()
+    {
+        for (int i = 0; i < tabItemList.size(); i++)
+        {
+            tabItemList.get(i).setIconAlpha(0);
+        }
+    }
+
+    private void showReportTip(boolean hasUnreadReports)
+    {
+        int visibility = hasUnreadReports ? View.VISIBLE : View.GONE;
         reportTipImageView.setVisibility(visibility);
-	}
-	
-	private void showMeTip(boolean hasMessages)
-	{
-        int visibility = hasMessages? View.VISIBLE : View.GONE;
+    }
+
+    private void showMeTip(boolean hasMessages)
+    {
+        int visibility = hasMessages ? View.VISIBLE : View.GONE;
         meTipImageView.setVisibility(visibility);
-	}
+    }
 
     private void dealWithReimGuideLayout()
     {
@@ -481,40 +481,40 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
     }
 
-	private void sendGetEventsRequest()
-	{
-		EventsRequest request = new EventsRequest();
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final EventsResponse response = new EventsResponse(httpResponse);
-				if (response.getStatus())
-				{
+    private void sendGetEventsRequest()
+    {
+        EventsRequest request = new EventsRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final EventsResponse response = new EventsResponse(httpResponse);
+                if (response.getStatus())
+                {
                     User currentUser = AppPreference.getAppPreference().getCurrentUser();
                     currentUser.setAppliedCompany(response.getAppliedCompany());
                     DBManager.getDBManager().updateUser(currentUser);
 
-					if (response.needToRefresh() && PhoneUtils.isNetworkConnected())
-					{
-						sendGetGroupRequest();
-					}
+                    if (response.needToRefresh() && PhoneUtils.isNetworkConnected())
+                    {
+                        sendGetGroupRequest();
+                    }
 
                     if (response.isGroupChanged() && PhoneUtils.isNetworkConnected())
                     {
                         sendCommonRequest();
                     }
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimApplication.setMineUnreadList(response.getMineUnreadList());
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimApplication.setMineUnreadList(response.getMineUnreadList());
                             ReimApplication.setOthersUnreadList(response.getOthersUnreadList());
                             ReimApplication.setUnreadMessagesCount(response.getUnreadMessagesCount());
                             ReimApplication.setHasUnreadMessages(response.hasUnreadMessages());
-							showReportTip(response.hasUnreadReports());
-							showMeTip(response.hasUnreadMessages());
+                            showReportTip(response.hasUnreadReports());
+                            showMeTip(response.hasUnreadMessages());
 
                             if (viewPager.getCurrentItem() == ReimApplication.TAB_ME)
                             {
@@ -526,12 +526,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                                 ReportFragment fragment = (ReportFragment) fragmentList.get(ReimApplication.TAB_REPORT);
                                 fragment.showBadge();
                             }
-						}
-					});
-				}
-			}
-		});
-	}
+                        }
+                    });
+                }
+            }
+        });
+    }
 
     private void sendCommonRequest()
     {
@@ -606,80 +606,80 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             }
         });
     }
-	
-	private void sendGetGroupRequest()
-	{
-		GetGroupRequest request = new GetGroupRequest();
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				GetGroupResponse response = new GetGroupResponse(httpResponse);
-				if (response.getStatus())
-				{
-					int currentGroupID = response.getGroup() == null? -1 : response.getGroup().getServerID();
-					
-					// update members
-					List<User> memberList = response.getMemberList();
-					User currentUser = appPreference.getCurrentUser();
-					
-					for (int i = 0; i < memberList.size(); i++)
-					{
-                        User user = memberList.get(i);
-						if (currentUser != null && user.equals(currentUser))
-						{
-							if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
-							{
-								if (user.getAvatarID() == currentUser.getAvatarID())
-								{
-									user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
-								}								
-							}
-							else
-							{
-                                memberList.set(i, currentUser);
-							}
-						}
-					}
-					
-					dbManager.updateGroupUsers(memberList, currentGroupID);
 
-					// update group info
-					dbManager.syncGroup(response.getGroup());
-				}
-			}
-		});
-	}
+    private void sendGetGroupRequest()
+    {
+        GetGroupRequest request = new GetGroupRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                GetGroupResponse response = new GetGroupResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
+
+                    // update members
+                    List<User> memberList = response.getMemberList();
+                    User currentUser = appPreference.getCurrentUser();
+
+                    for (int i = 0; i < memberList.size(); i++)
+                    {
+                        User user = memberList.get(i);
+                        if (currentUser != null && user.equals(currentUser))
+                        {
+                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+                            {
+                                if (user.getAvatarID() == currentUser.getAvatarID())
+                                {
+                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
+                                }
+                            }
+                            else
+                            {
+                                memberList.set(i, currentUser);
+                            }
+                        }
+                    }
+
+                    dbManager.updateGroupUsers(memberList, currentGroupID);
+
+                    // update group info
+                    dbManager.syncGroup(response.getGroup());
+                }
+            }
+        });
+    }
 
     private void sendFeedbackRequest(String feedback, String contactInfo)
     {
-    	ReimProgressDialog.show();
-    	FeedbackRequest request = new FeedbackRequest(feedback, contactInfo, PhoneUtils.getAppVersion());
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final FeedbackResponse response = new FeedbackResponse(httpResponse);
-				runOnUiThread(new Runnable()
-				{
-					public void run()
-					{
-						if (response.getStatus())
-						{
-					    	ReimProgressDialog.dismiss();
-							feedbackPopupWindow.dismiss();
-							phonePopupWindow.dismiss();
-							ViewUtils.showToast(MainActivity.this, R.string.succeed_in_sending_feedback);
-						}
-						else
-						{
-					    	ReimProgressDialog.dismiss();
-							ViewUtils.showToast(MainActivity.this, R.string.failed_to_send_feedback, response.getErrorMessage());
-						}
-					}						
-				});
-			}
-		});
+        ReimProgressDialog.show();
+        FeedbackRequest request = new FeedbackRequest(feedback, contactInfo, PhoneUtils.getAppVersion());
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final FeedbackResponse response = new FeedbackResponse(httpResponse);
+                runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        if (response.getStatus())
+                        {
+                            ReimProgressDialog.dismiss();
+                            feedbackPopupWindow.dismiss();
+                            phonePopupWindow.dismiss();
+                            ViewUtils.showToast(MainActivity.this, R.string.succeed_in_sending_feedback);
+                        }
+                        else
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(MainActivity.this, R.string.failed_to_send_feedback, response.getErrorMessage());
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void connectWebSocket()
@@ -778,48 +778,48 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             e.printStackTrace();
         }
     }
-    
-	public void onClick(View v)
-	{
-		resetTabItems();
-        hideReimGuideLayout();
-		
-		int position = 0;
-		switch (v.getId())
-		{
-			case R.id.tabItemReim:
-			{
-				MobclickAgent.onEvent(MainActivity.this, "UMENG_ITEM");				
-				position = ReimApplication.TAB_REIM;
-                dealWithReimGuideLayout();
-				break;
-			}
-			case R.id.tabItemReport:
-			{
-				MobclickAgent.onEvent(MainActivity.this, "UMENG_REPORT");
-				
-				position = ReimApplication.TAB_REPORT;
-				showReportTip(false);
-                dealWithReportGuideLayout();
-				break;							
-			}
-			case R.id.tabItemStat:
-			{
-				position = ReimApplication.TAB_STATISTICS;
-				break;							
-			}
-			case R.id.tabItemMe:
-			{
-				position = ReimApplication.TAB_ME;
-				showMeTip(false);
-				break;							
-			}
-			default:
-				break;
-		}
 
-		ReimApplication.setTabIndex(position);
-		viewPager.setCurrentItem(position, false);
-		tabItemList.get(position).setIconAlpha(1.0f);
-	}
+    public void onClick(View v)
+    {
+        resetTabItems();
+        hideReimGuideLayout();
+
+        int position = 0;
+        switch (v.getId())
+        {
+            case R.id.tabItemReim:
+            {
+                MobclickAgent.onEvent(MainActivity.this, "UMENG_ITEM");
+                position = ReimApplication.TAB_REIM;
+                dealWithReimGuideLayout();
+                break;
+            }
+            case R.id.tabItemReport:
+            {
+                MobclickAgent.onEvent(MainActivity.this, "UMENG_REPORT");
+
+                position = ReimApplication.TAB_REPORT;
+                showReportTip(false);
+                dealWithReportGuideLayout();
+                break;
+            }
+            case R.id.tabItemStat:
+            {
+                position = ReimApplication.TAB_STATISTICS;
+                break;
+            }
+            case R.id.tabItemMe:
+            {
+                position = ReimApplication.TAB_ME;
+                showMeTip(false);
+                break;
+            }
+            default:
+                break;
+        }
+
+        ReimApplication.setTabIndex(position);
+        viewPager.setCurrentItem(position, false);
+        tabItemList.get(position).setIconAlpha(1.0f);
+    }
 }

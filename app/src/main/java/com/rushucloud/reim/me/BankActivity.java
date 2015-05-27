@@ -63,46 +63,46 @@ public class BankActivity extends Activity
     protected String currentCity;
     private List<Province> provinceList = new ArrayList<>();
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_bank);
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_me_bank);
         initData();
-		initView();
-	}
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("BankActivity");
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("BankActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
         refreshInfo();
-	}
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("BankActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("BankActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     private void initData()
     {
         dbManager = DBManager.getDBManager();
         currentUser = AppPreference.getAppPreference().getCurrentUser();
         bankAccount = DBManager.getDBManager().getBankAccount(currentUser.getServerID());
-        originalBankName = bankAccount == null? "" : bankAccount.getBankName();
-        originalLocation = bankAccount == null? "" : bankAccount.getLocation();
+        originalBankName = bankAccount == null ? "" : bankAccount.getBankName();
+        originalLocation = bankAccount == null ? "" : bankAccount.getLocation();
         bankList = Arrays.asList(getResources().getStringArray(R.array.bankArray));
 
         try
@@ -129,10 +129,10 @@ public class BankActivity extends Activity
         getLocationInfo();
     }
 
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
@@ -184,7 +184,7 @@ public class BankActivity extends Activity
         });
 
         initLocationWindow();
-	}
+    }
 
     private void initBankWindow()
     {
@@ -270,7 +270,7 @@ public class BankActivity extends Activity
         {
             public void onClick(View v)
             {
-                String location = currentProvince.getName().equals(currentCity)? currentCity : currentProvince.getName() + currentCity;
+                String location = currentProvince.getName().equals(currentCity) ? currentCity : currentProvince.getName() + currentCity;
                 if (!PhoneUtils.isNetworkConnected())
                 {
                     ViewUtils.showToast(BankActivity.this, R.string.error_modify_network_unavailable);
@@ -321,8 +321,8 @@ public class BankActivity extends Activity
     {
         currentUser = AppPreference.getAppPreference().getCurrentUser();
         bankAccount = DBManager.getDBManager().getBankAccount(currentUser.getServerID());
-        originalBankName = bankAccount == null? "" : bankAccount.getBankName();
-        originalLocation = bankAccount == null? "" : bankAccount.getLocation();
+        originalBankName = bankAccount == null ? "" : bankAccount.getBankName();
+        originalLocation = bankAccount == null ? "" : bankAccount.getLocation();
 
         getLocationInfo();
 
@@ -360,7 +360,7 @@ public class BankActivity extends Activity
 
     private void getLocationInfo()
     {
-        String currentLocation = bankAccount == null? "" : bankAccount.getLocation();
+        String currentLocation = bankAccount == null ? "" : bankAccount.getLocation();
         if (currentLocation.length() == 3)
         {
             Province province = new Province();
@@ -424,7 +424,6 @@ public class BankActivity extends Activity
         currentCity = currentProvince.getCityArray()[index];
     }
 
-
     private void sendCreateBankAccountRequest(final boolean setBankName)
     {
         ReimProgressDialog.show();
@@ -466,7 +465,7 @@ public class BankActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            int prompt = setBankName? R.string.failed_to_set_bank_name : R.string.failed_to_set_bank_location;
+                            int prompt = setBankName ? R.string.failed_to_set_bank_name : R.string.failed_to_set_bank_location;
                             ViewUtils.showToast(BankActivity.this, prompt, response.getErrorMessage());
                         }
                     });
@@ -514,7 +513,7 @@ public class BankActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            int prompt = setBankName? R.string.failed_to_set_bank_name : R.string.failed_to_set_bank_location;
+                            int prompt = setBankName ? R.string.failed_to_set_bank_name : R.string.failed_to_set_bank_location;
                             ViewUtils.showToast(BankActivity.this, prompt, response.getErrorMessage());
                         }
                     });

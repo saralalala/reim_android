@@ -54,19 +54,19 @@ public class PickCompanyActivity extends Activity
     private boolean hasInit = false;
     private boolean fromGuide = false;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_pick_company);
-		initView();
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_guide_pick_company);
+        initView();
         fromGuide = getIntent().getBooleanExtra("fromGuide", false);
-	}
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("PickCompanyActivity");
-		MobclickAgent.onResume(this);
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("PickCompanyActivity");
+        MobclickAgent.onResume(this);
         ReimProgressDialog.setContext(this);
         if (!hasInit)
         {
@@ -76,36 +76,36 @@ public class PickCompanyActivity extends Activity
                 sendGetInvitedGroupRequest();
             }
         }
-	}
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("PickCompanyActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("PickCompanyActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
+            }
+        });
 
-		completeTextView = (TextView) findViewById(R.id.completeTextView);
+        completeTextView = (TextView) findViewById(R.id.completeTextView);
         completeTextView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
@@ -166,7 +166,7 @@ public class PickCompanyActivity extends Activity
                 if (!companyList.isEmpty())
                 {
                     Group chosenCompany = companyList.get(position);
-                    company = chosenCompany.equals(company)? null : chosenCompany;
+                    company = chosenCompany.equals(company) ? null : chosenCompany;
                     adapter.setCompany(company);
                     adapter.notifyDataSetChanged();
                     if (company == null)
@@ -180,7 +180,7 @@ public class PickCompanyActivity extends Activity
                 }
             }
         });
-	}
+    }
 
     private void searchGroups()
     {
@@ -431,7 +431,7 @@ public class PickCompanyActivity extends Activity
 
     private void hideSoftKeyboard()
     {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
     }
 

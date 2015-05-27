@@ -32,211 +32,211 @@ import netUtils.response.report.ApproveReportResponse;
 
 public class FollowingActivity extends Activity
 {
-	private static final int PICK_MANAGER = 0;
-	private static final int PICK_CC = 1;
-	
-	private TextView managerTextView;	
-	private TextView ccTextView;
-	
-	private Report report;
-	private	List<User> managerList = new ArrayList<>();
-	private List<User> ccList = new ArrayList<>();
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_report_following);
-		initData();
-		initView();
-	}
-	
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("FollowingActivity");		
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-	}
+    private static final int PICK_MANAGER = 0;
+    private static final int PICK_CC = 1;
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("FollowingActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			goBackToApproveReportActivity();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		if (resultCode == RESULT_OK)
-		{
-			switch (requestCode)
-			{
-				case PICK_MANAGER:
-				{
-					List<User> managerList = (List<User>) data.getSerializableExtra("managers");
-					report.setManagerList(managerList);
-					managerTextView.setText(report.getManagersName());
-					break;
-				}
-				case PICK_CC:
-				{
-					List<User> ccList = (List<User>) data.getSerializableExtra("ccs");
-					report.setCCList(ccList);
-					ccTextView.setText(report.getCCsName());
-					break;
-				}
-				default:
-					break;
-			}
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+    private TextView managerTextView;
+    private TextView ccTextView;
 
-	private void initData()
-	{
-		report = (Report) getIntent().getSerializableExtra("report");
-		managerList.addAll(report.getManagerList());
-		ccList.addAll(report.getCCList());
+    private Report report;
+    private List<User> managerList = new ArrayList<>();
+    private List<User> ccList = new ArrayList<>();
+
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_report_following);
+        initData();
+        initView();
+    }
+
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("FollowingActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("FollowingActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            goBackToApproveReportActivity();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == RESULT_OK)
+        {
+            switch (requestCode)
+            {
+                case PICK_MANAGER:
+                {
+                    List<User> managerList = (List<User>) data.getSerializableExtra("managers");
+                    report.setManagerList(managerList);
+                    managerTextView.setText(report.getManagersName());
+                    break;
+                }
+                case PICK_CC:
+                {
+                    List<User> ccList = (List<User>) data.getSerializableExtra("ccs");
+                    report.setCCList(ccList);
+                    ccTextView.setText(report.getCCsName());
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void initData()
+    {
+        report = (Report) getIntent().getSerializableExtra("report");
+        managerList.addAll(report.getManagerList());
+        ccList.addAll(report.getCCList());
         User currentUser = AppPreference.getAppPreference().getCurrentUser();
         List<User> managerList = new ArrayList<>();
         if (report.getSender().getServerID() != currentUser.getDefaultManagerID())
         {
             managerList.addAll(currentUser.buildBaseManagerList());
         }
-		report.setManagerList(managerList);
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				goBackToApproveReportActivity();
-			}	
-		});
+        report.setManagerList(managerList);
+    }
 
-		managerTextView = (TextView) findViewById(R.id.managerTextView);
-		managerTextView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(FollowingActivity.this, "UMENG_REPORT_NEXT_SEND");
-				Intent intent = new Intent(FollowingActivity.this, PickManagerActivity.class);
-				intent.putExtra("managers", (Serializable) report.getManagerList());
-				intent.putExtra("sender", report.getSender().getServerID());
-				intent.putExtra("fromFollowing", true);
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                goBackToApproveReportActivity();
+            }
+        });
+
+        managerTextView = (TextView) findViewById(R.id.managerTextView);
+        managerTextView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(FollowingActivity.this, "UMENG_REPORT_NEXT_SEND");
+                Intent intent = new Intent(FollowingActivity.this, PickManagerActivity.class);
+                intent.putExtra("managers", (Serializable) report.getManagerList());
+                intent.putExtra("sender", report.getSender().getServerID());
+                intent.putExtra("fromFollowing", true);
                 ViewUtils.goForwardForResult(FollowingActivity.this, intent, PICK_MANAGER);
-			}
-		});
-		managerTextView.setText(report.getManagersName());
-		
-		ccTextView = (TextView) findViewById(R.id.ccTextView);
-		ccTextView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(FollowingActivity.this, "UMENG_REPORT_NEXT_CC");
-				Intent intent = new Intent(FollowingActivity.this, PickCCActivity.class);
-				intent.putExtra("ccs", (Serializable) report.getCCList());
-				intent.putExtra("sender", report.getSender().getServerID());
-				intent.putExtra("fromFollowing", true);
-                ViewUtils.goForwardForResult(FollowingActivity.this, intent, PICK_CC);
-			}
-		});
-		
-		Button finishButton = (Button) findViewById(R.id.finishButton);
-		finishButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				sendApproveReportRequest(true);
-			}
-		});	
+            }
+        });
+        managerTextView.setText(report.getManagersName());
 
-		Button submitButton = (Button) findViewById(R.id.submitButton);
-		submitButton.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				sendApproveReportRequest(false);
-			}
-		});
-	}
-  
+        ccTextView = (TextView) findViewById(R.id.ccTextView);
+        ccTextView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(FollowingActivity.this, "UMENG_REPORT_NEXT_CC");
+                Intent intent = new Intent(FollowingActivity.this, PickCCActivity.class);
+                intent.putExtra("ccs", (Serializable) report.getCCList());
+                intent.putExtra("sender", report.getSender().getServerID());
+                intent.putExtra("fromFollowing", true);
+                ViewUtils.goForwardForResult(FollowingActivity.this, intent, PICK_CC);
+            }
+        });
+
+        Button finishButton = (Button) findViewById(R.id.finishButton);
+        finishButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                sendApproveReportRequest(true);
+            }
+        });
+
+        Button submitButton = (Button) findViewById(R.id.submitButton);
+        submitButton.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                sendApproveReportRequest(false);
+            }
+        });
+    }
+
     private void sendApproveReportRequest(boolean isFinished)
     {
-    	ReimProgressDialog.show();
-    	report.setMyDecision(Report.STATUS_APPROVED);
-    	
-    	ApproveReportRequest request = new ApproveReportRequest(report, isFinished);
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
-				if (response.getStatus())
-				{
-					int currentTime = Utils.getCurrentTime();
+        ReimProgressDialog.show();
+        report.setMyDecision(Report.STATUS_APPROVED);
+
+        ApproveReportRequest request = new ApproveReportRequest(report, isFinished);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final ApproveReportResponse response = new ApproveReportResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentTime = Utils.getCurrentTime();
                     report.setManagerList(managerList);
                     report.setCCList(ccList);
-					report.setLocalUpdatedDate(currentTime);
-					report.setServerUpdatedDate(currentTime);
+                    report.setLocalUpdatedDate(currentTime);
+                    report.setServerUpdatedDate(currentTime);
                     report.setStatus(response.getReportStatus());
-					DBManager.getDBManager().updateOthersReport(report);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(FollowingActivity.this, R.string.prompt_report_approved);
-							goBackToMainActivity();
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(FollowingActivity.this, R.string.error_operation_failed, response.getErrorMessage());
-						}
-					});
-				}
-			}
-		});
+                    DBManager.getDBManager().updateOthersReport(report);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(FollowingActivity.this, R.string.prompt_report_approved);
+                            goBackToMainActivity();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(FollowingActivity.this, R.string.error_operation_failed, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
     }
- 
+
     private void goBackToApproveReportActivity()
     {
-    	report.setManagerList(managerList);
-    	report.setCCList(ccList);
-    	
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("report", report);
-		Intent intent = new Intent(FollowingActivity.this, ApproveReportActivity.class);
-		intent.putExtras(bundle);
+        report.setManagerList(managerList);
+        report.setCCList(ccList);
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("report", report);
+        Intent intent = new Intent(FollowingActivity.this, ApproveReportActivity.class);
+        intent.putExtras(bundle);
         ViewUtils.goBackWithIntent(this, intent);
     }
- 
+
     private void goBackToMainActivity()
     {
-    	ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
-    	ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_OTHERS);
+        ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
+        ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_OTHERS);
         ViewUtils.goBack(this);
     }
 }

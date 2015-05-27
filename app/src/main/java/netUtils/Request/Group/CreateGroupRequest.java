@@ -12,16 +12,16 @@ import netUtils.request.BaseRequest;
 
 public class CreateGroupRequest extends BaseRequest
 {
-	public CreateGroupRequest(String groupName)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("name", groupName));
-		setParams(params);
+    public CreateGroupRequest(String groupName)
+    {
+        super();
 
-		appendUrl(URLDef.URL_GROUP);
-	}
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("name", groupName));
+        setParams(params);
+
+        appendUrl(URLDef.URL_GROUP);
+    }
 
     public CreateGroupRequest(String groupName, String inviteList)
     {
@@ -37,7 +37,6 @@ public class CreateGroupRequest extends BaseRequest
 
         appendUrl(URLDef.URL_GROUP);
     }
-
 
     public CreateGroupRequest(String groupName, String inviteList, int guideVersion)
     {
@@ -55,8 +54,8 @@ public class CreateGroupRequest extends BaseRequest
         appendUrl(URLDef.URL_GROUP);
     }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

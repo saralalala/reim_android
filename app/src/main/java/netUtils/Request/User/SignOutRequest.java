@@ -6,15 +6,15 @@ import netUtils.request.BaseRequest;
 
 public class SignOutRequest extends BaseRequest
 {
-	public SignOutRequest()
-	{
-		super();
+    public SignOutRequest()
+    {
+        super();
 
-		appendUrl(URLDef.URL_SIGN_OUT);
-	}
+        appendUrl(URLDef.URL_SIGN_OUT);
+    }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doGet(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doGet(callback);
+    }
 }

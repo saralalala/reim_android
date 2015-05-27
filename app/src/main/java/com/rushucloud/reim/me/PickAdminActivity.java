@@ -41,77 +41,77 @@ import netUtils.response.DownloadImageResponse;
 public class PickAdminActivity extends Activity
 {
     private ClearEditText memberEditText;
-	private MemberListViewAdapter adapter;
+    private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
 
-	private DBManager dbManager;
-	private List<User> userList;
+    private DBManager dbManager;
+    private List<User> userList;
     private List<User> showList = new ArrayList<>();
     private List<User> chosenList = new ArrayList<>();
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_admin);
-		initData();
-		initView();
-	}
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("PickAdminActivity");
-		MobclickAgent.onResume(this);
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_me_admin);
+        initData();
+        initView();
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("PickAdminActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("PickAdminActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("PickAdminActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-	private void initData()
-	{
-		dbManager = DBManager.getDBManager();
-		
-		int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+
+        int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
         int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
         userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUserID);
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
-		confirmTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+            }
+        });
+
+        TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
+        confirmTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 hideSoftKeyboard();
 
-				Intent intent = new Intent();
-				intent.putExtra("users", (Serializable) adapter.getChosenList());
+                Intent intent = new Intent();
+                intent.putExtra("users", (Serializable) adapter.getChosenList());
                 ViewUtils.goBackWithResult(PickAdminActivity.this, intent);
-			}
-		});
+            }
+        });
 
         memberEditText = (ClearEditText) findViewById(R.id.memberEditText);
         memberEditText.addTextChangedListener(new TextWatcher()
@@ -131,7 +131,7 @@ public class PickAdminActivity extends Activity
 
             public void afterTextChanged(Editable s)
             {
-                int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
+                int visibility = s.toString().isEmpty() ? View.VISIBLE : View.GONE;
                 indexLayout.setVisibility(visibility);
                 filterList();
             }
@@ -175,7 +175,7 @@ public class PickAdminActivity extends Activity
                 sendDownloadAvatarRequest(user);
             }
         }
-	}
+    }
 
     private void filterList()
     {
@@ -184,11 +184,11 @@ public class PickAdminActivity extends Activity
         adapter.setMemberList(showList);
         adapter.notifyDataSetChanged();
     }
-	
+
     private void sendDownloadAvatarRequest(final User user)
     {
-    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
-    	request.sendRequest(new HttpConnectionCallback()
+        DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
+        request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {

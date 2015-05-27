@@ -15,7 +15,7 @@ import netUtils.response.BaseResponse;
 
 public class CreateGroupResponse extends BaseResponse
 {
-	private int groupID;
+    private int groupID;
     private int date;
 
     private List<Category> categoryList;
@@ -24,17 +24,17 @@ public class CreateGroupResponse extends BaseResponse
     private User currentUser;
     private Group group;
 
-	public CreateGroupResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public CreateGroupResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONObject jObject = getDataObject();
-			setGroupID(Integer.valueOf(jObject.getString("id")));
+    protected void constructData()
+    {
+        try
+        {
+            JSONObject jObject = getDataObject();
+            setGroupID(Integer.valueOf(jObject.getString("id")));
             setDate(Integer.valueOf(jObject.getString("dt")));
 
             JSONObject profileObject = jObject.getJSONObject("profile");
@@ -59,7 +59,7 @@ public class CreateGroupResponse extends BaseResponse
             categoryList = new ArrayList<>();
             for (int i = 0; i < categoryArray.length(); i++)
             {
-                Category category =new Category(categoryArray.getJSONObject(i));
+                Category category = new Category(categoryArray.getJSONObject(i));
                 categoryList.add(category);
             }
 
@@ -78,22 +78,22 @@ public class CreateGroupResponse extends BaseResponse
                 User user = new User(memberArray.getJSONObject(i), groupID);
                 memberList.add(user);
             }
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public int getGroupID()
-	{
-		return groupID;
-	}
+    public int getGroupID()
+    {
+        return groupID;
+    }
 
-	public void setGroupID(int groupID)
-	{
-		this.groupID = groupID;
-	}
+    public void setGroupID(int groupID)
+    {
+        this.groupID = groupID;
+    }
 
     public int getDate()
     {

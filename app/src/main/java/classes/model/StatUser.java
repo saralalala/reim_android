@@ -5,9 +5,9 @@ import org.json.JSONObject;
 
 public class StatUser
 {
-	private int userID = -1;
-	private double amount = 0;
-    private int itemCount =  -1;
+    private int userID = -1;
+    private double amount = 0;
+    private int itemCount = -1;
 
     public StatUser(JSONObject jObject)
     {
@@ -23,28 +23,31 @@ public class StatUser
         }
     }
 
-	public int getUserID()
-	{
-		return userID;
-	}
-	public void setUserID(int userID)
-	{
-		this.userID = userID;
-	}
+    public int getUserID()
+    {
+        return userID;
+    }
 
-	public double getAmount()
-	{
-		return amount;
-	}
-	public void setAmount(double amount)
-	{
-		this.amount = amount;
-	}
+    public void setUserID(int userID)
+    {
+        this.userID = userID;
+    }
+
+    public double getAmount()
+    {
+        return amount;
+    }
+
+    public void setAmount(double amount)
+    {
+        this.amount = amount;
+    }
 
     public int getItemCount()
     {
         return itemCount;
     }
+
     public void setItemCount(int itemCount)
     {
         this.itemCount = itemCount;

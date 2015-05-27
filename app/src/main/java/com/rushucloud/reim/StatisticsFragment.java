@@ -47,7 +47,7 @@ import netUtils.response.statistics.OthersStatResponse;
 
 public class StatisticsFragment extends Fragment
 {
-	private static final int GET_DATA_INTERVAL = 600;
+    private static final int GET_DATA_INTERVAL = 600;
     private static final int DEFAULT_ICON_ID = 11;
 
     private View view;
@@ -55,19 +55,19 @@ public class StatisticsFragment extends Fragment
     private RelativeLayout titleLayout;
     private TextView myTitleTextView;
     private TextView othersTitleTextView;
-	private StatisticsListViewAdapter mineAdapter;
+    private StatisticsListViewAdapter mineAdapter;
     private StatisticsListViewAdapter othersAdapter;
     private XListView statListView;
 
-	private FrameLayout mineStatContainer;
-	private TextView mainAmountTextView;
-	private TextView mineUnitTextView;
-	private TextView ongoingPercentTextView;
-	private TextView newPercentTextView;
-	private TextView monthTotalTextView;
-	private TextView totalUnitTextView;
-	private LinearLayout monthLayout;
-	private LinearLayout categoryLayout;
+    private FrameLayout mineStatContainer;
+    private TextView mainAmountTextView;
+    private TextView mineUnitTextView;
+    private TextView ongoingPercentTextView;
+    private TextView newPercentTextView;
+    private TextView monthTotalTextView;
+    private TextView totalUnitTextView;
+    private LinearLayout monthLayout;
+    private LinearLayout categoryLayout;
 
     private FrameLayout othersStatContainer;
     private TextView othersTotalTextView;
@@ -78,8 +78,8 @@ public class StatisticsFragment extends Fragment
     private LinearLayout tagLayout;
     private LinearLayout memberLayout;
 
-	private AppPreference appPreference;
-	private DBManager dbManager;
+    private AppPreference appPreference;
+    private DBManager dbManager;
 
     private int colorR[] = {60, 181, 232, 181, 141, 62, 255, 138, 238, 125, 56};
     private int colorG[] = {183, 112, 140, 184, 192, 119, 196, 118, 149, 173, 56};
@@ -89,12 +89,12 @@ public class StatisticsFragment extends Fragment
     private int colorBDiff[] = {72, 54, 45, 131, 25, 25, 179, 37, 144, 63, 169};
     private int year;
     private int month;
-	private boolean hasInit = false;
-	private boolean hasMineData = false;
+    private boolean hasInit = false;
+    private boolean hasMineData = false;
     private boolean hasOthersData = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
+    {
         if (view == null)
         {
             view = inflater.inflate(R.layout.fragment_statistics, container, false);
@@ -108,38 +108,38 @@ public class StatisticsFragment extends Fragment
             }
         }
         return view;
-	}
-	
-	public void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("StatisticsFragment");
-		if (!hasInit)
-		{
-			appPreference = AppPreference.getAppPreference();
-			dbManager = DBManager.getDBManager();
-			initView();
-			hasInit = true;
-		}
+    }
+
+    public void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("StatisticsFragment");
+        if (!hasInit)
+        {
+            appPreference = AppPreference.getAppPreference();
+            dbManager = DBManager.getDBManager();
+            initView();
+            hasInit = true;
+        }
 
         if (getUserVisibleHint() && PhoneUtils.isNetworkConnected() && needToGetMineData())
         {
             ReimProgressDialog.show();
             sendGetMineDataRequest();
         }
-	}
+    }
 
-	public void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("StatisticsFragment");
-	}
+    public void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("StatisticsFragment");
+    }
 
-	public void setUserVisibleHint(boolean isVisibleToUser)
-	{
-		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser && hasInit)
-		{
+    public void setUserVisibleHint(boolean isVisibleToUser)
+    {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && hasInit)
+        {
             if (PhoneUtils.isNetworkConnected())
             {
                 setListView(ReimApplication.getStatTabIndex());
@@ -158,11 +158,11 @@ public class StatisticsFragment extends Fragment
             {
                 ViewUtils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
             }
-		}
-	}
-	
-	private void initView()
-	{
+        }
+    }
+
+    private void initView()
+    {
         statTitleTextView = (TextView) view.findViewById(R.id.statTitleTextView);
         titleLayout = (RelativeLayout) view.findViewById(R.id.titleLayout);
 
@@ -186,12 +186,12 @@ public class StatisticsFragment extends Fragment
 
         initMineView();
 
-		statListView = (XListView) getActivity().findViewById(R.id.statListView);
-		statListView.setAdapter(mineAdapter);
-		statListView.setXListViewListener(new IXListViewListener()
-		{
-			public void onRefresh()
-			{
+        statListView = (XListView) getActivity().findViewById(R.id.statListView);
+        statListView.setAdapter(mineAdapter);
+        statListView.setXListViewListener(new IXListViewListener()
+        {
+            public void onRefresh()
+            {
                 if (PhoneUtils.isNetworkConnected())
                 {
                     if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_MINE)
@@ -208,17 +208,17 @@ public class StatisticsFragment extends Fragment
                     statListView.stopRefresh();
                     ViewUtils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
                 }
-			}
-			
-			public void onLoadMore()
-			{
-				
-			}
-		});
-		statListView.setPullRefreshEnable(true);
-		statListView.setPullLoadEnable(false);
-		statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetMineStatTime()));
-	}
+            }
+
+            public void onLoadMore()
+            {
+
+            }
+        });
+        statListView.setPullRefreshEnable(true);
+        statListView.setPullLoadEnable(false);
+        statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetMineStatTime()));
+    }
 
     private void initMineView()
     {
@@ -262,7 +262,7 @@ public class StatisticsFragment extends Fragment
             {
                 if (PhoneUtils.isNetworkConnected())
                 {
-                    month = month == 1? 12 : month - 1;
+                    month = month == 1 ? 12 : month - 1;
                     if (month == 12)
                     {
                         year--;
@@ -289,7 +289,7 @@ public class StatisticsFragment extends Fragment
                 }
                 else
                 {
-                    month = month == 12? 1 : month + 1;
+                    month = month == 12 ? 1 : month + 1;
                     if (month == 1)
                     {
                         year++;
@@ -317,12 +317,12 @@ public class StatisticsFragment extends Fragment
         othersAdapter = new StatisticsListViewAdapter(othersView);
     }
 
-	private void resetMineView()
-	{
+    private void resetMineView()
+    {
         mineStatContainer.removeAllViews();
-		monthLayout.removeAllViews();
-		categoryLayout.removeAllViews();
-	}
+        monthLayout.removeAllViews();
+        categoryLayout.removeAllViews();
+    }
 
     private void resetOthersView()
     {
@@ -360,20 +360,20 @@ public class StatisticsFragment extends Fragment
         refreshData();
     }
 
-	private boolean needToGetMineData()
-	{
-		return !hasMineData || Utils.getCurrentTime() - appPreference.getLastGetMineStatTime() > GET_DATA_INTERVAL;
-	}
+    private boolean needToGetMineData()
+    {
+        return !hasMineData || Utils.getCurrentTime() - appPreference.getLastGetMineStatTime() > GET_DATA_INTERVAL;
+    }
 
     private boolean needToGetOthersData()
     {
         return !hasOthersData || Utils.getCurrentTime() - appPreference.getLastGetOthersStatTime() > GET_DATA_INTERVAL;
     }
 
-	private void refreshData()
-	{
-		if (PhoneUtils.isNetworkConnected())
-		{
+    private void refreshData()
+    {
+        if (PhoneUtils.isNetworkConnected())
+        {
             if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_MINE && needToGetMineData())
             {
                 ReimProgressDialog.show();
@@ -384,148 +384,148 @@ public class StatisticsFragment extends Fragment
                 ReimProgressDialog.show();
                 sendGetOthersDataRequest();
             }
-		}
-		else
-		{
-			statListView.stopRefresh();
-			ViewUtils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
-		}
-	}
-	
-	private void drawCostPie(double ongoingAmount, double newAmount)
-	{
-        double totalAmount = ongoingAmount + newAmount;
-		double ongoingRatio, newRatio;
-		if (totalAmount == 0)
-		{
-			ongoingRatio = newRatio = 0;
-		}
-		else
-		{
-			ongoingRatio = Utils.roundDouble(ongoingAmount * 100 / totalAmount);
-			newRatio = 100 - ongoingRatio;
-		}
-		
-		if (totalAmount < 10000)
-		{
-			mainAmountTextView.setText(Utils.formatDouble(totalAmount));
-            mineUnitTextView.setVisibility(View.GONE);
-		}
-		else if (totalAmount < 10000000)
-		{
-			mainAmountTextView.setText(Utils.formatDouble(totalAmount / 10000));
-            mineUnitTextView.setText(R.string.ten_thousand);
-		}
-		else
-		{
-			mainAmountTextView.setText(Utils.formatDouble(totalAmount / 100000000));
-            mineUnitTextView.setText(R.string.one_hundred_million);
-		}
-		ongoingPercentTextView.setText(Utils.formatDouble(ongoingRatio) + getString(R.string.percent));
-		newPercentTextView.setText(Utils.formatDouble(newRatio) + getString(R.string.percent));
+        }
+        else
+        {
+            statListView.stopRefresh();
+            ViewUtils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
+        }
+    }
 
-		float totalAngle = 262;
-		float startAngle = 139;
+    private void drawCostPie(double ongoingAmount, double newAmount)
+    {
+        double totalAmount = ongoingAmount + newAmount;
+        double ongoingRatio, newRatio;
+        if (totalAmount == 0)
+        {
+            ongoingRatio = newRatio = 0;
+        }
+        else
+        {
+            ongoingRatio = Utils.roundDouble(ongoingAmount * 100 / totalAmount);
+            newRatio = 100 - ongoingRatio;
+        }
+
+        if (totalAmount < 10000)
+        {
+            mainAmountTextView.setText(Utils.formatDouble(totalAmount));
+            mineUnitTextView.setVisibility(View.GONE);
+        }
+        else if (totalAmount < 10000000)
+        {
+            mainAmountTextView.setText(Utils.formatDouble(totalAmount / 10000));
+            mineUnitTextView.setText(R.string.ten_thousand);
+        }
+        else
+        {
+            mainAmountTextView.setText(Utils.formatDouble(totalAmount / 100000000));
+            mineUnitTextView.setText(R.string.one_hundred_million);
+        }
+        ongoingPercentTextView.setText(Utils.formatDouble(ongoingRatio) + getString(R.string.percent));
+        newPercentTextView.setText(Utils.formatDouble(newRatio) + getString(R.string.percent));
+
+        float totalAngle = 262;
+        float startAngle = 139;
         float ongoingAngle = (float) ongoingRatio * totalAngle / 100;
-		float newAngle = (float) newRatio * totalAngle / 100;
+        float newAngle = (float) newRatio * totalAngle / 100;
 
         // Draw new pie
         ReimPie newReimPie = new ReimPie(getActivity(), startAngle, newAngle, mineStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_new), 2);
         mineStatContainer.addView(newReimPie);
 
-		// Draw ongoing pie
+        // Draw ongoing pie
         startAngle += newAngle;
-		ReimPie ongoingReimPie = new ReimPie(getActivity(), startAngle, ongoingAngle, mineStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_ongoing), 2);
+        ReimPie ongoingReimPie = new ReimPie(getActivity(), startAngle, ongoingAngle, mineStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_ongoing), 2);
         mineStatContainer.addView(ongoingReimPie);
-	}
+    }
 
-	private void drawMonthBar(HashMap<String, Double> monthsData)
-	{
-		if (!monthsData.isEmpty())
-		{
-			double total = 0;
-			double max = 0;
-			for (Double data : monthsData.values())
-			{
-				total += data;
-				if (data > max)
-				{
-					max = data;
-				}
-			}
+    private void drawMonthBar(HashMap<String, Double> monthsData)
+    {
+        if (!monthsData.isEmpty())
+        {
+            double total = 0;
+            double max = 0;
+            for (Double data : monthsData.values())
+            {
+                total += data;
+                if (data > max)
+                {
+                    max = data;
+                }
+            }
             monthTotalTextView.setText(Utils.formatDouble(total));
-			
-			for (String month : monthsData.keySet())
-			{
-				Double data = monthsData.get(month);
-				ReimBar monthBar = new ReimBar(getActivity(), data / max);
-				
-				View view = View.inflate(getActivity(), R.layout.list_month_stat, null);
-				
-				TextView monthTextView = (TextView) view.findViewById(R.id.monthTextView);
-				monthTextView.setText(month);
 
-				TextView dataTextView = (TextView) view.findViewById(R.id.dataTextView);
-				TextView unitTextView = (TextView) view.findViewById(R.id.unitTextView);
-				
-				if (data < 100000)
-				{
-					dataTextView.setText(Utils.formatDouble(data));
-					unitTextView.setVisibility(View.GONE);
-				}
-				else if (data < 100000000)
-				{
-					dataTextView.setText(Utils.formatDouble(data / 10000));
-					unitTextView.setText(R.string.ten_thousand);
-				}
-				else
-				{
-					dataTextView.setText(Utils.formatDouble(data / 100000000));
-					unitTextView.setText(R.string.one_hundred_million);			
-				}
-				
-				LinearLayout dataLayout = (LinearLayout) view.findViewById(R.id.dataLayout);
-				dataLayout.addView(monthBar);
-				
-				monthLayout.addView(view);
-			}
-		}
-		else
-		{
+            for (String month : monthsData.keySet())
+            {
+                Double data = monthsData.get(month);
+                ReimBar monthBar = new ReimBar(getActivity(), data / max);
+
+                View view = View.inflate(getActivity(), R.layout.list_month_stat, null);
+
+                TextView monthTextView = (TextView) view.findViewById(R.id.monthTextView);
+                monthTextView.setText(month);
+
+                TextView dataTextView = (TextView) view.findViewById(R.id.dataTextView);
+                TextView unitTextView = (TextView) view.findViewById(R.id.unitTextView);
+
+                if (data < 100000)
+                {
+                    dataTextView.setText(Utils.formatDouble(data));
+                    unitTextView.setVisibility(View.GONE);
+                }
+                else if (data < 100000000)
+                {
+                    dataTextView.setText(Utils.formatDouble(data / 10000));
+                    unitTextView.setText(R.string.ten_thousand);
+                }
+                else
+                {
+                    dataTextView.setText(Utils.formatDouble(data / 100000000));
+                    unitTextView.setText(R.string.one_hundred_million);
+                }
+
+                LinearLayout dataLayout = (LinearLayout) view.findViewById(R.id.dataLayout);
+                dataLayout.addView(monthBar);
+
+                monthLayout.addView(view);
+            }
+        }
+        else
+        {
             monthTotalTextView.setVisibility(View.INVISIBLE);
-			totalUnitTextView.setVisibility(View.INVISIBLE);
-		}
-	}
-	
-	private void drawCategory(List<StatCategory> categoryList)
-	{
-		if (!categoryList.isEmpty())
-		{			
-			for (StatCategory category : categoryList)
-			{
-				Category localCategory = dbManager.getCategory(category.getCategoryID());
-				if (localCategory != null)
-				{
-					View view = View.inflate(getActivity(), R.layout.list_category_stat, null);
+            totalUnitTextView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void drawCategory(List<StatCategory> categoryList)
+    {
+        if (!categoryList.isEmpty())
+        {
+            for (StatCategory category : categoryList)
+            {
+                Category localCategory = dbManager.getCategory(category.getCategoryID());
+                if (localCategory != null)
+                {
+                    View view = View.inflate(getActivity(), R.layout.list_category_stat, null);
 
                     ImageView iconImageView = (ImageView) view.findViewById(R.id.iconImageView);
                     ViewUtils.setImageViewBitmap(localCategory, iconImageView);
 
-					TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+                    TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
                     nameTextView.setText(localCategory.getName());
-					
-					TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
-					countTextView.setText(Integer.toString(category.getItems().size()));
-					
-					TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+
+                    TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
+                    countTextView.setText(Integer.toString(category.getItems().size()));
+
+                    TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                     amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-					amountTextView.setText(Utils.formatDouble(category.getAmount()));
-					
-					categoryLayout.addView(view);					
-				}
-			}
-		}	
-	}
+                    amountTextView.setText(Utils.formatDouble(category.getAmount()));
+
+                    categoryLayout.addView(view);
+                }
+            }
+        }
+    }
 
     private void drawCategoryPie(List<StatCategory> categoryList)
     {
@@ -540,7 +540,7 @@ public class StatisticsFragment extends Fragment
             totalAmount += category.getAmount();
             if (localCategory != null)
             {
-                int iconID = localCategory.getIconID() < 1? DEFAULT_ICON_ID : localCategory.getIconID();
+                int iconID = localCategory.getIconID() < 1 ? DEFAULT_ICON_ID : localCategory.getIconID();
                 category.setIconID(iconID);
                 category.setName(localCategory.getName());
                 if (categoryArray.indexOfKey(iconID) < 0)
@@ -593,9 +593,9 @@ public class StatisticsFragment extends Fragment
             int key = categoryArray.keyAt(i);
             int colorIndex = key - 1;
             List<StatCategory> categories = categoryArray.get(key);
-            int rDiff = categories.size() == 1? colorRDiff[colorIndex] : colorRDiff[colorIndex] / (categories.size() - 1);
-            int gDiff = categories.size() == 1? colorGDiff[colorIndex] : colorGDiff[colorIndex] / (categories.size() - 1);
-            int bDiff = categories.size() == 1? colorBDiff[colorIndex] : colorBDiff[colorIndex] / (categories.size() - 1);
+            int rDiff = categories.size() == 1 ? colorRDiff[colorIndex] : colorRDiff[colorIndex] / (categories.size() - 1);
+            int gDiff = categories.size() == 1 ? colorGDiff[colorIndex] : colorGDiff[colorIndex] / (categories.size() - 1);
+            int bDiff = categories.size() == 1 ? colorBDiff[colorIndex] : colorBDiff[colorIndex] / (categories.size() - 1);
             for (int j = 0; j < categories.size(); j++)
             {
                 final StatCategory category = categories.get(j);
@@ -612,8 +612,8 @@ public class StatisticsFragment extends Fragment
                                                 colorB[colorIndex] + colorBDiff[colorIndex] - j * bDiff));
                 }
 
-                float angle = i == categoryArray.size() - 1 && j == categories.size() - 1?
-                                    270 - startAngle : (float) (360 * category.getAmount() / totalAmount);
+                float angle = i == categoryArray.size() - 1 && j == categories.size() - 1 ?
+                        270 - startAngle : (float) (360 * category.getAmount() / totalAmount);
 
                 reimPie = new ReimPie(getActivity(), startAngle, angle, othersStatContainer.getWidth(), category.getColor(), 1);
                 othersStatContainer.addView(reimPie);
@@ -788,25 +788,25 @@ public class StatisticsFragment extends Fragment
         }
     }
 
-	private void sendGetMineDataRequest()
-	{
-		MineStatRequest request = new MineStatRequest();
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final MineStatResponse response = new MineStatResponse(httpResponse);
-				if (response.getStatus())
-				{
-					hasMineData = true;
+    private void sendGetMineDataRequest()
+    {
+        MineStatRequest request = new MineStatRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final MineStatResponse response = new MineStatResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    hasMineData = true;
 
-					appPreference.setLastGetMineStatTime(Utils.getCurrentTime());
-					appPreference.saveAppPreference();
-					
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
+                    appPreference.setLastGetMineStatTime(Utils.getCurrentTime());
+                    appPreference.saveAppPreference();
+
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
                             if (!response.hasStaffData())
                             {
                                 statTitleTextView.setVisibility(View.VISIBLE);
@@ -818,32 +818,32 @@ public class StatisticsFragment extends Fragment
                                 titleLayout.setVisibility(View.VISIBLE);
                             }
 
-							resetMineView();
-							drawCostPie(response.getOngoingAmount(), response.getNewAmount());
-							drawMonthBar(response.getMonthsData());
-							drawCategory(response.getStatCategoryList());
-							mineAdapter.notifyDataSetChanged();
-							statListView.stopRefresh();
-							statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetMineStatTime()));
-							ReimProgressDialog.dismiss();
-						}
-					});
-				}
-				else
-				{
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							statListView.stopRefresh();
-							ViewUtils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
-						}
-					});					
-				}
-			}
-		});
-	}
+                            resetMineView();
+                            drawCostPie(response.getOngoingAmount(), response.getNewAmount());
+                            drawMonthBar(response.getMonthsData());
+                            drawCategory(response.getStatCategoryList());
+                            mineAdapter.notifyDataSetChanged();
+                            statListView.stopRefresh();
+                            statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetMineStatTime()));
+                            ReimProgressDialog.dismiss();
+                        }
+                    });
+                }
+                else
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            statListView.stopRefresh();
+                            ViewUtils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
 
     private void sendGetOthersDataRequest()
     {

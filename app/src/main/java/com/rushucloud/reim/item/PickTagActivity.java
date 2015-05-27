@@ -27,111 +27,111 @@ import classes.utils.ViewUtils;
 
 public class PickTagActivity extends Activity
 {
-	private TagListViewAdapter tagAdapter;
-	
-	private List<Tag> tagList = new ArrayList<>();
-	private boolean[] check;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_reim_tag);
-		initData();
-		initView();
-	}
+    private TagListViewAdapter tagAdapter;
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("PickTagActivity");		
-		MobclickAgent.onResume(this);
-	}
+    private List<Tag> tagList = new ArrayList<>();
+    private boolean[] check;
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("PickTagActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_reim_tag);
+        initData();
+        initView();
+    }
+
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("PickTagActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("PickTagActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void initData()
-	{		
-		int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-		tagList = DBManager.getDBManager().getGroupTags(currentGroupID);
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
 
-		List<Tag> chosenTags = (List<Tag>) getIntent().getSerializableExtra("tags");
-		check = Tag.getTagsCheck(tagList, chosenTags);
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        tagList = DBManager.getDBManager().getGroupTags(currentGroupID);
+
+        List<Tag> chosenTags = (List<Tag>) getIntent().getSerializableExtra("tags");
+        check = Tag.getTagsCheck(tagList, chosenTags);
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
-		confirmTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{				
-				List<Tag> tags = new ArrayList<>();
-				for (int i = 0; i < tagList.size(); i++)
-				{
-					if (check[i])
-					{
-						tags.add(tagList.get(i));
-					}
-				}
-				
-				Intent intent = new Intent();
-				intent.putExtra("tags", (Serializable) tags);
-                ViewUtils.goBackWithResult(PickTagActivity.this, intent);
-			}
-		});
+            }
+        });
 
-    	ListView tagListView = (ListView) findViewById(R.id.tagListView);
-		TextView noTagsTextView = (TextView) findViewById(R.id.noTagsTextView);
-		
-		if (tagList.isEmpty())
-		{
-			noTagsTextView.setVisibility(View.VISIBLE);
-			tagListView.setVisibility(View.INVISIBLE);
-		}
-		else
-		{
-			noTagsTextView.setVisibility(View.INVISIBLE);
-			tagListView.setVisibility(View.VISIBLE);
-			
-			tagAdapter = new TagListViewAdapter(this, tagList, check);
-			
-	    	tagListView.setAdapter(tagAdapter);
-	    	tagListView.setOnItemClickListener(new OnItemClickListener()
-			{
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-				{
-					check[position] = !check[position];
-					tagAdapter.setCheck(check);
-					tagAdapter.notifyDataSetChanged();
-				}
-			});			
-		}
-	}
+        TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
+        confirmTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                List<Tag> tags = new ArrayList<>();
+                for (int i = 0; i < tagList.size(); i++)
+                {
+                    if (check[i])
+                    {
+                        tags.add(tagList.get(i));
+                    }
+                }
+
+                Intent intent = new Intent();
+                intent.putExtra("tags", (Serializable) tags);
+                ViewUtils.goBackWithResult(PickTagActivity.this, intent);
+            }
+        });
+
+        ListView tagListView = (ListView) findViewById(R.id.tagListView);
+        TextView noTagsTextView = (TextView) findViewById(R.id.noTagsTextView);
+
+        if (tagList.isEmpty())
+        {
+            noTagsTextView.setVisibility(View.VISIBLE);
+            tagListView.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            noTagsTextView.setVisibility(View.INVISIBLE);
+            tagListView.setVisibility(View.VISIBLE);
+
+            tagAdapter = new TagListViewAdapter(this, tagList, check);
+
+            tagListView.setAdapter(tagAdapter);
+            tagListView.setOnItemClickListener(new OnItemClickListener()
+            {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
+                    check[position] = !check[position];
+                    tagAdapter.setCheck(check);
+                    tagAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+    }
 
     private void goBack()
     {

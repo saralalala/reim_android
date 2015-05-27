@@ -36,62 +36,62 @@ import netUtils.response.user.RegisterResponse;
 import netUtils.response.user.VerifyCodeResponse;
 
 public class PhoneSignUpActivity extends Activity
-{	
-	private ClearEditText phoneEditText;
-	private ClearEditText passwordEditText;
-	private EditText codeEditText;
-	private Button acquireCodeButton;
+{
+    private ClearEditText phoneEditText;
+    private ClearEditText passwordEditText;
+    private EditText codeEditText;
+    private Button acquireCodeButton;
 
     private boolean showPassword = false;
-	private int waitingTime;
-	private Thread thread;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_start_sign_up_by_phone);
-		initView();
-	}
+    private int waitingTime;
+    private Thread thread;
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("PhoneSignUpActivity");		
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_start_sign_up_by_phone);
+        initView();
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("PhoneSignUpActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("PhoneSignUpActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("PhoneSignUpActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
+            }
+        });
+
+        phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
         ViewUtils.requestFocus(this, phoneEditText);
-		
-		passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
+
+        passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
         passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
 
         final ImageView passwordImageView = (ImageView) findViewById(R.id.passwordImageView);
@@ -114,9 +114,9 @@ public class PhoneSignUpActivity extends Activity
                 Selection.setSelection(spanText, spanText.length());
             }
         });
-		
-		codeEditText = (EditText) findViewById(R.id.codeEditText);	
-		codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+
+        codeEditText = (EditText) findViewById(R.id.codeEditText);
+        codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
         codeEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)
@@ -129,44 +129,44 @@ public class PhoneSignUpActivity extends Activity
             }
         });
 
-		acquireCodeButton = (Button) findViewById(R.id.acquireCodeButton);
-		acquireCodeButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(PhoneSignUpActivity.this, "UMENG_REGIST_TEL-CAPTCHA");
-				hideSoftKeyboard();
-				
-				String phoneNumber = phoneEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
-				}
-				else if (phoneNumber.isEmpty())
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
+        acquireCodeButton = (Button) findViewById(R.id.acquireCodeButton);
+        acquireCodeButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(PhoneSignUpActivity.this, "UMENG_REGIST_TEL-CAPTCHA");
+                hideSoftKeyboard();
+
+                String phoneNumber = phoneEditText.getText().toString();
+                if (!PhoneUtils.isNetworkConnected())
+                {
+                    ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_request_network_unavailable);
+                }
+                else if (phoneNumber.isEmpty())
+                {
+                    ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_empty);
                     ViewUtils.requestFocus(PhoneSignUpActivity.this, phoneEditText);
-				}
-				else if (!Utils.isPhone(phoneNumber))
-				{
-					ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
+                }
+                else if (!Utils.isPhone(phoneNumber))
+                {
+                    ViewUtils.showToast(PhoneSignUpActivity.this, R.string.error_phone_wrong_format);
                     ViewUtils.requestFocus(PhoneSignUpActivity.this, phoneEditText);
-				}
-				else 
-				{
-					getVerifyCode(phoneNumber);
-				}
-			}
-		});
-		
-		Button signUpButton = (Button) findViewById(R.id.signUpButton);
-		signUpButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+                }
+                else
+                {
+                    getVerifyCode(phoneNumber);
+                }
+            }
+        });
+
+        Button signUpButton = (Button) findViewById(R.id.signUpButton);
+        signUpButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 signUp();
-			}
-		});
+            }
+        });
 
         ImageView emailImageView = (ImageView) findViewById(R.id.emailImageView);
         emailImageView.setOnClickListener(new View.OnClickListener()
@@ -182,96 +182,96 @@ public class PhoneSignUpActivity extends Activity
         {
             public void onClick(View v)
             {
-				WeChatUtils.sendAuthRequest(PhoneSignUpActivity.this);
+                WeChatUtils.sendAuthRequest(PhoneSignUpActivity.this);
             }
         });
-		
-    	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
-    	baseLayout.setOnClickListener(new View.OnClickListener()
-    	{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});
-	}
-	  
+
+        RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
+        baseLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
+    }
+
     private void getVerifyCode(String phoneNumber)
     {
         final String second = ViewUtils.getString(R.string.second);
-		waitingTime = 60;
-		acquireCodeButton.setEnabled(false);
-		acquireCodeButton.setText(waitingTime + second);
-		thread = new Thread(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					while (waitingTime > 0)
-					{
-						java.lang.Thread.sleep(1000);
-						waitingTime -= 1;
-						runOnUiThread(new Runnable()
-						{
-							public void run()
-							{
-								acquireCodeButton.setText(waitingTime + second);
-							}
-						});	
-					}
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-				finally
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							acquireCodeButton.setText(R.string.acquire_code);
-							acquireCodeButton.setEnabled(true);
-						}
-					});	
-				}
-			}
-		});
-		thread.start();
-		
-		ReimProgressDialog.show();
-		VerifyCodeRequest request = new VerifyCodeRequest(phoneNumber);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final VerifyCodeResponse response = new VerifyCodeResponse(httpResponse);
-				if (response.getStatus())
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_sending_message);
-						}
-					});
-				}
-				else 
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							thread.interrupt();
-							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_code, response.getErrorMessage());
-						}
-					});
-				}
-			}
-		});
+        waitingTime = 60;
+        acquireCodeButton.setEnabled(false);
+        acquireCodeButton.setText(waitingTime + second);
+        thread = new Thread(new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    while (waitingTime > 0)
+                    {
+                        java.lang.Thread.sleep(1000);
+                        waitingTime -= 1;
+                        runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                acquireCodeButton.setText(waitingTime + second);
+                            }
+                        });
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                finally
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            acquireCodeButton.setText(R.string.acquire_code);
+                            acquireCodeButton.setEnabled(true);
+                        }
+                    });
+                }
+            }
+        });
+        thread.start();
+
+        ReimProgressDialog.show();
+        VerifyCodeRequest request = new VerifyCodeRequest(phoneNumber);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final VerifyCodeResponse response = new VerifyCodeResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.succeed_in_sending_message);
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            thread.interrupt();
+                            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.failed_to_get_code, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void signUp()
@@ -317,24 +317,24 @@ public class PhoneSignUpActivity extends Activity
         }
     }
 
-	private void sendRegisterRequest(final User user, String verifyCode)
-	{
-		ReimProgressDialog.show();
-		RegisterRequest request = new RegisterRequest(user, verifyCode);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final RegisterResponse response = new RegisterResponse(httpResponse);
-				if (response.getStatus())
-				{
+    private void sendRegisterRequest(final User user, String verifyCode)
+    {
+        ReimProgressDialog.show();
+        RegisterRequest request = new RegisterRequest(user, verifyCode);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final RegisterResponse response = new RegisterResponse(httpResponse);
+                if (response.getStatus())
+                {
                     int currentGroupID = -1;
 
                     DBManager dbManager = DBManager.getDBManager();
                     AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setUsername(user.getPhone());
                     appPreference.setPassword(user.getPassword());
-					appPreference.setHasPassword(true);
+                    appPreference.setHasPassword(true);
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
                     appPreference.setLastShownGuideVersion(response.getLastShownGuideVersion());
@@ -398,28 +398,28 @@ public class PhoneSignUpActivity extends Activity
                             ViewUtils.goForwardAndFinish(PhoneSignUpActivity.this, GuideStartActivity.class);
                         }
                     });
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(PhoneSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
-						}
-					});		
-				}
-			}
-		});		
-	}
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(PhoneSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
 
     private void hideSoftKeyboard()
     {
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
     }
 
     private void goBack()

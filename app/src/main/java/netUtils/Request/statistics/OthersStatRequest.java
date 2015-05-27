@@ -15,9 +15,9 @@ public class OthersStatRequest extends BaseRequest
         appendUrl(month);
     }
 
-	public OthersStatRequest(int year, int month, int categoryID, int tagID, int userID)
-	{
-		super();
+    public OthersStatRequest(int year, int month, int categoryID, int tagID, int userID)
+    {
+        super();
 
         appendUrl(URLDef.URL_STATISTICS_OTHERS);
         appendUrl(year);
@@ -25,10 +25,10 @@ public class OthersStatRequest extends BaseRequest
         appendUrl(categoryID);
         appendUrl(tagID);
         appendUrl(userID);
-	}
+    }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doGet(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doGet(callback);
+    }
 }

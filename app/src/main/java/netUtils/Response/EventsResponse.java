@@ -1,4 +1,3 @@
-
 package netUtils.response;
 
 import org.json.JSONArray;
@@ -17,28 +16,28 @@ public class EventsResponse extends BaseResponse
     private int unreadMessagesCount;
     private boolean hasUnreadMessages;
     private boolean hasUnreadReports;
-	private boolean needToRefresh;
+    private boolean needToRefresh;
     private boolean groupChanged;
     private String appliedCompany;
-	
-	public EventsResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONObject jObject = getDataObject();
+    public EventsResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
+
+    protected void constructData()
+    {
+        try
+        {
+            JSONObject jObject = getDataObject();
             System.out.println("Events:" + jObject.toString());
             JSONArray appliesArray = jObject.getJSONArray("applies");
-			JSONArray invitesArray = jObject.getJSONArray("invites");
+            JSONArray invitesArray = jObject.getJSONArray("invites");
             JSONArray systemMessagesArray = jObject.getJSONArray("system");
             JSONArray adminMessagesArray = jObject.getJSONArray("questions");
-			JSONArray reportsArray = jObject.getJSONArray("reports");
-			JSONArray membersArray = jObject.getJSONArray("members");
-			JSONArray managersArray = jObject.getJSONArray("managers");
+            JSONArray reportsArray = jObject.getJSONArray("reports");
+            JSONArray membersArray = jObject.getJSONArray("members");
+            JSONArray managersArray = jObject.getJSONArray("managers");
 
             groupChanged = jObject.getInt("gid") != AppPreference.getAppPreference().getCurrentGroupID();
             appliedCompany = jObject.getString("apply");
@@ -62,13 +61,13 @@ public class EventsResponse extends BaseResponse
             unreadMessagesCount = appliesArray.length() + invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length();
             hasUnreadMessages = appliesArray.length() + invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length() > 0;
             hasUnreadReports = reportsArray.length() > 0;
-			needToRefresh = (membersArray.length() + managersArray.length()) > 0 && !groupChanged;
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+            needToRefresh = (membersArray.length() + managersArray.length()) > 0 && !groupChanged;
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     public List<Integer> getMineUnreadList()
     {
@@ -95,10 +94,10 @@ public class EventsResponse extends BaseResponse
         return hasUnreadReports;
     }
 
-	public boolean needToRefresh()
-	{
-		return needToRefresh;
-	}
+    public boolean needToRefresh()
+    {
+        return needToRefresh;
+    }
 
     public boolean isGroupChanged()
     {

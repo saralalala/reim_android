@@ -28,8 +28,8 @@ import classes.widget.PinnedSectionListView;
 
 public class ContactListViewAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter
 {
-	private Context context;
-	private LayoutInflater layoutInflater;
+    private Context context;
+    private LayoutInflater layoutInflater;
     private ArrayList<String> inputList = new ArrayList<>();
     private ArrayList<String> inputChosenList = new ArrayList<>();
     private List<User> contactList = new ArrayList<>();
@@ -38,14 +38,14 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
     private ArrayList<Integer> indexList = new ArrayList<>();
     private boolean noPermission = false;
 
-	public ContactListViewAdapter(Context context)
-	{
+    public ContactListViewAdapter(Context context)
+    {
         this.context = context;
-		this.layoutInflater = LayoutInflater.from(context);
-	}
+        this.layoutInflater = LayoutInflater.from(context);
+    }
 
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         if (position == 0)
         {
             return layoutInflater.inflate(R.layout.list_input_name, parent, false);
@@ -56,7 +56,7 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
 
             View view = layoutInflater.inflate(R.layout.list_contact_input, parent, false);
 
-            int visibility = inputChosenList.contains(contact)? View.VISIBLE : View.INVISIBLE;
+            int visibility = inputChosenList.contains(contact) ? View.VISIBLE : View.INVISIBLE;
             ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
             checkImageView.setVisibility(visibility);
 
@@ -82,14 +82,14 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
 
             View view = layoutInflater.inflate(R.layout.list_contact, parent, false);
 
-            int visibility = User.indexOfContactList(contactChosenList, user) > -1? View.VISIBLE : View.INVISIBLE;
+            int visibility = User.indexOfContactList(contactChosenList, user) > -1 ? View.VISIBLE : View.INVISIBLE;
             ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
             checkImageView.setVisibility(visibility);
 
             TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
             nameTextView.setText(user.getNickname());
 
-            String contact = user.getPhone().isEmpty()? user.getEmail() : user.getPhone();
+            String contact = user.getPhone().isEmpty() ? user.getEmail() : user.getPhone();
             TextView contactTextView = (TextView) view.findViewById(R.id.contactTextView);
             contactTextView.setText(contact);
 
@@ -127,10 +127,10 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
 
             return view;
         }
-	}
-	
-	public int getCount()
-	{
+    }
+
+    public int getCount()
+    {
         if (contactList.isEmpty() && noPermission)
         {
             return inputList.size() + 2;
@@ -143,17 +143,17 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
         {
             return inputList.size() + contactList.size() + 1;
         }
-	}
+    }
 
-	public User getItem(int position)
-	{
-		return contactList.get(position - inputList.size() - 1);
-	}
+    public User getItem(int position)
+    {
+        return contactList.get(position - inputList.size() - 1);
+    }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
+    public long getItemId(int position)
+    {
+        return position;
+    }
 
     public void initIndex()
     {
@@ -197,7 +197,7 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
         selector.put(ViewUtils.getString(R.string.manual), 0);
         contactList.clear();
         indexList.clear();
-        for (Map.Entry<String, ArrayList<User>> entry: indexMap.entrySet())
+        for (Map.Entry<String, ArrayList<User>> entry : indexMap.entrySet())
         {
             String key = entry.getKey();
             ArrayList<User> values = entry.getValue();
@@ -268,7 +268,7 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
 
     public int getItemViewType(int position)
     {
-        return indexList.contains(position)? 1 : 0;
+        return indexList.contains(position) ? 1 : 0;
     }
 
     public boolean isItemViewTypePinned(int viewType)

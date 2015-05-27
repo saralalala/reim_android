@@ -29,103 +29,103 @@ import netUtils.response.report.AlertResponse;
 
 public class ApproveInfoListViewAdapter extends BaseAdapter
 {
-	private Activity activity;
-	private LayoutInflater layoutInflater;
-	private DBManager dbManager;
+    private Activity activity;
+    private LayoutInflater layoutInflater;
+    private DBManager dbManager;
     private User currentUser;
-	private Report report;
-	private List<ApproveInfo> infoList;
-	private List<Integer> stepStartList;
-	
-	public ApproveInfoListViewAdapter(Activity activity, Report report, List<ApproveInfo> infos)
-	{
-		this.activity = activity;
-		this.layoutInflater = LayoutInflater.from(activity);
-		this.dbManager = DBManager.getDBManager();
+    private Report report;
+    private List<ApproveInfo> infoList;
+    private List<Integer> stepStartList;
+
+    public ApproveInfoListViewAdapter(Activity activity, Report report, List<ApproveInfo> infos)
+    {
+        this.activity = activity;
+        this.layoutInflater = LayoutInflater.from(activity);
+        this.dbManager = DBManager.getDBManager();
         this.currentUser = AppPreference.getAppPreference().getCurrentUser();
-		this.report = report;
-		this.infoList = new ArrayList<>(infos);
-		this.stepStartList = new ArrayList<>();
-		initStepList();
-	}
+        this.report = report;
+        this.infoList = new ArrayList<>(infos);
+        this.stepStartList = new ArrayList<>();
+        initStepList();
+    }
 
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		if (convertView == null)
-		{
-			convertView = layoutInflater.inflate(R.layout.list_approve_info, parent, false);
-		}
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        if (convertView == null)
+        {
+            convertView = layoutInflater.inflate(R.layout.list_approve_info, parent, false);
+        }
 
-		CircleImageView pointImageView = (CircleImageView) convertView.findViewById(R.id.pointImageView);
-		LinearLayout upperLayout = (LinearLayout) convertView.findViewById(R.id.upperLayout);
-		LinearLayout lowerLayout = (LinearLayout) convertView.findViewById(R.id.lowerLayout);
-		
-		CircleImageView avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
-		TextView nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
-		TextView statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
-		LinearLayout timeLayout = (LinearLayout) convertView.findViewById(R.id.timeLayout);
-		ImageView alarmImageView = (ImageView) convertView.findViewById(R.id.alarmImageView);
+        CircleImageView pointImageView = (CircleImageView) convertView.findViewById(R.id.pointImageView);
+        LinearLayout upperLayout = (LinearLayout) convertView.findViewById(R.id.upperLayout);
+        LinearLayout lowerLayout = (LinearLayout) convertView.findViewById(R.id.lowerLayout);
+
+        CircleImageView avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
+        TextView nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
+        TextView statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
+        LinearLayout timeLayout = (LinearLayout) convertView.findViewById(R.id.timeLayout);
+        ImageView alarmImageView = (ImageView) convertView.findViewById(R.id.alarmImageView);
         LinearLayout divider = (LinearLayout) convertView.findViewById(R.id.divider);
-		
-		ApproveInfo info = getItem(position);
-				
-		if (position == 0)
-		{
-			pointImageView.setVisibility(View.VISIBLE);
-			upperLayout.setVisibility(View.GONE);
+
+        ApproveInfo info = getItem(position);
+
+        if (position == 0)
+        {
+            pointImageView.setVisibility(View.VISIBLE);
+            upperLayout.setVisibility(View.GONE);
             lowerLayout.setVisibility(View.VISIBLE);
 
-			int point = info.hasApproved()? R.drawable.point_approved : R.drawable.point_not_approved;
-			pointImageView.setImageResource(point);
+            int point = info.hasApproved() ? R.drawable.point_approved : R.drawable.point_not_approved;
+            pointImageView.setImageResource(point);
 
-            int color = info.hasApproved()? R.color.status_approved : R.color.background_grey;
+            int color = info.hasApproved() ? R.color.status_approved : R.color.background_grey;
             lowerLayout.setBackgroundColor(ViewUtils.getColor(color));
-		}
-		else
-		{
-			if (stepStartList.contains(position))
-			{
-				pointImageView.setVisibility(View.VISIBLE);
-				int point = info.hasApproved()? R.drawable.point_approved : R.drawable.point_not_approved;
-				pointImageView.setImageResource(point);			
-			}
-			else
-			{
-				pointImageView.setVisibility(View.GONE);				
-			}
-			upperLayout.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            if (stepStartList.contains(position))
+            {
+                pointImageView.setVisibility(View.VISIBLE);
+                int point = info.hasApproved() ? R.drawable.point_approved : R.drawable.point_not_approved;
+                pointImageView.setImageResource(point);
+            }
+            else
+            {
+                pointImageView.setVisibility(View.GONE);
+            }
+            upperLayout.setVisibility(View.VISIBLE);
             lowerLayout.setVisibility(View.VISIBLE);
-			
-			ApproveInfo previousInfo = getItem(position - 1);
-			int color = previousInfo.hasApproved()? R.color.status_approved : R.color.background_grey;
-			upperLayout.setBackgroundColor(ViewUtils.getColor(color));
-			
-			color = info.hasApproved()? R.color.status_approved : R.color.background_grey;
-			lowerLayout.setBackgroundColor(ViewUtils.getColor(color));
-		}
-		
-		if (position == infoList.size() - 1)
-		{
-			lowerLayout.setVisibility(View.GONE);
+
+            ApproveInfo previousInfo = getItem(position - 1);
+            int color = previousInfo.hasApproved() ? R.color.status_approved : R.color.background_grey;
+            upperLayout.setBackgroundColor(ViewUtils.getColor(color));
+
+            color = info.hasApproved() ? R.color.status_approved : R.color.background_grey;
+            lowerLayout.setBackgroundColor(ViewUtils.getColor(color));
+        }
+
+        if (position == infoList.size() - 1)
+        {
+            lowerLayout.setVisibility(View.GONE);
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) divider.getLayoutParams();
             params.setMargins(0, 0, 0, 0);
-		}
+        }
         else
         {
             ApproveInfo nextInfo = infoList.get(position + 1);
-            int margin = info.getStep() != nextInfo.getStep()? 0 : 64;
+            int margin = info.getStep() != nextInfo.getStep() ? 0 : 64;
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) divider.getLayoutParams();
             params.setMargins(ViewUtils.dpToPixel(margin), 0, 0, 0);
         }
 
-		nicknameTextView.setText(R.string.not_available);	
+        nicknameTextView.setText(R.string.not_available);
 
-		final User user = dbManager.getUser(info.getUserID());
-		if (user != null)
-		{
+        final User user = dbManager.getUser(info.getUserID());
+        if (user != null)
+        {
             ViewUtils.setImageViewBitmap(user, avatarImageView);
-			nicknameTextView.setText(user.getNickname());
-		}
+            nicknameTextView.setText(user.getNickname());
+        }
         else
         {
             statusTextView.setText(R.string.not_available);
@@ -203,7 +203,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 
             timeLayout.setVisibility(View.GONE);
 
-            int visibility = user.equals(currentUser)? View.GONE : View.VISIBLE;
+            int visibility = user.equals(currentUser) ? View.GONE : View.VISIBLE;
             alarmImageView.setVisibility(visibility);
             alarmImageView.setOnClickListener(new OnClickListener()
             {
@@ -243,48 +243,48 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
                 }
             });
 
-            int alarmImage = report.getStatus() == Report.STATUS_SUBMITTED? R.drawable.alarm_enabled_drawable : R.drawable.alarm_disabled_drawable;
+            int alarmImage = report.getStatus() == Report.STATUS_SUBMITTED ? R.drawable.alarm_enabled_drawable : R.drawable.alarm_disabled_drawable;
             alarmImageView.setImageResource(alarmImage);
         }
-		
-		return convertView;
-	}
-	
-	public int getCount()
-	{
-		return infoList.size();
-	}
 
-	public ApproveInfo getItem(int position)
-	{
-		return infoList.get(position);
-	}
+        return convertView;
+    }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
-		
-	public void setInfoList(List<ApproveInfo> infos)
-	{
-		infoList.clear();
-		infoList.addAll(infos);
-		initStepList();
-	}	
+    public int getCount()
+    {
+        return infoList.size();
+    }
 
-	private void initStepList()
-	{
-		stepStartList.clear();
-		
-		int step = -1;
-		for (int i = 0; i < infoList.size(); i++)
-		{
-			ApproveInfo approveInfo = infoList.get(i);
-			if (approveInfo.getStep() != step)
-			{
-				stepStartList.add(i);
-				step = approveInfo.getStep();
-			}
-		}
-	}
+    public ApproveInfo getItem(int position)
+    {
+        return infoList.get(position);
+    }
+
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
+    public void setInfoList(List<ApproveInfo> infos)
+    {
+        infoList.clear();
+        infoList.addAll(infos);
+        initStepList();
+    }
+
+    private void initStepList()
+    {
+        stepStartList.clear();
+
+        int step = -1;
+        for (int i = 0; i < infoList.size(); i++)
+        {
+            ApproveInfo approveInfo = infoList.get(i);
+            if (approveInfo.getStep() != step)
+            {
+                stepStartList.add(i);
+                step = approveInfo.getStep();
+            }
+        }
+    }
 }

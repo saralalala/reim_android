@@ -9,54 +9,54 @@ import netUtils.response.BaseResponse;
 
 public class CreateItemResponse extends BaseResponse
 {
-	private int itemID;
-	private int createDate;
-	
-	public CreateItemResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    private int itemID;
+    private int createDate;
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONArray jsonArray = getDataArray();
-			JSONObject jObject = jsonArray.getJSONObject(0);
-			setStatus(Utils.intToBoolean(jObject.getInt("status")));
-			if (getStatus())
-			{
-				itemID = jObject.getInt("iid");
-				setCreateDate(jObject.getInt("createdt"));
-			}
-			else
-			{
-				setErrorMessage(jObject.getString("msg"));				
-			}
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+    public CreateItemResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	public int getItemID()
-	{
-		return itemID;
-	}
+    protected void constructData()
+    {
+        try
+        {
+            JSONArray jsonArray = getDataArray();
+            JSONObject jObject = jsonArray.getJSONObject(0);
+            setStatus(Utils.intToBoolean(jObject.getInt("status")));
+            if (getStatus())
+            {
+                itemID = jObject.getInt("iid");
+                setCreateDate(jObject.getInt("createdt"));
+            }
+            else
+            {
+                setErrorMessage(jObject.getString("msg"));
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public void setItemID(int itemID)
-	{
-		this.itemID = itemID;
-	}
+    public int getItemID()
+    {
+        return itemID;
+    }
 
-	public int getCreateDate()
-	{
-		return createDate;
-	}
+    public void setItemID(int itemID)
+    {
+        this.itemID = itemID;
+    }
 
-	public void setCreateDate(int createDate)
-	{
-		this.createDate = createDate;
-	}
+    public int getCreateDate()
+    {
+        return createDate;
+    }
+
+    public void setCreateDate(int createDate)
+    {
+        this.createDate = createDate;
+    }
 }

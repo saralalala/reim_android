@@ -6,15 +6,15 @@ import netUtils.request.BaseRequest;
 
 public class GetMessagesRequest extends BaseRequest
 {
-	public GetMessagesRequest()
-	{
-		super();
+    public GetMessagesRequest()
+    {
+        super();
 
-		appendUrl(URLDef.URL_MESSAGE_LIST);
-	}
+        appendUrl(URLDef.URL_MESSAGE_LIST);
+    }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doGet(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doGet(callback);
+    }
 }

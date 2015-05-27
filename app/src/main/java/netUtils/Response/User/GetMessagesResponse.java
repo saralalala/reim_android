@@ -15,24 +15,24 @@ import netUtils.response.BaseResponse;
 
 public class GetMessagesResponse extends BaseResponse
 {
-	private List<Message> messageList;
-	
-	public GetMessagesResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    private List<Message> messageList;
 
-	protected void constructData()
-	{
-		try
-		{
+    public GetMessagesResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
+
+    protected void constructData()
+    {
+        try
+        {
             String currentNickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
-			
-			JSONArray jsonArray = getDataArray();
-			messageList = new ArrayList<>();
-			for (int i = 0 ; i < jsonArray.length() ; i++)
-			{
-				JSONObject jObject = jsonArray.getJSONObject(i);
+
+            JSONArray jsonArray = getDataArray();
+            messageList = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jObject = jsonArray.getJSONObject(i);
 
                 int type = jObject.getInt("type");
                 if (type == Message.TYPE_MESSAGE)
@@ -47,16 +47,16 @@ public class GetMessagesResponse extends BaseResponse
                 {
                     messageList.add(new Apply(jObject, currentNickname));
                 }
-			}
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}		
-	}
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public List<Message> getMessageList()
-	{
-		return messageList;
-	}
+    public List<Message> getMessageList()
+    {
+        return messageList;
+    }
 }

@@ -13,23 +13,23 @@ import netUtils.request.BaseRequest;
 
 public class ModifyBankAccountRequest extends BaseRequest
 {
-	public ModifyBankAccountRequest(BankAccount bankAccount)
-	{
-		super();
+    public ModifyBankAccountRequest(BankAccount bankAccount)
+    {
+        super();
 
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("bank_name", bankAccount.getBankName()));
-		params.add(new BasicNameValuePair("bank_location", bankAccount.getLocation()));
-		params.add(new BasicNameValuePair("cardno", bankAccount.getNumber()));
-		params.add(new BasicNameValuePair("account", bankAccount.getName()));
-		setParams(params);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("bank_name", bankAccount.getBankName()));
+        params.add(new BasicNameValuePair("bank_location", bankAccount.getLocation()));
+        params.add(new BasicNameValuePair("cardno", bankAccount.getNumber()));
+        params.add(new BasicNameValuePair("account", bankAccount.getName()));
+        setParams(params);
 
         appendUrl(URLDef.URL_CATEGORY);
         appendUrl(bankAccount.getServerID());
-	}
+    }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPut(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPut(callback);
+    }
 }

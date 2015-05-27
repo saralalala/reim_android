@@ -29,43 +29,43 @@ import classes.utils.ViewUtils;
 
 public class ReportDetailListViewAdapter extends BaseAdapter
 {
-	private Activity activity;
-	private LayoutInflater layoutInflater;
-	
-	private DBManager dbManager;
-	private Report report;
-	private List<Item> itemList;
-	
-	public ReportDetailListViewAdapter(Activity activity, Report report, List<Item> items)
-	{
-		this.activity = activity;
-		this.layoutInflater = LayoutInflater.from(activity);
-		this.report = report;
-		this.itemList = new ArrayList<>(items);
-		this.dbManager = DBManager.getDBManager();
-	}
+    private Activity activity;
+    private LayoutInflater layoutInflater;
 
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		if (position == 0)
-		{
-			View view = layoutInflater.inflate(R.layout.list_report_detail, parent, false);
-			
-			// init title, time and status
-			TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-			TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
-			TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
+    private DBManager dbManager;
+    private Report report;
+    private List<Item> itemList;
 
-			String title = report.getTitle().isEmpty()? activity.getString(R.string.report_no_name) : report.getTitle();
-			titleTextView.setText(title);
-			
-			timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
+    public ReportDetailListViewAdapter(Activity activity, Report report, List<Item> items)
+    {
+        this.activity = activity;
+        this.layoutInflater = LayoutInflater.from(activity);
+        this.report = report;
+        this.itemList = new ArrayList<>(items);
+        this.dbManager = DBManager.getDBManager();
+    }
 
-			statusTextView.setText(report.getStatusString());
-			statusTextView.setBackgroundResource(report.getStatusBackground());
-			
-			TextView approveInfoTextView = (TextView) view.findViewById(R.id.approveInfoTextView);
-			approveInfoTextView.setOnClickListener(new View.OnClickListener()
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        if (position == 0)
+        {
+            View view = layoutInflater.inflate(R.layout.list_report_detail, parent, false);
+
+            // init title, time and status
+            TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
+            TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
+            TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
+
+            String title = report.getTitle().isEmpty() ? activity.getString(R.string.report_no_name) : report.getTitle();
+            titleTextView.setText(title);
+
+            timeTextView.setText(Utils.secondToStringUpToMinute(report.getCreatedDate()));
+
+            statusTextView.setText(report.getStatusString());
+            statusTextView.setBackgroundResource(report.getStatusBackground());
+
+            TextView approveInfoTextView = (TextView) view.findViewById(R.id.approveInfoTextView);
+            approveInfoTextView.setOnClickListener(new View.OnClickListener()
             {
                 public void onClick(View v)
                 {
@@ -84,17 +84,17 @@ public class ReportDetailListViewAdapter extends BaseAdapter
                 }
             });
 
-			// init sender
-			TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);
+            // init sender
+            TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);
 
-			if (report.getSender() != null)
-			{
-				User user = dbManager.getUser(report.getSender().getServerID());
+            if (report.getSender() != null)
+            {
+                User user = dbManager.getUser(report.getSender().getServerID());
                 if (user != null)
                 {
                     senderTextView.setText(user.getNickname());
                 }
-			}
+            }
 
             // init manager and cc
             LinearLayout managerLayout = (LinearLayout) view.findViewById(R.id.managerLayout);
@@ -127,71 +127,71 @@ public class ReportDetailListViewAdapter extends BaseAdapter
                 managerLayout.setVisibility(View.GONE);
                 ccLayout.setVisibility(View.GONE);
             }
-			
-			// init amount and item count
-			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-			TextView itemCountTextView = (TextView) view.findViewById(R.id.itemCountTextView);
-			
-			double amount = 0;
-			int itemCount = itemList.size();
-			
-			for (Item item : itemList)
-			{
-				amount += item.getAmount();
-			}
 
-			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-			amountTextView.setText(Utils.formatDouble(amount));
-			itemCountTextView.setText(itemCount + activity.getString(R.string.item_count));
-			
-			return view;
-		}
-		else 
-		{
-			View view = layoutInflater.inflate(R.layout.list_report_item_show, parent, false);
-			
-			TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-			TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
-			ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
-			
-			Item item = itemList.get(position - 1);
+            // init amount and item count
+            TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+            TextView itemCountTextView = (TextView) view.findViewById(R.id.itemCountTextView);
 
-			amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-			amountTextView.setText(Utils.formatDouble(item.getAmount()));
+            double amount = 0;
+            int itemCount = itemList.size();
 
-			String vendor = item.getVendor().isEmpty()? activity.getString(R.string.vendor_not_available) : item.getVendor();
-			vendorTextView.setText(vendor);
-			
-			Category category = item.getCategory();
+            for (Item item : itemList)
+            {
+                amount += item.getAmount();
+            }
+
+            amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+            amountTextView.setText(Utils.formatDouble(amount));
+            itemCountTextView.setText(itemCount + activity.getString(R.string.item_count));
+
+            return view;
+        }
+        else
+        {
+            View view = layoutInflater.inflate(R.layout.list_report_item_show, parent, false);
+
+            TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+            TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
+            ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
+
+            Item item = itemList.get(position - 1);
+
+            amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+            amountTextView.setText(Utils.formatDouble(item.getAmount()));
+
+            String vendor = item.getVendor().isEmpty() ? activity.getString(R.string.vendor_not_available) : item.getVendor();
+            vendorTextView.setText(vendor);
+
+            Category category = item.getCategory();
             ViewUtils.setImageViewBitmap(category, categoryImageView);
-			
-			return view;
-		}
-	}
-	
-	public int getCount()
-	{
-		return itemList.size() + 1;
-	}
 
-	public Item getItem(int position)
-	{
-		return null;
-	}
+            return view;
+        }
+    }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
+    public int getCount()
+    {
+        return itemList.size() + 1;
+    }
 
-	public void setReport(Report report)
-	{
-		this.report = new Report(report);
-	}
-	
-	public void setItemList(List<Item> items)
-	{
-		itemList.clear();
-		itemList.addAll(items);
-	}
+    public Item getItem(int position)
+    {
+        return null;
+    }
+
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
+    public void setReport(Report report)
+    {
+        this.report = new Report(report);
+    }
+
+    public void setItemList(List<Item> items)
+    {
+        itemList.clear();
+        itemList.addAll(items);
+    }
 }

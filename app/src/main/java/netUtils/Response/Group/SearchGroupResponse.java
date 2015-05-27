@@ -12,21 +12,21 @@ import netUtils.response.BaseResponse;
 
 public class SearchGroupResponse extends BaseResponse
 {
-	List<Group> groupList;
+    List<Group> groupList;
 
-	public SearchGroupResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public SearchGroupResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
-		try
-		{
+    protected void constructData()
+    {
+        try
+        {
             JSONArray jsonArray = getDataArray();
-			groupList = new ArrayList<Group>();
-			for (int i = 0; i < jsonArray.length(); i++)
-			{
+            groupList = new ArrayList<Group>();
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
                 JSONObject object = jsonArray.getJSONObject(i);
                 Group group = new Group();
                 group.setServerID(object.getInt("id"));
@@ -34,17 +34,17 @@ public class SearchGroupResponse extends BaseResponse
                 group.setCreatedDate(object.getInt("createdt"));
                 group.setLocalUpdatedDate(object.getInt("lastdt"));
                 group.setServerUpdatedDate(object.getInt("lastdt"));
-				groupList.add(group);
-			}
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+                groupList.add(group);
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public List<Group> getGroupList()
-	{
-		return groupList;
-	}
+    public List<Group> getGroupList()
+    {
+        return groupList;
+    }
 }

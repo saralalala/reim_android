@@ -18,34 +18,34 @@ import classes.utils.ViewUtils;
 
 public class JoinCompleteActivity extends Activity
 {
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_join_complete);
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_guide_join_complete);
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("JoinCompleteActivity");
-		MobclickAgent.onResume(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("JoinCompleteActivity");
+        MobclickAgent.onResume(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("JoinCompleteActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("JoinCompleteActivity");
+        MobclickAgent.onPause(this);
+    }
 
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
     {
         return keyCode != KeyEvent.KEYCODE_BACK && super.onKeyDown(keyCode, event);
     }
 
-	private void initView()
-	{
+    private void initView()
+    {
         TextView companyTextView = (TextView) findViewById(R.id.companyTextView);
         companyTextView.setText(getIntent().getStringExtra("companyName"));
 
@@ -63,5 +63,5 @@ public class JoinCompleteActivity extends Activity
                 ViewUtils.goForwardAndFinish(JoinCompleteActivity.this, MainActivity.class);
             }
         });
-	}
+    }
 }

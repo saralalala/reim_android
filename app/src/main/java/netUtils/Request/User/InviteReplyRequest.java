@@ -12,17 +12,17 @@ import netUtils.request.BaseRequest;
 
 public class InviteReplyRequest extends BaseRequest
 {
-	public InviteReplyRequest(int agree, String inviteCode)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("status", Integer.toString(agree)));
-		params.add(new BasicNameValuePair("code", inviteCode));
-		setParams(params);
+    public InviteReplyRequest(int agree, String inviteCode)
+    {
+        super();
 
-		appendUrl(URLDef.URL_INVITE);
-	}
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("status", Integer.toString(agree)));
+        params.add(new BasicNameValuePair("code", inviteCode));
+        setParams(params);
+
+        appendUrl(URLDef.URL_INVITE);
+    }
 
     public InviteReplyRequest(int agree, String inviteCode, int guideVersion)
     {
@@ -36,9 +36,9 @@ public class InviteReplyRequest extends BaseRequest
 
         appendUrl(URLDef.URL_INVITE);
     }
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPut(callback);
-	}
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPut(callback);
+    }
 }

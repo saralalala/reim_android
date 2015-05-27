@@ -21,17 +21,17 @@ public class RegisterResponse extends BaseResponse
     private User currentUser;
     private Group group;
     private int lastShownGuideVersion;
-	
-	public RegisterResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONObject jObject = getDataObject();
+    public RegisterResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
+
+    protected void constructData()
+    {
+        try
+        {
+            JSONObject jObject = getDataObject();
 
             JSONObject profileObject = jObject.getJSONObject("profile");
 
@@ -56,7 +56,7 @@ public class RegisterResponse extends BaseResponse
             categoryList = new ArrayList<>();
             for (int i = 0; i < categoryArray.length(); i++)
             {
-                Category category =new Category(categoryArray.getJSONObject(i));
+                Category category = new Category(categoryArray.getJSONObject(i));
                 categoryList.add(category);
             }
 
@@ -75,12 +75,12 @@ public class RegisterResponse extends BaseResponse
                 User user = new User(memberArray.getJSONObject(i), groupID);
                 memberList.add(user);
             }
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     public List<Category> getCategoryList()
     {

@@ -4,13 +4,13 @@ import netUtils.response.BaseResponse;
 
 public class DeleteBankAccountResponse extends BaseResponse
 {
-	public DeleteBankAccountResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public DeleteBankAccountResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
+    protected void constructData()
+    {
 
-	}
+    }
 }

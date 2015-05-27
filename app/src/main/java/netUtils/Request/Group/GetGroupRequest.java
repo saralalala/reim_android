@@ -6,15 +6,15 @@ import netUtils.request.BaseRequest;
 
 public class GetGroupRequest extends BaseRequest
 {
-	public GetGroupRequest()
-	{
-		super();
+    public GetGroupRequest()
+    {
+        super();
 
-		appendUrl(URLDef.URL_GROUP);
-	}
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doGet(callback);
-	}
+        appendUrl(URLDef.URL_GROUP);
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doGet(callback);
+    }
 }

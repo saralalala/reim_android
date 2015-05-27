@@ -25,21 +25,21 @@ public class RegisterRequest extends BaseRequest
         appendUrl(URLDef.URL_USER);
     }
 
-	public RegisterRequest(User user, String verifyCode)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<>();
-		params.add(new BasicNameValuePair("phone", user.getPhone()));
-		params.add(new BasicNameValuePair("password", user.getPassword()));	
-		params.add(new BasicNameValuePair("vcode", verifyCode));
-		setParams(params);
+    public RegisterRequest(User user, String verifyCode)
+    {
+        super();
 
-		appendUrl(URLDef.URL_USER);
-	}
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("phone", user.getPhone()));
+        params.add(new BasicNameValuePair("password", user.getPassword()));
+        params.add(new BasicNameValuePair("vcode", verifyCode));
+        setParams(params);
+
+        appendUrl(URLDef.URL_USER);
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

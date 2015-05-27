@@ -33,57 +33,57 @@ import netUtils.response.user.RegisterResponse;
 
 public class EmailSignUpActivity extends Activity
 {
-	private ClearEditText emailEditText;
-	private ClearEditText passwordEditText;
+    private ClearEditText emailEditText;
+    private ClearEditText passwordEditText;
 
     private boolean showPassword = false;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_start_sign_up_by_email);
-		initView();
-	}
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("EmailSignUpActivity");		
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_start_sign_up_by_email);
+        initView();
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("EmailSignUpActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("EmailSignUpActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("EmailSignUpActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-                goBack();
-			}
-		});
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-		emailEditText = (ClearEditText) findViewById(R.id.emailEditText);
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                goBack();
+            }
+        });
+
+        emailEditText = (ClearEditText) findViewById(R.id.emailEditText);
         ViewUtils.requestFocus(this, emailEditText);
 
-		passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
+        passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
         passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
         passwordEditText.setOnKeyListener(new View.OnKeyListener()
         {
@@ -118,14 +118,14 @@ public class EmailSignUpActivity extends Activity
             }
         });
 
-		Button signUpButton = (Button) findViewById(R.id.signUpButton);
-		signUpButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        Button signUpButton = (Button) findViewById(R.id.signUpButton);
+        signUpButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 signUp();
-			}
-		});
+            }
+        });
 
         ImageView phoneImageView = (ImageView) findViewById(R.id.phoneImageView);
         phoneImageView.setOnClickListener(new View.OnClickListener()
@@ -144,16 +144,16 @@ public class EmailSignUpActivity extends Activity
                 WeChatUtils.sendAuthRequest(EmailSignUpActivity.this);
             }
         });
-		
-    	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
-    	baseLayout.setOnClickListener(new View.OnClickListener()
-    	{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();				
-			}
-		}); 
-	}
+
+        RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
+        baseLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
+    }
 
     private void signUp()
     {
@@ -187,17 +187,17 @@ public class EmailSignUpActivity extends Activity
         }
     }
 
-	private void sendRegisterRequest(final User user)
-	{
-		ReimProgressDialog.show();
-		RegisterRequest request = new RegisterRequest(user);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final RegisterResponse response = new RegisterResponse(httpResponse);
-				if (response.getStatus())
-				{
+    private void sendRegisterRequest(final User user)
+    {
+        ReimProgressDialog.show();
+        RegisterRequest request = new RegisterRequest(user);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final RegisterResponse response = new RegisterResponse(httpResponse);
+                if (response.getStatus())
+                {
                     int currentGroupID = -1;
 
                     DBManager dbManager = DBManager.getDBManager();
@@ -267,27 +267,27 @@ public class EmailSignUpActivity extends Activity
                             ViewUtils.goForwardAndFinish(EmailSignUpActivity.this, GuideStartActivity.class);
                         }
                     });
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EmailSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
-						}
-					});		
-				}
-			}
-		});		
-	}
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(EmailSignUpActivity.this, R.string.failed_to_sign_up, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
 
     private void hideSoftKeyboard()
     {
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);  
-		imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);    	
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
     }
 
     private void goBack()

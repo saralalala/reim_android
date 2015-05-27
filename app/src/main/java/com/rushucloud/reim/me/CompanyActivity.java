@@ -24,42 +24,42 @@ public class CompanyActivity extends Activity
 {
     private TextView companyTextView;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_company);
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_me_company);
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("CompanyActivity");
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("CompanyActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
         loadCompanyName();
-	}
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("CompanyActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("CompanyActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
@@ -94,13 +94,13 @@ public class CompanyActivity extends Activity
 
         LinearLayout changeCompanyLayout = (LinearLayout) findViewById(R.id.changeCompanyLayout);
         changeCompanyLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        {
+            public void onClick(View v)
+            {
                 ViewUtils.goForward(CompanyActivity.this, PickCompanyActivity.class);
-			}
-		});
-	}
+            }
+        });
+    }
 
     private void loadCompanyName()
     {

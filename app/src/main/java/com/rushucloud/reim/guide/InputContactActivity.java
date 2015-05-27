@@ -33,48 +33,48 @@ import classes.utils.ViewUtils;
 
 public class InputContactActivity extends Activity
 {
-	private EditText contactEditText;
+    private EditText contactEditText;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_input_contact);
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_guide_input_contact);
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("InputContactActivity");
-		MobclickAgent.onResume(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("InputContactActivity");
+        MobclickAgent.onResume(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("InputContactActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("InputContactActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-	private void initView()
-	{
+    private void initView()
+    {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
+            }
+        });
 
         TextView completeTextView = (TextView) findViewById(R.id.completeTextView);
         completeTextView.setOnClickListener(new OnClickListener()
@@ -157,19 +157,19 @@ public class InputContactActivity extends Activity
         text.setSpan(new UnderlineSpan(), 5, 8, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         promptTextView.setText(text);
 
-		LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
+        LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});
-	}
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
+    }
 
     private void hideSoftKeyboard()
     {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(contactEditText.getWindowToken(), 0);
     }
 

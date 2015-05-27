@@ -14,40 +14,40 @@ import netUtils.request.BaseRequest;
 
 public class ApproveReportRequest extends BaseRequest
 {
-	public ApproveReportRequest(Report report, boolean isFinished)
-	{
-		super();
+    public ApproveReportRequest(Report report, boolean isFinished)
+    {
+        super();
 
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("status", Integer.toString(report.getMyDecision())));
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("status", Integer.toString(report.getMyDecision())));
         if (!isFinished)
         {
             params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
             params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
         }
-		setParams(params);
+        setParams(params);
 
         appendUrl(URLDef.URL_REPORT);
         appendUrl(report.getServerID());
-	}
-	
-	public ApproveReportRequest(Report report, String commentContent)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("status", Integer.toString(report.getMyDecision())));
-		params.add(new BasicNameValuePair("manager_id", ""));
-		params.add(new BasicNameValuePair("cc", ""));
-		params.add(new BasicNameValuePair("comment", commentContent));
-		setParams(params);
+    }
 
-		appendUrl(URLDef.URL_REPORT);
+    public ApproveReportRequest(Report report, String commentContent)
+    {
+        super();
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("status", Integer.toString(report.getMyDecision())));
+        params.add(new BasicNameValuePair("manager_id", ""));
+        params.add(new BasicNameValuePair("cc", ""));
+        params.add(new BasicNameValuePair("comment", commentContent));
+        setParams(params);
+
+        appendUrl(URLDef.URL_REPORT);
         appendUrl(report.getServerID());
-	}	
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPut(callback);
-	}
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPut(callback);
+    }
 }

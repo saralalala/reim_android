@@ -8,36 +8,36 @@ import netUtils.response.BaseResponse;
 
 public class UserInfoResponse extends BaseResponse
 {
-	private User user;
-	
-	public UserInfoResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    private User user;
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONObject jObject = getDataObject();
-			User user = new User();
-			user.setEmail(jObject.getString("email"));
-			user.setIsActive(Boolean.valueOf(jObject.getString("valid")));
-			user.setDefaultManagerID(Integer.valueOf(jObject.getString("manager")));
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}		
-	}
+    public UserInfoResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	public User getUser()
-	{
-		return user;
-	}
+    protected void constructData()
+    {
+        try
+        {
+            JSONObject jObject = getDataObject();
+            User user = new User();
+            user.setEmail(jObject.getString("email"));
+            user.setIsActive(Boolean.valueOf(jObject.getString("valid")));
+            user.setDefaultManagerID(Integer.valueOf(jObject.getString("manager")));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public void setUser(User user)
-	{
-		this.user = user;
-	}
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
 }

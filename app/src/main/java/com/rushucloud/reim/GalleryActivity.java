@@ -39,21 +39,21 @@ import classes.utils.ViewUtils;
 
 public class GalleryActivity extends Activity
 {
-	private TextView noImageTextView;
-	private GalleryAdapter adapter;
-	private Button confirmButton;
-	private ImageLoader imageLoader;
+    private TextView noImageTextView;
+    private GalleryAdapter adapter;
+    private Button confirmButton;
+    private ImageLoader imageLoader;
 
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_gallery);
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_gallery);
 
-		initImageLoader();
-		initView();
-		loadImages();
-	}
+        initImageLoader();
+        initView();
+        loadImages();
+    }
 
     protected void onResume()
     {
@@ -78,123 +78,123 @@ public class GalleryActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-	private void initImageLoader()
-	{
-		try
-		{
-			String CACHE_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/.temp_tmp";
-			new File(CACHE_DIR).mkdirs();
+    private void initImageLoader()
+    {
+        try
+        {
+            String CACHE_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/.temp_tmp";
+            new File(CACHE_DIR).mkdirs();
 
-			File cacheDir = StorageUtils.getOwnCacheDirectory(getBaseContext(), CACHE_DIR);
+            File cacheDir = StorageUtils.getOwnCacheDirectory(getBaseContext(), CACHE_DIR);
 
-			DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheOnDisc(true).imageScaleType(ImageScaleType.EXACTLY)
-					.bitmapConfig(Bitmap.Config.RGB_565).build();
-			ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getBaseContext()).defaultDisplayImageOptions(defaultOptions)
-					.discCache(new UnlimitedDiscCache(cacheDir)).memoryCache(new WeakMemoryCache());
+            DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheOnDisc(true).imageScaleType(ImageScaleType.EXACTLY)
+                    .bitmapConfig(Bitmap.Config.RGB_565).build();
+            ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getBaseContext()).defaultDisplayImageOptions(defaultOptions)
+                    .discCache(new UnlimitedDiscCache(cacheDir)).memoryCache(new WeakMemoryCache());
 
-			ImageLoaderConfiguration config = builder.build();
-			imageLoader = ImageLoader.getInstance();
-			imageLoader.init(config);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+            ImageLoaderConfiguration config = builder.build();
+            imageLoader = ImageLoader.getInstance();
+            imageLoader.init(config);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		noImageTextView = (TextView) findViewById(R.id.noImageTextView);
-		
-		final int maxCount = getIntent().getIntExtra("maxCount", -1);
-		adapter = new GalleryAdapter(getApplicationContext(), imageLoader, maxCount, new ExtraCallBack()
-		{
-			public void execute()
-			{
-				int selectedCount = adapter.getSelectedCount();
-				String title = selectedCount == 0? getString(R.string.confirm) : getString(R.string.confirm) + " (" + selectedCount + "/" + maxCount + ")";
-				confirmButton.setText(title);
-			}
-		});
-		
-		GridView galleryGridView = (GridView) findViewById(R.id.galleryGridView);
-		galleryGridView.setAdapter(adapter);
-		galleryGridView.setOnScrollListener(new PauseOnScrollListener(imageLoader, true, true));
+            }
+        });
 
-		confirmButton = (Button) findViewById(R.id.confirmButton);
-		confirmButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				ArrayList<String> selectedList = adapter.getSelectedList();
-				Intent intent = new Intent();
-				intent.putExtra("paths", selectedList.toArray(new String[selectedList.size()]));
+        noImageTextView = (TextView) findViewById(R.id.noImageTextView);
+
+        final int maxCount = getIntent().getIntExtra("maxCount", -1);
+        adapter = new GalleryAdapter(getApplicationContext(), imageLoader, maxCount, new ExtraCallBack()
+        {
+            public void execute()
+            {
+                int selectedCount = adapter.getSelectedCount();
+                String title = selectedCount == 0 ? getString(R.string.confirm) : getString(R.string.confirm) + " (" + selectedCount + "/" + maxCount + ")";
+                confirmButton.setText(title);
+            }
+        });
+
+        GridView galleryGridView = (GridView) findViewById(R.id.galleryGridView);
+        galleryGridView.setAdapter(adapter);
+        galleryGridView.setOnScrollListener(new PauseOnScrollListener(imageLoader, true, true));
+
+        confirmButton = (Button) findViewById(R.id.confirmButton);
+        confirmButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                ArrayList<String> selectedList = adapter.getSelectedList();
+                Intent intent = new Intent();
+                intent.putExtra("paths", selectedList.toArray(new String[selectedList.size()]));
                 ViewUtils.goBackWithResult(GalleryActivity.this, intent);
-			}
-		});
-	}
+            }
+        });
+    }
 
-	private void loadImages()
-	{
-		final Handler handler = new Handler();
-		new Thread()
-		{
-			public void run()
-			{
-				Looper.prepare();
-				handler.post(new Runnable()
-				{
-					public void run()
-					{
-						adapter.setImageList(getGalleryPaths());
-						adapter.notifyDataSetChanged();
-						if (adapter.isEmpty())
-						{
-							noImageTextView.setVisibility(View.VISIBLE);
-						}
-						else
-						{
-							noImageTextView.setVisibility(View.GONE);
-						}
-					}
-				});
-				Looper.loop();
-			}
-		}.start();
-	}
+    private void loadImages()
+    {
+        final Handler handler = new Handler();
+        new Thread()
+        {
+            public void run()
+            {
+                Looper.prepare();
+                handler.post(new Runnable()
+                {
+                    public void run()
+                    {
+                        adapter.setImageList(getGalleryPaths());
+                        adapter.notifyDataSetChanged();
+                        if (adapter.isEmpty())
+                        {
+                            noImageTextView.setVisibility(View.VISIBLE);
+                        }
+                        else
+                        {
+                            noImageTextView.setVisibility(View.GONE);
+                        }
+                    }
+                });
+                Looper.loop();
+            }
+        }.start();
+    }
 
-	private ArrayList<String> getGalleryPaths()
-	{
-		ArrayList<String> pathList = new ArrayList<>();
+    private ArrayList<String> getGalleryPaths()
+    {
+        ArrayList<String> pathList = new ArrayList<>();
 
         Cursor cursor = null;
-		try
-		{
-			// only looking for jpg and png files
+        try
+        {
+            // only looking for jpg and png files
             cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, Media.MIME_TYPE + "=?" + " or " + Media.MIME_TYPE + "=?",
-														new String[] { "image/jpeg", "image/png" }, Media.DATE_TAKEN);
+                                                new String[]{"image/jpeg", "image/png"}, Media.DATE_TAKEN);
 
-			if (cursor != null && cursor.getCount() > 0)
-			{
-				while (cursor.moveToNext())
-				{
-					pathList.add(cursor.getString(cursor.getColumnIndex(Media.DATA)));
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+            if (cursor != null && cursor.getCount() > 0)
+            {
+                while (cursor.moveToNext())
+                {
+                    pathList.add(cursor.getString(cursor.getColumnIndex(Media.DATA)));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         finally
         {
             if (cursor != null)
@@ -203,10 +203,10 @@ public class GalleryActivity extends Activity
             }
         }
 
-		// show the latest photo on top
-		Collections.reverse(pathList);
-		return pathList;
-	}
+        // show the latest photo on top
+        Collections.reverse(pathList);
+        return pathList;
+    }
 
     private void goBack()
     {

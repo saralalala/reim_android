@@ -48,46 +48,46 @@ public class MessageActivity extends Activity
     private TextView contentTextView;
     private TextView dateTextView;
 
-	private Message message;
+    private Message message;
     private Invite invite;
     private Apply apply;
-	private boolean fromPush;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_message);
-		initData();
-		initView();
-	}
-  
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("MessageActivity");
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
+    private boolean fromPush;
+
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_me_message);
+        initData();
+        initView();
+    }
+
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("MessageActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
         if (message.getType() == Message.TYPE_MESSAGE && PhoneUtils.isNetworkConnected())
         {
             sendGetMessageRequest();
         }
-	}
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("MessageActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("MessageActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            goBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @SuppressWarnings("unchecked")
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -109,13 +109,13 @@ public class MessageActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-	private void initData()
-	{
-		Bundle bundle = getIntent().getExtras();
-		if (bundle != null)
-		{
+    private void initData()
+    {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null)
+        {
             message = (Message) bundle.getSerializable("message");
-			fromPush = bundle.getBoolean("fromPush", false);
+            fromPush = bundle.getBoolean("fromPush", false);
             if (message.getType() == Message.TYPE_INVITE)
             {
                 invite = (Invite) message;
@@ -124,49 +124,49 @@ public class MessageActivity extends Activity
             {
                 apply = (Apply) message;
             }
-		}
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        }
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		contentTextView = (TextView) findViewById(R.id.contentTextView);
-		dateTextView = (TextView) findViewById(R.id.dateTextView);
-		
-		Button agreeButton = (Button) findViewById(R.id.agreeButton);
-		agreeButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (!PhoneUtils.isNetworkConnected())
-				{
+            }
+        });
+
+        contentTextView = (TextView) findViewById(R.id.contentTextView);
+        dateTextView = (TextView) findViewById(R.id.dateTextView);
+
+        Button agreeButton = (Button) findViewById(R.id.agreeButton);
+        agreeButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (!PhoneUtils.isNetworkConnected())
+                {
                     ViewUtils.showToast(MessageActivity.this, R.string.error_send_reply_network_unavailable);
-				}
-				else if (invite != null)
-				{
+                }
+                else if (invite != null)
+                {
                     ReimProgressDialog.show();
                     sendInviteReplyRequest(Invite.TYPE_ACCEPTED, invite.getInviteCode());
-				}
+                }
                 else if (apply != null)
                 {
                     sendApplyReplyRequest(apply.getServerID(), Apply.TYPE_ACCEPTED);
                 }
-			}
-		});
-		
-		Button rejectButton = (Button) findViewById(R.id.rejectButton);
-		rejectButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+            }
+        });
+
+        Button rejectButton = (Button) findViewById(R.id.rejectButton);
+        rejectButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 if (!PhoneUtils.isNetworkConnected())
                 {
                     ViewUtils.showToast(MessageActivity.this, R.string.error_send_reply_network_unavailable);
@@ -180,15 +180,15 @@ public class MessageActivity extends Activity
                 {
                     sendApplyReplyRequest(apply.getServerID(), Apply.TYPE_REJECTED);
                 }
-			}
-		});
+            }
+        });
 
         String currentNickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
-		if (invite != null && invite.getTypeCode() == Invite.TYPE_NEW && !invite.getInvitor().equals(currentNickname))
-		{
-			agreeButton.setVisibility(View.VISIBLE);
-			rejectButton.setVisibility(View.VISIBLE);
-		}
+        if (invite != null && invite.getTypeCode() == Invite.TYPE_NEW && !invite.getInvitor().equals(currentNickname))
+        {
+            agreeButton.setVisibility(View.VISIBLE);
+            rejectButton.setVisibility(View.VISIBLE);
+        }
         else if (apply != null && apply.getTypeCode() == Apply.TYPE_NEW && !apply.getApplicant().equals(currentNickname))
         {
             agreeButton.setVisibility(View.VISIBLE);
@@ -198,7 +198,7 @@ public class MessageActivity extends Activity
         }
 
         refreshView();
-	}
+    }
 
     private void refreshView()
     {
@@ -511,21 +511,21 @@ public class MessageActivity extends Activity
 
     private void goBack()
     {
-    	if (fromPush)
-		{
-        	ReimApplication.setTabIndex(ReimApplication.TAB_ME);
-        	Intent intent = new Intent(MessageActivity.this, MainActivity.class);
-    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    		Intent intent2 = new Intent(MessageActivity.this, MessageListActivity.class);
-    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        	startActivities(new Intent[] {intent, intent2});
+        if (fromPush)
+        {
+            ReimApplication.setTabIndex(ReimApplication.TAB_ME);
+            Intent intent = new Intent(MessageActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent intent2 = new Intent(MessageActivity.this, MessageListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivities(new Intent[]{intent, intent2});
             overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
-        	finish();
-		}
-    	else
-    	{
+            finish();
+        }
+        else
+        {
             ViewUtils.goBack(this);
-		}
+        }
     }
 }

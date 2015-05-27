@@ -1,4 +1,3 @@
-
 package com.rushucloud.reim.wxapi;
 
 import android.app.Activity;

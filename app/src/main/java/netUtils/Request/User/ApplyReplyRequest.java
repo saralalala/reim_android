@@ -12,20 +12,20 @@ import netUtils.request.BaseRequest;
 
 public class ApplyReplyRequest extends BaseRequest
 {
-	public ApplyReplyRequest(int applyID, int agree)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("permit", Integer.toString(agree)));
-		setParams(params);
+    public ApplyReplyRequest(int applyID, int agree)
+    {
+        super();
 
-		appendUrl(URLDef.URL_APPLY);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("permit", Integer.toString(agree)));
+        setParams(params);
+
+        appendUrl(URLDef.URL_APPLY);
         appendUrl(applyID);
-	}
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPut(callback);
-	}
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPut(callback);
+    }
 }

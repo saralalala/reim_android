@@ -40,52 +40,52 @@ import netUtils.response.bank.ModifyBankAccountResponse;
 
 public class BankNumberActivity extends Activity
 {
-	private ClearEditText bankEditText;
+    private ClearEditText bankEditText;
 
     private DBManager dbManager;
-	private User currentUser;
-	private BankAccount bankAccount;
+    private User currentUser;
+    private BankAccount bankAccount;
     private String originalAccount;
     private HashMap<String, String> codeMap = new HashMap<>();
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_bank_number);
-		initData();
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_me_bank_number);
+        initData();
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("BankNumberActivity");
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("BankNumberActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("BankNumberActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("BankNumberActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-	private void initData()
-	{
+    private void initData()
+    {
         dbManager = DBManager.getDBManager();
-		currentUser = AppPreference.getAppPreference().getCurrentUser();
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
         bankAccount = dbManager.getBankAccount(currentUser.getServerID());
-        originalAccount = bankAccount == null? "" : bankAccount.getNumber();
+        originalAccount = bankAccount == null ? "" : bankAccount.getNumber();
 
         try
         {
@@ -100,10 +100,10 @@ public class BankNumberActivity extends Activity
             JSONObject jObject = new JSONObject(json);
             Iterator<?> iterator = jObject.keys();
             String key;
-            while(iterator.hasNext())
+            while (iterator.hasNext())
             {
                 key = iterator.next().toString();
-                if(key != null && !key.isEmpty())
+                if (key != null && !key.isEmpty())
                 {
                     codeMap.put(key, jObject.getString(key));
                 }
@@ -115,29 +115,29 @@ public class BankNumberActivity extends Activity
         }
     }
 
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
+            }
+        });
 
-		TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
+        TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
+        saveTextView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
 
-				String newBankAccount = bankEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
-				{
+                String newBankAccount = bankEditText.getText().toString();
+                if (!PhoneUtils.isNetworkConnected())
+                {
                     ViewUtils.showToast(BankNumberActivity.this, R.string.error_modify_network_unavailable);
-				}
+                }
                 else if (newBankAccount.equals(originalAccount))
                 {
                     goBack();
@@ -167,8 +167,8 @@ public class BankNumberActivity extends Activity
                 {
                     sendDeleteBankAccountRequest();
                 }
-			}
-		});
+            }
+        });
 
         bankEditText = (ClearEditText) findViewById(R.id.bankEditText);
         bankEditText.setText(originalAccount);
@@ -176,13 +176,13 @@ public class BankNumberActivity extends Activity
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});        
-	}
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
+    }
 
     private void setBankAccount(String newBankAccount)
     {
@@ -310,11 +310,11 @@ public class BankNumberActivity extends Activity
         });
     }
 
-	private void hideSoftKeyboard()
-	{
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(bankEditText.getWindowToken(), 0);
-	}
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(bankEditText.getWindowToken(), 0);
+    }
 
     private void goBack()
     {

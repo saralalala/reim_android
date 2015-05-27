@@ -28,57 +28,57 @@ import netUtils.response.user.SandboxOAuthResponse;
 public class WelcomeActivity extends Activity
 {
     private AppPreference appPreference;
-	private long exitTime = 0;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_start_welcome);
-		appPreference = AppPreference.getAppPreference();
-		initView();
-	}
+    private long exitTime = 0;
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("WelcomeActivity");
-		MobclickAgent.onResume(this);
-        ReimProgressDialog.setContext(this);
-	}
-
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("WelcomeActivity");
-		MobclickAgent.onPause(this);
-	}
-
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    protected void onCreate(Bundle savedInstanceState)
     {
-        if (keyCode == KeyEvent.KEYCODE_BACK) 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_start_welcome);
+        appPreference = AppPreference.getAppPreference();
+        initView();
+    }
+
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("WelcomeActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("WelcomeActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
         {
-        	if(System.currentTimeMillis() - exitTime > 2000)
-        	{
-        		ViewUtils.showToast(WelcomeActivity.this, R.string.prompt_press_back_to_exit);
-        		exitTime = System.currentTimeMillis();
-        	}
-        	else 
-        	{
-				finish();
-				DBManager dbManager = DBManager.getDBManager();
-				dbManager.close();
-				android.os.Process.killProcess(android.os.Process.myPid());
-			}
+            if (System.currentTimeMillis() - exitTime > 2000)
+            {
+                ViewUtils.showToast(WelcomeActivity.this, R.string.prompt_press_back_to_exit);
+                exitTime = System.currentTimeMillis();
+            }
+            else
+            {
+                finish();
+                DBManager dbManager = DBManager.getDBManager();
+                dbManager.close();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
             return true;
-        } 
-        else 
+        }
+        else
         {
             return super.onKeyDown(keyCode, event);
         }
     }
-	
-	private void initView()
-	{
+
+    private void initView()
+    {
         Button signUpButton = (Button) findViewById(R.id.signUpButton);
         signUpButton.setOnClickListener(new View.OnClickListener()
         {
@@ -88,8 +88,8 @@ public class WelcomeActivity extends Activity
             }
         });
 
-		Button signInButton = (Button) findViewById(R.id.signInButton);
-		signInButton.setOnClickListener(new View.OnClickListener()
+        Button signInButton = (Button) findViewById(R.id.signInButton);
+        signInButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
@@ -116,7 +116,7 @@ public class WelcomeActivity extends Activity
                 WeChatUtils.sendAuthRequest(WelcomeActivity.this);
             }
         });
-	}
+    }
 
     private void sendSandboxOAuthRequest()
     {

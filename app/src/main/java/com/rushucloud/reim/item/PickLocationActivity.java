@@ -39,7 +39,7 @@ public class PickLocationActivity extends Activity
     private static final int INPUT_LOCATION = 0;
 
     private ClearEditText locationEditText;
-	private LocationListViewAdapter adapter;
+    private LocationListViewAdapter adapter;
     private PinnedSectionListView locationListView;
     private LinearLayout indexLayout;
     private TextView centralTextView;
@@ -47,42 +47,42 @@ public class PickLocationActivity extends Activity
     private List<String> hotCityList;
     private List<String> cityList;
     private List<String> showList = new ArrayList<>();
-	private String currentCity;
+    private String currentCity;
 
     public static String[] indexLetters = {"热门", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
             "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"};
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
+
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-		setContentView(R.layout.activity_reim_location);
-		initData();
-		initView();
-	}
+        setContentView(R.layout.activity_reim_location);
+        initData();
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("PickLocationActivity");		
-		MobclickAgent.onResume(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("PickLocationActivity");
+        MobclickAgent.onResume(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("PickLocationActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("PickLocationActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -103,38 +103,38 @@ public class PickLocationActivity extends Activity
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-	
-	private void initData()
-	{
-		currentCity = getIntent().getStringExtra("currentCity");
-        currentCity = !currentCity.isEmpty()? currentCity : getString(R.string.no_location);
+
+    private void initData()
+    {
+        currentCity = getIntent().getStringExtra("currentCity");
+        currentCity = !currentCity.isEmpty() ? currentCity : getString(R.string.no_location);
         hotCityList = Arrays.asList(getResources().getStringArray(R.array.hotCityArray));
         cityList = Arrays.asList(getResources().getStringArray(R.array.cityArray));
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		TextView addTextView = (TextView) findViewById(R.id.addTextView);
+            }
+        });
+
+        TextView addTextView = (TextView) findViewById(R.id.addTextView);
         addTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
                 Intent intent = new Intent(PickLocationActivity.this, InputLocationActivity.class);
                 ViewUtils.goForwardForResult(PickLocationActivity.this, intent, INPUT_LOCATION);
-			}
-		});
-		
-		locationEditText = (ClearEditText) findViewById(R.id.locationEditText);
+            }
+        });
+
+        locationEditText = (ClearEditText) findViewById(R.id.locationEditText);
         locationEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
         locationEditText.addTextChangedListener(new TextWatcher()
         {
@@ -181,7 +181,7 @@ public class PickLocationActivity extends Activity
 
         initListView();
         initIndexLayout();
-	}
+    }
 
     public void initListView()
     {
@@ -297,7 +297,7 @@ public class PickLocationActivity extends Activity
                         String key = indexLetters[index];
                         centralTextView.setVisibility(View.VISIBLE);
                         centralTextView.setText(key);
-                        int fontSize = index == 0? 24 : 30;
+                        int fontSize = index == 0 ? 24 : 30;
                         centralTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
                         if (adapter.getSelector().containsKey(key))
                         {
@@ -339,8 +339,8 @@ public class PickLocationActivity extends Activity
 
     private void hideSoftKeyboard()
     {
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(locationEditText.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(locationEditText.getWindowToken(), 0);
     }
 
     private void goBack()

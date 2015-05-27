@@ -24,183 +24,181 @@ import classes.utils.ViewUtils;
 
 public class GalleryAdapter extends BaseAdapter
 {
-	private Context context;
-	private LayoutInflater layoutInflater;
-	private ImageLoader imageLoader;
-	private ArrayList<String> pathList = new ArrayList<>();
-	private boolean[] checkList;
-	private int maxChosenCount;
-	private int height;
-	private ExtraCallBack callBack;
+    private Context context;
+    private LayoutInflater layoutInflater;
+    private ImageLoader imageLoader;
+    private ArrayList<String> pathList = new ArrayList<>();
+    private boolean[] checkList;
+    private int maxChosenCount;
+    private int height;
+    private ExtraCallBack callBack;
 
-	public GalleryAdapter(Context context, ImageLoader imageLoader, int maxCount, ExtraCallBack callBack)
-	{
-		this.context = context;
-		this.imageLoader = imageLoader;
-		this.layoutInflater = LayoutInflater.from(context);
-		this.maxChosenCount = maxCount;
-		this.height = (ViewUtils.getPhoneWindowWidth(context) - ViewUtils.dpToPixel(2) * 4) / 3;
-		this.callBack = callBack;
-	}
+    public GalleryAdapter(Context context, ImageLoader imageLoader, int maxCount, ExtraCallBack callBack)
+    {
+        this.context = context;
+        this.imageLoader = imageLoader;
+        this.layoutInflater = LayoutInflater.from(context);
+        this.maxChosenCount = maxCount;
+        this.height = (ViewUtils.getPhoneWindowWidth(context) - ViewUtils.dpToPixel(2) * 4) / 3;
+        this.callBack = callBack;
+    }
 
-	public View getView(final int position, View convertView, ViewGroup parent)
-	{
-		final ViewHolder holder;
-		if (convertView == null)
-		{
-			convertView = layoutInflater.inflate(R.layout.grid_gallery, parent, false);
-			holder = new ViewHolder();
-			holder.imageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
-			holder.checkLayout = (RelativeLayout) convertView.findViewById(R.id.checkLayout);
-			holder.checkImageView = (ImageView) convertView.findViewById(R.id.checkImageView);
+    public View getView(final int position, View convertView, ViewGroup parent)
+    {
+        final ViewHolder holder;
+        if (convertView == null)
+        {
+            convertView = layoutInflater.inflate(R.layout.grid_gallery, parent, false);
+            holder = new ViewHolder();
+            holder.imageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
+            holder.checkLayout = (RelativeLayout) convertView.findViewById(R.id.checkLayout);
+            holder.checkImageView = (ImageView) convertView.findViewById(R.id.checkImageView);
 
-			LayoutParams params = (LayoutParams) holder.imageView.getLayoutParams();
-			params.height = height;
-			holder.imageView.setLayoutParams(params);
-			
-			convertView.setTag(holder);
-		}
-		else
-		{
-			holder = (ViewHolder) convertView.getTag();
-		}
-		
-		holder.imageView.setTag(position);
-		holder.imageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				Intent intent = new Intent(context, SingleImageActivity.class);
-				intent.putExtra("imagePath", pathList.get(position));
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(intent);
-			}
-		});
-		holder.checkLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (maxChosenCount != -1 && getSelectedCount() == maxChosenCount && !checkList[position])
-				{
+            LayoutParams params = (LayoutParams) holder.imageView.getLayoutParams();
+            params.height = height;
+            holder.imageView.setLayoutParams(params);
+
+            convertView.setTag(holder);
+        }
+        else
+        {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        holder.imageView.setTag(position);
+        holder.imageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(context, SingleImageActivity.class);
+                intent.putExtra("imagePath", pathList.get(position));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
+        holder.checkLayout.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (maxChosenCount != -1 && getSelectedCount() == maxChosenCount && !checkList[position])
+                {
                     String content = String.format(ViewUtils.getString(R.string.error_images_maximum), maxChosenCount);
-					Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
-					holder.checkImageView.setSelected(false);
-				}
-				else
-				{
-					checkList[position] = !checkList[position];
-					holder.checkImageView.setSelected(checkList[position]);			
-				}
-				callBack.execute();
-			}
-		});
+                    Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
+                    holder.checkImageView.setSelected(false);
+                }
+                else
+                {
+                    checkList[position] = !checkList[position];
+                    holder.checkImageView.setSelected(checkList[position]);
+                }
+                callBack.execute();
+            }
+        });
 
-		try
-		{
-			imageLoader.displayImage("file://" + pathList.get(position), holder.imageView, new SimpleImageLoadingListener()
-			{
-				public void onLoadingStarted(String imageUri, View view)
-				{
-					holder.imageView.setImageResource(R.drawable.no_media);
-					super.onLoadingStarted(imageUri, view);
-				}
-			});
+        try
+        {
+            imageLoader.displayImage("file://" + pathList.get(position), holder.imageView, new SimpleImageLoadingListener()
+            {
+                public void onLoadingStarted(String imageUri, View view)
+                {
+                    holder.imageView.setImageResource(R.drawable.no_media);
+                    super.onLoadingStarted(imageUri, view);
+                }
+            });
 
-			holder.checkImageView.setSelected(checkList[position]);
+            holder.checkImageView.setSelected(checkList[position]);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+        return convertView;
+    }
 
-		return convertView;
-	}
-	
-	public int getCount()
-	{
-		return pathList.size();
-	}
+    public int getCount()
+    {
+        return pathList.size();
+    }
 
-	public String getItem(int position)
-	{
-		return pathList.get(position);
-	}
+    public String getItem(int position)
+    {
+        return pathList.get(position);
+    }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
+    public long getItemId(int position)
+    {
+        return position;
+    }
 
     public void selectAll(boolean selection)
     {
         for (int i = 0; i < pathList.size(); i++)
         {
             checkList[i] = selection;
-
         }
         notifyDataSetChanged();
     }
 
-	public ArrayList<String> getSelectedList()
-	{
-		ArrayList<String> selectedList = new ArrayList<>();
+    public ArrayList<String> getSelectedList()
+    {
+        ArrayList<String> selectedList = new ArrayList<>();
 
-		for (int i = 0; i < pathList.size(); i++)
-		{
-			if (checkList[i])
-			{
-				selectedList.add(pathList.get(i));
-			}
-		}
+        for (int i = 0; i < pathList.size(); i++)
+        {
+            if (checkList[i])
+            {
+                selectedList.add(pathList.get(i));
+            }
+        }
 
-		return selectedList;
-	}
+        return selectedList;
+    }
 
-	public int getSelectedCount()
-	{
-		int count = 0;
-		if (checkList != null)
-		{
-			for (boolean b : checkList)
-			{
-				if (b)
-				{
-					count++;
-				}
-			}
-		}
+    public int getSelectedCount()
+    {
+        int count = 0;
+        if (checkList != null)
+        {
+            for (boolean b : checkList)
+            {
+                if (b)
+                {
+                    count++;
+                }
+            }
+        }
 
-		return count;
-	}
-	
-	public void setImageList(ArrayList<String> paths)
-	{
-		pathList.clear();
-		pathList.addAll(paths);
-		
-		checkList = new boolean[paths.size()];
-		for (int i = 0; i < checkList.length; i++)
-		{
-			checkList[i] = false;
-		}
-	}
+        return count;
+    }
 
-	public void clearCache()
-	{
-		imageLoader.clearDiscCache();
-		imageLoader.clearMemoryCache();
-	}
+    public void setImageList(ArrayList<String> paths)
+    {
+        pathList.clear();
+        pathList.addAll(paths);
 
-	public void clear()
-	{
-		pathList.clear();
-	}
+        checkList = new boolean[paths.size()];
+        for (int i = 0; i < checkList.length; i++)
+        {
+            checkList[i] = false;
+        }
+    }
 
-	public class ViewHolder
-	{
-		public ImageView imageView;
-		public RelativeLayout checkLayout;
-		public ImageView checkImageView;
-	}
+    public void clearCache()
+    {
+        imageLoader.clearDiscCache();
+        imageLoader.clearMemoryCache();
+    }
+
+    public void clear()
+    {
+        pathList.clear();
+    }
+
+    public class ViewHolder
+    {
+        public ImageView imageView;
+        public RelativeLayout checkLayout;
+        public ImageView checkImageView;
+    }
 }

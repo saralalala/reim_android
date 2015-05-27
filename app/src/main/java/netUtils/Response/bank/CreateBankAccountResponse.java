@@ -7,25 +7,25 @@ import netUtils.response.BaseResponse;
 
 public class CreateBankAccountResponse extends BaseResponse
 {
-	private int accountID;
-	
-	public CreateBankAccountResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    private int accountID;
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONObject jObject = getDataObject();
+    public CreateBankAccountResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
+
+    protected void constructData()
+    {
+        try
+        {
+            JSONObject jObject = getDataObject();
             setAccountID(Integer.valueOf(jObject.getString("id")));
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}		
-	}
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     public int getAccountID()
     {

@@ -9,53 +9,53 @@ import netUtils.response.BaseResponse;
 
 public class CreateItemsResponse extends BaseResponse
 {
-	private int itemID;
-	
-	public CreateItemsResponse(Object httpResponse)
-	{
-		super(httpResponse);
-		if (!getStatus())
-		{
-			constructErrorData();
-		}
-	}
+    private int itemID;
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONArray jsonArray = getDataArray();
-			JSONObject jObject = jsonArray.getJSONObject(0);
-			setItemID(Integer.valueOf(jObject.getString("id")));
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+    public CreateItemsResponse(Object httpResponse)
+    {
+        super(httpResponse);
+        if (!getStatus())
+        {
+            constructErrorData();
+        }
+    }
 
-	protected void constructErrorData()
-	{
-		try
-		{
-			JSONArray jsonArray = getDataArray();
-			JSONObject jObject = jsonArray.getJSONObject(0);
-			setStatus(Utils.intToBoolean(jObject.getInt("status")));
-			setErrorMessage(jObject.getString("msg"));
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+    protected void constructData()
+    {
+        try
+        {
+            JSONArray jsonArray = getDataArray();
+            JSONObject jObject = jsonArray.getJSONObject(0);
+            setItemID(Integer.valueOf(jObject.getString("id")));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public int getItemID()
-	{
-		return itemID;
-	}
+    protected void constructErrorData()
+    {
+        try
+        {
+            JSONArray jsonArray = getDataArray();
+            JSONObject jObject = jsonArray.getJSONObject(0);
+            setStatus(Utils.intToBoolean(jObject.getInt("status")));
+            setErrorMessage(jObject.getString("msg"));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public void setItemID(int itemID)
-	{
-		this.itemID = itemID;
-	}
+    public int getItemID()
+    {
+        return itemID;
+    }
+
+    public void setItemID(int itemID)
+    {
+        this.itemID = itemID;
+    }
 }

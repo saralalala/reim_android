@@ -15,7 +15,7 @@ import classes.utils.ViewUtils;
 
 public class Message implements Serializable
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public static final int TYPE_MESSAGE = 1;
     public static final int TYPE_INVITE = 2;
@@ -23,9 +23,9 @@ public class Message implements Serializable
 
     private int serverID = -1;
     private String title = "";
-	private String content = "";
-	private int updateTime = -1;
-	private int type = -1;
+    private String content = "";
+    private int updateTime = -1;
+    private int type = -1;
     private boolean hasBeenRead = false;
 
     public Message()
@@ -57,6 +57,7 @@ public class Message implements Serializable
     {
         return serverID;
     }
+
     public void setServerID(int serverID)
     {
         this.serverID = serverID;
@@ -66,6 +67,7 @@ public class Message implements Serializable
     {
         return title;
     }
+
     public void setTitle(String title)
     {
         this.title = title;
@@ -75,6 +77,7 @@ public class Message implements Serializable
     {
         return content;
     }
+
     public void setContent(String content)
     {
         this.content = content;
@@ -84,6 +87,7 @@ public class Message implements Serializable
     {
         return updateTime;
     }
+
     public void setUpdateTime(int updateTime)
     {
         this.updateTime = updateTime;
@@ -93,6 +97,7 @@ public class Message implements Serializable
     {
         return type;
     }
+
     public void setType(int type)
     {
         this.type = type;
@@ -102,6 +107,7 @@ public class Message implements Serializable
     {
         return hasBeenRead;
     }
+
     public void setHasBeenRead(boolean hasBeenRead)
     {
         this.hasBeenRead = hasBeenRead;
@@ -109,12 +115,12 @@ public class Message implements Serializable
 
     public static void sortByUpdateDate(List<Message> messageList)
     {
-    	Collections.sort(messageList, new Comparator<Message>()
-		{
-			public int compare(Message message1, Message message2)
-			{
-				return message2.getUpdateTime() - message1.getUpdateTime();
-			}
-		});
+        Collections.sort(messageList, new Comparator<Message>()
+        {
+            public int compare(Message message1, Message message2)
+            {
+                return message2.getUpdateTime() - message1.getUpdateTime();
+            }
+        });
     }
 }

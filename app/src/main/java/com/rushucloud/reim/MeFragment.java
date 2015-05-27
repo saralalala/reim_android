@@ -41,113 +41,113 @@ import netUtils.response.DownloadImageResponse;
 
 public class MeFragment extends Fragment
 {
-	private boolean hasInit = false;
-	
-	private AppPreference appPreference;
-	private DBManager dbManager;
+    private boolean hasInit = false;
 
-	private View view;	
-	private TextView nicknameTextView;
-	private TextView companyTextView;
-	private CircleImageView avatarImageView;
+    private AppPreference appPreference;
+    private DBManager dbManager;
+
+    private View view;
+    private TextView nicknameTextView;
+    private TextView companyTextView;
+    private CircleImageView avatarImageView;
     private ImageView tipImageView;
     private TextView managerTextView;
     private RelativeLayout categoryLayout;
     private RelativeLayout tagLayout;
     private PopupWindow sharePopupWindow;
 
-	private User currentUser;
-	private String avatarPath;
+    private User currentUser;
+    private String avatarPath;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		if (view == null)
-		{
-			view = inflater.inflate(R.layout.fragment_me, container, false);
-		}
-		else
-		{
-			ViewGroup viewGroup = (ViewGroup) view.getParent();
-			if (viewGroup != null)
-			{
-				viewGroup.removeView(view);
-			}
-		}
-	    return view;
-	}
+    {
+        if (view == null)
+        {
+            view = inflater.inflate(R.layout.fragment_me, container, false);
+        }
+        else
+        {
+            ViewGroup viewGroup = (ViewGroup) view.getParent();
+            if (viewGroup != null)
+            {
+                viewGroup.removeView(view);
+            }
+        }
+        return view;
+    }
 
-	public void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("MeFragment");
-		if (!hasInit)
-		{
-			initData();
-	        initView();
-			hasInit = true;
-	        loadProfileView();
-		}
-	}
+    public void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("MeFragment");
+        if (!hasInit)
+        {
+            initData();
+            initView();
+            hasInit = true;
+            loadProfileView();
+        }
+    }
 
-	public void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("MeFragment");
-	}
+    public void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("MeFragment");
+    }
 
-	public void setUserVisibleHint(boolean isVisibleToUser)
-	{
-		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser && hasInit)
-		{
-	        loadProfileView();
-		}
-	}
-	
-	private void initData()
-	{
-		appPreference = AppPreference.getAppPreference();
-		dbManager = DBManager.getDBManager();
-	}
-	
-	private void initView()
-	{
+    public void setUserVisibleHint(boolean isVisibleToUser)
+    {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && hasInit)
+        {
+            loadProfileView();
+        }
+    }
+
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+    }
+
+    private void initView()
+    {
         // init profile
-		nicknameTextView = (TextView) view.findViewById(R.id.nicknameTextView);
-		companyTextView = (TextView) view.findViewById(R.id.companyTextView);	
-		
-		avatarImageView = (CircleImageView) view.findViewById(R.id.avatarImageView);
-		
+        nicknameTextView = (TextView) view.findViewById(R.id.nicknameTextView);
+        companyTextView = (TextView) view.findViewById(R.id.companyTextView);
+
+        avatarImageView = (CircleImageView) view.findViewById(R.id.avatarImageView);
+
         RelativeLayout profileLayout = (RelativeLayout) view.findViewById(R.id.profileLayout);
         profileLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(getActivity(), "UMENG_MINE_CHANGE_USERINFO");
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(getActivity(), "UMENG_MINE_CHANGE_USERINFO");
                 ViewUtils.goForward(getActivity(), ProfileActivity.class);
-			}
-		});
+            }
+        });
 
         // init message
         RelativeLayout messageLayout = (RelativeLayout) view.findViewById(R.id.messageLayout);
         messageLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        {
+            public void onClick(View v)
+            {
                 ReimApplication.setUnreadMessagesCount(0);
                 ReimApplication.setHasUnreadMessages(false);
                 ViewUtils.goForward(getActivity(), MessageListActivity.class);
-			}
-		});
+            }
+        });
 
         tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
 
         // init invite
         RelativeLayout inviteLayout = (RelativeLayout) view.findViewById(R.id.inviteLayout);
         inviteLayout.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        {
+            public void onClick(View v)
+            {
                 if (appPreference.isSandboxMode())
                 {
                     ViewUtils.showToast(getActivity(), R.string.error_trial_invite);
@@ -156,8 +156,8 @@ public class MeFragment extends Fragment
                 {
                     ViewUtils.goForward(getActivity(), InviteActivity.class);
                 }
-			}
-		});
+            }
+        });
 
         // init manager
         managerTextView = (TextView) view.findViewById(R.id.managerTextView);
@@ -181,12 +181,12 @@ public class MeFragment extends Fragment
         // init invoice
         TextView invoiceTextView = (TextView) view.findViewById(R.id.invoiceTextView);
         invoiceTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        {
+            public void onClick(View v)
+            {
                 ViewUtils.goForward(getActivity(), InvoiceTitleActivity.class);
-			}
-		});
+            }
+        });
 
         // init category
         categoryLayout = (RelativeLayout) view.findViewById(R.id.categoryLayout);
@@ -243,7 +243,7 @@ public class MeFragment extends Fragment
         });
 
         initShareWindow();
-	}
+    }
 
     private void initShareWindow()
     {
@@ -285,19 +285,19 @@ public class MeFragment extends Fragment
     }
 
     public void loadProfileView()
-	{
-		currentUser = appPreference.getCurrentUser();
+    {
+        currentUser = appPreference.getCurrentUser();
         Group currentGroup = appPreference.getCurrentGroup();
-		
-		if (currentUser != null)
-		{
+
+        if (currentUser != null)
+        {
             ViewUtils.setImageViewBitmap(currentUser, avatarImageView);
-			nicknameTextView.setText(currentUser.getNickname());
-	        
-			if (currentUser.hasUndownloadedAvatar() && PhoneUtils.isNetworkConnected())
-			{
-		        sendDownloadAvatarRequest();
-			}
+            nicknameTextView.setText(currentUser.getNickname());
+
+            if (currentUser.hasUndownloadedAvatar() && PhoneUtils.isNetworkConnected())
+            {
+                sendDownloadAvatarRequest();
+            }
 
             User manager = currentUser.getDefaultManager();
             if (manager != null)
@@ -319,12 +319,12 @@ public class MeFragment extends Fragment
                 categoryLayout.setVisibility(View.VISIBLE);
                 tagLayout.setVisibility(View.VISIBLE);
             }
-		}
-		else
-		{
-			avatarImageView.setImageResource(R.drawable.default_avatar);
-			nicknameTextView.setText(R.string.not_available);
-		}
+        }
+        else
+        {
+            avatarImageView.setImageResource(R.drawable.default_avatar);
+            nicknameTextView.setText(R.string.not_available);
+        }
 
         if (currentGroup != null)
         {
@@ -340,7 +340,7 @@ public class MeFragment extends Fragment
         }
 
         showTip();
-	}
+    }
 
     private void showShareWindow()
     {
@@ -362,48 +362,48 @@ public class MeFragment extends Fragment
             tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
         }
 
-        int visibility = ReimApplication.hasUnreadMessages()? View.VISIBLE : View.GONE;
+        int visibility = ReimApplication.hasUnreadMessages() ? View.VISIBLE : View.GONE;
         tipImageView.setVisibility(visibility);
     }
 
     private void sendDownloadAvatarRequest()
     {
-    	DownloadImageRequest request = new DownloadImageRequest(currentUser.getAvatarServerPath());
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-				if (response.getBitmap() != null)
-				{
-					int currentTime = Utils.getCurrentTime();
-					avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
-					currentUser.setAvatarLocalPath(avatarPath);
-					currentUser.setLocalUpdatedDate(currentTime);
-					currentUser.setServerUpdatedDate(currentTime);
-					if (dbManager.updateUser(currentUser))
-					{
-						getActivity().runOnUiThread(new Runnable()
-						{
-							public void run()
-							{
-								loadProfileView();
-							}
-						});						
-					}
-					else
-					{
-						getActivity().runOnUiThread(new Runnable()
-						{
-							public void run()
-							{
-								ViewUtils.showToast(getActivity(), R.string.failed_to_save_avatar);
-							}
-						});						
-					}
-				}
-				else if (getUserVisibleHint())
-				{
+        DownloadImageRequest request = new DownloadImageRequest(currentUser.getAvatarServerPath());
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+                if (response.getBitmap() != null)
+                {
+                    int currentTime = Utils.getCurrentTime();
+                    avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
+                    currentUser.setAvatarLocalPath(avatarPath);
+                    currentUser.setLocalUpdatedDate(currentTime);
+                    currentUser.setServerUpdatedDate(currentTime);
+                    if (dbManager.updateUser(currentUser))
+                    {
+                        getActivity().runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                loadProfileView();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        getActivity().runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                ViewUtils.showToast(getActivity(), R.string.failed_to_save_avatar);
+                            }
+                        });
+                    }
+                }
+                else if (getUserVisibleHint())
+                {
                     getActivity().runOnUiThread(new Runnable()
                     {
                         public void run()
@@ -412,7 +412,7 @@ public class MeFragment extends Fragment
                         }
                     });
                 }
-			}
-		});
+            }
+        });
     }
 }

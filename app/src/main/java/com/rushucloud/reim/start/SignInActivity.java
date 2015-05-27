@@ -39,58 +39,58 @@ import netUtils.response.user.SignInResponse;
 
 public class SignInActivity extends Activity
 {
-	private ClearEditText usernameEditText;
-	private ClearEditText passwordEditText;
-	private PopupWindow forgotPopupWindow;
+    private ClearEditText usernameEditText;
+    private ClearEditText passwordEditText;
+    private PopupWindow forgotPopupWindow;
 
     private boolean showPassword = false;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_start_sign_in);
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_start_sign_in);
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("SignInActivity");
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("SignInActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("SignInActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("SignInActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		usernameEditText = (ClearEditText) findViewById(R.id.usernameEditText);
+            }
+        });
+
+        usernameEditText = (ClearEditText) findViewById(R.id.usernameEditText);
         ViewUtils.requestFocus(this, usernameEditText);
-		
-		passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
+
+        passwordEditText = (ClearEditText) findViewById(R.id.passwordEditText);
         passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
         passwordEditText.setOnKeyListener(new View.OnKeyListener()
         {
@@ -128,24 +128,24 @@ public class SignInActivity extends Activity
         String username = getIntent().getStringExtra("username");
         String password = getIntent().getStringExtra("password");
 
-		if (username != null)
-		{
-			usernameEditText.setText(username);
-		}
+        if (username != null)
+        {
+            usernameEditText.setText(username);
+        }
 
         if (password != null)
         {
             passwordEditText.setText(password);
         }
 
-		Button signInButton = (Button) findViewById(R.id.signInButton);
-		signInButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        Button signInButton = (Button) findViewById(R.id.signInButton);
+        signInButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 signIn();
-			}
-		});
+            }
+        });
 
         TextView signUpTextView = (TextView) findViewById(R.id.signUpTextView);
         signUpTextView.setOnClickListener(new View.OnClickListener()
@@ -157,7 +157,7 @@ public class SignInActivity extends Activity
         });
 
         TextView forgorPasswordTextView = (TextView) findViewById(R.id.forgotTextView);
-		forgorPasswordTextView.setOnClickListener(new View.OnClickListener()
+        forgorPasswordTextView.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
@@ -184,49 +184,49 @@ public class SignInActivity extends Activity
             }
         });
 
-		// init forgot window
-		View forgorView = View.inflate(this, R.layout.window_start_find_password, null);
-		
-		Button phoneButton = (Button) forgorView.findViewById(R.id.phoneButton);
-		phoneButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL");
-				forgotPopupWindow.dismiss();
-				ViewUtils.goForwardAndFinish(SignInActivity.this, PhoneFindActivity.class);
-			}
-		});
-		
-		Button emailButton = (Button) forgorView.findViewById(R.id.emailButton);
-		emailButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD_MAIL");
-				forgotPopupWindow.dismiss();
+        // init forgot window
+        View forgorView = View.inflate(this, R.layout.window_start_find_password, null);
+
+        Button phoneButton = (Button) forgorView.findViewById(R.id.phoneButton);
+        phoneButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL");
+                forgotPopupWindow.dismiss();
+                ViewUtils.goForwardAndFinish(SignInActivity.this, PhoneFindActivity.class);
+            }
+        });
+
+        Button emailButton = (Button) forgorView.findViewById(R.id.emailButton);
+        emailButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD_MAIL");
+                forgotPopupWindow.dismiss();
                 ViewUtils.goForwardAndFinish(SignInActivity.this, EmailFindActivity.class);
-			}
-		});
-		
-		Button cancelButton = (Button) forgorView.findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				forgotPopupWindow.dismiss();
-			}
-		});
-		
-		forgotPopupWindow = ViewUtils.buildBottomPopupWindow(this, forgorView);
-	}
+            }
+        });
+
+        Button cancelButton = (Button) forgorView.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                forgotPopupWindow.dismiss();
+            }
+        });
+
+        forgotPopupWindow = ViewUtils.buildBottomPopupWindow(this, forgorView);
+    }
 
     private void showForgotWindow()
     {
-		forgotPopupWindow.showAtLocation(findViewById(R.id.baseLayout), Gravity.BOTTOM, 0, 0);
-		forgotPopupWindow.update();
+        forgotPopupWindow.showAtLocation(findViewById(R.id.baseLayout), Gravity.BOTTOM, 0, 0);
+        forgotPopupWindow.update();
 
-		ViewUtils.dimBackground(this);
+        ViewUtils.dimBackground(this);
     }
 
     private void signIn()
@@ -268,11 +268,11 @@ public class SignInActivity extends Activity
         }
     }
 
-	private void sendSignInRequest()
-	{
-		ReimProgressDialog.show();
-		SignInRequest request = new SignInRequest();
-		request.sendRequest(new HttpConnectionCallback()
+    private void sendSignInRequest()
+    {
+        ReimProgressDialog.show();
+        SignInRequest request = new SignInRequest();
+        request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
@@ -371,14 +371,14 @@ public class SignInActivity extends Activity
                 }
             }
         });
-	}
+    }
 
-	private void hideSoftKeyboard()
-	{
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
-	}
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+    }
 
     private void goBack()
     {

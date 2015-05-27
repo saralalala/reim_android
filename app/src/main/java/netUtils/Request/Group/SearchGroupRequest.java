@@ -12,19 +12,19 @@ import netUtils.request.BaseRequest;
 
 public class SearchGroupRequest extends BaseRequest
 {
-	public SearchGroupRequest(String keyword)
-	{
-		super();
+    public SearchGroupRequest(String keyword)
+    {
+        super();
 
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("keyword", keyword));
-		setParams(params);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("keyword", keyword));
+        setParams(params);
 
-		appendUrl(URLDef.URL_SEARCH_COMPANY);
-	}
+        appendUrl(URLDef.URL_SEARCH_COMPANY);
+    }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

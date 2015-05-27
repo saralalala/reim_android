@@ -7,33 +7,33 @@ import netUtils.response.BaseResponse;
 
 public class CreateReportResponse extends BaseResponse
 {
-	private int reportID;
-	
-	public CreateReportResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    private int reportID;
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONObject jObject = getDataObject();
-			setReportID(Integer.valueOf(jObject.getString("id")));
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-	}
+    public CreateReportResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	public int getReportID()
-	{
-		return reportID;
-	}
+    protected void constructData()
+    {
+        try
+        {
+            JSONObject jObject = getDataObject();
+            setReportID(Integer.valueOf(jObject.getString("id")));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public void setReportID(int reportID)
-	{
-		this.reportID = reportID;
-	}
+    public int getReportID()
+    {
+        return reportID;
+    }
+
+    public void setReportID(int reportID)
+    {
+        this.reportID = reportID;
+    }
 }

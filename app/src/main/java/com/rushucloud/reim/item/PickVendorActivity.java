@@ -37,47 +37,47 @@ public class PickVendorActivity extends Activity
 {
     private static final int INPUT_VENDOR = 0;
 
-	private VendorListViewAdapter vendorAdapter;
-	private ClearEditText vendorEditText;
-	
-	private String category;
+    private VendorListViewAdapter vendorAdapter;
+    private ClearEditText vendorEditText;
+
+    private String category;
     private String location;
-	private double latitude;
-	private double longitude;
-	private List<Vendor> vendorList = new ArrayList<>();
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-		setContentView(R.layout.activity_reim_vendor);
-		initData();
-		initView();
+    private double latitude;
+    private double longitude;
+    private List<Vendor> vendorList = new ArrayList<>();
+
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        setContentView(R.layout.activity_reim_vendor);
+        initData();
+        initView();
         getVendors();
-	}
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("PickVendorActivity");		
-		MobclickAgent.onResume(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("PickVendorActivity");
+        MobclickAgent.onResume(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("PickVendorActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("PickVendorActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -99,24 +99,24 @@ public class PickVendorActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-	private void initData()
-	{
-		category = getIntent().getStringExtra("category");
+    private void initData()
+    {
+        category = getIntent().getStringExtra("category");
         location = getIntent().getStringExtra("location");
-		latitude = getIntent().getDoubleExtra("latitude", -1);
-		longitude = getIntent().getDoubleExtra("longitude", -1);
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        latitude = getIntent().getDoubleExtra("latitude", -1);
+        longitude = getIntent().getDoubleExtra("longitude", -1);
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
+            }
+        });
 
         ImageView searchImageView = (ImageView) findViewById(R.id.searchImageView);
         searchImageView.setOnClickListener(new View.OnClickListener()
@@ -127,18 +127,18 @@ public class PickVendorActivity extends Activity
             }
         });
 
-		TextView addTextView = (TextView) findViewById(R.id.addTextView);
+        TextView addTextView = (TextView) findViewById(R.id.addTextView);
         addTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-				Intent intent = new Intent(PickVendorActivity.this, InputVendorActivity.class);
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+                Intent intent = new Intent(PickVendorActivity.this, InputVendorActivity.class);
                 ViewUtils.goForwardForResult(PickVendorActivity.this, intent, INPUT_VENDOR);
-			}
-		});
-		
-		vendorEditText = (ClearEditText) findViewById(R.id.vendorEditText);
+            }
+        });
+
+        vendorEditText = (ClearEditText) findViewById(R.id.vendorEditText);
         vendorEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)
@@ -151,45 +151,45 @@ public class PickVendorActivity extends Activity
             }
         });
 
-		vendorAdapter = new VendorListViewAdapter(this);
-		ListView vendorListView = (ListView) findViewById(R.id.vendorListView);
-		vendorListView.setAdapter(vendorAdapter);
-		vendorListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
+        vendorAdapter = new VendorListViewAdapter(this);
+        ListView vendorListView = (ListView) findViewById(R.id.vendorListView);
+        vendorListView.setAdapter(vendorAdapter);
+        vendorListView.setOnItemClickListener(new OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
                 hideSoftKeyboard();
 
-				Vendor vendor = vendorAdapter.getItem(position);				
-				Intent intent = new Intent();
-				intent.putExtra("vendor", vendor.getName());
+                Vendor vendor = vendorAdapter.getItem(position);
+                Intent intent = new Intent();
+                intent.putExtra("vendor", vendor.getName());
                 intent.putExtra("latitude", vendor.getLatitude());
                 intent.putExtra("longitude", vendor.getLongitude());
                 ViewUtils.goBackWithResult(PickVendorActivity.this, intent);
-			}
-		});
-	}
-	
+            }
+        });
+    }
+
     private void hideSoftKeyboard()
     {
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(vendorEditText.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(vendorEditText.getWindowToken(), 0);
     }
 
     private void getVendors()
     {
-    	if (!PhoneUtils.isNetworkConnected())
-		{
-			ViewUtils.showToast(PickVendorActivity.this, R.string.error_get_vendor_network_unavailable);
-		}
-		else if (latitude == -1)
-		{
-			ViewUtils.showToast(PickVendorActivity.this, R.string.failed_to_get_gps_info);
-		}
-		else
-		{
-			sendVendorsRequest();
-		}
+        if (!PhoneUtils.isNetworkConnected())
+        {
+            ViewUtils.showToast(PickVendorActivity.this, R.string.error_get_vendor_network_unavailable);
+        }
+        else if (latitude == -1)
+        {
+            ViewUtils.showToast(PickVendorActivity.this, R.string.failed_to_get_gps_info);
+        }
+        else
+        {
+            sendVendorsRequest();
+        }
     }
 
     private void searchVendors()
@@ -216,56 +216,56 @@ public class PickVendorActivity extends Activity
 
     private void sendVendorsRequest()
     {
-		GetVendorsRequest request = new GetVendorsRequest(category, latitude, longitude);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final GetVendorsResponse response = new GetVendorsResponse(httpResponse);
-				if (response.getStatus())
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							vendorList.clear();
+        GetVendorsRequest request = new GetVendorsRequest(category, latitude, longitude);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetVendorsResponse response = new GetVendorsResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            vendorList.clear();
                             vendorList.addAll(response.getVendorList());
-							
-							if (!vendorList.isEmpty())
-							{
-								vendorAdapter.setVendorList(vendorList);
+
+                            if (!vendorList.isEmpty())
+                            {
+                                vendorAdapter.setVendorList(vendorList);
                                 vendorAdapter.setShowDistance(true);
-								vendorAdapter.notifyDataSetChanged();
-								
-								for (int i = 0 ; i < vendorList.size(); i++)
-								{
-									Vendor vendor = vendorList.get(i);
-									if (vendor.getPhoto() == null && !vendor.getPhotoURL().isEmpty())
-									{
-										sendDownloadVendorImageRequest(i);
-									}
-								}
-							}
-							else 
-							{
-								ViewUtils.showToast(PickVendorActivity.this, R.string.failed_to_get_vendor_no_data);								
-							}
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(PickVendorActivity.this, R.string.failed_to_get_vendor);
-						}
-					});					
-				}
-			}
-		});
+                                vendorAdapter.notifyDataSetChanged();
+
+                                for (int i = 0; i < vendorList.size(); i++)
+                                {
+                                    Vendor vendor = vendorList.get(i);
+                                    if (vendor.getPhoto() == null && !vendor.getPhotoURL().isEmpty())
+                                    {
+                                        sendDownloadVendorImageRequest(i);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                ViewUtils.showToast(PickVendorActivity.this, R.string.failed_to_get_vendor_no_data);
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(PickVendorActivity.this, R.string.failed_to_get_vendor);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void sendVendorsRequest(String keyword)
@@ -294,7 +294,7 @@ public class PickVendorActivity extends Activity
                                 vendorAdapter.setShowDistance(false);
                                 vendorAdapter.notifyDataSetChanged();
 
-                                for (int i = 0 ; i < vendorList.size(); i++)
+                                for (int i = 0; i < vendorList.size(); i++)
                                 {
                                     Vendor vendor = vendorList.get(i);
                                     if (vendor.getPhoto() == null && !vendor.getPhotoURL().isEmpty())

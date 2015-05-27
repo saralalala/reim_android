@@ -26,9 +26,10 @@ import java.util.List;
 import classes.widget.touchView.FileTouchImageView;
 
 /**
- Class wraps file paths to adapter, then it instantiates {@link ru.truba.touchgallery.TouchView.FileTouchImageView} objects to paging up through them.
+ * Class wraps file paths to adapter, then it instantiates {@link ru.truba.touchgallery.TouchView.FileTouchImageView} objects to paging up through them.
  */
-public class InfinityFilePagerAdapter extends BasePagerAdapter {
+public class InfinityFilePagerAdapter extends BasePagerAdapter
+{
 
     private int TOTAL_PAGES = -1;
     private int MIN_LOOPS = 1000;
@@ -38,20 +39,23 @@ public class InfinityFilePagerAdapter extends BasePagerAdapter {
 
     private ImageView.ScaleType mScaleType = null;
 
-    public InfinityFilePagerAdapter(Context context, List<String> resources) {
-		super(context, resources);
+    public InfinityFilePagerAdapter(Context context, List<String> resources)
+    {
+        super(context, resources);
         TOTAL_PAGES = resources.size();
         FIRST_PAGE = TOTAL_PAGES * MIN_LOOPS / 2;
-	}
-
-    @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        super.setPrimaryItem(container, position, object);
-        ((GalleryViewPager)container).mCurrentView = ((FileTouchImageView)object).getImageView();
     }
 
     @Override
-    public Object instantiateItem(ViewGroup collection, int position){
+    public void setPrimaryItem(ViewGroup container, int position, Object object)
+    {
+        super.setPrimaryItem(container, position, object);
+        ((GalleryViewPager) container).mCurrentView = ((FileTouchImageView) object).getImageView();
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup collection, int position)
+    {
         final FileTouchImageView iv = new FileTouchImageView(mContext);
 
         position = position % TOTAL_PAGES;
@@ -59,23 +63,27 @@ public class InfinityFilePagerAdapter extends BasePagerAdapter {
         iv.setUrl(mResources.get(position));
         iv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        if(mScaleType != null)
+        if (mScaleType != null)
+        {
             iv.setScaleType(mScaleType);
+        }
         collection.addView(iv, 0);
         return iv;
     }
 
     /**
      * Set Scaletype for ImageView
+     *
      * @param scaletype
      */
-    public void setScaleTypeForImageView(ImageView.ScaleType scaletype) {
+    public void setScaleTypeForImageView(ImageView.ScaleType scaletype)
+    {
         mScaleType = scaletype;
     }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return TOTAL_PAGES * MIN_LOOPS;
     }
-
 };

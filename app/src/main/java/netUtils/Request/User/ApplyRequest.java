@@ -24,8 +24,8 @@ public class ApplyRequest extends BaseRequest
         appendUrl(URLDef.URL_APPLY);
     }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

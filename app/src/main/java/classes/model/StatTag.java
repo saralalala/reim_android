@@ -5,9 +5,9 @@ import org.json.JSONObject;
 
 public class StatTag
 {
-	private int tagID = -1;
-	private double amount = 0;
-    private int itemCount =  -1;
+    private int tagID = -1;
+    private double amount = 0;
+    private int itemCount = -1;
 
     public StatTag(JSONObject jObject)
     {
@@ -23,28 +23,31 @@ public class StatTag
         }
     }
 
-	public int getTagID()
-	{
-		return tagID;
-	}
-	public void setTagID(int tagID)
-	{
-		this.tagID = tagID;
-	}
+    public int getTagID()
+    {
+        return tagID;
+    }
 
-	public double getAmount()
-	{
-		return amount;
-	}
-	public void setAmount(double amount)
-	{
-		this.amount = amount;
-	}
+    public void setTagID(int tagID)
+    {
+        this.tagID = tagID;
+    }
+
+    public double getAmount()
+    {
+        return amount;
+    }
+
+    public void setAmount(double amount)
+    {
+        this.amount = amount;
+    }
 
     public int getItemCount()
     {
         return itemCount;
     }
+
     public void setItemCount(int itemCount)
     {
         this.itemCount = itemCount;

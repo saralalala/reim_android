@@ -43,104 +43,104 @@ import netUtils.response.DownloadImageResponse;
 public class PickCCActivity extends Activity
 {
     private ClearEditText ccEditText;
-	private MemberListViewAdapter adapter;
+    private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
 
-	private AppPreference appPreference;
-	private DBManager dbManager;
-	private List<User> userList;
+    private AppPreference appPreference;
+    private DBManager dbManager;
+    private List<User> userList;
     private List<User> showList = new ArrayList<>();
     private List<User> chosenList;
-	private int senderID;
-	private boolean newReport;
-	private boolean fromFollowing;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_report_cc);
-		initData();
-		initView();
-	}
+    private int senderID;
+    private boolean newReport;
+    private boolean fromFollowing;
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("PickCCActivity");		
-		MobclickAgent.onResume(this);
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_report_cc);
+        initData();
+        initView();
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("PickCCActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("PickCCActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("PickCCActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void initData()
-	{
-		appPreference = AppPreference.getAppPreference();
-		dbManager = DBManager.getDBManager();
-		
-		senderID = getIntent().getIntExtra("sender", -1);
-		newReport = getIntent().getBooleanExtra("newReport", false);
-		fromFollowing = getIntent().getBooleanExtra("fromFollowing", false);
-		userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
-		if (senderID != -1)
-		{
-			userList = User.removeUserFromList(userList, senderID);
-		}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-		List<User> ccList = (List<User>) getIntent().getSerializableExtra("ccs");
-        chosenList = ccList == null? new ArrayList<User>() : ccList;
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+
+        senderID = getIntent().getIntExtra("sender", -1);
+        newReport = getIntent().getBooleanExtra("newReport", false);
+        fromFollowing = getIntent().getBooleanExtra("fromFollowing", false);
+        userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
+        if (senderID != -1)
+        {
+            userList = User.removeUserFromList(userList, senderID);
+        }
+
+        List<User> ccList = (List<User>) getIntent().getSerializableExtra("ccs");
+        chosenList = ccList == null ? new ArrayList<User>() : ccList;
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
-		confirmTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+            }
+        });
+
+        TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
+        confirmTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 hideSoftKeyboard();
 
-				if (!fromFollowing && newReport)
-				{
-					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
-				}
-				else if (!fromFollowing)
-				{
-					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_EDIT_SEND_SUBMIT");					
-				}
-				else
-				{
-					MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEXT_CC_SUBMIT");					
-				}
+                if (!fromFollowing && newReport)
+                {
+                    MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
+                }
+                else if (!fromFollowing)
+                {
+                    MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_EDIT_SEND_SUBMIT");
+                }
+                else
+                {
+                    MobclickAgent.onEvent(PickCCActivity.this, "UMENG_REPORT_NEXT_CC_SUBMIT");
+                }
 
-				Intent intent = new Intent();
-				intent.putExtra("ccs", (Serializable) chosenList);
+                Intent intent = new Intent();
+                intent.putExtra("ccs", (Serializable) chosenList);
                 ViewUtils.goBackWithResult(PickCCActivity.this, intent);
-			}
-		});
+            }
+        });
 
         PinnedSectionListView ccListView = (PinnedSectionListView) findViewById(R.id.ccListView);
 
@@ -183,7 +183,7 @@ public class PickCCActivity extends Activity
 
                 public void afterTextChanged(Editable s)
                 {
-                    int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
+                    int visibility = s.toString().isEmpty() ? View.VISIBLE : View.GONE;
                     indexLayout.setVisibility(visibility);
                     filterList();
                 }
@@ -228,7 +228,7 @@ public class PickCCActivity extends Activity
                 }
             }
         }
-	}
+    }
 
     private void filterList()
     {
@@ -237,38 +237,38 @@ public class PickCCActivity extends Activity
         adapter.setMemberList(showList);
         adapter.notifyDataSetChanged();
     }
-	
+
     private void sendDownloadAvatarRequest(final User user)
     {
-    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-				if (response.getBitmap() != null)
-				{
-					String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
-					user.setAvatarLocalPath(avatarPath);
-					user.setLocalUpdatedDate(Utils.getCurrentTime());
-					user.setServerUpdatedDate(user.getLocalUpdatedDate());
-					dbManager.updateUser(user);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
-							if (senderID != -1)
-							{
-								userList = User.removeUserFromList(userList, senderID);
-							}
+        DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+                if (response.getBitmap() != null)
+                {
+                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
+                    user.setAvatarLocalPath(avatarPath);
+                    user.setLocalUpdatedDate(Utils.getCurrentTime());
+                    user.setServerUpdatedDate(user.getLocalUpdatedDate());
+                    dbManager.updateUser(user);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
+                            if (senderID != -1)
+                            {
+                                userList = User.removeUserFromList(userList, senderID);
+                            }
                             filterList();
-						}
-					});	
-				}
-			}
-		});
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void hideSoftKeyboard()

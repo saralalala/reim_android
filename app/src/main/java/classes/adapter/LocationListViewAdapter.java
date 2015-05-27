@@ -22,22 +22,22 @@ import classes.widget.PinnedSectionListView;
 
 public class LocationListViewAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter
 {
-	private LayoutInflater layoutInflater;
+    private LayoutInflater layoutInflater;
     private View hotCityView;
-	private List<String> cityList;
+    private List<String> cityList;
     private HashMap<String, Integer> selector = new HashMap<>();
     private ArrayList<Integer> indexList = new ArrayList<>();
-	
-	public LocationListViewAdapter(Context context, View hotCityView, List<String> cityList)
-	{
-		this.layoutInflater = LayoutInflater.from(context);
+
+    public LocationListViewAdapter(Context context, View hotCityView, List<String> cityList)
+    {
+        this.layoutInflater = LayoutInflater.from(context);
         this.hotCityView = hotCityView;
-		this.cityList = new ArrayList<>(cityList);
+        this.cityList = new ArrayList<>(cityList);
         initData();
-	}
-	
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         if (position == 0)
         {
             View view = layoutInflater.inflate(R.layout.list_header, parent, false);
@@ -63,22 +63,22 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
             locationTextView.setText(cityList.get(position - 2));
             return view;
         }
-	}
-	
-	public int getCount()
-	{
-		return cityList.size() + 2;
-	}
+    }
 
-	public String getItem(int position)
-	{
-		return null;
-	}
+    public int getCount()
+    {
+        return cityList.size() + 2;
+    }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
+    public String getItem(int position)
+    {
+        return null;
+    }
+
+    public long getItemId(int position)
+    {
+        return position;
+    }
 
     private void initData()
     {
@@ -122,7 +122,7 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
         selector.put(ViewUtils.getString(R.string.hot), 0);
         indexList.add(0);
         cityList.clear();
-        for (Map.Entry<String, ArrayList<String>> entry: indexMap.entrySet())
+        for (Map.Entry<String, ArrayList<String>> entry : indexMap.entrySet())
         {
             String key = entry.getKey();
             ArrayList<String> values = entry.getValue();
@@ -134,10 +134,10 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
         }
     }
 
-	public List<String> getCityList()
-	{
-		return cityList;
-	}
+    public List<String> getCityList()
+    {
+        return cityList;
+    }
 
     public void setCityList(List<String> cityList)
     {
@@ -162,7 +162,7 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
 
     public int getItemViewType(int position)
     {
-        return indexList.contains(position)? 1 : 0;
+        return indexList.contains(position) ? 1 : 0;
     }
 
     public boolean isItemViewTypePinned(int viewType)

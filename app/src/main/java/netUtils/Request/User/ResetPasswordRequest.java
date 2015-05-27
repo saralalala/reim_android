@@ -12,20 +12,20 @@ import netUtils.request.BaseRequest;
 
 public class ResetPasswordRequest extends BaseRequest
 {
-	public ResetPasswordRequest(String password, String code)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("password", password));
-		params.add(new BasicNameValuePair("code", code));
-		setParams(params);
+    public ResetPasswordRequest(String password, String code)
+    {
+        super();
 
-		appendUrl(URLDef.URL_PASSWORD);
-	}
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("password", password));
+        params.add(new BasicNameValuePair("code", code));
+        setParams(params);
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPut(callback);
-	}
+        appendUrl(URLDef.URL_PASSWORD);
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPut(callback);
+    }
 }

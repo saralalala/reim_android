@@ -4,13 +4,13 @@ import netUtils.response.BaseResponse;
 
 public class ModifyUserResponse extends BaseResponse
 {
-	public ModifyUserResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public ModifyUserResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
-		
-	}
+    protected void constructData()
+    {
+
+    }
 }

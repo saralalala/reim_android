@@ -6,15 +6,15 @@ import netUtils.request.BaseRequest;
 
 public class DeleteGroupRequest extends BaseRequest
 {
-	public DeleteGroupRequest()
-	{
-		super();
+    public DeleteGroupRequest()
+    {
+        super();
 
-		appendUrl(URLDef.URL_GROUP);
-	}
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doDelete(callback);
-	}
+        appendUrl(URLDef.URL_GROUP);
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doDelete(callback);
+    }
 }

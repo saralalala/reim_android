@@ -4,13 +4,13 @@ import netUtils.response.BaseResponse;
 
 public class SignOutResponse extends BaseResponse
 {
-	public SignOutResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public SignOutResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
-		
-	}
+    protected void constructData()
+    {
+
+    }
 }

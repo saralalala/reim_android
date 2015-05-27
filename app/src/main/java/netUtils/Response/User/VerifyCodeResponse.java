@@ -4,13 +4,13 @@ import netUtils.response.BaseResponse;
 
 public class VerifyCodeResponse extends BaseResponse
 {
-	public VerifyCodeResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public VerifyCodeResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
+    protected void constructData()
+    {
 
-	}
+    }
 }

@@ -12,19 +12,19 @@ import netUtils.request.BaseRequest;
 
 public class VerifyCodeRequest extends BaseRequest
 {
-	public VerifyCodeRequest(String phone)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("phone", phone));
-		setParams(params);
-		
-		appendUrl(URLDef.URL_CODE);
-	}
+    public VerifyCodeRequest(String phone)
+    {
+        super();
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("phone", phone));
+        setParams(params);
+
+        appendUrl(URLDef.URL_CODE);
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

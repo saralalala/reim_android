@@ -11,21 +11,21 @@ import netUtils.URLDef;
 
 public class UploadImageRequest extends BaseRequest
 {
-	public UploadImageRequest(String path, int type)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("name", "filePath"));
-		params.add(new BasicNameValuePair("filePath", path));
-		params.add(new BasicNameValuePair("type", Integer.toString(type)));
-		setParams(params);
+    public UploadImageRequest(String path, int type)
+    {
+        super();
 
-		appendUrl(URLDef.URL_IMAGE);
-	}
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("name", "filePath"));
+        params.add(new BasicNameValuePair("filePath", path));
+        params.add(new BasicNameValuePair("type", Integer.toString(type)));
+        setParams(params);
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+        appendUrl(URLDef.URL_IMAGE);
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

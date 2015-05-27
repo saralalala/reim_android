@@ -26,79 +26,79 @@ import classes.widget.ClearEditText;
 
 public class CreateCompanyActivity extends Activity
 {
-	private ClearEditText companyEditText;
+    private ClearEditText companyEditText;
 
     private String companyName;
     private ArrayList<String> inputList;
     private ArrayList<String> inputChosenList;
     private List<User> contactChosenList;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_create_company);
-		initData();
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_guide_create_company);
+        initData();
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("CreateCompanyActivity");
-		MobclickAgent.onResume(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("CreateCompanyActivity");
+        MobclickAgent.onResume(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("CreateCompanyActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("CreateCompanyActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @SuppressWarnings("unchecked")
-	private void initData()
-	{
+    private void initData()
+    {
         Bundle bundle = getIntent().getExtras();
         companyName = bundle.getString("companyName", "");
         inputList = bundle.getStringArrayList("inputList");
         inputChosenList = bundle.getStringArrayList("inputChosenList");
         contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
-	}
+    }
 
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
+            }
+        });
 
-		TextView nextTextView = (TextView) findViewById(R.id.nextTextView);
+        TextView nextTextView = (TextView) findViewById(R.id.nextTextView);
         nextTextView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
 
-				companyName = companyEditText.getText().toString();
+                companyName = companyEditText.getText().toString();
                 if (companyName.isEmpty())
-				{
-					ViewUtils.showToast(CreateCompanyActivity.this, R.string.error_company_name_empty);
-				}
-				else
-				{
+                {
+                    ViewUtils.showToast(CreateCompanyActivity.this, R.string.error_company_name_empty);
+                }
+                else
+                {
                     Bundle bundle = new Bundle();
                     bundle.putString("companyName", companyName);
                     bundle.putStringArrayList("inputList", inputList);
@@ -107,29 +107,29 @@ public class CreateCompanyActivity extends Activity
                     Intent intent = new Intent(CreateCompanyActivity.this, ContactActivity.class);
                     intent.putExtras(bundle);
                     ViewUtils.goForwardAndFinish(CreateCompanyActivity.this, intent);
-				}
-			}
-		});
-		
-		companyEditText = (ClearEditText) findViewById(R.id.companyEditText);
+                }
+            }
+        });
+
+        companyEditText = (ClearEditText) findViewById(R.id.companyEditText);
         companyEditText.setText(companyName);
         ViewUtils.requestFocus(this, companyEditText);
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});        
-	}
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
+    }
 
     private void hideSoftKeyboard()
-	{
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
-	}
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
+    }
 
     private void goBack()
     {

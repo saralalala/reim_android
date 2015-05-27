@@ -12,20 +12,20 @@ import netUtils.request.BaseRequest;
 
 public class ExportReportRequest extends BaseRequest
 {
-	public ExportReportRequest(int reportID, String email)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("rid", Integer.toString(reportID)));
-		params.add(new BasicNameValuePair("email", email));
-		setParams(params);
+    public ExportReportRequest(int reportID, String email)
+    {
+        super();
 
-		appendUrl(URLDef.URL_EXPORT);
-	}
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPost(callback);
-	}
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("rid", Integer.toString(reportID)));
+        params.add(new BasicNameValuePair("email", email));
+        setParams(params);
+
+        appendUrl(URLDef.URL_EXPORT);
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPost(callback);
+    }
 }

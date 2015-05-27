@@ -13,28 +13,28 @@ import netUtils.response.BaseResponse;
 
 public class OthersStatResponse extends BaseResponse
 {
-	private List<StatCategory> statCategoryList;
+    private List<StatCategory> statCategoryList;
     private List<StatTag> statTagList;
     private List<StatUser> statUserList;
 
-	public OthersStatResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public OthersStatResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONObject jObject = getDataObject();
-			
-			JSONArray categories = jObject.getJSONArray("categories");
-			this.statCategoryList = new ArrayList<>();
-			for (int i = 0; i < categories.length(); i++)
-			{
-				JSONObject object = categories.getJSONObject(i);
-				this.statCategoryList.add(new StatCategory(object));
-			}
+    protected void constructData()
+    {
+        try
+        {
+            JSONObject jObject = getDataObject();
+
+            JSONArray categories = jObject.getJSONArray("categories");
+            this.statCategoryList = new ArrayList<>();
+            for (int i = 0; i < categories.length(); i++)
+            {
+                JSONObject object = categories.getJSONObject(i);
+                this.statCategoryList.add(new StatCategory(object));
+            }
 
             JSONArray tags = jObject.getJSONArray("tags");
             this.statTagList = new ArrayList<>();
@@ -51,18 +51,17 @@ public class OthersStatResponse extends BaseResponse
                 JSONObject object = members.getJSONObject(i);
                 this.statUserList.add(new StatUser(object));
             }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	public List<StatCategory> getStatCategoryList()
-	{
-		return statCategoryList;
-	}
+    public List<StatCategory> getStatCategoryList()
+    {
+        return statCategoryList;
+    }
 
     public List<StatTag> getStatTagList()
     {

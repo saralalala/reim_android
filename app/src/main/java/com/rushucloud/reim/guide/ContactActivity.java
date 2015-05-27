@@ -58,42 +58,42 @@ public class ContactActivity extends Activity
     public static String[] indexLetters = {"手动", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
             "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"};
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_contact);
-		initData();
-		initView();
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_guide_contact);
+        initData();
+        initView();
         readContacts();
-	}
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("ContactActivity");
-		MobclickAgent.onResume(this);
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("ContactActivity");
+        MobclickAgent.onResume(this);
         if (contactList.isEmpty() && hasInit)
         {
             readContacts();
         }
         hasInit = true;
-	}
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("ContactActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("ContactActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @SuppressWarnings("unchecked")
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -123,32 +123,32 @@ public class ContactActivity extends Activity
     }
 
     @SuppressWarnings("unchecked")
-	private void initData()
-	{
+    private void initData()
+    {
         appPreference = AppPreference.getAppPreference();
         dbManager = DBManager.getDBManager();
-        
+
         Bundle bundle = getIntent().getExtras();
         companyName = bundle.getString("companyName", "");
         inputList = bundle.getStringArrayList("inputList");
         inputChosenList = bundle.getStringArrayList("inputChosenList");
         contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
-	}
-    
-	private void initView()
-	{
+    }
+
+    private void initView()
+    {
         ReimProgressDialog.setContext(this);
 
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
+            }
+        });
 
-		TextView nextTextView = (TextView) findViewById(R.id.nextTextView);
+        TextView nextTextView = (TextView) findViewById(R.id.nextTextView);
         nextTextView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
@@ -243,7 +243,7 @@ public class ContactActivity extends Activity
 
         indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
         centralTextView = (TextView) findViewById(R.id.centralTextView);
-	}
+    }
 
     public void initIndexLayout()
     {
@@ -270,7 +270,7 @@ public class ContactActivity extends Activity
                         String key = indexLetters[index];
                         centralTextView.setVisibility(View.VISIBLE);
                         centralTextView.setText(key);
-                        int fontSize = index == 0? 24 : 30;
+                        int fontSize = index == 0 ? 24 : 30;
                         centralTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
                         if (adapter.getSelector().containsKey(key))
                         {
@@ -448,7 +448,7 @@ public class ContactActivity extends Activity
             }
         });
     }
-    
+
     private void goBack()
     {
         Bundle bundle = new Bundle();

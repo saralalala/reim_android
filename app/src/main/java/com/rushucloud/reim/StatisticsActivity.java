@@ -76,19 +76,19 @@ public class StatisticsActivity extends Activity
     private int userID;
     private int lastUpdateTime = 0;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_stat);
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_stat);
         initData();
-		initView();
-	}
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("StatisticsActivity");
-		MobclickAgent.onResume(this);
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("StatisticsActivity");
+        MobclickAgent.onResume(this);
 
         if (PhoneUtils.isNetworkConnected() && needToGetData())
         {
@@ -99,23 +99,23 @@ public class StatisticsActivity extends Activity
         {
             ViewUtils.showToast(this, R.string.error_get_data_network_unavailable);
         }
-	}
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("StatisticsActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("StatisticsActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     private void initData()
     {
@@ -129,8 +129,8 @@ public class StatisticsActivity extends Activity
         userID = bundle.getInt("userID", -1);
     }
 
-	private void initView()
-	{
+    private void initView()
+    {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
         backImageView.setOnClickListener(new View.OnClickListener()
         {
@@ -230,7 +230,7 @@ public class StatisticsActivity extends Activity
         statListView.setPullRefreshEnable(true);
         statListView.setPullLoadEnable(false);
         statListView.setRefreshTime(getString(R.string.dash));
-	}
+    }
 
     private void resetView()
     {
@@ -278,7 +278,7 @@ public class StatisticsActivity extends Activity
                 totalAmount += category.getAmount();
                 if (localCategory != null)
                 {
-                    int iconID = localCategory.getIconID() < 1? DEFAULT_ICON_ID : localCategory.getIconID();
+                    int iconID = localCategory.getIconID() < 1 ? DEFAULT_ICON_ID : localCategory.getIconID();
                     category.setIconID(iconID);
                     category.setName(localCategory.getName());
                     if (categoryArray.indexOfKey(iconID) < 0)
@@ -331,9 +331,9 @@ public class StatisticsActivity extends Activity
                 int key = categoryArray.keyAt(i);
                 int colorIndex = key - 1;
                 List<StatCategory> categories = categoryArray.get(key);
-                int rDiff = categories.size() == 1? colorRDiff[colorIndex] : colorRDiff[colorIndex] / (categories.size() - 1);
-                int gDiff = categories.size() == 1? colorGDiff[colorIndex] : colorGDiff[colorIndex] / (categories.size() - 1);
-                int bDiff = categories.size() == 1? colorBDiff[colorIndex] : colorBDiff[colorIndex] / (categories.size() - 1);
+                int rDiff = categories.size() == 1 ? colorRDiff[colorIndex] : colorRDiff[colorIndex] / (categories.size() - 1);
+                int gDiff = categories.size() == 1 ? colorGDiff[colorIndex] : colorGDiff[colorIndex] / (categories.size() - 1);
+                int bDiff = categories.size() == 1 ? colorBDiff[colorIndex] : colorBDiff[colorIndex] / (categories.size() - 1);
                 for (int j = 0; j < categories.size(); j++)
                 {
                     StatCategory category = categories.get(j);
@@ -350,7 +350,7 @@ public class StatisticsActivity extends Activity
                                                     colorB[colorIndex] + colorBDiff[colorIndex] - j * bDiff));
                     }
 
-                    float angle = i == categoryArray.size() - 1 && j == categories.size() - 1?
+                    float angle = i == categoryArray.size() - 1 && j == categories.size() - 1 ?
                             270 - startAngle : (float) (360 * category.getAmount() / totalAmount);
 
                     reimPie = new ReimPie(this, startAngle, angle, statContainer.getWidth(), category.getColor(), 1);

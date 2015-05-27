@@ -12,10 +12,10 @@ import classes.utils.ViewUtils;
 
 public class ReimPie extends View
 {
-	private Paint paint = new Paint();
-	private RectF pieRect = new RectF();
-	private float occupyAngle = 0;
-	private float startAngle = 0;
+    private Paint paint = new Paint();
+    private RectF pieRect = new RectF();
+    private float occupyAngle = 0;
+    private float startAngle = 0;
 
     public ReimPie(Context context, float start, float angle, int diameter, int color, double offset)
     {
@@ -35,16 +35,15 @@ public class ReimPie extends View
         pieRect.top = pieOffset;
         pieRect.right = diameter - pieOffset;
         pieRect.bottom = diameter - pieOffset;
-
     }
 
-	public ReimPie(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public ReimPie(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
-	public void onDraw(Canvas canvas)
-	{
-		canvas.drawArc(pieRect, startAngle, occupyAngle, true, paint);
-	}
+    public void onDraw(Canvas canvas)
+    {
+        canvas.drawArc(pieRect, startAngle, occupyAngle, true, paint);
+    }
 }

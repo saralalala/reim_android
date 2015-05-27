@@ -43,7 +43,7 @@ public class ReimSSLSocketFactory extends SSLSocketFactory
 
             }
         };
-        sslContext.init(null, new TrustManager[]{ tm }, null);
+        sslContext.init(null, new TrustManager[]{tm}, null);
     }
 
     public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException

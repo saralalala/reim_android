@@ -7,33 +7,33 @@ import netUtils.response.BaseResponse;
 
 public class ModifyCategoryResponse extends BaseResponse
 {
-	private int categoryID;
-	
-	public ModifyCategoryResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    private int categoryID;
 
-	protected void constructData()
-	{
-		try
-		{
-			JSONObject jObject = getDataObject();
-			setCategoryID(Integer.valueOf(jObject.getString("id")));
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}		
-	}
+    public ModifyCategoryResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	public int getCategoryID()
-	{
-		return categoryID;
-	}
+    protected void constructData()
+    {
+        try
+        {
+            JSONObject jObject = getDataObject();
+            setCategoryID(Integer.valueOf(jObject.getString("id")));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	public void setCategoryID(int categoryID)
-	{
-		this.categoryID = categoryID;
-	}
+    public int getCategoryID()
+    {
+        return categoryID;
+    }
+
+    public void setCategoryID(int categoryID)
+    {
+        this.categoryID = categoryID;
+    }
 }

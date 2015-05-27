@@ -43,79 +43,79 @@ import netUtils.response.DownloadImageResponse;
 public class PickMemberActivity extends Activity
 {
     private ClearEditText memberEditText;
-	private MemberListViewAdapter adapter;
+    private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
 
-	private DBManager dbManager;
-	private List<User> userList;
+    private DBManager dbManager;
+    private List<User> userList;
     private List<User> showList = new ArrayList<>();
     private List<User> chosenList;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_reim_member);
-		initData();
-		initView();
-	}
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("PickMemberActivity");		
-		MobclickAgent.onResume(this);
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_reim_member);
+        initData();
+        initView();
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("PickMemberActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("PickMemberActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("PickMemberActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-	@SuppressWarnings("unchecked")
-	private void initData()
-	{
-		dbManager = DBManager.getDBManager();
-		
-		int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
-		userList = dbManager.getGroupUsers(currentGroupID);
-		chosenList = (List<User>) getIntent().getSerializableExtra("users");
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+
+        int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
+        userList = dbManager.getGroupUsers(currentGroupID);
+        chosenList = (List<User>) getIntent().getSerializableExtra("users");
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
-		confirmTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+            }
+        });
+
+        TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
+        confirmTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 hideSoftKeyboard();
 
-                List<User> chosenList = adapter == null? new ArrayList<User>() : adapter.getChosenList();
-				Intent intent = new Intent();
-				intent.putExtra("users", (Serializable) chosenList);
+                List<User> chosenList = adapter == null ? new ArrayList<User>() : adapter.getChosenList();
+                Intent intent = new Intent();
+                intent.putExtra("users", (Serializable) chosenList);
                 ViewUtils.goBackWithResult(PickMemberActivity.this, intent);
-			}
-		});
+            }
+        });
 
         if (userList.size() == 1)
         {
@@ -151,7 +151,7 @@ public class PickMemberActivity extends Activity
 
             public void afterTextChanged(Editable s)
             {
-                int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
+                int visibility = s.toString().isEmpty() ? View.VISIBLE : View.GONE;
                 indexLayout.setVisibility(visibility);
                 filterList();
             }
@@ -183,7 +183,7 @@ public class PickMemberActivity extends Activity
             }
         });
 
-        int topMargin = userList.size() == 1? 140 : 123;
+        int topMargin = userList.size() == 1 ? 140 : 123;
         indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
         TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
 
@@ -196,7 +196,7 @@ public class PickMemberActivity extends Activity
                 sendDownloadAvatarRequest(user);
             }
         }
-	}
+    }
 
     private void filterList()
     {
@@ -205,11 +205,11 @@ public class PickMemberActivity extends Activity
         adapter.setMemberList(showList);
         adapter.notifyDataSetChanged();
     }
-	
+
     private void sendDownloadAvatarRequest(final User user)
     {
-    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
-    	request.sendRequest(new HttpConnectionCallback()
+        DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
+        request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {

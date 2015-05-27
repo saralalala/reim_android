@@ -32,66 +32,66 @@ import netUtils.response.user.VerifyCodeResponse;
 
 public class BindPhoneActivity extends Activity
 {
-	private ClearEditText phoneEditText;
+    private ClearEditText phoneEditText;
     private EditText codeEditText;
     private Button acquireCodeButton;
 
-	private User currentUser;
+    private User currentUser;
     private String originalPhone;
 
     private int waitingTime;
     private Thread thread;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_bind_phone);
-		initData();
-		initView();
-	}
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("BindPhoneActivity");
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_me_bind_phone);
+        initData();
+        initView();
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("BindPhoneActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("BindPhoneActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("BindPhoneActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	private void initData()
-	{
-		currentUser = AppPreference.getAppPreference().getCurrentUser();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void initData()
+    {
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
         originalPhone = currentUser.getPhone();
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
+            }
+        });
+
+        phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
         ViewUtils.requestFocus(this, phoneEditText);
 
         codeEditText = (EditText) findViewById(R.id.codeEditText);
@@ -162,13 +162,13 @@ public class BindPhoneActivity extends Activity
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});        
-	}
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
+    }
 
     private void getVerifyCode(String phoneNumber)
     {
@@ -247,57 +247,57 @@ public class BindPhoneActivity extends Activity
             }
         });
     }
-	
-	private void sendModifyUserInfoRequest(String verifyCode)
-	{
-		ReimProgressDialog.show();		
-		ModifyUserRequest request = new ModifyUserRequest(currentUser, verifyCode);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ModifyUserResponse response = new ModifyUserResponse(httpResponse);
-				if (response.getStatus())
-				{
-					DBManager.getDBManager().updateUser(currentUser);
+
+    private void sendModifyUserInfoRequest(String verifyCode)
+    {
+        ReimProgressDialog.show();
+        ModifyUserRequest request = new ModifyUserRequest(currentUser, verifyCode);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final ModifyUserResponse response = new ModifyUserResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    DBManager.getDBManager().updateUser(currentUser);
                     AppPreference appPreference = AppPreference.getAppPreference();
                     if (appPreference.getUsername().equals(originalPhone))
                     {
                         appPreference.setUsername(currentUser.getPhone());
                         appPreference.saveAppPreference();
                     }
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(BindPhoneActivity.this, R.string.succeed_in_modifying_user_info);
-                            goBack();
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(BindPhoneActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
-						}
-					});						
-				}
-			}
-		});
-	}
 
-	private void hideSoftKeyboard()
-	{
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(BindPhoneActivity.this, R.string.succeed_in_modifying_user_info);
+                            goBack();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(BindPhoneActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
-	}
+    }
 
     private void goBack()
     {

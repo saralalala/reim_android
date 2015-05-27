@@ -15,47 +15,47 @@ import netUtils.request.BaseRequest;
 
 public class ModifyReportRequest extends BaseRequest
 {
-	public ModifyReportRequest(Report report)
-	{
-		super();
-		
-		DBManager dbManager = DBManager.getDBManager();
-		String iids = dbManager.getReportItemIDs(report.getLocalID());
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("title", report.getTitle()));
-		params.add(new BasicNameValuePair("iids", iids));
-		params.add(new BasicNameValuePair("status", Integer.toString(report.getStatus())));
-		params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
-		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
-		setParams(params);
+    public ModifyReportRequest(Report report)
+    {
+        super();
+
+        DBManager dbManager = DBManager.getDBManager();
+        String iids = dbManager.getReportItemIDs(report.getLocalID());
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("title", report.getTitle()));
+        params.add(new BasicNameValuePair("iids", iids));
+        params.add(new BasicNameValuePair("status", Integer.toString(report.getStatus())));
+        params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
+        params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
+        setParams(params);
 
         appendUrl(URLDef.URL_REPORT);
         appendUrl(report.getServerID());
-	}
-	
-	public ModifyReportRequest(Report report, String commentContent)
-	{
-		super();
-		
-		DBManager dbManager = DBManager.getDBManager();
-		String iids = dbManager.getReportItemIDs(report.getLocalID());
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("title", report.getTitle()));
-		params.add(new BasicNameValuePair("iids", iids));
-		params.add(new BasicNameValuePair("status", Integer.toString(report.getStatus())));
-		params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
-		params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
-		params.add(new BasicNameValuePair("comment", commentContent));
-		setParams(params);
+    }
+
+    public ModifyReportRequest(Report report, String commentContent)
+    {
+        super();
+
+        DBManager dbManager = DBManager.getDBManager();
+        String iids = dbManager.getReportItemIDs(report.getLocalID());
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("title", report.getTitle()));
+        params.add(new BasicNameValuePair("iids", iids));
+        params.add(new BasicNameValuePair("status", Integer.toString(report.getStatus())));
+        params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
+        params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
+        params.add(new BasicNameValuePair("comment", commentContent));
+        setParams(params);
 
         appendUrl(URLDef.URL_REPORT);
         appendUrl(report.getServerID());
-	}
-	
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPut(callback);
-	}
+    }
+
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPut(callback);
+    }
 }

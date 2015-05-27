@@ -31,72 +31,72 @@ import netUtils.response.bank.ModifyBankAccountResponse;
 
 public class BankNameActivity extends Activity
 {
-	private ClearEditText nameEditText;
+    private ClearEditText nameEditText;
 
     private DBManager dbManager;
     private User currentUser;
     private BankAccount bankAccount;
     private String originalName;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_bank_name);
-		initData();
-		initView();
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_me_bank_name);
+        initData();
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("BankNameActivity");
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("BankNameActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("BankNameActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("BankNameActivity");
+        MobclickAgent.onPause(this);
+    }
 
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-	private void initData()
-	{
+    private void initData()
+    {
         dbManager = DBManager.getDBManager();
         currentUser = AppPreference.getAppPreference().getCurrentUser();
         bankAccount = dbManager.getBankAccount(currentUser.getServerID());
-        originalName = bankAccount != null && !bankAccount.getName().isEmpty()? bankAccount.getName() : "";
-	}
+        originalName = bankAccount != null && !bankAccount.getName().isEmpty() ? bankAccount.getName() : "";
+    }
 
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
+            }
+        });
 
-		TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
+        TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
+        saveTextView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
 
-				String newName = nameEditText.getText().toString();
+                String newName = nameEditText.getText().toString();
                 if (!PhoneUtils.isNetworkConnected())
                 {
                     ViewUtils.showToast(BankNameActivity.this, R.string.error_modify_network_unavailable);
@@ -126,11 +126,11 @@ public class BankNameActivity extends Activity
                     bankAccount.setName(newName);
                     sendModifyBankAccountRequest();
                 }
-			}
-		});
+            }
+        });
 
         nameEditText = (ClearEditText) findViewById(R.id.nameEditText);
-        String text = originalName.isEmpty()? currentUser.getNickname() : originalName;
+        String text = originalName.isEmpty() ? currentUser.getNickname() : originalName;
         nameEditText.setText(text);
         ViewUtils.requestFocus(this, nameEditText);
 
@@ -142,7 +142,7 @@ public class BankNameActivity extends Activity
                 hideSoftKeyboard();
             }
         });
-	}
+    }
 
     private void sendCreateBankAccountRequest()
     {
@@ -222,11 +222,11 @@ public class BankNameActivity extends Activity
         });
     }
 
-	private void hideSoftKeyboard()
-	{
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
-	}
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
+    }
 
     private void goBack()
     {

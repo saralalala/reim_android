@@ -27,27 +27,27 @@ public class WeChatShareActivity extends Activity
     private String companyName;
     private int count;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide_wechat);
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_guide_wechat);
         initData();
-		initView();
-	}
+        initView();
+    }
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("WeChatShareActivity");
-		MobclickAgent.onResume(this);
-	}
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("WeChatShareActivity");
+        MobclickAgent.onResume(this);
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("WeChatShareActivity");
-		MobclickAgent.onPause(this);
-	}
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("WeChatShareActivity");
+        MobclickAgent.onPause(this);
+    }
 
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
     {
@@ -61,8 +61,8 @@ public class WeChatShareActivity extends Activity
         count = getIntent().getIntExtra("count", 0);
     }
 
-	private void initView()
-	{
+    private void initView()
+    {
         TextView nextTextView = (TextView) findViewById(R.id.nextTextView);
         nextTextView.setOnClickListener(new OnClickListener()
         {
@@ -97,5 +97,5 @@ public class WeChatShareActivity extends Activity
                 ViewUtils.showToast(WeChatShareActivity.this, R.string.prompt_copied_to_clipboard);
             }
         });
-	}
+    }
 }

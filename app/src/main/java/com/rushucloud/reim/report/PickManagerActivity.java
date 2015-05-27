@@ -47,63 +47,63 @@ public class PickManagerActivity extends Activity
     private RelativeLayout managerLayout;
     private CircleImageView avatarImageView;
     private TextView nicknameTextView;
-	private MemberListViewAdapter adapter;
+    private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
 
-	private AppPreference appPreference;
-	private DBManager dbManager;
+    private AppPreference appPreference;
+    private DBManager dbManager;
     private User currentUser;
     private User defaultManager;
-	private List<User> userList;
+    private List<User> userList;
     private List<User> showList = new ArrayList<>();
     private List<User> chosenList;
-	private int senderID;
-	private boolean newReport;
-	private boolean fromFollowing;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_report_manager);
-		initData();
-		initView();
-	}
+    private int senderID;
+    private boolean newReport;
+    private boolean fromFollowing;
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("PickManagerActivity");		
-		MobclickAgent.onResume(this);
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_report_manager);
+        initData();
+        initView();
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("PickManagerActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("PickManagerActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("PickManagerActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void initData()
-	{
-		appPreference = AppPreference.getAppPreference();
-		dbManager = DBManager.getDBManager();
-		
-		senderID = getIntent().getIntExtra("sender", -1);
-		newReport = getIntent().getBooleanExtra("newReport", false);
-		fromFollowing = getIntent().getBooleanExtra("fromFollowing", false);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-		List<User> managerList = (List<User>) getIntent().getSerializableExtra("managers");
-		currentUser = AppPreference.getAppPreference().getCurrentUser();
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+
+        senderID = getIntent().getIntExtra("sender", -1);
+        newReport = getIntent().getBooleanExtra("newReport", false);
+        fromFollowing = getIntent().getBooleanExtra("fromFollowing", false);
+
+        List<User> managerList = (List<User>) getIntent().getSerializableExtra("managers");
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
         defaultManager = currentUser.getDefaultManager();
         if (managerList != null)
         {
@@ -119,44 +119,44 @@ public class PickManagerActivity extends Activity
         }
 
         buildUserList();
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+    }
+
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-		
-		TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
-		confirmTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+            }
+        });
+
+        TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
+        confirmTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 hideSoftKeyboard();
 
-				if (!fromFollowing && newReport)
-				{
-					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
-				}
-				else if (!fromFollowing)
-				{
-					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_EDIT_SEND_SUBMIT");					
-				}
-				else
-				{
-					MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_NEXT_SEND_SUBMIT");					
-				}
-				
-				Intent intent = new Intent();
-				intent.putExtra("managers", (Serializable) chosenList);
+                if (!fromFollowing && newReport)
+                {
+                    MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_NEW_SEND_SUBMIT");
+                }
+                else if (!fromFollowing)
+                {
+                    MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_EDIT_SEND_SUBMIT");
+                }
+                else
+                {
+                    MobclickAgent.onEvent(PickManagerActivity.this, "UMENG_REPORT_NEXT_SEND_SUBMIT");
+                }
+
+                Intent intent = new Intent();
+                intent.putExtra("managers", (Serializable) chosenList);
                 ViewUtils.goBackWithResult(PickManagerActivity.this, intent);
-			}
-		});
+            }
+        });
 
         PinnedSectionListView managerListView = (PinnedSectionListView) findViewById(R.id.managerListView);
 
@@ -202,7 +202,7 @@ public class PickManagerActivity extends Activity
 
                 public void afterTextChanged(Editable s)
                 {
-                    int visibility = s.toString().isEmpty()? View.VISIBLE : View.GONE;
+                    int visibility = s.toString().isEmpty() ? View.VISIBLE : View.GONE;
                     indexLayout.setVisibility(visibility);
                     filterList();
                 }
@@ -288,7 +288,7 @@ public class PickManagerActivity extends Activity
                 }
             }
         }
-	}
+    }
 
     private void refreshManagerView()
     {
@@ -329,24 +329,24 @@ public class PickManagerActivity extends Activity
 
     private void sendDownloadAvatarRequest(final User user)
     {
-    	DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-				if (response.getBitmap() != null)
-				{
-					String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
-					user.setAvatarLocalPath(avatarPath);
-					user.setLocalUpdatedDate(Utils.getCurrentTime());
-					user.setServerUpdatedDate(user.getLocalUpdatedDate());
-					dbManager.updateUser(user);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
+        DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+                if (response.getBitmap() != null)
+                {
+                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
+                    user.setAvatarLocalPath(avatarPath);
+                    user.setLocalUpdatedDate(Utils.getCurrentTime());
+                    user.setServerUpdatedDate(user.getLocalUpdatedDate());
+                    dbManager.updateUser(user);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
                             if (defaultManager != null && defaultManager.equals(user))
                             {
                                 ViewUtils.setImageViewBitmap(user, avatarImageView);
@@ -356,11 +356,11 @@ public class PickManagerActivity extends Activity
                                 buildUserList();
                                 filterList();
                             }
-						}
-					});	
-				}
-			}
-		});
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void hideSoftKeyboard()

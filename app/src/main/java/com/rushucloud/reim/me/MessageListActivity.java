@@ -31,67 +31,67 @@ import netUtils.response.user.GetMessagesResponse;
 
 public class MessageListActivity extends Activity
 {
-	private TextView messageTextView;
-	private XListView messageListView;
-	private MessageListViewAdapter adapter;
-	
-	private List<Message> messageList = new ArrayList<>();
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_messages);
-		initView();
-	}
+    private TextView messageTextView;
+    private XListView messageListView;
+    private MessageListViewAdapter adapter;
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("MessageListActivity");
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-		if (PhoneUtils.isNetworkConnected())
-		{
+    private List<Message> messageList = new ArrayList<>();
+
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_me_messages);
+        initView();
+    }
+
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("MessageListActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+        if (PhoneUtils.isNetworkConnected())
+        {
             ReimProgressDialog.show();
-			sendGetMessagesRequest();
-		}
-		else
-		{
-			ViewUtils.showToast(MessageListActivity.this, R.string.error_get_data_network_unavailable);
-		}
-	}
+            sendGetMessagesRequest();
+        }
+        else
+        {
+            ViewUtils.showToast(MessageListActivity.this, R.string.error_get_data_network_unavailable);
+        }
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("MessageListActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("MessageListActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-                goBack();
-			}
-		});	
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-		messageTextView = (TextView) findViewById(R.id.messageTextView);
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                goBack();
+            }
+        });
+
+        messageTextView = (TextView) findViewById(R.id.messageTextView);
 
         adapter = new MessageListViewAdapter(MessageListActivity.this, messageList);
-		messageListView = (XListView) findViewById(R.id.messageListView);
+        messageListView = (XListView) findViewById(R.id.messageListView);
         messageListView.setAdapter(adapter);
         messageListView.setXListViewListener(new XListView.IXListViewListener()
         {
@@ -116,10 +116,10 @@ public class MessageListActivity extends Activity
         messageListView.setPullRefreshEnable(true);
         messageListView.setPullLoadEnable(false);
         messageListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-		messageListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
+        messageListView.setOnItemClickListener(new OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
                 if (position > 0)
                 {
                     Bundle bundle = new Bundle();
@@ -128,54 +128,54 @@ public class MessageListActivity extends Activity
                     intent.putExtras(bundle);
                     ViewUtils.goForward(MessageListActivity.this, intent);
                 }
-			}
-		});
-	}
-	
+            }
+        });
+    }
+
     private void sendGetMessagesRequest()
     {
-    	GetMessagesRequest request = new GetMessagesRequest();
-    	request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final GetMessagesResponse response = new GetMessagesResponse(httpResponse);
-				if (response.getStatus())
-				{
+        GetMessagesRequest request = new GetMessagesRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetMessagesResponse response = new GetMessagesResponse(httpResponse);
+                if (response.getStatus())
+                {
                     messageList.clear();
                     messageList.addAll(response.getMessageList());
                     Message.sortByUpdateDate(messageList);
 
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
                             adapter.setMessages(messageList);
                             adapter.notifyDataSetChanged();
 
-                            int visibility = messageList.isEmpty()? View.VISIBLE : View.GONE;
+                            int visibility = messageList.isEmpty() ? View.VISIBLE : View.GONE;
                             messageTextView.setVisibility(visibility);
 
                             messageListView.stopRefresh();
                             messageListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-						}						
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
                             ViewUtils.showToast(MessageListActivity.this, R.string.failed_to_get_message_list, response.getErrorMessage());
                             messageListView.stopRefresh();
-						}
-					});
-				}
-			}
-		});
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void goBack()

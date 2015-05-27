@@ -21,13 +21,13 @@ public class InviteReplyResponse extends BaseResponse
     private User currentUser;
     private Group group;
 
-	public InviteReplyResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public InviteReplyResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
+    protected void constructData()
+    {
         try
         {
             JSONObject jObject = getDataObject();
@@ -54,7 +54,7 @@ public class InviteReplyResponse extends BaseResponse
             categoryList = new ArrayList<>();
             for (int i = 0; i < categoryArray.length(); i++)
             {
-                Category category =new Category(categoryArray.getJSONObject(i));
+                Category category = new Category(categoryArray.getJSONObject(i));
                 categoryList.add(category);
             }
 
@@ -78,7 +78,7 @@ public class InviteReplyResponse extends BaseResponse
         {
             e.printStackTrace();
         }
-	}
+    }
 
     public List<Category> getCategoryList()
     {

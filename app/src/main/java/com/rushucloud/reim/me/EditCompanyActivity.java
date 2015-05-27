@@ -31,87 +31,87 @@ import netUtils.response.group.ModifyGroupResponse;
 
 public class EditCompanyActivity extends Activity
 {
-	private ClearEditText companyEditText;
+    private ClearEditText companyEditText;
 
     private AppPreference appPreference;
     private DBManager dbManager;
-	private Group currentGroup;
+    private Group currentGroup;
     private String originalName;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_me_establish_company);
-		initData();
-		initView();
-	}
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("EditCompanyActivity");
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_me_establish_company);
+        initData();
+        initView();
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("EditCompanyActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("EditCompanyActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("EditCompanyActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	private void initData()
-	{
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void initData()
+    {
         appPreference = AppPreference.getAppPreference();
         dbManager = DBManager.getDBManager();
-		currentGroup = appPreference.getCurrentGroup();
-        originalName = currentGroup != null? currentGroup.getName() : "";
-	}
-	
-	private void initView()
-	{
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-                goBack();
-			}
-		});
-		
-		TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
-		saveTextView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
+        currentGroup = appPreference.getCurrentGroup();
+        originalName = currentGroup != null ? currentGroup.getName() : "";
+    }
 
-				String newName = companyEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(EditCompanyActivity.this, R.string.error_modify_network_unavailable);
-				}
-				else if (newName.equals(originalName))
-				{
+    private void initView()
+    {
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                goBack();
+            }
+        });
+
+        TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
+        saveTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+
+                String newName = companyEditText.getText().toString();
+                if (!PhoneUtils.isNetworkConnected())
+                {
+                    ViewUtils.showToast(EditCompanyActivity.this, R.string.error_modify_network_unavailable);
+                }
+                else if (newName.equals(originalName))
+                {
                     goBack();
-				}
-				else if (newName.isEmpty())
-				{
-					ViewUtils.showToast(EditCompanyActivity.this, R.string.error_company_name_empty);
-				}
-				else
-				{
-					ReimProgressDialog.show();
+                }
+                else if (newName.isEmpty())
+                {
+                    ViewUtils.showToast(EditCompanyActivity.this, R.string.error_company_name_empty);
+                }
+                else
+                {
+                    ReimProgressDialog.show();
                     if (currentGroup == null)
                     {
                         sendCreateGroupRequest(newName);
@@ -120,11 +120,11 @@ public class EditCompanyActivity extends Activity
                     {
                         sendModifyGroupRequest(newName);
                     }
-				}
-			}
-		});
-		
-		companyEditText = (ClearEditText) findViewById(R.id.companyEditText);
+                }
+            }
+        });
+
+        companyEditText = (ClearEditText) findViewById(R.id.companyEditText);
         if (currentGroup != null)
         {
             companyEditText.setText(currentGroup.getName());
@@ -133,13 +133,13 @@ public class EditCompanyActivity extends Activity
 
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         baseLayout.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});        
-	}
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
+    }
 
     private void sendCreateGroupRequest(final String newName)
     {
@@ -219,50 +219,50 @@ public class EditCompanyActivity extends Activity
             }
         });
     }
-	
-	private void sendModifyGroupRequest(final String newName)
-	{
-		ModifyGroupRequest request = new ModifyGroupRequest(newName);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final ModifyGroupResponse response = new ModifyGroupResponse(httpResponse);
-				if (response.getStatus())
-				{
-					currentGroup.setName(newName);
-					dbManager.updateGroup(currentGroup);
-					
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditCompanyActivity.this, R.string.succeed_in_modifying);
+
+    private void sendModifyGroupRequest(final String newName)
+    {
+        ModifyGroupRequest request = new ModifyGroupRequest(newName);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final ModifyGroupResponse response = new ModifyGroupResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    currentGroup.setName(newName);
+                    dbManager.updateGroup(currentGroup);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(EditCompanyActivity.this, R.string.succeed_in_modifying);
                             goBack();
-						}
-					});
-				}
-				else
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-							ViewUtils.showToast(EditCompanyActivity.this, R.string.failed_to_modify, response.getErrorMessage());
-						}
-					});
-				}
-			}
-		});
-	}
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(EditCompanyActivity.this, R.string.failed_to_modify, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
 
     private void hideSoftKeyboard()
-	{
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
-	}
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
+    }
 
     private void goBack()
     {

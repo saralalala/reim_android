@@ -19,31 +19,31 @@ import classes.utils.ViewUtils;
 
 public class CompanyListViewAdapter extends BaseAdapter
 {
-	private LayoutInflater layoutInflater;
-	private List<Group> companyList;
-	private Group company;
+    private LayoutInflater layoutInflater;
+    private List<Group> companyList;
+    private Group company;
     private boolean hasInit = false;
 
-	public CompanyListViewAdapter(Context context, List<Group> companies, Group company)
-	{
-		this.layoutInflater = LayoutInflater.from(context);
-		this.companyList = new ArrayList<>(companies);
-		this.company = company;
-	}
-	
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		if (convertView == null)
-		{
-			convertView = layoutInflater.inflate(R.layout.list_company, parent, false);
-		}
+    public CompanyListViewAdapter(Context context, List<Group> companies, Group company)
+    {
+        this.layoutInflater = LayoutInflater.from(context);
+        this.companyList = new ArrayList<>(companies);
+        this.company = company;
+    }
 
-        int color = company != null && !companyList.isEmpty() && companyList.get(position).equals(company)?
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        if (convertView == null)
+        {
+            convertView = layoutInflater.inflate(R.layout.list_company, parent, false);
+        }
+
+        int color = company != null && !companyList.isEmpty() && companyList.get(position).equals(company) ?
                 R.color.list_item_selected : R.color.list_item_unselected;
         convertView.setBackgroundResource(color);
 
         ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
-		TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
         TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
 
         if (companyList.isEmpty())
@@ -62,12 +62,12 @@ public class CompanyListViewAdapter extends BaseAdapter
             timeTextView.setText(Utils.secondToStringUpToDay(company.getCreatedDate()) + ViewUtils.getString(R.string.create));
             timeTextView.setVisibility(View.VISIBLE);
         }
-		
-		return convertView;
-	}
-	
-	public int getCount()
-	{
+
+        return convertView;
+    }
+
+    public int getCount()
+    {
         if (!companyList.isEmpty())
         {
             return companyList.size();
@@ -80,25 +80,25 @@ public class CompanyListViewAdapter extends BaseAdapter
         {
             return 0;
         }
-	}
+    }
 
-	public Object getItem(int position)
-	{
-		return null;
-	}
+    public Object getItem(int position)
+    {
+        return null;
+    }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
-	
-	public void setCompanyList(List<Group> companies)
-	{
-		companyList.clear();
-		companyList.addAll(companies);
-	}
-	
-	public void setCompany(Group company)
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
+    public void setCompanyList(List<Group> companies)
+    {
+        companyList.clear();
+        companyList.addAll(companies);
+    }
+
+    public void setCompany(Group company)
     {
         this.company = company;
     }

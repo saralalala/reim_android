@@ -34,7 +34,8 @@ import java.net.URLConnection;
 
 import classes.widget.touchView.InputStreamWrapper.InputStreamProgressListener;
 
-public class UrlTouchImageView extends RelativeLayout {
+public class UrlTouchImageView extends RelativeLayout
+{
     protected ProgressBar mProgressBar;
     protected TouchImageView mImageView;
 
@@ -45,18 +46,23 @@ public class UrlTouchImageView extends RelativeLayout {
         super(ctx);
         mContext = ctx;
         init();
-
     }
+
     public UrlTouchImageView(Context ctx, AttributeSet attrs)
     {
         super(ctx, attrs);
         mContext = ctx;
         init();
     }
-    public TouchImageView getImageView() { return mImageView; }
+
+    public TouchImageView getImageView()
+    {
+        return mImageView;
+    }
 
     @SuppressWarnings("deprecation")
-    protected void init() {
+    protected void init()
+    {
         mImageView = new TouchImageView(mContext);
         LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
         mImageView.setLayoutParams(params);
@@ -77,19 +83,22 @@ public class UrlTouchImageView extends RelativeLayout {
     {
         new ImageLoadTask().execute(imageUrl);
     }
-    
-    public void setScaleType(ScaleType scaleType) {
+
+    public void setScaleType(ScaleType scaleType)
+    {
         mImageView.setScaleType(scaleType);
     }
-    
+
     //No caching load
     public class ImageLoadTask extends AsyncTask<String, Integer, Bitmap>
     {
         @Override
-        protected Bitmap doInBackground(String... strings) {
+        protected Bitmap doInBackground(String... strings)
+        {
             String url = strings[0];
             Bitmap bm = null;
-            try {
+            try
+            {
                 URL aURL = new URL(url);
                 URLConnection conn = aURL.openConnection();
                 conn.connect();
@@ -97,44 +106,47 @@ public class UrlTouchImageView extends RelativeLayout {
                 int totalLen = conn.getContentLength();
                 InputStreamWrapper bis = new InputStreamWrapper(is, 8192, totalLen);
                 bis.setProgressListener(new InputStreamProgressListener()
-				{					
-					@Override
-					public void onProgress(float progressValue, long bytesLoaded,
-							long bytesTotal)
-					{
-						publishProgress((int)(progressValue * 100));
-					}
-				});
+                {
+                    @Override
+                    public void onProgress(float progressValue, long bytesLoaded,
+                                           long bytesTotal)
+                    {
+                        publishProgress((int) (progressValue * 100));
+                    }
+                });
                 bm = BitmapFactory.decodeStream(bis);
                 bis.close();
                 is.close();
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
             return bm;
         }
-        
+
         @Override
-        protected void onPostExecute(Bitmap bitmap) {
-        	if (bitmap == null) 
-        	{
-        		mImageView.setScaleType(ScaleType.CENTER);
-        		bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.no_photo);
-        		mImageView.setImageBitmap(bitmap);
-        	}
-        	else 
-        	{
-        		mImageView.setScaleType(ScaleType.MATRIX);
-	            mImageView.setImageBitmap(bitmap);
-        	}
+        protected void onPostExecute(Bitmap bitmap)
+        {
+            if (bitmap == null)
+            {
+                mImageView.setScaleType(ScaleType.CENTER);
+                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.no_photo);
+                mImageView.setImageBitmap(bitmap);
+            }
+            else
+            {
+                mImageView.setScaleType(ScaleType.MATRIX);
+                mImageView.setImageBitmap(bitmap);
+            }
             mImageView.setVisibility(VISIBLE);
             mProgressBar.setVisibility(GONE);
         }
 
-		@Override
-		protected void onProgressUpdate(Integer... values)
-		{
-			mProgressBar.setProgress(values[0]);
-		}
+        @Override
+        protected void onProgressUpdate(Integer... values)
+        {
+            mProgressBar.setProgress(values[0]);
+        }
     }
 }

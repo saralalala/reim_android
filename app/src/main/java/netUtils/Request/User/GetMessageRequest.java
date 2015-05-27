@@ -6,17 +6,17 @@ import netUtils.request.BaseRequest;
 
 public class GetMessageRequest extends BaseRequest
 {
-	public GetMessageRequest(int type, int messageID)
-	{
-		super();
+    public GetMessageRequest(int type, int messageID)
+    {
+        super();
 
         appendUrl(URLDef.URL_MESSAGE);
         appendUrl(type);
         appendUrl(messageID);
-	}
+    }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doGet(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doGet(callback);
+    }
 }

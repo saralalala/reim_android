@@ -61,16 +61,16 @@ public class ReportFragment extends Fragment
 {
     private static final int GET_DATA_INTERVAL = 600;
 
-	private static final int SORT_UPDATE_DATE = 0;
+    private static final int SORT_UPDATE_DATE = 0;
     private static final int SORT_CREATE_DATE = 1;
-	private static final int SORT_AMOUNT = 2;
+    private static final int SORT_AMOUNT = 2;
 
-	private boolean hasInit = false;
-	
-	private View view;
+    private boolean hasInit = false;
+
+    private View view;
 
     private ImageView filterImageView;
-	private PopupWindow filterPopupWindow;
+    private PopupWindow filterPopupWindow;
     private RadioButton sortUpdateDateRadio;
     private RadioButton sortCreateDateRadio;
     private RadioButton sortAmountRadio;
@@ -80,9 +80,9 @@ public class ReportFragment extends Fragment
     private ReportTagGridViewAdapter tagAdapter;
     private RotateAnimation rotateAnimation;
     private RotateAnimation rotateReverseAnimation;
-	private RelativeLayout noResultLayout;
+    private RelativeLayout noResultLayout;
 
-	private TextView myTitleTextView;
+    private TextView myTitleTextView;
     private TextView myShortTextView;
     private TextView myMediumTextView;
     private TextView myLongTextView;
@@ -91,122 +91,122 @@ public class ReportFragment extends Fragment
     private TextView othersMediumTextView;
     private TextView othersLongTextView;
 
-	private XListView reportListView;
-	private ReportListViewAdapter mineAdapter;
-	private OthersReportListViewAdapter othersAdapter;
-	private PopupWindow operationPopupWindow;
+    private XListView reportListView;
+    private ReportListViewAdapter mineAdapter;
+    private OthersReportListViewAdapter othersAdapter;
+    private PopupWindow operationPopupWindow;
     private Button exportButton;
     private Button deleteButton;
 
-	private AppPreference appPreference;
-	private DBManager dbManager;
-	
-	private List<Report> mineList = new ArrayList<>();
-	private List<Report> showMineList = new ArrayList<>();
-	private int mineSortType = SORT_UPDATE_DATE;
-	private int mineTempSortType = SORT_UPDATE_DATE;
+    private AppPreference appPreference;
+    private DBManager dbManager;
+
+    private List<Report> mineList = new ArrayList<>();
+    private List<Report> showMineList = new ArrayList<>();
+    private int mineSortType = SORT_UPDATE_DATE;
+    private int mineTempSortType = SORT_UPDATE_DATE;
     private boolean mineSortReverse = false;
     private boolean mineTempSortReverse = false;
-	private boolean[] mineCheck;
-	private List<Integer> mineFilterStatusList = new ArrayList<>();
-	
-	private List<Report> othersList = new ArrayList<>();
-	private List<Report> showOthersList = new ArrayList<>();
-	private int othersSortType = SORT_UPDATE_DATE;
-	private int othersTempSortType = SORT_UPDATE_DATE;
+    private boolean[] mineCheck;
+    private List<Integer> mineFilterStatusList = new ArrayList<>();
+
+    private List<Report> othersList = new ArrayList<>();
+    private List<Report> showOthersList = new ArrayList<>();
+    private int othersSortType = SORT_UPDATE_DATE;
+    private int othersTempSortType = SORT_UPDATE_DATE;
     private boolean othersSortReverse = false;
     private boolean othersTempSortReverse = false;
-	private boolean[] othersCheck;
-	private List<Integer> othersFilterStatusList = new ArrayList<>();
-	
-	private int reportIndex;
-	
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		if (view == null)
-		{
-			view = inflater.inflate(R.layout.fragment_report, container, false);
-		}
-		else
-		{
-			ViewGroup viewGroup = (ViewGroup) view.getParent();
-			if (viewGroup != null)
-			{
-				viewGroup.removeView(view);
-			}
-		}
-	    return view;  
-	}
-	   
-	public void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("ReportFragment");
-		if (!hasInit)
-		{
-	        initView();
-	        initData();
-	        hasInit = true;
-			setListView(ReimApplication.getReportTabIndex());
-			syncReports();	
-		}
-	}
+    private boolean[] othersCheck;
+    private List<Integer> othersFilterStatusList = new ArrayList<>();
 
-	public void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("ReportFragment");
-	}
-	
-	public void setUserVisibleHint(boolean isVisibleToUser)
-	{
-		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser && hasInit)
-		{
-			setListView(ReimApplication.getReportTabIndex());
-			syncReports();
-		}
-	}
-    
+    private int reportIndex;
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        if (view == null)
+        {
+            view = inflater.inflate(R.layout.fragment_report, container, false);
+        }
+        else
+        {
+            ViewGroup viewGroup = (ViewGroup) view.getParent();
+            if (viewGroup != null)
+            {
+                viewGroup.removeView(view);
+            }
+        }
+        return view;
+    }
+
+    public void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("ReportFragment");
+        if (!hasInit)
+        {
+            initView();
+            initData();
+            hasInit = true;
+            setListView(ReimApplication.getReportTabIndex());
+            syncReports();
+        }
+    }
+
+    public void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("ReportFragment");
+    }
+
+    public void setUserVisibleHint(boolean isVisibleToUser)
+    {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && hasInit)
+        {
+            setListView(ReimApplication.getReportTabIndex());
+            syncReports();
+        }
+    }
+
     private void initData()
     {
-		if (dbManager == null)
-		{
-			dbManager = DBManager.getDBManager();			
-		}
-		
-		if (appPreference == null)
-		{
-			appPreference = AppPreference.getAppPreference();
-		}
-		
-		mineList.addAll(readMineReportList());
-		showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
+        if (dbManager == null)
+        {
+            dbManager = DBManager.getDBManager();
+        }
+
+        if (appPreference == null)
+        {
+            appPreference = AppPreference.getAppPreference();
+        }
+
+        mineList.addAll(readMineReportList());
+        showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
 
         othersList.addAll(readOthersReportList());
         showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
-		
-		mineCheck = new boolean[5];
-		othersCheck = new boolean[5];
-		for (int i = 0; i < 5; i++)
-		{
-			mineCheck[i] = false;
-			othersCheck[i] = false;
-		}
+
+        mineCheck = new boolean[5];
+        othersCheck = new boolean[5];
+        for (int i = 0; i < 5; i++)
+        {
+            mineCheck[i] = false;
+            othersCheck[i] = false;
+        }
     }
 
-	private void initView()
-	{
-		initTitleView();
-		initListView();	
-		initFilterWindow();
-		initOperationWindow();
-	}
-	
-	private void initTitleView()
-	{
-		myTitleTextView = (TextView)getActivity().findViewById(R.id.myTitleTextView);
-		myTitleTextView.setOnClickListener(new OnClickListener()
+    private void initView()
+    {
+        initTitleView();
+        initListView();
+        initFilterWindow();
+        initOperationWindow();
+    }
+
+    private void initTitleView()
+    {
+        myTitleTextView = (TextView) getActivity().findViewById(R.id.myTitleTextView);
+        myTitleTextView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
@@ -218,7 +218,7 @@ public class ReportFragment extends Fragment
         myMediumTextView = (TextView) view.findViewById(R.id.myMediumTextView);
         myLongTextView = (TextView) view.findViewById(R.id.myLongTextView);
 
-		othersTitleTextView = (TextView)getActivity().findViewById(R.id.othersTitleTextView);
+        othersTitleTextView = (TextView) getActivity().findViewById(R.id.othersTitleTextView);
         othersTitleTextView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
@@ -230,19 +230,19 @@ public class ReportFragment extends Fragment
         othersShortTextView = (TextView) view.findViewById(R.id.othersShortTextView);
         othersMediumTextView = (TextView) view.findViewById(R.id.othersMediumTextView);
         othersLongTextView = (TextView) view.findViewById(R.id.othersLongTextView);
-		
-		filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
-		filterImageView.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
-				showFilterWindow();
-			}
-		});
-		
-		ImageView addImageView = (ImageView) view.findViewById(R.id.addImageView);
-		addImageView.setOnClickListener(new OnClickListener()
+
+        filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
+        filterImageView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_CLICK");
+                showFilterWindow();
+            }
+        });
+
+        ImageView addImageView = (ImageView) view.findViewById(R.id.addImageView);
+        addImageView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
@@ -260,16 +260,16 @@ public class ReportFragment extends Fragment
                 ViewUtils.goForward(getActivity(), intent);
             }
         });
-	}
-	
-	private void initListView()
-	{
-		mineAdapter = new ReportListViewAdapter(getActivity(), showMineList);	
-		othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);
-		
-		reportListView = (XListView)getActivity().findViewById(R.id.reportListView);
-		reportListView.setAdapter(mineAdapter);
-		reportListView.setXListViewListener(new IXListViewListener()
+    }
+
+    private void initListView()
+    {
+        mineAdapter = new ReportListViewAdapter(getActivity(), showMineList);
+        othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);
+
+        reportListView = (XListView) getActivity().findViewById(R.id.reportListView);
+        reportListView.setAdapter(mineAdapter);
+        reportListView.setXListViewListener(new IXListViewListener()
         {
             public void onRefresh()
             {
@@ -295,18 +295,18 @@ public class ReportFragment extends Fragment
 
             }
         });
-		reportListView.setPullRefreshEnable(true);
-		reportListView.setPullLoadEnable(false);
-		reportListView.setOnItemClickListener(new OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id)
-			{
-				if ((operationPopupWindow == null || !operationPopupWindow.isShowing()) && position > 0)
-				{		
-					if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
-					{
-						Report report = showMineList.get(position - 1);
+        reportListView.setPullRefreshEnable(true);
+        reportListView.setPullLoadEnable(false);
+        reportListView.setOnItemClickListener(new OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id)
+            {
+                if ((operationPopupWindow == null || !operationPopupWindow.isShowing()) && position > 0)
+                {
+                    if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+                    {
+                        Report report = showMineList.get(position - 1);
 
                         List<Integer> mineUnreadList = ReimApplication.getMineUnreadList();
                         if (mineUnreadList.contains(report.getServerID()))
@@ -315,24 +315,24 @@ public class ReportFragment extends Fragment
                             ReimApplication.setMineUnreadList(mineUnreadList);
                         }
 
-						Bundle bundle = new Bundle();
-						bundle.putSerializable("report", report);
-						Intent intent = new Intent();
-						if (report.isEditable())
-						{
-							intent.setClass(getActivity(), EditReportActivity.class);
-						}
-						else
-						{
-							bundle.putBoolean("myReport", true);
-							intent.setClass(getActivity(), ShowReportActivity.class);						
-						}
-						intent.putExtras(bundle);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("report", report);
+                        Intent intent = new Intent();
+                        if (report.isEditable())
+                        {
+                            intent.setClass(getActivity(), EditReportActivity.class);
+                        }
+                        else
+                        {
+                            bundle.putBoolean("myReport", true);
+                            intent.setClass(getActivity(), ShowReportActivity.class);
+                        }
+                        intent.putExtras(bundle);
                         ViewUtils.goForward(getActivity(), intent);
-					}
-					else
-					{
-						Report report = showOthersList.get(position - 1);
+                    }
+                    else
+                    {
+                        Report report = showOthersList.get(position - 1);
                         if (report.getSectionName().isEmpty())
                         {
                             List<Integer> othersUnreadList = ReimApplication.getOthersUnreadList();
@@ -357,24 +357,24 @@ public class ReportFragment extends Fragment
                             intent.putExtras(bundle);
                             ViewUtils.goForward(getActivity(), intent);
                         }
-					}
-				}
-			}
-		});
-		reportListView.setOnItemLongClickListener(new OnItemLongClickListener()
-		{
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				reportIndex = position - 1;
+                    }
+                }
+            }
+        });
+        reportListView.setOnItemLongClickListener(new OnItemLongClickListener()
+        {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                reportIndex = position - 1;
                 showOperationWindow();
-				return false;
-			}
-		});
-	}
-	
-	private void initFilterWindow()
-	{
-		noResultLayout = (RelativeLayout) view.findViewById(R.id.noResultLayout);
+                return false;
+            }
+        });
+    }
+
+    private void initFilterWindow()
+    {
+        noResultLayout = (RelativeLayout) view.findViewById(R.id.noResultLayout);
 
         rotateAnimation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateAnimation.setDuration(200);
@@ -383,8 +383,8 @@ public class ReportFragment extends Fragment
         rotateReverseAnimation = new RotateAnimation(180, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateReverseAnimation.setDuration(200);
         rotateReverseAnimation.setFillAfter(true);
-		
-		View filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);
+
+        View filterView = View.inflate(getActivity(), R.layout.window_report_filter, null);
 
         sortUpdateDateRadio = (RadioButton) filterView.findViewById(R.id.sortUpdateDateRadio);
         sortUpdateDateRadio.setOnClickListener(new OnClickListener()
@@ -516,7 +516,7 @@ public class ReportFragment extends Fragment
 
         tagAdapter = new ReportTagGridViewAdapter(getActivity());
 
-        GridView tagGridView = (GridView)filterView.findViewById(R.id.tagGridView);
+        GridView tagGridView = (GridView) filterView.findViewById(R.id.tagGridView);
         tagGridView.setAdapter(tagAdapter);
         tagGridView.setOnItemClickListener(new OnItemClickListener()
         {
@@ -528,7 +528,7 @@ public class ReportFragment extends Fragment
             }
         });
 
-        ImageView confirmImageView = (ImageView)filterView.findViewById(R.id.confirmImageView);
+        ImageView confirmImageView = (ImageView) filterView.findViewById(R.id.confirmImageView);
         confirmImageView.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -557,7 +557,7 @@ public class ReportFragment extends Fragment
             }
         });
 
-        ImageView cancelImageView = (ImageView)filterView.findViewById(R.id.cancelImageView);
+        ImageView cancelImageView = (ImageView) filterView.findViewById(R.id.cancelImageView);
         cancelImageView.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -566,12 +566,12 @@ public class ReportFragment extends Fragment
             }
         });
 
-		filterPopupWindow = ViewUtils.buildTopPopupWindow(getActivity(), filterView);
-	}
-	
-	private void initOperationWindow()
-	{
-		View operationView = View.inflate(getActivity(), R.layout.window_report_operation, null);
+        filterPopupWindow = ViewUtils.buildTopPopupWindow(getActivity(), filterView);
+    }
+
+    private void initOperationWindow()
+    {
+        View operationView = View.inflate(getActivity(), R.layout.window_report_operation, null);
 
         exportButton = (Button) operationView.findViewById(R.id.exportButton);
         exportButton.setOnClickListener(new View.OnClickListener()
@@ -580,7 +580,7 @@ public class ReportFragment extends Fragment
             {
                 operationPopupWindow.dismiss();
 
-                Report report = ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE?
+                Report report = ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE ?
                         showMineList.get(reportIndex) : showOthersList.get(reportIndex);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("report", report);
@@ -589,13 +589,13 @@ public class ReportFragment extends Fragment
                 ViewUtils.goForward(getActivity(), intent);
             }
         });
-		
-		deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
-		deleteButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				operationPopupWindow.dismiss();
+
+        deleteButton = (Button) operationView.findViewById(R.id.deleteButton);
+        deleteButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                operationPopupWindow.dismiss();
 
                 if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
                 {
@@ -647,62 +647,62 @@ public class ReportFragment extends Fragment
                     builder.setNegativeButton(R.string.cancel, null);
                     builder.create().show();
                 }
-			}
-		});
-		
-		Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				operationPopupWindow.dismiss();
-			}
-		});
-		
-		operationPopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), operationView);
-	}
-	
-	public void setListView(int index)
-	{
-		ReimApplication.setReportTabIndex(index);
-		if (index == ReimApplication.TAB_REPORT_MINE)
-		{
-			myTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
-			othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
-		}
-		else
-		{
-			if (PhoneUtils.isNetworkConnected() && Utils.getCurrentTime() - appPreference.getLastGetOthersReportTime() > GET_DATA_INTERVAL)
-			{
-				sendSubordinatesReportsRequest();
-			}
-			myTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
-			othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
-		}
-		refreshReportListView(false);
-	}
+            }
+        });
 
-	public void showBadge()
-	{
+        Button cancelButton = (Button) operationView.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                operationPopupWindow.dismiss();
+            }
+        });
+
+        operationPopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), operationView);
+    }
+
+    public void setListView(int index)
+    {
+        ReimApplication.setReportTabIndex(index);
+        if (index == ReimApplication.TAB_REPORT_MINE)
+        {
+            myTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
+            othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
+        }
+        else
+        {
+            if (PhoneUtils.isNetworkConnected() && Utils.getCurrentTime() - appPreference.getLastGetOthersReportTime() > GET_DATA_INTERVAL)
+            {
+                sendSubordinatesReportsRequest();
+            }
+            myTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
+            othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
+        }
+        refreshReportListView(false);
+    }
+
+    public void showBadge()
+    {
         if (myShortTextView == null || myMediumTextView == null || myLongTextView == null)
         {
             return;
         }
 
-		int count = ReimApplication.getMineUnreadList().size();
-		if (count == 0)
-		{
-			myShortTextView.setVisibility(View.GONE);
+        int count = ReimApplication.getMineUnreadList().size();
+        if (count == 0)
+        {
+            myShortTextView.setVisibility(View.GONE);
             myMediumTextView.setVisibility(View.GONE);
             myLongTextView.setVisibility(View.GONE);
-		}
-		else if (count < 10)
-		{
+        }
+        else if (count < 10)
+        {
             myShortTextView.setVisibility(View.VISIBLE);
             myShortTextView.setText(Integer.toString(count));
             myMediumTextView.setVisibility(View.GONE);
             myLongTextView.setVisibility(View.GONE);
-		}
+        }
         else if (count < 100)
         {
             myShortTextView.setVisibility(View.GONE);
@@ -744,7 +744,7 @@ public class ReportFragment extends Fragment
             othersMediumTextView.setVisibility(View.GONE);
             othersLongTextView.setVisibility(View.VISIBLE);
         }
-	}
+    }
 
     private void selectSortUpdateDateRadio()
     {
@@ -869,30 +869,30 @@ public class ReportFragment extends Fragment
         }
     }
 
-	private List<Report> readMineReportList()
-	{
-		return dbManager.getUserReports(appPreference.getCurrentUserID());
-	}
-	
-	private List<Report> readOthersReportList()
-	{
-		return dbManager.getOthersReports(appPreference.getCurrentUserID());
-	}
+    private List<Report> readMineReportList()
+    {
+        return dbManager.getUserReports(appPreference.getCurrentUserID());
+    }
 
-	private List<Report> filterReportList(List<Report> reportList, int sortType, boolean sortReverse, List<Integer> filterStatusList)
-	{
-		List<Report> resultList = new ArrayList<>();
-		for (Report report : reportList)
-		{
-			if (!filterStatusList.isEmpty() && filterStatusList.size() < 5)
-			{
-				if (!report.isInSpecificStatus(filterStatusList))
-				{
-					continue;
-				}
-			}
-			resultList.add(report);
-		}
+    private List<Report> readOthersReportList()
+    {
+        return dbManager.getOthersReports(appPreference.getCurrentUserID());
+    }
+
+    private List<Report> filterReportList(List<Report> reportList, int sortType, boolean sortReverse, List<Integer> filterStatusList)
+    {
+        List<Report> resultList = new ArrayList<>();
+        for (Report report : reportList)
+        {
+            if (!filterStatusList.isEmpty() && filterStatusList.size() < 5)
+            {
+                if (!report.isInSpecificStatus(filterStatusList))
+                {
+                    continue;
+                }
+            }
+            resultList.add(report);
+        }
 
         switch (sortType)
         {
@@ -909,13 +909,13 @@ public class ReportFragment extends Fragment
                 break;
         }
 
-		if (sortReverse)
-		{
-			Collections.reverse(resultList);
-		}
+        if (sortReverse)
+        {
+            Collections.reverse(resultList);
+        }
 
-		return resultList;
-	}
+        return resultList;
+    }
 
     private void buildReportListByStatus()
     {
@@ -961,29 +961,29 @@ public class ReportFragment extends Fragment
         }
     }
 
-	private void refreshReportListView(boolean readDatabase)
-	{
-		if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
-		{
+    private void refreshReportListView(boolean readDatabase)
+    {
+        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        {
             if (readDatabase)
             {
                 mineList.clear();
                 mineList.addAll(readMineReportList());
             }
-			showMineList.clear();
-			showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
-			mineAdapter.setReportList(showMineList);
+            showMineList.clear();
+            showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
+            mineAdapter.setReportList(showMineList);
             mineAdapter.setUnreadList(ReimApplication.getMineUnreadList());
-			reportListView.setAdapter(mineAdapter);
+            reportListView.setAdapter(mineAdapter);
 
-            int visibility = !mineFilterStatusList.isEmpty() && showMineList.isEmpty()? View.VISIBLE : View.GONE;
+            int visibility = !mineFilterStatusList.isEmpty() && showMineList.isEmpty() ? View.VISIBLE : View.GONE;
             noResultLayout.setVisibility(visibility);
 
-            int filterImage = mineFilterStatusList.isEmpty()? R.drawable.filter_empty : R.drawable.filter_full;
+            int filterImage = mineFilterStatusList.isEmpty() ? R.drawable.filter_empty : R.drawable.filter_full;
             filterImageView.setImageResource(filterImage);
-		}
+        }
         else
-		{
+        {
             if (readDatabase)
             {
                 othersList.clear();
@@ -1001,21 +1001,21 @@ public class ReportFragment extends Fragment
 
             othersAdapter.setReportList(showOthersList);
             othersAdapter.setUnreadList(ReimApplication.getOthersUnreadList());
-			reportListView.setAdapter(othersAdapter);
+            reportListView.setAdapter(othersAdapter);
 
-            int visibility = !othersFilterStatusList.isEmpty() && showOthersList.isEmpty()? View.VISIBLE : View.GONE;
+            int visibility = !othersFilterStatusList.isEmpty() && showOthersList.isEmpty() ? View.VISIBLE : View.GONE;
             noResultLayout.setVisibility(visibility);
 
-            int filterImage = othersFilterStatusList.isEmpty()? R.drawable.filter_empty : R.drawable.filter_full;
+            int filterImage = othersFilterStatusList.isEmpty() ? R.drawable.filter_empty : R.drawable.filter_full;
             filterImageView.setImageResource(filterImage);
-		}
+        }
         showBadge();
-	}
+    }
 
     private void showFilterWindow()
     {
-		if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
-		{
+        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        {
             mineTempSortReverse = false;
             mineTempSortType = mineSortType;
             switch (mineSortType)
@@ -1051,15 +1051,15 @@ public class ReportFragment extends Fragment
                     break;
             }
 
-			tagAdapter.setCheck(mineCheck);
-			tagAdapter.notifyDataSetChanged();
-		}
-		else
-		{
+            tagAdapter.setCheck(mineCheck);
+            tagAdapter.notifyDataSetChanged();
+        }
+        else
+        {
             othersTempSortReverse = false;
             othersTempSortType = othersSortType;
-			switch (othersSortType)
-			{
+            switch (othersSortType)
+            {
                 case SORT_UPDATE_DATE:
                 {
                     selectSortUpdateDateRadio();
@@ -1089,16 +1089,16 @@ public class ReportFragment extends Fragment
                 }
                 default:
                     break;
-			}
-			
-			tagAdapter.setCheck(othersCheck);
-			tagAdapter.notifyDataSetChanged();			
-		}
-		
-		filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-		filterPopupWindow.update();
+            }
+
+            tagAdapter.setCheck(othersCheck);
+            tagAdapter.notifyDataSetChanged();
+        }
+
+        filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+        filterPopupWindow.update();
     }
-    
+
     private void showOperationWindow()
     {
         if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
@@ -1160,122 +1160,122 @@ public class ReportFragment extends Fragment
             }
         }
 
-		operationPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
-		operationPopupWindow.update();
-		
-		ViewUtils.dimBackground(getActivity());
+        operationPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+        operationPopupWindow.update();
+
+        ViewUtils.dimBackground(getActivity());
     }
 
-	private void sendDeleteReportRequest(final Report report)
-	{
-		ReimProgressDialog.show();
-		DeleteReportRequest request = new DeleteReportRequest(report.getServerID());
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final DeleteReportResponse response = new DeleteReportResponse(httpResponse);
-				if (response.getStatus())
-				{
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							int reportID = ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE?
+    private void sendDeleteReportRequest(final Report report)
+    {
+        ReimProgressDialog.show();
+        DeleteReportRequest request = new DeleteReportRequest(report.getServerID());
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final DeleteReportResponse response = new DeleteReportResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            int reportID = ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE ?
                                     report.getLocalID() : report.getServerID();
-							deleteLocalReport(reportID);
-						}
-					});
-				}
-				else
-				{
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							ReimProgressDialog.dismiss();
-				            ViewUtils.showToast(getActivity(), R.string.failed_to_delete, response.getErrorMessage());
-						}
-					});		
-				}
-			}
-		});
-	}
+                            deleteLocalReport(reportID);
+                        }
+                    });
+                }
+                else
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(getActivity(), R.string.failed_to_delete, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
 
-	private void sendSubordinatesReportsRequest()
-	{
-		SubordinatesReportRequest request = new SubordinatesReportRequest(0, 9999, 1);
-		request.sendRequest(new HttpConnectionCallback()
-		{
-			public void execute(Object httpResponse)
-			{
-				final SubordinatesReportResponse response = new SubordinatesReportResponse(httpResponse);
-				if (response.getStatus())
-				{
-					int managerID = appPreference.getCurrentUserID();
-					
-					List<Report> localReportList = dbManager.getOthersReports(managerID);
-					for (Report localReport : localReportList)
-					{
-						boolean reportExists = false;
-						for (Report report : response.getReportList())
-						{
-							if (localReport.getServerID() == report.getServerID())
-							{
-								reportExists = true;
-								break;
-							}
-						}
-						if (!reportExists)
-						{
-							dbManager.deleteOthersReport(localReport.getServerID(), managerID);
-						}
-					}
+    private void sendSubordinatesReportsRequest()
+    {
+        SubordinatesReportRequest request = new SubordinatesReportRequest(0, 9999, 1);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final SubordinatesReportResponse response = new SubordinatesReportResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int managerID = appPreference.getCurrentUserID();
 
-					for (Report report : response.getReportList())
-					{
-						Report localReport = dbManager.getOthersReport(report.getServerID());
-						if (localReport == null)
-						{
-							dbManager.insertOthersReport(report);
-						}
-						else
-						{
+                    List<Report> localReportList = dbManager.getOthersReports(managerID);
+                    for (Report localReport : localReportList)
+                    {
+                        boolean reportExists = false;
+                        for (Report report : response.getReportList())
+                        {
+                            if (localReport.getServerID() == report.getServerID())
+                            {
+                                reportExists = true;
+                                break;
+                            }
+                        }
+                        if (!reportExists)
+                        {
+                            dbManager.deleteOthersReport(localReport.getServerID(), managerID);
+                        }
+                    }
+
+                    for (Report report : response.getReportList())
+                    {
+                        Report localReport = dbManager.getOthersReport(report.getServerID());
+                        if (localReport == null)
+                        {
+                            dbManager.insertOthersReport(report);
+                        }
+                        else
+                        {
                             report.setType(localReport.getType());
                             report.setManagerList(localReport.getManagerList());
                             report.setCCList(localReport.getCCList());
-							dbManager.updateOthersReport(report);
-						}
-					}
-					
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
+                            dbManager.updateOthersReport(report);
+                        }
+                    }
+
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
                             appPreference.setLastGetOthersReportTime(Utils.getCurrentTime());
                             appPreference.saveAppPreference();
-							reportListView.stopRefresh();
-							reportListView.stopLoadMore();
-							reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-							refreshReportListView(true);
-						}
-					});
-				}
-				else
-				{
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							reportListView.stopRefresh();
-							reportListView.stopLoadMore();
-							ViewUtils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
-						}
-					});					
-				}
-			}
-		});
-	}
+                            reportListView.stopRefresh();
+                            reportListView.stopLoadMore();
+                            reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+                            refreshReportListView(true);
+                        }
+                    });
+                }
+                else
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            reportListView.stopRefresh();
+                            reportListView.stopLoadMore();
+                            ViewUtils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
 
     private void sendGetEventsRequest()
     {
@@ -1309,128 +1309,128 @@ public class ReportFragment extends Fragment
     }
 
     private void deleteLocalReport(int reportID)
-	{
-		if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
-		{
-			if (dbManager.deleteReport(reportID))
-			{
-				refreshReportListView(true);
-				ReimProgressDialog.dismiss();
-	            ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
-			}
-			else
-			{
-				ReimProgressDialog.dismiss();
-	            ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
-			}			
-		}
-		else
-		{
-			if (dbManager.deleteOthersReport(reportID, appPreference.getCurrentUserID()))
-			{
-				refreshReportListView(true);
-				ReimProgressDialog.dismiss();
-	            ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
-			}
-			else
-			{
-				ReimProgressDialog.dismiss();
-	            ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
-			}			
-		}
-	}
+    {
+        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        {
+            if (dbManager.deleteReport(reportID))
+            {
+                refreshReportListView(true);
+                ReimProgressDialog.dismiss();
+                ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
+            }
+            else
+            {
+                ReimProgressDialog.dismiss();
+                ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
+            }
+        }
+        else
+        {
+            if (dbManager.deleteOthersReport(reportID, appPreference.getCurrentUserID()))
+            {
+                refreshReportListView(true);
+                ReimProgressDialog.dismiss();
+                ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
+            }
+            else
+            {
+                ReimProgressDialog.dismiss();
+                ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
+            }
+        }
+    }
 
-	public void syncReports()
-	{
-		if (SyncUtils.canSyncToServer())
-		{
-			SyncUtils.isSyncOnGoing = true;
-			SyncUtils.syncFromServer(new SyncDataCallback()
-			{
-				public void execute()
-				{					
-					getActivity().runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							refreshReportListView(true);
-						}
-					});
+    public void syncReports()
+    {
+        if (SyncUtils.canSyncToServer())
+        {
+            SyncUtils.isSyncOnGoing = true;
+            SyncUtils.syncFromServer(new SyncDataCallback()
+            {
+                public void execute()
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            refreshReportListView(true);
+                        }
+                    });
 
-					SyncUtils.syncAllToServer(new SyncDataCallback()
-					{
-						public void execute()
-						{
-							SyncUtils.isSyncOnGoing = false;
-						}
-					});
-				}
-			});
-		}
-	}
+                    SyncUtils.syncAllToServer(new SyncDataCallback()
+                    {
+                        public void execute()
+                        {
+                            SyncUtils.isSyncOnGoing = false;
+                        }
+                    });
+                }
+            });
+        }
+    }
 
-	private void refreshReports()
-	{
-		if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
-		{
-			if (SyncUtils.canSyncToServer())
-			{
-				SyncUtils.isSyncOnGoing = true;
-				SyncUtils.syncFromServer(new SyncDataCallback()
-				{
-					public void execute()
-					{
-						getActivity().runOnUiThread(new Runnable()
-						{
-							public void run()
-							{
-								reportListView.stopRefresh();
-								reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-								refreshReportListView(true);
-							}
-						});
+    private void refreshReports()
+    {
+        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        {
+            if (SyncUtils.canSyncToServer())
+            {
+                SyncUtils.isSyncOnGoing = true;
+                SyncUtils.syncFromServer(new SyncDataCallback()
+                {
+                    public void execute()
+                    {
+                        getActivity().runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                reportListView.stopRefresh();
+                                reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+                                refreshReportListView(true);
+                            }
+                        });
 
-						SyncUtils.syncAllToServer(new SyncDataCallback()
-						{
-							public void execute()
-							{
-								SyncUtils.isSyncOnGoing = false;
-							}
-						});
-					}
-				});
-			}
-			else
-			{
-				getActivity().runOnUiThread(new Runnable()
-				{
-					public void run()
-					{
-						reportListView.stopRefresh();
+                        SyncUtils.syncAllToServer(new SyncDataCallback()
+                        {
+                            public void execute()
+                            {
+                                SyncUtils.isSyncOnGoing = false;
+                            }
+                        });
+                    }
+                });
+            }
+            else
+            {
+                getActivity().runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        reportListView.stopRefresh();
 //						String prompt = SyncUtils.isSyncOnGoing? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
-						int prompt = SyncUtils.isSyncOnGoing? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
-						ViewUtils.showToast(getActivity(), prompt);
-					}
-				});
-			}			
-		}	
-		else
-		{
-			if (PhoneUtils.isNetworkConnected())
-			{
-				sendSubordinatesReportsRequest();
-			}
-			else
-			{
-				getActivity().runOnUiThread(new Runnable()
-				{
-					public void run()
-					{
-						reportListView.stopRefresh();
-						ViewUtils.showToast(getActivity(), R.string.error_refresh_network_unavailable);
-					}
-				});
-			}
-		}		
-	}
+                        int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
+                        ViewUtils.showToast(getActivity(), prompt);
+                    }
+                });
+            }
+        }
+        else
+        {
+            if (PhoneUtils.isNetworkConnected())
+            {
+                sendSubordinatesReportsRequest();
+            }
+            else
+            {
+                getActivity().runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        reportListView.stopRefresh();
+                        ViewUtils.showToast(getActivity(), R.string.error_refresh_network_unavailable);
+                    }
+                });
+            }
+        }
+    }
 }

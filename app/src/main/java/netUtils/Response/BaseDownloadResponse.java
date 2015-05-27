@@ -4,15 +4,15 @@ import java.io.InputStream;
 
 public class BaseDownloadResponse
 {
-	private InputStream inputStream;
+    private InputStream inputStream;
 
-	public BaseDownloadResponse(Object httpResponse)
-	{
-		inputStream = (InputStream)httpResponse;
-	}
+    public BaseDownloadResponse(Object httpResponse)
+    {
+        inputStream = (InputStream) httpResponse;
+    }
 
-	public InputStream getInputStream()
-	{
-		return inputStream;
-	}
+    public InputStream getInputStream()
+    {
+        return inputStream;
+    }
 }

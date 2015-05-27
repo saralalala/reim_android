@@ -11,7 +11,8 @@ import classes.widget.touchView.UrlTouchImageView;
 /**
  * Created by fabio on 28/05/14.
  */
-public class InfinityUrlAdapter extends BasePagerAdapter {
+public class InfinityUrlAdapter extends BasePagerAdapter
+{
 
     private int TOTAL_PAGES = -1;
     private int MIN_LOOPS = 1000;
@@ -20,42 +21,49 @@ public class InfinityUrlAdapter extends BasePagerAdapter {
     public int FIRST_PAGE = 1;
     private ImageView.ScaleType mScaleType = null;
 
-    public InfinityUrlAdapter(Context context, List<String> resources) {
+    public InfinityUrlAdapter(Context context, List<String> resources)
+    {
         super(context, resources);
         TOTAL_PAGES = resources.size();
         FIRST_PAGE = TOTAL_PAGES * MIN_LOOPS / 2;
     }
 
-
     @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+    public void setPrimaryItem(ViewGroup container, int position, Object object)
+    {
         super.setPrimaryItem(container, FIRST_PAGE/*position*/, object);
-        ((GalleryViewPager)container).mCurrentView = ((UrlTouchImageView)object).getImageView();
+        ((GalleryViewPager) container).mCurrentView = ((UrlTouchImageView) object).getImageView();
     }
 
     @Override
-    public Object instantiateItem(ViewGroup collection, int position) {
+    public Object instantiateItem(ViewGroup collection, int position)
+    {
 
         position = position % TOTAL_PAGES;
         final UrlTouchImageView iv = new UrlTouchImageView(mContext);
         iv.setUrl(mResources.get(position));
         iv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        if(mScaleType != null)
+        if (mScaleType != null)
+        {
             iv.setScaleType(mScaleType);
+        }
         collection.addView(iv, 0);
-    return iv;
+        return iv;
     }
 
     /**
      * Set Scaletype for ImageView
+     *
      * @param scaletype
      */
-    public void setScaleTypeForImageView(ImageView.ScaleType scaletype) {
+    public void setScaleTypeForImageView(ImageView.ScaleType scaletype)
+    {
         mScaleType = scaletype;
     }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return TOTAL_PAGES * MIN_LOOPS;
     }
 };

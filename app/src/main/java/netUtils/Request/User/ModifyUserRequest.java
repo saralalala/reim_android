@@ -13,18 +13,18 @@ import netUtils.request.BaseRequest;
 
 public class ModifyUserRequest extends BaseRequest
 {
-	public ModifyUserRequest(User user)
-	{
-		super();
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("email", user.getEmail()));
-		params.add(new BasicNameValuePair("phone", user.getPhone()));
-		params.add(new BasicNameValuePair("nickname", user.getNickname()));
-		setParams(params);
+    public ModifyUserRequest(User user)
+    {
+        super();
 
-		appendUrl(URLDef.URL_USER);
-	}
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("email", user.getEmail()));
+        params.add(new BasicNameValuePair("phone", user.getPhone()));
+        params.add(new BasicNameValuePair("nickname", user.getNickname()));
+        setParams(params);
+
+        appendUrl(URLDef.URL_USER);
+    }
 
     public ModifyUserRequest(User user, String verifyCode)
     {
@@ -38,8 +38,8 @@ public class ModifyUserRequest extends BaseRequest
         appendUrl(URLDef.URL_USER);
     }
 
-	public void sendRequest(HttpConnectionCallback callback)
-	{
-		doPut(callback);
-	}
+    public void sendRequest(HttpConnectionCallback callback)
+    {
+        doPut(callback);
+    }
 }

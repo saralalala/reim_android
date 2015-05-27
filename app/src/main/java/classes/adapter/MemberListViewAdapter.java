@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -26,26 +25,26 @@ import classes.widget.PinnedSectionListView;
 
 public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter
 {
-	private LayoutInflater layoutInflater;
-	private List<User> memberList;
-	private List<User> chosenList;
+    private LayoutInflater layoutInflater;
+    private List<User> memberList;
+    private List<User> chosenList;
     private HashMap<String, Integer> selector = new HashMap<>();
     private ArrayList<Integer> indexList = new ArrayList<>();
     private int selectedColor;
     private int unselectedColor;
-	
-	public MemberListViewAdapter(Context context, List<User> userList, List<User> chosenList)
-	{
-		this.layoutInflater = LayoutInflater.from(context);
-		this.memberList = new ArrayList<>(userList);
-        this.chosenList = chosenList == null || chosenList.isEmpty()? new ArrayList<User>() : new ArrayList<>(chosenList);
+
+    public MemberListViewAdapter(Context context, List<User> userList, List<User> chosenList)
+    {
+        this.layoutInflater = LayoutInflater.from(context);
+        this.memberList = new ArrayList<>(userList);
+        this.chosenList = chosenList == null || chosenList.isEmpty() ? new ArrayList<User>() : new ArrayList<>(chosenList);
         this.selectedColor = ViewUtils.getColor(R.color.major_dark);
         this.unselectedColor = ViewUtils.getColor(R.color.font_major_dark);
         initData();
-	}
+    }
 
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         User user = memberList.get(position);
 
         if (indexList.contains(position))
@@ -61,7 +60,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
 
             boolean isChosen = chosenList.contains(user);
 
-            int color = isChosen? R.color.list_item_selected : R.color.list_item_unselected;
+            int color = isChosen ? R.color.list_item_selected : R.color.list_item_unselected;
             view.setBackgroundResource(color);
 
             CircleImageView imageView = (CircleImageView) view.findViewById(R.id.avatarImageView);
@@ -78,26 +77,26 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
                 nicknameTextView.setText(user.getNickname());
             }
 
-            color = isChosen? selectedColor : unselectedColor;
+            color = isChosen ? selectedColor : unselectedColor;
             nicknameTextView.setTextColor(color);
             return view;
         }
-	}
-	
-	public int getCount()
-	{
-		return memberList.size();
-	}
+    }
 
-	public User getItem(int position)
-	{
-		return memberList.get(position);
-	}
+    public int getCount()
+    {
+        return memberList.size();
+    }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
+    public User getItem(int position)
+    {
+        return memberList.get(position);
+    }
+
+    public long getItemId(int position)
+    {
+        return position;
+    }
 
     private void initData()
     {
@@ -139,7 +138,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
         int count = 0;
         selector.clear();
         memberList.clear();
-        for (Map.Entry<String, ArrayList<User>> entry: indexMap.entrySet())
+        for (Map.Entry<String, ArrayList<User>> entry : indexMap.entrySet())
         {
             String key = entry.getKey();
             ArrayList<User> values = entry.getValue();
@@ -177,8 +176,8 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
         chosenList.addAll(userList);
     }
 
-	public void setCheck(int position)
-	{
+    public void setCheck(int position)
+    {
         if (!indexList.contains(position))
         {
             User user = memberList.get(position);
@@ -191,7 +190,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
                 chosenList.add(user);
             }
         }
-	}
+    }
 
     public List<User> getChosenList()
     {
@@ -210,7 +209,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
 
     public int getItemViewType(int position)
     {
-        return indexList.contains(position)? 1 : 0;
+        return indexList.contains(position) ? 1 : 0;
     }
 
     public boolean isItemViewTypePinned(int viewType)

@@ -33,60 +33,63 @@ public class ReimApplication extends Application
     public static int TAB_STATISTICS_OTHERS = 1;
     public static int TAB_ME = 3;
 
-	public static Typeface TypeFaceYaHei;
-	public static Typeface TypeFaceAleoLight;
+    public static Typeface TypeFaceYaHei;
+    public static Typeface TypeFaceAleoLight;
 
     public static int GUIDE_VERSION = 1;
 
-	private static Context context;
-	
-	private static int tabIndex = TAB_REIM;
-	private static int reportTabIndex = TAB_REPORT_MINE;
+    private static Context context;
+
+    private static int tabIndex = TAB_REIM;
+    private static int reportTabIndex = TAB_REPORT_MINE;
     private static int statTabIndex = TAB_STATISTICS_MINE;
     private static List<Integer> mineUnreadList = new ArrayList<>();
     private static List<Integer> othersUnreadList = new ArrayList<>();
     private static int unreadMessagesCount;
     private static boolean hasUnreadMessages;
-	
-	public void onCreate()
-	{
-		super.onCreate();
 
-		initPushService();
-		initData();
-		initBeeCloud();
+    public void onCreate()
+    {
+        super.onCreate();
+
+        initPushService();
+        initData();
+        initBeeCloud();
         WeChatUtils.regToWX();
-		MobclickAgent.openActivityDurationTrack(false);
-		createDirectories();
-		saveCategoryIcon();
+        MobclickAgent.openActivityDurationTrack(false);
+        createDirectories();
+        saveCategoryIcon();
 
-		System.out.println("**************** Application Started *****************");
-		System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
+        System.out.println("**************** Application Started *****************");
+        System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
 //		System.out.println(getDeviceInfo(this));
-	}
+    }
 
-	public static int getTabIndex()
-	{
-		return tabIndex;
-	}
-	public static void setTabIndex(int tabIndex)
-	{
-		ReimApplication.tabIndex = tabIndex;
-	}
+    public static int getTabIndex()
+    {
+        return tabIndex;
+    }
 
-	public static int getReportTabIndex()
-	{
-		return reportTabIndex;
-	}
-	public static void setReportTabIndex(int reportTabIndex)
-	{
-		ReimApplication.reportTabIndex = reportTabIndex;
-	}
+    public static void setTabIndex(int tabIndex)
+    {
+        ReimApplication.tabIndex = tabIndex;
+    }
+
+    public static int getReportTabIndex()
+    {
+        return reportTabIndex;
+    }
+
+    public static void setReportTabIndex(int reportTabIndex)
+    {
+        ReimApplication.reportTabIndex = reportTabIndex;
+    }
 
     public static int getStatTabIndex()
     {
         return statTabIndex;
     }
+
     public static void setStatTabIndex(int statTabIndex)
     {
         ReimApplication.statTabIndex = statTabIndex;
@@ -96,6 +99,7 @@ public class ReimApplication extends Application
     {
         return mineUnreadList;
     }
+
     public static void setMineUnreadList(List<Integer> mineUnreadList)
     {
         ReimApplication.mineUnreadList = mineUnreadList;
@@ -105,6 +109,7 @@ public class ReimApplication extends Application
     {
         return othersUnreadList;
     }
+
     public static void setOthersUnreadList(List<Integer> othersUnreadList)
     {
         ReimApplication.othersUnreadList = othersUnreadList;
@@ -114,6 +119,7 @@ public class ReimApplication extends Application
     {
         return unreadMessagesCount;
     }
+
     public static void setUnreadMessagesCount(int unreadMessagesCount)
     {
         ReimApplication.unreadMessagesCount = unreadMessagesCount;
@@ -123,163 +129,163 @@ public class ReimApplication extends Application
     {
         return hasUnreadMessages;
     }
+
     public static void setHasUnreadMessages(boolean hasUnreadMessages)
     {
         ReimApplication.hasUnreadMessages = hasUnreadMessages;
     }
 
-	public static String getDeviceInfo(Context context)
-	{
-		try
-		{
-			org.json.JSONObject json = new org.json.JSONObject();
-			android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
-					.getSystemService(Context.TELEPHONY_SERVICE);
+    public static String getDeviceInfo(Context context)
+    {
+        try
+        {
+            org.json.JSONObject json = new org.json.JSONObject();
+            android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
 
-			String device_id = tm.getDeviceId();
+            String device_id = tm.getDeviceId();
 
-			android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) context
-					.getSystemService(Context.WIFI_SERVICE);
+            android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) context
+                    .getSystemService(Context.WIFI_SERVICE);
 
-			String mac = wifi.getConnectionInfo().getMacAddress();
-			json.put("mac", mac);
+            String mac = wifi.getConnectionInfo().getMacAddress();
+            json.put("mac", mac);
 
-			if (TextUtils.isEmpty(device_id))
-			{
-				device_id = mac;
-			}
+            if (TextUtils.isEmpty(device_id))
+            {
+                device_id = mac;
+            }
 
-			if (TextUtils.isEmpty(device_id))
-			{
-				device_id = android.provider.Settings.Secure.getString(
-						context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-			}
+            if (TextUtils.isEmpty(device_id))
+            {
+                device_id = android.provider.Settings.Secure.getString(
+                        context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+            }
 
-			json.put("device_id", device_id);
+            json.put("device_id", device_id);
 
-			return json.toString();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return null;
-	}
+            return json.toString();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	public static Context getContext()
-	{
-		return context;
-	}
+    public static Context getContext()
+    {
+        return context;
+    }
 
     private void createDirectories()
-	{
-		try
-		{
-			AppPreference appPreference = AppPreference.getAppPreference();			
-			File dir = new File(appPreference.getAppDirectory());
-			if (!dir.exists())
-			{
-				dir.mkdir();
-			}
-			dir = new File(appPreference.getAppImageDirectory());
-			if (!dir.exists())
-			{
-				dir.mkdir();
-				File nomediaFile = new File(dir, ".nomedia");
-				nomediaFile.createNewFile();
-			}
-			dir = new File(appPreference.getAvatarImageDirectory());
-			if (!dir.exists())
-			{
-				dir.mkdir();
-				File nomediaFile = new File(dir, ".nomedia");
-				nomediaFile.createNewFile();
-				File tempAvatarFile = new File(dir, "temp.jpg");
-				tempAvatarFile.createNewFile();
-			}
-			dir = new File(appPreference.getInvoiceImageDirectory());
-			if (!dir.exists())
-			{
-				dir.mkdir();
-				File nomediaFile = new File(dir, ".nomedia");
-				nomediaFile.createNewFile();
-				File tempInvoiceFile = new File(dir, "temp.jpg");
-				tempInvoiceFile.createNewFile();
-			}
-			dir = new File(appPreference.getIconImageDirectory());
-			if (!dir.exists())
-			{
-				dir.mkdir();
-				File nomediaFile = new File(dir, ".nomedia");
-				nomediaFile.createNewFile();
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+    {
+        try
+        {
+            AppPreference appPreference = AppPreference.getAppPreference();
+            File dir = new File(appPreference.getAppDirectory());
+            if (!dir.exists())
+            {
+                dir.mkdir();
+            }
+            dir = new File(appPreference.getAppImageDirectory());
+            if (!dir.exists())
+            {
+                dir.mkdir();
+                File nomediaFile = new File(dir, ".nomedia");
+                nomediaFile.createNewFile();
+            }
+            dir = new File(appPreference.getAvatarImageDirectory());
+            if (!dir.exists())
+            {
+                dir.mkdir();
+                File nomediaFile = new File(dir, ".nomedia");
+                nomediaFile.createNewFile();
+                File tempAvatarFile = new File(dir, "temp.jpg");
+                tempAvatarFile.createNewFile();
+            }
+            dir = new File(appPreference.getInvoiceImageDirectory());
+            if (!dir.exists())
+            {
+                dir.mkdir();
+                File nomediaFile = new File(dir, ".nomedia");
+                nomediaFile.createNewFile();
+                File tempInvoiceFile = new File(dir, "temp.jpg");
+                tempInvoiceFile.createNewFile();
+            }
+            dir = new File(appPreference.getIconImageDirectory());
+            if (!dir.exists())
+            {
+                dir.mkdir();
+                File nomediaFile = new File(dir, ".nomedia");
+                nomediaFile.createNewFile();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-	private void saveCategoryIcon()
-	{
-		List<Integer> iconList= new ArrayList<>();
-		iconList.add(R.drawable.icon_food);
-		iconList.add(R.drawable.icon_transport);
-		iconList.add(R.drawable.icon_office_supplies);
-		iconList.add(R.drawable.icon_business_development);
-		iconList.add(R.drawable.icon_marketing);
-		iconList.add(R.drawable.icon_recruiting);
-		iconList.add(R.drawable.icon_travel);
-		iconList.add(R.drawable.icon_operating);
-		iconList.add(R.drawable.icon_entertainment);
-		iconList.add(R.drawable.icon_others);
-		
-		for (int i = 0; i < iconList.size(); i++)
-		{
-			File file = new File(PhoneUtils.getIconFilePath(i + 1));
-			if (!file.exists())
-			{
-				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), iconList.get(i));
-				PhoneUtils.saveIconToFile(bitmap, i + 1);				
-			}
-		}		
-	}
-	
-	private void initPushService()
-	{
-		AVOSCloud.initialize(this, "25tdcbg3l8kp6yeqa4iqju6g788saf4xlseat1dxma3pdzfc",
-				"yc9e5h624ch14cgavj0r6b5yxq7fmn3y2nlm3hliq763syr1");
-		
-		PushService.subscribe(this, "public", MainActivity.class);
-		AVInstallation.getCurrentInstallation().saveInBackground();		
-	}
-	
-	private void initData()
-	{
-		context = getApplicationContext();
-		TypeFaceYaHei = Typeface.createFromAsset(getAssets(), "fonts/YaHei.ttf");
-		TypeFaceAleoLight = Typeface.createFromAsset(getAssets(), "fonts/Aleo_Light.ttf");
-		
-		try
-		{
-			Field field = Typeface.class.getDeclaredField("SERIF");
-			field.setAccessible(true);
-			field.set(null, TypeFaceYaHei);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+    private void saveCategoryIcon()
+    {
+        List<Integer> iconList = new ArrayList<>();
+        iconList.add(R.drawable.icon_food);
+        iconList.add(R.drawable.icon_transport);
+        iconList.add(R.drawable.icon_office_supplies);
+        iconList.add(R.drawable.icon_business_development);
+        iconList.add(R.drawable.icon_marketing);
+        iconList.add(R.drawable.icon_recruiting);
+        iconList.add(R.drawable.icon_travel);
+        iconList.add(R.drawable.icon_operating);
+        iconList.add(R.drawable.icon_entertainment);
+        iconList.add(R.drawable.icon_others);
 
-		ReimProgressDialog.init(context);
-		
-		AppPreference.createAppPreference(getApplicationContext());
-		DBManager.createDBManager(getApplicationContext());
-	}
+        for (int i = 0; i < iconList.size(); i++)
+        {
+            File file = new File(PhoneUtils.getIconFilePath(i + 1));
+            if (!file.exists())
+            {
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), iconList.get(i));
+                PhoneUtils.saveIconToFile(bitmap, i + 1);
+            }
+        }
+    }
 
-	private void initBeeCloud()
-	{
-		BeeCloud.setAppKey("02c6af87-8d5b-4d74-b086-d38359c297f3", this);
-	}
+    private void initPushService()
+    {
+        AVOSCloud.initialize(this, "25tdcbg3l8kp6yeqa4iqju6g788saf4xlseat1dxma3pdzfc",
+                             "yc9e5h624ch14cgavj0r6b5yxq7fmn3y2nlm3hliq763syr1");
 
+        PushService.subscribe(this, "public", MainActivity.class);
+        AVInstallation.getCurrentInstallation().saveInBackground();
+    }
+
+    private void initData()
+    {
+        context = getApplicationContext();
+        TypeFaceYaHei = Typeface.createFromAsset(getAssets(), "fonts/YaHei.ttf");
+        TypeFaceAleoLight = Typeface.createFromAsset(getAssets(), "fonts/Aleo_Light.ttf");
+
+        try
+        {
+            Field field = Typeface.class.getDeclaredField("SERIF");
+            field.setAccessible(true);
+            field.set(null, TypeFaceYaHei);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        ReimProgressDialog.init(context);
+
+        AppPreference.createAppPreference(getApplicationContext());
+        DBManager.createDBManager(getApplicationContext());
+    }
+
+    private void initBeeCloud()
+    {
+        BeeCloud.setAppKey("02c6af87-8d5b-4d74-b086-d38359c297f3", this);
+    }
 }

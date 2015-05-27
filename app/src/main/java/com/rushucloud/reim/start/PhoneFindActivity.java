@@ -26,61 +26,61 @@ import netUtils.request.user.ForgotPasswordRequest;
 import netUtils.response.user.ForgotPasswordResponse;
 
 public class PhoneFindActivity extends Activity
-{	
-	private ClearEditText phoneEditText;
-	private EditText codeEditText;
-	private Button acquireCodeButton;
+{
+    private ClearEditText phoneEditText;
+    private EditText codeEditText;
+    private Button acquireCodeButton;
 
-	private int waitingTime;
-	private Thread thread;
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_start_find_by_phone);
-		initView();
-	}
+    private int waitingTime;
+    private Thread thread;
 
-	protected void onResume()
-	{
-		super.onResume();
-		MobclickAgent.onPageStart("PhoneFindActivity");		
-		MobclickAgent.onResume(this);
-		ReimProgressDialog.setContext(this);
-	}
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_start_find_by_phone);
+        initView();
+    }
 
-	protected void onPause()
-	{
-		super.onPause();
-		MobclickAgent.onPageEnd("PhoneFindActivity");
-		MobclickAgent.onPause(this);
-	}
-	
-	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+    protected void onResume()
+    {
+        super.onResume();
+        MobclickAgent.onPageStart("PhoneFindActivity");
+        MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        MobclickAgent.onPageEnd("PhoneFindActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             goBack();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     private void initView()
     {
-		ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-		backImageView.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+        ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
+        backImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 goBack();
-			}
-		});
-    	
-		phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
+            }
+        });
+
+        phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
         ViewUtils.requestFocus(this, phoneEditText);
-		
-    	codeEditText = (EditText) findViewById(R.id.codeEditText);
-    	codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
+
+        codeEditText = (EditText) findViewById(R.id.codeEditText);
+        codeEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
         codeEditText.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)
@@ -92,49 +92,49 @@ public class PhoneFindActivity extends Activity
                 return false;
             }
         });
-    	
-    	acquireCodeButton = (Button) findViewById(R.id.acquireCodeButton);
-    	acquireCodeButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				MobclickAgent.onEvent(PhoneFindActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL-CAPTCHA");
-				
-				String phoneNumber = phoneEditText.getText().toString();
-				if (!PhoneUtils.isNetworkConnected())
-				{
-					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_request_network_unavailable);
-				}
-				else if (!Utils.isPhone(phoneNumber))
-				{
-					ViewUtils.showToast(PhoneFindActivity.this, R.string.error_phone_wrong_format);
+
+        acquireCodeButton = (Button) findViewById(R.id.acquireCodeButton);
+        acquireCodeButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                MobclickAgent.onEvent(PhoneFindActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL-CAPTCHA");
+
+                String phoneNumber = phoneEditText.getText().toString();
+                if (!PhoneUtils.isNetworkConnected())
+                {
+                    ViewUtils.showToast(PhoneFindActivity.this, R.string.error_request_network_unavailable);
+                }
+                else if (!Utils.isPhone(phoneNumber))
+                {
+                    ViewUtils.showToast(PhoneFindActivity.this, R.string.error_phone_wrong_format);
                     ViewUtils.requestFocus(PhoneFindActivity.this, phoneEditText);
-				}
-				else
-				{
-					hideSoftKeyboard();
-					sendTextMessage();
-				}
-			}
-		});
-    	
-    	Button nextButton = (Button) findViewById(R.id.nextButton);
-    	nextButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
+                }
+                else
+                {
+                    hideSoftKeyboard();
+                    sendTextMessage();
+                }
+            }
+        });
+
+        Button nextButton = (Button) findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 verifyCode();
-			}
-		});
-		
-    	RelativeLayout baseLayout=(RelativeLayout) findViewById(R.id.baseLayout);
-    	baseLayout.setOnClickListener(new View.OnClickListener()
-    	{
-			public void onClick(View v)
-			{
-				hideSoftKeyboard();
-			}
-		});
+            }
+        });
+
+        RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
+        baseLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+            }
+        });
     }
 
     private void verifyCode()
@@ -154,50 +154,50 @@ public class PhoneFindActivity extends Activity
     private void sendTextMessage()
     {
         final String second = ViewUtils.getString(R.string.second);
-		waitingTime = 60;
-		acquireCodeButton.setEnabled(false);
-		acquireCodeButton.setText(waitingTime + second);
-		thread = new Thread(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					while (waitingTime > 0)
-					{
-						java.lang.Thread.sleep(1000);
-						waitingTime -= 1;
-						runOnUiThread(new Runnable()
-						{
-							public void run()
-							{
-								acquireCodeButton.setText(waitingTime + second);
-							}
-						});
-					}
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-				finally
-				{
-					runOnUiThread(new Runnable()
-					{
-						public void run()
-						{
-							acquireCodeButton.setText(R.string.acquire_code);
-							acquireCodeButton.setEnabled(true);
-						}
-					});
-				}
-			}
-		});
-		thread.start();
+        waitingTime = 60;
+        acquireCodeButton.setEnabled(false);
+        acquireCodeButton.setText(waitingTime + second);
+        thread = new Thread(new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    while (waitingTime > 0)
+                    {
+                        java.lang.Thread.sleep(1000);
+                        waitingTime -= 1;
+                        runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                acquireCodeButton.setText(waitingTime + second);
+                            }
+                        });
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                finally
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            acquireCodeButton.setText(R.string.acquire_code);
+                            acquireCodeButton.setEnabled(true);
+                        }
+                    });
+                }
+            }
+        });
+        thread.start();
 
-		ReimProgressDialog.show();
-		ForgotPasswordRequest request = new ForgotPasswordRequest(1, phoneEditText.getText().toString());
-		request.sendRequest(new HttpConnectionCallback()
+        ReimProgressDialog.show();
+        ForgotPasswordRequest request = new ForgotPasswordRequest(1, phoneEditText.getText().toString());
+        request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
@@ -265,12 +265,12 @@ public class PhoneFindActivity extends Activity
             }
         });
     }
-	
+
     private void hideSoftKeyboard()
     {
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-		imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);	
-		imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
     }
 
     private void goBack()

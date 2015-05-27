@@ -5,17 +5,17 @@ import netUtils.response.BaseResponse;
 
 public class GetMessageResponse extends BaseResponse
 {
-	private Message message;
+    private Message message;
 
-	public GetMessageResponse(Object httpResponse)
-	{
-		super(httpResponse);
-	}
+    public GetMessageResponse(Object httpResponse)
+    {
+        super(httpResponse);
+    }
 
-	protected void constructData()
-	{
+    protected void constructData()
+    {
         message = new Message(getDataObject());
-	}
+    }
 
     public Message getMessage()
     {
