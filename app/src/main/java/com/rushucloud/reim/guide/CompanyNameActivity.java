@@ -24,7 +24,7 @@ import classes.model.User;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 
-public class CreateCompanyActivity extends Activity
+public class CompanyNameActivity extends Activity
 {
     private ClearEditText companyEditText;
 
@@ -95,7 +95,7 @@ public class CreateCompanyActivity extends Activity
                 companyName = companyEditText.getText().toString();
                 if (companyName.isEmpty())
                 {
-                    ViewUtils.showToast(CreateCompanyActivity.this, R.string.error_company_name_empty);
+                    ViewUtils.showToast(CompanyNameActivity.this, R.string.error_company_name_empty);
                 }
                 else
                 {
@@ -104,9 +104,9 @@ public class CreateCompanyActivity extends Activity
                     bundle.putStringArrayList("inputList", inputList);
                     bundle.putStringArrayList("inputChosenList", inputChosenList);
                     bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
-                    Intent intent = new Intent(CreateCompanyActivity.this, ContactActivity.class);
+                    Intent intent = new Intent(CompanyNameActivity.this, ContactActivity.class);
                     intent.putExtras(bundle);
-                    ViewUtils.goForwardAndFinish(CreateCompanyActivity.this, intent);
+                    ViewUtils.goForwardAndFinish(CompanyNameActivity.this, intent);
                 }
             }
         });

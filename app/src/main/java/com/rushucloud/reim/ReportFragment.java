@@ -1349,13 +1349,16 @@ public class ReportFragment extends Fragment
             {
                 public void execute()
                 {
-                    getActivity().runOnUiThread(new Runnable()
+                    if (getActivity() != null)
                     {
-                        public void run()
+                        getActivity().runOnUiThread(new Runnable()
                         {
-                            refreshReportListView(true);
-                        }
-                    });
+                            public void run()
+                            {
+                                refreshReportListView(true);
+                            }
+                        });
+                    }
 
                     SyncUtils.syncAllToServer(new SyncDataCallback()
                     {

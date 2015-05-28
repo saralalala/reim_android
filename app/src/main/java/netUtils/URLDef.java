@@ -46,6 +46,8 @@ public class URLDef
     public static final String URL_CODE = "vcode";
     public static final String URL_SET_ADMIN = "set_admin";
 
-    public static final String URL_MAIN_PAGE = "https://www.cloudbaoxiao.com";
+    public static final String URL_SHARE_REDIRECT_URI_PREFIX = "https://admin.cloudbaoxiao.com/pub/oauth/";
+    public static final String URL_SHARE = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx068349d5d3a73855&redirect_uri=%1$s" +
+                                            "&response_type=code&scope=snsapi_userinfo&state=reim_debug#wechat_redirect";
     public static final String URL_DOWNLOAD_PAGE = "https://admin.cloudbaoxiao.com/install/index";
 }

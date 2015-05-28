@@ -176,7 +176,7 @@ public class SetNicknameActivity extends Activity
                                 bundle.putStringArrayList("inputList", inputList);
                                 bundle.putStringArrayList("inputChosenList", inputChosenList);
                                 bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
-                                Intent intent = new Intent(SetNicknameActivity.this, CreateCompanyActivity.class);
+                                Intent intent = new Intent(SetNicknameActivity.this, CompanyNameActivity.class);
                                 intent.putExtras(bundle);
                                 ViewUtils.goForwardAndFinish(SetNicknameActivity.this, intent);
                             }
