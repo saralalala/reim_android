@@ -15,7 +15,7 @@ public class WeChatAccessTokenRequest extends BaseRequest
 {
     public WeChatAccessTokenRequest(String code)
     {
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("appid", WeChatUtils.APP_ID));
         params.add(new BasicNameValuePair("secret", WeChatUtils.APP_SECRET));
         params.add(new BasicNameValuePair("code", code));

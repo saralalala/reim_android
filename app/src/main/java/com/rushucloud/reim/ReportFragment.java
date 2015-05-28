@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import classes.adapter.OthersReportListViewAdapter;
 import classes.adapter.ReportListViewAdapter;
 import classes.adapter.ReportTagGridViewAdapter;
 import classes.model.Report;
@@ -88,8 +87,7 @@ public class ReportFragment extends Fragment implements OnClickListener
     private TextView othersBadgeTextView;
 
     private XListView reportListView;
-    private ReportListViewAdapter mineAdapter;
-    private OthersReportListViewAdapter othersAdapter;
+    private ReportListViewAdapter adapter;
     private PopupWindow operationPopupWindow;
     private Button exportButton;
     private Button deleteButton;
@@ -244,11 +242,10 @@ public class ReportFragment extends Fragment implements OnClickListener
 
     private void initListView()
     {
-        mineAdapter = new ReportListViewAdapter(getActivity(), showMineList);
-        othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);
+        adapter = new ReportListViewAdapter(getActivity(), showMineList);
 
-        reportListView = (XListView) getActivity().findViewById(R.id.myListView);
-        reportListView.setAdapter(mineAdapter);
+        reportListView = (XListView) getActivity().findViewById(R.id.reportListView);
+        reportListView.setAdapter(adapter);
         reportListView.setXListViewListener(new IXListViewListener()
         {
             public void onRefresh()
@@ -652,12 +649,12 @@ public class ReportFragment extends Fragment implements OnClickListener
         }
         else
         {
+            myTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
+            othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
             if (PhoneUtils.isNetworkConnected() && Utils.getCurrentTime() - appPreference.getLastGetOthersReportTime() > GET_DATA_INTERVAL)
             {
                 sendSubordinatesReportsRequest();
             }
-            myTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
-            othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
         }
         refreshReportListView(readDatabase);
     }
@@ -928,9 +925,10 @@ public class ReportFragment extends Fragment implements OnClickListener
             }
             showMineList.clear();
             showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
-            mineAdapter.setReportList(showMineList);
-            mineAdapter.setUnreadList(ReimApplication.getMineUnreadList());
-            reportListView.setAdapter(mineAdapter);
+            adapter.setReportList(showMineList);
+            adapter.setUnreadList(ReimApplication.getMineUnreadList());
+            adapter.setTabIndex(ReimApplication.TAB_REPORT_MINE);
+            adapter.notifyDataSetChanged();
 
             int visibility = !mineFilterStatusList.isEmpty() && showMineList.isEmpty() ? View.VISIBLE : View.GONE;
             noResultLayout.setVisibility(visibility);
@@ -955,10 +953,10 @@ public class ReportFragment extends Fragment implements OnClickListener
                 showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
             }
 
-            othersAdapter.setReportList(showOthersList);
-            othersAdapter.setUnreadList(ReimApplication.getOthersUnreadList());
-            othersAdapter.notifyDataSetChanged();
-            reportListView.setAdapter(othersAdapter);
+            adapter.setReportList(showOthersList);
+            adapter.setUnreadList(ReimApplication.getOthersUnreadList());
+            adapter.setTabIndex(ReimApplication.TAB_REPORT_OTHERS);
+            adapter.notifyDataSetChanged();
 
             int visibility = !othersFilterStatusList.isEmpty() && showOthersList.isEmpty() ? View.VISIBLE : View.GONE;
             noResultLayout.setVisibility(visibility);

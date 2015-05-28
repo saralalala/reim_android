@@ -24,7 +24,7 @@ public class ModifyBankAccountRequest extends BaseRequest
         params.add(new BasicNameValuePair("account", bankAccount.getName()));
         setParams(params);
 
-        appendUrl(URLDef.URL_CATEGORY);
+        appendUrl(URLDef.URL_BANK);
         appendUrl(bankAccount.getServerID());
     }
 

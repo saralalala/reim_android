@@ -13,6 +13,7 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 
 import classes.utils.ViewUtils;
 import classes.utils.WeChatUtils;
+import classes.widget.ReimProgressDialog;
 
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler
 {

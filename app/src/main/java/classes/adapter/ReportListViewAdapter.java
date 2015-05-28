@@ -25,6 +25,7 @@ public class ReportListViewAdapter extends BaseAdapter
     private DBManager dbManager;
     private List<Report> reportList;
     private List<Integer> unreadList;
+    private int tabIndex = ReimApplication.TAB_REPORT_MINE;
 
     public ReportListViewAdapter(Context context, List<Report> reports)
     {
@@ -37,36 +38,105 @@ public class ReportListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        if (convertView == null)
+        if (tabIndex == ReimApplication.TAB_REPORT_MINE)
         {
-            convertView = layoutInflater.inflate(R.layout.list_report, parent, false);
+            View view = layoutInflater.inflate(R.layout.list_report, parent, false);
+
+            TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
+            TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
+            TextView dateTextView = (TextView) view.findViewById(R.id.dateTextView);
+            TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+            ImageView tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
+
+            Report report = reportList.get(position);
+
+            statusTextView.setText(report.getStatusString());
+            statusTextView.setBackgroundResource(report.getStatusBackground());
+
+            String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
+            titleTextView.setText(title);
+
+            String date = Utils.secondToStringUpToDay(report.getCreatedDate());
+            dateTextView.setText(date.isEmpty() ? context.getString(R.string.not_available) : date);
+
+            double amount = dbManager.getReportAmount(report.getLocalID());
+            amountTextView.setText(Utils.formatDouble(amount));
+            amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+
+            int visibility = unreadList.contains(report.getServerID()) ? View.VISIBLE : View.INVISIBLE;
+            tipImageView.setVisibility(visibility);
+
+            return view;
         }
+        else
+        {
+            Report report = reportList.get(position);
+            if (!report.getSectionName().isEmpty())
+            {
+                if (report.getSectionName().equals(context.getString(R.string.pending)))
+                {
+                    View view = layoutInflater.inflate(R.layout.list_header, parent, false);
 
-        TextView statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.titleTextView);
-        TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
-        TextView amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
-        ImageView tipImageView = (ImageView) convertView.findViewById(R.id.tipImageView);
+                    TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
+                    headerTextView.setText(R.string.pending);
 
-        Report report = reportList.get(position);
+                    return view;
+                }
+                else if (report.getSectionName().equals(context.getString(R.string.no_pending_reports)))
+                {
+                    return layoutInflater.inflate(R.layout.list_no_pending_report, parent, false);
+                }
+                else if (report.getSectionName().equals(context.getString(R.string.processed)))
+                {
+                    View view = layoutInflater.inflate(R.layout.list_header, parent, false);
 
-        statusTextView.setText(report.getStatusString());
-        statusTextView.setBackgroundResource(report.getStatusBackground());
+                    TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
+                    headerTextView.setText(R.string.processed);
 
-        String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
-        titleTextView.setText(title);
+                    return view;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                View view = layoutInflater.inflate(R.layout.list_report, parent, false);
 
-        String date = Utils.secondToStringUpToDay(report.getCreatedDate());
-        dateTextView.setText(date.isEmpty() ? context.getString(R.string.not_available) : date);
+                TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
+                TextView ccTextView = (TextView) view.findViewById(R.id.ccTextView);
+                TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);
+                TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
+                TextView dateTextView = (TextView) view.findViewById(R.id.dateTextView);
+                TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                ImageView tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
 
-        double amount = dbManager.getReportAmount(report.getLocalID());
-        amountTextView.setText(Utils.formatDouble(amount));
-        amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                statusTextView.setText(report.getStatusString());
+                statusTextView.setBackgroundResource(report.getStatusBackground());
 
-        int visibility = unreadList.contains(report.getServerID()) ? View.VISIBLE : View.INVISIBLE;
-        tipImageView.setVisibility(visibility);
+                int visibility = report.isCC() ? View.VISIBLE : View.GONE;
+                ccTextView.setVisibility(visibility);
 
-        return convertView;
+                String nickname = report.getSender() == null ? "" : report.getSender().getNickname();
+                senderTextView.setText(context.getString(R.string.prompt_sender) + nickname);
+
+                String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
+                titleTextView.setText(title);
+
+                String date = Utils.secondToStringUpToDay(report.getCreatedDate());
+                dateTextView.setText(date.isEmpty() ? context.getString(R.string.not_available) : date);
+
+                double amount = Double.valueOf(report.getAmount());
+                amountTextView.setText(Utils.formatDouble(amount));
+                amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+
+                visibility = unreadList.contains(report.getServerID()) ? View.VISIBLE : View.INVISIBLE;
+                tipImageView.setVisibility(visibility);
+
+                return view;
+            }
+        }
     }
 
     public int getCount()
@@ -94,5 +164,10 @@ public class ReportListViewAdapter extends BaseAdapter
     {
         unreadList.clear();
         unreadList.addAll(unreads);
+    }
+
+    public void setTabIndex(int tabIndex)
+    {
+        this.tabIndex = tabIndex;
     }
 }

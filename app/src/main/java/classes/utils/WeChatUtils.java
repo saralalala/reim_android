@@ -86,7 +86,6 @@ public class WeChatUtils
 
     public static void sendAccessTokenRequest(String code)
     {
-        ReimProgressDialog.show();
         WeChatAccessTokenRequest request = new WeChatAccessTokenRequest(code);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -95,6 +94,13 @@ public class WeChatUtils
                 WeChatAccessTokenResponse response = new WeChatAccessTokenResponse(httpResponse);
                 if (response.getStatus())
                 {
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.show();
+                        }
+                    });
                     sendWeChatOAuthRequest(response.getAccessToken(), response.getOpenID(), response.getUnionID());
                 }
                 else
@@ -103,7 +109,6 @@ public class WeChatUtils
                     {
                         public void run()
                         {
-                            ReimProgressDialog.dismiss();
                             ViewUtils.showToast(activity, R.string.error_wechat_auth);
                         }
                     });

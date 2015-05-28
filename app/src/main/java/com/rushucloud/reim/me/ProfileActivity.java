@@ -389,7 +389,7 @@ public class ProfileActivity extends Activity
         else
         {
             passwordLayout.setVisibility(View.VISIBLE);
-            int text = appPreference.hasPassword() ? R.string.change_password : R.string.set_password;
+            int text = appPreference.hasPassword()? R.string.change_password : R.string.set_password;
             passwordTextView.setText(text);
         }
     }

@@ -101,12 +101,17 @@ public class GuideStartActivity extends Activity
 
     private void goBack()
     {
+        AppPreference appPreference = AppPreference.getAppPreference();
         Intent intent = new Intent(GuideStartActivity.this, SignInActivity.class);
-        if (Utils.isEmailOrPhone(AppPreference.getAppPreference().getUsername()))
+        if (Utils.isEmailOrPhone(appPreference.getUsername()))
         {
-            intent.putExtra("username", AppPreference.getAppPreference().getUsername());
-            intent.putExtra("password", AppPreference.getAppPreference().getPassword());
+            intent.putExtra("username", appPreference.getUsername());
+            intent.putExtra("password", appPreference.getPassword());
         }
+        appPreference.setUsername("");
+        appPreference.setPassword("");
+        appPreference.setHasPassword(true);
+        appPreference.saveAppPreference();
         ViewUtils.goBackWithIntent(GuideStartActivity.this, intent);
     }
 }

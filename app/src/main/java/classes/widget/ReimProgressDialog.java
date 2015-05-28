@@ -46,6 +46,7 @@ public class ReimProgressDialog
         {
             animationDrawable.start();
         }
+
         dialog.show();
     }
 
