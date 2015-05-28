@@ -17,6 +17,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
@@ -55,11 +56,6 @@ public abstract class BaseRequest
         params = null;
     }
 
-    protected String getUrl()
-    {
-        return url;
-    }
-
     protected void setUrl(String url)
     {
         this.url = url;
@@ -80,9 +76,14 @@ public abstract class BaseRequest
         this.url += "/" + suffix;
     }
 
+    protected void addParams(String key, String value)
+    {
+        this.params.add(new BasicNameValuePair(key, value));
+    }
+
     protected void setParams(List<NameValuePair> params)
     {
-        this.params = new ArrayList<NameValuePair>(params);
+        this.params = new ArrayList<>(params);
     }
 
     public abstract void sendRequest(HttpConnectionCallback callback);

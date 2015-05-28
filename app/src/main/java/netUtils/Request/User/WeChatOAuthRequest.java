@@ -16,7 +16,7 @@ public class WeChatOAuthRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("token", accessToken));
         params.add(new BasicNameValuePair("openid", openID));
         params.add(new BasicNameValuePair("unionid", unionID));
