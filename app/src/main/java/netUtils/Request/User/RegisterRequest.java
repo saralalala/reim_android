@@ -1,11 +1,5 @@
 package netUtils.request.user;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import classes.model.User;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
@@ -17,10 +11,8 @@ public class RegisterRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("email", user.getEmail()));
-        params.add(new BasicNameValuePair("password", user.getPassword()));
-        setParams(params);
+        addParams("email", user.getEmail());
+        addParams("password", user.getPassword());
 
         appendUrl(URLDef.URL_USER);
     }
@@ -29,11 +21,9 @@ public class RegisterRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("phone", user.getPhone()));
-        params.add(new BasicNameValuePair("password", user.getPassword()));
-        params.add(new BasicNameValuePair("vcode", verifyCode));
-        setParams(params);
+        addParams("phone", user.getPhone());
+        addParams("password", user.getPassword());
+        addParams("vcode", verifyCode);
 
         appendUrl(URLDef.URL_USER);
     }

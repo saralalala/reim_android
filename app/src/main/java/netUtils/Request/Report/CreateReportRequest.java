@@ -1,11 +1,5 @@
 package netUtils.request.report;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.DBManager;
@@ -22,15 +16,13 @@ public class CreateReportRequest extends BaseRequest
         DBManager dbManager = DBManager.getDBManager();
         String iids = dbManager.getReportItemIDs(report.getLocalID());
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("title", report.getTitle()));
-        params.add(new BasicNameValuePair("iids", iids));
-        params.add(new BasicNameValuePair("status", Integer.toString(report.getStatus())));
-        params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
-        params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
-        params.add(new BasicNameValuePair("prove_ahead", Integer.toString(report.getType())));
-        params.add(new BasicNameValuePair("createdt", Integer.toString(report.getCreatedDate())));
-        setParams(params);
+        addParams("title", report.getTitle());
+        addParams("iids", iids);
+        addParams("status", Integer.toString(report.getStatus()));
+        addParams("manager_id", User.getUsersIDString(report.getManagerList()));
+        addParams("cc", User.getUsersIDString(report.getCCList()));
+        addParams("prove_ahead", Integer.toString(report.getType()));
+        addParams("createdt", Integer.toString(report.getCreatedDate()));
 
         appendUrl(URLDef.URL_REPORT);
     }
@@ -42,16 +34,14 @@ public class CreateReportRequest extends BaseRequest
         DBManager dbManager = DBManager.getDBManager();
         String iids = dbManager.getReportItemIDs(report.getLocalID());
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("title", report.getTitle()));
-        params.add(new BasicNameValuePair("iids", iids));
-        params.add(new BasicNameValuePair("status", Integer.toString(report.getStatus())));
-        params.add(new BasicNameValuePair("manager_id", User.getUsersIDString(report.getManagerList())));
-        params.add(new BasicNameValuePair("cc", User.getUsersIDString(report.getCCList())));
-        params.add(new BasicNameValuePair("prove_ahead", Integer.toString(report.getType())));
-        params.add(new BasicNameValuePair("createdt", Integer.toString(report.getCreatedDate())));
-        params.add(new BasicNameValuePair("comment", commentContent));
-        setParams(params);
+        addParams("title", report.getTitle());
+        addParams("iids", iids);
+        addParams("status", Integer.toString(report.getStatus()));
+        addParams("manager_id", User.getUsersIDString(report.getManagerList()));
+        addParams("cc", User.getUsersIDString(report.getCCList()));
+        addParams("prove_ahead", Integer.toString(report.getType()));
+        addParams("createdt", Integer.toString(report.getCreatedDate()));
+        addParams("comment", commentContent);
 
         appendUrl(URLDef.URL_REPORT);
     }

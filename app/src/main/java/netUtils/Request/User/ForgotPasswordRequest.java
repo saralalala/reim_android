@@ -1,11 +1,5 @@
 package netUtils.request.user;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
 import netUtils.request.BaseRequest;
@@ -16,10 +10,8 @@ public class ForgotPasswordRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("type", Integer.toString(type)));
-        params.add(new BasicNameValuePair("name", arg));
-        setParams(params);
+        addParams("type", Integer.toString(type));
+        addParams("name", arg);
 
         appendUrl(URLDef.URL_PASSWORD);
     }
@@ -28,11 +20,9 @@ public class ForgotPasswordRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("type", Integer.toString(1)));
-        params.add(new BasicNameValuePair("name", phone));
-        params.add(new BasicNameValuePair("vcode", verifyCode));
-        setParams(params);
+        addParams("type", Integer.toString(1));
+        addParams("name", phone);
+        addParams("vcode", verifyCode);
 
         appendUrl(URLDef.URL_PASSWORD);
     }

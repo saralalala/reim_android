@@ -20,7 +20,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import netUtils.HttpConnectionCallback;
-import netUtils.request.FeedbackRequest;
+import netUtils.request.user.FeedbackRequest;
 import netUtils.response.FeedbackResponse;
 
 public class FeedbackActivity extends Activity

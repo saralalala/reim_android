@@ -1,9 +1,5 @@
 package netUtils.request.user;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import classes.model.User;
@@ -17,10 +13,8 @@ public class SetAdminRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("admin", Integer.toString(2)));
-        params.add(new BasicNameValuePair("uid", User.getUsersIDString(userList)));
-        setParams(params);
+        addParams("admin", Integer.toString(2));
+        addParams("uid", User.getUsersIDString(userList));
 
         appendUrl(URLDef.URL_SET_ADMIN);
     }

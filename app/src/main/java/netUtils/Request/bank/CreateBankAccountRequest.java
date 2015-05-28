@@ -1,11 +1,5 @@
 package netUtils.request.bank;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import classes.model.BankAccount;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
@@ -17,12 +11,10 @@ public class CreateBankAccountRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("bank_name", bankAccount.getBankName()));
-        params.add(new BasicNameValuePair("bank_location", bankAccount.getLocation()));
-        params.add(new BasicNameValuePair("cardno", bankAccount.getNumber()));
-        params.add(new BasicNameValuePair("account", bankAccount.getName()));
-        setParams(params);
+        addParams("bank_name", bankAccount.getBankName());
+        addParams("bank_location", bankAccount.getLocation());
+        addParams("cardno", bankAccount.getNumber());
+        addParams("account", bankAccount.getName());
 
         appendUrl(URLDef.URL_BANK);
     }

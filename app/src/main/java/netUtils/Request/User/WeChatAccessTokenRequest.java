@@ -1,11 +1,5 @@
 package netUtils.request.user;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import classes.utils.WeChatUtils;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
@@ -15,12 +9,10 @@ public class WeChatAccessTokenRequest extends BaseRequest
 {
     public WeChatAccessTokenRequest(String code)
     {
-        List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("appid", WeChatUtils.APP_ID));
-        params.add(new BasicNameValuePair("secret", WeChatUtils.APP_SECRET));
-        params.add(new BasicNameValuePair("code", code));
-        params.add(new BasicNameValuePair("grant_type", "authorization_code"));
-        setParams(params);
+        addParams("appid", WeChatUtils.APP_ID);
+        addParams("secret", WeChatUtils.APP_SECRET);
+        addParams("code", code);
+        addParams("grant_type", "authorization_code");
 
         setUrl(URLDef.URL_WECHAT);
     }

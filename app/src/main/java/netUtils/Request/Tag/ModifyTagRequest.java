@@ -1,11 +1,5 @@
 package netUtils.request.tag;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import classes.model.Tag;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
@@ -17,9 +11,7 @@ public class ModifyTagRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("name", tag.getName()));
-        setParams(params);
+        addParams("name", tag.getName());
 
         appendUrl(URLDef.URL_TAG);
         appendUrl(tag.getServerID());

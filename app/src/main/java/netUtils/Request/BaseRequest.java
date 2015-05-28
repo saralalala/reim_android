@@ -39,21 +39,19 @@ import netUtils.URLDef;
 public abstract class BaseRequest
 {
     private String url;
-    private List<NameValuePair> params;
+    private List<NameValuePair> params = new ArrayList<>();
     private HttpClient httpClient;
 
     protected BaseRequest()
     {
         this.httpClient = HttpUtils.getHttpClient();
         this.url = AppPreference.getAppPreference().isSandboxMode() ? URLDef.URL_PREFIX_SANDBOX : URLDef.URL_PREFIX;
-        params = null;
     }
 
     protected BaseRequest(int connectTimeout, int socketTimeout)
     {
         this.httpClient = HttpUtils.getHttpClient(connectTimeout, socketTimeout);
         this.url = URLDef.URL_PREFIX;
-        params = null;
     }
 
     protected void setUrl(String url)

@@ -1,11 +1,5 @@
 package netUtils.request.category;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import classes.model.Category;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
@@ -17,14 +11,12 @@ public class ModifyCategoryRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("name", category.getName()));
-        params.add(new BasicNameValuePair("limit", Double.toString(category.getLimit())));
-        params.add(new BasicNameValuePair("pid", Integer.toString(category.getParentID())));
-        params.add(new BasicNameValuePair("gid", Integer.toString(category.getGroupID())));
-        params.add(new BasicNameValuePair("pb", Integer.toString(category.getType())));
-        params.add(new BasicNameValuePair("avatar", Integer.toString(category.getIconID())));
-        setParams(params);
+        addParams("name", category.getName());
+        addParams("limit", Double.toString(category.getLimit()));
+        addParams("pid", Integer.toString(category.getParentID()));
+        addParams("gid", Integer.toString(category.getGroupID()));
+        addParams("pb", Integer.toString(category.getType()));
+        addParams("avatar", Integer.toString(category.getIconID()));
 
         appendUrl(URLDef.URL_CATEGORY);
         appendUrl(category.getServerID());

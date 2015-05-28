@@ -1,11 +1,5 @@
 package netUtils.request.user;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
 import netUtils.request.BaseRequest;
@@ -16,10 +10,8 @@ public class ChangePasswordRequest extends BaseRequest
     {
         super();
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("old_password", oldPassword));
-        params.add(new BasicNameValuePair("new_password", newPassword));
-        setParams(params);
+        addParams("old_password", oldPassword);
+        addParams("new_password", newPassword);
 
         appendUrl(URLDef.URL_USER);
     }

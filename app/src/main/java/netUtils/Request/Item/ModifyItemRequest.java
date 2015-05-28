@@ -1,12 +1,7 @@
 package netUtils.request.item;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import classes.model.Image;
 import classes.model.Item;
@@ -48,9 +43,7 @@ public class ModifyItemRequest extends BaseRequest
 
             jsonArray.put(jObject);
 
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("items", jsonArray.toString()));
-            setParams(params);
+            addParams("items", jsonArray.toString());
 
             appendUrl(URLDef.URL_ITEM);
         }

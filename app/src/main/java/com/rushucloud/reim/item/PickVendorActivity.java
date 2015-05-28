@@ -40,7 +40,6 @@ public class PickVendorActivity extends Activity
     private VendorListViewAdapter vendorAdapter;
     private ClearEditText vendorEditText;
 
-    private String category;
     private String location;
     private double latitude;
     private double longitude;
@@ -101,7 +100,6 @@ public class PickVendorActivity extends Activity
 
     private void initData()
     {
-        category = getIntent().getStringExtra("category");
         location = getIntent().getStringExtra("location");
         latitude = getIntent().getDoubleExtra("latitude", -1);
         longitude = getIntent().getDoubleExtra("longitude", -1);
@@ -216,7 +214,7 @@ public class PickVendorActivity extends Activity
 
     private void sendVendorsRequest()
     {
-        GetVendorsRequest request = new GetVendorsRequest(category, latitude, longitude);
+        GetVendorsRequest request = new GetVendorsRequest(latitude, longitude);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)

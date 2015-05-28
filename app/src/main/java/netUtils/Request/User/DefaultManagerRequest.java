@@ -1,11 +1,5 @@
 package netUtils.request.user;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import classes.utils.AppPreference;
 import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
@@ -18,10 +12,8 @@ public class DefaultManagerRequest extends BaseRequest
         super();
 
         String phone = AppPreference.getAppPreference().getCurrentUser().getPhone();
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("manager_id", Integer.toString(defaultManagerID)));
-        params.add(new BasicNameValuePair("phone", phone));
-        setParams(params);
+        addParams("manager_id", Integer.toString(defaultManagerID));
+        addParams("phone", phone);
 
         appendUrl(URLDef.URL_USER);
     }

@@ -6,7 +6,6 @@ import netUtils.request.BaseRequest;
 
 public class MineStatRequest extends BaseRequest
 {
-
     public MineStatRequest()
     {
         super();
