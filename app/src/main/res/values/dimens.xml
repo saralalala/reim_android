@@ -16,6 +16,7 @@
     <dimen name="window_button_height">32dp</dimen>
     <dimen name="feedback_button_corner_radius">4dp</dimen>
     <dimen name="radio_button_corner_radius">5dp</dimen>
+    <dimen name="badge_corner_radius">15dp</dimen>
     <dimen name="status_corner_radius">2dp</dimen>
     <dimen name="tag_corner_radius">5dp</dimen>
 

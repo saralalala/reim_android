@@ -57,7 +57,7 @@ import netUtils.response.EventsResponse;
 import netUtils.response.report.DeleteReportResponse;
 import netUtils.response.report.SubordinatesReportResponse;
 
-public class ReportFragment extends Fragment
+public class ReportFragment extends Fragment implements OnClickListener
 {
     private static final int GET_DATA_INTERVAL = 600;
 
@@ -83,13 +83,9 @@ public class ReportFragment extends Fragment
     private RelativeLayout noResultLayout;
 
     private TextView myTitleTextView;
-    private TextView myShortTextView;
-    private TextView myMediumTextView;
-    private TextView myLongTextView;
+    private TextView myBadgeTextView;
     private TextView othersTitleTextView;
-    private TextView othersShortTextView;
-    private TextView othersMediumTextView;
-    private TextView othersLongTextView;
+    private TextView othersBadgeTextView;
 
     private XListView reportListView;
     private ReportListViewAdapter mineAdapter;
@@ -206,30 +202,14 @@ public class ReportFragment extends Fragment
     private void initTitleView()
     {
         myTitleTextView = (TextView) getActivity().findViewById(R.id.myTitleTextView);
-        myTitleTextView.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                setListView(0, false);
-            }
-        });
+        myTitleTextView.setOnClickListener(this);
 
-        myShortTextView = (TextView) view.findViewById(R.id.myShortTextView);
-        myMediumTextView = (TextView) view.findViewById(R.id.myMediumTextView);
-        myLongTextView = (TextView) view.findViewById(R.id.myLongTextView);
+        myBadgeTextView = (TextView) view.findViewById(R.id.myBadgeTextView);
 
         othersTitleTextView = (TextView) getActivity().findViewById(R.id.othersTitleTextView);
-        othersTitleTextView.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                setListView(1, false);
-            }
-        });
+        othersTitleTextView.setOnClickListener(this);
 
-        othersShortTextView = (TextView) view.findViewById(R.id.othersShortTextView);
-        othersMediumTextView = (TextView) view.findViewById(R.id.othersMediumTextView);
-        othersLongTextView = (TextView) view.findViewById(R.id.othersLongTextView);
+        othersBadgeTextView = (TextView) view.findViewById(R.id.othersBadgeTextView);
 
         filterImageView = (ImageView) view.findViewById(R.id.filterImageView);
         filterImageView.setOnClickListener(new OnClickListener()
@@ -267,7 +247,7 @@ public class ReportFragment extends Fragment
         mineAdapter = new ReportListViewAdapter(getActivity(), showMineList);
         othersAdapter = new OthersReportListViewAdapter(getActivity(), showOthersList);
 
-        reportListView = (XListView) getActivity().findViewById(R.id.reportListView);
+        reportListView = (XListView) getActivity().findViewById(R.id.myListView);
         reportListView.setAdapter(mineAdapter);
         reportListView.setXListViewListener(new IXListViewListener()
         {
@@ -684,7 +664,7 @@ public class ReportFragment extends Fragment
 
     public void showBadge()
     {
-        if (myShortTextView == null || myMediumTextView == null || myLongTextView == null)
+        if (myBadgeTextView == null || othersBadgeTextView == null)
         {
             return;
         }
@@ -692,57 +672,33 @@ public class ReportFragment extends Fragment
         int count = ReimApplication.getMineUnreadList().size();
         if (count == 0)
         {
-            myShortTextView.setVisibility(View.GONE);
-            myMediumTextView.setVisibility(View.GONE);
-            myLongTextView.setVisibility(View.GONE);
-        }
-        else if (count < 10)
-        {
-            myShortTextView.setVisibility(View.VISIBLE);
-            myShortTextView.setText(Integer.toString(count));
-            myMediumTextView.setVisibility(View.GONE);
-            myLongTextView.setVisibility(View.GONE);
+            myBadgeTextView.setVisibility(View.GONE);
         }
         else if (count < 100)
         {
-            myShortTextView.setVisibility(View.GONE);
-            myMediumTextView.setVisibility(View.VISIBLE);
-            myMediumTextView.setText(Integer.toString(count));
-            myLongTextView.setVisibility(View.GONE);
+            myBadgeTextView.setVisibility(View.VISIBLE);
+            myBadgeTextView.setText(Integer.toString(count));
         }
         else
         {
-            myShortTextView.setVisibility(View.GONE);
-            myMediumTextView.setVisibility(View.GONE);
-            myLongTextView.setVisibility(View.VISIBLE);
+            myBadgeTextView.setVisibility(View.VISIBLE);
+            myBadgeTextView.setText(R.string.report_over_flow);
         }
 
         count = ReimApplication.getOthersUnreadList().size();
         if (count == 0)
         {
-            othersShortTextView.setVisibility(View.GONE);
-            othersMediumTextView.setVisibility(View.GONE);
-            othersLongTextView.setVisibility(View.GONE);
-        }
-        else if (count < 10)
-        {
-            othersShortTextView.setVisibility(View.VISIBLE);
-            othersShortTextView.setText(Integer.toString(count));
-            othersMediumTextView.setVisibility(View.GONE);
-            othersLongTextView.setVisibility(View.GONE);
+            othersBadgeTextView.setVisibility(View.GONE);
         }
         else if (count < 100)
         {
-            othersShortTextView.setVisibility(View.GONE);
-            othersMediumTextView.setVisibility(View.VISIBLE);
-            othersMediumTextView.setText(Integer.toString(count));
-            othersLongTextView.setVisibility(View.GONE);
+            othersBadgeTextView.setVisibility(View.VISIBLE);
+            othersBadgeTextView.setText(Integer.toString(count));
         }
         else
         {
-            othersShortTextView.setVisibility(View.GONE);
-            othersMediumTextView.setVisibility(View.GONE);
-            othersLongTextView.setVisibility(View.VISIBLE);
+            othersBadgeTextView.setVisibility(View.VISIBLE);
+            othersBadgeTextView.setText(R.string.report_over_flow);
         }
     }
 
@@ -1001,6 +957,7 @@ public class ReportFragment extends Fragment
 
             othersAdapter.setReportList(showOthersList);
             othersAdapter.setUnreadList(ReimApplication.getOthersUnreadList());
+            othersAdapter.notifyDataSetChanged();
             reportListView.setAdapter(othersAdapter);
 
             int visibility = !othersFilterStatusList.isEmpty() && showOthersList.isEmpty() ? View.VISIBLE : View.GONE;
@@ -1255,7 +1212,6 @@ public class ReportFragment extends Fragment
                             appPreference.setLastGetOthersReportTime(Utils.getCurrentTime());
                             appPreference.saveAppPreference();
                             reportListView.stopRefresh();
-                            reportListView.stopLoadMore();
                             reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
                             refreshReportListView(true);
                         }
@@ -1268,7 +1224,6 @@ public class ReportFragment extends Fragment
                         public void run()
                         {
                             reportListView.stopRefresh();
-                            reportListView.stopLoadMore();
                             ViewUtils.showToast(getActivity(), R.string.failed_to_get_data, response.getErrorMessage());
                         }
                     });
@@ -1434,6 +1389,18 @@ public class ReportFragment extends Fragment
                     }
                 });
             }
+        }
+    }
+
+    public void onClick(View v)
+    {
+        if (v.equals(myTitleTextView))
+        {
+            setListView(0, false);
+        }
+        else
+        {
+            setListView(1, false);
         }
     }
 }
