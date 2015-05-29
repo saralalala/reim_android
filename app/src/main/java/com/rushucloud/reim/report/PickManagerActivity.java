@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
-import com.rushucloud.reim.me.InviteActivity;
+import com.rushucloud.reim.me.InputInviteActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
@@ -170,7 +170,7 @@ public class PickManagerActivity extends Activity
             {
                 public void onClick(View v)
                 {
-                    ViewUtils.goForward(PickManagerActivity.this, InviteActivity.class);
+                    ViewUtils.goForward(PickManagerActivity.this, InputInviteActivity.class);
                 }
             });
 

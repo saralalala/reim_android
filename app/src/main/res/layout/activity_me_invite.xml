@@ -39,33 +39,66 @@
         android:layout_marginTop="18dp"
         layout="@layout/view_divider"/>
 
-    <classes.widget.ClearEditText
-        android:id="@+id/usernameEditText"
+    <LinearLayout
+        android:id="@+id/inputLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/edittext_height"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:background="@color/major_light"
-        android:inputType="textEmailAddress"
-        android:hint="@string/input_username"
-        android:textColor="@color/font_major_dark"
-        android:textSize="16sp"
-        android:textCursorDrawable="@null"/>
+        android:layout_height="@dimen/layout_height"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/me_item_drawable">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:text="@string/input_invite"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@string/next"
+            android:src="@drawable/next"/>
+
+    </LinearLayout>
 
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         layout="@layout/view_divider"/>
 
-    <Button
-		android:id="@+id/inviteButton"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/button_height"
-		android:layout_marginTop="24dp"
-		android:layout_marginLeft="16dp"
-		android:layout_marginRight="16dp"
-		android:background="@drawable/button_dark_drawable"
-		android:text="@string/send_invite"
-		android:textColor="@color/button_text_light_color"/>
+    <LinearLayout
+        android:id="@+id/wechatLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/me_item_drawable">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:text="@string/wechat_invite"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@string/next"
+            android:src="@drawable/next"/>
+
+    </LinearLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
 
 </LinearLayout>

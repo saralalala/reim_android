@@ -249,6 +249,8 @@
     <string name="message_from_admin">来自管理员的消息</string>
     <string name="message_reference">\n\n-----以下是你于%1$s发送的内容-----\n\n</string>
     <string name="invite">邀请好友</string>
+    <string name="input_invite">手机/邮箱邀请</string>
+    <string name="wechat_invite">微信邀请</string>
     <string name="send_invite">发送邀请</string>
     <string name="custom_service">联系客服</string>
     <string name="personal_info">个人信息</string>
@@ -416,6 +418,7 @@
     <string name="error_gps_unavailable">定位服务不可用，请打开定位服务或手动输入商家名称</string>
     <string name="error_self_as_manager">不能选择自己作为上级</string>
     <string name="error_trial_invite">试用账号暂时无法邀请别人</string>
+    <string name="error_no_company_invite">还没有创建公司，暂时不能邀请微信好友</string>
     <string name="error_no_group">你还没加入任何公司</string>
     <string name="error_item_not_found">未在本地找到消费</string>
     <string name="error_report_approved">报告已被审批</string>

@@ -41,8 +41,31 @@ public class WeChatUtils
         api.registerApp(APP_ID);
     }
 
+    public static boolean isWeChatAvailable()
+    {
+        if (api == null)
+        {
+            regToWX();
+        }
+
+        if (!api.isWXAppInstalled() || !api.isWXAppSupportAPI())
+        {
+            ViewUtils.showToast(activity, R.string.error_wechat_not_supported);
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public static void shareToWX(String url, String title, String description, boolean isShareToMoments)
     {
+        if (!isWeChatAvailable())
+        {
+            return;
+        }
+
         Bitmap bitmap = BitmapFactory.decodeResource(ReimApplication.getContext().getResources(), R.drawable.wechat_share_thumb);
 
         WXWebpageObject webpage = new WXWebpageObject(url);
@@ -65,14 +88,8 @@ public class WeChatUtils
 
     public static void sendAuthRequest(Activity source)
     {
-        if (api == null)
+        if (!isWeChatAvailable())
         {
-            regToWX();
-        }
-
-        if (!api.isWXAppInstalled() || !api.isWXAppSupportAPI())
-        {
-            ViewUtils.showToast(activity, R.string.error_wechat_not_supported);
             return;
         }
 

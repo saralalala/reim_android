@@ -1,37 +1,64 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Base64;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import classes.model.BankAccount;
+import classes.model.Group;
+import classes.model.Province;
+import classes.model.User;
+import classes.utils.AppPreference;
+import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
-import classes.utils.Utils;
 import classes.utils.ViewUtils;
-import classes.widget.ClearEditText;
+import classes.utils.WeChatUtils;
 import classes.widget.ReimProgressDialog;
+import classes.widget.wheelview.OnWheelChangedListener;
+import classes.widget.wheelview.WheelView;
+import classes.widget.wheelview.adapter.ArrayWheelAdapter;
 import netUtils.HttpConnectionCallback;
-import netUtils.request.user.InviteRequest;
-import netUtils.response.user.InviteResponse;
+import netUtils.URLDef;
+import netUtils.request.bank.CreateBankAccountRequest;
+import netUtils.request.bank.ModifyBankAccountRequest;
+import netUtils.response.bank.CreateBankAccountResponse;
+import netUtils.response.bank.ModifyBankAccountResponse;
 
 public class InviteActivity extends Activity
 {
-    private ClearEditText usernameEditText;
+    private String nickname = "";
+    private String companyName = "";
+    private String shareURL = "";
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_me_invite);
+        initData();
         initView();
     }
 
@@ -40,7 +67,6 @@ public class InviteActivity extends Activity
         super.onResume();
         MobclickAgent.onPageStart("InviteActivity");
         MobclickAgent.onResume(this);
-        ReimProgressDialog.setContext(this);
     }
 
     protected void onPause()
@@ -59,6 +85,31 @@ public class InviteActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
+    private void initData()
+    {
+        Group group = AppPreference.getAppPreference().getCurrentGroup();
+        if (group != null)
+        {
+            User user = AppPreference.getAppPreference().getCurrentUser();
+            nickname = user != null? user.getNickname() : "";
+            companyName = group.getName();
+
+            try
+            {
+                JSONObject jObject = new JSONObject();
+                jObject.put("nickname", nickname);
+                jObject.put("gid", AppPreference.getAppPreference().getCurrentGroupID());
+                String params = Base64.encodeToString(jObject.toString().getBytes(), Base64.NO_WRAP);
+                String redirectURI = URLEncoder.encode(URLDef.URL_SHARE_REDIRECT_URI_PREFIX + params, "UTF-8");
+                shareURL = String.format(URLDef.URL_SHARE, redirectURI);
+            }
+            catch (JSONException | UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -70,92 +121,36 @@ public class InviteActivity extends Activity
             }
         });
 
-        usernameEditText = (ClearEditText) findViewById(R.id.usernameEditText);
-        ViewUtils.requestFocus(this, usernameEditText);
-
-        Button inviteButton = (Button) findViewById(R.id.inviteButton);
-        inviteButton.setOnClickListener(new OnClickListener()
+        LinearLayout inputLayout = (LinearLayout) findViewById(R.id.inputLayout);
+        inputLayout.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-                MobclickAgent.onEvent(InviteActivity.this, "UMENG_MINE_INVITE");
-
-                String username = usernameEditText.getText().toString();
-                if (!PhoneUtils.isNetworkConnected())
-                {
-                    ViewUtils.showToast(InviteActivity.this, R.string.error_send_invite_network_unavailable);
-                }
-                if (username.isEmpty())
-                {
-                    ViewUtils.showToast(InviteActivity.this, R.string.error_email_or_phone_empty);
-                }
-                else if (!Utils.isEmailOrPhone(username))
-                {
-                    ViewUtils.showToast(InviteActivity.this, R.string.error_email_or_phone_wrong_format);
-                }
-                else
-                {
-                    hideSoftKeyboard();
-                    sendInviteRequest(username);
-                }
+                ViewUtils.goForward(InviteActivity.this, InputInviteActivity.class);
             }
         });
 
-        LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
-        baseLayout.setOnClickListener(new View.OnClickListener()
+        LinearLayout wechatLayout = (LinearLayout) findViewById(R.id.wechatLayout);
+        wechatLayout.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-                hideSoftKeyboard();
-            }
-        });
-    }
-
-    private void sendInviteRequest(String username)
-    {
-        ReimProgressDialog.show();
-        InviteRequest request = new InviteRequest(username);
-        request.sendRequest(new HttpConnectionCallback()
-        {
-            public void execute(Object httpResponse)
-            {
-                final InviteResponse response = new InviteResponse(httpResponse);
-                if (response.getStatus())
+                if (!shareURL.isEmpty())
                 {
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(InviteActivity.this, R.string.succeed_in_sending_invite);
-                            goBack();
-                        }
-                    });
+                    String title = String.format(getString(R.string.wechat_share_title), nickname, companyName);
+                    String description = String.format(getString(R.string.wechat_invite_description), nickname, companyName);
+                    WeChatUtils.shareToWX(shareURL, title, description, false);
                 }
                 else
                 {
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(InviteActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
-                        }
-                    });
+                    ViewUtils.showToast(InviteActivity.this, R.string.error_no_company_invite);
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);
     }
 
     private void goBack()
     {
-        hideSoftKeyboard();
         ViewUtils.goBack(this);
     }
 }
