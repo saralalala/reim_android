@@ -299,7 +299,7 @@
     <string name="about_footer">Copyright&#169; 2014&#8211;2015 北京如数科技有限公司</string>
     <string name="wechat_share_title">云报销 - 开启全新的报销体验</string>
     <string name="wechat_share_description">点击使用「云报销」，开启全新的报销体验。</string>
-    <string name="wechat_invite_description">%1$s邀请你加入「%2$s」，点击加入就可以开始使用了。</string>
+    <string name="wechat_invite_description">%1$s邀请你加入「%2$s」，点击就可以开始使用了。</string>
     
     <string name="input_username">请输入手机/邮箱</string>
     <string name="input_password">请输入密码</string>
