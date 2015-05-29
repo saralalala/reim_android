@@ -1196,7 +1196,6 @@ public class ReportFragment extends Fragment implements OnClickListener
                         }
                         else
                         {
-                            report.setType(localReport.getType());
                             report.setManagerList(localReport.getManagerList());
                             report.setCCList(localReport.getCCList());
                             dbManager.updateOthersReport(report);

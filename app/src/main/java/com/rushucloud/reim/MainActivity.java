@@ -1,6 +1,7 @@
 package com.rushucloud.reim;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,6 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
+import com.mechat.mechatlibrary.MCClient;
+import com.mechat.mechatlibrary.MCOnlineConfig;
+import com.mechat.mechatlibrary.MCUserConfig;
 import com.rushucloud.reim.item.EditItemActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -30,7 +34,9 @@ import org.json.JSONObject;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import classes.model.User;
 import classes.utils.AppPreference;
@@ -278,7 +284,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
                 if (PhoneUtils.isNetworkConnected())
                 {
-                    showFeedbackWindow();
+                    startMeChatActivity();
                 }
                 else
                 {
@@ -407,6 +413,27 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
         phonePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
         phonePopupWindow.update();
+    }
+
+    private void startMeChatActivity()
+    {
+        User currentUser = appPreference.getCurrentUser();
+
+        MCOnlineConfig onlineConfig = new MCOnlineConfig();
+        MCClient.getInstance().startMCConversationActivity(onlineConfig);
+
+        MCUserConfig mcUserConfig = new MCUserConfig();
+        Map<String,String> userInfo = new HashMap<>();
+        if (currentUser != null)
+        {
+            userInfo.put(MCUserConfig.PersonalAccount.NICK_NAME, currentUser.getNickname());
+            userInfo.put(MCUserConfig.Contact.TEL, currentUser.getPhone());
+            userInfo.put(MCUserConfig.Contact.EMAIL, currentUser.getEmail());
+        }
+        Map<String, String> userInfoExtra = new HashMap<>();
+        userInfoExtra.put("AndroidVersion",Integer.toString(Build.VERSION.SDK_INT));
+        userInfoExtra.put("AppVersion", PhoneUtils.getAppVersion());
+        mcUserConfig.setUserInfo(this, userInfo, userInfoExtra, null);
     }
 
     private void resetTabItems()

@@ -10,6 +10,8 @@ import android.text.TextUtils;
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.PushService;
+import com.mechat.mechatlibrary.MCClient;
+import com.mechat.mechatlibrary.callback.OnInitCallback;
 import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -52,6 +54,7 @@ public class ReimApplication extends Application
         super.onCreate();
 
         initPushService();
+        initMeChat();
         initData();
         WeChatUtils.regToWX();
         MobclickAgent.openActivityDurationTrack(false);
@@ -257,6 +260,22 @@ public class ReimApplication extends Application
 
         PushService.subscribe(this, "public", MainActivity.class);
         AVInstallation.getCurrentInstallation().saveInBackground();
+    }
+
+    private void initMeChat()
+    {
+        MCClient.init(this, "5567e8fb4eae35495f000003", new OnInitCallback()
+        {
+            public void onSuccess(String s)
+            {
+
+            }
+
+            public void onFailed(String s)
+            {
+
+            }
+        });
     }
 
     private void initData()

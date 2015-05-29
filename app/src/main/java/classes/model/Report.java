@@ -398,7 +398,7 @@ public class Report implements Serializable
 
     public boolean isPending()
     {
-        return canBeApprovedByMe() || (isCC && status == Report.STATUS_SUBMITTED && managerList.isEmpty()); // 刚取的报告，还没获取详细数据，因此没managerList
+        return canBeApprovedByMe() || (isCC && status == Report.STATUS_SUBMITTED && (managerList == null || managerList.isEmpty())); // 刚取的报告，还没获取详细数据，因此没managerList
     }
 
     public boolean isInSpecificStatus(List<Integer> statusList)

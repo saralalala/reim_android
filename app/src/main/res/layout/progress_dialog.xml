@@ -11,7 +11,7 @@
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/loading"
-        android:src="@anim/loading"/>
+        android:src="@anim/progress_loading"/>
 
     <TextView
         android:id="@+id/textView"

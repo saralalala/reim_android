@@ -1834,14 +1834,15 @@ public class DBManager extends SQLiteOpenHelper
             String amountString = report.getAmount() == null ? "" : "amount = '" + report.getAmount() + "',";
             String sqlString = "UPDATE tbl_others_report SET " + amountString +
                     "server_id = '" + report.getServerID() + "'," +
-                    "title = '" + sqliteEscape(report.getTitle()) + "'," +
                     "owner_id = '" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
+                    "title = '" + sqliteEscape(report.getTitle()) + "'," +
                     "user_id = '" + report.getSender().getServerID() + "'," +
-                    "status = '" + report.getStatus() + "'," +
-                    "my_decision = '" + report.getMyDecision() + "'," +
                     "manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
                     "cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
+                    "status = '" + report.getStatus() + "'," +
+                    "my_decision = '" + report.getMyDecision() + "'," +
                     "type = '" + report.getType() + "'," +
+                    "is_cc = '" + Utils.booleanToInt(report.isCC()) + "'," +
                     "created_date = '" + report.getCreatedDate() + "'," +
                     "server_updatedt = '" + report.getServerUpdatedDate() + "'," +
                     "local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
