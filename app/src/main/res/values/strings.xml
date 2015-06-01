@@ -352,8 +352,7 @@
     <string name="prompt_join">管理员通过申请后你就可以使用「云报销」了。在此之前，你也可以记录自己的 消费 ，加入公司后记录可以迁移。</string>
     <string name="prompt_joined">现在你可以使用「云报销」，记录你的 消费 ， 提交报销 申请，或者 审批 他人的报销了。</string>
     <string name="prompt_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
-    <string name="prompt_wechat_share">你可分享到同事和好友们使用的微信群，方便大家注册使用云报销。</string>
-    <string name="prompt_copied_to_clipboard">链接已复制到剪贴板</string>
+    <string name="prompt_wechat_share">你可以把「云报销」分享到同事们使用的微信群，让大家迅速加入你创建的公司。</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>

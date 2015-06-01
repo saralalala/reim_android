@@ -4,49 +4,27 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Base64;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import classes.model.BankAccount;
 import classes.model.Group;
-import classes.model.Province;
 import classes.model.User;
 import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.utils.WeChatUtils;
-import classes.widget.ReimProgressDialog;
-import classes.widget.wheelview.OnWheelChangedListener;
-import classes.widget.wheelview.WheelView;
-import classes.widget.wheelview.adapter.ArrayWheelAdapter;
-import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
-import netUtils.request.bank.CreateBankAccountRequest;
-import netUtils.request.bank.ModifyBankAccountRequest;
-import netUtils.response.bank.CreateBankAccountResponse;
-import netUtils.response.bank.ModifyBankAccountResponse;
 
 public class InviteActivity extends Activity
 {

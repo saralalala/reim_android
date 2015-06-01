@@ -1098,13 +1098,16 @@ public class ReimFragment extends Fragment
             {
                 public void execute()
                 {
-                    getActivity().runOnUiThread(new Runnable()
+                    if (getActivity() != null)
                     {
-                        public void run()
+                        getActivity().runOnUiThread(new Runnable()
                         {
-                            refreshItemListView();
-                        }
-                    });
+                            public void run()
+                            {
+                                refreshItemListView();
+                            }
+                        });
+                    }
 
                     SyncUtils.syncAllToServer(new SyncDataCallback()
                     {

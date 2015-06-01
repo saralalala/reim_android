@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.rushucloud.reim.me.AboutActivity;
 import com.rushucloud.reim.me.CategoryActivity;
 import com.rushucloud.reim.me.FeedbackActivity;
-import com.rushucloud.reim.me.InputInviteActivity;
 import com.rushucloud.reim.me.InviteActivity;
 import com.rushucloud.reim.me.InvoiceTitleActivity;
 import com.rushucloud.reim.me.ManagerActivity;

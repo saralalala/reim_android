@@ -1,9 +1,6 @@
 package com.rushucloud.reim.guide;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -105,18 +102,6 @@ public class WeChatShareActivity extends Activity
                 String title = String.format(getString(R.string.wechat_share_title), nickname, companyName);
                 String description = String.format(getString(R.string.wechat_invite_description), nickname, companyName);
                 WeChatUtils.shareToWX(shareURL, title, description, false);
-            }
-        });
-
-        TextView copyTextView = (TextView) findViewById(R.id.copyTextView);
-        copyTextView.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), shareURL);
-                clipboardManager.setPrimaryClip(clip);
-                ViewUtils.showToast(WeChatShareActivity.this, R.string.prompt_copied_to_clipboard);
             }
         });
     }
