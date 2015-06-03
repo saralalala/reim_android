@@ -295,12 +295,12 @@ public class PickManagerActivity extends Activity
         defaultManager = currentUser.getDefaultManager();
         if (defaultManager != null && chosenList.contains(defaultManager))
         {
-            managerLayout.setBackgroundResource(R.color.list_item_selected);
+            managerLayout.setBackgroundResource(R.color.list_item_pressed);
             nicknameTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
         }
         else if (defaultManager != null)
         {
-            managerLayout.setBackgroundResource(R.color.list_item_unselected);
+            managerLayout.setBackgroundResource(R.color.list_item_unpressed);
             nicknameTextView.setTextColor(ViewUtils.getColor(R.color.font_major_dark));
         }
     }

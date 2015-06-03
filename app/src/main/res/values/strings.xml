@@ -155,6 +155,7 @@
     <string name="budget">预算</string>
     <string name="borrowing">预借</string>
     <string name="need_reimburse">需收款</string>
+    <string name="does_not_need_reimburse">（不需收款）</string>
     <string name="actual_cost">实际消费</string>
     <string name="type">类　型</string>
     <string name="photo">照　片</string>
@@ -216,7 +217,7 @@
     <string name="submitted">已提交</string>
     <string name="ready_to_approve">待审批</string>
     <string name="approved">已通过</string>
-    <string name="rejected">已退回</string>
+    <string name="rejected">退回</string>
     <string name="report_no_name">无标题报告</string>
     <string name="continue_to_choose">继续选择</string>
     <string name="choose_following_managers">选择后续审批人</string>
@@ -248,7 +249,7 @@
     <string name="my_messages">我的消息</string>
     <string name="message_from_admin">来自管理员的消息</string>
     <string name="message_reference">\n\n-----以下是你于%1$s发送的内容-----\n\n</string>
-    <string name="invite">邀请好友</string>
+    <string name="invite">邀请同事</string>
     <string name="input_invite">手机/邮箱邀请</string>
     <string name="wechat_invite">微信邀请</string>
     <string name="send_invite">发送邀请</string>
@@ -293,7 +294,9 @@
     <string name="edit_tag">编辑标签</string>
     <string name="about_us">关于我们</string>
     <string name="feedback">意见反馈</string>
-    <string name="share">分享给他人</string>
+    <string name="check_update">检查更新</string>
+    <string name="confirm_download">确认下载</string>
+    <string name="share">推荐给他人</string>
     <string name="feedback_code">+86</string>
     <string name="version">版本</string>
     <string name="about_footer">Copyright&#169; 2014&#8211;2015 北京如数科技有限公司</string>
@@ -353,6 +356,7 @@
     <string name="prompt_joined">现在你可以使用「云报销」，记录你的 消费 ， 提交报销 申请，或者 审批 他人的报销了。</string>
     <string name="prompt_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
     <string name="prompt_wechat_share">你可以把「云报销」分享到同事们使用的微信群，让大家迅速加入你创建的公司。</string>
+    <string name="prompt_latest_version">当前已是最新版本</string>
     
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>
@@ -426,7 +430,7 @@
     <string name="error_submit_report_empty">请添加消费后再提交报告</string>
     <string name="error_submit_report_item_not_uploaded">消费未被上传，报告不可被提交</string>
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>
-    <string name="error_timeout">你的账号已经其他地方登录，本地已经下线。</string>
+    <string name="error_account_timeout">你的账号已经其他地方登录，本地已经下线。</string>
     <string name="error_images_maximum">最多只能选择%1$d张照片</string>
     <string name="error_contact_no_permission">未能读取到你的通讯录信息，可能是由于你未授权「云报销」读取你的通讯录所致。</string>
     <string name="error_wechat_common">微信错误</string>
@@ -436,6 +440,8 @@
     <string name="error_wechat_auth_denied">微信授权被拒绝</string>
     <string name="error_wechat_auth_user_cancel">用户取消微信授权</string>
     <string name="error_wechat_not_supported">微信未安装或当前微信版本不支持登录功能</string>
+    <string name="error_no_wifi">当前不在Wi-Fi环境下，无法更新</string>
+    <string name="error_timeout">连接超时</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>

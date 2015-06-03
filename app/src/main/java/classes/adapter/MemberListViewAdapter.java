@@ -60,7 +60,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
 
             boolean isChosen = chosenList.contains(user);
 
-            int color = isChosen ? R.color.list_item_selected : R.color.list_item_unselected;
+            int color = isChosen ? R.color.list_item_pressed : R.color.list_item_unpressed;
             view.setBackgroundResource(color);
 
             CircleImageView imageView = (CircleImageView) view.findViewById(R.id.avatarImageView);

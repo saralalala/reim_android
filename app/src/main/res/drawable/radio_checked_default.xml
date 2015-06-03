@@ -3,10 +3,10 @@
     android:shape="rectangle"
     android:padding="10dp">
     <!-- you can use any color you want I used here gray color-->
-    <solid android:color="@color/radio_button_selected_color" />
+    <solid android:color="@color/radio_button_selected_color"/>
     <corners
         android:bottomRightRadius="@dimen/radio_button_corner_radius"
         android:bottomLeftRadius="@dimen/radio_button_corner_radius"
         android:topLeftRadius="@dimen/radio_button_corner_radius"
-        android:topRightRadius="@dimen/radio_button_corner_radius" />
+        android:topRightRadius="@dimen/radio_button_corner_radius"/>
 </shape>

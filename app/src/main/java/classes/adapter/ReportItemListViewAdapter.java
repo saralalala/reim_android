@@ -52,7 +52,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
 
             Item item = itemList.get(position - 1);
 
-            int color = chosenIDList.contains(item.getLocalID()) ? R.color.list_item_selected : R.color.list_item_unselected;
+            int color = chosenIDList.contains(item.getLocalID()) ? R.color.list_item_pressed : R.color.list_item_unpressed;
             view.setBackgroundResource(color);
 
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);

@@ -1062,7 +1062,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
             {
                 exportButton.setEnabled(false);
-                exportButton.setBackgroundResource(R.drawable.window_button_selected);
+                exportButton.setBackgroundResource(R.drawable.window_button_pressed);
                 exportButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
             }
             else
@@ -1075,7 +1075,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             if (report.getStatus() == Report.STATUS_SUBMITTED || report.getStatus() == Report.STATUS_APPROVED)
             {
                 deleteButton.setEnabled(false);
-                deleteButton.setBackgroundResource(R.drawable.window_button_selected);
+                deleteButton.setBackgroundResource(R.drawable.window_button_pressed);
                 deleteButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
             }
             else
@@ -1091,7 +1091,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
             {
                 exportButton.setEnabled(false);
-                exportButton.setBackgroundResource(R.drawable.window_button_selected);
+                exportButton.setBackgroundResource(R.drawable.window_button_pressed);
                 exportButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
             }
             else
@@ -1104,7 +1104,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             if (report.getStatus() == Report.STATUS_SUBMITTED && report.getMyDecision() == Report.STATUS_SUBMITTED)
             {
                 deleteButton.setEnabled(false);
-                deleteButton.setBackgroundResource(R.drawable.window_button_selected);
+                deleteButton.setBackgroundResource(R.drawable.window_button_pressed);
                 deleteButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
             }
             else

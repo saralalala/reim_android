@@ -14,7 +14,7 @@
     <color name="font_major_dark">#FF373737</color>
     <color name="font_minor_dark">#FF333333</color>
     <color name="font_major_light">#CCFFFFFF</color>
-    <color name="font_title_selected">#77FFFFFF</color>
+    <color name="font_title_pressed">#77FFFFFF</color>
     <color name="font_reim_number">#FFFF5353</color>
     <color name="font_budget">#FF3CB798</color>
     <color name="font_list_item_header">#FF999999</color>
@@ -32,12 +32,12 @@
     <color name="button_light">#FFFFFFFF</color>
     <color name="button_text_dark">#FFFF575B</color>
     <color name="button_text_light">#FFFFFFFF</color>
-    <color name="button_window_selected">#FFE7E9EB</color>
-    <color name="button_window_unselected">#FFFFFFFF</color>
+    <color name="button_window_pressed">#FFE7E9EB</color>
+    <color name="button_window_unpressed">#FFFFFFFF</color>
     
     <color name="list_item_header">#FFE9E9EB</color>
-    <color name="list_item_selected">#FFFBE2E3</color>
-    <color name="list_item_unselected">#00000000</color>
+    <color name="list_item_pressed">#FFFBE2E3</color>
+    <color name="list_item_unpressed">#00000000</color>
     
     <color name="tab_item_selected">#FFFF575B</color>
     <color name="tab_item_unselected">#FF61686D</color>    
@@ -52,7 +52,7 @@
     <color name="item_approve_ahead">#FFFF575B</color>
 
     <color name="index_prompt">#AA000000</color>
-    <color name="index_layout_selected">#AAE9E9EB</color>
+    <color name="index_layout_pressed">#AAE9E9EB</color>
 
     <color name="province_line_border">#C7C7C7</color>
 

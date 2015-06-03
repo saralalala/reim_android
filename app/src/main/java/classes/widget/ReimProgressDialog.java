@@ -13,7 +13,6 @@ public class ReimProgressDialog
 {
     private static Dialog dialog;
     private static View dialogView;
-    private static ImageView imageView;
     private static AnimationDrawable animationDrawable;
 
     private ReimProgressDialog()
@@ -24,7 +23,7 @@ public class ReimProgressDialog
     public static void init(Context context)
     {
         dialogView = View.inflate(context, R.layout.progress_dialog, null);
-        imageView = (ImageView) dialogView.findViewById(R.id.avatarImageView);
+        ImageView imageView = (ImageView) dialogView.findViewById(R.id.avatarImageView);
         animationDrawable = (AnimationDrawable) imageView.getDrawable();
     }
 

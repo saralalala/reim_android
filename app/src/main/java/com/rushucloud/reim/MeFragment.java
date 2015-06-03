@@ -22,6 +22,10 @@ import com.rushucloud.reim.me.MessageListActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.rushucloud.reim.me.TagActivity;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
 
 import classes.model.Group;
 import classes.model.User;
@@ -33,6 +37,7 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.utils.WeChatUtils;
 import classes.widget.CircleImageView;
+import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
 import netUtils.NetworkConstant;
 import netUtils.URLDef;
@@ -229,6 +234,49 @@ public class MeFragment extends Fragment
             {
                 MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_OPINION");
                 ViewUtils.goForward(getActivity(), FeedbackActivity.class);
+            }
+        });
+
+        // init update
+        TextView updateTextView = (TextView) view.findViewById(R.id.updateTextView);
+        updateTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                ReimProgressDialog.show();
+                UmengUpdateAgent.setUpdateAutoPopup(false);
+                UmengUpdateAgent.setUpdateOnlyWifi(false);
+                UmengUpdateAgent.setUpdateListener(new UmengUpdateListener()
+                {
+                    public void onUpdateReturned(int updateStatus, final UpdateResponse updateInfo)
+                    {
+                        ReimProgressDialog.dismiss();
+                        switch (updateStatus)
+                        {
+                            case UpdateStatus.Yes:
+                            {
+                                UmengUpdateAgent.showUpdateDialog(getActivity(), updateInfo);
+                                break;
+                            }
+                            case UpdateStatus.No:
+                            {
+                                ViewUtils.showToast(getActivity(), R.string.prompt_latest_version);
+                                break;
+                            }
+                            case UpdateStatus.NoneWifi:
+                            {
+                                ViewUtils.showToast(getActivity(), R.string.error_no_wifi);
+                                break;
+                            }
+                            case UpdateStatus.Timeout:
+                            {
+                                ViewUtils.showToast(getActivity(), R.string.error_timeout);
+                                break;
+                            }
+                        }
+                    }
+                });
+                UmengUpdateAgent.forceUpdate(getActivity());
             }
         });
 

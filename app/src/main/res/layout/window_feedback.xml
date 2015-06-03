@@ -48,7 +48,7 @@
             android:layout_height="@dimen/window_button_height"
 			android:layout_toLeftOf="@+id/pivotView"
             android:layout_marginRight="5dp"
-            android:background="@drawable/feedback_button_dark_drawable"
+            android:background="@drawable/window_button_confirm_drawable"
             android:text="@string/submit"
             android:textColor="@color/button_text_light_color"/>
 
@@ -64,7 +64,7 @@
             android:layout_height="@dimen/window_button_height"
 			android:layout_toRightOf="@+id/pivotView"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/feedback_button_light_drawable"
+            android:background="@drawable/window_button_cancel_drawable"
             android:text="@string/cancel"
             android:textColor="@color/button_text_dark_color"/>
 

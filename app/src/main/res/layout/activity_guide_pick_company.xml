@@ -38,7 +38,7 @@
             android:paddingRight="16dp"
             android:gravity="center"
             android:text="@string/complete"
-            android:textColor="@color/font_title_selected"
+            android:textColor="@color/font_title_pressed"
             android:textSize="16sp"/>
 
     </RelativeLayout>

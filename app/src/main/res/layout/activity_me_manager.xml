@@ -121,7 +121,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="66dp"
-                android:background="@color/list_item_unselected">
+                android:background="@color/list_item_unpressed">
 
                 <classes.widget.CircleImageView
                     android:id="@+id/avatarImageView"

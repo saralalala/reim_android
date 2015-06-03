@@ -139,9 +139,9 @@ public class ShowItemActivity extends Activity
 
         // init type
         String temp = getString(item.getTypeString());
-        if (item.getType() == Item.TYPE_REIM && item.needReimbursed())
+        if (item.getType() == Item.TYPE_REIM && !item.needReimbursed())
         {
-            temp += "/" + getString(R.string.need_reimburse);
+            temp += getString(R.string.does_not_need_reimburse);
         }
         TextView typeTextView = (TextView) findViewById(R.id.typeTextView);
         typeTextView.setText(temp);

@@ -384,10 +384,10 @@ public class EditItemActivity extends Activity
 
                     if (fromReim && !fromPickItems && item.getType() != Item.TYPE_REIM && !item.isAaApproved())
                     {
-                        Builder buider = new Builder(EditItemActivity.this);
-                        buider.setTitle(R.string.option);
-                        buider.setMessage(R.string.prompt_save_approve_ahead_item);
-                        buider.setPositiveButton(R.string.only_save, new DialogInterface.OnClickListener()
+                        Builder builder = new Builder(EditItemActivity.this);
+                        builder.setTitle(R.string.option);
+                        builder.setMessage(R.string.prompt_save_approve_ahead_item);
+                        builder.setPositiveButton(R.string.only_save, new DialogInterface.OnClickListener()
                         {
                             public void onClick(DialogInterface dialog, int which)
                             {
@@ -395,7 +395,7 @@ public class EditItemActivity extends Activity
                                 saveItem();
                             }
                         });
-                        buider.setNeutralButton(R.string.send_to_approve, new DialogInterface.OnClickListener()
+                        builder.setNeutralButton(R.string.send_to_approve, new DialogInterface.OnClickListener()
                         {
                             public void onClick(DialogInterface dialog, int which)
                             {
@@ -431,8 +431,8 @@ public class EditItemActivity extends Activity
                                 ViewUtils.goForwardAndFinish(EditItemActivity.this, intent);
                             }
                         });
-                        buider.setNegativeButton(R.string.cancel, null);
-                        buider.create().show();
+                        builder.setNegativeButton(R.string.cancel, null);
+                        builder.create().show();
                     }
                     else if (fromPickItems)
                     {
@@ -561,14 +561,8 @@ public class EditItemActivity extends Activity
     private void initTypeView()
     {
         // init type
-        String temp = getString(item.getTypeString());
-        if (item.getType() == Item.TYPE_REIM && item.needReimbursed())
-        {
-            temp += "/" + getString(R.string.need_reimburse);
-        }
-
         typeTextView = (TextView) findViewById(R.id.typeTextView);
-        typeTextView.setText(temp);
+        refreshTypeView();
 
         LinearLayout typeLayout = (LinearLayout) findViewById(R.id.typeLayout);
         typeLayout.setOnClickListener(new View.OnClickListener()
@@ -689,12 +683,7 @@ public class EditItemActivity extends Activity
                     item.setType(Item.TYPE_BORROWING);
                 }
 
-                String temp = getString(item.getTypeString());
-                if (item.getType() == Item.TYPE_REIM && item.needReimbursed())
-                {
-                    temp += "/" + getString(R.string.need_reimburse);
-                }
-                typeTextView.setText(temp);
+                refreshTypeView();
             }
         });
 
@@ -1149,6 +1138,16 @@ public class EditItemActivity extends Activity
                 categoryWarningImageView.setVisibility(View.GONE);
             }
         }
+    }
+
+    private void refreshTypeView()
+    {
+        String temp = getString(item.getTypeString());
+        if (item.getType() == Item.TYPE_REIM && !item.needReimbursed())
+        {
+            temp += getString(R.string.does_not_need_reimburse);
+        }
+        typeTextView.setText(temp);
     }
 
     private void refreshTagView()

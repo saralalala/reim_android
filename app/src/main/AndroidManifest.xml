@@ -386,7 +386,7 @@
 
         <service
             android:name="com.mechat.mechatlibrary.MechatService"
-            android:label="MechatService" >
+            android:label="MechatService">
         </service>
 
 	</application>

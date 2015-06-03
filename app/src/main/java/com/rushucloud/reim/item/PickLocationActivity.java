@@ -308,7 +308,7 @@ public class PickLocationActivity extends Activity
                     switch (event.getAction())
                     {
                         case MotionEvent.ACTION_DOWN:
-                            indexLayout.setBackgroundColor(ViewUtils.getColor(R.color.index_layout_selected));
+                            indexLayout.setBackgroundColor(ViewUtils.getColor(R.color.index_layout_pressed));
                             break;
                         case MotionEvent.ACTION_UP:
                             indexLayout.setBackgroundColor(ViewUtils.getColor(android.R.color.transparent));

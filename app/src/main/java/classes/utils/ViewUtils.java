@@ -301,7 +301,7 @@ public class ViewUtils
                     switch (event.getAction())
                     {
                         case MotionEvent.ACTION_DOWN:
-                            indexLayout.setBackgroundColor(getColor(R.color.index_layout_selected));
+                            indexLayout.setBackgroundColor(getColor(R.color.index_layout_pressed));
                             break;
                         case MotionEvent.ACTION_UP:
                             indexLayout.setBackgroundColor(getColor(android.R.color.transparent));

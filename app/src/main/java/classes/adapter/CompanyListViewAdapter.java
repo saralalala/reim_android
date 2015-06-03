@@ -39,7 +39,7 @@ public class CompanyListViewAdapter extends BaseAdapter
         }
 
         int color = company != null && !companyList.isEmpty() && companyList.get(position).equals(company) ?
-                R.color.list_item_selected : R.color.list_item_unselected;
+                R.color.list_item_pressed : R.color.list_item_unpressed;
         convertView.setBackgroundResource(color);
 
         ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);

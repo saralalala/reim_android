@@ -87,6 +87,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        UmengUpdateAgent.setDefault();
         UmengUpdateAgent.update(this);
         initData();
         initView();

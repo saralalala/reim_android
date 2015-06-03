@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/titleLayout"
-        android:listSelector="@drawable/list_item_drawable" >
+        android:listSelector="@drawable/list_item_drawable">
     </ListView>
 
     <TextView

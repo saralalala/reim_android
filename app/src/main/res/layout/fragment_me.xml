@@ -366,6 +366,22 @@
                 layout="@layout/view_divider"/>
 
             <TextView
+                android:id="@+id/updateTextView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:paddingLeft="16dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/me_item_drawable"
+                android:text="@string/check_update"
+                android:textColor="@color/font_major_dark"
+                android:textSize="16sp"/>
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                layout="@layout/view_divider"/>
+
+            <TextView
                 android:id="@+id/shareTextView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/layout_height"

@@ -47,6 +47,6 @@
         android:layout_below="@+id/titleLayout"
         android:gravity="center"
         android:text="@string/no_messages"
-        android:textColor="@color/hint_light_grey" />
+        android:textColor="@color/hint_light_grey"/>
 
 </RelativeLayout>

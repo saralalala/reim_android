@@ -32,6 +32,11 @@
         <item name="android:paddingLeft">5dp</item>
         <item name="android:paddingRight">5dp</item>
     </style>
+    　　
+    <style name="Checkbox" parent="@android:style/Widget.CompoundButton.CheckBox">
+     　　<item name="android:button">@drawable/check_drawable</item>　　
+    　　<item name="android:paddingLeft">8dp</item>
+    </style>
     
     <style name="WindowTopAnimation" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/window_vertical_top_in</item>  

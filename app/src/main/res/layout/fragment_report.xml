@@ -88,7 +88,7 @@
             android:layout_centerVertical="true"
             android:padding="14dp"
             android:contentDescription="@string/add"
-            android:src="@drawable/add_report_unselected"/>
+            android:src="@drawable/add_report_unpressed"/>
 
     </RelativeLayout>
 

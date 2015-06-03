@@ -27,6 +27,7 @@
 	        android:contentDescription="@string/check"
 	        android:background="@drawable/check_drawable"
 	       	android:scaleType="fitXY"/>
+
     </RelativeLayout>
 
 </RelativeLayout>

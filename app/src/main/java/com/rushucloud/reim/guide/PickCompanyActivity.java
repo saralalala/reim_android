@@ -171,7 +171,7 @@ public class PickCompanyActivity extends Activity
                     adapter.notifyDataSetChanged();
                     if (company == null)
                     {
-                        completeTextView.setTextColor(ViewUtils.getColor(R.color.font_title_selected));
+                        completeTextView.setTextColor(ViewUtils.getColor(R.color.font_title_pressed));
                     }
                     else
                     {
