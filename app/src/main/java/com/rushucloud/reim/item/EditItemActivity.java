@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -88,9 +87,10 @@ public class EditItemActivity extends Activity
 
     private PopupWindow typePopupWindow;
     private TextView typeTextView;
-    private RadioButton consumedRadio;
-    private RadioButton budgetRadio;
-    private RadioButton borrowingRadio;
+    private ImageView consumedImageView;
+    private ImageView budgetImageView;
+    private ImageView borrowingImageView;
+    private RelativeLayout needReimLayout;
     private ToggleButton needReimToggleButton;
 
     private LinearLayout invoiceLayout;
@@ -562,7 +562,7 @@ public class EditItemActivity extends Activity
     {
         // init type
         String temp = getString(item.getTypeString());
-        if (item.needReimbursed())
+        if (item.getType() == Item.TYPE_REIM && item.needReimbursed())
         {
             temp += "/" + getString(R.string.need_reimburse);
         }
@@ -585,21 +585,70 @@ public class EditItemActivity extends Activity
 
         // init type window
         View typeView = View.inflate(this, R.layout.window_reim_type, null);
-        consumedRadio = (RadioButton) typeView.findViewById(R.id.consumedRadio);
-        budgetRadio = (RadioButton) typeView.findViewById(R.id.budgetRadio);
-        borrowingRadio = (RadioButton) typeView.findViewById(R.id.borrowingRadio);
-        budgetRadio.setOnCheckedChangeListener(new OnCheckedChangeListener()
+
+        consumedImageView = (ImageView) typeView.findViewById(R.id.consumedImageView);
+        budgetImageView = (ImageView) typeView.findViewById(R.id.budgetImageView);
+        borrowingImageView = (ImageView) typeView.findViewById(R.id.borrowingImageView);
+        needReimLayout = (RelativeLayout) typeView.findViewById(R.id.needReimLayout);
+
+        ImageView disclosureImageView = (ImageView) typeView.findViewById(R.id.disclosureImageView);
+        disclosureImageView.setOnClickListener(new View.OnClickListener()
         {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            public void onClick(View view)
             {
-                if (isChecked && newItem)
+                if (needReimLayout.getVisibility() == View.VISIBLE)
+                {
+                    needReimLayout.setVisibility(View.GONE);
+                }
+                else
+                {
+                    needReimLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        LinearLayout consumedLayout = (LinearLayout) typeView.findViewById(R.id.consumedLayout);
+        consumedLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                consumedImageView.setVisibility(View.VISIBLE);
+                budgetImageView.setVisibility(View.INVISIBLE);
+                borrowingImageView.setVisibility(View.INVISIBLE);
+                needReimLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        LinearLayout budgetLayout = (LinearLayout) typeView.findViewById(R.id.budgetLayout);
+        budgetLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                if (newItem)
                 {
                     MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_PROVEAHEAD");
                 }
-                if (isChecked && !newItem)
+                else
                 {
                     MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_PROVEAHEAD");
                 }
+
+                consumedImageView.setVisibility(View.INVISIBLE);
+                budgetImageView.setVisibility(View.VISIBLE);
+                borrowingImageView.setVisibility(View.INVISIBLE);
+                needReimLayout.setVisibility(View.GONE);
+            }
+        });
+
+        LinearLayout borrowingLayout = (LinearLayout) typeView.findViewById(R.id.borrowingLayout);
+        borrowingLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                consumedImageView.setVisibility(View.INVISIBLE);
+                budgetImageView.setVisibility(View.INVISIBLE);
+                borrowingImageView.setVisibility(View.VISIBLE);
+                needReimLayout.setVisibility(View.GONE);
             }
         });
 
@@ -626,11 +675,12 @@ public class EditItemActivity extends Activity
             {
                 typePopupWindow.dismiss();
 
-                if (consumedRadio.isChecked())
+                if (consumedImageView.getVisibility() == View.VISIBLE)
                 {
                     item.setType(Item.TYPE_REIM);
+                    item.setNeedReimbursed(needReimToggleButton.isChecked());
                 }
-                else if (budgetRadio.isChecked())
+                else if (budgetImageView.getVisibility() == View.VISIBLE)
                 {
                     item.setType(Item.TYPE_BUDGET);
                 }
@@ -638,10 +688,9 @@ public class EditItemActivity extends Activity
                 {
                     item.setType(Item.TYPE_BORROWING);
                 }
-                item.setNeedReimbursed(needReimToggleButton.isChecked());
 
                 String temp = getString(item.getTypeString());
-                if (item.needReimbursed())
+                if (item.getType() == Item.TYPE_REIM && item.needReimbursed())
                 {
                     temp += "/" + getString(R.string.need_reimburse);
                 }
@@ -1207,21 +1256,24 @@ public class EditItemActivity extends Activity
     {
         if (item.getType() == Item.TYPE_REIM)
         {
-            consumedRadio.setChecked(true);
-            budgetRadio.setChecked(false);
-            borrowingRadio.setChecked(false);
+            consumedImageView.setVisibility(View.VISIBLE);
+            budgetImageView.setVisibility(View.INVISIBLE);
+            borrowingImageView.setVisibility(View.INVISIBLE);
+            needReimLayout.setVisibility(View.VISIBLE);
         }
         else if (item.getType() == Item.TYPE_BUDGET)
         {
-            consumedRadio.setChecked(false);
-            budgetRadio.setChecked(true);
-            borrowingRadio.setChecked(false);
+            consumedImageView.setVisibility(View.INVISIBLE);
+            budgetImageView.setVisibility(View.VISIBLE);
+            borrowingImageView.setVisibility(View.INVISIBLE);
+            needReimLayout.setVisibility(View.GONE);
         }
         else
         {
-            consumedRadio.setChecked(false);
-            budgetRadio.setChecked(false);
-            borrowingRadio.setChecked(true);
+            consumedImageView.setVisibility(View.INVISIBLE);
+            budgetImageView.setVisibility(View.INVISIBLE);
+            borrowingImageView.setVisibility(View.VISIBLE);
+            needReimLayout.setVisibility(View.GONE);
         }
         needReimToggleButton.setChecked(item.needReimbursed());
 

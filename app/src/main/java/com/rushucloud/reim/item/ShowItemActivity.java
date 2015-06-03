@@ -139,7 +139,7 @@ public class ShowItemActivity extends Activity
 
         // init type
         String temp = getString(item.getTypeString());
-        if (item.needReimbursed())
+        if (item.getType() == Item.TYPE_REIM && item.needReimbursed())
         {
             temp += "/" + getString(R.string.need_reimburse);
         }

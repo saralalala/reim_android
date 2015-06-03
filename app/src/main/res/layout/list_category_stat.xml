@@ -38,32 +38,17 @@
 	        android:layout_weight="2"
 	        android:orientation="vertical"
 			android:layout_marginRight="16dp">
-	
-	        <LinearLayout
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:orientation="horizontal"
-	            android:gravity="right|bottom"
-	            android:layout_marginTop="16dp"
-	            android:baselineAligned="true">
-	
-	            <TextView
-	                android:id="@+id/countTextView"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:ellipsize="end"
-	                android:singleLine="true"
-	                android:textColor="@color/hint_light_grey"
-	                android:textSize="14sp"/>
-	
-	            <TextView
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:text="@string/item_count"
-	                android:textColor="@color/hint_light_grey"
-	                android:textSize="14sp"/>
-	
-	        </LinearLayout>
+
+            <TextView
+                android:id="@+id/countTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/hint_light_grey"
+                android:textSize="14sp"/>
 	
 	        <LinearLayout
 	            android:layout_width="match_parent"

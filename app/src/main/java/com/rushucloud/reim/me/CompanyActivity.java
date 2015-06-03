@@ -1,6 +1,7 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -72,7 +73,9 @@ public class CompanyActivity extends Activity
         {
             public void onClick(View v)
             {
-                ViewUtils.goForward(CompanyActivity.this, EditCompanyActivity.class);
+                Intent intent = new Intent(CompanyActivity.this, EditCompanyActivity.class);
+                intent.putExtra("newCompany", true);
+                ViewUtils.goForward(CompanyActivity.this, intent);
             }
         });
 

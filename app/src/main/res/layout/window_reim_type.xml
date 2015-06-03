@@ -1,85 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="169.5dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/background">
     
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/consumedLayout"
 	    android:layout_width="match_parent"
-	    android:layout_height="56.5dp"
+	    android:layout_height="56dp"
 	    android:orientation="horizontal"
-	    android:background="@drawable/list_item_drawable">
-            
-	    <include                 
-			android:layout_width="match_parent"
-			android:layout_height="0.5dp"
-			android:layout_alignParentTop="true"
-		  	layout="@layout/view_divider"/>
-	
-	    <TextView
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerVertical="true"
-	        android:layout_alignParentLeft="true"
-	        android:layout_marginLeft="16dp"
-	        android:text="@string/reim_type"
-	        android:textColor="@color/font_major_dark"
-	        android:textSize="16sp"/>
-    
-	    <classes.widget.SegmentedGroup
-	        android:id="@+id/typeRadioGroup"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-			android:layout_centerVertical="true"
-	        android:layout_alignParentRight="true"
-	        android:layout_marginRight="16dp"
-	    	android:orientation="horizontal">
-	
-	        <RadioButton
-	            android:id="@+id/consumedRadio"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:checked="true"
-	            android:text="@string/consumed"
-	            style="@style/RadioButton"/>
-	
-	        <RadioButton
-	            android:id="@+id/budgetRadio"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="@string/budget"
-	            style="@style/RadioButton"/>
+	    android:background="@drawable/window_item_drawable">
 
-            <RadioButton
-                android:id="@+id/borrowingRadio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/borrowing"
-                style="@style/RadioButton"/>
-	        
-	    </classes.widget.SegmentedGroup>
+        <ImageView
+            android:id="@+id/consumedImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/check"
+            android:src="@drawable/check"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:text="@string/consumed"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/disclosureImageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center_vertical"
+            android:padding="20dp"
+            android:contentDescription="@string/check"
+            android:src="@drawable/disclosure"/>
 	
-	</RelativeLayout>
+	</LinearLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
     
     <RelativeLayout
+        android:id="@+id/needReimLayout"
 	    android:layout_width="match_parent"
-	    android:layout_height="56.5dp"
-	    android:orientation="horizontal"
-	    android:background="@drawable/list_item_drawable">
-            
-	    <include                 
-			android:layout_width="match_parent"
-			android:layout_height="0.5dp"
-			android:layout_alignParentTop="true"
-		  	layout="@layout/view_divider"/>
+	    android:layout_height="56dp"
+	    android:background="@color/background_grey">
 	
 	    <TextView
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_centerVertical="true"
-	        android:layout_alignParentLeft="true"
-	        android:layout_marginLeft="16dp"
+	        android:layout_marginLeft="56dp"
+            android:layout_centerVertical="true"
 	        android:text="@string/need_reimburse"
 	        android:textColor="@color/font_major_dark"
 	        android:textSize="16sp"/>
@@ -88,19 +66,86 @@
 	        android:id="@+id/needReimToggleButton"
 	        android:layout_width="49dp"
 	        android:layout_height="30dp"
-	        android:layout_centerVertical="true"
-	        android:layout_alignParentRight="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
 	        android:layout_marginRight="16dp"
 	        android:background="@drawable/toggle_drawable"
 	        android:textOn=""
 	        android:textOff=""/>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            layout="@layout/view_divider"/>
 	
 	</RelativeLayout>
-            
-	<include                 
-		android:layout_width="match_parent"
-		android:layout_height="0.5dp"
-	  	layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/budgetLayout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:background="@drawable/window_item_drawable">
+
+        <ImageView
+            android:id="@+id/budgetImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/check"
+            android:src="@drawable/check"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:text="@string/budget"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/borrowingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:background="@drawable/window_item_drawable">
+
+        <ImageView
+            android:id="@+id/borrowingImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/check"
+            android:src="@drawable/check"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:text="@string/borrowing"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
 
 	<TextView
 	    android:id="@+id/confirmTextView"

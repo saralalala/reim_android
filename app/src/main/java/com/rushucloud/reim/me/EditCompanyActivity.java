@@ -74,7 +74,10 @@ public class EditCompanyActivity extends Activity
     {
         appPreference = AppPreference.getAppPreference();
         dbManager = DBManager.getDBManager();
-        currentGroup = appPreference.getCurrentGroup();
+        if (!getIntent().getBooleanExtra("newCompany", false))
+        {
+            currentGroup = appPreference.getCurrentGroup();
+        }
         originalName = currentGroup != null ? currentGroup.getName() : "";
     }
 

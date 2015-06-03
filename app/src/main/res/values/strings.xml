@@ -153,8 +153,8 @@
     <string name="reim_type">报销类型</string>
     <string name="consumed">报销</string>
     <string name="budget">预算</string>
-    <string name="borrowing">借款</string>
-    <string name="need_reimburse">需支付</string>
+    <string name="borrowing">预借</string>
+    <string name="need_reimburse">需收款</string>
     <string name="actual_cost">实际消费</string>
     <string name="type">类　型</string>
     <string name="photo">照　片</string>
