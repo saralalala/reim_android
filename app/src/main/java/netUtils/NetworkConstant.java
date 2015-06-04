@@ -48,6 +48,7 @@ public class NetworkConstant
     public static final int ERROR_REPORT_NOT_EXISTS = -25;
     public static final int ERROR_SIGN_IN = -31;
     public static final int ERROR_NAME_EXCEED_LIMIT = -33;
+    public static final int ERROR_SAME_COMPANY = -37;
     public static final int ERROR_MESSAGE_DONE = -38;
     public static final int ERROR_LAST_ADMIN = -39;
     public static final int ERROR_NOT_UNIQUE = -42;
@@ -128,6 +129,9 @@ public class NetworkConstant
                 break;
             case NetworkConstant.ERROR_NAME_EXCEED_LIMIT:
                 result = "报告名不能超过50个字";
+                break;
+            case NetworkConstant.ERROR_SAME_COMPANY:
+                result = "已经在同一家公司";
                 break;
             case NetworkConstant.ERROR_MESSAGE_DONE:
                 result = "此消息已被处理";

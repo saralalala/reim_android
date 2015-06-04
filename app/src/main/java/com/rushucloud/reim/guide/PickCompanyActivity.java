@@ -425,6 +425,12 @@ public class PickCompanyActivity extends Activity
                             {
                                 showLastAdminDialog();
                             }
+                            else if (response.getCode() == NetworkConstant.ERROR_SAME_COMPANY && fromGuide)
+                            {
+                                Intent intent = new Intent(PickCompanyActivity.this, JoinedActivity.class);
+                                intent.putExtra("companyName", company.getName());
+                                ViewUtils.goForwardAndFinish(PickCompanyActivity.this, intent);
+                            }
                             else
                             {
                                 ViewUtils.showToast(PickCompanyActivity.this, R.string.failed_to_apply, response.getErrorMessage());
@@ -479,6 +485,12 @@ public class PickCompanyActivity extends Activity
                             if (response.getCode() == NetworkConstant.ERROR_LAST_ADMIN)
                             {
                                 showLastAdminDialog();
+                            }
+                            else if (response.getCode() == NetworkConstant.ERROR_SAME_COMPANY && fromGuide)
+                            {
+                                Intent intent = new Intent(PickCompanyActivity.this, JoinCompleteActivity.class);
+                                intent.putExtra("companyName", company.getName());
+                                ViewUtils.goForwardAndFinish(PickCompanyActivity.this, intent);
                             }
                             else
                             {

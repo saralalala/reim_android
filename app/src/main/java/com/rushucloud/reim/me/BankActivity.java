@@ -191,7 +191,7 @@ public class BankActivity extends Activity
         final View bankView = View.inflate(this, R.layout.window_me_bank_name, null);
 
         final WheelView bankWheelView = (WheelView) bankView.findViewById(R.id.bankWheelView);
-        bankWheelView.setVisibleItems(7);
+        bankWheelView.setVisibleItems(11);
         bankWheelView.setViewAdapter(new ArrayWheelAdapter<>(this, bankList.toArray(new String[bankList.size()])));
         if (bankAccount != null && !bankAccount.getBankName().isEmpty())
         {
@@ -251,7 +251,7 @@ public class BankActivity extends Activity
             }
         });
         provinceWheelView.setViewAdapter(new ArrayWheelAdapter<>(this, Province.getProvinceArray(provinceList)));
-        provinceWheelView.setVisibleItems(7);
+        provinceWheelView.setVisibleItems(11);
 
         cityWheelView = (WheelView) locationView.findViewById(R.id.cityWheelView);
         cityWheelView.addChangingListener(new OnWheelChangedListener()
@@ -261,7 +261,7 @@ public class BankActivity extends Activity
                 updateCurrentCity(newValue);
             }
         });
-        cityWheelView.setVisibleItems(7);
+        cityWheelView.setVisibleItems(11);
 
         updateCurrentProvince(0);
 
