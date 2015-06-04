@@ -227,15 +227,15 @@ public class MeFragment extends Fragment
         });
 
         // init feedback
-        TextView feedbackTextView = (TextView) view.findViewById(R.id.feedbackTextView);
-        feedbackTextView.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_OPINION");
-                ViewUtils.goForward(getActivity(), FeedbackActivity.class);
-            }
-        });
+//        TextView feedbackTextView = (TextView) view.findViewById(R.id.feedbackTextView);
+//        feedbackTextView.setOnClickListener(new View.OnClickListener()
+//        {
+//            public void onClick(View v)
+//            {
+//                MobclickAgent.onEvent(getActivity(), "UMENG_MINE_SETTING_OPINION");
+//                ViewUtils.goForward(getActivity(), FeedbackActivity.class);
+//            }
+//        });
 
         // init update
         TextView updateTextView = (TextView) view.findViewById(R.id.updateTextView);

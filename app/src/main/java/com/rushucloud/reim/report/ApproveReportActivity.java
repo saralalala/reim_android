@@ -247,7 +247,7 @@ public class ApproveReportActivity extends Activity
 
         Builder builder = new Builder(this);
         builder.setView(view);
-        builder.setPositiveButton(R.string.reject, new DialogInterface.OnClickListener()
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface dialog, int which)
             {
