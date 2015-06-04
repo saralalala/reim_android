@@ -206,7 +206,7 @@ public class MessageActivity extends Activity
         dateTextView.setText(Utils.secondToStringUpToDay(message.getUpdateTime()));
     }
 
-    private void showDialog()
+    private void showLastAdminDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.warning);
@@ -358,7 +358,7 @@ public class MessageActivity extends Activity
                             ReimProgressDialog.dismiss();
                             if (response.getCode() == NetworkConstant.ERROR_LAST_ADMIN)
                             {
-                                showDialog();
+                                showLastAdminDialog();
                             }
                             else
                             {

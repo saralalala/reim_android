@@ -26,7 +26,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private DBManager(Context context)
     {
@@ -180,6 +180,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "item_count INT DEFAULT(0),"
                     + "amount TEXT DEFAULT(''),"
                     + "is_cc INT DEFAULT(0),"
+                    + "step INT DEFAULT(0),"
                     + "created_date INT DEFAULT(0),"
                     + "server_updatedt INT DEFAULT(0),"
                     + "local_updatedt INT DEFAULT(0),"
@@ -301,11 +302,11 @@ public class DBManager extends SQLiteOpenHelper
 
         if (newVersion > oldVersion)
         {
-//            if (oldVersion < 2)
-//            {
-//                String command = "ALTER TABLE tbl_user ADD COLUMN bank_account TEXT DEFAULT('')";
-//                db.execSQL(command);
-//            }
+            if (oldVersion < 2)
+            {
+                String command = "ALTER TABLE tbl_others_report ADD COLUMN step INT DEFAULT(0)";
+                db.execSQL(command);
+            }
         }
         onCreate(db);
     }
@@ -1745,7 +1746,7 @@ public class DBManager extends SQLiteOpenHelper
         try
         {
             String sqlString = "INSERT INTO tbl_others_report (server_id, owner_id, title, user_id, status, my_decision, manager_id, cc_id, " +
-                    "type, amount, item_count, is_cc, created_date, server_updatedt, local_updatedt) VALUES (" +
+                    "type, amount, item_count, is_cc, step, created_date, server_updatedt, local_updatedt) VALUES (" +
                     "'" + report.getServerID() + "'," +
                     "'" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
                     "'" + sqliteEscape(report.getTitle()) + "'," +
@@ -1758,6 +1759,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + report.getAmount() + "'," +
                     "'" + report.getItemCount() + "'," +
                     "'" + Utils.booleanToInt(report.isCC()) + "'," +
+                    "'" + report.getStep() + "'," +
                     "'" + report.getCreatedDate() + "'," +
                     "'" + report.getServerUpdatedDate() + "'," +
                     "'" + report.getLocalUpdatedDate() + "')";
@@ -1843,6 +1845,7 @@ public class DBManager extends SQLiteOpenHelper
                     "my_decision = '" + report.getMyDecision() + "'," +
                     "type = '" + report.getType() + "'," +
                     "is_cc = '" + Utils.booleanToInt(report.isCC()) + "'," +
+                    "step = '" + report.getStep() + "'," +
                     "created_date = '" + report.getCreatedDate() + "'," +
                     "server_updatedt = '" + report.getServerUpdatedDate() + "'," +
                     "local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
@@ -2041,6 +2044,7 @@ public class DBManager extends SQLiteOpenHelper
                 report.setItemCount(getIntFromCursor(cursor, "item_count"));
                 report.setAmount(getStringFromCursor(cursor, "amount"));
                 report.setIsCC(Utils.intToBoolean(getIntFromCursor(cursor, "is_cc")));
+                report.setStep(getIntFromCursor(cursor, "step"));
                 report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
                 report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
                 report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -2258,6 +2262,7 @@ public class DBManager extends SQLiteOpenHelper
                 report.setItemCount(getIntFromCursor(cursor, "item_count"));
                 report.setAmount(getStringFromCursor(cursor, "amount"));
                 report.setIsCC(Utils.intToBoolean(getIntFromCursor(cursor, "is_cc")));
+                report.setStep(getIntFromCursor(cursor, "step"));
                 report.setCreatedDate(getIntFromCursor(cursor, "created_date"));
                 report.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
                 report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));

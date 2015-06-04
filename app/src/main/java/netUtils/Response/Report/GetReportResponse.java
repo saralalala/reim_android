@@ -33,6 +33,7 @@ public class GetReportResponse extends BaseResponse
             report = new Report(jObject);
             report.setMyDecision(jObject.getInt("mdecision"));
             report.setIsCC(Utils.intToBoolean(jObject.getInt("cc")));
+            report.setStep(jObject.getInt("step"));
 
             DBManager dbManager = DBManager.getDBManager();
 

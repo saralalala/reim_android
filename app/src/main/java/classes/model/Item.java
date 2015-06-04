@@ -113,7 +113,6 @@ public class Item
     {
         return localID;
     }
-
     public void setLocalID(int localID)
     {
         this.localID = localID;
@@ -123,7 +122,6 @@ public class Item
     {
         return serverID;
     }
-
     public void setServerID(int serverID)
     {
         this.serverID = serverID;
@@ -133,7 +131,6 @@ public class Item
     {
         return type;
     }
-
     public int getTypeString()
     {
         switch (getType())
@@ -148,7 +145,6 @@ public class Item
                 return R.string.not_available;
         }
     }
-
     public void setType(int type)
     {
         this.type = type;
@@ -158,7 +154,6 @@ public class Item
     {
         return belongReport;
     }
-
     public void setBelongReport(Report belongReport)
     {
         this.belongReport = belongReport;
@@ -168,7 +163,6 @@ public class Item
     {
         return consumer;
     }
-
     public void setConsumer(User consumer)
     {
         this.consumer = consumer;
@@ -178,7 +172,6 @@ public class Item
     {
         return amount;
     }
-
     public void setAmount(double amount)
     {
         this.amount = amount;
@@ -188,7 +181,6 @@ public class Item
     {
         return aaAmount;
     }
-
     public void setAaAmount(double aaAmount)
     {
         this.aaAmount = aaAmount;
@@ -198,7 +190,6 @@ public class Item
     {
         return needReimbursed;
     }
-
     public void setNeedReimbursed(boolean needReimbursed)
     {
         this.needReimbursed = needReimbursed;
@@ -208,7 +199,6 @@ public class Item
     {
         return aaApproved;
     }
-
     public void setAaApproved(boolean aaApproved)
     {
         this.aaApproved = aaApproved;
@@ -218,7 +208,6 @@ public class Item
     {
         return status;
     }
-
     public void setStatus(int status)
     {
         this.status = status;
@@ -228,7 +217,6 @@ public class Item
     {
         return category;
     }
-
     public void setCategory(Category category)
     {
         this.category = category;
@@ -238,7 +226,6 @@ public class Item
     {
         return vendor;
     }
-
     public void setVendor(String vendor)
     {
         this.vendor = vendor;
@@ -248,7 +235,6 @@ public class Item
     {
         return location;
     }
-
     public void setLocation(String location)
     {
         this.location = location;
@@ -258,7 +244,6 @@ public class Item
     {
         return latitude;
     }
-
     public void setLatitude(double latitude)
     {
         this.latitude = latitude;
@@ -268,7 +253,6 @@ public class Item
     {
         return longitude;
     }
-
     public void setLongitude(double longitude)
     {
         this.longitude = longitude;
@@ -278,7 +262,6 @@ public class Item
     {
         return invoices;
     }
-
     public void setInvoices(List<Image> invoices)
     {
         this.invoices = invoices;
@@ -288,7 +271,6 @@ public class Item
     {
         return relevantUsers;
     }
-
     public void setRelevantUsers(List<User> relevantUsers)
     {
         this.relevantUsers = relevantUsers;
@@ -298,7 +280,6 @@ public class Item
     {
         return tags;
     }
-
     public void setTags(List<Tag> tags)
     {
         this.tags = tags;
@@ -308,7 +289,6 @@ public class Item
     {
         return note;
     }
-
     public void setNote(String note)
     {
         this.note = note;
@@ -318,7 +298,6 @@ public class Item
     {
         return relevantUsersID;
     }
-
     public void setRelevantUsersID(String relevantUsersID)
     {
         this.relevantUsersID = relevantUsersID;
@@ -328,7 +307,6 @@ public class Item
     {
         return tagsID;
     }
-
     public void setTagsID(String tagsID)
     {
         this.tagsID = tagsID;
@@ -338,7 +316,6 @@ public class Item
     {
         return consumedDate;
     }
-
     public void setConsumedDate(int consumedDate)
     {
         this.consumedDate = consumedDate;
@@ -348,7 +325,6 @@ public class Item
     {
         return createdDate;
     }
-
     public void setCreatedDate(int createdDate)
     {
         this.createdDate = createdDate;
@@ -358,7 +334,6 @@ public class Item
     {
         return serverUpdatedDate;
     }
-
     public void setServerUpdatedDate(int serverUpdatedDate)
     {
         this.serverUpdatedDate = serverUpdatedDate;
@@ -368,7 +343,6 @@ public class Item
     {
         return localUpdatedDate;
     }
-
     public void setLocalUpdatedDate(int localUpdatedDate)
     {
         this.localUpdatedDate = localUpdatedDate;
@@ -378,7 +352,6 @@ public class Item
     {
         return consumedDateGroup;
     }
-
     public void setConsumedDateGroup(String consumedDateGroup)
     {
         this.consumedDateGroup = consumedDateGroup;

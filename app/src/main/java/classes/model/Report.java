@@ -48,6 +48,7 @@ public class Report implements Serializable
     private int itemCount;
     private String amount;
     private boolean isCC;
+    private int step = 0;
     private String sectionName = "";
 
     public Report()
@@ -73,6 +74,7 @@ public class Report implements Serializable
         itemCount = report.getItemCount();
         amount = report.getAmount();
         isCC = report.isCC();
+        step = report.getStep();
     }
 
     public Report(JSONObject jObject)
@@ -102,7 +104,6 @@ public class Report implements Serializable
     {
         return localID;
     }
-
     public void setLocalID(int localID)
     {
         this.localID = localID;
@@ -112,7 +113,6 @@ public class Report implements Serializable
     {
         return serverID;
     }
-
     public void setServerID(int serverID)
     {
         this.serverID = serverID;
@@ -122,7 +122,6 @@ public class Report implements Serializable
     {
         return type;
     }
-
     public void setType(int type)
     {
         this.type = type;
@@ -132,7 +131,6 @@ public class Report implements Serializable
     {
         return title;
     }
-
     public void setTitle(String title)
     {
         this.title = title;
@@ -142,7 +140,6 @@ public class Report implements Serializable
     {
         return status;
     }
-
     public void setStatus(int status)
     {
         this.status = status;
@@ -152,7 +149,6 @@ public class Report implements Serializable
     {
         return myDecision;
     }
-
     public void setMyDecision(int myDecision)
     {
         this.myDecision = myDecision;
@@ -162,7 +158,6 @@ public class Report implements Serializable
     {
         return aaApproved;
     }
-
     public void setAaApproved(boolean aaApproved)
     {
         this.aaApproved = aaApproved;
@@ -172,7 +167,6 @@ public class Report implements Serializable
     {
         return managerList;
     }
-
     public String getManagersName()
     {
         if (getManagerList() == null || getManagerList().isEmpty())
@@ -184,7 +178,6 @@ public class Report implements Serializable
             return User.getUsersNameString(getManagerList());
         }
     }
-
     public void setManagerList(List<User> managerList)
     {
         if (managerList == null)
@@ -206,7 +199,6 @@ public class Report implements Serializable
     {
         return ccList;
     }
-
     public String getCCsName()
     {
         if (getCCList() == null || getCCList().isEmpty())
@@ -218,7 +210,6 @@ public class Report implements Serializable
             return User.getUsersNameString(getCCList());
         }
     }
-
     public void setCCList(List<User> ccList)
     {
         if (ccList == null)
@@ -240,7 +231,6 @@ public class Report implements Serializable
     {
         return commentList;
     }
-
     public void setCommentList(List<Comment> commentList)
     {
         this.commentList = commentList;
@@ -250,7 +240,6 @@ public class Report implements Serializable
     {
         return sender;
     }
-
     public void setSender(User sender)
     {
         this.sender = sender;
@@ -260,7 +249,6 @@ public class Report implements Serializable
     {
         return createdDate;
     }
-
     public void setCreatedDate(int createdDate)
     {
         this.createdDate = createdDate;
@@ -270,7 +258,6 @@ public class Report implements Serializable
     {
         return serverUpdatedDate;
     }
-
     public void setServerUpdatedDate(int serverUpdatedDate)
     {
         this.serverUpdatedDate = serverUpdatedDate;
@@ -280,7 +267,6 @@ public class Report implements Serializable
     {
         return localUpdatedDate;
     }
-
     public void setLocalUpdatedDate(int localUpdatedDate)
     {
         this.localUpdatedDate = localUpdatedDate;
@@ -290,7 +276,6 @@ public class Report implements Serializable
     {
         return itemCount;
     }
-
     public void setItemCount(int count)
     {
         this.itemCount = count;
@@ -300,7 +285,6 @@ public class Report implements Serializable
     {
         return amount;
     }
-
     public void setAmount(String amount)
     {
         this.amount = amount;
@@ -310,17 +294,24 @@ public class Report implements Serializable
     {
         return isCC;
     }
-
     public void setIsCC(boolean isCC)
     {
         this.isCC = isCC;
+    }
+
+    public int getStep()
+    {
+        return step;
+    }
+    public void setStep(int step)
+    {
+        this.step = step;
     }
 
     public String getSectionName()
     {
         return sectionName;
     }
-
     public void setSectionName(String sectionName)
     {
         this.sectionName = sectionName;

@@ -45,6 +45,7 @@ public class SubordinatesReportResponse extends BaseResponse
                     report.setItemCount(object.getInt("item_count"));
                     report.setAmount(object.getString("amount"));
                     report.setIsCC(Utils.intToBoolean(object.getInt("cc_flag")));
+                    report.setStep(object.getInt("step"));
 
                     User user = new User();
                     user.setServerID(object.getInt("uid"));

@@ -335,7 +335,7 @@ public class ApproveReportActivity extends Activity
                                 }
                                 else
                                 {
-                                    ViewUtils.showToast(ApproveReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                                    ViewUtils.showToast(ApproveReportActivity.this, R.string.failed_to_get_data);
                                     goBackToMainActivity();
                                 }
                             }

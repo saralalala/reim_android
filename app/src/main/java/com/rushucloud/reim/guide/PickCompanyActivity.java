@@ -1,7 +1,9 @@
 package com.rushucloud.reim.guide;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.me.PickAdminActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -31,17 +34,22 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
 import netUtils.request.group.GetInvitedGroupRequest;
 import netUtils.request.group.SearchGroupRequest;
 import netUtils.request.user.ApplyRequest;
 import netUtils.request.user.InviteReplyRequest;
+import netUtils.request.user.SetAdminRequest;
 import netUtils.response.group.GetInvitedGroupResponse;
 import netUtils.response.group.SearchGroupResponse;
 import netUtils.response.user.ApplyResponse;
 import netUtils.response.user.InviteReplyResponse;
+import netUtils.response.user.SetAdminResponse;
 
 public class PickCompanyActivity extends Activity
 {
+    private static final int PICK_ADMIN = 0;
+
     private TextView completeTextView;
     private EditText companyEditText;
     private TextView sectionTextView;
@@ -51,6 +59,7 @@ public class PickCompanyActivity extends Activity
     private List<Group> invitedList = new ArrayList<>();
     private List<Invite> inviteList = new ArrayList<>();
     private Group company;
+    private Invite invite;
     private boolean hasInit = false;
     private boolean fromGuide = false;
 
@@ -94,6 +103,26 @@ public class PickCompanyActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
+    @SuppressWarnings("unchecked")
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == Activity.RESULT_OK)
+        {
+            switch (requestCode)
+            {
+                case PICK_ADMIN:
+                {
+                    List<User> users = (List<User>) data.getSerializableExtra("users");
+                    sendSetAdminRequest(users);
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -120,10 +149,12 @@ public class PickCompanyActivity extends Activity
                     }
                     else if (index != -1)
                     {
-                        sendInviteReplyRequest(inviteList.get(index));
+                        invite = inviteList.get(index);
+                        sendInviteReplyRequest(invite);
                     }
                     else
                     {
+                        invite = null;
                         sendApplyRequest();
                     }
                 }
@@ -180,6 +211,23 @@ public class PickCompanyActivity extends Activity
                 }
             }
         });
+    }
+
+    private void showLastAdminDialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.warning);
+        builder.setMessage(R.string.prompt_last_admin);
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                Intent intent = new Intent(PickCompanyActivity.this, PickAdminActivity.class);
+                ViewUtils.goForwardForResult(PickCompanyActivity.this, intent, PICK_ADMIN);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.create().show();
     }
 
     private void searchGroups()
@@ -373,7 +421,14 @@ public class PickCompanyActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(PickCompanyActivity.this, R.string.failed_to_apply, response.getErrorMessage());
+                            if (response.getCode() == NetworkConstant.ERROR_LAST_ADMIN)
+                            {
+                                showLastAdminDialog();
+                            }
+                            else
+                            {
+                                ViewUtils.showToast(PickCompanyActivity.this, R.string.failed_to_apply, response.getErrorMessage());
+                            }
                         }
                     });
                 }
@@ -421,7 +476,49 @@ public class PickCompanyActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(PickCompanyActivity.this, R.string.failed_to_apply, response.getErrorMessage());
+                            if (response.getCode() == NetworkConstant.ERROR_LAST_ADMIN)
+                            {
+                                showLastAdminDialog();
+                            }
+                            else
+                            {
+                                ViewUtils.showToast(PickCompanyActivity.this, R.string.failed_to_apply, response.getErrorMessage());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendSetAdminRequest(List<User> userList)
+    {
+        ReimProgressDialog.show();
+        SetAdminRequest request = new SetAdminRequest(userList);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final SetAdminResponse response = new SetAdminResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    if (invite != null)
+                    {
+                        sendInviteReplyRequest(invite);
+                    }
+                    else
+                    {
+                        sendApplyRequest();
+                    }
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(PickCompanyActivity.this, R.string.failed_to_set_admin, response.getErrorMessage());
                         }
                     });
                 }

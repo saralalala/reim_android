@@ -1194,6 +1194,10 @@ public class ReportFragment extends Fragment implements OnClickListener
                         {
                             dbManager.insertOthersReport(report);
                         }
+                        else if (report.getStep() != localReport.getStep())
+                        {
+                            dbManager.updateOthersReport(report);
+                        }
                         else
                         {
                             report.setManagerList(localReport.getManagerList());

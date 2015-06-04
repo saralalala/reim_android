@@ -132,7 +132,7 @@
     <string name="statistics">统计</string>
     <string name="me">自己</string>
     <string name="reim_guide">点击＋开始记录你的第一笔消费</string>
-    <string name="report_guide">点击这里创建你的第一份报销报告</string>
+    <string name="report_guide">点击这里创建报告，提交你的报销</string>
     
     <string name="sort">排序</string>
     <string name="sort_consumed_date">消费时间</string>
