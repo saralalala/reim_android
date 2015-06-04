@@ -259,7 +259,7 @@ public class StatisticsActivity extends Activity
             {
                 totalAmount += category.getAmount();
             }
-            overviewTextView.setText(Utils.formatDouble(totalAmount));
+            overviewTextView.setText(Utils.addComma(Utils.formatDouble(totalAmount)));
         }
         else
         {
@@ -371,7 +371,7 @@ public class StatisticsActivity extends Activity
                     ViewUtils.setImageViewBitmap(category, iconImageView);
 
                     TextView amountTextView = (TextView) categoryView.findViewById(R.id.amountTextView);
-                    amountTextView.setText(Utils.formatDouble(category.getAmount()));
+                    amountTextView.setText(Utils.addComma(Utils.formatDouble(category.getAmount())));
 
                     FrameLayout legendLayout = (FrameLayout) categoryView.findViewById(R.id.legendLayout);
                     ReimPie legendPie = new ReimPie(this, 0, 360, legendWidth, category.getColor(), 0);
@@ -491,7 +491,7 @@ public class StatisticsActivity extends Activity
 
                         TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                         amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-                        amountTextView.setText(Utils.formatDouble(user.getAmount()));
+                        amountTextView.setText(Utils.addComma(Utils.formatDouble(user.getAmount())));
 
                         memberLayout.addView(view);
                     }

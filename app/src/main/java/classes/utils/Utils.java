@@ -233,4 +233,33 @@ public class Utils
         }
         return result;
     }
+
+    public static String addComma(String source)
+    {
+        int index = source.indexOf(".");
+        if (index < 0)
+        {
+            index = source.length();
+        }
+
+        int length = index;
+        String result = "";
+        for (int i = length - 1; i >= 0; i--)
+        {
+            result += source.substring(i, i + 1);
+            if (i % 3 == length % 3 && i != 0)
+            {
+                result += ",";
+            }
+        }
+
+        result = new StringBuilder(result).reverse().toString();
+        index = source.indexOf(".");
+        if (index > 0)
+        {
+            result += source.substring(index);
+        }
+
+        return result;
+    }
 }
