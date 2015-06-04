@@ -36,7 +36,7 @@ public class GetGroupResponse extends BaseResponse
             }
 
             JSONArray memberArray = jObject.getJSONArray("gmember");
-            memberList = new ArrayList<User>();
+            memberList = new ArrayList<>();
             for (int i = 0; i < memberArray.length(); i++)
             {
                 User user = new User(memberArray.getJSONObject(i), groupID);

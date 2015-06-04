@@ -520,8 +520,11 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 if (response.getStatus())
                 {
                     User currentUser = AppPreference.getAppPreference().getCurrentUser();
-                    currentUser.setAppliedCompany(response.getAppliedCompany());
-                    DBManager.getDBManager().updateUser(currentUser);
+                    if (currentUser != null)
+                    {
+                        currentUser.setAppliedCompany(response.getAppliedCompany());
+                        DBManager.getDBManager().updateUser(currentUser);
+                    }
 
                     if (response.needToRefresh() && PhoneUtils.isNetworkConnected())
                     {
