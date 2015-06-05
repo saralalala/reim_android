@@ -334,15 +334,53 @@
                 layout="@layout/view_divider"/>
 
             <TextView
-                android:id="@+id/aboutTextView"
+                android:id="@+id/shareTextView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/layout_height"
                 android:paddingLeft="16dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/me_item_drawable"
-                android:text="@string/about_us"
+                android:text="@string/share"
                 android:textColor="@color/font_major_dark"
                 android:textSize="16sp"/>
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                layout="@layout/view_divider"/>
+
+            <RelativeLayout
+                android:id="@+id/settingsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:background="@drawable/me_item_drawable">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="16dp"
+                    android:text="@string/settings"
+                    android:textColor="@color/font_major_dark"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="@string/next"
+                    android:src="@drawable/next"/>
+
+            </RelativeLayout>
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginBottom="24dp"
+                layout="@layout/view_divider"/>
 
             <!--<include-->
                 <!--android:layout_width="match_parent"-->
@@ -359,44 +397,6 @@
                 <!--android:text="@string/feedback"-->
                 <!--android:textColor="@color/font_major_dark"-->
                 <!--android:textSize="16sp"/>-->
-
-            <include
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                layout="@layout/view_divider"/>
-
-            <TextView
-                android:id="@+id/updateTextView"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/layout_height"
-                android:paddingLeft="16dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/me_item_drawable"
-                android:text="@string/check_update"
-                android:textColor="@color/font_major_dark"
-                android:textSize="16sp"/>
-
-            <include
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                layout="@layout/view_divider"/>
-
-            <TextView
-                android:id="@+id/shareTextView"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/layout_height"
-                android:paddingLeft="16dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/me_item_drawable"
-                android:text="@string/share"
-                android:textColor="@color/font_major_dark"
-                android:textSize="16sp"/>
-            
-	        <include                 
-				android:layout_width="match_parent"
-				android:layout_height="0.5dp"
-				android:layout_marginBottom="24dp"
-	        	layout="@layout/view_divider"/>
 			
         </LinearLayout>
         

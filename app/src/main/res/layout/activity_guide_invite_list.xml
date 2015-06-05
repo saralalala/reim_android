@@ -27,19 +27,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/invite_contact"
+            android:text="@string/contact_invite"
             android:textColor="@color/major_light"
             android:textSize="20sp"/>
 
         <TextView
-            android:id="@+id/nextTextView"
+            android:id="@+id/confirmTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
 			android:paddingLeft="16dp"
 			android:paddingRight="16dp"
 			android:gravity="center"
-            android:text="@string/next"
+            android:text="@string/confirm"
             android:textColor="@color/title_text_color"
             android:textSize="16sp"/>
 

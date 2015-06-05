@@ -104,7 +104,7 @@ public class CompanyNameActivity extends Activity
                     bundle.putStringArrayList("inputList", inputList);
                     bundle.putStringArrayList("inputChosenList", inputChosenList);
                     bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
-                    Intent intent = new Intent(CompanyNameActivity.this, ContactActivity.class);
+                    Intent intent = new Intent(CompanyNameActivity.this, InviteListActivity.class);
                     intent.putExtras(bundle);
                     ViewUtils.goForwardAndFinish(CompanyNameActivity.this, intent);
                 }

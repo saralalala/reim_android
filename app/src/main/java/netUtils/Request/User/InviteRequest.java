@@ -6,13 +6,13 @@ import netUtils.request.BaseRequest;
 
 public class InviteRequest extends BaseRequest
 {
-    public InviteRequest(String username)
+    public InviteRequest(String inviteList)
     {
         super();
 
-        addParams("name", username);
+        addParams("invites", inviteList);
 
-        appendUrl(URLDef.URL_INVITE);
+        appendUrl(URLDef.URL_INVITES);
     }
 
     public void sendRequest(HttpConnectionCallback callback)

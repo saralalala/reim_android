@@ -30,15 +30,22 @@ import java.util.ArrayList;
 
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
+import classes.widget.ReimProgressDialog;
+import netUtils.HttpConnectionCallback;
+import netUtils.request.user.InviteRequest;
+import netUtils.response.user.InviteResponse;
 
 public class InputContactActivity extends Activity
 {
     private EditText contactEditText;
 
+    private boolean fromGuide;
+
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_input_contact);
+        fromGuide = getIntent().getBooleanExtra("fromGuide", false);
         initView();
     }
 
@@ -47,6 +54,7 @@ public class InputContactActivity extends Activity
         super.onResume();
         MobclickAgent.onPageStart("InputContactActivity");
         MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
     }
 
     protected void onPause()
@@ -76,8 +84,8 @@ public class InputContactActivity extends Activity
             }
         });
 
-        TextView completeTextView = (TextView) findViewById(R.id.completeTextView);
-        completeTextView.setOnClickListener(new OnClickListener()
+        TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
+        confirmTextView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
@@ -101,6 +109,7 @@ public class InputContactActivity extends Activity
 
                 int count = 0;
                 boolean contactsInvalid = false;
+                String inviteList = "";
                 for (String contact : contactList)
                 {
                     int index = contactString.substring(count).indexOf(contact);
@@ -110,6 +119,12 @@ public class InputContactActivity extends Activity
                         {
                             contactsInvalid = true;
                             text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_dark)),
+                                         index + count, index + count + contact.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        else
+                        {
+                            inviteList += contact + ",";
+                            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.font_major_dark)),
                                          index + count, index + count + contact.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
                         count += contact.length();
@@ -123,14 +138,27 @@ public class InputContactActivity extends Activity
                     Selection.setSelection(spanText, spanText.length());
                     ViewUtils.showToast(InputContactActivity.this, R.string.error_username_wrong_format);
                 }
-                else
+                else if (fromGuide)
                 {
                     Intent intent = new Intent();
                     intent.putStringArrayListExtra("inputList", contactList);
                     ViewUtils.goBackWithResult(InputContactActivity.this, intent);
                 }
+                else if (!inviteList.isEmpty())
+                {
+                    inviteList = inviteList.substring(0, inviteList.length() - 1);
+                    sendInviteRequest(inviteList);
+                }
+                else
+                {
+                    goBack();
+                }
             }
         });
+        if (fromGuide)
+        {
+            confirmTextView.setText(R.string.complete);
+        }
 
         contactEditText = (EditText) findViewById(R.id.contactEditText);
         contactEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);
@@ -178,4 +206,34 @@ public class InputContactActivity extends Activity
         hideSoftKeyboard();
         ViewUtils.goBack(this);
     }
+
+    private void sendInviteRequest(String inviteList)
+    {
+        ReimProgressDialog.show();
+        InviteRequest inviteRequest = new InviteRequest(inviteList);
+        inviteRequest.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final InviteResponse response = new InviteResponse(httpResponse);
+                runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        ReimProgressDialog.dismiss();
+                        if (response.getStatus())
+                        {
+                            ViewUtils.showToast(InputContactActivity.this, R.string.succeed_in_sending_invite);
+                            goBack();
+                        }
+                        else
+                        {
+                            ViewUtils.showToast(InputContactActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 }

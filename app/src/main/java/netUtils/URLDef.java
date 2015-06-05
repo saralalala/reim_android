@@ -2,11 +2,11 @@ package netUtils;
 
 public class URLDef
 {
-//    public static final String URL_PREFIX = "https://api.rushucloud.com/stage";
-	public static final String URL_PREFIX = "https://api.cloudbaoxiao.com/online";
+    public static final String URL_PREFIX = "https://api.rushucloud.com/stage";
+//	public static final String URL_PREFIX = "https://api.cloudbaoxiao.com/online";
 
-//    public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com/stage/msg";
-    public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com/online/msg";
+    public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com/stage/msg";
+//    public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com/online/msg";
 
     public static final String URL_PREFIX_SANDBOX = "https://api.cloudbaoxiao.com/sandbox";
 
@@ -38,7 +38,7 @@ public class URLDef
     public static final String URL_MESSAGE = "messages/single";
     public static final String URL_MESSAGE_LIST = "messages/list";
     public static final String URL_INVITE = "invite";
-    public static final String URL_INVITED_COMPANY = "invites";
+    public static final String URL_INVITES = "invites";
     public static final String URL_APPLY = "apply";
     public static final String URL_SIGN_IN = "login";
     public static final String URL_SIGN_OUT = "logout";

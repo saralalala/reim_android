@@ -2,6 +2,7 @@ package classes.utils;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import classes.widget.ReimProgressDialog;
 
@@ -70,7 +72,6 @@ public class ReimApplication extends Application
     {
         return tabIndex;
     }
-
     public static void setTabIndex(int tabIndex)
     {
         ReimApplication.tabIndex = tabIndex;
@@ -80,7 +81,6 @@ public class ReimApplication extends Application
     {
         return reportTabIndex;
     }
-
     public static void setReportTabIndex(int reportTabIndex)
     {
         ReimApplication.reportTabIndex = reportTabIndex;
@@ -90,7 +90,6 @@ public class ReimApplication extends Application
     {
         return statTabIndex;
     }
-
     public static void setStatTabIndex(int statTabIndex)
     {
         ReimApplication.statTabIndex = statTabIndex;
@@ -100,7 +99,6 @@ public class ReimApplication extends Application
     {
         return mineUnreadList;
     }
-
     public static void setMineUnreadList(List<Integer> mineUnreadList)
     {
         ReimApplication.mineUnreadList = mineUnreadList;
@@ -110,7 +108,6 @@ public class ReimApplication extends Application
     {
         return othersUnreadList;
     }
-
     public static void setOthersUnreadList(List<Integer> othersUnreadList)
     {
         ReimApplication.othersUnreadList = othersUnreadList;
@@ -120,7 +117,6 @@ public class ReimApplication extends Application
     {
         return unreadMessagesCount;
     }
-
     public static void setUnreadMessagesCount(int unreadMessagesCount)
     {
         ReimApplication.unreadMessagesCount = unreadMessagesCount;
@@ -130,7 +126,6 @@ public class ReimApplication extends Application
     {
         return hasUnreadMessages;
     }
-
     public static void setHasUnreadMessages(boolean hasUnreadMessages)
     {
         ReimApplication.hasUnreadMessages = hasUnreadMessages;
@@ -299,5 +294,16 @@ public class ReimApplication extends Application
 
         AppPreference.createAppPreference(getApplicationContext());
         DBManager.createDBManager(getApplicationContext());
+
+        String language = AppPreference.getAppPreference().getLanguage();
+        System.out.println(language);
+        if (!language.isEmpty())
+        {
+            Locale locale = new Locale(language);
+            Locale.setDefault(locale);
+            Configuration config = getResources().getConfiguration();
+            config.locale = locale;
+            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        }
     }
 }

@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.adapter.ContactListViewAdapter;
+import classes.adapter.InviteListViewAdapter;
 import classes.model.Group;
 import classes.model.User;
 import classes.utils.AppPreference;
@@ -37,11 +37,11 @@ import netUtils.HttpConnectionCallback;
 import netUtils.request.group.CreateGroupRequest;
 import netUtils.response.group.CreateGroupResponse;
 
-public class ContactActivity extends Activity
+public class InviteListActivity extends Activity
 {
     private static final int INPUT_CONTACT = 0;
 
-    private ContactListViewAdapter adapter;
+    private InviteListViewAdapter adapter;
     private PinnedSectionListView contactListView;
     private LinearLayout indexLayout;
     private TextView centralTextView;
@@ -61,7 +61,7 @@ public class ContactActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_guide_contact);
+        setContentView(R.layout.activity_guide_invite_list);
         initData();
         initView();
         readContacts();
@@ -70,7 +70,7 @@ public class ContactActivity extends Activity
     protected void onResume()
     {
         super.onResume();
-        MobclickAgent.onPageStart("ContactActivity");
+        MobclickAgent.onPageStart("InviteListActivity");
         MobclickAgent.onResume(this);
         if (contactList.isEmpty() && hasInit)
         {
@@ -82,7 +82,7 @@ public class ContactActivity extends Activity
     protected void onPause()
     {
         super.onPause();
-        MobclickAgent.onPageEnd("ContactActivity");
+        MobclickAgent.onPageEnd("InviteListActivity");
         MobclickAgent.onPause(this);
     }
 
@@ -169,7 +169,7 @@ public class ContactActivity extends Activity
 
                 if (!PhoneUtils.isNetworkConnected())
                 {
-                    ViewUtils.showToast(ContactActivity.this, R.string.error_create_network_unavailable);
+                    ViewUtils.showToast(InviteListActivity.this, R.string.error_create_network_unavailable);
                 }
                 else
                 {
@@ -178,7 +178,7 @@ public class ContactActivity extends Activity
             }
         });
 
-        adapter = new ContactListViewAdapter(this);
+        adapter = new InviteListViewAdapter(this);
         adapter.setInputList(inputList);
         adapter.setInputChosenList(inputChosenList);
         adapter.setContactList(contactList);
@@ -205,9 +205,10 @@ public class ContactActivity extends Activity
                     {
                         inviteList = inviteList.substring(0, inviteList.length() - 2);
                     }
-                    Intent intent = new Intent(ContactActivity.this, InputContactActivity.class);
+                    Intent intent = new Intent(InviteListActivity.this, InputContactActivity.class);
                     intent.putExtra("inviteList", inviteList);
-                    ViewUtils.goForwardForResult(ContactActivity.this, intent, INPUT_CONTACT);
+                    intent.putExtra("fromGuide", true);
+                    ViewUtils.goForwardForResult(InviteListActivity.this, intent, INPUT_CONTACT);
                 }
                 else if (position > 0 && position < inputList.size() + 1)
                 {
@@ -427,10 +428,10 @@ public class ContactActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            Intent intent = new Intent(ContactActivity.this, WeChatShareActivity.class);
+                            Intent intent = new Intent(InviteListActivity.this, WeChatShareActivity.class);
                             intent.putExtra("companyName", companyName);
                             intent.putExtra("count", count);
-                            ViewUtils.goForwardAndFinish(ContactActivity.this, intent);
+                            ViewUtils.goForwardAndFinish(InviteListActivity.this, intent);
                         }
                     });
                 }
@@ -441,7 +442,7 @@ public class ContactActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(ContactActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
+                            ViewUtils.showToast(InviteListActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
                         }
                     });
                 }
@@ -456,7 +457,7 @@ public class ContactActivity extends Activity
         bundle.putStringArrayList("inputList", inputList);
         bundle.putStringArrayList("inputChosenList", inputChosenList);
         bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
-        Intent intent = new Intent(ContactActivity.this, CompanyNameActivity.class);
+        Intent intent = new Intent(InviteListActivity.this, CompanyNameActivity.class);
         intent.putExtras(bundle);
         ViewUtils.goBackWithIntent(this, intent);
     }

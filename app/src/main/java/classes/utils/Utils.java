@@ -234,8 +234,9 @@ public class Utils
         return result;
     }
 
-    public static String addComma(String source)
+    public static String formatAmount(double arg)
     {
+        String source = formatDouble(arg);
         int index = source.indexOf(".");
         if (index < 0)
         {

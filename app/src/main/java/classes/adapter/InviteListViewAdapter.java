@@ -26,17 +26,19 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
 
-public class ContactListViewAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter
+public class InviteListViewAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter
 {
     private Context context;
     private LayoutInflater layoutInflater;
+    private ArrayList<String> inputList = new ArrayList<>();
+    private ArrayList<String> inputChosenList = new ArrayList<>();
     private List<User> contactList = new ArrayList<>();
     private List<User> contactChosenList = new ArrayList<>();
     private HashMap<String, Integer> selector = new HashMap<>();
     private ArrayList<Integer> indexList = new ArrayList<>();
     private boolean noPermission = false;
 
-    public ContactListViewAdapter(Context context)
+    public InviteListViewAdapter(Context context)
     {
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
@@ -44,7 +46,56 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        if (noPermission)
+        if (position == 0)
+        {
+            return layoutInflater.inflate(R.layout.list_input_name, parent, false);
+        }
+        else if (position > 0 && position < inputList.size() + 1)
+        {
+            String contact = inputList.get(position - 1);
+
+            View view = layoutInflater.inflate(R.layout.list_contact_input, parent, false);
+
+            int visibility = inputChosenList.contains(contact) ? View.VISIBLE : View.INVISIBLE;
+            ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
+            checkImageView.setVisibility(visibility);
+
+            TextView contactTextView = (TextView) view.findViewById(R.id.contactTextView);
+            contactTextView.setText(contact);
+
+            return view;
+        }
+        else if (!contactList.isEmpty() && indexList.contains(position))
+        {
+            User user = contactList.get(position - inputList.size() - 1);
+
+            View view = layoutInflater.inflate(R.layout.list_header, parent, false);
+
+            TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
+            headerTextView.setText(user.getNickname());
+
+            return view;
+        }
+        else if (!contactList.isEmpty())
+        {
+            User user = contactList.get(position - inputList.size() - 1);
+
+            View view = layoutInflater.inflate(R.layout.list_contact, parent, false);
+
+            int visibility = User.indexOfContactList(contactChosenList, user) > -1 ? View.VISIBLE : View.INVISIBLE;
+            ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
+            checkImageView.setVisibility(visibility);
+
+            TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+            nameTextView.setText(user.getNickname());
+
+            String contact = user.getPhone().isEmpty() ? user.getEmail() : user.getPhone();
+            TextView contactTextView = (TextView) view.findViewById(R.id.contactTextView);
+            contactTextView.setText(contact);
+
+            return view;
+        }
+        else
         {
             View view = layoutInflater.inflate(R.layout.list_contact_no_permission, parent, false);
 
@@ -76,46 +127,27 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
 
             return view;
         }
-        else if (indexList.contains(position))
-        {
-            User user = contactList.get(position);
-
-            View view = layoutInflater.inflate(R.layout.list_header, parent, false);
-
-            TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
-            headerTextView.setText(user.getNickname());
-
-            return view;
-        }
-        else
-        {
-            User user = contactList.get(position);
-
-            View view = layoutInflater.inflate(R.layout.list_contact, parent, false);
-
-            int visibility = User.indexOfContactList(contactChosenList, user) > -1 ? View.VISIBLE : View.INVISIBLE;
-            ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
-            checkImageView.setVisibility(visibility);
-
-            TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
-            nameTextView.setText(user.getNickname());
-
-            String contact = user.getPhone().isEmpty() ? user.getEmail() : user.getPhone();
-            TextView contactTextView = (TextView) view.findViewById(R.id.contactTextView);
-            contactTextView.setText(contact);
-
-            return view;
-        }
     }
 
     public int getCount()
     {
-        return noPermission? 1 : contactList.size();
+        if (contactList.isEmpty() && noPermission)
+        {
+            return inputList.size() + 2;
+        }
+        else if (contactList.isEmpty())
+        {
+            return inputList.size() + 1;
+        }
+        else
+        {
+            return inputList.size() + contactList.size() + 1;
+        }
     }
 
     public User getItem(int position)
     {
-        return contactList.get(position);
+        return contactList.get(position - inputList.size() - 1);
     }
 
     public long getItemId(int position)
@@ -160,7 +192,7 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
             indexMap.put(initLetter, letterUserList);
         }
 
-        int count = 0;
+        int count = inputList.size() + 1;
         selector.clear();
         selector.put(ViewUtils.getString(R.string.manual), 0);
         contactList.clear();
@@ -188,6 +220,18 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
             contactList.addAll(values);
             count += values.size() + 1;
         }
+    }
+
+    public void setInputList(ArrayList<String> inputs)
+    {
+        inputList.clear();
+        inputList.addAll(inputs);
+    }
+
+    public void setInputChosenList(ArrayList<String> inputs)
+    {
+        inputChosenList.clear();
+        inputChosenList.addAll(inputs);
     }
 
     public void setContactList(List<User> contacts)

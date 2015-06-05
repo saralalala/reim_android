@@ -36,6 +36,7 @@ public class AppPreference
     private boolean needToShowReimGuide = true;
     private boolean needToShowReportGuide = true;
     private boolean sandboxMode = false;
+    private String language = "";
     private String appDirectory = "";
     private String appImageDirectory = "";
     private String avatarImageDirectory = "";
@@ -81,6 +82,7 @@ public class AppPreference
         appPreference.setNeedToShowReimGuide(preferences.getBoolean("needToShowReimGuide", true));
         appPreference.setNeedToShowReportGuide(preferences.getBoolean("needToShowReportGuide", true));
         appPreference.setSandboxMode(preferences.getBoolean("sandboxMode", false));
+        appPreference.setLanguage(preferences.getString("language", ""));
 
         appPreference.setAppDirectory(Environment.getExternalStorageDirectory() + "/cloudbaoxiao");
         appPreference.setAppImageDirectory(appPreference.getAppDirectory() + "/images");
@@ -110,6 +112,7 @@ public class AppPreference
         editor.putBoolean("needToShowReimGuide", appPreference.needToShowReimGuide());
         editor.putBoolean("needToShowReportGuide", appPreference.needToShowReportGuide());
         editor.putBoolean("sandboxMode", appPreference.isSandboxMode());
+        editor.putString("language", appPreference.getLanguage());
         editor.commit();
     }
 
@@ -117,12 +120,10 @@ public class AppPreference
     {
         return currentUserID;
     }
-
     public void setCurrentUserID(int currentUserID)
     {
         this.currentUserID = currentUserID;
     }
-
     public User getCurrentUser()
     {
         return DBManager.getDBManager().getUser(currentUserID);
@@ -132,12 +133,10 @@ public class AppPreference
     {
         return currentGroupID;
     }
-
     public void setCurrentGroupID(int currentGroupID)
     {
         this.currentGroupID = currentGroupID;
     }
-
     public Group getCurrentGroup()
     {
         return DBManager.getDBManager().getGroup(currentGroupID);
@@ -147,7 +146,6 @@ public class AppPreference
     {
         return username;
     }
-
     public void setUsername(String username)
     {
         this.username = username;
@@ -157,7 +155,6 @@ public class AppPreference
     {
         return password;
     }
-
     public void setPassword(String password)
     {
         this.password = password;
@@ -167,7 +164,6 @@ public class AppPreference
     {
         return hasPassword;
     }
-
     public void setHasPassword(boolean hasPassword)
     {
         this.hasPassword = hasPassword;
@@ -177,7 +173,6 @@ public class AppPreference
     {
         return deviceToken;
     }
-
     public void setDeviceToken(String deviceToken)
     {
         this.deviceToken = deviceToken;
@@ -187,7 +182,6 @@ public class AppPreference
     {
         return serverToken;
     }
-
     public void setServerToken(String serverToken)
     {
         this.serverToken = serverToken;
@@ -197,7 +191,6 @@ public class AppPreference
     {
         return syncOnlyWithWifi;
     }
-
     public void setSyncOnlyWithWifi(boolean syncOnlyWithWifi)
     {
         this.syncOnlyWithWifi = syncOnlyWithWifi;
@@ -207,7 +200,6 @@ public class AppPreference
     {
         return enablePasswordProtection;
     }
-
     public void setEnablePasswordProtection(boolean enablePasswordProtection)
     {
         this.enablePasswordProtection = enablePasswordProtection;
@@ -217,7 +209,6 @@ public class AppPreference
     {
         return lastSyncTime;
     }
-
     public void setLastSyncTime(int lastSyncTime)
     {
         this.lastSyncTime = lastSyncTime;
@@ -227,7 +218,6 @@ public class AppPreference
     {
         return lastGetOthersReportTime;
     }
-
     public void setLastGetOthersReportTime(int lastGetOthersReportTime)
     {
         this.lastGetOthersReportTime = lastGetOthersReportTime;
@@ -237,7 +227,6 @@ public class AppPreference
     {
         return lastGetMineStatTime;
     }
-
     public void setLastGetMineStatTime(int lastGetMineStatTime)
     {
         this.lastGetMineStatTime = lastGetMineStatTime;
@@ -247,7 +236,6 @@ public class AppPreference
     {
         return lastGetOthersStatTime;
     }
-
     public void setLastGetOthersStatTime(int lastGetOthersStatTime)
     {
         this.lastGetOthersStatTime = lastGetOthersStatTime;
@@ -257,7 +245,6 @@ public class AppPreference
     {
         return lastShownGuideVersion;
     }
-
     public void setLastShownGuideVersion(int lastShownGuideVersion)
     {
         this.lastShownGuideVersion = lastShownGuideVersion;
@@ -267,7 +254,6 @@ public class AppPreference
     {
         return needToShowReimGuide;
     }
-
     public void setNeedToShowReimGuide(boolean needToShowReimGuide)
     {
         this.needToShowReimGuide = needToShowReimGuide;
@@ -277,7 +263,6 @@ public class AppPreference
     {
         return needToShowReportGuide;
     }
-
     public void setNeedToShowReportGuide(boolean needToShowReportGuide)
     {
         this.needToShowReportGuide = needToShowReportGuide;
@@ -287,17 +272,24 @@ public class AppPreference
     {
         return sandboxMode;
     }
-
     public void setSandboxMode(boolean sandboxMode)
     {
         this.sandboxMode = sandboxMode;
+    }
+
+    public String getLanguage()
+    {
+        return language;
+    }
+    public void setLanguage(String language)
+    {
+        this.language = language;
     }
 
     public String getAppDirectory()
     {
         return appDirectory;
     }
-
     public void setAppDirectory(String appDirectory)
     {
         this.appDirectory = appDirectory;
@@ -307,7 +299,6 @@ public class AppPreference
     {
         return appImageDirectory;
     }
-
     public void setAppImageDirectory(String appImageDirectory)
     {
         this.appImageDirectory = appImageDirectory;
@@ -317,7 +308,6 @@ public class AppPreference
     {
         return avatarImageDirectory;
     }
-
     public void setAvatarImageDirectory(String avatarImageDirectory)
     {
         this.avatarImageDirectory = avatarImageDirectory;
@@ -327,7 +317,6 @@ public class AppPreference
     {
         return getAvatarImageDirectory() + "/temp.png";
     }
-
     public Uri getTempAvatarUri()
     {
         return Uri.fromFile(new File(getAvatarImageDirectory() + "/temp.png"));
@@ -337,7 +326,6 @@ public class AppPreference
     {
         return invoiceImageDirectory;
     }
-
     public void setInvoiceImageDirectory(String invoiceImageDirectory)
     {
         this.invoiceImageDirectory = invoiceImageDirectory;
@@ -347,7 +335,6 @@ public class AppPreference
     {
         return getInvoiceImageDirectory() + "/temp.png";
     }
-
     public Uri getTempInvoiceUri()
     {
         return Uri.fromFile(new File(getInvoiceImageDirectory() + "/temp.png"));
@@ -357,7 +344,6 @@ public class AppPreference
     {
         return iconImageDirectory;
     }
-
     public void setIconImageDirectory(String iconImageDirectory)
     {
         this.iconImageDirectory = iconImageDirectory;

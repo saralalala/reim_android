@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="16dp"
-            android:text="@string/input_invite"
+            android:text="@string/input_contact_manually"
             android:textColor="@color/font_major_dark"
             android:textSize="16sp"/>
 
@@ -84,6 +84,37 @@
             android:layout_weight="1"
             android:layout_marginLeft="16dp"
             android:text="@string/wechat_invite"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@string/next"
+            android:src="@drawable/next"/>
+
+    </LinearLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/contactLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/me_item_drawable">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:text="@string/contact_invite"
             android:textColor="@color/font_major_dark"
             android:textSize="16sp"/>
 

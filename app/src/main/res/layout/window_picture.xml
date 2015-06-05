@@ -13,7 +13,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/window_button_drawable"
-        android:text="@string/choose_from_camera"
+        android:text="@string/take_photo"
         android:textColor="@color/button_text_dark_color"
         android:textSize="20sp"/>
 

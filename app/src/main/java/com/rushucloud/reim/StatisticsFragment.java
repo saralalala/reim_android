@@ -453,7 +453,7 @@ public class StatisticsFragment extends Fragment
                     max = data;
                 }
             }
-            monthTotalTextView.setText(Utils.addComma(Utils.formatDouble(total)));
+            monthTotalTextView.setText(Utils.formatAmount(total));
 
             for (String month : monthsData.keySet())
             {
@@ -519,7 +519,7 @@ public class StatisticsFragment extends Fragment
 
                     TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                     amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-                    amountTextView.setText(Utils.addComma(Utils.formatDouble(category.getAmount())));
+                    amountTextView.setText(Utils.formatAmount(category.getAmount()));
 
                     categoryLayout.addView(view);
                 }
@@ -643,7 +643,7 @@ public class StatisticsFragment extends Fragment
                 ViewUtils.setImageViewBitmap(category, iconImageView);
 
                 TextView amountTextView = (TextView) categoryView.findViewById(R.id.amountTextView);
-                amountTextView.setText(Utils.addComma(Utils.formatDouble(category.getAmount())));
+                amountTextView.setText(Utils.formatAmount(category.getAmount()));
 
                 FrameLayout legendLayout = (FrameLayout) categoryView.findViewById(R.id.legendLayout);
                 ReimPie legendPie = new ReimPie(getActivity(), 0, 360, legendWidth, category.getColor(), 0);
@@ -780,7 +780,7 @@ public class StatisticsFragment extends Fragment
 
                     TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                     amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-                    amountTextView.setText(Utils.addComma(Utils.formatDouble(user.getAmount())));
+                    amountTextView.setText(Utils.formatAmount(user.getAmount()));
 
                     memberLayout.addView(view);
                 }

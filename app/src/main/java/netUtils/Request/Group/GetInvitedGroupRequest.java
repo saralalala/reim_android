@@ -10,7 +10,7 @@ public class GetInvitedGroupRequest extends BaseRequest
     {
         super();
 
-        appendUrl(URLDef.URL_INVITED_COMPANY);
+        appendUrl(URLDef.URL_INVITES);
     }
 
     public void sendRequest(HttpConnectionCallback callback)

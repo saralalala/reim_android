@@ -33,14 +33,14 @@
     <string name="saturday">周六</string>
     <string name="sunday">周日</string>
 
-    <string name="confirm">确定</string>
-    <string name="save">保存</string>
-    <string name="cancel">取消</string>
-    <string name="add">添加</string>
-    <string name="establish">新建</string>
-    <string name="back">返回</string>
-    <string name="complete">完成</string>
-    <string name="next">下一步</string>
+    <string name="confirm">Confirm</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="establish">Establish</string>
+    <string name="back">Back</string>
+    <string name="complete">Complete</string>
+    <string name="next">Next</string>
     <string name="send">发送</string>
     <string name="modify">修改</string>
     <string name="delete">删除</string>
@@ -129,10 +129,10 @@
     <string name="joined_3">加</string>
     <string name="joined_4">入</string>
     
-    <string name="reimbursement">消费</string>
-    <string name="report">报告</string>
-    <string name="statistics">统计</string>
-    <string name="me">自己</string>
+    <string name="reimbursement">Reim</string>
+    <string name="report">Report</string>
+    <string name="statistics">Statistics</string>
+    <string name="me">Me</string>
     <string name="reim_guide">点击＋开始记录你的第一笔消费</string>
     <string name="report_guide">点击这里创建报告，提交你的报销</string>
     
@@ -297,7 +297,7 @@
     <string name="check_update">检查更新</string>
     <string name="confirm_download">确认下载</string>
     <string name="share">推荐给他人</string>
-    <string name="language">语言设置</string>
+    <string name="language">Language Settings</string>
     <string name="feedback_code">+86</string>
     <string name="version">版本</string>
     <string name="about_footer">Copyright&#169; 2014&#8211;2015 北京如数科技有限公司</string>
@@ -468,7 +468,7 @@
     <string name="succeed_in_modifying_tag">修改成功</string>
     <string name="succeed_in_deleting_category">删除成功</string>
     <string name="succeed_in_deleting_tag">删除成功</string>
-    <string name="succeed_in_sending_invite">邀请发送成功</string>
+    <string name="succeed_in_sending_invite">发送成功</string>
     <string name="succeed_in_sending_comment">发表成功</string>
     <string name="succeed_in_submitting_report">提交成功</string>
     <string name="succeed_in_alerting">已提醒对方审批报告</string>

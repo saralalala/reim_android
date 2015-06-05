@@ -1,6 +1,7 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Base64;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.guide.InputContactActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
@@ -104,7 +106,9 @@ public class InviteActivity extends Activity
         {
             public void onClick(View v)
             {
-                ViewUtils.goForward(InviteActivity.this, InputInviteActivity.class);
+                Intent intent = new Intent(InviteActivity.this, InputContactActivity.class);
+                intent.putExtra("fromMe", true);
+                ViewUtils.goForward(InviteActivity.this, intent);
             }
         });
 
@@ -123,6 +127,15 @@ public class InviteActivity extends Activity
                 {
                     ViewUtils.showToast(InviteActivity.this, R.string.error_no_company_invite);
                 }
+            }
+        });
+
+        LinearLayout contactLayout = (LinearLayout) findViewById(R.id.contactLayout);
+        contactLayout.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                ViewUtils.goForward(InviteActivity.this, ContactActivity.class);
             }
         });
     }

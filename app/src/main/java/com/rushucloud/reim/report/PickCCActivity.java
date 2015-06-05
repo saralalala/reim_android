@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
-import com.rushucloud.reim.me.InputInviteActivity;
+import com.rushucloud.reim.guide.InputContactActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
@@ -154,7 +154,7 @@ public class PickCCActivity extends Activity
             {
                 public void onClick(View v)
                 {
-                    ViewUtils.goForward(PickCCActivity.this, InputInviteActivity.class);
+                    ViewUtils.goForward(PickCCActivity.this, InputContactActivity.class);
                 }
             });
 

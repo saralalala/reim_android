@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/invite_wechat"
+            android:text="@string/wechat_invite"
             android:textColor="@color/major_light"
             android:textSize="20sp"/>
 
@@ -68,7 +68,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:background="@drawable/button_dark_drawable"
-        android:text="@string/invite_wechat"
+        android:text="@string/wechat_invite"
         android:textColor="@color/button_text_light_color"/>
 
 </LinearLayout>

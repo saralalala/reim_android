@@ -75,10 +75,10 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
             upperLayout.setVisibility(View.GONE);
             lowerLayout.setVisibility(View.VISIBLE);
 
-            int point = info.hasApproved() ? R.drawable.point_approved : R.drawable.point_not_approved;
+            int point = info.hasApproved()? R.drawable.point_approved : R.drawable.point_not_approved;
             pointImageView.setImageResource(point);
 
-            int color = info.hasApproved() ? R.color.status_approved : R.color.background_grey;
+            int color = info.hasApproved()? R.color.status_approved : R.color.background_grey;
             lowerLayout.setBackgroundColor(ViewUtils.getColor(color));
         }
         else
@@ -86,7 +86,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
             if (stepStartList.contains(position))
             {
                 pointImageView.setVisibility(View.VISIBLE);
-                int point = info.hasApproved() ? R.drawable.point_approved : R.drawable.point_not_approved;
+                int point = info.hasApproved()? R.drawable.point_approved : R.drawable.point_not_approved;
                 pointImageView.setImageResource(point);
             }
             else
@@ -97,10 +97,10 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
             lowerLayout.setVisibility(View.VISIBLE);
 
             ApproveInfo previousInfo = getItem(position - 1);
-            int color = previousInfo.hasApproved() ? R.color.status_approved : R.color.background_grey;
+            int color = previousInfo.hasApproved()? R.color.status_approved : R.color.background_grey;
             upperLayout.setBackgroundColor(ViewUtils.getColor(color));
 
-            color = info.hasApproved() ? R.color.status_approved : R.color.background_grey;
+            color = info.hasApproved()? R.color.status_approved : R.color.background_grey;
             lowerLayout.setBackgroundColor(ViewUtils.getColor(color));
         }
 
@@ -113,7 +113,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
         else
         {
             ApproveInfo nextInfo = infoList.get(position + 1);
-            int margin = info.getStep() != nextInfo.getStep() ? 0 : 64;
+            int margin = info.getStep() != nextInfo.getStep()? 0 : 64;
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) divider.getLayoutParams();
             params.setMargins(ViewUtils.dpToPixel(margin), 0, 0, 0);
         }
@@ -203,7 +203,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 
             timeLayout.setVisibility(View.GONE);
 
-            int visibility = user.equals(currentUser) ? View.GONE : View.VISIBLE;
+            int visibility = user.equals(currentUser)? View.GONE : View.VISIBLE;
             alarmImageView.setVisibility(visibility);
             alarmImageView.setOnClickListener(new OnClickListener()
             {
@@ -243,7 +243,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
                 }
             });
 
-            int alarmImage = report.getStatus() == Report.STATUS_SUBMITTED ? R.drawable.alarm_enabled_drawable : R.drawable.alarm_disabled_drawable;
+            int alarmImage = report.getStatus() == Report.STATUS_SUBMITTED? R.drawable.alarm_enabled_drawable : R.drawable.alarm_disabled_drawable;
             alarmImageView.setImageResource(alarmImage);
         }
 
