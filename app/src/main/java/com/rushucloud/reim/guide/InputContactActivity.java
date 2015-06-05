@@ -93,6 +93,8 @@ public class InputContactActivity extends Activity
 
                 String contactString = contactEditText.getText().toString();
                 SpannableString text = new SpannableString(contactString);
+                text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.font_major_dark)),
+                             0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 contactString = contactString.replace("，", ",");
                 contactString = contactString.replace(" ", ",");
                 contactString = contactString.replace("　", ",");
@@ -121,21 +123,17 @@ public class InputContactActivity extends Activity
                             text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.major_dark)),
                                          index + count, index + count + contact.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
-                        else
-                        {
-                            inviteList += contact + ",";
-                            text.setSpan(new ForegroundColorSpan(ViewUtils.getColor(R.color.font_major_dark)),
-                                         index + count, index + count + contact.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
+                        inviteList += contact + ",";
                         count += contact.length();
                     }
                 }
 
+                contactEditText.setText(text);
+                Spannable spanText = contactEditText.getText();
+                Selection.setSelection(spanText, spanText.length());
+
                 if (contactsInvalid)
                 {
-                    contactEditText.setText(text);
-                    Spannable spanText = contactEditText.getText();
-                    Selection.setSelection(spanText, spanText.length());
                     ViewUtils.showToast(InputContactActivity.this, R.string.error_username_wrong_format);
                 }
                 else if (fromGuide)
