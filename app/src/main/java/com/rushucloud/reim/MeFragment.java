@@ -256,7 +256,7 @@ public class MeFragment extends Fragment
             public void onClick(View v)
             {
                 sharePopupWindow.dismiss();
-                WeChatUtils.shareToWX(URLDef.URL_DOWNLOAD_PAGE, title, description, false);
+                WeChatUtils.shareToWX(getActivity(), URLDef.URL_DOWNLOAD_PAGE, title, description, false);
             }
         });
 
@@ -266,7 +266,7 @@ public class MeFragment extends Fragment
             public void onClick(View v)
             {
                 sharePopupWindow.dismiss();
-                WeChatUtils.shareToWX(URLDef.URL_DOWNLOAD_PAGE, title, description, true);
+                WeChatUtils.shareToWX(getActivity(), URLDef.URL_DOWNLOAD_PAGE, title, description, true);
             }
         });
 

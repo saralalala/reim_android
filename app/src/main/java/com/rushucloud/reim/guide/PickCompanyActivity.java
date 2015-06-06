@@ -155,6 +155,7 @@ public class PickCompanyActivity extends Activity
                     else
                     {
                         invite = null;
+                        ReimProgressDialog.show();
                         sendApplyRequest();
                     }
                 }
@@ -444,7 +445,6 @@ public class PickCompanyActivity extends Activity
 
     private void sendApplyRequest()
     {
-        ReimProgressDialog.show();
         ApplyRequest request = new ApplyRequest(company.getServerID(), 1);
         request.sendRequest(new HttpConnectionCallback()
         {

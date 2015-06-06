@@ -1,6 +1,7 @@
 package classes.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -41,7 +42,7 @@ public class WeChatUtils
         api.registerApp(APP_ID);
     }
 
-    public static boolean isWeChatAvailable()
+    public static boolean isWeChatAvailable(Context context)
     {
         if (api == null)
         {
@@ -50,7 +51,7 @@ public class WeChatUtils
 
         if (!api.isWXAppInstalled() || !api.isWXAppSupportAPI())
         {
-            ViewUtils.showToast(activity, R.string.error_wechat_not_supported);
+            ViewUtils.showToast(context, R.string.error_wechat_not_supported);
             return false;
         }
         else
@@ -59,9 +60,9 @@ public class WeChatUtils
         }
     }
 
-    public static void shareToWX(String url, String title, String description, boolean isShareToMoments)
+    public static void shareToWX(Context context, String url, String title, String description, boolean isShareToMoments)
     {
-        if (!isWeChatAvailable())
+        if (!isWeChatAvailable(context))
         {
             return;
         }
@@ -88,7 +89,7 @@ public class WeChatUtils
 
     public static void sendAuthRequest(Activity source)
     {
-        if (!isWeChatAvailable())
+        if (!isWeChatAvailable(source))
         {
             return;
         }

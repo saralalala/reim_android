@@ -101,7 +101,7 @@ public class WeChatShareActivity extends Activity
             {
                 String title = String.format(getString(R.string.wechat_share_title), nickname, companyName);
                 String description = String.format(getString(R.string.wechat_invite_description), nickname, companyName);
-                WeChatUtils.shareToWX(shareURL, title, description, false);
+                WeChatUtils.shareToWX(WeChatShareActivity.this, shareURL, title, description, false);
             }
         });
     }
