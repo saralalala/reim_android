@@ -154,7 +154,7 @@ public class PhoneSignUpActivity extends Activity
                 }
                 else
                 {
-                    getVerifyCode(phoneNumber);
+                    getVerifyCode(Utils.removePhonePrefix(phoneNumber));
                 }
             }
         });
@@ -310,7 +310,7 @@ public class PhoneSignUpActivity extends Activity
         else
         {
             User user = new User();
-            user.setPhone(phoneNumber);
+            user.setPhone(Utils.removePhonePrefix(phoneNumber));
             user.setPassword(password);
 
             sendRegisterRequest(user, inputCode);

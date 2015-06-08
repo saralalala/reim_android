@@ -26,10 +26,11 @@ public class Apply extends Message implements Serializable
 
     }
 
-    public Apply(JSONObject jObject, String currentNickname)
+    public Apply(JSONObject jObject, int currentUserID)
     {
         try
         {
+            int applicantID = jObject.getInt("uid");
             String applicant = jObject.getString("applicant");
             String groupName = jObject.getString("groupname");
             int activeType = jObject.getInt("permit");
@@ -40,35 +41,35 @@ public class Apply extends Message implements Serializable
             setType(Message.TYPE_APPLY);
             setHasBeenRead(Utils.intToBoolean(jObject.getInt("sread")));
 
-            if (!applicant.equals(currentNickname) && activeType == Apply.TYPE_NEW)
+            if (applicantID != currentUserID && activeType == Apply.TYPE_NEW)
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_others_new), applicant, groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("updatedt"));
             }
-            else if (applicant.equals(currentNickname) && activeType == Apply.TYPE_NEW)
+            else if (applicantID == currentUserID && activeType == Apply.TYPE_NEW)
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_new), groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("updatedt"));
             }
-            else if (!applicant.equals(currentNickname) && activeType == Apply.TYPE_REJECTED)
+            else if (applicantID != currentUserID && activeType == Apply.TYPE_REJECTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_others_rejected), applicant, groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("updatedt"));
             }
-            else if (applicant.equals(currentNickname) && activeType == Apply.TYPE_REJECTED)
+            else if (applicantID == currentUserID && activeType == Apply.TYPE_REJECTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_rejected), groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("updatedt"));
             }
-            else if (!applicant.equals(currentNickname) && activeType == Apply.TYPE_ACCEPTED)
+            else if (applicantID != currentUserID && activeType == Apply.TYPE_ACCEPTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_others_accepted), applicant, groupName);
                 setTitle(message);

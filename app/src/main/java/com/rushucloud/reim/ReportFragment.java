@@ -175,10 +175,10 @@ public class ReportFragment extends Fragment implements OnClickListener
         }
 
         mineList.addAll(readMineReportList());
-        showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
+        showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList, true));
 
         othersList.addAll(readOthersReportList());
-        showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
+        showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList, false));
 
         mineCheck = new boolean[5];
         othersCheck = new boolean[5];
@@ -832,7 +832,7 @@ public class ReportFragment extends Fragment implements OnClickListener
         return dbManager.getOthersReports(appPreference.getCurrentUserID());
     }
 
-    private List<Report> filterReportList(List<Report> reportList, int sortType, boolean sortReverse, List<Integer> filterStatusList)
+    private List<Report> filterReportList(List<Report> reportList, int sortType, boolean sortReverse, List<Integer> filterStatusList, boolean filterMine)
     {
         List<Report> resultList = new ArrayList<>();
         for (Report report : reportList)
@@ -856,8 +856,17 @@ public class ReportFragment extends Fragment implements OnClickListener
                 Report.sortByCreateDate(resultList);
                 break;
             case SORT_AMOUNT:
-                Report.sortByAmount(resultList);
+            {
+                if (filterMine)
+                {
+                    Report.sortMineByAmount(resultList);
+                }
+                else
+                {
+                    Report.sortOthersByAmount(resultList);
+                }
                 break;
+            }
             default:
                 break;
         }
@@ -924,7 +933,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                 mineList.addAll(readMineReportList());
             }
             showMineList.clear();
-            showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList));
+            showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList, true));
             adapter.setReportList(showMineList);
             adapter.setUnreadList(ReimApplication.getMineUnreadList());
             adapter.setTabIndex(ReimApplication.TAB_REPORT_MINE);
@@ -950,7 +959,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             else
             {
                 showOthersList.clear();
-                showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList));
+                showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList,false));
             }
 
             adapter.setReportList(showOthersList);

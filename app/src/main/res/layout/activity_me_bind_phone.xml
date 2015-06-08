@@ -47,6 +47,7 @@
         android:background="@color/major_light"
         android:hint="@string/input_phone"
         android:inputType="phone"
+        android:maxLength="25"
         android:textColor="@color/font_major_dark"
         android:textSize="16sp"
         android:textCursorDrawable="@null"/>

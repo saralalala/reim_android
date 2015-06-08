@@ -105,6 +105,11 @@ public class PhoneFindActivity extends Activity
                 {
                     ViewUtils.showToast(PhoneFindActivity.this, R.string.error_request_network_unavailable);
                 }
+                else if (phoneNumber.isEmpty())
+                {
+                    ViewUtils.showToast(PhoneFindActivity.this, R.string.error_phone_empty);
+                    ViewUtils.requestFocus(PhoneFindActivity.this, phoneEditText);
+                }
                 else if (!Utils.isPhone(phoneNumber))
                 {
                     ViewUtils.showToast(PhoneFindActivity.this, R.string.error_phone_wrong_format);
@@ -113,7 +118,7 @@ public class PhoneFindActivity extends Activity
                 else
                 {
                     hideSoftKeyboard();
-                    sendTextMessage();
+                    sendTextMessage(Utils.removePhonePrefix(phoneNumber));
                 }
             }
         });
@@ -151,7 +156,7 @@ public class PhoneFindActivity extends Activity
         }
     }
 
-    private void sendTextMessage()
+    private void sendTextMessage(String phoneNumber)
     {
         final String second = ViewUtils.getString(R.string.second);
         waitingTime = 60;
@@ -196,7 +201,7 @@ public class PhoneFindActivity extends Activity
         thread.start();
 
         ReimProgressDialog.show();
-        ForgotPasswordRequest request = new ForgotPasswordRequest(1, phoneEditText.getText().toString());
+        ForgotPasswordRequest request = new ForgotPasswordRequest(1, phoneNumber);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)

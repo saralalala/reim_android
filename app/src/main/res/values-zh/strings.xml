@@ -14,6 +14,7 @@
     <string name="chinese">中文</string>
     <string name="english">English</string>
     <string name="rmb">元</string>
+    <string name="plus">+</string>
     <string name="rmb_symbol">¥</string>
     <string name="percent">%</string>
     <string name="dash">-</string>
@@ -66,7 +67,7 @@
     <string name="wechat">微信</string>
     <string name="wechat_session">微信好友</string>
     <string name="wechat_moments">朋友圈</string>
-    
+
     <string name="sign_up">注册</string>
     <string name="quick_sign_up">快速注册</string>
     <string name="sign_up_by_phone">手机注册</string>
@@ -128,14 +129,14 @@
     <string name="joined_2">已</string>
     <string name="joined_3">加</string>
     <string name="joined_4">入</string>
-    
+
     <string name="reimbursement">消费</string>
     <string name="report">报告</string>
     <string name="statistics">统计</string>
     <string name="me">自己</string>
     <string name="reim_guide">点击＋开始记录你的第一笔消费</string>
     <string name="report_guide">点击这里创建报告，提交你的报销</string>
-    
+
     <string name="sort">排序</string>
     <string name="sort_consumed_date">消费时间</string>
     <string name="sort_amount">金额</string>
@@ -149,8 +150,8 @@
     <string name="filter_added">已加入报告</string>
     <string name="filter_free">未加入报告</string>
     <string name="filter_tag">标签</string>
-    <string name="filter_category">类别</string>    
-    
+    <string name="filter_category">类别</string>
+
     <string name="invoice">发票</string>
     <string name="reim_type">报销类型</string>
     <string name="consumed">报销</string>
@@ -184,7 +185,7 @@
     <string name="report_not_available">未加入报告</string>
     <string name="vendor_not_available">未填写商家</string>
     <string name="pick_image">选择图片</string>
-    
+
     <string name="my_report">我的报告</string>
     <string name="others_report">收到的报告</string>
     <string name="pending">待处理</string>
@@ -240,7 +241,7 @@
     <string name="stat_category">类别-</string>
     <string name="stat_tag">标签-</string>
     <string name="stat_user">人员-</string>
-    
+
     <string name="personal_center">个人中心</string>
     <string name="sign_out">退出登录</string>
     <string name="avatar">头像</string>
@@ -304,7 +305,7 @@
     <string name="wechat_share_title">云报销 - 开启全新的报销体验</string>
     <string name="wechat_share_description">点击使用「云报销」，开启全新的报销体验。</string>
     <string name="wechat_invite_description">%1$s邀请你加入「%2$s」，点击就可以开始使用了。</string>
-    
+
     <string name="input_username">请输入手机/邮箱</string>
     <string name="input_password">请输入密码</string>
     <string name="input_new_password">请输入新密码</string>
@@ -334,7 +335,7 @@
     <string name="input_category_limit">请输入类别限额</string>
     <string name="input_tag_name">请输入标签名称</string>
     <string name="input_user_contact">请输入对方手机号或邮箱</string>
-    
+
     <string name="prompt_loading">正在努力加载中&#8230;</string>
     <string name="prompt_sign_out">确认要切换当前账号</string>
     <string name="prompt_save_approve_ahead_item">这是一笔预申请的消费，您是想仅保存此笔消费还是要直接发送给上级审批？</string>
@@ -356,9 +357,10 @@
     <string name="prompt_join">管理员通过申请后你就可以使用「云报销」了。在此之前，你也可以记录自己的 消费 ，加入公司后记录可以迁移。</string>
     <string name="prompt_joined">现在你可以使用「云报销」，记录你的 消费 ， 提交报销 申请，或者 审批 他人的报销了。</string>
     <string name="prompt_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
+    <string name="prompt_company_exists">「%1$s」公司已存在，是否建立同名公司？</string>
     <string name="prompt_wechat_share">你可以把「云报销」分享到同事们使用的微信群，让大家迅速加入你创建的公司。</string>
     <string name="prompt_latest_version">当前已是最新版本</string>
-    
+
     <string name="error_wrong_code">验证码错误</string>
     <string name="error_no_code">未获取到任何验证码</string>
     <string name="error_code_empty">验证码不能为空</string>
@@ -468,7 +470,7 @@
     <string name="succeed_in_modifying_tag">修改成功</string>
     <string name="succeed_in_deleting_category">删除成功</string>
     <string name="succeed_in_deleting_tag">删除成功</string>
-    <string name="succeed_in_sending_invite">发送成功</string>
+    <string name="succeed_in_sending_invite">邀请发送成功</string>
     <string name="succeed_in_sending_comment">发表成功</string>
     <string name="succeed_in_submitting_report">提交成功</string>
     <string name="succeed_in_alerting">已提醒对方审批报告</string>
@@ -570,7 +572,7 @@
     <string name="vendor_flight">飞机票</string>
     <string name="vendor_train">火车票</string>
     <string name="vendor_phone">话费</string>
-    
+
     <string name="status_draft">待提交</string>
     <string name="status_submitted">审核中</string>
     <string name="status_approved">待结算</string>
@@ -580,14 +582,14 @@
     <string name="status_borrowing">借</string>
     <string name="status_approve_ahead_approved">(已审批)</string>
     <string name="status_cc">抄送</string>
-    
+
     <string name="xlistview_header_hint_normal">下拉更新</string>
     <string name="xlistview_header_hint_ready">释放更新</string>
     <string name="xlistview_header_hint_loading">正在加载……</string>
     <string name="xlistview_header_last_time">最近更新：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
-    
+
     <string name="surprise">如果你能看到这个窗口，说明你是一个极有探索欲望的同学，如数科技就是喜欢这样的人。你有没有兴趣加入我们呢？请发送简历到hr@cloudbaoxiao.com。</string>
     <string name="surprise_ok">好的我知道了</string>
 

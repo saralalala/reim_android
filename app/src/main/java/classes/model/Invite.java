@@ -27,10 +27,11 @@ public class Invite extends Message implements Serializable
 
     }
 
-    public Invite(JSONObject jObject, String currentNickname)
+    public Invite(JSONObject jObject, int currentUserID)
     {
         try
         {
+            int invitorID = jObject.getInt("uid");
             String invitor = jObject.getString("invitor");
             String groupName = jObject.getString("groupname");
             String iName = jObject.optString("iname", "");
@@ -43,35 +44,35 @@ public class Invite extends Message implements Serializable
             setType(Message.TYPE_INVITE);
             setHasBeenRead(Utils.intToBoolean(jObject.getInt("sread")));
 
-            if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_NEW)
+            if (invitorID != currentUserID && activeType == Invite.TYPE_NEW)
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_others_new), invitor, groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("invitedt"));
             }
-            else if (invitor.equals(currentNickname) && activeType == Invite.TYPE_NEW)
+            else if (invitorID == currentUserID && activeType == Invite.TYPE_NEW)
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_new), iName, groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("invitedt"));
             }
-            else if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_REJECTED)
+            else if (invitorID != currentUserID && activeType == Invite.TYPE_REJECTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_others_rejected), groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("activedt"));
             }
-            else if (invitor.equals(currentNickname) && activeType == Invite.TYPE_REJECTED)
+            else if (invitorID == currentUserID && activeType == Invite.TYPE_REJECTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_rejected), iName, groupName);
                 setTitle(message);
                 setContent(message);
                 setUpdateTime(jObject.getInt("activedt"));
             }
-            else if (!invitor.equals(currentNickname) && activeType == Invite.TYPE_ACCEPTED)
+            else if (invitorID != currentUserID && activeType == Invite.TYPE_ACCEPTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_others_accepted), groupName);
                 setTitle(message);

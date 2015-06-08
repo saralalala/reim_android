@@ -120,7 +120,7 @@ public class BindPhoneActivity extends Activity
                 }
                 else
                 {
-                    getVerifyCode(phoneNumber);
+                    getVerifyCode(Utils.removePhonePrefix(phoneNumber));
                 }
             }
         });
@@ -154,7 +154,7 @@ public class BindPhoneActivity extends Activity
                 }
                 else
                 {
-                    currentUser.setPhone(newPhone);
+                    currentUser.setPhone(Utils.removePhonePrefix(newPhone));
                     sendModifyUserInfoRequest(inputCode);
                 }
             }

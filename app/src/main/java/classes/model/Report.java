@@ -71,8 +71,8 @@ public class Report implements Serializable
         createdDate = report.getCreatedDate();
         serverUpdatedDate = report.getServerUpdatedDate();
         localUpdatedDate = report.getLocalUpdatedDate();
-        itemCount = report.getItemCount();
         amount = report.getAmount();
+        itemCount = report.getItemCount();
         isCC = report.isCC();
         step = report.getStep();
     }
@@ -423,7 +423,7 @@ public class Report implements Serializable
         }
     }
 
-    public static void sortByAmount(List<Report> reportList)
+    public static void sortMineByAmount(List<Report> reportList)
     {
         DBManager dbManager = DBManager.getDBManager();
         final SparseArray<Double> countArray = new SparseArray<>();
@@ -438,6 +438,26 @@ public class Report implements Serializable
             public int compare(Report report1, Report report2)
             {
                 return (int) (countArray.get(report2.getLocalID()) - countArray.get(report1.getLocalID()));
+            }
+        });
+    }
+
+    public static void sortOthersByAmount(List<Report> reportList)
+    {
+        Collections.sort(reportList, new Comparator<Report>()
+        {
+            public int compare(Report report1, Report report2)
+            {
+                double amount1 = Double.valueOf(report1.getAmount());
+                double amount2 = Double.valueOf(report2.getAmount());
+                if (Math.abs(amount1 - amount2) < 0.01)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return amount1 > amount2? -1 : 1;
+                }
             }
         });
     }

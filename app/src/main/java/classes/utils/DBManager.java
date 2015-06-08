@@ -1846,6 +1846,8 @@ public class DBManager extends SQLiteOpenHelper
                     "type = '" + report.getType() + "'," +
                     "is_cc = '" + Utils.booleanToInt(report.isCC()) + "'," +
                     "step = '" + report.getStep() + "'," +
+                    "amount = '" + report.getAmount() + "'," +
+                    "item_count = '" + report.getItemCount() + "'," +
                     "created_date = '" + report.getCreatedDate() + "'," +
                     "server_updatedt = '" + report.getServerUpdatedDate() + "'," +
                     "local_updatedt = '" + report.getLocalUpdatedDate() + "' " +

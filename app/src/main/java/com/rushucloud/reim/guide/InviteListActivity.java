@@ -1,7 +1,9 @@
 package com.rushucloud.reim.guide;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
 import netUtils.request.group.CreateGroupRequest;
 import netUtils.response.group.CreateGroupResponse;
 
@@ -148,8 +151,8 @@ public class InviteListActivity extends Activity
             }
         });
 
-        TextView nextTextView = (TextView) findViewById(R.id.nextTextView);
-        nextTextView.setOnClickListener(new OnClickListener()
+        TextView confirmTextView = (TextView) findViewById(R.id.confirmTextView);
+        confirmTextView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
@@ -173,7 +176,7 @@ public class InviteListActivity extends Activity
                 }
                 else
                 {
-                    sendCreateGroupRequest(inviteList, inputChosenList.size() + contactChosenList.size());
+                    sendCreateGroupRequest(inviteList, inputChosenList.size() + contactChosenList.size(), false);
                 }
             }
         });
@@ -368,10 +371,26 @@ public class InviteListActivity extends Activity
         }).start();
     }
 
-    private void sendCreateGroupRequest(String inviteList, final int count)
+    private void showCompanyDialog(final String inviteList, final int count)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.warning);
+        builder.setMessage(String.format(getString(R.string.prompt_company_exists), companyName));
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                sendCreateGroupRequest(inviteList, count, true);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.create().show();
+    }
+
+    private void sendCreateGroupRequest(final String inviteList, final int count, boolean forceCreate)
     {
         ReimProgressDialog.show();
-        CreateGroupRequest request = new CreateGroupRequest(companyName, inviteList, 1);
+        CreateGroupRequest request = new CreateGroupRequest(companyName, inviteList, 1, forceCreate);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -442,7 +461,14 @@ public class InviteListActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(InviteListActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
+                            if (response.getCode() == NetworkConstant.ERROR_COMPANY_EXISTS)
+                            {
+                                showCompanyDialog(inviteList, count);
+                            }
+                            else
+                            {
+                                ViewUtils.showToast(InviteListActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
+                            }
                         }
                     });
                 }

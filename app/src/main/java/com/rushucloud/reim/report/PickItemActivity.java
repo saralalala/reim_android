@@ -338,9 +338,9 @@ public class PickItemActivity extends Activity implements OnClickListener
                 }
                 else
                 {
-                    type = tabIndex;
                     if (tabIndex == 0)
                     {
+                        type = Report.TYPE_REIM;
                         int localID = consumedShowList.get(position - 1).getLocalID();
                         if (consumedChosenList.contains(localID))
                         {
@@ -357,6 +357,7 @@ public class PickItemActivity extends Activity implements OnClickListener
                     }
                     else if (tabIndex == 1)
                     {
+                        type = Report.TYPE_BUDGET;
                         int localID = budgetShowList.get(position - 1).getLocalID();
                         if (budgetChosenList.contains(localID))
                         {
@@ -373,6 +374,7 @@ public class PickItemActivity extends Activity implements OnClickListener
                     }
                     else
                     {
+                        type = Report.TYPE_BORROWING;
                         int localID = borrowingShowList.get(position - 1).getLocalID();
                         if (borrowingChosenList.contains(localID))
                         {

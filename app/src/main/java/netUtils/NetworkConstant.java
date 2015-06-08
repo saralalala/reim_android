@@ -52,6 +52,7 @@ public class NetworkConstant
     public static final int ERROR_MESSAGE_DONE = -38;
     public static final int ERROR_LAST_ADMIN = -39;
     public static final int ERROR_NOT_UNIQUE = -42;
+    public static final int ERROR_COMPANY_EXISTS = -49;
 
     public static String errorCodeToString(int code)
     {
@@ -141,6 +142,9 @@ public class NetworkConstant
                 break;
             case NetworkConstant.ERROR_NOT_UNIQUE:
                 result = "";
+                break;
+            case NetworkConstant.ERROR_COMPANY_EXISTS:
+                result = "公司已存在";
                 break;
             default:
                 break;

@@ -1,5 +1,6 @@
 package com.rushucloud.reim;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
@@ -20,6 +21,7 @@ import com.rushucloud.reim.me.MessageListActivity;
 import com.rushucloud.reim.me.ProfileActivity;
 import com.rushucloud.reim.me.SettingsActivity;
 import com.rushucloud.reim.me.TagActivity;
+import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.model.Group;
@@ -297,6 +299,19 @@ public class MeFragment extends Fragment
                 sendDownloadAvatarRequest();
             }
 
+            if (currentGroup != null)
+            {
+                companyTextView.setText(currentGroup.getName());
+            }
+            else if (!currentUser.getAppliedCompany().isEmpty())
+            {
+                companyTextView.setText(currentUser.getAppliedCompany() + ViewUtils.getString(R.string.waiting_for_approve));
+            }
+            else
+            {
+                companyTextView.setText(R.string.no_company);
+            }
+
             User manager = currentUser.getDefaultManager();
             if (manager != null)
             {
@@ -317,27 +332,19 @@ public class MeFragment extends Fragment
                 categoryLayout.setVisibility(View.VISIBLE);
                 tagLayout.setVisibility(View.VISIBLE);
             }
+
+            showTip();
         }
         else
         {
-            avatarImageView.setImageResource(R.drawable.default_avatar);
-            nicknameTextView.setText(R.string.not_available);
+            Intent intent = new Intent(getActivity(), SignInActivity.class);
+            if (Utils.isEmailOrPhone(appPreference.getUsername()))
+            {
+                intent.putExtra("username", appPreference.getUsername());
+                intent.putExtra("password", appPreference.getPassword());
+            }
+            ViewUtils.goBackWithIntent(getActivity(), intent);
         }
-
-        if (currentGroup != null)
-        {
-            companyTextView.setText(currentGroup.getName());
-        }
-        else if (!currentUser.getAppliedCompany().isEmpty())
-        {
-            companyTextView.setText(currentUser.getAppliedCompany() + ViewUtils.getString(R.string.waiting_for_approve));
-        }
-        else
-        {
-            companyTextView.setText(R.string.no_company);
-        }
-
-        showTip();
     }
 
     private void showShareWindow()

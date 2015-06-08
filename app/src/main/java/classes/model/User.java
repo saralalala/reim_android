@@ -50,9 +50,9 @@ public class User implements Serializable
     {
         serverID = user.getServerID();
         email = user.getEmail();
+        phone = user.getPhone();
         password = user.getPassword();
         nickname = user.getNickname();
-        phone = user.getPhone();
         avatarID = user.getAvatarID();
         avatarServerPath = user.getAvatarServerPath();
         avatarLocalPath = user.getAvatarLocalPath();
@@ -139,7 +139,6 @@ public class User implements Serializable
     {
         return serverID;
     }
-
     public void setServerID(int serverID)
     {
         this.serverID = serverID;
@@ -149,7 +148,6 @@ public class User implements Serializable
     {
         return email;
     }
-
     public void setEmail(String email)
     {
         this.email = email;
@@ -159,7 +157,6 @@ public class User implements Serializable
     {
         return phone;
     }
-
     public void setPhone(String phone)
     {
         this.phone = phone;
@@ -174,7 +171,6 @@ public class User implements Serializable
     {
         return password;
     }
-
     public void setPassword(String password)
     {
         this.password = password;
@@ -184,7 +180,6 @@ public class User implements Serializable
     {
         return nickname;
     }
-
     public void setNickname(String nickname)
     {
         this.nickname = nickname;
@@ -194,7 +189,6 @@ public class User implements Serializable
     {
         return nicknameInitLetter;
     }
-
     public void setNicknameInitLetter(String nicknameInitLetter)
     {
         this.nicknameInitLetter = nicknameInitLetter;
@@ -204,7 +198,6 @@ public class User implements Serializable
     {
         return bankAccount;
     }
-
     public void setBankAccount(BankAccount bankAccount)
     {
         this.bankAccount = bankAccount;
@@ -214,7 +207,6 @@ public class User implements Serializable
     {
         return avatarID;
     }
-
     public void setAvatarID(int avatarID)
     {
         this.avatarID = avatarID;
@@ -224,7 +216,6 @@ public class User implements Serializable
     {
         return avatarServerPath;
     }
-
     public void setAvatarServerPath(String avatarServerPath)
     {
         this.avatarServerPath = avatarServerPath;
@@ -234,7 +225,6 @@ public class User implements Serializable
     {
         return avatarLocalPath;
     }
-
     public void setAvatarLocalPath(String avatarLocalPath)
     {
         this.avatarLocalPath = avatarLocalPath;
@@ -244,7 +234,6 @@ public class User implements Serializable
     {
         return privilege;
     }
-
     public void setPrivilege(int privilege)
     {
         this.privilege = privilege;
@@ -254,7 +243,6 @@ public class User implements Serializable
     {
         return isActive;
     }
-
     public void setIsActive(boolean isActive)
     {
         this.isActive = isActive;
@@ -264,7 +252,6 @@ public class User implements Serializable
     {
         return isAdmin;
     }
-
     public void setIsAdmin(boolean isAdmin)
     {
         this.isAdmin = isAdmin;
@@ -274,7 +261,6 @@ public class User implements Serializable
     {
         return groupID;
     }
-
     public void setGroupID(int groupID)
     {
         this.groupID = groupID;
@@ -284,7 +270,6 @@ public class User implements Serializable
     {
         return appliedCompany;
     }
-
     public void setAppliedCompany(String appliedCompany)
     {
         this.appliedCompany = appliedCompany;
@@ -294,12 +279,10 @@ public class User implements Serializable
     {
         return defaultManagerID;
     }
-
     public void setDefaultManagerID(int defaultManagerID)
     {
         this.defaultManagerID = defaultManagerID;
     }
-
     public User getDefaultManager()
     {
         if (defaultManagerID > 0)
@@ -316,7 +299,6 @@ public class User implements Serializable
     {
         return serverUpdatedDate;
     }
-
     public void setServerUpdatedDate(int serverUpdatedDate)
     {
         this.serverUpdatedDate = serverUpdatedDate;
@@ -326,7 +308,6 @@ public class User implements Serializable
     {
         return localUpdatedDate;
     }
-
     public void setLocalUpdatedDate(int localUpdatedDate)
     {
         this.localUpdatedDate = localUpdatedDate;

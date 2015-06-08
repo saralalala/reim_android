@@ -26,7 +26,7 @@ public class GetMessagesResponse extends BaseResponse
     {
         try
         {
-            String currentNickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
+            int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
 
             JSONArray jsonArray = getDataArray();
             messageList = new ArrayList<>();
@@ -41,11 +41,11 @@ public class GetMessagesResponse extends BaseResponse
                 }
                 else if (type == Message.TYPE_INVITE)
                 {
-                    messageList.add(new Invite(jObject, currentNickname));
+                    messageList.add(new Invite(jObject, currentUserID));
                 }
                 else
                 {
-                    messageList.add(new Apply(jObject, currentNickname));
+                    messageList.add(new Apply(jObject, currentUserID));
                 }
             }
         }

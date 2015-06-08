@@ -1,7 +1,9 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -24,6 +26,7 @@ import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.HttpConnectionCallback;
+import netUtils.NetworkConstant;
 import netUtils.request.group.CreateGroupRequest;
 import netUtils.request.group.ModifyGroupRequest;
 import netUtils.response.group.CreateGroupResponse;
@@ -117,7 +120,7 @@ public class EditCompanyActivity extends Activity
                     ReimProgressDialog.show();
                     if (currentGroup == null)
                     {
-                        sendCreateGroupRequest(newName);
+                        sendCreateGroupRequest(newName, false);
                     }
                     else
                     {
@@ -144,9 +147,25 @@ public class EditCompanyActivity extends Activity
         });
     }
 
-    private void sendCreateGroupRequest(final String newName)
+    private void showCompanyDialog(final String newName)
     {
-        CreateGroupRequest request = new CreateGroupRequest(newName);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.warning);
+        builder.setMessage(String.format(getString(R.string.prompt_company_exists), newName));
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                sendCreateGroupRequest(newName, true);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.create().show();
+    }
+
+    private void sendCreateGroupRequest(final String newName, boolean forceCreate)
+    {
+        CreateGroupRequest request = new CreateGroupRequest(newName, forceCreate);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -215,7 +234,14 @@ public class EditCompanyActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(EditCompanyActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
+                            if (response.getCode() == NetworkConstant.ERROR_COMPANY_EXISTS)
+                            {
+                                showCompanyDialog(newName);
+                            }
+                            else
+                            {
+                                ViewUtils.showToast(EditCompanyActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
+                            }
                         }
                     });
                 }

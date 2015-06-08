@@ -159,7 +159,16 @@ public class Utils
 
     public static boolean isPhone(String source)
     {
-        String regexPhone = "^[1]+\\d{10}$";
+        if (source.startsWith("+86"))
+        {
+            source = source.substring(3);
+        }
+        else if (source.startsWith("86"))
+        {
+            source = source.substring(2);
+        }
+
+        String regexPhone = "^1[34578]\\d{9}$";
         Pattern pattern = Pattern.compile(regexPhone);
         Matcher matcher = pattern.matcher(source);
         return matcher.find();
@@ -171,6 +180,22 @@ public class Utils
         Pattern pattern = Pattern.compile(regexBankAccount);
         Matcher matcher = pattern.matcher(source);
         return matcher.find();
+    }
+
+    public static String removePhonePrefix(String source)
+    {
+        if (source.startsWith("+86"))
+        {
+            return source.substring(3);
+        }
+        else if (source.startsWith("86"))
+        {
+            return source.substring(2);
+        }
+        else
+        {
+            return source;
+        }
     }
 
     public static int booleanToInt(boolean b)

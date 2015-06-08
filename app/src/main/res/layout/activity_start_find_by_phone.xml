@@ -53,6 +53,7 @@
             android:singleLine="true"
             android:hint="@string/input_phone"
             android:inputType="phone"
+            android:maxLength="25"
             android:drawableRight="@drawable/delete_start_drawable"
             android:textColor="@color/font_major_light"
             android:textColorHint="@color/hint_white"

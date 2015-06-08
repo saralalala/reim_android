@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextWatcher;
@@ -63,6 +64,7 @@ import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
+import classes.utils.TextLengthFilter;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
@@ -977,6 +979,7 @@ public class EditItemActivity extends Activity
     {
         noteEditText = (EditText) findViewById(R.id.noteEditText);
         noteEditText.setText(item.getNote());
+        noteEditText.setFilters(new InputFilter[]{new TextLengthFilter(1000)});
         noteEditText.setOnFocusChangeListener(new OnFocusChangeListener()
         {
             public void onFocusChange(View v, boolean hasFocus)

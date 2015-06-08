@@ -296,7 +296,6 @@ public class ReimApplication extends Application
         DBManager.createDBManager(getApplicationContext());
 
         String language = AppPreference.getAppPreference().getLanguage();
-        System.out.println(language);
         if (!language.isEmpty())
         {
             Locale locale = new Locale(language);

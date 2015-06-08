@@ -112,6 +112,7 @@ public class PickCompanyActivity extends Activity
             {
                 case PICK_ADMIN:
                 {
+                    ReimProgressDialog.setContext(this);
                     List<User> users = (List<User>) data.getSerializableExtra("users");
                     sendSetAdminRequest(users);
                     break;

@@ -14,11 +14,13 @@
     <string name="chinese">中文</string>
     <string name="english">English</string>
     <string name="rmb">元</string>
-    <string name="rmb_symbol">¥</string>
+    <string name="plus">+</string>
     <string name="percent">%</string>
     <string name="dash">-</string>
+    <string name="rmb_symbol">¥</string>
     <string name="ten_thousand">万</string>
     <string name="one_hundred_million">亿</string>
+    <string name="china_country_code">86</string>
     <string name="year">年</string>
     <string name="month">月</string>
     <string name="second">秒</string>
@@ -311,6 +313,7 @@
     <string name="input_confirm_password">请确认密码</string>
     <string name="input_email">请输入邮箱</string>
     <string name="input_phone">请输入手机号</string>
+    <string name="input_country_code">国码</string>
     <string name="input_account_name">请输入户名</string>
     <string name="input_bank_account">请输入银行账号</string>
     <string name="input_code">请输入验证码</string>
@@ -356,6 +359,7 @@
     <string name="prompt_join">管理员通过申请后你就可以使用「云报销」了。在此之前，你也可以记录自己的 消费 ，加入公司后记录可以迁移。</string>
     <string name="prompt_joined">现在你可以使用「云报销」，记录你的 消费 ， 提交报销 申请，或者 审批 他人的报销了。</string>
     <string name="prompt_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
+    <string name="prompt_company_exists">「%1$s」公司已存在，是否建立同名公司？</string>
     <string name="prompt_wechat_share">你可以把「云报销」分享到同事们使用的微信群，让大家迅速加入你创建的公司。</string>
     <string name="prompt_latest_version">当前已是最新版本</string>
     

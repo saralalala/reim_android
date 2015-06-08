@@ -358,39 +358,54 @@ public class ProfileActivity extends Activity
         currentUser = appPreference.getCurrentUser();
         currentGroup = appPreference.getCurrentGroup();
 
-        ViewUtils.setImageViewBitmap(currentUser, avatarImageView);
-
-        String nickname = currentUser != null && !currentUser.getNickname().isEmpty() ? currentUser.getNickname() : getString(R.string.empty);
-        nicknameTextView.setText(nickname);
-
-        String email = currentUser != null && !currentUser.getEmail().isEmpty() ? currentUser.getEmail() : getString(R.string.not_binding);
-        emailTextView.setText(email);
-
-        String phone = currentUser != null && !currentUser.getPhone().isEmpty() ? currentUser.getPhone() : getString(R.string.not_binding);
-        phoneTextView.setText(phone);
-
-        if (currentGroup != null)
+        if (currentUser == null)
         {
-            companyTextView.setText(currentGroup.getName());
-        }
-        else if (!currentUser.getAppliedCompany().isEmpty())
-        {
-            companyTextView.setText(currentUser.getAppliedCompany() + ViewUtils.getString(R.string.waiting_for_approve));
+            Intent intent = new Intent(ProfileActivity.this, SignInActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            if (Utils.isEmailOrPhone(appPreference.getUsername()))
+            {
+                intent.putExtra("username", appPreference.getUsername());
+                intent.putExtra("password", appPreference.getPassword());
+            }
+            ViewUtils.goBackWithIntent(ProfileActivity.this, intent);
         }
         else
         {
-            companyTextView.setText(R.string.not_joined);
-        }
+            ViewUtils.setImageViewBitmap(currentUser, avatarImageView);
 
-        if (currentUser.getEmail().isEmpty() && currentUser.getPhone().isEmpty())
-        {
-            passwordLayout.setVisibility(View.GONE);
-        }
-        else
-        {
-            passwordLayout.setVisibility(View.VISIBLE);
-            int text = appPreference.hasPassword()? R.string.change_password : R.string.set_password;
-            passwordTextView.setText(text);
+            String nickname = !currentUser.getNickname().isEmpty() ? currentUser.getNickname() : getString(R.string.empty);
+            nicknameTextView.setText(nickname);
+
+            String email = !currentUser.getEmail().isEmpty() ? currentUser.getEmail() : getString(R.string.not_binding);
+            emailTextView.setText(email);
+
+            String phone = !currentUser.getPhone().isEmpty() ? currentUser.getPhone() : getString(R.string.not_binding);
+            phoneTextView.setText(phone);
+
+            if (currentGroup != null)
+            {
+                companyTextView.setText(currentGroup.getName());
+            }
+            else if (!currentUser.getAppliedCompany().isEmpty())
+            {
+                companyTextView.setText(currentUser.getAppliedCompany() + ViewUtils.getString(R.string.waiting_for_approve));
+            }
+            else
+            {
+                companyTextView.setText(R.string.not_joined);
+            }
+
+            if (currentUser.getEmail().isEmpty() && currentUser.getPhone().isEmpty())
+            {
+                passwordLayout.setVisibility(View.GONE);
+            }
+            else
+            {
+                passwordLayout.setVisibility(View.VISIBLE);
+                int text = appPreference.hasPassword()? R.string.change_password : R.string.set_password;
+                passwordTextView.setText(text);
+            }
         }
     }
 
