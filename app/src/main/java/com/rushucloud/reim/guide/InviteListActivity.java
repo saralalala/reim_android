@@ -116,6 +116,7 @@ public class InviteListActivity extends Activity
                     adapter.setContactList(contactList);
                     adapter.initIndex();
                     adapter.notifyDataSetChanged();
+                    ReimProgressDialog.setContext(this);
                     break;
                 }
                 default:

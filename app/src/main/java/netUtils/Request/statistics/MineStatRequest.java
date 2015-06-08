@@ -13,6 +13,13 @@ public class MineStatRequest extends BaseRequest
         appendUrl(URLDef.URL_STATISTICS);
     }
 
+    public MineStatRequest(int tagID, int categoryID)
+    {
+        super();
+
+        appendUrl(URLDef.URL_STATISTICS);
+    }
+
     public void sendRequest(HttpConnectionCallback callback)
     {
         doGet(callback);
