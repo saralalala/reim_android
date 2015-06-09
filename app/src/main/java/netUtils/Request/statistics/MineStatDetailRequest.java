@@ -7,16 +7,9 @@ import netUtils.HttpConnectionCallback;
 import netUtils.URLDef;
 import netUtils.request.BaseRequest;
 
-public class MineStatRequest extends BaseRequest
+public class MineStatDetailRequest extends BaseRequest
 {
-    public MineStatRequest()
-    {
-        super();
-
-        appendUrl(URLDef.URL_STATISTICS);
-    }
-
-    public MineStatRequest(int year, int month, int tagID, int categoryID)
+    public MineStatDetailRequest(int year, int month, int tagID, int categoryID)
     {
         super();
 

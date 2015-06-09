@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import classes.model.StatCategory;
+import classes.model.StatTag;
 import classes.utils.Utils;
 import netUtils.response.BaseResponse;
 
@@ -18,6 +19,7 @@ public class MineStatResponse extends BaseResponse
     private double newAmount;
     private double ongoingAmount;
     private List<StatCategory> statCategoryList;
+    private List<StatTag> statTagList;
     private HashMap<String, Double> monthsData;
 
     public MineStatResponse(Object httpResponse)
@@ -35,8 +37,8 @@ public class MineStatResponse extends BaseResponse
             this.ongoingAmount = jObject.getDouble("process");
             this.newAmount = jObject.getDouble("new");
 
-            JSONArray cates = jObject.getJSONArray("cates");
             this.statCategoryList = new ArrayList<>();
+            JSONArray cates = jObject.getJSONArray("cates");
             for (int i = 0; i < cates.length(); i++)
             {
                 JSONObject object = cates.getJSONObject(i);
@@ -55,8 +57,16 @@ public class MineStatResponse extends BaseResponse
                 this.statCategoryList.add(category);
             }
 
-            JSONObject months = jObject.optJSONObject("ms");
+            this.statTagList = new ArrayList<>();
+//            JSONArray tags = jObject.getJSONArray("tags");
+//            for (int i = 0; i < tags.length(); i++)
+//            {
+//                JSONObject object = tags.getJSONObject(i);
+//                this.statTagList.add(new StatTag(object));
+//            }
+
             this.monthsData = new HashMap<>();
+            JSONObject months = jObject.optJSONObject("ms");
             if (months != null)
             {
                 for (Iterator<?> iterator = months.keys(); iterator.hasNext(); )
@@ -91,6 +101,11 @@ public class MineStatResponse extends BaseResponse
     public List<StatCategory> getStatCategoryList()
     {
         return statCategoryList;
+    }
+
+    public List<StatTag> getStatTagList()
+    {
+        return statTagList;
     }
 
     public HashMap<String, Double> getMonthsData()

@@ -10,7 +10,7 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,25 +23,66 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginRight="16dp"
-            android:gravity="right">
+            android:orientation="vertical"
+            android:layout_marginRight="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/newLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
-                android:text="@string/rmb_symbol"
-                android:textColor="@color/font_major_dark"
-                android:textSize="14sp"/>
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:visibility="gone">
 
-            <TextView
-                android:id="@+id/overviewTextView"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:text="@string/stat_new"
+                    android:textColor="@color/status_approved"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:text="@string/rmb_symbol"
+                    android:textColor="@color/status_approved"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/newTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/status_approved"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/font_major_dark"
-                android:textSize="22sp"/>
+                android:orientation="horizontal"
+                android:gravity="right">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:text="@string/rmb_symbol"
+                    android:textColor="@color/font_major_dark"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/overviewTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/font_major_dark"
+                    android:textSize="22sp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -135,10 +176,79 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/monthTitleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:visibility="gone">
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            layout="@layout/view_divider"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true"
+            android:background="@color/list_item_header">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:text="@string/cost_total"
+                android:textColor="@color/font_list_item_header"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/totalUnitTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                android:gravity="right|center_vertical"
+                android:text="@string/rmb_symbol"
+                android:textColor="@color/font_list_item_header"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/monthTotalTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="12dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/font_list_item_header"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            layout="@layout/view_divider"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/monthLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        android:visibility="gone"/>
+
+    <RelativeLayout
         android:id="@+id/tagTitleLayout"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:background="@color/list_item_header">
+        android:background="@color/list_item_header"
+        android:visibility="gone">
 
         <include
             android:layout_width="match_parent"
@@ -166,13 +276,15 @@
         android:id="@+id/tagLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/memberTitleLayout"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:background="@color/list_item_header">
+        android:background="@color/list_item_header"
+        android:visibility="gone">
 
         <include
             android:layout_width="match_parent"
@@ -201,6 +313,7 @@
         android:id="@+id/memberLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:visibility="gone"/>
 
 </LinearLayout>

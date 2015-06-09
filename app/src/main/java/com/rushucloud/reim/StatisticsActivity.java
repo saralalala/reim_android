@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import classes.adapter.StatisticsListViewAdapter;
@@ -36,7 +37,9 @@ import classes.widget.ReimPie;
 import classes.widget.ReimProgressDialog;
 import classes.widget.XListView;
 import netUtils.HttpConnectionCallback;
+import netUtils.request.statistics.MineStatDetailRequest;
 import netUtils.request.statistics.OthersStatRequest;
+import netUtils.response.statistics.MineStatDetailResponse;
 import netUtils.response.statistics.OthersStatResponse;
 
 public class StatisticsActivity extends Activity
@@ -47,7 +50,8 @@ public class StatisticsActivity extends Activity
     private StatisticsListViewAdapter adapter;
     private XListView statListView;
 
-    private LinearLayout overviewLayout;
+    private LinearLayout newLayout;
+    private TextView newTextView;
     private TextView overviewTextView;
     private RelativeLayout pieLayout;
     private FrameLayout statContainer;
@@ -56,6 +60,10 @@ public class StatisticsActivity extends Activity
     private LinearLayout categoryLayout;
     private LinearLayout leftCategoryLayout;
     private LinearLayout rightCategoryLayout;
+    private TextView monthTotalTextView;
+    private TextView totalUnitTextView;
+    private RelativeLayout monthTitleLayout;
+    private LinearLayout monthLayout;
     private RelativeLayout tagTitleLayout;
     private LinearLayout tagLayout;
     private RelativeLayout memberTitleLayout;
@@ -69,6 +77,7 @@ public class StatisticsActivity extends Activity
     private int colorRDiff[] = {137, 52, 16, 52, 80, 135, 0, 82, 12, 91, 169};
     private int colorGDiff[] = {51, 100, 81, 50, 44, 95, 41, 96, 74, 58, 169};
     private int colorBDiff[] = {72, 54, 45, 131, 25, 25, 179, 37, 144, 63, 169};
+    private boolean mineData;
     private int year;
     private int month;
     private int categoryID;
@@ -93,7 +102,14 @@ public class StatisticsActivity extends Activity
         if (PhoneUtils.isNetworkConnected() && needToGetData())
         {
             ReimProgressDialog.show();
-            sendGetDataRequest();
+            if (mineData)
+            {
+                sendGetMineDataRequest();
+            }
+            else
+            {
+                sendGetOthersDataRequest();
+            }
         }
         else if (!PhoneUtils.isNetworkConnected() && needToGetData())
         {
@@ -122,11 +138,12 @@ public class StatisticsActivity extends Activity
         dbManager = DBManager.getDBManager();
 
         Bundle bundle = getIntent().getExtras();
-        year = bundle.getInt("year");
-        month = bundle.getInt("month");
-        categoryID = bundle.getInt("categoryID", -1);
-        tagID = bundle.getInt("tagID", -1);
-        userID = bundle.getInt("userID", -1);
+        mineData = bundle.getBoolean("mineData", false);
+        year = bundle.getInt("year", 0);
+        month = bundle.getInt("month", 0);
+        categoryID = bundle.getInt("categoryID", 0);
+        tagID = bundle.getInt("tagID", 0);
+        userID = bundle.getInt("userID", 0);
     }
 
     private void initView()
@@ -141,7 +158,11 @@ public class StatisticsActivity extends Activity
         });
 
         TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
-        if (categoryID != -1)
+        if (year != 0)
+        {
+            titleTextView.setText(Utils.getMonthString(year, month));
+        }
+        else if (categoryID != 0)
         {
             Category category = dbManager.getCategory(categoryID);
             if (category != null)
@@ -154,7 +175,7 @@ public class StatisticsActivity extends Activity
                 goBack();
             }
         }
-        else if (tagID != -1)
+        else if (tagID != 0)
         {
             Tag tag = dbManager.getTag(tagID);
             if (tag != null)
@@ -167,7 +188,7 @@ public class StatisticsActivity extends Activity
                 goBack();
             }
         }
-        else if (userID != -1)
+        else if (userID != 0)
         {
             User user = dbManager.getUser(userID);
             if (user != null)
@@ -188,9 +209,11 @@ public class StatisticsActivity extends Activity
 
         View view = View.inflate(this, R.layout.view_stat_second, null);
 
-        overviewLayout = (LinearLayout) view.findViewById(R.id.overviewLayout);
+        newLayout = (LinearLayout) view.findViewById(R.id.newLayout);
+        newTextView = (TextView) view.findViewById(R.id.newTextView);
         overviewTextView = (TextView) view.findViewById(R.id.overviewTextView);
         overviewTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+
         pieLayout = (RelativeLayout) view.findViewById(R.id.pieLayout);
         statContainer = (FrameLayout) view.findViewById(R.id.statContainer);
         totalTextView = (TextView) view.findViewById(R.id.totalTextView);
@@ -199,8 +222,15 @@ public class StatisticsActivity extends Activity
         categoryLayout = (LinearLayout) view.findViewById(R.id.categoryLayout);
         leftCategoryLayout = (LinearLayout) view.findViewById(R.id.leftCategoryLayout);
         rightCategoryLayout = (LinearLayout) view.findViewById(R.id.rightCategoryLayout);
+
+        monthTotalTextView = (TextView) view.findViewById(R.id.monthTotalTextView);
+        totalUnitTextView = (TextView) view.findViewById(R.id.totalUnitTextView);
+        monthTitleLayout = (RelativeLayout) view.findViewById(R.id.monthTitleLayout);
+        monthLayout = (LinearLayout) view.findViewById(R.id.monthLayout);
+
         tagTitleLayout = (RelativeLayout) view.findViewById(R.id.tagTitleLayout);
         tagLayout = (LinearLayout) view.findViewById(R.id.tagLayout);
+
         memberTitleLayout = (RelativeLayout) view.findViewById(R.id.memberTitleLayout);
         memberLayout = (LinearLayout) view.findViewById(R.id.memberLayout);
 
@@ -213,7 +243,7 @@ public class StatisticsActivity extends Activity
             {
                 if (PhoneUtils.isNetworkConnected())
                 {
-                    sendGetDataRequest();
+                    sendGetOthersDataRequest();
                 }
                 else
                 {
@@ -246,24 +276,29 @@ public class StatisticsActivity extends Activity
         return Utils.getCurrentTime() - lastUpdateTime > GET_DATA_INTERVAL;
     }
 
-    private void drawCategoryPie(List<StatCategory> categoryList)
+    private void drawOverviewLayout(double totalAmount, double newAmount)
     {
-        if (categoryID != -1 && categoryList.size() <= 1)
+        if (mineData)
         {
-            overviewLayout.setVisibility(View.VISIBLE);
-            pieLayout.setVisibility(View.GONE);
-            categoryLayout.setVisibility(View.GONE);
-
-            double totalAmount = 0;
-            for (StatCategory category : categoryList)
-            {
-                totalAmount += category.getAmount();
-            }
-            overviewTextView.setText(Utils.formatAmount(totalAmount));
+            newLayout.setVisibility(View.VISIBLE);
+            newTextView.setText(Utils.formatAmount(newAmount));
         }
         else
         {
-            overviewLayout.setVisibility(View.GONE);
+            newLayout.setVisibility(View.GONE);
+        }
+        overviewTextView.setText(Utils.formatAmount(totalAmount));
+    }
+
+    private void drawCategoryPie(List<StatCategory> categoryList)
+    {
+        if (categoryID != 0 && categoryList.size() <= 1)
+        {
+            pieLayout.setVisibility(View.GONE);
+            categoryLayout.setVisibility(View.GONE);
+        }
+        else
+        {
             pieLayout.setVisibility(View.VISIBLE);
             categoryLayout.setVisibility(View.VISIBLE);
 
@@ -400,14 +435,72 @@ public class StatisticsActivity extends Activity
         }
     }
 
+    private void drawMonthBar(HashMap<String, Double> monthsData)
+    {
+        if (year == 0 || month == 0)
+        {
+            monthTitleLayout.setVisibility(View.VISIBLE);
+            monthLayout.setVisibility(View.VISIBLE);
+            if (!monthsData.isEmpty())
+            {
+                double total = 0;
+                double max = 0;
+                for (Double data : monthsData.values())
+                {
+                    total += data;
+                    if (data > max)
+                    {
+                        max = data;
+                    }
+                }
+                monthTotalTextView.setText(Utils.formatAmount(total));
+
+                for (final String month : monthsData.keySet())
+                {
+                    Double data = monthsData.get(month);
+                    ReimBar monthBar = new ReimBar(StatisticsActivity.this, data / max);
+
+                    View view = View.inflate(StatisticsActivity.this, R.layout.list_month_stat, null);
+
+                    TextView monthTextView = (TextView) view.findViewById(R.id.monthTextView);
+                    monthTextView.setText(month);
+
+                    TextView dataTextView = (TextView) view.findViewById(R.id.dataTextView);
+                    TextView unitTextView = (TextView) view.findViewById(R.id.unitTextView);
+
+                    if (data < 100000)
+                    {
+                        dataTextView.setText(Utils.formatDouble(data));
+                        unitTextView.setVisibility(View.GONE);
+                    }
+                    else if (data < 100000000)
+                    {
+                        dataTextView.setText(Utils.formatDouble(data / 10000));
+                        unitTextView.setText(R.string.ten_thousand);
+                    }
+                    else
+                    {
+                        dataTextView.setText(Utils.formatDouble(data / 100000000));
+                        unitTextView.setText(R.string.one_hundred_million);
+                    }
+
+                    LinearLayout dataLayout = (LinearLayout) view.findViewById(R.id.dataLayout);
+                    dataLayout.addView(monthBar);
+
+                    monthLayout.addView(view);
+                }
+            }
+            else
+            {
+                monthTotalTextView.setVisibility(View.INVISIBLE);
+                totalUnitTextView.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
     private void drawTagBar(List<StatTag> tagList)
     {
-        if (tagID != -1 || tagList.isEmpty())
-        {
-            tagTitleLayout.setVisibility(View.GONE);
-            tagLayout.setVisibility(View.GONE);
-        }
-        else
+        if (tagID == 0 && !tagList.isEmpty())
         {
             tagTitleLayout.setVisibility(View.VISIBLE);
             tagLayout.setVisibility(View.VISIBLE);
@@ -464,12 +557,7 @@ public class StatisticsActivity extends Activity
 
     private void drawMember(List<StatUser> userList)
     {
-        if (userID != -1)
-        {
-            memberTitleLayout.setVisibility(View.GONE);
-            memberLayout.setVisibility(View.GONE);
-        }
-        else
+        if (userID == 0)
         {
             memberTitleLayout.setVisibility(View.VISIBLE);
             memberLayout.setVisibility(View.VISIBLE);
@@ -500,7 +588,50 @@ public class StatisticsActivity extends Activity
         }
     }
 
-    private void sendGetDataRequest()
+    private void sendGetMineDataRequest()
+    {
+        MineStatDetailRequest request = new MineStatDetailRequest(year, month, tagID, categoryID);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final MineStatDetailResponse response = new MineStatDetailResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            lastUpdateTime = Utils.getCurrentTime();
+                            resetView();
+                            drawOverviewLayout(response.getTotalAmount(), response.getNewAmount());
+                            drawCategoryPie(response.getStatCategoryList());
+                            drawMonthBar(response.getMonthsData());
+                            drawTagBar(response.getStatTagList());
+                            adapter.notifyDataSetChanged();
+                            statListView.stopRefresh();
+                            statListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+                            ReimProgressDialog.dismiss();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            statListView.stopRefresh();
+                            ViewUtils.showToast(StatisticsActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendGetOthersDataRequest()
     {
         OthersStatRequest request = new OthersStatRequest(year, month, categoryID, tagID, userID);
         request.sendRequest(new HttpConnectionCallback()
@@ -516,6 +647,7 @@ public class StatisticsActivity extends Activity
                         {
                             lastUpdateTime = Utils.getCurrentTime();
                             resetView();
+                            drawOverviewLayout(response.getTotalAmount(), -1);
                             drawCategoryPie(response.getStatCategoryList());
                             drawTagBar(response.getStatTagList());
                             drawMember(response.getStatUserList());

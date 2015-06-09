@@ -13,6 +13,7 @@ import netUtils.response.BaseResponse;
 
 public class OthersStatResponse extends BaseResponse
 {
+    private double totalAmount = 0;
     private List<StatCategory> statCategoryList;
     private List<StatTag> statTagList;
     private List<StatUser> statUserList;
@@ -28,24 +29,25 @@ public class OthersStatResponse extends BaseResponse
         {
             JSONObject jObject = getDataObject();
 
-            JSONArray categories = jObject.getJSONArray("categories");
             this.statCategoryList = new ArrayList<>();
+            JSONArray categories = jObject.getJSONArray("categories");
             for (int i = 0; i < categories.length(); i++)
             {
-                JSONObject object = categories.getJSONObject(i);
-                this.statCategoryList.add(new StatCategory(object));
+                StatCategory category = new StatCategory(categories.getJSONObject(i));
+                this.statCategoryList.add(category);
+                this.totalAmount += category.getAmount();
             }
 
-            JSONArray tags = jObject.getJSONArray("tags");
             this.statTagList = new ArrayList<>();
+            JSONArray tags = jObject.getJSONArray("tags");
             for (int i = 0; i < tags.length(); i++)
             {
                 JSONObject object = tags.getJSONObject(i);
                 this.statTagList.add(new StatTag(object));
             }
 
-            JSONArray members = jObject.getJSONArray("members");
             this.statUserList = new ArrayList<>();
+            JSONArray members = jObject.getJSONArray("members");
             for (int i = 0; i < members.length(); i++)
             {
                 JSONObject object = members.getJSONObject(i);
@@ -56,6 +58,11 @@ public class OthersStatResponse extends BaseResponse
         {
             e.printStackTrace();
         }
+    }
+
+    public double getTotalAmount()
+    {
+        return totalAmount;
     }
 
     public List<StatCategory> getStatCategoryList()

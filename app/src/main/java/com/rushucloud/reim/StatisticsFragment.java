@@ -68,15 +68,17 @@ public class StatisticsFragment extends Fragment
     private TextView totalUnitTextView;
     private LinearLayout monthLayout;
     private LinearLayout categoryLayout;
+    private RelativeLayout mineTagTitleLayout;
+    private LinearLayout mineTagLayout;
 
     private FrameLayout othersStatContainer;
     private TextView othersTotalTextView;
     private TextView othersUnitTextView;
     private LinearLayout leftCategoryLayout;
     private LinearLayout rightCategoryLayout;
-    private RelativeLayout tagTitleLayout;
-    private LinearLayout tagLayout;
     private LinearLayout memberLayout;
+    private RelativeLayout othersTagTitleLayout;
+    private LinearLayout othersTagLayout;
 
     private AppPreference appPreference;
     private DBManager dbManager;
@@ -241,6 +243,8 @@ public class StatisticsFragment extends Fragment
         totalUnitTextView = (TextView) mineView.findViewById(R.id.totalUnitTextView);
         monthLayout = (LinearLayout) mineView.findViewById(R.id.monthLayout);
         categoryLayout = (LinearLayout) mineView.findViewById(R.id.categoryLayout);
+        mineTagTitleLayout = (RelativeLayout) mineView.findViewById(R.id.tagTitleLayout);
+        mineTagLayout = (LinearLayout) mineView.findViewById(R.id.tagLayout);
 
         mineAdapter = new StatisticsListViewAdapter(mineView);
     }
@@ -310,8 +314,8 @@ public class StatisticsFragment extends Fragment
 
         leftCategoryLayout = (LinearLayout) othersView.findViewById(R.id.leftCategoryLayout);
         rightCategoryLayout = (LinearLayout) othersView.findViewById(R.id.rightCategoryLayout);
-        tagTitleLayout = (RelativeLayout) othersView.findViewById(R.id.tagTitleLayout);
-        tagLayout = (LinearLayout) othersView.findViewById(R.id.tagLayout);
+        othersTagTitleLayout = (RelativeLayout) othersView.findViewById(R.id.tagTitleLayout);
+        othersTagLayout = (LinearLayout) othersView.findViewById(R.id.tagLayout);
         memberLayout = (LinearLayout) othersView.findViewById(R.id.memberLayout);
 
         othersAdapter = new StatisticsListViewAdapter(othersView);
@@ -322,6 +326,7 @@ public class StatisticsFragment extends Fragment
         mineStatContainer.removeAllViews();
         monthLayout.removeAllViews();
         categoryLayout.removeAllViews();
+        mineTagLayout.removeAllViews();
     }
 
     private void resetOthersView()
@@ -329,7 +334,7 @@ public class StatisticsFragment extends Fragment
         othersStatContainer.removeAllViews();
         leftCategoryLayout.removeAllViews();
         rightCategoryLayout.removeAllViews();
-        tagLayout.removeAllViews();
+        othersTagLayout.removeAllViews();
         memberLayout.removeAllViews();
     }
 
@@ -455,12 +460,26 @@ public class StatisticsFragment extends Fragment
             }
             monthTotalTextView.setText(Utils.formatAmount(total));
 
-            for (String month : monthsData.keySet())
+            for (final String month : monthsData.keySet())
             {
                 Double data = monthsData.get(month);
                 ReimBar monthBar = new ReimBar(getActivity(), data / max);
 
                 View view = View.inflate(getActivity(), R.layout.list_month_stat, null);
+                view.setBackgroundResource(R.drawable.list_item_drawable);
+                view.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("mineData", true);
+                        bundle.putInt("year", Integer.valueOf(month.substring(0, 4)));
+                        bundle.putInt("month", Integer.valueOf(month.substring(5, 7)));
+                        Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                        intent.putExtras(bundle);
+                        ViewUtils.goForward(getActivity(), intent);
+                    }
+                });
 
                 TextView monthTextView = (TextView) view.findViewById(R.id.monthTextView);
                 monthTextView.setText(month);
@@ -503,10 +522,23 @@ public class StatisticsFragment extends Fragment
         {
             for (StatCategory category : categoryList)
             {
-                Category localCategory = dbManager.getCategory(category.getCategoryID());
+                final Category localCategory = dbManager.getCategory(category.getCategoryID());
                 if (localCategory != null)
                 {
                     View view = View.inflate(getActivity(), R.layout.list_category_stat, null);
+                    view.setBackgroundResource(R.drawable.list_item_drawable);
+                    view.setOnClickListener(new View.OnClickListener()
+                    {
+                        public void onClick(View v)
+                        {
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean("mineData", true);
+                            bundle.putInt("categoryID", localCategory.getServerID());
+                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                            intent.putExtras(bundle);
+                            ViewUtils.goForward(getActivity(), intent);
+                        }
+                    });
 
                     ImageView iconImageView = (ImageView) view.findViewById(R.id.iconImageView);
                     ViewUtils.setImageViewBitmap(localCategory, iconImageView);
@@ -671,12 +703,20 @@ public class StatisticsFragment extends Fragment
         othersStatContainer.addView(reimPie);
     }
 
-    private void drawTagBar(List<StatTag> tagList)
+    private void drawTagBar(List<StatTag> tagList, boolean mineData)
     {
         if (!tagList.isEmpty())
         {
-            tagTitleLayout.setVisibility(View.VISIBLE);
-            tagLayout.setVisibility(View.VISIBLE);
+            if (mineData)
+            {
+                mineTagTitleLayout.setVisibility(View.VISIBLE);
+                mineTagLayout.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                othersTagTitleLayout.setVisibility(View.VISIBLE);
+                othersTagLayout.setVisibility(View.VISIBLE);
+            }
 
             double max = 0;
             for (StatTag tag : tagList)
@@ -736,14 +776,26 @@ public class StatisticsFragment extends Fragment
                     LinearLayout dataLayout = (LinearLayout) view.findViewById(R.id.dataLayout);
                     dataLayout.addView(tagBar);
 
-                    tagLayout.addView(view);
+                    if (mineData)
+                    {
+                        mineTagLayout.addView(view);
+                    }
+                    else
+                    {
+                        othersTagLayout.addView(view);
+                    }
                 }
             }
         }
+        else if (mineData)
+        {
+            mineTagTitleLayout.setVisibility(View.GONE);
+            mineTagLayout.setVisibility(View.GONE);
+        }
         else
         {
-            tagTitleLayout.setVisibility(View.GONE);
-            tagLayout.setVisibility(View.GONE);
+            othersTagTitleLayout.setVisibility(View.GONE);
+            othersTagLayout.setVisibility(View.GONE);
         }
     }
 
@@ -822,6 +874,7 @@ public class StatisticsFragment extends Fragment
                             drawCostPie(response.getOngoingAmount(), response.getNewAmount());
                             drawMonthBar(response.getMonthsData());
                             drawCategory(response.getStatCategoryList());
+                            drawTagBar(response.getStatTagList(), true);
                             mineAdapter.notifyDataSetChanged();
                             statListView.stopRefresh();
                             statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetMineStatTime()));
@@ -866,7 +919,7 @@ public class StatisticsFragment extends Fragment
                         {
                             resetOthersView();
                             drawCategoryPie(response.getStatCategoryList());
-                            drawTagBar(response.getStatTagList());
+                            drawTagBar(response.getStatTagList(), false);
                             drawMember(response.getStatUserList());
                             othersAdapter.notifyDataSetChanged();
                             statListView.stopRefresh();

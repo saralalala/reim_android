@@ -139,6 +139,7 @@ public class SetPasswordActivity extends Activity
                 final ChangePasswordResponse response = new ChangePasswordResponse(httpResponse);
                 if (response.getStatus())
                 {
+                    appPreference.setServerToken(response.getServerToken());
                     appPreference.setPassword(password);
                     appPreference.setHasPassword(true);
                     appPreference.saveAppPreference();
