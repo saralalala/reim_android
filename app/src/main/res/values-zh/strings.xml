@@ -15,11 +15,12 @@
     <string name="english">English</string>
     <string name="rmb">元</string>
     <string name="plus">+</string>
-    <string name="rmb_symbol">¥</string>
     <string name="percent">%</string>
     <string name="dash">-</string>
+    <string name="rmb_symbol">¥</string>
     <string name="ten_thousand">万</string>
     <string name="one_hundred_million">亿</string>
+    <string name="china_country_code">86</string>
     <string name="year">年</string>
     <string name="month">月</string>
     <string name="second">秒</string>
@@ -62,9 +63,9 @@
     <string name="create">创建</string>
     <string name="guide">指导</string>
     <string name="manual">手动</string>
+    <string name="unbind">解绑</string>
     <string name="hot">热门</string>
     <string name="password">密码</string>
-    <string name="wechat">微信</string>
     <string name="wechat_session">微信好友</string>
     <string name="wechat_moments">朋友圈</string>
 
@@ -258,7 +259,13 @@
     <string name="personal_info">个人信息</string>
     <string name="email">邮箱</string>
     <string name="phone">手机</string>
+    <string name="wechat">微信</string>
+    <string name="bind_email">绑定邮箱</string>
+    <string name="bind_phone">绑定手机</string>
+    <string name="bind_wechat">绑定微信</string>
+    <string name="change_email">更换绑定邮箱</string>
     <string name="change_phone">更换绑定手机</string>
+    <string name="change_wechat">更换绑定微信</string>
     <string name="bank_info">银行账户</string>
     <string name="bank_account">银行账号</string>
     <string name="bank_account_name">户名</string>
@@ -310,8 +317,10 @@
     <string name="input_password">请输入密码</string>
     <string name="input_new_password">请输入新密码</string>
     <string name="input_confirm_password">请确认密码</string>
+    <string name="input_password_wechat">请输入「云报销」登录密码</string>
     <string name="input_email">请输入邮箱</string>
     <string name="input_phone">请输入手机号</string>
+    <string name="input_country_code">国码</string>
     <string name="input_account_name">请输入户名</string>
     <string name="input_bank_account">请输入银行账号</string>
     <string name="input_code">请输入验证码</string>
@@ -338,6 +347,9 @@
 
     <string name="prompt_loading">正在努力加载中&#8230;</string>
     <string name="prompt_sign_out">确认要切换当前账号</string>
+    <string name="prompt_unbind">确认要解绑？</string>
+    <string name="prompt_last_certification">抱歉，这是你唯一的登录凭证，暂时无法解绑。</string>
+    <string name="prompt_wechat_only">该账号仅绑定了微信，如需更换，请先绑定邮箱并设置密码</string>
     <string name="prompt_save_approve_ahead_item">这是一笔预申请的消费，您是想仅保存此笔消费还是要直接发送给上级审批？</string>
     <string name="prompt_delete_item">是否要删除此笔消费？</string>
     <string name="prompt_delete_report">是否要删除此报告？</string>
@@ -421,6 +433,7 @@
     <string name="error_submit_network_unavailable">网络未连接，无法提交</string>
     <string name="error_update_network_unavailable">网络未连接，无法更新信息</string>
     <string name="error_request_network_unavailable">网络未连接，无法发送请求</string>
+    <string name="error_unbind_network_unavailable">网络未连接，无法解绑</string>
     <string name="error_gps_unavailable">定位服务不可用，请打开定位服务或手动输入商家名称</string>
     <string name="error_self_as_manager">不能选择自己作为上级</string>
     <string name="error_trial_invite">试用账号暂时无法邀请别人</string>
@@ -452,10 +465,13 @@
     <string name="succeed_in_sending_message">验证短信已发送</string>
     <string name="succeed_in_changing_password">密码修改成功</string>
     <string name="succeed_in_setting_password">密码设置成功</string>
+    <string name="succeed_in_unbinding_email">解绑邮箱成功</string>
+    <string name="succeed_in_unbinding_phone">解绑手机成功</string>
+    <string name="succeed_in_unbinding_wechat">解绑微信成功</string>
     <string name="succeed_in_changing_default_manager">默认上级修改成功</string>
     <string name="succeed_in_sending_feedback">反馈发送成功！</string>
-    <string name="succeed_in_sending_invite_reply">邀请回复发送成功！</string>
-    <string name="succeed_in_sending_apply_reply">申请回复发送成功！</string>
+    <string name="succeed_in_sending_invite_reply">邀请回复发送成功</string>
+    <string name="succeed_in_sending_apply_reply">申请回复发送成功</string>
     <string name="succeed_in_exporting">报告导出成功</string>
     <string name="succeed_in_saving_item">保存成功</string>
     <string name="succeed_in_saving_report">报告保存成功</string>
@@ -526,6 +542,9 @@
     <string name="failed_to_sign_out">登出失败</string>
     <string name="failed_to_change_password">修改密码失败</string>
     <string name="failed_to_set_password">设置密码失败</string>
+    <string name="failed_to_unbind_email">解绑邮箱失败</string>
+    <string name="failed_to_unbind_phone">解绑手机失败</string>
+    <string name="failed_to_unbind_wechat">解绑微信失败</string>
     <string name="failed_to_alert">提醒发送失败</string>
     <string name="failed_to_get_message_list">获取消息列表失败</string>
     <string name="failed_to_delete">删除失败</string>

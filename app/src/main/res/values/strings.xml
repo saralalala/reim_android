@@ -66,7 +66,6 @@
     <string name="unbind">解绑</string>
     <string name="hot">热门</string>
     <string name="password">密码</string>
-    <string name="wechat">微信</string>
     <string name="wechat_session">微信好友</string>
     <string name="wechat_moments">朋友圈</string>
     
@@ -260,6 +259,10 @@
     <string name="personal_info">个人信息</string>
     <string name="email">邮箱</string>
     <string name="phone">手机</string>
+    <string name="wechat">微信</string>
+    <string name="bind_email">绑定邮箱</string>
+    <string name="bind_phone">绑定手机</string>
+    <string name="bind_wechat">绑定微信</string>
     <string name="change_email">更换绑定邮箱</string>
     <string name="change_phone">更换绑定手机</string>
     <string name="change_wechat">更换绑定微信</string>
