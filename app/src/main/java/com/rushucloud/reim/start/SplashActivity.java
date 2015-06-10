@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -15,7 +15,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.ViewUtils;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.SandboxOAuthRequest;
 import netUtils.request.user.SignInRequest;
 import netUtils.response.user.SandboxOAuthResponse;

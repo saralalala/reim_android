@@ -18,7 +18,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -33,7 +33,7 @@ import classes.utils.ViewUtils;
 import classes.utils.WeChatUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.SignInRequest;
 import netUtils.response.user.SignInResponse;
 
@@ -171,7 +171,7 @@ public class SignInActivity extends Activity
         {
             public void onClick(View v)
             {
-                WeChatUtils.sendAuthRequest(SignInActivity.this);
+                WeChatUtils.sendAuthRequest(SignInActivity.this, null);
             }
         });
 

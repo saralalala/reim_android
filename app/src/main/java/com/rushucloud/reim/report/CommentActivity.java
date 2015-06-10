@@ -31,12 +31,12 @@ import classes.utils.ReimBroadcastReceiver;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.request.DownloadImageRequest;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
+import netUtils.request.common.DownloadImageRequest;
 import netUtils.request.report.GetReportRequest;
 import netUtils.request.report.ModifyReportRequest;
-import netUtils.response.DownloadImageResponse;
+import netUtils.response.common.DownloadImageResponse;
 import netUtils.response.report.GetReportResponse;
 import netUtils.response.report.ModifyReportResponse;
 

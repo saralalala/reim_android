@@ -5,7 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.utils.Utils;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class CreateItemResponse extends BaseResponse
 {

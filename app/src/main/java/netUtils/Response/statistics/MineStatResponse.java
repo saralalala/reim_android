@@ -11,7 +11,7 @@ import java.util.List;
 import classes.model.StatCategory;
 import classes.model.StatTag;
 import classes.utils.Utils;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class MineStatResponse extends BaseResponse
 {

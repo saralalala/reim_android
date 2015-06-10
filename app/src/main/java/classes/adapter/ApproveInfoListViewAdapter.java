@@ -23,7 +23,7 @@ import classes.utils.DBManager;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.report.AlertRequest;
 import netUtils.response.report.AlertResponse;
 

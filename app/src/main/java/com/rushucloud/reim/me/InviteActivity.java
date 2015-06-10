@@ -26,7 +26,7 @@ import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.ViewUtils;
 import classes.utils.WeChatUtils;
-import netUtils.URLDef;
+import netUtils.common.URLDef;
 
 public class InviteActivity extends Activity
 {

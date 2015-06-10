@@ -42,8 +42,8 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
-import com.rushucloud.reim.GalleryActivity;
-import com.rushucloud.reim.MultipleImageActivity;
+import com.rushucloud.reim.common.GalleryActivity;
+import com.rushucloud.reim.common.MultipleImageActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.report.EditReportActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -69,10 +69,10 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.request.DownloadImageRequest;
-import netUtils.response.DownloadImageResponse;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
+import netUtils.request.common.DownloadImageRequest;
+import netUtils.response.common.DownloadImageResponse;
 
 public class EditItemActivity extends Activity
 {

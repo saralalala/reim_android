@@ -34,12 +34,12 @@ import classes.widget.CircleImageView;
 import classes.widget.ClearEditText;
 import classes.widget.PinnedSectionListView;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.request.DownloadImageRequest;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
+import netUtils.request.common.DownloadImageRequest;
 import netUtils.request.group.GetGroupRequest;
 import netUtils.request.user.DefaultManagerRequest;
-import netUtils.response.DownloadImageResponse;
+import netUtils.response.common.DownloadImageResponse;
 import netUtils.response.group.GetGroupResponse;
 import netUtils.response.user.DefaultManagerResponse;
 

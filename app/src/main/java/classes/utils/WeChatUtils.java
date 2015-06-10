@@ -5,9 +5,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.rushucloud.reim.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
@@ -17,7 +17,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import classes.model.User;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.WeChatAccessTokenRequest;
 import netUtils.request.user.WeChatOAuthRequest;
 import netUtils.response.user.WeChatAccessTokenResponse;
@@ -30,6 +30,7 @@ public class WeChatUtils
 
     private static IWXAPI api;
     private static Activity activity;
+    private static WeChatOAuthCallBack oAuthCallBack;
 
     public static IWXAPI getApi()
     {
@@ -87,7 +88,7 @@ public class WeChatUtils
         api.sendReq(req);
     }
 
-    public static void sendAuthRequest(Activity source)
+    public static void sendAuthRequest(Activity source, WeChatOAuthCallBack callBack)
     {
         if (!isWeChatAvailable(source))
         {
@@ -95,7 +96,7 @@ public class WeChatUtils
         }
 
         activity = source;
-        ReimProgressDialog.setContext(activity);
+        oAuthCallBack = callBack;
         SendAuth.Req req = new SendAuth.Req();
         req.scope = "snsapi_userinfo";
         req.state = "reim_wechat_sign_in";
@@ -112,14 +113,14 @@ public class WeChatUtils
                 WeChatAccessTokenResponse response = new WeChatAccessTokenResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    activity.runOnUiThread(new Runnable()
+                    if (oAuthCallBack != null)
                     {
-                        public void run()
-                        {
-                            ReimProgressDialog.show();
-                        }
-                    });
-                    sendWeChatOAuthRequest(response.getAccessToken(), response.getOpenID(), response.getUnionID());
+                        oAuthCallBack.execute(response.getAccessToken(), response.getOpenID(), response.getUnionID());
+                    }
+                    else
+                    {
+                        sendWeChatOAuthRequest(response.getAccessToken(), response.getOpenID(), response.getUnionID());
+                    }
                 }
                 else
                 {
@@ -137,6 +138,15 @@ public class WeChatUtils
 
     public static void sendWeChatOAuthRequest(String accessToken, String openID, final String unionID)
     {
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                ReimProgressDialog.setContext(activity);
+                ReimProgressDialog.show();
+            }
+        });
+
         WeChatOAuthRequest request = new WeChatOAuthRequest(accessToken, openID, unionID);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -238,5 +248,10 @@ public class WeChatUtils
                 }
             }
         });
+    }
+
+    public interface WeChatOAuthCallBack
+    {
+        void execute(String accessToken, String openID, final String unionID);
     }
 }

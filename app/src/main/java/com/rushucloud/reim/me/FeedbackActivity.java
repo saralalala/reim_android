@@ -19,9 +19,9 @@ import com.umeng.analytics.MobclickAgent;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.FeedbackRequest;
-import netUtils.response.FeedbackResponse;
+import netUtils.response.common.FeedbackResponse;
 
 public class FeedbackActivity extends Activity
 {

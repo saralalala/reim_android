@@ -29,7 +29,7 @@ import classes.utils.ViewUtils;
 import classes.utils.WeChatUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.RegisterRequest;
 import netUtils.request.user.VerifyCodeRequest;
 import netUtils.response.user.RegisterResponse;
@@ -182,7 +182,7 @@ public class PhoneSignUpActivity extends Activity
         {
             public void onClick(View v)
             {
-                WeChatUtils.sendAuthRequest(PhoneSignUpActivity.this);
+                WeChatUtils.sendAuthRequest(PhoneSignUpActivity.this, null);
             }
         });
 

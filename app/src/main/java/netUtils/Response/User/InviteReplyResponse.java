@@ -11,7 +11,7 @@ import classes.model.Category;
 import classes.model.Group;
 import classes.model.Tag;
 import classes.model.User;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class InviteReplyResponse extends BaseResponse
 {

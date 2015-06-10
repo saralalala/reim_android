@@ -3,7 +3,7 @@ package netUtils.response.category;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class DeleteCategoryResponse extends BaseResponse
 {

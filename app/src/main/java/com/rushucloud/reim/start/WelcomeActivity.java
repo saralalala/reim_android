@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -21,7 +21,7 @@ import classes.utils.ReimApplication;
 import classes.utils.ViewUtils;
 import classes.utils.WeChatUtils;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.SandboxOAuthRequest;
 import netUtils.response.user.SandboxOAuthResponse;
 
@@ -113,7 +113,7 @@ public class WelcomeActivity extends Activity
         {
             public void onClick(View v)
             {
-                WeChatUtils.sendAuthRequest(WelcomeActivity.this);
+                WeChatUtils.sendAuthRequest(WelcomeActivity.this, null);
             }
         });
     }

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    android:id="@+id/baseLayout">
+    android:id="@+id/containerLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -32,14 +32,14 @@
             android:textSize="20sp"/>
 
         <TextView
-            android:id="@+id/saveTextView"
+            android:id="@+id/unbindTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:gravity="center"
-            android:text="@string/save"
+            android:text="@string/unbind"
             android:textColor="@color/title_text_color"
             android:textSize="16sp"/>
 
@@ -51,18 +51,73 @@
         android:layout_marginTop="18dp"
         layout="@layout/view_divider"/>
 
-    <classes.widget.ClearEditText
-        android:id="@+id/emailEditText"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/edittext_height"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:background="@color/major_light"
-        android:hint="@string/input_email"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/font_major_dark"
-        android:textSize="16sp"
-        android:textCursorDrawable="@null"/>
+        android:layout_height="@dimen/layout_height"
+        android:orientation="horizontal"
+        android:background="@drawable/me_item_drawable">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:text="@string/email"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/emailTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/hint_grey"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="24dp"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/bindEmailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height"
+        android:orientation="horizontal"
+        android:background="@drawable/me_item_drawable">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:text="@string/change_email"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@string/next"
+            android:src="@drawable/next"/>
+
+    </LinearLayout>
 
     <include
         android:layout_width="match_parent"

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.InviteRequest;
 import netUtils.response.user.InviteResponse;
 

@@ -1,6 +1,6 @@
 package netUtils.response.user;
 
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class ChangePasswordResponse extends BaseResponse
 {

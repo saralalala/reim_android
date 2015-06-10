@@ -19,7 +19,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.ResetPasswordRequest;
 import netUtils.response.user.ResetPasswordResponse;
 

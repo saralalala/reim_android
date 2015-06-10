@@ -31,6 +31,18 @@
             android:textColor="@color/major_light"
             android:textSize="20sp"/>
 
+        <TextView
+            android:id="@+id/unbindTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:gravity="center"
+            android:text="@string/unbind"
+            android:textColor="@color/title_text_color"
+            android:textSize="16sp"/>
+
     </RelativeLayout>
 
     <include
@@ -98,7 +110,6 @@
             android:textSize="16sp"/>
 
         <ImageView
-            android:id="@+id/phoneNextImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

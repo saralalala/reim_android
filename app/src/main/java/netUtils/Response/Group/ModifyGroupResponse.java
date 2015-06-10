@@ -3,7 +3,7 @@ package netUtils.response.group;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class ModifyGroupResponse extends BaseResponse
 {

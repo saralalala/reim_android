@@ -1,6 +1,6 @@
 package netUtils.response.report;
 
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class AlertResponse extends BaseResponse
 {

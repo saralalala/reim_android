@@ -3,9 +3,9 @@ package netUtils.request.user;
 import java.util.List;
 
 import classes.model.User;
-import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
-import netUtils.request.BaseRequest;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.URLDef;
+import netUtils.request.common.BaseRequest;
 
 public class SetAdminRequest extends BaseRequest
 {

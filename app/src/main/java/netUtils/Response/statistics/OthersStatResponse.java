@@ -9,7 +9,7 @@ import java.util.List;
 import classes.model.StatCategory;
 import classes.model.StatTag;
 import classes.model.StatUser;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class OthersStatResponse extends BaseResponse
 {

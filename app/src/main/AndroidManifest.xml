@@ -115,23 +115,22 @@
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
 
-        <!--   public part   -->
+        <!--   common part   -->
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:launchMode="singleTop"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
-        
         <activity
-            android:name=".GalleryActivity"
+            android:name=".common.GalleryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".MultipleImageActivity"
+            android:name=".common.MultipleImageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".SingleImageActivity"
+            android:name=".common.SingleImageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
 
@@ -220,7 +219,7 @@
 
         <!--   statistics part   -->
         <activity
-            android:name=".StatisticsActivity"
+            android:name=".statistics.StatisticsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
 
@@ -234,11 +233,23 @@
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".me.BindEmailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".me.PhoneActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".me.BindPhoneActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.WeChatActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.BindWeChatActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
         <activity

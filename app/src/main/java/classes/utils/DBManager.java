@@ -26,7 +26,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private DBManager(Context context)
     {
@@ -56,6 +56,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "server_id INT DEFAULT(0),"
                     + "email TEXT DEFAULT(''),"
                     + "phone TEXT DEFAULT(''),"
+                    + "wechat TEXT DEFAULT(''),"
                     + "nickname TEXT DEFAULT(''),"
                     + "avatar_id INT DEFAULT(0),"
                     + "avatar_server_path TEXT DEFAULT(''),"
@@ -307,6 +308,12 @@ public class DBManager extends SQLiteOpenHelper
                 String command = "ALTER TABLE tbl_others_report ADD COLUMN step INT DEFAULT(0)";
                 db.execSQL(command);
             }
+
+            if (oldVersion < 3)
+            {
+                String command = "ALTER TABLE tbl_user ADD COLUMN wechat TEXT DEFAULT('')";
+                db.execSQL(command);
+            }
         }
         onCreate(db);
     }
@@ -479,11 +486,12 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            String sqlString = "INSERT INTO tbl_user (server_id, email, phone, nickname, avatar_id, avatar_server_path, avatar_local_path, " +
+            String sqlString = "INSERT INTO tbl_user (server_id, email, phone, wechat, nickname, avatar_id, avatar_server_path, avatar_local_path, " +
                     "privilege, manager_id, group_id, applied_company, admin, local_updatedt, server_updatedt) VALUES (" +
                     "'" + user.getServerID() + "'," +
                     "'" + user.getEmail() + "'," +
                     "'" + user.getPhone() + "'," +
+                    "'" + user.getWeChat() + "'," +
                     "'" + sqliteEscape(user.getNickname()) + "'," +
                     "'" + user.getAvatarID() + "'," +
                     "'" + user.getAvatarServerPath() + "'," +
@@ -519,6 +527,7 @@ public class DBManager extends SQLiteOpenHelper
                     "server_id = '" + user.getServerID() + "'," +
                     "email = '" + user.getEmail() + "'," +
                     "phone = '" + user.getPhone() + "'," +
+                    "wechat = '" + user.getWeChat() + "'," +
                     "nickname = '" + sqliteEscape(user.getNickname()) + "'," +
                     "avatar_id = '" + user.getAvatarID() + "'," +
                     "avatar_server_path = '" + user.getAvatarServerPath() + "'," +
@@ -593,15 +602,14 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_id, avatar_server_path, " +
-                                                      "avatar_local_path, privilege, manager_id, group_id, applied_company, admin, local_updatedt, " +
-                                                      "server_updatedt FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
+            Cursor cursor = database.rawQuery("SELECT * FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
             if (cursor.moveToNext())
             {
                 User user = new User();
                 user.setServerID(getIntFromCursor(cursor, "server_id"));
                 user.setEmail(getStringFromCursor(cursor, "email"));
                 user.setPhone(getStringFromCursor(cursor, "phone"));
+                user.setWeChat(getStringFromCursor(cursor, "wechat"));
                 user.setNickname(getStringFromCursor(cursor, "nickname"));
                 user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
                 user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));
@@ -667,15 +675,14 @@ public class DBManager extends SQLiteOpenHelper
         {
             if (groupServerID != -1 && groupServerID != 0)
             {
-                Cursor cursor = database.rawQuery("SELECT server_id, email, phone, nickname, avatar_id, avatar_server_path, avatar_local_path, " +
-                                                          "privilege, manager_id, group_id, applied_company, admin, local_updatedt, server_updatedt " +
-                                                          "FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
+                Cursor cursor = database.rawQuery("SELECT * FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
                 while (cursor.moveToNext())
                 {
                     User user = new User();
                     user.setServerID(getIntFromCursor(cursor, "server_id"));
                     user.setEmail(getStringFromCursor(cursor, "email"));
                     user.setPhone(getStringFromCursor(cursor, "phone"));
+                    user.setWeChat(getStringFromCursor(cursor, "wechat"));
                     user.setNickname(getStringFromCursor(cursor, "nickname"));
                     user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
                     user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));

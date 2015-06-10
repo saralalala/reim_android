@@ -35,10 +35,10 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.PinnedSectionListView;
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.request.DownloadImageRequest;
-import netUtils.response.DownloadImageResponse;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
+import netUtils.request.common.DownloadImageRequest;
+import netUtils.response.common.DownloadImageResponse;
 
 public class PickMemberActivity extends Activity
 {

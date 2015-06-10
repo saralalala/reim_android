@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import classes.model.User;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class UserInfoResponse extends BaseResponse
 {

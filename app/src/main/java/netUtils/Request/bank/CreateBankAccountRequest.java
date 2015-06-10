@@ -1,9 +1,9 @@
 package netUtils.request.bank;
 
 import classes.model.BankAccount;
-import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
-import netUtils.request.BaseRequest;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.URLDef;
+import netUtils.request.common.BaseRequest;
 
 public class CreateBankAccountRequest extends BaseRequest
 {

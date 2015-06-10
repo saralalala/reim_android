@@ -1,13 +1,13 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,26 +19,19 @@ import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
-import classes.utils.Utils;
 import classes.utils.ViewUtils;
-import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.request.user.ModifyUserRequest;
-import netUtils.response.user.ModifyUserResponse;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
+import netUtils.request.user.UnbindRequest;
+import netUtils.response.user.UnbindResponse;
 
 public class EmailActivity extends Activity
 {
-    private ClearEditText emailEditText;
-
-    private User currentUser;
-    private String originalEmail;
-
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_me_email);
-        initData();
         initView();
     }
 
@@ -66,16 +59,10 @@ public class EmailActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
-        originalEmail = currentUser.getEmail();
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
-        backImageView.setOnClickListener(new View.OnClickListener()
+        backImageView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
@@ -83,77 +70,78 @@ public class EmailActivity extends Activity
             }
         });
 
-        TextView saveTextView = (TextView) findViewById(R.id.saveTextView);
-        saveTextView.setOnClickListener(new View.OnClickListener()
+        TextView unbindTextView = (TextView) findViewById(R.id.unbindTextView);
+        unbindTextView.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-                hideSoftKeyboard();
-
-                String newEmail = emailEditText.getText().toString();
-                if (!PhoneUtils.isNetworkConnected())
+                final User currentUser = AppPreference.getAppPreference().getCurrentUser();
+                if (currentUser == null)
                 {
-                    ViewUtils.showToast(EmailActivity.this, R.string.error_modify_network_unavailable);
+                    ViewUtils.showToast(EmailActivity.this, R.string.failed_to_read_data);
                 }
-                else if (newEmail.equals(originalEmail))
+                else if (currentUser.getPhone().isEmpty() && currentUser.getWeChat().isEmpty())
                 {
-                    goBack();
-                }
-                else if (newEmail.isEmpty() && currentUser.getPhone().isEmpty())
-                {
-                    ViewUtils.showToast(EmailActivity.this, R.string.error_new_email_empty);
-                }
-                else if (!newEmail.isEmpty() && !Utils.isEmail(newEmail))
-                {
-                    ViewUtils.showToast(EmailActivity.this, R.string.error_email_wrong_format);
+                    ViewUtils.showToast(EmailActivity.this, R.string.prompt_last_certification);
                 }
                 else
                 {
-                    currentUser.setEmail(newEmail);
-                    sendModifyUserInfoRequest();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EmailActivity.this);
+                    builder.setTitle(R.string.tip);
+                    builder.setMessage(R.string.prompt_unbind);
+                    builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            if (PhoneUtils.isNetworkConnected())
+                            {
+                                sendUnbindRequest(currentUser);
+                            }
+                            else
+                            {
+                                ViewUtils.showToast(EmailActivity.this, R.string.error_unbind_network_unavailable);
+                            }
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, null);
+                    builder.create().show();
                 }
             }
         });
 
-        emailEditText = (ClearEditText) findViewById(R.id.emailEditText);
-        emailEditText.setText(currentUser.getEmail());
-        ViewUtils.requestFocus(this, emailEditText);
+        TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
+        emailTextView.setText(getIntent().getStringExtra("email"));
 
-        LinearLayout baseLayout = (LinearLayout) findViewById(R.id.baseLayout);
-        baseLayout.setOnClickListener(new OnClickListener()
+        LinearLayout bindEmailLayout = (LinearLayout) findViewById(R.id.bindEmailLayout);
+        bindEmailLayout.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-                hideSoftKeyboard();
+                ViewUtils.goForward(EmailActivity.this, BindEmailActivity.class);
             }
         });
     }
 
-    private void sendModifyUserInfoRequest()
+    private void sendUnbindRequest(final User user)
     {
         ReimProgressDialog.show();
-        ModifyUserRequest request = new ModifyUserRequest(currentUser);
+        UnbindRequest request = new UnbindRequest(NetworkConstant.CONTACT_TYPE_EMAIL);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
-                final ModifyUserResponse response = new ModifyUserResponse(httpResponse);
+                final UnbindResponse response = new UnbindResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    DBManager.getDBManager().updateUser(currentUser);
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    if (appPreference.getUsername().equals(originalEmail))
-                    {
-                        appPreference.setUsername(currentUser.getEmail());
-                        appPreference.saveAppPreference();
-                    }
+                    user.setEmail("");
+                    DBManager.getDBManager().updateUser(user);
 
                     runOnUiThread(new Runnable()
                     {
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(EmailActivity.this, R.string.succeed_in_modifying_user_info);
+                            ViewUtils.showToast(EmailActivity.this, R.string.succeed_in_unbinding_email);
                             goBack();
                         }
                     });
@@ -165,7 +153,7 @@ public class EmailActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(EmailActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
+                            ViewUtils.showToast(EmailActivity.this, R.string.failed_to_unbind_email, response.getErrorMessage());
                         }
                     });
                 }
@@ -173,15 +161,8 @@ public class EmailActivity extends Activity
         });
     }
 
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
-    }
-
     private void goBack()
     {
-        hideSoftKeyboard();
         ViewUtils.goBack(this);
     }
 }

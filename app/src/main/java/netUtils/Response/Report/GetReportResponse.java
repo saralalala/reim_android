@@ -13,7 +13,7 @@ import classes.model.Report;
 import classes.model.User;
 import classes.utils.DBManager;
 import classes.utils.Utils;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class GetReportResponse extends BaseResponse
 {

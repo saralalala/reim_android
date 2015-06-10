@@ -9,7 +9,7 @@ import java.util.List;
 
 import classes.model.Group;
 import classes.model.Invite;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class GetInvitedGroupResponse extends BaseResponse
 {

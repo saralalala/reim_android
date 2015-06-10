@@ -3,7 +3,7 @@ package netUtils.response.bank;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class CreateBankAccountResponse extends BaseResponse
 {

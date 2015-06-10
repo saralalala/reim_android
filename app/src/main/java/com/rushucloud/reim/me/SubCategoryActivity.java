@@ -31,10 +31,10 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.request.DownloadImageRequest;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.request.common.DownloadImageRequest;
 import netUtils.request.category.DeleteCategoryRequest;
-import netUtils.response.DownloadImageResponse;
+import netUtils.response.common.DownloadImageResponse;
 import netUtils.response.category.DeleteCategoryResponse;
 
 public class SubCategoryActivity extends Activity

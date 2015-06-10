@@ -27,10 +27,10 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.request.DownloadImageRequest;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.request.common.DownloadImageRequest;
 import netUtils.request.item.GetVendorsRequest;
-import netUtils.response.DownloadImageResponse;
+import netUtils.response.common.DownloadImageResponse;
 import netUtils.response.item.GetVendorsResponse;
 
 public class PickVendorActivity extends Activity

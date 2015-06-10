@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.model.Group;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class SearchGroupResponse extends BaseResponse
 {

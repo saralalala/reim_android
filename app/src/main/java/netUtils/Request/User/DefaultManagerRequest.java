@@ -1,9 +1,9 @@
 package netUtils.request.user;
 
 import classes.utils.AppPreference;
-import netUtils.HttpConnectionCallback;
-import netUtils.URLDef;
-import netUtils.request.BaseRequest;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.URLDef;
+import netUtils.request.common.BaseRequest;
 
 public class DefaultManagerRequest extends BaseRequest
 {

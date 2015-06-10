@@ -35,8 +35,8 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
 import netUtils.request.group.CreateGroupRequest;
 import netUtils.response.group.CreateGroupResponse;
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.model.Item;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class GetItemsResponse extends BaseResponse
 {

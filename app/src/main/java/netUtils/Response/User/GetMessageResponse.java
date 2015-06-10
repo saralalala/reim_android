@@ -1,7 +1,7 @@
 package netUtils.response.user;
 
 import classes.model.Message;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class GetMessageResponse extends BaseResponse
 {

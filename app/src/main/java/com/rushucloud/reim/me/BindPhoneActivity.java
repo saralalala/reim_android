@@ -24,7 +24,7 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.ModifyUserRequest;
 import netUtils.request.user.VerifyCodeRequest;
 import netUtils.response.user.ModifyUserResponse;

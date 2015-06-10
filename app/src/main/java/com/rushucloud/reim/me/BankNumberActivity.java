@@ -30,7 +30,7 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.bank.CreateBankAccountRequest;
 import netUtils.request.bank.DeleteBankAccountRequest;
 import netUtils.request.bank.ModifyBankAccountRequest;

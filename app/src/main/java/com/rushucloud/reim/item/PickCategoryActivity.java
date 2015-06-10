@@ -25,9 +25,9 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
-import netUtils.HttpConnectionCallback;
-import netUtils.request.DownloadImageRequest;
-import netUtils.response.DownloadImageResponse;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.request.common.DownloadImageRequest;
+import netUtils.response.common.DownloadImageResponse;
 
 public class PickCategoryActivity extends Activity
 {

@@ -11,7 +11,7 @@ import classes.model.Apply;
 import classes.model.Invite;
 import classes.model.Message;
 import classes.utils.AppPreference;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class GetMessagesResponse extends BaseResponse
 {

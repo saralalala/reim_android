@@ -25,7 +25,7 @@ import classes.model.Apply;
 import classes.model.Invite;
 import classes.model.Message;
 import classes.model.Report;
-import netUtils.NetworkConstant;
+import netUtils.common.NetworkConstant;
 
 public class ReimBroadcastReceiver extends BroadcastReceiver
 {

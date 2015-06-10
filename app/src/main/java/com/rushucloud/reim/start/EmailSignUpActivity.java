@@ -27,7 +27,7 @@ import classes.utils.ViewUtils;
 import classes.utils.WeChatUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.RegisterRequest;
 import netUtils.response.user.RegisterResponse;
 
@@ -141,7 +141,7 @@ public class EmailSignUpActivity extends Activity
         {
             public void onClick(View v)
             {
-                WeChatUtils.sendAuthRequest(EmailSignUpActivity.this);
+                WeChatUtils.sendAuthRequest(EmailSignUpActivity.this, null);
             }
         });
 

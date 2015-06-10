@@ -1,6 +1,6 @@
 package netUtils.response.bank;
 
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class ModifyBankAccountResponse extends BaseResponse
 {

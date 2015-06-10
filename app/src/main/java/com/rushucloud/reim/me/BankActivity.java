@@ -34,7 +34,7 @@ import classes.widget.ReimProgressDialog;
 import classes.widget.wheelview.OnWheelChangedListener;
 import classes.widget.wheelview.WheelView;
 import classes.widget.wheelview.adapter.ArrayWheelAdapter;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.bank.CreateBankAccountRequest;
 import netUtils.request.bank.ModifyBankAccountRequest;
 import netUtils.response.bank.CreateBankAccountResponse;

@@ -21,7 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
-import com.rushucloud.reim.SingleImageActivity;
+import com.rushucloud.reim.common.SingleImageActivity;
 import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -35,11 +35,11 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.request.UploadImageRequest;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
+import netUtils.request.common.UploadImageRequest;
 import netUtils.request.user.SignOutRequest;
-import netUtils.response.UploadImageResponse;
+import netUtils.response.common.UploadImageResponse;
 import netUtils.response.user.SignOutResponse;
 
 public class ProfileActivity extends Activity
@@ -54,6 +54,7 @@ public class ProfileActivity extends Activity
     private TextView nicknameTextView;
     private TextView emailTextView;
     private TextView phoneTextView;
+    private TextView wechatTextView;
     private TextView companyTextView;
     private RelativeLayout passwordLayout;
     private TextView passwordTextView;
@@ -214,7 +215,17 @@ public class ProfileActivity extends Activity
         {
             public void onClick(View v)
             {
-                ViewUtils.goForward(ProfileActivity.this, EmailActivity.class);
+                String email = appPreference.getCurrentUser().getEmail();
+                if (email.isEmpty())
+                {
+                    ViewUtils.goForward(ProfileActivity.this, BindEmailActivity.class);
+                }
+                else
+                {
+                    Intent intent = new Intent(ProfileActivity.this, EmailActivity.class);
+                    intent.putExtra("email", email);
+                    ViewUtils.goForward(ProfileActivity.this, intent);
+                }
             }
         });
 
@@ -235,6 +246,28 @@ public class ProfileActivity extends Activity
                 {
                     Intent intent = new Intent(ProfileActivity.this, PhoneActivity.class);
                     intent.putExtra("phone", phone);
+                    ViewUtils.goForward(ProfileActivity.this, intent);
+                }
+            }
+        });
+
+        // init wechat
+        wechatTextView = (TextView) findViewById(R.id.wechatTextView);
+
+        LinearLayout wechatLayout = (LinearLayout) findViewById(R.id.wechatLayout);
+        wechatLayout.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                String wechat = appPreference.getCurrentUser().getWeChat();
+                if (wechat.isEmpty())
+                {
+                    ViewUtils.goForward(ProfileActivity.this, BindWeChatActivity.class);
+                }
+                else
+                {
+                    Intent intent = new Intent(ProfileActivity.this, WeChatActivity.class);
+                    intent.putExtra("wechat", wechat);
                     ViewUtils.goForward(ProfileActivity.this, intent);
                 }
             }
@@ -382,6 +415,9 @@ public class ProfileActivity extends Activity
 
             String phone = !currentUser.getPhone().isEmpty() ? currentUser.getPhone() : getString(R.string.not_binding);
             phoneTextView.setText(phone);
+
+            String wechat = !currentUser.getWeChat().isEmpty() ? currentUser.getWeChat() : getString(R.string.not_binding);
+            wechatTextView.setText(wechat);
 
             if (currentGroup != null)
             {

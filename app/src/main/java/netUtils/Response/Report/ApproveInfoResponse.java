@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import classes.model.ApproveInfo;
-import netUtils.response.BaseResponse;
+import netUtils.response.common.BaseResponse;
 
 public class ApproveInfoResponse extends BaseResponse
 {

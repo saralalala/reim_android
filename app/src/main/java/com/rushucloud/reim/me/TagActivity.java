@@ -30,7 +30,7 @@ import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.tag.DeleteTagRequest;
 import netUtils.response.tag.DeleteTagResponse;
 

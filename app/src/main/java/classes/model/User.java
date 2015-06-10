@@ -25,6 +25,7 @@ public class User implements Serializable
     private int serverID = -1;
     private String email = "";
     private String phone = "";
+    private String wechat = "";
     private String password = "";
     private String nickname = "";
     private String nicknameInitLetter = "";
@@ -51,6 +52,7 @@ public class User implements Serializable
         serverID = user.getServerID();
         email = user.getEmail();
         phone = user.getPhone();
+        wechat = user.getWeChat();
         password = user.getPassword();
         nickname = user.getNickname();
         avatarID = user.getAvatarID();
@@ -73,6 +75,7 @@ public class User implements Serializable
             setServerID(Integer.valueOf(jObject.getString("id")));
             setEmail(jObject.getString("email"));
             setPhone(jObject.getString("phone"));
+            setWeChat(jObject.optString("weixin_nickname", ""));
             setNickname(jObject.getString("nickname"));
             setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
             setDefaultManagerID(jObject.getInt("manager_id"));
@@ -106,6 +109,7 @@ public class User implements Serializable
             setNickname(jObject.getString("nickname"));
             setEmail(jObject.getString("email"));
             setPhone(jObject.getString("phone"));
+            setWeChat(jObject.getString("weixin_nickname"));
             setDefaultManagerID(jObject.getInt("manager_id"));
             setAvatarLocalPath("");
             setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
@@ -160,6 +164,15 @@ public class User implements Serializable
     public void setPhone(String phone)
     {
         this.phone = phone;
+    }
+
+    public String getWeChat()
+    {
+        return wechat;
+    }
+    public void setWeChat(String wechat)
+    {
+        this.wechat = wechat;
     }
 
     public String getContact()

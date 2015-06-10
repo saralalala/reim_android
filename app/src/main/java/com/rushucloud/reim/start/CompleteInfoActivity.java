@@ -17,9 +17,9 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
-import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
-import com.rushucloud.reim.SingleImageActivity;
+import com.rushucloud.reim.common.SingleImageActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.model.User;
@@ -30,11 +30,11 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.request.UploadImageRequest;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
+import netUtils.request.common.UploadImageRequest;
 import netUtils.request.user.ModifyUserRequest;
-import netUtils.response.UploadImageResponse;
+import netUtils.response.common.UploadImageResponse;
 import netUtils.response.user.ModifyUserResponse;
 
 public class CompleteInfoActivity extends Activity

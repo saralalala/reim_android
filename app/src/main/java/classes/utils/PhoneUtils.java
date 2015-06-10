@@ -30,7 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import netUtils.NetworkConstant;
+import netUtils.common.NetworkConstant;
 
 public class PhoneUtils
 {

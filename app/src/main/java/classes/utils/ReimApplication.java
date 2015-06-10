@@ -13,7 +13,7 @@ import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.PushService;
 import com.mechat.mechatlibrary.MCClient;
 import com.mechat.mechatlibrary.callback.OnInitCallback;
-import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 

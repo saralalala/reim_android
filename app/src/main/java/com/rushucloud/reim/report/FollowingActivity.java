@@ -26,7 +26,7 @@ import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
+import netUtils.common.HttpConnectionCallback;
 import netUtils.request.report.ApproveReportRequest;
 import netUtils.response.report.ApproveReportResponse;
 

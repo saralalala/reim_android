@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.rushucloud.reim.R;
-import com.rushucloud.reim.SingleImageActivity;
+import com.rushucloud.reim.common.SingleImageActivity;
 
 import java.util.ArrayList;
 

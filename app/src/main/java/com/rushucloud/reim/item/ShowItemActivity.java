@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.rushucloud.reim.MultipleImageActivity;
+import com.rushucloud.reim.common.MultipleImageActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -31,10 +31,10 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
-import netUtils.request.DownloadImageRequest;
-import netUtils.response.DownloadImageResponse;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
+import netUtils.request.common.DownloadImageRequest;
+import netUtils.response.common.DownloadImageResponse;
 
 public class ShowItemActivity extends Activity
 {

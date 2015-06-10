@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.rushucloud.reim.MainActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
@@ -30,8 +30,8 @@ import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import netUtils.HttpConnectionCallback;
-import netUtils.NetworkConstant;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
 import netUtils.request.user.ApplyReplyRequest;
 import netUtils.request.user.GetMessageRequest;
 import netUtils.request.user.InviteReplyRequest;
