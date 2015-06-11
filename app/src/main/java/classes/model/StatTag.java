@@ -15,7 +15,7 @@ public class StatTag
         {
             setTagID(jObject.getInt("id"));
             setAmount(jObject.getDouble("amount"));
-            setItemCount(jObject.getInt("count"));
+            setItemCount(jObject.getJSONArray("items").length());
         }
         catch (JSONException e)
         {

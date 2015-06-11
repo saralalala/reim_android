@@ -756,6 +756,9 @@ public class StatisticsFragment extends Fragment
                     TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
                     nameTextView.setText(localTag.getName());
 
+                    TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
+                    countTextView.setText(String.format(getString(R.string.item_count), tag.getItemCount()));
+
                     TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                     TextView unitTextView = (TextView) view.findViewById(R.id.unitTextView);
 

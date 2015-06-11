@@ -58,12 +58,12 @@ public class MineStatResponse extends BaseResponse
             }
 
             this.statTagList = new ArrayList<>();
-//            JSONArray tags = jObject.getJSONArray("tags");
-//            for (int i = 0; i < tags.length(); i++)
-//            {
-//                JSONObject object = tags.getJSONObject(i);
-//                this.statTagList.add(new StatTag(object));
-//            }
+            JSONArray tags = jObject.getJSONArray("tags");
+            for (int i = 0; i < tags.length(); i++)
+            {
+                JSONObject object = tags.getJSONObject(i);
+                this.statTagList.add(new StatTag(object));
+            }
 
             this.monthsData = new HashMap<>();
             JSONObject months = jObject.optJSONObject("ms");

@@ -231,6 +231,7 @@
     <string name="mark">标记</string>
     <string name="stat_ongoing">报销中</string>
     <string name="stat_new">待提交</string>
+    <string name="new_reim">待报销</string>
     <string name="new_total">待报销总计</string>
     <string name="last_12_months">近12个月</string>
     <string name="cost_total">费用汇总</string>

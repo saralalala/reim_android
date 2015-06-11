@@ -54,6 +54,7 @@ public class StatisticsActivity extends Activity
     private LinearLayout newLayout;
     private TextView newTextView;
     private TextView overviewTextView;
+    private RelativeLayout categoryTitleLayout;
     private RelativeLayout pieLayout;
     private FrameLayout statContainer;
     private TextView totalTextView;
@@ -215,6 +216,7 @@ public class StatisticsActivity extends Activity
         overviewTextView = (TextView) view.findViewById(R.id.overviewTextView);
         overviewTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 
+        categoryTitleLayout = (RelativeLayout) view.findViewById(R.id.categoryTitleLayout);
         pieLayout = (RelativeLayout) view.findViewById(R.id.pieLayout);
         statContainer = (FrameLayout) view.findViewById(R.id.statContainer);
         totalTextView = (TextView) view.findViewById(R.id.totalTextView);
@@ -295,11 +297,13 @@ public class StatisticsActivity extends Activity
     {
         if (categoryID != 0 && categoryList.size() <= 1)
         {
+            categoryTitleLayout.setVisibility(View.GONE);
             pieLayout.setVisibility(View.GONE);
             categoryLayout.setVisibility(View.GONE);
         }
         else
         {
+            categoryTitleLayout.setVisibility(View.VISIBLE);
             pieLayout.setVisibility(View.VISIBLE);
             categoryLayout.setVisibility(View.VISIBLE);
 
@@ -527,6 +531,9 @@ public class StatisticsActivity extends Activity
 
                     TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
                     nameTextView.setText(localTag.getName());
+
+                    TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
+                    countTextView.setText(String.format(getString(R.string.item_count), tag.getItemCount()));
 
                     TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                     TextView unitTextView = (TextView) view.findViewById(R.id.unitTextView);

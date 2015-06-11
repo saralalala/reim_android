@@ -8,24 +8,50 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
 
         <TextView
             android:id="@+id/nameTextView"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
             android:layout_marginRight="6dp"
             android:textColor="@color/font_major_dark"
             android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/countTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/hint_light_grey"
+            android:textSize="14sp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="9dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <LinearLayout
+            android:id="@+id/dataLayout"
+            android:layout_width="0dp"
+            android:layout_height="18dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
 
         <LinearLayout
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginLeft="6dp"
-            android:layout_marginRight="16dp"
             android:layout_alignParentRight="true"
             android:gravity="right"
             android:baselineAligned="true">
@@ -50,18 +76,9 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/font_month_data"
                 android:textSize="14sp"/>
+
         </LinearLayout>
 
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/dataLayout"
-        android:layout_width="match_parent"
-        android:layout_height="18dp"
-        android:orientation="horizontal"
-		android:layout_centerVertical="true"
-        android:layout_marginTop="9dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"/>
+    </LinearLayout>
 
 </LinearLayout>
