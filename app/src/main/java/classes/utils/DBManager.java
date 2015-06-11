@@ -26,7 +26,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private DBManager(Context context)
     {
@@ -66,6 +66,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "group_id INT DEFAULT(0),"
                     + "applied_company TEXT DEFAULT(''),"
                     + "admin INT DEFAULT(0),"
+                    + "active INT DEFAULT(0),"
                     + "server_updatedt INT DEFAULT(0),"
                     + "local_updatedt INT DEFAULT(0),"
                     + "backup1 INT DEFAULT(0),"
@@ -314,6 +315,12 @@ public class DBManager extends SQLiteOpenHelper
                 String command = "ALTER TABLE tbl_user ADD COLUMN wechat TEXT DEFAULT('')";
                 db.execSQL(command);
             }
+
+            if (oldVersion < 4)
+            {
+                String command = "ALTER TABLE tbl_user ADD COLUMN active INT DEFAULT(0)";
+                db.execSQL(command);
+            }
         }
         onCreate(db);
     }
@@ -487,7 +494,7 @@ public class DBManager extends SQLiteOpenHelper
         try
         {
             String sqlString = "INSERT INTO tbl_user (server_id, email, phone, wechat, nickname, avatar_id, avatar_server_path, avatar_local_path, " +
-                    "privilege, manager_id, group_id, applied_company, admin, local_updatedt, server_updatedt) VALUES (" +
+                    "privilege, manager_id, group_id, applied_company, admin, active, local_updatedt, server_updatedt) VALUES (" +
                     "'" + user.getServerID() + "'," +
                     "'" + user.getEmail() + "'," +
                     "'" + user.getPhone() + "'," +
@@ -501,6 +508,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + user.getGroupID() + "'," +
                     "'" + user.getAppliedCompany() + "'," +
                     "'" + Utils.booleanToInt(user.isAdmin()) + "'," +
+                    "'" + Utils.booleanToInt(user.isActive()) + "'," +
                     "'" + user.getLocalUpdatedDate() + "'," +
                     "'" + user.getServerUpdatedDate() + "')";
             database.execSQL(sqlString);
@@ -536,6 +544,7 @@ public class DBManager extends SQLiteOpenHelper
                     "group_id = '" + user.getGroupID() + "'," +
                     "applied_company = '" + user.getAppliedCompany() + "'," +
                     "admin = '" + Utils.booleanToInt(user.isAdmin()) + "'," +
+                    "active = '" + Utils.booleanToInt(user.isActive()) + "'," +
                     "local_updatedt = '" + user.getLocalUpdatedDate() + "'," +
                     "server_updatedt = '" + user.getServerUpdatedDate() + "' " +
                     "WHERE server_id = '" + user.getServerID() + "'";
@@ -619,6 +628,7 @@ public class DBManager extends SQLiteOpenHelper
                 user.setGroupID(getIntFromCursor(cursor, "group_id"));
                 user.setAppliedCompany(getStringFromCursor(cursor, "applied_company"));
                 user.setIsAdmin(getBooleanFromCursor(cursor, "admin"));
+                user.setIsActive(getBooleanFromCursor(cursor, "active"));
                 user.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
                 user.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 
@@ -692,6 +702,7 @@ public class DBManager extends SQLiteOpenHelper
                     user.setGroupID(getIntFromCursor(cursor, "group_id"));
                     user.setAppliedCompany(getStringFromCursor(cursor, "applied_company"));
                     user.setIsAdmin(getBooleanFromCursor(cursor, "admin"));
+                    user.setIsActive(getBooleanFromCursor(cursor, "active"));
                     user.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
                     user.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
                     userList.add(user);

@@ -285,6 +285,7 @@
     <string name="manager_not_set">还没有设置上级</string>
     <string name="not_set">未设置</string>
     <string name="not_binding">未绑定</string>
+    <string name="not_active">（未验证）</string>
     <string name="icon">图标</string>
     <string name="sub_category">子类别</string>
     <string name="join_group">加入团队</string>

@@ -411,6 +411,10 @@ public class ProfileActivity extends Activity
             nicknameTextView.setText(nickname);
 
             String email = !currentUser.getEmail().isEmpty() ? currentUser.getEmail() : getString(R.string.not_binding);
+            if (!currentUser.isActive())
+            {
+                email += getString(R.string.not_active);
+            }
             emailTextView.setText(email);
 
             String phone = !currentUser.getPhone().isEmpty() ? currentUser.getPhone() : getString(R.string.not_binding);

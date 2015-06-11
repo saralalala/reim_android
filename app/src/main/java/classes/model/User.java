@@ -83,6 +83,7 @@ public class User implements Serializable
             setAppliedCompany(jObject.optString("apply"));
             setAvatarServerPath(jObject.getString("apath"));
             setAvatarLocalPath("");
+            setIsActive(Utils.intToBoolean(jObject.optInt("active", 0)));
             setLocalUpdatedDate(jObject.getInt("dt"));
             setServerUpdatedDate(jObject.getInt("dt"));
             String imageID = jObject.getString("avatar");
@@ -113,7 +114,7 @@ public class User implements Serializable
             setDefaultManagerID(jObject.getInt("manager_id"));
             setAvatarLocalPath("");
             setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
-            setIsActive(Utils.intToBoolean(jObject.getInt("active")));
+            setIsActive(Utils.intToBoolean(jObject.optInt("active", 0)));
             setGroupID(groupID);
             setAppliedCompany(jObject.getString("apply"));
             setLocalUpdatedDate(jObject.getInt("lastdt"));

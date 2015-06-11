@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import classes.adapter.GalleryAdapter;
-import classes.utils.ExtraCallBack;
+import classes.utils.Utils;
 import classes.utils.ViewUtils;
 
 public class GalleryActivity extends Activity
@@ -117,7 +117,7 @@ public class GalleryActivity extends Activity
         noImageTextView = (TextView) findViewById(R.id.noImageTextView);
 
         final int maxCount = getIntent().getIntExtra("maxCount", -1);
-        adapter = new GalleryAdapter(getApplicationContext(), imageLoader, maxCount, new ExtraCallBack()
+        adapter = new GalleryAdapter(getApplicationContext(), imageLoader, maxCount, new Utils.ExtraCallBack()
         {
             public void execute()
             {

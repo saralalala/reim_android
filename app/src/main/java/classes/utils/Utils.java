@@ -288,4 +288,9 @@ public class Utils
 
         return result;
     }
+
+    public interface ExtraCallBack
+    {
+        void execute();
+    }
 }

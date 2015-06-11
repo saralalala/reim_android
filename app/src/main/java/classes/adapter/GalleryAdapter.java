@@ -19,7 +19,7 @@ import com.rushucloud.reim.common.SingleImageActivity;
 
 import java.util.ArrayList;
 
-import classes.utils.ExtraCallBack;
+import classes.utils.Utils;
 import classes.utils.ViewUtils;
 
 public class GalleryAdapter extends BaseAdapter
@@ -31,9 +31,9 @@ public class GalleryAdapter extends BaseAdapter
     private boolean[] checkList;
     private int maxChosenCount;
     private int height;
-    private ExtraCallBack callBack;
+    private Utils.ExtraCallBack callBack;
 
-    public GalleryAdapter(Context context, ImageLoader imageLoader, int maxCount, ExtraCallBack callBack)
+    public GalleryAdapter(Context context, ImageLoader imageLoader, int maxCount, Utils.ExtraCallBack callBack)
     {
         this.context = context;
         this.imageLoader = imageLoader;
