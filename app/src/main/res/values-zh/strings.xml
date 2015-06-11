@@ -231,10 +231,11 @@
     <string name="mark">标记</string>
     <string name="stat_ongoing">报销中</string>
     <string name="stat_new">待提交</string>
+    <string name="new_reim">待报销</string>
     <string name="new_total">待报销总计</string>
     <string name="last_12_months">近12个月</string>
-    <string name="cost_total">费用汇总</string>
     <string name="stat_by_category">类别统计</string>
+    <string name="stat_by_month">月份统计</string>
     <string name="stat_by_tag">标签统计</string>
     <string name="stat_by_member">人员统计</string>
     <string name="choose_month">选择月份</string>
@@ -284,6 +285,7 @@
     <string name="manager_not_set">还没有设置上级</string>
     <string name="not_set">未设置</string>
     <string name="not_binding">未绑定</string>
+    <string name="not_active">（未验证）</string>
     <string name="icon">图标</string>
     <string name="sub_category">子类别</string>
     <string name="join_group">加入团队</string>

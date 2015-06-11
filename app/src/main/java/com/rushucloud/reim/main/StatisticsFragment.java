@@ -705,7 +705,7 @@ public class StatisticsFragment extends Fragment
         othersStatContainer.addView(reimPie);
     }
 
-    private void drawTagBar(List<StatTag> tagList, boolean mineData)
+    private void drawTagBar(List<StatTag> tagList, final boolean mineData)
     {
         if (!tagList.isEmpty())
         {
@@ -747,6 +747,10 @@ public class StatisticsFragment extends Fragment
                             bundle.putInt("year", year);
                             bundle.putInt("month", month);
                             bundle.putInt("tagID", localTag.getServerID());
+                            if (mineData)
+                            {
+                                bundle.putBoolean("mineData", true);
+                            }
                             Intent intent = new Intent(getActivity(), StatisticsActivity.class);
                             intent.putExtras(bundle);
                             ViewUtils.goForward(getActivity(), intent);
