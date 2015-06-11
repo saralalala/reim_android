@@ -275,6 +275,7 @@ public class StatisticsActivity extends Activity
         statContainer.removeAllViews();
         leftCategoryLayout.removeAllViews();
         rightCategoryLayout.removeAllViews();
+        monthLayout.removeAllViews();
         tagLayout.removeAllViews();
         memberLayout.removeAllViews();
     }
