@@ -234,8 +234,8 @@
     <string name="new_reim">待报销</string>
     <string name="new_total">待报销总计</string>
     <string name="last_12_months">近12个月</string>
-    <string name="cost_total">费用汇总</string>
     <string name="stat_by_category">类别统计</string>
+    <string name="stat_by_month">月份统计</string>
     <string name="stat_by_tag">标签统计</string>
     <string name="stat_by_member">人员统计</string>
     <string name="choose_month">选择月份</string>

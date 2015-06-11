@@ -233,5 +233,4 @@ public class InputContactActivity extends Activity
             }
         });
     }
-
 }

@@ -244,7 +244,12 @@ public class StatisticsActivity extends Activity
         {
             public void onRefresh()
             {
-                if (PhoneUtils.isNetworkConnected())
+                boolean isNetworkConnected = PhoneUtils.isNetworkConnected();
+                if (isNetworkConnected && mineData)
+                {
+                    sendGetMineDataRequest();
+                }
+                else if (isNetworkConnected)
                 {
                     sendGetOthersDataRequest();
                 }

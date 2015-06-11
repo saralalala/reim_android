@@ -1,9 +1,7 @@
 package com.rushucloud.reim.guide;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -27,18 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.InviteListViewAdapter;
-import classes.model.Group;
 import classes.model.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
-import netUtils.request.group.CreateGroupRequest;
-import netUtils.response.group.CreateGroupResponse;
+import netUtils.request.user.InviteRequest;
+import netUtils.response.user.InviteResponse;
 
 public class InviteListActivity extends Activity
 {
@@ -49,8 +43,6 @@ public class InviteListActivity extends Activity
     private LinearLayout indexLayout;
     private TextView centralTextView;
 
-    private AppPreference appPreference;
-    private DBManager dbManager;
     private String companyName;
     private ArrayList<String> inputList = new ArrayList<>();
     private ArrayList<String> inputChosenList = new ArrayList<>();
@@ -129,9 +121,6 @@ public class InviteListActivity extends Activity
     @SuppressWarnings("unchecked")
     private void initData()
     {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
         Bundle bundle = getIntent().getExtras();
         companyName = bundle.getString("companyName", "");
         inputList = bundle.getStringArrayList("inputList");
@@ -173,11 +162,11 @@ public class InviteListActivity extends Activity
 
                 if (!PhoneUtils.isNetworkConnected())
                 {
-                    ViewUtils.showToast(InviteListActivity.this, R.string.error_create_network_unavailable);
+                    ViewUtils.showToast(InviteListActivity.this, R.string.error_send_invite_network_unavailable);
                 }
                 else
                 {
-                    sendCreateGroupRequest(inviteList, inputChosenList.size() + contactChosenList.size(), false);
+                    sendInviteRequest(inviteList, inputChosenList.size() + contactChosenList.size());
                 }
             }
         });
@@ -372,107 +361,34 @@ public class InviteListActivity extends Activity
         }).start();
     }
 
-    private void showCompanyDialog(final String inviteList, final int count)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.warning);
-        builder.setMessage(String.format(getString(R.string.prompt_company_exists), companyName));
-        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                sendCreateGroupRequest(inviteList, count, true);
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.create().show();
-    }
-
-    private void sendCreateGroupRequest(final String inviteList, final int count, boolean forceCreate)
+    private void sendInviteRequest(String inviteList, final int count)
     {
         ReimProgressDialog.show();
-        CreateGroupRequest request = new CreateGroupRequest(companyName, inviteList, 1, forceCreate);
-        request.sendRequest(new HttpConnectionCallback()
+        InviteRequest inviteRequest = new InviteRequest(inviteList);
+        inviteRequest.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
-                final CreateGroupResponse response = new CreateGroupResponse(httpResponse);
-                if (response.getStatus())
+                final InviteResponse response = new InviteResponse(httpResponse);
+                runOnUiThread(new Runnable()
                 {
-                    Group group = new Group();
-                    group.setName(companyName);
-                    group.setServerID(response.getGroupID());
-                    group.setLocalUpdatedDate(response.getDate());
-                    group.setServerUpdatedDate(response.getDate());
-
-                    User currentUser = appPreference.getCurrentUser();
-                    currentUser.setGroupID(group.getServerID());
-                    currentUser.setIsAdmin(true);
-
-                    dbManager.insertGroup(group);
-                    dbManager.updateUser(currentUser);
-                    appPreference.setCurrentGroupID(group.getServerID());
-                    appPreference.saveAppPreference();
-
-                    int currentGroupID = response.getGroup().getServerID();
-
-                    // update AppPreference
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    appPreference.setCurrentGroupID(currentGroupID);
-                    appPreference.saveAppPreference();
-
-                    // update members
-                    DBManager dbManager = DBManager.getDBManager();
-                    currentUser = response.getCurrentUser();
-                    User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-                    if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+                    public void run()
                     {
-                        currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
-                    }
-
-                    dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-
-                    dbManager.syncUser(currentUser);
-
-                    // update categories
-                    dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-
-                    // update tags
-                    dbManager.updateGroupTags(response.getTagList(), currentGroupID);
-
-                    // update group info
-                    dbManager.syncGroup(response.getGroup());
-
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
+                        ReimProgressDialog.dismiss();
+                        if (response.getStatus())
                         {
-                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(InviteListActivity.this, R.string.succeed_in_sending_invite);
                             Intent intent = new Intent(InviteListActivity.this, WeChatShareActivity.class);
                             intent.putExtra("companyName", companyName);
                             intent.putExtra("count", count);
                             ViewUtils.goForwardAndFinish(InviteListActivity.this, intent);
                         }
-                    });
-                }
-                else
-                {
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
+                        else
                         {
-                            ReimProgressDialog.dismiss();
-                            if (response.getCode() == NetworkConstant.ERROR_COMPANY_EXISTS)
-                            {
-                                showCompanyDialog(inviteList, count);
-                            }
-                            else
-                            {
-                                ViewUtils.showToast(InviteListActivity.this, R.string.failed_to_create_company, response.getErrorMessage());
-                            }
+                            ViewUtils.showToast(InviteListActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
                         }
-                    });
-                }
+                    }
+                });
             }
         });
     }
