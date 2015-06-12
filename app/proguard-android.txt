@@ -1,0 +1,117 @@
+################ common ###############
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+-keepattributes SourceFile,LineNumberTable
+-verbose
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
+-libraryjars llibs/commons-codec-1.9.jar
+-libraryjars libs/httpcore-4.3.2.jar
+-libraryjars libs/httpmime-4.3.5.jar
+-libraryjars libs/android-async-http-1.4.4-fix.jar
+-libraryjars libs/fastjson.jar
+-libraryjars libs/library-1.2.2.jar
+-libraryjars libs/universal-image-loader-1.9.0.jar
+-libraryjars libs/avoscloud-v2.6.6.jar
+-libraryjars libs/avospush-v2.6.6.jar.jar
+-libraryjars libs/libammsdk.jar
+-libraryjars libs/locSDK_5.3.jar
+-libraryjars libs/umeng-analytics-v5.5.3.jar
+-libraryjars libs/umeng-update-v2.6.0.1.jar
+-libraryjars libs/mechat_1.1.3.jar
+-libraryjars libs/pinyin4j-2.5.0.jar
+
+# 保持 native 方法不被混淆
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# 保持自定义控件类不被混淆
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+-keepclasseswithmembers class * {
+    void onClick*(...);
+}
+-keepclasseswithmembers class * {
+    *** *Callback(...);
+}
+
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
+}
+
+# keep setters in Views so that animations can still work.
+# see http://proguard.sourceforge.net/manual/examples.html#beans
+-keepclassmembers public class * extends android.view.View {
+   void set*(***);
+   *** get*();
+}
+
+# 保持枚举 enum 类不被混淆
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+# 保持 Parcelable 不被混淆
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
+}
+
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
+
+#################### support.v4 #####################
+-libraryjars libs/android-support-v4.jar
+-keep class android.support.v4.** { *; }
+-dontwarn android.support.v4.**
+
+#################### WebSocket ####################
+-keep class org.java_websocket.** { *; }
+-dontwarn org.java_websocket.**
+
+#################### HTTP core / HTTP mime ####################
+-keep class org.apache.http.** { *; }
+-dontwarn org.apache.http.**
+
+#################### Universal Image Loader ####################
+-keep class com.nostra13.universalimageloader.** { *; }
+-dontwarn com.nostra13.universalimageloader.**
+
+#################### LeanCloud #####################
+-keep class com.avos.avoscloud.** { *; }
+-dontwarn com.avos.avoscloud.**
+
+#################### Baidu Map ####################
+-keep class com.baidu.** { *; }
+-dontwarn com.baidu.**
+
+#################### Umeng ####################
+-keepclassmembers class * {
+   public <init>(org.json.JSONObject);
+}
+
+-keep public class com.rushucloud.reim.R$*{
+	public static final int *;
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+#################### Mechat #####################
+-keep class com.mechat.mechatlibrary.** { *; }
+-dontwarn com.mechat.mechatlibrary.**
+
+#################### Pinyin #####################
+-keep class net.sourceforge.pinyin4j.** { *; }
+-dontwarn net.sourceforge.pinyin4j.**

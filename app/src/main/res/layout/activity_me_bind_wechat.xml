@@ -59,6 +59,7 @@
         android:paddingRight="16dp"
         android:background="@color/major_light"
         android:hint="@string/input_password_wechat"
+        android:inputType="textEmailAddress"
         android:textColor="@color/font_major_dark"
         android:textSize="16sp"
         android:textCursorDrawable="@null"/>

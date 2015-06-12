@@ -79,11 +79,6 @@ public abstract class BaseRequest
         this.params.add(new BasicNameValuePair(key, value));
     }
 
-    protected void setParams(List<NameValuePair> params)
-    {
-        this.params = new ArrayList<>(params);
-    }
-
     public abstract void sendRequest(HttpConnectionCallback callback);
 
     protected void doPost(HttpConnectionCallback callback)

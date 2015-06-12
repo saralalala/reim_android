@@ -849,7 +849,7 @@ public class EditItemActivity extends Activity
 
     private void initLocationView()
     {
-        String cityName = item.getLocation().isEmpty() ? getString(R.string.no_location) : item.getLocation();
+        String cityName = item.getLocation().isEmpty()? getString(R.string.no_location) : item.getLocation();
         locationTextView = (TextView) findViewById(R.id.locationTextView);
         locationTextView.setText(cityName);
 

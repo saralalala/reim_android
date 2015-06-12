@@ -19,12 +19,18 @@ android {
             keyAlias "androidkey"
             keyPassword "19901228"
         }
+        release {
+            storeFile file("android_keystore")
+            storePassword "19901228"
+            keyAlias "androidkey"
+            keyPassword "19901228"
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-android.txt'
         }
     }
 
@@ -45,21 +51,19 @@ android {
 dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile files('libs/achartengine-1.1.0.jar')
-    compile files('libs/android-async-http-1.4.4-fix.jar')
-    compile files('libs/avoscloud-v2.6.6.jar')
-    compile files('libs/avospush-v2.6.6.jar')
-    compile files('libs/commons-codec-1.9.jar')
-    compile files('libs/fastjson.jar')
-    compile files('libs/httpcore-4.3.2.jar')
-    compile files('libs/httpmime-4.3.5.jar')
-    compile files('libs/library-1.2.2.jar')
-    compile files('libs/libammsdk.jar')
-    compile files('libs/locSDK_5.3.jar')
-    compile files('libs/rebound-0.3.7.jar')
-    compile files('libs/umeng-analytics-v5.5.3.jar')
-    compile files('libs/umeng-update-v2.6.0.1.jar')
-    compile files('libs/universal-image-loader-1.9.0.jar')
-    compile files('libs/pinyin4j-2.5.0.jar')
-    compile files('libs/mechat_1.1.3.jar')
+    compile files('libs/commons-codec-1.9.jar') // Apache
+    compile files('libs/httpcore-4.3.2.jar') // HTTP core
+    compile files('libs/httpmime-4.3.5.jar') // HTTP mime
+    compile files('libs/android-async-http-1.4.4-fix.jar') // WebSocket
+    compile files('libs/library-1.2.2.jar') // SubsamplingScaleImageView
+    compile files('libs/universal-image-loader-1.9.0.jar') // Universal Image Loader
+    compile files('libs/avoscloud-v2.6.6.jar') // LeanCloud
+    compile files('libs/avospush-v2.6.6.jar') // LeanCloud Push
+    compile files('libs/fastjson.jar') // LeanCloud Dependency
+    compile files('libs/libammsdk.jar') // WeChat
+    compile files('libs/locSDK_5.3.jar') // Baidu Map
+    compile files('libs/umeng-analytics-v5.5.3.jar') // Umeng Analytics
+    compile files('libs/umeng-update-v2.6.0.1.jar') // Umeng Update
+    compile files('libs/mechat_1.1.3.jar') // Mechat
+    compile files('libs/pinyin4j-2.5.0.jar') // Pinyin
 }

@@ -73,6 +73,7 @@
                 android:paddingRight="12dp"
                 android:singleLine="true"
                 android:hint="@string/input_password"
+                android:inputType="textEmailAddress"
                 android:drawableRight="@drawable/delete_start_drawable"
                 android:textColor="@color/font_major_light"
                 android:textColorHint="@color/hint_white"
