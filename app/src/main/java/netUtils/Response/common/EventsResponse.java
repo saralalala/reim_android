@@ -37,8 +37,10 @@ public class EventsResponse extends BaseResponse
             JSONArray reportsArray = jObject.getJSONArray("reports");
             JSONArray membersArray = jObject.getJSONArray("members");
             JSONArray managersArray = jObject.getJSONArray("managers");
-            JSONArray categoriesArray = jObject.getJSONArray("categories");
-            JSONArray tagsArray = jObject.getJSONArray("tags");
+            JSONArray categoriesArray = jObject.optJSONArray("categories");
+            JSONArray tagsArray = jObject.optJSONArray("tags");
+            boolean categoriesChanged = categoriesArray != null && categoriesArray.length() > 0;
+            boolean tagsChanged = tagsArray != null && tagsArray.length() > 0;
 
             appliedCompany = jObject.getString("apply");
 
@@ -63,7 +65,7 @@ public class EventsResponse extends BaseResponse
             hasUnreadReports = reportsArray.length() > 0;
 
             boolean groupChanged = jObject.getInt("gid") != AppPreference.getAppPreference().getCurrentGroupID();
-            needToRefresh = groupChanged || (membersArray.length() + managersArray.length()) > 0 || categoriesArray.length() > 0 || tagsArray.length() > 0;
+            needToRefresh = groupChanged || (membersArray.length() + managersArray.length()) > 0 || categoriesChanged || tagsChanged;
         }
         catch (JSONException e)
         {
