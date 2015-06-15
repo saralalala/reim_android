@@ -524,6 +524,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     if (currentUser != null)
                     {
                         currentUser.setAppliedCompany(response.getAppliedCompany());
+                        currentUser.setIsActive(response.isCurrentUserActived());
                         DBManager.getDBManager().updateUser(currentUser);
                     }
 

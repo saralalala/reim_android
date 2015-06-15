@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.utils.AppPreference;
+import classes.utils.Utils;
 
 public class EventsResponse extends BaseResponse
 {
@@ -18,6 +19,7 @@ public class EventsResponse extends BaseResponse
     private boolean hasUnreadReports;
     private boolean needToRefresh;
     private String appliedCompany;
+    private boolean currentUserActived;
 
     public EventsResponse(Object httpResponse)
     {
@@ -41,6 +43,7 @@ public class EventsResponse extends BaseResponse
             JSONArray tagsArray = jObject.optJSONArray("tags");
             boolean categoriesChanged = categoriesArray != null && categoriesArray.length() > 0;
             boolean tagsChanged = tagsArray != null && tagsArray.length() > 0;
+            currentUserActived = Utils.intToBoolean(jObject.optInt("active", 0));
 
             appliedCompany = jObject.getString("apply");
 
@@ -106,5 +109,10 @@ public class EventsResponse extends BaseResponse
     public String getAppliedCompany()
     {
         return appliedCompany;
+    }
+
+    public boolean isCurrentUserActived()
+    {
+        return currentUserActived;
     }
 }
