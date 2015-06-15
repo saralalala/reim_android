@@ -373,6 +373,7 @@
     <string name="prompt_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
     <string name="prompt_company_exists">「%1$s」公司已存在，是否建立同名公司？</string>
     <string name="prompt_wechat_share">你可以把「云报销」分享到同事们使用的微信群，让大家迅速加入你创建的公司。</string>
+    <string name="prompt_all_in_same_company">你们已经是同一个公司的同事了</string>
     <string name="prompt_latest_version">当前已是最新版本</string>
     
     <string name="error_wrong_code">验证码错误</string>

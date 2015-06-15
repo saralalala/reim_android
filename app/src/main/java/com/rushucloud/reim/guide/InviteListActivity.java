@@ -377,7 +377,8 @@ public class InviteListActivity extends Activity
                         ReimProgressDialog.dismiss();
                         if (response.getStatus())
                         {
-                            ViewUtils.showToast(InviteListActivity.this, R.string.succeed_in_sending_invite);
+                            int prompt = response.isAllInSameCompany()? R.string.prompt_all_in_same_company : R.string.succeed_in_sending_invite;
+                            ViewUtils.showToast(InviteListActivity.this, prompt);
                             Intent intent = new Intent(InviteListActivity.this, WeChatShareActivity.class);
                             intent.putExtra("companyName", companyName);
                             intent.putExtra("count", count);

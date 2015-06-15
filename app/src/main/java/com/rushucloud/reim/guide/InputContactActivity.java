@@ -221,7 +221,8 @@ public class InputContactActivity extends Activity
                         ReimProgressDialog.dismiss();
                         if (response.getStatus())
                         {
-                            ViewUtils.showToast(InputContactActivity.this, R.string.succeed_in_sending_invite);
+                            int prompt = response.isAllInSameCompany()? R.string.prompt_all_in_same_company : R.string.succeed_in_sending_invite;
+                            ViewUtils.showToast(InputContactActivity.this, prompt);
                             goBack();
                         }
                         else
