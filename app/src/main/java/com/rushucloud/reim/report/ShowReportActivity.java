@@ -11,9 +11,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.ShowItemActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;

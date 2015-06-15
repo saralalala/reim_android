@@ -14,8 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.rushucloud.reim.common.MultipleImageActivity;
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.common.MultipleImageActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;

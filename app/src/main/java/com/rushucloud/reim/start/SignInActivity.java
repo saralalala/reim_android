@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.InputType;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.method.HideReturnsTransformationMethod;
@@ -19,9 +18,9 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.model.User;

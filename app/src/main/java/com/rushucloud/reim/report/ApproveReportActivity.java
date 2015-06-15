@@ -17,9 +17,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.ShowItemActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;

@@ -32,10 +32,10 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.request.common.DownloadImageRequest;
 import netUtils.request.category.DeleteCategoryRequest;
-import netUtils.response.common.DownloadImageResponse;
+import netUtils.request.common.DownloadImageRequest;
 import netUtils.response.category.DeleteCategoryResponse;
+import netUtils.response.common.DownloadImageResponse;
 
 public class SubCategoryActivity extends Activity
 {

@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.model.User;

@@ -1,6 +1,5 @@
 package netUtils.request.user;
 
-import classes.model.User;
 import classes.utils.AppPreference;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.URLDef;

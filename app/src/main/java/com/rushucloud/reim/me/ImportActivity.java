@@ -1,8 +1,6 @@
 package com.rushucloud.reim.me;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -15,17 +13,8 @@ import android.widget.TextView;
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
 
-import classes.model.DidiExpense;
-import classes.model.User;
-import classes.utils.AppPreference;
-import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
-import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
-import netUtils.request.user.UnbindRequest;
-import netUtils.response.user.UnbindResponse;
 
 public class ImportActivity extends Activity
 {

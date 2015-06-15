@@ -21,9 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.rushucloud.reim.main.MainActivity;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.EditItemActivity;
+import com.rushucloud.reim.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;

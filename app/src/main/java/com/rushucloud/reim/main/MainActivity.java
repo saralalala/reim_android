@@ -55,12 +55,10 @@ import netUtils.common.NetworkConstant;
 import netUtils.common.URLDef;
 import netUtils.request.common.CommonRequest;
 import netUtils.request.common.EventsRequest;
-import netUtils.request.group.GetGroupRequest;
 import netUtils.request.user.FeedbackRequest;
 import netUtils.response.common.CommonResponse;
 import netUtils.response.common.EventsResponse;
 import netUtils.response.common.FeedbackResponse;
-import netUtils.response.group.GetGroupResponse;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
 {

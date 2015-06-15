@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.model.DidiExpense;
-import classes.model.User;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 
