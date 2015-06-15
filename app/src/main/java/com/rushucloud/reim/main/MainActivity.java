@@ -529,11 +529,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
                     if (response.needToRefresh() && PhoneUtils.isNetworkConnected())
                     {
-                        sendGetGroupRequest();
-                    }
-
-                    if (response.isGroupChanged() && PhoneUtils.isNetworkConnected())
-                    {
                         sendCommonRequest();
                     }
 
@@ -634,50 +629,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
                     }
-                }
-            }
-        });
-    }
-
-    private void sendGetGroupRequest()
-    {
-        GetGroupRequest request = new GetGroupRequest();
-        request.sendRequest(new HttpConnectionCallback()
-        {
-            public void execute(Object httpResponse)
-            {
-                GetGroupResponse response = new GetGroupResponse(httpResponse);
-                if (response.getStatus())
-                {
-                    int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
-
-                    // update members
-                    List<User> memberList = response.getMemberList();
-                    User currentUser = appPreference.getCurrentUser();
-
-                    for (int i = 0; i < memberList.size(); i++)
-                    {
-                        User user = memberList.get(i);
-                        if (currentUser != null && user.equals(currentUser))
-                        {
-                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
-                            {
-                                if (user.getAvatarID() == currentUser.getAvatarID())
-                                {
-                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
-                                }
-                            }
-                            else
-                            {
-                                memberList.set(i, currentUser);
-                            }
-                        }
-                    }
-
-                    dbManager.updateGroupUsers(memberList, currentGroupID);
-
-                    // update group info
-                    dbManager.syncGroup(response.getGroup());
                 }
             }
         });

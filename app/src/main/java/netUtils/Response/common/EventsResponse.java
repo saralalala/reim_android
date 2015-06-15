@@ -17,7 +17,6 @@ public class EventsResponse extends BaseResponse
     private boolean hasUnreadMessages;
     private boolean hasUnreadReports;
     private boolean needToRefresh;
-    private boolean groupChanged;
     private String appliedCompany;
 
     public EventsResponse(Object httpResponse)
@@ -38,8 +37,9 @@ public class EventsResponse extends BaseResponse
             JSONArray reportsArray = jObject.getJSONArray("reports");
             JSONArray membersArray = jObject.getJSONArray("members");
             JSONArray managersArray = jObject.getJSONArray("managers");
+            JSONArray categoriesArray = jObject.getJSONArray("categories");
+            JSONArray tagsArray = jObject.getJSONArray("tags");
 
-            groupChanged = jObject.getInt("gid") != AppPreference.getAppPreference().getCurrentGroupID();
             appliedCompany = jObject.getString("apply");
 
             int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
@@ -59,9 +59,11 @@ public class EventsResponse extends BaseResponse
             }
 
             unreadMessagesCount = appliesArray.length() + invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length();
-            hasUnreadMessages = appliesArray.length() + invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length() > 0;
+            hasUnreadMessages = unreadMessagesCount > 0;
             hasUnreadReports = reportsArray.length() > 0;
-            needToRefresh = (membersArray.length() + managersArray.length()) > 0 && !groupChanged;
+
+            boolean groupChanged = jObject.getInt("gid") != AppPreference.getAppPreference().getCurrentGroupID();
+            needToRefresh = groupChanged || (membersArray.length() + managersArray.length()) > 0 || categoriesArray.length() > 0 || tagsArray.length() > 0;
         }
         catch (JSONException e)
         {
@@ -97,11 +99,6 @@ public class EventsResponse extends BaseResponse
     public boolean needToRefresh()
     {
         return needToRefresh;
-    }
-
-    public boolean isGroupChanged()
-    {
-        return groupChanged;
     }
 
     public String getAppliedCompany()
