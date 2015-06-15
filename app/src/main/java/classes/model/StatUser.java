@@ -15,7 +15,7 @@ public class StatUser
         {
             setUserID(jObject.getInt("id"));
             setAmount(jObject.getDouble("amount"));
-            setItemCount(jObject.getInt("count"));
+            setItemCount(jObject.getJSONArray("items").length());
         }
         catch (JSONException e)
         {
@@ -27,7 +27,6 @@ public class StatUser
     {
         return userID;
     }
-
     public void setUserID(int userID)
     {
         this.userID = userID;
@@ -37,7 +36,6 @@ public class StatUser
     {
         return amount;
     }
-
     public void setAmount(double amount)
     {
         this.amount = amount;
@@ -47,7 +45,6 @@ public class StatUser
     {
         return itemCount;
     }
-
     public void setItemCount(int itemCount)
     {
         this.itemCount = itemCount;

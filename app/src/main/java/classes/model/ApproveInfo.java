@@ -39,7 +39,6 @@ public class ApproveInfo implements Comparable<ApproveInfo>
     {
         return userID;
     }
-
     public void setUserID(int userID)
     {
         this.userID = userID;
@@ -49,7 +48,6 @@ public class ApproveInfo implements Comparable<ApproveInfo>
     {
         return reportSenderID;
     }
-
     public void setReportSenderID(int reportSenderID)
     {
         this.reportSenderID = reportSenderID;
@@ -59,12 +57,10 @@ public class ApproveInfo implements Comparable<ApproveInfo>
     {
         return status;
     }
-
     public int getRealStatus()
     {
         return status % 100;
     }
-
     public void setStatus(int status)
     {
         this.status = status;
@@ -74,7 +70,6 @@ public class ApproveInfo implements Comparable<ApproveInfo>
     {
         return approveTime;
     }
-
     public void setApproveTime(String approveTime)
     {
         this.approveTime = approveTime;
@@ -84,7 +79,6 @@ public class ApproveInfo implements Comparable<ApproveInfo>
     {
         return approveDate;
     }
-
     public void setApproveDate(String approveDate)
     {
         this.approveDate = approveDate;
@@ -94,7 +88,6 @@ public class ApproveInfo implements Comparable<ApproveInfo>
     {
         return step;
     }
-
     public void setStep(int step)
     {
         this.step = step;

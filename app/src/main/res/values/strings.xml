@@ -68,6 +68,7 @@
     <string name="password">密码</string>
     <string name="wechat_session">微信好友</string>
     <string name="wechat_moments">朋友圈</string>
+    <string name="didi">滴滴打车</string>
     
     <string name="sign_up">注册</string>
     <string name="quick_sign_up">快速注册</string>
@@ -251,6 +252,7 @@
     <string name="sync_without_wifi">仅WiFi开启时上传云端</string>
     <string name="preference">偏好设置</string>
     <string name="get_invoice">我要开发票</string>
+    <string name="import_expenses">导入消费</string>
     <string name="my_messages">我的消息</string>
     <string name="message_from_admin">来自管理员的消息</string>
     <string name="message_reference">\n\n-----以下是你于%1$s发送的内容-----\n\n</string>
@@ -264,9 +266,11 @@
     <string name="bind_email">绑定邮箱</string>
     <string name="bind_phone">绑定手机</string>
     <string name="bind_wechat">绑定微信</string>
+    <string name="bind_didi">绑定滴滴打车</string>
     <string name="change_email">更换绑定邮箱</string>
     <string name="change_phone">更换绑定手机</string>
     <string name="change_wechat">更换绑定微信</string>
+    <string name="import_didi_expenses">导入滴滴打车消费记录</string>
     <string name="bank_info">银行账户</string>
     <string name="bank_account">银行账号</string>
     <string name="bank_account_name">户名</string>
@@ -322,7 +326,7 @@
     <string name="input_password_wechat">请输入「云报销」登录密码</string>
     <string name="input_email">请输入邮箱</string>
     <string name="input_phone">请输入手机号</string>
-    <string name="input_country_code">国码</string>
+    <string name="input_didi_phone">请输入滴滴打车注册手机号</string>
     <string name="input_account_name">请输入户名</string>
     <string name="input_bank_account">请输入银行账号</string>
     <string name="input_code">请输入验证码</string>
@@ -550,6 +554,7 @@
     <string name="failed_to_unbind_wechat">解绑微信失败</string>
     <string name="failed_to_alert">提醒发送失败</string>
     <string name="failed_to_get_message_list">获取消息列表失败</string>
+    <string name="failed_to_get_didi_expenses">获取滴滴打车消费列表失败</string>
     <string name="failed_to_delete">删除失败</string>
     <string name="failed_to_search_companies">搜索公司失败</string>
     <string name="failed_to_apply">申请加入公司失败</string>
@@ -574,6 +579,7 @@
     <string name="no_messages">当前没有任何消息</string>
     <string name="no_categories">当前没有任何类别</string>
     <string name="no_tags">当前没有任何标签</string>
+    <string name="no_expenses">当前没有任何消费记录</string>
     <string name="no_filter_result">抱歉，没有找到符合的结果</string>
 
     <string name="apply_new">你发送了加入「%1$s」的申请</string>

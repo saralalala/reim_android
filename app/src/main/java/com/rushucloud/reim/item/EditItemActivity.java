@@ -490,6 +490,10 @@ public class EditItemActivity extends Activity
         TextView approvedTextView = (TextView) findViewById(R.id.approvedTextView);
         amountWarningImageView = (ImageView) findViewById(R.id.amountWarningImageView);
 
+        TextView statusTextView = (TextView) findViewById(R.id.statusTextView);
+        statusTextView.setText(item.getStatusString());
+        statusTextView.setBackgroundResource(item.getStatusBackground());
+
         amountEditText = (EditText) findViewById(R.id.amountEditText);
         amountEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
         amountEditText.setOnFocusChangeListener(ViewUtils.onFocusChangeListener);

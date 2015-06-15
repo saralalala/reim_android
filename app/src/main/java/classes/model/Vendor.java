@@ -42,7 +42,6 @@ public class Vendor
     {
         return name;
     }
-
     public void setName(String name)
     {
         this.name = name;
@@ -52,7 +51,6 @@ public class Vendor
     {
         return address;
     }
-
     public void setAddress(String address)
     {
         this.address = address;
@@ -62,7 +60,6 @@ public class Vendor
     {
         return latitude;
     }
-
     public void setLatitude(double latitude)
     {
         this.latitude = latitude;
@@ -72,7 +69,6 @@ public class Vendor
     {
         return longitude;
     }
-
     public void setLongitude(double longitude)
     {
         this.longitude = longitude;
@@ -82,7 +78,6 @@ public class Vendor
     {
         return distance;
     }
-
     public void setDistance(int distance)
     {
         this.distance = distance;
@@ -92,7 +87,6 @@ public class Vendor
     {
         return photoResID;
     }
-
     public void setPhotoResID(int photoResID)
     {
         this.photoResID = photoResID;
@@ -102,7 +96,6 @@ public class Vendor
     {
         return photoURL;
     }
-
     public void setPhotoURL(String photoURL)
     {
         this.photoURL = photoURL;
@@ -112,7 +105,6 @@ public class Vendor
     {
         return photo;
     }
-
     public void setPhoto(Bitmap photo)
     {
         this.photo = photo;

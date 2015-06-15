@@ -97,7 +97,6 @@ public class Invite extends Message implements Serializable
     {
         return inviteCode;
     }
-
     public void setInviteCode(String inviteCode)
     {
         this.inviteCode = inviteCode;
@@ -107,7 +106,6 @@ public class Invite extends Message implements Serializable
     {
         return invitor;
     }
-
     public void setInvitor(String invitor)
     {
         this.invitor = invitor;
@@ -117,7 +115,6 @@ public class Invite extends Message implements Serializable
     {
         return typeCode;
     }
-
     public void setTypeCode(int typeCode)
     {
         this.typeCode = typeCode;

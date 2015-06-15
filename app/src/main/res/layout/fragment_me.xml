@@ -35,7 +35,7 @@
             <RelativeLayout
 	            android:id="@+id/profileLayout"
 				android:layout_width="match_parent"
-				android:layout_height="99dp"
+				android:layout_height="100dp"
 				android:layout_marginTop="18dp"
 				android:background="@drawable/me_item_drawable">
             
@@ -49,7 +49,6 @@
 				    android:id="@+id/avatarImageView"
 				    android:layout_width="66dp"
 				    android:layout_height="66dp"
-				    android:layout_alignParentLeft="true"
 				    android:layout_centerVertical="true"
 				    android:layout_marginLeft="16dp"
 				    android:contentDescription="@string/avatar"
@@ -112,13 +111,52 @@
 		            layout="@layout/view_divider"/>
 			
 			</RelativeLayout>
-            
-	        <include                 
-				android:layout_width="match_parent"
-				android:layout_height="0.5dp"
-				android:layout_marginTop="24dp"
-	        	layout="@layout/view_divider"/>
-			
+
+            <RelativeLayout
+                android:id="@+id/importLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_with_two_divider_height"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/me_item_drawable"
+                android:visibility="gone">
+
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    layout="@layout/view_divider"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:text="@string/import_expenses"
+                    android:textColor="@color/font_major_dark"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="@string/next"
+                    android:src="@drawable/next"/>
+
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    layout="@layout/view_divider"/>
+
+            </RelativeLayout>
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="24dp"
+                layout="@layout/view_divider"/>
+
             <RelativeLayout
                 android:id="@+id/messageLayout"
 				android:layout_width="match_parent"

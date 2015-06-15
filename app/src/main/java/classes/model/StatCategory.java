@@ -1,8 +1,10 @@
 package classes.model;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import classes.utils.PhoneUtils;
@@ -12,7 +14,7 @@ public class StatCategory
     private int categoryID = -1;
     private double amount = 0;
     private int itemCount = -1;
-    private List<Integer> items = null;
+    private List<Integer> items = new ArrayList<>();
     private int iconID = -1;
     private String name = "";
     private int color = -1;
@@ -28,7 +30,13 @@ public class StatCategory
         {
             setCategoryID(jObject.getInt("id"));
             setAmount(jObject.getDouble("amount"));
-            setItemCount(jObject.getInt("count"));
+
+            JSONArray iids = jObject.getJSONArray("items");
+            setItemCount(iids.length());
+            for (int j = 0; j < iids.length(); j++)
+            {
+                items.add(iids.getInt(j));
+            }
         }
         catch (JSONException e)
         {
@@ -40,7 +48,6 @@ public class StatCategory
     {
         return categoryID;
     }
-
     public void setCategoryID(int categoryID)
     {
         this.categoryID = categoryID;
@@ -50,7 +57,6 @@ public class StatCategory
     {
         return amount;
     }
-
     public void setAmount(double amount)
     {
         this.amount = amount;
@@ -60,7 +66,6 @@ public class StatCategory
     {
         return itemCount;
     }
-
     public void setItemCount(int itemCount)
     {
         this.itemCount = itemCount;
@@ -70,7 +75,6 @@ public class StatCategory
     {
         return items;
     }
-
     public void setItems(List<Integer> items)
     {
         this.items = items;
@@ -80,12 +84,10 @@ public class StatCategory
     {
         return iconID;
     }
-
     public void setIconID(int iconID)
     {
         this.iconID = iconID;
     }
-
     public String getIconPath()
     {
         return iconID == -1 || iconID == 0 ? "" : PhoneUtils.getIconFilePath(iconID);
@@ -95,7 +97,6 @@ public class StatCategory
     {
         return name;
     }
-
     public void setName(String name)
     {
         this.name = name;
@@ -105,7 +106,6 @@ public class StatCategory
     {
         return color;
     }
-
     public void setColor(int color)
     {
         this.color = color;

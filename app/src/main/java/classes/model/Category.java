@@ -72,7 +72,6 @@ public class Category implements Serializable
     {
         return serverID;
     }
-
     public void setServerID(int serverID)
     {
         this.serverID = serverID;
@@ -82,7 +81,6 @@ public class Category implements Serializable
     {
         return name;
     }
-
     public void setName(String name)
     {
         this.name = name;
@@ -92,7 +90,6 @@ public class Category implements Serializable
     {
         return limit;
     }
-
     public void setLimit(double limit)
     {
         this.limit = limit;
@@ -102,7 +99,6 @@ public class Category implements Serializable
     {
         return groupID;
     }
-
     public void setGroupID(int groupID)
     {
         this.groupID = groupID;
@@ -112,7 +108,6 @@ public class Category implements Serializable
     {
         return parentID;
     }
-
     public void setParentID(int parentID)
     {
         this.parentID = parentID;
@@ -122,12 +117,10 @@ public class Category implements Serializable
     {
         return iconID;
     }
-
     public void setIconID(int iconID)
     {
         this.iconID = iconID;
     }
-
     public String getIconPath()
     {
         return iconID == -1 || iconID == 0 ? "" : PhoneUtils.getIconFilePath(iconID);
@@ -137,7 +130,6 @@ public class Category implements Serializable
     {
         return type;
     }
-
     public void setType(int type)
     {
         this.type = type;
@@ -147,7 +139,6 @@ public class Category implements Serializable
     {
         return serverUpdatedDate;
     }
-
     public void setServerUpdatedDate(int serverUpdatedDate)
     {
         this.serverUpdatedDate = serverUpdatedDate;
@@ -157,7 +148,6 @@ public class Category implements Serializable
     {
         return localUpdatedDate;
     }
-
     public void setLocalUpdatedDate(int localUpdatedDate)
     {
         this.localUpdatedDate = localUpdatedDate;

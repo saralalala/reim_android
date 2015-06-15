@@ -122,6 +122,10 @@ public class ShowItemActivity extends Activity
         TextView budgetTextView = (TextView) findViewById(R.id.budgetTextView);
         TextView approvedTextView = (TextView) findViewById(R.id.approvedTextView);
 
+        TextView statusTextView = (TextView) findViewById(R.id.statusTextView);
+        statusTextView.setText(item.getStatusString());
+        statusTextView.setBackgroundResource(item.getStatusBackground());
+
         TextView amountTextView = (TextView) findViewById(R.id.amountTextView);
         amountTextView.setText(Utils.formatDouble(item.getAmount()));
         amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);

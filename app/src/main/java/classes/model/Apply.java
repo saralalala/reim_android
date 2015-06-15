@@ -94,7 +94,6 @@ public class Apply extends Message implements Serializable
     {
         return applicant;
     }
-
     public void setApplicant(String applicant)
     {
         this.applicant = applicant;
@@ -104,7 +103,6 @@ public class Apply extends Message implements Serializable
     {
         return typeCode;
     }
-
     public void setTypeCode(int typeCode)
     {
         this.typeCode = typeCode;

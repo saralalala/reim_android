@@ -97,16 +97,34 @@
 	                    android:textSize="54sp"
                         android:textCursorDrawable="@null"/>
 
-                    <ImageView
-                        android:id="@+id/amountWarningImageView"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="bottom"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:contentDescription="@string/warning"
-                        android:src="@drawable/warning"
-                        android:visibility="gone"/>
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp">
+
+                        <TextView
+                            android:id="@+id/statusTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:gravity="center"
+                            android:textColor="@color/major_light"/>
+
+                        <ImageView
+                            android:id="@+id/amountWarningImageView"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="4dp"
+                            android:contentDescription="@string/warning"
+                            android:src="@drawable/warning"
+                            android:visibility="gone"/>
+
+                    </RelativeLayout>
 
 	            </LinearLayout>
 

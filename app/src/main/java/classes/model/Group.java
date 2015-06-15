@@ -35,7 +35,6 @@ public class Group
     {
         return serverID;
     }
-
     public void setServerID(int serverID)
     {
         this.serverID = serverID;
@@ -45,7 +44,6 @@ public class Group
     {
         return name;
     }
-
     public void setName(String name)
     {
         this.name = name;
@@ -55,7 +53,6 @@ public class Group
     {
         return createdDate;
     }
-
     public void setCreatedDate(int createdDate)
     {
         this.createdDate = createdDate;
@@ -65,7 +62,6 @@ public class Group
     {
         return serverUpdatedDate;
     }
-
     public void setServerUpdatedDate(int serverUpdatedDate)
     {
         this.serverUpdatedDate = serverUpdatedDate;
@@ -75,7 +71,6 @@ public class Group
     {
         return localUpdatedDate;
     }
-
     public void setLocalUpdatedDate(int localUpdatedDate)
     {
         this.localUpdatedDate = localUpdatedDate;

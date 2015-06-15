@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.me.CategoryActivity;
+import com.rushucloud.reim.me.ImportActivity;
 import com.rushucloud.reim.me.InviteActivity;
 import com.rushucloud.reim.me.InvoiceTitleActivity;
 import com.rushucloud.reim.me.ManagerActivity;
@@ -127,6 +128,16 @@ public class MeFragment extends Fragment
             {
                 MobclickAgent.onEvent(getActivity(), "UMENG_MINE_CHANGE_USERINFO");
                 ViewUtils.goForward(getActivity(), ProfileActivity.class);
+            }
+        });
+
+        // init import
+        RelativeLayout importLayout = (RelativeLayout) view.findViewById(R.id.importLayout);
+        importLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                ViewUtils.goForward(getActivity(), ImportActivity.class);
             }
         });
 

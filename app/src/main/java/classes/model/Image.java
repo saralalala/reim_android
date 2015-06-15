@@ -40,7 +40,6 @@ public class Image
     {
         return localID;
     }
-
     public void setLocalID(int localID)
     {
         this.localID = localID;
@@ -50,7 +49,6 @@ public class Image
     {
         return serverID;
     }
-
     public void setServerID(int serverID)
     {
         this.serverID = serverID;
@@ -60,7 +58,6 @@ public class Image
     {
         return serverPath;
     }
-
     public void setServerPath(String serverPath)
     {
         this.serverPath = serverPath;
@@ -70,7 +67,6 @@ public class Image
     {
         return localPath;
     }
-
     public void setLocalPath(String localPath)
     {
         this.localPath = localPath;
@@ -80,7 +76,6 @@ public class Image
     {
         return itemID;
     }
-
     public void setItemID(int itemID)
     {
         this.itemID = itemID;

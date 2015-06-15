@@ -39,7 +39,6 @@ public class BankAccount implements Serializable
     {
         return localID;
     }
-
     public void setLocalID(int localID)
     {
         this.localID = localID;
@@ -49,7 +48,6 @@ public class BankAccount implements Serializable
     {
         return serverID;
     }
-
     public void setServerID(int serverID)
     {
         this.serverID = serverID;
@@ -59,7 +57,6 @@ public class BankAccount implements Serializable
     {
         return name;
     }
-
     public void setName(String name)
     {
         this.name = name;
@@ -69,7 +66,6 @@ public class BankAccount implements Serializable
     {
         return number;
     }
-
     public void setNumber(String number)
     {
         this.number = number;
@@ -79,7 +75,6 @@ public class BankAccount implements Serializable
     {
         return bankName;
     }
-
     public void setBankName(String bankName)
     {
         this.bankName = bankName;
@@ -89,7 +84,6 @@ public class BankAccount implements Serializable
     {
         return location;
     }
-
     public void setLocation(String location)
     {
         this.location = location;

@@ -58,7 +58,6 @@ public class Tag implements Serializable
     {
         return serverID;
     }
-
     public void setServerID(int serverID)
     {
         this.serverID = serverID;
@@ -68,7 +67,6 @@ public class Tag implements Serializable
     {
         return groupID;
     }
-
     public void setGroupID(int groupID)
     {
         this.groupID = groupID;
@@ -78,7 +76,6 @@ public class Tag implements Serializable
     {
         return name;
     }
-
     public void setName(String name)
     {
         this.name = name;
@@ -88,7 +85,6 @@ public class Tag implements Serializable
     {
         return iconID;
     }
-
     public void setIconID(int iconID)
     {
         this.iconID = iconID;
@@ -98,7 +94,6 @@ public class Tag implements Serializable
     {
         return iconPath;
     }
-
     public void setIconPath(String iconPath)
     {
         this.iconPath = iconPath;
@@ -108,7 +103,6 @@ public class Tag implements Serializable
     {
         return serverUpdatedDate;
     }
-
     public void setServerUpdatedDate(int serverUpdatedDate)
     {
         this.serverUpdatedDate = serverUpdatedDate;
@@ -118,7 +112,6 @@ public class Tag implements Serializable
     {
         return localUpdatedDate;
     }
-
     public void setLocalUpdatedDate(int localUpdatedDate)
     {
         this.localUpdatedDate = localUpdatedDate;

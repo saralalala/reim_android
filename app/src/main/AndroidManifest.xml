@@ -229,6 +229,18 @@
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".me.ImportActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.BindDidiActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.DidiExpenseActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".me.EmailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>

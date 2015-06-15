@@ -38,22 +38,10 @@ public class MineStatResponse extends BaseResponse
             this.newAmount = jObject.getDouble("new");
 
             this.statCategoryList = new ArrayList<>();
-            JSONArray cates = jObject.getJSONArray("cates");
-            for (int i = 0; i < cates.length(); i++)
+            JSONArray categories = jObject.getJSONArray("cates");
+            for (int i = 0; i < categories.length(); i++)
             {
-                JSONObject object = cates.getJSONObject(i);
-                StatCategory category = new StatCategory();
-                category.setCategoryID(object.getInt("id"));
-                category.setAmount(object.getDouble("amount"));
-
-                List<Integer> itemIDList = new ArrayList<>();
-                JSONArray iids = object.getJSONArray("items");
-                for (int j = 0; j < iids.length(); j++)
-                {
-                    itemIDList.add(iids.getInt(j));
-                }
-                category.setItems(itemIDList);
-
+                StatCategory category = new StatCategory(categories.getJSONObject(i));
                 this.statCategoryList.add(category);
             }
 

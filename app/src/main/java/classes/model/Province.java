@@ -39,7 +39,6 @@ public class Province
     {
         return name;
     }
-
     public void setName(String name)
     {
         this.name = name;
@@ -49,7 +48,6 @@ public class Province
     {
         return cityList;
     }
-
     public String[] getCityArray()
     {
         return cityList.toArray(new String[cityList.size()]);

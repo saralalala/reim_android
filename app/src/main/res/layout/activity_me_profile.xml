@@ -57,7 +57,7 @@
 			<RelativeLayout
                 android:id="@+id/avatarLayout"
 			    android:layout_width="match_parent"
-			    android:layout_height="99dp"
+			    android:layout_height="100dp"
 			    android:layout_marginTop="18dp"
 			    android:background="@drawable/me_item_drawable">
             

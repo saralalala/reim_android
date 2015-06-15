@@ -22,7 +22,6 @@ public class Comment implements Serializable
     {
         return localID;
     }
-
     public void setLocalID(int localID)
     {
         this.localID = localID;
@@ -32,7 +31,6 @@ public class Comment implements Serializable
     {
         return serverID;
     }
-
     public void setServerID(int serverID)
     {
         this.serverID = serverID;
@@ -42,7 +40,6 @@ public class Comment implements Serializable
     {
         return reportID;
     }
-
     public void setReportID(int reportID)
     {
         this.reportID = reportID;
@@ -52,7 +49,6 @@ public class Comment implements Serializable
     {
         return content;
     }
-
     public void setContent(String content)
     {
         this.content = content;
@@ -62,7 +58,6 @@ public class Comment implements Serializable
     {
         return reviewer;
     }
-
     public void setReviewer(User reviewer)
     {
         this.reviewer = reviewer;
@@ -72,7 +67,6 @@ public class Comment implements Serializable
     {
         return createdDate;
     }
-
     public void setCreatedDate(int createdDate)
     {
         this.createdDate = createdDate;
@@ -82,7 +76,6 @@ public class Comment implements Serializable
     {
         return serverUpdatedDate;
     }
-
     public void setServerUpdatedDate(int serverUpdatedDate)
     {
         this.serverUpdatedDate = serverUpdatedDate;
@@ -92,7 +85,6 @@ public class Comment implements Serializable
     {
         return localUpdatedDate;
     }
-
     public void setLocalUpdatedDate(int localUpdatedDate)
     {
         this.localUpdatedDate = localUpdatedDate;
@@ -104,7 +96,7 @@ public class Comment implements Serializable
         {
             public int compare(Comment comment1, Comment comment2)
             {
-                return (int) (comment2.getCreatedDate() - comment1.getCreatedDate());
+                return comment2.getCreatedDate() - comment1.getCreatedDate();
             }
         });
     }

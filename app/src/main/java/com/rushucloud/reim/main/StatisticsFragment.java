@@ -549,7 +549,7 @@ public class StatisticsFragment extends Fragment
                     nameTextView.setText(localCategory.getName());
 
                     TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
-                    countTextView.setText(String.format(getString(R.string.item_count), category.getItems().size()));
+                    countTextView.setText(String.format(getString(R.string.item_count), category.getItemCount()));
 
                     TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                     amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);

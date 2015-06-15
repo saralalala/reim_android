@@ -27,7 +27,6 @@ public class StatTag
     {
         return tagID;
     }
-
     public void setTagID(int tagID)
     {
         this.tagID = tagID;
@@ -37,7 +36,6 @@ public class StatTag
     {
         return amount;
     }
-
     public void setAmount(double amount)
     {
         this.amount = amount;
@@ -47,7 +45,6 @@ public class StatTag
     {
         return itemCount;
     }
-
     public void setItemCount(int itemCount)
     {
         this.itemCount = itemCount;
