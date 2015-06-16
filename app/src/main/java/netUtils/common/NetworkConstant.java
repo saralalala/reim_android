@@ -85,7 +85,7 @@ public class NetworkConstant
                 result = "用户已经存在";
                 break;
             case NetworkConstant.ERROR_AUTH_TIMEOUT:
-                result = "认证超时";
+                result = "你的账号已在其他地方登录，本地已经下线";
                 break;
             case NetworkConstant.ERROR_BAD_PERMISSION:
                 result = "权限不足本次操作";

@@ -826,7 +826,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            System.out.println("insert item: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
+            LogUtils.println("insert item: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
             int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
             int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
             String sqlString = "INSERT INTO tbl_item (server_id, vendor, report_local_id, category_id, amount, pa_amount, " +
@@ -925,7 +925,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            System.out.println("update item by local id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
+            LogUtils.println("update item by local id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
             int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
             int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
             String sqlString = "UPDATE tbl_item SET " +
@@ -965,7 +965,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            System.out.println("update item by server id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
+            LogUtils.println("update item by server id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
             int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
             int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
             String sqlString = "UPDATE tbl_item SET " +
@@ -1729,7 +1729,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            System.out.println("insert report: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
+            LogUtils.println("insert report: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
             String sqlString = "INSERT INTO tbl_report (server_id, title, user_id, status, aa_approved, manager_id, cc_id, type, " +
                     "created_date, server_updatedt, local_updatedt) VALUES (" +
                     "'" + report.getServerID() + "'," +
@@ -1795,7 +1795,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            System.out.println("update report by local id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
+            LogUtils.println("update report by local id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
             String sqlString = "UPDATE tbl_report SET " +
                     "server_id = '" + report.getServerID() + "'," +
                     "title = '" + sqliteEscape(report.getTitle()) + "'," +
@@ -1823,7 +1823,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            System.out.println("update report by server id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
+            LogUtils.println("update report by server id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
             String sqlString = "UPDATE tbl_report SET " +
                     "server_id = '" + report.getServerID() + "'," +
                     "title = '" + sqliteEscape(report.getTitle()) + "'," +

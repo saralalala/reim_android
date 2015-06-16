@@ -54,6 +54,8 @@ public abstract class BaseResponse
 
                 if (code == NetworkConstant.ERROR_AUTH_TIMEOUT)
                 {
+                    errorMessage = NetworkConstant.errorCodeToString(code);
+
                     AppPreference appPreference = AppPreference.getAppPreference();
                     String username = appPreference.getUsername();
                     String password = appPreference.getPassword();

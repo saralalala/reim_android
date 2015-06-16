@@ -8,7 +8,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.rushucloud.reim.R;
@@ -33,8 +35,10 @@ import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
 import netUtils.request.group.GetGroupRequest;
 import netUtils.request.report.GetReportRequest;
+import netUtils.request.report.RevokeReportRequest;
 import netUtils.response.group.GetGroupResponse;
 import netUtils.response.report.GetReportResponse;
+import netUtils.response.report.RevokeReportResponse;
 
 public class ShowReportActivity extends Activity
 {
@@ -42,6 +46,8 @@ public class ShowReportActivity extends Activity
 
     private ImageView tipImageView;
     private ReportDetailListViewAdapter adapter;
+//    private LinearLayout revokeDivider;
+//    private Button revokeButton;
 
     private Report report;
     private List<Item> itemList = null;
@@ -171,6 +177,17 @@ public class ShowReportActivity extends Activity
                 }
             }
         });
+
+//        revokeDivider = (LinearLayout) findViewById(R.id.revokeDivider);
+//
+//        revokeButton = (Button) findViewById(R.id.revokeButton);
+//        revokeButton.setOnClickListener(new View.OnClickListener()
+//        {
+//            public void onClick(View view)
+//            {
+//                sendRevokeReportRequest(report.getServerID());
+//            }
+//        });
     }
 
     private void refreshView()
@@ -186,6 +203,8 @@ public class ShowReportActivity extends Activity
             lastCommentCount = commentList.size();
         }
 
+//        refreshRevokeView();
+
         if (PhoneUtils.isNetworkConnected())
         {
             sendGetGroupRequest();
@@ -194,6 +213,80 @@ public class ShowReportActivity extends Activity
         {
             ViewUtils.showToast(this, R.string.error_get_data_network_unavailable);
         }
+    }
+
+//    private void refreshRevokeView()
+//    {
+//        if (myReport && report.getStatus() != Report.STATUS_FINISHED)
+//        {
+//            revokeDivider.setVisibility(View.VISIBLE);
+//            revokeButton.setVisibility(View.VISIBLE);
+//        }
+//        else
+//        {
+//            revokeDivider.setVisibility(View.GONE);
+//            revokeButton.setVisibility(View.GONE);
+//        }
+//    }
+
+    private void sendGetGroupRequest()
+    {
+        ReimProgressDialog.show();
+        GetGroupRequest request = new GetGroupRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetGroupResponse response = new GetGroupResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
+
+                    // update members
+                    List<User> memberList = response.getMemberList();
+                    User currentUser = AppPreference.getAppPreference().getCurrentUser();
+
+                    for (int i = 0; i < memberList.size(); i++)
+                    {
+                        User user = memberList.get(i);
+                        if (currentUser != null && user.equals(currentUser))
+                        {
+                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+                            {
+                                if (user.getAvatarID() == currentUser.getAvatarID())
+                                {
+                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
+                                }
+                            }
+                            else
+                            {
+                                memberList.set(i, currentUser);
+                            }
+                            break;
+                        }
+                    }
+
+                    dbManager.updateGroupUsers(memberList, currentGroupID);
+
+                    // update group info
+                    dbManager.syncGroup(response.getGroup());
+
+                    sendGetReportRequest(report.getServerID());
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ShowReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            goBackToMainActivity();
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void sendGetReportRequest(final int reportServerID)
@@ -263,6 +356,7 @@ public class ShowReportActivity extends Activity
                                     adapter.setReport(report);
                                     adapter.setItemList(itemList);
                                     adapter.notifyDataSetChanged();
+//                                    refreshRevokeView();
 
                                     if (report.getCommentList().size() != lastCommentCount)
                                     {
@@ -299,49 +393,60 @@ public class ShowReportActivity extends Activity
         });
     }
 
-    private void sendGetGroupRequest()
+    private void sendRevokeReportRequest(final int reportServerID)
     {
         ReimProgressDialog.show();
-        GetGroupRequest request = new GetGroupRequest();
+        RevokeReportRequest request = new RevokeReportRequest(reportServerID);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
-                final GetGroupResponse response = new GetGroupResponse(httpResponse);
+                final RevokeReportResponse response = new RevokeReportResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
+                    int ownerID = AppPreference.getAppPreference().getCurrentUserID();
+                    int localID = report.getLocalID();
+                    report = new Report(response.getReport());
+                    report.setLocalID(localID);
 
-                    // update members
-                    List<User> memberList = response.getMemberList();
-                    User currentUser = AppPreference.getAppPreference().getCurrentUser();
-
-                    for (int i = 0; i < memberList.size(); i++)
+                    if (myReport)
                     {
-                        User user = memberList.get(i);
-                        if (currentUser != null && user.equals(currentUser))
+                        dbManager.updateReportByServerID(report);
+
+                        dbManager.deleteReportComments(report.getLocalID());
+                        for (Comment comment : report.getCommentList())
                         {
-                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
-                            {
-                                if (user.getAvatarID() == currentUser.getAvatarID())
-                                {
-                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
-                                }
-                            }
-                            else
-                            {
-                                memberList.set(i, currentUser);
-                            }
-                            break;
+                            comment.setReportID(report.getLocalID());
+                            dbManager.insertComment(comment);
+                        }
+                    }
+                    else
+                    {
+                        dbManager.deleteOthersReport(reportServerID, ownerID);
+                        dbManager.insertOthersReport(report);
+
+                        for (Item item : response.getItemList())
+                        {
+                            dbManager.insertOthersItem(item);
+                        }
+                        itemList = dbManager.getOthersReportItems(reportServerID);
+
+                        for (Comment comment : report.getCommentList())
+                        {
+                            comment.setReportID(report.getServerID());
+                            dbManager.insertOthersComment(comment);
                         }
                     }
 
-                    dbManager.updateGroupUsers(memberList, currentGroupID);
-
-                    // update group info
-                    dbManager.syncGroup(response.getGroup());
-
-                    sendGetReportRequest(report.getServerID());
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ShowReportActivity.this, R.string.succeed_in_revoking_report);
+                            goBackToMainActivity();
+                        }
+                    });
                 }
                 else
                 {
@@ -350,8 +455,7 @@ public class ShowReportActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(ShowReportActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
-                            goBackToMainActivity();
+                            ViewUtils.showToast(ShowReportActivity.this, R.string.failed_to_revoke_report, response.getErrorMessage());
                         }
                     });
                 }

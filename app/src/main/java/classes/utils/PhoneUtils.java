@@ -279,7 +279,7 @@ public class PhoneUtils
         }
         catch (IOException ex)
         {
-            System.out.println("Unable to read sysprop " + propName);
+            LogUtils.println("Unable to read sysprop " + propName);
             return line;
         }
         finally
@@ -292,7 +292,7 @@ public class PhoneUtils
                 }
                 catch (IOException e)
                 {
-                    System.out.println("Exception while closing InputStream");
+                    LogUtils.println("Exception while closing InputStream");
                 }
             }
         }

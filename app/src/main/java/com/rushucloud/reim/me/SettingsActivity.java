@@ -7,7 +7,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -64,14 +63,14 @@ public class SettingsActivity extends Activity
             }
         });
 
-        RelativeLayout languageLayout = (RelativeLayout) findViewById(R.id.languageLayout);
-        languageLayout.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                ViewUtils.goForward(SettingsActivity.this, LanguageActivity.class);
-            }
-        });
+//        RelativeLayout languageLayout = (RelativeLayout) findViewById(R.id.languageLayout);
+//        languageLayout.setOnClickListener(new View.OnClickListener()
+//        {
+//            public void onClick(View v)
+//            {
+//                ViewUtils.goForward(SettingsActivity.this, LanguageActivity.class);
+//            }
+//        });
 
         TextView updateTextView = (TextView) findViewById(R.id.updateTextView);
         updateTextView.setOnClickListener(new View.OnClickListener()

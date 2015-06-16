@@ -77,6 +77,7 @@ public class PhoneFindActivity extends Activity
         });
 
         phoneEditText = (ClearEditText) findViewById(R.id.phoneEditText);
+        phoneEditText.setText(getIntent().getStringExtra("username"));
         ViewUtils.requestFocus(this, phoneEditText);
 
         codeEditText = (EditText) findViewById(R.id.codeEditText);

@@ -10,6 +10,7 @@ import classes.model.Item;
 import classes.model.Report;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import netUtils.request.common.SyncDataRequest;
@@ -57,7 +58,7 @@ public abstract class SyncUtils
     public static void syncFromServer(final SyncDataCallback callback)
     {
 //		int lastSynctime = AppPreference.getAppPreference().getLastSyncTime();
-//		System.out.println("lastSynctime:"+lastSynctime);
+//		LogUtils.println("lastSynctime:"+lastSynctime);
         final int currentTime = Utils.getCurrentTime();
         SyncDataRequest request = new SyncDataRequest(0);
         request.sendRequest(new HttpConnectionCallback()
@@ -115,7 +116,7 @@ public abstract class SyncUtils
 
     public static void syncAllToServer(SyncDataCallback callback)
     {
-        System.out.println("------------- syncAllToServer ------------");
+        LogUtils.println("------------- syncAllToServer ------------");
         imageTaskCount = 0;
         itemTaskCount = 0;
         reportTaskCount = 0;
@@ -138,7 +139,7 @@ public abstract class SyncUtils
 
         imageTaskCount = imageList.size();
 
-        System.out.println("imageTaskCount：" + imageTaskCount);
+        LogUtils.println("imageTaskCount：" + imageTaskCount);
         if (imageTaskCount > 0)
         {
             for (Image image : imageList)
@@ -158,14 +159,14 @@ public abstract class SyncUtils
         DBManager dbManager = DBManager.getDBManager();
         List<Item> itemList = dbManager.getUnsyncedItems(appPreference.getCurrentUserID());
         itemTaskCount = itemList.size();
-        System.out.println("itemTaskCount：" + itemTaskCount);
+        LogUtils.println("itemTaskCount：" + itemTaskCount);
         if (itemTaskCount > 0)
         {
             for (Item item : itemList)
             {
                 if (item.hasUnuploadedInvoice())
                 {
-                    System.out.println("ignore item：local id " + item.getLocalID());
+                    LogUtils.println("ignore item：local id " + item.getLocalID());
                     itemTaskCount--;
                     if (itemTaskCount == 0)
                     {
@@ -194,7 +195,7 @@ public abstract class SyncUtils
         DBManager dbManager = DBManager.getDBManager();
         List<Report> reportList = dbManager.getUnsyncedUserReports(appPreference.getCurrentUserID());
         reportTaskCount = reportList.size();
-        System.out.println("reportTaskCount：" + reportTaskCount);
+        LogUtils.println("reportTaskCount：" + reportTaskCount);
         if (reportTaskCount > 0)
         {
             for (Report report : reportList)
@@ -220,7 +221,7 @@ public abstract class SyncUtils
 
     private static void sendUploadImageRequest(final Image image, final SyncDataCallback callback)
     {
-        System.out.println("upload image：local id " + image.getLocalID());
+        LogUtils.println("upload image：local id " + image.getLocalID());
         UploadImageRequest request = new UploadImageRequest(image.getLocalPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -229,14 +230,14 @@ public abstract class SyncUtils
                 final UploadImageResponse response = new UploadImageResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    System.out.println("upload image：local id " + image.getLocalID() + " *Succeed*");
+                    LogUtils.println("upload image：local id " + image.getLocalID() + " *Succeed*");
                     image.setServerID(response.getImageID());
                     image.setServerPath(response.getPath());
                     DBManager.getDBManager().updateImageServerID(image);
                 }
                 else
                 {
-                    System.out.println("upload image：local id " + image.getLocalID() + " *Failed*");
+                    LogUtils.println("upload image：local id " + image.getLocalID() + " *Failed*");
                 }
 
                 imageTaskCount--;
@@ -250,7 +251,7 @@ public abstract class SyncUtils
 
     private static void sendCreateItemRequest(final Item item, final SyncDataCallback callback)
     {
-        System.out.println("create item：local id " + item.getLocalID());
+        LogUtils.println("create item：local id " + item.getLocalID());
         CreateItemRequest request = new CreateItemRequest(item);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -259,7 +260,7 @@ public abstract class SyncUtils
                 final CreateItemResponse response = new CreateItemResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    System.out.println("create item：local id " + item.getLocalID() + " *Succeed*");
+                    LogUtils.println("create item：local id " + item.getLocalID() + " *Succeed*");
                     item.setLocalUpdatedDate(Utils.getCurrentTime());
                     item.setServerUpdatedDate(item.getLocalUpdatedDate());
                     item.setServerID(response.getItemID());
@@ -268,7 +269,7 @@ public abstract class SyncUtils
                 }
                 else
                 {
-                    System.out.println("create item：local id " + item.getLocalID() + " *Failed*");
+                    LogUtils.println("create item：local id " + item.getLocalID() + " *Failed*");
                 }
 
                 itemTaskCount--;
@@ -282,7 +283,7 @@ public abstract class SyncUtils
 
     private static void sendModifyItemRequest(final Item item, final SyncDataCallback callback)
     {
-        System.out.println("modify item：local id " + item.getLocalID());
+        LogUtils.println("modify item：local id " + item.getLocalID());
         ModifyItemRequest request = new ModifyItemRequest(item);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -291,7 +292,7 @@ public abstract class SyncUtils
                 final ModifyItemResponse response = new ModifyItemResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    System.out.println("modify item：local id " + item.getLocalID() + " *Succeed*");
+                    LogUtils.println("modify item：local id " + item.getLocalID() + " *Succeed*");
                     item.setLocalUpdatedDate(Utils.getCurrentTime());
                     item.setServerUpdatedDate(item.getLocalUpdatedDate());
                     item.setServerID(response.getItemID());
@@ -299,7 +300,7 @@ public abstract class SyncUtils
                 }
                 else
                 {
-                    System.out.println("modify item：local id " + item.getLocalID() + " *Failed*");
+                    LogUtils.println("modify item：local id " + item.getLocalID() + " *Failed*");
                 }
 
                 itemTaskCount--;
@@ -313,7 +314,7 @@ public abstract class SyncUtils
 
     private static void sendCreateReportRequest(final Report report, final SyncDataCallback callback)
     {
-        System.out.println("create report：local id " + report.getLocalID());
+        LogUtils.println("create report：local id " + report.getLocalID());
         CreateReportRequest request = new CreateReportRequest(report);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -322,7 +323,7 @@ public abstract class SyncUtils
                 CreateReportResponse response = new CreateReportResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    System.out.println("create report：local id " + report.getLocalID() + " *Succeed*");
+                    LogUtils.println("create report：local id " + report.getLocalID() + " *Succeed*");
                     int currentTime = Utils.getCurrentTime();
                     report.setLocalUpdatedDate(currentTime);
                     report.setServerUpdatedDate(currentTime);
@@ -331,7 +332,7 @@ public abstract class SyncUtils
                 }
                 else
                 {
-                    System.out.println("create report：local id " + report.getLocalID() + " *Failed*");
+                    LogUtils.println("create report：local id " + report.getLocalID() + " *Failed*");
                 }
 
                 reportTaskCount--;
@@ -345,13 +346,13 @@ public abstract class SyncUtils
 
     private static void sendModifyReportRequest(final Report report, final SyncDataCallback callback)
     {
-        System.out.println("modify report：local id " + report.getLocalID());
+        LogUtils.println("modify report：local id " + report.getLocalID());
         ModifyReportRequest request = new ModifyReportRequest(report);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
-                System.out.println("modify report：local id " + report.getLocalID() + " *Succeed*");
+                LogUtils.println("modify report：local id " + report.getLocalID() + " *Succeed*");
                 ModifyReportResponse response = new ModifyReportResponse(httpResponse);
                 if (response.getStatus())
                 {
@@ -361,7 +362,7 @@ public abstract class SyncUtils
                 }
                 else
                 {
-                    System.out.println("modify report：local id " + report.getLocalID() + " *Failed*");
+                    LogUtils.println("modify report：local id " + report.getLocalID() + " *Failed*");
                 }
 
                 reportTaskCount--;

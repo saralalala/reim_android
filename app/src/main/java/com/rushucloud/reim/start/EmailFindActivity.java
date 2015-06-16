@@ -81,6 +81,7 @@ public class EmailFindActivity extends Activity
                 return false;
             }
         });
+        emailEditText.setText(getIntent().getStringExtra("username"));
         ViewUtils.requestFocus(this, emailEditText);
 
         Button confirmButton = (Button) findViewById(R.id.confirmButton);

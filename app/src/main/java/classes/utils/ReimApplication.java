@@ -63,9 +63,9 @@ public class ReimApplication extends Application
         createDirectories();
         saveCategoryIcon();
 
-        System.out.println("**************** Application Started *****************");
-        System.out.println(AVInstallation.getCurrentInstallation().getInstallationId());
-//		System.out.println(getDeviceInfo(this));
+        LogUtils.println("**************** Application Started *****************");
+        LogUtils.println(AVInstallation.getCurrentInstallation().getInstallationId());
+//		LogUtils.println(getDeviceInfo(this));
     }
 
     public static int getTabIndex()

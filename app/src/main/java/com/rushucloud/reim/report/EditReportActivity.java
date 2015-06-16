@@ -38,6 +38,7 @@ import classes.model.Report;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
@@ -782,7 +783,7 @@ public class EditReportActivity extends Activity
 
     private void sendUploadImageRequest(final Image image)
     {
-        System.out.println("upload image：local id " + image.getLocalID());
+        LogUtils.println("upload image：local id " + image.getLocalID());
         UploadImageRequest request = new UploadImageRequest(image.getLocalPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -791,7 +792,7 @@ public class EditReportActivity extends Activity
                 final UploadImageResponse response = new UploadImageResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    System.out.println("upload image：local id " + image.getLocalID() + " *Succeed*");
+                    LogUtils.println("upload image：local id " + image.getLocalID() + " *Succeed*");
                     image.setServerID(response.getImageID());
                     image.setServerPath(response.getPath());
                     dbManager.updateImageServerID(image);
@@ -816,7 +817,7 @@ public class EditReportActivity extends Activity
                 }
                 else
                 {
-                    System.out.println("upload image：local id " + image.getLocalID() + " *Failed*");
+                    LogUtils.println("upload image：local id " + image.getLocalID() + " *Failed*");
 
                     imageTaskCount--;
 
@@ -839,7 +840,7 @@ public class EditReportActivity extends Activity
 
     private void sendCreateItemRequest(final Item item)
     {
-        System.out.println("create item：local id " + item.getLocalID());
+        LogUtils.println("create item：local id " + item.getLocalID());
         CreateItemRequest request = new CreateItemRequest(item);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -848,7 +849,7 @@ public class EditReportActivity extends Activity
                 CreateItemResponse response = new CreateItemResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    System.out.println("create item：local id " + item.getLocalID() + " *Succeed*");
+                    LogUtils.println("create item：local id " + item.getLocalID() + " *Succeed*");
                     int currentTime = Utils.getCurrentTime();
                     item.setLocalUpdatedDate(currentTime);
                     item.setServerUpdatedDate(currentTime);
@@ -875,7 +876,7 @@ public class EditReportActivity extends Activity
                 }
                 else
                 {
-                    System.out.println("create item：local id " + item.getLocalID() + " *Failed*");
+                    LogUtils.println("create item：local id " + item.getLocalID() + " *Failed*");
 
                     itemTaskCount--;
 
@@ -898,7 +899,7 @@ public class EditReportActivity extends Activity
 
     private void sendModifyItemRequest(final Item item)
     {
-        System.out.println("modify item：local id " + item.getLocalID());
+        LogUtils.println("modify item：local id " + item.getLocalID());
         ModifyItemRequest request = new ModifyItemRequest(item);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -907,7 +908,7 @@ public class EditReportActivity extends Activity
                 ModifyItemResponse response = new ModifyItemResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    System.out.println("modify item：local id " + item.getLocalID() + " *Succeed*");
+                    LogUtils.println("modify item：local id " + item.getLocalID() + " *Succeed*");
                     int currentTime = Utils.getCurrentTime();
                     item.setLocalUpdatedDate(currentTime);
                     item.setServerUpdatedDate(currentTime);
@@ -933,7 +934,7 @@ public class EditReportActivity extends Activity
                 }
                 else
                 {
-                    System.out.println("modify item：local id " + item.getLocalID() + " *Failed*");
+                    LogUtils.println("modify item：local id " + item.getLocalID() + " *Failed*");
 
                     itemTaskCount--;
 

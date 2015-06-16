@@ -59,7 +59,24 @@
     <ListView
         android:id="@+id/detailListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/background"/>
+
+    <!--<include-->
+        <!--android:id="@+id/revokeDivider"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.5dp"-->
+        <!--layout="@layout/view_divider"/>-->
+
+    <!--<Button-->
+        <!--android:id="@+id/revokeButton"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--style="?android:attr/buttonBarButtonStyle"-->
+        <!--android:background="@drawable/bar_button_drawable"-->
+        <!--android:text="@string/revoke"-->
+        <!--android:textColor="@color/start_button_text_color"-->
+        <!--android:textSize="18sp"/>-->
 
 </LinearLayout>

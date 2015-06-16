@@ -17,17 +17,13 @@ public class CreateGroupRequest extends BaseRequest
         appendUrl(URLDef.URL_GROUP);
     }
 
-    public CreateGroupRequest(String groupName, String inviteList, int guideVersion, boolean forceCreate)
+    public CreateGroupRequest(String groupName, boolean forceCreate, int guideVersion)
     {
         super();
 
         addParams("name", groupName);
         addParams("force", Utils.booleanToString(forceCreate));
         addParams("version", Integer.toString(guideVersion));
-        if (!inviteList.isEmpty())
-        {
-            addParams("invites", inviteList);
-        }
 
         appendUrl(URLDef.URL_GROUP);
     }

@@ -2,6 +2,7 @@ package com.rushucloud.reim.start;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Selection;
@@ -194,7 +195,13 @@ public class SignInActivity extends Activity
             {
                 MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL");
                 forgotPopupWindow.dismiss();
-                ViewUtils.goForwardAndFinish(SignInActivity.this, PhoneFindActivity.class);
+                String username = usernameEditText.getText().toString();
+                Intent intent = new Intent(SignInActivity.this, PhoneFindActivity.class);
+                if (Utils.isPhone(username))
+                {
+                    intent.putExtra("username", username);
+                }
+                ViewUtils.goForwardAndFinish(SignInActivity.this, intent);
             }
         });
 
@@ -205,7 +212,13 @@ public class SignInActivity extends Activity
             {
                 MobclickAgent.onEvent(SignInActivity.this, "UMENG_REGIST_FORGETPASSWORD_MAIL");
                 forgotPopupWindow.dismiss();
-                ViewUtils.goForwardAndFinish(SignInActivity.this, EmailFindActivity.class);
+                String username = usernameEditText.getText().toString();
+                Intent intent = new Intent(SignInActivity.this, EmailFindActivity.class);
+                if (Utils.isEmail(username))
+                {
+                    intent.putExtra("username", username);
+                }
+                ViewUtils.goForwardAndFinish(SignInActivity.this, intent);
             }
         });
 

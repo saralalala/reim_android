@@ -27,6 +27,7 @@ public class URLDef
     public static final String URL_ALERT = "alert";
     public static final String URL_APPROVE_INFO = "report_flow";
     public static final String URL_REPORT = "report";
+    public static final String URL_REVOKE = "revoke";
     public static final String URL_EXPORT = "exports";
     public static final String URL_SUBORDINATE_REPORT = "subordinate_reports";
     public static final String URL_BANK = "bank";

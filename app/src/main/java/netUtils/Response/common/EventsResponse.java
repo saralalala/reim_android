@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.utils.AppPreference;
+import classes.utils.LogUtils;
 import classes.utils.Utils;
 
 public class EventsResponse extends BaseResponse
@@ -31,7 +32,7 @@ public class EventsResponse extends BaseResponse
         try
         {
             JSONObject jObject = getDataObject();
-            System.out.println("Events:" + jObject.toString());
+            LogUtils.println("Events:" + jObject.toString());
             JSONArray appliesArray = jObject.getJSONArray("applies");
             JSONArray invitesArray = jObject.getJSONArray("invites");
             JSONArray systemMessagesArray = jObject.getJSONArray("system");

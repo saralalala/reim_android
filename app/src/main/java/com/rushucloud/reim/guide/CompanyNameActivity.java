@@ -171,7 +171,7 @@ public class CompanyNameActivity extends Activity
     private void sendCreateGroupRequest(boolean forceCreate)
     {
         ReimProgressDialog.show();
-        CreateGroupRequest request = new CreateGroupRequest(companyName, forceCreate);
+        CreateGroupRequest request = new CreateGroupRequest(companyName, forceCreate, 1);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)

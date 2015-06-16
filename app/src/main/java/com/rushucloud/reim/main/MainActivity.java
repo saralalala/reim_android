@@ -42,6 +42,7 @@ import java.util.Map;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
+import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
@@ -673,14 +674,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             {
                 public void onOpen(ServerHandshake handShakeData)
                 {
-                    System.out.println("onOpen");
+                    LogUtils.println("onOpen");
                     webSocketIsClosed = false;
                     webSocketClient.send(HttpUtils.getJWTString());
                 }
 
                 public void onMessage(String message)
                 {
-                    System.out.println("onMessage:" + message);
+                    LogUtils.println("onMessage:" + message);
 
                     try
                     {
@@ -748,7 +749,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
                 public void onError(Exception ex)
                 {
-                    System.out.println("onError:" + ex.getLocalizedMessage());
+                    LogUtils.println("onError:" + ex.getLocalizedMessage());
                     webSocketIsClosed = true;
                 }
             };
@@ -756,7 +757,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
         catch (Exception e)
         {
-            System.out.println(e.getLocalizedMessage());
+            LogUtils.println(e.getLocalizedMessage());
             e.printStackTrace();
         }
     }
