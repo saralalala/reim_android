@@ -164,9 +164,16 @@ public class InviteListActivity extends Activity
                 {
                     ViewUtils.showToast(InviteListActivity.this, R.string.error_send_invite_network_unavailable);
                 }
-                else
+                else if (!inviteList.isEmpty())
                 {
                     sendInviteRequest(inviteList, inputChosenList.size() + contactChosenList.size());
+                }
+                else
+                {
+                    Intent intent = new Intent(InviteListActivity.this, WeChatShareActivity.class);
+                    intent.putExtra("companyName", companyName);
+                    intent.putExtra("count", 0);
+                    ViewUtils.goForwardAndFinish(InviteListActivity.this, intent);
                 }
             }
         });

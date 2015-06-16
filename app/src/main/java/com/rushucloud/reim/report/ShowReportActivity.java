@@ -46,8 +46,8 @@ public class ShowReportActivity extends Activity
 
     private ImageView tipImageView;
     private ReportDetailListViewAdapter adapter;
-//    private LinearLayout revokeDivider;
-//    private Button revokeButton;
+    private LinearLayout revokeDivider;
+    private Button revokeButton;
 
     private Report report;
     private List<Item> itemList = null;
@@ -178,16 +178,16 @@ public class ShowReportActivity extends Activity
             }
         });
 
-//        revokeDivider = (LinearLayout) findViewById(R.id.revokeDivider);
-//
-//        revokeButton = (Button) findViewById(R.id.revokeButton);
-//        revokeButton.setOnClickListener(new View.OnClickListener()
-//        {
-//            public void onClick(View view)
-//            {
-//                sendRevokeReportRequest(report.getServerID());
-//            }
-//        });
+        revokeDivider = (LinearLayout) findViewById(R.id.revokeDivider);
+
+        revokeButton = (Button) findViewById(R.id.revokeButton);
+        revokeButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                sendRevokeReportRequest(report.getServerID());
+            }
+        });
     }
 
     private void refreshView()
@@ -203,7 +203,7 @@ public class ShowReportActivity extends Activity
             lastCommentCount = commentList.size();
         }
 
-//        refreshRevokeView();
+        refreshRevokeView();
 
         if (PhoneUtils.isNetworkConnected())
         {
@@ -215,19 +215,19 @@ public class ShowReportActivity extends Activity
         }
     }
 
-//    private void refreshRevokeView()
-//    {
-//        if (myReport && report.getStatus() != Report.STATUS_FINISHED)
-//        {
-//            revokeDivider.setVisibility(View.VISIBLE);
-//            revokeButton.setVisibility(View.VISIBLE);
-//        }
-//        else
-//        {
-//            revokeDivider.setVisibility(View.GONE);
-//            revokeButton.setVisibility(View.GONE);
-//        }
-//    }
+    private void refreshRevokeView()
+    {
+        if (myReport && report.getStatus() != Report.STATUS_FINISHED)
+        {
+            revokeDivider.setVisibility(View.VISIBLE);
+            revokeButton.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            revokeDivider.setVisibility(View.GONE);
+            revokeButton.setVisibility(View.GONE);
+        }
+    }
 
     private void sendGetGroupRequest()
     {
@@ -356,7 +356,7 @@ public class ShowReportActivity extends Activity
                                     adapter.setReport(report);
                                     adapter.setItemList(itemList);
                                     adapter.notifyDataSetChanged();
-//                                    refreshRevokeView();
+                                    refreshRevokeView();
 
                                     if (report.getCommentList().size() != lastCommentCount)
                                     {
