@@ -31,8 +31,10 @@ import netUtils.response.bank.ModifyBankAccountResponse;
 
 public class BankNameActivity extends Activity
 {
+    // Widgets
     private ClearEditText nameEditText;
 
+    // Local Data
     private DBManager dbManager;
     private User currentUser;
     private BankAccount bankAccount;

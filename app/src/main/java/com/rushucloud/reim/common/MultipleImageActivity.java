@@ -16,6 +16,7 @@ import classes.widget.galleryWidget.GalleryViewPager;
 
 public class MultipleImageActivity extends Activity
 {
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

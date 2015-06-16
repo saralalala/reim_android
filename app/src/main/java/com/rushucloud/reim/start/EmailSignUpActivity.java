@@ -33,11 +33,14 @@ import netUtils.response.user.RegisterResponse;
 
 public class EmailSignUpActivity extends Activity
 {
+    // Widgets
     private ClearEditText emailEditText;
     private ClearEditText passwordEditText;
 
+    // Local Data
     private boolean showPassword = false;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

@@ -34,15 +34,18 @@ import netUtils.response.report.ApproveInfoResponse;
 
 public class ApproveInfoActivity extends Activity
 {
+    // Widgets
     private TextView timeTextView;
     private ApproveInfoListViewAdapter adapter;
 
+    // Local Data
     private DBManager dbManager;
 
     private int reportServerID;
     private Report report;
     private List<ApproveInfo> infoList = new ArrayList<>();
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

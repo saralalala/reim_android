@@ -29,12 +29,15 @@ import netUtils.response.tag.ModifyTagResponse;
 
 public class EditTagActivity extends Activity
 {
+    // Widgets
     private ClearEditText nameEditText;
 
+    // Local Data
     private DBManager dbManager;
     private String originalName;
     private Tag tag;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

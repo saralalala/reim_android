@@ -40,17 +40,20 @@ import netUtils.response.common.DownloadImageResponse;
 
 public class CategoryActivity extends Activity
 {
+    // Widgets
     private ListView categoryListView;
     private TextView categoryTextView;
     private CategoryListViewAdapter adapter;
     private PopupWindow operationPopupWindow;
 
+    // Local Data
     private AppPreference appPreference;
     private DBManager dbManager;
 
     private List<Category> categoryList;
     private Category currentCategory;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

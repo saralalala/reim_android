@@ -40,14 +40,17 @@ import netUtils.response.bank.ModifyBankAccountResponse;
 
 public class BankNumberActivity extends Activity
 {
+    // Widgets
     private ClearEditText bankEditText;
 
+    // Local Data
     private DBManager dbManager;
     private User currentUser;
     private BankAccount bankAccount;
     private String originalAccount;
     private HashMap<String, String> codeMap = new HashMap<>();
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

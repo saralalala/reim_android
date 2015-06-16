@@ -30,20 +30,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import classes.adapter.LocationListViewAdapter;
+import classes.utils.Constant;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.PinnedSectionListView;
 
 public class PickLocationActivity extends Activity
 {
-    private static final int INPUT_LOCATION = 0;
-
+    // Widgets
     private ClearEditText locationEditText;
     private LocationListViewAdapter adapter;
     private PinnedSectionListView locationListView;
     private LinearLayout indexLayout;
     private TextView centralTextView;
 
+    // Local Data
     private List<String> hotCityList;
     private List<String> cityList;
     private List<String> showList = new ArrayList<>();
@@ -52,6 +53,7 @@ public class PickLocationActivity extends Activity
     public static String[] indexLetters = {"热门", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
             "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"};
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -90,7 +92,7 @@ public class PickLocationActivity extends Activity
         {
             switch (requestCode)
             {
-                case INPUT_LOCATION:
+                case Constant.ACTIVITY_INPUT_LOCATION:
                 {
                     Intent intent = new Intent();
                     intent.putExtra("location", data.getStringExtra("location"));
@@ -130,7 +132,7 @@ public class PickLocationActivity extends Activity
             {
                 hideSoftKeyboard();
                 Intent intent = new Intent(PickLocationActivity.this, InputLocationActivity.class);
-                ViewUtils.goForwardForResult(PickLocationActivity.this, intent, INPUT_LOCATION);
+                ViewUtils.goForwardForResult(PickLocationActivity.this, intent, Constant.ACTIVITY_INPUT_LOCATION);
             }
         });
 

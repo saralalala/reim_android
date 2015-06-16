@@ -37,10 +37,13 @@ import netUtils.response.user.InviteResponse;
 
 public class InputContactActivity extends Activity
 {
+    // Widgets
     private EditText contactEditText;
 
+    // Local Data
     private boolean fromGuide;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

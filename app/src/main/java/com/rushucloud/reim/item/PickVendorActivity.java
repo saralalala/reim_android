@@ -23,6 +23,7 @@ import java.util.List;
 
 import classes.adapter.VendorListViewAdapter;
 import classes.model.Vendor;
+import classes.utils.Constant;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
@@ -35,16 +36,17 @@ import netUtils.response.item.GetVendorsResponse;
 
 public class PickVendorActivity extends Activity
 {
-    private static final int INPUT_VENDOR = 0;
-
+    // Widgets
     private VendorListViewAdapter vendorAdapter;
     private ClearEditText vendorEditText;
 
+    // Local Data
     private String location;
     private double latitude;
     private double longitude;
     private List<Vendor> vendorList = new ArrayList<>();
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -84,7 +86,7 @@ public class PickVendorActivity extends Activity
         {
             switch (requestCode)
             {
-                case INPUT_VENDOR:
+                case Constant.ACTIVITY_INPUT_VENDOR:
                 {
                     Intent intent = new Intent();
                     intent.putExtra("vendor", data.getStringExtra("vendor"));
@@ -132,7 +134,7 @@ public class PickVendorActivity extends Activity
             {
                 hideSoftKeyboard();
                 Intent intent = new Intent(PickVendorActivity.this, InputVendorActivity.class);
-                ViewUtils.goForwardForResult(PickVendorActivity.this, intent, INPUT_VENDOR);
+                ViewUtils.goForwardForResult(PickVendorActivity.this, intent, Constant.ACTIVITY_INPUT_VENDOR);
             }
         });
 

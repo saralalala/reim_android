@@ -25,9 +25,11 @@ import netUtils.response.common.FeedbackResponse;
 
 public class FeedbackActivity extends Activity
 {
+    // Widgets
     private EditText feedbackEditText;
     private ClearEditText contactEditText;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

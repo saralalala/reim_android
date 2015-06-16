@@ -34,13 +34,16 @@ import netUtils.response.group.ModifyGroupResponse;
 
 public class EditCompanyActivity extends Activity
 {
+    // Widgets
     private ClearEditText companyEditText;
 
+    // Local Data
     private AppPreference appPreference;
     private DBManager dbManager;
     private Group currentGroup;
     private String originalName;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

@@ -28,6 +28,7 @@ import com.umeng.analytics.MobclickAgent;
 import classes.model.Group;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
@@ -44,10 +45,7 @@ import netUtils.response.user.SignOutResponse;
 
 public class ProfileActivity extends Activity
 {
-    private static final int PICK_IMAGE = 0;
-    private static final int TAKE_PHOTO = 1;
-    private static final int CROP_IMAGE = 2;
-
+    // Widgets
     private CircleImageView avatarImageView;
     private PopupWindow picturePopupWindow;
 
@@ -59,12 +57,14 @@ public class ProfileActivity extends Activity
     private RelativeLayout passwordLayout;
     private TextView passwordTextView;
 
+    // Local Data
     private AppPreference appPreference;
 
     private Group currentGroup;
     private User currentUser;
     private String avatarPath;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -97,17 +97,17 @@ public class ProfileActivity extends Activity
             {
                 switch (requestCode)
                 {
-                    case PICK_IMAGE:
+                    case Constant.ACTIVITY_PICK_IMAGE:
                     {
                         cropImage(data.getData());
                         break;
                     }
-                    case TAKE_PHOTO:
+                    case Constant.ACTIVITY_TAKE_PHOTO:
                     {
                         cropImage(appPreference.getTempAvatarUri());
                         break;
                     }
-                    case CROP_IMAGE:
+                    case Constant.ACTIVITY_CROP_IMAGE:
                     {
                         avatarPath = PhoneUtils.saveBitmapToFile(appPreference.getTempAvatarPath(), NetworkConstant.IMAGE_TYPE_AVATAR);
 
@@ -357,7 +357,7 @@ public class ProfileActivity extends Activity
 
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
-                startActivityForResult(intent, TAKE_PHOTO);
+                startActivityForResult(intent, Constant.ACTIVITY_TAKE_PHOTO);
             }
         });
 
@@ -370,7 +370,7 @@ public class ProfileActivity extends Activity
 
                 Intent intent = new Intent(Intent.ACTION_PICK, null);
                 intent.setType("image/*");
-                startActivityForResult(intent, PICK_IMAGE);
+                startActivityForResult(intent, Constant.ACTIVITY_PICK_IMAGE);
             }
         });
 
@@ -472,7 +472,7 @@ public class ProfileActivity extends Activity
         intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
         intent.putExtra("return-data", false);
         intent.putExtra("noFaceDetection", true);
-        startActivityForResult(intent, CROP_IMAGE);
+        startActivityForResult(intent, Constant.ACTIVITY_CROP_IMAGE);
     }
 
     private void sendUploadAvatarRequest()
@@ -543,8 +543,8 @@ public class ProfileActivity extends Activity
                     appPreference.setSandboxMode(false);
                     appPreference.saveAppPreference();
 
-                    ReimApplication.setTabIndex(ReimApplication.TAB_REIM);
-                    ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_MINE);
+                    ReimApplication.setTabIndex(Constant.TAB_REIM);
+                    ReimApplication.setReportTabIndex(Constant.TAB_REPORT_MINE);
 
                     runOnUiThread(new Runnable()
                     {

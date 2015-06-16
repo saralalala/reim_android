@@ -42,6 +42,7 @@ import netUtils.response.bank.ModifyBankAccountResponse;
 
 public class BankActivity extends Activity
 {
+    // Widgets
     private TextView nameTextView;
     private TextView numberTextView;
     private TextView bankNameTextView;
@@ -51,6 +52,7 @@ public class BankActivity extends Activity
     private WheelView provinceWheelView;
     private WheelView cityWheelView;
 
+    // Local Data
     private DBManager dbManager;
     private User currentUser;
     private BankAccount bankAccount;
@@ -63,6 +65,7 @@ public class BankActivity extends Activity
     protected String currentCity;
     private List<Province> provinceList = new ArrayList<>();
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

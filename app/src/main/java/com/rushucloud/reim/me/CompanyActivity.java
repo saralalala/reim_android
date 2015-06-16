@@ -23,8 +23,10 @@ import classes.widget.ReimProgressDialog;
 
 public class CompanyActivity extends Activity
 {
+    // Widgets
     private TextView companyTextView;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

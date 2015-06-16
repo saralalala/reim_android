@@ -31,12 +31,15 @@ import netUtils.response.user.GetMessagesResponse;
 
 public class MessageListActivity extends Activity
 {
+    // Widgets
     private TextView messageTextView;
     private XListView messageListView;
     private MessageListViewAdapter adapter;
 
+    // Local Data
     private List<Message> messageList = new ArrayList<>();
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

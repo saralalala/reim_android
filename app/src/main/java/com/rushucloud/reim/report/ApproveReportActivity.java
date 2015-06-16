@@ -31,6 +31,7 @@ import classes.model.Item;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
@@ -48,11 +49,13 @@ import netUtils.response.report.GetReportResponse;
 
 public class ApproveReportActivity extends Activity
 {
-    private AppPreference appPreference;
-    private DBManager dbManager;
-
+    // Widgets
     private ImageView tipImageView;
     private ReportDetailListViewAdapter adapter;
+
+    // Local Data
+    private AppPreference appPreference;
+    private DBManager dbManager;
 
     private int reportServerID;
     private Report report;
@@ -61,6 +64,7 @@ public class ApproveReportActivity extends Activity
 
     private boolean fromPush;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -304,8 +308,8 @@ public class ApproveReportActivity extends Activity
                             }
                             else if (fromPush && !report.canBeApproved())
                             {
-                                ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
-                                ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_OTHERS);
+                                ReimApplication.setTabIndex(Constant.TAB_REPORT);
+                                ReimApplication.setReportTabIndex(Constant.TAB_REPORT_OTHERS);
 
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("report", report);
@@ -526,8 +530,8 @@ public class ApproveReportActivity extends Activity
 
     private void goBackToMainActivity()
     {
-        ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
-        ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_OTHERS);
+        ReimApplication.setTabIndex(Constant.TAB_REPORT);
+        ReimApplication.setReportTabIndex(Constant.TAB_REPORT_OTHERS);
 
         if (fromPush)
         {

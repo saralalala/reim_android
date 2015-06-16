@@ -42,10 +42,12 @@ import netUtils.response.common.DownloadImageResponse;
 
 public class PickCCActivity extends Activity
 {
+    // Widgets
     private ClearEditText ccEditText;
     private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
 
+    // Local Data
     private AppPreference appPreference;
     private DBManager dbManager;
     private List<User> userList;
@@ -55,6 +57,7 @@ public class PickCCActivity extends Activity
     private boolean newReport;
     private boolean fromFollowing;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

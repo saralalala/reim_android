@@ -1,6 +1,8 @@
 package com.rushucloud.reim.report;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +28,7 @@ import classes.model.Item;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
@@ -42,12 +45,14 @@ import netUtils.response.report.RevokeReportResponse;
 
 public class ShowReportActivity extends Activity
 {
-    private DBManager dbManager;
-
+    // Widgets
     private ImageView tipImageView;
     private ReportDetailListViewAdapter adapter;
     private LinearLayout revokeDivider;
     private Button revokeButton;
+
+    // Local Data
+    private DBManager dbManager;
 
     private Report report;
     private List<Item> itemList = null;
@@ -55,6 +60,7 @@ public class ShowReportActivity extends Activity
     private boolean myReport;
     private int lastCommentCount;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -185,7 +191,7 @@ public class ShowReportActivity extends Activity
         {
             public void onClick(View view)
             {
-                sendRevokeReportRequest(report.getServerID());
+                showRevokeDialog();
             }
         });
     }
@@ -227,6 +233,22 @@ public class ShowReportActivity extends Activity
             revokeDivider.setVisibility(View.GONE);
             revokeButton.setVisibility(View.GONE);
         }
+    }
+
+    private void showRevokeDialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.warning);
+        builder.setMessage(R.string.prompt_revoke_report);
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                sendRevokeReportRequest(report.getServerID());
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.create().show();
     }
 
     private void sendGetGroupRequest()
@@ -465,11 +487,11 @@ public class ShowReportActivity extends Activity
 
     private void goBackToMainActivity()
     {
-        int reportTabIndex = myReport ? ReimApplication.TAB_REPORT_MINE : ReimApplication.TAB_REPORT_OTHERS;
+        int reportTabIndex = myReport ? Constant.TAB_REPORT_MINE : Constant.TAB_REPORT_OTHERS;
         ReimApplication.setReportTabIndex(reportTabIndex);
         if (fromPush)
         {
-            ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
+            ReimApplication.setTabIndex(Constant.TAB_REPORT);
             Intent intent = new Intent(ShowReportActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

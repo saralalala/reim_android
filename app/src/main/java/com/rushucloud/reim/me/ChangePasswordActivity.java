@@ -27,11 +27,15 @@ import netUtils.response.user.ChangePasswordResponse;
 
 public class ChangePasswordActivity extends Activity
 {
-    private AppPreference appPreference;
+    // Widgets
     private ClearEditText oldPasswordEditText;
     private ClearEditText newPasswordEditText;
     private ClearEditText confirmPasswordEditText;
 
+    // Local Data
+    private AppPreference appPreference;
+
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

@@ -18,7 +18,7 @@ import classes.utils.ViewUtils;
 
 public class InvoiceTitleActivity extends Activity
 {
-
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

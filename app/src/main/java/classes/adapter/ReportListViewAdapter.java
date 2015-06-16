@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.model.Report;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
@@ -25,7 +26,7 @@ public class ReportListViewAdapter extends BaseAdapter
     private DBManager dbManager;
     private List<Report> reportList;
     private List<Integer> unreadList;
-    private int tabIndex = ReimApplication.TAB_REPORT_MINE;
+    private int tabIndex = Constant.TAB_REPORT_MINE;
 
     public ReportListViewAdapter(Context context, List<Report> reports)
     {
@@ -38,7 +39,7 @@ public class ReportListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        if (tabIndex == ReimApplication.TAB_REPORT_MINE)
+        if (tabIndex == Constant.TAB_REPORT_MINE)
         {
             View view = layoutInflater.inflate(R.layout.list_report, parent, false);
 

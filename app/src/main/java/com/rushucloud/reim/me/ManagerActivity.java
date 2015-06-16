@@ -45,6 +45,7 @@ import netUtils.response.user.DefaultManagerResponse;
 
 public class ManagerActivity extends Activity
 {
+    // Widgets
     private TextView noMemberTextView;
     private ClearEditText managerEditText;
     private CircleImageView avatarImageView;
@@ -53,6 +54,7 @@ public class ManagerActivity extends Activity
     private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
 
+    // Local Data
     private AppPreference appPreference;
     private DBManager dbManager;
 
@@ -63,6 +65,7 @@ public class ManagerActivity extends Activity
     private List<User> showList = new ArrayList<>();
     private List<User> chosenList;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

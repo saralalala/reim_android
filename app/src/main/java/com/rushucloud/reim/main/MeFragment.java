@@ -44,11 +44,7 @@ import netUtils.response.common.DownloadImageResponse;
 
 public class MeFragment extends Fragment
 {
-    private boolean hasInit = false;
-
-    private AppPreference appPreference;
-    private DBManager dbManager;
-
+    // Widgets
     private View view;
     private TextView nicknameTextView;
     private TextView companyTextView;
@@ -59,9 +55,14 @@ public class MeFragment extends Fragment
     private RelativeLayout tagLayout;
     private PopupWindow sharePopupWindow;
 
+    // Local Data
+    private AppPreference appPreference;
+    private DBManager dbManager;
+    private boolean hasInit = false;
     private User currentUser;
     private String avatarPath;
 
+    // View
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         if (view == null)

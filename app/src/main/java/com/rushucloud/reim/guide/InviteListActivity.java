@@ -26,6 +26,7 @@ import java.util.List;
 
 import classes.adapter.InviteListViewAdapter;
 import classes.model.User;
+import classes.utils.Constant;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
@@ -36,13 +37,13 @@ import netUtils.response.user.InviteResponse;
 
 public class InviteListActivity extends Activity
 {
-    private static final int INPUT_CONTACT = 0;
-
+    // Widgets
     private InviteListViewAdapter adapter;
     private PinnedSectionListView contactListView;
     private LinearLayout indexLayout;
     private TextView centralTextView;
 
+    // Local Data
     private String companyName;
     private ArrayList<String> inputList = new ArrayList<>();
     private ArrayList<String> inputChosenList = new ArrayList<>();
@@ -53,6 +54,7 @@ public class InviteListActivity extends Activity
     public static String[] indexLetters = {"手动", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
             "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"};
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -97,7 +99,7 @@ public class InviteListActivity extends Activity
         {
             switch (requestCode)
             {
-                case INPUT_CONTACT:
+                case Constant.ACTIVITY_INPUT_CONTACT:
                 {
                     inputList.clear();
                     inputList.addAll((ArrayList<String>) data.getSerializableExtra("inputList"));
@@ -208,7 +210,7 @@ public class InviteListActivity extends Activity
                     Intent intent = new Intent(InviteListActivity.this, InputContactActivity.class);
                     intent.putExtra("inviteList", inviteList);
                     intent.putExtra("fromGuide", true);
-                    ViewUtils.goForwardForResult(InviteListActivity.this, intent, INPUT_CONTACT);
+                    ViewUtils.goForwardForResult(InviteListActivity.this, intent, Constant.ACTIVITY_INPUT_CONTACT);
                 }
                 else if (position > 0 && position < inputList.size() + 1)
                 {
@@ -295,6 +297,18 @@ public class InviteListActivity extends Activity
                 }
             });
         }
+    }
+
+    private void goBack()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putString("companyName", companyName);
+        bundle.putStringArrayList("inputList", inputList);
+        bundle.putStringArrayList("inputChosenList", inputChosenList);
+        bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
+        Intent intent = new Intent(InviteListActivity.this, CompanyNameActivity.class);
+        intent.putExtras(bundle);
+        ViewUtils.goBackWithIntent(this, intent);
     }
 
     private void readContacts()
@@ -384,7 +398,7 @@ public class InviteListActivity extends Activity
                         ReimProgressDialog.dismiss();
                         if (response.getStatus())
                         {
-                            int prompt = response.isAllInSameCompany()? R.string.prompt_all_in_same_company : R.string.succeed_in_sending_invite;
+                            int prompt = response.isAllInSameCompany() ? R.string.prompt_all_in_same_company : R.string.succeed_in_sending_invite;
                             ViewUtils.showToast(InviteListActivity.this, prompt);
                             Intent intent = new Intent(InviteListActivity.this, WeChatShareActivity.class);
                             intent.putExtra("companyName", companyName);
@@ -399,17 +413,5 @@ public class InviteListActivity extends Activity
                 });
             }
         });
-    }
-
-    private void goBack()
-    {
-        Bundle bundle = new Bundle();
-        bundle.putString("companyName", companyName);
-        bundle.putStringArrayList("inputList", inputList);
-        bundle.putStringArrayList("inputChosenList", inputChosenList);
-        bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
-        Intent intent = new Intent(InviteListActivity.this, CompanyNameActivity.class);
-        intent.putExtras(bundle);
-        ViewUtils.goBackWithIntent(this, intent);
     }
 }

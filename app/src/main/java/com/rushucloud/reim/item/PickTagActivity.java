@@ -27,11 +27,14 @@ import classes.utils.ViewUtils;
 
 public class PickTagActivity extends Activity
 {
+    // Widgets
     private TagListViewAdapter tagAdapter;
 
+    // Local Data
     private List<Tag> tagList = new ArrayList<>();
     private boolean[] check;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

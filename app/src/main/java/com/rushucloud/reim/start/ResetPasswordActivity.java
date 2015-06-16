@@ -25,11 +25,14 @@ import netUtils.response.user.ResetPasswordResponse;
 
 public class ResetPasswordActivity extends Activity
 {
+    // Widgets
     private ClearEditText newPasswordEditText;
     private ClearEditText confirmPasswordEditText;
 
+    // Local Data
     private String code;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

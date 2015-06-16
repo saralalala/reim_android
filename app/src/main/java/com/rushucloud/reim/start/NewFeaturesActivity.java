@@ -8,6 +8,7 @@ import com.umeng.analytics.MobclickAgent;
 
 public class NewFeaturesActivity extends Activity
 {
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

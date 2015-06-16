@@ -27,15 +27,6 @@ import classes.widget.ReimProgressDialog;
 
 public class ReimApplication extends Application
 {
-    public static int TAB_REIM = 0;
-    public static int TAB_REPORT = 1;
-    public static int TAB_REPORT_MINE = 0;
-    public static int TAB_REPORT_OTHERS = 1;
-    public static int TAB_STATISTICS = 2;
-    public static int TAB_STATISTICS_MINE = 0;
-    public static int TAB_STATISTICS_OTHERS = 1;
-    public static int TAB_ME = 3;
-
     public static Typeface TypeFaceYaHei;
     public static Typeface TypeFaceAleoLight;
 
@@ -43,9 +34,9 @@ public class ReimApplication extends Application
 
     private static Context context;
 
-    private static int tabIndex = TAB_REIM;
-    private static int reportTabIndex = TAB_REPORT_MINE;
-    private static int statTabIndex = TAB_STATISTICS_MINE;
+    private static int tabIndex = Constant.TAB_REIM;
+    private static int reportTabIndex = Constant.TAB_REPORT_MINE;
+    private static int statTabIndex = Constant.TAB_STATISTICS_MINE;
     private static List<Integer> mineUnreadList = new ArrayList<>();
     private static List<Integer> othersUnreadList = new ArrayList<>();
     private static int unreadMessagesCount;

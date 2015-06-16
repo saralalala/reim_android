@@ -29,15 +29,18 @@ import classes.widget.ReimProgressDialog;
 
 public class ContactActivity extends Activity
 {
+    // Widgets
     private ContactListViewAdapter adapter;
     private PinnedSectionListView contactListView;
     private LinearLayout indexLayout;
     private TextView centralTextView;
 
+    // Local Data
     private List<User> contactList = new ArrayList<>();
     private List<User> contactChosenList = new ArrayList<>();
     private boolean hasInit = false;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

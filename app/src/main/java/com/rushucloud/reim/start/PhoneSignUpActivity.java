@@ -37,15 +37,18 @@ import netUtils.response.user.VerifyCodeResponse;
 
 public class PhoneSignUpActivity extends Activity
 {
+    // Widgets
     private ClearEditText phoneEditText;
     private ClearEditText passwordEditText;
     private EditText codeEditText;
     private Button acquireCodeButton;
 
+    // Local Data
     private boolean showPassword = false;
     private int waitingTime;
     private Thread thread;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

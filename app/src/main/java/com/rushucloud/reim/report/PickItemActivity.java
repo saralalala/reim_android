@@ -36,17 +36,14 @@ import classes.model.Item;
 import classes.model.Report;
 import classes.model.Tag;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
 public class PickItemActivity extends Activity implements OnClickListener
 {
-    private static final int SORT_CONSUMED_DATE = 0;
-    private static final int SORT_AMOUNT = 1;
-
-    private static final int NEW_ITEM = 0;
-
+    // Widgets
     private ImageView filterImageView;
     private PopupWindow filterPopupWindow;
     private RadioButton sortAmountRadio;
@@ -65,6 +62,7 @@ public class PickItemActivity extends Activity implements OnClickListener
     private ListView itemListView;
     private ReportItemListViewAdapter adapter;
 
+    // Local Data
     private AppPreference appPreference;
     private static DBManager dbManager;
 
@@ -79,14 +77,14 @@ public class PickItemActivity extends Activity implements OnClickListener
     private List<Item> consumedShowList = new ArrayList<>();
     private ArrayList<Integer> consumedChosenList = null;
 
-    private int consumedSortType = SORT_CONSUMED_DATE;
+    private int consumedSortType = Constant.SORT_CONSUMED_DATE;
     private boolean consumedSortReverse = false;
     private boolean[] consumedTagCheck;
     private boolean[] consumedCategoryCheck;
     private List<Tag> consumedFilterTagList = new ArrayList<>();
     private List<Category> consumedFilterCategoryList = new ArrayList<>();
 
-    private int consumedTempSortType = SORT_CONSUMED_DATE;
+    private int consumedTempSortType = Constant.SORT_CONSUMED_DATE;
     private boolean consumedTempSortReverse = false;
     private boolean[] consumedTempTagCheck;
     private boolean[] consumedTempCategoryCheck;
@@ -95,14 +93,14 @@ public class PickItemActivity extends Activity implements OnClickListener
     private List<Item> budgetShowList = new ArrayList<>();
     private ArrayList<Integer> budgetChosenList = null;
 
-    private int budgetSortType = SORT_CONSUMED_DATE;
+    private int budgetSortType = Constant.SORT_CONSUMED_DATE;
     private boolean budgetSortReverse = false;
     private boolean[] budgetTagCheck;
     private boolean[] budgetCategoryCheck;
     private List<Tag> budgetFilterTagList = new ArrayList<>();
     private List<Category> budgetFilterCategoryList = new ArrayList<>();
 
-    private int budgetTempSortType = SORT_CONSUMED_DATE;
+    private int budgetTempSortType = Constant.SORT_CONSUMED_DATE;
     private boolean budgetTempSortReverse = false;
     private boolean[] budgetTempTagCheck;
     private boolean[] budgetTempCategoryCheck;
@@ -111,18 +109,19 @@ public class PickItemActivity extends Activity implements OnClickListener
     private List<Item> borrowingShowList = new ArrayList<>();
     private ArrayList<Integer> borrowingChosenList = null;
 
-    private int borrowingSortType = SORT_CONSUMED_DATE;
+    private int borrowingSortType = Constant.SORT_CONSUMED_DATE;
     private boolean borrowingSortReverse = false;
     private boolean[] borrowingTagCheck;
     private boolean[] borrowingCategoryCheck;
     private List<Tag> borrowingFilterTagList = new ArrayList<>();
     private List<Category> borrowingFilterCategoryList = new ArrayList<>();
 
-    private int borrowingTempSortType = SORT_CONSUMED_DATE;
+    private int borrowingTempSortType = Constant.SORT_CONSUMED_DATE;
     private boolean borrowingTempSortReverse = false;
     private boolean[] borrowingTempTagCheck;
     private boolean[] borrowingTempCategoryCheck;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -167,7 +166,7 @@ public class PickItemActivity extends Activity implements OnClickListener
         {
             switch (requestCode)
             {
-                case NEW_ITEM:
+                case Constant.ACTIVITY_NEW_ITEM:
                 {
                     int itemID = data.getIntExtra("itemID", -1);
                     if (itemID > 0)
@@ -334,7 +333,7 @@ public class PickItemActivity extends Activity implements OnClickListener
                     Intent intent = new Intent(PickItemActivity.this, EditItemActivity.class);
                     intent.putExtra("fromPickItems", true);
                     intent.putExtra("type", tabIndex);
-                    ViewUtils.goForwardForResult(PickItemActivity.this, intent, NEW_ITEM);
+                    ViewUtils.goForwardForResult(PickItemActivity.this, intent, Constant.ACTIVITY_NEW_ITEM);
                 }
                 else
                 {
@@ -435,10 +434,10 @@ public class PickItemActivity extends Activity implements OnClickListener
                 selectSortDateRadio();
                 if (tabIndex == 0)
                 {
-                    if (consumedTempSortType != SORT_CONSUMED_DATE)
+                    if (consumedTempSortType != Constant.SORT_CONSUMED_DATE)
                     {
                         consumedTempSortReverse = false;
-                        consumedTempSortType = SORT_CONSUMED_DATE;
+                        consumedTempSortType = Constant.SORT_CONSUMED_DATE;
                     }
                     else
                     {
@@ -447,10 +446,10 @@ public class PickItemActivity extends Activity implements OnClickListener
                 }
                 else if (tabIndex == 1)
                 {
-                    if (budgetTempSortType != SORT_CONSUMED_DATE)
+                    if (budgetTempSortType != Constant.SORT_CONSUMED_DATE)
                     {
                         budgetTempSortReverse = false;
-                        budgetTempSortType = SORT_CONSUMED_DATE;
+                        budgetTempSortType = Constant.SORT_CONSUMED_DATE;
                     }
                     else
                     {
@@ -459,10 +458,10 @@ public class PickItemActivity extends Activity implements OnClickListener
                 }
                 else
                 {
-                    if (borrowingTempSortType != SORT_CONSUMED_DATE)
+                    if (borrowingTempSortType != Constant.SORT_CONSUMED_DATE)
                     {
                         borrowingTempSortReverse = false;
-                        borrowingTempSortType = SORT_CONSUMED_DATE;
+                        borrowingTempSortType = Constant.SORT_CONSUMED_DATE;
                     }
                     else
                     {
@@ -481,10 +480,10 @@ public class PickItemActivity extends Activity implements OnClickListener
                 selectSortAmountRadio();
                 if (tabIndex == 0)
                 {
-                    if (consumedTempSortType != SORT_AMOUNT)
+                    if (consumedTempSortType != Constant.SORT_AMOUNT)
                     {
                         consumedTempSortReverse = false;
-                        consumedTempSortType = SORT_AMOUNT;
+                        consumedTempSortType = Constant.SORT_AMOUNT;
                     }
                     else
                     {
@@ -493,10 +492,10 @@ public class PickItemActivity extends Activity implements OnClickListener
                 }
                 else if (tabIndex == 1)
                 {
-                    if (budgetTempSortType != SORT_AMOUNT)
+                    if (budgetTempSortType != Constant.SORT_AMOUNT)
                     {
                         budgetTempSortReverse = false;
-                        budgetTempSortType = SORT_AMOUNT;
+                        budgetTempSortType = Constant.SORT_AMOUNT;
                     }
                     else
                     {
@@ -505,10 +504,10 @@ public class PickItemActivity extends Activity implements OnClickListener
                 }
                 else
                 {
-                    if (borrowingTempSortType != SORT_AMOUNT)
+                    if (borrowingTempSortType != Constant.SORT_AMOUNT)
                     {
                         borrowingTempSortReverse = false;
-                        borrowingTempSortType = SORT_AMOUNT;
+                        borrowingTempSortType = Constant.SORT_AMOUNT;
                     }
                     else
                     {
@@ -895,7 +894,7 @@ public class PickItemActivity extends Activity implements OnClickListener
             consumedTempSortType = consumedSortType;
             switch (consumedSortType)
             {
-                case SORT_CONSUMED_DATE:
+                case Constant.SORT_CONSUMED_DATE:
                 {
                     selectSortDateRadio();
                     if (consumedSortReverse)
@@ -904,7 +903,7 @@ public class PickItemActivity extends Activity implements OnClickListener
                     }
                     break;
                 }
-                case SORT_AMOUNT:
+                case Constant.SORT_AMOUNT:
                 {
                     selectSortAmountRadio();
                     if (consumedSortReverse)
@@ -925,7 +924,7 @@ public class PickItemActivity extends Activity implements OnClickListener
             budgetTempSortType = budgetSortType;
             switch (budgetSortType)
             {
-                case SORT_CONSUMED_DATE:
+                case Constant.SORT_CONSUMED_DATE:
                 {
                     selectSortDateRadio();
                     if (budgetSortReverse)
@@ -934,7 +933,7 @@ public class PickItemActivity extends Activity implements OnClickListener
                     }
                     break;
                 }
-                case SORT_AMOUNT:
+                case Constant.SORT_AMOUNT:
                 {
                     selectSortAmountRadio();
                     if (budgetSortReverse)
@@ -955,7 +954,7 @@ public class PickItemActivity extends Activity implements OnClickListener
             borrowingTempSortType = borrowingSortType;
             switch (borrowingSortType)
             {
-                case SORT_CONSUMED_DATE:
+                case Constant.SORT_CONSUMED_DATE:
                 {
                     selectSortDateRadio();
                     if (borrowingSortReverse)
@@ -964,7 +963,7 @@ public class PickItemActivity extends Activity implements OnClickListener
                     }
                     break;
                 }
-                case SORT_AMOUNT:
+                case Constant.SORT_AMOUNT:
                 {
                     selectSortAmountRadio();
                     if (borrowingSortReverse)
@@ -1170,10 +1169,10 @@ public class PickItemActivity extends Activity implements OnClickListener
 
         switch (sortType)
         {
-            case SORT_CONSUMED_DATE:
+            case Constant.SORT_CONSUMED_DATE:
                 Item.sortByConsumedDate(showList);
                 break;
-            case SORT_AMOUNT:
+            case Constant.SORT_AMOUNT:
                 Item.sortByAmount(showList);
                 break;
             default:

@@ -25,8 +25,10 @@ import netUtils.response.user.ForgotPasswordResponse;
 
 public class EmailFindActivity extends Activity
 {
+    // Widgets
     private ClearEditText emailEditText;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

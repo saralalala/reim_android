@@ -371,7 +371,8 @@
     <string name="prompt_feedback_phone">请留下联系方式，方便我们与你沟通</string>
     <string name="prompt_sender">创建人：</string>
     <string name="prompt_no_need_to_alarm">报告未在审核过程中，无需发送提醒</string>
-    <string name="prompt_choose_or_finish">您希望直接通过，还是选择其他人继续审批这份报告？</string>
+    <string name="prompt_choose_or_finish">你希望直接通过，还是选择其他人继续审批这份报告？</string>
+    <string name="prompt_revoke_report">确定要撤回这份报告？</string>
     <string name="prompt_no_lastest_data">还没到下个月呢</string>
     <string name="prompt_join">管理员通过申请后你就可以使用「云报销」了。在此之前，你也可以记录自己的 消费 ，加入公司后记录可以迁移。</string>
     <string name="prompt_joined">现在你可以使用「云报销」，记录你的 消费 ， 提交报销 申请，或者 审批 他人的报销了。</string>
@@ -466,6 +467,37 @@
     <string name="error_wechat_not_supported">微信未安装或当前微信版本不支持登录功能</string>
     <string name="error_no_wifi">当前不在Wi-Fi环境下，无法更新</string>
     <string name="error_timeout">连接超时</string>
+
+    <string name="error_network_system_error">系统错误，请稍后尝试</string>
+    <string name="error_network_user_not_exists">用户不存在或密码错误</string>
+    <string name="error_network_mail_send_error">邮件发送错误</string>
+    <string name="error_network_parameter_error">参数错误</string>
+    <string name="error_network_empty_header">非法请求</string>
+    <string name="error_network_auth_fail">认证失败</string>
+    <string name="error_network_user_exists">用户已经存在</string>
+    <string name="error_network_auth_timeout">你的账号已在其他地方登录，本地已经下线</string>
+    <string name="error_network_bad_permission">权限不足本次操作</string>
+    <string name="error_network_already_bound">用户已绑定</string>
+    <string name="error_network_user_auth_error">用户认证失败</string>
+    <string name="error_network_bad_items">条目信息不齐全，请重新填写</string>
+    <string name="error_network_empty_bind">尚未绑定账号</string>
+    <string name="error_network_close_report">您提交的报告已经处于关闭状态</string>
+    <string name="error_network_empty_category">没有选定分类</string>
+    <string name="error_network_zero_amount">没有报销额度</string>
+    <string name="error_network_older_company">报销中有条目不属于当前公司</string>
+    <string name="error_network_empty_report">消费不存在</string>
+    <string name="error_network_empty_items">没有提交消费</string>
+    <string name="error_network_item_added">消费已加入报告</string>
+    <string name="error_network_report_deleted">报告已被删除</string>
+    <string name="error_network_report_not_exists">报告不存在</string>
+    <string name="error_network_sign_in">用户名或密码错误</string>
+    <string name="error_network_name_exceed_limit">报告名不能超过50个字</string>
+    <string name="error_network_same_company">已经在同一家公司</string>
+    <string name="error_network_message_done">此消息已被处理</string>
+    <string name="error_network_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
+    <string name="error_network_not_unique">消费已被添加进另外的报告中</string>
+    <string name="error_network_company_exists">公司已存在</string>
+
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>

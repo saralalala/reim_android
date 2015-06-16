@@ -18,6 +18,7 @@ import classes.utils.ViewUtils;
 
 public class JoinCompleteActivity extends Activity
 {
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

@@ -24,6 +24,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
@@ -39,21 +40,20 @@ import netUtils.response.user.ModifyUserResponse;
 
 public class CompleteInfoActivity extends Activity
 {
-    private static final int PICK_IMAGE = 0;
-    private static final int TAKE_PHOTO = 1;
-    private static final int CROP_IMAGE = 2;
-
-    private AppPreference appPreference;
-    private DBManager dbManager;
-
+    // Widgets
     private ImageView avatarImageView;
     private ClearEditText nicknameEditText;
     private PopupWindow picturePopupWindow;
+
+    // Local Data
+    private AppPreference appPreference;
+    private DBManager dbManager;
 
     private User currentUser;
     private String avatarPath = "";
     private boolean newAvatar = false;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -83,15 +83,15 @@ public class CompleteInfoActivity extends Activity
         {
             try
             {
-                if (requestCode == PICK_IMAGE)
+                if (requestCode == Constant.ACTIVITY_PICK_IMAGE)
                 {
                     cropImage(data.getData());
                 }
-                else if (requestCode == TAKE_PHOTO)
+                else if (requestCode == Constant.ACTIVITY_TAKE_PHOTO)
                 {
                     cropImage(appPreference.getTempAvatarUri());
                 }
-                else if (requestCode == CROP_IMAGE)
+                else if (requestCode == Constant.ACTIVITY_CROP_IMAGE)
                 {
                     avatarPath = PhoneUtils.saveBitmapToFile(appPreference.getTempAvatarPath(), NetworkConstant.IMAGE_TYPE_AVATAR);
                     newAvatar = true;
@@ -190,7 +190,7 @@ public class CompleteInfoActivity extends Activity
 
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
-                startActivityForResult(intent, TAKE_PHOTO);
+                startActivityForResult(intent, Constant.ACTIVITY_TAKE_PHOTO);
             }
         });
 
@@ -203,7 +203,7 @@ public class CompleteInfoActivity extends Activity
 
                 Intent intent = new Intent(Intent.ACTION_PICK, null);
                 intent.setType("image/*");
-                startActivityForResult(intent, PICK_IMAGE);
+                startActivityForResult(intent, Constant.ACTIVITY_PICK_IMAGE);
             }
         });
 
@@ -241,7 +241,7 @@ public class CompleteInfoActivity extends Activity
         intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
         intent.putExtra("return-data", false);
         intent.putExtra("noFaceDetection", true);
-        startActivityForResult(intent, CROP_IMAGE);
+        startActivityForResult(intent, Constant.ACTIVITY_CROP_IMAGE);
     }
 
     private void showPictureWindow()

@@ -30,12 +30,15 @@ import netUtils.response.user.GetMessagesResponse;
 
 public class DidiExpenseActivity extends Activity
 {
+    // Widgets
     private TextView expenseTextView;
     private XListView expenseListView;
     private DidiExpenseListViewAdapter adapter;
 
+    // Local Data
     private List<DidiExpense> expenseList = new ArrayList<>();
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

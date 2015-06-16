@@ -40,11 +40,13 @@ import classes.utils.ViewUtils;
 
 public class GalleryActivity extends Activity
 {
+    // Widgets
     private TextView noImageTextView;
     private GalleryAdapter adapter;
     private Button confirmButton;
     private ImageLoader imageLoader;
 
+    // View
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -173,6 +175,11 @@ public class GalleryActivity extends Activity
         }.start();
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
     private ArrayList<String> getGalleryPaths()
     {
         ArrayList<String> pathList = new ArrayList<>();
@@ -207,10 +214,5 @@ public class GalleryActivity extends Activity
         // show the latest photo on top
         Collections.reverse(pathList);
         return pathList;
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

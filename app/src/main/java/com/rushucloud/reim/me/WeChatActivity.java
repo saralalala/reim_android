@@ -28,8 +28,10 @@ import netUtils.response.user.UnbindResponse;
 
 public class WeChatActivity extends Activity
 {
+    // Local Data
     private User currentUser;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

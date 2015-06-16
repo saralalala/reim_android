@@ -23,8 +23,10 @@ import netUtils.response.user.SignInResponse;
 
 public class SplashActivity extends Activity
 {
+    // Local Data
     private AppPreference appPreference;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

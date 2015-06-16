@@ -20,8 +20,10 @@ import classes.widget.ClearEditText;
 
 public class InputLocationActivity extends Activity
 {
+    // Widgets
     private ClearEditText locationEditText;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

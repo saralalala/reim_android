@@ -27,6 +27,7 @@ import classes.model.StatTag;
 import classes.model.StatUser;
 import classes.model.Tag;
 import classes.model.User;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
@@ -45,9 +46,7 @@ import netUtils.response.statistics.OthersStatResponse;
 
 public class StatisticsActivity extends Activity
 {
-    private static final int GET_DATA_INTERVAL = 600;
-    private static final int DEFAULT_ICON_ID = 11;
-
+    // Widgets
     private StatisticsListViewAdapter adapter;
     private XListView statListView;
 
@@ -71,6 +70,7 @@ public class StatisticsActivity extends Activity
     private RelativeLayout memberTitleLayout;
     private LinearLayout memberLayout;
 
+    // Local Data
     private DBManager dbManager;
 
     private int colorR[] = {60, 181, 232, 181, 141, 62, 255, 138, 238, 125, 56};
@@ -87,6 +87,7 @@ public class StatisticsActivity extends Activity
     private int userID;
     private int lastUpdateTime = 0;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -282,7 +283,7 @@ public class StatisticsActivity extends Activity
 
     private boolean needToGetData()
     {
-        return Utils.getCurrentTime() - lastUpdateTime > GET_DATA_INTERVAL;
+        return Utils.getCurrentTime() - lastUpdateTime > Constant.GET_DATA_INTERVAL;
     }
 
     private void drawOverviewLayout(double totalAmount, double newAmount)
@@ -324,7 +325,7 @@ public class StatisticsActivity extends Activity
                 totalAmount += category.getAmount();
                 if (localCategory != null)
                 {
-                    int iconID = localCategory.getIconID() < 1 ? DEFAULT_ICON_ID : localCategory.getIconID();
+                    int iconID = localCategory.getIconID() < 1 ? Constant.DEFAULT_ICON_ID : localCategory.getIconID();
                     category.setIconID(iconID);
                     category.setName(localCategory.getName());
                     if (categoryArray.indexOfKey(iconID) < 0)
@@ -341,11 +342,11 @@ public class StatisticsActivity extends Activity
             }
             if (deletedCategory.getAmount() > 0)
             {
-                if (categoryArray.indexOfKey(DEFAULT_ICON_ID) < 0)
+                if (categoryArray.indexOfKey(Constant.DEFAULT_ICON_ID) < 0)
                 {
-                    categoryArray.put(DEFAULT_ICON_ID, new ArrayList<StatCategory>());
+                    categoryArray.put(Constant.DEFAULT_ICON_ID, new ArrayList<StatCategory>());
                 }
-                List<StatCategory> list = categoryArray.get(DEFAULT_ICON_ID);
+                List<StatCategory> list = categoryArray.get(Constant.DEFAULT_ICON_ID);
                 list.add(deletedCategory);
             }
 
@@ -383,7 +384,7 @@ public class StatisticsActivity extends Activity
                 for (int j = 0; j < categories.size(); j++)
                 {
                     StatCategory category = categories.get(j);
-                    if (key != DEFAULT_ICON_ID)
+                    if (key != Constant.DEFAULT_ICON_ID)
                     {
                         category.setColor(Color.rgb(colorR[colorIndex] + j * rDiff,
                                                     colorG[colorIndex] + j * gDiff,

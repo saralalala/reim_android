@@ -13,6 +13,7 @@ import classes.widget.subscaleview.SubsamplingScaleImageView;
 
 public class SingleImageActivity extends Activity
 {
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

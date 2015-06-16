@@ -39,8 +39,10 @@ import netUtils.response.group.ModifyGroupResponse;
 
 public class CompanyNameActivity extends Activity
 {
+    // Widgets
     private ClearEditText companyEditText;
 
+    // Local Data
     private AppPreference appPreference;
     private DBManager dbManager;
     private Group currentGroup;
@@ -49,6 +51,7 @@ public class CompanyNameActivity extends Activity
     private ArrayList<String> inputChosenList;
     private List<User> contactChosenList;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -166,6 +169,37 @@ public class CompanyNameActivity extends Activity
         });
         builder.setNegativeButton(R.string.cancel, null);
         builder.create().show();
+    }
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
+    }
+
+    private void goForward()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putString("companyName", companyName);
+        bundle.putStringArrayList("inputList", inputList);
+        bundle.putStringArrayList("inputChosenList", inputChosenList);
+        bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
+        Intent intent = new Intent(CompanyNameActivity.this, InviteListActivity.class);
+        intent.putExtras(bundle);
+        ViewUtils.goForwardAndFinish(CompanyNameActivity.this, intent);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        Bundle bundle = new Bundle();
+        bundle.putString("companyName", companyName);
+        bundle.putStringArrayList("inputList", inputList);
+        bundle.putStringArrayList("inputChosenList", inputChosenList);
+        bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
+        Intent intent = new Intent(this, SetNicknameActivity.class);
+        intent.putExtras(bundle);
+        ViewUtils.goBackWithIntent(this, intent);
     }
 
     private void sendCreateGroupRequest(boolean forceCreate)
@@ -291,36 +325,5 @@ public class CompanyNameActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
-    }
-
-    private void goForward()
-    {
-        Bundle bundle = new Bundle();
-        bundle.putString("companyName", companyName);
-        bundle.putStringArrayList("inputList", inputList);
-        bundle.putStringArrayList("inputChosenList", inputChosenList);
-        bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
-        Intent intent = new Intent(CompanyNameActivity.this, InviteListActivity.class);
-        intent.putExtras(bundle);
-        ViewUtils.goForwardAndFinish(CompanyNameActivity.this, intent);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        Bundle bundle = new Bundle();
-        bundle.putString("companyName", companyName);
-        bundle.putStringArrayList("inputList", inputList);
-        bundle.putStringArrayList("inputChosenList", inputChosenList);
-        bundle.putSerializable("contactChosenList", (Serializable) contactChosenList);
-        Intent intent = new Intent(this, SetNicknameActivity.class);
-        intent.putExtras(bundle);
-        ViewUtils.goBackWithIntent(this, intent);
     }
 }

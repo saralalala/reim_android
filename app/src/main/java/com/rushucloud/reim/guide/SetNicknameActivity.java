@@ -33,8 +33,10 @@ import netUtils.response.user.ModifyUserResponse;
 
 public class SetNicknameActivity extends Activity
 {
+    // Widgets
     private ClearEditText nicknameEditText;
 
+    // Local Data
     private User currentUser;
     private boolean join;
     private String nickname;
@@ -43,6 +45,7 @@ public class SetNicknameActivity extends Activity
     private ArrayList<String> inputChosenList = new ArrayList<>();
     private List<User> contactChosenList = new ArrayList<>();
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

@@ -38,15 +38,18 @@ import netUtils.response.common.DownloadImageResponse;
 
 public class ShowItemActivity extends Activity
 {
+    // Widgets
     private LinearLayout invoiceLayout;
     private ImageView categoryImageView;
     private LinearLayout tagLayout;
     private LinearLayout memberLayout;
 
+    // Local Data
     private DBManager dbManager;
     private Item item;
     private boolean myItem;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

@@ -35,12 +35,14 @@ import netUtils.response.category.ModifyCategoryResponse;
 
 public class EditCategoryActivity extends Activity
 {
+    // Widgets
     private ImageView iconImageView;
     private ClearEditText nameEditText;
     //	private EditText limitEditText;
 //	private ToggleButton proveAheadToggleButton;
     private LinearLayout iconLayout;
 
+    // Local Data
     private DBManager dbManager;
 
     private List<Integer> iconList;
@@ -53,6 +55,7 @@ public class EditCategoryActivity extends Activity
     private int iconVerticalInterval;
     private int iconMaxCount;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

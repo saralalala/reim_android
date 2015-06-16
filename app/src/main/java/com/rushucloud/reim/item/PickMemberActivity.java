@@ -42,15 +42,18 @@ import netUtils.response.common.DownloadImageResponse;
 
 public class PickMemberActivity extends Activity
 {
+    // Widgets
     private ClearEditText memberEditText;
     private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
 
+    // Local Data
     private DBManager dbManager;
     private List<User> userList;
     private List<User> showList = new ArrayList<>();
     private List<User> chosenList;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

@@ -27,11 +27,13 @@ import netUtils.common.URLDef;
 
 public class WeChatShareActivity extends Activity
 {
+    // Local Data
     private String nickname;
     private String companyName;
     private String shareURL;
     private int count;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

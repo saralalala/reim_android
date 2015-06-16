@@ -41,6 +41,7 @@ import java.util.Map;
 
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
@@ -63,8 +64,7 @@ import netUtils.response.common.FeedbackResponse;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
-    private long exitTime = 0;
-
+    // Widgets
     private ViewPager viewPager;
     private ImageView reportTipImageView;
     private ImageView meTipImageView;
@@ -75,14 +75,17 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private EditText codeEditText;
     private EditText phoneEditText;
 
+    // Local Data
     private AppPreference appPreference;
     private DBManager dbManager;
+    private long exitTime = 0;
     private WebSocketClient webSocketClient;
     private boolean webSocketIsClosed = true;
 
     private List<Fragment> fragmentList = new ArrayList<>();
     private List<TabItem> tabItemList = new ArrayList<>();
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -105,11 +108,11 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         fragmentList.get(viewPager.getCurrentItem()).setUserVisibleHint(true);
 
         initData();
-        if (ReimApplication.getTabIndex() == ReimApplication.TAB_REIM)
+        if (ReimApplication.getTabIndex() == Constant.TAB_REIM)
         {
             dealWithReimGuideLayout();
         }
-        else if (ReimApplication.getTabIndex() == ReimApplication.TAB_REPORT)
+        else if (ReimApplication.getTabIndex() == Constant.TAB_REPORT)
         {
             dealWithReportGuideLayout();
         }
@@ -218,16 +221,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 if (arg0 == 2)
                 {
                     int currentIndex = viewPager.getCurrentItem();
-                    if (currentIndex == ReimApplication.TAB_REIM)
+                    if (currentIndex == Constant.TAB_REIM)
                     {
                         dealWithReimGuideLayout();
                     }
-                    else if (currentIndex == ReimApplication.TAB_REPORT)
+                    else if (currentIndex == Constant.TAB_REPORT)
                     {
                         showReportTip(false);
                         dealWithReportGuideLayout();
                     }
-                    else if (currentIndex == ReimApplication.TAB_ME)
+                    else if (currentIndex == Constant.TAB_ME)
                     {
                         showMeTip(false);
                     }
@@ -543,14 +546,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                             showReportTip(response.hasUnreadReports());
                             showMeTip(response.hasUnreadMessages());
 
-                            if (viewPager.getCurrentItem() == ReimApplication.TAB_ME)
+                            if (viewPager.getCurrentItem() == Constant.TAB_ME)
                             {
-                                MeFragment fragment = (MeFragment) fragmentList.get(ReimApplication.TAB_ME);
+                                MeFragment fragment = (MeFragment) fragmentList.get(Constant.TAB_ME);
                                 fragment.showTip();
                             }
-                            else if (viewPager.getCurrentItem() == ReimApplication.TAB_REPORT)
+                            else if (viewPager.getCurrentItem() == Constant.TAB_REPORT)
                             {
-                                ReportFragment fragment = (ReportFragment) fragmentList.get(ReimApplication.TAB_REPORT);
+                                ReportFragment fragment = (ReportFragment) fragmentList.get(Constant.TAB_REPORT);
                                 fragment.showBadge();
                             }
                         }
@@ -605,13 +608,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         // update group info
                         dbManager.syncGroup(response.getGroup());
 
-                        if (viewPager.getCurrentItem() == ReimApplication.TAB_ME)
+                        if (viewPager.getCurrentItem() == Constant.TAB_ME)
                         {
                             runOnUiThread(new Runnable()
                             {
                                 public void run()
                                 {
-                                    MeFragment fragment = (MeFragment) fragmentList.get(ReimApplication.TAB_ME);
+                                    MeFragment fragment = (MeFragment) fragmentList.get(Constant.TAB_ME);
                                     fragment.loadProfileView();
                                 }
                             });
@@ -695,18 +698,18 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                                 public void run()
                                 {
                                     sendGetEventsRequest();
-                                    ReportFragment fragment = (ReportFragment) fragmentList.get(ReimApplication.TAB_REPORT);
-                                    if (myReport && viewPager.getCurrentItem() == ReimApplication.TAB_REPORT &&
-                                            ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+                                    ReportFragment fragment = (ReportFragment) fragmentList.get(Constant.TAB_REPORT);
+                                    if (myReport && viewPager.getCurrentItem() == Constant.TAB_REPORT &&
+                                            ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
                                     {
                                         fragment.syncReports();
                                     }
-                                    else if (!myReport && viewPager.getCurrentItem() == ReimApplication.TAB_REPORT &&
-                                            ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_OTHERS)
+                                    else if (!myReport && viewPager.getCurrentItem() == Constant.TAB_REPORT &&
+                                            ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_OTHERS)
                                     {
                                         appPreference.setLastGetOthersReportTime(0);
                                         appPreference.saveAppPreference();
-                                        fragment.setListView(ReimApplication.TAB_REPORT_OTHERS, false);
+                                        fragment.setListView(Constant.TAB_REPORT_OTHERS, false);
                                     }
                                     showReportTip(true);
                                 }
@@ -721,13 +724,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                                     ReimApplication.setHasUnreadMessages(true);
                                     showMeTip(true);
 
-                                    if (viewPager.getCurrentItem() == ReimApplication.TAB_ME)
+                                    if (viewPager.getCurrentItem() == Constant.TAB_ME)
                                     {
                                         runOnUiThread(new Runnable()
                                         {
                                             public void run()
                                             {
-                                                MeFragment fragment = (MeFragment) fragmentList.get(ReimApplication.TAB_ME);
+                                                MeFragment fragment = (MeFragment) fragmentList.get(Constant.TAB_ME);
                                                 fragment.showTip();
                                             }
                                         });
@@ -773,7 +776,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             case R.id.tabItemReim:
             {
                 MobclickAgent.onEvent(MainActivity.this, "UMENG_ITEM");
-                position = ReimApplication.TAB_REIM;
+                position = Constant.TAB_REIM;
                 dealWithReimGuideLayout();
                 break;
             }
@@ -781,19 +784,19 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             {
                 MobclickAgent.onEvent(MainActivity.this, "UMENG_REPORT");
 
-                position = ReimApplication.TAB_REPORT;
+                position = Constant.TAB_REPORT;
                 showReportTip(false);
                 dealWithReportGuideLayout();
                 break;
             }
             case R.id.tabItemStat:
             {
-                position = ReimApplication.TAB_STATISTICS;
+                position = Constant.TAB_STATISTICS;
                 break;
             }
             case R.id.tabItemMe:
             {
-                position = ReimApplication.TAB_ME;
+                position = Constant.TAB_ME;
                 showMeTip(false);
                 break;
             }

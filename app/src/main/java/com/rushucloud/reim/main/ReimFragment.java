@@ -44,6 +44,7 @@ import classes.model.Item;
 import classes.model.Report;
 import classes.model.Tag;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
@@ -62,16 +63,7 @@ import netUtils.response.item.DeleteItemResponse;
 
 public class ReimFragment extends Fragment
 {
-    private static final int FILTER_TYPE_ALL = 0;
-    private static final int FILTER_TYPE_CONSUMED = 1;
-    private static final int FILTER_TYPE_BUDGET = 2;
-    private static final int FILTER_TYPE_BORROWING = 3;
-    private static final int FILTER_STATUS_ALL = 0;
-    private static final int FILTER_STATUS_FREE = 1;
-    private static final int FILTER_STATUS_ADDED = 2;
-    private static final int SORT_CONSUMED_DATE = 0;
-    private static final int SORT_AMOUNT = 1;
-
+    // Widgets
     private View view;
     private PopupWindow filterPopupWindow;
     private ImageView sortDateImageView;
@@ -85,6 +77,7 @@ public class ReimFragment extends Fragment
     private ItemListViewAdapter adapter;
     private PopupWindow deletePopupWindow;
 
+    // Local Data
     private AppPreference appPreference;
     private DBManager dbManager;
 
@@ -93,25 +86,26 @@ public class ReimFragment extends Fragment
     private List<Tag> tagList = new ArrayList<>();
     private List<Category> categoryList = new ArrayList<>();
 
-    private int sortType = SORT_CONSUMED_DATE;
+    private int sortType = Constant.SORT_CONSUMED_DATE;
     private boolean sortReverse = false;
-    private int filterType = FILTER_TYPE_ALL;
-    private int filterStatus = FILTER_STATUS_ALL;
+    private int filterType = Constant.FILTER_TYPE_ALL;
+    private int filterStatus = Constant.FILTER_STATUS_ALL;
     private boolean[] tagCheck;
     private boolean[] categoryCheck;
     private List<Tag> filterTagList = new ArrayList<>();
     private List<Category> filterCategoryList = new ArrayList<>();
 
-    private int tempFilterType = FILTER_TYPE_ALL;
+    private int tempFilterType = Constant.FILTER_TYPE_ALL;
     private boolean tempSortReverse = false;
-    private int tempFilterStatus = FILTER_STATUS_ALL;
-    private int tempSortType = SORT_CONSUMED_DATE;
+    private int tempFilterStatus = Constant.FILTER_STATUS_ALL;
+    private int tempSortType = Constant.SORT_CONSUMED_DATE;
     private boolean[] tempTagCheck;
     private boolean[] tempCategoryCheck;
 
     private boolean hasInit = false;
     private int itemIndex;
 
+    // View
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         if (view == null)
@@ -394,13 +388,13 @@ public class ReimFragment extends Fragment
                 MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_TIME");
                 sortAmountRadio.setChecked(false);
                 sortConsumedDateRadio.setChecked(true);
-                if (tempSortType != SORT_CONSUMED_DATE)
+                if (tempSortType != Constant.SORT_CONSUMED_DATE)
                 {
                     tempSortReverse = false;
                     sortAmountImageView.clearAnimation();
                     sortAmountImageView.setVisibility(View.GONE);
 
-                    tempSortType = SORT_CONSUMED_DATE;
+                    tempSortType = Constant.SORT_CONSUMED_DATE;
                     sortDateImageView.setVisibility(View.VISIBLE);
                 }
                 else
@@ -416,13 +410,13 @@ public class ReimFragment extends Fragment
                 MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_AMOUNT");
                 sortAmountRadio.setChecked(true);
                 sortConsumedDateRadio.setChecked(false);
-                if (tempSortType != SORT_AMOUNT)
+                if (tempSortType != Constant.SORT_AMOUNT)
                 {
                     tempSortReverse = false;
                     sortDateImageView.clearAnimation();
                     sortDateImageView.setVisibility(View.GONE);
 
-                    tempSortType = SORT_AMOUNT;
+                    tempSortType = Constant.SORT_AMOUNT;
                     sortAmountImageView.setVisibility(View.VISIBLE);
                 }
                 else
@@ -443,22 +437,22 @@ public class ReimFragment extends Fragment
             {
                 if (checkedId == filterTypeAllRadio.getId())
                 {
-                    tempFilterType = FILTER_TYPE_ALL;
+                    tempFilterType = Constant.FILTER_TYPE_ALL;
                 }
                 else if (checkedId == filterConsumedRadio.getId())
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PAY");
-                    tempFilterType = FILTER_TYPE_CONSUMED;
+                    tempFilterType = Constant.FILTER_TYPE_CONSUMED;
                 }
                 else if (checkedId == filterBudgetRadio.getId())
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PROVE_AHEAD");
-                    tempFilterType = FILTER_TYPE_BUDGET;
+                    tempFilterType = Constant.FILTER_TYPE_BUDGET;
                 }
                 else if (checkedId == filterBorrowingRadio.getId())
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_PROVE_AHEAD");
-                    tempFilterType = FILTER_TYPE_BORROWING;
+                    tempFilterType = Constant.FILTER_TYPE_BORROWING;
                 }
             }
         });
@@ -473,17 +467,17 @@ public class ReimFragment extends Fragment
             {
                 if (checkedId == filterStatusAllRadio.getId())
                 {
-                    tempFilterStatus = FILTER_STATUS_ALL;
+                    tempFilterStatus = Constant.FILTER_STATUS_ALL;
                 }
                 else if (checkedId == filterFreeRadio.getId())
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_NO_IN_REPORT");
-                    tempFilterStatus = FILTER_STATUS_FREE;
+                    tempFilterStatus = Constant.FILTER_STATUS_FREE;
                 }
                 else if (checkedId == filterAddedRadio.getId())
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_IN_REPORT");
-                    tempFilterStatus = FILTER_STATUS_ADDED;
+                    tempFilterStatus = Constant.FILTER_STATUS_ADDED;
                 }
             }
         });
@@ -530,7 +524,7 @@ public class ReimFragment extends Fragment
 
                 filterPopupWindow.dismiss();
 
-                int filterImage = filterType != FILTER_TYPE_ALL || filterStatus != FILTER_STATUS_ALL ||
+                int filterImage = filterType != Constant.FILTER_TYPE_ALL || filterStatus != Constant.FILTER_STATUS_ALL ||
                         !filterTagList.isEmpty() || !filterCategoryList.isEmpty() ? R.drawable.filter_full : R.drawable.filter_empty;
                 filterImageView.setImageResource(filterImage);
 
@@ -549,7 +543,7 @@ public class ReimFragment extends Fragment
 
                 switch (sortType)
                 {
-                    case SORT_CONSUMED_DATE:
+                    case Constant.SORT_CONSUMED_DATE:
                     {
                         sortConsumedDateRadio.setChecked(true);
                         sortAmountRadio.setChecked(false);
@@ -559,7 +553,7 @@ public class ReimFragment extends Fragment
                         sortAmountImageView.setVisibility(View.GONE);
                         break;
                     }
-                    case SORT_AMOUNT:
+                    case Constant.SORT_AMOUNT:
                     {
                         sortConsumedDateRadio.setChecked(false);
                         sortAmountRadio.setChecked(true);
@@ -577,16 +571,16 @@ public class ReimFragment extends Fragment
 
                 switch (filterType)
                 {
-                    case FILTER_TYPE_ALL:
+                    case Constant.FILTER_TYPE_ALL:
                         filterTypeRadioGroup.check(filterTypeAllRadio.getId());
                         break;
-                    case FILTER_TYPE_CONSUMED:
+                    case Constant.FILTER_TYPE_CONSUMED:
                         filterTypeRadioGroup.check(filterConsumedRadio.getId());
                         break;
-                    case FILTER_TYPE_BUDGET:
+                    case Constant.FILTER_TYPE_BUDGET:
                         filterTypeRadioGroup.check(filterBudgetRadio.getId());
                         break;
-                    case FILTER_TYPE_BORROWING:
+                    case Constant.FILTER_TYPE_BORROWING:
                         filterTypeRadioGroup.check(filterBorrowingRadio.getId());
                         break;
                     default:
@@ -595,13 +589,13 @@ public class ReimFragment extends Fragment
 
                 switch (filterStatus)
                 {
-                    case FILTER_STATUS_ALL:
+                    case Constant.FILTER_STATUS_ALL:
                         filterStatusRadioGroup.check(filterStatusAllRadio.getId());
                         break;
-                    case FILTER_STATUS_FREE:
+                    case Constant.FILTER_STATUS_FREE:
                         filterStatusRadioGroup.check(filterFreeRadio.getId());
                         break;
-                    case FILTER_STATUS_ADDED:
+                    case Constant.FILTER_STATUS_ADDED:
                         filterStatusRadioGroup.check(filterAddedRadio.getId());
                         break;
                     default:
@@ -692,23 +686,23 @@ public class ReimFragment extends Fragment
         showList.clear();
         for (Item item : itemList)
         {
-            if (filterType == FILTER_TYPE_CONSUMED && item.getType() != Item.TYPE_REIM)
+            if (filterType == Constant.FILTER_TYPE_CONSUMED && item.getType() != Item.TYPE_REIM)
             {
                 continue;
             }
-            if (filterType == FILTER_TYPE_BUDGET && item.getType() != Item.TYPE_BUDGET)
+            if (filterType == Constant.FILTER_TYPE_BUDGET && item.getType() != Item.TYPE_BUDGET)
             {
                 continue;
             }
-            if (filterType == FILTER_TYPE_BORROWING && item.getType() != Item.TYPE_BORROWING)
+            if (filterType == Constant.FILTER_TYPE_BORROWING && item.getType() != Item.TYPE_BORROWING)
             {
                 continue;
             }
-            if (filterStatus == FILTER_STATUS_FREE && item.getBelongReport() != null && item.getBelongReport().getLocalID() != -1)
+            if (filterStatus == Constant.FILTER_STATUS_FREE && item.getBelongReport() != null && item.getBelongReport().getLocalID() != -1)
             {
                 continue;
             }
-            if (filterStatus == FILTER_STATUS_ADDED && (item.getBelongReport() == null || item.getBelongReport().getLocalID() == -1))
+            if (filterStatus == Constant.FILTER_STATUS_ADDED && (item.getBelongReport() == null || item.getBelongReport().getLocalID() == -1))
             {
                 continue;
             }
@@ -727,7 +721,7 @@ public class ReimFragment extends Fragment
 
         switch (sortType)
         {
-            case SORT_CONSUMED_DATE:
+            case Constant.SORT_CONSUMED_DATE:
             {
                 Item.sortByConsumedDate(showList);
                 if (sortReverse)
@@ -737,7 +731,7 @@ public class ReimFragment extends Fragment
                 buildItemListByConsumedDate();
                 break;
             }
-            case SORT_AMOUNT:
+            case Constant.SORT_AMOUNT:
             {
                 Item.sortByAmount(showList);
                 if (sortReverse)
@@ -856,7 +850,7 @@ public class ReimFragment extends Fragment
         adapter.setItemList(showList);
         adapter.notifyDataSetChanged();
 
-        int visibility = (filterType != FILTER_STATUS_ALL || filterStatus != FILTER_STATUS_ALL || !filterCategoryList.isEmpty() ||
+        int visibility = (filterType != Constant.FILTER_STATUS_ALL || filterStatus != Constant.FILTER_STATUS_ALL || !filterCategoryList.isEmpty() ||
                 !filterTagList.isEmpty()) && showList.isEmpty() ? View.VISIBLE : View.GONE;
         noResultLayout.setVisibility(visibility);
     }
@@ -990,11 +984,11 @@ public class ReimFragment extends Fragment
 
     private void showFilterWindow()
     {
-        if (sortReverse && sortType == SORT_CONSUMED_DATE)
+        if (sortReverse && sortType == Constant.SORT_CONSUMED_DATE)
         {
             sortDateImageView.startAnimation(rotateAnimation);
         }
-        else if (sortReverse && sortType == SORT_AMOUNT)
+        else if (sortReverse && sortType == Constant.SORT_AMOUNT)
         {
             sortAmountImageView.startAnimation(rotateAnimation);
         }

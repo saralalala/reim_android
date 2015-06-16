@@ -37,6 +37,7 @@ import classes.model.Item;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
@@ -65,13 +66,7 @@ import netUtils.response.report.ModifyReportResponse;
 
 public class EditReportActivity extends Activity
 {
-    private static final int PICK_MANAGER = 0;
-    private static final int PICK_CC = 1;
-    private static final int PICK_ITEMS = 2;
-
-    private AppPreference appPreference;
-    private DBManager dbManager;
-
+    // Widgets
     private EditText titleEditText;
     private TextView timeTextView;
     private TextView statusTextView;
@@ -84,6 +79,10 @@ public class EditReportActivity extends Activity
     private LinearLayout itemLayout;
     private ImageView commentTipImageView;
     private PopupWindow deletePopupWindow;
+
+    // Local Data
+    private AppPreference appPreference;
+    private DBManager dbManager;
 
     private Report report;
     private List<Item> itemList = new ArrayList<>();
@@ -104,6 +103,7 @@ public class EditReportActivity extends Activity
     private int itemTaskCount;
     private int itemTaskSuccessCount;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -161,21 +161,21 @@ public class EditReportActivity extends Activity
         {
             switch (requestCode)
             {
-                case PICK_MANAGER:
+                case Constant.ACTIVITY_PICK_MANAGER:
                 {
                     List<User> managerList = (List<User>) data.getSerializableExtra("managers");
                     report.setManagerList(managerList);
                     managerTextView.setText(report.getManagersName());
                     break;
                 }
-                case PICK_CC:
+                case Constant.ACTIVITY_PICK_CC:
                 {
                     List<User> ccList = (List<User>) data.getSerializableExtra("ccs");
                     report.setCCList(ccList);
                     ccTextView.setText(report.getCCsName());
                     break;
                 }
-                case PICK_ITEMS:
+                case Constant.ACTIVITY_PICK_ITEMS:
                 {
                     Bundle bundle = data.getExtras();
                     chosenItemIDList.clear();
@@ -326,7 +326,7 @@ public class EditReportActivity extends Activity
                 Intent intent = new Intent(EditReportActivity.this, PickManagerActivity.class);
                 intent.putExtra("managers", (Serializable) report.getManagerList());
                 intent.putExtra("newReport", newReport);
-                ViewUtils.goForwardForResult(EditReportActivity.this, intent, PICK_MANAGER);
+                ViewUtils.goForwardForResult(EditReportActivity.this, intent, Constant.ACTIVITY_PICK_MANAGER);
             }
         });
 
@@ -348,7 +348,7 @@ public class EditReportActivity extends Activity
                 Intent intent = new Intent(EditReportActivity.this, PickCCActivity.class);
                 intent.putExtra("ccs", (Serializable) report.getCCList());
                 intent.putExtra("newReport", newReport);
-                ViewUtils.goForwardForResult(EditReportActivity.this, intent, PICK_CC);
+                ViewUtils.goForwardForResult(EditReportActivity.this, intent, Constant.ACTIVITY_PICK_CC);
             }
         });
 
@@ -378,7 +378,7 @@ public class EditReportActivity extends Activity
                 bundle.putIntegerArrayList("chosenItemIDList", chosenItemIDList);
                 Intent intent = new Intent(EditReportActivity.this, PickItemActivity.class);
                 intent.putExtras(bundle);
-                ViewUtils.goForwardForResult(EditReportActivity.this, intent, PICK_ITEMS);
+                ViewUtils.goForwardForResult(EditReportActivity.this, intent, Constant.ACTIVITY_PICK_ITEMS);
             }
         });
 
@@ -1295,8 +1295,8 @@ public class EditReportActivity extends Activity
 
     private void goBackToMainActivity()
     {
-        ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
-        ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_MINE);
+        ReimApplication.setTabIndex(Constant.TAB_REPORT);
+        ReimApplication.setReportTabIndex(Constant.TAB_REPORT_MINE);
         if (fromPush)
         {
             Intent intent = new Intent(EditReportActivity.this, MainActivity.class);

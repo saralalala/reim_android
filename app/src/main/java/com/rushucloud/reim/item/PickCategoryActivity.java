@@ -31,14 +31,17 @@ import netUtils.response.common.DownloadImageResponse;
 
 public class PickCategoryActivity extends Activity
 {
+    // Widgets
     private CategoryExpandableListAdapter adapter;
 
+    // Local Data
     private DBManager dbManager;
     private List<Category> categoryList = null;
     private List<List<Category>> subCategoryList = null;
     private List<Boolean> check = null;
     private List<List<Boolean>> subCheck = null;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

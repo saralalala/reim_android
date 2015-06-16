@@ -29,11 +29,14 @@ import netUtils.response.user.ModifyUserResponse;
 
 public class BindEmailActivity extends Activity
 {
+    // Widgets
     private ClearEditText emailEditText;
 
+    // Local Data
     private User currentUser;
     private String originalEmail;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

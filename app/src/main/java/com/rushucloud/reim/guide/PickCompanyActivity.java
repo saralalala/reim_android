@@ -29,6 +29,7 @@ import classes.model.Group;
 import classes.model.Invite;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
@@ -48,13 +49,13 @@ import netUtils.response.user.SetAdminResponse;
 
 public class PickCompanyActivity extends Activity
 {
-    private static final int PICK_ADMIN = 0;
-
+    // Widgets
     private TextView completeTextView;
     private EditText companyEditText;
     private TextView sectionTextView;
     private CompanyListViewAdapter adapter;
 
+    // Local Data
     private List<Group> companyList = new ArrayList<>();
     private List<Group> invitedList = new ArrayList<>();
     private List<Invite> inviteList = new ArrayList<>();
@@ -63,6 +64,7 @@ public class PickCompanyActivity extends Activity
     private boolean hasInit = false;
     private boolean fromGuide = false;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -110,7 +112,7 @@ public class PickCompanyActivity extends Activity
         {
             switch (requestCode)
             {
-                case PICK_ADMIN:
+                case Constant.ACTIVITY_PICK_ADMIN:
                 {
                     ReimProgressDialog.setContext(this);
                     List<User> users = (List<User>) data.getSerializableExtra("users");
@@ -225,7 +227,7 @@ public class PickCompanyActivity extends Activity
             public void onClick(DialogInterface dialog, int which)
             {
                 Intent intent = new Intent(PickCompanyActivity.this, PickAdminActivity.class);
-                ViewUtils.goForwardForResult(PickCompanyActivity.this, intent, PICK_ADMIN);
+                ViewUtils.goForwardForResult(PickCompanyActivity.this, intent, Constant.ACTIVITY_PICK_ADMIN);
             }
         });
         builder.setNegativeButton(R.string.cancel, null);

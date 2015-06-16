@@ -32,16 +32,18 @@ import netUtils.response.user.VerifyCodeResponse;
 
 public class BindDidiActivity extends Activity
 {
+    // Widgets
     private ClearEditText phoneEditText;
     private EditText codeEditText;
     private Button acquireCodeButton;
 
+    // Local Data
     private User currentUser;
     private String originalPhone;
-
     private int waitingTime;
     private Thread thread;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

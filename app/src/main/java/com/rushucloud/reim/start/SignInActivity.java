@@ -40,12 +40,15 @@ import netUtils.response.user.SignInResponse;
 
 public class SignInActivity extends Activity
 {
+    // Widgets
     private ClearEditText usernameEditText;
     private ClearEditText passwordEditText;
     private PopupWindow forgotPopupWindow;
 
+    // Local Data
     private boolean showPassword = false;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

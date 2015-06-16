@@ -26,6 +26,7 @@ import classes.utils.ViewUtils;
 
 public class GuideStartActivity extends Activity
 {
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

@@ -24,11 +24,14 @@ import classes.widget.ReimProgressDialog;
 
 public class LanguageActivity extends Activity
 {
+    // Widgets
     private ImageView chineseImageView;
     private ImageView englishImageView;
 
+    // Local Data
     private boolean hasAction = false;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

@@ -43,6 +43,7 @@ import netUtils.response.common.DownloadImageResponse;
 
 public class PickManagerActivity extends Activity
 {
+    // Widgets
     private ClearEditText managerEditText;
     private RelativeLayout managerLayout;
     private CircleImageView avatarImageView;
@@ -50,6 +51,7 @@ public class PickManagerActivity extends Activity
     private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
 
+    // Local Data
     private AppPreference appPreference;
     private DBManager dbManager;
     private User currentUser;
@@ -61,6 +63,7 @@ public class PickManagerActivity extends Activity
     private boolean newReport;
     private boolean fromFollowing;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

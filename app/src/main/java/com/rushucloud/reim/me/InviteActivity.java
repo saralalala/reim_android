@@ -30,10 +30,12 @@ import netUtils.common.URLDef;
 
 public class InviteActivity extends Activity
 {
+    // Local Data
     private String nickname = "";
     private String companyName = "";
     private String shareURL = "";
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

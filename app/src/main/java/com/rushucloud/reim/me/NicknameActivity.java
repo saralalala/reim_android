@@ -28,11 +28,14 @@ import netUtils.response.user.ModifyUserResponse;
 
 public class NicknameActivity extends Activity
 {
+    // Widgets
     private ClearEditText nicknameEditText;
 
+    // Local Data
     private User currentUser;
     private String originalNickname;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

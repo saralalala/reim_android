@@ -29,21 +29,6 @@ import netUtils.common.NetworkConstant;
 
 public class ReimBroadcastReceiver extends BroadcastReceiver
 {
-    public static final int REPORT_MINE_REJECTED = 0;
-    public static final int REPORT_MINE_REJECTED_WITH_COMMENT = 1;
-    public static final int REPORT_MINE_APPROVED = 2;
-    public static final int REPORT_MINE_FINISHED = 3;
-    public static final int REPORT_MINE_SUBMMITED_ONLY_COMMENT = 4;
-    public static final int REPORT_MINE_REJECTED_ONLY_COMMENT = 5;
-    public static final int REPORT_MINE_APPROVED_ONLY_COMMENT = 6;
-    public static final int REPORT_MINE_FINISHED_ONLY_COMMENT = 7;
-    public static final int REPORT_OTHERS_SUBMMITED = 8;
-    public static final int REPORT_OTHERS_SUBMMITED_CC = 9;
-    public static final int REPORT_OTHERS_CAN_BE_APPROVED_ONLY_COMMENT = 10;
-    public static final int REPORT_OTHERS_SUBMITTED_ONLY_COMMENT = 11;
-    public static final int REPORT_OTHERS_REJECTED_ONLY_COMMENT = 12;
-    public static final int REPORT_OTHERS_APPROVED_ONLY_COMMENT = 13;
-
     private static NotificationManager manager = null;
     private static int notificationID = 0;
 
@@ -126,19 +111,22 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 
                     Intent newIntent = new Intent();
                     int pushType = classifyReportType(jObject);
-                    if (pushType == REPORT_MINE_REJECTED || pushType == REPORT_MINE_REJECTED_WITH_COMMENT)
+                    if (pushType == NetworkConstant.PUSH_REPORT_TYPE_MINE_REJECTED ||
+                            pushType == NetworkConstant.PUSH_REPORT_TYPE_MINE_REJECTED_WITH_COMMENT)
                     {
-                        if (pushType == REPORT_MINE_REJECTED_WITH_COMMENT)
+                        if (pushType == NetworkConstant.PUSH_REPORT_TYPE_MINE_REJECTED_WITH_COMMENT)
                         {
                             bundle.putBoolean("commentPrompt", true);
                         }
                         newIntent.setClass(context, EditReportActivity.class);
                     }
-                    else if (pushType == REPORT_MINE_APPROVED || pushType == REPORT_MINE_FINISHED || pushType == REPORT_OTHERS_SUBMMITED_CC)
+                    else if (pushType == NetworkConstant.PUSH_REPORT_TYPE_MINE_APPROVED ||
+                            pushType == NetworkConstant.PUSH_REPORT_TYPE_MINE_FINISHED ||
+                            pushType == NetworkConstant.PUSH_REPORT_TYPE_OTHERS_SUBMMITED_CC)
                     {
                         newIntent.setClass(context, ShowReportActivity.class);
                     }
-                    else if (pushType == REPORT_OTHERS_SUBMMITED)
+                    else if (pushType == NetworkConstant.PUSH_REPORT_TYPE_OTHERS_SUBMMITED)
                     {
                         newIntent.setClass(context, ApproveReportActivity.class);
                     }
@@ -252,59 +240,59 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
 
             if (myReport && !hasComment && status == Report.STATUS_REJECTED)
             {
-                return REPORT_MINE_REJECTED;
+                return NetworkConstant.PUSH_REPORT_TYPE_MINE_REJECTED;
             }
             else if (myReport && hasComment && !onlyComment && status == Report.STATUS_REJECTED)
             {
-                return REPORT_MINE_REJECTED_WITH_COMMENT;
+                return NetworkConstant.PUSH_REPORT_TYPE_MINE_REJECTED_WITH_COMMENT;
             }
             else if (myReport && !hasComment && status == Report.STATUS_APPROVED)
             {
-                return REPORT_MINE_APPROVED;
+                return NetworkConstant.PUSH_REPORT_TYPE_MINE_APPROVED;
             }
             else if (myReport && !hasComment && status == Report.STATUS_FINISHED)
             {
-                return REPORT_MINE_FINISHED;
+                return NetworkConstant.PUSH_REPORT_TYPE_MINE_FINISHED;
             }
             else if (myReport && hasComment && status == Report.STATUS_SUBMITTED)
             {
-                return REPORT_MINE_SUBMMITED_ONLY_COMMENT;
+                return NetworkConstant.PUSH_REPORT_TYPE_MINE_SUBMMITED_ONLY_COMMENT;
             }
             else if (myReport && hasComment && onlyComment && status == Report.STATUS_REJECTED)
             {
-                return REPORT_MINE_REJECTED_ONLY_COMMENT;
+                return NetworkConstant.PUSH_REPORT_TYPE_MINE_REJECTED_ONLY_COMMENT;
             }
             else if (myReport && hasComment && status == Report.STATUS_APPROVED)
             {
-                return REPORT_MINE_APPROVED_ONLY_COMMENT;
+                return NetworkConstant.PUSH_REPORT_TYPE_MINE_APPROVED_ONLY_COMMENT;
             }
             else if (myReport && hasComment && status == Report.STATUS_FINISHED)
             {
-                return REPORT_MINE_FINISHED_ONLY_COMMENT;
+                return NetworkConstant.PUSH_REPORT_TYPE_MINE_FINISHED_ONLY_COMMENT;
             }
             else if (!myReport && !hasComment && !isCC && status == Report.STATUS_SUBMITTED && myDecision == Report.STATUS_SUBMITTED)
             {
-                return REPORT_OTHERS_SUBMMITED;
+                return NetworkConstant.PUSH_REPORT_TYPE_OTHERS_SUBMMITED;
             }
             else if (!myReport && !hasComment && isCC && status == Report.STATUS_SUBMITTED)
             {
-                return REPORT_OTHERS_SUBMMITED_CC;
+                return NetworkConstant.PUSH_REPORT_TYPE_OTHERS_SUBMMITED_CC;
             }
             else if (!myReport && hasComment && !isCC && status == Report.STATUS_SUBMITTED && myDecision == Report.STATUS_SUBMITTED)
             {
-                return REPORT_OTHERS_CAN_BE_APPROVED_ONLY_COMMENT;
+                return NetworkConstant.PUSH_REPORT_TYPE_OTHERS_CAN_BE_APPROVED_ONLY_COMMENT;
             }
             else if (!myReport && hasComment && status == Report.STATUS_SUBMITTED)
             {
-                return REPORT_OTHERS_SUBMITTED_ONLY_COMMENT;
+                return NetworkConstant.PUSH_REPORT_TYPE_OTHERS_SUBMITTED_ONLY_COMMENT;
             }
             else if (!myReport && hasComment && status == Report.STATUS_REJECTED)
             {
-                return REPORT_OTHERS_REJECTED_ONLY_COMMENT;
+                return NetworkConstant.PUSH_REPORT_TYPE_OTHERS_REJECTED_ONLY_COMMENT;
             }
             else if (!myReport && hasComment && status == Report.STATUS_APPROVED)
             {
-                return REPORT_OTHERS_APPROVED_ONLY_COMMENT;
+                return NetworkConstant.PUSH_REPORT_TYPE_OTHERS_APPROVED_ONLY_COMMENT;
             }
             else
             {

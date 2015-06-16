@@ -27,7 +27,6 @@ import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
-import classes.utils.ReimBroadcastReceiver;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
@@ -42,11 +41,13 @@ import netUtils.response.report.ModifyReportResponse;
 
 public class CommentActivity extends Activity
 {
+    // Widgets
     private TextView commentTextView;
     private ListView commentListView;
     private CommentListViewAdapter adapter;
     private EditText commentEditText;
 
+    // Local Data
     private DBManager dbManager;
     private Report report;
     private List<Comment> commentList = new ArrayList<>();
@@ -55,6 +56,7 @@ public class CommentActivity extends Activity
     private boolean fromPush;
     private int pushType;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -387,11 +389,11 @@ public class CommentActivity extends Activity
             Intent intent = new Intent();
             intent.putExtras(bundle);
 
-            if (pushType == ReimBroadcastReceiver.REPORT_MINE_REJECTED_ONLY_COMMENT)
+            if (pushType == NetworkConstant.PUSH_REPORT_TYPE_MINE_REJECTED_ONLY_COMMENT)
             {
                 intent.setClass(this, EditReportActivity.class);
             }
-            else if (pushType == ReimBroadcastReceiver.REPORT_OTHERS_APPROVED_ONLY_COMMENT)
+            else if (pushType == NetworkConstant.PUSH_REPORT_TYPE_OTHERS_APPROVED_ONLY_COMMENT)
             {
                 intent.setClass(this, ApproveReportActivity.class);
             }

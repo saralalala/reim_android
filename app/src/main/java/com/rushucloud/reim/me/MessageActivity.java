@@ -24,6 +24,7 @@ import classes.model.Invite;
 import classes.model.Message;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
@@ -43,16 +44,17 @@ import netUtils.response.user.SetAdminResponse;
 
 public class MessageActivity extends Activity
 {
-    private static final int PICK_ADMIN = 0;
-
+    // Widgets
     private TextView contentTextView;
     private TextView dateTextView;
 
+    // Local Data
     private Message message;
     private Invite invite;
     private Apply apply;
     private boolean fromPush;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -96,7 +98,7 @@ public class MessageActivity extends Activity
         {
             switch (requestCode)
             {
-                case PICK_ADMIN:
+                case Constant.ACTIVITY_PICK_ADMIN:
                 {
                     List<User> users = (List<User>) data.getSerializableExtra("users");
                     sendSetAdminRequest(users);
@@ -216,7 +218,7 @@ public class MessageActivity extends Activity
             public void onClick(DialogInterface dialog, int which)
             {
                 Intent intent = new Intent(MessageActivity.this, PickAdminActivity.class);
-                ViewUtils.goForwardForResult(MessageActivity.this, intent, PICK_ADMIN);
+                ViewUtils.goForwardForResult(MessageActivity.this, intent, Constant.ACTIVITY_PICK_ADMIN);
             }
         });
         builder.setNegativeButton(R.string.cancel, null);
@@ -513,7 +515,7 @@ public class MessageActivity extends Activity
     {
         if (fromPush)
         {
-            ReimApplication.setTabIndex(ReimApplication.TAB_ME);
+            ReimApplication.setTabIndex(Constant.TAB_ME);
             Intent intent = new Intent(MessageActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

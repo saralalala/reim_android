@@ -36,16 +36,19 @@ import netUtils.response.tag.DeleteTagResponse;
 
 public class TagActivity extends Activity
 {
+    // Widgets
     private ListView tagListView;
     private TextView tagTextView;
     private TagListViewAdapter adapter;
     private PopupWindow operationPopupWindow;
 
+    // Local Data
     private DBManager dbManager;
 
     private List<Tag> tagList;
     private Tag currentTag;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

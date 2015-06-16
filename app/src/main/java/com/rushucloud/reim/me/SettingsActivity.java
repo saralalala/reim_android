@@ -21,6 +21,7 @@ import classes.widget.ReimProgressDialog;
 
 public class SettingsActivity extends Activity
 {
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

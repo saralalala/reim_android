@@ -29,11 +29,14 @@ import netUtils.response.report.ExportReportResponse;
 
 public class ExportActivity extends Activity
 {
+    // Widgets
     private ClearEditText emailEditText;
 
+    // Local Data
     private User currentUser;
     private Report report;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

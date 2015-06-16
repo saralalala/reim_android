@@ -39,6 +39,7 @@ import classes.adapter.ReportTagGridViewAdapter;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
@@ -59,14 +60,7 @@ import netUtils.response.report.SubordinatesReportResponse;
 
 public class ReportFragment extends Fragment implements OnClickListener
 {
-    private static final int GET_DATA_INTERVAL = 600;
-
-    private static final int SORT_UPDATE_DATE = 0;
-    private static final int SORT_CREATE_DATE = 1;
-    private static final int SORT_AMOUNT = 2;
-
-    private boolean hasInit = false;
-
+    // Widgets
     private View view;
 
     private ImageView filterImageView;
@@ -93,13 +87,16 @@ public class ReportFragment extends Fragment implements OnClickListener
     private Button exportButton;
     private Button deleteButton;
 
+    // Local Data
     private AppPreference appPreference;
     private DBManager dbManager;
+    private boolean hasInit = false;
+    private int reportIndex;
 
     private List<Report> mineList = new ArrayList<>();
     private List<Report> showMineList = new ArrayList<>();
-    private int mineSortType = SORT_UPDATE_DATE;
-    private int mineTempSortType = SORT_UPDATE_DATE;
+    private int mineSortType = Constant.SORT_UPDATE_DATE;
+    private int mineTempSortType = Constant.SORT_UPDATE_DATE;
     private boolean mineSortReverse = false;
     private boolean mineTempSortReverse = false;
     private boolean[] mineCheck;
@@ -107,15 +104,14 @@ public class ReportFragment extends Fragment implements OnClickListener
 
     private List<Report> othersList = new ArrayList<>();
     private List<Report> showOthersList = new ArrayList<>();
-    private int othersSortType = SORT_UPDATE_DATE;
-    private int othersTempSortType = SORT_UPDATE_DATE;
+    private int othersSortType = Constant.SORT_UPDATE_DATE;
+    private int othersTempSortType = Constant.SORT_UPDATE_DATE;
     private boolean othersSortReverse = false;
     private boolean othersTempSortReverse = false;
     private boolean[] othersCheck;
     private List<Integer> othersFilterStatusList = new ArrayList<>();
 
-    private int reportIndex;
-
+    // View
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         if (view == null)
@@ -282,7 +278,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             {
                 if ((operationPopupWindow == null || !operationPopupWindow.isShowing()) && position > 0)
                 {
-                    if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+                    if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
                     {
                         Report report = showMineList.get(position - 1);
 
@@ -370,13 +366,13 @@ public class ReportFragment extends Fragment implements OnClickListener
             public void onClick(View v)
             {
                 selectSortUpdateDateRadio();
-                if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+                if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_MODIFY_DATE");
-                    if (mineTempSortType != SORT_UPDATE_DATE)
+                    if (mineTempSortType != Constant.SORT_UPDATE_DATE)
                     {
                         mineTempSortReverse = false;
-                        mineTempSortType = SORT_UPDATE_DATE;
+                        mineTempSortType = Constant.SORT_UPDATE_DATE;
                     }
                     else
                     {
@@ -386,10 +382,10 @@ public class ReportFragment extends Fragment implements OnClickListener
                 else
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_MODIFY_DATE");
-                    if (othersTempSortType != SORT_UPDATE_DATE)
+                    if (othersTempSortType != Constant.SORT_UPDATE_DATE)
                     {
                         othersTempSortReverse = false;
-                        othersTempSortType = SORT_UPDATE_DATE;
+                        othersTempSortType = Constant.SORT_UPDATE_DATE;
                     }
                     else
                     {
@@ -404,13 +400,13 @@ public class ReportFragment extends Fragment implements OnClickListener
             public void onClick(View v)
             {
                 selectSortCreateDateRadio();
-                if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+                if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_CREATE_DATE");
-                    if (mineTempSortType != SORT_CREATE_DATE)
+                    if (mineTempSortType != Constant.SORT_CREATE_DATE)
                     {
                         mineTempSortReverse = false;
-                        mineTempSortType = SORT_CREATE_DATE;
+                        mineTempSortType = Constant.SORT_CREATE_DATE;
                     }
                     else
                     {
@@ -420,10 +416,10 @@ public class ReportFragment extends Fragment implements OnClickListener
                 else
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_CREATE_DATE");
-                    if (othersTempSortType != SORT_CREATE_DATE)
+                    if (othersTempSortType != Constant.SORT_CREATE_DATE)
                     {
                         othersTempSortReverse = false;
-                        othersTempSortType = SORT_CREATE_DATE;
+                        othersTempSortType = Constant.SORT_CREATE_DATE;
                     }
                     else
                     {
@@ -438,13 +434,13 @@ public class ReportFragment extends Fragment implements OnClickListener
             public void onClick(View v)
             {
                 selectSortAmountRadio();
-                if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+                if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_MY_AMOUNT");
-                    if (mineTempSortType != SORT_AMOUNT)
+                    if (mineTempSortType != Constant.SORT_AMOUNT)
                     {
                         mineTempSortReverse = false;
-                        mineTempSortType = SORT_AMOUNT;
+                        mineTempSortType = Constant.SORT_AMOUNT;
                     }
                     else
                     {
@@ -454,10 +450,10 @@ public class ReportFragment extends Fragment implements OnClickListener
                 else
                 {
                     MobclickAgent.onEvent(getActivity(), "UMENG_SHEET_OTHERS_AMOUNT");
-                    if (othersTempSortType != SORT_AMOUNT)
+                    if (othersTempSortType != Constant.SORT_AMOUNT)
                     {
                         othersTempSortReverse = false;
-                        othersTempSortType = SORT_AMOUNT;
+                        othersTempSortType = Constant.SORT_AMOUNT;
                     }
                     else
                     {
@@ -511,7 +507,7 @@ public class ReportFragment extends Fragment implements OnClickListener
         {
             public void onClick(View v)
             {
-                if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+                if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
                 {
                     mineSortReverse = mineTempSortReverse;
                     mineSortType = mineTempSortType;
@@ -558,7 +554,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             {
                 operationPopupWindow.dismiss();
 
-                Report report = ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE ?
+                Report report = ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE ?
                         showMineList.get(reportIndex) : showOthersList.get(reportIndex);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("report", report);
@@ -575,7 +571,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             {
                 operationPopupWindow.dismiss();
 
-                if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+                if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
                 {
                     final Report report = showMineList.get(reportIndex);
                     Builder builder = new Builder(getActivity());
@@ -643,7 +639,7 @@ public class ReportFragment extends Fragment implements OnClickListener
     public void setListView(int index, boolean readDatabase)
     {
         ReimApplication.setReportTabIndex(index);
-        if (index == ReimApplication.TAB_REPORT_MINE)
+        if (index == Constant.TAB_REPORT_MINE)
         {
             myTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
             othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
@@ -652,7 +648,7 @@ public class ReportFragment extends Fragment implements OnClickListener
         {
             myTitleTextView.setTextColor(ViewUtils.getColor(R.color.hint_light));
             othersTitleTextView.setTextColor(ViewUtils.getColor(R.color.major_light));
-            if (PhoneUtils.isNetworkConnected() && Utils.getCurrentTime() - appPreference.getLastGetOthersReportTime() > GET_DATA_INTERVAL)
+            if (PhoneUtils.isNetworkConnected() && Utils.getCurrentTime() - appPreference.getLastGetOthersReportTime() > Constant.GET_DATA_INTERVAL)
             {
                 sendSubordinatesReportsRequest();
             }
@@ -741,7 +737,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 
     private void reverseSortUpdateImageView()
     {
-        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
         {
             mineTempSortReverse = !mineTempSortReverse;
             if (!mineTempSortReverse) // status before change
@@ -769,7 +765,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 
     private void reverseSortCreateImageView()
     {
-        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
         {
             mineTempSortReverse = !mineTempSortReverse;
             if (!mineTempSortReverse) // status before change
@@ -797,7 +793,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 
     private void reverseSortAmountImageView()
     {
-        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
         {
             mineTempSortReverse = !mineTempSortReverse;
             if (!mineTempSortReverse) // status before change
@@ -850,13 +846,13 @@ public class ReportFragment extends Fragment implements OnClickListener
 
         switch (sortType)
         {
-            case SORT_UPDATE_DATE:
+            case Constant.SORT_UPDATE_DATE:
                 Report.sortByUpdateDate(resultList);
                 break;
-            case SORT_CREATE_DATE:
+            case Constant.SORT_CREATE_DATE:
                 Report.sortByCreateDate(resultList);
                 break;
-            case SORT_AMOUNT:
+            case Constant.SORT_AMOUNT:
             {
                 if (filterMine)
                 {
@@ -926,7 +922,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 
     private void refreshReportListView(boolean readDatabase)
     {
-        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
         {
             if (readDatabase)
             {
@@ -937,7 +933,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList, true));
             adapter.setReportList(showMineList);
             adapter.setUnreadList(ReimApplication.getMineUnreadList());
-            adapter.setTabIndex(ReimApplication.TAB_REPORT_MINE);
+            adapter.setTabIndex(Constant.TAB_REPORT_MINE);
             adapter.notifyDataSetChanged();
 
             int visibility = !mineFilterStatusList.isEmpty() && showMineList.isEmpty() ? View.VISIBLE : View.GONE;
@@ -953,7 +949,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                 othersList.clear();
                 othersList.addAll(readOthersReportList());
             }
-            if (!othersList.isEmpty() && othersFilterStatusList.isEmpty() && othersSortType == SORT_UPDATE_DATE && !othersSortReverse)
+            if (!othersList.isEmpty() && othersFilterStatusList.isEmpty() && othersSortType == Constant.SORT_UPDATE_DATE && !othersSortReverse)
             {
                 buildReportListByStatus();
             }
@@ -965,7 +961,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 
             adapter.setReportList(showOthersList);
             adapter.setUnreadList(ReimApplication.getOthersUnreadList());
-            adapter.setTabIndex(ReimApplication.TAB_REPORT_OTHERS);
+            adapter.setTabIndex(Constant.TAB_REPORT_OTHERS);
             adapter.notifyDataSetChanged();
 
             int visibility = !othersFilterStatusList.isEmpty() && showOthersList.isEmpty() ? View.VISIBLE : View.GONE;
@@ -979,13 +975,13 @@ public class ReportFragment extends Fragment implements OnClickListener
 
     private void showFilterWindow()
     {
-        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
         {
             mineTempSortReverse = false;
             mineTempSortType = mineSortType;
             switch (mineSortType)
             {
-                case SORT_UPDATE_DATE:
+                case Constant.SORT_UPDATE_DATE:
                 {
                     selectSortUpdateDateRadio();
                     if (mineSortReverse)
@@ -994,7 +990,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                     }
                     break;
                 }
-                case SORT_CREATE_DATE:
+                case Constant.SORT_CREATE_DATE:
                 {
                     selectSortCreateDateRadio();
                     if (mineSortReverse)
@@ -1003,7 +999,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                     }
                     break;
                 }
-                case SORT_AMOUNT:
+                case Constant.SORT_AMOUNT:
                 {
                     selectSortAmountRadio();
                     if (mineSortReverse)
@@ -1025,7 +1021,7 @@ public class ReportFragment extends Fragment implements OnClickListener
             othersTempSortType = othersSortType;
             switch (othersSortType)
             {
-                case SORT_UPDATE_DATE:
+                case Constant.SORT_UPDATE_DATE:
                 {
                     selectSortUpdateDateRadio();
                     if (othersSortReverse)
@@ -1034,7 +1030,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                     }
                     break;
                 }
-                case SORT_CREATE_DATE:
+                case Constant.SORT_CREATE_DATE:
                 {
                     selectSortCreateDateRadio();
                     if (othersSortReverse)
@@ -1043,7 +1039,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                     }
                     break;
                 }
-                case SORT_AMOUNT:
+                case Constant.SORT_AMOUNT:
                 {
                     selectSortAmountRadio();
                     if (othersSortReverse)
@@ -1066,7 +1062,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 
     private void showOperationWindow()
     {
-        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
         {
             Report report = showMineList.get(reportIndex);
             if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
@@ -1146,7 +1142,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                     {
                         public void run()
                         {
-                            int reportID = ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE ?
+                            int reportID = ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE ?
                                     report.getLocalID() : report.getServerID();
                             deleteLocalReport(reportID);
                         }
@@ -1276,7 +1272,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 
     private void deleteLocalReport(int reportID)
     {
-        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
         {
             if (dbManager.deleteReport(reportID))
             {
@@ -1340,7 +1336,7 @@ public class ReportFragment extends Fragment implements OnClickListener
 
     private void refreshReports()
     {
-        if (ReimApplication.getReportTabIndex() == ReimApplication.TAB_REPORT_MINE)
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
         {
             if (SyncUtils.canSyncToServer())
             {

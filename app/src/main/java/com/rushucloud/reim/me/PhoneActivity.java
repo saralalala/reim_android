@@ -28,6 +28,7 @@ import netUtils.response.user.UnbindResponse;
 
 public class PhoneActivity extends Activity
 {
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

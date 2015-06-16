@@ -27,9 +27,11 @@ import netUtils.response.user.SandboxOAuthResponse;
 
 public class WelcomeActivity extends Activity
 {
+    // Local Data
     private AppPreference appPreference;
     private long exitTime = 0;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

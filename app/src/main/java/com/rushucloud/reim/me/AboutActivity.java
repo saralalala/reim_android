@@ -20,10 +20,14 @@ import classes.utils.ViewUtils;
 
 public class AboutActivity extends Activity
 {
-    private long showTime;
-    private int showCount;
+    // Widgets
     private PopupWindow surprisePopupWindow;
 
+    // Local Data
+    private long showTime;
+    private int showCount;
+
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

@@ -30,6 +30,7 @@ import classes.model.StatUser;
 import classes.model.Tag;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
@@ -49,9 +50,8 @@ import netUtils.response.statistics.OthersStatResponse;
 
 public class StatisticsFragment extends Fragment
 {
-    private static final int GET_DATA_INTERVAL = 600;
-    private static final int DEFAULT_ICON_ID = 11;
 
+    // Widgets
     private View view;
     private TextView statTitleTextView;
     private RelativeLayout titleLayout;
@@ -97,6 +97,7 @@ public class StatisticsFragment extends Fragment
     private boolean hasMineData = false;
     private boolean hasOthersData = false;
 
+    // View
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         if (view == null)
@@ -147,12 +148,12 @@ public class StatisticsFragment extends Fragment
             if (PhoneUtils.isNetworkConnected())
             {
                 setListView(ReimApplication.getStatTabIndex());
-                if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_MINE && needToGetMineData())
+                if (ReimApplication.getStatTabIndex() == Constant.TAB_STATISTICS_MINE && needToGetMineData())
                 {
                     ReimProgressDialog.show();
                     sendGetMineDataRequest();
                 }
-                else if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_OTHERS && needToGetOthersData())
+                else if (ReimApplication.getStatTabIndex() == Constant.TAB_STATISTICS_OTHERS && needToGetOthersData())
                 {
                     ReimProgressDialog.show();
                     sendGetOthersDataRequest();
@@ -198,7 +199,7 @@ public class StatisticsFragment extends Fragment
             {
                 if (PhoneUtils.isNetworkConnected())
                 {
-                    if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_MINE)
+                    if (ReimApplication.getStatTabIndex() == Constant.TAB_STATISTICS_MINE)
                     {
                         sendGetMineDataRequest();
                     }
@@ -369,24 +370,24 @@ public class StatisticsFragment extends Fragment
 
     private boolean needToGetMineData()
     {
-        return !hasMineData || Utils.getCurrentTime() - appPreference.getLastGetMineStatTime() > GET_DATA_INTERVAL;
+        return !hasMineData || Utils.getCurrentTime() - appPreference.getLastGetMineStatTime() > Constant.GET_DATA_INTERVAL;
     }
 
     private boolean needToGetOthersData()
     {
-        return !hasOthersData || Utils.getCurrentTime() - appPreference.getLastGetOthersStatTime() > GET_DATA_INTERVAL;
+        return !hasOthersData || Utils.getCurrentTime() - appPreference.getLastGetOthersStatTime() > Constant.GET_DATA_INTERVAL;
     }
 
     private void refreshData()
     {
         if (PhoneUtils.isNetworkConnected())
         {
-            if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_MINE && needToGetMineData())
+            if (ReimApplication.getStatTabIndex() == Constant.TAB_STATISTICS_MINE && needToGetMineData())
             {
                 ReimProgressDialog.show();
                 sendGetMineDataRequest();
             }
-            else if (ReimApplication.getStatTabIndex() == ReimApplication.TAB_STATISTICS_OTHERS && needToGetOthersData())
+            else if (ReimApplication.getStatTabIndex() == Constant.TAB_STATISTICS_OTHERS && needToGetOthersData())
             {
                 ReimProgressDialog.show();
                 sendGetOthersDataRequest();
@@ -574,7 +575,7 @@ public class StatisticsFragment extends Fragment
             totalAmount += category.getAmount();
             if (localCategory != null)
             {
-                int iconID = localCategory.getIconID() < 1 ? DEFAULT_ICON_ID : localCategory.getIconID();
+                int iconID = localCategory.getIconID() < 1 ? Constant.DEFAULT_ICON_ID : localCategory.getIconID();
                 category.setIconID(iconID);
                 category.setName(localCategory.getName());
                 if (categoryArray.indexOfKey(iconID) < 0)
@@ -591,11 +592,11 @@ public class StatisticsFragment extends Fragment
         }
         if (deletedCategory.getAmount() > 0)
         {
-            if (categoryArray.indexOfKey(DEFAULT_ICON_ID) < 0)
+            if (categoryArray.indexOfKey(Constant.DEFAULT_ICON_ID) < 0)
             {
-                categoryArray.put(DEFAULT_ICON_ID, new ArrayList<StatCategory>());
+                categoryArray.put(Constant.DEFAULT_ICON_ID, new ArrayList<StatCategory>());
             }
-            List<StatCategory> list = categoryArray.get(DEFAULT_ICON_ID);
+            List<StatCategory> list = categoryArray.get(Constant.DEFAULT_ICON_ID);
             list.add(deletedCategory);
         }
 
@@ -633,7 +634,7 @@ public class StatisticsFragment extends Fragment
             for (int j = 0; j < categories.size(); j++)
             {
                 final StatCategory category = categories.get(j);
-                if (key != DEFAULT_ICON_ID)
+                if (key != Constant.DEFAULT_ICON_ID)
                 {
                     category.setColor(Color.rgb(colorR[colorIndex] + j * rDiff,
                                                 colorG[colorIndex] + j * gDiff,

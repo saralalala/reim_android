@@ -30,8 +30,10 @@ import netUtils.response.user.BindWeChatResponse;
 
 public class BindWeChatActivity extends Activity
 {
+    // Widgets
     private ClearEditText passwordEditText;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

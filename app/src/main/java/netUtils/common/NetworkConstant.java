@@ -1,5 +1,9 @@
 package netUtils.common;
 
+import com.rushucloud.reim.R;
+
+import classes.utils.ViewUtils;
+
 public class NetworkConstant
 {
     public static final String USER_AGENT = "ReimApp";
@@ -27,6 +31,21 @@ public class NetworkConstant
     public static final int PUSH_TYPE_ADMIN_MESSAGE = 5;
     public static final int PUSH_TYPE_APPLY = 6;
     public static final int PUSH_TYPE_APPLY_REPLY = 7;
+
+    public static final int PUSH_REPORT_TYPE_MINE_REJECTED = 0;
+    public static final int PUSH_REPORT_TYPE_MINE_REJECTED_WITH_COMMENT = 1;
+    public static final int PUSH_REPORT_TYPE_MINE_APPROVED = 2;
+    public static final int PUSH_REPORT_TYPE_MINE_FINISHED = 3;
+    public static final int PUSH_REPORT_TYPE_MINE_SUBMMITED_ONLY_COMMENT = 4;
+    public static final int PUSH_REPORT_TYPE_MINE_REJECTED_ONLY_COMMENT = 5;
+    public static final int PUSH_REPORT_TYPE_MINE_APPROVED_ONLY_COMMENT = 6;
+    public static final int PUSH_REPORT_TYPE_MINE_FINISHED_ONLY_COMMENT = 7;
+    public static final int PUSH_REPORT_TYPE_OTHERS_SUBMMITED = 8;
+    public static final int PUSH_REPORT_TYPE_OTHERS_SUBMMITED_CC = 9;
+    public static final int PUSH_REPORT_TYPE_OTHERS_CAN_BE_APPROVED_ONLY_COMMENT = 10;
+    public static final int PUSH_REPORT_TYPE_OTHERS_SUBMITTED_ONLY_COMMENT = 11;
+    public static final int PUSH_REPORT_TYPE_OTHERS_REJECTED_ONLY_COMMENT = 12;
+    public static final int PUSH_REPORT_TYPE_OTHERS_APPROVED_ONLY_COMMENT = 13;
 
     public static final int ERROR_SYSTEM_ERROR = -1;
     public static final int ERROR_USER_NOT_EXISTS = -3;
@@ -60,99 +79,99 @@ public class NetworkConstant
 
     public static String errorCodeToString(int code)
     {
-        String result = null;
+        int result = -1;
         switch (code)
         {
             case NetworkConstant.ERROR_SYSTEM_ERROR:
-                result = "系统错误，请稍后尝试";
+                result = R.string.error_network_system_error;
                 break;
             case NetworkConstant.ERROR_USER_NOT_EXISTS:
-                result = "用户不存在或密码错误";
+                result = R.string.error_network_user_not_exists;
                 break;
             case NetworkConstant.ERROR_MAIL_SEND_ERROR:
-                result = "邮件发送错误";
+                result = R.string.error_network_mail_send_error;
                 break;
             case NetworkConstant.ERROR_PARAMETER_ERROR:
-                result = "参数错误";
+                result = R.string.error_network_parameter_error;
                 break;
             case NetworkConstant.ERROR_EMPTY_HEADER:
-                result = "非法请求";
+                result = R.string.error_network_empty_header;
                 break;
             case NetworkConstant.ERROR_AUTH_FAIL:
-                result = "认证失败";
+                result = R.string.error_network_auth_fail;
                 break;
             case NetworkConstant.ERROR_USER_EXISTS:
-                result = "用户已经存在";
+                result = R.string.error_network_user_exists;
                 break;
             case NetworkConstant.ERROR_AUTH_TIMEOUT:
-                result = "你的账号已在其他地方登录，本地已经下线";
+                result = R.string.error_network_auth_timeout;
                 break;
             case NetworkConstant.ERROR_BAD_PERMISSION:
-                result = "权限不足本次操作";
+                result = R.string.error_network_bad_permission;
                 break;
             case NetworkConstant.ERROR_ALREADY_BOUND:
-                result = "用户已绑定";
+                result = R.string.error_network_already_bound;
                 break;
             case NetworkConstant.ERROR_USER_AUTH_ERROR:
-                result = "用户认证失败";
+                result = R.string.error_network_user_auth_error;
                 break;
             case NetworkConstant.ERROR_BAD_ITEMS:
-                result = "条目信息不齐全，请重新填写";
+                result = R.string.error_network_bad_items;
                 break;
             case NetworkConstant.ERROR_EMPTY_BIND:
-                result = "尚未绑定账号";
+                result = R.string.error_network_empty_bind;
                 break;
             case NetworkConstant.ERROR_CLOSE_REPORT:
-                result = "您提交的报告已经处于关闭状态";
+                result = R.string.error_network_close_report;
                 break;
             case NetworkConstant.ERROR_EMPTY_CATEGORY:
-                result = "没有选定分类";
+                result = R.string.error_network_empty_category;
                 break;
             case NetworkConstant.ERROR_ZERO_AMOUNT:
-                result = "没有报销额度";
+                result = R.string.error_network_zero_amount;
                 break;
             case NetworkConstant.ERROR_OLDER_COMPANY:
-                result = "报销中有条目不属于当前公司";
+                result = R.string.error_network_older_company;
                 break;
             case NetworkConstant.ERROR_EMPTY_REPORT:
-                result = "报销不存在";
+                result = R.string.error_network_empty_report;
                 break;
             case NetworkConstant.ERROR_EMPTY_ITEMS:
-                result = "没有提交项目";
+                result = R.string.error_network_empty_items;
                 break;
             case NetworkConstant.ERROR_ITEM_ADDED:
-                result = "条目已加入报销";
+                result = R.string.error_network_item_added;
                 break;
             case NetworkConstant.ERROR_REPORT_DELETED:
-                result = "报告已被删除";
+                result = R.string.error_network_report_deleted;
                 break;
             case NetworkConstant.ERROR_REPORT_NOT_EXISTS:
-                result = "报告不存在";
+                result = R.string.error_network_report_not_exists;
                 break;
             case NetworkConstant.ERROR_SIGN_IN:
-                result = "用户名或密码错误";
+                result = R.string.error_network_sign_in;
                 break;
             case NetworkConstant.ERROR_NAME_EXCEED_LIMIT:
-                result = "报告名不能超过50个字";
+                result = R.string.error_network_name_exceed_limit;
                 break;
             case NetworkConstant.ERROR_SAME_COMPANY:
-                result = "已经在同一家公司";
+                result = R.string.error_network_same_company;
                 break;
             case NetworkConstant.ERROR_MESSAGE_DONE:
-                result = "此消息已被处理";
+                result = R.string.error_network_message_done;
                 break;
             case NetworkConstant.ERROR_LAST_ADMIN:
-                result = "你是公司里最后一个管理员，请先指定公司里另一成员成为管理员";
+                result = R.string.error_network_last_admin;
                 break;
             case NetworkConstant.ERROR_NOT_UNIQUE:
-                result = "";
+                result = R.string.error_network_not_unique;
                 break;
             case NetworkConstant.ERROR_COMPANY_EXISTS:
-                result = "公司已存在";
+                result = R.string.error_network_company_exists;
                 break;
             default:
                 break;
         }
-        return result;
+        return result == -1? "" : ViewUtils.getString(result);
     }
 }

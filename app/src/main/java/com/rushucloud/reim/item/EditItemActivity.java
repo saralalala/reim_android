@@ -61,6 +61,7 @@ import classes.model.Report;
 import classes.model.Tag;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
@@ -76,14 +77,7 @@ import netUtils.response.common.DownloadImageResponse;
 
 public class EditItemActivity extends Activity
 {
-    private static final int PICK_IMAGE = 0;
-    private static final int TAKE_PHOTO = 1;
-    private static final int PICK_VENDOR = 2;
-    private static final int PICK_LOCATION = 3;
-    private static final int PICK_CATEGORY = 4;
-    private static final int PICK_TAG = 5;
-    private static final int PICK_MEMBER = 6;
-
+    // Widgets
     private EditText amountEditText;
     private ImageView amountWarningImageView;
 
@@ -119,11 +113,12 @@ public class EditItemActivity extends Activity
 
     private EditText noteEditText;
 
-    private List<ImageView> removeList = null;
-    boolean removeImageViewShown = false;
-
+    // Local Data
     private static AppPreference appPreference;
     private static DBManager dbManager;
+
+    private List<ImageView> removeList = null;
+    boolean removeImageViewShown = false;
 
     private List<Category> categoryList;
     private List<Tag> tagList;
@@ -141,6 +136,7 @@ public class EditItemActivity extends Activity
     private BDLocation currentLocation;
     private String currentCity = "";
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -194,7 +190,7 @@ public class EditItemActivity extends Activity
         {
             switch (requestCode)
             {
-                case PICK_IMAGE:
+                case Constant.ACTIVITY_PICK_IMAGE:
                 {
                     try
                     {
@@ -222,7 +218,7 @@ public class EditItemActivity extends Activity
                     }
                     break;
                 }
-                case TAKE_PHOTO:
+                case Constant.ACTIVITY_TAKE_PHOTO:
                 {
                     try
                     {
@@ -247,7 +243,7 @@ public class EditItemActivity extends Activity
                     }
                     break;
                 }
-                case PICK_VENDOR:
+                case Constant.ACTIVITY_PICK_VENDOR:
                 {
                     String vendor = data.getStringExtra("vendor");
                     item.setVendor(vendor);
@@ -266,28 +262,28 @@ public class EditItemActivity extends Activity
                     }
                     break;
                 }
-                case PICK_LOCATION:
+                case Constant.ACTIVITY_PICK_LOCATION:
                 {
                     item.setLocation(data.getStringExtra("location"));
                     String location = item.getLocation().isEmpty() ? getString(R.string.no_location) : item.getLocation();
                     locationTextView.setText(location);
                     break;
                 }
-                case PICK_CATEGORY:
+                case Constant.ACTIVITY_PICK_CATEGORY:
                 {
                     Category category = (Category) data.getSerializableExtra("category");
                     item.setCategory(category);
                     refreshCategoryView();
                     break;
                 }
-                case PICK_TAG:
+                case Constant.ACTIVITY_PICK_TAG:
                 {
                     List<Tag> tags = (List<Tag>) data.getSerializableExtra("tags");
                     item.setTags(tags);
                     refreshTagView();
                     break;
                 }
-                case PICK_MEMBER:
+                case Constant.ACTIVITY_PICK_MEMBER:
                 {
                     List<User> users = (List<User>) data.getSerializableExtra("users");
                     item.setRelevantUsers(users);
@@ -734,7 +730,7 @@ public class EditItemActivity extends Activity
 
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempInvoiceUri());
-                startActivityForResult(intent, TAKE_PHOTO);
+                startActivityForResult(intent, Constant.ACTIVITY_TAKE_PHOTO);
             }
         });
 
@@ -747,7 +743,7 @@ public class EditItemActivity extends Activity
 
                 Intent intent = new Intent(EditItemActivity.this, GalleryActivity.class);
                 intent.putExtra("maxCount", Item.MAX_INVOICE_COUNT - item.getInvoices().size());
-                startActivityForResult(intent, PICK_IMAGE);
+                startActivityForResult(intent, Constant.ACTIVITY_PICK_IMAGE);
             }
         });
 
@@ -846,7 +842,7 @@ public class EditItemActivity extends Activity
                     intent.putExtra("latitude", currentLocation.getLatitude());
                     intent.putExtra("longitude", currentLocation.getLongitude());
                 }
-                ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_VENDOR);
+                ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_VENDOR);
             }
         });
     }
@@ -865,7 +861,7 @@ public class EditItemActivity extends Activity
                 hideSoftKeyboard();
                 Intent intent = new Intent(EditItemActivity.this, PickLocationActivity.class);
                 intent.putExtra("currentCity", currentCity);
-                ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_LOCATION);
+                ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_LOCATION);
             }
         });
     }
@@ -891,7 +887,7 @@ public class EditItemActivity extends Activity
                     hideSoftKeyboard();
                     Intent intent = new Intent(EditItemActivity.this, PickCategoryActivity.class);
                     intent.putExtra("category", item.getCategory());
-                    ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_CATEGORY);
+                    ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_CATEGORY);
                 }
             }
         });
@@ -932,7 +928,7 @@ public class EditItemActivity extends Activity
                     hideSoftKeyboard();
                     Intent intent = new Intent(EditItemActivity.this, PickTagActivity.class);
                     intent.putExtra("tags", (Serializable) item.getTags());
-                    ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_TAG);
+                    ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_TAG);
                 }
             });
 
@@ -961,7 +957,7 @@ public class EditItemActivity extends Activity
                 hideSoftKeyboard();
                 Intent intent = new Intent(EditItemActivity.this, PickMemberActivity.class);
                 intent.putExtra("users", (Serializable) item.getRelevantUsers());
-                ViewUtils.goForwardForResult(EditItemActivity.this, intent, PICK_MEMBER);
+                ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_MEMBER);
             }
         });
 
@@ -1344,7 +1340,7 @@ public class EditItemActivity extends Activity
             item.setServerID(localItem.getServerID());
         }
         dbManager.syncItem(item);
-        ReimApplication.setTabIndex(ReimApplication.TAB_REIM);
+        ReimApplication.setTabIndex(Constant.TAB_REIM);
         ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
         ViewUtils.goBack(this);
     }

@@ -27,13 +27,16 @@ import netUtils.response.user.ForgotPasswordResponse;
 
 public class PhoneFindActivity extends Activity
 {
+    // Widgets
     private ClearEditText phoneEditText;
     private EditText codeEditText;
     private Button acquireCodeButton;
 
+    // Local Data
     private int waitingTime;
     private Thread thread;
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);

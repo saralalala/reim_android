@@ -21,6 +21,7 @@ import java.util.List;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
@@ -32,16 +33,16 @@ import netUtils.response.report.ApproveReportResponse;
 
 public class FollowingActivity extends Activity
 {
-    private static final int PICK_MANAGER = 0;
-    private static final int PICK_CC = 1;
-
+    // Widgets
     private TextView managerTextView;
     private TextView ccTextView;
 
+    // Local Data
     private Report report;
     private List<User> managerList = new ArrayList<>();
     private List<User> ccList = new ArrayList<>();
 
+    // View
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -81,14 +82,14 @@ public class FollowingActivity extends Activity
         {
             switch (requestCode)
             {
-                case PICK_MANAGER:
+                case Constant.ACTIVITY_PICK_MANAGER:
                 {
                     List<User> managerList = (List<User>) data.getSerializableExtra("managers");
                     report.setManagerList(managerList);
                     managerTextView.setText(report.getManagersName());
                     break;
                 }
-                case PICK_CC:
+                case Constant.ACTIVITY_PICK_CC:
                 {
                     List<User> ccList = (List<User>) data.getSerializableExtra("ccs");
                     report.setCCList(ccList);
@@ -137,7 +138,7 @@ public class FollowingActivity extends Activity
                 intent.putExtra("managers", (Serializable) report.getManagerList());
                 intent.putExtra("sender", report.getSender().getServerID());
                 intent.putExtra("fromFollowing", true);
-                ViewUtils.goForwardForResult(FollowingActivity.this, intent, PICK_MANAGER);
+                ViewUtils.goForwardForResult(FollowingActivity.this, intent, Constant.ACTIVITY_PICK_MANAGER);
             }
         });
         managerTextView.setText(report.getManagersName());
@@ -152,7 +153,7 @@ public class FollowingActivity extends Activity
                 intent.putExtra("ccs", (Serializable) report.getCCList());
                 intent.putExtra("sender", report.getSender().getServerID());
                 intent.putExtra("fromFollowing", true);
-                ViewUtils.goForwardForResult(FollowingActivity.this, intent, PICK_CC);
+                ViewUtils.goForwardForResult(FollowingActivity.this, intent, Constant.ACTIVITY_PICK_CC);
             }
         });
 
@@ -235,8 +236,8 @@ public class FollowingActivity extends Activity
 
     private void goBackToMainActivity()
     {
-        ReimApplication.setTabIndex(ReimApplication.TAB_REPORT);
-        ReimApplication.setReportTabIndex(ReimApplication.TAB_REPORT_OTHERS);
+        ReimApplication.setTabIndex(Constant.TAB_REPORT);
+        ReimApplication.setReportTabIndex(Constant.TAB_REPORT_OTHERS);
         ViewUtils.goBack(this);
     }
 }
