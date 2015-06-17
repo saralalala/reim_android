@@ -111,24 +111,6 @@ public class MessageActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void initData()
-    {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null)
-        {
-            message = (Message) bundle.getSerializable("message");
-            fromPush = bundle.getBoolean("fromPush", false);
-            if (message.getType() == Message.TYPE_INVITE)
-            {
-                invite = (Invite) message;
-            }
-            else if (message.getType() == Message.TYPE_APPLY)
-            {
-                apply = (Apply) message;
-            }
-        }
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -225,6 +207,46 @@ public class MessageActivity extends Activity
         builder.create().show();
     }
 
+    private void goBack()
+    {
+        if (fromPush)
+        {
+            ReimApplication.setTabIndex(Constant.TAB_ME);
+            Intent intent = new Intent(MessageActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent intent2 = new Intent(MessageActivity.this, MessageListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivities(new Intent[]{intent, intent2});
+            overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
+            finish();
+        }
+        else
+        {
+            ViewUtils.goBack(this);
+        }
+    }
+
+    // Data
+    private void initData()
+    {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null)
+        {
+            message = (Message) bundle.getSerializable("message");
+            fromPush = bundle.getBoolean("fromPush", false);
+            if (message.getType() == Message.TYPE_INVITE)
+            {
+                invite = (Invite) message;
+            }
+            else if (message.getType() == Message.TYPE_APPLY)
+            {
+                apply = (Apply) message;
+            }
+        }
+    }
+
+    // Network
     private void sendGetMessageRequest()
     {
         ReimProgressDialog.show();
@@ -509,25 +531,5 @@ public class MessageActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        if (fromPush)
-        {
-            ReimApplication.setTabIndex(Constant.TAB_ME);
-            Intent intent = new Intent(MessageActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            Intent intent2 = new Intent(MessageActivity.this, MessageListActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivities(new Intent[]{intent, intent2});
-            overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
-            finish();
-        }
-        else
-        {
-            ViewUtils.goBack(this);
-        }
     }
 }

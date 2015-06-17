@@ -192,35 +192,6 @@ public class EditReportActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
-        currentUser = appPreference.getCurrentUser();
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null)
-        {
-            fromPush = bundle.getBoolean("fromPush", false);
-            report = (Report) bundle.getSerializable("report");
-            if (fromPush)
-            {
-                report = dbManager.getReportByServerID(report.getServerID());
-            }
-            else
-            {
-                lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
-            }
-            newReport = report.getLocalID() == -1;
-            if (!newReport)
-            {
-                itemList = dbManager.getReportItems(report.getLocalID());
-                chosenItemIDList = Item.getItemsIDList(itemList);
-            }
-        }
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -660,6 +631,52 @@ public class EditReportActivity extends Activity
         imm.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
     }
 
+    private void goBackToMainActivity()
+    {
+        ReimApplication.setTabIndex(Constant.TAB_REPORT);
+        ReimApplication.setReportTabIndex(Constant.TAB_REPORT_MINE);
+        if (fromPush)
+        {
+            Intent intent = new Intent(EditReportActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            ViewUtils.goBackWithIntent(this, intent);
+        }
+        else
+        {
+            ViewUtils.goBack(this);
+        }
+    }
+
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+
+        currentUser = appPreference.getCurrentUser();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null)
+        {
+            fromPush = bundle.getBoolean("fromPush", false);
+            report = (Report) bundle.getSerializable("report");
+            if (fromPush)
+            {
+                report = dbManager.getReportByServerID(report.getServerID());
+            }
+            else
+            {
+                lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
+            }
+            newReport = report.getLocalID() == -1;
+            if (!newReport)
+            {
+                itemList = dbManager.getReportItems(report.getLocalID());
+                chosenItemIDList = Item.getItemsIDList(itemList);
+            }
+        }
+    }
+
     private boolean saveReport()
     {
         Report localReport = dbManager.getReportByLocalID(report.getLocalID());
@@ -681,6 +698,7 @@ public class EditReportActivity extends Activity
         return dbManager.updateReportItems(chosenItemIDList, report.getLocalID());
     }
 
+    // Network
     private void submitReport()
     {
         ReimProgressDialog.show();
@@ -1291,21 +1309,5 @@ public class EditReportActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBackToMainActivity()
-    {
-        ReimApplication.setTabIndex(Constant.TAB_REPORT);
-        ReimApplication.setReportTabIndex(Constant.TAB_REPORT_MINE);
-        if (fromPush)
-        {
-            Intent intent = new Intent(EditReportActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            ViewUtils.goBackWithIntent(this, intent);
-        }
-        else
-        {
-            ViewUtils.goBack(this);
-        }
     }
 }

@@ -72,14 +72,6 @@ public class BankNameActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
-        bankAccount = dbManager.getBankAccount(currentUser.getServerID());
-        originalName = bankAccount != null && !bankAccount.getName().isEmpty() ? bankAccount.getName() : "";
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -146,6 +138,28 @@ public class BankNameActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
+        bankAccount = dbManager.getBankAccount(currentUser.getServerID());
+        originalName = bankAccount != null && !bankAccount.getName().isEmpty() ? bankAccount.getName() : "";
+    }
+
+    // Network
     private void sendCreateBankAccountRequest()
     {
         ReimProgressDialog.show();
@@ -222,17 +236,5 @@ public class BankNameActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

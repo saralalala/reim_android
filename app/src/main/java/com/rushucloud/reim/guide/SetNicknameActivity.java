@@ -78,26 +78,6 @@ public class SetNicknameActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    @SuppressWarnings("unchecked")
-    private void initData()
-    {
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
-        join = getIntent().getBooleanExtra("join", false);
-        if (join)
-        {
-            nickname = getIntent().getStringExtra("nickname");
-        }
-        else
-        {
-            Bundle bundle = getIntent().getExtras();
-            nickname = bundle.getString("nickname", currentUser.getNickname());
-            companyName = bundle.getString("companyName", "");
-            inputList = bundle.getStringArrayList("inputList");
-            inputChosenList = bundle.getStringArrayList("inputChosenList");
-            contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
-        }
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -147,6 +127,40 @@ public class SetNicknameActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBackWithIntent(this, GuideStartActivity.class);
+    }
+
+    // Data
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
+        join = getIntent().getBooleanExtra("join", false);
+        if (join)
+        {
+            nickname = getIntent().getStringExtra("nickname");
+        }
+        else
+        {
+            Bundle bundle = getIntent().getExtras();
+            nickname = bundle.getString("nickname", currentUser.getNickname());
+            companyName = bundle.getString("companyName", "");
+            inputList = bundle.getStringArrayList("inputList");
+            inputChosenList = bundle.getStringArrayList("inputChosenList");
+            contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
+        }
+    }
+
+    // Network
     private void sendModifyUserInfoRequest()
     {
         ReimProgressDialog.show();
@@ -199,17 +213,5 @@ public class SetNicknameActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBackWithIntent(this, GuideStartActivity.class);
     }
 }

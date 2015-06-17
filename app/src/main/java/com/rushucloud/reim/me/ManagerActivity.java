@@ -107,20 +107,6 @@ public class ManagerActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
-        currentGroupID = appPreference.getCurrentGroupID();
-        currentUser = appPreference.getCurrentUser();
-        manager = currentUser != null ? currentUser.getDefaultManager() : null;
-
-        userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUser.getServerID());
-        User.sortByNickname(userList);
-        chosenList = currentUser.buildBaseManagerList();
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -236,20 +222,6 @@ public class ManagerActivity extends Activity
         });
     }
 
-    private void refreshManagerView()
-    {
-        if (manager != null)
-        {
-            nicknameTextView.setText(manager.getNickname());
-            ViewUtils.setImageViewBitmap(manager, avatarImageView);
-        }
-        else
-        {
-            nicknameTextView.setText(R.string.manager_not_set);
-            avatarImageView.setImageResource(R.drawable.default_avatar);
-        }
-    }
-
     private void initListView()
     {
         if (userList.isEmpty())
@@ -281,6 +253,47 @@ public class ManagerActivity extends Activity
         }
     }
 
+    private void refreshManagerView()
+    {
+        if (manager != null)
+        {
+            nicknameTextView.setText(manager.getNickname());
+            ViewUtils.setImageViewBitmap(manager, avatarImageView);
+        }
+        else
+        {
+            nicknameTextView.setText(R.string.manager_not_set);
+            avatarImageView.setImageResource(R.drawable.default_avatar);
+        }
+    }
+
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(managerEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+
+        currentGroupID = appPreference.getCurrentGroupID();
+        currentUser = appPreference.getCurrentUser();
+        manager = currentUser != null ? currentUser.getDefaultManager() : null;
+
+        userList = User.removeUserFromList(dbManager.getGroupUsers(currentGroupID), currentUser.getServerID());
+        User.sortByNickname(userList);
+        chosenList = currentUser.buildBaseManagerList();
+    }
+
     private void filterList()
     {
         showList.clear();
@@ -289,6 +302,7 @@ public class ManagerActivity extends Activity
         adapter.notifyDataSetChanged();
     }
 
+    // Network
     private void sendGetGroupRequest()
     {
         ReimProgressDialog.show();
@@ -411,17 +425,5 @@ public class ManagerActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(managerEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

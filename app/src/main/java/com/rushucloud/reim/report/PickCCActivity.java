@@ -89,25 +89,6 @@ public class PickCCActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    @SuppressWarnings("unchecked")
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
-        senderID = getIntent().getIntExtra("sender", -1);
-        newReport = getIntent().getBooleanExtra("newReport", false);
-        fromFollowing = getIntent().getBooleanExtra("fromFollowing", false);
-        userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
-        if (senderID != -1)
-        {
-            userList = User.removeUserFromList(userList, senderID);
-        }
-
-        List<User> ccList = (List<User>) getIntent().getSerializableExtra("ccs");
-        chosenList = ccList == null ? new ArrayList<User>() : ccList;
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -233,6 +214,41 @@ public class PickCCActivity extends Activity
         }
     }
 
+    private void hideSoftKeyboard()
+    {
+        if (ccEditText != null)
+        {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(ccEditText.getWindowToken(), 0);
+        }
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+
+        senderID = getIntent().getIntExtra("sender", -1);
+        newReport = getIntent().getBooleanExtra("newReport", false);
+        fromFollowing = getIntent().getBooleanExtra("fromFollowing", false);
+        userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
+        if (senderID != -1)
+        {
+            userList = User.removeUserFromList(userList, senderID);
+        }
+
+        List<User> ccList = (List<User>) getIntent().getSerializableExtra("ccs");
+        chosenList = ccList == null ? new ArrayList<User>() : ccList;
+    }
+
     private void filterList()
     {
         showList.clear();
@@ -241,6 +257,7 @@ public class PickCCActivity extends Activity
         adapter.notifyDataSetChanged();
     }
 
+    // Network
     private void sendDownloadAvatarRequest(final User user)
     {
         DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
@@ -272,20 +289,5 @@ public class PickCCActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        if (ccEditText != null)
-        {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(ccEditText.getWindowToken(), 0);
-        }
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

@@ -76,12 +76,6 @@ public class BindDidiActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
-        originalPhone = currentUser.getPhone();
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -172,6 +166,27 @@ public class BindDidiActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
+        originalPhone = currentUser.getPhone();
+    }
+
+    // Network
     private void getVerifyCode(String phoneNumber)
     {
         final String second = ViewUtils.getString(R.string.second);
@@ -292,18 +307,5 @@ public class BindDidiActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

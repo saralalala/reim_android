@@ -158,6 +158,19 @@ public class EmailSignUpActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBackWithIntent(EmailSignUpActivity.this, PhoneSignUpActivity.class);
+    }
+
+    // Network
     private void signUp()
     {
         MobclickAgent.onEvent(EmailSignUpActivity.this, "UMENG_REGIST_MAIL-SUBMIT");
@@ -284,17 +297,5 @@ public class EmailSignUpActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBackWithIntent(EmailSignUpActivity.this, PhoneSignUpActivity.class);
     }
 }

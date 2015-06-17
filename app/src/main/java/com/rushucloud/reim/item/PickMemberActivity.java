@@ -85,16 +85,6 @@ public class PickMemberActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    @SuppressWarnings("unchecked")
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-
-        int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
-        userList = dbManager.getGroupUsers(currentGroupID);
-        chosenList = (List<User>) getIntent().getSerializableExtra("users");
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -201,6 +191,32 @@ public class PickMemberActivity extends Activity
         }
     }
 
+    private void hideSoftKeyboard()
+    {
+        if (memberEditText != null)
+        {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(memberEditText.getWindowToken(), 0);
+        }
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+
+        int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
+        userList = dbManager.getGroupUsers(currentGroupID);
+        chosenList = (List<User>) getIntent().getSerializableExtra("users");
+    }
+
     private void filterList()
     {
         showList.clear();
@@ -209,6 +225,7 @@ public class PickMemberActivity extends Activity
         adapter.notifyDataSetChanged();
     }
 
+    // Network
     private void sendDownloadAvatarRequest(final User user)
     {
         DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
@@ -237,20 +254,5 @@ public class PickMemberActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        if (memberEditText != null)
-        {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(memberEditText.getWindowToken(), 0);
-        }
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

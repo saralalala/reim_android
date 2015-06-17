@@ -83,41 +83,6 @@ public class BankNumberActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
-        bankAccount = dbManager.getBankAccount(currentUser.getServerID());
-        originalAccount = bankAccount == null ? "" : bankAccount.getNumber();
-
-        try
-        {
-            codeMap.clear();
-
-            InputStream inputStream = getResources().openRawResource(R.raw.bank_code);
-            byte[] buffer = new byte[inputStream.available()];
-            //noinspection ResultOfMethodCallIgnored
-            inputStream.read(buffer);
-
-            String json = new String(buffer, "GB2312");
-            JSONObject jObject = new JSONObject(json);
-            Iterator<?> iterator = jObject.keys();
-            String key;
-            while (iterator.hasNext())
-            {
-                key = iterator.next().toString();
-                if (key != null && !key.isEmpty())
-                {
-                    codeMap.put(key, jObject.getString(key));
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -187,6 +152,54 @@ public class BankNumberActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(bankEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
+        bankAccount = dbManager.getBankAccount(currentUser.getServerID());
+        originalAccount = bankAccount == null ? "" : bankAccount.getNumber();
+
+        try
+        {
+            codeMap.clear();
+
+            InputStream inputStream = getResources().openRawResource(R.raw.bank_code);
+            byte[] buffer = new byte[inputStream.available()];
+            //noinspection ResultOfMethodCallIgnored
+            inputStream.read(buffer);
+
+            String json = new String(buffer, "GB2312");
+            JSONObject jObject = new JSONObject(json);
+            Iterator<?> iterator = jObject.keys();
+            String key;
+            while (iterator.hasNext())
+            {
+                key = iterator.next().toString();
+                if (key != null && !key.isEmpty())
+                {
+                    codeMap.put(key, jObject.getString(key));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     private void setBankAccount(String newBankAccount)
     {
         bankAccount.setNumber(newBankAccount);
@@ -197,6 +210,7 @@ public class BankNumberActivity extends Activity
         }
     }
 
+    // Network
     private void sendCreateBankAccountRequest()
     {
         ReimProgressDialog.show();
@@ -311,17 +325,5 @@ public class BankNumberActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(bankEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

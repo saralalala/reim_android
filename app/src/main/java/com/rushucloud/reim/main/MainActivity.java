@@ -160,12 +160,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-    }
-
     private void initView()
     {
         ReimFragment reimFragment = new ReimFragment();
@@ -435,7 +429,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             userInfo.put(MCUserConfig.Contact.EMAIL, currentUser.getEmail());
         }
         Map<String, String> userInfoExtra = new HashMap<>();
-        userInfoExtra.put("AndroidVersion",Integer.toString(Build.VERSION.SDK_INT));
+        userInfoExtra.put("AndroidVersion", Integer.toString(Build.VERSION.SDK_INT));
         userInfoExtra.put("AppVersion", PhoneUtils.getAppVersion());
         mcUserConfig.setUserInfo(this, userInfo, userInfoExtra, null);
     }
@@ -512,6 +506,58 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
     }
 
+    public void onClick(View v)
+    {
+        resetTabItems();
+        hideReimGuideLayout();
+
+        int position = 0;
+        switch (v.getId())
+        {
+            case R.id.tabItemReim:
+            {
+                MobclickAgent.onEvent(MainActivity.this, "UMENG_ITEM");
+                position = Constant.TAB_REIM;
+                dealWithReimGuideLayout();
+                break;
+            }
+            case R.id.tabItemReport:
+            {
+                MobclickAgent.onEvent(MainActivity.this, "UMENG_REPORT");
+
+                position = Constant.TAB_REPORT;
+                showReportTip(false);
+                dealWithReportGuideLayout();
+                break;
+            }
+            case R.id.tabItemStat:
+            {
+                position = Constant.TAB_STATISTICS;
+                break;
+            }
+            case R.id.tabItemMe:
+            {
+                position = Constant.TAB_ME;
+                showMeTip(false);
+                break;
+            }
+            default:
+                break;
+        }
+
+        ReimApplication.setTabIndex(position);
+        viewPager.setCurrentItem(position, false);
+        tabItemList.get(position).setIconAlpha(1.0f);
+    }
+
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+    }
+
+    // Network
     private void sendGetEventsRequest()
     {
         EventsRequest request = new EventsRequest();
@@ -763,49 +809,5 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             LogUtils.println(e.getLocalizedMessage());
             e.printStackTrace();
         }
-    }
-
-    public void onClick(View v)
-    {
-        resetTabItems();
-        hideReimGuideLayout();
-
-        int position = 0;
-        switch (v.getId())
-        {
-            case R.id.tabItemReim:
-            {
-                MobclickAgent.onEvent(MainActivity.this, "UMENG_ITEM");
-                position = Constant.TAB_REIM;
-                dealWithReimGuideLayout();
-                break;
-            }
-            case R.id.tabItemReport:
-            {
-                MobclickAgent.onEvent(MainActivity.this, "UMENG_REPORT");
-
-                position = Constant.TAB_REPORT;
-                showReportTip(false);
-                dealWithReportGuideLayout();
-                break;
-            }
-            case R.id.tabItemStat:
-            {
-                position = Constant.TAB_STATISTICS;
-                break;
-            }
-            case R.id.tabItemMe:
-            {
-                position = Constant.TAB_ME;
-                showMeTip(false);
-                break;
-            }
-            default:
-                break;
-        }
-
-        ReimApplication.setTabIndex(position);
-        viewPager.setCurrentItem(position, false);
-        tabItemList.get(position).setIconAlpha(1.0f);
     }
 }

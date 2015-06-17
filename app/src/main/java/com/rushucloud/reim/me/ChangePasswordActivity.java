@@ -142,6 +142,21 @@ public class ChangePasswordActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(oldPasswordEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(newPasswordEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Network
     private void sendChangePasswordRequest(String oldPassword, final String newPassword)
     {
         ReimProgressDialog.show();
@@ -179,19 +194,5 @@ public class ChangePasswordActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(oldPasswordEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(newPasswordEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

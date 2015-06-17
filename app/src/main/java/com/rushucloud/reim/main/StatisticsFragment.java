@@ -50,7 +50,6 @@ import netUtils.response.statistics.OthersStatResponse;
 
 public class StatisticsFragment extends Fragment
 {
-
     // Widgets
     private View view;
     private TextView statTitleTextView;
@@ -366,38 +365,6 @@ public class StatisticsFragment extends Fragment
             statListView.setRefreshTime(Utils.secondToStringUpToMinute(appPreference.getLastGetOthersStatTime()));
         }
         refreshData();
-    }
-
-    private boolean needToGetMineData()
-    {
-        return !hasMineData || Utils.getCurrentTime() - appPreference.getLastGetMineStatTime() > Constant.GET_DATA_INTERVAL;
-    }
-
-    private boolean needToGetOthersData()
-    {
-        return !hasOthersData || Utils.getCurrentTime() - appPreference.getLastGetOthersStatTime() > Constant.GET_DATA_INTERVAL;
-    }
-
-    private void refreshData()
-    {
-        if (PhoneUtils.isNetworkConnected())
-        {
-            if (ReimApplication.getStatTabIndex() == Constant.TAB_STATISTICS_MINE && needToGetMineData())
-            {
-                ReimProgressDialog.show();
-                sendGetMineDataRequest();
-            }
-            else if (ReimApplication.getStatTabIndex() == Constant.TAB_STATISTICS_OTHERS && needToGetOthersData())
-            {
-                ReimProgressDialog.show();
-                sendGetOthersDataRequest();
-            }
-        }
-        else
-        {
-            statListView.stopRefresh();
-            ViewUtils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
-        }
     }
 
     private void drawCostPie(double ongoingAmount, double newAmount)
@@ -847,6 +814,40 @@ public class StatisticsFragment extends Fragment
                     memberLayout.addView(view);
                 }
             }
+        }
+    }
+
+    // Data
+    private boolean needToGetMineData()
+    {
+        return !hasMineData || Utils.getCurrentTime() - appPreference.getLastGetMineStatTime() > Constant.GET_DATA_INTERVAL;
+    }
+
+    private boolean needToGetOthersData()
+    {
+        return !hasOthersData || Utils.getCurrentTime() - appPreference.getLastGetOthersStatTime() > Constant.GET_DATA_INTERVAL;
+    }
+
+    // Network
+    private void refreshData()
+    {
+        if (PhoneUtils.isNetworkConnected())
+        {
+            if (ReimApplication.getStatTabIndex() == Constant.TAB_STATISTICS_MINE && needToGetMineData())
+            {
+                ReimProgressDialog.show();
+                sendGetMineDataRequest();
+            }
+            else if (ReimApplication.getStatTabIndex() == Constant.TAB_STATISTICS_OTHERS && needToGetOthersData())
+            {
+                ReimProgressDialog.show();
+                sendGetOthersDataRequest();
+            }
+        }
+        else
+        {
+            statListView.stopRefresh();
+            ViewUtils.showToast(getActivity(), R.string.error_get_data_network_unavailable);
         }
     }
 

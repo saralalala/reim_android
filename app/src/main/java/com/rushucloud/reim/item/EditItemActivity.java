@@ -297,57 +297,6 @@ public class EditItemActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-        locationClient = new LocationClient(getApplicationContext());
-
-        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
-        tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-
-        Intent intent = this.getIntent();
-        fromReim = intent.getBooleanExtra("fromReim", false);
-        fromEditReport = intent.getBooleanExtra("fromEditReport", false);
-        fromPickItems = intent.getBooleanExtra("fromPickItems", false);
-        int itemLocalID = intent.getIntExtra("itemLocalID", -1);
-        if (itemLocalID == -1)
-        {
-            newItem = true;
-            MobclickAgent.onEvent(this, "UMENG_NEW_ITEM");
-            item = new Item();
-            if (!categoryList.isEmpty())
-            {
-                item.setCategory(categoryList.get(0));
-            }
-            item.setConsumedDate(Utils.getCurrentTime());
-            item.setInvoices(new ArrayList<Image>());
-            if (fromPickItems)
-            {
-                item.setType(intent.getIntExtra("type", 0));
-            }
-            List<User> relevantUsers = new ArrayList<>();
-            relevantUsers.add(appPreference.getCurrentUser());
-            item.setRelevantUsers(relevantUsers);
-            originInvoiceList = new ArrayList<>();
-        }
-        else
-        {
-            newItem = false;
-            MobclickAgent.onEvent(this, "UMENG_EDIT_ITEM");
-            item = dbManager.getItemByLocalID(itemLocalID);
-            if (item == null)
-            {
-                ViewUtils.showToast(this, R.string.error_item_not_found);
-                goBack();
-            }
-            else
-            {
-                originInvoiceList = new ArrayList<>(item.getInvoices());
-            }
-        }
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -1325,24 +1274,78 @@ public class EditItemActivity extends Activity
         ViewUtils.dimBackground(this);
     }
 
+    private List<NumberPicker> findNumberPickers(ViewGroup viewGroup)
+    {
+        List<NumberPicker> pickerList = new ArrayList<>();
+        View child;
+        if (null != viewGroup)
+        {
+            for (int i = 0; i < viewGroup.getChildCount(); i++)
+            {
+                child = viewGroup.getChildAt(i);
+                if (child instanceof NumberPicker)
+                {
+                    pickerList.add((NumberPicker) child);
+                }
+                else if (child instanceof LinearLayout)
+                {
+                    List<NumberPicker> result = findNumberPickers((ViewGroup) child);
+                    if (result.size() > 0)
+                    {
+                        return result;
+                    }
+                }
+            }
+        }
+        return pickerList;
+    }
+
+    private void resizePicker()
+    {
+        int yearWidth = ViewUtils.dpToPixel(60);
+        int width = ViewUtils.dpToPixel(40);
+        int dateMargin = ViewUtils.dpToPixel(15);
+        int timeMargin = ViewUtils.dpToPixel(5);
+
+        LinearLayout datePickerContainer = (LinearLayout) datePicker.getChildAt(0);
+        LinearLayout dateSpinner = (LinearLayout) datePickerContainer.getChildAt(0);
+
+        NumberPicker yearPicker = (NumberPicker) dateSpinner.getChildAt(0);
+        LayoutParams params = new LayoutParams(yearWidth, LayoutParams.WRAP_CONTENT);
+        params.rightMargin = dateMargin;
+        yearPicker.setLayoutParams(params);
+
+        NumberPicker monthPicker = (NumberPicker) dateSpinner.getChildAt(1);
+        params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+        params.rightMargin = dateMargin;
+        monthPicker.setLayoutParams(params);
+
+        NumberPicker datePicker = (NumberPicker) dateSpinner.getChildAt(2);
+        params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+        datePicker.setLayoutParams(params);
+
+        List<NumberPicker> pickerList = findNumberPickers(timePicker);
+        for (int i = 0; i < pickerList.size(); i++)
+        {
+            NumberPicker picker = pickerList.get(i);
+            params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+            if (i == 0)
+            {
+                params.rightMargin = timeMargin;
+            }
+            else
+            {
+                params.leftMargin = timeMargin;
+            }
+            picker.setLayoutParams(params);
+        }
+    }
+
     private void hideSoftKeyboard()
     {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(amountEditText.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(noteEditText.getWindowToken(), 0);
-    }
-
-    private void saveItem()
-    {
-        Item localItem = dbManager.getItemByLocalID(item.getLocalID());
-        if (localItem != null)
-        {
-            item.setServerID(localItem.getServerID());
-        }
-        dbManager.syncItem(item);
-        ReimApplication.setTabIndex(Constant.TAB_REIM);
-        ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
-        ViewUtils.goBack(this);
     }
 
     private void goBack()
@@ -1366,6 +1369,72 @@ public class EditItemActivity extends Activity
         ViewUtils.goBack(this);
     }
 
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+        locationClient = new LocationClient(getApplicationContext());
+
+        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+        tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+
+        Intent intent = this.getIntent();
+        fromReim = intent.getBooleanExtra("fromReim", false);
+        fromEditReport = intent.getBooleanExtra("fromEditReport", false);
+        fromPickItems = intent.getBooleanExtra("fromPickItems", false);
+        int itemLocalID = intent.getIntExtra("itemLocalID", -1);
+        if (itemLocalID == -1)
+        {
+            newItem = true;
+            MobclickAgent.onEvent(this, "UMENG_NEW_ITEM");
+            item = new Item();
+            if (!categoryList.isEmpty())
+            {
+                item.setCategory(categoryList.get(0));
+            }
+            item.setConsumedDate(Utils.getCurrentTime());
+            item.setInvoices(new ArrayList<Image>());
+            if (fromPickItems)
+            {
+                item.setType(intent.getIntExtra("type", 0));
+            }
+            List<User> relevantUsers = new ArrayList<>();
+            relevantUsers.add(appPreference.getCurrentUser());
+            item.setRelevantUsers(relevantUsers);
+            originInvoiceList = new ArrayList<>();
+        }
+        else
+        {
+            newItem = false;
+            MobclickAgent.onEvent(this, "UMENG_EDIT_ITEM");
+            item = dbManager.getItemByLocalID(itemLocalID);
+            if (item == null)
+            {
+                ViewUtils.showToast(this, R.string.error_item_not_found);
+                goBack();
+            }
+            else
+            {
+                originInvoiceList = new ArrayList<>(item.getInvoices());
+            }
+        }
+    }
+
+    private void saveItem()
+    {
+        Item localItem = dbManager.getItemByLocalID(item.getLocalID());
+        if (localItem != null)
+        {
+            item.setServerID(localItem.getServerID());
+        }
+        dbManager.syncItem(item);
+        ReimApplication.setTabIndex(Constant.TAB_REIM);
+        ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+        ViewUtils.goBack(this);
+    }
+
+    // Network
     private void sendDownloadInvoiceRequest(final Image image)
     {
         DownloadImageRequest request = new DownloadImageRequest(image.getServerPath());
@@ -1491,73 +1560,6 @@ public class EditItemActivity extends Activity
             locationClient.setLocOption(option);
             locationClient.start();
         }
-    }
-
-    private void resizePicker()
-    {
-        int yearWidth = ViewUtils.dpToPixel(60);
-        int width = ViewUtils.dpToPixel(40);
-        int dateMargin = ViewUtils.dpToPixel(15);
-        int timeMargin = ViewUtils.dpToPixel(5);
-
-        LinearLayout datePickerContainer = (LinearLayout) datePicker.getChildAt(0);
-        LinearLayout dateSpinner = (LinearLayout) datePickerContainer.getChildAt(0);
-
-        NumberPicker yearPicker = (NumberPicker) dateSpinner.getChildAt(0);
-        LayoutParams params = new LayoutParams(yearWidth, LayoutParams.WRAP_CONTENT);
-        params.rightMargin = dateMargin;
-        yearPicker.setLayoutParams(params);
-
-        NumberPicker monthPicker = (NumberPicker) dateSpinner.getChildAt(1);
-        params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
-        params.rightMargin = dateMargin;
-        monthPicker.setLayoutParams(params);
-
-        NumberPicker datePicker = (NumberPicker) dateSpinner.getChildAt(2);
-        params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
-        datePicker.setLayoutParams(params);
-
-        List<NumberPicker> pickerList = findNumberPickers(timePicker);
-        for (int i = 0; i < pickerList.size(); i++)
-        {
-            NumberPicker picker = pickerList.get(i);
-            params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
-            if (i == 0)
-            {
-                params.rightMargin = timeMargin;
-            }
-            else
-            {
-                params.leftMargin = timeMargin;
-            }
-            picker.setLayoutParams(params);
-        }
-    }
-
-    private List<NumberPicker> findNumberPickers(ViewGroup viewGroup)
-    {
-        List<NumberPicker> pickerList = new ArrayList<>();
-        View child;
-        if (null != viewGroup)
-        {
-            for (int i = 0; i < viewGroup.getChildCount(); i++)
-            {
-                child = viewGroup.getChildAt(i);
-                if (child instanceof NumberPicker)
-                {
-                    pickerList.add((NumberPicker) child);
-                }
-                else if (child instanceof LinearLayout)
-                {
-                    List<NumberPicker> result = findNumberPickers((ViewGroup) child);
-                    if (result.size() > 0)
-                    {
-                        return result;
-                    }
-                }
-            }
-        }
-        return pickerList;
     }
 
     public class ReimLocationListener implements BDLocationListener

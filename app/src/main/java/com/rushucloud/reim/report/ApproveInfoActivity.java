@@ -79,18 +79,6 @@ public class ApproveInfoActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-
-        reportServerID = getIntent().getIntExtra("reportServerID", -1);
-        report = dbManager.getReportByServerID(reportServerID);
-        if (report == null)
-        {
-            report = dbManager.getOthersReport(reportServerID);
-        }
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -128,6 +116,25 @@ public class ApproveInfoActivity extends Activity
         }
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+
+        reportServerID = getIntent().getIntExtra("reportServerID", -1);
+        report = dbManager.getReportByServerID(reportServerID);
+        if (report == null)
+        {
+            report = dbManager.getOthersReport(reportServerID);
+        }
+    }
+
+    // Network
     private void sendGetApproveInfoRequest(int reportServerID)
     {
         ReimProgressDialog.show();
@@ -214,10 +221,5 @@ public class ApproveInfoActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

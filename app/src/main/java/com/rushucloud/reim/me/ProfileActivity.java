@@ -147,13 +147,6 @@ public class ProfileActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        currentUser = appPreference.getCurrentUser();
-        currentGroup = appPreference.getCurrentGroup();
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -475,6 +468,20 @@ public class ProfileActivity extends Activity
         startActivityForResult(intent, Constant.ACTIVITY_CROP_IMAGE);
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        currentUser = appPreference.getCurrentUser();
+        currentGroup = appPreference.getCurrentGroup();
+    }
+
+    // Network
     private void sendUploadAvatarRequest()
     {
         UploadImageRequest request = new UploadImageRequest(avatarPath, NetworkConstant.IMAGE_TYPE_AVATAR);
@@ -576,10 +583,5 @@ public class ProfileActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

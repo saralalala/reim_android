@@ -88,46 +88,6 @@ public class EditCategoryActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-
-        originalCategory = (Category) getIntent().getSerializableExtra("category");
-        category = new Category(originalCategory);
-
-        iconList = new ArrayList<>();
-        iconList.add(R.drawable.icon_food);
-        iconList.add(R.drawable.icon_transport);
-        iconList.add(R.drawable.icon_office_supplies);
-        iconList.add(R.drawable.icon_business_development);
-        iconList.add(R.drawable.icon_marketing);
-        iconList.add(R.drawable.icon_recruiting);
-        iconList.add(R.drawable.icon_travel);
-        iconList.add(R.drawable.icon_operating);
-        iconList.add(R.drawable.icon_entertainment);
-        iconList.add(R.drawable.icon_others);
-
-        checkList = new ArrayList<>();
-        for (int i = 0; i < iconList.size(); i++)
-        {
-            checkList.add(false);
-        }
-
-        if (category.getIconID() > 0)
-        {
-            checkList.set(category.getIconID() - 1, true);
-        }
-        else if (category.getParentID() != 0)
-        {
-            Category parent = dbManager.getCategory(category.getParentID());
-            if (parent.getIconID() > 0)
-            {
-                category.setIconID(parent.getIconID());
-                checkList.set(parent.getIconID() - 1, true);
-            }
-        }
-    }
-
     private void initView()
     {
         int widthPixels = ViewUtils.getPhoneWindowWidth(this);
@@ -279,6 +239,60 @@ public class EditCategoryActivity extends Activity
         }
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
+//		imm.hideSoftInputFromWindow(limitEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+
+        originalCategory = (Category) getIntent().getSerializableExtra("category");
+        category = new Category(originalCategory);
+
+        iconList = new ArrayList<>();
+        iconList.add(R.drawable.icon_food);
+        iconList.add(R.drawable.icon_transport);
+        iconList.add(R.drawable.icon_office_supplies);
+        iconList.add(R.drawable.icon_business_development);
+        iconList.add(R.drawable.icon_marketing);
+        iconList.add(R.drawable.icon_recruiting);
+        iconList.add(R.drawable.icon_travel);
+        iconList.add(R.drawable.icon_operating);
+        iconList.add(R.drawable.icon_entertainment);
+        iconList.add(R.drawable.icon_others);
+
+        checkList = new ArrayList<>();
+        for (int i = 0; i < iconList.size(); i++)
+        {
+            checkList.add(false);
+        }
+
+        if (category.getIconID() > 0)
+        {
+            checkList.set(category.getIconID() - 1, true);
+        }
+        else if (category.getParentID() != 0)
+        {
+            Category parent = dbManager.getCategory(category.getParentID());
+            if (parent.getIconID() > 0)
+            {
+                category.setIconID(parent.getIconID());
+                checkList.set(parent.getIconID() - 1, true);
+            }
+        }
+    }
+
     private void resetCheck()
     {
         for (int j = 0; j < checkList.size(); j++)
@@ -287,13 +301,7 @@ public class EditCategoryActivity extends Activity
         }
     }
 
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
-//		imm.hideSoftInputFromWindow(limitEditText.getWindowToken(), 0);
-    }
-
+    // Network
     private void sendCreateCategoryRequest()
     {
         ReimProgressDialog.show();
@@ -373,11 +381,5 @@ public class EditCategoryActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

@@ -84,20 +84,6 @@ public class CompanyNameActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    @SuppressWarnings("unchecked")
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-        currentGroup = appPreference.getCurrentGroup();
-
-        Bundle bundle = getIntent().getExtras();
-        companyName = bundle.getString("companyName", "");
-        inputList = bundle.getStringArrayList("inputList");
-        inputChosenList = bundle.getStringArrayList("inputChosenList");
-        contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -202,6 +188,22 @@ public class CompanyNameActivity extends Activity
         ViewUtils.goBackWithIntent(this, intent);
     }
 
+    // Data
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+        currentGroup = appPreference.getCurrentGroup();
+
+        Bundle bundle = getIntent().getExtras();
+        companyName = bundle.getString("companyName", "");
+        inputList = bundle.getStringArrayList("inputList");
+        inputChosenList = bundle.getStringArrayList("inputChosenList");
+        contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
+    }
+
+    // Network
     private void sendCreateGroupRequest(boolean forceCreate)
     {
         ReimProgressDialog.show();

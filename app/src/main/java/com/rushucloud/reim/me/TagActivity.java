@@ -82,12 +82,6 @@ public class TagActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-        tagList = dbManager.getGroupTags(AppPreference.getAppPreference().getCurrentGroupID());
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -186,6 +180,14 @@ public class TagActivity extends Activity
         operationPopupWindow = ViewUtils.buildBottomPopupWindow(this, operationView);
     }
 
+    private void showOperationWindow()
+    {
+        operationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+        operationPopupWindow.update();
+
+        ViewUtils.dimBackground(this);
+    }
+
     private void refreshListView()
     {
         tagList = dbManager.getGroupTags(AppPreference.getAppPreference().getCurrentGroupID());
@@ -205,14 +207,19 @@ public class TagActivity extends Activity
         }
     }
 
-    private void showOperationWindow()
+    private void goBack()
     {
-        operationPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
-        operationPopupWindow.update();
-
-        ViewUtils.dimBackground(this);
+        ViewUtils.goBack(this);
     }
 
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+        tagList = dbManager.getGroupTags(AppPreference.getAppPreference().getCurrentGroupID());
+    }
+
+    // Network
     private void sendDeleteTagRequest(final Tag tag)
     {
         ReimProgressDialog.show();
@@ -248,10 +255,5 @@ public class TagActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

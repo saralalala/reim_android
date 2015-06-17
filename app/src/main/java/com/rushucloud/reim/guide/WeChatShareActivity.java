@@ -61,27 +61,6 @@ public class WeChatShareActivity extends Activity
         return keyCode != KeyEvent.KEYCODE_BACK && super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        nickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
-        companyName = getIntent().getStringExtra("companyName");
-        count = getIntent().getIntExtra("count", 0);
-
-        try
-        {
-            JSONObject jObject = new JSONObject();
-            jObject.put("nickname", nickname);
-            jObject.put("gid", AppPreference.getAppPreference().getCurrentGroupID());
-            String params = Base64.encodeToString(jObject.toString().getBytes(), Base64.NO_WRAP);
-            String redirectURI = URLEncoder.encode(URLDef.URL_SHARE_REDIRECT_URI_PREFIX + params, "UTF-8");
-            shareURL = String.format(URLDef.URL_SHARE, redirectURI);
-        }
-        catch (JSONException | UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     private void initView()
     {
         TextView nextTextView = (TextView) findViewById(R.id.nextTextView);
@@ -106,5 +85,27 @@ public class WeChatShareActivity extends Activity
                 WeChatUtils.shareToWX(WeChatShareActivity.this, shareURL, title, description, false);
             }
         });
+    }
+
+    // Data
+    private void initData()
+    {
+        nickname = AppPreference.getAppPreference().getCurrentUser().getNickname();
+        companyName = getIntent().getStringExtra("companyName");
+        count = getIntent().getIntExtra("count", 0);
+
+        try
+        {
+            JSONObject jObject = new JSONObject();
+            jObject.put("nickname", nickname);
+            jObject.put("gid", AppPreference.getAppPreference().getCurrentGroupID());
+            String params = Base64.encodeToString(jObject.toString().getBytes(), Base64.NO_WRAP);
+            String redirectURI = URLEncoder.encode(URLDef.URL_SHARE_REDIRECT_URI_PREFIX + params, "UTF-8");
+            shareURL = String.format(URLDef.URL_SHARE, redirectURI);
+        }
+        catch (JSONException | UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

@@ -98,22 +98,6 @@ public class ApproveReportActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null)
-        {
-            report = (Report) bundle.getSerializable("report");
-            fromPush = bundle.getBoolean("fromPush", false);
-            reportServerID = report.getServerID();
-            itemList = dbManager.getOthersReportItems(reportServerID);
-            lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
-        }
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -270,6 +254,50 @@ public class ApproveReportActivity extends Activity
         builder.create().show();
     }
 
+    private void jumpToFollowingActivity()
+    {
+        Intent intent = new Intent(ApproveReportActivity.this, FollowingActivity.class);
+        intent.putExtra("report", report);
+        ViewUtils.goForwardAndFinish(this, intent);
+    }
+
+    private void goBackToMainActivity()
+    {
+        ReimApplication.setTabIndex(Constant.TAB_REPORT);
+        ReimApplication.setReportTabIndex(Constant.TAB_REPORT_OTHERS);
+
+        if (fromPush)
+        {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            ViewUtils.goBackWithIntent(this, intent);
+        }
+        else
+        {
+            ViewUtils.goBack(this);
+        }
+    }
+
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null)
+        {
+            report = (Report) bundle.getSerializable("report");
+            fromPush = bundle.getBoolean("fromPush", false);
+            reportServerID = report.getServerID();
+            itemList = dbManager.getOthersReportItems(reportServerID);
+            lastCommentCount = report.getCommentList() != null ? report.getCommentList().size() : 0;
+        }
+    }
+
+    // Network
     private void sendGetReportRequest(final int reportServerID)
     {
         GetReportRequest request = new GetReportRequest(reportServerID);
@@ -519,31 +547,5 @@ public class ApproveReportActivity extends Activity
                 }
             }
         });
-    }
-
-    private void jumpToFollowingActivity()
-    {
-        Intent intent = new Intent(ApproveReportActivity.this, FollowingActivity.class);
-        intent.putExtra("report", report);
-        ViewUtils.goForwardAndFinish(this, intent);
-    }
-
-    private void goBackToMainActivity()
-    {
-        ReimApplication.setTabIndex(Constant.TAB_REPORT);
-        ReimApplication.setReportTabIndex(Constant.TAB_REPORT_OTHERS);
-
-        if (fromPush)
-        {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            ViewUtils.goBackWithIntent(this, intent);
-        }
-        else
-        {
-            ViewUtils.goBack(this);
-        }
     }
 }

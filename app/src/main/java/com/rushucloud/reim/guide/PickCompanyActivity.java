@@ -234,6 +234,28 @@ public class PickCompanyActivity extends Activity
         builder.create().show();
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        if (fromGuide)
+        {
+            Intent intent = new Intent(this, SetNicknameActivity.class);
+            intent.putExtra("nickname", AppPreference.getAppPreference().getCurrentUser().getNickname());
+            intent.putExtra("join", true);
+            ViewUtils.goBackWithIntent(this, intent);
+        }
+        else
+        {
+            ViewUtils.goBack(this);
+        }
+    }
+
+    // Network
     private void searchGroups()
     {
         if (companyEditText.getText().toString().isEmpty())
@@ -539,26 +561,5 @@ public class PickCompanyActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        if (fromGuide)
-        {
-            Intent intent = new Intent(this, SetNicknameActivity.class);
-            intent.putExtra("nickname", AppPreference.getAppPreference().getCurrentUser().getNickname());
-            intent.putExtra("join", true);
-            ViewUtils.goBackWithIntent(this, intent);
-        }
-        else
-        {
-            ViewUtils.goBack(this);
-        }
     }
 }

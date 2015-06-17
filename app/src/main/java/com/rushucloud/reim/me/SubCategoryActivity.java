@@ -87,14 +87,6 @@ public class SubCategoryActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
-        parentID = this.getIntent().getIntExtra("parentID", 0);
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -241,6 +233,21 @@ public class SubCategoryActivity extends Activity
         ViewUtils.dimBackground(this);
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+
+        parentID = this.getIntent().getIntExtra("parentID", 0);
+    }
+
+    // Network
     private void sendDeleteCategoryRequest(final Category category)
     {
         ReimProgressDialog.show();
@@ -306,10 +313,5 @@ public class SubCategoryActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

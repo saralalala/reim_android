@@ -135,6 +135,12 @@ public class MessageListActivity extends Activity
         });
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Network
     private void sendGetMessagesRequest()
     {
         GetMessagesRequest request = new GetMessagesRequest();
@@ -179,10 +185,5 @@ public class MessageListActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

@@ -208,6 +208,7 @@ public class InputContactActivity extends Activity
         ViewUtils.goBack(this);
     }
 
+    // Network
     private void sendInviteRequest(String inviteList)
     {
         ReimProgressDialog.show();

@@ -23,11 +23,16 @@ import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
+import netUtils.request.user.ResendRequest;
 import netUtils.request.user.UnbindRequest;
+import netUtils.response.user.ResendResponse;
 import netUtils.response.user.UnbindResponse;
 
 public class EmailActivity extends Activity
 {
+    private int waitingTime = 60;
+    private Thread thread;
+
     // View
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -113,6 +118,50 @@ public class EmailActivity extends Activity
         TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
         emailTextView.setText(getIntent().getStringExtra("email"));
 
+        LinearLayout activeLayout = (LinearLayout) findViewById(R.id.activeLayout);
+        activeLayout.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (waitingTime != 60)
+                {
+                    ViewUtils.showToast(EmailActivity.this, String.format(getString(R.string.prompt_resend_active_email_wait), waitingTime));
+                }
+                else
+                {
+                    thread = new Thread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            try
+                            {
+                                while (waitingTime > 0)
+                                {
+                                    java.lang.Thread.sleep(1000);
+                                    waitingTime -= 1;
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                            finally
+                            {
+                                waitingTime = 60;
+                            }
+                        }
+                    });
+                    thread.start();
+
+                    sendActiveRequest();
+                }
+            }
+        });
+        if (AppPreference.getAppPreference().getCurrentUser().isActive())
+        {
+            activeLayout.setVisibility(View.GONE);
+        }
+
         LinearLayout bindEmailLayout = (LinearLayout) findViewById(R.id.bindEmailLayout);
         bindEmailLayout.setOnClickListener(new OnClickListener()
         {
@@ -123,6 +172,12 @@ public class EmailActivity extends Activity
         });
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Network
     private void sendUnbindRequest(final User user)
     {
         ReimProgressDialog.show();
@@ -135,6 +190,7 @@ public class EmailActivity extends Activity
                 if (response.getStatus())
                 {
                     user.setEmail("");
+                    user.setIsActive(false);
                     DBManager.getDBManager().updateUser(user);
 
                     runOnUiThread(new Runnable()
@@ -162,8 +218,30 @@ public class EmailActivity extends Activity
         });
     }
 
-    private void goBack()
+    private void sendActiveRequest()
     {
-        ViewUtils.goBack(this);
+        ResendRequest request = new ResendRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final ResendResponse response = new ResendResponse(httpResponse);
+                runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        if (response.getStatus())
+                        {
+                            ViewUtils.showToast(EmailActivity.this, R.string.succeed_in_resending_active_email);
+                        }
+                        else
+                        {
+                            ViewUtils.showToast(EmailActivity.this, R.string.failed_to_resend_active_email);
+                            thread.interrupt();
+                        }
+                    }
+                });
+            }
+        });
     }
 }

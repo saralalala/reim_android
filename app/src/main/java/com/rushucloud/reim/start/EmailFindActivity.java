@@ -105,6 +105,18 @@ public class EmailFindActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBackWithIntent(EmailFindActivity.this, SignInActivity.class);
+    }
+
+    // Network
     private void resetEmail()
     {
         if (PhoneUtils.isNetworkConnected())
@@ -161,16 +173,5 @@ public class EmailFindActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBackWithIntent(EmailFindActivity.this, SignInActivity.class);
     }
 }

@@ -221,6 +221,40 @@ public class CommentActivity extends Activity
         }
     }
 
+    private void goBack()
+    {
+        if (fromPush)
+        {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("report", report);
+            bundle.putBoolean("fromPush", fromPush);
+            bundle.putBoolean("myReport", myReport);
+
+            Intent intent = new Intent();
+            intent.putExtras(bundle);
+
+            if (pushType == NetworkConstant.PUSH_REPORT_TYPE_MINE_REJECTED_ONLY_COMMENT)
+            {
+                intent.setClass(this, EditReportActivity.class);
+            }
+            else if (pushType == NetworkConstant.PUSH_REPORT_TYPE_OTHERS_APPROVED_ONLY_COMMENT)
+            {
+                intent.setClass(this, ApproveReportActivity.class);
+            }
+            else
+            {
+                intent.setClass(this, ShowReportActivity.class);
+            }
+
+            ViewUtils.goBackWithIntent(this, intent);
+        }
+        else
+        {
+            ViewUtils.goBack(this);
+        }
+    }
+
+    // Network
     private void sendGetReportRequest(final int reportServerID)
     {
         ReimProgressDialog.show();
@@ -375,38 +409,5 @@ public class CommentActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        if (fromPush)
-        {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("report", report);
-            bundle.putBoolean("fromPush", fromPush);
-            bundle.putBoolean("myReport", myReport);
-
-            Intent intent = new Intent();
-            intent.putExtras(bundle);
-
-            if (pushType == NetworkConstant.PUSH_REPORT_TYPE_MINE_REJECTED_ONLY_COMMENT)
-            {
-                intent.setClass(this, EditReportActivity.class);
-            }
-            else if (pushType == NetworkConstant.PUSH_REPORT_TYPE_OTHERS_APPROVED_ONLY_COMMENT)
-            {
-                intent.setClass(this, ApproveReportActivity.class);
-            }
-            else
-            {
-                intent.setClass(this, ShowReportActivity.class);
-            }
-
-            ViewUtils.goBackWithIntent(this, intent);
-        }
-        else
-        {
-            ViewUtils.goBack(this);
-        }
     }
 }

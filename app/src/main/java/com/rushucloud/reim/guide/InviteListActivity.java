@@ -120,16 +120,6 @@ public class InviteListActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @SuppressWarnings("unchecked")
-    private void initData()
-    {
-        Bundle bundle = getIntent().getExtras();
-        companyName = bundle.getString("companyName", "");
-        inputList = bundle.getStringArrayList("inputList");
-        inputChosenList = bundle.getStringArrayList("inputChosenList");
-        contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
-    }
-
     private void initView()
     {
         ReimProgressDialog.setContext(this);
@@ -248,7 +238,7 @@ public class InviteListActivity extends Activity
         centralTextView = (TextView) findViewById(R.id.centralTextView);
     }
 
-    public void initIndexLayout()
+    private void initIndexLayout()
     {
         final int height = (ViewUtils.getPhoneWindowHeight(this) - ViewUtils.dpToPixel(50) - ViewUtils.getStatusBarHeight(this)) / indexLetters.length;
 
@@ -309,6 +299,17 @@ public class InviteListActivity extends Activity
         Intent intent = new Intent(InviteListActivity.this, CompanyNameActivity.class);
         intent.putExtras(bundle);
         ViewUtils.goBackWithIntent(this, intent);
+    }
+
+    // Data
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        Bundle bundle = getIntent().getExtras();
+        companyName = bundle.getString("companyName", "");
+        inputList = bundle.getStringArrayList("inputList");
+        inputChosenList = bundle.getStringArrayList("inputChosenList");
+        contactChosenList = (List<User>) bundle.getSerializable("contactChosenList");
     }
 
     private void readContacts()
@@ -382,6 +383,7 @@ public class InviteListActivity extends Activity
         }).start();
     }
 
+    // Network
     private void sendInviteRequest(String inviteList, final int count)
     {
         ReimProgressDialog.show();

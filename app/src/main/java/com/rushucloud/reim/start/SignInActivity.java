@@ -245,6 +245,19 @@ public class SignInActivity extends Activity
         ViewUtils.dimBackground(this);
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBackWithIntent(SignInActivity.this, WelcomeActivity.class);
+    }
+
+    // Network
     private void signIn()
     {
         MobclickAgent.onEvent(SignInActivity.this, "UMENG_LOGIN");
@@ -387,17 +400,5 @@ public class SignInActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(usernameEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBackWithIntent(SignInActivity.this, WelcomeActivity.class);
     }
 }

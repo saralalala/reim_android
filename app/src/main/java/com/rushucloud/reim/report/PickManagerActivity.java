@@ -95,35 +95,6 @@ public class PickManagerActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    @SuppressWarnings("unchecked")
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
-        senderID = getIntent().getIntExtra("sender", -1);
-        newReport = getIntent().getBooleanExtra("newReport", false);
-        fromFollowing = getIntent().getBooleanExtra("fromFollowing", false);
-
-        List<User> managerList = (List<User>) getIntent().getSerializableExtra("managers");
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
-        defaultManager = currentUser.getDefaultManager();
-        if (managerList != null)
-        {
-            chosenList = managerList;
-        }
-        else if (senderID == currentUser.getDefaultManagerID())
-        {
-            chosenList = new ArrayList<>();
-        }
-        else
-        {
-            chosenList = currentUser.buildBaseManagerList();
-        }
-
-        buildUserList();
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -308,6 +279,51 @@ public class PickManagerActivity extends Activity
         }
     }
 
+    private void hideSoftKeyboard()
+    {
+        if (managerEditText != null)
+        {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(managerEditText.getWindowToken(), 0);
+        }
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+
+        senderID = getIntent().getIntExtra("sender", -1);
+        newReport = getIntent().getBooleanExtra("newReport", false);
+        fromFollowing = getIntent().getBooleanExtra("fromFollowing", false);
+
+        List<User> managerList = (List<User>) getIntent().getSerializableExtra("managers");
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
+        defaultManager = currentUser.getDefaultManager();
+        if (managerList != null)
+        {
+            chosenList = managerList;
+        }
+        else if (senderID == currentUser.getDefaultManagerID())
+        {
+            chosenList = new ArrayList<>();
+        }
+        else
+        {
+            chosenList = currentUser.buildBaseManagerList();
+        }
+
+        buildUserList();
+    }
+
     private void buildUserList()
     {
         userList = User.removeUserFromList(dbManager.getGroupUsers(appPreference.getCurrentGroupID()), appPreference.getCurrentUserID());
@@ -330,6 +346,7 @@ public class PickManagerActivity extends Activity
         adapter.notifyDataSetChanged();
     }
 
+    // Network
     private void sendDownloadAvatarRequest(final User user)
     {
         DownloadImageRequest request = new DownloadImageRequest(user.getAvatarServerPath());
@@ -364,20 +381,5 @@ public class PickManagerActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        if (managerEditText != null)
-        {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(managerEditText.getWindowToken(), 0);
-        }
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

@@ -67,31 +67,6 @@ public class InviteActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        Group group = AppPreference.getAppPreference().getCurrentGroup();
-        if (group != null)
-        {
-            User user = AppPreference.getAppPreference().getCurrentUser();
-            nickname = user != null? user.getNickname() : "";
-            companyName = group.getName();
-
-            try
-            {
-                JSONObject jObject = new JSONObject();
-                jObject.put("nickname", nickname);
-                jObject.put("gid", AppPreference.getAppPreference().getCurrentGroupID());
-                String params = Base64.encodeToString(jObject.toString().getBytes(), Base64.NO_WRAP);
-                String redirectURI = URLEncoder.encode(URLDef.URL_SHARE_REDIRECT_URI_PREFIX + params, "UTF-8");
-                shareURL = String.format(URLDef.URL_SHARE, redirectURI);
-            }
-            catch (JSONException | UnsupportedEncodingException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -145,5 +120,31 @@ public class InviteActivity extends Activity
     private void goBack()
     {
         ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        Group group = AppPreference.getAppPreference().getCurrentGroup();
+        if (group != null)
+        {
+            User user = AppPreference.getAppPreference().getCurrentUser();
+            nickname = user != null? user.getNickname() : "";
+            companyName = group.getName();
+
+            try
+            {
+                JSONObject jObject = new JSONObject();
+                jObject.put("nickname", nickname);
+                jObject.put("gid", AppPreference.getAppPreference().getCurrentGroupID());
+                String params = Base64.encodeToString(jObject.toString().getBytes(), Base64.NO_WRAP);
+                String redirectURI = URLEncoder.encode(URLDef.URL_SHARE_REDIRECT_URI_PREFIX + params, "UTF-8");
+                shareURL = String.format(URLDef.URL_SHARE, redirectURI);
+            }
+            catch (JSONException | UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 }

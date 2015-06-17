@@ -100,13 +100,6 @@ public class PickVendorActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void initData()
-    {
-        location = getIntent().getStringExtra("location");
-        latitude = getIntent().getDoubleExtra("latitude", -1);
-        longitude = getIntent().getDoubleExtra("longitude", -1);
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -176,6 +169,21 @@ public class PickVendorActivity extends Activity
         imm.hideSoftInputFromWindow(vendorEditText.getWindowToken(), 0);
     }
 
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        location = getIntent().getStringExtra("location");
+        latitude = getIntent().getDoubleExtra("latitude", -1);
+        longitude = getIntent().getDoubleExtra("longitude", -1);
+    }
+
+    // Network
     private void getVendors()
     {
         if (!PhoneUtils.isNetworkConnected())
@@ -349,11 +357,5 @@ public class PickVendorActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

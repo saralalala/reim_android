@@ -146,6 +146,20 @@ public class PhoneFindActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        waitingTime = -1;
+        ViewUtils.goBackWithIntent(PhoneFindActivity.this, SignInActivity.class);
+    }
+
+    // Network
     private void verifyCode()
     {
         MobclickAgent.onEvent(PhoneFindActivity.this, "UMENG_REGIST_FORGETPASSWORD_TEL-SUBMIT");
@@ -273,18 +287,5 @@ public class PhoneFindActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        waitingTime = -1;
-        ViewUtils.goBackWithIntent(PhoneFindActivity.this, SignInActivity.class);
     }
 }

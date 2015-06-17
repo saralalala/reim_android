@@ -123,6 +123,12 @@ public class PhoneActivity extends Activity
         });
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Network
     private void sendUnbindRequest(final User user)
     {
         ReimProgressDialog.show();
@@ -160,10 +166,5 @@ public class PhoneActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

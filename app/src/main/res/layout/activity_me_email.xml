@@ -86,6 +86,30 @@
         android:layout_height="0.5dp"
         layout="@layout/view_divider"/>
 
+    <LinearLayout
+        android:id="@+id/activeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_with_one_divider_height"
+        android:orientation="vertical"
+        android:background="@drawable/me_item_drawable">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/layout_height"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical"
+            android:text="@string/resend_active_email"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            layout="@layout/view_divider"/>
+
+    </LinearLayout>
+
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

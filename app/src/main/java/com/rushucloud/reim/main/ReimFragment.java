@@ -156,46 +156,6 @@ public class ReimFragment extends Fragment
         }
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
-        tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-        tagCheck = new boolean[tagList.size()];
-        tempTagCheck = new boolean[tagList.size()];
-        for (int i = 0; i < tagCheck.length; i++)
-        {
-            tagCheck[i] = false;
-            tempTagCheck[i] = false;
-        }
-
-        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
-        categoryCheck = new boolean[categoryList.size()];
-        tempCategoryCheck = new boolean[categoryList.size()];
-        for (int i = 0; i < categoryCheck.length; i++)
-        {
-            categoryCheck[i] = false;
-            tempCategoryCheck[i] = false;
-        }
-
-        itemList.clear();
-        itemList.addAll(readItemList());
-        filterItemList();
-
-        if (PhoneUtils.isNetworkConnected())
-        {
-            for (Item item : showList)
-            {
-                Category category = item.getCategory();
-                if (category != null && category.hasUndownloadedIcon())
-                {
-                    sendDownloadCategoryIconRequest(category);
-                }
-            }
-        }
-    }
-
     private void initView()
     {
         initListView();
@@ -676,142 +636,30 @@ public class ReimFragment extends Fragment
         deletePopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), deleteView);
     }
 
-    private List<Item> readItemList()
+    private void showFilterWindow()
     {
-        return dbManager.getUserItems(appPreference.getCurrentUserID());
-    }
-
-    private void filterItemList()
-    {
-        showList.clear();
-        for (Item item : itemList)
-        {
-            if (filterType == Constant.FILTER_TYPE_CONSUMED && item.getType() != Item.TYPE_REIM)
-            {
-                continue;
-            }
-            if (filterType == Constant.FILTER_TYPE_BUDGET && item.getType() != Item.TYPE_BUDGET)
-            {
-                continue;
-            }
-            if (filterType == Constant.FILTER_TYPE_BORROWING && item.getType() != Item.TYPE_BORROWING)
-            {
-                continue;
-            }
-            if (filterStatus == Constant.FILTER_STATUS_FREE && item.getBelongReport() != null && item.getBelongReport().getLocalID() != -1)
-            {
-                continue;
-            }
-            if (filterStatus == Constant.FILTER_STATUS_ADDED && (item.getBelongReport() == null || item.getBelongReport().getLocalID() == -1))
-            {
-                continue;
-            }
-
-            if (!filterTagList.isEmpty() && !item.containsSpecificTags(filterTagList))
-            {
-                continue;
-            }
-
-            if (!filterCategoryList.isEmpty() && !item.containsCategory(filterCategoryList))
-            {
-                continue;
-            }
-            showList.add(item);
-        }
-
-        switch (sortType)
-        {
-            case Constant.SORT_CONSUMED_DATE:
-            {
-                Item.sortByConsumedDate(showList);
-                if (sortReverse)
-                {
-                    Collections.reverse(showList);
-                }
-                buildItemListByConsumedDate();
-                break;
-            }
-            case Constant.SORT_AMOUNT:
-            {
-                Item.sortByAmount(showList);
-                if (sortReverse)
-                {
-                    Collections.reverse(showList);
-                }
-                break;
-            }
-            default:
-                break;
-        }
-    }
-
-    private void buildItemListByConsumedDate()
-    {
-        List<String> timeList = new ArrayList<>();
-        for (Item item : showList)
-        {
-            String time = Utils.secondToStringUpToDay(item.getConsumedDate());
-            if (!timeList.contains(time))
-            {
-                timeList.add(time);
-            }
-        }
-
-        List<List<Item>> collectList = new ArrayList<>();
-        for (String time : timeList)
-        {
-            Item item = new Item();
-            item.setConsumedDateGroup(time);
-
-            List<Item> subList = new ArrayList<>();
-            subList.add(item);
-
-            collectList.add(subList);
-        }
-
-        for (Item item : showList)
-        {
-            String time = Utils.secondToStringUpToDay(item.getConsumedDate());
-            int index = timeList.indexOf(time);
-
-            List<Item> subList = collectList.get(index);
-            subList.add(item);
-        }
-
-        showList.clear();
-        for (List<Item> subList : collectList)
-        {
-            for (Item item : subList)
-            {
-                showList.add(item);
-            }
-        }
-    }
-
-    private void reverseSortDateImageView()
-    {
-        tempSortReverse = !tempSortReverse;
-        if (!tempSortReverse) // status before change
-        {
-            sortDateImageView.startAnimation(rotateReverseAnimation);
-        }
-        else
+        if (sortReverse && sortType == Constant.SORT_CONSUMED_DATE)
         {
             sortDateImageView.startAnimation(rotateAnimation);
         }
-    }
-
-    private void reverseSortAmountImageView()
-    {
-        tempSortReverse = !tempSortReverse;
-        if (!tempSortReverse) // status before change
-        {
-            sortAmountImageView.startAnimation(rotateReverseAnimation);
-        }
-        else
+        else if (sortReverse && sortType == Constant.SORT_AMOUNT)
         {
             sortAmountImageView.startAnimation(rotateAnimation);
         }
+
+        refreshFilterTagView();
+        refreshFilterCategoryView();
+
+        filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+        filterPopupWindow.update();
+    }
+
+    private void showDeleteWindow()
+    {
+        deletePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+        deletePopupWindow.update();
+
+        ViewUtils.dimBackground(getActivity());
     }
 
     private void refreshItemListView()
@@ -982,32 +830,201 @@ public class ReimFragment extends Fragment
         }
     }
 
-    private void showFilterWindow()
+    private void reverseSortDateImageView()
     {
-        if (sortReverse && sortType == Constant.SORT_CONSUMED_DATE)
+        tempSortReverse = !tempSortReverse;
+        if (!tempSortReverse) // status before change
+        {
+            sortDateImageView.startAnimation(rotateReverseAnimation);
+        }
+        else
         {
             sortDateImageView.startAnimation(rotateAnimation);
         }
-        else if (sortReverse && sortType == Constant.SORT_AMOUNT)
+    }
+
+    private void reverseSortAmountImageView()
+    {
+        tempSortReverse = !tempSortReverse;
+        if (!tempSortReverse) // status before change
+        {
+            sortAmountImageView.startAnimation(rotateReverseAnimation);
+        }
+        else
         {
             sortAmountImageView.startAnimation(rotateAnimation);
         }
-
-        refreshFilterTagView();
-        refreshFilterCategoryView();
-
-        filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-        filterPopupWindow.update();
     }
 
-    private void showDeleteWindow()
+    // Data
+    private void initData()
     {
-        deletePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
-        deletePopupWindow.update();
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
 
-        ViewUtils.dimBackground(getActivity());
+        tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+        tagCheck = new boolean[tagList.size()];
+        tempTagCheck = new boolean[tagList.size()];
+        for (int i = 0; i < tagCheck.length; i++)
+        {
+            tagCheck[i] = false;
+            tempTagCheck[i] = false;
+        }
+
+        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+        categoryCheck = new boolean[categoryList.size()];
+        tempCategoryCheck = new boolean[categoryList.size()];
+        for (int i = 0; i < categoryCheck.length; i++)
+        {
+            categoryCheck[i] = false;
+            tempCategoryCheck[i] = false;
+        }
+
+        itemList.clear();
+        itemList.addAll(readItemList());
+        filterItemList();
+
+        if (PhoneUtils.isNetworkConnected())
+        {
+            for (Item item : showList)
+            {
+                Category category = item.getCategory();
+                if (category != null && category.hasUndownloadedIcon())
+                {
+                    sendDownloadCategoryIconRequest(category);
+                }
+            }
+        }
     }
 
+    private List<Item> readItemList()
+    {
+        return dbManager.getUserItems(appPreference.getCurrentUserID());
+    }
+
+    private void filterItemList()
+    {
+        showList.clear();
+        for (Item item : itemList)
+        {
+            if (filterType == Constant.FILTER_TYPE_CONSUMED && item.getType() != Item.TYPE_REIM)
+            {
+                continue;
+            }
+            if (filterType == Constant.FILTER_TYPE_BUDGET && item.getType() != Item.TYPE_BUDGET)
+            {
+                continue;
+            }
+            if (filterType == Constant.FILTER_TYPE_BORROWING && item.getType() != Item.TYPE_BORROWING)
+            {
+                continue;
+            }
+            if (filterStatus == Constant.FILTER_STATUS_FREE && item.getBelongReport() != null && item.getBelongReport().getLocalID() != -1)
+            {
+                continue;
+            }
+            if (filterStatus == Constant.FILTER_STATUS_ADDED && (item.getBelongReport() == null || item.getBelongReport().getLocalID() == -1))
+            {
+                continue;
+            }
+
+            if (!filterTagList.isEmpty() && !item.containsSpecificTags(filterTagList))
+            {
+                continue;
+            }
+
+            if (!filterCategoryList.isEmpty() && !item.containsCategory(filterCategoryList))
+            {
+                continue;
+            }
+            showList.add(item);
+        }
+
+        switch (sortType)
+        {
+            case Constant.SORT_CONSUMED_DATE:
+            {
+                Item.sortByConsumedDate(showList);
+                if (sortReverse)
+                {
+                    Collections.reverse(showList);
+                }
+                buildItemListByConsumedDate();
+                break;
+            }
+            case Constant.SORT_AMOUNT:
+            {
+                Item.sortByAmount(showList);
+                if (sortReverse)
+                {
+                    Collections.reverse(showList);
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    private void buildItemListByConsumedDate()
+    {
+        List<String> timeList = new ArrayList<>();
+        for (Item item : showList)
+        {
+            String time = Utils.secondToStringUpToDay(item.getConsumedDate());
+            if (!timeList.contains(time))
+            {
+                timeList.add(time);
+            }
+        }
+
+        List<List<Item>> collectList = new ArrayList<>();
+        for (String time : timeList)
+        {
+            Item item = new Item();
+            item.setConsumedDateGroup(time);
+
+            List<Item> subList = new ArrayList<>();
+            subList.add(item);
+
+            collectList.add(subList);
+        }
+
+        for (Item item : showList)
+        {
+            String time = Utils.secondToStringUpToDay(item.getConsumedDate());
+            int index = timeList.indexOf(time);
+
+            List<Item> subList = collectList.get(index);
+            subList.add(item);
+        }
+
+        showList.clear();
+        for (List<Item> subList : collectList)
+        {
+            for (Item item : subList)
+            {
+                showList.add(item);
+            }
+        }
+    }
+
+    private void deleteLocalItem(int itemLocalID)
+    {
+        if (dbManager.deleteItem(itemLocalID))
+        {
+            refreshItemListView();
+            ReimProgressDialog.dismiss();
+            ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
+        }
+        else
+        {
+            ReimProgressDialog.dismiss();
+            ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
+        }
+    }
+
+    // Network
     private void sendDownloadCategoryIconRequest(final Category category)
     {
         DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
@@ -1067,21 +1084,6 @@ public class ReimFragment extends Fragment
                 }
             }
         });
-    }
-
-    private void deleteLocalItem(int itemLocalID)
-    {
-        if (dbManager.deleteItem(itemLocalID))
-        {
-            refreshItemListView();
-            ReimProgressDialog.dismiss();
-            ViewUtils.showToast(getActivity(), R.string.succeed_in_deleting);
-        }
-        else
-        {
-            ReimProgressDialog.dismiss();
-            ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
-        }
     }
 
     private void syncItems()

@@ -146,6 +146,12 @@ public class GalleryActivity extends Activity
         });
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Data
     private void loadImages()
     {
         final Handler handler = new Handler();
@@ -173,11 +179,6 @@ public class GalleryActivity extends Activity
                 Looper.loop();
             }
         }.start();
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 
     private ArrayList<String> getGalleryPaths()

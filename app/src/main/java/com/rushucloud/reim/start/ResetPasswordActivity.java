@@ -65,11 +65,6 @@ public class ResetPasswordActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        code = getIntent().getStringExtra("code");
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -117,6 +112,25 @@ public class ResetPasswordActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(newPasswordEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        ViewUtils.goBackWithIntent(ResetPasswordActivity.this, PhoneFindActivity.class);
+    }
+
+    // Data
+    private void initData()
+    {
+        code = getIntent().getStringExtra("code");
+    }
+
+    // Network
     private void resetPassword()
     {
         MobclickAgent.onEvent(ResetPasswordActivity.this, "UMENG_REGIST_FORGETPASSWORD-NEWPASSWORD");
@@ -183,17 +197,5 @@ public class ResetPasswordActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(newPasswordEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBackWithIntent(ResetPasswordActivity.this, PhoneFindActivity.class);
     }
 }

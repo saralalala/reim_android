@@ -123,6 +123,7 @@ public class SplashActivity extends Activity
         }
     }
 
+    // Network
     private void sendSignInRequest()
     {
         SignInRequest request = new SignInRequest();

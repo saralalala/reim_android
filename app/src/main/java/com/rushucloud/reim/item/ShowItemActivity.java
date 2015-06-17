@@ -83,32 +83,6 @@ public class ShowItemActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-        Intent intent = this.getIntent();
-        int itemID = intent.getIntExtra("itemLocalID", -1);
-        if (itemID == -1)
-        {
-            myItem = false;
-            itemID = intent.getIntExtra("othersItemServerID", -1);
-            item = dbManager.getOthersItem(itemID);
-            if (item == null)
-            {
-                item = new Item();
-            }
-        }
-        else
-        {
-            myItem = true;
-            item = dbManager.getItemByLocalID(itemID);
-            if (item == null)
-            {
-                item = new Item();
-            }
-        }
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -404,6 +378,39 @@ public class ShowItemActivity extends Activity
         }
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+        Intent intent = this.getIntent();
+        int itemID = intent.getIntExtra("itemLocalID", -1);
+        if (itemID == -1)
+        {
+            myItem = false;
+            itemID = intent.getIntExtra("othersItemServerID", -1);
+            item = dbManager.getOthersItem(itemID);
+            if (item == null)
+            {
+                item = new Item();
+            }
+        }
+        else
+        {
+            myItem = true;
+            item = dbManager.getItemByLocalID(itemID);
+            if (item == null)
+            {
+                item = new Item();
+            }
+        }
+    }
+
+    // Network
     private void sendDownloadInvoiceRequest(final Image image)
     {
         DownloadImageRequest request = new DownloadImageRequest(image.getServerPath());
@@ -515,10 +522,5 @@ public class ShowItemActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

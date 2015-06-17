@@ -108,12 +108,6 @@ public class MeFragment extends Fragment
         }
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-    }
-
     private void initView()
     {
         // init profile
@@ -297,6 +291,14 @@ public class MeFragment extends Fragment
         sharePopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), shareView);
     }
 
+    private void showShareWindow()
+    {
+        sharePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+        sharePopupWindow.update();
+
+        ViewUtils.dimBackground(getActivity());
+    }
+
     public void loadProfileView()
     {
         currentUser = appPreference.getCurrentUser();
@@ -360,14 +362,6 @@ public class MeFragment extends Fragment
         }
     }
 
-    private void showShareWindow()
-    {
-        sharePopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
-        sharePopupWindow.update();
-
-        ViewUtils.dimBackground(getActivity());
-    }
-
     public void showTip()
     {
         if (view == null)
@@ -384,6 +378,14 @@ public class MeFragment extends Fragment
         tipImageView.setVisibility(visibility);
     }
 
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+    }
+
+    // Network
     private void sendDownloadAvatarRequest()
     {
         DownloadImageRequest request = new DownloadImageRequest(currentUser.getAvatarServerPath());

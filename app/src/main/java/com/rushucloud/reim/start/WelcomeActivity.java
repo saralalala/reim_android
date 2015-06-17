@@ -120,6 +120,7 @@ public class WelcomeActivity extends Activity
         });
     }
 
+    // Network
     private void sendSandboxOAuthRequest()
     {
         ReimProgressDialog.show();

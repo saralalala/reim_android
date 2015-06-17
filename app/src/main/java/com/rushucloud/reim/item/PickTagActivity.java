@@ -66,17 +66,6 @@ public class PickTagActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    @SuppressWarnings("unchecked")
-    private void initData()
-    {
-        int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
-
-        tagList = DBManager.getDBManager().getGroupTags(currentGroupID);
-
-        List<Tag> chosenTags = (List<Tag>) getIntent().getSerializableExtra("tags");
-        check = Tag.getTagsCheck(tagList, chosenTags);
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -139,5 +128,17 @@ public class PickTagActivity extends Activity
     private void goBack()
     {
         ViewUtils.goBack(this);
+    }
+
+    // Data
+    @SuppressWarnings("unchecked")
+    private void initData()
+    {
+        int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
+
+        tagList = DBManager.getDBManager().getGroupTags(currentGroupID);
+
+        List<Tag> chosenTags = (List<Tag>) getIntent().getSerializableExtra("tags");
+        check = Tag.getTagsCheck(tagList, chosenTags);
     }
 }

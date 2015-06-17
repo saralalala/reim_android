@@ -115,13 +115,6 @@ public class CompleteInfoActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -228,6 +221,14 @@ public class CompleteInfoActivity extends Activity
         });
     }
 
+    private void showPictureWindow()
+    {
+        picturePopupWindow.showAtLocation(findViewById(R.id.baseLayout), Gravity.BOTTOM, 0, 0);
+        picturePopupWindow.update();
+
+        ViewUtils.dimBackground(this);
+    }
+
     private void cropImage(Uri uri)
     {
         int width = ViewUtils.getPhoneWindowWidth(this);
@@ -244,14 +245,27 @@ public class CompleteInfoActivity extends Activity
         startActivityForResult(intent, Constant.ACTIVITY_CROP_IMAGE);
     }
 
-    private void showPictureWindow()
+    private void hideSoftKeyboard()
     {
-        picturePopupWindow.showAtLocation(findViewById(R.id.baseLayout), Gravity.BOTTOM, 0, 0);
-        picturePopupWindow.update();
-
-        ViewUtils.dimBackground(this);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
     }
 
+    private void goBack()
+    {
+        startActivity(new Intent(CompleteInfoActivity.this, SignInActivity.class));
+        finish();
+    }
+
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
+    }
+
+    // Network
     private void completeInfo()
     {
         MobclickAgent.onEvent(CompleteInfoActivity.this, "UMENG_LOGIN");
@@ -370,17 +384,5 @@ public class CompleteInfoActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        startActivity(new Intent(CompleteInfoActivity.this, SignInActivity.class));
-        finish();
     }
 }

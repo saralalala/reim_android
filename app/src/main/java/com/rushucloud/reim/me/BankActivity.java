@@ -99,39 +99,6 @@ public class BankActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
-        bankAccount = DBManager.getDBManager().getBankAccount(currentUser.getServerID());
-        originalBankName = bankAccount == null ? "" : bankAccount.getBankName();
-        originalLocation = bankAccount == null ? "" : bankAccount.getLocation();
-        bankList = Arrays.asList(getResources().getStringArray(R.array.bankArray));
-
-        try
-        {
-            provinceList.clear();
-
-            InputStream inputStream = getResources().openRawResource(R.raw.province);
-            byte[] buffer = new byte[inputStream.available()];
-            //noinspection ResultOfMethodCallIgnored
-            inputStream.read(buffer);
-
-            String json = new String(buffer, "GB2312");
-            JSONArray jsonArray = new JSONArray(json);
-            for (int i = 0; i < jsonArray.length(); i++)
-            {
-                provinceList.add(new Province(jsonArray.getJSONObject(i)));
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        getLocationInfo();
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -361,6 +328,45 @@ public class BankActivity extends Activity
         }
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
+        bankAccount = DBManager.getDBManager().getBankAccount(currentUser.getServerID());
+        originalBankName = bankAccount == null ? "" : bankAccount.getBankName();
+        originalLocation = bankAccount == null ? "" : bankAccount.getLocation();
+        bankList = Arrays.asList(getResources().getStringArray(R.array.bankArray));
+
+        try
+        {
+            provinceList.clear();
+
+            InputStream inputStream = getResources().openRawResource(R.raw.province);
+            byte[] buffer = new byte[inputStream.available()];
+            //noinspection ResultOfMethodCallIgnored
+            inputStream.read(buffer);
+
+            String json = new String(buffer, "GB2312");
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                provinceList.add(new Province(jsonArray.getJSONObject(i)));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        getLocationInfo();
+    }
+
     private void getLocationInfo()
     {
         String currentLocation = bankAccount == null ? "" : bankAccount.getLocation();
@@ -427,6 +433,7 @@ public class BankActivity extends Activity
         currentCity = currentProvince.getCityArray()[index];
     }
 
+    // Network
     private void sendCreateBankAccountRequest(final boolean setBankName)
     {
         ReimProgressDialog.show();
@@ -523,10 +530,5 @@ public class BankActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

@@ -76,17 +76,6 @@ public class EditCompanyActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-        if (!getIntent().getBooleanExtra("newCompany", false))
-        {
-            currentGroup = appPreference.getCurrentGroup();
-        }
-        originalName = currentGroup != null ? currentGroup.getName() : "";
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -166,6 +155,31 @@ public class EditCompanyActivity extends Activity
         builder.create().show();
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+        if (!getIntent().getBooleanExtra("newCompany", false))
+        {
+            currentGroup = appPreference.getCurrentGroup();
+        }
+        originalName = currentGroup != null ? currentGroup.getName() : "";
+    }
+
+    // Network
     private void sendCreateGroupRequest(final String newName, boolean forceCreate)
     {
         CreateGroupRequest request = new CreateGroupRequest(newName, forceCreate);
@@ -288,17 +302,5 @@ public class EditCompanyActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(companyEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

@@ -70,13 +70,6 @@ public class EditTagActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-        tag = (Tag) getIntent().getSerializableExtra("tag");
-        originalName = tag.getName();
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -135,6 +128,21 @@ public class EditTagActivity extends Activity
         imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
     }
 
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+        tag = (Tag) getIntent().getSerializableExtra("tag");
+        originalName = tag.getName();
+    }
+
+    // Network
     private void sendCreateTagRequest()
     {
         ReimProgressDialog.show();
@@ -214,11 +222,5 @@ public class EditTagActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

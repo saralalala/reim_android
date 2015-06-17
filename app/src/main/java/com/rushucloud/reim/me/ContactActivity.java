@@ -156,6 +156,12 @@ public class ContactActivity extends Activity
         centralTextView = (TextView) findViewById(R.id.centralTextView);
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Data
     private void readContacts()
     {
         contactList.clear();
@@ -226,10 +232,5 @@ public class ContactActivity extends Activity
                 });
             }
         }).start();
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

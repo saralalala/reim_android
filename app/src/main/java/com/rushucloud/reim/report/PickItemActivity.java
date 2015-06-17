@@ -206,68 +206,6 @@ public class PickItemActivity extends Activity implements OnClickListener
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void initData()
-    {
-        Bundle bundle = this.getIntent().getExtras();
-        report = (Report) bundle.getSerializable("report");
-        chosenItemIDList = bundle.getIntegerArrayList("chosenItemIDList");
-        if (chosenItemIDList == null)
-        {
-            chosenItemIDList = new ArrayList<>();
-        }
-
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
-        tabIndex = report.getType();
-        if (tabIndex == 0)
-        {
-            consumedChosenList = new ArrayList<>(chosenItemIDList);
-            budgetChosenList = new ArrayList<>();
-            borrowingChosenList = new ArrayList<>();
-        }
-        else if (tabIndex == 1)
-        {
-            consumedChosenList = new ArrayList<>();
-            budgetChosenList = new ArrayList<>(chosenItemIDList);
-            borrowingChosenList = new ArrayList<>();
-        }
-        else
-        {
-            consumedChosenList = new ArrayList<>();
-            budgetChosenList = new ArrayList<>();
-            borrowingChosenList = new ArrayList<>(chosenItemIDList);
-        }
-
-        tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
-        consumedTagCheck = new boolean[tagList.size()];
-        budgetTagCheck = new boolean[tagList.size()];
-        borrowingTagCheck = new boolean[tagList.size()];
-        for (int i = 0; i < consumedTagCheck.length; i++)
-        {
-            consumedTagCheck[i] = false;
-            budgetTagCheck[i] = false;
-            borrowingTagCheck[i] = false;
-        }
-        consumedTempTagCheck = consumedTagCheck;
-        budgetTempTagCheck = budgetTagCheck;
-        borrowingTempTagCheck = borrowingTagCheck;
-
-        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
-        consumedCategoryCheck = new boolean[categoryList.size()];
-        budgetCategoryCheck = new boolean[categoryList.size()];
-        borrowingCategoryCheck = new boolean[categoryList.size()];
-        for (int i = 0; i < consumedCategoryCheck.length; i++)
-        {
-            consumedCategoryCheck[i] = false;
-            budgetCategoryCheck[i] = false;
-            borrowingCategoryCheck[i] = false;
-        }
-        consumedTempCategoryCheck = consumedCategoryCheck;
-        budgetTempCategoryCheck = budgetCategoryCheck;
-        borrowingTempCategoryCheck = borrowingCategoryCheck;
-    }
-
     private void initView()
     {
         filterImageView = (ImageView) findViewById(R.id.filterImageView);
@@ -622,6 +560,106 @@ public class PickItemActivity extends Activity implements OnClickListener
         filterPopupWindow = ViewUtils.buildTopPopupWindow(this, filterView);
     }
 
+    private void showFilterWindow()
+    {
+        if (tabIndex == 0)
+        {
+            consumedTempSortReverse = false;
+            consumedTempSortType = consumedSortType;
+            switch (consumedSortType)
+            {
+                case Constant.SORT_CONSUMED_DATE:
+                {
+                    selectSortDateRadio();
+                    if (consumedSortReverse)
+                    {
+                        reverseSortDateImageView();
+                    }
+                    break;
+                }
+                case Constant.SORT_AMOUNT:
+                {
+                    selectSortAmountRadio();
+                    if (consumedSortReverse)
+                    {
+                        reverseSortAmountImageView();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            consumedTempTagCheck = consumedTagCheck;
+            consumedTempCategoryCheck = consumedCategoryCheck;
+        }
+        else if (tabIndex == 1)
+        {
+            budgetTempSortReverse = false;
+            budgetTempSortType = budgetSortType;
+            switch (budgetSortType)
+            {
+                case Constant.SORT_CONSUMED_DATE:
+                {
+                    selectSortDateRadio();
+                    if (budgetSortReverse)
+                    {
+                        reverseSortDateImageView();
+                    }
+                    break;
+                }
+                case Constant.SORT_AMOUNT:
+                {
+                    selectSortAmountRadio();
+                    if (budgetSortReverse)
+                    {
+                        reverseSortAmountImageView();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            budgetTempTagCheck = budgetTagCheck;
+            budgetTempCategoryCheck = budgetCategoryCheck;
+        }
+        else
+        {
+            borrowingTempSortReverse = false;
+            borrowingTempSortType = borrowingSortType;
+            switch (borrowingSortType)
+            {
+                case Constant.SORT_CONSUMED_DATE:
+                {
+                    selectSortDateRadio();
+                    if (borrowingSortReverse)
+                    {
+                        reverseSortDateImageView();
+                    }
+                    break;
+                }
+                case Constant.SORT_AMOUNT:
+                {
+                    selectSortAmountRadio();
+                    if (borrowingSortReverse)
+                    {
+                        reverseSortAmountImageView();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            borrowingTempTagCheck = borrowingTagCheck;
+            borrowingTempCategoryCheck = borrowingCategoryCheck;
+        }
+
+        refreshTagView();
+        refreshCategoryView();
+
+        filterPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+        filterPopupWindow.update();
+    }
+
     private void refreshView()
     {
         ReimProgressDialog.show();
@@ -886,106 +924,6 @@ public class PickItemActivity extends Activity implements OnClickListener
         }
     }
 
-    private void showFilterWindow()
-    {
-        if (tabIndex == 0)
-        {
-            consumedTempSortReverse = false;
-            consumedTempSortType = consumedSortType;
-            switch (consumedSortType)
-            {
-                case Constant.SORT_CONSUMED_DATE:
-                {
-                    selectSortDateRadio();
-                    if (consumedSortReverse)
-                    {
-                        reverseSortDateImageView();
-                    }
-                    break;
-                }
-                case Constant.SORT_AMOUNT:
-                {
-                    selectSortAmountRadio();
-                    if (consumedSortReverse)
-                    {
-                        reverseSortAmountImageView();
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            consumedTempTagCheck = consumedTagCheck;
-            consumedTempCategoryCheck = consumedCategoryCheck;
-        }
-        else if (tabIndex == 1)
-        {
-            budgetTempSortReverse = false;
-            budgetTempSortType = budgetSortType;
-            switch (budgetSortType)
-            {
-                case Constant.SORT_CONSUMED_DATE:
-                {
-                    selectSortDateRadio();
-                    if (budgetSortReverse)
-                    {
-                        reverseSortDateImageView();
-                    }
-                    break;
-                }
-                case Constant.SORT_AMOUNT:
-                {
-                    selectSortAmountRadio();
-                    if (budgetSortReverse)
-                    {
-                        reverseSortAmountImageView();
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            budgetTempTagCheck = budgetTagCheck;
-            budgetTempCategoryCheck = budgetCategoryCheck;
-        }
-        else
-        {
-            borrowingTempSortReverse = false;
-            borrowingTempSortType = borrowingSortType;
-            switch (borrowingSortType)
-            {
-                case Constant.SORT_CONSUMED_DATE:
-                {
-                    selectSortDateRadio();
-                    if (borrowingSortReverse)
-                    {
-                        reverseSortDateImageView();
-                    }
-                    break;
-                }
-                case Constant.SORT_AMOUNT:
-                {
-                    selectSortAmountRadio();
-                    if (borrowingSortReverse)
-                    {
-                        reverseSortAmountImageView();
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            borrowingTempTagCheck = borrowingTagCheck;
-            borrowingTempCategoryCheck = borrowingCategoryCheck;
-        }
-
-        refreshTagView();
-        refreshCategoryView();
-
-        filterPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-        filterPopupWindow.update();
-    }
-
     private void selectSortDateRadio()
     {
         sortConsumedDateRadio.setChecked(true);
@@ -1084,6 +1022,87 @@ public class PickItemActivity extends Activity implements OnClickListener
                 sortAmountImageView.startAnimation(rotateAnimation);
             }
         }
+    }
+
+    public void onClick(View v)
+    {
+        if (v.equals(consumedTextView))
+        {
+            tabIndex = 0;
+        }
+        else if (v.equals(budgetTextView))
+        {
+            tabIndex = 1;
+        }
+        else
+        {
+            tabIndex = 2;
+        }
+        filterItemList();
+        refreshView();
+    }
+
+    // Data
+    private void initData()
+    {
+        Bundle bundle = this.getIntent().getExtras();
+        report = (Report) bundle.getSerializable("report");
+        chosenItemIDList = bundle.getIntegerArrayList("chosenItemIDList");
+        if (chosenItemIDList == null)
+        {
+            chosenItemIDList = new ArrayList<>();
+        }
+
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+
+        tabIndex = report.getType();
+        if (tabIndex == 0)
+        {
+            consumedChosenList = new ArrayList<>(chosenItemIDList);
+            budgetChosenList = new ArrayList<>();
+            borrowingChosenList = new ArrayList<>();
+        }
+        else if (tabIndex == 1)
+        {
+            consumedChosenList = new ArrayList<>();
+            budgetChosenList = new ArrayList<>(chosenItemIDList);
+            borrowingChosenList = new ArrayList<>();
+        }
+        else
+        {
+            consumedChosenList = new ArrayList<>();
+            budgetChosenList = new ArrayList<>();
+            borrowingChosenList = new ArrayList<>(chosenItemIDList);
+        }
+
+        tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+        consumedTagCheck = new boolean[tagList.size()];
+        budgetTagCheck = new boolean[tagList.size()];
+        borrowingTagCheck = new boolean[tagList.size()];
+        for (int i = 0; i < consumedTagCheck.length; i++)
+        {
+            consumedTagCheck[i] = false;
+            budgetTagCheck[i] = false;
+            borrowingTagCheck[i] = false;
+        }
+        consumedTempTagCheck = consumedTagCheck;
+        budgetTempTagCheck = budgetTagCheck;
+        borrowingTempTagCheck = borrowingTagCheck;
+
+        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+        consumedCategoryCheck = new boolean[categoryList.size()];
+        budgetCategoryCheck = new boolean[categoryList.size()];
+        borrowingCategoryCheck = new boolean[categoryList.size()];
+        for (int i = 0; i < consumedCategoryCheck.length; i++)
+        {
+            consumedCategoryCheck[i] = false;
+            budgetCategoryCheck[i] = false;
+            borrowingCategoryCheck[i] = false;
+        }
+        consumedTempCategoryCheck = consumedCategoryCheck;
+        budgetTempCategoryCheck = budgetCategoryCheck;
+        borrowingTempCategoryCheck = borrowingCategoryCheck;
     }
 
     private void refreshData()
@@ -1199,23 +1218,5 @@ public class PickItemActivity extends Activity implements OnClickListener
             borrowingShowList.clear();
             borrowingShowList.addAll(showList);
         }
-    }
-
-    public void onClick(View v)
-    {
-        if (v.equals(consumedTextView))
-        {
-            tabIndex = 0;
-        }
-        else if (v.equals(budgetTextView))
-        {
-            tabIndex = 1;
-        }
-        else
-        {
-            tabIndex = 2;
-        }
-        filterItemList();
-        refreshView();
     }
 }

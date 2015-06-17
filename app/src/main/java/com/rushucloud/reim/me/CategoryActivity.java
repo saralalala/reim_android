@@ -87,14 +87,6 @@ public class CategoryActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        appPreference = AppPreference.getAppPreference();
-        dbManager = DBManager.getDBManager();
-
-        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -242,6 +234,21 @@ public class CategoryActivity extends Activity
         }
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        appPreference = AppPreference.getAppPreference();
+        dbManager = DBManager.getDBManager();
+
+        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
+    }
+
+    // Network
     private void sendDeleteCategoryRequest(final Category category)
     {
         ReimProgressDialog.show();
@@ -307,10 +314,5 @@ public class CategoryActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

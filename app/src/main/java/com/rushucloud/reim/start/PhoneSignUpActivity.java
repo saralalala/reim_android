@@ -199,6 +199,21 @@ public class PhoneSignUpActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        waitingTime = -1;
+        ViewUtils.goBackWithIntent(PhoneSignUpActivity.this, WelcomeActivity.class);
+    }
+
+    // Network
     private void getVerifyCode(String phoneNumber)
     {
         final String second = ViewUtils.getString(R.string.second);
@@ -415,19 +430,5 @@ public class PhoneSignUpActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(phoneEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(codeEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        waitingTime = -1;
-        ViewUtils.goBackWithIntent(PhoneSignUpActivity.this, WelcomeActivity.class);
     }
 }

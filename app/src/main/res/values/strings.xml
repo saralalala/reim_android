@@ -271,6 +271,7 @@
     <string name="change_email">更换绑定邮箱</string>
     <string name="change_phone">更换绑定手机</string>
     <string name="change_wechat">更换绑定微信</string>
+    <string name="resend_active_email">重新发送激活邮件</string>
     <string name="import_didi_expenses">导入滴滴打车消费记录</string>
     <string name="bank_info">银行账户</string>
     <string name="bank_account">银行账号</string>
@@ -357,6 +358,7 @@
     <string name="prompt_unbind">确认要解绑？</string>
     <string name="prompt_last_certification">抱歉，这是你唯一的登录凭证，暂时无法解绑。</string>
     <string name="prompt_wechat_only">该账号仅绑定了微信，如需更换，请先绑定邮箱并设置密码</string>
+    <string name="prompt_resend_active_email_wait">邮件已发送，请%1$d秒后再次尝试</string>
     <string name="prompt_save_approve_ahead_item">这是一笔预申请的消费，您是想仅保存此笔消费还是要直接发送给上级审批？</string>
     <string name="prompt_delete_item">是否要删除此笔消费？</string>
     <string name="prompt_delete_report">是否要删除此报告？</string>
@@ -508,6 +510,7 @@
     <string name="succeed_in_unbinding_email">解绑邮箱成功</string>
     <string name="succeed_in_unbinding_phone">解绑手机成功</string>
     <string name="succeed_in_unbinding_wechat">解绑微信成功</string>
+    <string name="succeed_in_resending_active_email">激活邮件已发送</string>
     <string name="succeed_in_changing_default_manager">默认上级修改成功</string>
     <string name="succeed_in_sending_feedback">反馈发送成功！</string>
     <string name="succeed_in_sending_invite_reply">邀请回复发送成功</string>
@@ -587,6 +590,7 @@
     <string name="failed_to_unbind_email">解绑邮箱失败</string>
     <string name="failed_to_unbind_phone">解绑手机失败</string>
     <string name="failed_to_unbind_wechat">解绑微信失败</string>
+    <string name="failed_to_resend_active_email">激活邮件发送失败</string>
     <string name="failed_to_alert">提醒发送失败</string>
     <string name="failed_to_get_message_list">获取消息列表失败</string>
     <string name="failed_to_get_didi_expenses">获取滴滴打车消费列表失败</string>

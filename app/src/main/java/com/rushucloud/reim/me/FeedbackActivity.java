@@ -110,6 +110,20 @@ public class FeedbackActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(feedbackEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(contactEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Network
     private void sendFeedbackRequest(String feedback, String contactInfo)
     {
         FeedbackRequest request = new FeedbackRequest(feedback, contactInfo, PhoneUtils.getAppVersion());
@@ -135,18 +149,5 @@ public class FeedbackActivity extends Activity
                 });
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(feedbackEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(contactEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

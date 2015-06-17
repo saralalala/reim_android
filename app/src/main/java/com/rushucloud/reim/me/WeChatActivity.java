@@ -137,6 +137,12 @@ public class WeChatActivity extends Activity
         });
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Network
     private void sendUnbindRequest()
     {
         ReimProgressDialog.show();
@@ -174,10 +180,5 @@ public class WeChatActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

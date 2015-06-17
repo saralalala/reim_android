@@ -69,12 +69,6 @@ public class ExportActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
-        report = (Report) getIntent().getExtras().getSerializable("report");
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -134,6 +128,20 @@ public class ExportActivity extends Activity
         imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
     }
 
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
+        report = (Report) getIntent().getExtras().getSerializable("report");
+    }
+
+    // Network
     private void sendExportReportRequest(int reportID, String email)
     {
         ReimProgressDialog.show();
@@ -168,11 +176,5 @@ public class ExportActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

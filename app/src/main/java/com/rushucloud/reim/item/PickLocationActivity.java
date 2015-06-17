@@ -106,14 +106,6 @@ public class PickLocationActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void initData()
-    {
-        currentCity = getIntent().getStringExtra("currentCity");
-        currentCity = !currentCity.isEmpty() ? currentCity : getString(R.string.no_location);
-        hotCityList = Arrays.asList(getResources().getStringArray(R.array.hotCityArray));
-        cityList = Arrays.asList(getResources().getStringArray(R.array.cityArray));
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -185,7 +177,7 @@ public class PickLocationActivity extends Activity
         initIndexLayout();
     }
 
-    public void initListView()
+    private void initListView()
     {
         View hotCityView = View.inflate(this, R.layout.list_hot_city, null);
 
@@ -270,7 +262,7 @@ public class PickLocationActivity extends Activity
         });
     }
 
-    public void initIndexLayout()
+    private void initIndexLayout()
     {
         indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
         centralTextView = (TextView) findViewById(R.id.centralTextView);
@@ -325,6 +317,27 @@ public class PickLocationActivity extends Activity
         }
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(locationEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        currentCity = getIntent().getStringExtra("currentCity");
+        currentCity = !currentCity.isEmpty() ? currentCity : getString(R.string.no_location);
+        hotCityList = Arrays.asList(getResources().getStringArray(R.array.hotCityArray));
+        cityList = Arrays.asList(getResources().getStringArray(R.array.cityArray));
+    }
+
     private void filterList()
     {
         showList.clear();
@@ -337,17 +350,5 @@ public class PickLocationActivity extends Activity
         }
         adapter.setCityList(showList);
         adapter.notifyDataSetChanged();
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(locationEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

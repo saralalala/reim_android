@@ -103,20 +103,6 @@ public class FollowingActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void initData()
-    {
-        report = (Report) getIntent().getSerializableExtra("report");
-        managerList.addAll(report.getManagerList());
-        ccList.addAll(report.getCCList());
-        User currentUser = AppPreference.getAppPreference().getCurrentUser();
-        List<User> managerList = new ArrayList<>();
-        if (report.getSender().getServerID() != currentUser.getDefaultManagerID())
-        {
-            managerList.addAll(currentUser.buildBaseManagerList());
-        }
-        report.setManagerList(managerList);
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -176,6 +162,41 @@ public class FollowingActivity extends Activity
         });
     }
 
+    private void goBackToApproveReportActivity()
+    {
+        report.setManagerList(managerList);
+        report.setCCList(ccList);
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("report", report);
+        Intent intent = new Intent(FollowingActivity.this, ApproveReportActivity.class);
+        intent.putExtras(bundle);
+        ViewUtils.goBackWithIntent(this, intent);
+    }
+
+    private void goBackToMainActivity()
+    {
+        ReimApplication.setTabIndex(Constant.TAB_REPORT);
+        ReimApplication.setReportTabIndex(Constant.TAB_REPORT_OTHERS);
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        report = (Report) getIntent().getSerializableExtra("report");
+        managerList.addAll(report.getManagerList());
+        ccList.addAll(report.getCCList());
+        User currentUser = AppPreference.getAppPreference().getCurrentUser();
+        List<User> managerList = new ArrayList<>();
+        if (report.getSender().getServerID() != currentUser.getDefaultManagerID())
+        {
+            managerList.addAll(currentUser.buildBaseManagerList());
+        }
+        report.setManagerList(managerList);
+    }
+
+    // Network
     private void sendApproveReportRequest(boolean isFinished)
     {
         ReimProgressDialog.show();
@@ -220,24 +241,5 @@ public class FollowingActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBackToApproveReportActivity()
-    {
-        report.setManagerList(managerList);
-        report.setCCList(ccList);
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("report", report);
-        Intent intent = new Intent(FollowingActivity.this, ApproveReportActivity.class);
-        intent.putExtras(bundle);
-        ViewUtils.goBackWithIntent(this, intent);
-    }
-
-    private void goBackToMainActivity()
-    {
-        ReimApplication.setTabIndex(Constant.TAB_REPORT);
-        ReimApplication.setReportTabIndex(Constant.TAB_REPORT_OTHERS);
-        ViewUtils.goBack(this);
     }
 }

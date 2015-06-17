@@ -159,33 +159,6 @@ public class ReportFragment extends Fragment implements OnClickListener
         }
     }
 
-    private void initData()
-    {
-        if (dbManager == null)
-        {
-            dbManager = DBManager.getDBManager();
-        }
-
-        if (appPreference == null)
-        {
-            appPreference = AppPreference.getAppPreference();
-        }
-
-        mineList.addAll(readMineReportList());
-        showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList, true));
-
-        othersList.addAll(readOthersReportList());
-        showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList, false));
-
-        mineCheck = new boolean[5];
-        othersCheck = new boolean[5];
-        for (int i = 0; i < 5; i++)
-        {
-            mineCheck[i] = false;
-            othersCheck[i] = false;
-        }
-    }
-
     private void initView()
     {
         initTitleView();
@@ -636,6 +609,160 @@ public class ReportFragment extends Fragment implements OnClickListener
         operationPopupWindow = ViewUtils.buildBottomPopupWindow(getActivity(), operationView);
     }
 
+    private void showFilterWindow()
+    {
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
+        {
+            mineTempSortReverse = false;
+            mineTempSortType = mineSortType;
+            switch (mineSortType)
+            {
+                case Constant.SORT_UPDATE_DATE:
+                {
+                    selectSortUpdateDateRadio();
+                    if (mineSortReverse)
+                    {
+                        reverseSortUpdateImageView();
+                    }
+                    break;
+                }
+                case Constant.SORT_CREATE_DATE:
+                {
+                    selectSortCreateDateRadio();
+                    if (mineSortReverse)
+                    {
+                        reverseSortCreateImageView();
+                    }
+                    break;
+                }
+                case Constant.SORT_AMOUNT:
+                {
+                    selectSortAmountRadio();
+                    if (mineSortReverse)
+                    {
+                        reverseSortAmountImageView();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            tagAdapter.setCheck(mineCheck);
+            tagAdapter.notifyDataSetChanged();
+        }
+        else
+        {
+            othersTempSortReverse = false;
+            othersTempSortType = othersSortType;
+            switch (othersSortType)
+            {
+                case Constant.SORT_UPDATE_DATE:
+                {
+                    selectSortUpdateDateRadio();
+                    if (othersSortReverse)
+                    {
+                        reverseSortUpdateImageView();
+                    }
+                    break;
+                }
+                case Constant.SORT_CREATE_DATE:
+                {
+                    selectSortCreateDateRadio();
+                    if (othersSortReverse)
+                    {
+                        reverseSortCreateImageView();
+                    }
+                    break;
+                }
+                case Constant.SORT_AMOUNT:
+                {
+                    selectSortAmountRadio();
+                    if (othersSortReverse)
+                    {
+                        reverseSortAmountImageView();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            tagAdapter.setCheck(othersCheck);
+            tagAdapter.notifyDataSetChanged();
+        }
+
+        filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
+        filterPopupWindow.update();
+    }
+
+    private void showOperationWindow()
+    {
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
+        {
+            Report report = showMineList.get(reportIndex);
+            if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
+            {
+                exportButton.setEnabled(false);
+                exportButton.setBackgroundResource(R.drawable.window_button_pressed);
+                exportButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
+            }
+            else
+            {
+                exportButton.setEnabled(true);
+                exportButton.setBackgroundResource(R.drawable.window_button_drawable);
+                exportButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
+            }
+
+            if (report.getStatus() == Report.STATUS_SUBMITTED || report.getStatus() == Report.STATUS_APPROVED)
+            {
+                deleteButton.setEnabled(false);
+                deleteButton.setBackgroundResource(R.drawable.window_button_pressed);
+                deleteButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
+            }
+            else
+            {
+                deleteButton.setEnabled(true);
+                deleteButton.setBackgroundResource(R.drawable.window_button_drawable);
+                deleteButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
+            }
+        }
+        else
+        {
+            Report report = showOthersList.get(reportIndex);
+            if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
+            {
+                exportButton.setEnabled(false);
+                exportButton.setBackgroundResource(R.drawable.window_button_pressed);
+                exportButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
+            }
+            else
+            {
+                exportButton.setEnabled(true);
+                exportButton.setBackgroundResource(R.drawable.window_button_drawable);
+                exportButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
+            }
+
+            if (report.getStatus() == Report.STATUS_SUBMITTED && report.getMyDecision() == Report.STATUS_SUBMITTED)
+            {
+                deleteButton.setEnabled(false);
+                deleteButton.setBackgroundResource(R.drawable.window_button_pressed);
+                deleteButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
+            }
+            else
+            {
+                deleteButton.setEnabled(true);
+                deleteButton.setBackgroundResource(R.drawable.window_button_drawable);
+                deleteButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
+            }
+        }
+
+        operationPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+        operationPopupWindow.update();
+
+        ViewUtils.dimBackground(getActivity());
+    }
+
     public void setListView(int index, boolean readDatabase)
     {
         ReimApplication.setReportTabIndex(index);
@@ -819,6 +946,99 @@ public class ReportFragment extends Fragment implements OnClickListener
         }
     }
 
+    private void refreshReportListView(boolean readDatabase)
+    {
+        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
+        {
+            if (readDatabase)
+            {
+                mineList.clear();
+                mineList.addAll(readMineReportList());
+            }
+            showMineList.clear();
+            showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList, true));
+            adapter.setReportList(showMineList);
+            adapter.setUnreadList(ReimApplication.getMineUnreadList());
+            adapter.setTabIndex(Constant.TAB_REPORT_MINE);
+            adapter.notifyDataSetChanged();
+
+            int visibility = !mineFilterStatusList.isEmpty() && showMineList.isEmpty() ? View.VISIBLE : View.GONE;
+            noResultLayout.setVisibility(visibility);
+
+            int filterImage = mineFilterStatusList.isEmpty() ? R.drawable.filter_empty : R.drawable.filter_full;
+            filterImageView.setImageResource(filterImage);
+        }
+        else
+        {
+            if (readDatabase)
+            {
+                othersList.clear();
+                othersList.addAll(readOthersReportList());
+            }
+            if (!othersList.isEmpty() && othersFilterStatusList.isEmpty() && othersSortType == Constant.SORT_UPDATE_DATE && !othersSortReverse)
+            {
+                buildReportListByStatus();
+            }
+            else
+            {
+                showOthersList.clear();
+                showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList,false));
+            }
+
+            adapter.setReportList(showOthersList);
+            adapter.setUnreadList(ReimApplication.getOthersUnreadList());
+            adapter.setTabIndex(Constant.TAB_REPORT_OTHERS);
+            adapter.notifyDataSetChanged();
+
+            int visibility = !othersFilterStatusList.isEmpty() && showOthersList.isEmpty() ? View.VISIBLE : View.GONE;
+            noResultLayout.setVisibility(visibility);
+
+            int filterImage = othersFilterStatusList.isEmpty() ? R.drawable.filter_empty : R.drawable.filter_full;
+            filterImageView.setImageResource(filterImage);
+        }
+        showBadge();
+    }
+
+    public void onClick(View v)
+    {
+        if (v.equals(myTitleTextView))
+        {
+            setListView(0, false);
+        }
+        else
+        {
+            setListView(1, false);
+        }
+    }
+
+    // Data
+    private void initData()
+    {
+        if (dbManager == null)
+        {
+            dbManager = DBManager.getDBManager();
+        }
+
+        if (appPreference == null)
+        {
+            appPreference = AppPreference.getAppPreference();
+        }
+
+        mineList.addAll(readMineReportList());
+        showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList, true));
+
+        othersList.addAll(readOthersReportList());
+        showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList, false));
+
+        mineCheck = new boolean[5];
+        othersCheck = new boolean[5];
+        for (int i = 0; i < 5; i++)
+        {
+            mineCheck[i] = false;
+            othersCheck[i] = false;
+        }
+    }
+
     private List<Report> readMineReportList()
     {
         return dbManager.getUserReports(appPreference.getCurrentUserID());
@@ -920,213 +1140,7 @@ public class ReportFragment extends Fragment implements OnClickListener
         }
     }
 
-    private void refreshReportListView(boolean readDatabase)
-    {
-        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
-        {
-            if (readDatabase)
-            {
-                mineList.clear();
-                mineList.addAll(readMineReportList());
-            }
-            showMineList.clear();
-            showMineList.addAll(filterReportList(mineList, mineSortType, mineSortReverse, mineFilterStatusList, true));
-            adapter.setReportList(showMineList);
-            adapter.setUnreadList(ReimApplication.getMineUnreadList());
-            adapter.setTabIndex(Constant.TAB_REPORT_MINE);
-            adapter.notifyDataSetChanged();
-
-            int visibility = !mineFilterStatusList.isEmpty() && showMineList.isEmpty() ? View.VISIBLE : View.GONE;
-            noResultLayout.setVisibility(visibility);
-
-            int filterImage = mineFilterStatusList.isEmpty() ? R.drawable.filter_empty : R.drawable.filter_full;
-            filterImageView.setImageResource(filterImage);
-        }
-        else
-        {
-            if (readDatabase)
-            {
-                othersList.clear();
-                othersList.addAll(readOthersReportList());
-            }
-            if (!othersList.isEmpty() && othersFilterStatusList.isEmpty() && othersSortType == Constant.SORT_UPDATE_DATE && !othersSortReverse)
-            {
-                buildReportListByStatus();
-            }
-            else
-            {
-                showOthersList.clear();
-                showOthersList.addAll(filterReportList(othersList, othersSortType, othersSortReverse, othersFilterStatusList,false));
-            }
-
-            adapter.setReportList(showOthersList);
-            adapter.setUnreadList(ReimApplication.getOthersUnreadList());
-            adapter.setTabIndex(Constant.TAB_REPORT_OTHERS);
-            adapter.notifyDataSetChanged();
-
-            int visibility = !othersFilterStatusList.isEmpty() && showOthersList.isEmpty() ? View.VISIBLE : View.GONE;
-            noResultLayout.setVisibility(visibility);
-
-            int filterImage = othersFilterStatusList.isEmpty() ? R.drawable.filter_empty : R.drawable.filter_full;
-            filterImageView.setImageResource(filterImage);
-        }
-        showBadge();
-    }
-
-    private void showFilterWindow()
-    {
-        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
-        {
-            mineTempSortReverse = false;
-            mineTempSortType = mineSortType;
-            switch (mineSortType)
-            {
-                case Constant.SORT_UPDATE_DATE:
-                {
-                    selectSortUpdateDateRadio();
-                    if (mineSortReverse)
-                    {
-                        reverseSortUpdateImageView();
-                    }
-                    break;
-                }
-                case Constant.SORT_CREATE_DATE:
-                {
-                    selectSortCreateDateRadio();
-                    if (mineSortReverse)
-                    {
-                        reverseSortCreateImageView();
-                    }
-                    break;
-                }
-                case Constant.SORT_AMOUNT:
-                {
-                    selectSortAmountRadio();
-                    if (mineSortReverse)
-                    {
-                        reverseSortAmountImageView();
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-
-            tagAdapter.setCheck(mineCheck);
-            tagAdapter.notifyDataSetChanged();
-        }
-        else
-        {
-            othersTempSortReverse = false;
-            othersTempSortType = othersSortType;
-            switch (othersSortType)
-            {
-                case Constant.SORT_UPDATE_DATE:
-                {
-                    selectSortUpdateDateRadio();
-                    if (othersSortReverse)
-                    {
-                        reverseSortUpdateImageView();
-                    }
-                    break;
-                }
-                case Constant.SORT_CREATE_DATE:
-                {
-                    selectSortCreateDateRadio();
-                    if (othersSortReverse)
-                    {
-                        reverseSortCreateImageView();
-                    }
-                    break;
-                }
-                case Constant.SORT_AMOUNT:
-                {
-                    selectSortAmountRadio();
-                    if (othersSortReverse)
-                    {
-                        reverseSortAmountImageView();
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-
-            tagAdapter.setCheck(othersCheck);
-            tagAdapter.notifyDataSetChanged();
-        }
-
-        filterPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.CENTER, 0, 0);
-        filterPopupWindow.update();
-    }
-
-    private void showOperationWindow()
-    {
-        if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
-        {
-            Report report = showMineList.get(reportIndex);
-            if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
-            {
-                exportButton.setEnabled(false);
-                exportButton.setBackgroundResource(R.drawable.window_button_pressed);
-                exportButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
-            }
-            else
-            {
-                exportButton.setEnabled(true);
-                exportButton.setBackgroundResource(R.drawable.window_button_drawable);
-                exportButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
-            }
-
-            if (report.getStatus() == Report.STATUS_SUBMITTED || report.getStatus() == Report.STATUS_APPROVED)
-            {
-                deleteButton.setEnabled(false);
-                deleteButton.setBackgroundResource(R.drawable.window_button_pressed);
-                deleteButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
-            }
-            else
-            {
-                deleteButton.setEnabled(true);
-                deleteButton.setBackgroundResource(R.drawable.window_button_drawable);
-                deleteButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
-            }
-        }
-        else
-        {
-            Report report = showOthersList.get(reportIndex);
-            if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
-            {
-                exportButton.setEnabled(false);
-                exportButton.setBackgroundResource(R.drawable.window_button_pressed);
-                exportButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
-            }
-            else
-            {
-                exportButton.setEnabled(true);
-                exportButton.setBackgroundResource(R.drawable.window_button_drawable);
-                exportButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
-            }
-
-            if (report.getStatus() == Report.STATUS_SUBMITTED && report.getMyDecision() == Report.STATUS_SUBMITTED)
-            {
-                deleteButton.setEnabled(false);
-                deleteButton.setBackgroundResource(R.drawable.window_button_pressed);
-                deleteButton.setTextColor(ViewUtils.getColor(R.color.button_text_light));
-            }
-            else
-            {
-                deleteButton.setEnabled(true);
-                deleteButton.setBackgroundResource(R.drawable.window_button_drawable);
-                deleteButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
-            }
-        }
-
-        operationPopupWindow.showAtLocation(getActivity().findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
-        operationPopupWindow.update();
-
-        ViewUtils.dimBackground(getActivity());
-    }
-
+    // Network
     private void sendDeleteReportRequest(final Report report)
     {
         ReimProgressDialog.show();
@@ -1396,18 +1410,6 @@ public class ReportFragment extends Fragment implements OnClickListener
                     }
                 });
             }
-        }
-    }
-
-    public void onClick(View v)
-    {
-        if (v.equals(myTitleTextView))
-        {
-            setListView(0, false);
-        }
-        else
-        {
-            setListView(1, false);
         }
     }
 }

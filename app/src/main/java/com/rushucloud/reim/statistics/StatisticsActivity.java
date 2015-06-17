@@ -136,19 +136,6 @@ public class StatisticsActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-
-        Bundle bundle = getIntent().getExtras();
-        mineData = bundle.getBoolean("mineData", false);
-        year = bundle.getInt("year", 0);
-        month = bundle.getInt("month", 0);
-        categoryID = bundle.getInt("categoryID", 0);
-        tagID = bundle.getInt("tagID", 0);
-        userID = bundle.getInt("userID", 0);
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -279,11 +266,6 @@ public class StatisticsActivity extends Activity
         monthLayout.removeAllViews();
         tagLayout.removeAllViews();
         memberLayout.removeAllViews();
-    }
-
-    private boolean needToGetData()
-    {
-        return Utils.getCurrentTime() - lastUpdateTime > Constant.GET_DATA_INTERVAL;
     }
 
     private void drawOverviewLayout(double totalAmount, double newAmount)
@@ -603,6 +585,31 @@ public class StatisticsActivity extends Activity
         }
     }
 
+    private void goBack()
+    {
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+
+        Bundle bundle = getIntent().getExtras();
+        mineData = bundle.getBoolean("mineData", false);
+        year = bundle.getInt("year", 0);
+        month = bundle.getInt("month", 0);
+        categoryID = bundle.getInt("categoryID", 0);
+        tagID = bundle.getInt("tagID", 0);
+        userID = bundle.getInt("userID", 0);
+    }
+
+    private boolean needToGetData()
+    {
+        return Utils.getCurrentTime() - lastUpdateTime > Constant.GET_DATA_INTERVAL;
+    }
+
+    // Network
     private void sendGetMineDataRequest()
     {
         MineStatDetailRequest request = new MineStatDetailRequest(year, month, tagID, categoryID);
@@ -687,10 +694,5 @@ public class StatisticsActivity extends Activity
                 }
             }
         });
-    }
-
-    private void goBack()
-    {
-        ViewUtils.goBack(this);
     }
 }

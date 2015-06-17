@@ -68,12 +68,6 @@ public class NicknameActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        currentUser = AppPreference.getAppPreference().getCurrentUser();
-        originalNickname = currentUser.getNickname();
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -127,6 +121,26 @@ public class NicknameActivity extends Activity
         });
     }
 
+    private void hideSoftKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
+    }
+
+    private void goBack()
+    {
+        hideSoftKeyboard();
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
+        originalNickname = currentUser.getNickname();
+    }
+
+    // Network
     private void sendModifyUserInfoRequest()
     {
         ReimProgressDialog.show();
@@ -163,17 +177,5 @@ public class NicknameActivity extends Activity
                 }
             }
         });
-    }
-
-    private void hideSoftKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(nicknameEditText.getWindowToken(), 0);
-    }
-
-    private void goBack()
-    {
-        hideSoftKeyboard();
-        ViewUtils.goBack(this);
     }
 }

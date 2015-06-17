@@ -73,22 +73,6 @@ public class PickCategoryActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-
-        Category chosenCategory = (Category) getIntent().getSerializableExtra("category");
-
-        readCategoryList();
-
-        check = Category.getCategoryCheck(categoryList, chosenCategory);
-        subCheck = new ArrayList<>();
-        for (List<Category> categories : subCategoryList)
-        {
-            subCheck.add(Category.getCategoryCheck(categories, chosenCategory));
-        }
-    }
-
     private void initView()
     {
         ImageView backImageView = (ImageView) findViewById(R.id.backImageView);
@@ -195,34 +179,26 @@ public class PickCategoryActivity extends Activity
         }
     }
 
-    private void sendDownloadCategoryIconRequest(final Category category)
+    private void goBack()
     {
-        DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
-        request.sendRequest(new HttpConnectionCallback()
+        ViewUtils.goBack(this);
+    }
+
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+
+        Category chosenCategory = (Category) getIntent().getSerializableExtra("category");
+
+        readCategoryList();
+
+        check = Category.getCategoryCheck(categoryList, chosenCategory);
+        subCheck = new ArrayList<>();
+        for (List<Category> categories : subCategoryList)
         {
-            public void execute(Object httpResponse)
-            {
-                final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
-                if (response.getBitmap() != null)
-                {
-                    PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
-                    category.setLocalUpdatedDate(Utils.getCurrentTime());
-                    category.setServerUpdatedDate(category.getLocalUpdatedDate());
-                    dbManager.updateCategory(category);
-
-                    readCategoryList();
-
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            adapter.setCategory(categoryList, subCategoryList);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-        });
+            subCheck.add(Category.getCategoryCheck(categories, chosenCategory));
+        }
     }
 
     private void readCategoryList()
@@ -270,8 +246,34 @@ public class PickCategoryActivity extends Activity
         }
     }
 
-    private void goBack()
+    // Network
+    private void sendDownloadCategoryIconRequest(final Category category)
     {
-        ViewUtils.goBack(this);
+        DownloadImageRequest request = new DownloadImageRequest(category.getIconID());
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
+                if (response.getBitmap() != null)
+                {
+                    PhoneUtils.saveIconToFile(response.getBitmap(), category.getIconID());
+                    category.setLocalUpdatedDate(Utils.getCurrentTime());
+                    category.setServerUpdatedDate(category.getLocalUpdatedDate());
+                    dbManager.updateCategory(category);
+
+                    readCategoryList();
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            adapter.setCategory(categoryList, subCategoryList);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
     }
 }
