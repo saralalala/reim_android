@@ -17,61 +17,14 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/company"/>
 
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="12dp"
-        android:layout_gravity="center_horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/succeed_in_creating_company_1"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/succeed_in_creating_company_2"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/succeed_in_creating_company_3"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/succeed_in_creating_company_4"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/succeed_in_creating_company_5"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/succeed_in_creating_company_6"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-    </LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:text="@string/succeed_in_creating_company"
+        android:textColor="@color/major_light"
+        android:textSize="28sp"/>
 
     <TextView
         android:id="@+id/companyTextView"

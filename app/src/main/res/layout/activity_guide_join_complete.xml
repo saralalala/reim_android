@@ -17,53 +17,14 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/sent"/>
 
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="12dp"
-        android:layout_gravity="center_horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/applied_to_join_1"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/applied_to_join_2"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/applied_to_join_3"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/applied_to_join_4"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/applied_to_join_5"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-    </LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:text="@string/applied_to_join"
+        android:textColor="@color/major_light"
+        android:textSize="28sp"/>
 
     <TextView
         android:id="@+id/companyTextView"
@@ -73,7 +34,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:text="阿斯顿家乐福哈时间看到"
         android:textColor="@color/major_light"
         android:textSize="18sp"/>
 

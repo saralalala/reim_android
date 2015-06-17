@@ -17,45 +17,14 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/joined"/>
 
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="12dp"
-        android:layout_gravity="center_horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/joined_1"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/joined_2"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:text="@string/joined_3"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/joined_4"
-            android:textColor="@color/major_light"
-            android:textSize="28sp"/>
-
-    </LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:text="@string/joined"
+        android:textColor="@color/major_light"
+        android:textSize="28sp"/>
 
     <TextView
         android:id="@+id/companyTextView"

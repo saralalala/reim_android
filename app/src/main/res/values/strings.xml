@@ -86,13 +86,7 @@
     <string name="reset_password">设置新密码</string>
     <string name="complete_info">完善个人信息</string>
 
-    <string name="welcome_to_use_1">欢</string>
-    <string name="welcome_to_use_2">迎</string>
-    <string name="welcome_to_use_3">使</string>
-    <string name="welcome_to_use_4">用</string>
-    <string name="welcome_to_use_5">云</string>
-    <string name="welcome_to_use_6">报</string>
-    <string name="welcome_to_use_7">销</string>
+    <string name="welcome_to_use">欢迎使用云报销</string>
     <string name="introduction">「云报销」是一款财务报销管理工具。你可以在这里随时进行费用记录、申请和审批，也可以更好地管理企业的支出。开始使用前，请先用30秒设置你的账户。</string>
     <string name="join_company">加入公司</string>
     <string name="are_you_admin">您是管理员？</string>
@@ -116,21 +110,8 @@
     <string name="search_result">搜索结果</string>
     <string name="search_result_empty">没有符合条件的公司</string>
     <string name="copy_link"><u>复制链接</u></string>
-    <string name="applied_to_join_1">已</string>
-    <string name="applied_to_join_2">申</string>
-    <string name="applied_to_join_3">请</string>
-    <string name="applied_to_join_4">加</string>
-    <string name="applied_to_join_5">入</string>
-    <string name="succeed_in_creating_company_1">公</string>
-    <string name="succeed_in_creating_company_2">司</string>
-    <string name="succeed_in_creating_company_3">创</string>
-    <string name="succeed_in_creating_company_4">建</string>
-    <string name="succeed_in_creating_company_5">成</string>
-    <string name="succeed_in_creating_company_6">功</string>
-    <string name="joined_1">你</string>
-    <string name="joined_2">已</string>
-    <string name="joined_3">加</string>
-    <string name="joined_4">入</string>
+    <string name="applied_to_join">已申请加入</string>
+    <string name="joined">你已加入</string>
     
     <string name="reimbursement">消费</string>
     <string name="report">报告</string>
@@ -649,6 +630,30 @@
     <string name="status_borrowing">借</string>
     <string name="status_approve_ahead_approved">(已审批)</string>
     <string name="status_cc">抄送</string>
+
+    <string name="currency_cny">人民币</string>
+    <string name="currency_usd">美元</string>
+    <string name="currency_eur">欧元</string>
+    <string name="currency_hkd">港币</string>
+    <string name="currency_mop">澳门元</string>
+    <string name="currency_twd">新台币</string>
+    <string name="currency_jpy">日元</string>
+    <string name="currency_ker">韩国元</string>
+    <string name="currency_gbp">英镑</string>
+    <string name="currency_rub">卢布</string>
+    <string name="currency_sgd">新加坡元</string>
+    <string name="currency_php">菲律宾比索</string>
+    <string name="currency_idr">印尼卢比</string>
+    <string name="currency_myr">马来西亚元</string>
+    <string name="currency_thb">泰铢</string>
+    <string name="currency_cad">加拿大元</string>
+    <string name="currency_aud">澳大利亚元</string>
+    <string name="currency_nzd">新西兰元</string>
+    <string name="currency_chf">瑞士法郎</string>
+    <string name="currency_dkk">丹麦克朗</string>
+    <string name="currency_nok">挪威克朗</string>
+    <string name="currency_sek">瑞典克朗</string>
+    <string name="currency_brl">巴西里亚尔</string>
     
     <string name="xlistview_header_hint_normal">下拉更新</string>
     <string name="xlistview_header_hint_ready">释放更新</string>

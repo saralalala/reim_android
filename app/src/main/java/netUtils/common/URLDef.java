@@ -47,6 +47,8 @@ public class URLDef
     public static final String URL_SET_ADMIN = "set_admin";
     public static final String URL_BIND = "bind";
     public static final String URL_RESEND = "resend";
+    public static final String URL_DIDI_GET_SMS = "http://pay.xiaojukeji.com/api/v2/p_getsmscode";
+    public static final String URL_DIDI_SIGN_IN = "http://pay.xiaojukeji.com/api/v2/weixinapi/p_login?openid=oDe7ajgT3tsnY1QmLFo2QAQYq41E&phone=%1$s&channel=1200&source=";
 
     public static final String URL_SHARE_REDIRECT_URI_PREFIX = "https://admin.cloudbaoxiao.com/pub/oauth/";
     public static final String URL_SHARE = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx068349d5d3a73855&redirect_uri=%1$s" +

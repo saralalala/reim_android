@@ -55,6 +55,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import classes.model.Category;
+import classes.model.Currency;
 import classes.model.Image;
 import classes.model.Item;
 import classes.model.Report;
@@ -120,6 +121,7 @@ public class EditItemActivity extends Activity
     private List<ImageView> removeList = null;
     boolean removeImageViewShown = false;
 
+    private List<Currency> currencyList = new ArrayList<>();
     private List<Category> categoryList;
     private List<Tag> tagList;
 
@@ -1376,6 +1378,7 @@ public class EditItemActivity extends Activity
         dbManager = DBManager.getDBManager();
         locationClient = new LocationClient(getApplicationContext());
 
+        initCurrencyList();
         categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
         tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
 
@@ -1420,6 +1423,78 @@ public class EditItemActivity extends Activity
             }
         }
     }
+    
+    private void initCurrencyList()
+    {
+        Currency currency = new Currency(R.string.currency_cny, "CNY", "￥");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_usd, "USD", "$");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_eur, "EUR", "€");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_hkd, "HKD", "$");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_mop, "MOP", "$");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_twd, "TWD", "$");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_jpy, "JPY", "￥");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_ker, "KER", "₩");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_gbp, "GBP", "£");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_rub, "RUB", "Rbs");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_sgd, "SGD", "$");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_php, "PHP", "₱");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_idr, "IDR", "Rps");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_myr, "MYR", "$");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_thb, "THB", "฿");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_cad, "CAD", "$");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_aud, "AUD", "$");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_nzd, "NZD", "$");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_chf, "CHF", "₣");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_dkk, "DKK", "Kr");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_nok, "NOK", "Kr");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_sek, "SEK", "Kr");
+        currencyList.add(currency);
+
+        currency = new Currency(R.string.currency_brl, "BRL", "$");
+        currencyList.add(currency);
+    }    
 
     private void saveItem()
     {
