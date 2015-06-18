@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import classes.utils.DBManager;
 import classes.utils.Utils;
 
 public class Item
@@ -42,6 +43,7 @@ public class Item
     private String location = "";
     private double latitude = -1;
     private double longitude = -1;
+    private Currency currency = null;
     private List<Image> invoices = null;
     private List<User> relevantUsers = null;
     private List<Tag> tags = null;
@@ -56,7 +58,7 @@ public class Item
 
     public Item()
     {
-
+        currency = DBManager.getDBManager().getCurrency("CNY");
     }
 
     public Item(JSONObject jObject)
@@ -81,6 +83,8 @@ public class Item
             setTagsID(jObject.getString("tags"));
             setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
             setRelevantUsersID(jObject.getString("relates"));
+
+            currency = DBManager.getDBManager().getCurrency("CNY");
 
             JSONArray invoiceArray = jObject.getJSONArray("images");
             List<Image> invoiceList = new ArrayList<>();
@@ -256,6 +260,15 @@ public class Item
     public void setLongitude(double longitude)
     {
         this.longitude = longitude;
+    }
+
+    public Currency getCurrency()
+    {
+        return currency;
+    }
+    public void setCurrency(Currency currency)
+    {
+        this.currency = currency;
     }
 
     public List<Image> getInvoices()

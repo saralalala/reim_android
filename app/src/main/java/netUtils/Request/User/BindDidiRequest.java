@@ -1,24 +1,23 @@
-package netUtils.request.item;
+package netUtils.request.user;
 
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.URLDef;
 import netUtils.request.common.BaseRequest;
 
-public class DidiGetSMSRequest extends BaseRequest
+public class BindDidiRequest extends BaseRequest
 {
-    public DidiGetSMSRequest(String phone)
+    public BindDidiRequest(String phone, String token)
     {
         super();
 
         addParams("phone", phone);
-        addParams("smstype", 0);
-        addParams("source", 2);
+        addParams("token", token);
 
-        setUrl(URLDef.URL_DIDI_GET_SMS);
+        appendUrl(URLDef.URL_DIDI_BIND);
     }
 
     public void sendRequest(HttpConnectionCallback callback)
     {
-        doGet(callback);
+        doPost(callback);
     }
 }

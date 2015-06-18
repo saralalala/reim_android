@@ -118,7 +118,7 @@
                 android:layout_height="@dimen/layout_with_two_divider_height"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/me_item_drawable"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <include
                     android:layout_width="match_parent"

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_with_one_divider_height"
+        android:orientation="horizontal"
+        android:background="@drawable/list_item_drawable">
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentTop="true"
+            layout="@layout/view_divider"/>
+
+        <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/button_dark_drawable"
+            android:text="@string/confirm"
+            android:textColor="@color/button_text_light_color"/>
+
+    </RelativeLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
+
+    <classes.widget.wheelview.WheelView
+        android:id="@+id/currencyWheelView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

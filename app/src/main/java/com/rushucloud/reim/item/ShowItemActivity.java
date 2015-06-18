@@ -118,15 +118,6 @@ public class ShowItemActivity extends Activity
             approvedTextView.setVisibility(View.GONE);
         }
 
-        // init type
-        String temp = getString(item.getTypeString());
-        if (item.getType() == Item.TYPE_REIM && !item.needReimbursed())
-        {
-            temp += getString(R.string.does_not_need_reimburse);
-        }
-        TextView typeTextView = (TextView) findViewById(R.id.typeTextView);
-        typeTextView.setText(temp);
-
         // init invoice photo
         invoiceLayout = (LinearLayout) findViewById(R.id.invoiceLayout);
         refreshInvoiceView();
@@ -146,25 +137,6 @@ public class ShowItemActivity extends Activity
             }
         }
 
-        // init time
-        TextView timeTextView = (TextView) findViewById(R.id.timeTextView);
-        if (item.getConsumedDate() > 0)
-        {
-            timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
-        }
-        else
-        {
-            timeTextView.setText(R.string.not_available);
-        }
-
-        // init vendor
-        TextView vendorTextView = (TextView) findViewById(R.id.vendorTextView);
-        vendorTextView.setText(item.getVendor());
-
-        // init location
-        TextView locationTextView = (TextView) findViewById(R.id.locationTextView);
-        locationTextView.setText(item.getLocation());
-
         // init category
         categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
         TextView categoryTextView = (TextView) findViewById(R.id.categoryTextView);
@@ -178,6 +150,34 @@ public class ShowItemActivity extends Activity
                 sendDownloadCategoryIconRequest(item.getCategory());
             }
         }
+
+        // init vendor
+        TextView vendorTextView = (TextView) findViewById(R.id.vendorTextView);
+        vendorTextView.setText(item.getVendor());
+
+        // init location
+        TextView locationTextView = (TextView) findViewById(R.id.locationTextView);
+        locationTextView.setText(item.getLocation());
+
+        // init time
+        TextView timeTextView = (TextView) findViewById(R.id.timeTextView);
+        if (item.getConsumedDate() > 0)
+        {
+            timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
+        }
+        else
+        {
+            timeTextView.setText(R.string.not_available);
+        }
+
+        // init type
+        String temp = getString(item.getTypeString());
+        if (item.getType() == Item.TYPE_REIM && !item.needReimbursed())
+        {
+            temp += getString(R.string.does_not_need_reimburse);
+        }
+        TextView typeTextView = (TextView) findViewById(R.id.typeTextView);
+        typeTextView.setText(temp);
 
         // init tag
         tagLayout = (LinearLayout) findViewById(R.id.tagLayout);

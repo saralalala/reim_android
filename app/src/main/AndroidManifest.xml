@@ -237,7 +237,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".me.DidiExpenseActivity"
+            android:name=".item.DidiExpenseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
         <activity

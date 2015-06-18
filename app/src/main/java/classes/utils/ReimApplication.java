@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import classes.model.Currency;
 import classes.widget.ReimProgressDialog;
 
 public class ReimApplication extends Application
@@ -294,6 +295,79 @@ public class ReimApplication extends Application
             Configuration config = getResources().getConfiguration();
             config.locale = locale;
             getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        }
+
+        DBManager dbManager = DBManager.getDBManager();
+        if (dbManager.isCurrencyTableEmpty())
+        {
+            Currency currency = new Currency("CNY", "￥");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("USD", "$");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("EUR", "€");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("HKD", "$");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("MOP", "$");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("TWD", "$");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("JPY", "￥");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("KER", "₩");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("GBP", "£");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("RUB", "Rbs");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("SGD", "$");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("PHP", "₱");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("IDR", "Rps");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("MYR", "$");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("THB", "฿");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("CAD", "$");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("AUD", "$");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("NZD", "$");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("CHF", "₣");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("DKK", "Kr");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("NOK", "Kr");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("SEK", "Kr");
+            dbManager.insertCurrency(currency);
+
+            currency = new Currency("BRL", "$");
+            dbManager.insertCurrency(currency);
         }
     }
 }

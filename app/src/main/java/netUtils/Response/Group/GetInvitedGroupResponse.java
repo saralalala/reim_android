@@ -26,8 +26,8 @@ public class GetInvitedGroupResponse extends BaseResponse
         try
         {
             JSONArray jsonArray = getDataArray();
-            groupList = new ArrayList<Group>();
-            inviteList = new ArrayList<Invite>();
+            groupList = new ArrayList<>();
+            inviteList = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++)
             {
                 JSONObject object = jsonArray.getJSONObject(i);

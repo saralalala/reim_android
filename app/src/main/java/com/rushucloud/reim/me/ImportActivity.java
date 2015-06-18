@@ -11,8 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.item.DidiExpenseActivity;
 import com.umeng.analytics.MobclickAgent;
 
+import classes.model.User;
+import classes.utils.AppPreference;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 
@@ -61,15 +64,20 @@ public class ImportActivity extends Activity
             }
         });
 
+        final User currentUser = AppPreference.getAppPreference().getCurrentUser();
+
         final TextView didiTextView = (TextView) findViewById(R.id.didiTextView);
-        didiTextView.setText("13811891565");
+        if (!currentUser.getDidi().isEmpty())
+        {
+            didiTextView.setText(currentUser.getDidi());
+        }
 
         LinearLayout didiLayout = (LinearLayout) findViewById(R.id.didiLayout);
         didiLayout.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-                if (didiTextView.getText().equals("13811891565"))
+                if (!currentUser.getDidi().isEmpty())
                 {
                     ViewUtils.goForward(ImportActivity.this, DidiExpenseActivity.class);
                 }

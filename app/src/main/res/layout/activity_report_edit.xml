@@ -228,24 +228,24 @@
 			        android:layout_gravity="center_vertical"
 			        android:gravity="bottom"
 			        android:layout_marginLeft="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:text="@string/rmb_symbol"
+                        android:textColor="@color/font_major_dark"
+                        android:textSize="16sp"/>
 			
 			        <TextView
 			            android:id="@+id/amountTextView"
-			            android:layout_width="wrap_content"
+			            android:layout_width="match_parent"
 			            android:layout_height="wrap_content"
 			            android:layout_marginTop="4dp"
 			            android:ellipsize="end"
 			            android:singleLine="true"
 			            android:textColor="@color/font_reim_number"
 			            android:textSize="24sp"/>
-			
-			        <TextView
-			            android:layout_width="wrap_content"
-			            android:layout_height="wrap_content"
-			            android:layout_marginLeft="3dp"
-			            android:text="@string/rmb_symbol"
-			            android:textColor="@color/font_major_dark"
-			            android:textSize="16sp"/>
 			
 			    </LinearLayout>
 			
@@ -257,7 +257,6 @@
 			        android:layout_marginBottom="22dp"
 			        android:layout_marginLeft="14dp"
 			        android:layout_marginRight="10dp"
-			        android:text="@string/item_count"
 			        android:textColor="@color/hint_grey"
 			        android:textSize="14sp"/>
 			

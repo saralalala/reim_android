@@ -13,6 +13,7 @@ import java.util.List;
 import classes.model.BankAccount;
 import classes.model.Category;
 import classes.model.Comment;
+import classes.model.Currency;
 import classes.model.Group;
 import classes.model.Image;
 import classes.model.Item;
@@ -26,7 +27,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 6;
 
     private DBManager(Context context)
     {
@@ -57,6 +58,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "email TEXT DEFAULT(''),"
                     + "phone TEXT DEFAULT(''),"
                     + "wechat TEXT DEFAULT(''),"
+                    + "didi TEXT DEFAULT(''),"
                     + "nickname TEXT DEFAULT(''),"
                     + "avatar_id INT DEFAULT(0),"
                     + "avatar_server_path TEXT DEFAULT(''),"
@@ -291,6 +293,14 @@ public class DBManager extends SQLiteOpenHelper
                     + "backup3 TEXT DEFAULT('')"
                     + ")";
             db.execSQL(createOthersImageTable);
+
+            String createCurrencyTable = "CREATE TABLE IF NOT EXISTS tbl_currency ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "code TEXT DEFAULT(''),"
+                    + "symbol TEXT DEFAULT(''),"
+                    + "rate FLOAT DEFAULT(0)"
+                    + ")";
+            db.execSQL(createCurrencyTable);
         }
         catch (Exception e)
         {
@@ -321,6 +331,12 @@ public class DBManager extends SQLiteOpenHelper
                 String command = "ALTER TABLE tbl_user ADD COLUMN active INT DEFAULT(0)";
                 db.execSQL(command);
             }
+
+            if (oldVersion < 5)
+            {
+                String command = "ALTER TABLE tbl_user ADD COLUMN didi TEXT DEFAULT('')";
+                db.execSQL(command);
+            }
         }
         onCreate(db);
     }
@@ -337,14 +353,6 @@ public class DBManager extends SQLiteOpenHelper
     public static synchronized DBManager getDBManager()
     {
         return dbManager;
-    }
-
-    public void executeExtraCommand()
-    {
-//		String sqlString = "DELETE FROM tbl_report WHERE id = 23";
-//		database.execSQL(sqlString);
-//		String sqlString = "DROP TABLE IF EXISTS tbl_category";
-//		database.execSQL(sqlString);		
     }
 
     public boolean openDatabase()
@@ -493,12 +501,13 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            String sqlString = "INSERT INTO tbl_user (server_id, email, phone, wechat, nickname, avatar_id, avatar_server_path, avatar_local_path, " +
+            String sqlString = "INSERT INTO tbl_user (server_id, email, phone, wechat, didi, nickname, avatar_id, avatar_server_path, avatar_local_path, " +
                     "privilege, manager_id, group_id, applied_company, admin, active, local_updatedt, server_updatedt) VALUES (" +
                     "'" + user.getServerID() + "'," +
                     "'" + user.getEmail() + "'," +
                     "'" + user.getPhone() + "'," +
                     "'" + user.getWeChat() + "'," +
+                    "'" + user.getDidi() + "'," +
                     "'" + sqliteEscape(user.getNickname()) + "'," +
                     "'" + user.getAvatarID() + "'," +
                     "'" + user.getAvatarServerPath() + "'," +
@@ -536,6 +545,7 @@ public class DBManager extends SQLiteOpenHelper
                     "email = '" + user.getEmail() + "'," +
                     "phone = '" + user.getPhone() + "'," +
                     "wechat = '" + user.getWeChat() + "'," +
+                    "didi = '" + user.getDidi() + "'," +
                     "nickname = '" + sqliteEscape(user.getNickname()) + "'," +
                     "avatar_id = '" + user.getAvatarID() + "'," +
                     "avatar_server_path = '" + user.getAvatarServerPath() + "'," +
@@ -619,6 +629,7 @@ public class DBManager extends SQLiteOpenHelper
                 user.setEmail(getStringFromCursor(cursor, "email"));
                 user.setPhone(getStringFromCursor(cursor, "phone"));
                 user.setWeChat(getStringFromCursor(cursor, "wechat"));
+                user.setDidi(getStringFromCursor(cursor, "didi"));
                 user.setNickname(getStringFromCursor(cursor, "nickname"));
                 user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
                 user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));
@@ -693,6 +704,7 @@ public class DBManager extends SQLiteOpenHelper
                     user.setEmail(getStringFromCursor(cursor, "email"));
                     user.setPhone(getStringFromCursor(cursor, "phone"));
                     user.setWeChat(getStringFromCursor(cursor, "wechat"));
+                    user.setDidi(getStringFromCursor(cursor, "didi"));
                     user.setNickname(getStringFromCursor(cursor, "nickname"));
                     user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
                     user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));
@@ -3587,6 +3599,114 @@ public class DBManager extends SQLiteOpenHelper
         {
             e.printStackTrace();
             return imageList;
+        }
+    }
+
+    // Currency
+    public boolean isCurrencyTableEmpty()
+    {
+        try
+        {
+            Cursor cursor = database.rawQuery("SELECT * FROM tbl_currency", null);
+            boolean result = !cursor.moveToNext();
+            cursor.close();
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    public boolean insertCurrency(Currency currency)
+    {
+        try
+        {
+            String sqlString = "INSERT INTO tbl_currency (code, symbol, rate) VALUES (" +
+                    "'" + currency.getCode() + "'," +
+                    "'" + currency.getSymbol() + "'," +
+                    "'" + currency.getRate() + "')";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateCurrency(Currency currency)
+    {
+        try
+        {
+            String sqlString = "UPDATE tbl_currency SET " +
+                    "rate = '" + currency.getRate() + "' " +
+                    "WHERE code = '" + currency.getCode() + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Currency getCurrency(String code)
+    {
+        try
+        {
+            Cursor cursor = database.rawQuery("SELECT * FROM tbl_currency WHERE code = ?", new String[]{code});
+
+            if (cursor.moveToNext())
+            {
+                Currency currency = new Currency();
+                currency.setCode(getStringFromCursor(cursor, "code"));
+                currency.setSymbol(getStringFromCursor(cursor, "symbol"));
+                currency.setRate(getDoubleFromCursor(cursor, "rate"));
+
+                cursor.close();
+                return currency;
+            }
+            else
+            {
+                cursor.close();
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Currency> getCurrencyList()
+    {
+        List<Currency> currencyList = new ArrayList<>();
+        try
+        {
+            Cursor cursor = database.rawQuery("SELECT * FROM tbl_currency", null);
+
+            while (cursor.moveToNext())
+            {
+                Currency currency = new Currency();
+                currency.setCode(getStringFromCursor(cursor, "code"));
+                currency.setSymbol(getStringFromCursor(cursor, "symbol"));
+                currency.setRate(getDoubleFromCursor(cursor, "rate"));
+
+                currencyList.add(currency);
+            }
+
+            cursor.close();
+
+            return currencyList;
+        }
+        catch (Exception e)
+        {
+            return currencyList;
         }
     }
 

@@ -1147,7 +1147,10 @@ public class WheelView extends View
         }
 
         index %= count;
-        return viewAdapter.getItem(index, recycle.getItem(), itemsLayout);
+
+        View view = viewAdapter.getItem(index, recycle.getItem(), itemsLayout);
+        view.setPadding(0, 10, 0, 10);
+        return view;
     }
 
     /**

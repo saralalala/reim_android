@@ -2,6 +2,7 @@ package com.rushucloud.reim.me;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -14,7 +15,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.item.DidiExpenseActivity;
 import com.umeng.analytics.MobclickAgent;
+
+import java.io.Serializable;
 
 import classes.model.User;
 import classes.utils.AppPreference;
@@ -25,10 +29,12 @@ import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.request.user.ModifyUserRequest;
-import netUtils.request.user.VerifyCodeRequest;
-import netUtils.response.user.ModifyUserResponse;
-import netUtils.response.user.VerifyCodeResponse;
+import netUtils.request.item.DidiSignInRequest;
+import netUtils.request.item.DidiVerifyCodeRequest;
+import netUtils.request.user.BindDidiRequest;
+import netUtils.response.item.DidiSignInResponse;
+import netUtils.response.item.DidiVerifyCodeResponse;
+import netUtils.response.user.BindDidiResponse;
 
 public class BindDidiActivity extends Activity
 {
@@ -39,7 +45,6 @@ public class BindDidiActivity extends Activity
 
     // Local Data
     private User currentUser;
-    private String originalPhone;
     private int waitingTime;
     private Thread thread;
 
@@ -91,6 +96,9 @@ public class BindDidiActivity extends Activity
         ViewUtils.requestFocus(this, phoneEditText);
 
         codeEditText = (EditText) findViewById(R.id.codeEditText);
+
+        phoneEditText.setText("13811891565");
+        codeEditText.setText("1234");
 
         acquireCodeButton = (Button) findViewById(R.id.acquireCodeButton);
         acquireCodeButton.setOnClickListener(new OnClickListener()
@@ -150,8 +158,8 @@ public class BindDidiActivity extends Activity
                 }
                 else
                 {
-                    currentUser.setPhone(Utils.removePhonePrefix(newPhone));
-                    sendModifyUserInfoRequest(inputCode);
+//                    sendDidiSignInRequest(newPhone, inputCode);
+                    sendBindDidiRequest("13811891565", "01a5cGBVgKpdTRaMw/bx3gY3jFmdDMMqNABg4S6cJj5Ujs2qgzAQRt/lW+dCRqNGX+YSkqEKiSn5WRTx3Tu0q66+szjDmQu9HwEboPCBwZJZJm3HQZvRaIWSI2MjBfeQ/RNI3PYcKrYLNcmQiLM2yzor1NyLF2+4FXxh1/i/HYl/Jc8xSpJGS2RXmuZJ6n5358nx+0pwzbXXU+70/Q4AAP//");
                 }
             }
         });
@@ -183,7 +191,6 @@ public class BindDidiActivity extends Activity
     private void initData()
     {
         currentUser = AppPreference.getAppPreference().getCurrentUser();
-        originalPhone = currentUser.getPhone();
     }
 
     // Network
@@ -232,12 +239,12 @@ public class BindDidiActivity extends Activity
         thread.start();
 
         ReimProgressDialog.show();
-        VerifyCodeRequest request = new VerifyCodeRequest(phoneNumber);
+        DidiVerifyCodeRequest request = new DidiVerifyCodeRequest(phoneNumber);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
-                final VerifyCodeResponse response = new VerifyCodeResponse(httpResponse);
+                final DidiVerifyCodeResponse response = new DidiVerifyCodeResponse(httpResponse);
                 if (response.getStatus())
                 {
                     runOnUiThread(new Runnable()
@@ -257,7 +264,7 @@ public class BindDidiActivity extends Activity
                         {
                             ReimProgressDialog.dismiss();
                             thread.interrupt();
-                            ViewUtils.showToast(BindDidiActivity.this, R.string.failed_to_get_code, response.getErrorMessage());
+                            ViewUtils.showToast(BindDidiActivity.this, R.string.failed_to_get_code);
                         }
                     });
                 }
@@ -265,32 +272,56 @@ public class BindDidiActivity extends Activity
         });
     }
 
-    private void sendModifyUserInfoRequest(String verifyCode)
+    private void sendDidiSignInRequest(final String phone, String verifyCode)
     {
         ReimProgressDialog.show();
-        ModifyUserRequest request = new ModifyUserRequest(currentUser, verifyCode);
+        DidiSignInRequest request = new DidiSignInRequest(phone, verifyCode);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
-                final ModifyUserResponse response = new ModifyUserResponse(httpResponse);
+                final DidiSignInResponse response = new DidiSignInResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    DBManager.getDBManager().updateUser(currentUser);
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    if (appPreference.getUsername().equals(originalPhone))
+                    sendBindDidiRequest(phone, response.getToken());
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
                     {
-                        appPreference.setUsername(currentUser.getPhone());
-                        appPreference.saveAppPreference();
-                    }
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(BindDidiActivity.this, R.string.failed_to_get_didi_token);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendBindDidiRequest(final String phone, String token)
+    {
+        BindDidiRequest request = new BindDidiRequest(phone, token);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final BindDidiResponse response = new BindDidiResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    currentUser.setDidi(phone);
+                    DBManager.getDBManager().updateUser(currentUser);
 
                     runOnUiThread(new Runnable()
                     {
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(BindDidiActivity.this, R.string.succeed_in_modifying_user_info);
-                            goBack();
+                            ViewUtils.showToast(BindDidiActivity.this, R.string.succeed_in_binding);
+                            Intent intent = new Intent(BindDidiActivity.this, DidiExpenseActivity.class);
+                            intent.putExtra("expenseList", (Serializable) response.getDidiExpenseList());
+                            ViewUtils.goForward(BindDidiActivity.this, intent);
                         }
                     });
                 }
@@ -301,7 +332,7 @@ public class BindDidiActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(BindDidiActivity.this, R.string.failed_to_modify_user_info, response.getErrorMessage());
+                            ViewUtils.showToast(BindDidiActivity.this, R.string.failed_to_bind_didi, response.getErrorMessage());
                         }
                     });
                 }

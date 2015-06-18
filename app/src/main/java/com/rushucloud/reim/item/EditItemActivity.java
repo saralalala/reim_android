@@ -54,8 +54,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import classes.model.BankAccount;
 import classes.model.Category;
 import classes.model.Currency;
+import classes.model.DidiExpense;
 import classes.model.Image;
 import classes.model.Item;
 import classes.model.Report;
@@ -71,6 +73,8 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
+import classes.widget.wheelview.WheelView;
+import classes.widget.wheelview.adapter.ArrayWheelAdapter;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
 import netUtils.request.common.DownloadImageRequest;
@@ -79,6 +83,7 @@ import netUtils.response.common.DownloadImageResponse;
 public class EditItemActivity extends Activity
 {
     // Widgets
+    private TextView symbolTextView;
     private EditText amountEditText;
     private ImageView amountWarningImageView;
 
@@ -103,6 +108,9 @@ public class EditItemActivity extends Activity
 
     private TextView locationTextView;
 
+    private TextView currencyTextView;
+    private PopupWindow currencyPopupWindow;
+
     private ImageView categoryImageView;
     private TextView categoryTextView;
     private ImageView categoryWarningImageView;
@@ -122,11 +130,11 @@ public class EditItemActivity extends Activity
     boolean removeImageViewShown = false;
 
     private List<Currency> currencyList = new ArrayList<>();
-    private List<Category> categoryList;
-    private List<Tag> tagList;
+    private List<Category> categoryList = new ArrayList<>();
+    private List<Tag> tagList = new ArrayList<>();
 
     private Item item;
-    private List<Image> originInvoiceList;
+    private List<Image> originInvoiceList = new ArrayList<>();
 
     private boolean fromReim;
     private boolean fromEditReport;
@@ -424,6 +432,7 @@ public class EditItemActivity extends Activity
         initVendorView();
         initLocationView();
         initTimeView();
+        initCurrencyView();
         initTypeView();
         initTagView();
         initMemberView();
@@ -440,6 +449,9 @@ public class EditItemActivity extends Activity
         TextView statusTextView = (TextView) findViewById(R.id.statusTextView);
         statusTextView.setText(item.getStatusString());
         statusTextView.setBackgroundResource(item.getStatusBackground());
+
+        symbolTextView = (TextView) findViewById(R.id.symbolTextView);
+        symbolTextView.setText(item.getCurrency().getSymbol());
 
         amountEditText = (EditText) findViewById(R.id.amountEditText);
         amountEditText.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -509,6 +521,258 @@ public class EditItemActivity extends Activity
             budgetTextView.setVisibility(View.GONE);
             approvedTextView.setVisibility(View.GONE);
         }
+    }
+
+    private void initInvoiceView()
+    {
+        // init invoice
+        invoiceLayout = (LinearLayout) findViewById(R.id.invoiceLayout);
+
+        addInvoiceImageView = (ImageView) findViewById(R.id.addInvoiceImageView);
+        addInvoiceImageView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+                if (item.getInvoices().size() == Item.MAX_INVOICE_COUNT)
+                {
+                    ViewUtils.showToast(EditItemActivity.this, R.string.prompt_max_image_count);
+                }
+                else
+                {
+                    showPictureWindow();
+                }
+            }
+        });
+
+        removeList = new ArrayList<>();
+
+        refreshInvoiceView();
+
+        // init picture window
+        View pictureView = View.inflate(this, R.layout.window_picture, null);
+
+        Button cameraButton = (Button) pictureView.findViewById(R.id.cameraButton);
+        cameraButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                picturePopupWindow.dismiss();
+
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempInvoiceUri());
+                startActivityForResult(intent, Constant.ACTIVITY_TAKE_PHOTO);
+            }
+        });
+
+        Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
+        galleryButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                picturePopupWindow.dismiss();
+
+                Intent intent = new Intent(EditItemActivity.this, GalleryActivity.class);
+                intent.putExtra("maxCount", Item.MAX_INVOICE_COUNT - item.getInvoices().size());
+                startActivityForResult(intent, Constant.ACTIVITY_PICK_IMAGE);
+            }
+        });
+
+        Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                picturePopupWindow.dismiss();
+            }
+        });
+
+        picturePopupWindow = ViewUtils.buildBottomPopupWindow(this, pictureView);
+
+        if (!PhoneUtils.isNetworkConnected())
+        {
+            ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_download_invoice);
+        }
+        else
+        {
+            for (Image image : item.getInvoices())
+            {
+                if (image.isNotDownloaded() && PhoneUtils.isNetworkConnected())
+                {
+                    sendDownloadInvoiceRequest(image);
+                }
+            }
+        }
+    }
+
+    private void initCategoryView()
+    {
+        RelativeLayout categoryLayout = (RelativeLayout) findViewById(R.id.categoryLayout);
+        categoryLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (!item.isAaApproved())
+                {
+                    if (newItem)
+                    {
+                        MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_CATEGORY");
+                    }
+                    else
+                    {
+                        MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_CATEGORY");
+                    }
+
+                    hideSoftKeyboard();
+                    Intent intent = new Intent(EditItemActivity.this, PickCategoryActivity.class);
+                    intent.putExtra("category", item.getCategory());
+                    ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_CATEGORY);
+                }
+            }
+        });
+
+        categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
+        categoryTextView = (TextView) findViewById(R.id.categoryTextView);
+        categoryWarningImageView = (ImageView) findViewById(R.id.categoryWarningImageView);
+
+        refreshCategoryView();
+    }
+
+    private void initVendorView()
+    {
+        vendorTextView = (TextView) findViewById(R.id.vendorTextView);
+        vendorTextView.setText(item.getVendor());
+        vendorTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+
+                if (newItem)
+                {
+                    MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_MERCHANT");
+                }
+                else
+                {
+                    MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_MERCHANT");
+                }
+
+                Intent intent = new Intent(EditItemActivity.this, PickVendorActivity.class);
+                intent.putExtra("location", item.getLocation());
+                if (currentLocation != null)
+                {
+                    intent.putExtra("latitude", currentLocation.getLatitude());
+                    intent.putExtra("longitude", currentLocation.getLongitude());
+                }
+                ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_VENDOR);
+            }
+        });
+    }
+
+    private void initLocationView()
+    {
+        String cityName = item.getLocation().isEmpty()? getString(R.string.no_location) : item.getLocation();
+        locationTextView = (TextView) findViewById(R.id.locationTextView);
+        locationTextView.setText(cityName);
+
+        LinearLayout locationLayout = (LinearLayout) findViewById(R.id.locationLayout);
+        locationLayout.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+                Intent intent = new Intent(EditItemActivity.this, PickLocationActivity.class);
+                intent.putExtra("currentCity", currentCity);
+                ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_LOCATION);
+            }
+        });
+    }
+
+    private void initTimeView()
+    {
+        // init time
+        int time = item.getConsumedDate() > 0 ? item.getConsumedDate() : Utils.getCurrentTime();
+        timeTextView = (TextView) findViewById(R.id.timeTextView);
+        timeTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+                showTimeWindow();
+            }
+        });
+        timeTextView.setText(Utils.secondToStringUpToMinute(time));
+
+        // init time window
+        View timeView = View.inflate(this, R.layout.window_reim_time, null);
+
+        Button confirmButton = (Button) timeView.findViewById(R.id.confirmButton);
+        confirmButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                timePopupWindow.dismiss();
+
+                GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(),
+                                                                 datePicker.getDayOfMonth(), timePicker.getCurrentHour(), timePicker.getCurrentMinute());
+                item.setConsumedDate((int) (greCal.getTimeInMillis() / 1000));
+                timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
+            }
+        });
+
+        datePicker = (DatePicker) timeView.findViewById(R.id.datePicker);
+
+        timePicker = (TimePicker) timeView.findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
+
+        resizePicker();
+
+        timePopupWindow = ViewUtils.buildBottomPopupWindow(this, timeView);
+    }
+
+    private void initCurrencyView()
+    {
+        // init currency
+        currencyTextView = (TextView) findViewById(R.id.currencyTextView);
+        currencyTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+                showCurrencyWindow();
+            }
+        });
+        currencyTextView.setText(item.getCurrency().getName());
+
+        // init currency window
+        final View currencyView = View.inflate(this, R.layout.window_reim_currency, null);
+
+        final WheelView currencyWheelView = (WheelView) currencyView.findViewById(R.id.currencyWheelView);
+        currencyWheelView.setVisibleItems(7);
+        currencyWheelView.setViewAdapter(new ArrayWheelAdapter<>(this, Currency.listToArray(currencyList)));
+        if (item.getCurrency() != null && !item.getCurrency().getName().isEmpty())
+        {
+            int index = currencyList.indexOf(item.getCurrency());
+            if (index >= 0)
+            {
+                currencyWheelView.setCurrentItem(index);
+            }
+        }
+
+        Button confirmButton = (Button) currencyView.findViewById(R.id.confirmButton);
+        confirmButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Currency currency = currencyList.get(currencyWheelView.getCurrentItem());
+                item.setCurrency(currency);
+                currencyTextView.setText(currency.getName());
+                symbolTextView.setText(currency.getSymbol());
+                currencyPopupWindow.dismiss();
+            }
+        });
+
+        currencyPopupWindow = ViewUtils.buildBottomPopupWindow(this, currencyView);
     }
 
     private void initTypeView()
@@ -641,213 +905,6 @@ public class EditItemActivity extends Activity
         });
 
         typePopupWindow = ViewUtils.buildBottomPopupWindow(this, typeView);
-    }
-
-    private void initInvoiceView()
-    {
-        // init invoice
-        invoiceLayout = (LinearLayout) findViewById(R.id.invoiceLayout);
-
-        addInvoiceImageView = (ImageView) findViewById(R.id.addInvoiceImageView);
-        addInvoiceImageView.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                hideSoftKeyboard();
-                if (item.getInvoices().size() == Item.MAX_INVOICE_COUNT)
-                {
-                    ViewUtils.showToast(EditItemActivity.this, R.string.prompt_max_image_count);
-                }
-                else
-                {
-                    showPictureWindow();
-                }
-            }
-        });
-
-        removeList = new ArrayList<>();
-
-        refreshInvoiceView();
-
-        // init picture window
-        View pictureView = View.inflate(this, R.layout.window_picture, null);
-
-        Button cameraButton = (Button) pictureView.findViewById(R.id.cameraButton);
-        cameraButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                picturePopupWindow.dismiss();
-
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempInvoiceUri());
-                startActivityForResult(intent, Constant.ACTIVITY_TAKE_PHOTO);
-            }
-        });
-
-        Button galleryButton = (Button) pictureView.findViewById(R.id.galleryButton);
-        galleryButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                picturePopupWindow.dismiss();
-
-                Intent intent = new Intent(EditItemActivity.this, GalleryActivity.class);
-                intent.putExtra("maxCount", Item.MAX_INVOICE_COUNT - item.getInvoices().size());
-                startActivityForResult(intent, Constant.ACTIVITY_PICK_IMAGE);
-            }
-        });
-
-        Button cancelButton = (Button) pictureView.findViewById(R.id.cancelButton);
-        cancelButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                picturePopupWindow.dismiss();
-            }
-        });
-
-        picturePopupWindow = ViewUtils.buildBottomPopupWindow(this, pictureView);
-
-        if (!PhoneUtils.isNetworkConnected())
-        {
-            ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_download_invoice);
-        }
-        else
-        {
-            for (Image image : item.getInvoices())
-            {
-                if (image.isNotDownloaded() && PhoneUtils.isNetworkConnected())
-                {
-                    sendDownloadInvoiceRequest(image);
-                }
-            }
-        }
-    }
-
-    private void initTimeView()
-    {
-        // init time
-        int time = item.getConsumedDate() > 0 ? item.getConsumedDate() : Utils.getCurrentTime();
-        timeTextView = (TextView) findViewById(R.id.timeTextView);
-        timeTextView.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                hideSoftKeyboard();
-                showTimeWindow();
-            }
-        });
-        timeTextView.setText(Utils.secondToStringUpToMinute(time));
-
-        // init time window
-        View timeView = View.inflate(this, R.layout.window_reim_time, null);
-
-        Button confirmButton = (Button) timeView.findViewById(R.id.confirmButton);
-        confirmButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                timePopupWindow.dismiss();
-
-                GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(),
-                                                                 datePicker.getDayOfMonth(), timePicker.getCurrentHour(), timePicker.getCurrentMinute());
-                item.setConsumedDate((int) (greCal.getTimeInMillis() / 1000));
-                timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
-            }
-        });
-
-        datePicker = (DatePicker) timeView.findViewById(R.id.datePicker);
-
-        timePicker = (TimePicker) timeView.findViewById(R.id.timePicker);
-        timePicker.setIs24HourView(true);
-
-        resizePicker();
-
-        timePopupWindow = ViewUtils.buildBottomPopupWindow(this, timeView);
-    }
-
-    private void initVendorView()
-    {
-        vendorTextView = (TextView) findViewById(R.id.vendorTextView);
-        vendorTextView.setText(item.getVendor());
-        vendorTextView.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                hideSoftKeyboard();
-
-                if (newItem)
-                {
-                    MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_MERCHANT");
-                }
-                else
-                {
-                    MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_MERCHANT");
-                }
-
-                Intent intent = new Intent(EditItemActivity.this, PickVendorActivity.class);
-                intent.putExtra("location", item.getLocation());
-                if (currentLocation != null)
-                {
-                    intent.putExtra("latitude", currentLocation.getLatitude());
-                    intent.putExtra("longitude", currentLocation.getLongitude());
-                }
-                ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_VENDOR);
-            }
-        });
-    }
-
-    private void initLocationView()
-    {
-        String cityName = item.getLocation().isEmpty()? getString(R.string.no_location) : item.getLocation();
-        locationTextView = (TextView) findViewById(R.id.locationTextView);
-        locationTextView.setText(cityName);
-
-        LinearLayout locationLayout = (LinearLayout) findViewById(R.id.locationLayout);
-        locationLayout.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                hideSoftKeyboard();
-                Intent intent = new Intent(EditItemActivity.this, PickLocationActivity.class);
-                intent.putExtra("currentCity", currentCity);
-                ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_LOCATION);
-            }
-        });
-    }
-
-    private void initCategoryView()
-    {
-        RelativeLayout categoryLayout = (RelativeLayout) findViewById(R.id.categoryLayout);
-        categoryLayout.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                if (!item.isAaApproved())
-                {
-                    if (newItem)
-                    {
-                        MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_CATEGORY");
-                    }
-                    else
-                    {
-                        MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_CATEGORY");
-                    }
-
-                    hideSoftKeyboard();
-                    Intent intent = new Intent(EditItemActivity.this, PickCategoryActivity.class);
-                    intent.putExtra("category", item.getCategory());
-                    ViewUtils.goForwardForResult(EditItemActivity.this, intent, Constant.ACTIVITY_PICK_CATEGORY);
-                }
-            }
-        });
-
-        categoryImageView = (ImageView) findViewById(R.id.categoryImageView);
-        categoryTextView = (TextView) findViewById(R.id.categoryTextView);
-        categoryWarningImageView = (ImageView) findViewById(R.id.categoryWarningImageView);
-
-        refreshCategoryView();
     }
 
     private void initTagView()
@@ -1205,37 +1262,6 @@ public class EditItemActivity extends Activity
         }
     }
 
-    private void showTypeWindow()
-    {
-        if (item.getType() == Item.TYPE_REIM)
-        {
-            consumedImageView.setVisibility(View.VISIBLE);
-            budgetImageView.setVisibility(View.INVISIBLE);
-            borrowingImageView.setVisibility(View.INVISIBLE);
-            needReimLayout.setVisibility(View.VISIBLE);
-        }
-        else if (item.getType() == Item.TYPE_BUDGET)
-        {
-            consumedImageView.setVisibility(View.INVISIBLE);
-            budgetImageView.setVisibility(View.VISIBLE);
-            borrowingImageView.setVisibility(View.INVISIBLE);
-            needReimLayout.setVisibility(View.GONE);
-        }
-        else
-        {
-            consumedImageView.setVisibility(View.INVISIBLE);
-            budgetImageView.setVisibility(View.INVISIBLE);
-            borrowingImageView.setVisibility(View.VISIBLE);
-            needReimLayout.setVisibility(View.GONE);
-        }
-        needReimToggleButton.setChecked(item.needReimbursed());
-
-        typePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
-        typePopupWindow.update();
-
-        ViewUtils.dimBackground(this);
-    }
-
     private void showPictureWindow()
     {
         picturePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
@@ -1272,6 +1298,45 @@ public class EditItemActivity extends Activity
 
         timePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
         timePopupWindow.update();
+
+        ViewUtils.dimBackground(this);
+    }
+
+    private void showCurrencyWindow()
+    {
+        currencyPopupWindow.showAtLocation(findViewById(R.id.baseLayout), Gravity.BOTTOM, 0, 0);
+        currencyPopupWindow.update();
+
+        ViewUtils.dimBackground(this);
+    }
+
+    private void showTypeWindow()
+    {
+        if (item.getType() == Item.TYPE_REIM)
+        {
+            consumedImageView.setVisibility(View.VISIBLE);
+            budgetImageView.setVisibility(View.INVISIBLE);
+            borrowingImageView.setVisibility(View.INVISIBLE);
+            needReimLayout.setVisibility(View.VISIBLE);
+        }
+        else if (item.getType() == Item.TYPE_BUDGET)
+        {
+            consumedImageView.setVisibility(View.INVISIBLE);
+            budgetImageView.setVisibility(View.VISIBLE);
+            borrowingImageView.setVisibility(View.INVISIBLE);
+            needReimLayout.setVisibility(View.GONE);
+        }
+        else
+        {
+            consumedImageView.setVisibility(View.INVISIBLE);
+            budgetImageView.setVisibility(View.INVISIBLE);
+            borrowingImageView.setVisibility(View.VISIBLE);
+            needReimLayout.setVisibility(View.GONE);
+        }
+        needReimToggleButton.setChecked(item.needReimbursed());
+
+        typePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+        typePopupWindow.update();
 
         ViewUtils.dimBackground(this);
     }
@@ -1378,9 +1443,9 @@ public class EditItemActivity extends Activity
         dbManager = DBManager.getDBManager();
         locationClient = new LocationClient(getApplicationContext());
 
-        initCurrencyList();
-        categoryList = dbManager.getGroupCategories(appPreference.getCurrentGroupID());
-        tagList = dbManager.getGroupTags(appPreference.getCurrentGroupID());
+        currencyList.addAll(dbManager.getCurrencyList());
+        categoryList.addAll(dbManager.getGroupCategories(appPreference.getCurrentGroupID()));
+        tagList.addAll(dbManager.getGroupTags(appPreference.getCurrentGroupID()));
 
         Intent intent = this.getIntent();
         fromReim = intent.getBooleanExtra("fromReim", false);
@@ -1405,7 +1470,25 @@ public class EditItemActivity extends Activity
             List<User> relevantUsers = new ArrayList<>();
             relevantUsers.add(appPreference.getCurrentUser());
             item.setRelevantUsers(relevantUsers);
-            originInvoiceList = new ArrayList<>();
+
+            if (intent.getBooleanExtra("fromDidi", false))
+            {
+                DidiExpense expense = (DidiExpense) intent.getSerializableExtra("expense");
+                item.setAmount(expense.getAmount());
+                item.setConsumedDate(expense.getTimeStamp());
+                item.setVendor(ViewUtils.getString(R.string.vendor_taxi));
+                item.setNote(String.format(getString(R.string.from_to), expense.getStart(), expense.getDestionation()));
+
+                String transport = getString(R.string.transport);
+                for (Category category : categoryList)
+                {
+                    if (category.getName().equals(transport))
+                    {
+                        item.setCategory(category);
+                        break;
+                    }
+                }
+            }
         }
         else
         {
@@ -1419,82 +1502,10 @@ public class EditItemActivity extends Activity
             }
             else
             {
-                originInvoiceList = new ArrayList<>(item.getInvoices());
+                originInvoiceList.addAll(item.getInvoices());
             }
         }
     }
-    
-    private void initCurrencyList()
-    {
-        Currency currency = new Currency(R.string.currency_cny, "CNY", "￥");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_usd, "USD", "$");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_eur, "EUR", "€");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_hkd, "HKD", "$");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_mop, "MOP", "$");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_twd, "TWD", "$");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_jpy, "JPY", "￥");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_ker, "KER", "₩");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_gbp, "GBP", "£");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_rub, "RUB", "Rbs");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_sgd, "SGD", "$");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_php, "PHP", "₱");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_idr, "IDR", "Rps");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_myr, "MYR", "$");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_thb, "THB", "฿");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_cad, "CAD", "$");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_aud, "AUD", "$");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_nzd, "NZD", "$");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_chf, "CHF", "₣");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_dkk, "DKK", "Kr");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_nok, "NOK", "Kr");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_sek, "SEK", "Kr");
-        currencyList.add(currency);
-
-        currency = new Currency(R.string.currency_brl, "BRL", "$");
-        currencyList.add(currency);
-    }    
 
     private void saveItem()
     {

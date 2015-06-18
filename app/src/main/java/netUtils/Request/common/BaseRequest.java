@@ -139,7 +139,7 @@ public abstract class BaseRequest
     {
         if (params != null)
         {
-            List<String> paramsList = new ArrayList<String>();
+            List<String> paramsList = new ArrayList<>();
             Iterator<NameValuePair> it = params.iterator();
             while (it.hasNext())
             {
@@ -166,7 +166,7 @@ public abstract class BaseRequest
     {
         if (params != null)
         {
-            List<String> paramsList = new ArrayList<String>();
+            List<String> paramsList = new ArrayList<>();
             Iterator<NameValuePair> it = params.iterator();
             while (it.hasNext())
             {

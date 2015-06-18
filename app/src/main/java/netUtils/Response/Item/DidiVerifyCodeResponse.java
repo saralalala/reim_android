@@ -9,11 +9,11 @@ import java.util.List;
 
 import classes.model.Vendor;
 
-public class DidiGetSMSResponse
+public class DidiVerifyCodeResponse
 {
     private boolean status;
 
-    public DidiGetSMSResponse(Object httpResponse)
+    public DidiVerifyCodeResponse(Object httpResponse)
     {
         try
         {

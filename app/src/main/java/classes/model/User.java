@@ -26,6 +26,7 @@ public class User implements Serializable
     private String email = "";
     private String phone = "";
     private String wechat = "";
+    private String didi = "";
     private String password = "";
     private String nickname = "";
     private String nicknameInitLetter = "";
@@ -53,6 +54,7 @@ public class User implements Serializable
         email = user.getEmail();
         phone = user.getPhone();
         wechat = user.getWeChat();
+        didi = user.getDidi();
         password = user.getPassword();
         nickname = user.getNickname();
         avatarID = user.getAvatarID();
@@ -179,6 +181,15 @@ public class User implements Serializable
     public String getContact()
     {
         return getPhone().isEmpty() ? getEmail() : getPhone();
+    }
+
+    public String getDidi()
+    {
+        return didi;
+    }
+    public void setDidi(String didi)
+    {
+        this.didi = didi;
     }
 
     public String getPassword()

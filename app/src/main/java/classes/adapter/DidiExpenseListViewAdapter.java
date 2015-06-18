@@ -46,7 +46,7 @@ public class DidiExpenseListViewAdapter extends BaseAdapter
         destinationTextView.setText(expense.getDestionation());
 
         TextView priceTextView = (TextView) convertView.findViewById(R.id.priceTextView);
-        priceTextView.setText(ViewUtils.getString(R.string.rmb_symbol) + Utils.formatAmount(expense.getPrice()));
+        priceTextView.setText(ViewUtils.getString(R.string.rmb_symbol) + Utils.formatAmount(expense.getAmount()));
 
         return convertView;
     }

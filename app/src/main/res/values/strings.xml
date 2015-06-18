@@ -151,6 +151,7 @@
     <string name="tag">标　签</string>
     <string name="member">参与者</string>
     <string name="time">时　间</string>
+    <string name="currency">货　币</string>
     <string name="note">备　注</string>
     <string name="transport">交通</string>
     <string name="choose_category">选择类别</string>
@@ -168,6 +169,7 @@
     <string name="report_not_available">未加入报告</string>
     <string name="vendor_not_available">未填写商家</string>
     <string name="pick_image">选择图片</string>
+    <string name="from_to">从 %1$s 至 %2$s</string>
     
     <string name="my_report">我的报告</string>
     <string name="others_report">收到的报告</string>
@@ -491,7 +493,9 @@
     <string name="succeed_in_unbinding_email">解绑邮箱成功</string>
     <string name="succeed_in_unbinding_phone">解绑手机成功</string>
     <string name="succeed_in_unbinding_wechat">解绑微信成功</string>
+    <string name="succeed_in_unbinding_didi">解绑滴滴打车成功</string>
     <string name="succeed_in_resending_active_email">激活邮件已发送</string>
+    <string name="succeed_in_binding">绑定成功</string>
     <string name="succeed_in_changing_default_manager">默认上级修改成功</string>
     <string name="succeed_in_sending_feedback">反馈发送成功！</string>
     <string name="succeed_in_sending_invite_reply">邀请回复发送成功</string>
@@ -571,9 +575,12 @@
     <string name="failed_to_unbind_email">解绑邮箱失败</string>
     <string name="failed_to_unbind_phone">解绑手机失败</string>
     <string name="failed_to_unbind_wechat">解绑微信失败</string>
+    <string name="failed_to_unbind_didi">解绑滴滴打车失败</string>
     <string name="failed_to_resend_active_email">激活邮件发送失败</string>
     <string name="failed_to_alert">提醒发送失败</string>
     <string name="failed_to_get_message_list">获取消息列表失败</string>
+    <string name="failed_to_get_didi_token">获取滴滴Token失败</string>
+    <string name="failed_to_bind_didi">滴滴账号绑定失败</string>
     <string name="failed_to_get_didi_expenses">获取滴滴打车消费列表失败</string>
     <string name="failed_to_delete">删除失败</string>
     <string name="failed_to_search_companies">搜索公司失败</string>
