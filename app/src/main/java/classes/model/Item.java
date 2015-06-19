@@ -33,8 +33,8 @@ public class Item
     private int type = TYPE_REIM;
     private Report belongReport = null;
     private User consumer;
-    private double amount = 0.0;
-    private double aaAmount = 0.0;
+    private double amount = 0;
+    private double aaAmount = 0;
     private boolean needReimbursed = true;
     private boolean aaApproved = false;
     private int status = STATUS_DRAFT;
@@ -44,6 +44,7 @@ public class Item
     private double latitude = -1;
     private double longitude = -1;
     private Currency currency = null;
+    private double rate = 0;
     private List<Image> invoices = null;
     private List<User> relevantUsers = null;
     private List<Tag> tags = null;
@@ -84,7 +85,7 @@ public class Item
             setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
             setRelevantUsersID(jObject.getString("relates"));
 
-            currency = DBManager.getDBManager().getCurrency("CNY");
+//            setCurrency(DBManager.getDBManager().getCurrency(jObject.getString("currency")));
 
             JSONArray invoiceArray = jObject.getJSONArray("images");
             List<Image> invoiceList = new ArrayList<>();
@@ -269,6 +270,15 @@ public class Item
     public void setCurrency(Currency currency)
     {
         this.currency = currency;
+    }
+
+    public double getRate()
+    {
+        return rate;
+    }
+    public void setRate(double rate)
+    {
+        this.rate = rate;
     }
 
     public List<Image> getInvoices()

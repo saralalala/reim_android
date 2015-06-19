@@ -12,7 +12,7 @@ import classes.model.Vendor;
 public class GetVendorsResponse
 {
     private boolean status;
-    private List<Vendor> vendorList;
+    private List<Vendor> vendorList = new ArrayList<>();
 
     public GetVendorsResponse(Object httpResponse)
     {
@@ -20,9 +20,8 @@ public class GetVendorsResponse
         {
             JSONObject jObject = new JSONObject((String) httpResponse);
             status = jObject.getString("status").equals("OK");
-            JSONArray jsonArray = jObject.getJSONArray("businesses");
-            vendorList = new ArrayList<>();
 
+            JSONArray jsonArray = jObject.getJSONArray("businesses");
             int count = jsonArray.length();
             for (int i = 0; i < count; i++)
             {
@@ -33,7 +32,6 @@ public class GetVendorsResponse
         {
             e.printStackTrace();
             status = false;
-            setVendorList(null);
         }
     }
 
@@ -50,10 +48,5 @@ public class GetVendorsResponse
     public List<Vendor> getVendorList()
     {
         return vendorList;
-    }
-
-    public void setVendorList(List<Vendor> vendorList)
-    {
-        this.vendorList = vendorList;
     }
 }

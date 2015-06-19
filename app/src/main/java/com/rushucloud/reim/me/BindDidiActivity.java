@@ -159,7 +159,8 @@ public class BindDidiActivity extends Activity
                 else
                 {
 //                    sendDidiSignInRequest(newPhone, inputCode);
-                    sendBindDidiRequest("13811891565", "01a5cGBVgKpdTRaMw/bx3gY3jFmdDMMqNABg4S6cJj5Ujs2qgzAQRt/lW+dCRqNGX+YSkqEKiSn5WRTx3Tu0q66+szjDmQu9HwEboPCBwZJZJm3HQZvRaIWSI2MjBfeQ/RNI3PYcKrYLNcmQiLM2yzor1NyLF2+4FXxh1/i/HYl/Jc8xSpJGS2RXmuZJ6n5358nx+0pwzbXXU+70/Q4AAP//");
+                    sendBindDidiRequest("18614097696", "PDPEGnQE8tj1PcsCA0yOhtZAWdU/scRLs2nWdZ7pg/RUjk2uwyAMBu/iNU8KiUMwl3lCYDWRIFT8LKood6/Vrrr6ZjHW+IIxjggOQMEHZqtxQ9oIabWrVlBLYnAC/iH7J5C57yU2cBe0LKNxQUM04aKglVGDePOtIFT2nf/7kflXCpySJLU1GifaDBmph92fJ6fvK9F3319PuZvudwAAAP//");
+//                    sendBindDidiRequest("15801628438", "GpLpaibknMm%2FeCunsE1gK8Onz7lCArFdcIOf2EykRA5UzT2qwzAQxPG7TL3Frr1%2BknWZh5GXxCAh0EdlfPeIdKn%2BU%2FxgboxxnQgA4TsWL%2Bp095tbdBcm1JIMQQjHa9YRsvV3ORvCjZZnRFdhZmUltDJqnIwfQqx2dPvvV7ZfFC2l%2BSibZ%2FlbvK4ezycAAP%2F%2F");
                 }
             }
         });
@@ -300,7 +301,7 @@ public class BindDidiActivity extends Activity
         });
     }
 
-    private void sendBindDidiRequest(final String phone, String token)
+    private void sendBindDidiRequest(final String phone, final String token)
     {
         BindDidiRequest request = new BindDidiRequest(phone, token);
         request.sendRequest(new HttpConnectionCallback()
@@ -311,6 +312,7 @@ public class BindDidiActivity extends Activity
                 if (response.getStatus())
                 {
                     currentUser.setDidi(phone);
+                    currentUser.setDidiToken(token);
                     DBManager.getDBManager().updateUser(currentUser);
 
                     runOnUiThread(new Runnable()

@@ -531,10 +531,13 @@ public class EditReportActivity extends Activity
                 }
             });
 
+            TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
             TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
             TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
             ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
             ImageView warningImageView = (ImageView) view.findViewById(R.id.warningImageView);
+
+            symbolTextView.setText(item.getCurrency().getSymbol());
 
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
             amountTextView.setText(Utils.formatDouble(item.getAmount()));

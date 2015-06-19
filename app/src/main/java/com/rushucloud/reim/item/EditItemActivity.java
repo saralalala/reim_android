@@ -589,11 +589,11 @@ public class EditItemActivity extends Activity
 
         picturePopupWindow = ViewUtils.buildBottomPopupWindow(this, pictureView);
 
-        if (!PhoneUtils.isNetworkConnected())
+        if (item.getInvoices() != null && !item.getInvoices().isEmpty() && !PhoneUtils.isNetworkConnected())
         {
             ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_download_invoice);
         }
-        else
+        else if (item.getInvoices() != null && !item.getInvoices().isEmpty())
         {
             for (Image image : item.getInvoices())
             {
@@ -1477,6 +1477,7 @@ public class EditItemActivity extends Activity
                 item.setAmount(expense.getAmount());
                 item.setConsumedDate(expense.getTimeStamp());
                 item.setVendor(ViewUtils.getString(R.string.vendor_taxi));
+                item.setLocation(expense.getCity());
                 item.setNote(String.format(getString(R.string.from_to), expense.getStart(), expense.getDestionation()));
 
                 String transport = getString(R.string.transport);

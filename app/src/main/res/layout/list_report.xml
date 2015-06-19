@@ -85,21 +85,22 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/amountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dp"
+                android:text="@string/rmb_symbol"
+                android:textColor="@color/font_major_dark"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/amountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/font_major_dark"
                 android:textSize="24sp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/rmb_symbol"
-                android:textColor="@color/font_major_dark"
-                android:textSize="14sp"/>
         </LinearLayout>
 
     </LinearLayout>

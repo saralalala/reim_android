@@ -10,21 +10,28 @@ public class DidiExpense implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
+    public static final int TYPE_TAXI = 0;
+    public static final int TYPE_ZHUAN_CHE = 2;
+    public static final int TYPE_KUAI_CHE = 4;
+    public static final int TYPE_LIFT = -1;
+
     private String orderID = "";
     private String time = "";
     private String start = "";
     private String destionation = "";
     private double amount = 0;
+    private String city = "";
+    private int type = TYPE_TAXI;
 
     public DidiExpense(JSONObject jObject)
     {
         try
         {
-            setOrderID(jObject.getString("orderid"));
+            setOrderID(jObject.getString("oid"));
             setTime(jObject.getString("setuptime"));
             setStart(jObject.getString("fromAddress"));
             setDestionation(jObject.getString("toAddress"));
-            setAmount(jObject.optDouble("amount", 0));
+            setType(jObject.optInt("product_type", 0));
         }
         catch (JSONException e)
         {
@@ -87,5 +94,23 @@ public class DidiExpense implements Serializable
     public void setAmount(double amount)
     {
         this.amount = amount;
+    }
+
+    public String getCity()
+    {
+        return city;
+    }
+    public void setCity(String city)
+    {
+        this.city = city;
+    }
+
+    public int getType()
+    {
+        return type;
+    }
+    public void setType(int type)
+    {
+        this.type = type;
     }
 }

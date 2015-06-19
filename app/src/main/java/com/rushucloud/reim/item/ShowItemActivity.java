@@ -103,6 +103,9 @@ public class ShowItemActivity extends Activity
         statusTextView.setText(item.getStatusString());
         statusTextView.setBackgroundResource(item.getStatusBackground());
 
+        TextView symbolTextView = (TextView) findViewById(R.id.symbolTextView);
+        symbolTextView.setText(item.getCurrency().getSymbol());
+
         TextView amountTextView = (TextView) findViewById(R.id.amountTextView);
         amountTextView.setText(Utils.formatDouble(item.getAmount()));
         amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -169,6 +172,10 @@ public class ShowItemActivity extends Activity
         {
             timeTextView.setText(R.string.not_available);
         }
+
+        // init currency
+        TextView currencyTextView = (TextView) findViewById(R.id.currencyTextView);
+        currencyTextView.setText(item.getCurrency().getName());
 
         // init type
         String temp = getString(item.getTypeString());

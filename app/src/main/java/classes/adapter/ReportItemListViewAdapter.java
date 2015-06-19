@@ -45,6 +45,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
         {
             View view = layoutInflater.inflate(R.layout.list_report_item_edit, parent, false);
 
+            TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
             TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
             TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
             ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
@@ -54,6 +55,8 @@ public class ReportItemListViewAdapter extends BaseAdapter
 
             int color = chosenIDList.contains(item.getLocalID()) ? R.color.list_item_pressed : R.color.list_item_unpressed;
             view.setBackgroundResource(color);
+
+            symbolTextView.setText(item.getCurrency().getSymbol());
 
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
             amountTextView.setText(Utils.formatDouble(item.getAmount()));

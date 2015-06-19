@@ -59,6 +59,7 @@ public class ItemListViewAdapter extends BaseAdapter
             ImageView photoImageView = (ImageView) view.findViewById(R.id.photoImageView);
             TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
             TextView typeTextView = (TextView) view.findViewById(R.id.typeTextView);
+            TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
             TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
             TextView reportTextView = (TextView) view.findViewById(R.id.reportTextView);
             TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
@@ -99,6 +100,8 @@ public class ItemListViewAdapter extends BaseAdapter
                 typeTextView.setText(R.string.status_borrowing);
                 typeTextView.setBackgroundResource(R.drawable.status_item_approve_ahead);
             }
+
+            symbolTextView.setText(item.getCurrency().getSymbol());
 
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
             amountTextView.setText(Utils.formatDouble(item.getAmount()));

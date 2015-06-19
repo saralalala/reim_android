@@ -321,7 +321,7 @@ public class ManagerActivity extends Activity
                     currentUser = appPreference.getCurrentUser();
 
                     dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-                    dbManager.syncUser(currentUser);
+                    dbManager.updateUser(currentUser);
 
                     dbManager.syncGroup(response.getGroup());
 

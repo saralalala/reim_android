@@ -326,7 +326,7 @@ public class MessageActivity extends Activity
 
                             dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
 
-                            dbManager.syncUser(currentUser);
+                            dbManager.updateUser(currentUser);
 
                             // update categories
                             dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
@@ -439,7 +439,7 @@ public class MessageActivity extends Activity
 
                             dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
 
-                            dbManager.syncUser(currentUser);
+                            dbManager.updateUser(currentUser);
 
                             // update categories
                             dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

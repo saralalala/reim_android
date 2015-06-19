@@ -32,6 +32,7 @@ public class ModifyItemRequest extends BaseRequest
             jObject.put("latitude", Double.toString(item.getLatitude()));
             jObject.put("longitude", Double.toString(item.getLongitude()));
             jObject.put("uid", item.getConsumer().getServerID());
+            jObject.put("currency", item.getCurrency().getCode());
             jObject.put("prove_ahead", Integer.toString(item.getType()));
             jObject.put("image_id", Image.getImagesIDString(item.getInvoices()));
             jObject.put("uids", User.getUsersIDString(item.getRelevantUsers()));

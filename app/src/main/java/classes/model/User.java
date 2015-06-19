@@ -27,6 +27,7 @@ public class User implements Serializable
     private String phone = "";
     private String wechat = "";
     private String didi = "";
+    private String didiToken = "";
     private String password = "";
     private String nickname = "";
     private String nicknameInitLetter = "";
@@ -55,6 +56,7 @@ public class User implements Serializable
         phone = user.getPhone();
         wechat = user.getWeChat();
         didi = user.getDidi();
+        didiToken = user.getDidiToken();
         password = user.getPassword();
         nickname = user.getNickname();
         avatarID = user.getAvatarID();
@@ -97,6 +99,13 @@ public class User implements Serializable
             {
                 setAvatarID(Integer.valueOf(imageID));
             }
+
+            JSONObject didiObject = jObject.optJSONObject("didi");
+            if (didiObject != null)
+            {
+                setDidi(didiObject.getString("phone"));
+                setDidiToken(didiObject.getString("token"));
+            }
         }
         catch (NumberFormatException | JSONException e)
         {
@@ -134,6 +143,13 @@ public class User implements Serializable
             else
             {
                 setAvatarID(Integer.valueOf(imageID));
+            }
+
+            JSONObject didiObject = jObject.optJSONObject("didi");
+            if (didiObject != null)
+            {
+                setDidi(didiObject.getString("phone"));
+                setDidiToken(didiObject.getString("token"));
             }
         }
         catch (JSONException e)
@@ -190,6 +206,15 @@ public class User implements Serializable
     public void setDidi(String didi)
     {
         this.didi = didi;
+    }
+
+    public String getDidiToken()
+    {
+        return didiToken;
+    }
+    public void setDidiToken(String didiToken)
+    {
+        this.didiToken = didiToken;
     }
 
     public String getPassword()

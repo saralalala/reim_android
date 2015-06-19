@@ -21,6 +21,12 @@ import classes.widget.ReimProgressDialog;
 
 public class ImportActivity extends Activity
 {
+    // Widgets
+    private TextView didiTextView;
+
+    // Local Data
+    private User currentUser;
+
     // View
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -35,6 +41,7 @@ public class ImportActivity extends Activity
         MobclickAgent.onPageStart("ImportActivity");
         MobclickAgent.onResume(this);
         ReimProgressDialog.setContext(this);
+        refreshView();
     }
 
     protected void onPause()
@@ -64,13 +71,7 @@ public class ImportActivity extends Activity
             }
         });
 
-        final User currentUser = AppPreference.getAppPreference().getCurrentUser();
-
-        final TextView didiTextView = (TextView) findViewById(R.id.didiTextView);
-        if (!currentUser.getDidi().isEmpty())
-        {
-            didiTextView.setText(currentUser.getDidi());
-        }
+        didiTextView = (TextView) findViewById(R.id.didiTextView);
 
         LinearLayout didiLayout = (LinearLayout) findViewById(R.id.didiLayout);
         didiLayout.setOnClickListener(new OnClickListener()
@@ -87,6 +88,19 @@ public class ImportActivity extends Activity
                 }
             }
         });
+    }
+
+    private void refreshView()
+    {
+        currentUser = AppPreference.getAppPreference().getCurrentUser();
+        if (!currentUser.getDidi().isEmpty())
+        {
+            didiTextView.setText(currentUser.getDidi());
+        }
+        else
+        {
+            didiTextView.setText(R.string.not_binding);
+        }
     }
 
     private void goBack()

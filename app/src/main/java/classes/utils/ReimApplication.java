@@ -300,7 +300,7 @@ public class ReimApplication extends Application
         DBManager dbManager = DBManager.getDBManager();
         if (dbManager.isCurrencyTableEmpty())
         {
-            Currency currency = new Currency("CNY", "￥");
+            Currency currency = new Currency("CNY", "¥");
             dbManager.insertCurrency(currency);
 
             currency = new Currency("USD", "$");
@@ -318,7 +318,7 @@ public class ReimApplication extends Application
             currency = new Currency("TWD", "$");
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("JPY", "￥");
+            currency = new Currency("JPY", "¥");
             dbManager.insertCurrency(currency);
 
             currency = new Currency("KER", "₩");

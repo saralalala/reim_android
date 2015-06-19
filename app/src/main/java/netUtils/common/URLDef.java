@@ -47,11 +47,15 @@ public class URLDef
     public static final String URL_SET_ADMIN = "set_admin";
     public static final String URL_BIND = "bind";
     public static final String URL_RESEND = "resend";
+    public static final String URL_REVERSE_GEOCODING = "http://api.map.baidu.com/geocoder/v2/";
     public static final String URL_DIDI_BIND = "didi_bind";
     public static final String URL_DIDI_ORDER = "didi_order";
     public static final String URL_DIDI_GET_SMS = "http://pay.xiaojukeji.com/api/v2/p_getsmscode";
     public static final String URL_DIDI_SIGN_IN = "http://pay.xiaojukeji.com/api/v2/weixinapi/p_login?openid=oDe7ajgT3tsnY1QmLFo2QAQYq41E&phone=%1$s&channel=1200&source=";
-    public static final String URL_DIDI_DETAIL = "http://pay.xiaojukeji.com/api/v2/p_getorderdetail";
+    public static final String URL_DIDI_TAXI_DETAIL = "http://pay.xiaojukeji.com/api/v2/p_getorderdetail";
+    public static final String URL_DIDI_KUAI_CHE_DETAIL = "http://api.udache.com/gulfstream/api/v1/passenger/pGetOrderDetail";
+    public static final String URL_DIDI_ZHUAN_CHE_DETAIL = "http://api.udache.com/gulfstream/api/v1/passenger/pGetOrderDetail";
+    public static final String URL_DIDI_LIFT_DETAIL = "http://api.didialift.com/beatles/api/passenger/order/getinfo";
 
     public static final String URL_SHARE_REDIRECT_URI_PREFIX = "https://admin.cloudbaoxiao.com/pub/oauth/";
     public static final String URL_SHARE = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx068349d5d3a73855&redirect_uri=%1$s" +

@@ -30,11 +30,19 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import classes.widget.XListView;
+import cn.beecloud.BCLocation;
+import cn.beecloud.BeeCloud;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.request.item.DidiOrderDetailRequest;
+import netUtils.request.item.DidiDetailKuaiCheRequest;
+import netUtils.request.item.DidiDetailLiftRequest;
+import netUtils.request.item.DidiDetailTaxiRequest;
+import netUtils.request.item.DidiDetailZhuanCheRequest;
 import netUtils.request.item.DidiOrdersRequest;
 import netUtils.request.user.UnbindDidiRequest;
-import netUtils.response.item.DidiOrderDetailResponse;
+import netUtils.response.item.DidiDetailKuaiCheResponse;
+import netUtils.response.item.DidiDetailLiftResponse;
+import netUtils.response.item.DidiDetailTaxiResponse;
+import netUtils.response.item.DidiDetailZhuanCheResponse;
 import netUtils.response.item.DidiOrdersResponse;
 import netUtils.response.user.UnbindDidiResponse;
 
@@ -47,7 +55,9 @@ public class DidiExpenseActivity extends Activity
 
     // Local Data
     private List<DidiExpense> expenseList = new ArrayList<>();
+    private String token = "";
     private boolean needToGetData = true;
+    private int pageIndex = 0;
 
     // View
     protected void onCreate(Bundle savedInstanceState)
@@ -56,6 +66,7 @@ public class DidiExpenseActivity extends Activity
         setContentView(R.layout.activity_me_didi_expenses);
         initData();
         initView();
+        initBeeCloud();
     }
 
     protected void onResume()
@@ -156,12 +167,9 @@ public class DidiExpenseActivity extends Activity
         int visibility = expenseList.isEmpty() ? View.VISIBLE : View.GONE;
         expenseTextView.setVisibility(visibility);
 
-        if (PhoneUtils.isNetworkConnected())
+        if (!needToGetData)
         {
-            for (DidiExpense expense : expenseList)
-            {
-                sendDidiOrderDetailRequest(expense);
-            }
+            getOrderAmount();
         }
     }
 
@@ -180,9 +188,41 @@ public class DidiExpenseActivity extends Activity
             expenseList.addAll((List<DidiExpense>) serializable);
             needToGetData = false;
         }
+
+        token = AppPreference.getAppPreference().getCurrentUser().getDidiToken();
     }
 
     // Network
+    private void initBeeCloud()
+    {
+        BeeCloud.setAppIdAndSecret(this, "0f4179d0-b80d-45c6-9ca1-7ad46f4c9402", "9e4a4a76-e771-4d75-aa52-4ff7c15df658");
+    }
+
+    private void getOrderAmount()
+    {
+        if (PhoneUtils.isNetworkConnected())
+        {
+            for (DidiExpense expense : expenseList)
+            {
+                switch (expense.getType())
+                {
+                    case DidiExpense.TYPE_TAXI:
+                        sendDidiDetailTaxiRequest(expense);
+                        break;
+                    case DidiExpense.TYPE_ZHUAN_CHE:
+                        sendDidiDetailZhuanCheRequest(expense);
+                        break;
+                    case DidiExpense.TYPE_KUAI_CHE:
+                        sendDidiDetailKuaiCheRequest(expense);
+                        break;
+                    case DidiExpense.TYPE_LIFT:
+                        sendDidiDetailLiftRequest(expense);
+                        break;
+                }
+            }
+        }
+    }
+
     private void sendDidiOrdersRequest()
     {
         DidiOrdersRequest request = new DidiOrdersRequest();
@@ -193,13 +233,12 @@ public class DidiExpenseActivity extends Activity
                 final DidiOrdersResponse response = new DidiOrdersResponse(httpResponse);
                 if (response.getStatus())
                 {
+                    needToGetData = false;
+
                     expenseList.clear();
                     expenseList.addAll(response.getDidiExpenseList());
 
-                    for (DidiExpense expense : expenseList)
-                    {
-                        sendDidiOrderDetailRequest(expense);
-                    }
+                    getOrderAmount();
 
                     runOnUiThread(new Runnable()
                     {
@@ -233,17 +272,93 @@ public class DidiExpenseActivity extends Activity
         });
     }
 
-    private void sendDidiOrderDetailRequest(final DidiExpense expense)
+    private void sendDidiDetailTaxiRequest(final DidiExpense expense)
     {
-        DidiOrderDetailRequest request = new DidiOrderDetailRequest(expense.getOrderID());
+        DidiDetailTaxiRequest request = new DidiDetailTaxiRequest(expense.getOrderID(), token);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
-                DidiOrderDetailResponse response = new DidiOrderDetailResponse(httpResponse);
+                DidiDetailTaxiResponse response = new DidiDetailTaxiResponse(httpResponse);
                 if (response.getStatus())
                 {
                     expense.setAmount(response.getAmount());
+                    expense.setCity(response.getCity());
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendDidiDetailZhuanCheRequest(final DidiExpense expense)
+    {
+        DidiDetailZhuanCheRequest request = new DidiDetailZhuanCheRequest(expense.getOrderID(), token);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                DidiDetailZhuanCheResponse response = new DidiDetailZhuanCheResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    expense.setAmount(response.getAmount());
+                    expense.setCity(response.getCity());
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendDidiDetailKuaiCheRequest(final DidiExpense expense)
+    {
+        DidiDetailKuaiCheRequest request = new DidiDetailKuaiCheRequest(expense.getOrderID(), token);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                DidiDetailKuaiCheResponse response = new DidiDetailKuaiCheResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    expense.setAmount(response.getAmount());
+                    expense.setCity(response.getCity());
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendDidiDetailLiftRequest(final DidiExpense expense)
+    {
+        DidiDetailLiftRequest request = new DidiDetailLiftRequest(expense.getOrderID(), token);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                DidiDetailLiftResponse response = new DidiDetailLiftResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    expense.setAmount(response.getAmount());
+                    queryCity(expense, response.getLatitude(), response.getLongitude());
 
                     runOnUiThread(new Runnable()
                     {
@@ -275,6 +390,7 @@ public class DidiExpenseActivity extends Activity
                         {
                             User currentUser = AppPreference.getAppPreference().getCurrentUser();
                             currentUser.setDidi("");
+                            currentUser.setDidiToken("");
                             DBManager.getDBManager().updateUser(currentUser);
 
                             ViewUtils.showToast(DidiExpenseActivity.this, R.string.succeed_in_unbinding_didi);
@@ -286,6 +402,27 @@ public class DidiExpenseActivity extends Activity
                         }
                     }
                 });
+            }
+        });
+    }
+
+    private void queryCity(DidiExpense expense, double latitude, double longitude)
+    {
+        BCLocation location = BCLocation.locationWithLatitude(latitude, longitude);
+        String city = location.getCity();
+
+        int index = city.indexOf(ViewUtils.getString(R.string.city));
+        if (index > 0)
+        {
+            city = city.substring(0, index);
+        }
+        expense.setCity(city);
+
+        runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                adapter.notifyDataSetChanged();
             }
         });
     }

@@ -109,6 +109,27 @@
 -dontwarn org.xbill.**
 -keep class org.xbill.** { *; }
 
+#################### BeeCloud ####################
+-dontwarn cn.beecloud.**
+-keep class cn.beecloud.** { *; }
+
+-dontwarn com.google.gson.**
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.** { *; }
+-keep class com.google.gson.JsonObject { *; }
+-keep class com.google.gson.examples.android.model.** { *; }
+
+-keepclassmembers class * implements java.io.Serializable {
+   static final long serialVersionUID;
+   private static final java.io.ObjectStreamField[] serialPersistentFields;
+   private void writeObject(java.io.ObjectOutputStream);
+   private void readObject(java.io.ObjectInputStream);
+   java.lang.Object writeReplace();
+   java.lang.Object readResolve();
+}
+
+-keep public class * implements java.io.Serializable {*;}
+
 #################### WeChat ####################
 -dontwarn com.tencent.mm.sdk.**
 -keep class com.tencent.mm.sdk.** { *; }

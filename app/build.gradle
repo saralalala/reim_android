@@ -53,7 +53,6 @@ android {
 }
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.3'
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile files('libs/commons-codec-1.9.jar') // Apache
     compile files('libs/httpcore-4.3.2.jar') // HTTP core
@@ -64,6 +63,8 @@ dependencies {
     compile files('libs/avoscloud-v2.6.6.jar') // LeanCloud
     compile files('libs/avospush-v2.6.6.jar') // LeanCloud Push
     compile files('libs/fastjson.jar') // LeanCloud Dependency
+    compile files('libs/beecloud.jar') // BeeCloud
+    compile files('libs/gson-2.2.4.jar') // BeeCloud Dependency
     compile files('libs/libammsdk.jar') // WeChat
     compile files('libs/locSDK_5.3.jar') // Baidu Map
     compile files('libs/umeng-analytics-v5.5.3.jar') // Umeng Analytics
