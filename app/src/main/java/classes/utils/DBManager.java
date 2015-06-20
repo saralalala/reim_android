@@ -423,6 +423,21 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
+    public boolean deleteGroup(int groupServerID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_group WHERE server_id = '" + groupServerID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean updateGroup(Group group)
     {
         try
@@ -443,19 +458,12 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public boolean deleteGroup(int groupServerID)
+    public Group getGroup(int groupServerID)
     {
-        try
-        {
-            String sqlString = "DELETE FROM tbl_group WHERE server_id = '" + groupServerID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
+        Cursor cursor = database.rawQuery("SELECT server_id, group_name, local_updatedt, server_updatedt" +
+                                                  " FROM tbl_group WHERE server_id = ?",
+                                          new String[]{Integer.toString(groupServerID)});
+        return getGroupFromCursorWithClose(cursor);
     }
 
     public boolean syncGroup(Group group)
@@ -480,32 +488,6 @@ public class DBManager extends SQLiteOpenHelper
         {
             e.printStackTrace();
             return false;
-        }
-    }
-
-    public Group getGroup(int groupServerID)
-    {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT server_id, group_name, local_updatedt, server_updatedt" +
-                                                      " FROM tbl_group WHERE server_id = ?", new String[]{Integer.toString(groupServerID)});
-            if (cursor.moveToNext())
-            {
-                Group group = getGroupFromCursor(cursor);
-
-                cursor.close();
-                return group;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -541,6 +523,21 @@ public class DBManager extends SQLiteOpenHelper
                 deleteBankAccount(user.getServerID());
                 insertBankAccount(user.getBankAccount(), user.getServerID());
             }
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteUser(int userServerID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_user WHERE server_id = '" + userServerID + "'";
+            database.execSQL(sqlString);
             return true;
         }
         catch (Exception e)
@@ -589,19 +586,11 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public boolean deleteUser(int userServerID)
+    public User getUser(int userServerID)
     {
-        try
-        {
-            String sqlString = "DELETE FROM tbl_user WHERE server_id = '" + userServerID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_user WHERE server_id = ?",
+                                          new String[]{Integer.toString(userServerID)});
+        return getUserFromCursorWithClose(cursor);
     }
 
     public boolean syncUser(User user)
@@ -632,28 +621,18 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public User getUser(int userServerID)
+    public boolean deleteGroupUsers(int groupServerID)
     {
         try
         {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_user WHERE server_id = ?", new String[]{Integer.toString(userServerID)});
-            if (cursor.moveToNext())
-            {
-                User user = getUserFromCursor(cursor);
-
-                cursor.close();
-                return user;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
+            String sqlString = "DELETE FROM tbl_user WHERE group_id = '" + groupServerID + "'";
+            database.execSQL(sqlString);
+            return true;
         }
         catch (Exception e)
         {
-            Log.i("reim", e.toString());
-            return null;
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -666,7 +645,7 @@ public class DBManager extends SQLiteOpenHelper
             {
                 for (User user : userList)
                 {
-                    if (localUser.getServerID() == user.getServerID() && localUser.getAvatarID() == user.getAvatarID())
+                    if (localUser.equals(user) && localUser.getAvatarID() == user.getAvatarID())
                     {
                         user.setAvatarLocalPath(localUser.getAvatarLocalPath());
                         break;
@@ -690,17 +669,17 @@ public class DBManager extends SQLiteOpenHelper
     public List<User> getGroupUsers(int groupServerID)
     {
         List<User> userList = new ArrayList<>();
+        Cursor cursor = null;
         try
         {
             if (groupServerID != -1 && groupServerID != 0)
             {
-                Cursor cursor = database.rawQuery("SELECT * FROM tbl_user WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
+                cursor = database.rawQuery("SELECT * FROM tbl_user WHERE group_id = ?",
+                                              new String[]{Integer.toString(groupServerID)});
                 while (cursor.moveToNext())
                 {
                     userList.add(getUserFromCursor(cursor));
                 }
-
-                cursor.close();
             }
             else
             {
@@ -710,28 +689,19 @@ public class DBManager extends SQLiteOpenHelper
                     userList.add(user);
                 }
             }
-            return userList;
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return userList;
         }
-    }
-
-    public boolean deleteGroupUsers(int groupServerID)
-    {
-        try
+        finally
         {
-            String sqlString = "DELETE FROM tbl_user WHERE group_id = '" + groupServerID + "'";
-            database.execSQL(sqlString);
-            return true;
+            if (cursor != null)
+            {
+                cursor.close();
+            }
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
+        return userList;
     }
 
     public boolean insertRelevantUsers(Item item)
@@ -758,6 +728,21 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
+    public boolean deleteRelevantUsers(int itemLocalID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_item_user WHERE item_local_id = '" + itemLocalID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean updateRelevantUsers(Item item)
     {
         try
@@ -775,42 +760,32 @@ public class DBManager extends SQLiteOpenHelper
 
     public List<User> getRelevantUsers(int itemLocalID)
     {
-        List<User> relevantUsers = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT user_id FROM tbl_item_user WHERE item_local_id = ?",
+                                              new String[]{Integer.toString(itemLocalID)});
         try
         {
-            Cursor userCursor = database.rawQuery("SELECT user_id FROM tbl_item_user WHERE item_local_id = ?",
-                                                  new String[]{Integer.toString(itemLocalID)});
-            while (userCursor.moveToNext())
+            while (cursor.moveToNext())
             {
-                User user = getUser(getIntFromCursor(userCursor, "user_id"));
+                User user = getUser(getIntFromCursor(cursor, "user_id"));
                 if (user != null)
                 {
-                    relevantUsers.add(user);
+                    userList.add(user);
                 }
             }
-
-            return relevantUsers;
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return relevantUsers;
         }
-    }
-
-    public boolean deleteRelevantUsers(int itemLocalID)
-    {
-        try
+        finally
         {
-            String sqlString = "DELETE FROM tbl_item_user WHERE item_local_id = '" + itemLocalID + "'";
-            database.execSQL(sqlString);
-            return true;
+            if (cursor != null)
+            {
+                cursor.close();
+            }
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
+        return userList;
     }
 
     // Item
@@ -899,6 +874,55 @@ public class DBManager extends SQLiteOpenHelper
         catch (Exception e)
         {
             e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteItem(int itemLocalID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_item WHERE id = '" + itemLocalID + "'";
+            database.execSQL(sqlString);
+
+            deleteItemImages(itemLocalID);
+            deleteItemTags(itemLocalID);
+            deleteRelevantUsers(itemLocalID);
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    public boolean deleteTrashItems(List<Integer> remainingList, int userServerID)
+    {
+        try
+        {
+            String idString = !remainingList.isEmpty() ? TextUtils.join(",", remainingList) + ", -1" : "-1";
+            List<Integer> itemIDList = new ArrayList<>();
+
+            String command = "SELECT id FROM tbl_item WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
+            Cursor cursor = database.rawQuery(command, null);
+
+            while (cursor.moveToNext())
+            {
+                itemIDList.add(getIntFromCursor(cursor, "id"));
+            }
+
+            cursor.close();
+
+            for (Integer itemLocalID : itemIDList)
+            {
+                deleteItem(itemLocalID);
+            }
+
+            return true;
+        }
+        catch (Exception e)
+        {
             return false;
         }
     }
@@ -1004,53 +1028,25 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public boolean deleteItem(int itemLocalID)
+    public Item getItemByLocalID(int itemLocalID)
     {
-        try
-        {
-            String sqlString = "DELETE FROM tbl_item WHERE id = '" + itemLocalID + "'";
-            database.execSQL(sqlString);
-
-            deleteItemImages(itemLocalID);
-            deleteItemTags(itemLocalID);
-            deleteRelevantUsers(itemLocalID);
-
-            return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE id = ?",
+                                          new String[]{Integer.toString(itemLocalID)});
+        return getItemFromCursorWithClose(cursor);
     }
 
-    public boolean deleteTrashItems(List<Integer> remainingList, int userServerID)
+    public Item getItemByServerID(int itemServerID)
     {
-        try
-        {
-            String idString = !remainingList.isEmpty() ? TextUtils.join(",", remainingList) + ", -1" : "-1";
-            List<Integer> itemIDList = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE server_id = ?",
+                                          new String[]{Integer.toString(itemServerID)});
+        return getItemFromCursorWithClose(cursor);
+    }
 
-            String command = "SELECT id FROM tbl_item WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
-            Cursor cursor = database.rawQuery(command, null);
-
-            while (cursor.moveToNext())
-            {
-                itemIDList.add(getIntFromCursor(cursor, "id"));
-            }
-
-            cursor.close();
-
-            for (Integer itemLocalID : itemIDList)
-            {
-                deleteItem(itemLocalID);
-            }
-
-            return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
+    public Item getOthersItem(int itemServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_item WHERE server_id = ?",
+                                          new String[]{Integer.toString(itemServerID)});
+        return getOthersItemFromCursorWithClose(cursor);
     }
 
     public boolean syncItem(Item item)
@@ -1093,6 +1089,94 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
+    public List<Item> getUserItems(int userServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ?",
+                                          new String[]{Integer.toString(userServerID)});
+        return getItemListFromCursorWithClose(cursor);
+    }
+
+    public List<Item> getUnarchivedConsumedItems(int userServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
+                                                  "(report_local_id = -1 OR report_local_id = 0) AND " +
+                                                  "(type = 0 OR (type = 1 AND aa_approved = 1) OR (type = 2 AND aa_approved = 1))",
+                                          new String[]{Integer.toString(userServerID)});
+        return getItemListFromCursorWithClose(cursor);
+    }
+
+    public List<Item> getUnarchivedBudgetItems(int userServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
+                                                  "(report_local_id = -1 OR report_local_id = 0) AND " +
+                                                  "type = 1 AND aa_approved = 0",
+                                          new String[]{Integer.toString(userServerID)});
+        return getItemListFromCursorWithClose(cursor);
+    }
+
+    public List<Item> getUnarchivedBorrowingItems(int userServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
+                                                  "(report_local_id = -1 OR report_local_id = 0) AND " +
+                                                  "type = 2 AND aa_approved = 0",
+                                          new String[]{Integer.toString(userServerID)});
+        return getItemListFromCursorWithClose(cursor);
+    }
+
+    public List<Item> getUnsyncedItems(int userServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE local_updatedt > server_updatedt AND user_id = ?",
+                                          new String[]{Integer.toString(userServerID)});
+        return getItemListFromCursorWithClose(cursor);
+    }
+
+    public List<Item> getExistsUserItems(int userServerID)
+    {
+        List<Item> itemList = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT id, server_id FROM tbl_item WHERE user_id = ? AND server_id != -1",
+                                          new String[]{Integer.toString(userServerID)});
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                Item item = new Item();
+                item.setLocalID(getIntFromCursor(cursor, "id"));
+                item.setServerID(getIntFromCursor(cursor, "server_id"));
+                itemList.add(item);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return itemList;
+    }
+
+    public List<Item> getItems(ArrayList<Integer> chosenItemIDList)
+    {
+        List<Item> itemList = new ArrayList<>();
+        try
+        {
+            for (int i = 0; i < chosenItemIDList.size(); i++)
+            {
+                itemList.add(getItemByLocalID(chosenItemIDList.get(i)));
+            }
+            return itemList;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return itemList;
+        }
+    }
+
     public boolean syncItemList(List<Item> itemList, int userServerID)
     {
         try
@@ -1124,231 +1208,6 @@ public class DBManager extends SQLiteOpenHelper
         {
             e.printStackTrace();
             return false;
-        }
-    }
-
-    public Item getItemByLocalID(int itemLocalID)
-    {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE id = ?", new String[]{Integer.toString(itemLocalID)});
-
-            if (cursor.moveToNext())
-            {
-                Item item = getItemFromCursor(cursor);
-
-                cursor.close();
-                return item;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Item getItemByServerID(int itemServerID)
-    {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE server_id = ?", new String[]{Integer.toString(itemServerID)});
-
-            if (cursor.moveToNext())
-            {
-                Item item = getItemFromCursor(cursor);
-
-                cursor.close();
-                return item;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Item getOthersItem(int itemServerID)
-    {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_item WHERE server_id = ?",
-                                              new String[]{Integer.toString(itemServerID)});
-
-            if (cursor.moveToNext())
-            {
-                Item item = getOthersItemFromCursor(cursor);
-
-                cursor.close();
-                return item;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public List<Item> getUserItems(int userServerID)
-    {
-        List<Item> itemList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ?", new String[]{Integer.toString(userServerID)});
-
-            while (cursor.moveToNext())
-            {
-                itemList.add(getItemFromCursor(cursor));
-            }
-
-            cursor.close();
-            return itemList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return itemList;
-        }
-    }
-
-    public List<Item> getUnarchivedConsumedItems(int userServerID)
-    {
-        List<Item> itemList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
-                                                      "(report_local_id = -1 OR report_local_id = 0) AND " +
-                                                      "(type = 0 OR (type = 1 AND aa_approved = 1) OR (type = 2 AND aa_approved = 1))",
-                                              new String[]{Integer.toString(userServerID)});
-
-            while (cursor.moveToNext())
-            {
-                itemList.add(getItemFromCursor(cursor));
-            }
-
-            cursor.close();
-            return itemList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return itemList;
-        }
-    }
-
-    public List<Item> getUnarchivedBudgetItems(int userServerID)
-    {
-        List<Item> itemList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
-                                                      "(report_local_id = -1 OR report_local_id = 0) AND " +
-                                                      "type = 1 AND aa_approved = 0",
-                                              new String[]{Integer.toString(userServerID)});
-
-            while (cursor.moveToNext())
-            {
-                itemList.add(getItemFromCursor(cursor));
-            }
-
-            cursor.close();
-            return itemList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return itemList;
-        }
-    }
-
-    public List<Item> getUnarchivedBorrowingItems(int userServerID)
-    {
-        List<Item> itemList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE user_id = ? AND " +
-                                                      "(report_local_id = -1 OR report_local_id = 0) AND " +
-                                                      "type = 2 AND aa_approved = 0",
-                                              new String[]{Integer.toString(userServerID)});
-
-            while (cursor.moveToNext())
-            {
-                itemList.add(getItemFromCursor(cursor));
-            }
-
-            cursor.close();
-            return itemList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return itemList;
-        }
-    }
-
-    public List<Item> getUnsyncedItems(int userServerID)
-    {
-        List<Item> itemList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE local_updatedt > server_updatedt AND user_id = ?",
-                                              new String[]{Integer.toString(userServerID)});
-
-            while (cursor.moveToNext())
-            {
-                itemList.add(getItemFromCursor(cursor));
-            }
-
-            cursor.close();
-            return itemList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return itemList;
-        }
-    }
-
-    public List<Item> getExistsUserItems(int userServerID)
-    {
-        List<Item> itemList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT id, server_id FROM tbl_item WHERE user_id = ? AND server_id != -1",
-                                              new String[]{Integer.toString(userServerID)});
-
-            while (cursor.moveToNext())
-            {
-                Item item = new Item();
-                item.setLocalID(getIntFromCursor(cursor, "id"));
-                item.setServerID(getIntFromCursor(cursor, "server_id"));
-                itemList.add(item);
-            }
-
-            cursor.close();
-            return itemList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return itemList;
         }
     }
 
@@ -1436,66 +1295,16 @@ public class DBManager extends SQLiteOpenHelper
 
     public List<Item> getReportItems(int reportLocalID)
     {
-        List<Item> itemList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE report_local_id = ?",
-                                              new String[]{Integer.toString(reportLocalID)});
-
-            while (cursor.moveToNext())
-            {
-                itemList.add(getItemFromCursor(cursor));
-            }
-
-            cursor.close();
-            return itemList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return itemList;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE report_local_id = ?",
+                                          new String[]{Integer.toString(reportLocalID)});
+        return getItemListFromCursorWithClose(cursor);
     }
 
     public List<Item> getOthersReportItems(int reportServerID)
     {
-        List<Item> itemList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_item WHERE report_server_id = ?",
-                                              new String[]{Integer.toString(reportServerID)});
-
-            while (cursor.moveToNext())
-            {
-                itemList.add(getOthersItemFromCursor(cursor));
-            }
-
-            cursor.close();
-            return itemList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return itemList;
-        }
-    }
-
-    public List<Item> getItems(ArrayList<Integer> chosenItemIDList)
-    {
-        List<Item> itemList = new ArrayList<>();
-        try
-        {
-            for (int i = 0; i < chosenItemIDList.size(); i++)
-            {
-                itemList.add(getItemByLocalID(chosenItemIDList.get(i)));
-            }
-            return itemList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return itemList;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_item WHERE report_server_id = ?",
+                                          new String[]{Integer.toString(reportServerID)});
+        return getOthersItemListFromCursorWithClose(cursor);
     }
 
     // Report
@@ -1555,95 +1364,6 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + report.getCreatedDate() + "'," +
                     "'" + report.getServerUpdatedDate() + "'," +
                     "'" + report.getLocalUpdatedDate() + "')";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean updateReportByLocalID(Report report)
-    {
-        try
-        {
-            LogUtils.println("update report by local id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
-            String sqlString = "UPDATE tbl_report SET " +
-                    "server_id = '" + report.getServerID() + "'," +
-                    "title = '" + sqliteEscape(report.getTitle()) + "'," +
-                    "user_id = '" + report.getSender().getServerID() + "'," +
-                    "status = '" + report.getStatus() + "'," +
-                    "aa_approved = '" + Utils.booleanToInt(report.isAaApproved()) + "'," +
-                    "manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
-                    "cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
-                    "type = '" + report.getType() + "'," +
-                    "created_date = '" + report.getCreatedDate() + "'," +
-                    "server_updatedt = '" + report.getServerUpdatedDate() + "'," +
-                    "local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
-                    "WHERE id = '" + report.getLocalID() + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean updateReportByServerID(Report report)
-    {
-        try
-        {
-            LogUtils.println("update report by server id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
-            String sqlString = "UPDATE tbl_report SET " +
-                    "server_id = '" + report.getServerID() + "'," +
-                    "title = '" + sqliteEscape(report.getTitle()) + "'," +
-                    "user_id = '" + report.getSender().getServerID() + "'," +
-                    "status = '" + report.getStatus() + "'," +
-                    "aa_approved = '" + Utils.booleanToInt(report.isAaApproved()) + "'," +
-                    "manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
-                    "cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
-                    "type = '" + report.getType() + "'," +
-                    "created_date = '" + report.getCreatedDate() + "'," +
-                    "server_updatedt = '" + report.getServerUpdatedDate() + "'," +
-                    "local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
-                    "WHERE server_id = '" + report.getServerID() + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean updateOthersReport(Report report)
-    {
-        try
-        {
-            String amountString = report.getAmount() == null ? "" : "amount = '" + report.getAmount() + "',";
-            String sqlString = "UPDATE tbl_others_report SET " + amountString +
-                    "server_id = '" + report.getServerID() + "'," +
-                    "owner_id = '" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
-                    "title = '" + sqliteEscape(report.getTitle()) + "'," +
-                    "user_id = '" + report.getSender().getServerID() + "'," +
-                    "manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
-                    "cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
-                    "status = '" + report.getStatus() + "'," +
-                    "my_decision = '" + report.getMyDecision() + "'," +
-                    "type = '" + report.getType() + "'," +
-                    "is_cc = '" + Utils.booleanToInt(report.isCC()) + "'," +
-                    "step = '" + report.getStep() + "'," +
-                    "amount = '" + report.getAmount() + "'," +
-                    "item_count = '" + report.getItemCount() + "'," +
-                    "created_date = '" + report.getCreatedDate() + "'," +
-                    "server_updatedt = '" + report.getServerUpdatedDate() + "'," +
-                    "local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
-                    "WHERE server_id = '" + report.getServerID() + "'";
             database.execSQL(sqlString);
             return true;
         }
@@ -1737,82 +1457,114 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public Report getReportByLocalID(int reportLocalID)
+    public boolean updateReportByLocalID(Report report)
     {
         try
         {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE id = ? ",
-                                              new String[]{Integer.toString(reportLocalID)});
-
-            if (cursor.moveToNext())
-            {
-                Report report = getReportFromCursor(cursor);
-
-                cursor.close();
-                return report;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
+            LogUtils.println("update report by local id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
+            String sqlString = "UPDATE tbl_report SET " +
+                    "server_id = '" + report.getServerID() + "'," +
+                    "title = '" + sqliteEscape(report.getTitle()) + "'," +
+                    "user_id = '" + report.getSender().getServerID() + "'," +
+                    "status = '" + report.getStatus() + "'," +
+                    "aa_approved = '" + Utils.booleanToInt(report.isAaApproved()) + "'," +
+                    "manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
+                    "cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
+                    "type = '" + report.getType() + "'," +
+                    "created_date = '" + report.getCreatedDate() + "'," +
+                    "server_updatedt = '" + report.getServerUpdatedDate() + "'," +
+                    "local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
+                    "WHERE id = '" + report.getLocalID() + "'";
+            database.execSQL(sqlString);
+            return true;
         }
         catch (Exception e)
         {
-            return null;
+            e.printStackTrace();
+            return false;
         }
+    }
+
+    public boolean updateReportByServerID(Report report)
+    {
+        try
+        {
+            LogUtils.println("update report by server id: local id = " + report.getLocalID() + ", server id = " + report.getServerID());
+            String sqlString = "UPDATE tbl_report SET " +
+                    "server_id = '" + report.getServerID() + "'," +
+                    "title = '" + sqliteEscape(report.getTitle()) + "'," +
+                    "user_id = '" + report.getSender().getServerID() + "'," +
+                    "status = '" + report.getStatus() + "'," +
+                    "aa_approved = '" + Utils.booleanToInt(report.isAaApproved()) + "'," +
+                    "manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
+                    "cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
+                    "type = '" + report.getType() + "'," +
+                    "created_date = '" + report.getCreatedDate() + "'," +
+                    "server_updatedt = '" + report.getServerUpdatedDate() + "'," +
+                    "local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
+                    "WHERE server_id = '" + report.getServerID() + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateOthersReport(Report report)
+    {
+        try
+        {
+            String amountString = report.getAmount() == null ? "" : "amount = '" + report.getAmount() + "',";
+            String sqlString = "UPDATE tbl_others_report SET " + amountString +
+                    "server_id = '" + report.getServerID() + "'," +
+                    "owner_id = '" + AppPreference.getAppPreference().getCurrentUserID() + "'," +
+                    "title = '" + sqliteEscape(report.getTitle()) + "'," +
+                    "user_id = '" + report.getSender().getServerID() + "'," +
+                    "manager_id = '" + User.getUsersIDString(report.getManagerList()) + "'," +
+                    "cc_id = '" + User.getUsersIDString(report.getCCList()) + "'," +
+                    "status = '" + report.getStatus() + "'," +
+                    "my_decision = '" + report.getMyDecision() + "'," +
+                    "type = '" + report.getType() + "'," +
+                    "is_cc = '" + Utils.booleanToInt(report.isCC()) + "'," +
+                    "step = '" + report.getStep() + "'," +
+                    "amount = '" + report.getAmount() + "'," +
+                    "item_count = '" + report.getItemCount() + "'," +
+                    "created_date = '" + report.getCreatedDate() + "'," +
+                    "server_updatedt = '" + report.getServerUpdatedDate() + "'," +
+                    "local_updatedt = '" + report.getLocalUpdatedDate() + "' " +
+                    "WHERE server_id = '" + report.getServerID() + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Report getReportByLocalID(int reportLocalID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE id = ? ",
+                                          new String[]{Integer.toString(reportLocalID)});
+        return getReportFromCursorWithClose(cursor);
     }
 
     public Report getReportByServerID(int reportServerID)
     {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE server_id = ? ",
-                                              new String[]{Integer.toString(reportServerID)});
-
-            if (cursor.moveToNext())
-            {
-                Report report = getReportFromCursor(cursor);
-
-                cursor.close();
-                return report;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE server_id = ? ",
+                                          new String[]{Integer.toString(reportServerID)});
+        return getReportFromCursorWithClose(cursor);
     }
 
     public Report getOthersReport(int reportServerID)
     {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE server_id = ?",
-                                              new String[]{Integer.toString(reportServerID)});
-
-            if (cursor.moveToNext())
-            {
-                Report report = getOthersReportFromCursor(cursor);
-
-                cursor.close();
-                return report;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE server_id = ?",
+                                          new String[]{Integer.toString(reportServerID)});
+        return getOthersReportFromCursorWithClose(cursor);
     }
 
     public boolean syncReport(Report report)
@@ -1855,6 +1607,113 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
+    public List<Report> getUnsyncedUserReports(int userServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE local_updatedt > server_updatedt AND " +
+                                                  "(user_id = ? OR manager_id = ?)",
+                                          new String[]{Integer.toString(userServerID), Integer.toString(userServerID)});
+        return getReportListFromCursorWithClose(cursor);
+    }
+
+    public List<Report> getExistsUserReports(int userServerID)
+    {
+        List<Report> reportList = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT id, server_id FROM tbl_report WHERE user_id = ? AND server_id != -1",
+                                          new String[]{Integer.toString(userServerID)});
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                Report report = new Report();
+                report.setLocalID(getIntFromCursor(cursor, "id"));
+                report.setServerID(getIntFromCursor(cursor, "server_id"));
+
+                reportList.add(report);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return reportList;
+    }
+
+    public List<Report> getUserReports(int userServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE user_id = ?",
+                                          new String[]{Integer.toString(userServerID)});
+        return getReportListFromCursorWithClose(cursor);
+    }
+
+    public List<Report> getOthersReports(int userServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE owner_id = ?",
+                                          new String[]{Integer.toString(userServerID)});
+        return getOthersReportListFromCursorWithClose(cursor);
+    }
+
+    public String getReportItemIDs(int reportLocalID)
+    {
+        String result = "";
+        List<Integer> idList = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT server_id FROM tbl_item WHERE report_local_id = ?",
+                                          new String[]{Integer.toString(reportLocalID)});
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                idList.add(getIntFromCursor(cursor, "server_id"));
+            }
+
+            result = TextUtils.join(",", idList);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return result;
+    }
+
+    public double getReportAmount(int reportLocalID)
+    {
+        double amount = 0;
+        Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id = ?",
+                                          new String[]{Integer.toString(reportLocalID)});
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                amount += getDoubleFromCursor(cursor, "amount");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return amount;
+    }
+
     public boolean syncReportList(List<Report> reportList, int userServerID)
     {
         try
@@ -1885,250 +1744,6 @@ public class DBManager extends SQLiteOpenHelper
         {
             e.printStackTrace();
             return false;
-        }
-    }
-
-    public List<Report> getUnsyncedUserReports(int userServerID)
-    {
-        List<Report> reportList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE local_updatedt > server_updatedt AND " +
-                                                      "(user_id = ? OR manager_id = ?)",
-                                              new String[]{Integer.toString(userServerID), Integer.toString(userServerID)});
-
-            while (cursor.moveToNext())
-            {
-                reportList.add(getReportFromCursor(cursor));
-            }
-
-            cursor.close();
-            return reportList;
-        }
-        catch (Exception e)
-        {
-            return reportList;
-        }
-    }
-
-    public List<Report> getExistsUserReports(int userServerID)
-    {
-        List<Report> reportList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT id, server_id FROM tbl_report WHERE user_id = ? AND server_id != -1",
-                                              new String[]{Integer.toString(userServerID)});
-
-            while (cursor.moveToNext())
-            {
-                Report report = new Report();
-                report.setLocalID(getIntFromCursor(cursor, "id"));
-                report.setServerID(getIntFromCursor(cursor, "server_id"));
-
-                reportList.add(report);
-            }
-
-            cursor.close();
-            return reportList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return reportList;
-        }
-    }
-
-    public List<Report> getUserReports(int userServerID)
-    {
-        List<Report> reportList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_report WHERE user_id = ?",
-                                              new String[]{Integer.toString(userServerID)});
-
-            while (cursor.moveToNext())
-            {
-                reportList.add(getReportFromCursor(cursor));
-            }
-
-            cursor.close();
-            return reportList;
-        }
-        catch (Exception e)
-        {
-            return reportList;
-        }
-    }
-
-    public List<Report> getOthersReports(int userServerID)
-    {
-        List<Report> reportList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_report WHERE owner_id = ?",
-                                              new String[]{Integer.toString(userServerID)});
-
-            while (cursor.moveToNext())
-            {
-                reportList.add(getOthersReportFromCursor(cursor));
-            }
-
-            cursor.close();
-            return reportList;
-        }
-        catch (Exception e)
-        {
-            return reportList;
-        }
-    }
-
-    public String getReportItemIDs(int reportLocalID)
-    {
-        List<Integer> idList = new ArrayList<>();
-        Cursor cursor = database.rawQuery("SELECT server_id FROM tbl_item WHERE report_local_id = ?",
-                                          new String[]{Integer.toString(reportLocalID)});
-        while (cursor.moveToNext())
-        {
-            idList.add(getIntFromCursor(cursor, "server_id"));
-        }
-
-        cursor.close();
-        return TextUtils.join(",", idList);
-    }
-
-    public double getReportAmount(int reportLocalID)
-    {
-        double amount = 0;
-        Cursor cursor = null;
-
-        try
-        {
-            cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id = ?",
-                                       new String[]{Integer.toString(reportLocalID)});
-
-            while (cursor.moveToNext())
-            {
-                amount += getDoubleFromCursor(cursor, "amount");
-            }
-        }
-        finally
-        {
-            if (cursor != null)
-            {
-                cursor.close();
-            }
-        }
-        return amount;
-    }
-
-    // Bank Account
-    public int insertBankAccount(BankAccount bankAccount, int userID)
-    {
-        try
-        {
-            String sqlString = "INSERT INTO tbl_bank (server_id, user_id, name, number, bank_name, location) VALUES (" +
-                    "'" + bankAccount.getServerID() + "'," +
-                    "'" + userID + "'," +
-                    "'" + sqliteEscape(bankAccount.getName()) + "'," +
-                    "'" + sqliteEscape(bankAccount.getNumber()) + "'," +
-                    "'" + sqliteEscape(bankAccount.getBankName()) + "'," +
-                    "'" + sqliteEscape(bankAccount.getLocation()) + "')";
-            database.execSQL(sqlString);
-
-            Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_bank", null);
-            cursor.moveToFirst();
-            bankAccount.setLocalID(cursor.getInt(0));
-            cursor.close();
-
-            return bankAccount.getLocalID();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
-    public boolean updateBankAccount(BankAccount bankAccount)
-    {
-        try
-        {
-            String sqlString = "UPDATE tbl_bank SET " +
-                    "server_id = '" + bankAccount.getServerID() + "'," +
-                    "name = '" + sqliteEscape(bankAccount.getName()) + "'," +
-                    "number = '" + sqliteEscape(bankAccount.getNumber()) + "'," +
-                    "bank_name = '" + sqliteEscape(bankAccount.getBankName()) + "'," +
-                    "location = '" + sqliteEscape(bankAccount.getLocation()) + "' " +
-                    "WHERE id = '" + bankAccount.getLocalID() + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean deleteUserBankAccount(int userID)
-    {
-        try
-        {
-            String sqlString = "DELETE FROM tbl_bank WHERE user_id = '" + userID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean deleteBankAccount(int accountLocalID)
-    {
-        try
-        {
-            String sqlString = "DELETE FROM tbl_bank WHERE id = '" + accountLocalID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public BankAccount getBankAccount(int userID)
-    {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_bank WHERE user_id = ?",
-                                              new String[]{Integer.toString(userID)});
-            if (cursor.moveToNext())
-            {
-                BankAccount bankAccount = new BankAccount();
-                bankAccount.setLocalID(getIntFromCursor(cursor, "id"));
-                bankAccount.setServerID(getIntFromCursor(cursor, "server_id"));
-                bankAccount.setName(getStringFromCursor(cursor, "name"));
-                bankAccount.setNumber(getStringFromCursor(cursor, "number"));
-                bankAccount.setBankName(getStringFromCursor(cursor, "bank_name"));
-                bankAccount.setLocation(getStringFromCursor(cursor, "location"));
-
-                cursor.close();
-                return bankAccount;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -2168,28 +1783,6 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + comment.getCreatedDate() + "'," +
                     "'" + comment.getServerUpdatedDate() + "'," +
                     "'" + comment.getLocalUpdatedDate() + "')";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
-    }
-
-    public boolean updateComment(Comment comment)
-    {
-        try
-        {
-            String sqlString = "UPDATE tbl_comment SET " +
-                    "server_id = '" + comment.getServerID() + "'," +
-                    "report_local_id = '" + comment.getReportID() + "'," +
-                    "user_id = '" + comment.getReviewer().getServerID() + "'," +
-                    "comment = '" + sqliteEscape(comment.getContent()) + "'," +
-                    "comment_date = '" + comment.getCreatedDate() + "'," +
-                    "server_updatedt = '" + comment.getServerUpdatedDate() + "'," +
-                    "local_updatedt = '" + comment.getLocalUpdatedDate() + "' " +
-                    "WHERE server_id = '" + comment.getLocalID() + "'";
             database.execSQL(sqlString);
             return true;
         }
@@ -2259,77 +1852,54 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public Comment getComment(int commentLocalID)
+    public boolean updateComment(Comment comment)
     {
         try
         {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE id = ?",
-                                              new String[]{Integer.toString(commentLocalID)});
-
-            if (cursor.moveToNext())
-            {
-                Comment comment = getCommentFromCursor(cursor);
-
-                cursor.close();
-                return comment;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
+            String sqlString = "UPDATE tbl_comment SET " +
+                    "server_id = '" + comment.getServerID() + "'," +
+                    "report_local_id = '" + comment.getReportID() + "'," +
+                    "user_id = '" + comment.getReviewer().getServerID() + "'," +
+                    "comment = '" + sqliteEscape(comment.getContent()) + "'," +
+                    "comment_date = '" + comment.getCreatedDate() + "'," +
+                    "server_updatedt = '" + comment.getServerUpdatedDate() + "'," +
+                    "local_updatedt = '" + comment.getLocalUpdatedDate() + "' " +
+                    "WHERE server_id = '" + comment.getLocalID() + "'";
+            database.execSQL(sqlString);
+            return true;
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            return null;
+            return false;
         }
+    }
+
+    public Comment getComment(int commentLocalID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE id = ?",
+                                          new String[]{Integer.toString(commentLocalID)});
+        return getCommentFromCursorWithClose(cursor);
+    }
+
+    public Comment getOthersComment(int commentServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_comment WHERE server_id = ?",
+                                          new String[]{Integer.toString(commentServerID)});
+        return getOthersCommentFromCursorWithClose(cursor);
     }
 
     public List<Comment> getReportComments(int reportLocalID)
     {
-        List<Comment> commentList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE report_local_id = ?",
-                                              new String[]{Integer.toString(reportLocalID)});
-
-            while (cursor.moveToNext())
-            {
-                commentList.add(getCommentFromCursor(cursor));
-            }
-
-            cursor.close();
-            return commentList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return commentList;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE report_local_id = ?",
+                                          new String[]{Integer.toString(reportLocalID)});
+        return getCommentListFromCursorWithClose(cursor);
     }
 
     public List<Comment> getOthersReportComments(int reportServerID)
     {
-        List<Comment> commentList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_comment WHERE report_server_id = ?",
-                                              new String[]{Integer.toString(reportServerID)});
-
-            while (cursor.moveToNext())
-            {
-                commentList.add(getOthersCommentFromCursor(cursor));
-            }
-
-            cursor.close();
-            return commentList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return commentList;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_comment WHERE report_server_id = ?",
+                                          new String[]{Integer.toString(reportServerID)});
+        return getOthersCommentListFromCursorWithClose(cursor);
     }
 
     // Category
@@ -2348,6 +1918,21 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + category.getType() + "'," +
                     "'" + category.getLocalUpdatedDate() + "'," +
                     "'" + category.getServerUpdatedDate() + "')";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteCategory(int categoryServerID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_category WHERE server_id = '" + categoryServerID + "'";
             database.execSQL(sqlString);
             return true;
         }
@@ -2382,45 +1967,11 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public boolean deleteCategory(int categoryServerID)
-    {
-        try
-        {
-            String sqlString = "DELETE FROM tbl_category WHERE server_id = '" + categoryServerID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     public Category getCategory(int categoryServerID)
     {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE server_id = ?",
-                                              new String[]{Integer.toString(categoryServerID)});
-            if (cursor.moveToNext())
-            {
-                Category category = getCategoryFromCursor(cursor);
-
-                cursor.close();
-                return category;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE server_id = ?",
+                                          new String[]{Integer.toString(categoryServerID)});
+        return getCategoryFromCursorWithClose(cursor);
     }
 
     public boolean insertCategoryList(List<Category> categoryList)
@@ -2436,64 +1987,6 @@ public class DBManager extends SQLiteOpenHelper
         catch (Exception e)
         {
             return false;
-        }
-    }
-
-    public boolean updateGroupCategories(List<Category> categoryList, int groupServerID)
-    {
-        try
-        {
-            deleteGroupCategories(groupServerID);
-            insertCategoryList(categoryList);
-            return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
-    }
-
-    public List<Category> getGroupCategories(int groupServerID)
-    {
-        List<Category> categoryList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE group_id = ? AND parent_id = 0",
-                                              new String[]{Integer.toString(groupServerID)});
-            while (cursor.moveToNext())
-            {
-                categoryList.add(getCategoryFromCursor(cursor));
-            }
-
-            cursor.close();
-            return categoryList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return categoryList;
-        }
-    }
-
-    public List<Category> getSubCategories(int parentServerID, int groupServerID)
-    {
-        List<Category> categoryList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE group_id = ? AND parent_id = ?",
-                                              new String[]{Integer.toString(groupServerID), Integer.toString(parentServerID)});
-            while (cursor.moveToNext())
-            {
-                categoryList.add(getCategoryFromCursor(cursor));
-            }
-
-            cursor.close();
-            return categoryList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return categoryList;
         }
     }
 
@@ -2528,6 +2021,34 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
+    public boolean updateGroupCategories(List<Category> categoryList, int groupServerID)
+    {
+        try
+        {
+            deleteGroupCategories(groupServerID);
+            insertCategoryList(categoryList);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    public List<Category> getGroupCategories(int groupServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE group_id = ? AND parent_id = 0",
+                                          new String[]{Integer.toString(groupServerID)});
+        return getCategoryListFromCursorWithClose(cursor);
+    }
+
+    public List<Category> getSubCategories(int parentServerID, int groupServerID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE group_id = ? AND parent_id = ?",
+                                          new String[]{Integer.toString(groupServerID), Integer.toString(parentServerID)});
+        return getCategoryListFromCursorWithClose(cursor);
+    }
+
     // Tag
     public boolean insertTag(Tag tag)
     {
@@ -2541,6 +2062,21 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + tag.getIconPath() + "'," +
                     "'" + tag.getLocalUpdatedDate() + "'," +
                     "'" + tag.getServerUpdatedDate() + "')";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteTag(int tagServerID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_tag WHERE server_id = '" + tagServerID + "'";
             database.execSQL(sqlString);
             return true;
         }
@@ -2573,19 +2109,11 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public boolean deleteTag(int tagServerID)
+    public Tag getTag(int tagServerID)
     {
-        try
-        {
-            String sqlString = "DELETE FROM tbl_tag WHERE server_id = '" + tagServerID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_tag WHERE server_id = ?",
+                                          new String[]{Integer.toString(tagServerID)});
+        return getTagFromCursorWithClose(cursor);
     }
 
     public boolean syncTag(Tag tag)
@@ -2613,31 +2141,6 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public Tag getTag(int tagServerID)
-    {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_tag WHERE server_id = ?", new String[]{Integer.toString(tagServerID)});
-            if (cursor.moveToNext())
-            {
-                Tag tag = getTagFromCursor(cursor);
-
-                cursor.close();
-                return tag;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public boolean insertTagList(List<Tag> tagList)
     {
         try
@@ -2650,6 +2153,21 @@ public class DBManager extends SQLiteOpenHelper
         }
         catch (Exception e)
         {
+            return false;
+        }
+    }
+
+    public boolean deleteGroupTags(int groupServerID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_tag WHERE group_id = '" + groupServerID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
             return false;
         }
     }
@@ -2670,39 +2188,9 @@ public class DBManager extends SQLiteOpenHelper
 
     public List<Tag> getGroupTags(int groupServerID)
     {
-        List<Tag> tagList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_tag WHERE group_id = ?", new String[]{Integer.toString(groupServerID)});
-
-            while (cursor.moveToNext())
-            {
-                tagList.add(getTagFromCursor(cursor));
-            }
-
-            cursor.close();
-            return tagList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return tagList;
-        }
-    }
-
-    public boolean deleteGroupTags(int groupServerID)
-    {
-        try
-        {
-            String sqlString = "DELETE FROM tbl_tag WHERE group_id = '" + groupServerID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_tag WHERE group_id = ?",
+                                          new String[]{Integer.toString(groupServerID)});
+        return getTagListFromCursorWithClose(cursor);
     }
 
     public boolean insertItemTags(Item item)
@@ -2729,6 +2217,21 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
+    public boolean deleteItemTags(int itemLocalID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_item_tag WHERE item_local_id = '" + itemLocalID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean updateItemTags(Item item)
     {
         try
@@ -2746,42 +2249,32 @@ public class DBManager extends SQLiteOpenHelper
 
     public List<Tag> getItemTags(int itemLocalID)
     {
+        List<Tag> tags = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT tag_id FROM tbl_item_tag WHERE item_local_id = ?",
+                                             new String[]{Integer.toString(itemLocalID)});
         try
         {
-            List<Tag> tags = new ArrayList<>();
-            Cursor tagCursor = database.rawQuery("SELECT tag_id FROM tbl_item_tag WHERE item_local_id = ?",
-                                                 new String[]{Integer.toString(itemLocalID)});
-            while (tagCursor.moveToNext())
+            while (cursor.moveToNext())
             {
-                Tag tag = getTag(getIntFromCursor(tagCursor, "tag_id"));
+                Tag tag = getTag(getIntFromCursor(cursor, "tag_id"));
                 if (tag != null)
                 {
                     tags.add(tag);
                 }
             }
-
-            return !tags.isEmpty() ? tags : null;
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return null;
         }
-    }
-
-    public boolean deleteItemTags(int itemLocalID)
-    {
-        try
+        finally
         {
-            String sqlString = "DELETE FROM tbl_item_tag WHERE item_local_id = '" + itemLocalID + "'";
-            database.execSQL(sqlString);
-            return true;
+            if (cursor != null)
+            {
+                cursor.close();
+            }
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
+        return tags;
     }
 
     // Image
@@ -2817,6 +2310,78 @@ public class DBManager extends SQLiteOpenHelper
         }
         catch (Exception e)
         {
+            return false;
+        }
+    }
+
+    public boolean deleteImage(int imageLocalID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_image WHERE id = '" + imageLocalID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteOthersImage(int imageServerID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_others_image WHERE server_id = '" + imageServerID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteItemImages(int itemLocalID)
+    {
+        try
+        {
+            List<Image> images = getItemImages(itemLocalID);
+            for (Image image : images)
+            {
+                image.deleteFile();
+            }
+
+            String sqlString = "DELETE FROM tbl_image WHERE item_local_id = '" + itemLocalID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteOthersItemImages(int itemServerID)
+    {
+        try
+        {
+            List<Image> images = getOthersItemImages(itemServerID);
+            for (Image image : images)
+            {
+                image.deleteFile();
+            }
+
+            String sqlString = "DELETE FROM tbl_others_image WHERE item_server_id = '" + itemServerID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
             return false;
         }
     }
@@ -2973,226 +2538,42 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public boolean deleteImage(int imageLocalID)
-    {
-        try
-        {
-            String sqlString = "DELETE FROM tbl_image WHERE id = '" + imageLocalID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean deleteOthersImage(int imageServerID)
-    {
-        try
-        {
-            String sqlString = "DELETE FROM tbl_others_image WHERE server_id = '" + imageServerID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean deleteItemImages(int itemLocalID)
-    {
-        try
-        {
-            List<Image> images = getItemImages(itemLocalID);
-            for (Image image : images)
-            {
-                image.deleteFile();
-            }
-
-            String sqlString = "DELETE FROM tbl_image WHERE item_local_id = '" + itemLocalID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean deleteOthersItemImages(int itemServerID)
-    {
-        try
-        {
-            List<Image> images = getOthersItemImages(itemServerID);
-            for (Image image : images)
-            {
-                image.deleteFile();
-            }
-
-            String sqlString = "DELETE FROM tbl_others_image WHERE item_server_id = '" + itemServerID + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     public Image getImageByLocalID(int imageLocalID)
     {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE id = ?",
-                                              new String[]{Integer.toString(imageLocalID)});
-
-            if (cursor.moveToNext())
-            {
-                Image image = getImageFromCursor(cursor);
-
-                cursor.close();
-                return image;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE id = ?",
+                                          new String[]{Integer.toString(imageLocalID)});
+        return getImageFromCursorWithClose(cursor);
     }
 
     public Image getImageByServerID(int imageServerID)
     {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE server_id = ?",
-                                              new String[]{Integer.toString(imageServerID)});
-
-            if (cursor.moveToNext())
-            {
-                Image image = getImageFromCursor(cursor);
-
-                cursor.close();
-                return image;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE server_id = ?",
+                                          new String[]{Integer.toString(imageServerID)});
+        return getImageFromCursorWithClose(cursor);
     }
 
     public Image getOthersImage(int imageServerID)
     {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_image WHERE server_id = ?",
-                                              new String[]{Integer.toString(imageServerID)});
-
-            if (cursor.moveToNext())
-            {
-                Image image = getOthersImageFromCursor(cursor);
-
-                cursor.close();
-                return image;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_image WHERE server_id = ?",
+                                          new String[]{Integer.toString(imageServerID)});
+        return getOthersImageFromCursorWithClose(cursor);
     }
 
     public List<Image> getItemImages(int itemLocalID)
     {
-        List<Image> imageList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE item_local_id = ?",
-                                              new String[]{Integer.toString(itemLocalID)});
-
-            while (cursor.moveToNext())
-            {
-                Image image = getImageFromCursor(cursor);
-
-                imageList.add(image);
-            }
-
-            cursor.close();
-            return imageList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return imageList;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_image WHERE item_local_id = ?",
+                                          new String[]{Integer.toString(itemLocalID)});
+        return getImageListFromCursorWithClose(cursor);
     }
 
     public List<Image> getOthersItemImages(int itemServerID)
     {
-        List<Image> imageList = new ArrayList<>();
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_image WHERE item_server_id = ?",
-                                              new String[]{Integer.toString(itemServerID)});
-
-            while (cursor.moveToNext())
-            {
-                Image image = getOthersImageFromCursor(cursor);
-
-                imageList.add(image);
-            }
-
-            cursor.close();
-            return imageList;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return imageList;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_image WHERE item_server_id = ?",
+                                          new String[]{Integer.toString(itemServerID)});
+        return getOthersImageListFromCursorWithClose(cursor);
     }
 
     // Currency
-    public boolean isCurrencyTableEmpty()
-    {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_currency", null);
-            boolean result = !cursor.moveToNext();
-            cursor.close();
-
-            return result;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
-    }
-
     public boolean insertCurrency(Currency currency)
     {
         try
@@ -3230,50 +2611,101 @@ public class DBManager extends SQLiteOpenHelper
 
     public Currency getCurrency(String code)
     {
-        try
-        {
-            Cursor cursor = database.rawQuery("SELECT * FROM tbl_currency WHERE code = ?", new String[]{code});
-
-            if (cursor.moveToNext())
-            {
-                Currency currency = getCurrencyFromCursor(cursor);
-
-                cursor.close();
-                return currency;
-            }
-            else
-            {
-                cursor.close();
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_currency WHERE code = ?", new String[]{code});
+        return getCurrencyFromCursorWithClose(cursor);
     }
 
     public List<Currency> getCurrencyList()
     {
-        List<Currency> currencyList = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_currency", null);
+        return getCurrencyListFromCursorWithClose(cursor);
+    }
+
+    public boolean isCurrencyTableEmpty()
+    {
         try
         {
             Cursor cursor = database.rawQuery("SELECT * FROM tbl_currency", null);
-
-            while (cursor.moveToNext())
-            {
-                currencyList.add(getCurrencyFromCursor(cursor));
-            }
-
+            boolean result = !cursor.moveToNext();
             cursor.close();
 
-            return currencyList;
+            return result;
         }
         catch (Exception e)
         {
-            return currencyList;
+            return false;
         }
+    }
+
+    // Bank Account
+    public int insertBankAccount(BankAccount bankAccount, int userID)
+    {
+        try
+        {
+            String sqlString = "INSERT INTO tbl_bank (server_id, user_id, name, number, bank_name, location) VALUES (" +
+                    "'" + bankAccount.getServerID() + "'," +
+                    "'" + userID + "'," +
+                    "'" + sqliteEscape(bankAccount.getName()) + "'," +
+                    "'" + sqliteEscape(bankAccount.getNumber()) + "'," +
+                    "'" + sqliteEscape(bankAccount.getBankName()) + "'," +
+                    "'" + sqliteEscape(bankAccount.getLocation()) + "')";
+            database.execSQL(sqlString);
+
+            Cursor cursor = database.rawQuery("SELECT last_insert_rowid() from tbl_bank", null);
+            cursor.moveToFirst();
+            bankAccount.setLocalID(cursor.getInt(0));
+            cursor.close();
+
+            return bankAccount.getLocalID();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public boolean deleteBankAccount(int userID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_bank WHERE user_id = '" + userID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateBankAccount(BankAccount bankAccount)
+    {
+        try
+        {
+            String sqlString = "UPDATE tbl_bank SET " +
+                    "server_id = '" + bankAccount.getServerID() + "'," +
+                    "name = '" + sqliteEscape(bankAccount.getName()) + "'," +
+                    "number = '" + sqliteEscape(bankAccount.getNumber()) + "'," +
+                    "bank_name = '" + sqliteEscape(bankAccount.getBankName()) + "'," +
+                    "location = '" + sqliteEscape(bankAccount.getLocation()) + "' " +
+                    "WHERE id = '" + bankAccount.getLocalID() + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public BankAccount getBankAccount(int userID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_bank WHERE user_id = ?",
+                                          new String[]{Integer.toString(userID)});
+        return getBankAccountFromCursorWithClose(cursor);
     }
 
     // Auxiliaries
@@ -3311,6 +2743,7 @@ public class DBManager extends SQLiteOpenHelper
         return cursor.getInt(cursor.getColumnIndex(columnName)) > 0;
     }
 
+    // Auxiliaries - Group
     private Group getGroupFromCursor(Cursor cursor)
     {
         Group group = new Group();
@@ -3322,6 +2755,31 @@ public class DBManager extends SQLiteOpenHelper
         return group;
     }
 
+    private Group getGroupFromCursorWithClose(Cursor cursor)
+    {
+        Group group = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                group = getGroupFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return group;
+    }
+
+    // Auxiliaries - User
     private User getUserFromCursor(Cursor cursor)
     {
         User user = new User();
@@ -3347,6 +2805,31 @@ public class DBManager extends SQLiteOpenHelper
         return user;
     }
 
+    private User getUserFromCursorWithClose(Cursor cursor)
+    {
+        User user = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                user = getUserFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return user;
+    }
+
+    // Auxiliaries - Item
     private Item getItemFromCursor(Cursor cursor)
     {
         Item item = new Item();
@@ -3375,6 +2858,54 @@ public class DBManager extends SQLiteOpenHelper
         item.setTags(getItemTags(item.getLocalID()));
 
         return item;
+    }
+
+    private Item getItemFromCursorWithClose(Cursor cursor)
+    {
+        Item item = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                item = getItemFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return item;
+    }
+
+    private List<Item> getItemListFromCursorWithClose(Cursor cursor)
+    {
+        List<Item> itemList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                itemList.add(getItemFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return itemList;
     }
 
     private Item getOthersItemFromCursor(Cursor cursor)
@@ -3407,6 +2938,55 @@ public class DBManager extends SQLiteOpenHelper
         return item;
     }
 
+    private Item getOthersItemFromCursorWithClose(Cursor cursor)
+    {
+        Item item = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                item = getOthersItemFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return item;
+    }
+
+    private List<Item> getOthersItemListFromCursorWithClose(Cursor cursor)
+    {
+        List<Item> itemList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                itemList.add(getOthersItemFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return itemList;
+    }
+
+    // Auxiliaries - Report
     private Report getReportFromCursor(Cursor cursor)
     {
         Report report = new Report();
@@ -3425,6 +3005,54 @@ public class DBManager extends SQLiteOpenHelper
         report.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 
         return report;
+    }
+
+    private Report getReportFromCursorWithClose(Cursor cursor)
+    {
+        Report report = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                report = getReportFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return report;
+    }
+
+    private List<Report> getReportListFromCursorWithClose(Cursor cursor)
+    {
+        List<Report> reportList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                reportList.add(getReportFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return reportList;
     }
 
     private Report getOthersReportFromCursor(Cursor cursor)
@@ -3451,6 +3079,55 @@ public class DBManager extends SQLiteOpenHelper
         return report;
     }
 
+    private Report getOthersReportFromCursorWithClose(Cursor cursor)
+    {
+        Report report = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                report = getOthersReportFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return report;
+    }
+
+    private List<Report> getOthersReportListFromCursorWithClose(Cursor cursor)
+    {
+        List<Report> reportList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                reportList.add(getOthersReportFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return reportList;
+    }
+
+    // Auxiliaries - Comment
     private Comment getCommentFromCursor(Cursor cursor)
     {
         Comment comment = new Comment();
@@ -3464,6 +3141,54 @@ public class DBManager extends SQLiteOpenHelper
         comment.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 
         return comment;
+    }
+
+    private Comment getCommentFromCursorWithClose(Cursor cursor)
+    {
+        Comment comment = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                comment = getCommentFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return comment;
+    }
+
+    private List<Comment> getCommentListFromCursorWithClose(Cursor cursor)
+    {
+        List<Comment> commentList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                commentList.add(getCommentFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return commentList;
     }
 
     private Comment getOthersCommentFromCursor(Cursor cursor)
@@ -3481,6 +3206,55 @@ public class DBManager extends SQLiteOpenHelper
         return comment;
     }
 
+    private Comment getOthersCommentFromCursorWithClose(Cursor cursor)
+    {
+        Comment comment = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                comment = getOthersCommentFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return comment;
+    }
+
+    private List<Comment> getOthersCommentListFromCursorWithClose(Cursor cursor)
+    {
+        List<Comment> commentList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                commentList.add(getOthersCommentFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return commentList;
+    }
+
+    // Auxiliaries - Category
     private Category getCategoryFromCursor(Cursor cursor)
     {
         Category category = new Category();
@@ -3497,6 +3271,55 @@ public class DBManager extends SQLiteOpenHelper
         return category;
     }
 
+    private Category getCategoryFromCursorWithClose(Cursor cursor)
+    {
+        Category category = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                category = getCategoryFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return category;
+    }
+
+    private List<Category> getCategoryListFromCursorWithClose(Cursor cursor)
+    {
+        List<Category> categoryList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                categoryList.add(getCategoryFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return categoryList;
+    }
+
+    // Auxiliaries - Tag
     private Tag getTagFromCursor(Cursor cursor)
     {
         Tag tag = new Tag();
@@ -3511,6 +3334,55 @@ public class DBManager extends SQLiteOpenHelper
         return tag;
     }
 
+    private Tag getTagFromCursorWithClose(Cursor cursor)
+    {
+        Tag tag = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                tag = getTagFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return tag;
+    }
+
+    private List<Tag> getTagListFromCursorWithClose(Cursor cursor)
+    {
+        List<Tag> tagList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                tagList.add(getTagFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return tagList;
+    }
+
+    // Auxiliaries - Image
     private Image getImageFromCursor(Cursor cursor)
     {
         Image image = new Image();
@@ -3521,6 +3393,54 @@ public class DBManager extends SQLiteOpenHelper
         image.setItemID(getIntFromCursor(cursor, "item_local_id"));
 
         return image;
+    }
+
+    private Image getImageFromCursorWithClose(Cursor cursor)
+    {
+        Image image = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                image = getImageFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return image;
+    }
+
+    private List<Image> getImageListFromCursorWithClose(Cursor cursor)
+    {
+        List<Image> imageList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                imageList.add(getImageFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return imageList;
     }
 
     private Image getOthersImageFromCursor(Cursor cursor)
@@ -3535,6 +3455,55 @@ public class DBManager extends SQLiteOpenHelper
         return image;
     }
 
+    private Image getOthersImageFromCursorWithClose(Cursor cursor)
+    {
+        Image image = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                image = getOthersImageFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return image;
+    }
+
+    private List<Image> getOthersImageListFromCursorWithClose(Cursor cursor)
+    {
+        List<Image> imageList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                imageList.add(getOthersImageFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return imageList;
+    }
+
+    // Auxiliaries - Currency
     private Currency getCurrencyFromCursor(Cursor cursor)
     {
         Currency currency = new Currency();
@@ -3543,5 +3512,91 @@ public class DBManager extends SQLiteOpenHelper
         currency.setRate(getDoubleFromCursor(cursor, "rate"));
 
         return currency;
+    }
+
+    private Currency getCurrencyFromCursorWithClose(Cursor cursor)
+    {
+        Currency currency = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                currency = getCurrencyFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return currency;
+    }
+
+    private List<Currency> getCurrencyListFromCursorWithClose(Cursor cursor)
+    {
+        List<Currency> currencyList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                currencyList.add(getCurrencyFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return currencyList;
+    }
+
+    // Auxiliaries - Bank Account
+    private BankAccount getBankAccountFromCursor(Cursor cursor)
+    {
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setLocalID(getIntFromCursor(cursor, "id"));
+        bankAccount.setServerID(getIntFromCursor(cursor, "server_id"));
+        bankAccount.setName(getStringFromCursor(cursor, "name"));
+        bankAccount.setNumber(getStringFromCursor(cursor, "number"));
+        bankAccount.setBankName(getStringFromCursor(cursor, "bank_name"));
+        bankAccount.setLocation(getStringFromCursor(cursor, "location"));
+
+        return bankAccount;
+    }
+
+    private BankAccount getBankAccountFromCursorWithClose(Cursor cursor)
+    {
+        BankAccount bankAccount = null;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                bankAccount = getBankAccountFromCursor(cursor);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return bankAccount;
     }
 }

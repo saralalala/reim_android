@@ -300,7 +300,7 @@ public class BankNumberActivity extends Activity
                 DeleteBankAccountResponse response = new DeleteBankAccountResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    dbManager.deleteBankAccount(bankAccount.getLocalID());
+                    dbManager.deleteBankAccount(currentUser.getServerID());
 
                     runOnUiThread(new Runnable()
                     {
