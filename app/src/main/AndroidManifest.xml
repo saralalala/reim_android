@@ -281,6 +281,18 @@
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".me.ProxyActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.PickProxyActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.ProxyScopeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".me.CompanyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"/>

@@ -276,6 +276,16 @@ public class ProfileActivity extends Activity
             }
         });
 
+        // init proxy
+        LinearLayout proxyLayout = (LinearLayout) findViewById(R.id.proxyLayout);
+        proxyLayout.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                ViewUtils.goForwardAndFinish(ProfileActivity.this, ProxyActivity.class);
+            }
+        });
+
         // init company
         companyTextView = (TextView) findViewById(R.id.companyTextView);
 
@@ -285,6 +295,16 @@ public class ProfileActivity extends Activity
             public void onClick(View v)
             {
                 ViewUtils.goForward(ProfileActivity.this, CompanyActivity.class);
+            }
+        });
+
+        // init switch
+        LinearLayout switchLayout = (LinearLayout) findViewById(R.id.switchLayout);
+        switchLayout.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+
             }
         });
 

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
     android:id="@+id/containerLayout">
 
     <RelativeLayout
-        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
         android:background="@color/major_dark">
@@ -26,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/category_management"
+            android:text="@string/proxy"
             android:textColor="@color/major_light"
             android:textSize="20sp"/>
 
@@ -38,25 +39,32 @@
 			android:paddingLeft="16dp"
 			android:paddingRight="16dp"
 			android:gravity="center"
-            android:text="@string/establish"
+            android:text="@string/add"
             android:textColor="@color/title_text_color"
             android:textSize="16sp"/>
+
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/categoryListView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/titleLayout"
-        android:listSelector="@drawable/list_item_drawable"/>
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/categoryTextView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/titleLayout"
-        android:gravity="center"
-        android:text="@string/no_categories"
-        android:textColor="@color/hint_light_grey"/>
+        <ListView
+            android:id="@+id/proxyListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/titleLayout"
+            android:listSelector="@drawable/list_item_drawable"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/proxyTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/titleLayout"
+            android:gravity="center"
+            android:text="@string/no_proxy"
+            android:textColor="@color/hint_light_grey"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

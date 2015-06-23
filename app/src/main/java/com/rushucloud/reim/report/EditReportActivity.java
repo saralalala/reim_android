@@ -75,6 +75,7 @@ public class EditReportActivity extends Activity
     private TextView managerTextView;
     private TextView ccTextView;
 
+    private TextView totalTextView;
     private TextView amountTextView;
     private TextView itemCountTextView;
     private LinearLayout itemLayout;
@@ -324,6 +325,7 @@ public class EditReportActivity extends Activity
             }
         });
 
+        totalTextView = (TextView) findViewById(R.id.totalTextView);
         amountTextView = (TextView) findViewById(R.id.amountTextView);
         amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
         itemCountTextView = (TextView) findViewById(R.id.itemCountTextView);
@@ -506,6 +508,7 @@ public class EditReportActivity extends Activity
         itemLayout.removeAllViews();
 
         double amount = 0;
+        boolean containsForeignCurrency = false;
         for (int i = 0; i < itemList.size(); i++)
         {
             LayoutInflater inflater = LayoutInflater.from(this);
@@ -540,6 +543,22 @@ public class EditReportActivity extends Activity
 
             symbolTextView.setText(item.getCurrency().getSymbol());
 
+            if (item.getCurrency().isCNY())
+            {
+                amount += item.getAmount();
+            }
+            else if (item.getRate() != 0)
+            {
+                containsForeignCurrency = true;
+                amount += item.getAmount() * item.getRate() / 100;
+            }
+            else
+            {
+                containsForeignCurrency = true;
+                Currency currency = dbManager.getCurrency(item.getCurrency().getCode());
+                amount += item.getAmount() * currency.getRate() / 100;
+            }
+
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
             amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
@@ -557,21 +576,11 @@ public class EditReportActivity extends Activity
             }
 
             itemLayout.addView(view);
-
-            if (item.getCurrency().isCNY())
-            {
-                amount += item.getAmount();
-            }
-            else if (item.getRate() != 0)
-            {
-                amount += item.getAmount() * item.getRate() / 100;
-            }
-            else
-            {
-                Currency currency = dbManager.getCurrency(item.getCurrency().getCode());
-                amount += item.getAmount() * currency.getRate() / 100;
-            }
         }
+
+        int prompt = containsForeignCurrency? R.string.equivalent_amount : R.string.total_amount;
+        totalTextView.setText(prompt);
+
         amountTextView.setText(Utils.formatDouble(amount));
     }
 

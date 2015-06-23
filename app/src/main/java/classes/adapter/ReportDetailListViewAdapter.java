@@ -130,10 +130,12 @@ public class ReportDetailListViewAdapter extends BaseAdapter
             }
 
             // init amount and item count
+            TextView totalTextView = (TextView) view.findViewById(R.id.totalTextView);
             TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
             TextView itemCountTextView = (TextView) view.findViewById(R.id.itemCountTextView);
 
             double amount = 0;
+            boolean containsForeignCurrency = false;
 
             for (Item item : itemList)
             {
@@ -143,15 +145,19 @@ public class ReportDetailListViewAdapter extends BaseAdapter
                 }
                 else if (item.getRate() != 0)
                 {
+                    containsForeignCurrency = true;
                     amount += item.getAmount() * item.getRate() / 100;
                 }
                 else
                 {
+                    containsForeignCurrency = true;
                     Currency currency = dbManager.getCurrency(item.getCurrency().getCode());
                     amount += item.getAmount() * currency.getRate() / 100;
                 }
             }
 
+            int prompt = containsForeignCurrency? R.string.equivalent_amount : R.string.total_amount;
+            totalTextView.setText(prompt);
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
             amountTextView.setText(Utils.formatDouble(amount));
             itemCountTextView.setText(String.format(ViewUtils.getString(R.string.item_count), itemList.size()));

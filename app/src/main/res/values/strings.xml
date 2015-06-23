@@ -53,6 +53,7 @@
     <string name="option">选项</string>
     <string name="search">搜索</string>
     <string name="status">状态</string>
+    <string name="all">全部</string>
     <string name="detail">详情</string>
     <string name="loading">等待</string>
     <string name="image">图片</string>
@@ -187,6 +188,7 @@
     <string name="approver">审核人</string>
     <string name="cc">抄　送</string>
     <string name="total_amount">总　额</string>
+    <string name="equivalent_amount">折　合</string>
     <string name="item_count">%1$d笔消费</string>
     <string name="item_count_added">已添加%1$d笔消费</string>
     <string name="choose_manager">选择审批人</string>
@@ -262,11 +264,19 @@
     <string name="bank_account_name">户名</string>
     <string name="bank_location">开户地</string>
     <string name="bank_branch">开户行</string>
+    <string name="set_proxy">代理人设置</string>
+    <string name="proxy">代理人</string>
+    <string name="choose_proxy">选择代理人</string>
+    <string name="proxy_scope">代理范围</string>
+    <string name="only_approve">只负责审批</string>
+    <string name="only_submit">只负责提交</string>
     <string name="company">公司</string>
     <string name="change_company">更换公司</string>
     <string name="not_joined">未加入</string>
     <string name="waiting_for_approve">（待批准）</string>
     <string name="nickname">姓名</string>
+    <string name="switch_identity">切换身份</string>
+    <string name="switch_back">切换回原账号</string>
     <string name="change_password">修改密码</string>
     <string name="set_password">设置密码</string>
     <string name="default_manager">上级设置</string>
@@ -328,6 +338,7 @@
     <string name="input_cc">请输入抄送人信息</string>
     <string name="input_comment">请输入评论</string>
     <string name="input_admin">请输入管理员信息</string>
+    <string name="input_proxy">请输入代理人信息</string>
     <string name="input_nickname">请填写你的真实姓名</string>
     <string name="input_company_name">请设置公司名称</string>
     <string name="input_feedback">请输入你的意见或建议</string>
@@ -338,6 +349,7 @@
     <string name="input_user_contact">请输入对方手机号或邮箱</string>
     
     <string name="prompt_loading">正在努力加载中&#8230;</string>
+    <string name="prompt_press_back_to_exit">再按一次返回键退出应用</string>
     <string name="prompt_sign_out">确认要切换当前账号</string>
     <string name="prompt_unbind">确认要解绑？</string>
     <string name="prompt_last_certification">抱歉，这是你唯一的登录凭证，暂时无法解绑。</string>
@@ -348,11 +360,11 @@
     <string name="prompt_delete_report">是否要删除此报告？</string>
     <string name="prompt_delete_category">是否要删除此类别？</string>
     <string name="prompt_delete_tag">是否要删除此标签？</string>
-    <string name="prompt_press_back_to_exit">再按一次返回键退出应用</string>
     <string name="prompt_sync_ongoing">正在同步中</string>
     <string name="prompt_report_approved">报告已通过</string>
     <string name="prompt_report_rejected">报告已退回</string>
     <string name="prompt_max_image_count">对不起，最多只能添加16张图片</string>
+    <string name="prompt_choose_proxy">请选择代理人</string>
     <string name="prompt_feedback">告诉我们你在使用过程中遇到的问题，或对产品提出你的建议。我们会在1个工作日内给你答复。</string>
     <string name="prompt_feedback_phone">请留下联系方式，方便我们与你沟通</string>
     <string name="prompt_sender">创建人：</string>
@@ -484,7 +496,6 @@
     <string name="error_network_not_unique">消费已被添加进另外的报告中</string>
     <string name="error_network_company_exists">公司已存在</string>
 
-
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>
     <string name="succeed_in_sending_email">邮件已发送，查收你的邮箱！</string>
@@ -509,12 +520,15 @@
     <string name="succeed_in_creating_company">公司创建成功</string>
     <string name="succeed_in_creating_category">创建类别成功</string>
     <string name="succeed_in_creating_tag">创建标签成功</string>
+    <string name="succeed_in_creating_proxy">添加代理人成功</string>
     <string name="succeed_in_modifying">修改成功</string>
     <string name="succeed_in_modifying_user_info">修改成功</string>
     <string name="succeed_in_modifying_category">修改成功</string>
     <string name="succeed_in_modifying_tag">修改成功</string>
+    <string name="succeed_in_modifying_proxy">修改成功</string>
     <string name="succeed_in_deleting_category">删除成功</string>
     <string name="succeed_in_deleting_tag">删除成功</string>
+    <string name="succeed_in_deleting_proxy">删除成功</string>
     <string name="succeed_in_sending_invite">邀请发送成功</string>
     <string name="succeed_in_sending_comment">发表成功</string>
     <string name="succeed_in_submitting_report">提交成功</string>
@@ -550,11 +564,14 @@
     <string name="failed_to_create_report">创建失败</string>
     <string name="failed_to_create_category">创建失败</string>
     <string name="failed_to_create_tag">创建失败</string>
+    <string name="failed_to_create_proxy">创建失败</string>
     <string name="failed_to_modify_item">修改失败</string>
     <string name="failed_to_modify_category">修改失败</string>
     <string name="failed_to_modify_tag">修改失败</string>
+    <string name="failed_to_modify_proxy">修改失败</string>
     <string name="failed_to_delete_category">删除失败</string>
     <string name="failed_to_delete_tag">删除失败</string>
+    <string name="failed_to_delete_proxy">删除失败</string>
     <string name="failed_to_search">网络搜索失败</string>
     <string name="failed_to_send_feedback">反馈发送失败</string>
     <string name="failed_to_change_manager">默认上级修改失败</string>
@@ -609,6 +626,7 @@
     <string name="no_tags">当前没有任何标签</string>
     <string name="no_expenses">当前没有任何消费记录</string>
     <string name="no_filter_result">抱歉，没有找到符合的结果</string>
+    <string name="no_proxy">你暂时还未设置代理人</string>
 
     <string name="apply_new">你发送了加入「%1$s」的申请</string>
     <string name="apply_others_new">%1$s 申请加入「%2$s」</string>
@@ -638,6 +656,10 @@
     <string name="status_borrowing">借</string>
     <string name="status_approve_ahead_approved">(已审批)</string>
     <string name="status_cc">抄送</string>
+
+    <string name="proxy_permission_all">提交 &amp; 审批</string>
+    <string name="proxy_permission_approve">仅审批</string>
+    <string name="proxy_permission_submit">仅提交</string>
 
     <string name="currency_cny">人民币</string>
     <string name="currency_usd">美元</string>

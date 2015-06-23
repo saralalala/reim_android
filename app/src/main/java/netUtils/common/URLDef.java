@@ -47,6 +47,7 @@ public class URLDef
     public static final String URL_SET_ADMIN = "set_admin";
     public static final String URL_BIND = "bind";
     public static final String URL_RESEND = "resend";
+    public static final String URL_WINGMAN = "wingman";
     public static final String URL_CURRENCY = "currency";
     public static final String URL_DIDI_BIND = "didi_bind";
     public static final String URL_DIDI_ORDER = "didi_order";
