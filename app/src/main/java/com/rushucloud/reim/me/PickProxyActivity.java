@@ -225,7 +225,7 @@ public class PickProxyActivity extends Activity
     private void goBack()
     {
         hideSoftKeyboard();
-        ViewUtils.goBack(this);
+        ViewUtils.goBackWithIntent(this, ProxyActivity.class);
     }
 
     // Data

@@ -169,7 +169,14 @@ public class ProxyScopeActivity extends Activity
 
     private void goBack()
     {
-        ViewUtils.goBack(this);
+        if (newProxy)
+        {
+            ViewUtils.goBackWithIntent(this, PickProxyActivity.class);
+        }
+        else
+        {
+            ViewUtils.goBackWithIntent(this, ProxyActivity.class);
+        }
     }
 
     // Data

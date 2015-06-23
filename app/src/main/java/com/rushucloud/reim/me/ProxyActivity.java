@@ -99,7 +99,7 @@ public class ProxyActivity extends Activity
         {
             public void onClick(View v)
             {
-                ViewUtils.goForward(ProxyActivity.this, PickProxyActivity.class);
+                ViewUtils.goForwardAndFinish(ProxyActivity.this, PickProxyActivity.class);
             }
         });
 
@@ -117,7 +117,7 @@ public class ProxyActivity extends Activity
                     Intent intent = new Intent(ProxyActivity.this, ProxyScopeActivity.class);
                     intent.putExtra("proxy", proxyList.get(i));
                     intent.putExtra("newProxy", false);
-                    ViewUtils.goForward(ProxyActivity.this, intent);
+                    ViewUtils.goForwardAndFinish(ProxyActivity.this, intent);
                 }
             }
         });
