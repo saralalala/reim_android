@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.text.TextUtils;
 
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
@@ -57,7 +56,6 @@ public class ReimApplication extends Application
 
         LogUtils.println("**************** Application Started *****************");
         LogUtils.println(AVInstallation.getCurrentInstallation().getInstallationId());
-//		LogUtils.println(getDeviceInfo(this));
     }
 
     public static int getTabIndex()
@@ -121,44 +119,6 @@ public class ReimApplication extends Application
     public static void setHasUnreadMessages(boolean hasUnreadMessages)
     {
         ReimApplication.hasUnreadMessages = hasUnreadMessages;
-    }
-
-    public static String getDeviceInfo(Context context)
-    {
-        try
-        {
-            org.json.JSONObject json = new org.json.JSONObject();
-            android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
-                    .getSystemService(Context.TELEPHONY_SERVICE);
-
-            String device_id = tm.getDeviceId();
-
-            android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) context
-                    .getSystemService(Context.WIFI_SERVICE);
-
-            String mac = wifi.getConnectionInfo().getMacAddress();
-            json.put("mac", mac);
-
-            if (TextUtils.isEmpty(device_id))
-            {
-                device_id = mac;
-            }
-
-            if (TextUtils.isEmpty(device_id))
-            {
-                device_id = android.provider.Settings.Secure.getString(
-                        context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-            }
-
-            json.put("device_id", device_id);
-
-            return json.toString();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public static Context getContext()
@@ -300,73 +260,73 @@ public class ReimApplication extends Application
         DBManager dbManager = DBManager.getDBManager();
         if (dbManager.isCurrencyTableEmpty())
         {
-            Currency currency = new Currency("CNY", "¥");
+            Currency currency = new Currency("CNY", "¥", 1);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("USD", "$");
+            currency = new Currency("USD", "$", 622.12);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("EUR", "€");
+            currency = new Currency("EUR", "€", 702.37);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("HKD", "$");
+            currency = new Currency("HKD", "$", 80.24);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("MOP", "$");
+            currency = new Currency("MOP", "$", 80.52);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("TWD", "$");
+            currency = new Currency("TWD", "$", 20.88);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("JPY", "¥");
+            currency = new Currency("JPY", "¥", 5.0389);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("KER", "₩");
+            currency = new Currency("KER", "₩", 0.5881);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("GBP", "£");
+            currency = new Currency("GBP", "£", 983.05);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("RUB", "Rbs");
+            currency = new Currency("RUB", "Rbs", 11.56);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("SGD", "$");
+            currency = new Currency("SGD", "$", 465.38);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("PHP", "₱");
+            currency = new Currency("PHP", "₱", 14.23);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("IDR", "Rps");
+            currency = new Currency("IDR", "Rps", 0.0482);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("MYR", "$");
+            currency = new Currency("MYR", "$", 165.96);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("THB", "฿");
+            currency = new Currency("THB", "฿", 19.06);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("CAD", "$");
+            currency = new Currency("CAD", "$", 505.07);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("AUD", "$");
+            currency = new Currency("AUD", "$", 480.12);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("NZD", "$");
+            currency = new Currency("NZD", "$", 429.4);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("CHF", "₣");
+            currency = new Currency("CHF", "₣", 672.45);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("DKK", "Kr");
+            currency = new Currency("DKK", "Kr", 94.17);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("NOK", "Kr");
+            currency = new Currency("NOK", "Kr", 80.1);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("SEK", "Kr");
+            currency = new Currency("SEK", "Kr", 76.1);
             dbManager.insertCurrency(currency);
 
-            currency = new Currency("BRL", "$");
+            currency = new Currency("BRL", "$", 210.98);
             dbManager.insertCurrency(currency);
         }
     }

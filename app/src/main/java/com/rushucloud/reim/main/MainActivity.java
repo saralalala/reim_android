@@ -57,10 +57,12 @@ import netUtils.common.NetworkConstant;
 import netUtils.common.URLDef;
 import netUtils.request.common.CommonRequest;
 import netUtils.request.common.EventsRequest;
+import netUtils.request.item.CurrencyRequest;
 import netUtils.request.user.FeedbackRequest;
 import netUtils.response.common.CommonResponse;
 import netUtils.response.common.EventsResponse;
 import netUtils.response.common.FeedbackResponse;
+import netUtils.response.item.CurrencyResponse;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
@@ -120,6 +122,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         if (PhoneUtils.isNetworkConnected())
         {
             sendGetEventsRequest();
+            sendCurrencyRequest();
             if (webSocketClient == null || webSocketIsClosed)
             {
                 connectWebSocket();
@@ -604,6 +607,22 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                             }
                         }
                     });
+                }
+            }
+        });
+    }
+
+    private void sendCurrencyRequest()
+    {
+        CurrencyRequest request = new CurrencyRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                CurrencyResponse response = new CurrencyResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    dbManager.updateCurrencyList(response.getCurrencyList());
                 }
             }
         });

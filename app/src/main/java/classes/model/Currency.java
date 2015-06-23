@@ -17,10 +17,11 @@ public class Currency
 
     }
 
-	public Currency(String code, String symbol)
+	public Currency(String code, String symbol, double rate)
 	{
 		this.code = code;
 		this.symbol = symbol;
+        this.rate = rate;
 	}
 
 	public String getName()
@@ -142,6 +143,11 @@ public class Currency
             return currency.getCode().equals(this.getCode());
         }
         return super.equals(o);
+    }
+
+    public boolean isCNY()
+    {
+        return getCode().equals("CNY");
     }
 
     public static String[] listToArray(List<Currency> currencyList)

@@ -12,7 +12,7 @@ import netUtils.response.common.BaseResponse;
 
 public class GetItemsResponse extends BaseResponse
 {
-    List<Item> itemList;
+    private List<Item> itemList;
 
     public GetItemsResponse(Object httpResponse)
     {

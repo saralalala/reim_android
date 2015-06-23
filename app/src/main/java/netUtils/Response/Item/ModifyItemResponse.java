@@ -10,6 +10,7 @@ import netUtils.response.common.BaseResponse;
 public class ModifyItemResponse extends BaseResponse
 {
     private int itemID;
+    private double rate;
 
     public ModifyItemResponse(Object httpResponse)
     {
@@ -25,7 +26,8 @@ public class ModifyItemResponse extends BaseResponse
             setStatus(Utils.intToBoolean(jObject.getInt("status")));
             if (getStatus())
             {
-                setItemID(Integer.valueOf(jObject.getString("iid")));
+                itemID = jObject.getInt("iid");
+                rate = jObject.getDouble("rate");
             }
             else
             {
@@ -43,8 +45,8 @@ public class ModifyItemResponse extends BaseResponse
         return itemID;
     }
 
-    public void setItemID(int itemID)
+    public double getRate()
     {
-        this.itemID = itemID;
+        return rate;
     }
 }

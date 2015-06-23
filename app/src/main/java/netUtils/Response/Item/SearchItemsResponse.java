@@ -11,7 +11,7 @@ import netUtils.response.common.BaseResponse;
 
 public class SearchItemsResponse extends BaseResponse
 {
-    List<Item> itemList;
+    private List<Item> itemList;
 
     public SearchItemsResponse(Object httpResponse)
     {

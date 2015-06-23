@@ -261,6 +261,7 @@ public abstract class SyncUtils
                 if (response.getStatus())
                 {
                     LogUtils.println("create item：local id " + item.getLocalID() + " *Succeed*");
+                    item.setRate(response.getRate());
                     item.setLocalUpdatedDate(Utils.getCurrentTime());
                     item.setServerUpdatedDate(item.getLocalUpdatedDate());
                     item.setServerID(response.getItemID());
@@ -293,6 +294,7 @@ public abstract class SyncUtils
                 if (response.getStatus())
                 {
                     LogUtils.println("modify item：local id " + item.getLocalID() + " *Succeed*");
+                    item.setRate(response.getRate());
                     item.setLocalUpdatedDate(Utils.getCurrentTime());
                     item.setServerUpdatedDate(item.getLocalUpdatedDate());
                     item.setServerID(response.getItemID());

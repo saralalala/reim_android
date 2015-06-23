@@ -32,6 +32,7 @@ import java.util.List;
 
 import classes.model.Category;
 import classes.model.Comment;
+import classes.model.Currency;
 import classes.model.Image;
 import classes.model.Item;
 import classes.model.Report;
@@ -557,7 +558,19 @@ public class EditReportActivity extends Activity
 
             itemLayout.addView(view);
 
-            amount += item.getAmount();
+            if (item.getCurrency().isCNY())
+            {
+                amount += item.getAmount();
+            }
+            else if (item.getRate() != 0)
+            {
+                amount += item.getAmount() * item.getRate() / 100;
+            }
+            else
+            {
+                Currency currency = dbManager.getCurrency(item.getCurrency().getCode());
+                amount += item.getAmount() * currency.getRate() / 100;
+            }
         }
         amountTextView.setText(Utils.formatDouble(amount));
     }
@@ -875,6 +888,7 @@ public class EditReportActivity extends Activity
                     item.setLocalUpdatedDate(currentTime);
                     item.setServerUpdatedDate(currentTime);
                     item.setServerID(response.getItemID());
+                    item.setRate(response.getRate());
                     dbManager.updateItemByLocalID(item);
 
                     itemTaskCount--;
@@ -931,6 +945,7 @@ public class EditReportActivity extends Activity
                 {
                     LogUtils.println("modify item：local id " + item.getLocalID() + " *Succeed*");
                     int currentTime = Utils.getCurrentTime();
+                    item.setRate(response.getRate());
                     item.setLocalUpdatedDate(currentTime);
                     item.setServerUpdatedDate(currentTime);
                     dbManager.updateItem(item);

@@ -85,7 +85,12 @@ public class Item
             setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
             setRelevantUsersID(jObject.getString("relates"));
 
-//            setCurrency(DBManager.getDBManager().getCurrency(jObject.getString("currency")));
+            Currency currency = DBManager.getDBManager().getCurrency(jObject.getString("currency").toUpperCase());
+            if (currency != null)
+            {
+                setCurrency(currency);
+            }
+            setRate(jObject.getDouble("rate"));
 
             JSONArray invoiceArray = jObject.getJSONArray("images");
             List<Image> invoiceList = new ArrayList<>();

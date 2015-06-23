@@ -859,6 +859,8 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + sqliteEscape(item.getNote()) + "'," +
                     "'" + item.getStatus() + "'," +
                     "'" + sqliteEscape(item.getLocation()) + "'," +
+                    "'" + item.getCurrency().getCode() + "'," +
+                    "'" + item.getRate() + "'," +
                     "'" + item.getCreatedDate() + "'," +
                     "'" + item.getServerUpdatedDate() + "'," +
                     "'" + item.getLocalUpdatedDate() + "'," +
@@ -1691,13 +1693,29 @@ public class DBManager extends SQLiteOpenHelper
     public double getReportAmount(int reportLocalID)
     {
         double amount = 0;
-        Cursor cursor = database.rawQuery("SELECT amount FROM tbl_item WHERE report_local_id = ?",
+        Cursor cursor = database.rawQuery("SELECT currency, amount, rate FROM tbl_item WHERE report_local_id = ?",
                                           new String[]{Integer.toString(reportLocalID)});
         try
         {
             while (cursor.moveToNext())
             {
-                amount += getDoubleFromCursor(cursor, "amount");
+                String code = getStringFromCursor(cursor, "currency");
+                double itemAmount = getDoubleFromCursor(cursor, "amount");
+                double itemRate = getDoubleFromCursor(cursor, "rate");
+
+                if (code.equals("CNY"))
+                {
+                    amount += itemAmount;
+                }
+                else if (itemRate != 0)
+                {
+                    amount += itemAmount * itemRate / 100;
+                }
+                else
+                {
+                    Currency currency = getCurrency(code);
+                    amount += itemAmount * currency.getRate() / 100;
+                }
             }
         }
         catch (Exception e)
@@ -1850,42 +1868,6 @@ public class DBManager extends SQLiteOpenHelper
             e.printStackTrace();
             return false;
         }
-    }
-
-    public boolean updateComment(Comment comment)
-    {
-        try
-        {
-            String sqlString = "UPDATE tbl_comment SET " +
-                    "server_id = '" + comment.getServerID() + "'," +
-                    "report_local_id = '" + comment.getReportID() + "'," +
-                    "user_id = '" + comment.getReviewer().getServerID() + "'," +
-                    "comment = '" + sqliteEscape(comment.getContent()) + "'," +
-                    "comment_date = '" + comment.getCreatedDate() + "'," +
-                    "server_updatedt = '" + comment.getServerUpdatedDate() + "'," +
-                    "local_updatedt = '" + comment.getLocalUpdatedDate() + "' " +
-                    "WHERE server_id = '" + comment.getLocalID() + "'";
-            database.execSQL(sqlString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
-    }
-
-    public Comment getComment(int commentLocalID)
-    {
-        Cursor cursor = database.rawQuery("SELECT * FROM tbl_comment WHERE id = ?",
-                                          new String[]{Integer.toString(commentLocalID)});
-        return getCommentFromCursorWithClose(cursor);
-    }
-
-    public Comment getOthersComment(int commentServerID)
-    {
-        Cursor cursor = database.rawQuery("SELECT * FROM tbl_others_comment WHERE server_id = ?",
-                                          new String[]{Integer.toString(commentServerID)});
-        return getOthersCommentFromCursorWithClose(cursor);
     }
 
     public List<Comment> getReportComments(int reportLocalID)
@@ -2615,6 +2597,23 @@ public class DBManager extends SQLiteOpenHelper
         return getCurrencyFromCursorWithClose(cursor);
     }
 
+    public boolean updateCurrencyList(List<Currency> currencyList)
+    {
+        try
+        {
+            for (Currency currency : currencyList)
+            {
+                updateCurrency(currency);
+            }
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public List<Currency> getCurrencyList()
     {
         Cursor cursor = database.rawQuery("SELECT * FROM tbl_currency", null);
@@ -3143,30 +3142,6 @@ public class DBManager extends SQLiteOpenHelper
         return comment;
     }
 
-    private Comment getCommentFromCursorWithClose(Cursor cursor)
-    {
-        Comment comment = null;
-        try
-        {
-            if (cursor.moveToNext())
-            {
-                comment = getCommentFromCursor(cursor);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            if (cursor != null)
-            {
-                cursor.close();
-            }
-        }
-        return comment;
-    }
-
     private List<Comment> getCommentListFromCursorWithClose(Cursor cursor)
     {
         List<Comment> commentList = new ArrayList<>();
@@ -3203,30 +3178,6 @@ public class DBManager extends SQLiteOpenHelper
         comment.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
         comment.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
 
-        return comment;
-    }
-
-    private Comment getOthersCommentFromCursorWithClose(Cursor cursor)
-    {
-        Comment comment = null;
-        try
-        {
-            if (cursor.moveToNext())
-            {
-                comment = getOthersCommentFromCursor(cursor);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            if (cursor != null)
-            {
-                cursor.close();
-            }
-        }
         return comment;
     }
 

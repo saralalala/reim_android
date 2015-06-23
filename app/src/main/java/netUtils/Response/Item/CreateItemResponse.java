@@ -10,7 +10,7 @@ import netUtils.response.common.BaseResponse;
 public class CreateItemResponse extends BaseResponse
 {
     private int itemID;
-    private int createDate;
+    private double rate;
 
     public CreateItemResponse(Object httpResponse)
     {
@@ -27,7 +27,7 @@ public class CreateItemResponse extends BaseResponse
             if (getStatus())
             {
                 itemID = jObject.getInt("iid");
-                setCreateDate(jObject.getInt("createdt"));
+                rate = jObject.getDouble("rate");
             }
             else
             {
@@ -45,18 +45,8 @@ public class CreateItemResponse extends BaseResponse
         return itemID;
     }
 
-    public void setItemID(int itemID)
+    public double getRate()
     {
-        this.itemID = itemID;
-    }
-
-    public int getCreateDate()
-    {
-        return createDate;
-    }
-
-    public void setCreateDate(int createDate)
-    {
-        this.createDate = createDate;
+        return rate;
     }
 }
