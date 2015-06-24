@@ -13,8 +13,7 @@ public class StatCategory
 {
     private int categoryID = -1;
     private double amount = 0;
-    private int itemCount = -1;
-    private List<Integer> items = new ArrayList<>();
+    private int itemCount = 0;
     private int iconID = -1;
     private String name = "";
     private int color = -1;
@@ -30,13 +29,9 @@ public class StatCategory
         {
             setCategoryID(jObject.getInt("id"));
             setAmount(jObject.getDouble("amount"));
-
-            JSONArray iids = jObject.getJSONArray("items");
-            setItemCount(iids.length());
-            for (int j = 0; j < iids.length(); j++)
-            {
-                items.add(iids.getInt(j));
-            }
+            JSONArray iids = jObject.optJSONArray("items");
+            int count = iids != null? iids.length() : jObject.getInt("count");
+            setItemCount(count);
         }
         catch (JSONException e)
         {
@@ -69,15 +64,6 @@ public class StatCategory
     public void setItemCount(int itemCount)
     {
         this.itemCount = itemCount;
-    }
-
-    public List<Integer> getItems()
-    {
-        return items;
-    }
-    public void setItems(List<Integer> items)
-    {
-        this.items = items;
     }
 
     public int getIconID()

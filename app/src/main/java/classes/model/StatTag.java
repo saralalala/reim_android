@@ -1,5 +1,6 @@
 package classes.model;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -7,7 +8,7 @@ public class StatTag
 {
     private int tagID = -1;
     private double amount = 0;
-    private int itemCount = -1;
+    private int itemCount = 0;
 
     public StatTag(JSONObject jObject)
     {
@@ -15,7 +16,9 @@ public class StatTag
         {
             setTagID(jObject.getInt("id"));
             setAmount(jObject.getDouble("amount"));
-            setItemCount(jObject.getJSONArray("items").length());
+            JSONArray iids = jObject.optJSONArray("items");
+            int count = iids != null? iids.length() : jObject.getInt("count");
+            setItemCount(count);
         }
         catch (JSONException e)
         {
