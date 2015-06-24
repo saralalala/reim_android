@@ -21,6 +21,7 @@ public class MineStatResponse extends BaseResponse
     private List<StatCategory> statCategoryList;
     private List<StatTag> statTagList;
     private HashMap<String, Double> monthsData;
+    private HashMap<String, Double> currencyData;
 
     public MineStatResponse(Object httpResponse)
     {
@@ -64,6 +65,18 @@ public class MineStatResponse extends BaseResponse
                     this.monthsData.put(key, value);
                 }
             }
+
+            this.currencyData = new HashMap<>();
+            JSONObject currencies = jObject.optJSONObject("currencies");
+            if (currencies != null)
+            {
+                for (Iterator<?> iterator = currencies.keys(); iterator.hasNext(); )
+                {
+                    String key = (String) iterator.next();
+                    Double value = currencies.getDouble(key);
+                    this.currencyData.put(key.toUpperCase(), value);
+                }
+            }
         }
         catch (Exception e)
         {
@@ -99,5 +112,10 @@ public class MineStatResponse extends BaseResponse
     public HashMap<String, Double> getMonthsData()
     {
         return monthsData;
+    }
+
+    public HashMap<String, Double> getCurrencyData()
+    {
+        return currencyData;
     }
 }

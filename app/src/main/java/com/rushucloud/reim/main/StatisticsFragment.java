@@ -24,6 +24,7 @@ import java.util.List;
 
 import classes.adapter.StatisticsListViewAdapter;
 import classes.model.Category;
+import classes.model.Currency;
 import classes.model.StatCategory;
 import classes.model.StatTag;
 import classes.model.StatUser;
@@ -69,6 +70,8 @@ public class StatisticsFragment extends Fragment
     private TextView totalUnitTextView;
     private LinearLayout monthLayout;
     private LinearLayout categoryLayout;
+    private RelativeLayout mineCurrencyTitleLayout;
+    private LinearLayout mineCurrencyLayout;
     private RelativeLayout mineTagTitleLayout;
     private LinearLayout mineTagLayout;
 
@@ -245,6 +248,8 @@ public class StatisticsFragment extends Fragment
         totalUnitTextView = (TextView) mineView.findViewById(R.id.totalUnitTextView);
         monthLayout = (LinearLayout) mineView.findViewById(R.id.monthLayout);
         categoryLayout = (LinearLayout) mineView.findViewById(R.id.categoryLayout);
+        mineCurrencyTitleLayout = (RelativeLayout) mineView.findViewById(R.id.currencyTitleLayout);
+        mineCurrencyLayout = (LinearLayout) mineView.findViewById(R.id.currencyLayout);
         mineTagTitleLayout = (RelativeLayout) mineView.findViewById(R.id.tagTitleLayout);
         mineTagLayout = (LinearLayout) mineView.findViewById(R.id.tagLayout);
 
@@ -526,6 +531,51 @@ public class StatisticsFragment extends Fragment
                     categoryLayout.addView(view);
                 }
             }
+        }
+    }
+
+    private void drawCurrency(HashMap<String, Double> currencyData)
+    {
+        if (currencyData.size() > 1)
+        {
+            for (String code : currencyData.keySet())
+            {
+                final Currency currency = dbManager.getCurrency(code);
+                if (currency != null)
+                {
+                    View view = View.inflate(getActivity(), R.layout.list_currency_stat, null);
+                    view.setBackgroundResource(R.drawable.list_item_drawable);
+                    view.setOnClickListener(new View.OnClickListener()
+                    {
+                        public void onClick(View v)
+                        {
+//                            Bundle bundle = new Bundle();
+//                            bundle.putBoolean("mineData", true);
+//                            bundle.putInt("categoryID", localCategory.getServerID());
+//                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+//                            intent.putExtras(bundle);
+//                            ViewUtils.goForward(getActivity(), intent);
+                        }
+                    });
+
+                    TextView currencyTextView = (TextView) view.findViewById(R.id.currencyTextView);
+                    currencyTextView.setText(currency.getName());
+
+                    TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
+                    symbolTextView.setText(currency.getSymbol());
+
+                    TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                    amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                    amountTextView.setText(Utils.formatAmount(currencyData.get(code)));
+
+                    mineCurrencyLayout.addView(view);
+                }
+            }
+        }
+        else
+        {
+            mineCurrencyTitleLayout.setVisibility(View.GONE);
+            mineCurrencyLayout.setVisibility(View.GONE);
         }
     }
 
@@ -885,6 +935,7 @@ public class StatisticsFragment extends Fragment
                             drawCostPie(response.getOngoingAmount(), response.getNewAmount());
                             drawMonthBar(response.getMonthsData());
                             drawCategory(response.getStatCategoryList());
+                            drawCurrency(response.getCurrencyData());
                             drawTagBar(response.getStatTagList(), true);
                             mineAdapter.notifyDataSetChanged();
                             statListView.stopRefresh();

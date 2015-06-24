@@ -5,34 +5,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import classes.model.Category;
-import classes.model.Item;
 import classes.model.Proxy;
-import classes.model.Tag;
-import classes.model.User;
-import classes.utils.ReimApplication;
-import classes.utils.Utils;
-import classes.utils.ViewUtils;
 
 public class ProxyListViewAdapter extends BaseAdapter
 {
     private LayoutInflater layoutInflater;
     private List<Proxy> proxyList;
+    private List<Proxy> chosenList;
 
-    public ProxyListViewAdapter(Context context, List<Proxy> proxies)
+    public ProxyListViewAdapter(Context context, List<Proxy> proxies, List<Proxy> chosens)
     {
         this.layoutInflater = LayoutInflater.from(context);
         this.proxyList = new ArrayList<>(proxies);
+        this.chosenList = new ArrayList<>();
+        if (chosens != null)
+        {
+            chosenList.addAll(chosens);
+        }
     }
 
     public View getView(int position, View convertView, ViewGroup parent)
@@ -43,6 +39,9 @@ public class ProxyListViewAdapter extends BaseAdapter
         }
 
         Proxy proxy = this.getItem(position);
+
+        int color = chosenList.contains(proxy)? R.color.list_item_pressed : R.color.list_item_unpressed;
+        convertView.setBackgroundResource(color);
 
         TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
         TextView scopeTextView = (TextView) convertView.findViewById(R.id.scopeTextView);
@@ -72,5 +71,10 @@ public class ProxyListViewAdapter extends BaseAdapter
     {
         proxyList.clear();
         proxyList.addAll(proxies);
+    }
+
+    public void setChosenList(List<Proxy> chosenList)
+    {
+        this.chosenList = chosenList;
     }
 }

@@ -63,6 +63,10 @@ public class HttpUtils
             jObject.put(NetworkConstant.DEVICE_TYPE, NetworkConstant.DEVICE_TYPE_ANDROID);
             jObject.put(NetworkConstant.DEVICE_TOKEN, appPreference.getDeviceToken());
             jObject.put(NetworkConstant.SERVER_TOKEN, appPreference.getServerToken());
+            if (appPreference.isProxyMode())
+            {
+                jObject.put(NetworkConstant.PROXY, appPreference.getCurrentUserID());
+            }
             String resultString = jObject.toString();
 
             return ReimJWT.Encode(resultString);

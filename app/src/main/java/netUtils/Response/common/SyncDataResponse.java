@@ -44,6 +44,7 @@ public class SyncDataResponse extends BaseResponse
         }
         catch (JSONException e)
         {
+            System.out.println(e.getLocalizedMessage());
             e.printStackTrace();
         }
     }

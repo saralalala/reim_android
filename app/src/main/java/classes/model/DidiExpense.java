@@ -65,7 +65,7 @@ public class DidiExpense implements Serializable
         int minute = Integer.valueOf(time.substring(14, 16));
         int second = Integer.valueOf(time.substring(17));
 
-        GregorianCalendar greCal = new GregorianCalendar(year, month, day, hour, minute, second);
+        GregorianCalendar greCal = new GregorianCalendar(year, month - 1, day, hour, minute, second);
         return (int) (greCal.getTimeInMillis() / 1000);
     }
 

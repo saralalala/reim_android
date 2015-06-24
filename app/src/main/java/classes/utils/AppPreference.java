@@ -21,6 +21,7 @@ public class AppPreference
 
     private int currentUserID = -1;
     private int currentGroupID = -1;
+    private int proxyUserID = -1;
     private String username = "";
     private String password = "";
     private boolean hasPassword = true;
@@ -67,6 +68,7 @@ public class AppPreference
         SharedPreferences preferences = context.getSharedPreferences("ReimApplication", Application.MODE_PRIVATE);
         appPreference.setCurrentUserID(preferences.getInt("currentUserID", -1));
         appPreference.setCurrentGroupID(preferences.getInt("currentGroupID", -1));
+        appPreference.setProxyUserID(preferences.getInt("proxyUserID", -1));
         appPreference.setUsername(preferences.getString("username", ""));
         appPreference.setPassword(preferences.getString("password", ""));
         appPreference.setHasPassword(preferences.getBoolean("hasPassword", true));
@@ -94,10 +96,10 @@ public class AppPreference
     public void saveAppPreference()
     {
         SharedPreferences sharedPreference = context.getSharedPreferences("ReimApplication", Application.MODE_PRIVATE);
-        AppPreference appPreference = AppPreference.getAppPreference();
         Editor editor = sharedPreference.edit();
         editor.putInt("currentUserID", appPreference.getCurrentUserID());
         editor.putInt("currentGroupID", appPreference.getCurrentGroupID());
+        editor.putInt("proxyUserID", appPreference.getProxyUserID());
         editor.putString("username", appPreference.getUsername());
         editor.putString("password", appPreference.getPassword());
         editor.putBoolean("hasPassword", appPreference.hasPassword());
@@ -113,7 +115,7 @@ public class AppPreference
         editor.putBoolean("needToShowReportGuide", appPreference.needToShowReportGuide());
         editor.putBoolean("sandboxMode", appPreference.isSandboxMode());
         editor.putString("language", appPreference.getLanguage());
-        editor.commit();
+        editor.apply();
     }
 
     public int getCurrentUserID()
@@ -140,6 +142,19 @@ public class AppPreference
     public Group getCurrentGroup()
     {
         return DBManager.getDBManager().getGroup(currentGroupID);
+    }
+
+    public int getProxyUserID()
+    {
+        return proxyUserID;
+    }
+    public void setProxyUserID(int proxyUserID)
+    {
+        this.proxyUserID = proxyUserID;
+    }
+    public boolean isProxyMode()
+    {
+        return proxyUserID != -1;
     }
 
     public String getUsername()

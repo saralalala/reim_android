@@ -11,6 +11,7 @@ public class NetworkConstant
 
     public static final String USERNAME = "email";
     public static final String PASSWORD = "password";
+    public static final String PROXY = "proxy";
     public static final String DEVICE_TYPE = "device_type";
     public static final String DEVICE_TYPE_ANDROID = "android";
     public static final String DEVICE_TOKEN = "device_token";
@@ -76,6 +77,7 @@ public class NetworkConstant
     public static final int ERROR_LAST_ADMIN = -39;
     public static final int ERROR_NOT_UNIQUE = -42;
     public static final int ERROR_COMPANY_EXISTS = -49;
+    public static final int ERROR_PROXY_ERROR = -58;
 
     public static String errorCodeToString(int code)
     {
@@ -168,6 +170,9 @@ public class NetworkConstant
                 break;
             case NetworkConstant.ERROR_COMPANY_EXISTS:
                 result = R.string.error_network_company_exists;
+                break;
+            case NetworkConstant.ERROR_PROXY_ERROR:
+                result = R.string.error_proxy_error;
                 break;
             default:
                 break;

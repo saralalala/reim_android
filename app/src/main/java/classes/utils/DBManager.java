@@ -351,7 +351,7 @@ public class DBManager extends SQLiteOpenHelper
                 command = "ALTER TABLE tbl_others_item ADD COLUMN currency TEXT DEFAULT('')";
                 db.execSQL(command);
 
-                command = "ALTER TABLE tbl_others_user ADD COLUMN rate FLOAT DEFAULT(0)";
+                command = "ALTER TABLE tbl_others_item ADD COLUMN rate FLOAT DEFAULT(0)";
                 db.execSQL(command);
             }
         }

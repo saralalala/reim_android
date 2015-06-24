@@ -38,8 +38,10 @@ import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
+import netUtils.request.common.CommonRequest;
 import netUtils.request.common.UploadImageRequest;
 import netUtils.request.user.SignOutRequest;
+import netUtils.response.common.CommonResponse;
 import netUtils.response.common.UploadImageResponse;
 import netUtils.response.user.SignOutResponse;
 
@@ -54,6 +56,7 @@ public class ProfileActivity extends Activity
     private TextView phoneTextView;
     private TextView wechatTextView;
     private TextView companyTextView;
+    private TextView switchTextView;
     private RelativeLayout passwordLayout;
     private TextView passwordTextView;
 
@@ -277,6 +280,8 @@ public class ProfileActivity extends Activity
         });
 
         // init proxy
+        switchTextView = (TextView) findViewById(R.id.switchTextView);
+
         LinearLayout proxyLayout = (LinearLayout) findViewById(R.id.proxyLayout);
         proxyLayout.setOnClickListener(new OnClickListener()
         {
@@ -304,7 +309,16 @@ public class ProfileActivity extends Activity
         {
             public void onClick(View v)
             {
-
+                if (appPreference.isProxyMode())
+                {
+                    appPreference.setCurrentUserID(appPreference.getProxyUserID());
+                    appPreference.setProxyUserID(-1);
+                    sendCommonRequest();
+                }
+                else
+                {
+                    ViewUtils.goForwardAndFinish(ProfileActivity.this, ClientActivity.class);
+                }
             }
         });
 
@@ -401,6 +415,7 @@ public class ProfileActivity extends Activity
 
     private void loadInfoView()
     {
+        appPreference = AppPreference.getAppPreference();
         currentUser = appPreference.getCurrentUser();
         currentGroup = appPreference.getCurrentGroup();
 
@@ -424,7 +439,7 @@ public class ProfileActivity extends Activity
             nicknameTextView.setText(nickname);
 
             String email = !currentUser.getEmail().isEmpty() ? currentUser.getEmail() : getString(R.string.not_binding);
-            if (!currentUser.isActive())
+            if (!currentUser.getEmail().isEmpty() && !currentUser.isActive())
             {
                 email += getString(R.string.not_active);
             }
@@ -448,6 +463,9 @@ public class ProfileActivity extends Activity
             {
                 companyTextView.setText(R.string.not_joined);
             }
+
+            int switchPrompt = appPreference.isProxyMode()? R.string.switch_back : R.string.switch_identity;
+            switchTextView.setText(switchPrompt);
 
             if (currentUser.getEmail().isEmpty() && currentUser.getPhone().isEmpty())
             {
@@ -598,6 +616,93 @@ public class ProfileActivity extends Activity
                         {
                             ReimProgressDialog.dismiss();
                             ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_sign_out, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendCommonRequest()
+    {
+        ReimProgressDialog.show();
+        CommonRequest request = new CommonRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final CommonResponse response = new CommonResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = -1;
+
+                    DBManager dbManager = DBManager.getDBManager();
+                    appPreference.setServerToken(response.getServerToken());
+
+                    if (response.getGroup() != null)
+                    {
+                        currentGroupID = response.getGroup().getServerID();
+
+                        // update AppPreference
+                        appPreference.setCurrentGroupID(currentGroupID);
+                        appPreference.saveAppPreference();
+
+                        // update members
+                        User currentUser = response.getCurrentUser();
+                        User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+                        if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+                        {
+                            currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
+                        }
+
+                        dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+                        dbManager.updateUser(currentUser);
+
+                        // update categories
+                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+
+                        // update tags
+                        dbManager.updateGroupTags(response.getTagList(), currentGroupID);
+
+                        // update group info
+                        dbManager.syncGroup(response.getGroup());
+                    }
+                    else
+                    {
+                        // update AppPreference
+                        appPreference.setCurrentGroupID(currentGroupID);
+                        appPreference.saveAppPreference();
+
+                        // update current user
+                        dbManager.syncUser(response.getCurrentUser());
+
+                        // update categories
+                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+                    }
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ProfileActivity.this, R.string.succeed_in_switch_identity);
+                            loadInfoView();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            int proxyUserID = appPreference.getProxyUserID();
+                            appPreference.setProxyUserID(appPreference.getCurrentUserID());
+                            appPreference.setCurrentUserID(proxyUserID);
+                            appPreference.saveAppPreference();
+                            ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_switch_identity, response.getErrorMessage());
                         }
                     });
                 }

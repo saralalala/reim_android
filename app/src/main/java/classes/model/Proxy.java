@@ -53,6 +53,21 @@ public class Proxy implements Serializable
         this.permission = permission;
     }
 
+    public boolean equals(Object o)
+    {
+        if (o == null)
+        {
+            return false;
+        }
+
+        if (o instanceof Proxy)
+        {
+            Proxy proxy = (Proxy) o;
+            return proxy.getUser().getServerID() == this.user.getServerID();
+        }
+        return super.equals(o);
+    }
+
     public static List<Proxy> parse(JSONArray jsonArray, boolean isClientArray)
     {
         List<Proxy> proxyList = new ArrayList<>();

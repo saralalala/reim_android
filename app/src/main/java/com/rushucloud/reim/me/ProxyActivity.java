@@ -105,7 +105,7 @@ public class ProxyActivity extends Activity
 
         proxyTextView = (TextView) findViewById(R.id.proxyTextView);
 
-        adapter = new ProxyListViewAdapter(this, proxyList);
+        adapter = new ProxyListViewAdapter(this, proxyList, null);
         ListView proxyListView = (ListView) findViewById(R.id.proxyListView);
         proxyListView.setAdapter(adapter);
         proxyListView.setOnItemClickListener(new AdapterView.OnItemClickListener()

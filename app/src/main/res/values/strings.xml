@@ -224,6 +224,7 @@
     <string name="last_12_months">近12个月</string>
     <string name="stat_by_category">类别统计</string>
     <string name="stat_by_month">月份统计</string>
+    <string name="stat_by_currency">货币统计</string>
     <string name="stat_by_tag">标签统计</string>
     <string name="stat_by_member">人员统计</string>
     <string name="choose_month">选择月份</string>
@@ -276,6 +277,7 @@
     <string name="waiting_for_approve">（待批准）</string>
     <string name="nickname">姓名</string>
     <string name="switch_identity">切换身份</string>
+    <string name="switch_client">切换对象</string>
     <string name="switch_back">切换回原账号</string>
     <string name="change_password">修改密码</string>
     <string name="set_password">设置密码</string>
@@ -495,6 +497,7 @@
     <string name="error_network_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
     <string name="error_network_not_unique">消费已被添加进另外的报告中</string>
     <string name="error_network_company_exists">公司已存在</string>
+    <string name="error_proxy_error">被代理人不在你公司，无法进行该操作</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>
@@ -526,6 +529,7 @@
     <string name="succeed_in_modifying_category">修改成功</string>
     <string name="succeed_in_modifying_tag">修改成功</string>
     <string name="succeed_in_modifying_proxy">修改成功</string>
+    <string name="succeed_in_deleting">删除成功</string>
     <string name="succeed_in_deleting_category">删除成功</string>
     <string name="succeed_in_deleting_tag">删除成功</string>
     <string name="succeed_in_deleting_proxy">删除成功</string>
@@ -534,8 +538,8 @@
     <string name="succeed_in_submitting_report">提交成功</string>
     <string name="succeed_in_revoking_report">撤回成功</string>
     <string name="succeed_in_alerting">已提醒对方审批报告</string>
-    <string name="succeed_in_deleting">删除成功</string>
     <string name="succeed_in_applying">申请发送成功，管理员批准后可正式加入</string>
+    <string name="succeed_in_switch_identity">切换身份成功</string>
     <string name="succeed_in_setting_account_name">户名设置成功</string>
     <string name="succeed_in_setting_bank_account">银行账户设置成功</string>
     <string name="succeed_in_setting_bank_name">开户行设置成功</string>
@@ -603,6 +607,7 @@
     <string name="failed_to_delete">删除失败</string>
     <string name="failed_to_search_companies">搜索公司失败</string>
     <string name="failed_to_apply">申请加入公司失败</string>
+    <string name="failed_to_switch_identity">切换身份失败</string>
     <string name="failed_to_set_account_name">设置户名失败</string>
     <string name="failed_to_set_bank_account">设置银行账户失败</string>
     <string name="failed_to_set_bank_name">设置开户行失败</string>
@@ -627,6 +632,7 @@
     <string name="no_expenses">当前没有任何消费记录</string>
     <string name="no_filter_result">抱歉，没有找到符合的结果</string>
     <string name="no_proxy">你暂时还未设置代理人</string>
+    <string name="no_client">你暂时还未被任何人设置为代理人</string>
 
     <string name="apply_new">你发送了加入「%1$s」的申请</string>
     <string name="apply_others_new">%1$s 申请加入「%2$s」</string>
@@ -657,7 +663,7 @@
     <string name="status_approve_ahead_approved">(已审批)</string>
     <string name="status_cc">抄送</string>
 
-    <string name="proxy_permission_all">提交 &amp; 审批</string>
+    <string name="proxy_permission_all">提交 &#038; 审批</string>
     <string name="proxy_permission_approve">仅审批</string>
     <string name="proxy_permission_submit">仅提交</string>
 
