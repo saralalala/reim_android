@@ -132,10 +132,10 @@
     <string name="joined_3">加</string>
     <string name="joined_4">入</string>
 
-    <string name="reimbursement">消费</string>
-    <string name="report">报告</string>
-    <string name="statistics">统计</string>
-    <string name="me">自己</string>
+    <string name="reimbursement">Expense</string>
+    <string name="report">Report</string>
+    <string name="statistics">Statistic</string>
+    <string name="me">Me</string>
     <string name="reim_guide">点击＋开始记录你的第一笔消费</string>
     <string name="report_guide">点击这里创建报告，提交你的报销</string>
 

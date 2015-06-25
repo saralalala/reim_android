@@ -38,37 +38,37 @@
         android:layout_marginTop="24dp"
         layout="@layout/view_divider"/>
 
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/languageLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/layout_height"-->
-        <!--android:background="@drawable/me_item_drawable">-->
+    <RelativeLayout
+        android:id="@+id/languageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height"
+        android:background="@drawable/me_item_drawable">
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_marginLeft="16dp"-->
-            <!--android:text="@string/language"-->
-            <!--android:textColor="@color/font_major_dark"-->
-            <!--android:textSize="16sp"/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+            android:text="@string/language"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
 
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:contentDescription="@string/next"-->
-            <!--android:src="@drawable/next"/>-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@string/next"
+            android:src="@drawable/next"/>
 
-    <!--</RelativeLayout>-->
+    </RelativeLayout>
 
-    <!--<include-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0.5dp"-->
-        <!--layout="@layout/view_divider"/>-->
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        layout="@layout/view_divider"/>
 
     <TextView
         android:id="@+id/updateTextView"
