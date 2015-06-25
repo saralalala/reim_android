@@ -107,6 +107,7 @@ public class BindEmailActivity extends Activity
                 else
                 {
                     currentUser.setEmail(newEmail);
+                    currentUser.setIsActive(false);
                     sendModifyUserInfoRequest();
                 }
             }

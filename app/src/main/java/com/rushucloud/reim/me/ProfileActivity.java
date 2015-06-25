@@ -287,7 +287,7 @@ public class ProfileActivity extends Activity
         {
             public void onClick(View v)
             {
-                ViewUtils.goForwardAndFinish(ProfileActivity.this, ProxyActivity.class);
+                ViewUtils.goForward(ProfileActivity.this, ProxyActivity.class);
             }
         });
 
@@ -317,7 +317,7 @@ public class ProfileActivity extends Activity
                 }
                 else
                 {
-                    ViewUtils.goForwardAndFinish(ProfileActivity.this, ClientActivity.class);
+                    ViewUtils.goForward(ProfileActivity.this, ClientActivity.class);
                 }
             }
         });

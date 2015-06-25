@@ -30,6 +30,10 @@ import netUtils.response.user.UnbindResponse;
 
 public class EmailActivity extends Activity
 {
+    // Widgets
+    private LinearLayout activeLayout;
+
+    // Local Data
     private int waitingTime = 60;
     private Thread thread;
 
@@ -47,6 +51,7 @@ public class EmailActivity extends Activity
         MobclickAgent.onPageStart("EmailActivity");
         MobclickAgent.onResume(this);
         ReimProgressDialog.setContext(this);
+        refreshView();
     }
 
     protected void onPause()
@@ -118,7 +123,7 @@ public class EmailActivity extends Activity
         TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
         emailTextView.setText(getIntent().getStringExtra("email"));
 
-        LinearLayout activeLayout = (LinearLayout) findViewById(R.id.activeLayout);
+        activeLayout = (LinearLayout) findViewById(R.id.activeLayout);
         activeLayout.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
@@ -157,10 +162,6 @@ public class EmailActivity extends Activity
                 }
             }
         });
-        if (AppPreference.getAppPreference().getCurrentUser().isActive())
-        {
-            activeLayout.setVisibility(View.GONE);
-        }
 
         LinearLayout bindEmailLayout = (LinearLayout) findViewById(R.id.bindEmailLayout);
         bindEmailLayout.setOnClickListener(new OnClickListener()
@@ -170,6 +171,14 @@ public class EmailActivity extends Activity
                 ViewUtils.goForward(EmailActivity.this, BindEmailActivity.class);
             }
         });
+    }
+
+    private void refreshView()
+    {
+        if (AppPreference.getAppPreference().getCurrentUser().isActive())
+        {
+            activeLayout.setVisibility(View.GONE);
+        }
     }
 
     private void goBack()

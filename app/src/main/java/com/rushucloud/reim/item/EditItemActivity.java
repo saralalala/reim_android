@@ -1478,6 +1478,7 @@ public class EditItemActivity extends Activity
                 item.setConsumedDate(expense.getTimeStamp());
                 item.setVendor(ViewUtils.getString(R.string.vendor_taxi));
                 item.setLocation(expense.getCity());
+                item.setDidiID(expense.getId());
                 item.setNote(String.format(getString(R.string.from_to), expense.getStart(), expense.getDestionation()));
 
                 String transport = getString(R.string.transport);
