@@ -192,6 +192,7 @@ public class ClientActivity extends Activity
 
     private void sendCommonRequest()
     {
+        ReimProgressDialog.show();
         CommonRequest request = new CommonRequest();
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -251,6 +252,7 @@ public class ClientActivity extends Activity
                     {
                         public void run()
                         {
+                            ReimProgressDialog.dismiss();
                             ViewUtils.showToast(ClientActivity.this, R.string.succeed_in_switch_identity);
                             ViewUtils.goBack(ClientActivity.this);
                         }
@@ -262,6 +264,7 @@ public class ClientActivity extends Activity
                     {
                         public void run()
                         {
+                            ReimProgressDialog.dismiss();
                             appPreference.setCurrentUserID(appPreference.getProxyUserID());
                             appPreference.setProxyUserID(-1);
                             appPreference.setProxyPermission(-1);
