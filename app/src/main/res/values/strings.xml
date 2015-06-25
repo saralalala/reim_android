@@ -464,6 +464,11 @@
     <string name="error_wechat_not_supported">微信未安装或当前微信版本不支持登录功能</string>
     <string name="error_no_wifi">当前不在Wi-Fi环境下，无法更新</string>
     <string name="error_timeout">连接超时</string>
+    <string name="error_create_item_no_permission">抱歉，你暂时没有创建消费的权限</string>
+    <string name="error_modify_item_no_permission">抱歉，你暂时没有修改消费的权限</string>
+    <string name="error_create_report_no_permission">抱歉，你暂时没有创建报告的权限</string>
+    <string name="error_modify_report_no_permission">抱歉，你暂时没有修改报告的权限</string>
+    <string name="error_submit_report_no_permission">抱歉，你暂时没有提交报告的权限</string>
 
     <string name="error_network_system_error">系统错误，请稍后尝试</string>
     <string name="error_network_user_not_exists">用户不存在或密码错误</string>

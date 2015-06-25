@@ -1728,8 +1728,7 @@ public class DBManager extends SQLiteOpenHelper
                 }
                 else
                 {
-                    Currency currency = getCurrency(code);
-                    amount += itemAmount * currency.getRate() / 100;
+                    amount += itemAmount * getRate(code) / 100;
                 }
             }
         }
@@ -2610,6 +2609,31 @@ public class DBManager extends SQLiteOpenHelper
     {
         Cursor cursor = database.rawQuery("SELECT * FROM tbl_currency WHERE code = ?", new String[]{code});
         return getCurrencyFromCursorWithClose(cursor);
+    }
+
+    public double getRate(String code)
+    {
+        Cursor cursor = database.rawQuery("SELECT rate FROM tbl_currency WHERE code = ?", new String[]{code});
+        double rate = 0;
+        try
+        {
+            if (cursor.moveToNext())
+            {
+                rate = getDoubleFromCursor(cursor, "rate");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return rate;
     }
 
     public boolean updateCurrencyList(List<Currency> currencyList)

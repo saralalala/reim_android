@@ -196,16 +196,23 @@ public class ReportFragment extends Fragment implements OnClickListener
             {
                 MobclickAgent.onEvent(getActivity(), "UMENG_REPORT_NEW");
 
-                User currentUser = appPreference.getCurrentUser();
-                Report report = new Report();
-                report.setSender(currentUser);
-                report.setManagerList(currentUser.buildBaseManagerList());
+                if (appPreference.hasProxyEditPermission())
+                {
+                    User currentUser = appPreference.getCurrentUser();
+                    Report report = new Report();
+                    report.setSender(currentUser);
+                    report.setManagerList(currentUser.buildBaseManagerList());
 
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("report", report);
-                Intent intent = new Intent(getActivity(), EditReportActivity.class);
-                intent.putExtras(bundle);
-                ViewUtils.goForward(getActivity(), intent);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("report", report);
+                    Intent intent = new Intent(getActivity(), EditReportActivity.class);
+                    intent.putExtras(bundle);
+                    ViewUtils.goForward(getActivity(), intent);
+                }
+                else
+                {
+                    ViewUtils.showToast(getActivity(), R.string.error_create_report_no_permission);
+                }
             }
         });
     }

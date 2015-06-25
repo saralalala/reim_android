@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.model.Category;
-import classes.model.Currency;
 import classes.model.Item;
 import classes.model.Report;
 import classes.model.User;
@@ -151,8 +150,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
                 else
                 {
                     containsForeignCurrency = true;
-                    Currency currency = dbManager.getCurrency(item.getCurrency().getCode());
-                    amount += item.getAmount() * currency.getRate() / 100;
+                    amount += item.getAmount() * item.getCurrency().getRate() / 100;
                 }
             }
 

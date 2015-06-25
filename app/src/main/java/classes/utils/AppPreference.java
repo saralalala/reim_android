@@ -12,6 +12,7 @@ import com.avos.avoscloud.AVInstallation;
 import java.io.File;
 
 import classes.model.Group;
+import classes.model.Proxy;
 import classes.model.User;
 
 public class AppPreference
@@ -22,6 +23,7 @@ public class AppPreference
     private int currentUserID = -1;
     private int currentGroupID = -1;
     private int proxyUserID = -1;
+    private int proxyPermission = -1;
     private String username = "";
     private String password = "";
     private boolean hasPassword = true;
@@ -69,6 +71,7 @@ public class AppPreference
         appPreference.setCurrentUserID(preferences.getInt("currentUserID", -1));
         appPreference.setCurrentGroupID(preferences.getInt("currentGroupID", -1));
         appPreference.setProxyUserID(preferences.getInt("proxyUserID", -1));
+        appPreference.setProxyPermission(preferences.getInt("proxyPermission", -1));
         appPreference.setUsername(preferences.getString("username", ""));
         appPreference.setPassword(preferences.getString("password", ""));
         appPreference.setHasPassword(preferences.getBoolean("hasPassword", true));
@@ -100,6 +103,7 @@ public class AppPreference
         editor.putInt("currentUserID", appPreference.getCurrentUserID());
         editor.putInt("currentGroupID", appPreference.getCurrentGroupID());
         editor.putInt("proxyUserID", appPreference.getProxyUserID());
+        editor.putInt("proxyPermission", appPreference.getProxyPermission());
         editor.putString("username", appPreference.getUsername());
         editor.putString("password", appPreference.getPassword());
         editor.putBoolean("hasPassword", appPreference.hasPassword());
@@ -155,6 +159,19 @@ public class AppPreference
     public boolean isProxyMode()
     {
         return proxyUserID != -1;
+    }
+
+    public int getProxyPermission()
+    {
+        return proxyPermission;
+    }
+    public void setProxyPermission(int proxyPermission)
+    {
+        this.proxyPermission = proxyPermission;
+    }
+    public boolean hasProxyEditPermission()
+    {
+        return proxyPermission != Proxy.PERMISSION_APPROVE;
     }
 
     public String getUsername()

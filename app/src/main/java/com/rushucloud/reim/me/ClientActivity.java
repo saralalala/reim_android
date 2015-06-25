@@ -99,8 +99,10 @@ public class ClientActivity extends Activity
         {
             public void onClick(View v)
             {
+                Proxy proxy = chosenList.get(0);
                 appPreference.setProxyUserID(appPreference.getCurrentUserID()); // proxyUserID is id of actual current user
-                appPreference.setCurrentUserID(chosenList.get(0).getUser().getServerID()); // currentUserID changes to client user id
+                appPreference.setProxyPermission(proxy.getPermission()); // set permission
+                appPreference.setCurrentUserID(proxy.getUser().getServerID()); // currentUserID changes to client user id
                 sendCommonRequest();
             }
         });
@@ -262,6 +264,7 @@ public class ClientActivity extends Activity
                         {
                             appPreference.setCurrentUserID(appPreference.getProxyUserID());
                             appPreference.setProxyUserID(-1);
+                            appPreference.setProxyPermission(-1);
                             appPreference.saveAppPreference();
                             ViewUtils.showToast(ClientActivity.this, R.string.failed_to_switch_identity, response.getErrorMessage());
                         }

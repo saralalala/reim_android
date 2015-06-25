@@ -166,7 +166,7 @@ public class PhoneFindActivity extends Activity
 
         if (codeEditText.getText().toString().isEmpty())
         {
-            ViewUtils.showToast(PhoneFindActivity.this, R.string.error_no_code);
+            ViewUtils.showToast(PhoneFindActivity.this, R.string.error_code_empty);
         }
         else
         {

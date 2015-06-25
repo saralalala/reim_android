@@ -311,9 +311,11 @@ public class ProfileActivity extends Activity
             {
                 if (appPreference.isProxyMode())
                 {
+                    int permission = appPreference.getProxyPermission();
                     appPreference.setCurrentUserID(appPreference.getProxyUserID());
                     appPreference.setProxyUserID(-1);
-                    sendCommonRequest();
+                    appPreference.setProxyPermission(-1);
+                    sendCommonRequest(permission);
                 }
                 else
                 {
@@ -579,6 +581,8 @@ public class ProfileActivity extends Activity
                     final String password = appPreference.getPassword();
 
                     appPreference.setCurrentUserID(-1);
+                    appPreference.setProxyUserID(-1);
+                    appPreference.setProxyPermission(-1);
                     appPreference.setCurrentGroupID(-1);
                     appPreference.setUsername("");
                     appPreference.setPassword("");
@@ -623,7 +627,7 @@ public class ProfileActivity extends Activity
         });
     }
 
-    private void sendCommonRequest()
+    private void sendCommonRequest(final int permission)
     {
         ReimProgressDialog.show();
         CommonRequest request = new CommonRequest();
@@ -701,6 +705,7 @@ public class ProfileActivity extends Activity
                             int proxyUserID = appPreference.getProxyUserID();
                             appPreference.setProxyUserID(appPreference.getCurrentUserID());
                             appPreference.setCurrentUserID(proxyUserID);
+                            appPreference.setProxyPermission(permission);
                             appPreference.saveAppPreference();
                             ViewUtils.showToast(ProfileActivity.this, R.string.failed_to_switch_identity, response.getErrorMessage());
                         }

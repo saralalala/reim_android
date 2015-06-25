@@ -553,7 +553,19 @@ public class Item
         {
             public int compare(Item item1, Item item2)
             {
-                return (int) (item2.getAmount() - item1.getAmount());
+                double amount1 = item1.getAmount();
+                if (!item1.getCurrency().isCNY())
+                {
+                    amount1 *= item1.getRate() != 0? item1.getRate() : item1.getCurrency().getRate();
+                }
+
+                double amount2 = item2.getAmount();
+                if (!item2.getCurrency().isCNY())
+                {
+                    amount2 *= item2.getRate() != 0? item2.getRate() : item2.getCurrency().getRate();
+                }
+
+                return (int) (amount2 - amount1);
             }
         });
     }

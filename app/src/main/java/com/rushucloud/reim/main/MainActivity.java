@@ -270,9 +270,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             public void onClick(View v)
             {
                 hideReimGuideLayout();
-                Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
-                intent.putExtra("fromReim", true);
-                ViewUtils.goForward(MainActivity.this, intent);
+                if (appPreference.hasProxyEditPermission())
+                {
+                    Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
+                    intent.putExtra("fromReim", true);
+                    ViewUtils.goForward(MainActivity.this, intent);
+                }
+                else
+                {
+                    ViewUtils.showToast(MainActivity.this, R.string.error_create_item_no_permission);
+                }
             }
         });
 

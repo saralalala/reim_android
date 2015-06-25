@@ -32,7 +32,6 @@ import java.util.List;
 
 import classes.model.Category;
 import classes.model.Comment;
-import classes.model.Currency;
 import classes.model.Image;
 import classes.model.Item;
 import classes.model.Report;
@@ -210,35 +209,42 @@ public class EditReportActivity extends Activity
         {
             public void onClick(View v)
             {
-                if (newReport)
+                if (appPreference.hasProxyEditPermission())
                 {
-                    MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_SAVE");
-                }
-                else
-                {
-                    MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_SAVE");
-                }
-
-                hideSoftKeyboard();
-                if (saveReport())
-                {
-                    if (SyncUtils.canSyncToServer())
+                    if (newReport)
                     {
-                        SyncUtils.isSyncOnGoing = true;
-                        SyncUtils.syncAllToServer(new SyncDataCallback()
-                        {
-                            public void execute()
-                            {
-                                SyncUtils.isSyncOnGoing = false;
-                            }
-                        });
+                        MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_SAVE");
                     }
-                    ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_saving_report);
-                    goBackToMainActivity();
+                    else
+                    {
+                        MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_SAVE");
+                    }
+
+                    hideSoftKeyboard();
+                    if (saveReport())
+                    {
+                        if (SyncUtils.canSyncToServer())
+                        {
+                            SyncUtils.isSyncOnGoing = true;
+                            SyncUtils.syncAllToServer(new SyncDataCallback()
+                            {
+                                public void execute()
+                                {
+                                    SyncUtils.isSyncOnGoing = false;
+                                }
+                            });
+                        }
+                        ViewUtils.showToast(EditReportActivity.this, R.string.succeed_in_saving_report);
+                        goBackToMainActivity();
+                    }
+                    else
+                    {
+                        ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_save_report);
+                    }
                 }
                 else
                 {
-                    ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_save_report);
+                    ViewUtils.showToast(EditReportActivity.this, R.string.error_modify_report_no_permission);
                 }
             }
         });
@@ -408,50 +414,57 @@ public class EditReportActivity extends Activity
         {
             public void onClick(View v)
             {
-                if (newReport)
+                if (appPreference.hasProxyEditPermission())
                 {
-                    MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_SUBMIT");
-                }
-                else
-                {
-                    MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_SUBMIT");
-                }
-
-                hideSoftKeyboard();
-
-                for (Item item : itemList)
-                {
-                    if (item.missingInfo())
+                    if (newReport)
                     {
-                        ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_miss_info);
-                        return;
+                        MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_NEW_SUBMIT");
+                    }
+                    else
+                    {
+                        MobclickAgent.onEvent(EditReportActivity.this, "UMENG_REPORT_EDIT_SUBMIT");
+                    }
+
+                    hideSoftKeyboard();
+
+                    for (Item item : itemList)
+                    {
+                        if (item.missingInfo())
+                        {
+                            ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_miss_info);
+                            return;
+                        }
+                    }
+
+                    if (!PhoneUtils.isNetworkConnected())
+                    {
+                        ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_network_unavailable);
+                    }
+                    else if (titleEditText.getText().toString().isEmpty())
+                    {
+                        ViewUtils.showToast(EditReportActivity.this, R.string.error_report_title_empty);
+                        ViewUtils.requestFocus(EditReportActivity.this, titleEditText);
+                    }
+                    else if (report.getManagerList() == null || report.getManagerList().isEmpty())
+                    {
+                        ViewUtils.showToast(EditReportActivity.this, R.string.no_manager);
+                    }
+                    else if (itemList.isEmpty())
+                    {
+                        ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_empty);
+                    }
+                    else if (SyncUtils.isSyncOnGoing)
+                    {
+                        ViewUtils.showToast(EditReportActivity.this, R.string.prompt_sync_ongoing);
+                    }
+                    else
+                    {
+                        submitReport();
                     }
                 }
-
-                if (!PhoneUtils.isNetworkConnected())
-                {
-                    ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_network_unavailable);
-                }
-                else if (titleEditText.getText().toString().isEmpty())
-                {
-                    ViewUtils.showToast(EditReportActivity.this, R.string.error_report_title_empty);
-                    ViewUtils.requestFocus(EditReportActivity.this, titleEditText);
-                }
-                else if (report.getManagerList() == null || report.getManagerList().isEmpty())
-                {
-                    ViewUtils.showToast(EditReportActivity.this, R.string.no_manager);
-                }
-                else if (itemList.isEmpty())
-                {
-                    ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_empty);
-                }
-                else if (SyncUtils.isSyncOnGoing)
-                {
-                    ViewUtils.showToast(EditReportActivity.this, R.string.prompt_sync_ongoing);
-                }
                 else
                 {
-                    submitReport();
+                    ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_no_permission);
                 }
             }
         });
@@ -555,8 +568,7 @@ public class EditReportActivity extends Activity
             else
             {
                 containsForeignCurrency = true;
-                Currency currency = dbManager.getCurrency(item.getCurrency().getCode());
-                amount += item.getAmount() * currency.getRate() / 100;
+                amount += item.getAmount() * item.getCurrency().getRate() / 100;
             }
 
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);

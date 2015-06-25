@@ -54,7 +54,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import classes.model.BankAccount;
 import classes.model.Category;
 import classes.model.Currency;
 import classes.model.DidiExpense;
@@ -325,94 +324,101 @@ public class EditItemActivity extends Activity
             {
                 MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_SAVE");
 
-                try
+                if (appPreference.hasProxyEditPermission())
                 {
-                    hideSoftKeyboard();
-
-                    item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
-                    item.setConsumer(appPreference.getCurrentUser());
-                    item.setNote(noteEditText.getText().toString());
-                    item.setLocalUpdatedDate(Utils.getCurrentTime());
-
-                    if (newItem)
+                    try
                     {
-                        item.setCreatedDate(item.getLocalUpdatedDate());
-                    }
+                        hideSoftKeyboard();
 
-                    if (fromReim && !fromPickItems && item.getType() != Item.TYPE_REIM && !item.isAaApproved())
-                    {
-                        Builder builder = new Builder(EditItemActivity.this);
-                        builder.setTitle(R.string.option);
-                        builder.setMessage(R.string.prompt_save_approve_ahead_item);
-                        builder.setPositiveButton(R.string.only_save, new DialogInterface.OnClickListener()
+                        item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
+                        item.setConsumer(appPreference.getCurrentUser());
+                        item.setNote(noteEditText.getText().toString());
+                        item.setLocalUpdatedDate(Utils.getCurrentTime());
+
+                        if (newItem)
                         {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_PROVEAHEAD_SAVE");
-                                saveItem();
-                            }
-                        });
-                        builder.setNeutralButton(R.string.send_to_approve, new DialogInterface.OnClickListener()
+                            item.setCreatedDate(item.getLocalUpdatedDate());
+                        }
+
+                        if (fromReim && !fromPickItems && item.getType() != Item.TYPE_REIM && !item.isAaApproved())
                         {
-                            public void onClick(DialogInterface dialog, int which)
+                            Builder builder = new Builder(EditItemActivity.this);
+                            builder.setTitle(R.string.option);
+                            builder.setMessage(R.string.prompt_save_approve_ahead_item);
+                            builder.setPositiveButton(R.string.only_save, new DialogInterface.OnClickListener()
                             {
-                                MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_PROVEAHEAD_SUBMIT");
-
-                                Report report;
-                                if (item.getBelongReport() == null)
+                                public void onClick(DialogInterface dialog, int which)
                                 {
-                                    int title = item.getType() == Item.TYPE_BUDGET ? R.string.report_budget : R.string.report_borrowing;
-                                    report = new Report();
-                                    report.setTitle(getString(title));
-                                    report.setSender(appPreference.getCurrentUser());
-                                    report.setCreatedDate(Utils.getCurrentTime());
-                                    report.setLocalUpdatedDate(Utils.getCurrentTime());
-                                    report.setType(item.getType());
-                                    report.setManagerList(appPreference.getCurrentUser().buildBaseManagerList());
-                                    report.setLocalID(dbManager.insertReport(report));
-
-                                    item.setBelongReport(report);
+                                    MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_PROVEAHEAD_SAVE");
+                                    saveItem();
                                 }
-                                else
+                            });
+                            builder.setNeutralButton(R.string.send_to_approve, new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int which)
                                 {
-                                    report = item.getBelongReport();
+                                    MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_PROVEAHEAD_SUBMIT");
+
+                                    Report report;
+                                    if (item.getBelongReport() == null)
+                                    {
+                                        int title = item.getType() == Item.TYPE_BUDGET ? R.string.report_budget : R.string.report_borrowing;
+                                        report = new Report();
+                                        report.setTitle(getString(title));
+                                        report.setSender(appPreference.getCurrentUser());
+                                        report.setCreatedDate(Utils.getCurrentTime());
+                                        report.setLocalUpdatedDate(Utils.getCurrentTime());
+                                        report.setType(item.getType());
+                                        report.setManagerList(appPreference.getCurrentUser().buildBaseManagerList());
+                                        report.setLocalID(dbManager.insertReport(report));
+
+                                        item.setBelongReport(report);
+                                    }
+                                    else
+                                    {
+                                        report = item.getBelongReport();
+                                    }
+
+                                    dbManager.syncItem(item);
+                                    ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("report", report);
+                                    Intent intent = new Intent(EditItemActivity.this, EditReportActivity.class);
+                                    intent.putExtras(bundle);
+                                    ViewUtils.goForwardAndFinish(EditItemActivity.this, intent);
                                 }
-
-                                dbManager.syncItem(item);
-                                ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
-
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("report", report);
-                                Intent intent = new Intent(EditItemActivity.this, EditReportActivity.class);
-                                intent.putExtras(bundle);
-                                ViewUtils.goForwardAndFinish(EditItemActivity.this, intent);
-                            }
-                        });
-                        builder.setNegativeButton(R.string.cancel, null);
-                        builder.create().show();
+                            });
+                            builder.setNegativeButton(R.string.cancel, null);
+                            builder.create().show();
+                        }
+                        else if (fromPickItems)
+                        {
+                            item.setLocalID(dbManager.insertItem(item));
+                            ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+                            Intent intent = new Intent();
+                            intent.putExtra("itemID", item.getLocalID());
+                            intent.putExtra("type", item.getType());
+                            ViewUtils.goBackWithResult(EditItemActivity.this, intent);
+                        }
+                        else
+                        {
+                            saveItem();
+                        }
                     }
-                    else if (fromPickItems)
+                    catch (NumberFormatException e)
                     {
-                        item.setLocalID(dbManager.insertItem(item));
-                        ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
-                        Intent intent = new Intent();
-                        intent.putExtra("itemID", item.getLocalID());
-                        intent.putExtra("type", item.getType());
-                        ViewUtils.goBackWithResult(EditItemActivity.this, intent);
+                        ViewUtils.showToast(EditItemActivity.this, R.string.error_number_wrong_format);
+                        ViewUtils.requestFocus(EditItemActivity.this, amountEditText);
                     }
-                    else
+                    catch (Exception e)
                     {
-                        saveItem();
+                        e.printStackTrace();
                     }
                 }
-                catch (NumberFormatException e)
+                else
                 {
-                    ViewUtils.showToast(EditItemActivity.this, R.string.error_number_wrong_format);
-                    ViewUtils.requestFocus(EditItemActivity.this, amountEditText);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
+                    ViewUtils.showToast(EditItemActivity.this, R.string.error_create_report_no_permission);
                 }
             }
         });
