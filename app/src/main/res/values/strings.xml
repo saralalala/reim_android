@@ -260,6 +260,7 @@
     <string name="change_wechat">更换绑定微信</string>
     <string name="resend_active_email">重新发送激活邮件</string>
     <string name="import_didi_expenses">导入滴滴打车消费记录</string>
+    <string name="has_imported">(已导入)</string>
     <string name="bank_info">银行账户</string>
     <string name="bank_account">银行账号</string>
     <string name="bank_account_name">户名</string>

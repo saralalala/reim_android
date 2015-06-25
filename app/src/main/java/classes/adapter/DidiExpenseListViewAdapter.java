@@ -39,6 +39,10 @@ public class DidiExpenseListViewAdapter extends BaseAdapter
         TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
         timeTextView.setText(expense.getTime());
 
+        int visibility = expense.isUsed()? View.VISIBLE : View.INVISIBLE;
+        TextView usedTextView = (TextView) convertView.findViewById(R.id.usedTextView);
+        usedTextView.setVisibility(visibility);
+
         TextView startTextView = (TextView) convertView.findViewById(R.id.startTextView);
         startTextView.setText(expense.getStart());
 
