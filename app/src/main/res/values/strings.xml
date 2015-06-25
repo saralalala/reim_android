@@ -329,7 +329,6 @@
     <string name="input_account_name">请输入户名</string>
     <string name="input_bank_account">请输入银行账号</string>
     <string name="input_code">请输入验证码</string>
-    <string name="input_amount">请输入金额</string>
     <string name="input_note">请输入备注</string>
     <string name="input_vendor">请输入商家</string>
     <string name="input_location">请输入城市</string>
@@ -381,8 +380,7 @@
     <string name="prompt_wechat_share">你可以把「云报销」分享到同事们使用的微信群，让大家迅速加入你创建的公司。</string>
     <string name="prompt_all_in_same_company">你们已经是同一个公司的同事了</string>
     <string name="prompt_latest_version">当前已是最新版本</string>
-    
-    <string name="error_wrong_code">验证码错误</string>
+
     <string name="error_code_empty">验证码不能为空</string>
     <string name="error_username_empty">请输入用户名</string>
     <string name="error_username_wrong_format">输入内容有错误，请修正标红部分后再邀请</string>
@@ -402,10 +400,8 @@
     <string name="error_old_password_empty">请输入旧密码</string>
     <string name="error_new_password_empty">请输入新密码</string>
     <string name="error_confirm_password_empty">请再次输入密码</string>
-    <string name="error_same_password">新旧密码重复，请重新输入</string>
     <string name="error_wrong_confirm_password">新密码两次输入不一致</string>
     <string name="error_wrong_set_password_confirm">密码两次输入不一致</string>
-    <string name="error_email_or_phone_empty">请输入手机号或邮箱</string>
     <string name="error_email_or_phone_wrong_format">手机号或邮箱格式不正确</string>
     <string name="error_category_name_empty">请输入类别名称</string>
     <string name="error_tag_name_empty">请输入标签名称</string>
@@ -420,10 +416,8 @@
     <string name="error_modify_network_unavailable">网络未连接，无法修改</string>
     <string name="error_delete_network_unavailable">网络未连接，无法删除</string>
     <string name="error_delete_item_submitted">此笔消费已提交，无法删除</string>
-    <string name="error_delete_report_submitted">你尚未处理该报告，无法删除</string>
     <string name="error_export_network_unavailable">网络未连接，无法导出</string>
     <string name="error_save_network_unavailable">网络未连接，无法保存</string>
-    <string name="error_send_network_unavailable">网络未连接，无法发送审批报告</string>
     <string name="error_get_data_network_unavailable">网络未连接，无法获取数据</string>
     <string name="error_get_vendor_network_unavailable">网络未连接，无法联网获取商家，请手动输入商家名称</string>
     <string name="error_download_invoice_network_unavailable">网络未连接，无法下载照片</string>
@@ -440,7 +434,6 @@
     <string name="error_update_network_unavailable">网络未连接，无法更新信息</string>
     <string name="error_request_network_unavailable">网络未连接，无法发送请求</string>
     <string name="error_unbind_network_unavailable">网络未连接，无法解绑</string>
-    <string name="error_gps_unavailable">定位服务不可用，请打开定位服务或手动输入商家名称</string>
     <string name="error_self_as_manager">不能选择自己作为上级</string>
     <string name="error_trial_invite">试用账号暂时无法邀请别人</string>
     <string name="error_no_company_invite">还没有创建公司，暂时不能邀请微信好友</string>
@@ -452,7 +445,6 @@
     <string name="error_submit_report_empty">请添加消费后再提交报告</string>
     <string name="error_submit_report_item_not_uploaded">消费未被上传，报告不可被提交</string>
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>
-    <string name="error_account_timeout">你的账号已经其他地方登录，本地已经下线。</string>
     <string name="error_images_maximum">最多只能选择%1$d张照片</string>
     <string name="error_contact_no_permission">未能读取到你的通讯录信息，可能是由于你未授权「云报销」读取你的通讯录所致。</string>
     <string name="error_wechat_common">微信错误</string>
