@@ -25,6 +25,7 @@
     <string name="month">月</string>
     <string name="second">秒</string>
     <string name="total">总计</string>
+    <string name="city">市</string>
     <string name="province">省</string>
     <string name="region">自治区</string>
     <string name="monday">周一</string>
@@ -52,6 +53,7 @@
     <string name="option">选项</string>
     <string name="search">搜索</string>
     <string name="status">状态</string>
+    <string name="all">全部</string>
     <string name="detail">详情</string>
     <string name="loading">等待</string>
     <string name="image">图片</string>
@@ -86,13 +88,7 @@
     <string name="reset_password">设置新密码</string>
     <string name="complete_info">完善个人信息</string>
 
-    <string name="welcome_to_use_1">欢</string>
-    <string name="welcome_to_use_2">迎</string>
-    <string name="welcome_to_use_3">使</string>
-    <string name="welcome_to_use_4">用</string>
-    <string name="welcome_to_use_5">云</string>
-    <string name="welcome_to_use_6">报</string>
-    <string name="welcome_to_use_7">销</string>
+    <string name="welcome_to_use">欢迎使用云报销</string>
     <string name="introduction">「云报销」是一款财务报销管理工具。你可以在这里随时进行费用记录、申请和审批，也可以更好地管理企业的支出。开始使用前，请先用30秒设置你的账户。</string>
     <string name="join_company">加入公司</string>
     <string name="are_you_admin">您是管理员？</string>
@@ -116,21 +112,8 @@
     <string name="search_result">搜索结果</string>
     <string name="search_result_empty">没有符合条件的公司</string>
     <string name="copy_link"><u>复制链接</u></string>
-    <string name="applied_to_join_1">已</string>
-    <string name="applied_to_join_2">申</string>
-    <string name="applied_to_join_3">请</string>
-    <string name="applied_to_join_4">加</string>
-    <string name="applied_to_join_5">入</string>
-    <string name="succeed_in_creating_company_1">公</string>
-    <string name="succeed_in_creating_company_2">司</string>
-    <string name="succeed_in_creating_company_3">创</string>
-    <string name="succeed_in_creating_company_4">建</string>
-    <string name="succeed_in_creating_company_5">成</string>
-    <string name="succeed_in_creating_company_6">功</string>
-    <string name="joined_1">你</string>
-    <string name="joined_2">已</string>
-    <string name="joined_3">加</string>
-    <string name="joined_4">入</string>
+    <string name="applied_to_join">已申请加入</string>
+    <string name="joined">你已加入</string>
 
     <string name="reimbursement">Expense</string>
     <string name="report">Report</string>
@@ -170,6 +153,7 @@
     <string name="tag">标　签</string>
     <string name="member">参与者</string>
     <string name="time">时　间</string>
+    <string name="currency">货　币</string>
     <string name="note">备　注</string>
     <string name="transport">交通</string>
     <string name="choose_category">选择类别</string>
@@ -187,6 +171,7 @@
     <string name="report_not_available">未加入报告</string>
     <string name="vendor_not_available">未填写商家</string>
     <string name="pick_image">选择图片</string>
+    <string name="from_to">从 %1$s 至 %2$s</string>
 
     <string name="my_report">我的报告</string>
     <string name="others_report">收到的报告</string>
@@ -203,6 +188,7 @@
     <string name="approver">审核人</string>
     <string name="cc">抄　送</string>
     <string name="total_amount">总　额</string>
+    <string name="equivalent_amount">折　合</string>
     <string name="item_count">%1$d笔消费</string>
     <string name="item_count_added">已添加%1$d笔消费</string>
     <string name="choose_manager">选择审批人</string>
@@ -238,6 +224,7 @@
     <string name="last_12_months">近12个月</string>
     <string name="stat_by_category">类别统计</string>
     <string name="stat_by_month">月份统计</string>
+    <string name="stat_by_currency">货币统计</string>
     <string name="stat_by_tag">标签统计</string>
     <string name="stat_by_member">人员统计</string>
     <string name="choose_month">选择月份</string>
@@ -271,17 +258,27 @@
     <string name="change_email">更换绑定邮箱</string>
     <string name="change_phone">更换绑定手机</string>
     <string name="change_wechat">更换绑定微信</string>
+    <string name="resend_active_email">重新发送激活邮件</string>
     <string name="import_didi_expenses">导入滴滴打车消费记录</string>
     <string name="bank_info">银行账户</string>
     <string name="bank_account">银行账号</string>
     <string name="bank_account_name">户名</string>
     <string name="bank_location">开户地</string>
     <string name="bank_branch">开户行</string>
+    <string name="set_proxy">代理人设置</string>
+    <string name="proxy">代理人</string>
+    <string name="choose_proxy">选择代理人</string>
+    <string name="proxy_scope">代理范围</string>
+    <string name="only_approve">只负责审批</string>
+    <string name="only_submit">只负责提交</string>
     <string name="company">公司</string>
     <string name="change_company">更换公司</string>
     <string name="not_joined">未加入</string>
     <string name="waiting_for_approve">（待批准）</string>
     <string name="nickname">姓名</string>
+    <string name="switch_identity">切换身份</string>
+    <string name="switch_client">切换对象</string>
+    <string name="switch_back">切换回原账号</string>
     <string name="change_password">修改密码</string>
     <string name="set_password">设置密码</string>
     <string name="default_manager">上级设置</string>
@@ -333,7 +330,6 @@
     <string name="input_code">请输入验证码</string>
     <string name="input_amount">请输入金额</string>
     <string name="input_note">请输入备注</string>
-    <string name="input_keyword">请输入关键字</string>
     <string name="input_vendor">请输入商家</string>
     <string name="input_location">请输入城市</string>
     <string name="input_member">请输入参与者信息</string>
@@ -343,6 +339,7 @@
     <string name="input_cc">请输入抄送人信息</string>
     <string name="input_comment">请输入评论</string>
     <string name="input_admin">请输入管理员信息</string>
+    <string name="input_proxy">请输入代理人信息</string>
     <string name="input_nickname">请填写你的真实姓名</string>
     <string name="input_company_name">请设置公司名称</string>
     <string name="input_feedback">请输入你的意见或建议</string>
@@ -353,20 +350,22 @@
     <string name="input_user_contact">请输入对方手机号或邮箱</string>
 
     <string name="prompt_loading">正在努力加载中&#8230;</string>
+    <string name="prompt_press_back_to_exit">再按一次返回键退出应用</string>
     <string name="prompt_sign_out">确认要切换当前账号</string>
     <string name="prompt_unbind">确认要解绑？</string>
     <string name="prompt_last_certification">抱歉，这是你唯一的登录凭证，暂时无法解绑。</string>
     <string name="prompt_wechat_only">该账号仅绑定了微信，如需更换，请先绑定邮箱并设置密码</string>
+    <string name="prompt_resend_active_email_wait">邮件已发送，请%1$d秒后再次尝试</string>
     <string name="prompt_save_approve_ahead_item">这是一笔预申请的消费，您是想仅保存此笔消费还是要直接发送给上级审批？</string>
     <string name="prompt_delete_item">是否要删除此笔消费？</string>
     <string name="prompt_delete_report">是否要删除此报告？</string>
     <string name="prompt_delete_category">是否要删除此类别？</string>
     <string name="prompt_delete_tag">是否要删除此标签？</string>
-    <string name="prompt_press_back_to_exit">再按一次返回键退出应用</string>
     <string name="prompt_sync_ongoing">正在同步中</string>
     <string name="prompt_report_approved">报告已通过</string>
     <string name="prompt_report_rejected">报告已退回</string>
     <string name="prompt_max_image_count">对不起，最多只能添加16张图片</string>
+    <string name="prompt_choose_proxy">请选择代理人</string>
     <string name="prompt_feedback">告诉我们你在使用过程中遇到的问题，或对产品提出你的建议。我们会在1个工作日内给你答复。</string>
     <string name="prompt_feedback_phone">请留下联系方式，方便我们与你沟通</string>
     <string name="prompt_sender">创建人：</string>
@@ -497,7 +496,7 @@
     <string name="error_network_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
     <string name="error_network_not_unique">消费已被添加进另外的报告中</string>
     <string name="error_network_company_exists">公司已存在</string>
-
+    <string name="error_proxy_error">被代理人不在你公司，无法进行该操作</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>
@@ -508,6 +507,9 @@
     <string name="succeed_in_unbinding_email">解绑邮箱成功</string>
     <string name="succeed_in_unbinding_phone">解绑手机成功</string>
     <string name="succeed_in_unbinding_wechat">解绑微信成功</string>
+    <string name="succeed_in_unbinding_didi">解绑滴滴打车成功</string>
+    <string name="succeed_in_resending_active_email">激活邮件已发送</string>
+    <string name="succeed_in_binding">绑定成功</string>
     <string name="succeed_in_changing_default_manager">默认上级修改成功</string>
     <string name="succeed_in_sending_feedback">反馈发送成功！</string>
     <string name="succeed_in_sending_invite_reply">邀请回复发送成功</string>
@@ -520,19 +522,23 @@
     <string name="succeed_in_creating_company">公司创建成功</string>
     <string name="succeed_in_creating_category">创建类别成功</string>
     <string name="succeed_in_creating_tag">创建标签成功</string>
+    <string name="succeed_in_creating_proxy">添加代理人成功</string>
     <string name="succeed_in_modifying">修改成功</string>
     <string name="succeed_in_modifying_user_info">修改成功</string>
     <string name="succeed_in_modifying_category">修改成功</string>
     <string name="succeed_in_modifying_tag">修改成功</string>
+    <string name="succeed_in_modifying_proxy">修改成功</string>
+    <string name="succeed_in_deleting">删除成功</string>
     <string name="succeed_in_deleting_category">删除成功</string>
     <string name="succeed_in_deleting_tag">删除成功</string>
+    <string name="succeed_in_deleting_proxy">删除成功</string>
     <string name="succeed_in_sending_invite">邀请发送成功</string>
     <string name="succeed_in_sending_comment">发表成功</string>
     <string name="succeed_in_submitting_report">提交成功</string>
     <string name="succeed_in_revoking_report">撤回成功</string>
     <string name="succeed_in_alerting">已提醒对方审批报告</string>
-    <string name="succeed_in_deleting">删除成功</string>
     <string name="succeed_in_applying">申请发送成功，管理员批准后可正式加入</string>
+    <string name="succeed_in_switch_identity">切换身份成功</string>
     <string name="succeed_in_setting_account_name">户名设置成功</string>
     <string name="succeed_in_setting_bank_account">银行账户设置成功</string>
     <string name="succeed_in_setting_bank_name">开户行设置成功</string>
@@ -561,11 +567,14 @@
     <string name="failed_to_create_report">创建失败</string>
     <string name="failed_to_create_category">创建失败</string>
     <string name="failed_to_create_tag">创建失败</string>
+    <string name="failed_to_create_proxy">创建失败</string>
     <string name="failed_to_modify_item">修改失败</string>
     <string name="failed_to_modify_category">修改失败</string>
     <string name="failed_to_modify_tag">修改失败</string>
+    <string name="failed_to_modify_proxy">修改失败</string>
     <string name="failed_to_delete_category">删除失败</string>
     <string name="failed_to_delete_tag">删除失败</string>
+    <string name="failed_to_delete_proxy">删除失败</string>
     <string name="failed_to_search">网络搜索失败</string>
     <string name="failed_to_send_feedback">反馈发送失败</string>
     <string name="failed_to_change_manager">默认上级修改失败</string>
@@ -587,12 +596,17 @@
     <string name="failed_to_unbind_email">解绑邮箱失败</string>
     <string name="failed_to_unbind_phone">解绑手机失败</string>
     <string name="failed_to_unbind_wechat">解绑微信失败</string>
+    <string name="failed_to_unbind_didi">解绑滴滴打车失败</string>
+    <string name="failed_to_resend_active_email">激活邮件发送失败</string>
     <string name="failed_to_alert">提醒发送失败</string>
     <string name="failed_to_get_message_list">获取消息列表失败</string>
+    <string name="failed_to_get_didi_token">获取滴滴Token失败</string>
+    <string name="failed_to_bind_didi">滴滴账号绑定失败</string>
     <string name="failed_to_get_didi_expenses">获取滴滴打车消费列表失败</string>
     <string name="failed_to_delete">删除失败</string>
     <string name="failed_to_search_companies">搜索公司失败</string>
     <string name="failed_to_apply">申请加入公司失败</string>
+    <string name="failed_to_switch_identity">切换身份失败</string>
     <string name="failed_to_set_account_name">设置户名失败</string>
     <string name="failed_to_set_bank_account">设置银行账户失败</string>
     <string name="failed_to_set_bank_name">设置开户行失败</string>
@@ -616,6 +630,8 @@
     <string name="no_tags">当前没有任何标签</string>
     <string name="no_expenses">当前没有任何消费记录</string>
     <string name="no_filter_result">抱歉，没有找到符合的结果</string>
+    <string name="no_proxy">你暂时还未设置代理人</string>
+    <string name="no_client">你暂时还未被任何人设置为代理人</string>
 
     <string name="apply_new">你发送了加入「%1$s」的申请</string>
     <string name="apply_others_new">%1$s 申请加入「%2$s」</string>
@@ -645,6 +661,34 @@
     <string name="status_borrowing">借</string>
     <string name="status_approve_ahead_approved">(已审批)</string>
     <string name="status_cc">抄送</string>
+
+    <string name="proxy_permission_all">提交 &#038; 审批</string>
+    <string name="proxy_permission_approve">仅审批</string>
+    <string name="proxy_permission_submit">仅提交</string>
+
+    <string name="currency_cny">人民币</string>
+    <string name="currency_usd">美元</string>
+    <string name="currency_eur">欧元</string>
+    <string name="currency_hkd">港币</string>
+    <string name="currency_mop">澳门元</string>
+    <string name="currency_twd">新台币</string>
+    <string name="currency_jpy">日元</string>
+    <string name="currency_ker">韩国元</string>
+    <string name="currency_gbp">英镑</string>
+    <string name="currency_rub">卢布</string>
+    <string name="currency_sgd">新加坡元</string>
+    <string name="currency_php">菲律宾比索</string>
+    <string name="currency_idr">印尼卢比</string>
+    <string name="currency_myr">马来西亚元</string>
+    <string name="currency_thb">泰铢</string>
+    <string name="currency_cad">加拿大元</string>
+    <string name="currency_aud">澳大利亚元</string>
+    <string name="currency_nzd">新西兰元</string>
+    <string name="currency_chf">瑞士法郎</string>
+    <string name="currency_dkk">丹麦克朗</string>
+    <string name="currency_nok">挪威克朗</string>
+    <string name="currency_sek">瑞典克朗</string>
+    <string name="currency_brl">巴西里亚尔</string>
 
     <string name="xlistview_header_hint_normal">下拉更新</string>
     <string name="xlistview_header_hint_ready">释放更新</string>

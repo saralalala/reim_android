@@ -330,7 +330,6 @@
     <string name="input_code">请输入验证码</string>
     <string name="input_amount">请输入金额</string>
     <string name="input_note">请输入备注</string>
-    <string name="input_keyword">请输入关键字</string>
     <string name="input_vendor">请输入商家</string>
     <string name="input_location">请输入城市</string>
     <string name="input_member">请输入参与者信息</string>

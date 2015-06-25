@@ -81,6 +81,8 @@ public class StatisticsFragment extends Fragment
     private LinearLayout leftCategoryLayout;
     private LinearLayout rightCategoryLayout;
     private LinearLayout memberLayout;
+    private RelativeLayout othersCurrencyTitleLayout;
+    private LinearLayout othersCurrencyLayout;
     private RelativeLayout othersTagTitleLayout;
     private LinearLayout othersTagLayout;
 
@@ -321,6 +323,8 @@ public class StatisticsFragment extends Fragment
 
         leftCategoryLayout = (LinearLayout) othersView.findViewById(R.id.leftCategoryLayout);
         rightCategoryLayout = (LinearLayout) othersView.findViewById(R.id.rightCategoryLayout);
+        othersCurrencyTitleLayout = (RelativeLayout) othersView.findViewById(R.id.currencyTitleLayout);
+        othersCurrencyLayout = (LinearLayout) othersView.findViewById(R.id.currencyLayout);
         othersTagTitleLayout = (RelativeLayout) othersView.findViewById(R.id.tagTitleLayout);
         othersTagLayout = (LinearLayout) othersView.findViewById(R.id.tagLayout);
         memberLayout = (LinearLayout) othersView.findViewById(R.id.memberLayout);
@@ -531,32 +535,47 @@ public class StatisticsFragment extends Fragment
                     categoryLayout.addView(view);
                 }
             }
+
+            View lastView = categoryLayout.getChildAt(categoryLayout.getChildCount() - 1);
+            View divider = lastView.findViewById(R.id.divider);
+            divider.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void drawCurrency(HashMap<String, Double> currencyData)
+    private void drawCurrency(HashMap<String, Double> currencyData, final boolean mineData)
     {
         if (currencyData.size() > 1)
         {
+            if (mineData)
+            {
+                mineCurrencyTitleLayout.setVisibility(View.VISIBLE);
+                mineCurrencyLayout.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                othersCurrencyTitleLayout.setVisibility(View.VISIBLE);
+                othersCurrencyLayout.setVisibility(View.VISIBLE);
+            }
+
             for (String code : currencyData.keySet())
             {
                 final Currency currency = dbManager.getCurrency(code);
                 if (currency != null)
                 {
                     View view = View.inflate(getActivity(), R.layout.list_currency_stat, null);
-                    view.setBackgroundResource(R.drawable.list_item_drawable);
-                    view.setOnClickListener(new View.OnClickListener()
-                    {
-                        public void onClick(View v)
-                        {
+//                    view.setBackgroundResource(R.drawable.list_item_drawable);
+//                    view.setOnClickListener(new View.OnClickListener()
+//                    {
+//                        public void onClick(View v)
+//                        {
 //                            Bundle bundle = new Bundle();
 //                            bundle.putBoolean("mineData", true);
 //                            bundle.putInt("categoryID", localCategory.getServerID());
 //                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
 //                            intent.putExtras(bundle);
 //                            ViewUtils.goForward(getActivity(), intent);
-                        }
-                    });
+//                        }
+//                    });
 
                     TextView currencyTextView = (TextView) view.findViewById(R.id.currencyTextView);
                     currencyTextView.setText(currency.getName());
@@ -568,14 +587,39 @@ public class StatisticsFragment extends Fragment
                     amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
                     amountTextView.setText(Utils.formatAmount(currencyData.get(code)));
 
-                    mineCurrencyLayout.addView(view);
+                    if (mineData)
+                    {
+                        mineCurrencyLayout.addView(view);
+                    }
+                    else
+                    {
+                        othersCurrencyLayout.addView(view);
+                    }
                 }
             }
+
+            if (mineData)
+            {
+                View lastView = mineCurrencyLayout.getChildAt(mineCurrencyLayout.getChildCount() - 1);
+                View divider = lastView.findViewById(R.id.divider);
+                divider.setVisibility(View.INVISIBLE);
+            }
+            else
+            {
+                View lastView = othersCurrencyLayout.getChildAt(othersCurrencyLayout.getChildCount() - 1);
+                View divider = lastView.findViewById(R.id.divider);
+                divider.setVisibility(View.INVISIBLE);
+            }
         }
-        else
+        else if (mineData)
         {
             mineCurrencyTitleLayout.setVisibility(View.GONE);
             mineCurrencyLayout.setVisibility(View.GONE);
+        }
+        else
+        {
+            othersCurrencyTitleLayout.setVisibility(View.GONE);
+            othersCurrencyLayout.setVisibility(View.GONE);
         }
     }
 
@@ -935,7 +979,7 @@ public class StatisticsFragment extends Fragment
                             drawCostPie(response.getOngoingAmount(), response.getNewAmount());
                             drawMonthBar(response.getMonthsData());
                             drawCategory(response.getStatCategoryList());
-                            drawCurrency(response.getCurrencyData());
+                            drawCurrency(response.getCurrencyData(), true);
                             drawTagBar(response.getStatTagList(), true);
                             mineAdapter.notifyDataSetChanged();
                             statListView.stopRefresh();
@@ -981,6 +1025,7 @@ public class StatisticsFragment extends Fragment
                         {
                             resetOthersView();
                             drawCategoryPie(response.getStatCategoryList());
+                            drawCurrency(response.getCurrencyData(), false);
                             drawTagBar(response.getStatTagList(), false);
                             drawMember(response.getStatUserList());
                             othersAdapter.notifyDataSetChanged();
