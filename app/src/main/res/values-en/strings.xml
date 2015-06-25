@@ -382,7 +382,6 @@
     <string name="prompt_latest_version">当前已是最新版本</string>
 
     <string name="error_wrong_code">验证码错误</string>
-    <string name="error_no_code">未获取到任何验证码</string>
     <string name="error_code_empty">验证码不能为空</string>
     <string name="error_username_empty">请输入用户名</string>
     <string name="error_username_wrong_format">输入内容有错误，请修正标红部分后再邀请</string>

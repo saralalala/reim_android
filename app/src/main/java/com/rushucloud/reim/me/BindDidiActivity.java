@@ -97,9 +97,6 @@ public class BindDidiActivity extends Activity
 
         codeEditText = (EditText) findViewById(R.id.codeEditText);
 
-        phoneEditText.setText("13811891565");
-        codeEditText.setText("1234");
-
         acquireCodeButton = (Button) findViewById(R.id.acquireCodeButton);
         acquireCodeButton.setOnClickListener(new OnClickListener()
         {
@@ -158,9 +155,7 @@ public class BindDidiActivity extends Activity
                 }
                 else
                 {
-//                    sendDidiSignInRequest(newPhone, inputCode);
-                    sendBindDidiRequest("18614097696", "PDPEGnQE8tj1PcsCA0yOhtZAWdU/scRLs2nWdZ7pg/RUjk2uwyAMBu/iNU8KiUMwl3lCYDWRIFT8LKood6/Vrrr6ZjHW+IIxjggOQMEHZqtxQ9oIabWrVlBLYnAC/iH7J5C57yU2cBe0LKNxQUM04aKglVGDePOtIFT2nf/7kflXCpySJLU1GifaDBmph92fJ6fvK9F3319PuZvudwAAAP//");
-//                    sendBindDidiRequest("15801628438", "GpLpaibknMm%2FeCunsE1gK8Onz7lCArFdcIOf2EykRA5UzT2qwzAQxPG7TL3Frr1%2BknWZh5GXxCAh0EdlfPeIdKn%2BU%2FxgboxxnQgA4TsWL%2Bp095tbdBcm1JIMQQjHa9YRsvV3ORvCjZZnRFdhZmUltDJqnIwfQqx2dPvvV7ZfFC2l%2BSibZ%2FlbvK4ezycAAP%2F%2F");
+                    sendDidiSignInRequest(newPhone, inputCode);
                 }
             }
         });
