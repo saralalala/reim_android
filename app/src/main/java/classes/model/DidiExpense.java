@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 
+import classes.utils.Utils;
+
 public class DidiExpense implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -15,6 +17,7 @@ public class DidiExpense implements Serializable
     public static final int TYPE_KUAI_CHE = 4;
     public static final int TYPE_LIFT = -1;
 
+    private int id;
     private String orderID = "";
     private String time = "";
     private String start = "";
@@ -22,21 +25,33 @@ public class DidiExpense implements Serializable
     private double amount = 0;
     private String city = "";
     private int type = TYPE_TAXI;
+    private boolean isUsed = false;
 
     public DidiExpense(JSONObject jObject)
     {
         try
         {
+            setId(jObject.getInt("id"));
             setOrderID(jObject.getString("oid"));
             setTime(jObject.getString("setuptime"));
             setStart(jObject.getString("fromAddress"));
             setDestionation(jObject.getString("toAddress"));
             setType(jObject.optInt("product_type", 0));
+            setUsed(Utils.intToBoolean(jObject.getInt("used")));
         }
         catch (JSONException e)
         {
             e.printStackTrace();
         }
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+    public void setId(int id)
+    {
+        this.id = id;
     }
 
     public String getOrderID()
@@ -113,4 +128,14 @@ public class DidiExpense implements Serializable
     {
         this.type = type;
     }
+
+    public boolean isUsed()
+    {
+        return isUsed;
+    }
+    public void setUsed(boolean isUsed)
+    {
+        this.isUsed = isUsed;
+    }
+
 }
