@@ -45,6 +45,7 @@ public class Item
     private double longitude = -1;
     private Currency currency = null;
     private double rate = 0;
+    private int didiID = -1;
     private List<Image> invoices = null;
     private List<User> relevantUsers = null;
     private List<Tag> tags = null;
@@ -284,6 +285,15 @@ public class Item
     public void setRate(double rate)
     {
         this.rate = rate;
+    }
+
+    public int getDidiID()
+    {
+        return didiID;
+    }
+    public void setDidiID(int didiID)
+    {
+        this.didiID = didiID;
     }
 
     public List<Image> getInvoices()

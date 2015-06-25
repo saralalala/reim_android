@@ -27,7 +27,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private DBManager(Context context)
     {
@@ -85,6 +85,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "vendor TEXT DEFAULT(''),"
                     + "currency TEXT DEFAULT(''),"
                     + "rate FLOAT DEFAULT(0),"
+                    + "didi_id INT DEFAULT(0),"
                     + "report_local_id INT DEFAULT(0),"
                     + "category_id INT DEFAULT(0),"
                     + "amount FLOAT DEFAULT(0),"
@@ -134,6 +135,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "vendor TEXT DEFAULT(''),"
                     + "currency TEXT DEFAULT(''),"
                     + "rate FLOAT DEFAULT(0),"
+                    + "didi_id INT DEFAULT(0),"
                     + "report_server_id INT DEFAULT(0),"
                     + "category_id INT DEFAULT(0),"
                     + "tags_id TEXT DEFAULT(''),"
@@ -352,6 +354,15 @@ public class DBManager extends SQLiteOpenHelper
                 db.execSQL(command);
 
                 command = "ALTER TABLE tbl_others_item ADD COLUMN rate FLOAT DEFAULT(0)";
+                db.execSQL(command);
+            }
+
+            if (oldVersion < 6)
+            {
+                String command = "ALTER TABLE tbl_item ADD COLUMN didi_id INT DEFAULT(0)";
+                db.execSQL(command);
+
+                command = "ALTER TABLE tbl_others_item ADD COLUMN didi_id INT DEFAULT(0)";
                 db.execSQL(command);
             }
         }
@@ -797,7 +808,7 @@ public class DBManager extends SQLiteOpenHelper
             int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
             int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
             String sqlString = "INSERT INTO tbl_item (server_id, vendor, report_local_id, category_id, amount, " +
-                    "pa_amount, user_id, consumed_date, note, status, location, currency, rate, createdt, " +
+                    "pa_amount, user_id, consumed_date, note, status, location, currency, rate, didi_id, createdt, " +
                     "server_updatedt, local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
                     "'" + item.getServerID() + "'," +
                     "'" + sqliteEscape(item.getVendor()) + "'," +
@@ -812,6 +823,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + sqliteEscape(item.getLocation()) + "'," +
                     "'" + item.getCurrency().getCode() + "'," +
                     "'" + item.getRate() + "'," +
+                    "'" + item.getDidiID() + "'," +
                     "'" + item.getCreatedDate() + "'," +
                     "'" + item.getServerUpdatedDate() + "'," +
                     "'" + item.getLocalUpdatedDate() + "'," +
@@ -844,8 +856,8 @@ public class DBManager extends SQLiteOpenHelper
         {
             int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
             String sqlString = "INSERT INTO tbl_others_item (server_id, vendor, report_server_id, category_id, tags_id, " +
-                    "users_id, amount, pa_amount, user_id, consumed_date, note, status, location, currency, rate, createdt, " +
-                    "server_updatedt, local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
+                    "users_id, amount, pa_amount, user_id, consumed_date, note, status, location, currency, rate, didi_id, " +
+                    "createdt, server_updatedt, local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
                     "'" + item.getServerID() + "'," +
                     "'" + sqliteEscape(item.getVendor()) + "'," +
                     "'" + item.getBelongReport().getServerID() + "'," +
@@ -861,6 +873,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + sqliteEscape(item.getLocation()) + "'," +
                     "'" + item.getCurrency().getCode() + "'," +
                     "'" + item.getRate() + "'," +
+                    "'" + item.getDidiID() + "'," +
                     "'" + item.getCreatedDate() + "'," +
                     "'" + item.getServerUpdatedDate() + "'," +
                     "'" + item.getLocalUpdatedDate() + "'," +
@@ -962,6 +975,7 @@ public class DBManager extends SQLiteOpenHelper
                     "location = '" + sqliteEscape(item.getLocation()) + "'," +
                     "currency = '" + item.getCurrency().getCode() + "'," +
                     "rate = '" + item.getRate() + "'," +
+                    "didi_id = '" + item.getDidiID() + "'," +
                     "createdt = '" + item.getCreatedDate() + "'," +
                     "server_updatedt = '" + item.getServerUpdatedDate() + "'," +
                     "local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
@@ -1004,6 +1018,7 @@ public class DBManager extends SQLiteOpenHelper
                     "location = '" + sqliteEscape(item.getLocation()) + "'," +
                     "currency = '" + item.getCurrency().getCode() + "'," +
                     "rate = '" + item.getRate() + "'," +
+                    "didi_id = '" + item.getDidiID() + "'," +
                     "createdt = '" + item.getCreatedDate() + "'," +
                     "server_updatedt = '" + item.getServerUpdatedDate() + "'," +
                     "local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
@@ -2842,6 +2857,7 @@ public class DBManager extends SQLiteOpenHelper
         item.setLocation(getStringFromCursor(cursor, "location"));
         item.setCurrency(getCurrency(getStringFromCursor(cursor, "currency")));
         item.setRate(getDoubleFromCursor(cursor, "rate"));
+        item.setDidiID(getIntFromCursor(cursor, "didi_id"));
         item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
         item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
         item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -2920,6 +2936,7 @@ public class DBManager extends SQLiteOpenHelper
         item.setLocation(getStringFromCursor(cursor, "location"));
         item.setCurrency(getCurrency(getStringFromCursor(cursor, "currency")));
         item.setRate(getDoubleFromCursor(cursor, "rate"));
+        item.setDidiID(getIntFromCursor(cursor, "didi_id"));
         item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
         item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
         item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
