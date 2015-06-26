@@ -457,7 +457,7 @@
     <string name="error_no_wifi">当前不在Wi-Fi环境下，无法更新</string>
     <string name="error_timeout">连接超时</string>
     <string name="error_create_item_no_permission">抱歉，你暂时没有创建消费的权限</string>
-    <string name="error_modify_item_no_permission">抱歉，你暂时没有修改消费的权限</string>
+    <string name="error_modify_item_no_permission">抱歉，你暂时没有修改消费的的权限</string>
     <string name="error_create_report_no_permission">抱歉，你暂时没有创建报告的权限</string>
     <string name="error_modify_report_no_permission">抱歉，你暂时没有修改报告的权限</string>
     <string name="error_submit_report_no_permission">抱歉，你暂时没有提交报告的权限</string>
@@ -646,7 +646,7 @@
     <string name="vendor_flight">飞机票</string>
     <string name="vendor_train">火车票</string>
     <string name="vendor_phone">话费</string>
-    
+
     <string name="status_draft">待提交</string>
     <string name="status_submitted">审核中</string>
     <string name="status_approved">待结算</string>
@@ -684,14 +684,14 @@
     <string name="currency_nok">挪威克朗</string>
     <string name="currency_sek">瑞典克朗</string>
     <string name="currency_brl">巴西里亚尔</string>
-    
+
     <string name="xlistview_header_hint_normal">下拉更新</string>
     <string name="xlistview_header_hint_ready">释放更新</string>
     <string name="xlistview_header_hint_loading">正在加载……</string>
     <string name="xlistview_header_last_time">最近更新：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
-    
+
     <string name="surprise">如果你能看到这个窗口，说明你是一个极有探索欲望的同学，如数科技就是喜欢这样的人。你有没有兴趣加入我们呢？请发送简历到hr@cloudbaoxiao.com。</string>
     <string name="surprise_ok">好的我知道了</string>
 
