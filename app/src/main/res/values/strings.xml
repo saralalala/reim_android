@@ -224,6 +224,7 @@
     <string name="last_12_months">近12个月</string>
     <string name="stat_by_category">类别统计</string>
     <string name="stat_by_month">月份统计</string>
+    <string name="stat_by_status">明细统计</string>
     <string name="stat_by_currency">货币统计</string>
     <string name="stat_by_tag">标签统计</string>
     <string name="stat_by_member">人员统计</string>

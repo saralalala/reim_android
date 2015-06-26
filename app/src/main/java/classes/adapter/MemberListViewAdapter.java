@@ -136,6 +136,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
         }
 
         int count = 0;
+        indexList.clear();
         selector.clear();
         memberList.clear();
         for (Map.Entry<String, ArrayList<User>> entry : indexMap.entrySet())
