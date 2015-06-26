@@ -366,6 +366,7 @@
     <string name="prompt_report_rejected">报告已退回</string>
     <string name="prompt_max_image_count">对不起，最多只能添加16张图片</string>
     <string name="prompt_choose_proxy">请选择代理人</string>
+    <string name="prompt_choose_client">请选择委托人</string>
     <string name="prompt_feedback">告诉我们你在使用过程中遇到的问题，或对产品提出你的建议。我们会在1个工作日内给你答复。</string>
     <string name="prompt_feedback_phone">请留下联系方式，方便我们与你沟通</string>
     <string name="prompt_sender">创建人：</string>

@@ -22,6 +22,7 @@ import java.util.List;
 
 import classes.adapter.StatisticsListViewAdapter;
 import classes.model.Category;
+import classes.model.Currency;
 import classes.model.StatCategory;
 import classes.model.StatTag;
 import classes.model.StatUser;
@@ -65,6 +66,8 @@ public class StatisticsActivity extends Activity
     private TextView totalUnitTextView;
     private RelativeLayout monthTitleLayout;
     private LinearLayout monthLayout;
+    private RelativeLayout currencyTitleLayout;
+    private LinearLayout currencyLayout;
     private RelativeLayout tagTitleLayout;
     private LinearLayout tagLayout;
     private RelativeLayout memberTitleLayout;
@@ -219,6 +222,9 @@ public class StatisticsActivity extends Activity
         monthTitleLayout = (RelativeLayout) view.findViewById(R.id.monthTitleLayout);
         monthLayout = (LinearLayout) view.findViewById(R.id.monthLayout);
 
+        currencyTitleLayout = (RelativeLayout) view.findViewById(R.id.currencyTitleLayout);
+        currencyLayout = (LinearLayout) view.findViewById(R.id.currencyLayout);
+
         tagTitleLayout = (RelativeLayout) view.findViewById(R.id.tagTitleLayout);
         tagLayout = (LinearLayout) view.findViewById(R.id.tagLayout);
 
@@ -264,6 +270,7 @@ public class StatisticsActivity extends Activity
         leftCategoryLayout.removeAllViews();
         rightCategoryLayout.removeAllViews();
         monthLayout.removeAllViews();
+        currencyLayout.removeAllViews();
         tagLayout.removeAllViews();
         memberLayout.removeAllViews();
     }
@@ -492,6 +499,61 @@ public class StatisticsActivity extends Activity
         }
     }
 
+    private void drawCurrency(HashMap<String, Double> currencyData)
+    {
+        if (currencyData.size() > 1)
+        {
+            currencyTitleLayout.setVisibility(View.VISIBLE);
+            currencyLayout.setVisibility(View.VISIBLE);
+
+            for (String code : currencyData.keySet())
+            {
+                final Currency currency = dbManager.getCurrency(code);
+                if (currency != null)
+                {
+                    View view = View.inflate(StatisticsActivity.this, R.layout.list_currency_stat, null);
+
+                    TextView currencyTextView = (TextView) view.findViewById(R.id.currencyTextView);
+                    currencyTextView.setText(currency.getName());
+
+                    TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
+                    symbolTextView.setText(currency.getSymbol());
+
+                    TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                    amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                    amountTextView.setText(Utils.formatAmount(currencyData.get(code)));
+
+                    if (mineData)
+                    {
+                        currencyLayout.addView(view);
+                    }
+                    else
+                    {
+                        currencyLayout.addView(view);
+                    }
+                }
+            }
+
+            if (mineData)
+            {
+                View lastView = currencyLayout.getChildAt(currencyLayout.getChildCount() - 1);
+                View divider = lastView.findViewById(R.id.divider);
+                divider.setVisibility(View.INVISIBLE);
+            }
+            else
+            {
+                View lastView = currencyLayout.getChildAt(currencyLayout.getChildCount() - 1);
+                View divider = lastView.findViewById(R.id.divider);
+                divider.setVisibility(View.INVISIBLE);
+            }
+        }
+        else
+        {
+            currencyTitleLayout.setVisibility(View.GONE);
+            currencyLayout.setVisibility(View.GONE);
+        }
+    }
+
     private void drawTagBar(List<StatTag> tagList)
     {
         if (tagID == 0 && !tagList.isEmpty())
@@ -629,6 +691,7 @@ public class StatisticsActivity extends Activity
                             drawOverviewLayout(response.getTotalAmount(), response.getNewAmount());
                             drawCategoryPie(response.getStatCategoryList());
                             drawMonthBar(response.getMonthsData());
+                            drawCurrency(response.getCurrencyData());
                             drawTagBar(response.getStatTagList());
                             adapter.notifyDataSetChanged();
                             statListView.stopRefresh();
@@ -671,6 +734,7 @@ public class StatisticsActivity extends Activity
                             resetView();
                             drawOverviewLayout(response.getTotalAmount(), -1);
                             drawCategoryPie(response.getStatCategoryList());
+                            drawCurrency(response.getCurrencyData());
                             drawTagBar(response.getStatTagList());
                             drawMember(response.getStatUserList());
                             adapter.notifyDataSetChanged();

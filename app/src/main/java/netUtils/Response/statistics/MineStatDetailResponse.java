@@ -19,6 +19,7 @@ public class MineStatDetailResponse extends BaseResponse
     private List<StatCategory> statCategoryList;
     private HashMap<String, Double> monthsData;
     private List<StatTag> statTagList;
+    private HashMap<String, Double> currencyData;
 
     public MineStatDetailResponse(Object httpResponse)
     {
@@ -54,6 +55,18 @@ public class MineStatDetailResponse extends BaseResponse
                 this.statCategoryList.add(new StatCategory(object));
             }
 
+            this.currencyData = new HashMap<>();
+            JSONObject currencies = jObject.optJSONObject("currencies");
+            if (currencies != null)
+            {
+                for (Iterator<?> iterator = currencies.keys(); iterator.hasNext(); )
+                {
+                    String key = (String) iterator.next();
+                    Double value = currencies.getDouble(key);
+                    this.currencyData.put(key.toUpperCase(), value);
+                }
+            }
+
             this.statTagList = new ArrayList<>();
             JSONArray tags = jObject.getJSONArray("tags");
             for (int i = 0; i < tags.length(); i++)
@@ -86,6 +99,11 @@ public class MineStatDetailResponse extends BaseResponse
     public HashMap<String, Double> getMonthsData()
     {
         return monthsData;
+    }
+
+    public HashMap<String, Double> getCurrencyData()
+    {
+        return currencyData;
     }
 
     public List<StatTag> getStatTagList()

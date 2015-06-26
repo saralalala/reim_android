@@ -418,7 +418,7 @@ public class EditItemActivity extends Activity
                 }
                 else
                 {
-                    ViewUtils.showToast(EditItemActivity.this, R.string.error_create_report_no_permission);
+                    ViewUtils.showToast(EditItemActivity.this, R.string.error_modify_item_no_permission);
                 }
             }
         });
