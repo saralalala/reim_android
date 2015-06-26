@@ -462,6 +462,7 @@
     <string name="error_create_report_no_permission">抱歉，你暂时没有创建报告的权限</string>
     <string name="error_modify_report_no_permission">抱歉，你暂时没有修改报告的权限</string>
     <string name="error_submit_report_no_permission">抱歉，你暂时没有提交报告的权限</string>
+    <string name="error_change_avatar_no_permission">权限不足，你暂时无法更换头像</string>
 
     <string name="error_network_system_error">系统错误，请稍后尝试</string>
     <string name="error_network_user_not_exists">用户不存在或密码错误</string>
@@ -492,7 +493,7 @@
     <string name="error_network_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
     <string name="error_network_not_unique">消费已被添加进另外的报告中</string>
     <string name="error_network_company_exists">公司已存在</string>
-    <string name="error_proxy_error">被代理人不在你公司，无法进行该操作</string>
+    <string name="error_network_proxy_error">被代理人不在你公司，无法进行该操作</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>

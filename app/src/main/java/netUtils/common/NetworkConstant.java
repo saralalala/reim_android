@@ -172,7 +172,7 @@ public class NetworkConstant
                 result = R.string.error_network_company_exists;
                 break;
             case NetworkConstant.ERROR_PROXY_ERROR:
-                result = R.string.error_proxy_error;
+                result = R.string.error_network_proxy_error;
                 break;
             default:
                 break;

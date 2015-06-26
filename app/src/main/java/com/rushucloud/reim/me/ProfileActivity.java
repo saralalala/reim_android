@@ -384,9 +384,16 @@ public class ProfileActivity extends Activity
             {
                 picturePopupWindow.dismiss();
 
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
-                startActivityForResult(intent, Constant.ACTIVITY_TAKE_PHOTO);
+                if (appPreference.getProxyPermission() == -1) // current user is not proxy
+                {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
+                    startActivityForResult(intent, Constant.ACTIVITY_TAKE_PHOTO);
+                }
+                else
+                {
+                    ViewUtils.showToast(ProfileActivity.this, R.string.error_change_avatar_no_permission);
+                }
             }
         });
 
@@ -397,9 +404,16 @@ public class ProfileActivity extends Activity
             {
                 picturePopupWindow.dismiss();
 
-                Intent intent = new Intent(Intent.ACTION_PICK, null);
-                intent.setType("image/*");
-                startActivityForResult(intent, Constant.ACTIVITY_PICK_IMAGE);
+                if (appPreference.getProxyPermission() == -1) // current user is not proxy
+                {
+                    Intent intent = new Intent(Intent.ACTION_PICK, null);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, Constant.ACTIVITY_PICK_IMAGE);
+                }
+                else
+                {
+                    ViewUtils.showToast(ProfileActivity.this, R.string.error_change_avatar_no_permission);
+                }
             }
         });
 

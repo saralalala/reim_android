@@ -49,7 +49,7 @@ public class OthersStatResponse extends BaseResponse
                 for (int i = 0; i < details.length(); i++)
                 {
                     JSONObject object = details.getJSONObject(i);
-                    this.statusData.put(object.getString("desc"), object.getDouble("amount"));
+                    this.statusData.put(object.getString("desc"), object.getDouble("val"));
                 }
             }
 

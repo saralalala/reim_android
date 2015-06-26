@@ -492,7 +492,7 @@
     <string name="error_network_last_admin">你是公司里最后一个管理员，请先指定公司里另一成员成为管理员</string>
     <string name="error_network_not_unique">消费已被添加进另外的报告中</string>
     <string name="error_network_company_exists">公司已存在</string>
-    <string name="error_proxy_error">被代理人不在你公司，无法进行该操作</string>
+    <string name="error_network_proxy_error">被代理人不在你公司，无法进行该操作</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">Register successful. Please</string> <!--?-->
