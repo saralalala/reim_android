@@ -66,6 +66,8 @@ public class StatisticsActivity extends Activity
     private TextView totalUnitTextView;
     private RelativeLayout monthTitleLayout;
     private LinearLayout monthLayout;
+    private RelativeLayout statusTitleLayout;
+    private LinearLayout statusLayout;
     private RelativeLayout currencyTitleLayout;
     private LinearLayout currencyLayout;
     private RelativeLayout tagTitleLayout;
@@ -236,6 +238,9 @@ public class StatisticsActivity extends Activity
         monthTitleLayout = (RelativeLayout) view.findViewById(R.id.monthTitleLayout);
         monthLayout = (LinearLayout) view.findViewById(R.id.monthLayout);
 
+        statusTitleLayout = (RelativeLayout) view.findViewById(R.id.statusTitleLayout);
+        statusLayout = (LinearLayout) view.findViewById(R.id.statusLayout);
+
         currencyTitleLayout = (RelativeLayout) view.findViewById(R.id.currencyTitleLayout);
         currencyLayout = (LinearLayout) view.findViewById(R.id.currencyLayout);
 
@@ -284,11 +289,143 @@ public class StatisticsActivity extends Activity
         leftCategoryLayout.removeAllViews();
         rightCategoryLayout.removeAllViews();
         monthLayout.removeAllViews();
+        statusLayout.removeAllViews();
         currencyLayout.removeAllViews();
         tagLayout.removeAllViews();
         memberLayout.removeAllViews();
     }
 
+    // View - draw mine
+    private void drawMonthBar(HashMap<String, Double> monthsData)
+    {
+        if (year == 0 || month == 0)
+        {
+            monthTitleLayout.setVisibility(View.VISIBLE);
+            monthLayout.setVisibility(View.VISIBLE);
+            if (!monthsData.isEmpty())
+            {
+                double total = 0;
+                double max = 0;
+                for (Double data : monthsData.values())
+                {
+                    total += data;
+                    if (data > max)
+                    {
+                        max = data;
+                    }
+                }
+                monthTotalTextView.setText(Utils.formatAmount(total));
+
+                for (final String month : monthsData.keySet())
+                {
+                    Double data = monthsData.get(month);
+                    ReimBar monthBar = new ReimBar(StatisticsActivity.this, data / max);
+
+                    View view = View.inflate(StatisticsActivity.this, R.layout.list_month_stat, null);
+
+                    TextView monthTextView = (TextView) view.findViewById(R.id.monthTextView);
+                    monthTextView.setText(month);
+
+                    TextView dataTextView = (TextView) view.findViewById(R.id.dataTextView);
+                    TextView unitTextView = (TextView) view.findViewById(R.id.unitTextView);
+
+                    if (data < 100000)
+                    {
+                        dataTextView.setText(Utils.formatDouble(data));
+                        unitTextView.setVisibility(View.GONE);
+                    }
+                    else if (data < 100000000)
+                    {
+                        dataTextView.setText(Utils.formatDouble(data / 10000));
+                        unitTextView.setText(R.string.ten_thousand);
+                    }
+                    else
+                    {
+                        dataTextView.setText(Utils.formatDouble(data / 100000000));
+                        unitTextView.setText(R.string.one_hundred_million);
+                    }
+
+                    LinearLayout dataLayout = (LinearLayout) view.findViewById(R.id.dataLayout);
+                    dataLayout.addView(monthBar);
+
+                    monthLayout.addView(view);
+                }
+            }
+            else
+            {
+                monthTotalTextView.setVisibility(View.INVISIBLE);
+                totalUnitTextView.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    // View - draw others
+    private void drawStatus(HashMap<String, Double> statusData)
+    {
+        if (!statusData.isEmpty())
+        {
+            statusTitleLayout.setVisibility(View.VISIBLE);
+            statusLayout.setVisibility(View.VISIBLE);
+
+            for (final String status : statusData.keySet())
+            {
+                View view = View.inflate(StatisticsActivity.this, R.layout.list_status_stat, null);
+
+                TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
+                statusTextView.setText(status);
+
+                TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                amountTextView.setText(Utils.formatAmount(statusData.get(status)));
+
+                statusLayout.addView(view);
+            }
+
+            View lastView = statusLayout.getChildAt(statusLayout.getChildCount() - 1);
+            View divider = lastView.findViewById(R.id.divider);
+            divider.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            statusTitleLayout.setVisibility(View.GONE);
+            statusLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void drawMember(List<StatUser> userList)
+    {
+        if (userID == 0)
+        {
+            memberTitleLayout.setVisibility(View.VISIBLE);
+            memberLayout.setVisibility(View.VISIBLE);
+
+            if (!userList.isEmpty())
+            {
+                for (StatUser user : userList)
+                {
+                    User localUser = dbManager.getUser(user.getUserID());
+                    if (localUser != null)
+                    {
+                        View view = View.inflate(this, R.layout.list_member_stat, null);
+
+                        TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+                        nameTextView.setText(localUser.getNickname());
+
+                        TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
+                        countTextView.setText(Integer.toString(user.getItemCount()));
+
+                        TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                        amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                        amountTextView.setText(Utils.formatAmount(user.getAmount()));
+
+                        memberLayout.addView(view);
+                    }
+                }
+            }
+        }
+    }
+
+    // View - draw both
     private void drawOverviewLayout(double totalAmount, double newAmount)
     {
         if (mineData)
@@ -450,69 +587,6 @@ public class StatisticsActivity extends Activity
         }
     }
 
-    private void drawMonthBar(HashMap<String, Double> monthsData)
-    {
-        if (year == 0 || month == 0)
-        {
-            monthTitleLayout.setVisibility(View.VISIBLE);
-            monthLayout.setVisibility(View.VISIBLE);
-            if (!monthsData.isEmpty())
-            {
-                double total = 0;
-                double max = 0;
-                for (Double data : monthsData.values())
-                {
-                    total += data;
-                    if (data > max)
-                    {
-                        max = data;
-                    }
-                }
-                monthTotalTextView.setText(Utils.formatAmount(total));
-
-                for (final String month : monthsData.keySet())
-                {
-                    Double data = monthsData.get(month);
-                    ReimBar monthBar = new ReimBar(StatisticsActivity.this, data / max);
-
-                    View view = View.inflate(StatisticsActivity.this, R.layout.list_month_stat, null);
-
-                    TextView monthTextView = (TextView) view.findViewById(R.id.monthTextView);
-                    monthTextView.setText(month);
-
-                    TextView dataTextView = (TextView) view.findViewById(R.id.dataTextView);
-                    TextView unitTextView = (TextView) view.findViewById(R.id.unitTextView);
-
-                    if (data < 100000)
-                    {
-                        dataTextView.setText(Utils.formatDouble(data));
-                        unitTextView.setVisibility(View.GONE);
-                    }
-                    else if (data < 100000000)
-                    {
-                        dataTextView.setText(Utils.formatDouble(data / 10000));
-                        unitTextView.setText(R.string.ten_thousand);
-                    }
-                    else
-                    {
-                        dataTextView.setText(Utils.formatDouble(data / 100000000));
-                        unitTextView.setText(R.string.one_hundred_million);
-                    }
-
-                    LinearLayout dataLayout = (LinearLayout) view.findViewById(R.id.dataLayout);
-                    dataLayout.addView(monthBar);
-
-                    monthLayout.addView(view);
-                }
-            }
-            else
-            {
-                monthTotalTextView.setVisibility(View.INVISIBLE);
-                totalUnitTextView.setVisibility(View.INVISIBLE);
-            }
-        }
-    }
-
     private void drawCurrency(HashMap<String, Double> currencyData)
     {
         if (currencyData.size() > 1)
@@ -628,39 +702,6 @@ public class StatisticsActivity extends Activity
         }
     }
 
-    private void drawMember(List<StatUser> userList)
-    {
-        if (userID == 0)
-        {
-            memberTitleLayout.setVisibility(View.VISIBLE);
-            memberLayout.setVisibility(View.VISIBLE);
-
-            if (!userList.isEmpty())
-            {
-                for (StatUser user : userList)
-                {
-                    User localUser = dbManager.getUser(user.getUserID());
-                    if (localUser != null)
-                    {
-                        View view = View.inflate(this, R.layout.list_member_stat, null);
-
-                        TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
-                        nameTextView.setText(localUser.getNickname());
-
-                        TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
-                        countTextView.setText(Integer.toString(user.getItemCount()));
-
-                        TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-                        amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-                        amountTextView.setText(Utils.formatAmount(user.getAmount()));
-
-                        memberLayout.addView(view);
-                    }
-                }
-            }
-        }
-    }
-
     private void goBack()
     {
         ViewUtils.goBack(this);
@@ -749,6 +790,7 @@ public class StatisticsActivity extends Activity
                             resetView();
                             drawOverviewLayout(response.getTotalAmount(), -1);
                             drawCategoryPie(response.getStatCategoryList());
+                            drawStatus(response.getStatusData());
                             drawCurrency(response.getCurrencyData());
                             drawTagBar(response.getStatTagList());
                             drawMember(response.getStatUserList());

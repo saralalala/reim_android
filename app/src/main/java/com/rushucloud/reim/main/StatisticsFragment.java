@@ -701,6 +701,7 @@ public class StatisticsFragment extends Fragment
         reimPie = new ReimPie(getActivity(), 0, 360, othersStatContainer.getWidth(), ViewUtils.getColor(R.color.background), 40);
         othersStatContainer.addView(reimPie);
     }
+
     private void drawStatus(HashMap<String, Double> statusData)
     {
         if (!statusData.isEmpty())
