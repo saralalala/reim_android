@@ -268,10 +268,17 @@ public class PickItemActivity extends Activity implements OnClickListener
             {
                 if (position == 0)
                 {
-                    Intent intent = new Intent(PickItemActivity.this, EditItemActivity.class);
-                    intent.putExtra("fromPickItems", true);
-                    intent.putExtra("type", tabIndex);
-                    ViewUtils.goForwardForResult(PickItemActivity.this, intent, Constant.ACTIVITY_NEW_ITEM);
+                    if (appPreference.hasProxyEditPermission())
+                    {
+                        Intent intent = new Intent(PickItemActivity.this, EditItemActivity.class);
+                        intent.putExtra("fromPickItems", true);
+                        intent.putExtra("type", tabIndex);
+                        ViewUtils.goForwardForResult(PickItemActivity.this, intent, Constant.ACTIVITY_NEW_ITEM);
+                    }
+                    else
+                    {
+                        ViewUtils.showToast(PickItemActivity.this, R.string.error_create_item_no_permission);
+                    }
                 }
                 else
                 {
