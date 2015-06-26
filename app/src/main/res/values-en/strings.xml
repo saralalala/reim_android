@@ -232,6 +232,7 @@
     <string name="stat_category">Category-</string>
     <string name="stat_tag">Tag-</string>
     <string name="stat_user">Staff-</string>
+    <string name="stat_currency">Currency-</string>
 
     <string name="personal_center">Personal</string>
     <string name="sign_out">退出登录</string>

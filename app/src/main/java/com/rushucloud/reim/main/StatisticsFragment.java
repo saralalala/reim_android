@@ -571,19 +571,22 @@ public class StatisticsFragment extends Fragment
                 if (currency != null)
                 {
                     View view = View.inflate(getActivity(), R.layout.list_currency_stat, null);
-//                    view.setBackgroundResource(R.drawable.list_item_drawable);
-//                    view.setOnClickListener(new View.OnClickListener()
-//                    {
-//                        public void onClick(View v)
-//                        {
-//                            Bundle bundle = new Bundle();
-//                            bundle.putBoolean("mineData", true);
-//                            bundle.putInt("categoryID", localCategory.getServerID());
-//                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
-//                            intent.putExtras(bundle);
-//                            ViewUtils.goForward(getActivity(), intent);
-//                        }
-//                    });
+                    view.setBackgroundResource(R.drawable.list_item_drawable);
+                    view.setOnClickListener(new View.OnClickListener()
+                    {
+                        public void onClick(View v)
+                        {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("currencyCode", currency.getCode());
+                            if (mineData)
+                            {
+                                bundle.putBoolean("mineData", true);
+                            }
+                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                            intent.putExtras(bundle);
+                            ViewUtils.goForward(getActivity(), intent);
+                        }
+                    });
 
                     TextView currencyTextView = (TextView) view.findViewById(R.id.currencyTextView);
                     currencyTextView.setText(currency.getName());

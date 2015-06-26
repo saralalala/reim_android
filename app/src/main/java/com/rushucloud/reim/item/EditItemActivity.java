@@ -20,7 +20,6 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -49,6 +48,7 @@ import com.rushucloud.reim.report.EditReportActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -1347,31 +1347,28 @@ public class EditItemActivity extends Activity
         ViewUtils.dimBackground(this);
     }
 
-    private List<NumberPicker> findNumberPickers(ViewGroup viewGroup)
+    private List<NumberPicker> findNumberPickers(TimePicker timePicker)
     {
         List<NumberPicker> pickerList = new ArrayList<>();
-        View child;
-        if (null != viewGroup)
+        Field[] fields = TimePicker.class.getDeclaredFields();
+        for (Field field : fields)
         {
-            for (int i = 0; i < viewGroup.getChildCount(); i++)
+            field.setAccessible(true);
+            if (field.getType().getSimpleName().equals("NumberPicker"))
             {
-                child = viewGroup.getChildAt(i);
-                if (child instanceof NumberPicker)
+                try
                 {
-                    pickerList.add((NumberPicker) child);
+                    pickerList.add((NumberPicker) field.get(timePicker));
                 }
-                else if (child instanceof LinearLayout)
+                catch (IllegalAccessException e)
                 {
-                    List<NumberPicker> result = findNumberPickers((ViewGroup) child);
-                    if (result.size() > 0)
-                    {
-                        return result;
-                    }
+                    e.printStackTrace();
                 }
             }
         }
         return pickerList;
     }
+
 
     private void resizePicker()
     {
@@ -1402,15 +1399,16 @@ public class EditItemActivity extends Activity
         {
             NumberPicker picker = pickerList.get(i);
             params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
-            if (i == 0)
+            if (i == 1)
             {
                 params.rightMargin = timeMargin;
+                picker.setLayoutParams(params);
             }
-            else
+            else if (i == 2)
             {
                 params.leftMargin = timeMargin;
+                picker.setLayoutParams(params);
             }
-            picker.setLayoutParams(params);
         }
     }
 

@@ -15,7 +15,7 @@ public class OthersStatRequest extends BaseRequest
         appendUrl(month);
     }
 
-    public OthersStatRequest(int year, int month, int categoryID, int tagID, int userID)
+    public OthersStatRequest(int year, int month, int categoryID, int tagID, int userID, String currencyCode)
     {
         super();
 
@@ -25,6 +25,7 @@ public class OthersStatRequest extends BaseRequest
         appendUrl(categoryID);
         appendUrl(tagID);
         appendUrl(userID);
+        appendUrl(currencyCode);
     }
 
     public void sendRequest(HttpConnectionCallback callback)

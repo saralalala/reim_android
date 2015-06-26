@@ -88,6 +88,7 @@ public class StatisticsActivity extends Activity
     private int categoryID;
     private int tagID;
     private int userID;
+    private String currencyCode;
     private int lastUpdateTime = 0;
 
     // View
@@ -187,6 +188,19 @@ public class StatisticsActivity extends Activity
             if (user != null)
             {
                 titleTextView.setText(getString(R.string.stat_user) + user.getNickname());
+            }
+            else
+            {
+                ViewUtils.showToast(this, R.string.failed_to_read_data);
+                goBack();
+            }
+        }
+        else if (!currencyCode.isEmpty())
+        {
+            Currency currency = dbManager.getCurrency(currencyCode);
+            if (currency != null)
+            {
+                titleTextView.setText(getString(R.string.stat_currency) + currency.getName());
             }
             else
             {
@@ -664,6 +678,7 @@ public class StatisticsActivity extends Activity
         categoryID = bundle.getInt("categoryID", 0);
         tagID = bundle.getInt("tagID", 0);
         userID = bundle.getInt("userID", 0);
+        currencyCode = bundle.getString("currencyCode", "");
     }
 
     private boolean needToGetData()
@@ -674,7 +689,7 @@ public class StatisticsActivity extends Activity
     // Network
     private void sendGetMineDataRequest()
     {
-        MineStatDetailRequest request = new MineStatDetailRequest(year, month, tagID, categoryID);
+        MineStatDetailRequest request = new MineStatDetailRequest(year, month, tagID, categoryID, currencyCode);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -718,7 +733,7 @@ public class StatisticsActivity extends Activity
 
     private void sendGetOthersDataRequest()
     {
-        OthersStatRequest request = new OthersStatRequest(year, month, categoryID, tagID, userID);
+        OthersStatRequest request = new OthersStatRequest(year, month, categoryID, tagID, userID, currencyCode);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)

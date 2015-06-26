@@ -9,7 +9,7 @@ import netUtils.request.common.BaseRequest;
 
 public class MineStatDetailRequest extends BaseRequest
 {
-    public MineStatDetailRequest(int year, int month, int tagID, int categoryID)
+    public MineStatDetailRequest(int year, int month, int tagID, int categoryID, String currencyCode)
     {
         super();
 
@@ -38,6 +38,7 @@ public class MineStatDetailRequest extends BaseRequest
         appendUrl(tagID);
         appendUrl(AppPreference.getAppPreference().getCurrentUserID());
         appendUrl(categoryID);
+        appendUrl(currencyCode);
     }
 
     public void sendRequest(HttpConnectionCallback callback)
