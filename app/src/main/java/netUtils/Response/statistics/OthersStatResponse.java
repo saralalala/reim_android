@@ -17,9 +17,9 @@ public class OthersStatResponse extends BaseResponse
 {
     private double totalAmount = 0;
     private List<StatCategory> statCategoryList;
+    private HashMap<String, Double> currencyData;
     private List<StatTag> statTagList;
     private List<StatUser> statUserList;
-    private HashMap<String, Double> currencyData;
 
     public OthersStatResponse(Object httpResponse)
     {
@@ -41,6 +41,18 @@ public class OthersStatResponse extends BaseResponse
                 this.totalAmount += category.getAmount();
             }
 
+            this.currencyData = new HashMap<>();
+            JSONObject currencies = jObject.optJSONObject("currencies");
+            if (currencies != null)
+            {
+                for (Iterator<?> iterator = currencies.keys(); iterator.hasNext(); )
+                {
+                    String key = (String) iterator.next();
+                    Double value = currencies.getDouble(key);
+                    this.currencyData.put(key.toUpperCase(), value);
+                }
+            }
+
             this.statTagList = new ArrayList<>();
             JSONArray tags = jObject.getJSONArray("tags");
             for (int i = 0; i < tags.length(); i++)
@@ -55,18 +67,6 @@ public class OthersStatResponse extends BaseResponse
             {
                 JSONObject object = members.getJSONObject(i);
                 this.statUserList.add(new StatUser(object));
-            }
-
-            this.currencyData = new HashMap<>();
-            JSONObject currencies = jObject.optJSONObject("currencies");
-            if (currencies != null)
-            {
-                for (Iterator<?> iterator = currencies.keys(); iterator.hasNext(); )
-                {
-                    String key = (String) iterator.next();
-                    Double value = currencies.getDouble(key);
-                    this.currencyData.put(key.toUpperCase(), value);
-                }
             }
         }
         catch (Exception e)
@@ -85,6 +85,11 @@ public class OthersStatResponse extends BaseResponse
         return statCategoryList;
     }
 
+    public HashMap<String, Double> getCurrencyData()
+    {
+        return currencyData;
+    }
+
     public List<StatTag> getStatTagList()
     {
         return statTagList;
@@ -93,10 +98,5 @@ public class OthersStatResponse extends BaseResponse
     public List<StatUser> getStatUserList()
     {
         return statUserList;
-    }
-
-    public HashMap<String, Double> getCurrencyData()
-    {
-        return currencyData;
     }
 }

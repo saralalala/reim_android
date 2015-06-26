@@ -32,6 +32,7 @@ public class EmailActivity extends Activity
 {
     // Widgets
     private LinearLayout activeLayout;
+    private TextView emailTextView;
 
     // Local Data
     private int waitingTime = 60;
@@ -120,7 +121,7 @@ public class EmailActivity extends Activity
             }
         });
 
-        TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
+        emailTextView = (TextView) findViewById(R.id.emailTextView);
         emailTextView.setText(getIntent().getStringExtra("email"));
 
         activeLayout = (LinearLayout) findViewById(R.id.activeLayout);
@@ -175,10 +176,10 @@ public class EmailActivity extends Activity
 
     private void refreshView()
     {
-        if (AppPreference.getAppPreference().getCurrentUser().isActive())
-        {
-            activeLayout.setVisibility(View.GONE);
-        }
+        User currentUser = AppPreference.getAppPreference().getCurrentUser();
+        int visibility = currentUser.isActive()? View.GONE : View.VISIBLE;
+        activeLayout.setVisibility(visibility);
+        emailTextView.setText(currentUser.getEmail());
     }
 
     private void goBack()

@@ -249,9 +249,12 @@ public class StatisticsFragment extends Fragment
         monthTotalTextView = (TextView) mineView.findViewById(R.id.monthTotalTextView);
         totalUnitTextView = (TextView) mineView.findViewById(R.id.totalUnitTextView);
         monthLayout = (LinearLayout) mineView.findViewById(R.id.monthLayout);
+
         categoryLayout = (LinearLayout) mineView.findViewById(R.id.categoryLayout);
+
         mineCurrencyTitleLayout = (RelativeLayout) mineView.findViewById(R.id.currencyTitleLayout);
         mineCurrencyLayout = (LinearLayout) mineView.findViewById(R.id.currencyLayout);
+
         mineTagTitleLayout = (RelativeLayout) mineView.findViewById(R.id.tagTitleLayout);
         mineTagLayout = (LinearLayout) mineView.findViewById(R.id.tagLayout);
 
@@ -323,10 +326,13 @@ public class StatisticsFragment extends Fragment
 
         leftCategoryLayout = (LinearLayout) othersView.findViewById(R.id.leftCategoryLayout);
         rightCategoryLayout = (LinearLayout) othersView.findViewById(R.id.rightCategoryLayout);
+
         othersCurrencyTitleLayout = (RelativeLayout) othersView.findViewById(R.id.currencyTitleLayout);
         othersCurrencyLayout = (LinearLayout) othersView.findViewById(R.id.currencyLayout);
+
         othersTagTitleLayout = (RelativeLayout) othersView.findViewById(R.id.tagTitleLayout);
         othersTagLayout = (LinearLayout) othersView.findViewById(R.id.tagLayout);
+
         memberLayout = (LinearLayout) othersView.findViewById(R.id.memberLayout);
 
         othersAdapter = new StatisticsListViewAdapter(othersView);
@@ -337,6 +343,7 @@ public class StatisticsFragment extends Fragment
         mineStatContainer.removeAllViews();
         monthLayout.removeAllViews();
         categoryLayout.removeAllViews();
+        mineCurrencyLayout.removeAllViews();
         mineTagLayout.removeAllViews();
     }
 
@@ -345,6 +352,7 @@ public class StatisticsFragment extends Fragment
         othersStatContainer.removeAllViews();
         leftCategoryLayout.removeAllViews();
         rightCategoryLayout.removeAllViews();
+        othersCurrencyLayout.removeAllViews();
         othersTagLayout.removeAllViews();
         memberLayout.removeAllViews();
     }

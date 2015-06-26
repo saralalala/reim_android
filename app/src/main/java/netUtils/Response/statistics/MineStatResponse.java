@@ -18,10 +18,10 @@ public class MineStatResponse extends BaseResponse
     private boolean hasStaffData;
     private double newAmount;
     private double ongoingAmount;
-    private List<StatCategory> statCategoryList;
-    private List<StatTag> statTagList;
     private HashMap<String, Double> monthsData;
+    private List<StatCategory> statCategoryList;
     private HashMap<String, Double> currencyData;
+    private List<StatTag> statTagList;
 
     public MineStatResponse(Object httpResponse)
     {
@@ -99,23 +99,23 @@ public class MineStatResponse extends BaseResponse
         return ongoingAmount;
     }
 
-    public List<StatCategory> getStatCategoryList()
-    {
-        return statCategoryList;
-    }
-
-    public List<StatTag> getStatTagList()
-    {
-        return statTagList;
-    }
-
     public HashMap<String, Double> getMonthsData()
     {
         return monthsData;
     }
 
+    public List<StatCategory> getStatCategoryList()
+    {
+        return statCategoryList;
+    }
+
     public HashMap<String, Double> getCurrencyData()
     {
         return currencyData;
+    }
+
+    public List<StatTag> getStatTagList()
+    {
+        return statTagList;
     }
 }
