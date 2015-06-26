@@ -1124,13 +1124,19 @@ public class ReportFragment extends Fragment implements OnClickListener
         showOthersList.clear();
 
         Report report = new Report();
-        report.setSectionName(getString(R.string.pending));
+        if (isAdded())
+        {
+            report.setSectionName(getString(R.string.pending));
+        }
         showOthersList.add(report);
 
         if (pendingList.isEmpty())
         {
             Report noPendingReport = new Report();
-            noPendingReport.setSectionName(getString(R.string.no_pending_reports));
+            if (isAdded())
+            {
+                noPendingReport.setSectionName(getString(R.string.no_pending_reports));
+            }
             showOthersList.add(noPendingReport);
         }
         else
@@ -1141,7 +1147,10 @@ public class ReportFragment extends Fragment implements OnClickListener
         if (!processedList.isEmpty())
         {
             Report processedReport = new Report();
-            processedReport.setSectionName(getString(R.string.processed));
+            if (isAdded())
+            {
+                processedReport.setSectionName(getString(R.string.processed));
+            }
             showOthersList.add(processedReport);
             showOthersList.addAll(processedList);
         }
@@ -1233,19 +1242,22 @@ public class ReportFragment extends Fragment implements OnClickListener
                         }
                     }
 
-                    getActivity().runOnUiThread(new Runnable()
+                    if (isAdded())
                     {
-                        public void run()
+                        getActivity().runOnUiThread(new Runnable()
                         {
-                            appPreference.setLastGetOthersReportTime(Utils.getCurrentTime());
-                            appPreference.saveAppPreference();
-                            reportListView.stopRefresh();
-                            reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
-                            refreshReportListView(true);
-                        }
-                    });
+                            public void run()
+                            {
+                                appPreference.setLastGetOthersReportTime(Utils.getCurrentTime());
+                                appPreference.saveAppPreference();
+                                reportListView.stopRefresh();
+                                reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
+                                refreshReportListView(true);
+                            }
+                        });
+                    }
                 }
-                else
+                else if (isAdded())
                 {
                     getActivity().runOnUiThread(new Runnable()
                     {
