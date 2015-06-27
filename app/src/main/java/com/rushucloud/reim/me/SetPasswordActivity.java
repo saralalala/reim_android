@@ -96,7 +96,11 @@ public class SetPasswordActivity extends Activity
                 final String password = passwordEditText.getText().toString();
                 final String confirmPassword = confirmPasswordEditText.getText().toString();
 
-                if (!PhoneUtils.isNetworkConnected())
+                if (appPreference.isProxyMode())
+                {
+                    ViewUtils.showToast(SetPasswordActivity.this, R.string.error_change_avatar_no_permission);
+                }
+                else if (!PhoneUtils.isNetworkConnected())
                 {
                     ViewUtils.showToast(SetPasswordActivity.this, R.string.error_change_password_network_unavailable);
                 }
@@ -166,7 +170,7 @@ public class SetPasswordActivity extends Activity
                     {
                         public void run()
                         {
-                            ReimProgressDialog.show();
+                            ReimProgressDialog.dismiss();
                             ViewUtils.showToast(SetPasswordActivity.this, R.string.succeed_in_setting_password);
                             goBack();
                         }
@@ -178,7 +182,7 @@ public class SetPasswordActivity extends Activity
                     {
                         public void run()
                         {
-                            ReimProgressDialog.show();
+                            ReimProgressDialog.dismiss();
                             ViewUtils.showToast(SetPasswordActivity.this, R.string.failed_to_change_password, response.getErrorMessage());
                         }
                     });

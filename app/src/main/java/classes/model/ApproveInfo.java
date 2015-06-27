@@ -10,6 +10,7 @@ public class ApproveInfo implements Comparable<ApproveInfo>
     private int userID = -1;
     private int reportSenderID = -1;
     private int status = -1;
+    private boolean isRevoked = false;
     private String approveTime = "";
     private String approveDate = "";
     private int step = -1;
@@ -64,6 +65,15 @@ public class ApproveInfo implements Comparable<ApproveInfo>
     public void setStatus(int status)
     {
         this.status = status;
+    }
+
+    public boolean isRevoked()
+    {
+        return isRevoked;
+    }
+    public void setIsRevoked(boolean isRevoked)
+    {
+        this.isRevoked = isRevoked;
     }
 
     public String getApproveTime()

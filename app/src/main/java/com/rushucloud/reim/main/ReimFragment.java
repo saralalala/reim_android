@@ -461,8 +461,8 @@ public class ReimFragment extends Fragment
                 filterType = tempFilterType;
                 filterStatus = tempFilterStatus;
 
-                System.arraycopy(tagCheck, 0, tempTagCheck, 0, tagCheck.length);
-                System.arraycopy(categoryCheck, 0, tempCategoryCheck, 0, categoryCheck.length);
+                System.arraycopy(tempTagCheck, 0, tagCheck, 0, tempTagCheck.length);
+                System.arraycopy(tempCategoryCheck, 0, categoryCheck, 0, tempCategoryCheck.length);
 
                 filterTagList.clear();
                 for (int i = 0; i < tagCheck.length; i++)

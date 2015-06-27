@@ -210,6 +210,7 @@
     <string name="ready_to_approve">待审批</string>
     <string name="approved">已通过</string>
     <string name="rejected">退回</string>
+    <string name="revoked">撤回</string>
     <string name="report_no_name">无标题报告</string>
     <string name="continue_to_choose">继续选择</string>
     <string name="choose_following_managers">选择后续审批人</string>
@@ -465,6 +466,7 @@
     <string name="error_modify_report_no_permission">抱歉，你暂时没有修改报告的权限</string>
     <string name="error_submit_report_no_permission">抱歉，你暂时没有提交报告的权限</string>
     <string name="error_change_avatar_no_permission">权限不足，你暂时无法更换头像</string>
+    <string name="error_change_password_no_permission">权限不足，你暂时无法更改密码</string>
 
     <string name="error_network_system_error">系统错误，请稍后尝试</string>
     <string name="error_network_user_not_exists">用户不存在或密码错误</string>

@@ -384,7 +384,7 @@ public class ProfileActivity extends Activity
             {
                 picturePopupWindow.dismiss();
 
-                if (appPreference.getProxyPermission() == -1) // current user is not proxy
+                if (!appPreference.isProxyMode())
                 {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
@@ -404,7 +404,7 @@ public class ProfileActivity extends Activity
             {
                 picturePopupWindow.dismiss();
 
-                if (appPreference.getProxyPermission() == -1) // current user is not proxy
+                if (!appPreference.isProxyMode())
                 {
                     Intent intent = new Intent(Intent.ACTION_PICK, null);
                     intent.setType("image/*");
