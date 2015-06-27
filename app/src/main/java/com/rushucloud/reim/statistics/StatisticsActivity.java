@@ -412,7 +412,7 @@ public class StatisticsActivity extends Activity
                         nameTextView.setText(localUser.getNickname());
 
                         TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
-                        countTextView.setText(Integer.toString(user.getItemCount()));
+                        countTextView.setText(String.format(getString(R.string.item_count), user.getItemCount()));
 
                         TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                         amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);

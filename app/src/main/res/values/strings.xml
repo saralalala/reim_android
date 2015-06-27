@@ -210,7 +210,8 @@
     <string name="ready_to_approve">待审批</string>
     <string name="approved">已通过</string>
     <string name="rejected">退回</string>
-    <string name="revoked">撤回</string>
+    <string name="revoked">已撤回</string>
+    <string name="proxy_approved">（%1$s代审）</string>
     <string name="report_no_name">无标题报告</string>
     <string name="continue_to_choose">继续选择</string>
     <string name="choose_following_managers">选择后续审批人</string>

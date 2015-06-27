@@ -718,6 +718,8 @@ public class StatisticsFragment extends Fragment
 //                    public void onClick(View v)
 //                    {
 //                        Bundle bundle = new Bundle();
+//                        bundle.putInt("year", year);
+//                        bundle.putInt("month", month);
 //                        bundle.putString("status", status);
 //                        Intent intent = new Intent(getActivity(), StatisticsActivity.class);
 //                        intent.putExtras(bundle);
@@ -820,6 +822,11 @@ public class StatisticsFragment extends Fragment
                             {
                                 bundle.putBoolean("mineData", true);
                             }
+                            else
+                            {
+                                bundle.putInt("year", year);
+                                bundle.putInt("month", month);
+                            }
                             Intent intent = new Intent(getActivity(), StatisticsActivity.class);
                             intent.putExtras(bundle);
                             ViewUtils.goForward(getActivity(), intent);
@@ -911,12 +918,15 @@ public class StatisticsFragment extends Fragment
                         public void onClick(View v)
                         {
                             Bundle bundle = new Bundle();
-                            bundle.putInt("year", year);
-                            bundle.putInt("month", month);
                             bundle.putInt("tagID", localTag.getServerID());
                             if (mineData)
                             {
                                 bundle.putBoolean("mineData", true);
+                            }
+                            else
+                            {
+                                bundle.putInt("year", year);
+                                bundle.putInt("month", month);
                             }
                             Intent intent = new Intent(getActivity(), StatisticsActivity.class);
                             intent.putExtras(bundle);

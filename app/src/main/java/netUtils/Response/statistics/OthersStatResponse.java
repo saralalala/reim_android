@@ -15,7 +15,7 @@ import netUtils.response.common.BaseResponse;
 
 public class OthersStatResponse extends BaseResponse
 {
-    private double totalAmount = 0;
+    private double totalAmount;
     private List<StatCategory> statCategoryList;
     private HashMap<String, Double> statusData;
     private HashMap<String, Double> currencyData;

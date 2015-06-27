@@ -9,8 +9,8 @@ public class ApproveInfo implements Comparable<ApproveInfo>
 {
     private int userID = -1;
     private int reportSenderID = -1;
+    private int proxyUserID = -1;
     private int status = -1;
-    private boolean isRevoked = false;
     private String approveTime = "";
     private String approveDate = "";
     private int step = -1;
@@ -25,6 +25,7 @@ public class ApproveInfo implements Comparable<ApproveInfo>
         try
         {
             setUserID(jObject.getInt("uid"));
+            setProxyUserID(jObject.getInt("wingman"));
             setStatus(jObject.getInt("status"));
             setApproveTime(jObject.getString("approvaldt").substring(11, 16));
             setApproveDate(jObject.getString("approvaldt").substring(0, 10));
@@ -54,6 +55,15 @@ public class ApproveInfo implements Comparable<ApproveInfo>
         this.reportSenderID = reportSenderID;
     }
 
+    public int getProxyUserID()
+    {
+        return proxyUserID;
+    }
+    public void setProxyUserID(int proxyUserID)
+    {
+        this.proxyUserID = proxyUserID;
+    }
+
     public int getStatus()
     {
         return status;
@@ -65,15 +75,6 @@ public class ApproveInfo implements Comparable<ApproveInfo>
     public void setStatus(int status)
     {
         this.status = status;
-    }
-
-    public boolean isRevoked()
-    {
-        return isRevoked;
-    }
-    public void setIsRevoked(boolean isRevoked)
-    {
-        this.isRevoked = isRevoked;
     }
 
     public String getApproveTime()
@@ -117,6 +118,11 @@ public class ApproveInfo implements Comparable<ApproveInfo>
         {
             return getRealStatus() == Report.STATUS_APPROVED || getRealStatus() == Report.STATUS_REJECTED;
         }
+    }
+
+    public boolean isRevoked()
+    {
+        return userID == reportSenderID && getRealStatus() == Report.STATUS_REJECTED;
     }
 
     public int compareTo(@NonNull ApproveInfo another)
