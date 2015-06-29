@@ -556,13 +556,13 @@ public class Item
                 double amount1 = item1.getAmount();
                 if (!item1.getCurrency().isCNY())
                 {
-                    amount1 *= item1.getRate() != 0? item1.getRate() : item1.getCurrency().getRate();
+                    amount1 *= item1.getRate() != 0 ? item1.getRate() : item1.getCurrency().getRate();
                 }
 
                 double amount2 = item2.getAmount();
                 if (!item2.getCurrency().isCNY())
                 {
-                    amount2 *= item2.getRate() != 0? item2.getRate() : item2.getCurrency().getRate();
+                    amount2 *= item2.getRate() != 0 ? item2.getRate() : item2.getCurrency().getRate();
                 }
 
                 return (int) (amount2 - amount1);

@@ -129,7 +129,7 @@ public class InviteActivity extends Activity
         if (group != null)
         {
             User user = AppPreference.getAppPreference().getCurrentUser();
-            nickname = user != null? user.getNickname() : "";
+            nickname = user != null ? user.getNickname() : "";
             companyName = group.getName();
 
             try

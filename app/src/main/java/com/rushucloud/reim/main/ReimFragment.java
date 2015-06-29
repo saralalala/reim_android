@@ -206,7 +206,7 @@ public class ReimFragment extends Fragment
                         public void run()
                         {
                             itemListView.stopRefresh();
-//					String prompt = SyncUtils.isSyncOnGoing? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+//					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
                             int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
                             ViewUtils.showToast(getActivity(), prompt);
                         }
@@ -250,7 +250,7 @@ public class ReimFragment extends Fragment
                         public void run()
                         {
                             itemListView.stopLoadMore();
-//					String prompt = SyncUtils.isSyncOnGoing? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
+//					String prompt = SyncUtils.isSyncOnGoing ? "正在同步中" : "未打开同步开关或未打开Wifi，无法刷新";
                             int prompt = SyncUtils.isSyncOnGoing ? R.string.prompt_sync_ongoing : R.string.error_refresh_network_unavailable;
                             ViewUtils.showToast(getActivity(), prompt);
                         }

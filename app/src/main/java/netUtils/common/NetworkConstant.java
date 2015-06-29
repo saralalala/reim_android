@@ -177,6 +177,6 @@ public class NetworkConstant
             default:
                 break;
         }
-        return result == -1? "" : ViewUtils.getString(result);
+        return result == -1 ? "" : ViewUtils.getString(result);
     }
 }

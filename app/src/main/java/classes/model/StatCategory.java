@@ -30,7 +30,7 @@ public class StatCategory
             setCategoryID(jObject.getInt("id"));
             setAmount(jObject.getDouble("amount"));
             JSONArray iids = jObject.optJSONArray("items");
-            int count = iids != null? iids.length() : jObject.getInt("count");
+            int count = iids != null ? iids.length() : jObject.getInt("count");
             setItemCount(count);
         }
         catch (JSONException e)

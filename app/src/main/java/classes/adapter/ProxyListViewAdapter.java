@@ -40,7 +40,7 @@ public class ProxyListViewAdapter extends BaseAdapter
 
         Proxy proxy = this.getItem(position);
 
-        int color = chosenList.contains(proxy)? R.color.list_item_pressed : R.color.list_item_unpressed;
+        int color = chosenList.contains(proxy) ? R.color.list_item_pressed : R.color.list_item_unpressed;
         convertView.setBackgroundResource(color);
 
         TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);

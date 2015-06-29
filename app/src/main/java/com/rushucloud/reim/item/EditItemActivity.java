@@ -677,7 +677,7 @@ public class EditItemActivity extends Activity
 
     private void initLocationView()
     {
-        String cityName = item.getLocation().isEmpty()? getString(R.string.no_location) : item.getLocation();
+        String cityName = item.getLocation().isEmpty() ? getString(R.string.no_location) : item.getLocation();
         locationTextView = (TextView) findViewById(R.id.locationTextView);
         locationTextView.setText(cityName);
 
@@ -1661,7 +1661,7 @@ public class EditItemActivity extends Activity
             if (location != null)
             {
                 currentLocation = location;
-                currentCity = currentLocation.getCity() == null? "" : currentLocation.getCity();
+                currentCity = currentLocation.getCity() == null ? "" : currentLocation.getCity();
                 int index = currentCity.indexOf("市");
                 if (index > 0)
                 {

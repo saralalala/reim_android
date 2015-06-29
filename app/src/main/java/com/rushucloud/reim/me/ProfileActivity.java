@@ -480,7 +480,7 @@ public class ProfileActivity extends Activity
                 companyTextView.setText(R.string.not_joined);
             }
 
-            int switchPrompt = appPreference.isProxyMode()? R.string.switch_back : R.string.switch_identity;
+            int switchPrompt = appPreference.isProxyMode() ? R.string.switch_back : R.string.switch_identity;
             switchTextView.setText(switchPrompt);
 
             if (currentUser.getEmail().isEmpty() && currentUser.getPhone().isEmpty())
@@ -490,7 +490,7 @@ public class ProfileActivity extends Activity
             else
             {
                 passwordLayout.setVisibility(View.VISIBLE);
-                int text = appPreference.hasPassword()? R.string.change_password : R.string.set_password;
+                int text = appPreference.hasPassword() ? R.string.change_password : R.string.set_password;
                 passwordTextView.setText(text);
             }
         }

@@ -456,7 +456,7 @@ public class Report implements Serializable
                 }
                 else
                 {
-                    return amount1 > amount2? -1 : 1;
+                    return amount1 > amount2 ? -1 : 1;
                 }
             }
         });
