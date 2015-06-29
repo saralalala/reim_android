@@ -21,6 +21,8 @@ import java.util.ArrayList;
 
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 
@@ -113,6 +115,7 @@ public class GuideStartActivity extends Activity
         appPreference.setPassword("");
         appPreference.setHasPassword(true);
         appPreference.saveAppPreference();
+        ReimApplication.resetTabIndices();
         ViewUtils.goBackWithIntent(GuideStartActivity.this, intent);
     }
 }

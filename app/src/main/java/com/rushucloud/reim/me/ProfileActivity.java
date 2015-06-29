@@ -437,6 +437,7 @@ public class ProfileActivity extends Activity
 
         if (currentUser == null)
         {
+            ReimApplication.resetTabIndices();
             Intent intent = new Intent(ProfileActivity.this, SignInActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -614,6 +615,7 @@ public class ProfileActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
+                            ReimApplication.resetTabIndices();
                             Intent intent = new Intent(ProfileActivity.this, SignInActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

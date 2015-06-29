@@ -605,11 +605,13 @@ public class StatisticsFragment extends Fragment
         {
             othersTotalTextView.setText(Utils.formatDouble(totalAmount / 10000));
             othersUnitTextView.setText(R.string.ten_thousand);
+            othersUnitTextView.setVisibility(View.VISIBLE);
         }
         else
         {
             othersTotalTextView.setText(Utils.formatDouble(totalAmount / 100000000));
             othersUnitTextView.setText(R.string.one_hundred_million);
+            othersUnitTextView.setVisibility(View.VISIBLE);
         }
 
         ReimPie reimPie = new ReimPie(getActivity(), 0, 360, othersStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_pie), 1);
@@ -712,20 +714,21 @@ public class StatisticsFragment extends Fragment
             for (final String status : statusData.keySet())
             {
                 View view = View.inflate(getActivity(), R.layout.list_status_stat, null);
-//                view.setBackgroundResource(R.drawable.list_item_drawable);
-//                view.setOnClickListener(new View.OnClickListener()
-//                {
-//                    public void onClick(View v)
-//                    {
-//                        Bundle bundle = new Bundle();
-//                        bundle.putInt("year", year);
-//                        bundle.putInt("month", month);
-//                        bundle.putString("status", status);
-//                        Intent intent = new Intent(getActivity(), StatisticsActivity.class);
-//                        intent.putExtras(bundle);
-//                        ViewUtils.goForward(getActivity(), intent);
-//                    }
-//                });
+                view.setBackgroundResource(R.drawable.list_item_drawable);
+                view.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        int statusType = status.equals(getString(R.string.status_approved)) ? 6 : 4;
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("year", year);
+                        bundle.putInt("month", month);
+                        bundle.putInt("status", statusType);
+                        Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                        intent.putExtras(bundle);
+                        ViewUtils.goForward(getActivity(), intent);
+                    }
+                });
 
                 TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
                 statusTextView.setText(status);

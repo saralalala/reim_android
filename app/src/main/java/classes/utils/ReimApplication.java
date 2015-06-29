@@ -126,6 +126,13 @@ public class ReimApplication extends Application
         return context;
     }
 
+    public static void resetTabIndices()
+    {
+        setTabIndex(Constant.TAB_REIM);
+        setReportTabIndex(Constant.TAB_REPORT_MINE);
+        setStatTabIndex(Constant.TAB_STATISTICS_MINE);
+    }
+
     private void createDirectories()
     {
         try

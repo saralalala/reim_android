@@ -68,6 +68,7 @@ public abstract class BaseResponse
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("username", username);
                     intent.putExtra("password", password);
+                    ReimApplication.resetTabIndices();
                     ReimApplication.getContext().startActivity(intent);
                 }
             }

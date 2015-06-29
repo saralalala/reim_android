@@ -10,26 +10,29 @@ public class OthersStatRequest extends BaseRequest
     {
         super();
 
+        addParams("year", year);
+        addParams("month", month);
+
         appendUrl(URLDef.URL_STATISTICS_OTHERS);
-        appendUrl(year);
-        appendUrl(month);
     }
 
-    public OthersStatRequest(int year, int month, int categoryID, int tagID, int userID, String currencyCode)
+    public OthersStatRequest(int year, int month, int categoryID, int tagID, int userID, String currencyCode, int status)
     {
         super();
 
+        addParams("year", year);
+        addParams("month", month);
+        addParams("category", categoryID);
+        addParams("tagID", tagID);
+        addParams("user", userID);
+        addParams("currency", currencyCode);
+        addParams("status", status);
+
         appendUrl(URLDef.URL_STATISTICS_OTHERS);
-        appendUrl(year);
-        appendUrl(month);
-        appendUrl(categoryID);
-        appendUrl(tagID);
-        appendUrl(userID);
-        appendUrl(currencyCode);
     }
 
     public void sendRequest(HttpConnectionCallback callback)
     {
-        doGet(callback);
+        doPost(callback);
     }
 }

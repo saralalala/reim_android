@@ -352,6 +352,7 @@ public class MeFragment extends Fragment
         }
         else
         {
+            ReimApplication.resetTabIndices();
             Intent intent = new Intent(getActivity(), SignInActivity.class);
             if (Utils.isEmailOrPhone(appPreference.getUsername()))
             {

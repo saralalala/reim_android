@@ -91,6 +91,7 @@ public class StatisticsActivity extends Activity
     private int tagID;
     private int userID;
     private String currencyCode;
+    private int status;
     private int lastUpdateTime = 0;
 
     // View
@@ -362,7 +363,7 @@ public class StatisticsActivity extends Activity
     // View - draw others
     private void drawStatus(HashMap<String, Double> statusData)
     {
-        if (!statusData.isEmpty())
+        if (status == -2 && !statusData.isEmpty())
         {
             statusTitleLayout.setVisibility(View.VISIBLE);
             statusLayout.setVisibility(View.VISIBLE);
@@ -499,11 +500,13 @@ public class StatisticsActivity extends Activity
             {
                 totalTextView.setText(Utils.formatDouble(totalAmount / 10000));
                 unitTextView.setText(R.string.ten_thousand);
+                unitTextView.setVisibility(View.VISIBLE);
             }
             else
             {
                 totalTextView.setText(Utils.formatDouble(totalAmount / 100000000));
                 unitTextView.setText(R.string.one_hundred_million);
+                unitTextView.setVisibility(View.VISIBLE);
             }
 
             ReimPie reimPie = new ReimPie(this, 0, 360, statContainer.getWidth(), ViewUtils.getColor(R.color.stat_pie), 1);
@@ -720,6 +723,7 @@ public class StatisticsActivity extends Activity
         tagID = bundle.getInt("tagID", 0);
         userID = bundle.getInt("userID", 0);
         currencyCode = bundle.getString("currencyCode", "");
+        status = bundle.getInt("status", -2);
     }
 
     private boolean needToGetData()
@@ -774,7 +778,7 @@ public class StatisticsActivity extends Activity
 
     private void sendGetOthersDataRequest()
     {
-        OthersStatRequest request = new OthersStatRequest(year, month, categoryID, tagID, userID, currencyCode);
+        OthersStatRequest request = new OthersStatRequest(year, month, categoryID, tagID, userID, currencyCode, status);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)

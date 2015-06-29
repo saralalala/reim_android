@@ -807,6 +807,7 @@ public class DBManager extends SQLiteOpenHelper
             LogUtils.println("insert item: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
             int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
             int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
+            String currencyCode = item.getCurrency() == null ? "CNY" : item.getCurrency().getCode();
             String sqlString = "INSERT INTO tbl_item (server_id, vendor, report_local_id, category_id, amount, " +
                     "pa_amount, user_id, consumed_date, note, status, location, currency, rate, didi_id, createdt, " +
                     "server_updatedt, local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
@@ -821,7 +822,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + sqliteEscape(item.getNote()) + "'," +
                     "'" + item.getStatus() + "'," +
                     "'" + sqliteEscape(item.getLocation()) + "'," +
-                    "'" + item.getCurrency().getCode() + "'," +
+                    "'" + currencyCode + "'," +
                     "'" + item.getRate() + "'," +
                     "'" + item.getDidiID() + "'," +
                     "'" + item.getCreatedDate() + "'," +
@@ -855,6 +856,7 @@ public class DBManager extends SQLiteOpenHelper
         try
         {
             int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
+            String currencyCode = item.getCurrency() == null ? "CNY" : item.getCurrency().getCode();
             String sqlString = "INSERT INTO tbl_others_item (server_id, vendor, report_server_id, category_id, tags_id, " +
                     "users_id, amount, pa_amount, user_id, consumed_date, note, status, location, currency, rate, didi_id, " +
                     "createdt, server_updatedt, local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
@@ -871,7 +873,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + sqliteEscape(item.getNote()) + "'," +
                     "'" + item.getStatus() + "'," +
                     "'" + sqliteEscape(item.getLocation()) + "'," +
-                    "'" + item.getCurrency().getCode() + "'," +
+                    "'" + currencyCode + "'," +
                     "'" + item.getRate() + "'," +
                     "'" + item.getDidiID() + "'," +
                     "'" + item.getCreatedDate() + "'," +
@@ -961,6 +963,7 @@ public class DBManager extends SQLiteOpenHelper
             LogUtils.println("update item by local id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
             int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
             int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
+            String currencyCode = item.getCurrency() == null ? "CNY" : item.getCurrency().getCode();
             String sqlString = "UPDATE tbl_item SET " +
                     "server_id = '" + item.getServerID() + "'," +
                     "vendor = '" + sqliteEscape(item.getVendor()) + "'," +
@@ -973,7 +976,7 @@ public class DBManager extends SQLiteOpenHelper
                     "note = '" + sqliteEscape(item.getNote()) + "'," +
                     "status = '" + item.getStatus() + "'," +
                     "location = '" + sqliteEscape(item.getLocation()) + "'," +
-                    "currency = '" + item.getCurrency().getCode() + "'," +
+                    "currency = '" + currencyCode + "'," +
                     "rate = '" + item.getRate() + "'," +
                     "didi_id = '" + item.getDidiID() + "'," +
                     "createdt = '" + item.getCreatedDate() + "'," +
@@ -1004,6 +1007,7 @@ public class DBManager extends SQLiteOpenHelper
             LogUtils.println("update item by server id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
             int reportID = item.getBelongReport() == null ? -1 : item.getBelongReport().getLocalID();
             int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
+            String currencyCode = item.getCurrency() == null ? "CNY" : item.getCurrency().getCode();
             String sqlString = "UPDATE tbl_item SET " +
                     "server_id = '" + item.getServerID() + "'," +
                     "vendor = '" + sqliteEscape(item.getVendor()) + "'," +
@@ -1016,7 +1020,7 @@ public class DBManager extends SQLiteOpenHelper
                     "note = '" + sqliteEscape(item.getNote()) + "'," +
                     "status = '" + item.getStatus() + "'," +
                     "location = '" + sqliteEscape(item.getLocation()) + "'," +
-                    "currency = '" + item.getCurrency().getCode() + "'," +
+                    "currency = '" + currencyCode + "'," +
                     "rate = '" + item.getRate() + "'," +
                     "didi_id = '" + item.getDidiID() + "'," +
                     "createdt = '" + item.getCreatedDate() + "'," +
