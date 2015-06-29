@@ -719,7 +719,7 @@ public class StatisticsFragment extends Fragment
                 {
                     public void onClick(View v)
                     {
-                        int statusType = status.equals(getString(R.string.status_approved)) ? 6 : 4;
+                        int statusType = status.equals(getString(R.string.status_approved)) ? 2 : 4;
                         Bundle bundle = new Bundle();
                         bundle.putInt("year", year);
                         bundle.putInt("month", month);
