@@ -302,6 +302,11 @@ public class MeFragment extends Fragment
 
     public void loadProfileView()
     {
+        if (appPreference == null)
+        {
+            initData();
+        }
+
         currentUser = appPreference.getCurrentUser();
         Group currentGroup = appPreference.getCurrentGroup();
 

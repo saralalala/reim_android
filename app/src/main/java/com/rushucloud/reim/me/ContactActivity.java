@@ -26,6 +26,9 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
 import classes.widget.ReimProgressDialog;
+import netUtils.common.HttpConnectionCallback;
+import netUtils.request.user.InviteRequest;
+import netUtils.response.user.InviteResponse;
 
 public class ContactActivity extends Activity
 {
@@ -52,7 +55,7 @@ public class ContactActivity extends Activity
     protected void onResume()
     {
         super.onResume();
-        MobclickAgent.onPageStart("InviteListActivity");
+        MobclickAgent.onPageStart("ContactActivity");
         MobclickAgent.onResume(this);
         if (contactList.isEmpty() && hasInit)
         {
@@ -64,7 +67,7 @@ public class ContactActivity extends Activity
     protected void onPause()
     {
         super.onPause();
-        MobclickAgent.onPageEnd("InviteListActivity");
+        MobclickAgent.onPageEnd("ContactActivity");
         MobclickAgent.onPause(this);
     }
 
@@ -113,11 +116,11 @@ public class ContactActivity extends Activity
 
                     if (!PhoneUtils.isNetworkConnected())
                     {
-                        ViewUtils.showToast(ContactActivity.this, R.string.error_create_network_unavailable);
+                        ViewUtils.showToast(ContactActivity.this, R.string.error_send_invite_network_unavailable);
                     }
                     else
                     {
-
+                        sendInviteRequest(inviteList);
                     }
                 }
             }
@@ -232,5 +235,36 @@ public class ContactActivity extends Activity
                 });
             }
         }).start();
+    }
+
+    // Network
+    private void sendInviteRequest(String inviteList)
+    {
+        ReimProgressDialog.show();
+        InviteRequest inviteRequest = new InviteRequest(inviteList);
+        inviteRequest.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final InviteResponse response = new InviteResponse(httpResponse);
+                runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        ReimProgressDialog.dismiss();
+                        if (response.getStatus())
+                        {
+                            int prompt = response.isAllInSameCompany() ? R.string.prompt_all_in_same_company : R.string.succeed_in_sending_invite;
+                            ViewUtils.showToast(ContactActivity.this, prompt);
+                            goBack();
+                        }
+                        else
+                        {
+                            ViewUtils.showToast(ContactActivity.this, R.string.failed_to_send_invite, response.getErrorMessage());
+                        }
+                    }
+                });
+            }
+        });
     }
 }
