@@ -235,7 +235,7 @@ public class ManagerActivity extends Activity
             adapter = new MemberListViewAdapter(this, userList, chosenList);
             managerListView.setAdapter(adapter);
 
-            indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+            indexLayout = (LinearLayout) findViewById(R.id.indexLayout);
             TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
 
             ViewUtils.initIndexLayout(this, 123, adapter.getSelector(), managerListView, indexLayout, centralTextView);

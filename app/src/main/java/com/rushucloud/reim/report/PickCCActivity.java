@@ -199,7 +199,7 @@ public class PickCCActivity extends Activity
                 }
             });
 
-            indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+            indexLayout = (LinearLayout) findViewById(R.id.indexLayout);
             TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
 
             ViewUtils.initIndexLayout(this, 123, adapter.getSelector(), ccListView, indexLayout, centralTextView);

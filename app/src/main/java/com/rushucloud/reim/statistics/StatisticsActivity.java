@@ -24,6 +24,7 @@ import classes.adapter.StatisticsListViewAdapter;
 import classes.model.Category;
 import classes.model.Currency;
 import classes.model.StatCategory;
+import classes.model.StatGroup;
 import classes.model.StatTag;
 import classes.model.StatUser;
 import classes.model.Tag;
@@ -92,8 +93,10 @@ public class StatisticsActivity extends Activity
     private int categoryID;
     private int tagID;
     private int userID;
-    private String currencyCode;
     private int status;
+    private String currencyCode;
+    private int groupID;
+    private String groupName;
     private int lastUpdateTime = 0;
 
     // View
@@ -157,11 +160,7 @@ public class StatisticsActivity extends Activity
         });
 
         TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
-        if (year != 0)
-        {
-            titleTextView.setText(Utils.getMonthString(year, month));
-        }
-        else if (categoryID != 0)
+        if (categoryID != 0)
         {
             Category category = dbManager.getCategory(categoryID);
             if (category != null)
@@ -217,6 +216,14 @@ public class StatisticsActivity extends Activity
                 ViewUtils.showToast(this, R.string.failed_to_read_data);
                 goBack();
             }
+        }
+        else if (groupID != 0)
+        {
+            titleTextView.setText(getString(R.string.stat_group) + groupName);
+        }
+        else if (year != 0)
+        {
+            titleTextView.setText(Utils.getMonthString(year, month));
         }
         else
         {
@@ -331,9 +338,9 @@ public class StatisticsActivity extends Activity
                 for (final String month : monthsData.keySet())
                 {
                     Double data = monthsData.get(month);
-                    ReimBar monthBar = new ReimBar(StatisticsActivity.this, data / max);
+                    ReimBar monthBar = new ReimBar(this, data / max);
 
-                    View view = View.inflate(StatisticsActivity.this, R.layout.list_month_stat, null);
+                    View view = View.inflate(this, R.layout.list_month_stat, null);
 
                     TextView monthTextView = (TextView) view.findViewById(R.id.monthTextView);
                     monthTextView.setText(month);
@@ -381,7 +388,7 @@ public class StatisticsActivity extends Activity
 
             for (final String status : statusData.keySet())
             {
-                View view = View.inflate(StatisticsActivity.this, R.layout.list_status_stat, null);
+                View view = View.inflate(this, R.layout.list_status_stat, null);
 
                 TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
                 statusTextView.setText(status);
@@ -404,23 +411,23 @@ public class StatisticsActivity extends Activity
         }
     }
 
-    private void drawDepartment(HashMap<String, Double> departmentData)
+    private void drawDepartment(List<StatGroup> groupList)
     {
-        if (!departmentData.isEmpty())
+        if (!groupList.isEmpty())
         {
             departmentTitleLayout.setVisibility(View.VISIBLE);
             departmentLayout.setVisibility(View.VISIBLE);
 
-            for (final String department : departmentData.keySet())
+            for (final StatGroup group : groupList)
             {
                 View view = View.inflate(this, R.layout.list_department_stat, null);
 
-                TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
-                statusTextView.setText(department);
+                TextView departmentTextView = (TextView) view.findViewById(R.id.departmentTextView);
+                departmentTextView.setText(group.getName());
 
                 TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                 amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-                amountTextView.setText(Utils.formatAmount(departmentData.get(department)));
+                amountTextView.setText(Utils.formatAmount(group.getAmount()));
 
                 departmentLayout.addView(view);
             }
@@ -645,7 +652,7 @@ public class StatisticsActivity extends Activity
                 final Currency currency = dbManager.getCurrency(code);
                 if (currency != null)
                 {
-                    View view = View.inflate(StatisticsActivity.this, R.layout.list_currency_stat, null);
+                    View view = View.inflate(this, R.layout.list_currency_stat, null);
 
                     TextView currencyTextView = (TextView) view.findViewById(R.id.currencyTextView);
                     currencyTextView.setText(currency.getName());
@@ -765,8 +772,10 @@ public class StatisticsActivity extends Activity
         categoryID = bundle.getInt("categoryID", 0);
         tagID = bundle.getInt("tagID", 0);
         userID = bundle.getInt("userID", 0);
-        currencyCode = bundle.getString("currencyCode", "");
         status = bundle.getInt("status", -2);
+        currencyCode = bundle.getString("currencyCode", "");
+        groupID = bundle.getInt("groupID", 0);
+        groupName = bundle.getString("groupName", "");
     }
 
     private boolean needToGetData()
@@ -821,7 +830,7 @@ public class StatisticsActivity extends Activity
 
     private void sendGetOthersDataRequest()
     {
-        OthersStatRequest request = new OthersStatRequest(year, month, categoryID, tagID, userID, currencyCode, status);
+        OthersStatRequest request = new OthersStatRequest(year, month, categoryID, tagID, userID, currencyCode, status, groupID);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -839,7 +848,7 @@ public class StatisticsActivity extends Activity
                             drawCategoryPie(response.getStatCategoryList());
                             drawStatus(response.getStatusData());
                             drawCurrency(response.getCurrencyData());
-                            drawDepartment(response.getDepartmentData());
+                            drawDepartment(response.getStatGroupList());
                             drawTagBar(response.getStatTagList());
                             drawMember(response.getStatUserList());
                             adapter.notifyDataSetChanged();

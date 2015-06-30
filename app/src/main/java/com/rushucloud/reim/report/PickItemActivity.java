@@ -1052,7 +1052,7 @@ public class PickItemActivity extends Activity implements OnClickListener
     // Data
     private void initData()
     {
-        Bundle bundle = this.getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
         report = (Report) bundle.getSerializable("report");
         chosenItemIDList = bundle.getIntegerArrayList("chosenItemIDList");
         if (chosenItemIDList == null)

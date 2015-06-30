@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import classes.model.StatCategory;
+import classes.model.StatGroup;
 import classes.model.StatTag;
 import classes.model.StatUser;
 import netUtils.response.common.BaseResponse;
@@ -19,7 +20,7 @@ public class OthersStatResponse extends BaseResponse
     private List<StatCategory> statCategoryList;
     private HashMap<String, Double> statusData;
     private HashMap<String, Double> currencyData;
-    private HashMap<String, Double> departmentData;
+    private List<StatGroup> statGroupList;
     private List<StatTag> statTagList;
     private List<StatUser> statUserList;
 
@@ -34,27 +35,27 @@ public class OthersStatResponse extends BaseResponse
         {
             JSONObject jObject = getDataObject();
 
-            this.statCategoryList = new ArrayList<>();
+            statCategoryList = new ArrayList<>();
             JSONArray categories = jObject.getJSONArray("categories");
             for (int i = 0; i < categories.length(); i++)
             {
                 StatCategory category = new StatCategory(categories.getJSONObject(i));
-                this.statCategoryList.add(category);
-                this.totalAmount += category.getAmount();
+                statCategoryList.add(category);
+                totalAmount += category.getAmount();
             }
 
-            this.statusData = new HashMap<>();
+            statusData = new HashMap<>();
             JSONArray details = jObject.optJSONArray("detail");
             if (details != null)
             {
                 for (int i = 0; i < details.length(); i++)
                 {
                     JSONObject object = details.getJSONObject(i);
-                    this.statusData.put(object.getString("desc"), object.getDouble("val"));
+                    statusData.put(object.getString("desc"), object.getDouble("val"));
                 }
             }
 
-            this.currencyData = new HashMap<>();
+            currencyData = new HashMap<>();
             JSONObject currencies = jObject.optJSONObject("currencies");
             if (currencies != null)
             {
@@ -62,11 +63,11 @@ public class OthersStatResponse extends BaseResponse
                 {
                     String key = (String) iterator.next();
                     Double value = currencies.getDouble(key);
-                    this.currencyData.put(key.toUpperCase(), value);
+                    currencyData.put(key.toUpperCase(), value);
                 }
             }
 
-            this.departmentData = new HashMap<>();
+            statGroupList = new ArrayList<>();
             JSONObject groupObject = jObject.optJSONObject("group");
             if (groupObject != null)
             {
@@ -74,31 +75,31 @@ public class OthersStatResponse extends BaseResponse
                 for (int i = 0; i < groups.length(); i++)
                 {
                     JSONObject object = groups.getJSONObject(i);
-                    departmentData.put(object.getString("name"), object.getDouble("amount"));
+                    statGroupList.add(new StatGroup(object));
                 }
 
                 JSONArray members = groupObject.optJSONArray("members");
                 for (int i = 0; i < members.length(); i++)
                 {
                     JSONObject object = members.getJSONObject(i);
-                    departmentData.put(object.getString("name"), object.getDouble("amount"));
+                    statGroupList.add(new StatGroup(object));
                 }
             }
 
-            this.statTagList = new ArrayList<>();
+            statTagList = new ArrayList<>();
             JSONArray tags = jObject.getJSONArray("tags");
             for (int i = 0; i < tags.length(); i++)
             {
                 JSONObject object = tags.getJSONObject(i);
-                this.statTagList.add(new StatTag(object));
+                statTagList.add(new StatTag(object));
             }
 
-            this.statUserList = new ArrayList<>();
+            statUserList = new ArrayList<>();
             JSONArray members = jObject.getJSONArray("members");
             for (int i = 0; i < members.length(); i++)
             {
                 JSONObject object = members.getJSONObject(i);
-                this.statUserList.add(new StatUser(object));
+                statUserList.add(new StatUser(object));
             }
         }
         catch (Exception e)
@@ -127,9 +128,9 @@ public class OthersStatResponse extends BaseResponse
         return currencyData;
     }
 
-    public HashMap<String, Double> getDepartmentData()
+    public List<StatGroup> getStatGroupList()
     {
-        return departmentData;
+        return statGroupList;
     }
 
     public List<StatTag> getStatTagList()

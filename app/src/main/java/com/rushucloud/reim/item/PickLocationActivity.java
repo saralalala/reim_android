@@ -264,7 +264,7 @@ public class PickLocationActivity extends Activity
 
     private void initIndexLayout()
     {
-        indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+        indexLayout = (LinearLayout) findViewById(R.id.indexLayout);
         centralTextView = (TextView) findViewById(R.id.centralTextView);
 
         final int height = (ViewUtils.getPhoneWindowHeight(this) - ViewUtils.dpToPixel(123) - ViewUtils.getStatusBarHeight(this)) / indexLetters.length;

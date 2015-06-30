@@ -1451,7 +1451,7 @@ public class EditItemActivity extends Activity
         categoryList.addAll(dbManager.getGroupCategories(appPreference.getCurrentGroupID()));
         tagList.addAll(dbManager.getGroupTags(appPreference.getCurrentGroupID()));
 
-        Intent intent = this.getIntent();
+        Intent intent = getIntent();
         fromReim = intent.getBooleanExtra("fromReim", false);
         fromEditReport = intent.getBooleanExtra("fromEditReport", false);
         fromPickItems = intent.getBooleanExtra("fromPickItems", false);

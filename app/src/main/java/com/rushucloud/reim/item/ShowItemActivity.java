@@ -394,7 +394,7 @@ public class ShowItemActivity extends Activity
     private void initData()
     {
         dbManager = DBManager.getDBManager();
-        Intent intent = this.getIntent();
+        Intent intent = getIntent();
         int itemID = intent.getIntExtra("itemLocalID", -1);
         if (itemID == -1)
         {

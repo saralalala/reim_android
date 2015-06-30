@@ -244,7 +244,7 @@ public class SubCategoryActivity extends Activity
         appPreference = AppPreference.getAppPreference();
         dbManager = DBManager.getDBManager();
 
-        parentID = this.getIntent().getIntExtra("parentID", 0);
+        parentID = getIntent().getIntExtra("parentID", 0);
     }
 
     // Network

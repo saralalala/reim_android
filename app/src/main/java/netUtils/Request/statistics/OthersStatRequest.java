@@ -16,7 +16,8 @@ public class OthersStatRequest extends BaseRequest
         appendUrl(URLDef.URL_STATISTICS_OTHERS);
     }
 
-    public OthersStatRequest(int year, int month, int categoryID, int tagID, int userID, String currencyCode, int status)
+    public OthersStatRequest(int year, int month, int categoryID, int tagID, int userID,
+                             String currencyCode, int status, int groupID)
     {
         super();
 
@@ -27,6 +28,7 @@ public class OthersStatRequest extends BaseRequest
         addParams("user", userID);
         addParams("currency", currencyCode);
         addParams("status", status);
+        addParams("group_id", groupID);
 
         appendUrl(URLDef.URL_STATISTICS_OTHERS);
     }

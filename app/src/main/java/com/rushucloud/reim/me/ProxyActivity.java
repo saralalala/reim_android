@@ -164,7 +164,7 @@ public class ProxyActivity extends Activity
 
     private void showDeleteWindow()
     {
-        deletePopupWindow.showAtLocation(ProxyActivity.this.findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
+        deletePopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
         deletePopupWindow.update();
 
         ViewUtils.dimBackground(ProxyActivity.this);

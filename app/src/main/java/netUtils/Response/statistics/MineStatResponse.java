@@ -34,27 +34,27 @@ public class MineStatResponse extends BaseResponse
         {
             JSONObject jObject = getDataObject();
 
-            this.hasStaffData = Utils.intToBoolean(jObject.getInt("staff"));
-            this.ongoingAmount = jObject.getDouble("process");
-            this.newAmount = jObject.getDouble("new");
+            hasStaffData = Utils.intToBoolean(jObject.getInt("staff"));
+            ongoingAmount = jObject.getDouble("process");
+            newAmount = jObject.getDouble("new");
 
-            this.statCategoryList = new ArrayList<>();
+            statCategoryList = new ArrayList<>();
             JSONArray categories = jObject.getJSONArray("cates");
             for (int i = 0; i < categories.length(); i++)
             {
                 StatCategory category = new StatCategory(categories.getJSONObject(i));
-                this.statCategoryList.add(category);
+                statCategoryList.add(category);
             }
 
-            this.statTagList = new ArrayList<>();
+            statTagList = new ArrayList<>();
             JSONArray tags = jObject.getJSONArray("tags");
             for (int i = 0; i < tags.length(); i++)
             {
                 JSONObject object = tags.getJSONObject(i);
-                this.statTagList.add(new StatTag(object));
+                statTagList.add(new StatTag(object));
             }
 
-            this.monthsData = new HashMap<>();
+            monthsData = new HashMap<>();
             JSONObject months = jObject.optJSONObject("ms");
             if (months != null)
             {
@@ -62,11 +62,11 @@ public class MineStatResponse extends BaseResponse
                 {
                     String key = (String) iterator.next();
                     Double value = months.getDouble(key);
-                    this.monthsData.put(key, value);
+                    monthsData.put(key, value);
                 }
             }
 
-            this.currencyData = new HashMap<>();
+            currencyData = new HashMap<>();
             JSONObject currencies = jObject.optJSONObject("currencies");
             if (currencies != null)
             {
@@ -74,7 +74,7 @@ public class MineStatResponse extends BaseResponse
                 {
                     String key = (String) iterator.next();
                     Double value = currencies.getDouble(key);
-                    this.currencyData.put(key.toUpperCase(), value);
+                    currencyData.put(key.toUpperCase(), value);
                 }
             }
         }

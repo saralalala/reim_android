@@ -234,7 +234,7 @@ public class InviteListActivity extends Activity
             }
         });
 
-        indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+        indexLayout = (LinearLayout) findViewById(R.id.indexLayout);
         centralTextView = (TextView) findViewById(R.id.centralTextView);
     }
 

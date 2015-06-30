@@ -177,7 +177,7 @@ public class PickMemberActivity extends Activity
         });
 
         int topMargin = userList.size() == 1 ? 140 : 123;
-        indexLayout = (LinearLayout) this.findViewById(R.id.indexLayout);
+        indexLayout = (LinearLayout) findViewById(R.id.indexLayout);
         TextView centralTextView = (TextView) findViewById(R.id.centralTextView);
 
         ViewUtils.initIndexLayout(this, topMargin, adapter.getSelector(), userListView, indexLayout, centralTextView);
