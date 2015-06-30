@@ -21,7 +21,7 @@ public class DidiExpense implements Serializable
     private String orderID = "";
     private String time = "";
     private String start = "";
-    private String destionation = "";
+    private String destination = "";
     private double amount = 0;
     private String city = "";
     private int type = TYPE_TAXI;
@@ -35,7 +35,7 @@ public class DidiExpense implements Serializable
             setOrderID(jObject.getString("oid"));
             setTime(jObject.getString("setuptime"));
             setStart(jObject.getString("fromAddress"));
-            setDestionation(jObject.getString("toAddress"));
+            setDestination(jObject.getString("toAddress"));
             setType(jObject.optInt("product_type", 0));
             setUsed(Utils.intToBoolean(jObject.getInt("used")));
         }
@@ -93,13 +93,13 @@ public class DidiExpense implements Serializable
         this.start = start;
     }
 
-    public String getDestionation()
+    public String getDestination()
     {
-        return destionation;
+        return destination;
     }
-    public void setDestionation(String destionation)
+    public void setDestination(String destination)
     {
-        this.destionation = destionation;
+        this.destination = destination;
     }
 
     public double getAmount()

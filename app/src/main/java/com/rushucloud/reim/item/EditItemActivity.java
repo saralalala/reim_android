@@ -1483,7 +1483,7 @@ public class EditItemActivity extends Activity
                 item.setVendor(ViewUtils.getString(R.string.vendor_taxi));
                 item.setLocation(expense.getCity());
                 item.setDidiID(expense.getId());
-                item.setNote(String.format(getString(R.string.from_to), expense.getStart(), expense.getDestionation()));
+                item.setNote(String.format(getString(R.string.from_to), expense.getStart(), expense.getDestination()));
 
                 String transport = getString(R.string.transport);
                 for (Category category : categoryList)
