@@ -95,7 +95,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         UmengUpdateAgent.setDefault();
         UmengUpdateAgent.update(this);
         initData();
-        initView();
+        initView();//
     }
 
     protected void onResume()

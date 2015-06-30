@@ -34,7 +34,7 @@ public class Item
     private Report belongReport = null;
     private User consumer;
     private double amount = 0;
-    private double aaAmount = 0;
+    private double aaAmount = 0;//
     private boolean needReimbursed = true;
     private boolean aaApproved = false;
     private int status = STATUS_DRAFT;
