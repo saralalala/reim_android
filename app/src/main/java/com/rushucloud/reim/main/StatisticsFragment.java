@@ -80,11 +80,13 @@ public class StatisticsFragment extends Fragment
     private TextView othersUnitTextView;
     private LinearLayout leftCategoryLayout;
     private LinearLayout rightCategoryLayout;
-    private LinearLayout memberLayout;
+    private RelativeLayout statusTitleLayout;
+    private LinearLayout statusLayout;
     private RelativeLayout othersCurrencyTitleLayout;
     private LinearLayout othersCurrencyLayout;
     private RelativeLayout othersTagTitleLayout;
     private LinearLayout othersTagLayout;
+    private LinearLayout memberLayout;
 
     private AppPreference appPreference;
     private DBManager dbManager;
@@ -327,6 +329,9 @@ public class StatisticsFragment extends Fragment
         leftCategoryLayout = (LinearLayout) othersView.findViewById(R.id.leftCategoryLayout);
         rightCategoryLayout = (LinearLayout) othersView.findViewById(R.id.rightCategoryLayout);
 
+        statusTitleLayout = (RelativeLayout) othersView.findViewById(R.id.statusTitleLayout);
+        statusLayout = (LinearLayout) othersView.findViewById(R.id.statusLayout);
+
         othersCurrencyTitleLayout = (RelativeLayout) othersView.findViewById(R.id.currencyTitleLayout);
         othersCurrencyLayout = (LinearLayout) othersView.findViewById(R.id.currencyLayout);
 
@@ -352,6 +357,7 @@ public class StatisticsFragment extends Fragment
         othersStatContainer.removeAllViews();
         leftCategoryLayout.removeAllViews();
         rightCategoryLayout.removeAllViews();
+        statusLayout.removeAllViews();
         othersCurrencyLayout.removeAllViews();
         othersTagLayout.removeAllViews();
         memberLayout.removeAllViews();
@@ -384,6 +390,7 @@ public class StatisticsFragment extends Fragment
         refreshData();
     }
 
+    // View - draw mine
     private void drawCostPie(double ongoingAmount, double newAmount)
     {
         double totalAmount = ongoingAmount + newAmount;
@@ -550,90 +557,7 @@ public class StatisticsFragment extends Fragment
         }
     }
 
-    private void drawCurrency(HashMap<String, Double> currencyData, final boolean mineData)
-    {
-        if (currencyData.size() > 1)
-        {
-            if (mineData)
-            {
-                mineCurrencyTitleLayout.setVisibility(View.VISIBLE);
-                mineCurrencyLayout.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                othersCurrencyTitleLayout.setVisibility(View.VISIBLE);
-                othersCurrencyLayout.setVisibility(View.VISIBLE);
-            }
-
-            for (String code : currencyData.keySet())
-            {
-                final Currency currency = dbManager.getCurrency(code);
-                if (currency != null)
-                {
-                    View view = View.inflate(getActivity(), R.layout.list_currency_stat, null);
-                    view.setBackgroundResource(R.drawable.list_item_drawable);
-                    view.setOnClickListener(new View.OnClickListener()
-                    {
-                        public void onClick(View v)
-                        {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("currencyCode", currency.getCode());
-                            if (mineData)
-                            {
-                                bundle.putBoolean("mineData", true);
-                            }
-                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
-                            intent.putExtras(bundle);
-                            ViewUtils.goForward(getActivity(), intent);
-                        }
-                    });
-
-                    TextView currencyTextView = (TextView) view.findViewById(R.id.currencyTextView);
-                    currencyTextView.setText(currency.getName());
-
-                    TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
-                    symbolTextView.setText(currency.getSymbol());
-
-                    TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-                    amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-                    amountTextView.setText(Utils.formatAmount(currencyData.get(code)));
-
-                    if (mineData)
-                    {
-                        mineCurrencyLayout.addView(view);
-                    }
-                    else
-                    {
-                        othersCurrencyLayout.addView(view);
-                    }
-                }
-            }
-
-            if (mineData)
-            {
-                View lastView = mineCurrencyLayout.getChildAt(mineCurrencyLayout.getChildCount() - 1);
-                View divider = lastView.findViewById(R.id.divider);
-                divider.setVisibility(View.INVISIBLE);
-            }
-            else
-            {
-                View lastView = othersCurrencyLayout.getChildAt(othersCurrencyLayout.getChildCount() - 1);
-                View divider = lastView.findViewById(R.id.divider);
-                divider.setVisibility(View.INVISIBLE);
-            }
-        }
-        else if (mineData)
-        {
-            mineCurrencyTitleLayout.setVisibility(View.GONE);
-            mineCurrencyLayout.setVisibility(View.GONE);
-        }
-        else
-        {
-            othersCurrencyTitleLayout.setVisibility(View.GONE);
-            othersCurrencyLayout.setVisibility(View.GONE);
-        }
-    }
-
+    // View - draw others
     private void drawCategoryPie(List<StatCategory> categoryList)
     {
         SparseArray<List<StatCategory>> categoryArray = new SparseArray<>();
@@ -681,11 +605,13 @@ public class StatisticsFragment extends Fragment
         {
             othersTotalTextView.setText(Utils.formatDouble(totalAmount / 10000));
             othersUnitTextView.setText(R.string.ten_thousand);
+            othersUnitTextView.setVisibility(View.VISIBLE);
         }
         else
         {
             othersTotalTextView.setText(Utils.formatDouble(totalAmount / 100000000));
             othersUnitTextView.setText(R.string.one_hundred_million);
+            othersUnitTextView.setVisibility(View.VISIBLE);
         }
 
         ReimPie reimPie = new ReimPie(getActivity(), 0, 360, othersStatContainer.getWidth(), ViewUtils.getColor(R.color.stat_pie), 1);
@@ -778,6 +704,184 @@ public class StatisticsFragment extends Fragment
         othersStatContainer.addView(reimPie);
     }
 
+    private void drawStatus(HashMap<String, Double> statusData)
+    {
+        if (!statusData.isEmpty())
+        {
+            statusTitleLayout.setVisibility(View.VISIBLE);
+            statusLayout.setVisibility(View.VISIBLE);
+
+            for (final String status : statusData.keySet())
+            {
+                View view = View.inflate(getActivity(), R.layout.list_status_stat, null);
+                view.setBackgroundResource(R.drawable.list_item_drawable);
+                view.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        int statusType = status.equals(getString(R.string.status_approved)) ? 2 : 4;
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("year", year);
+                        bundle.putInt("month", month);
+                        bundle.putInt("status", statusType);
+                        Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                        intent.putExtras(bundle);
+                        ViewUtils.goForward(getActivity(), intent);
+                    }
+                });
+
+                TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
+                statusTextView.setText(status);
+
+                TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                amountTextView.setText(Utils.formatAmount(statusData.get(status)));
+
+                statusLayout.addView(view);
+            }
+
+            View lastView = statusLayout.getChildAt(statusLayout.getChildCount() - 1);
+            View divider = lastView.findViewById(R.id.divider);
+            divider.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            statusTitleLayout.setVisibility(View.GONE);
+            statusLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void drawMember(List<StatUser> userList)
+    {
+        if (!userList.isEmpty())
+        {
+            for (StatUser user : userList)
+            {
+                final User localUser = dbManager.getUser(user.getUserID());
+                if (localUser != null)
+                {
+                    View view = View.inflate(getActivity(), R.layout.list_member_stat, null);
+                    view.setBackgroundResource(R.drawable.list_item_drawable);
+                    view.setOnClickListener(new View.OnClickListener()
+                    {
+                        public void onClick(View v)
+                        {
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("year", year);
+                            bundle.putInt("month", month);
+                            bundle.putInt("userID", localUser.getServerID());
+                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                            intent.putExtras(bundle);
+                            ViewUtils.goForward(getActivity(), intent);
+                        }
+                    });
+
+                    TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+                    nameTextView.setText(localUser.getNickname());
+
+                    TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
+                    countTextView.setText(String.format(getString(R.string.item_count), user.getItemCount()));
+
+                    TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                    amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                    amountTextView.setText(Utils.formatAmount(user.getAmount()));
+
+                    memberLayout.addView(view);
+                }
+            }
+        }
+    }
+
+    // View - draw both
+    private void drawCurrency(HashMap<String, Double> currencyData, final boolean mineData)
+    {
+        if (currencyData.size() > 1)
+        {
+            if (mineData)
+            {
+                mineCurrencyTitleLayout.setVisibility(View.VISIBLE);
+                mineCurrencyLayout.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                othersCurrencyTitleLayout.setVisibility(View.VISIBLE);
+                othersCurrencyLayout.setVisibility(View.VISIBLE);
+            }
+
+            for (String code : currencyData.keySet())
+            {
+                final Currency currency = dbManager.getCurrency(code);
+                if (currency != null)
+                {
+                    View view = View.inflate(getActivity(), R.layout.list_currency_stat, null);
+                    view.setBackgroundResource(R.drawable.list_item_drawable);
+                    view.setOnClickListener(new View.OnClickListener()
+                    {
+                        public void onClick(View v)
+                        {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("currencyCode", currency.getCode());
+                            if (mineData)
+                            {
+                                bundle.putBoolean("mineData", true);
+                            }
+                            else
+                            {
+                                bundle.putInt("year", year);
+                                bundle.putInt("month", month);
+                            }
+                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                            intent.putExtras(bundle);
+                            ViewUtils.goForward(getActivity(), intent);
+                        }
+                    });
+
+                    TextView currencyTextView = (TextView) view.findViewById(R.id.currencyTextView);
+                    currencyTextView.setText(currency.getName());
+
+                    TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
+                    symbolTextView.setText(currency.getSymbol());
+
+                    TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                    amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                    amountTextView.setText(Utils.formatAmount(currencyData.get(code)));
+
+                    if (mineData)
+                    {
+                        mineCurrencyLayout.addView(view);
+                    }
+                    else
+                    {
+                        othersCurrencyLayout.addView(view);
+                    }
+                }
+            }
+
+            if (mineData)
+            {
+                View lastView = mineCurrencyLayout.getChildAt(mineCurrencyLayout.getChildCount() - 1);
+                View divider = lastView.findViewById(R.id.divider);
+                divider.setVisibility(View.INVISIBLE);
+            }
+            else
+            {
+                View lastView = othersCurrencyLayout.getChildAt(othersCurrencyLayout.getChildCount() - 1);
+                View divider = lastView.findViewById(R.id.divider);
+                divider.setVisibility(View.INVISIBLE);
+            }
+        }
+        else if (mineData)
+        {
+            mineCurrencyTitleLayout.setVisibility(View.GONE);
+            mineCurrencyLayout.setVisibility(View.GONE);
+        }
+        else
+        {
+            othersCurrencyTitleLayout.setVisibility(View.GONE);
+            othersCurrencyLayout.setVisibility(View.GONE);
+        }
+    }
+
     private void drawTagBar(List<StatTag> tagList, final boolean mineData)
     {
         if (!tagList.isEmpty())
@@ -817,12 +921,15 @@ public class StatisticsFragment extends Fragment
                         public void onClick(View v)
                         {
                             Bundle bundle = new Bundle();
-                            bundle.putInt("year", year);
-                            bundle.putInt("month", month);
                             bundle.putInt("tagID", localTag.getServerID());
                             if (mineData)
                             {
                                 bundle.putBoolean("mineData", true);
+                            }
+                            else
+                            {
+                                bundle.putInt("year", year);
+                                bundle.putInt("month", month);
                             }
                             Intent intent = new Intent(getActivity(), StatisticsActivity.class);
                             intent.putExtras(bundle);
@@ -878,47 +985,6 @@ public class StatisticsFragment extends Fragment
         {
             othersTagTitleLayout.setVisibility(View.GONE);
             othersTagLayout.setVisibility(View.GONE);
-        }
-    }
-
-    private void drawMember(List<StatUser> userList)
-    {
-        if (!userList.isEmpty())
-        {
-            for (StatUser user : userList)
-            {
-                final User localUser = dbManager.getUser(user.getUserID());
-                if (localUser != null)
-                {
-                    View view = View.inflate(getActivity(), R.layout.list_member_stat, null);
-                    view.setBackgroundResource(R.drawable.list_item_drawable);
-                    view.setOnClickListener(new View.OnClickListener()
-                    {
-                        public void onClick(View v)
-                        {
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("year", year);
-                            bundle.putInt("month", month);
-                            bundle.putInt("userID", localUser.getServerID());
-                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
-                            intent.putExtras(bundle);
-                            ViewUtils.goForward(getActivity(), intent);
-                        }
-                    });
-
-                    TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
-                    nameTextView.setText(localUser.getNickname());
-
-                    TextView countTextView = (TextView) view.findViewById(R.id.countTextView);
-                    countTextView.setText(String.format(getString(R.string.item_count), user.getItemCount()));
-
-                    TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-                    amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-                    amountTextView.setText(Utils.formatAmount(user.getAmount()));
-
-                    memberLayout.addView(view);
-                }
-            }
         }
     }
 
@@ -1036,6 +1102,7 @@ public class StatisticsFragment extends Fragment
                         {
                             resetOthersView();
                             drawCategoryPie(response.getStatCategoryList());
+                            drawStatus(response.getStatusData());
                             drawCurrency(response.getCurrencyData(), false);
                             drawTagBar(response.getStatTagList(), false);
                             drawMember(response.getStatUserList());

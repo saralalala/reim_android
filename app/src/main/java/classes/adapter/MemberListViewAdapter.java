@@ -60,7 +60,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
 
             boolean isChosen = chosenList.contains(user);
 
-            int color = isChosen? R.color.list_item_pressed : R.color.list_item_unpressed;
+            int color = isChosen ? R.color.list_item_pressed : R.color.list_item_unpressed;
             view.setBackgroundResource(color);
 
             CircleImageView imageView = (CircleImageView) view.findViewById(R.id.avatarImageView);
@@ -77,7 +77,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
                 nicknameTextView.setText(user.getNickname());
             }
 
-            color = isChosen? selectedColor : unselectedColor;
+            color = isChosen ? selectedColor : unselectedColor;
             nicknameTextView.setTextColor(color);
             return view;
         }
@@ -136,6 +136,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
         }
 
         int count = 0;
+        indexList.clear();
         selector.clear();
         memberList.clear();
         for (Map.Entry<String, ArrayList<User>> entry : indexMap.entrySet())

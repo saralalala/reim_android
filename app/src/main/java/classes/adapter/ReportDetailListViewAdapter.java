@@ -154,7 +154,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
                 }
             }
 
-            int prompt = containsForeignCurrency? R.string.equivalent_amount : R.string.total_amount;
+            int prompt = containsForeignCurrency ? R.string.equivalent_amount : R.string.total_amount;
             totalTextView.setText(prompt);
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
             amountTextView.setText(Utils.formatDouble(amount));

@@ -110,7 +110,7 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
 
     public int getCount()
     {
-        return noPermission? 1 : contactList.size();
+        return noPermission ? 1 : contactList.size();
     }
 
     public User getItem(int position)

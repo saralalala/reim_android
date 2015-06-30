@@ -15,8 +15,9 @@ import netUtils.response.common.BaseResponse;
 
 public class OthersStatResponse extends BaseResponse
 {
-    private double totalAmount = 0;
+    private double totalAmount;
     private List<StatCategory> statCategoryList;
+    private HashMap<String, Double> statusData;
     private HashMap<String, Double> currencyData;
     private List<StatTag> statTagList;
     private List<StatUser> statUserList;
@@ -39,6 +40,17 @@ public class OthersStatResponse extends BaseResponse
                 StatCategory category = new StatCategory(categories.getJSONObject(i));
                 this.statCategoryList.add(category);
                 this.totalAmount += category.getAmount();
+            }
+
+            this.statusData = new HashMap<>();
+            JSONArray details = jObject.optJSONArray("detail");
+            if (details != null)
+            {
+                for (int i = 0; i < details.length(); i++)
+                {
+                    JSONObject object = details.getJSONObject(i);
+                    this.statusData.put(object.getString("desc"), object.getDouble("val"));
+                }
             }
 
             this.currencyData = new HashMap<>();
@@ -83,6 +95,11 @@ public class OthersStatResponse extends BaseResponse
     public List<StatCategory> getStatCategoryList()
     {
         return statCategoryList;
+    }
+
+    public HashMap<String, Double> getStatusData()
+    {
+        return statusData;
     }
 
     public HashMap<String, Double> getCurrencyData()

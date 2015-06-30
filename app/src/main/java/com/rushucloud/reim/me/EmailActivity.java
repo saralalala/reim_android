@@ -177,7 +177,7 @@ public class EmailActivity extends Activity
     private void refreshView()
     {
         User currentUser = AppPreference.getAppPreference().getCurrentUser();
-        int visibility = currentUser.isActive()? View.GONE : View.VISIBLE;
+        int visibility = currentUser.isActive() ? View.GONE : View.VISIBLE;
         activeLayout.setVisibility(visibility);
         emailTextView.setText(currentUser.getEmail());
     }

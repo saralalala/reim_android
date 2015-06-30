@@ -80,12 +80,12 @@ public class LanguageActivity extends Activity
             public void onClick(View v)
             {
                 Configuration config = getResources().getConfiguration();
-                config.locale = chineseImageView.getVisibility() == View.VISIBLE? Locale.CHINESE : Locale.ENGLISH;
+                config.locale = chineseImageView.getVisibility() == View.VISIBLE ? Locale.CHINESE : Locale.ENGLISH;
                 getResources().updateConfiguration(config, getResources().getDisplayMetrics());
 
                 if (hasAction)
                 {
-                    String language = chineseImageView.getVisibility() == View.VISIBLE? "zh" : "en";
+                    String language = chineseImageView.getVisibility() == View.VISIBLE ? "zh" : "en";
                     AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setLanguage(language);
                     appPreference.saveAppPreference();

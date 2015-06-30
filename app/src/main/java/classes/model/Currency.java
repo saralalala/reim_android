@@ -100,7 +100,7 @@ public class Currency
                 break;
         }
 
-		return nameID == -1? "" : ViewUtils.getString(nameID);
+		return nameID == -1 ? "" : ViewUtils.getString(nameID);
 	}
 
 	public String getCode()

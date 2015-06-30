@@ -590,7 +590,7 @@ public class EditReportActivity extends Activity
             itemLayout.addView(view);
         }
 
-        int prompt = containsForeignCurrency? R.string.equivalent_amount : R.string.total_amount;
+        int prompt = containsForeignCurrency ? R.string.equivalent_amount : R.string.total_amount;
         totalTextView.setText(prompt);
 
         amountTextView.setText(Utils.formatDouble(amount));

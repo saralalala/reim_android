@@ -76,7 +76,7 @@ public class Proxy implements Serializable
             for (int i = 0; i < jsonArray.length(); i++)
             {
                 JSONObject object = jsonArray.getJSONObject(i);
-                int userID = isClientArray? object.getInt("uid") : object.getInt("wingid");
+                int userID = isClientArray ? object.getInt("uid") : object.getInt("wingid");
                 User user = DBManager.getDBManager().getUser(userID);
                 if (user == null)
                 {

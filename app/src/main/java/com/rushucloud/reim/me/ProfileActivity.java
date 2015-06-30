@@ -384,9 +384,16 @@ public class ProfileActivity extends Activity
             {
                 picturePopupWindow.dismiss();
 
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
-                startActivityForResult(intent, Constant.ACTIVITY_TAKE_PHOTO);
+                if (!appPreference.isProxyMode())
+                {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, appPreference.getTempAvatarUri());
+                    startActivityForResult(intent, Constant.ACTIVITY_TAKE_PHOTO);
+                }
+                else
+                {
+                    ViewUtils.showToast(ProfileActivity.this, R.string.error_change_avatar_no_permission);
+                }
             }
         });
 
@@ -397,9 +404,16 @@ public class ProfileActivity extends Activity
             {
                 picturePopupWindow.dismiss();
 
-                Intent intent = new Intent(Intent.ACTION_PICK, null);
-                intent.setType("image/*");
-                startActivityForResult(intent, Constant.ACTIVITY_PICK_IMAGE);
+                if (!appPreference.isProxyMode())
+                {
+                    Intent intent = new Intent(Intent.ACTION_PICK, null);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, Constant.ACTIVITY_PICK_IMAGE);
+                }
+                else
+                {
+                    ViewUtils.showToast(ProfileActivity.this, R.string.error_change_avatar_no_permission);
+                }
             }
         });
 
@@ -423,6 +437,7 @@ public class ProfileActivity extends Activity
 
         if (currentUser == null)
         {
+            ReimApplication.resetTabIndices();
             Intent intent = new Intent(ProfileActivity.this, SignInActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -466,7 +481,7 @@ public class ProfileActivity extends Activity
                 companyTextView.setText(R.string.not_joined);
             }
 
-            int switchPrompt = appPreference.isProxyMode()? R.string.switch_back : R.string.switch_identity;
+            int switchPrompt = appPreference.isProxyMode() ? R.string.switch_back : R.string.switch_identity;
             switchTextView.setText(switchPrompt);
 
             if (currentUser.getEmail().isEmpty() && currentUser.getPhone().isEmpty())
@@ -476,7 +491,7 @@ public class ProfileActivity extends Activity
             else
             {
                 passwordLayout.setVisibility(View.VISIBLE);
-                int text = appPreference.hasPassword()? R.string.change_password : R.string.set_password;
+                int text = appPreference.hasPassword() ? R.string.change_password : R.string.set_password;
                 passwordTextView.setText(text);
             }
         }
@@ -600,6 +615,7 @@ public class ProfileActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
+                            ReimApplication.resetTabIndices();
                             Intent intent = new Intent(ProfileActivity.this, SignInActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
