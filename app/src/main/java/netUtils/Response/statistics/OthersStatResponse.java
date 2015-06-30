@@ -19,6 +19,7 @@ public class OthersStatResponse extends BaseResponse
     private List<StatCategory> statCategoryList;
     private HashMap<String, Double> statusData;
     private HashMap<String, Double> currencyData;
+    private HashMap<String, Double> departmentData;
     private List<StatTag> statTagList;
     private List<StatUser> statUserList;
 
@@ -65,6 +66,25 @@ public class OthersStatResponse extends BaseResponse
                 }
             }
 
+            this.departmentData = new HashMap<>();
+            JSONObject groupObject = jObject.optJSONObject("group");
+            if (groupObject != null)
+            {
+                JSONArray groups = groupObject.optJSONArray("groups");
+                for (int i = 0; i < groups.length(); i++)
+                {
+                    JSONObject object = groups.getJSONObject(i);
+                    departmentData.put(object.getString("name"), object.getDouble("amount"));
+                }
+
+                JSONArray members = groupObject.optJSONArray("members");
+                for (int i = 0; i < members.length(); i++)
+                {
+                    JSONObject object = members.getJSONObject(i);
+                    departmentData.put(object.getString("name"), object.getDouble("amount"));
+                }
+            }
+
             this.statTagList = new ArrayList<>();
             JSONArray tags = jObject.getJSONArray("tags");
             for (int i = 0; i < tags.length(); i++)
@@ -105,6 +125,11 @@ public class OthersStatResponse extends BaseResponse
     public HashMap<String, Double> getCurrencyData()
     {
         return currencyData;
+    }
+
+    public HashMap<String, Double> getDepartmentData()
+    {
+        return departmentData;
     }
 
     public List<StatTag> getStatTagList()

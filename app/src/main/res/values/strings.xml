@@ -228,6 +228,7 @@
     <string name="stat_by_month">月份统计</string>
     <string name="stat_by_status">明细统计</string>
     <string name="stat_by_currency">货币统计</string>
+    <string name="stat_by_department">部门统计</string>
     <string name="stat_by_tag">标签统计</string>
     <string name="stat_by_member">人员统计</string>
     <string name="choose_month">选择月份</string>
@@ -235,6 +236,7 @@
     <string name="stat_category">类别-</string>
     <string name="stat_tag">标签-</string>
     <string name="stat_user">人员-</string>
+    <string name="stat_status">明细-</string>
     <string name="stat_currency">货币-</string>
     
     <string name="personal_center">个人中心</string>

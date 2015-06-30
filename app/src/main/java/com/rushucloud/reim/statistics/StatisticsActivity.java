@@ -70,6 +70,8 @@ public class StatisticsActivity extends Activity
     private LinearLayout statusLayout;
     private RelativeLayout currencyTitleLayout;
     private LinearLayout currencyLayout;
+    private RelativeLayout departmentTitleLayout;
+    private LinearLayout departmentLayout;
     private RelativeLayout tagTitleLayout;
     private LinearLayout tagLayout;
     private RelativeLayout memberTitleLayout;
@@ -198,6 +200,11 @@ public class StatisticsActivity extends Activity
                 goBack();
             }
         }
+        else if (status != -2)
+        {
+            int statusType = status == 2 ? R.string.status_approved : R.string.status_finished;
+            titleTextView.setText(getString(R.string.stat_status) + ViewUtils.getString(statusType));
+        }
         else if (!currencyCode.isEmpty())
         {
             Currency currency = dbManager.getCurrency(currencyCode);
@@ -244,6 +251,9 @@ public class StatisticsActivity extends Activity
 
         currencyTitleLayout = (RelativeLayout) view.findViewById(R.id.currencyTitleLayout);
         currencyLayout = (LinearLayout) view.findViewById(R.id.currencyLayout);
+
+        departmentTitleLayout = (RelativeLayout) view.findViewById(R.id.departmentTitleLayout);
+        departmentLayout = (LinearLayout) view.findViewById(R.id.departmentLayout);
 
         tagTitleLayout = (RelativeLayout) view.findViewById(R.id.tagTitleLayout);
         tagLayout = (LinearLayout) view.findViewById(R.id.tagLayout);
@@ -292,6 +302,7 @@ public class StatisticsActivity extends Activity
         monthLayout.removeAllViews();
         statusLayout.removeAllViews();
         currencyLayout.removeAllViews();
+        departmentLayout.removeAllViews();
         tagLayout.removeAllViews();
         memberLayout.removeAllViews();
     }
@@ -390,6 +401,38 @@ public class StatisticsActivity extends Activity
         {
             statusTitleLayout.setVisibility(View.GONE);
             statusLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void drawDepartment(HashMap<String, Double> departmentData)
+    {
+        if (!departmentData.isEmpty())
+        {
+            departmentTitleLayout.setVisibility(View.VISIBLE);
+            departmentLayout.setVisibility(View.VISIBLE);
+
+            for (final String department : departmentData.keySet())
+            {
+                View view = View.inflate(this, R.layout.list_department_stat, null);
+
+                TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
+                statusTextView.setText(department);
+
+                TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                amountTextView.setText(Utils.formatAmount(departmentData.get(department)));
+
+                departmentLayout.addView(view);
+            }
+
+            View lastView = departmentLayout.getChildAt(departmentLayout.getChildCount() - 1);
+            View divider = lastView.findViewById(R.id.divider);
+            divider.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            departmentTitleLayout.setVisibility(View.GONE);
+            departmentLayout.setVisibility(View.GONE);
         }
     }
 
@@ -796,6 +839,7 @@ public class StatisticsActivity extends Activity
                             drawCategoryPie(response.getStatCategoryList());
                             drawStatus(response.getStatusData());
                             drawCurrency(response.getCurrencyData());
+                            drawDepartment(response.getDepartmentData());
                             drawTagBar(response.getStatTagList());
                             drawMember(response.getStatUserList());
                             adapter.notifyDataSetChanged();

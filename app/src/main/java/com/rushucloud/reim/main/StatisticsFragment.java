@@ -84,6 +84,8 @@ public class StatisticsFragment extends Fragment
     private LinearLayout statusLayout;
     private RelativeLayout othersCurrencyTitleLayout;
     private LinearLayout othersCurrencyLayout;
+    private RelativeLayout departmentTitleLayout;
+    private LinearLayout departmentLayout;
     private RelativeLayout othersTagTitleLayout;
     private LinearLayout othersTagLayout;
     private LinearLayout memberLayout;
@@ -335,6 +337,9 @@ public class StatisticsFragment extends Fragment
         othersCurrencyTitleLayout = (RelativeLayout) othersView.findViewById(R.id.currencyTitleLayout);
         othersCurrencyLayout = (LinearLayout) othersView.findViewById(R.id.currencyLayout);
 
+        departmentTitleLayout = (RelativeLayout) othersView.findViewById(R.id.departmentTitleLayout);
+        departmentLayout = (LinearLayout) othersView.findViewById(R.id.departmentLayout);
+
         othersTagTitleLayout = (RelativeLayout) othersView.findViewById(R.id.tagTitleLayout);
         othersTagLayout = (LinearLayout) othersView.findViewById(R.id.tagLayout);
 
@@ -359,6 +364,7 @@ public class StatisticsFragment extends Fragment
         rightCategoryLayout.removeAllViews();
         statusLayout.removeAllViews();
         othersCurrencyLayout.removeAllViews();
+        departmentLayout.removeAllViews();
         othersTagLayout.removeAllViews();
         memberLayout.removeAllViews();
     }
@@ -751,6 +757,52 @@ public class StatisticsFragment extends Fragment
         }
     }
 
+    private void drawDepartment(HashMap<String, Double> departmentData)
+    {
+        if (!departmentData.isEmpty())
+        {
+            departmentTitleLayout.setVisibility(View.VISIBLE);
+            departmentLayout.setVisibility(View.VISIBLE);
+
+            for (final String department : departmentData.keySet())
+            {
+                View view = View.inflate(getActivity(), R.layout.list_department_stat, null);
+//                view.setBackgroundResource(R.drawable.list_item_drawable);
+//                view.setOnClickListener(new View.OnClickListener()
+//                {
+//                    public void onClick(View v)
+//                    {
+//                        Bundle bundle = new Bundle();
+//                        bundle.putInt("year", year);
+//                        bundle.putInt("month", month);
+//                        bundle.putString("department", department);
+//                        Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+//                        intent.putExtras(bundle);
+//                        ViewUtils.goForward(getActivity(), intent);
+//                    }
+//                });
+
+                TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
+                statusTextView.setText(department);
+
+                TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+                amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                amountTextView.setText(Utils.formatAmount(departmentData.get(department)));
+
+                departmentLayout.addView(view);
+            }
+
+            View lastView = departmentLayout.getChildAt(departmentLayout.getChildCount() - 1);
+            View divider = lastView.findViewById(R.id.divider);
+            divider.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            departmentTitleLayout.setVisibility(View.GONE);
+            departmentLayout.setVisibility(View.GONE);
+        }
+    }
+
     private void drawMember(List<StatUser> userList)
     {
         if (!userList.isEmpty())
@@ -1104,6 +1156,7 @@ public class StatisticsFragment extends Fragment
                             drawCategoryPie(response.getStatCategoryList());
                             drawStatus(response.getStatusData());
                             drawCurrency(response.getCurrencyData(), false);
+                            drawDepartment(response.getDepartmentData());
                             drawTagBar(response.getStatTagList(), false);
                             drawMember(response.getStatUserList());
                             othersAdapter.notifyDataSetChanged();
