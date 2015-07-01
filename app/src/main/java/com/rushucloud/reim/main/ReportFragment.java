@@ -708,7 +708,7 @@ public class ReportFragment extends Fragment implements OnClickListener
         if (ReimApplication.getReportTabIndex() == Constant.TAB_REPORT_MINE)
         {
             Report report = showMineList.get(reportIndex);
-            if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
+            if (report.getStatus() != Report.STATUS_APPROVED && !report.isFinished())
             {
                 exportButton.setEnabled(false);
                 exportButton.setBackgroundResource(R.drawable.window_button_pressed);
@@ -737,7 +737,7 @@ public class ReportFragment extends Fragment implements OnClickListener
         else
         {
             Report report = showOthersList.get(reportIndex);
-            if (report.getStatus() != Report.STATUS_APPROVED && report.getStatus() != Report.STATUS_FINISHED)
+            if (report.getStatus() != Report.STATUS_APPROVED && !report.isFinished())
             {
                 exportButton.setEnabled(false);
                 exportButton.setBackgroundResource(R.drawable.window_button_pressed);

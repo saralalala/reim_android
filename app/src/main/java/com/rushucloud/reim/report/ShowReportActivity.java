@@ -37,9 +37,11 @@ import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
 import netUtils.request.group.GetGroupRequest;
+import netUtils.request.report.ConfirmReportRequest;
 import netUtils.request.report.GetReportRequest;
 import netUtils.request.report.RevokeReportRequest;
 import netUtils.response.group.GetGroupResponse;
+import netUtils.response.report.ConfirmReportResponse;
 import netUtils.response.report.GetReportResponse;
 import netUtils.response.report.RevokeReportResponse;
 
@@ -48,8 +50,9 @@ public class ShowReportActivity extends Activity
     // Widgets
     private ImageView tipImageView;
     private ReportDetailListViewAdapter adapter;
-    private LinearLayout revokeDivider;
+    private LinearLayout buttonDivider;
     private Button revokeButton;
+    private Button confirmButton;
 
     // Local Data
     private DBManager dbManager;
@@ -157,7 +160,7 @@ public class ShowReportActivity extends Activity
             }
         });
 
-        revokeDivider = (LinearLayout) findViewById(R.id.revokeDivider);
+        buttonDivider = (LinearLayout) findViewById(R.id.buttonDivider);
 
         revokeButton = (Button) findViewById(R.id.revokeButton);
         revokeButton.setOnClickListener(new View.OnClickListener()
@@ -165,6 +168,15 @@ public class ShowReportActivity extends Activity
             public void onClick(View view)
             {
                 showRevokeDialog();
+            }
+        });
+
+        confirmButton = (Button) findViewById(R.id.confirmButton);
+        confirmButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                sendConfirmReportRequest(report.getServerID());
             }
         });
     }
@@ -183,6 +195,7 @@ public class ShowReportActivity extends Activity
         }
 
         refreshRevokeView();
+        refreshConfirmView();
 
         if (PhoneUtils.isNetworkConnected())
         {
@@ -196,15 +209,29 @@ public class ShowReportActivity extends Activity
 
     private void refreshRevokeView()
     {
-        if (myReport && report.getStatus() != Report.STATUS_FINISHED)
+        if (myReport && !report.isFinished())
         {
-            revokeDivider.setVisibility(View.VISIBLE);
+            buttonDivider.setVisibility(View.VISIBLE);
             revokeButton.setVisibility(View.VISIBLE);
         }
         else
         {
-            revokeDivider.setVisibility(View.GONE);
+            buttonDivider.setVisibility(View.GONE);
             revokeButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void refreshConfirmView()
+    {
+        if (myReport && report.getStatus() == Report.STATUS_NEED_CONFIRM)
+        {
+            buttonDivider.setVisibility(View.VISIBLE);
+            confirmButton.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            buttonDivider.setVisibility(View.GONE);
+            confirmButton.setVisibility(View.GONE);
         }
     }
 
@@ -400,6 +427,7 @@ public class ShowReportActivity extends Activity
                                     adapter.setItemList(itemList);
                                     adapter.notifyDataSetChanged();
                                     refreshRevokeView();
+                                    refreshConfirmView();
 
                                     if (report.getCommentList().size() != lastCommentCount)
                                     {
@@ -447,38 +475,17 @@ public class ShowReportActivity extends Activity
                 final RevokeReportResponse response = new RevokeReportResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    int ownerID = AppPreference.getAppPreference().getCurrentUserID();
                     int localID = report.getLocalID();
                     report = new Report(response.getReport());
                     report.setLocalID(localID);
 
-                    if (myReport)
+                    dbManager.updateReportByServerID(report);
+
+                    dbManager.deleteReportComments(report.getLocalID());
+                    for (Comment comment : report.getCommentList())
                     {
-                        dbManager.updateReportByServerID(report);
-
-                        dbManager.deleteReportComments(report.getLocalID());
-                        for (Comment comment : report.getCommentList())
-                        {
-                            comment.setReportID(report.getLocalID());
-                            dbManager.insertComment(comment);
-                        }
-                    }
-                    else
-                    {
-                        dbManager.deleteOthersReport(reportServerID, ownerID);
-                        dbManager.insertOthersReport(report);
-
-                        for (Item item : response.getItemList())
-                        {
-                            dbManager.insertOthersItem(item);
-                        }
-                        itemList = dbManager.getOthersReportItems(reportServerID);
-
-                        for (Comment comment : report.getCommentList())
-                        {
-                            comment.setReportID(report.getServerID());
-                            dbManager.insertOthersComment(comment);
-                        }
+                        comment.setReportID(report.getLocalID());
+                        dbManager.insertComment(comment);
                     }
 
                     runOnUiThread(new Runnable()
@@ -499,6 +506,45 @@ public class ShowReportActivity extends Activity
                         {
                             ReimProgressDialog.dismiss();
                             ViewUtils.showToast(ShowReportActivity.this, R.string.failed_to_revoke_report, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendConfirmReportRequest(final int reportServerID)
+    {
+        ReimProgressDialog.show();
+        ConfirmReportRequest request = new ConfirmReportRequest(reportServerID);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final ConfirmReportResponse response = new ConfirmReportResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    report.setStatus(Report.STATUS_CONFIRMED);
+                    dbManager.updateReportByServerID(report);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ShowReportActivity.this, R.string.succeed_in_confirming_report);
+                            goBackToMainActivity();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ShowReportActivity.this, R.string.failed_to_confirm_report, response.getErrorMessage());
                         }
                     });
                 }

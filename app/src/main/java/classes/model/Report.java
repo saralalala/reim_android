@@ -30,6 +30,8 @@ public class Report implements Serializable
     public static final int STATUS_APPROVED = 2;
     public static final int STATUS_REJECTED = 3;
     public static final int STATUS_FINISHED = 4;
+    public static final int STATUS_NEED_CONFIRM = 7;
+    public static final int STATUS_CONFIRMED = 8;
 
     private int localID = -1;
     private int serverID = -1;
@@ -331,6 +333,10 @@ public class Report implements Serializable
                 return R.drawable.status_rejected;
             case STATUS_FINISHED:
                 return R.drawable.status_finished;
+            case STATUS_NEED_CONFIRM:
+                return R.drawable.status_finished;
+            case STATUS_CONFIRMED:
+                return R.drawable.status_finished;
             default:
                 return 0;
         }
@@ -349,6 +355,10 @@ public class Report implements Serializable
             case STATUS_REJECTED:
                 return R.string.status_rejected;
             case STATUS_FINISHED:
+                return R.string.status_finished;
+            case STATUS_NEED_CONFIRM:
+                return R.string.status_finished;
+            case STATUS_CONFIRMED:
                 return R.string.status_finished;
             default:
                 return R.string.not_available;
@@ -374,6 +384,11 @@ public class Report implements Serializable
     public boolean isEditable()
     {
         return getStatus() == Report.STATUS_DRAFT || getStatus() == Report.STATUS_REJECTED;
+    }
+
+    public boolean isFinished()
+    {
+        return getStatus() == Report.STATUS_FINISHED || getStatus() == Report.STATUS_NEED_CONFIRM || getStatus() == STATUS_CONFIRMED;
     }
 
     public boolean canBeApproved()
@@ -417,6 +432,10 @@ public class Report implements Serializable
             case STATUS_REJECTED:
                 return R.string.status_rejected;
             case STATUS_FINISHED:
+                return R.string.status_finished;
+            case STATUS_NEED_CONFIRM:
+                return R.string.status_finished;
+            case STATUS_CONFIRMED:
                 return R.string.status_finished;
             default:
                 return R.string.not_available;
