@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/get_invoice"
+            android:text="@string/invoice_title"
             android:textColor="@color/major_light"
             android:textSize="20sp"/>
 
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
-        android:text="@string/get_invoice_prompt"
+        android:text="@string/invoice_title_prompt"
         android:textColor="@color/hint_grey"
         android:textSize="16sp"/>
 

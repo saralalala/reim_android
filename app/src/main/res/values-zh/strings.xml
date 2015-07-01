@@ -247,7 +247,7 @@
     <string name="enable_password_protection">开启密码保护</string>
     <string name="sync_without_wifi">仅WiFi开启时上传云端</string>
     <string name="preference">偏好设置</string>
-    <string name="get_invoice">我要开发票</string>
+    <string name="invoice_title">发票抬头</string>
     <string name="import_expenses">导入消费</string>
     <string name="my_messages">我的消息</string>
     <string name="message_from_admin">来自管理员的消息</string>
@@ -304,7 +304,7 @@
     <string name="approve_apply">批准申请</string>
     <string name="reject_apply">拒绝申请</string>
     <string name="choose_admin">选择管理员</string>
-    <string name="get_invoice_prompt">发票抬头：</string>
+    <string name="invoice_title_prompt">发票抬头：</string>
     <string name="invoice_invalid">尚未加入任何公司</string>
     <string name="powered_by">Powered by 云报销</string>
     <string name="category_management">类别管理</string>

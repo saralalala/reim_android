@@ -247,7 +247,7 @@
     <string name="enable_password_protection">Password Protection</string>
     <string name="sync_without_wifi">Sync data without Wi-Fi</string>
     <string name="preference">Preference</string>
-    <string name="get_invoice">Fapiao Name</string>
+    <string name="invoice_title">Fapiao Name</string>
     <string name="import_expenses">导入消费</string>
     <string name="my_messages">我的消息</string>
     <string name="message_from_admin">Admin:</string> <!--?-->
@@ -304,7 +304,7 @@
     <string name="approve_apply">Approve</string>
     <string name="reject_apply">Reject</string>
     <string name="choose_admin">Choose Admin</string>
-    <string name="get_invoice_prompt">Invoice Name：</string>
+    <string name="invoice_title_prompt">Invoice Name：</string>
     <string name="invoice_invalid">尚未加入任何公司</string>
     <string name="powered_by">Powered by 云报销</string> <!---->
     <string name="category_management">Category Management</string>
