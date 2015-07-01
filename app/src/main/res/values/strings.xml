@@ -239,7 +239,7 @@
     <string name="stat_user">人员-</string>
     <string name="stat_status">明细-</string>
     <string name="stat_currency">货币-</string>
-    <string name="stat_group">部门-</string>
+    <string name="stat_department">部门-</string>
     
     <string name="personal_center">个人中心</string>
     <string name="sign_out">退出登录</string>

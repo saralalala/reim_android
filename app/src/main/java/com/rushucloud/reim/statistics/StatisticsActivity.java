@@ -219,7 +219,7 @@ public class StatisticsActivity extends Activity
         }
         else if (groupID != 0)
         {
-            titleTextView.setText(getString(R.string.stat_group) + groupName);
+            titleTextView.setText(getString(R.string.stat_department) + groupName);
         }
         else if (year != 0)
         {
