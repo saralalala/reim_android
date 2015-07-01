@@ -123,6 +123,7 @@ public class User implements Serializable
             setPhone(jObject.getString("phone"));
             setWeChat(jObject.getString("weixin_nickname"));
             setDefaultManagerID(jObject.getInt("manager_id"));
+            setAvatarServerPath(jObject.optString("apath", ""));
             setAvatarLocalPath("");
             setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
             setIsActive(Utils.intToBoolean(jObject.optInt("active", 0)));

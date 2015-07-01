@@ -415,6 +415,10 @@ public class Report implements Serializable
             {
                 return true;
             }
+            if (integer == Report.STATUS_FINISHED && isFinished())
+            {
+                return true;
+            }
         }
         return false;
     }
