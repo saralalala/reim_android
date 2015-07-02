@@ -35,7 +35,7 @@ public class User implements Serializable
     private int avatarID = -1;
     private String avatarServerPath = "";
     private String avatarLocalPath = "";
-    private int privilege = 0;
+    private int privilege = 0;//
     private boolean isActive = false;
     private boolean isAdmin = false;
     private int groupID = -1;
