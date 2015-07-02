@@ -114,9 +114,11 @@
 	<include                 
 		android:layout_width="match_parent"
 		android:layout_height="0.5dp"
+        android:layout_above="@+id/buttonLayout"
 		layout="@layout/view_divider"/>
 
     <LinearLayout
+        android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

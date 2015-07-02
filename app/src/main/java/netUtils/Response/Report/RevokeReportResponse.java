@@ -12,7 +12,6 @@ import classes.model.Item;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.DBManager;
-import classes.utils.LogUtils;
 import classes.utils.Utils;
 import netUtils.response.common.BaseResponse;
 
@@ -24,7 +23,6 @@ public class RevokeReportResponse extends BaseResponse
     public RevokeReportResponse(Object httpResponse)
     {
         super(httpResponse);
-        LogUtils.println(httpResponse);
     }
 
     protected void constructData()
@@ -114,18 +112,8 @@ public class RevokeReportResponse extends BaseResponse
         return report;
     }
 
-    public void setReport(Report report)
-    {
-        this.report = report;
-    }
-
     public List<Item> getItemList()
     {
         return itemList;
-    }
-
-    public void setItemList(List<Item> itemList)
-    {
-        this.itemList = itemList;
     }
 }

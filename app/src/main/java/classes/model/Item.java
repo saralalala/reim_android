@@ -25,6 +25,8 @@ public class Item
     public static final int STATUS_APPROVED = 2;
     public static final int STATUS_REJECTED = 3;
     public static final int STATUS_FINISHED = 4;
+    public static final int STATUS_NEED_CONFIRM = 7;
+    public static final int STATUS_CONFIRMED = 8;
 
     public static final int MAX_INVOICE_COUNT = 16;
 
@@ -411,6 +413,10 @@ public class Item
                     return R.drawable.status_rejected;
                 case STATUS_FINISHED:
                     return R.drawable.status_finished;
+                case STATUS_NEED_CONFIRM:
+                    return R.drawable.status_finished;
+                case STATUS_CONFIRMED:
+                    return R.drawable.status_finished;
                 default:
                     return 0;
             }
@@ -436,6 +442,10 @@ public class Item
                 case STATUS_REJECTED:
                     return R.string.status_rejected;
                 case STATUS_FINISHED:
+                    return R.string.status_finished;
+                case STATUS_NEED_CONFIRM:
+                    return R.string.status_finished;
+                case STATUS_CONFIRMED:
                     return R.string.status_finished;
                 default:
                     return R.string.not_available;

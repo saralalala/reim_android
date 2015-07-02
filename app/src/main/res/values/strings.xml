@@ -196,6 +196,7 @@
     <string name="admin">公司管理员</string>
     <string name="submit">提交</string>
     <string name="revoke">撤回</string>
+    <string name="confirm_paid">确认已收款</string>
     <string name="approve">通过</string>
     <string name="reject">退回</string>
     <string name="reject_reason">退回理由：</string>
@@ -238,7 +239,7 @@
     <string name="stat_user">人员-</string>
     <string name="stat_status">明细-</string>
     <string name="stat_currency">货币-</string>
-    <string name="stat_group">部门-</string>
+    <string name="stat_department">部门-</string>
     
     <string name="personal_center">个人中心</string>
     <string name="sign_out">退出登录</string>
@@ -246,7 +247,7 @@
     <string name="enable_password_protection">开启密码保护</string>
     <string name="sync_without_wifi">仅WiFi开启时上传云端</string>
     <string name="preference">偏好设置</string>
-    <string name="get_invoice">我要开发票</string>
+    <string name="invoice_title">发票抬头</string>
     <string name="import_expenses">导入消费</string>
     <string name="my_messages">我的消息</string>
     <string name="message_from_admin">来自管理员的消息</string>
@@ -303,7 +304,7 @@
     <string name="approve_apply">批准申请</string>
     <string name="reject_apply">拒绝申请</string>
     <string name="choose_admin">选择管理员</string>
-    <string name="get_invoice_prompt">发票抬头：</string>
+    <string name="invoice_title_prompt">发票抬头：</string>
     <string name="invoice_invalid">尚未加入任何公司</string>
     <string name="powered_by">Powered by 云报销</string>
     <string name="category_management">类别管理</string>
@@ -541,6 +542,7 @@
     <string name="succeed_in_sending_comment">发表成功</string>
     <string name="succeed_in_submitting_report">提交成功</string>
     <string name="succeed_in_revoking_report">撤回成功</string>
+    <string name="succeed_in_confirming_report">确认成功</string>
     <string name="succeed_in_alerting">已提醒对方审批报告</string>
     <string name="succeed_in_applying">申请发送成功，管理员批准后可正式加入</string>
     <string name="succeed_in_switch_identity">切换身份成功</string>
@@ -589,6 +591,7 @@
     <string name="failed_to_send_comment">评论发表失败</string>
     <string name="failed_to_submit_report">提交报告失败</string>
     <string name="failed_to_revoke_report">撤回报告失败</string>
+    <string name="failed_to_confirm_report">确认报告失败</string>
     <string name="failed_to_send_email">邮件发送失败</string>
     <string name="failed_to_send_message">短信发送失败</string>
     <string name="failed_to_modify">修改失败</string>
@@ -662,6 +665,8 @@
     <string name="status_approved">待结算</string>
     <string name="status_rejected">退回</string>
     <string name="status_finished">完成</string>
+    <string name="status_need_confirm">待确认</string>
+    <string name="status_confirmed">已确认</string>
     <string name="status_budget">预</string>
     <string name="status_borrowing">借</string>
     <string name="status_approve_ahead_approved">(已审批)</string>

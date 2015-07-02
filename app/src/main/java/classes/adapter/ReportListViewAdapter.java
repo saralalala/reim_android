@@ -44,6 +44,7 @@ public class ReportListViewAdapter extends BaseAdapter
             View view = layoutInflater.inflate(R.layout.list_report, parent, false);
 
             TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
+            TextView confirmTextView = (TextView) view.findViewById(R.id.confirmTextView);
             TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
             TextView dateTextView = (TextView) view.findViewById(R.id.dateTextView);
             TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
@@ -53,6 +54,21 @@ public class ReportListViewAdapter extends BaseAdapter
 
             statusTextView.setText(report.getStatusString());
             statusTextView.setBackgroundResource(report.getStatusBackground());
+
+            if (report.getStatus() == Report.STATUS_NEED_CONFIRM)
+            {
+                confirmTextView.setText(R.string.status_need_confirm);
+                confirmTextView.setVisibility(View.VISIBLE);
+            }
+            else if (report.getStatus() == Report.STATUS_CONFIRMED)
+            {
+                confirmTextView.setText(R.string.status_confirmed);
+                confirmTextView.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                confirmTextView.setVisibility(View.GONE);
+            }
 
             String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
             titleTextView.setText(title);

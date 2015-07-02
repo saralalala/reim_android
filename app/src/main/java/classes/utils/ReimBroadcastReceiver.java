@@ -250,7 +250,8 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
             {
                 return NetworkConstant.PUSH_REPORT_TYPE_MINE_APPROVED;
             }
-            else if (myReport && !hasComment && status == Report.STATUS_FINISHED)
+            else if (myReport && !hasComment && (status == Report.STATUS_FINISHED ||
+                    status == Report.STATUS_NEED_CONFIRM || status == Report.STATUS_CONFIRMED))
             {
                 return NetworkConstant.PUSH_REPORT_TYPE_MINE_FINISHED;
             }
@@ -266,7 +267,8 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
             {
                 return NetworkConstant.PUSH_REPORT_TYPE_MINE_APPROVED_ONLY_COMMENT;
             }
-            else if (myReport && hasComment && status == Report.STATUS_FINISHED)
+            else if (myReport && hasComment && (status == Report.STATUS_FINISHED ||
+                    status == Report.STATUS_NEED_CONFIRM || status == Report.STATUS_CONFIRMED))
             {
                 return NetworkConstant.PUSH_REPORT_TYPE_MINE_FINISHED_ONLY_COMMENT;
             }

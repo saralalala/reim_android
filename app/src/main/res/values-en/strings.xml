@@ -196,6 +196,7 @@
     <string name="admin">Administrator</string>
     <string name="submit">Submit</string>
     <string name="revoke">撤回</string>
+    <string name="confirm_paid">确认已收款</string>
     <string name="approve">Approve</string>
     <string name="reject">Reject</string>
     <string name="reject_reason">Reject reason：</string>
@@ -228,6 +229,7 @@
     <string name="stat_by_month">月份统计</string>
     <string name="stat_by_status">明细统计</string>
     <string name="stat_by_currency">货币统计</string>
+    <string name="stat_by_department">部门统计</string>
     <string name="stat_by_tag">By Tag</string>
     <string name="stat_by_member">By Staff</string>
     <string name="choose_month">Choose Month</string>
@@ -235,7 +237,9 @@
     <string name="stat_category">Category-</string>
     <string name="stat_tag">Tag-</string>
     <string name="stat_user">Staff-</string>
+    <string name="stat_status">Status-</string>
     <string name="stat_currency">Currency-</string>
+    <string name="stat_department">Department-</string>
 
     <string name="personal_center">Personal</string>
     <string name="sign_out">退出登录</string>
@@ -243,7 +247,7 @@
     <string name="enable_password_protection">Password Protection</string>
     <string name="sync_without_wifi">Sync data without Wi-Fi</string>
     <string name="preference">Preference</string>
-    <string name="get_invoice">Fapiao Name</string>
+    <string name="invoice_title">Fapiao Name</string>
     <string name="import_expenses">导入消费</string>
     <string name="my_messages">我的消息</string>
     <string name="message_from_admin">Admin:</string> <!--?-->
@@ -300,7 +304,7 @@
     <string name="approve_apply">Approve</string>
     <string name="reject_apply">Reject</string>
     <string name="choose_admin">Choose Admin</string>
-    <string name="get_invoice_prompt">Invoice Name：</string>
+    <string name="invoice_title_prompt">Invoice Name：</string>
     <string name="invoice_invalid">尚未加入任何公司</string>
     <string name="powered_by">Powered by 云报销</string> <!---->
     <string name="category_management">Category Management</string>
@@ -538,6 +542,7 @@
     <string name="succeed_in_sending_comment">Send Successful</string>
     <string name="succeed_in_submitting_report">Submit Successful</string>
     <string name="succeed_in_revoking_report">撤回成功</string>
+    <string name="succeed_in_confirming_report">确认成功</string>
     <string name="succeed_in_alerting">Alert Successful</string>
     <string name="succeed_in_applying">申请发送成功，管理员批准后可正式加入</string>
     <string name="succeed_in_switch_identity">切换身份成功</string>
@@ -586,6 +591,7 @@
     <string name="failed_to_send_comment">Failed to comment</string>
     <string name="failed_to_submit_report">Failed to submit report</string>
     <string name="failed_to_revoke_report">Failed to revoke report</string>
+    <string name="failed_to_confirm_report">Failed to confirm report</string>
     <string name="failed_to_send_email">Failed to send email</string>
     <string name="failed_to_send_message">Failed to send message</string>
     <string name="failed_to_modify">Failed to modify</string>
@@ -659,6 +665,8 @@
     <string name="status_approved">Approved</string>
     <string name="status_rejected">Rejected</string>
     <string name="status_finished">Finished</string>
+    <string name="status_need_confirm">Need to confirm</string>
+    <string name="status_confirmed">Confirmed</string>
     <string name="status_budget">Budget</string>
     <string name="status_borrowing">Borrowing</string>
     <string name="status_approve_ahead_approved">(Approved)</string>

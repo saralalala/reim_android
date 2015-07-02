@@ -67,14 +67,13 @@ public class MineStatResponse extends BaseResponse
             }
 
             currencyData = new HashMap<>();
-            JSONObject currencies = jObject.optJSONObject("currencies");
+            JSONArray currencies = jObject.optJSONArray("currencies");
             if (currencies != null)
             {
-                for (Iterator<?> iterator = currencies.keys(); iterator.hasNext(); )
+                for (int i = 0; i < currencies.length(); i++)
                 {
-                    String key = (String) iterator.next();
-                    Double value = currencies.getDouble(key);
-                    currencyData.put(key.toUpperCase(), value);
+                    JSONObject object = currencies.getJSONObject(i);
+                    currencyData.put(object.getString("name").toUpperCase(), object.getDouble("amount"));
                 }
             }
         }

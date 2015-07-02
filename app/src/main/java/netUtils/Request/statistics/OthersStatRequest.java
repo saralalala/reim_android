@@ -17,7 +17,7 @@ public class OthersStatRequest extends BaseRequest
     }
 
     public OthersStatRequest(int year, int month, int categoryID, int tagID, int userID,
-                             String currencyCode, int status, int groupID)
+                             String currencyCode, int status, int departmentID)
     {
         super();
 
@@ -28,7 +28,7 @@ public class OthersStatRequest extends BaseRequest
         addParams("user", userID);
         addParams("currency", currencyCode);
         addParams("status", status);
-        addParams("group_id", groupID);
+        addParams("group_id", departmentID);
 
         appendUrl(URLDef.URL_STATISTICS_OTHERS);
     }
