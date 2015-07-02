@@ -26,7 +26,7 @@ import classes.adapter.StatisticsListViewAdapter;
 import classes.model.Category;
 import classes.model.Currency;
 import classes.model.StatCategory;
-import classes.model.StatGroup;
+import classes.model.StatDepartment;
 import classes.model.StatTag;
 import classes.model.StatUser;
 import classes.model.Tag;
@@ -758,38 +758,41 @@ public class StatisticsFragment extends Fragment
         }
     }
 
-    private void drawDepartment(List<StatGroup> groupList)
+    private void drawDepartment(List<StatDepartment> departmentList)
     {
-        if (!groupList.isEmpty())
+        if (!departmentList.isEmpty())
         {
             departmentTitleLayout.setVisibility(View.VISIBLE);
             departmentLayout.setVisibility(View.VISIBLE);
 
-            for (final StatGroup group : groupList)
+            for (final StatDepartment department : departmentList)
             {
                 View view = View.inflate(getActivity(), R.layout.list_department_stat, null);
-                view.setBackgroundResource(R.drawable.list_item_drawable);
-                view.setOnClickListener(new View.OnClickListener()
+                if (department.isDepartment())
                 {
-                    public void onClick(View v)
+                    view.setBackgroundResource(R.drawable.list_item_drawable);
+                    view.setOnClickListener(new View.OnClickListener()
                     {
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("year", year);
-                        bundle.putInt("month", month);
-                        bundle.putInt("groupID", group.getGroupID());
-                        bundle.putString("groupName", group.getName());
-                        Intent intent = new Intent(getActivity(), StatisticsActivity.class);
-                        intent.putExtras(bundle);
-                        ViewUtils.goForward(getActivity(), intent);
-                    }
-                });
+                        public void onClick(View v)
+                        {
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("year", year);
+                            bundle.putInt("month", month);
+                            bundle.putInt("departmentID", department.getDepartmentID());
+                            bundle.putString("departmentName", department.getName());
+                            Intent intent = new Intent(getActivity(), StatisticsActivity.class);
+                            intent.putExtras(bundle);
+                            ViewUtils.goForward(getActivity(), intent);
+                        }
+                    });
+                }
 
                 TextView departmentTextView = (TextView) view.findViewById(R.id.departmentTextView);
-                departmentTextView.setText(group.getName());
+                departmentTextView.setText(department.getName());
 
                 TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                 amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-                amountTextView.setText(Utils.formatAmount(group.getAmount()));
+                amountTextView.setText(Utils.formatAmount(department.getAmount()));
 
                 departmentLayout.addView(view);
             }
@@ -1158,7 +1161,7 @@ public class StatisticsFragment extends Fragment
                             drawCategoryPie(response.getStatCategoryList());
                             drawStatus(response.getStatusData());
                             drawCurrency(response.getCurrencyData(), false);
-                            drawDepartment(response.getStatGroupList());
+                            drawDepartment(response.getStatDepartmentList());
                             drawTagBar(response.getStatTagList(), false);
                             drawMember(response.getStatUserList());
                             othersAdapter.notifyDataSetChanged();

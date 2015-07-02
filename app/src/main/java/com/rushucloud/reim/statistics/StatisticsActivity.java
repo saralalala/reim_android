@@ -1,6 +1,7 @@
 package com.rushucloud.reim.statistics;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,7 +25,7 @@ import classes.adapter.StatisticsListViewAdapter;
 import classes.model.Category;
 import classes.model.Currency;
 import classes.model.StatCategory;
-import classes.model.StatGroup;
+import classes.model.StatDepartment;
 import classes.model.StatTag;
 import classes.model.StatUser;
 import classes.model.Tag;
@@ -95,8 +96,8 @@ public class StatisticsActivity extends Activity
     private int userID;
     private int status;
     private String currencyCode;
-    private int groupID;
-    private String groupName;
+    private int departmentID;
+    private String departmentName;
     private int lastUpdateTime = 0;
 
     // View
@@ -217,9 +218,9 @@ public class StatisticsActivity extends Activity
                 goBack();
             }
         }
-        else if (groupID != 0)
+        else if (departmentID != 0)
         {
-            titleTextView.setText(getString(R.string.stat_department) + groupName);
+            titleTextView.setText(getString(R.string.stat_department) + departmentName);
         }
         else if (year != 0)
         {
@@ -411,23 +412,41 @@ public class StatisticsActivity extends Activity
         }
     }
 
-    private void drawDepartment(List<StatGroup> groupList)
+    private void drawDepartment(List<StatDepartment> departmentList)
     {
-        if (!groupList.isEmpty())
+        if (!departmentList.isEmpty())
         {
             departmentTitleLayout.setVisibility(View.VISIBLE);
             departmentLayout.setVisibility(View.VISIBLE);
 
-            for (final StatGroup group : groupList)
+            for (final StatDepartment department : departmentList)
             {
                 View view = View.inflate(this, R.layout.list_department_stat, null);
+                if (department.isDepartment())
+                {
+                    view.setBackgroundResource(R.drawable.list_item_drawable);
+                    view.setOnClickListener(new View.OnClickListener()
+                    {
+                        public void onClick(View v)
+                        {
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("year", year);
+                            bundle.putInt("month", month);
+                            bundle.putInt("departmentID", department.getDepartmentID());
+                            bundle.putString("departmentName", department.getName());
+                            Intent intent = new Intent(StatisticsActivity.this, StatisticsActivity.class);
+                            intent.putExtras(bundle);
+                            ViewUtils.goForward(StatisticsActivity.this, intent);
+                        }
+                    });
+                }
 
                 TextView departmentTextView = (TextView) view.findViewById(R.id.departmentTextView);
-                departmentTextView.setText(group.getName());
+                departmentTextView.setText(department.getName());
 
                 TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
                 amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-                amountTextView.setText(Utils.formatAmount(group.getAmount()));
+                amountTextView.setText(Utils.formatAmount(department.getAmount()));
 
                 departmentLayout.addView(view);
             }
@@ -774,8 +793,8 @@ public class StatisticsActivity extends Activity
         userID = bundle.getInt("userID", 0);
         status = bundle.getInt("status", -2);
         currencyCode = bundle.getString("currencyCode", "");
-        groupID = bundle.getInt("groupID", 0);
-        groupName = bundle.getString("groupName", "");
+        departmentID = bundle.getInt("departmentID", 0);
+        departmentName = bundle.getString("departmentName", "");
     }
 
     private boolean needToGetData()
@@ -830,7 +849,7 @@ public class StatisticsActivity extends Activity
 
     private void sendGetOthersDataRequest()
     {
-        OthersStatRequest request = new OthersStatRequest(year, month, categoryID, tagID, userID, currencyCode, status, groupID);
+        OthersStatRequest request = new OthersStatRequest(year, month, categoryID, tagID, userID, currencyCode, status, departmentID);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -848,7 +867,7 @@ public class StatisticsActivity extends Activity
                             drawCategoryPie(response.getStatCategoryList());
                             drawStatus(response.getStatusData());
                             drawCurrency(response.getCurrencyData());
-                            drawDepartment(response.getStatGroupList());
+                            drawDepartment(response.getStatDepartmentList());
                             drawTagBar(response.getStatTagList());
                             drawMember(response.getStatUserList());
                             adapter.notifyDataSetChanged();
