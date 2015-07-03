@@ -83,7 +83,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "server_id INT DEFAULT(0),"
                     + "type INT DEFAULT(0),"
                     + "vendor TEXT DEFAULT(''),"
-                    + "currency TEXT DEFAULT(''),"
+                    + "currency TEXT DEFAULT('CNY'),"
                     + "rate FLOAT DEFAULT(0),"
                     + "didi_id INT DEFAULT(0),"
                     + "report_local_id INT DEFAULT(0),"
@@ -133,7 +133,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "server_id INT DEFAULT(0),"
                     + "type INT DEFAULT(0),"
                     + "vendor TEXT DEFAULT(''),"
-                    + "currency TEXT DEFAULT(''),"
+                    + "currency TEXT DEFAULT('CNY'),"
                     + "rate FLOAT DEFAULT(0),"
                     + "didi_id INT DEFAULT(0),"
                     + "report_server_id INT DEFAULT(0),"
@@ -317,7 +317,7 @@ public class DBManager extends SQLiteOpenHelper
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        Log.w("TaskDBAdapter", "Upgrading from version " + oldVersion + " to " + newVersion);
+        LogUtils.println("Upgrading from version " + oldVersion + " to " + newVersion, "TaskDBAdapter");
 
         if (newVersion > oldVersion)
         {
@@ -344,13 +344,16 @@ public class DBManager extends SQLiteOpenHelper
                 String command = "ALTER TABLE tbl_user ADD COLUMN didi TEXT DEFAULT('')";
                 db.execSQL(command);
 
-                command = "ALTER TABLE tbl_item ADD COLUMN currency TEXT DEFAULT('')";
+                command = "ALTER TABLE tbl_user ADD COLUMN didi_token TEXT DEFAULT('')";
                 db.execSQL(command);
 
-                command = "ALTER TABLE tbl_user ADD COLUMN rate FLOAT DEFAULT(0)";
+                command = "ALTER TABLE tbl_item ADD COLUMN currency TEXT DEFAULT('CNY')";
                 db.execSQL(command);
 
-                command = "ALTER TABLE tbl_others_item ADD COLUMN currency TEXT DEFAULT('')";
+                command = "ALTER TABLE tbl_item ADD COLUMN rate FLOAT DEFAULT(0)";
+                db.execSQL(command);
+
+                command = "ALTER TABLE tbl_others_item ADD COLUMN currency TEXT DEFAULT('CNY')";
                 db.execSQL(command);
 
                 command = "ALTER TABLE tbl_others_item ADD COLUMN rate FLOAT DEFAULT(0)";

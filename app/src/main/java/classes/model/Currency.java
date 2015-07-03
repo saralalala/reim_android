@@ -8,7 +8,7 @@ import classes.utils.ViewUtils;
 
 public class Currency
 {
-	private String code = "";
+	private String code = "CNY";
 	private String symbol = "";
     private double rate = 0;
 
