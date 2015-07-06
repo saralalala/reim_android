@@ -356,8 +356,8 @@ public class ViewUtils
 
     public static void goBack(Activity activity)
     {
-        activity.overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
         activity.finish();
+        activity.overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
     }
 
     public static void goBackWithIntent(Activity activity, Intent intent)
@@ -377,7 +377,7 @@ public class ViewUtils
     public static void goBackWithResult(Activity activity, Intent intent)
     {
         activity.setResult(Activity.RESULT_OK, intent);
-        activity.overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
         activity.finish();
+        activity.overridePendingTransition(R.anim.window_left_in, R.anim.window_right_out);
     }
 }

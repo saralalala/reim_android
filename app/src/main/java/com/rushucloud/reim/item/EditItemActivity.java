@@ -1369,7 +1369,6 @@ public class EditItemActivity extends Activity
         return pickerList;
     }
 
-
     private void resizePicker()
     {
         int yearWidth = ViewUtils.dpToPixel(60);
