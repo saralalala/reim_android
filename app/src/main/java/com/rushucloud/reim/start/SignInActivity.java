@@ -290,6 +290,7 @@ public class SignInActivity extends Activity
             AppPreference appPreference = AppPreference.getAppPreference();
             appPreference.setUsername(username);
             appPreference.setPassword(password);
+            appPreference.setProxyUserID(-1);
             appPreference.setHasPassword(true);
             appPreference.saveAppPreference();
 

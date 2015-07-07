@@ -32,7 +32,6 @@ public class SplashActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_splash);
         appPreference = AppPreference.getAppPreference();
-        start();
     }
 
     protected void onResume()
@@ -40,6 +39,7 @@ public class SplashActivity extends Activity
         super.onResume();
         MobclickAgent.onPageStart("SplashActivity");
         MobclickAgent.onResume(this);
+        start();
     }
 
     protected void onPause()
@@ -79,47 +79,44 @@ public class SplashActivity extends Activity
             };
             splashThread.start();
         }
-        else
+        else if (PhoneUtils.isNetworkConnected())
         {
-            if (PhoneUtils.isNetworkConnected())
+            if (appPreference.isSandboxMode())
             {
-                if (appPreference.isSandboxMode())
-                {
-                    sendSandboxOAuthRequest();
-                }
-                else
-                {
-                    sendSignInRequest();
-                }
+                sendSandboxOAuthRequest();
             }
             else
             {
-                Thread splashThread = new Thread()
+                sendSignInRequest();
+            }
+        }
+        else
+        {
+            Thread splashThread = new Thread()
+            {
+                public void run()
                 {
-                    public void run()
+                    try
                     {
-                        try
+                        int waitingTime = 0;
+                        int splashTime = 2000;
+                        while (waitingTime < splashTime)
                         {
-                            int waitingTime = 0;
-                            int splashTime = 2000;
-                            while (waitingTime < splashTime)
-                            {
-                                sleep(100);
-                                waitingTime += 100;
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                        finally
-                        {
-                            ViewUtils.goForwardAndFinish(SplashActivity.this, MainActivity.class);
+                            sleep(100);
+                            waitingTime += 100;
                         }
                     }
-                };
-                splashThread.start();
-            }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    finally
+                    {
+                        ViewUtils.goForwardAndFinish(SplashActivity.this, MainActivity.class);
+                    }
+                }
+            };
+            splashThread.start();
         }
     }
 
