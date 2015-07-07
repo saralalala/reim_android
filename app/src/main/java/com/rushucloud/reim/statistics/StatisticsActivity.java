@@ -414,7 +414,7 @@ public class StatisticsActivity extends Activity
 
     private void drawDepartment(List<StatDepartment> departmentList)
     {
-        if (!departmentList.isEmpty())
+        if (!departmentList.isEmpty() && StatDepartment.containsDepartment(departmentList))
         {
             departmentTitleLayout.setVisibility(View.VISIBLE);
             departmentLayout.setVisibility(View.VISIBLE);

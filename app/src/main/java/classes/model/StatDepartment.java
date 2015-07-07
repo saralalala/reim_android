@@ -3,6 +3,8 @@ package classes.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class StatDepartment
 {
     private int departmentID = -1;
@@ -59,5 +61,17 @@ public class StatDepartment
     public void setIsDepartment(boolean isDepartment)
     {
         this.isDepartment = isDepartment;
+    }
+
+    public static boolean containsDepartment(List<StatDepartment> departmentList)
+    {
+        for (StatDepartment department : departmentList)
+        {
+            if (department.isDepartment())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

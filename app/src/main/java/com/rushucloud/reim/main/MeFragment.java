@@ -315,7 +315,7 @@ public class MeFragment extends Fragment
             ViewUtils.setImageViewBitmap(currentUser, avatarImageView);
             nicknameTextView.setText(currentUser.getNickname());
 
-            if (currentUser.hasUndownloadedAvatar() && PhoneUtils.isNetworkConnected())
+            if (currentUser.hasUndownloadedAvatar() && PhoneUtils.isNetworkConnected() && isAdded())
             {
                 sendDownloadAvatarRequest();
             }
@@ -356,7 +356,7 @@ public class MeFragment extends Fragment
 
             showTip();
         }
-        else
+        else if (isAdded())
         {
             ReimApplication.resetTabIndices();
             Intent intent = new Intent(getActivity(), SignInActivity.class);
