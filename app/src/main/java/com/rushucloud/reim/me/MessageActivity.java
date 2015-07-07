@@ -134,6 +134,10 @@ public class MessageActivity extends Activity
                 {
                     ViewUtils.showToast(MessageActivity.this, R.string.error_send_reply_network_unavailable);
                 }
+                else if (AppPreference.getAppPreference().isProxyMode())
+                {
+                    ViewUtils.showToast(MessageActivity.this, R.string.error_message_no_permission);
+                }
                 else if (invite != null)
                 {
                     ReimProgressDialog.show();
@@ -154,6 +158,10 @@ public class MessageActivity extends Activity
                 if (!PhoneUtils.isNetworkConnected())
                 {
                     ViewUtils.showToast(MessageActivity.this, R.string.error_send_reply_network_unavailable);
+                }
+                else if (AppPreference.getAppPreference().isProxyMode())
+                {
+                    ViewUtils.showToast(MessageActivity.this, R.string.error_message_no_permission);
                 }
                 else if (invite != null)
                 {
@@ -328,6 +336,9 @@ public class MessageActivity extends Activity
 
                             dbManager.updateUser(currentUser);
 
+                            // update set of books
+                            dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
                             // update categories
                             dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 
@@ -345,6 +356,9 @@ public class MessageActivity extends Activity
 
                             // update current user
                             dbManager.syncUser(response.getCurrentUser());
+
+                            // update set of books
+                            dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
 
                             // update categories
                             dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
@@ -441,6 +455,9 @@ public class MessageActivity extends Activity
 
                             dbManager.updateUser(currentUser);
 
+                            // update set of books
+                            dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
                             // update categories
                             dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 
@@ -455,6 +472,9 @@ public class MessageActivity extends Activity
                             // update AppPreference
                             appPreference.setCurrentGroupID(currentGroupID);
                             appPreference.saveAppPreference();
+
+                            // update set of books
+                            dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
 
                             // update current user
                             dbManager.syncUser(response.getCurrentUser());

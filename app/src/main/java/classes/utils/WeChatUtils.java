@@ -163,6 +163,7 @@ public class WeChatUtils
                     appPreference.setUsername(unionID);
                     appPreference.setHasPassword(response.hasPassword());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
+                    appPreference.setProxyUserID(-1);
                     appPreference.setLastShownGuideVersion(response.getLastShownGuideVersion());
                     appPreference.setSyncOnlyWithWifi(true);
                     appPreference.setEnablePasswordProtection(true);
@@ -191,6 +192,9 @@ public class WeChatUtils
 
                         dbManager.updateUser(currentUser);
 
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 
@@ -205,6 +209,9 @@ public class WeChatUtils
                         // update AppPreference
                         appPreference.setCurrentGroupID(currentGroupID);
                         appPreference.saveAppPreference();
+
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
 
                         // update current user
                         dbManager.syncUser(response.getCurrentUser());

@@ -1253,6 +1253,8 @@ public class ReportFragment extends Fragment implements OnClickListener
                                 reportListView.stopRefresh();
                                 reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
                                 refreshReportListView(true);
+                                MainActivity activity = (MainActivity) getActivity();
+                                activity.showReportTip(false);
                             }
                         });
                     }

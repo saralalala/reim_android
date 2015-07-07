@@ -233,6 +233,9 @@ public class ClientActivity extends Activity
 
                         dbManager.updateUser(currentUser);
 
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 
@@ -247,6 +250,9 @@ public class ClientActivity extends Activity
                         // update AppPreference
                         appPreference.setCurrentGroupID(currentGroupID);
                         appPreference.saveAppPreference();
+
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
 
                         // update current user
                         dbManager.syncUser(response.getCurrentUser());

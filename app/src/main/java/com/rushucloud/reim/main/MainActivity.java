@@ -452,7 +452,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
     }
 
-    private void showReportTip(boolean hasUnreadReports)
+    public void showReportTip(boolean hasUnreadReports)
     {
         int visibility = hasUnreadReports ? View.VISIBLE : View.GONE;
         reportTipImageView.setVisibility(visibility);
@@ -671,6 +671,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
                         dbManager.updateUser(currentUser);
 
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 
@@ -700,6 +703,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
                         // update current user
                         dbManager.syncUser(response.getCurrentUser());
+
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
 
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

@@ -1447,7 +1447,7 @@ public class EditItemActivity extends Activity
         locationClient = new LocationClient(getApplicationContext());
 
         currencyList.addAll(dbManager.getCurrencyList());
-        categoryList.addAll(dbManager.getGroupCategories(appPreference.getCurrentGroupID()));
+        categoryList.addAll(dbManager.getUserCategories(appPreference.getCurrentUserID()));
         tagList.addAll(dbManager.getGroupTags(appPreference.getCurrentGroupID()));
 
         Intent intent = getIntent();

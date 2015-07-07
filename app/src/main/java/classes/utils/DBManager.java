@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,7 @@ import classes.model.Group;
 import classes.model.Image;
 import classes.model.Item;
 import classes.model.Report;
+import classes.model.SetOfBook;
 import classes.model.Tag;
 import classes.model.User;
 
@@ -27,7 +27,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     private DBManager(Context context)
     {
@@ -252,6 +252,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "max_limit INT DEFAULT(0),"
                     + "group_id INT DEFAULT(0),"
                     + "parent_id INT DEFAULT(0),"
+                    + "sob_id INT DEFAULT(0),"
                     + "icon_id INT DEFAULT(0),"
                     + "type INT DEFAULT(0),"
                     + "server_updatedt INT DEFAULT(0),"
@@ -308,6 +309,17 @@ public class DBManager extends SQLiteOpenHelper
                     + "rate FLOAT DEFAULT(0)"
                     + ")";
             db.execSQL(createCurrencyTable);
+
+            String createSetOfBookTable = "CREATE TABLE IF NOT EXISTS tbl_sob ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "server_id INT DEFAULT(0),"
+                    + "user_id TEXT DEFAULT(''),"
+                    + "name TEXT DEFAULT(''),"
+                    + "backup1 INT DEFAULT(0),"
+                    + "backup2 TEXT DEFAULT(''),"
+                    + "backup3 TEXT DEFAULT('')"
+                    + ")";
+            db.execSQL(createSetOfBookTable);
         }
         catch (Exception e)
         {
@@ -366,6 +378,12 @@ public class DBManager extends SQLiteOpenHelper
                 db.execSQL(command);
 
                 command = "ALTER TABLE tbl_others_item ADD COLUMN didi_id INT DEFAULT(0)";
+                db.execSQL(command);
+            }
+
+            if (oldVersion < 7)
+            {
+                String command = "ALTER TABLE tbl_category ADD COLUMN sob_id INT DEFAULT(0)";
                 db.execSQL(command);
             }
         }
@@ -1911,12 +1929,13 @@ public class DBManager extends SQLiteOpenHelper
         try
         {
             String sqlString = "INSERT INTO tbl_category (server_id, category_name, max_limit, group_id, " +
-                    "parent_id, icon_id, type, local_updatedt, server_updatedt) VALUES (" +
+                    "parent_id, sob_id, icon_id, type, local_updatedt, server_updatedt) VALUES (" +
                     "'" + category.getServerID() + "'," +
                     "'" + sqliteEscape(category.getName()) + "'," +
                     "'" + category.getLimit() + "'," +
                     "'" + category.getGroupID() + "'," +
                     "'" + category.getParentID() + "'," +
+                    "'" + category.getSetOfBookID() + "'," +
                     "'" + category.getIconID() + "'," +
                     "'" + category.getType() + "'," +
                     "'" + category.getLocalUpdatedDate() + "'," +
@@ -1955,6 +1974,7 @@ public class DBManager extends SQLiteOpenHelper
                     "max_limit = '" + category.getLimit() + "'," +
                     "group_id = '" + category.getGroupID() + "'," +
                     "parent_id = '" + category.getParentID() + "'," +
+                    "sob_id = '" + category.getSetOfBookID() + "'," +
                     "icon_id = '" + category.getIconID() + "'," +
                     "type = '" + category.getType() + "'," +
                     "local_updatedt = '" + category.getLocalUpdatedDate() + "'," +
@@ -2042,6 +2062,13 @@ public class DBManager extends SQLiteOpenHelper
     {
         Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE group_id = ? AND parent_id = 0",
                                           new String[]{Integer.toString(groupServerID)});
+        return getCategoryListFromCursorWithClose(cursor);
+    }
+
+    public List<Category> getUserCategories(int userID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE sob_id IN (?) AND parent_id = 0",
+                                          new String[]{getUserSetOfBookIDs(userID)});
         return getCategoryListFromCursorWithClose(cursor);
     }
 
@@ -2753,6 +2780,93 @@ public class DBManager extends SQLiteOpenHelper
         return getBankAccountFromCursorWithClose(cursor);
     }
 
+    // Set of Book
+    public boolean insertSetOfBook(SetOfBook setOfBook)
+    {
+        try
+        {
+            String sqlString = "INSERT INTO tbl_sob (server_id, user_id, name) VALUES (" +
+                    "'" + setOfBook.getServerID() + "'," +
+                    "'" + setOfBook.getUserID() + "'," +
+                    "'" + sqliteEscape(setOfBook.getName()) + "')";
+            database.execSQL(sqlString);
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteUserSetOfBooks(int userID)
+    {
+        try
+        {
+            String sqlString = "DELETE FROM tbl_sob WHERE user_id = '" + userID + "'";
+            database.execSQL(sqlString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateUserSetOfBooks(List<SetOfBook> setOfBookList, int userID)
+    {
+        try
+        {
+            deleteUserSetOfBooks(userID);
+            for (SetOfBook setOfBook : setOfBookList)
+            {
+                insertSetOfBook(setOfBook);
+            }
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<SetOfBook> getUserSetOfBooks(int userID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_sob WHERE user_id = ?",
+                                          new String[]{Integer.toString(userID)});
+        return getSetOfBookListFromCursorWithClose(cursor);
+    }
+
+    public String getUserSetOfBookIDs(int userID)
+    {
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_sob WHERE user_id = ?",
+                                          new String[]{Integer.toString(userID)});
+        List<Integer> setOfBookList = new ArrayList<>();
+        setOfBookList.add(0);
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                setOfBookList.add(getIntFromCursor(cursor, "server_id"));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return TextUtils.join(",", setOfBookList);
+    }
+
     // Auxiliaries
     private String sqliteEscape(String keyWord)
     {
@@ -3262,6 +3376,7 @@ public class DBManager extends SQLiteOpenHelper
         category.setLimit(getDoubleFromCursor(cursor, "max_limit"));
         category.setGroupID(getIntFromCursor(cursor, "group_id"));
         category.setParentID(getIntFromCursor(cursor, "parent_id"));
+        category.setSetOfBookID(getIntFromCursor(cursor, "sob_id"));
         category.setIconID(getIntFromCursor(cursor, "icon_id"));
         category.setType(getIntFromCursor(cursor, "type"));
         category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -3597,5 +3712,40 @@ public class DBManager extends SQLiteOpenHelper
             }
         }
         return bankAccount;
+    }
+
+    // Auxiliaries - Set of Book
+    private SetOfBook getSetOfBookFromCursor(Cursor cursor)
+    {
+        SetOfBook setOfBook = new SetOfBook();
+        setOfBook.setServerID(getIntFromCursor(cursor, "server_id"));
+        setOfBook.setUserID(getIntFromCursor(cursor, "user_id"));
+        setOfBook.setName(getStringFromCursor(cursor, "name"));
+
+        return setOfBook;
+    }
+
+    private List<SetOfBook> getSetOfBookListFromCursorWithClose(Cursor cursor)
+    {
+        List<SetOfBook> setOfBookList = new ArrayList<>();
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                setOfBookList.add(getSetOfBookFromCursor(cursor));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return setOfBookList;
     }
 }

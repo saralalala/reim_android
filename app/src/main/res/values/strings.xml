@@ -472,6 +472,7 @@
     <string name="error_submit_report_no_permission">抱歉，你暂时没有提交报告的权限</string>
     <string name="error_change_avatar_no_permission">权限不足，你暂时无法更换头像</string>
     <string name="error_change_password_no_permission">权限不足，你暂时无法更改密码</string>
+    <string name="error_message_no_permission">权限不足，你暂时无法处理</string>
 
     <string name="error_network_system_error">系统错误，请稍后尝试</string>
     <string name="error_network_user_not_exists">用户不存在或密码错误</string>
