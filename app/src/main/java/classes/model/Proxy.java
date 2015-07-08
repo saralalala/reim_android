@@ -80,7 +80,7 @@ public class Proxy implements Serializable
                 User user = DBManager.getDBManager().getUser(userID);
                 if (user == null)
                 {
-                    break;
+                    continue;
                 }
                 Proxy proxy = new Proxy();
                 proxy.setUser(user);
