@@ -61,6 +61,7 @@ public abstract class BaseResponse
                     String password = appPreference.getPassword();
                     appPreference.setUsername("");
                     appPreference.setPassword("");
+                    appPreference.setProxyUserID(-1);
                     appPreference.saveAppPreference();
 
                     Intent intent = new Intent(ReimApplication.getContext(), SignInActivity.class);
