@@ -1259,7 +1259,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                         });
                     }
                 }
-                else if (isAdded())
+                else if (getUserVisibleHint())
                 {
                     getActivity().runOnUiThread(new Runnable()
                     {
