@@ -20,6 +20,7 @@ public class URLDef
     public static final String URL_GROUP = "groups";
     public static final String URL_SEARCH_COMPANY = "search_company";
     public static final String URL_ITEM = "item";
+    public static final String URL_ITEM_UPDATE_AMOUNT = "update_amount";
     public static final String URL_DIANPING = "http://api.dianping.com/v1/business/find_businesses";
     public static final String URL_WECHAT = "https://api.weixin.qq.com/sns/oauth2/access_token";
     public static final String URL_OAUTH = "oauth";
