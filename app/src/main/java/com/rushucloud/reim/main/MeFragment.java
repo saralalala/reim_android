@@ -408,7 +408,7 @@ public class MeFragment extends Fragment
                     currentUser.setAvatarLocalPath(avatarPath);
                     currentUser.setLocalUpdatedDate(currentTime);
                     currentUser.setServerUpdatedDate(currentTime);
-                    if (dbManager.updateUser(currentUser))
+                    if (dbManager.updateUser(currentUser) && isAdded())
                     {
                         getActivity().runOnUiThread(new Runnable()
                         {
@@ -418,7 +418,7 @@ public class MeFragment extends Fragment
                             }
                         });
                     }
-                    else
+                    else if (isAdded())
                     {
                         getActivity().runOnUiThread(new Runnable()
                         {
@@ -429,7 +429,7 @@ public class MeFragment extends Fragment
                         });
                     }
                 }
-                else if (getUserVisibleHint())
+                else if (isAdded())
                 {
                     getActivity().runOnUiThread(new Runnable()
                     {

@@ -1290,7 +1290,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                     ReimApplication.setHasUnreadMessages(response.hasUnreadMessages());
                     refreshReports();
                 }
-                else
+                else if (isAdded())
                 {
                     getActivity().runOnUiThread(new Runnable()
                     {
