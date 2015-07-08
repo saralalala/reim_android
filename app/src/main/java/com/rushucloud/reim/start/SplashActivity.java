@@ -32,7 +32,6 @@ public class SplashActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_splash);
         appPreference = AppPreference.getAppPreference();
-        start();
     }
 
     protected void onResume()
@@ -40,6 +39,7 @@ public class SplashActivity extends Activity
         super.onResume();
         MobclickAgent.onPageStart("SplashActivity");
         MobclickAgent.onResume(this);
+        start();
     }
 
     protected void onPause()
@@ -207,10 +207,18 @@ public class SplashActivity extends Activity
                     {
                         public void run()
                         {
+                            AppPreference appPreference = AppPreference.getAppPreference();
+                            String username = appPreference.getUsername();
+                            String password = appPreference.getPassword();
+                            appPreference.setUsername("");
+                            appPreference.setPassword("");
+                            appPreference.setProxyUserID(-1);
+                            appPreference.saveAppPreference();
+
                             ViewUtils.showToast(SplashActivity.this, R.string.failed_to_sign_in, response.getErrorMessage());
                             Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
-                            intent.putExtra("username", AppPreference.getAppPreference().getUsername());
-                            intent.putExtra("password", AppPreference.getAppPreference().getPassword());
+                            intent.putExtra("username", username);
+                            intent.putExtra("password", password);
                             ViewUtils.goForwardAndFinish(SplashActivity.this, intent);
                         }
                     });
