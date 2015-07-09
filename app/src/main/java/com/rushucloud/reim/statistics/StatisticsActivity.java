@@ -855,7 +855,7 @@ public class StatisticsActivity extends Activity
             public void execute(Object httpResponse)
             {
                 final OthersStatResponse response = new OthersStatResponse(httpResponse);
-                if (response.getStatus())
+                if (response.getStatus() && !isFinishing())
                 {
                     runOnUiThread(new Runnable()
                     {
@@ -877,7 +877,7 @@ public class StatisticsActivity extends Activity
                         }
                     });
                 }
-                else
+                else if (!isFinishing())
                 {
                     runOnUiThread(new Runnable()
                     {
