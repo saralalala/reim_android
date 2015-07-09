@@ -181,6 +181,7 @@ public class EditReportActivity extends Activity
                     Bundle bundle = data.getExtras();
                     chosenItemIDList.clear();
                     chosenItemIDList.addAll(bundle.getIntegerArrayList("chosenItemIDList"));
+                    System.out.println(chosenItemIDList);
                     itemList = dbManager.getItems(chosenItemIDList);
                     report.setType(bundle.getInt("type"));
                     refreshView();
@@ -481,7 +482,7 @@ public class EditReportActivity extends Activity
         {
             public void onClick(View v)
             {
-                chosenItemIDList.remove(itemIndex);
+                chosenItemIDList.remove(itemIndex); // remove(int index) not remove(Integer id)
                 itemList.remove(itemIndex);
 
                 deletePopupWindow.dismiss();
@@ -832,7 +833,13 @@ public class EditReportActivity extends Activity
         }
         else
         {
-            ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_not_uploaded);
+            runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_not_uploaded);
+                }
+            });
         }
     }
 

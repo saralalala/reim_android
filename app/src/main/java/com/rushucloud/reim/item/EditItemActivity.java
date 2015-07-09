@@ -1347,6 +1347,28 @@ public class EditItemActivity extends Activity
         ViewUtils.dimBackground(this);
     }
 
+    private List<NumberPicker> findNumberPickers(DatePicker datePicker)
+    {
+        List<NumberPicker> pickerList = new ArrayList<>();
+        Field[] fields = DatePicker.class.getDeclaredFields();
+        for (Field field : fields)
+        {
+            field.setAccessible(true);
+            if (field.getType().getSimpleName().equals("NumberPicker"))
+            {
+                try
+                {
+                    pickerList.add((NumberPicker) field.get(datePicker));
+                }
+                catch (IllegalAccessException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return pickerList;
+    }
+
     private List<NumberPicker> findNumberPickers(TimePicker timePicker)
     {
         List<NumberPicker> pickerList = new ArrayList<>();
@@ -1376,39 +1398,33 @@ public class EditItemActivity extends Activity
         int dateMargin = ViewUtils.dpToPixel(15);
         int timeMargin = ViewUtils.dpToPixel(5);
 
-        LinearLayout datePickerContainer = (LinearLayout) datePicker.getChildAt(0);
-        LinearLayout dateSpinner = (LinearLayout) datePickerContainer.getChildAt(0);
+        List<NumberPicker> pickerList = findNumberPickers(datePicker);
 
-        NumberPicker yearPicker = (NumberPicker) dateSpinner.getChildAt(0);
+        NumberPicker yearPicker = pickerList.get(2);
         LayoutParams params = new LayoutParams(yearWidth, LayoutParams.WRAP_CONTENT);
         params.rightMargin = dateMargin;
         yearPicker.setLayoutParams(params);
 
-        NumberPicker monthPicker = (NumberPicker) dateSpinner.getChildAt(1);
+        NumberPicker monthPicker = pickerList.get(1);
         params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
         params.rightMargin = dateMargin;
         monthPicker.setLayoutParams(params);
 
-        NumberPicker datePicker = (NumberPicker) dateSpinner.getChildAt(2);
+        NumberPicker dayPicker = pickerList.get(0);
         params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
-        datePicker.setLayoutParams(params);
+        dayPicker.setLayoutParams(params);
 
-        List<NumberPicker> pickerList = findNumberPickers(timePicker);
-        for (int i = 0; i < pickerList.size(); i++)
-        {
-            NumberPicker picker = pickerList.get(i);
-            params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
-            if (i == 1)
-            {
-                params.rightMargin = timeMargin;
-                picker.setLayoutParams(params);
-            }
-            else if (i == 2)
-            {
-                params.leftMargin = timeMargin;
-                picker.setLayoutParams(params);
-            }
-        }
+        pickerList = findNumberPickers(timePicker);
+
+        NumberPicker hourPicker = pickerList.get(1);
+        params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+        params.rightMargin = timeMargin;
+        hourPicker.setLayoutParams(params);
+
+        NumberPicker minutePicker = pickerList.get(2);
+        params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
+        params.leftMargin = timeMargin;
+        minutePicker.setLayoutParams(params);
     }
 
     private void hideSoftKeyboard()
