@@ -212,6 +212,7 @@ public class ApproveReportActivity extends Activity
             {
                 if (i > 0)
                 {
+                    itemIndex = i - 1;
                     showEditWindow();
                 }
                 return false;
@@ -230,10 +231,11 @@ public class ApproveReportActivity extends Activity
         {
             public void onClick(View v)
             {
-                Item item = itemList.get(itemIndex-1);
+                Item item = itemList.get(itemIndex);
                 Intent intent = new Intent(ApproveReportActivity.this, EditItemActivity.class);
                 intent.putExtra("fromApproveReport", true);
                 intent.putExtra("itemServerID", item.getServerID());
+                ViewUtils.goForward(ApproveReportActivity.this, intent);
                 editPopupWindow.dismiss();
             }
         });
@@ -452,7 +454,6 @@ public class ApproveReportActivity extends Activity
     private void sendApproveReportRequest()
     {
         ReimProgressDialog.show();
-
         ApproveReportRequest request = new ApproveReportRequest(report, true);
         request.sendRequest(new HttpConnectionCallback()
         {

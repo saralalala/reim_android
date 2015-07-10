@@ -77,7 +77,9 @@ import classes.widget.wheelview.adapter.ArrayWheelAdapter;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
 import netUtils.request.common.DownloadImageRequest;
+import netUtils.request.item.ChangeAmountRequest;
 import netUtils.response.common.DownloadImageResponse;
+import netUtils.response.item.ChangeAmountResponse;
 
 public class EditItemActivity extends Activity
 {
@@ -416,7 +418,10 @@ public class EditItemActivity extends Activity
                         }
                         else
                         {
-                            
+                            item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
+                            item.setNote(noteEditText.getText().toString());
+
+                            sendChangeAmountRequest(item);
                         }
                     }
                     catch (NumberFormatException e)
@@ -1483,7 +1488,7 @@ public class EditItemActivity extends Activity
         fromReim = intent.getBooleanExtra("fromReim", false);
         fromEditReport = intent.getBooleanExtra("fromEditReport", false);
         fromPickItems = intent.getBooleanExtra("fromPickItems", false);
-        fromApproveReport = intent.getBooleanExtra("fromApproveItems", false);
+        fromApproveReport = intent.getBooleanExtra("fromApproveReport", false);
 
         int itemServerID = intent.getIntExtra("itemServerID", -1);
         int itemLocalID = intent.getIntExtra("itemLocalID", -1);
@@ -1683,6 +1688,45 @@ public class EditItemActivity extends Activity
             }
         });
     }
+
+    private void sendChangeAmountRequest(final Item item)
+    {
+        ReimProgressDialog.show();
+        ChangeAmountRequest request = new ChangeAmountRequest(item);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final ChangeAmountResponse response = new ChangeAmountResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    dbManager.updateOthersItem(item);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+                            ViewUtils.goBack(EditItemActivity.this);
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(EditItemActivity.this, R.string.failed_to_save_item, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
+
 
     private void getLocation()
     {
