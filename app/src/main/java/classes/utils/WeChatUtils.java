@@ -142,8 +142,11 @@ public class WeChatUtils
         {
             public void run()
             {
-                ReimProgressDialog.setContext(activity);
-                ReimProgressDialog.show();
+                if (!activity.isFinishing())
+                {
+                    ReimProgressDialog.setContext(activity);
+                    ReimProgressDialog.show();
+                }
             }
         });
 
@@ -225,14 +228,17 @@ public class WeChatUtils
                     {
                         public void run()
                         {
-                            ReimProgressDialog.dismiss();
-                            if (appPreference.getLastShownGuideVersion() < ReimApplication.GUIDE_VERSION)
+                            if (!activity.isFinishing())
                             {
-                                ViewUtils.goForwardAndFinish(activity, GuideStartActivity.class);
-                            }
-                            else
-                            {
-                                ViewUtils.goForwardAndFinish(activity, MainActivity.class);
+                                ReimProgressDialog.dismiss();
+                                if (appPreference.getLastShownGuideVersion() < ReimApplication.GUIDE_VERSION)
+                                {
+                                    ViewUtils.goForwardAndFinish(activity, GuideStartActivity.class);
+                                }
+                                else
+                                {
+                                    ViewUtils.goForwardAndFinish(activity, MainActivity.class);
+                                }
                             }
                         }
                     });
@@ -248,8 +254,11 @@ public class WeChatUtils
                     {
                         public void run()
                         {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(activity, R.string.failed_to_sign_in, response.getErrorMessage());
+                            if (!activity.isFinishing())
+                            {
+                                ReimProgressDialog.dismiss();
+                                ViewUtils.showToast(activity, R.string.failed_to_sign_in, response.getErrorMessage());
+                            }
                         }
                     });
                 }
