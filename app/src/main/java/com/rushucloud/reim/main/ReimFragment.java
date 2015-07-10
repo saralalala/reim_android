@@ -265,7 +265,7 @@ public class ReimFragment extends Fragment
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                if (deletePopupWindow == null || !deletePopupWindow.isShowing() && position > 0)
+                if ((deletePopupWindow == null || !deletePopupWindow.isShowing()) && position > 0)
                 {
                     Item item = showList.get(position - 1);
                     if (item.getConsumedDateGroup().isEmpty())

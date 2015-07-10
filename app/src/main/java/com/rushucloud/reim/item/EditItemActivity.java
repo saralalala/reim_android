@@ -420,6 +420,8 @@ public class EditItemActivity extends Activity
                         {
                             item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
                             item.setNote(noteEditText.getText().toString());
+                            item.setTagsID(Tag.getTagsIDString(item.getTags()));
+                            item.setRelevantUsersID(User.getUsersIDString(item.getRelevantUsers()));
 
                             sendChangeAmountRequest(item);
                         }
@@ -763,7 +765,10 @@ public class EditItemActivity extends Activity
             public void onClick(View v)
             {
                 hideSoftKeyboard();
-                showCurrencyWindow();
+                if (!fromApproveReport)
+                {
+                    showCurrencyWindow();
+                }
             }
         });
         currencyTextView.setText(item.getCurrency().getName());
@@ -1117,11 +1122,14 @@ public class EditItemActivity extends Activity
             {
                 public boolean onLongClick(View v)
                 {
-                    for (ImageView removeImageView : removeList)
+                    if (!fromApproveReport)
                     {
-                        removeImageView.setVisibility(View.VISIBLE);
+                        for (ImageView removeImageView : removeList)
+                        {
+                            removeImageView.setVisibility(View.VISIBLE);
+                        }
+                        removeImageViewShown = true;
                     }
-                    removeImageViewShown = true;
                     return false;
                 }
             });
@@ -1143,7 +1151,7 @@ public class EditItemActivity extends Activity
             layout.addView(view, params);
         }
 
-        int visibility = invoiceCount < Item.MAX_INVOICE_COUNT ? View.VISIBLE : View.INVISIBLE;
+        int visibility = invoiceCount < Item.MAX_INVOICE_COUNT && !fromApproveReport ? View.VISIBLE : View.INVISIBLE;
         addInvoiceImageView.setVisibility(visibility);
     }
 
@@ -1726,7 +1734,6 @@ public class EditItemActivity extends Activity
             }
         });
     }
-
 
     private void getLocation()
     {

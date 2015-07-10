@@ -1085,19 +1085,12 @@ public class DBManager extends SQLiteOpenHelper
                     "consumed_date = '" + item.getConsumedDate() + "'," +
                     "note = '" + sqliteEscape(item.getNote()) + "'," +
                     "location = '" + sqliteEscape(item.getLocation()) + "'," +
+                    "tags_id = '" + item.getTagsID() + "'," +
+                    "users_id = '" + item.getRelevantUsersID() + "'," +
                     "server_updatedt = '" + item.getServerUpdatedDate() + "'," +
                     "local_updatedt = '" + item.getLocalUpdatedDate() + "' " +
                     "WHERE server_id = '" + item.getServerID() + "'";
             database.execSQL(sqlString);
-
-//            if (item.getInvoices() != null || item.getTags() != null || item.getRelevantUsers() != null)
-//            {
-//                item.setLocalID(getItemByServerID(item.getServerID()).getLocalID());
-//
-//                updateItemImages(item);
-//                updateItemTags(item);
-//                updateRelevantUsers(item);
-//            }
 
             return true;
         }

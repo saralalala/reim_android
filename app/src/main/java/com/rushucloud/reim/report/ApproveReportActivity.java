@@ -195,10 +195,9 @@ public class ApproveReportActivity extends Activity
         detailListView.setAdapter(adapter);
         detailListView.setOnItemClickListener(new OnItemClickListener()
         {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id)
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                if (position > 0)
+                if (position > 0 && (editPopupWindow == null || !editPopupWindow.isShowing()))
                 {
                     Intent intent = new Intent(ApproveReportActivity.this, ShowItemActivity.class);
                     intent.putExtra("othersItemServerID", itemList.get(position - 1).getServerID());
