@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.model.StatDepartment;
 import classes.model.Vendor;
 
 public class GetVendorsResponse
@@ -28,7 +29,7 @@ public class GetVendorsResponse
                 vendorList.add(new Vendor(jsonArray.getJSONObject(i)));
             }
         }
-        catch (JSONException e)
+        catch (Exception e)
         {
             e.printStackTrace();
             status = false;
