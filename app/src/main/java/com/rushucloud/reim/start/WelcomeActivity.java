@@ -139,6 +139,7 @@ public class WelcomeActivity extends Activity
                     appPreference.setUsername(response.getOpenID());
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
+                    appPreference.setProxyUserID(-1);
                     appPreference.setLastShownGuideVersion(response.getLastShownGuideVersion());
                     appPreference.setSyncOnlyWithWifi(true);
                     appPreference.setEnablePasswordProtection(true);
@@ -167,6 +168,9 @@ public class WelcomeActivity extends Activity
 
                         dbManager.updateUser(currentUser);
 
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 
@@ -184,6 +188,9 @@ public class WelcomeActivity extends Activity
 
                         // update current user
                         dbManager.syncUser(response.getCurrentUser());
+
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
 
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

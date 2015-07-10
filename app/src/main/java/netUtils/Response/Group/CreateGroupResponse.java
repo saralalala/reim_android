@@ -9,6 +9,7 @@ import java.util.List;
 
 import classes.model.Category;
 import classes.model.Group;
+import classes.model.SetOfBook;
 import classes.model.Tag;
 import classes.model.User;
 import netUtils.response.common.BaseResponse;
@@ -18,6 +19,7 @@ public class CreateGroupResponse extends BaseResponse
     private int groupID;
     private int date;
 
+    private List<SetOfBook> setOfBookList;
     private List<Category> categoryList;
     private List<Tag> tagList;
     private List<User> memberList;
@@ -34,8 +36,8 @@ public class CreateGroupResponse extends BaseResponse
         try
         {
             JSONObject jObject = getDataObject();
-            setGroupID(Integer.valueOf(jObject.getString("id")));
-            setDate(Integer.valueOf(jObject.getString("dt")));
+            groupID = jObject.getInt("id");
+            date = jObject.getInt("dt");
 
             JSONObject profileObject = jObject.getJSONObject("profile");
 
@@ -54,6 +56,14 @@ public class CreateGroupResponse extends BaseResponse
 
             currentUser = new User();
             currentUser.parse(profileObject, groupID);
+
+            JSONArray sobArray = profileObject.getJSONArray("sob");
+            setOfBookList = new ArrayList<>();
+            for (int i = 0; i < sobArray.length(); i++)
+            {
+                SetOfBook setOfBook = new SetOfBook(sobArray.getJSONObject(i), currentUser.getServerID());
+                setOfBookList.add(setOfBook);
+            }
 
             JSONArray categoryArray = jObject.getJSONArray("categories");
             categoryList = new ArrayList<>();
@@ -90,19 +100,14 @@ public class CreateGroupResponse extends BaseResponse
         return groupID;
     }
 
-    public void setGroupID(int groupID)
-    {
-        this.groupID = groupID;
-    }
-
     public int getDate()
     {
         return date;
     }
 
-    public void setDate(int date)
+    public List<SetOfBook> getSetOfBookList()
     {
-        this.date = date;
+        return setOfBookList;
     }
 
     public List<Category> getCategoryList()

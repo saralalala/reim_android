@@ -1253,11 +1253,13 @@ public class ReportFragment extends Fragment implements OnClickListener
                                 reportListView.stopRefresh();
                                 reportListView.setRefreshTime(Utils.secondToStringUpToMinute(Utils.getCurrentTime()));
                                 refreshReportListView(true);
+                                MainActivity activity = (MainActivity) getActivity();
+                                activity.showReportTip(false);
                             }
                         });
                     }
                 }
-                else if (isAdded())
+                else if (getUserVisibleHint())
                 {
                     getActivity().runOnUiThread(new Runnable()
                     {
@@ -1288,7 +1290,7 @@ public class ReportFragment extends Fragment implements OnClickListener
                     ReimApplication.setHasUnreadMessages(response.hasUnreadMessages());
                     refreshReports();
                 }
-                else
+                else if (isAdded())
                 {
                     getActivity().runOnUiThread(new Runnable()
                     {

@@ -250,6 +250,9 @@ public class CompanyNameActivity extends Activity
 
                     dbManager.updateUser(currentUser);
 
+                    // update set of books
+                    dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
                     // update categories
                     dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 

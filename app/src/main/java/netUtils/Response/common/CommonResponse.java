@@ -9,11 +9,13 @@ import java.util.List;
 
 import classes.model.Category;
 import classes.model.Group;
+import classes.model.SetOfBook;
 import classes.model.Tag;
 import classes.model.User;
 
 public class CommonResponse extends BaseResponse
 {
+    private List<SetOfBook> setOfBookList;
     private List<Category> categoryList;
     private List<Tag> tagList;
     private List<User> memberList;
@@ -49,6 +51,14 @@ public class CommonResponse extends BaseResponse
             currentUser = new User();
             currentUser.parse(profileObject, groupID);
 
+            JSONArray sobArray = profileObject.getJSONArray("sob");
+            setOfBookList = new ArrayList<>();
+            for (int i = 0; i < sobArray.length(); i++)
+            {
+                SetOfBook setOfBook = new SetOfBook(sobArray.getJSONObject(i), currentUser.getServerID());
+                setOfBookList.add(setOfBook);
+            }
+
             JSONArray categoryArray = jObject.getJSONArray("categories");
             categoryList = new ArrayList<>();
             for (int i = 0; i < categoryArray.length(); i++)
@@ -77,6 +87,11 @@ public class CommonResponse extends BaseResponse
         {
             e.printStackTrace();
         }
+    }
+
+    public List<SetOfBook> getSetOfBookList()
+    {
+        return setOfBookList;
     }
 
     public List<Category> getCategoryList()

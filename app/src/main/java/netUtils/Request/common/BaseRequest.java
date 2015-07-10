@@ -84,6 +84,11 @@ public abstract class BaseRequest
         this.params.add(new BasicNameValuePair(key, Integer.toString(value)));
     }
 
+    protected void addParams(String key, double value)
+    {
+        this.params.add(new BasicNameValuePair(key, Double.toString(value)));
+    }
+
     public abstract void sendRequest(HttpConnectionCallback callback);
 
     protected void doPost(HttpConnectionCallback callback)

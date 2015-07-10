@@ -204,14 +204,15 @@ public class PickCategoryActivity extends Activity
     private void readCategoryList()
     {
         int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
+        int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
         if (categoryList == null)
         {
-            categoryList = dbManager.getGroupCategories(currentGroupID);
+            categoryList = dbManager.getUserCategories(currentUserID);
         }
         else
         {
             categoryList.clear();
-            categoryList.addAll(dbManager.getGroupCategories(currentGroupID));
+            categoryList.addAll(dbManager.getUserCategories(currentUserID));
         }
 
         if (subCategoryList == null)

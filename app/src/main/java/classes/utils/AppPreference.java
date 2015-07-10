@@ -169,7 +169,7 @@ public class AppPreference
     {
         this.proxyPermission = proxyPermission;
     }
-    public boolean hasProxyEditPermission()
+    public boolean hasProxyEditPermission() // include the situation of no proxy
     {
         return proxyPermission != Proxy.PERMISSION_APPROVE;
     }

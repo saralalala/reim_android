@@ -10,12 +10,14 @@ import java.util.List;
 import classes.model.BankAccount;
 import classes.model.Category;
 import classes.model.Group;
+import classes.model.SetOfBook;
 import classes.model.Tag;
 import classes.model.User;
 import netUtils.response.common.BaseResponse;
 
 public class WeChatOAuthResponse extends BaseResponse
 {
+    private List<SetOfBook> setOfBookList;
     private List<Category> categoryList;
     private List<Tag> tagList;
     private List<User> memberList;
@@ -45,12 +47,21 @@ public class WeChatOAuthResponse extends BaseResponse
             }
 
             currentUser = new User(profileObject, groupID);
+            lastShownGuideVersion = profileObject.getInt("guide_version");
+
             JSONArray jsonArray = profileObject.getJSONArray("banks");
             if (jsonArray.length() > 0)
             {
                 currentUser.setBankAccount(new BankAccount(jsonArray.getJSONObject(0)));
             }
-            lastShownGuideVersion = profileObject.getInt("guide_version");
+
+            JSONArray sobArray = profileObject.getJSONArray("sob");
+            setOfBookList = new ArrayList<>();
+            for (int i = 0; i < sobArray.length(); i++)
+            {
+                SetOfBook setOfBook = new SetOfBook(sobArray.getJSONObject(i), currentUser.getServerID());
+                setOfBookList.add(setOfBook);
+            }
 
             JSONArray categoryArray = jObject.getJSONArray("categories");
             categoryList = new ArrayList<>();
@@ -80,6 +91,11 @@ public class WeChatOAuthResponse extends BaseResponse
         {
             e.printStackTrace();
         }
+    }
+
+    public List<SetOfBook> getSetOfBookList()
+    {
+        return setOfBookList;
     }
 
     public List<Category> getCategoryList()

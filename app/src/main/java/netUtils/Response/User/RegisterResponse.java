@@ -9,12 +9,14 @@ import java.util.List;
 
 import classes.model.Category;
 import classes.model.Group;
+import classes.model.SetOfBook;
 import classes.model.Tag;
 import classes.model.User;
 import netUtils.response.common.BaseResponse;
 
 public class RegisterResponse extends BaseResponse
 {
+    private List<SetOfBook> setOfBookList;
     private List<Category> categoryList;
     private List<Tag> tagList;
     private List<User> memberList;
@@ -52,6 +54,14 @@ public class RegisterResponse extends BaseResponse
             currentUser.parse(profileObject, groupID);
             lastShownGuideVersion = profileObject.getInt("guide_version");
 
+            JSONArray sobArray = profileObject.getJSONArray("sob");
+            setOfBookList = new ArrayList<>();
+            for (int i = 0; i < sobArray.length(); i++)
+            {
+                SetOfBook setOfBook = new SetOfBook(sobArray.getJSONObject(i), currentUser.getServerID());
+                setOfBookList.add(setOfBook);
+            }
+
             JSONArray categoryArray = jObject.getJSONArray("categories");
             categoryList = new ArrayList<>();
             for (int i = 0; i < categoryArray.length(); i++)
@@ -80,6 +90,11 @@ public class RegisterResponse extends BaseResponse
         {
             e.printStackTrace();
         }
+    }
+
+    public List<SetOfBook> getSetOfBookList()
+    {
+        return setOfBookList;
     }
 
     public List<Category> getCategoryList()

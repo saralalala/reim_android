@@ -39,6 +39,7 @@ public class User implements Serializable
     private boolean isActive = false;
     private boolean isAdmin = false;
     private int groupID = -1;
+    private int sobID = 0;
     private String appliedCompany = "";
     private int defaultManagerID = -1;
     private int serverUpdatedDate = -1;
@@ -66,6 +67,7 @@ public class User implements Serializable
         isActive = user.isActive();
         isAdmin = user.isAdmin();
         groupID = user.getGroupID();
+        sobID = user.getSobID();
         appliedCompany = user.getAppliedCompany();
         defaultManagerID = user.getDefaultManagerID();
         serverUpdatedDate = user.getServerUpdatedDate();
@@ -84,6 +86,7 @@ public class User implements Serializable
             setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
             setDefaultManagerID(jObject.getInt("manager_id"));
             setGroupID(groupID);
+            setSobID(jObject.optInt("sob_id", 0));
             setAppliedCompany(jObject.optString("apply"));
             setAvatarServerPath(jObject.getString("apath"));
             setAvatarLocalPath("");
@@ -128,6 +131,7 @@ public class User implements Serializable
             setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
             setIsActive(Utils.intToBoolean(jObject.optInt("active", 0)));
             setGroupID(groupID);
+            setSobID(jObject.optInt("sob_id", 0));
             setAppliedCompany(jObject.getString("apply"));
             setLocalUpdatedDate(jObject.getInt("lastdt"));
             setServerUpdatedDate(jObject.getInt("lastdt"));
@@ -315,6 +319,15 @@ public class User implements Serializable
     public void setGroupID(int groupID)
     {
         this.groupID = groupID;
+    }
+
+    public int getSobID()
+    {
+        return sobID;
+    }
+    public void setSobID(int sobID)
+    {
+        this.sobID = sobID;
     }
 
     public String getAppliedCompany()

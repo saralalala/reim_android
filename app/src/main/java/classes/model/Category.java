@@ -25,6 +25,7 @@ public class Category implements Serializable
     private double limit = 0;
     private int groupID = -1;
     private int parentID = 0;
+    private int setOfBookID = 0;
     private int iconID = -1;
     private int type = TYPE_REIM;
     private int serverUpdatedDate = -1;
@@ -42,6 +43,7 @@ public class Category implements Serializable
         setLimit(category.getLimit());
         setGroupID(category.getGroupID());
         setParentID(category.getParentID());
+        setSetOfBookID(category.getSetOfBookID());
         setLocalUpdatedDate(category.getLocalUpdatedDate());
         setServerUpdatedDate(category.getServerUpdatedDate());
         setType(category.getType());
@@ -57,6 +59,7 @@ public class Category implements Serializable
             setLimit(jObject.getDouble("max_limit"));
             setGroupID(jObject.optInt("gid", -1));
             setParentID(jObject.optInt("pid", -1));
+            setSetOfBookID(jObject.optInt("sob_id", 0));
             setLocalUpdatedDate(jObject.getInt("lastdt"));
             setServerUpdatedDate(jObject.getInt("lastdt"));
             setType(jObject.getInt("prove_before"));
@@ -111,6 +114,15 @@ public class Category implements Serializable
     public void setParentID(int parentID)
     {
         this.parentID = parentID;
+    }
+
+    public int getSetOfBookID()
+    {
+        return setOfBookID;
+    }
+    public void setSetOfBookID(int setOfBookID)
+    {
+        this.setOfBookID = setOfBookID;
     }
 
     public int getIconID()

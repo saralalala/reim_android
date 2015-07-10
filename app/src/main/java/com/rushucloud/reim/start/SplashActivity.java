@@ -32,7 +32,6 @@ public class SplashActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_splash);
         appPreference = AppPreference.getAppPreference();
-        start();
     }
 
     protected void onResume()
@@ -40,6 +39,7 @@ public class SplashActivity extends Activity
         super.onResume();
         MobclickAgent.onPageStart("SplashActivity");
         MobclickAgent.onResume(this);
+        start();
     }
 
     protected void onPause()
@@ -79,47 +79,44 @@ public class SplashActivity extends Activity
             };
             splashThread.start();
         }
-        else
+        else if (PhoneUtils.isNetworkConnected())
         {
-            if (PhoneUtils.isNetworkConnected())
+            if (appPreference.isSandboxMode())
             {
-                if (appPreference.isSandboxMode())
-                {
-                    sendSandboxOAuthRequest();
-                }
-                else
-                {
-                    sendSignInRequest();
-                }
+                sendSandboxOAuthRequest();
             }
             else
             {
-                Thread splashThread = new Thread()
+                sendSignInRequest();
+            }
+        }
+        else
+        {
+            Thread splashThread = new Thread()
+            {
+                public void run()
                 {
-                    public void run()
+                    try
                     {
-                        try
+                        int waitingTime = 0;
+                        int splashTime = 2000;
+                        while (waitingTime < splashTime)
                         {
-                            int waitingTime = 0;
-                            int splashTime = 2000;
-                            while (waitingTime < splashTime)
-                            {
-                                sleep(100);
-                                waitingTime += 100;
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                        finally
-                        {
-                            ViewUtils.goForwardAndFinish(SplashActivity.this, MainActivity.class);
+                            sleep(100);
+                            waitingTime += 100;
                         }
                     }
-                };
-                splashThread.start();
-            }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    finally
+                    {
+                        ViewUtils.goForwardAndFinish(SplashActivity.this, MainActivity.class);
+                    }
+                }
+            };
+            splashThread.start();
         }
     }
 
@@ -164,6 +161,9 @@ public class SplashActivity extends Activity
 
                         dbManager.updateUser(currentUser);
 
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 
@@ -181,6 +181,9 @@ public class SplashActivity extends Activity
 
                         // update current user
                         dbManager.syncUser(response.getCurrentUser());
+
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
 
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
@@ -207,10 +210,18 @@ public class SplashActivity extends Activity
                     {
                         public void run()
                         {
+                            AppPreference appPreference = AppPreference.getAppPreference();
+                            String username = appPreference.getUsername();
+                            String password = appPreference.getPassword();
+                            appPreference.setUsername("");
+                            appPreference.setPassword("");
+                            appPreference.setProxyUserID(-1);
+                            appPreference.saveAppPreference();
+
                             ViewUtils.showToast(SplashActivity.this, R.string.failed_to_sign_in, response.getErrorMessage());
                             Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
-                            intent.putExtra("username", AppPreference.getAppPreference().getUsername());
-                            intent.putExtra("password", AppPreference.getAppPreference().getPassword());
+                            intent.putExtra("username", username);
+                            intent.putExtra("password", password);
                             ViewUtils.goForwardAndFinish(SplashActivity.this, intent);
                         }
                     });
@@ -236,6 +247,7 @@ public class SplashActivity extends Activity
                     appPreference.setUsername(response.getOpenID());
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
+                    appPreference.setProxyUserID(-1);
                     appPreference.setLastShownGuideVersion(response.getLastShownGuideVersion());
                     appPreference.setSyncOnlyWithWifi(true);
                     appPreference.setEnablePasswordProtection(true);
@@ -264,6 +276,9 @@ public class SplashActivity extends Activity
 
                         dbManager.updateUser(currentUser);
 
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
 
@@ -281,6 +296,9 @@ public class SplashActivity extends Activity
 
                         // update current user
                         dbManager.syncUser(response.getCurrentUser());
+
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
 
                         // update categories
                         dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);

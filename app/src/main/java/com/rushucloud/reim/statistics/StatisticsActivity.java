@@ -414,7 +414,7 @@ public class StatisticsActivity extends Activity
 
     private void drawDepartment(List<StatDepartment> departmentList)
     {
-        if (!departmentList.isEmpty() && StatDepartment.containsDepartment(departmentList))
+        if (userID == 0 && !departmentList.isEmpty() && StatDepartment.containsDepartment(departmentList))
         {
             departmentTitleLayout.setVisibility(View.VISIBLE);
             departmentLayout.setVisibility(View.VISIBLE);
@@ -855,7 +855,7 @@ public class StatisticsActivity extends Activity
             public void execute(Object httpResponse)
             {
                 final OthersStatResponse response = new OthersStatResponse(httpResponse);
-                if (response.getStatus())
+                if (response.getStatus() && !isFinishing())
                 {
                     runOnUiThread(new Runnable()
                     {
@@ -877,7 +877,7 @@ public class StatisticsActivity extends Activity
                         }
                     });
                 }
-                else
+                else if (!isFinishing())
                 {
                     runOnUiThread(new Runnable()
                     {
