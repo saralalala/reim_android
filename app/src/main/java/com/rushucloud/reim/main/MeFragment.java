@@ -305,6 +305,8 @@ public class MeFragment extends Fragment
         if (appPreference == null)
         {
             initData();
+            initView();
+            hasInit = true;
         }
 
         currentUser = appPreference.getCurrentUser();
