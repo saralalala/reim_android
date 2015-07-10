@@ -50,6 +50,16 @@ public class PhoneUtils
         }
     }
 
+    public static String getSystemVersion()
+    {
+        return Build.VERSION.RELEASE;
+    }
+
+    public static String getPhoneModel()
+    {
+        return Build.MODEL;
+    }
+
     public static boolean isWiFiConnected()
     {
         ConnectivityManager manager = (ConnectivityManager) ReimApplication.getContext()

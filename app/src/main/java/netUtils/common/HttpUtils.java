@@ -84,6 +84,8 @@ public class HttpUtils
         result += NetworkConstant.DEVICE_TYPE_ANDROID + ",";
         result += PhoneUtils.getAppVersion() + ",";
         result += AppPreference.getAppPreference().getUsername();
+        result += PhoneUtils.getPhoneModel() + ",";
+        result += PhoneUtils.getSystemVersion() + ",";
         return result;
     }
 
