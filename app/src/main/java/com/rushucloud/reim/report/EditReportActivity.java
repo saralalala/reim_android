@@ -158,6 +158,7 @@ public class EditReportActivity extends Activity
     @SuppressWarnings("unchecked")
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        ReimProgressDialog.setContext(this);
         if (resultCode == RESULT_OK)
         {
             switch (requestCode)
