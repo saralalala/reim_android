@@ -138,6 +138,7 @@ public class EditItemActivity extends Activity
     private boolean fromReim;
     private boolean fromEditReport;
     private boolean fromPickItems;
+    private boolean fromApproveReport;
     private boolean newItem = false;
 
     private LocationClient locationClient = null;
@@ -326,6 +327,7 @@ public class EditItemActivity extends Activity
 
                 if (appPreference.hasProxyEditPermission())
                 {
+<<<<<<< Updated upstream
                     try
                     {
                         hideSoftKeyboard();
@@ -335,6 +337,16 @@ public class EditItemActivity extends Activity
                         item.setNote(noteEditText.getText().toString());
                         item.setLocalUpdatedDate(Utils.getCurrentTime());
 
+=======
+                    hideSoftKeyboard();
+                    if(!fromApproveReport)
+                    {
+                        item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
+                        item.setConsumer(appPreference.getCurrentUser());
+                        item.setNote(noteEditText.getText().toString());
+                        item.setLocalUpdatedDate(Utils.getCurrentTime());
+
+>>>>>>> Stashed changes
                         if (newItem)
                         {
                             item.setCreatedDate(item.getLocalUpdatedDate());
@@ -405,15 +417,22 @@ public class EditItemActivity extends Activity
                         {
                             saveItem();
                         }
+<<<<<<< Updated upstream
                     }
                     catch (NumberFormatException e)
                     {
                         ViewUtils.showToast(EditItemActivity.this, R.string.error_number_wrong_format);
                         ViewUtils.requestFocus(EditItemActivity.this, amountEditText);
+=======
+>>>>>>> Stashed changes
                     }
                     catch (Exception e)
                     {
+<<<<<<< Updated upstream
                         e.printStackTrace();
+=======
+
+>>>>>>> Stashed changes
                     }
                 }
                 else
@@ -1470,8 +1489,11 @@ public class EditItemActivity extends Activity
         fromReim = intent.getBooleanExtra("fromReim", false);
         fromEditReport = intent.getBooleanExtra("fromEditReport", false);
         fromPickItems = intent.getBooleanExtra("fromPickItems", false);
+        fromApproveReport = intent.getBooleanExtra("fromApproveItems", false);
+
+        int itemServerID = intent.getIntExtra("itemServerID", -1);
         int itemLocalID = intent.getIntExtra("itemLocalID", -1);
-        if (itemLocalID == -1)
+        if (itemLocalID == -1 && itemServerID == -1)
         {
             newItem = true;
             MobclickAgent.onEvent(this, "UMENG_NEW_ITEM");
@@ -1511,11 +1533,25 @@ public class EditItemActivity extends Activity
                 }
             }
         }
-        else
+        else if(itemLocalID != -1 && itemServerID == -1)
         {
             newItem = false;
             MobclickAgent.onEvent(this, "UMENG_EDIT_ITEM");
             item = dbManager.getItemByLocalID(itemLocalID);
+            if (item == null)
+            {
+                ViewUtils.showToast(this, R.string.error_item_not_found);
+                goBack();
+            }
+            else
+            {
+                originInvoiceList.addAll(item.getInvoices());
+            }
+        }
+        else
+        {
+            newItem = false;
+            item = dbManager.getOthersItem(itemServerID);
             if (item == null)
             {
                 ViewUtils.showToast(this, R.string.error_item_not_found);
