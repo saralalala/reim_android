@@ -1070,6 +1070,43 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
+    public boolean updateOthersItem(Item item)
+    {
+        try
+        {
+            LogUtils.println("update others item by server id: local id = " + item.getLocalID() + ", server id = " + item.getServerID());
+
+            int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
+
+            String sqlString = "UPDATE tbl_others_item SET " +
+                    "vendor = '" + sqliteEscape(item.getVendor()) + "'," +
+                    "category_id = '" + categoryID + "'," +
+                    "amount = '" + item.getAmount() + "'," +
+                    "consumed_date = '" + item.getConsumedDate() + "'," +
+                    "note = '" + sqliteEscape(item.getNote()) + "'," +
+                    "location = '" + sqliteEscape(item.getLocation()) + "'," +
+                    "server_updatedt = '" + item.getServerUpdatedDate() + "'," +
+                    "local_updatedt = '" + item.getLocalUpdatedDate() + "' " +
+                    "WHERE server_id = '" + item.getServerID() + "'";
+            database.execSQL(sqlString);
+
+//            if (item.getInvoices() != null || item.getTags() != null || item.getRelevantUsers() != null)
+//            {
+//                item.setLocalID(getItemByServerID(item.getServerID()).getLocalID());
+//
+//                updateItemImages(item);
+//                updateItemTags(item);
+//                updateRelevantUsers(item);
+//            }
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
     public Item getItemByLocalID(int itemLocalID)
     {
         Cursor cursor = database.rawQuery("SELECT * FROM tbl_item WHERE id = ?",
