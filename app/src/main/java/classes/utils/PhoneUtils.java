@@ -104,21 +104,21 @@ public class PhoneUtils
         return result;
     }
 
-    public static String getImageName()
+    public static String getImageName(int serverID)
     {
         long currentTime = new Date().getTime();
 
-        return Long.toString(currentTime) + ".jpg";
+        return Long.toString(currentTime) + "_" + serverID + ".jpg";
     }
 
-    public static String getAvatarFilePath()
+    public static String getAvatarFilePath(int serverID)
     {
-        return AppPreference.getAppPreference().getAvatarImageDirectory() + "/" + getImageName();
+        return AppPreference.getAppPreference().getAvatarImageDirectory() + "/" + getImageName(serverID);
     }
 
-    public static String getInvoiceFilePath()
+    public static String getInvoiceFilePath(int serverID)
     {
-        return AppPreference.getAppPreference().getInvoiceImageDirectory() + "/" + getImageName();
+        return AppPreference.getAppPreference().getInvoiceImageDirectory() + "/" + getImageName(serverID);
     }
 
     public static String getIconFilePath(int iconID)
@@ -149,7 +149,7 @@ public class PhoneUtils
                 bitmap = source;
             }
 
-            String filePath = type == NetworkConstant.IMAGE_TYPE_AVATAR ? getAvatarFilePath() : getInvoiceFilePath();
+            String filePath = type == NetworkConstant.IMAGE_TYPE_AVATAR ? getAvatarFilePath(0) : getInvoiceFilePath(0);
 
             File compressedBitmapFile = new File(filePath);
             compressedBitmapFile.createNewFile();
@@ -172,7 +172,7 @@ public class PhoneUtils
         }
     }
 
-    public static String saveOriginalBitmapToFile(Bitmap bitmap, int type)
+    public static String saveOriginalBitmapToFile(Bitmap bitmap, int type, int serverID)
     {
         try
         {
@@ -184,11 +184,11 @@ public class PhoneUtils
             String path;
             if (type == NetworkConstant.IMAGE_TYPE_AVATAR)
             {
-                path = getAvatarFilePath();
+                path = getAvatarFilePath(serverID);
             }
             else
             {
-                path = getInvoiceFilePath();
+                path = getInvoiceFilePath(serverID);
             }
 
             File compressedBitmapFile = new File(path);

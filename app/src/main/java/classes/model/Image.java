@@ -12,8 +12,8 @@ import java.util.List;
 
 public class Image
 {
-    private int localID = -1;
-    private int serverID = -1;
+    private int localID = 0;
+    private int serverID = 0;
     private String serverPath = "";
     private String localPath = "";
     private int itemID = -1;
@@ -117,7 +117,7 @@ public class Image
 
     public boolean isNotUploaded()
     {
-        return getServerID() == -1;
+        return getServerID() <= 0;
     }
 
     public boolean equals(Object o)
