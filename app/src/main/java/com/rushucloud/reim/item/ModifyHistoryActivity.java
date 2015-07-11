@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.ModifyHistoryListViewAdapter;
+import classes.model.Image;
 import classes.model.ModifyHistory;
 import classes.model.User;
 import classes.utils.DBManager;
@@ -23,7 +24,6 @@ import classes.utils.PhoneUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
 import netUtils.request.common.DownloadImageRequest;
 import netUtils.response.common.DownloadImageResponse;
 
@@ -124,7 +124,7 @@ public class ModifyHistoryActivity extends Activity
                 DownloadImageResponse response = new DownloadImageResponse(httpResponse);
                 if (response.getBitmap() != null)
                 {
-                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR);
+                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), Image.TYPE_AVATAR);
                     user.setAvatarLocalPath(avatarPath);
                     user.setLocalUpdatedDate(Utils.getCurrentTime());
                     user.setServerUpdatedDate(user.getLocalUpdatedDate());

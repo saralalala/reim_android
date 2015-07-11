@@ -22,6 +22,7 @@ import com.rushucloud.reim.common.SingleImageActivity;
 import com.rushucloud.reim.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
+import classes.model.Image;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;
@@ -32,7 +33,6 @@ import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
 import netUtils.request.common.UploadImageRequest;
 import netUtils.request.user.ModifyUserRequest;
 import netUtils.response.common.UploadImageResponse;
@@ -93,7 +93,7 @@ public class CompleteInfoActivity extends Activity
                 }
                 else if (requestCode == Constant.ACTIVITY_CROP_IMAGE)
                 {
-                    avatarPath = PhoneUtils.saveBitmapToFile(appPreference.getTempAvatarPath(), NetworkConstant.IMAGE_TYPE_AVATAR);
+                    avatarPath = PhoneUtils.saveBitmapToFile(appPreference.getTempAvatarPath(), Image.TYPE_AVATAR);
                     newAvatar = true;
                     avatarImageView.setImageBitmap(BitmapFactory.decodeFile(avatarPath));
                 }
@@ -299,7 +299,7 @@ public class CompleteInfoActivity extends Activity
 
     private void sendUploadAvatarRequest()
     {
-        UploadImageRequest request = new UploadImageRequest(avatarPath, NetworkConstant.IMAGE_TYPE_AVATAR);
+        UploadImageRequest request = new UploadImageRequest(avatarPath, Image.TYPE_AVATAR);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)

@@ -46,7 +46,6 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
 import netUtils.common.SyncDataCallback;
 import netUtils.common.SyncUtils;
 import netUtils.request.common.UploadImageRequest;
@@ -850,7 +849,7 @@ public class EditReportActivity extends Activity
     private void sendUploadImageRequest(final Image image)
     {
         LogUtils.println("upload image：local id " + image.getLocalID());
-        UploadImageRequest request = new UploadImageRequest(image.getLocalPath(), NetworkConstant.IMAGE_TYPE_INVOICE);
+        UploadImageRequest request = new UploadImageRequest(image.getLocalPath(), Image.TYPE_INVOICE);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)

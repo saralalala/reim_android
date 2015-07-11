@@ -22,6 +22,7 @@ import java.util.List;
 
 import classes.adapter.CommentListViewAdapter;
 import classes.model.Comment;
+import classes.model.Image;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.AppPreference;
@@ -95,35 +96,6 @@ public class CommentActivity extends Activity
             goBack();
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void initData()
-    {
-        dbManager = DBManager.getDBManager();
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null)
-        {
-            report = (Report) bundle.getSerializable("report");
-            fromPush = bundle.getBoolean("fromPush", false);
-            myReport = bundle.getBoolean("myReport", false);
-            newReport = bundle.getBoolean("newReport", false);
-            pushType = bundle.getInt("pushType");
-
-            if (myReport)
-            {
-                commentList = dbManager.getReportComments(report.getLocalID());
-            }
-            else
-            {
-                commentList = dbManager.getOthersReportComments(report.getServerID());
-            }
-
-            if (commentList != null && !commentList.isEmpty())
-            {
-                Comment.sortByCreateDate(commentList);
-            }
-        }
     }
 
     private void initView()
@@ -254,6 +226,36 @@ public class CommentActivity extends Activity
         }
     }
 
+    // Data
+    private void initData()
+    {
+        dbManager = DBManager.getDBManager();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null)
+        {
+            report = (Report) bundle.getSerializable("report");
+            fromPush = bundle.getBoolean("fromPush", false);
+            myReport = bundle.getBoolean("myReport", false);
+            newReport = bundle.getBoolean("newReport", false);
+            pushType = bundle.getInt("pushType");
+
+            if (myReport)
+            {
+                commentList = dbManager.getReportComments(report.getLocalID());
+            }
+            else
+            {
+                commentList = dbManager.getOthersReportComments(report.getServerID());
+            }
+
+            if (commentList != null && !commentList.isEmpty())
+            {
+                Comment.sortByCreateDate(commentList);
+            }
+        }
+    }
+
     // Network
     private void sendGetReportRequest(final int reportServerID)
     {
@@ -328,7 +330,7 @@ public class CommentActivity extends Activity
                 DownloadImageResponse response = new DownloadImageResponse(httpResponse);
                 if (response.getBitmap() != null)
                 {
-                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR, user.getAvatarID());
+                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), Image.TYPE_AVATAR, user.getAvatarID());
                     user.setAvatarLocalPath(avatarPath);
                     user.setLocalUpdatedDate(Utils.getCurrentTime());
                     user.setServerUpdatedDate(user.getLocalUpdatedDate());

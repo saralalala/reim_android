@@ -30,7 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import netUtils.common.NetworkConstant;
+import classes.model.Image;
 
 public class PhoneUtils
 {
@@ -149,7 +149,7 @@ public class PhoneUtils
                 bitmap = source;
             }
 
-            String filePath = type == NetworkConstant.IMAGE_TYPE_AVATAR ? getAvatarFilePath(0) : getInvoiceFilePath(0);
+            String filePath = type == Image.TYPE_AVATAR ? getAvatarFilePath(0) : getInvoiceFilePath(0);
 
             File compressedBitmapFile = new File(filePath);
             compressedBitmapFile.createNewFile();
@@ -182,7 +182,7 @@ public class PhoneUtils
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
             String path;
-            if (type == NetworkConstant.IMAGE_TYPE_AVATAR)
+            if (type == Image.TYPE_AVATAR)
             {
                 path = getAvatarFilePath(serverID);
             }

@@ -17,10 +17,6 @@ public class NetworkConstant
     public static final String DEVICE_TOKEN = "device_token";
     public static final String SERVER_TOKEN = "server_token";
 
-    public static final int IMAGE_TYPE_AVATAR = 0;
-    public static final int IMAGE_TYPE_INVOICE = 1;
-    public static final int IMAGE_TYPE_ICON = 2;
-
     public static final int CONTACT_TYPE_WECHAT = 0;
     public static final int CONTACT_TYPE_EMAIL = 1;
     public static final int CONTACT_TYPE_PHONE = 2;
@@ -50,6 +46,7 @@ public class NetworkConstant
     public static final int PUSH_REPORT_TYPE_MINE_REJECTED_ONLY_COMMENT = 5;
     public static final int PUSH_REPORT_TYPE_MINE_APPROVED_ONLY_COMMENT = 6;
     public static final int PUSH_REPORT_TYPE_MINE_FINISHED_ONLY_COMMENT = 7;
+    public static final int PUSH_REPORT_TYPE_MINE_ITEM_MODIFIED = 14;
     public static final int PUSH_REPORT_TYPE_OTHERS_SUBMMITED = 8;
     public static final int PUSH_REPORT_TYPE_OTHERS_SUBMMITED_CC = 9;
     public static final int PUSH_REPORT_TYPE_OTHERS_CAN_BE_APPROVED_ONLY_COMMENT = 10;

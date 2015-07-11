@@ -464,7 +464,7 @@ public class StatisticsActivity extends Activity
 
     private void drawMember(List<StatUser> userList)
     {
-        if (userID == 0)
+        if (userID == 0 && !userList.isEmpty())
         {
             memberTitleLayout.setVisibility(View.VISIBLE);
             memberLayout.setVisibility(View.VISIBLE);

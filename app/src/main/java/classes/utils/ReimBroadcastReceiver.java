@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.item.ShowItemActivity;
 import com.rushucloud.reim.me.MessageActivity;
 import com.rushucloud.reim.report.ApproveReportActivity;
 import com.rushucloud.reim.report.CommentActivity;
@@ -108,6 +109,7 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
                     bundle.putSerializable("report", report);
                     bundle.putBoolean("fromPush", true);
                     bundle.putBoolean("myReport", myReport);
+                    bundle.putInt("itemID", jObject.getInt("iid"));
 
                     Intent newIntent = new Intent();
                     int pushType = classifyReportType(jObject);
@@ -129,6 +131,10 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
                     else if (pushType == NetworkConstant.PUSH_REPORT_TYPE_OTHERS_SUBMMITED)
                     {
                         newIntent.setClass(context, ApproveReportActivity.class);
+                    }
+                    else if (pushType == NetworkConstant.PUSH_REPORT_TYPE_MINE_ITEM_MODIFIED)
+                    {
+                        newIntent.setClass(context, ShowItemActivity.class);
                     }
                     else
                     {
@@ -271,6 +277,10 @@ public class ReimBroadcastReceiver extends BroadcastReceiver
                     status == Report.STATUS_NEED_CONFIRM || status == Report.STATUS_CONFIRMED))
             {
                 return NetworkConstant.PUSH_REPORT_TYPE_MINE_FINISHED_ONLY_COMMENT;
+            }
+            else if (myReport && !hasComment && status == Report.STATUS_SUBMITTED)
+            {
+                return NetworkConstant.PUSH_REPORT_TYPE_MINE_ITEM_MODIFIED;
             }
             else if (!myReport && !hasComment && !isCC && status == Report.STATUS_SUBMITTED && myDecision == Report.STATUS_SUBMITTED)
             {

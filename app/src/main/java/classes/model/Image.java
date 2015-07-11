@@ -12,6 +12,10 @@ import java.util.List;
 
 public class Image
 {
+    public static final int TYPE_AVATAR = 0;
+    public static final int TYPE_INVOICE = 1;
+    public static final int TYPE_ICON = 2;
+
     private int localID = 0;
     private int serverID = 0;
     private String serverPath = "";

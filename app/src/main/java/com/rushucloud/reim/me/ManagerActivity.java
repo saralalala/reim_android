@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.MemberListViewAdapter;
+import classes.model.Image;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -35,7 +36,6 @@ import classes.widget.ClearEditText;
 import classes.widget.PinnedSectionListView;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
 import netUtils.request.common.DownloadImageRequest;
 import netUtils.request.group.GetGroupRequest;
 import netUtils.request.user.DefaultManagerRequest;
@@ -402,7 +402,7 @@ public class ManagerActivity extends Activity
                 DownloadImageResponse response = new DownloadImageResponse(httpResponse);
                 if (response.getBitmap() != null)
                 {
-                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR, user.getAvatarID());
+                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), Image.TYPE_AVATAR, user.getAvatarID());
                     user.setAvatarLocalPath(avatarPath);
                     user.setLocalUpdatedDate(Utils.getCurrentTime());
                     user.setServerUpdatedDate(user.getLocalUpdatedDate());

@@ -29,6 +29,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.List;
 
 import classes.model.Group;
+import classes.model.Image;
 import classes.model.SetOfBook;
 import classes.model.User;
 import classes.utils.AppPreference;
@@ -40,7 +41,6 @@ import classes.utils.ViewUtils;
 import classes.utils.WeChatUtils;
 import classes.widget.CircleImageView;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
 import netUtils.common.URLDef;
 import netUtils.request.common.DownloadImageRequest;
 import netUtils.response.common.DownloadImageResponse;
@@ -422,7 +422,7 @@ public class MeFragment extends Fragment
                 if (response.getBitmap() != null)
                 {
                     int currentTime = Utils.getCurrentTime();
-                    avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR, currentUser.getAvatarID());
+                    avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), Image.TYPE_AVATAR, currentUser.getAvatarID());
                     currentUser.setAvatarLocalPath(avatarPath);
                     currentUser.setLocalUpdatedDate(currentTime);
                     currentUser.setServerUpdatedDate(currentTime);

@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.common.MultipleImageActivity;
+import com.rushucloud.reim.main.MainActivity;
+import com.rushucloud.reim.report.ShowReportActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
@@ -26,7 +28,10 @@ import classes.model.Category;
 import classes.model.Image;
 import classes.model.Item;
 import classes.model.ModifyHistory;
+import classes.model.Report;
 import classes.model.User;
+import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
@@ -35,10 +40,13 @@ import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
 import netUtils.request.common.DownloadImageRequest;
+import netUtils.request.group.GetGroupRequest;
+import netUtils.request.item.GetItemRequest;
 import netUtils.request.item.ModifyHistoryRequest;
 import netUtils.response.common.DownloadImageResponse;
+import netUtils.response.group.GetGroupResponse;
+import netUtils.response.item.GetItemResponse;
 import netUtils.response.item.ModifyHistoryResponse;
 
 public class ShowItemActivity extends Activity
@@ -52,9 +60,12 @@ public class ShowItemActivity extends Activity
 
     // Local Data
     private DBManager dbManager;
-    private Item item;
+    private Item item = new Item();
     private boolean myItem;
     private List<ModifyHistory> historyList = new ArrayList<>();
+    private Report report;
+    private boolean fromPush;
+    private boolean myReport;
 
     // View
     protected void onCreate(Bundle savedInstanceState)
@@ -72,8 +83,13 @@ public class ShowItemActivity extends Activity
         MobclickAgent.onPageStart("ShowItemActivity");
         MobclickAgent.onResume(this);
         ReimProgressDialog.setContext(this);
-        if (historyList.isEmpty())
+        if (fromPush)
         {
+            sendGetGroupRequest();
+        }
+        else if (historyList.isEmpty())
+        {
+            ReimProgressDialog.show();
             sendModifyHistoryRequest(item.getServerID());
         }
     }
@@ -409,7 +425,30 @@ public class ShowItemActivity extends Activity
 
     private void goBack()
     {
-        ViewUtils.goBack(this);
+        if (fromPush)
+        {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("report", report);
+            bundle.putBoolean("fromPush", fromPush);
+            bundle.putBoolean("myReport", myReport);
+
+            Intent intent = new Intent(this, ShowReportActivity.class);
+            intent.putExtras(bundle);
+            ViewUtils.goBackWithIntent(this, intent);
+        }
+        else
+        {
+            ViewUtils.goBack(this);
+        }
+    }
+
+    private void goBackToMainActivity()
+    {
+        ReimApplication.setTabIndex(Constant.TAB_REPORT);
+        ReimApplication.setReportTabIndex(Constant.TAB_REPORT_MINE);
+        Intent intent = new Intent(ShowItemActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        ViewUtils.goBackWithIntent(this, intent);
     }
 
     // Data
@@ -417,24 +456,37 @@ public class ShowItemActivity extends Activity
     {
         dbManager = DBManager.getDBManager();
         Intent intent = getIntent();
-        int itemID = intent.getIntExtra("itemLocalID", -1);
-        if (itemID == -1)
+        Bundle bundle = intent.getExtras();
+        if (bundle != null)
         {
-            myItem = false;
-            itemID = intent.getIntExtra("othersItemServerID", -1);
-            item = dbManager.getOthersItem(itemID);
-            if (item == null)
-            {
-                item = new Item();
-            }
+            report = (Report) bundle.getSerializable("report");
+            report = dbManager.getReportByServerID(report.getServerID());
+            fromPush = bundle.getBoolean("fromPush", false);
+            myReport = bundle.getBoolean("myReport", false);
+            item.setServerID(bundle.getInt("itemID"));
+            myItem = true;
         }
         else
         {
-            myItem = true;
-            item = dbManager.getItemByLocalID(itemID);
-            if (item == null)
+            int itemID = intent.getIntExtra("itemLocalID", -1);
+            if (itemID == -1)
             {
-                item = new Item();
+                myItem = false;
+                itemID = intent.getIntExtra("othersItemServerID", -1);
+                item = dbManager.getOthersItem(itemID);
+                if (item == null)
+                {
+                    item = new Item();
+                }
+            }
+            else
+            {
+                myItem = true;
+                item = dbManager.getItemByLocalID(itemID);
+                if (item == null)
+                {
+                    item = new Item();
+                }
             }
         }
     }
@@ -450,7 +502,7 @@ public class ShowItemActivity extends Activity
                 final DownloadImageResponse response = new DownloadImageResponse(httpResponse);
                 if (response.getBitmap() != null)
                 {
-                    final String invoicePath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE, image.getServerID());
+                    final String invoicePath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), Image.TYPE_INVOICE, image.getServerID());
                     if (!invoicePath.isEmpty())
                     {
                         image.setLocalPath(invoicePath);
@@ -534,7 +586,7 @@ public class ShowItemActivity extends Activity
                 DownloadImageResponse response = new DownloadImageResponse(httpResponse);
                 if (response.getBitmap() != null)
                 {
-                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR, user.getAvatarID());
+                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), Image.TYPE_AVATAR, user.getAvatarID());
                     user.setAvatarLocalPath(avatarPath);
                     user.setLocalUpdatedDate(Utils.getCurrentTime());
                     user.setServerUpdatedDate(user.getLocalUpdatedDate());
@@ -555,7 +607,6 @@ public class ShowItemActivity extends Activity
 
     private void sendModifyHistoryRequest(int itemID)
     {
-        ReimProgressDialog.show();
         ModifyHistoryRequest request = new ModifyHistoryRequest(itemID);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -593,6 +644,106 @@ public class ShowItemActivity extends Activity
                                 ReimProgressDialog.dismiss();
                                 ViewUtils.showToast(ShowItemActivity.this, R.string.failed_to_get_modify_history, response.getErrorMessage());
                             }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendGetGroupRequest()
+    {
+        ReimProgressDialog.show();
+        GetGroupRequest request = new GetGroupRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetGroupResponse response = new GetGroupResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
+
+                    // update members
+                    List<User> memberList = response.getMemberList();
+                    User currentUser = AppPreference.getAppPreference().getCurrentUser();
+
+                    for (int i = 0; i < memberList.size(); i++)
+                    {
+                        User user = memberList.get(i);
+                        if (currentUser != null && user.equals(currentUser))
+                        {
+                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+                            {
+                                if (user.getAvatarID() == currentUser.getAvatarID())
+                                {
+                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
+                                }
+                            }
+                            else
+                            {
+                                memberList.set(i, currentUser);
+                            }
+                            break;
+                        }
+                    }
+
+                    dbManager.updateGroupUsers(memberList, currentGroupID);
+
+                    // update group info
+                    dbManager.syncGroup(response.getGroup());
+
+                    sendGetItemRequest(item.getServerID());
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ShowItemActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            goBackToMainActivity();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendGetItemRequest(final int itemID)
+    {
+        GetItemRequest request = new GetItemRequest(itemID);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetItemResponse response = new GetItemResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    dbManager.updateItemByServerID(response.getItem());
+                    item = dbManager.getItemByServerID(itemID);
+
+                    sendModifyHistoryRequest(itemID);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            initView();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ShowItemActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            goBackToMainActivity();
                         }
                     });
                 }

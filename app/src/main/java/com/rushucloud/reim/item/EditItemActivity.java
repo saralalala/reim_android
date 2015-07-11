@@ -76,7 +76,6 @@ import classes.widget.ReimProgressDialog;
 import classes.widget.wheelview.WheelView;
 import classes.widget.wheelview.adapter.ArrayWheelAdapter;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
 import netUtils.request.common.DownloadImageRequest;
 import netUtils.request.item.ModifyOthersItemRequest;
 import netUtils.response.common.DownloadImageResponse;
@@ -213,7 +212,7 @@ public class EditItemActivity extends Activity
                         ReimProgressDialog.show();
                         for (String path : paths)
                         {
-                            String invoicePath = PhoneUtils.saveBitmapToFile(path, NetworkConstant.IMAGE_TYPE_INVOICE);
+                            String invoicePath = PhoneUtils.saveBitmapToFile(path, Image.TYPE_INVOICE);
                             if (!invoicePath.isEmpty())
                             {
                                 Image image = new Image();
@@ -236,7 +235,7 @@ public class EditItemActivity extends Activity
                 {
                     try
                     {
-                        String invoicePath = PhoneUtils.saveBitmapToFile(appPreference.getTempInvoicePath(), NetworkConstant.IMAGE_TYPE_INVOICE);
+                        String invoicePath = PhoneUtils.saveBitmapToFile(appPreference.getTempInvoicePath(), Image.TYPE_INVOICE);
                         if (!invoicePath.isEmpty())
                         {
                             Image image = new Image();
@@ -1657,7 +1656,7 @@ public class EditItemActivity extends Activity
                 DownloadImageResponse response = new DownloadImageResponse(httpResponse);
                 if (response.getBitmap() != null)
                 {
-                    final String invoicePath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_INVOICE, image.getServerID());
+                    final String invoicePath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), Image.TYPE_INVOICE, image.getServerID());
                     if (!invoicePath.isEmpty())
                     {
                         image.setLocalPath(invoicePath);
@@ -1739,7 +1738,7 @@ public class EditItemActivity extends Activity
                 DownloadImageResponse response = new DownloadImageResponse(httpResponse);
                 if (response.getBitmap() != null)
                 {
-                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR, user.getAvatarID());
+                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), Image.TYPE_AVATAR, user.getAvatarID());
                     user.setAvatarLocalPath(avatarPath);
                     user.setLocalUpdatedDate(Utils.getCurrentTime());
                     user.setServerUpdatedDate(user.getLocalUpdatedDate());

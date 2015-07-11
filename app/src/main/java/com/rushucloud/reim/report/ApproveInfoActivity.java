@@ -18,6 +18,7 @@ import java.util.List;
 
 import classes.adapter.ApproveInfoListViewAdapter;
 import classes.model.ApproveInfo;
+import classes.model.Image;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.DBManager;
@@ -26,7 +27,6 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
 import netUtils.request.common.DownloadImageRequest;
 import netUtils.request.report.ApproveInfoRequest;
 import netUtils.response.common.DownloadImageResponse;
@@ -205,7 +205,7 @@ public class ApproveInfoActivity extends Activity
                 DownloadImageResponse response = new DownloadImageResponse(httpResponse);
                 if (response.getBitmap() != null)
                 {
-                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), NetworkConstant.IMAGE_TYPE_AVATAR, user.getAvatarID());
+                    String avatarPath = PhoneUtils.saveOriginalBitmapToFile(response.getBitmap(), Image.TYPE_AVATAR, user.getAvatarID());
                     user.setAvatarLocalPath(avatarPath);
                     user.setLocalUpdatedDate(Utils.getCurrentTime());
                     user.setServerUpdatedDate(user.getLocalUpdatedDate());

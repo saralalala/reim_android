@@ -26,6 +26,7 @@ import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import classes.model.Group;
+import classes.model.Image;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;
@@ -37,7 +38,6 @@ import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
-import netUtils.common.NetworkConstant;
 import netUtils.request.common.CommonRequest;
 import netUtils.request.common.UploadImageRequest;
 import netUtils.request.user.SignOutRequest;
@@ -112,7 +112,7 @@ public class ProfileActivity extends Activity
                     }
                     case Constant.ACTIVITY_CROP_IMAGE:
                     {
-                        avatarPath = PhoneUtils.saveBitmapToFile(appPreference.getTempAvatarPath(), NetworkConstant.IMAGE_TYPE_AVATAR);
+                        avatarPath = PhoneUtils.saveBitmapToFile(appPreference.getTempAvatarPath(), Image.TYPE_AVATAR);
 
                         if (!avatarPath.isEmpty() && PhoneUtils.isNetworkConnected())
                         {
@@ -539,7 +539,7 @@ public class ProfileActivity extends Activity
     // Network
     private void sendUploadAvatarRequest()
     {
-        UploadImageRequest request = new UploadImageRequest(avatarPath, NetworkConstant.IMAGE_TYPE_AVATAR);
+        UploadImageRequest request = new UploadImageRequest(avatarPath, Image.TYPE_AVATAR);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
