@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -1373,7 +1374,7 @@ public class EditItemActivity extends Activity
         ViewUtils.dimBackground(this);
     }
 
-    private List<NumberPicker> findNumberPickers(DatePicker datePicker)
+    private List<NumberPicker> findNumberPickersFromDatePicker(DatePicker datePicker)
     {
         List<NumberPicker> pickerList = new ArrayList<>();
         Field[] fields = DatePicker.class.getDeclaredFields();
@@ -1392,10 +1393,21 @@ public class EditItemActivity extends Activity
                 }
             }
         }
+
+        if (pickerList.isEmpty())
+        {
+            LinearLayout datePickerContainer = (LinearLayout) datePicker.getChildAt(0);
+            LinearLayout dateSpinner = (LinearLayout) datePickerContainer.getChildAt(0);
+
+            pickerList.add((NumberPicker) dateSpinner.getChildAt(2));
+            pickerList.add((NumberPicker) dateSpinner.getChildAt(1));
+            pickerList.add((NumberPicker) dateSpinner.getChildAt(0));
+        }
+
         return pickerList;
     }
 
-    private List<NumberPicker> findNumberPickers(TimePicker timePicker)
+    private List<NumberPicker> findNumberPickersFromTimePicker(TimePicker timePicker)
     {
         List<NumberPicker> pickerList = new ArrayList<>();
         Field[] fields = TimePicker.class.getDeclaredFields();
@@ -1414,6 +1426,41 @@ public class EditItemActivity extends Activity
                 }
             }
         }
+
+        if (pickerList.isEmpty())
+        {
+            return findNumberPickers(timePicker);
+        }
+        else
+        {
+            pickerList.remove(0); // remove am/pm picker
+            return pickerList;
+        }
+    }
+
+    private List<NumberPicker> findNumberPickers(ViewGroup viewGroup)
+    {
+        List<NumberPicker> pickerList = new ArrayList<>();
+        View child;
+        if (null != viewGroup)
+        {
+            for (int i = 0; i < viewGroup.getChildCount(); i++)
+            {
+                child = viewGroup.getChildAt(i);
+                if (child instanceof NumberPicker)
+                {
+                    pickerList.add((NumberPicker) child);
+                }
+                else if (child instanceof LinearLayout)
+                {
+                    List<NumberPicker> result = findNumberPickers((ViewGroup) child);
+                    if (result.size() > 0)
+                    {
+                        return result;
+                    }
+                }
+            }
+        }
         return pickerList;
     }
 
@@ -1424,7 +1471,7 @@ public class EditItemActivity extends Activity
         int dateMargin = ViewUtils.dpToPixel(15);
         int timeMargin = ViewUtils.dpToPixel(5);
 
-        List<NumberPicker> pickerList = findNumberPickers(datePicker);
+        List<NumberPicker> pickerList = findNumberPickersFromDatePicker(datePicker);
 
         NumberPicker yearPicker = pickerList.get(2);
         LayoutParams params = new LayoutParams(yearWidth, LayoutParams.WRAP_CONTENT);
@@ -1440,14 +1487,15 @@ public class EditItemActivity extends Activity
         params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
         dayPicker.setLayoutParams(params);
 
-        pickerList = findNumberPickers(timePicker);
+        pickerList.clear();
+        pickerList.addAll(findNumberPickersFromTimePicker(timePicker));
 
-        NumberPicker hourPicker = pickerList.get(1);
+        NumberPicker hourPicker = pickerList.get(0);
         params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
         params.rightMargin = timeMargin;
         hourPicker.setLayoutParams(params);
 
-        NumberPicker minutePicker = pickerList.get(2);
+        NumberPicker minutePicker = pickerList.get(1);
         params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
         params.leftMargin = timeMargin;
         minutePicker.setLayoutParams(params);
