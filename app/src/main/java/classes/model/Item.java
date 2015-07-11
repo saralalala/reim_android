@@ -123,6 +123,7 @@ public class Item
             e.printStackTrace();
         }
     }
+
     public Item(Item item)
     {
         category = new Category(item.getCategory());
