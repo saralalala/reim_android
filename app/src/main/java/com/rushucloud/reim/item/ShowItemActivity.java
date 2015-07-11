@@ -18,11 +18,14 @@ import com.rushucloud.reim.R;
 import com.rushucloud.reim.common.MultipleImageActivity;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import classes.model.Category;
 import classes.model.Image;
 import classes.model.Item;
+import classes.model.ModifyHistory;
 import classes.model.User;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -34,11 +37,14 @@ import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
 import netUtils.request.common.DownloadImageRequest;
+import netUtils.request.item.ModifyHistoryRequest;
 import netUtils.response.common.DownloadImageResponse;
+import netUtils.response.item.ModifyHistoryResponse;
 
 public class ShowItemActivity extends Activity
 {
     // Widgets
+    private TextView modifyHistoryTextView;
     private LinearLayout invoiceLayout;
     private ImageView categoryImageView;
     private LinearLayout tagLayout;
@@ -48,6 +54,7 @@ public class ShowItemActivity extends Activity
     private DBManager dbManager;
     private Item item;
     private boolean myItem;
+    private List<ModifyHistory> historyList = new ArrayList<>();
 
     // View
     protected void onCreate(Bundle savedInstanceState)
@@ -65,6 +72,10 @@ public class ShowItemActivity extends Activity
         MobclickAgent.onPageStart("ShowItemActivity");
         MobclickAgent.onResume(this);
         ReimProgressDialog.setContext(this);
+        if (historyList.isEmpty())
+        {
+            sendModifyHistoryRequest(item.getServerID());
+        }
     }
 
     protected void onPause()
@@ -109,6 +120,17 @@ public class ShowItemActivity extends Activity
         TextView amountTextView = (TextView) findViewById(R.id.amountTextView);
         amountTextView.setText(Utils.formatDouble(item.getAmount()));
         amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+
+        modifyHistoryTextView = (TextView) findViewById(R.id.modifyHistoryTextView);
+        modifyHistoryTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(ShowItemActivity.this, ModifyHistoryActivity.class);
+                intent.putExtra("historyList", (Serializable) historyList);
+                ViewUtils.goForward(ShowItemActivity.this, intent);
+            }
+        });
 
         if (item.isAaApproved())
         {
@@ -524,6 +546,53 @@ public class ShowItemActivity extends Activity
                         {
                             initData();
                             refreshMemberView();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendModifyHistoryRequest(int itemID)
+    {
+        ReimProgressDialog.show();
+        ModifyHistoryRequest request = new ModifyHistoryRequest(itemID);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final ModifyHistoryResponse response = new ModifyHistoryResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    historyList.clear();
+                    historyList.addAll(response.getHistoryList());
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            if (!isFinishing())
+                            {
+                                ReimProgressDialog.dismiss();
+                                if (!historyList.isEmpty())
+                                {
+                                    modifyHistoryTextView.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            if (!isFinishing())
+                            {
+                                ReimProgressDialog.dismiss();
+                                ViewUtils.showToast(ShowItemActivity.this, R.string.failed_to_get_modify_history, response.getErrorMessage());
+                            }
                         }
                     });
                 }

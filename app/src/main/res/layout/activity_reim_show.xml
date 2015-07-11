@@ -60,10 +60,10 @@
                     android:id="@+id/amountLayout"
 	                android:layout_width="match_parent"
 	                android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/statusTextView"
+                    android:layout_toLeftOf="@+id/sideLayout"
 	                android:layout_marginTop="24dp"
 	                android:layout_marginLeft="16dp"
-	                android:layout_marginRight="6dp">
+                    android:layout_marginRight="3dp">
 
                     <TextView
                         android:id="@+id/symbolTextView"
@@ -94,18 +94,44 @@
 	                android:textColor="@color/font_budget"
 	                android:textSize="14sp"/>
 
-                <TextView
-                    android:id="@+id/statusTextView"
+                <LinearLayout
+                    android:id="@+id/sideLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:layout_alignTop="@+id/amountLayout"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="8dp"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
-                    android:gravity="center"
-                    android:textColor="@color/major_light"/>
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/statusTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="8dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:gravity="center"
+                        android:text="adf"
+                        android:textColor="@color/major_light"/>
+
+                    <TextView
+                        android:id="@+id/modifyHistoryTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/statusTextView"
+                        android:layout_alignParentRight="true"
+                        android:paddingLeft="3dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:paddingRight="12dp"
+                        android:text="@string/modify_history_hint"
+                        android:textColor="@color/major_dark"
+                        android:textSize="14sp"
+                        android:visibility="gone"/>
+
+                </LinearLayout>
+
 	            
 	        </RelativeLayout>
             

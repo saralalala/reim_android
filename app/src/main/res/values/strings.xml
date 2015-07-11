@@ -145,6 +145,8 @@
     <string name="need_reimburse">需收款</string>
     <string name="does_not_need_reimburse">（不需收款）</string>
     <string name="actual_cost">实际消费</string>
+    <string name="modify_history">修改历史</string>
+    <string name="modify_history_hint">修改历史 ></string>
     <string name="type">类　型</string>
     <string name="photo">照　片</string>
     <string name="category">类　别</string>
@@ -623,6 +625,7 @@
     <string name="failed_to_set_admin">设置管理员失败</string>
     <string name="failed_to_verify_code">验证码验证错误</string>
     <string name="failed_to_experience">进入体验模式失败</string>
+    <string name="failed_to_get_modify_history">获取修改历史失败</string>
 
     <string name="no_pending_reports">报告都已处理完毕</string>
     <string name="no_image">未找到图片</string>

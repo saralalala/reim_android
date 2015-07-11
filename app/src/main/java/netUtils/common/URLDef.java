@@ -27,6 +27,7 @@ public class URLDef
     public static final String URL_SEARCH = "search";
     public static final String URL_ALERT = "alert";
     public static final String URL_APPROVE_INFO = "report_flow";
+    public static final String URL_MODIFY_HISTORY = "item_flow";
     public static final String URL_REPORT = "report";
     public static final String URL_REVOKE = "revoke";
     public static final String URL_CONFIRM_REPORT = "success";
