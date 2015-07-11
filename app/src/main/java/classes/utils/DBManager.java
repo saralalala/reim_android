@@ -2095,10 +2095,18 @@ public class DBManager extends SQLiteOpenHelper
         return getCategoryListFromCursorWithClose(cursor);
     }
 
-    public List<Category> getUserCategories(int userID)
+    public List<Category> getSetOfBookCategories(int sobID)
     {
-        Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE sob_id IN (?) AND parent_id = 0",
-                                          new String[]{getUserSetOfBookIDs(userID)});
+        String command = "SELECT * FROM tbl_category WHERE sob_id IN (0," + sobID + ") AND parent_id = 0";
+        Cursor cursor = database.rawQuery(command, null);
+        return getCategoryListFromCursorWithClose(cursor);
+    }
+
+    public List<Category> getUserCategories(int userID, int groupServerID)
+    {
+        String command = "SELECT * FROM tbl_category WHERE sob_id IN (" + getUserSetOfBookIDs(userID) +
+                ") AND parent_id = 0 AND group_id = " + groupServerID;
+        Cursor cursor = database.rawQuery(command, null);
         return getCategoryListFromCursorWithClose(cursor);
     }
 
@@ -3123,8 +3131,10 @@ public class DBManager extends SQLiteOpenHelper
         item.setBelongReport(getOthersReport(getIntFromCursor(cursor, "report_server_id")));
         item.setCategory(getCategory(getIntFromCursor(cursor, "category_id")));
         item.setInvoices(getOthersItemImages(item.getServerID()));
-        item.setRelevantUsers(User.idStringToUserList(getStringFromCursor(cursor, "users_id")));
-        item.setTags(Tag.idStringToTagList(getStringFromCursor(cursor, "tags_id")));
+        item.setRelevantUsersID(getStringFromCursor(cursor, "users_id"));
+        item.setRelevantUsers(User.idStringToUserList(item.getRelevantUsersID()));
+        item.setTagsID(getStringFromCursor(cursor, "tags_id"));
+        item.setTags(Tag.idStringToTagList(item.getTagsID()));
 
         return item;
     }

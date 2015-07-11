@@ -26,7 +26,10 @@ import com.rushucloud.reim.me.TagActivity;
 import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.List;
+
 import classes.model.Group;
+import classes.model.SetOfBook;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -51,6 +54,7 @@ public class MeFragment extends Fragment
     private CircleImageView avatarImageView;
     private ImageView tipImageView;
     private TextView managerTextView;
+    private View adminDivider;
     private RelativeLayout categoryLayout;
     private RelativeLayout tagLayout;
     private PopupWindow sharePopupWindow;
@@ -196,6 +200,9 @@ public class MeFragment extends Fragment
                 ViewUtils.goForward(getActivity(), InvoiceTitleActivity.class);
             }
         });
+
+        // init adminDivider
+        adminDivider = view.findViewById(R.id.adminDivider);
 
         // init category
         categoryLayout = (RelativeLayout) view.findViewById(R.id.categoryLayout);
@@ -345,14 +352,23 @@ public class MeFragment extends Fragment
                 managerTextView.setText("");
             }
 
+            List<SetOfBook> setOfBookList = dbManager.getUserSetOfBooks(appPreference.getCurrentUserID());
             if (!currentUser.isAdmin() || currentUser.getGroupID() <= 0)
             {
+                adminDivider.setVisibility(View.GONE);
                 categoryLayout.setVisibility(View.GONE);
                 tagLayout.setVisibility(View.GONE);
             }
+            else if (setOfBookList.isEmpty())
+            {
+                adminDivider.setVisibility(View.VISIBLE);
+                categoryLayout.setVisibility(View.VISIBLE);
+                tagLayout.setVisibility(View.VISIBLE);
+            }
             else
             {
-                categoryLayout.setVisibility(View.VISIBLE);
+                adminDivider.setVisibility(View.VISIBLE);
+                categoryLayout.setVisibility(View.GONE);
                 tagLayout.setVisibility(View.VISIBLE);
             }
 

@@ -22,12 +22,25 @@
             android:src="@drawable/back_drawable"/>
 
         <TextView
+            android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/choose_category"
             android:textColor="@color/major_light"
             android:textSize="20sp"/>
+
+        <Spinner
+            android:id="@+id/sobSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@id/backImageView"
+            android:layout_toLeftOf="@id/confirmTextView"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:gravity="center"
+            android:background="@drawable/spinner"/>
 
         <TextView
             android:id="@+id/confirmTextView"

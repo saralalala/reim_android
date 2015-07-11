@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -20,6 +23,7 @@ import java.util.List;
 
 import classes.adapter.CategoryExpandableListAdapter;
 import classes.model.Category;
+import classes.model.SetOfBook;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -36,10 +40,13 @@ public class PickCategoryActivity extends Activity
 
     // Local Data
     private DBManager dbManager;
-    private List<Category> categoryList = null;
-    private List<List<Category>> subCategoryList = null;
-    private List<Boolean> check = null;
-    private List<List<Boolean>> subCheck = null;
+    private List<SetOfBook> setOfBookList = new ArrayList<>();
+    private String[] setOfBookNameList;
+    private List<List<Category>> categoryList = new ArrayList<>();
+    private List<List<List<Category>>> subCategoryList = new ArrayList<>();
+    private List<List<Boolean>> check = new ArrayList<>();
+    private List<List<List<Boolean>>> subCheck = new ArrayList<>();
+    private int sobIndex = 0;
 
     // View
     protected void onCreate(Bundle savedInstanceState)
@@ -51,6 +58,7 @@ public class PickCategoryActivity extends Activity
     }
 
     protected void onResume()
+
     {
         super.onResume();
         MobclickAgent.onPageStart("PickCategoryActivity");
@@ -93,11 +101,15 @@ public class PickCategoryActivity extends Activity
                 Category category = null;
                 for (int i = 0; i < check.size(); i++)
                 {
-                    if (check.get(i))
+                    List<Boolean> checkList = check.get(i);
+                    for (int j = 0; j < checkList.size(); j++)
                     {
-                        category = categoryList.get(i);
-                        flag = true;
-                        break;
+                        if (checkList.get(j))
+                        {
+                            category = categoryList.get(i).get(j);
+                            flag = true;
+                            break;
+                        }
                     }
                 }
 
@@ -105,13 +117,21 @@ public class PickCategoryActivity extends Activity
                 {
                     for (int i = 0; i < subCheck.size(); i++)
                     {
-                        List<Boolean> booleans = subCheck.get(i);
-                        for (int j = 0; j < booleans.size(); j++)
+                        List<List<Boolean>> sobSubCheck = subCheck.get(i);
+                        for (int j = 0; j < sobSubCheck.size(); j++)
                         {
-                            if (booleans.get(j))
+                            List<Boolean> subCheckList = sobSubCheck.get(j);
+                            for (int k = 0; k < subCheckList.size(); k++)
                             {
-                                category = subCategoryList.get(i).get(j);
-                                flag = true;
+                                if (subCheckList.get(k))
+                                {
+                                    category = subCategoryList.get(i).get(j).get(k);
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                            if (flag)
+                            {
                                 break;
                             }
                         }
@@ -128,7 +148,42 @@ public class PickCategoryActivity extends Activity
             }
         });
 
-        adapter = new CategoryExpandableListAdapter(this, categoryList, subCategoryList, check, subCheck);
+        TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, setOfBookNameList);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        Spinner sobSpinner = (Spinner) findViewById(R.id.sobSpinner);
+        sobSpinner.setAdapter(spinnerAdapter);
+        sobSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                sobIndex = position;
+                adapter.setCategory(categoryList.get(sobIndex), subCategoryList.get(sobIndex));
+                adapter.setCheck(check.get(sobIndex), subCheck.get(sobIndex));
+                adapter.notifyDataSetChanged();
+            }
+
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
+        if (setOfBookList.isEmpty())
+        {
+            titleTextView.setVisibility(View.VISIBLE);
+            sobSpinner.setVisibility(View.GONE);
+        }
+        else
+        {
+            titleTextView.setVisibility(View.GONE);
+            sobSpinner.setVisibility(View.VISIBLE);
+        }
+
+        adapter = new CategoryExpandableListAdapter(this, categoryList.get(0), subCategoryList.get(0),
+                                                    check.get(0), subCheck.get(0));
 
         ExpandableListView categoryListView = (ExpandableListView) findViewById(R.id.categoryListView);
         categoryListView.setAdapter(adapter);
@@ -137,8 +192,8 @@ public class PickCategoryActivity extends Activity
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id)
             {
                 resetCheck();
-                check.set(groupPosition, true);
-                adapter.setCheck(check, subCheck);
+                check.get(sobIndex).set(groupPosition, true);
+                adapter.setCheck(check.get(sobIndex), subCheck.get(sobIndex));
                 adapter.notifyDataSetChanged();
                 return false;
             }
@@ -149,8 +204,8 @@ public class PickCategoryActivity extends Activity
                                         int childPosition, long id)
             {
                 resetCheck();
-                subCheck.get(groupPosition).set(childPosition, true);
-                adapter.setCheck(check, subCheck);
+                subCheck.get(sobIndex).get(groupPosition).set(childPosition, true);
+                adapter.setCheck(check.get(sobIndex), subCheck.get(sobIndex));
                 adapter.notifyDataSetChanged();
                 return false;
             }
@@ -158,21 +213,27 @@ public class PickCategoryActivity extends Activity
 
         if (PhoneUtils.isNetworkConnected())
         {
-            for (Category category : categoryList)
-            {
-                if (category.hasUndownloadedIcon())
-                {
-                    sendDownloadCategoryIconRequest(category);
-                }
-            }
-
-            for (List<Category> categories : subCategoryList)
+            for (List<Category> categories : categoryList)
             {
                 for (Category category : categories)
                 {
                     if (category.hasUndownloadedIcon())
                     {
                         sendDownloadCategoryIconRequest(category);
+                    }
+                }
+            }
+
+            for (List<List<Category>> subCategories : subCategoryList)
+            {
+                for (List<Category> categories : subCategories)
+                {
+                    for (Category category : categories)
+                    {
+                        if (category.hasUndownloadedIcon())
+                        {
+                            sendDownloadCategoryIconRequest(category);
+                        }
                     }
                 }
             }
@@ -191,13 +252,41 @@ public class PickCategoryActivity extends Activity
 
         Category chosenCategory = (Category) getIntent().getSerializableExtra("category");
 
+        setOfBookList = dbManager.getUserSetOfBooks(AppPreference.getAppPreference().getCurrentUserID());
+        setOfBookNameList = new String[setOfBookList.size()];
+        for (int i = 0; i < setOfBookList.size(); i++)
+        {
+            setOfBookNameList[i] = setOfBookList.get(i).getName();
+        }
+
         readCategoryList();
 
-        check = Category.getCategoryCheck(categoryList, chosenCategory);
-        subCheck = new ArrayList<>();
-        for (List<Category> categories : subCategoryList)
+        if (setOfBookList.isEmpty())
         {
-            subCheck.add(Category.getCategoryCheck(categories, chosenCategory));
+            check.add(Category.getCategoryCheck(categoryList.get(0), chosenCategory));
+            subCheck.add(new ArrayList<List<Boolean>>());
+
+            for (List<Category> categories : subCategoryList.get(0))
+            {
+                subCheck.get(0).add(Category.getCategoryCheck(categories, chosenCategory));
+            }
+        }
+        else
+        {
+            for (List<Category> categories : categoryList)
+            {
+                check.add(Category.getCategoryCheck(categories, chosenCategory));
+            }
+
+            for (List<List<Category>> sobSubCategories : subCategoryList)
+            {
+                List<List<Boolean>> sobSubCheckList = new ArrayList<>();
+                for (List<Category> subCategories : sobSubCategories)
+                {
+                    sobSubCheckList.add(Category.getCategoryCheck(subCategories, chosenCategory));
+                }
+                subCheck.add(sobSubCheckList);
+            }
         }
     }
 
@@ -205,44 +294,58 @@ public class PickCategoryActivity extends Activity
     {
         int currentGroupID = AppPreference.getAppPreference().getCurrentGroupID();
         int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
-        if (categoryList == null)
+
+        categoryList.clear();
+        subCategoryList.clear();
+        if (setOfBookList.isEmpty())
         {
-            categoryList = dbManager.getUserCategories(currentUserID);
+            categoryList.add(dbManager.getUserCategories(currentUserID, currentGroupID));
+            subCategoryList.add(new ArrayList<List<Category>>());
+
+            for (Category category : categoryList.get(0))
+            {
+                List<Category> subCategories = dbManager.getSubCategories(category.getServerID(), currentGroupID);
+                subCategoryList.get(0).add(subCategories);
+            }
         }
         else
         {
-            categoryList.clear();
-            categoryList.addAll(dbManager.getUserCategories(currentUserID));
-        }
+            for (SetOfBook setOfBook : setOfBookList)
+            {
+                categoryList.add(dbManager.getSetOfBookCategories(setOfBook.getServerID()));
+            }
 
-        if (subCategoryList == null)
-        {
-            subCategoryList = new ArrayList<>();
-        }
-        else
-        {
-            subCategoryList.clear();
-        }
-
-        for (Category category : categoryList)
-        {
-            List<Category> subCategories = dbManager.getSubCategories(category.getServerID(), currentGroupID);
-            subCategoryList.add(subCategories);
+            for (List<Category> categories : categoryList)
+            {
+                List<List<Category>> sobSubCategoryList = new ArrayList<>();
+                for (Category category : categories)
+                {
+                    List<Category> subCategories = dbManager.getSubCategories(category.getServerID(), currentGroupID);
+                    sobSubCategoryList.add(subCategories);
+                }
+                subCategoryList.add(sobSubCategoryList);
+            }
         }
     }
 
     private void resetCheck()
     {
-        for (int i = 0; i < check.size(); i++)
+        for (List<Boolean> checkList : check)
         {
-            check.set(i, false);
+            for (int i = 0; i < checkList.size(); i++)
+            {
+                checkList.set(i, false);
+            }
         }
 
-        for (List<Boolean> booleans : subCheck)
+        for (List<List<Boolean>> subCheckList : subCheck)
         {
-            for (int i = 0; i < booleans.size(); i++)
+            for (List<Boolean> booleans : subCheckList)
             {
-                booleans.set(i, false);
+                for (int i = 0; i < booleans.size(); i++)
+                {
+                    booleans.set(i, false);
+                }
             }
         }
     }
@@ -269,8 +372,24 @@ public class PickCategoryActivity extends Activity
                     {
                         public void run()
                         {
-                            adapter.setCategory(categoryList, subCategoryList);
-                            adapter.notifyDataSetChanged();
+                            boolean isInCurrentSetOfBook = category.isInCategoryList(categoryList.get(sobIndex));
+                            if (!isInCurrentSetOfBook)
+                            {
+                                for (List<Category> subCategories : subCategoryList.get(sobIndex))
+                                {
+                                    if (category.isInCategoryList(subCategories))
+                                    {
+                                        isInCurrentSetOfBook = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (isInCurrentSetOfBook)
+                            {
+                                adapter.setCategory(categoryList.get(sobIndex), subCategoryList.get(sobIndex));
+                                adapter.notifyDataSetChanged();
+                            }
                         }
                     });
                 }

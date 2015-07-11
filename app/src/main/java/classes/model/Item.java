@@ -123,6 +123,17 @@ public class Item
             e.printStackTrace();
         }
     }
+    public Item(Item item)
+    {
+        category = new Category(item.getCategory());
+        note = item.getNote();
+        vendor = item.getVendor();
+        tagsID = item.getTagsID();
+        relevantUsersID = item.getRelevantUsersID();
+        amount = item.getAmount();
+        location = item.getLocation();
+        consumedDate = item.getConsumedDate();
+    }
 
     public int getLocalID()
     {

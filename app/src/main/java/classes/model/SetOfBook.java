@@ -18,8 +18,8 @@ public class SetOfBook
     {
         try
         {
-            setServerID(jObject.getInt("id"));
-            setName(jObject.getString("name"));
+            setServerID(jObject.getInt("sob_id"));
+            setName(jObject.getString("sob_name"));
             setUserID(userID);
         }
         catch (JSONException e)

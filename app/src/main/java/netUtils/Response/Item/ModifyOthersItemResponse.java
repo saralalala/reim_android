@@ -2,9 +2,9 @@ package netUtils.response.item;
 
 import netUtils.response.common.BaseResponse;
 
-public class ChangeAmountResponse extends BaseResponse
+public class ModifyOthersItemResponse extends BaseResponse
 {
-    public ChangeAmountResponse(Object httpResponse)
+    public ModifyOthersItemResponse(Object httpResponse)
     {
         super(httpResponse);
     }

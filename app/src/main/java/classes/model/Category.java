@@ -180,6 +180,18 @@ public class Category implements Serializable
         return super.equals(o);
     }
 
+    public boolean isInCategoryList(List<Category> categoryList)
+    {
+        for (Category category : categoryList)
+        {
+            if (this.getServerID() == category.getServerID())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static List<Boolean> getCategoryCheck(List<Category> categoryList, Category category)
     {
         if (categoryList == null)

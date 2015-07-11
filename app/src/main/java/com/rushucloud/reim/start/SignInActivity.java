@@ -62,6 +62,9 @@ public class SignInActivity extends Activity
         MobclickAgent.onPageStart("SignInActivity");
         MobclickAgent.onResume(this);
         ReimProgressDialog.setContext(this);
+
+        usernameEditText.setText("2@y.cn");
+        passwordEditText.setText("g0YTBhMzE2OTg1OWZhMDMyYjlmOGVkMTE3NDQ3OD");
     }
 
     protected void onPause()

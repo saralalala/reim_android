@@ -78,9 +78,9 @@ import classes.widget.wheelview.adapter.ArrayWheelAdapter;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
 import netUtils.request.common.DownloadImageRequest;
-import netUtils.request.item.ChangeAmountRequest;
+import netUtils.request.item.ModifyOthersItemRequest;
 import netUtils.response.common.DownloadImageResponse;
-import netUtils.response.item.ChangeAmountResponse;
+import netUtils.response.item.ModifyOthersItemResponse;
 
 public class EditItemActivity extends Activity
 {
@@ -136,6 +136,7 @@ public class EditItemActivity extends Activity
     private List<Tag> tagList = new ArrayList<>();
 
     private Item item;
+    private Item originItem;
     private List<Image> originInvoiceList = new ArrayList<>();
 
     private boolean fromReim;
@@ -424,7 +425,19 @@ public class EditItemActivity extends Activity
                             item.setTagsID(Tag.getTagsIDString(item.getTags()));
                             item.setRelevantUsersID(User.getUsersIDString(item.getRelevantUsers()));
 
-                            sendChangeAmountRequest(item);
+                            // judge which attribute was modified
+                            boolean[] attributesCheck = new boolean[8];
+                            attributesCheck[0] = item.getCategory().getServerID() != originItem.getCategory().getServerID();
+                            attributesCheck[1] = !item.getNote().equals(originItem.getNote());
+                            attributesCheck[2] = !Utils.isIDStringEqual(item.getTagsID(), originItem.getTagsID());
+                            attributesCheck[3] = !item.getVendor().equals(originItem.getVendor());
+                            attributesCheck[4] = !Utils.isIDStringEqual(item.getRelevantUsersID(),
+                                                                       originItem.getRelevantUsersID());
+                            attributesCheck[5] = item.getAmount() != originItem.getAmount();
+                            attributesCheck[6] = !item.getLocation().equals(originItem.getLocation());
+                            attributesCheck[7] = item.getConsumedDate() != originItem.getConsumedDate();
+
+                            sendModifyOthersItemRequest(item, attributesCheck);
                         }
                     }
                     catch (NumberFormatException e)
@@ -1537,7 +1550,7 @@ public class EditItemActivity extends Activity
         locationClient = new LocationClient(getApplicationContext());
 
         currencyList.addAll(dbManager.getCurrencyList());
-        categoryList.addAll(dbManager.getUserCategories(appPreference.getCurrentUserID()));
+        categoryList.addAll(dbManager.getUserCategories(appPreference.getCurrentUserID(), appPreference.getCurrentGroupID()));
         tagList.addAll(dbManager.getGroupTags(appPreference.getCurrentGroupID()));
 
         Intent intent = getIntent();
@@ -1614,6 +1627,7 @@ public class EditItemActivity extends Activity
             }
             else
             {
+                originItem = new Item(item);
                 originInvoiceList.addAll(item.getInvoices());
             }
         }
@@ -1745,15 +1759,15 @@ public class EditItemActivity extends Activity
         });
     }
 
-    private void sendChangeAmountRequest(final Item item)
+    private void sendModifyOthersItemRequest(final Item item, boolean[] attributesCheck)
     {
         ReimProgressDialog.show();
-        ChangeAmountRequest request = new ChangeAmountRequest(item);
+        ModifyOthersItemRequest request = new ModifyOthersItemRequest(item, attributesCheck);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
-                final ChangeAmountResponse response = new ChangeAmountResponse(httpResponse);
+                final ModifyOthersItemResponse response = new ModifyOthersItemResponse(httpResponse);
                 if (response.getStatus())
                 {
                     dbManager.updateOthersItem(item);

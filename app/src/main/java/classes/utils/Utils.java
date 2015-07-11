@@ -230,6 +230,35 @@ public class Utils
         return Double.valueOf(formatDouble(amount));
     }
 
+    public static boolean isIDStringEqual(String idString1, String idString2)
+    {
+        List<Integer> idList1 = stringToIntList(idString1);
+        List<Integer> idList2 = stringToIntList(idString2);
+
+        if (idList1.size() != idList2.size())
+        {
+            return false;
+        }
+
+        for (Integer id1 : idList1)
+        {
+            boolean idExists = false;
+            for (Integer id2 : idList2)
+            {
+                if (id1.equals(id2))
+                {
+                    idExists = true;
+                    break;
+                }
+            }
+            if (!idExists)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static double roundDouble(double arg)
     {
         if (arg > 0 & arg < 0.1)

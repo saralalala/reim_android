@@ -24,6 +24,15 @@ public class NetworkConstant
     public static final int CONTACT_TYPE_WECHAT = 0;
     public static final int CONTACT_TYPE_EMAIL = 1;
     public static final int CONTACT_TYPE_PHONE = 2;
+    
+    public static final int UPDATE_ITEM_TYPE_CATEGORY = 1;
+    public static final int UPDATE_ITEM_TYPE_NOTE = 2;
+    public static final int UPDATE_ITEM_TYPE_TAGS = 3;
+    public static final int UPDATE_ITEM_TYPE_VENDOR = 4;
+    public static final int UPDATE_ITEM_TYPE_USERS = 5;
+    public static final int UPDATE_ITEM_TYPE_AMOUNT = 6;
+    public static final int UPDATE_ITEM_TYPE_LOCATION = 7;
+    public static final int UPDATE_ITEM_TYPE_CONSUMED_DATE = 8;
 
     public static final int PUSH_TYPE_SYSTEM_MESSAGE = 1;
     public static final int PUSH_TYPE_REPORT = 2;
