@@ -1348,7 +1348,7 @@ public class EditItemActivity extends Activity
         ViewUtils.dimBackground(this);
     }
 
-    private List<NumberPicker> findNumberPickers(DatePicker datePicker)
+    private List<NumberPicker> findNumberPickersFromDatePicker(DatePicker datePicker)
     {
         List<NumberPicker> pickerList = new ArrayList<>();
         Field[] fields = DatePicker.class.getDeclaredFields();
@@ -1367,24 +1367,21 @@ public class EditItemActivity extends Activity
                 }
             }
         }
-        return pickerList;
-    }
 
-    private List<NumberPicker> findNumberPickersFromDatePicker(DatePicker datePicker)
-    {
-        List<NumberPicker> pickerList = new ArrayList<>();
+        if (pickerList.isEmpty())
+        {
+            LinearLayout datePickerContainer = (LinearLayout) datePicker.getChildAt(0);
+            LinearLayout dateSpinner = (LinearLayout) datePickerContainer.getChildAt(0);
 
-        LinearLayout datePickerContainer = (LinearLayout) datePicker.getChildAt(0);
-        LinearLayout dateSpinner = (LinearLayout) datePickerContainer.getChildAt(0);
-
-        pickerList.add((NumberPicker) dateSpinner.getChildAt(2));
-        pickerList.add((NumberPicker) dateSpinner.getChildAt(1));
-        pickerList.add((NumberPicker) dateSpinner.getChildAt(0));
+            pickerList.add((NumberPicker) dateSpinner.getChildAt(2));
+            pickerList.add((NumberPicker) dateSpinner.getChildAt(1));
+            pickerList.add((NumberPicker) dateSpinner.getChildAt(0));
+        }
 
         return pickerList;
     }
 
-    private List<NumberPicker> findNumberPickers(TimePicker timePicker)
+    private List<NumberPicker> findNumberPickersFromTimePicker(TimePicker timePicker)
     {
         List<NumberPicker> pickerList = new ArrayList<>();
         Field[] fields = TimePicker.class.getDeclaredFields();
@@ -1403,11 +1400,19 @@ public class EditItemActivity extends Activity
                 }
             }
         }
-        pickerList.remove(0); // remove am/pm picker
-        return pickerList;
+
+        if (pickerList.isEmpty())
+        {
+            return findNumberPickers(timePicker);
+        }
+        else
+        {
+            pickerList.remove(0); // remove am/pm picker
+            return pickerList;
+        }
     }
 
-    private List<NumberPicker> findNumberPickersFromTimePicker(ViewGroup viewGroup)
+    private List<NumberPicker> findNumberPickers(ViewGroup viewGroup)
     {
         List<NumberPicker> pickerList = new ArrayList<>();
         View child;
@@ -1422,7 +1427,7 @@ public class EditItemActivity extends Activity
                 }
                 else if (child instanceof LinearLayout)
                 {
-                    List<NumberPicker> result = findNumberPickersFromTimePicker((ViewGroup) child);
+                    List<NumberPicker> result = findNumberPickers((ViewGroup) child);
                     if (result.size() > 0)
                     {
                         return result;
@@ -1440,11 +1445,7 @@ public class EditItemActivity extends Activity
         int dateMargin = ViewUtils.dpToPixel(15);
         int timeMargin = ViewUtils.dpToPixel(5);
 
-        List<NumberPicker> pickerList = findNumberPickers(datePicker);
-        if (pickerList.isEmpty())
-        {
-            pickerList.addAll(findNumberPickersFromDatePicker(datePicker));
-        }
+        List<NumberPicker> pickerList = findNumberPickersFromDatePicker(datePicker);
 
         NumberPicker yearPicker = pickerList.get(2);
         LayoutParams params = new LayoutParams(yearWidth, LayoutParams.WRAP_CONTENT);
@@ -1461,11 +1462,7 @@ public class EditItemActivity extends Activity
         dayPicker.setLayoutParams(params);
 
         pickerList.clear();
-        pickerList.addAll(findNumberPickers(timePicker));
-        if (pickerList.isEmpty())
-        {
-            pickerList.addAll(findNumberPickersFromTimePicker(timePicker));
-        }
+        pickerList.addAll(findNumberPickersFromTimePicker(timePicker));
 
         NumberPicker hourPicker = pickerList.get(0);
         params = new LayoutParams(width, LayoutParams.WRAP_CONTENT);
