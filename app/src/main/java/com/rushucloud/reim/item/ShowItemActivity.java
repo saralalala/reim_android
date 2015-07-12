@@ -64,8 +64,8 @@ public class ShowItemActivity extends Activity
     private boolean myItem;
     private List<ModifyHistory> historyList = new ArrayList<>();
     private Report report;
-    private boolean fromPush;
-    private boolean myReport;
+    private boolean fromPush = false;
+    private boolean myReport = true;
 
     // View
     protected void onCreate(Bundle savedInstanceState)
@@ -457,11 +457,11 @@ public class ShowItemActivity extends Activity
         dbManager = DBManager.getDBManager();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        if (bundle != null)
+        fromPush = bundle.getBoolean("fromPush", false);
+        if (fromPush)
         {
             report = (Report) bundle.getSerializable("report");
             report = dbManager.getReportByServerID(report.getServerID());
-            fromPush = bundle.getBoolean("fromPush", false);
             myReport = bundle.getBoolean("myReport", false);
             item.setServerID(bundle.getInt("itemID"));
             myItem = true;
