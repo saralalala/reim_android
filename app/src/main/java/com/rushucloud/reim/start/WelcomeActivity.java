@@ -14,6 +14,9 @@ import com.rushucloud.reim.guide.GuideStartActivity;
 import com.rushucloud.reim.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;

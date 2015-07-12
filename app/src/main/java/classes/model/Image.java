@@ -4,8 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.File;
 import java.util.List;
@@ -31,7 +31,7 @@ public class Image
     {
         try
         {
-            setServerID(jObject.getInt("id"));
+            setServerID(jObject.getInteger("id"));
             setServerPath(jObject.getString("path"));
         }
         catch (JSONException e)

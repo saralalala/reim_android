@@ -3,14 +3,15 @@ package classes.model;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import classes.utils.PhoneUtils;
+import classes.utils.Utils;
 
 public class Category implements Serializable
 {
@@ -54,16 +55,16 @@ public class Category implements Serializable
     {
         try
         {
-            setServerID(jObject.optInt("id", -1));
+            setServerID(Utils.optInt(jObject, "id", -1));
             setName(jObject.getString("category_name"));
             setLimit(jObject.getDouble("max_limit"));
-            setGroupID(jObject.optInt("gid", -1));
-            setParentID(jObject.optInt("pid", -1));
-            setSetOfBookID(jObject.optInt("sob_id", 0));
-            setLocalUpdatedDate(jObject.getInt("lastdt"));
-            setServerUpdatedDate(jObject.getInt("lastdt"));
-            setType(jObject.getInt("prove_before"));
-            setIconID(jObject.optInt("avatar", -1));
+            setGroupID(Utils.optInt(jObject, "gid", -1));
+            setParentID(Utils.optInt(jObject, "pid", -1));
+            setSetOfBookID(Utils.optInt(jObject, "sob_id", 0));
+            setLocalUpdatedDate(jObject.getInteger("lastdt"));
+            setServerUpdatedDate(jObject.getInteger("lastdt"));
+            setType(jObject.getInteger("prove_before"));
+            setIconID(Utils.optInt(jObject, "avatar", -1));
         }
         catch (JSONException e)
         {

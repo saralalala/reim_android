@@ -794,7 +794,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         List<User> userList = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT user_id FROM tbl_item_user WHERE item_local_id = ?",
-                                              new String[]{Integer.toString(itemLocalID)});
+                                          new String[]{Integer.toString(itemLocalID)});
         try
         {
             while (cursor.moveToNext())
@@ -818,6 +818,33 @@ public class DBManager extends SQLiteOpenHelper
             }
         }
         return userList;
+    }
+
+    public boolean allInDatabase(List<User> userList)
+    {
+        String idString = User.getUsersIDString(userList);
+        if (idString.isEmpty())
+        {
+            return true;
+        }
+
+        try
+        {
+            String content = "SELECT COUNT(DISTINCT(server_id)) AS count FROM tbl_user WHERE server_id IN (" + idString + ")";
+            Cursor cursor = database.rawQuery(content, null);
+            int count = 0;
+            if (cursor.moveToNext())
+            {
+                count = getIntFromCursor(cursor, "count");
+            }
+            cursor.close();
+
+            return count == userList.size();
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
     // Item

@@ -1,9 +1,9 @@
 package netUtils.response.item;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import classes.utils.ViewUtils;
 
@@ -17,8 +17,8 @@ public class DidiDetailKuaiCheResponse
     {
         try
         {
-            JSONObject jObject = new JSONObject((String) httpResponse);
-            status = jObject.getInt("errno") == 0;
+            JSONObject jObject = JSON.parseObject((String) httpResponse);
+            status = jObject.getInteger("errno") == 0;
             amount = jObject.getJSONObject("feeInfo").getDouble("total_fee");
             city = jObject.getJSONObject("order").getString("cityName");
             int index = city.indexOf(ViewUtils.getString(R.string.city));

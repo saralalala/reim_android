@@ -1,7 +1,7 @@
 package netUtils.response.common;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 public class UploadImageResponse extends BaseResponse
 {

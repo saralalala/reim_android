@@ -1,13 +1,8 @@
 package netUtils.response.item;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import classes.model.Vendor;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 public class DidiVerifyCodeResponse
 {
@@ -17,8 +12,8 @@ public class DidiVerifyCodeResponse
     {
         try
         {
-            JSONObject jObject = new JSONObject((String) httpResponse);
-            status = jObject.getInt("errno") == 0;
+            JSONObject jObject = JSON.parseObject((String) httpResponse);
+            status = jObject.getInteger("errno") == 0;
         }
         catch (JSONException e)
         {

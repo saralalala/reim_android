@@ -1,8 +1,8 @@
 package netUtils.response.group;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +28,17 @@ public class GetInvitedGroupResponse extends BaseResponse
             JSONArray jsonArray = getDataArray();
             groupList = new ArrayList<>();
             inviteList = new ArrayList<>();
-            for (int i = 0; i < jsonArray.length(); i++)
+            for (int i = 0; i < jsonArray.size(); i++)
             {
                 JSONObject object = jsonArray.getJSONObject(i);
                 Group group = new Group();
-                group.setServerID(object.getInt("gid"));
+                group.setServerID(object.getInteger("gid"));
                 group.setName(object.getString("groupname"));
-                group.setCreatedDate(object.getInt("createdt"));
+                group.setCreatedDate(object.getInteger("createdt"));
                 groupList.add(group);
 
                 Invite invite = new Invite();
-                invite.setServerID(object.getInt("id"));
+                invite.setServerID(object.getInteger("id"));
                 invite.setInviteCode(object.getString("code"));
                 inviteList.add(invite);
             }

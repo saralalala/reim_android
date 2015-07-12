@@ -2,6 +2,7 @@ package classes.utils;
 
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.R;
 
 import java.text.DecimalFormat;
@@ -321,5 +322,17 @@ public class Utils
     public interface ExtraCallBack
     {
         void execute();
+    }
+
+    public static int optInt(JSONObject object, String key, int defaultValue)
+    {
+        Integer result = object.getInteger(key);
+        return result == null ? defaultValue : result;
+    }
+
+    public static String optString(JSONObject object, String key, String defaultValue)
+    {
+        String result = object.getString(key);
+        return result == null ? defaultValue : result;
     }
 }

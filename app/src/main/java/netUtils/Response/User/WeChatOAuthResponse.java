@@ -1,8 +1,8 @@
 package netUtils.response.user;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,24 +40,24 @@ public class WeChatOAuthResponse extends BaseResponse
 
             int groupID = -1;
             JSONObject groupObject = profileObject.getJSONObject("group");
-            if (groupObject.getInt("groupid") != -1)
+            if (groupObject.getInteger("groupid") != -1)
             {
                 group = new Group(groupObject);
                 groupID = group.getServerID();
             }
 
             currentUser = new User(profileObject, groupID);
-            lastShownGuideVersion = profileObject.getInt("guide_version");
+            lastShownGuideVersion = profileObject.getInteger("guide_version");
 
             JSONArray jsonArray = profileObject.getJSONArray("banks");
-            if (jsonArray.length() > 0)
+            if (jsonArray.size() > 0)
             {
                 currentUser.setBankAccount(new BankAccount(jsonArray.getJSONObject(0)));
             }
 
             JSONArray sobArray = profileObject.getJSONArray("sob");
             setOfBookList = new ArrayList<>();
-            for (int i = 0; i < sobArray.length(); i++)
+            for (int i = 0; i < sobArray.size(); i++)
             {
                 SetOfBook setOfBook = new SetOfBook(sobArray.getJSONObject(i), currentUser.getServerID());
                 setOfBookList.add(setOfBook);
@@ -65,7 +65,7 @@ public class WeChatOAuthResponse extends BaseResponse
 
             JSONArray categoryArray = jObject.getJSONArray("categories");
             categoryList = new ArrayList<>();
-            for (int i = 0; i < categoryArray.length(); i++)
+            for (int i = 0; i < categoryArray.size(); i++)
             {
                 Category category = new Category(categoryArray.getJSONObject(i));
                 categoryList.add(category);
@@ -73,7 +73,7 @@ public class WeChatOAuthResponse extends BaseResponse
 
             JSONArray tagArray = jObject.getJSONArray("tags");
             tagList = new ArrayList<>();
-            for (int i = 0; i < tagArray.length(); i++)
+            for (int i = 0; i < tagArray.size(); i++)
             {
                 Tag tag = new Tag(tagArray.getJSONObject(i));
                 tagList.add(tag);
@@ -81,7 +81,7 @@ public class WeChatOAuthResponse extends BaseResponse
 
             JSONArray memberArray = jObject.getJSONArray("members");
             memberList = new ArrayList<>();
-            for (int i = 0; i < memberArray.length(); i++)
+            for (int i = 0; i < memberArray.size(); i++)
             {
                 User user = new User(memberArray.getJSONObject(i), groupID);
                 memberList.add(user);

@@ -1,8 +1,8 @@
 package netUtils.response.report;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class SingleSubReportResponse extends BaseResponse
                 JSONObject object = jsonArray.getJSONObject(i);
                 Report report = new Report();
                 report.setTitle(object.getString("title"));
-                report.setCreatedDate(object.getInt("createdt"));
+                report.setCreatedDate(object.getInteger("createdt"));
 //				report.setLastUpdatedDate(new Date(Integer.valueOf(object.getString("lastdt"))));
                 report.setStatus(Integer.valueOf(object.getString("status")));
                 reportList.add(report);

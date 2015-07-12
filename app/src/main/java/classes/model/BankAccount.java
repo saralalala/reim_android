@@ -35,6 +35,22 @@ public class BankAccount implements Serializable
         }
     }
 
+    public BankAccount(com.alibaba.fastjson.JSONObject jObject)
+    {
+        try
+        {
+            setServerID(jObject.getInteger("id"));
+            setName(jObject.getString("account"));
+            setNumber(jObject.getString("cardno"));
+            setBankName(jObject.getString("bankname"));
+            setLocation(jObject.getString("bankloc"));
+        }
+        catch (com.alibaba.fastjson.JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public int getLocalID()
     {
         return localID;

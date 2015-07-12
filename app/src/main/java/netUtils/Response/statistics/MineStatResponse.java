@@ -1,11 +1,10 @@
 package netUtils.response.statistics;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import classes.model.StatCategory;
@@ -34,13 +33,13 @@ public class MineStatResponse extends BaseResponse
         {
             JSONObject jObject = getDataObject();
 
-            hasStaffData = Utils.intToBoolean(jObject.getInt("staff"));
+            hasStaffData = Utils.intToBoolean(jObject.getInteger("staff"));
             ongoingAmount = jObject.getDouble("process");
             newAmount = jObject.getDouble("new");
 
             statCategoryList = new ArrayList<>();
             JSONArray categories = jObject.getJSONArray("cates");
-            for (int i = 0; i < categories.length(); i++)
+            for (int i = 0; i < categories.size(); i++)
             {
                 StatCategory category = new StatCategory(categories.getJSONObject(i));
                 statCategoryList.add(category);
@@ -48,29 +47,28 @@ public class MineStatResponse extends BaseResponse
 
             statTagList = new ArrayList<>();
             JSONArray tags = jObject.getJSONArray("tags");
-            for (int i = 0; i < tags.length(); i++)
+            for (int i = 0; i < tags.size(); i++)
             {
                 JSONObject object = tags.getJSONObject(i);
                 statTagList.add(new StatTag(object));
             }
 
             monthsData = new HashMap<>();
-            JSONObject months = jObject.optJSONObject("ms");
+            JSONObject months = jObject.getJSONObject("ms");
             if (months != null)
             {
-                for (Iterator<?> iterator = months.keys(); iterator.hasNext(); )
+                for (String key : months.keySet())
                 {
-                    String key = (String) iterator.next();
                     Double value = months.getDouble(key);
                     monthsData.put(key, value);
                 }
             }
 
             currencyData = new HashMap<>();
-            JSONArray currencies = jObject.optJSONArray("currencies");
+            JSONArray currencies = jObject.getJSONArray("currencies");
             if (currencies != null)
             {
-                for (int i = 0; i < currencies.length(); i++)
+                for (int i = 0; i < currencies.size(); i++)
                 {
                     JSONObject object = currencies.getJSONObject(i);
                     currencyData.put(object.getString("name").toUpperCase(), object.getDouble("amount"));

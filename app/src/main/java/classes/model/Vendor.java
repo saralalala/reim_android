@@ -2,8 +2,8 @@ package classes.model;
 
 import android.graphics.Bitmap;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 public class Vendor
 {
@@ -29,7 +29,7 @@ public class Vendor
             setAddress(jObject.getString("address"));
             setLatitude(jObject.getDouble("latitude"));
             setLongitude(jObject.getDouble("longitude"));
-            setDistance(jObject.getInt("distance"));
+            setDistance(jObject.getInteger("distance"));
             setPhotoURL(jObject.getString("s_photo_url"));
         }
         catch (JSONException e)

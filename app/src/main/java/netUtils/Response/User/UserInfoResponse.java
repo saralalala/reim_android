@@ -1,7 +1,7 @@
 package netUtils.response.user;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import classes.model.User;
 import netUtils.response.common.BaseResponse;

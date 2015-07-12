@@ -1,7 +1,7 @@
 package classes.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ public class ModifyHistory implements Serializable
     {
         try
         {
-            setUser(DBManager.getDBManager().getUser(jObject.getInt("manager")));
+            setUser(DBManager.getDBManager().getUser(jObject.getInteger("manager")));
             setTime(jObject.getString("submitdt"));
             setContent(jObject.getString("newvalue"));
         }

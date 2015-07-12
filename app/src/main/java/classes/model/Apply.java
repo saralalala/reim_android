@@ -1,9 +1,8 @@
 package classes.model;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.Serializable;
 
@@ -30,58 +29,58 @@ public class Apply extends Message implements Serializable
     {
         try
         {
-            int applicantID = jObject.getInt("uid");
+            int applicantID = jObject.getInteger("uid");
             String applicant = jObject.getString("applicant");
             String groupName = jObject.getString("groupname");
-            int activeType = jObject.getInt("permit");
+            int activeType = jObject.getInteger("permit");
 
-            setServerID(jObject.getInt("id"));
+            setServerID(jObject.getInteger("id"));
             setTypeCode(activeType);
             setApplicant(applicant);
             setType(Message.TYPE_APPLY);
-            setHasBeenRead(Utils.intToBoolean(jObject.getInt("sread")));
+            setHasBeenRead(Utils.intToBoolean(jObject.getInteger("sread")));
 
             if (applicantID != currentUserID && activeType == Apply.TYPE_NEW)
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_others_new), applicant, groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("updatedt"));
+                setUpdateTime(jObject.getInteger("updatedt"));
             }
             else if (applicantID == currentUserID && activeType == Apply.TYPE_NEW)
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_new), groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("updatedt"));
+                setUpdateTime(jObject.getInteger("updatedt"));
             }
             else if (applicantID != currentUserID && activeType == Apply.TYPE_REJECTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_others_rejected), applicant, groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("updatedt"));
+                setUpdateTime(jObject.getInteger("updatedt"));
             }
             else if (applicantID == currentUserID && activeType == Apply.TYPE_REJECTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_rejected), groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("updatedt"));
+                setUpdateTime(jObject.getInteger("updatedt"));
             }
             else if (applicantID != currentUserID && activeType == Apply.TYPE_ACCEPTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_others_accepted), applicant, groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("updatedt"));
+                setUpdateTime(jObject.getInteger("updatedt"));
             }
             else
             {
                 String message = String.format(ViewUtils.getString(R.string.apply_accepted), groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("updatedt"));
+                setUpdateTime(jObject.getInteger("updatedt"));
             }
         }
         catch (JSONException e)

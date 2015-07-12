@@ -1,7 +1,8 @@
 package netUtils.response.item;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 public class DidiDetailLiftResponse
 {
@@ -14,8 +15,8 @@ public class DidiDetailLiftResponse
     {
         try
         {
-            JSONObject jObject = new JSONObject((String) httpResponse);
-            status = jObject.getInt("errno") == 0;
+            JSONObject jObject = JSON.parseObject((String) httpResponse);
+            status = jObject.getInteger("errno") == 0;
 
             JSONObject orderObject = jObject.getJSONObject("order_info");
             amount = orderObject.getJSONObject("price_detail").getDouble("total_price");

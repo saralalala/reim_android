@@ -28,6 +28,20 @@ public class SetOfBook
         }
     }
 
+    public SetOfBook(com.alibaba.fastjson.JSONObject jObject, int userID)
+    {
+        try
+        {
+            setServerID(jObject.getInteger("sob_id"));
+            setName(jObject.getString("sob_name"));
+            setUserID(userID);
+        }
+        catch (com.alibaba.fastjson.JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public int getServerID()
     {
         return serverID;

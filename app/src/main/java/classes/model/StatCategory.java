@@ -1,11 +1,8 @@
 package classes.model;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import classes.utils.PhoneUtils;
 
@@ -27,10 +24,10 @@ public class StatCategory
     {
         try
         {
-            setCategoryID(jObject.getInt("id"));
+            setCategoryID(jObject.getInteger("id"));
             setAmount(jObject.getDouble("amount"));
-            JSONArray iids = jObject.optJSONArray("items");
-            int count = iids != null ? iids.length() : jObject.getInt("count");
+            JSONArray iids = jObject.getJSONArray("items");
+            int count = iids != null ? iids.size() : jObject.getInteger("count");
             setItemCount(count);
         }
         catch (JSONException e)

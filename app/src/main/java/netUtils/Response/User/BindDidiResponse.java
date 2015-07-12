@@ -1,8 +1,8 @@
 package netUtils.response.user;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class BindDidiResponse extends BaseResponse
             JSONArray jsonArray = getDataArray();
 
             didiExpenseList = new ArrayList<>();
-            for (int i = 0; i < jsonArray.length(); i++)
+            for (int i = 0; i < jsonArray.size(); i++)
             {
                 JSONObject object = jsonArray.getJSONObject(i);
                 didiExpenseList.add(new DidiExpense(object));

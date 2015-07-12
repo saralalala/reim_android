@@ -4,9 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -81,18 +81,18 @@ public class User implements Serializable
             setServerID(Integer.valueOf(jObject.getString("id")));
             setEmail(jObject.getString("email"));
             setPhone(jObject.getString("phone"));
-            setWeChat(jObject.optString("weixin_nickname", ""));
+            setWeChat(Utils.optString(jObject, "weixin_nickname", ""));
             setNickname(jObject.getString("nickname"));
-            setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
-            setDefaultManagerID(jObject.getInt("manager_id"));
+            setIsAdmin(Utils.intToBoolean(jObject.getInteger("admin")));
+            setDefaultManagerID(jObject.getInteger("manager_id"));
             setGroupID(groupID);
-            setSobID(jObject.optInt("sob_id", 0));
-            setAppliedCompany(jObject.optString("apply"));
+            setSobID(Utils.optInt(jObject, "sob_id", 0));
+            setAppliedCompany(Utils.optString(jObject, "apply", ""));
             setAvatarServerPath(jObject.getString("apath"));
             setAvatarLocalPath("");
-            setIsActive(Utils.intToBoolean(jObject.optInt("active", 0)));
-            setLocalUpdatedDate(jObject.getInt("dt"));
-            setServerUpdatedDate(jObject.getInt("dt"));
+            setIsActive(Utils.intToBoolean(Utils.optInt(jObject, "active", 0)));
+            setLocalUpdatedDate(jObject.getInteger("dt"));
+            setServerUpdatedDate(jObject.getInteger("dt"));
             String imageID = jObject.getString("avatar");
             if (imageID.isEmpty())
             {
@@ -103,7 +103,7 @@ public class User implements Serializable
                 setAvatarID(Integer.valueOf(imageID));
             }
 
-            JSONObject didiObject = jObject.optJSONObject("didi");
+            JSONObject didiObject = jObject.getJSONObject("didi");
             if (didiObject != null)
             {
                 setDidi(didiObject.getString("phone"));
@@ -120,24 +120,24 @@ public class User implements Serializable
     {
         try
         {
-            setServerID(jObject.getInt("id"));
+            setServerID(jObject.getInteger("id"));
             setNickname(jObject.getString("nickname"));
             setEmail(jObject.getString("email"));
             setPhone(jObject.getString("phone"));
             setWeChat(jObject.getString("weixin_nickname"));
-            setDefaultManagerID(jObject.getInt("manager_id"));
-            setAvatarServerPath(jObject.optString("apath", ""));
+            setDefaultManagerID(jObject.getInteger("manager_id"));
+            setAvatarServerPath(Utils.optString(jObject, "apath", ""));
             setAvatarLocalPath("");
-            setIsAdmin(Utils.intToBoolean(jObject.getInt("admin")));
-            setIsActive(Utils.intToBoolean(jObject.optInt("active", 0)));
+            setIsAdmin(Utils.intToBoolean(jObject.getInteger("admin")));
+            setIsActive(Utils.intToBoolean(Utils.optInt(jObject, "active", 0)));
             setGroupID(groupID);
-            setSobID(jObject.optInt("sob_id", 0));
+            setSobID(Utils.optInt(jObject, "sob_id", 0));
             setAppliedCompany(jObject.getString("apply"));
-            setLocalUpdatedDate(jObject.getInt("lastdt"));
-            setServerUpdatedDate(jObject.getInt("lastdt"));
+            setLocalUpdatedDate(jObject.getInteger("lastdt"));
+            setServerUpdatedDate(jObject.getInteger("lastdt"));
             String imageID = jObject.getString("avatar");
             JSONArray jsonArray = jObject.getJSONArray("banks");
-            if (jsonArray.length() > 0)
+            if (jsonArray.size() > 0)
             {
                 setBankAccount(new BankAccount(jsonArray.getJSONObject(0)));
             }
@@ -150,7 +150,7 @@ public class User implements Serializable
                 setAvatarID(Integer.valueOf(imageID));
             }
 
-            JSONObject didiObject = jObject.optJSONObject("didi");
+            JSONObject didiObject = jObject.getJSONObject("didi");
             if (didiObject != null)
             {
                 setDidi(didiObject.getString("phone"));

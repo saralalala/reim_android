@@ -1,8 +1,8 @@
 package netUtils.response.report;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +32,7 @@ public class ApproveInfoResponse extends BaseResponse
 
             JSONArray jsonArray = jObject.getJSONArray("data");
             infoList = new ArrayList<>();
-            for (int i = 0; i < jsonArray.length(); i++)
+            for (int i = 0; i < jsonArray.size(); i++)
             {
                 ApproveInfo info = new ApproveInfo(jsonArray.getJSONObject(i));
                 infoList.add(info);

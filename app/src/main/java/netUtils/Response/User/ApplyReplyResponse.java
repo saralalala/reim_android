@@ -1,8 +1,8 @@
 package netUtils.response.user;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +38,13 @@ public class ApplyReplyResponse extends BaseResponse
 
             int groupID = -1;
             JSONObject groupObject = profileObject.getJSONObject("group");
-            if (groupObject.getInt("groupid") != -1)
+            if (groupObject.getInteger("groupid") != -1)
             {
                 group = new Group();
-                group.setServerID(groupObject.getInt("groupid"));
+                group.setServerID(groupObject.getInteger("groupid"));
                 group.setName(groupObject.getString("group_name"));
-                group.setLocalUpdatedDate(groupObject.getInt("lastdt"));
-                group.setServerUpdatedDate(groupObject.getInt("lastdt"));
+                group.setLocalUpdatedDate(groupObject.getInteger("lastdt"));
+                group.setServerUpdatedDate(groupObject.getInteger("lastdt"));
 
                 groupID = group.getServerID();
             }
@@ -54,7 +54,7 @@ public class ApplyReplyResponse extends BaseResponse
 
             JSONArray sobArray = profileObject.getJSONArray("sob");
             setOfBookList = new ArrayList<>();
-            for (int i = 0; i < sobArray.length(); i++)
+            for (int i = 0; i < sobArray.size(); i++)
             {
                 SetOfBook setOfBook = new SetOfBook(sobArray.getJSONObject(i), currentUser.getServerID());
                 setOfBookList.add(setOfBook);
@@ -62,7 +62,7 @@ public class ApplyReplyResponse extends BaseResponse
 
             JSONArray categoryArray = jObject.getJSONArray("categories");
             categoryList = new ArrayList<>();
-            for (int i = 0; i < categoryArray.length(); i++)
+            for (int i = 0; i < categoryArray.size(); i++)
             {
                 Category category = new Category(categoryArray.getJSONObject(i));
                 categoryList.add(category);
@@ -70,7 +70,7 @@ public class ApplyReplyResponse extends BaseResponse
 
             JSONArray tagArray = jObject.getJSONArray("tags");
             tagList = new ArrayList<>();
-            for (int i = 0; i < tagArray.length(); i++)
+            for (int i = 0; i < tagArray.size(); i++)
             {
                 Tag tag = new Tag(tagArray.getJSONObject(i));
                 tagList.add(tag);
@@ -78,7 +78,7 @@ public class ApplyReplyResponse extends BaseResponse
 
             JSONArray memberArray = jObject.getJSONArray("members");
             memberList = new ArrayList<>();
-            for (int i = 0; i < memberArray.length(); i++)
+            for (int i = 0; i < memberArray.size(); i++)
             {
                 User user = new User(memberArray.getJSONObject(i), groupID);
                 memberList.add(user);

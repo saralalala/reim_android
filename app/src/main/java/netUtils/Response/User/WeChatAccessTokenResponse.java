@@ -1,7 +1,8 @@
 package netUtils.response.user;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 public class WeChatAccessTokenResponse
 {
@@ -14,7 +15,7 @@ public class WeChatAccessTokenResponse
     {
         try
         {
-            JSONObject jObject = new JSONObject((String) httpResponse);
+            JSONObject jObject = JSON.parseObject((String) httpResponse);
             accessToken = jObject.getString("access_token");
             openID = jObject.getString("openid");
             unionID = jObject.getString("unionid");

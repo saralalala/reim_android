@@ -1,10 +1,9 @@
 package classes.model;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.R;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,27 +68,27 @@ public class Item
     {
         try
         {
-            setServerID(jObject.getInt("id"));
+            setServerID(jObject.getInteger("id"));
             setAmount(jObject.getDouble("amount"));
             setAaAmount(jObject.getDouble("pa_amount"));
             setVendor(jObject.getString("merchants"));
             setNote(jObject.getString("note"));
-            setStatus(jObject.getInt("status"));
+            setStatus(jObject.getInteger("status"));
             setLocation(jObject.getString("location"));
-            setConsumedDate(jObject.getInt("dt"));
-            setCreatedDate(jObject.getInt("createdt"));
-            setServerUpdatedDate(jObject.getInt("lastdt"));
-            setLocalUpdatedDate(jObject.getInt("lastdt"));
-            setType(jObject.getInt("prove_ahead"));
-            setNeedReimbursed(Utils.intToBoolean(jObject.getInt("reimbursed")));
-            setAaApproved(Utils.intToBoolean(jObject.getInt("pa_approval")));
+            setConsumedDate(jObject.getInteger("dt"));
+            setCreatedDate(jObject.getInteger("createdt"));
+            setServerUpdatedDate(jObject.getInteger("lastdt"));
+            setLocalUpdatedDate(jObject.getInteger("lastdt"));
+            setType(jObject.getInteger("prove_ahead"));
+            setNeedReimbursed(Utils.intToBoolean(jObject.getInteger("reimbursed")));
+            setAaApproved(Utils.intToBoolean(jObject.getInteger("pa_approval")));
             setTags(Tag.idStringToTagList(jObject.getString("tags")));
             setTagsID(jObject.getString("tags"));
             setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
             setRelevantUsersID(jObject.getString("relates"));
 
             Currency currency = new Currency();
-            String currencyCode = jObject.optString("currency", "").toUpperCase();
+            String currencyCode = Utils.optString(jObject, "currency", "").toUpperCase();
             if (!currencyCode.isEmpty())
             {
                 currency.setCode(currencyCode);
@@ -99,7 +98,7 @@ public class Item
 
             JSONArray invoiceArray = jObject.getJSONArray("images");
             List<Image> invoiceList = new ArrayList<>();
-            for (int i = 0; i < invoiceArray.length(); i++)
+            for (int i = 0; i < invoiceArray.size(); i++)
             {
                 Image image = new Image(invoiceArray.getJSONObject(i));
                 invoiceList.add(image);
@@ -107,15 +106,15 @@ public class Item
             setInvoices(invoiceList);
 
             Report report = new Report();
-            report.setServerID(jObject.getInt("rid"));
+            report.setServerID(jObject.getInteger("rid"));
             setBelongReport(report);
 
             Category category = new Category();
-            category.setServerID(jObject.getInt("category"));
+            category.setServerID(jObject.getInteger("category"));
             setCategory(category);
 
             User user = new User();
-            user.setServerID(jObject.getInt("uid"));
+            user.setServerID(jObject.getInteger("uid"));
             setConsumer(user);
         }
         catch (JSONException e)

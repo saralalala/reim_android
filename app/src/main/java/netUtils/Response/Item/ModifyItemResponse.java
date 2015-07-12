@@ -1,8 +1,8 @@
 package netUtils.response.item;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import classes.utils.Utils;
 import netUtils.response.common.BaseResponse;
@@ -23,10 +23,10 @@ public class ModifyItemResponse extends BaseResponse
         {
             JSONArray jsonArray = getDataArray();
             JSONObject jObject = jsonArray.getJSONObject(0);
-            setStatus(Utils.intToBoolean(jObject.getInt("status")));
+            setStatus(Utils.intToBoolean(jObject.getInteger("status")));
             if (getStatus())
             {
-                itemID = jObject.getInt("iid");
+                itemID = jObject.getInteger("iid");
                 rate = jObject.getDouble("rate");
             }
             else
