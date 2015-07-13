@@ -20,8 +20,12 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.List;
 
 import classes.model.Apply;
+import classes.model.Category;
+import classes.model.Group;
 import classes.model.Invite;
 import classes.model.Message;
+import classes.model.SetOfBook;
+import classes.model.Tag;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;
@@ -426,7 +430,12 @@ public class MessageActivity extends Activity
                 {
                     if (agree == Invite.TYPE_ACCEPTED)
                     {
-                        int currentGroupID = -1;
+                        Group currentGroup = response.getGroup();
+                        User currentUser = response.getCurrentUser();
+                        List<SetOfBook> bookList = response.getSetOfBookList();
+                        List<Category> categoryList = response.getCategoryList();
+                        List<User> userList = response.getMemberList();
+                        List<Tag> tagList = response.getTagList();
 
                         DBManager dbManager = DBManager.getDBManager();
                         AppPreference appPreference = AppPreference.getAppPreference();
@@ -435,53 +444,7 @@ public class MessageActivity extends Activity
                         appPreference.setSyncOnlyWithWifi(true);
                         appPreference.setEnablePasswordProtection(true);
 
-                        if (response.getGroup() != null)
-                        {
-                            currentGroupID = response.getGroup().getServerID();
-
-                            // update AppPreference
-                            appPreference.setCurrentGroupID(currentGroupID);
-                            appPreference.saveAppPreference();
-
-                            // update members
-                            User currentUser = response.getCurrentUser();
-                            User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-                            if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
-                            {
-                                currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
-                            }
-
-                            dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-
-                            dbManager.updateUser(currentUser);
-
-                            // update set of books
-                            dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
-
-                            // update categories
-                            dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-
-                            // update tags
-                            dbManager.updateGroupTags(response.getTagList(), currentGroupID);
-
-                            // update group info
-                            dbManager.syncGroup(response.getGroup());
-                        }
-                        else
-                        {
-                            // update AppPreference
-                            appPreference.setCurrentGroupID(currentGroupID);
-                            appPreference.saveAppPreference();
-
-                            // update set of books
-                            dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
-
-                            // update current user
-                            dbManager.syncUser(response.getCurrentUser());
-
-                            // update categories
-                            dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-                        }
+                        Utils.updateGroupInfo(currentGroup, currentUser, bookList, categoryList,tagList, userList,dbManager,appPreference);
 
                         runOnUiThread(new Runnable()
                         {
