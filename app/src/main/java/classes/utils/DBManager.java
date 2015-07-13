@@ -27,7 +27,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     private DBManager(Context context)
     {
@@ -255,6 +255,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "sob_id INT DEFAULT(0),"
                     + "icon_id INT DEFAULT(0),"
                     + "type INT DEFAULT(0),"
+                    + "note TEXT DEFAULT(''),"
                     + "server_updatedt INT DEFAULT(0),"
                     + "local_updatedt INT DEFAULT(0),"
                     + "backup1 INT DEFAULT(0),"
@@ -384,6 +385,12 @@ public class DBManager extends SQLiteOpenHelper
             if (oldVersion < 7)
             {
                 String command = "ALTER TABLE tbl_category ADD COLUMN sob_id INT DEFAULT(0)";
+                db.execSQL(command);
+            }
+
+            if (oldVersion < 8)
+            {
+                String command = "ALTER TABLE tbl_category ADD COLUMN note TEXT DEFAULT('')";
                 db.execSQL(command);
             }
         }
@@ -1986,7 +1993,7 @@ public class DBManager extends SQLiteOpenHelper
         try
         {
             String sqlString = "INSERT INTO tbl_category (server_id, category_name, max_limit, group_id, " +
-                    "parent_id, sob_id, icon_id, type, local_updatedt, server_updatedt) VALUES (" +
+                    "parent_id, sob_id, icon_id, type, note, local_updatedt, server_updatedt) VALUES (" +
                     "'" + category.getServerID() + "'," +
                     "'" + sqliteEscape(category.getName()) + "'," +
                     "'" + category.getLimit() + "'," +
@@ -1995,6 +2002,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + category.getSetOfBookID() + "'," +
                     "'" + category.getIconID() + "'," +
                     "'" + category.getType() + "'," +
+                    "'" + category.getNote() + "'," +
                     "'" + category.getLocalUpdatedDate() + "'," +
                     "'" + category.getServerUpdatedDate() + "')";
             database.execSQL(sqlString);
@@ -2034,6 +2042,7 @@ public class DBManager extends SQLiteOpenHelper
                     "sob_id = '" + category.getSetOfBookID() + "'," +
                     "icon_id = '" + category.getIconID() + "'," +
                     "type = '" + category.getType() + "'," +
+                    "note = '" + category.getNote() + "'," +
                     "local_updatedt = '" + category.getLocalUpdatedDate() + "'," +
                     "server_updatedt = '" + category.getServerUpdatedDate() + "' " +
                     "WHERE server_id = '" + category.getServerID() + "'";
@@ -2142,6 +2151,38 @@ public class DBManager extends SQLiteOpenHelper
         Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE group_id = ? AND parent_id = ?",
                                           new String[]{Integer.toString(groupServerID), Integer.toString(parentServerID)});
         return getCategoryListFromCursorWithClose(cursor);
+    }
+
+    public String getCategoriesNames(List<Integer> idList)
+    {
+        List<String> resultList = new ArrayList<>();
+        String idString = Utils.intListToString(idList);
+        if (idString.isEmpty())
+        {
+            return "";
+        }
+
+        String content = "SELECT category_name FROM tbl_category WHERE server_id IN (" + idString + ")";
+        Cursor cursor = database.rawQuery(content, null);
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                resultList.add(getStringFromCursor(cursor, "category_name"));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (cursor != null)
+            {
+                cursor.close();
+            }
+        }
+        return TextUtils.join("、", resultList);
     }
 
     public boolean isCategoryInDatabase(int categoryServerID)
@@ -3463,6 +3504,7 @@ public class DBManager extends SQLiteOpenHelper
         category.setSetOfBookID(getIntFromCursor(cursor, "sob_id"));
         category.setIconID(getIntFromCursor(cursor, "icon_id"));
         category.setType(getIntFromCursor(cursor, "type"));
+        category.setNote(getStringFromCursor(cursor, "note"));
         category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
         category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 

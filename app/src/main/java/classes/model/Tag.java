@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.utils.DBManager;
-import classes.utils.PhoneUtils;
+import classes.utils.JSONUtils;
 import classes.utils.Utils;
 
 public class Tag implements Serializable
@@ -35,17 +35,11 @@ public class Tag implements Serializable
     {
         try
         {
-            setServerID(Utils.optInt(jObject, "id", -1));
+            setServerID(JSONUtils.optInt(jObject, "id", -1));
             setName(jObject.getString("name"));
-            setGroupID(Utils.optInt(jObject, "gid", -1));
+            setGroupID(JSONUtils.optInt(jObject, "gid", -1));
             setLocalUpdatedDate(jObject.getInteger("lastdt"));
             setServerUpdatedDate(jObject.getInteger("lastdt"));
-            int iconID = Utils.optInt(jObject, "avatar", -1);
-            setIconID(iconID);
-            if (iconID != -1)
-            {
-                setIconPath(PhoneUtils.getIconFilePath(iconID));
-            }
         }
         catch (JSONException e)
         {

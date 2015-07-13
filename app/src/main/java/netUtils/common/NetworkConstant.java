@@ -84,6 +84,8 @@ public class NetworkConstant
     public static final int ERROR_NOT_UNIQUE = -42;
     public static final int ERROR_COMPANY_EXISTS = -49;
     public static final int ERROR_PROXY_ERROR = -58;
+    public static final int ERROR_CATEGORY_EXCEED_LIMIT = -63;
+    public static final int ERROR_REPORT_EXCEED_LIMIT = -64;
 
     public static String errorCodeToString(int code)
     {
@@ -179,6 +181,9 @@ public class NetworkConstant
                 break;
             case NetworkConstant.ERROR_PROXY_ERROR:
                 result = R.string.error_network_proxy_error;
+                break;
+            case NetworkConstant.ERROR_REPORT_EXCEED_LIMIT:
+                result = R.string.error_network_report_exceed_limit;
                 break;
             default:
                 break;

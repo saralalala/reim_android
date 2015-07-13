@@ -6,6 +6,7 @@ import com.rushucloud.reim.R;
 
 import java.io.Serializable;
 
+import classes.utils.JSONUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 
@@ -33,7 +34,7 @@ public class Invite extends Message implements Serializable
             int invitorID = jObject.getInteger("uid");
             String invitor = jObject.getString("invitor");
             String groupName = jObject.getString("groupname");
-            String iName = Utils.optString(jObject, "iname", "");
+            String iName = JSONUtils.optString(jObject, "iname", "");
             int activeType = jObject.getInteger("actived");
 
             setServerID(jObject.getInteger("id"));

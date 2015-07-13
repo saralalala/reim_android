@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
-import classes.utils.Utils;
+import classes.utils.JSONUtils;
 
 public class StatDepartment
 {
@@ -18,7 +18,7 @@ public class StatDepartment
     {
         try
         {
-            setDepartmentID(Utils.optInt(jObject, "id", -1));
+            setDepartmentID(JSONUtils.optInt(jObject, "id", -1));
             setName(jObject.getString("name"));
             setAmount(jObject.getDouble("amount"));
             setIsDepartment(isDepartment);

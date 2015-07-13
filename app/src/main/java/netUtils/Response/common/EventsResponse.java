@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.utils.AppPreference;
+import classes.utils.JSONUtils;
 import classes.utils.LogUtils;
 import classes.utils.Utils;
 
@@ -44,7 +45,7 @@ public class EventsResponse extends BaseResponse
             JSONArray tagsArray = jObject.getJSONArray("tags");
             boolean categoriesChanged = categoriesArray != null && categoriesArray.size() > 0;
             boolean tagsChanged = tagsArray != null && tagsArray.size() > 0;
-            currentUserActived = Utils.intToBoolean(Utils.optInt(jObject, "active", 0));
+            currentUserActived = Utils.intToBoolean(JSONUtils.optInt(jObject, "active", 0));
 
             appliedCompany = jObject.getString("apply");
 

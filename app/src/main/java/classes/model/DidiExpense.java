@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 
+import classes.utils.JSONUtils;
 import classes.utils.Utils;
 
 public class DidiExpense implements Serializable
@@ -36,7 +37,7 @@ public class DidiExpense implements Serializable
             setTime(jObject.getString("setuptime"));
             setStart(jObject.getString("fromAddress"));
             setDestination(jObject.getString("toAddress"));
-            setType(Utils.optInt(jObject, "product_type", 0));
+            setType(JSONUtils.optInt(jObject, "product_type", 0));
             setUsed(Utils.intToBoolean(jObject.getInteger("used")));
         }
         catch (JSONException e)

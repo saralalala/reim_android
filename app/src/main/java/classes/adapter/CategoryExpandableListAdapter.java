@@ -83,6 +83,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 
         ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
         TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+        TextView noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
 
         Category category = categoryList.get(groupPosition);
 
@@ -96,6 +97,10 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
         {
             nameTextView.setText(category.getName());
         }
+
+        int visibility = category.getNote().isEmpty() ? View.GONE : View.VISIBLE;
+        noteTextView.setVisibility(visibility);
+        noteTextView.setText(category.getNote());
 
         int color = checkList.get(groupPosition) ? selectedColor : unselectedColor;
         nameTextView.setTextColor(color);
@@ -112,6 +117,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 
         ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
         TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+        TextView noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
 
         Category category = subCategoryList.get(groupPosition).get(childPosition);
 
@@ -125,6 +131,10 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
         {
             nameTextView.setText(category.getName());
         }
+
+        int visibility = category.getNote().isEmpty() ? View.GONE : View.VISIBLE;
+        noteTextView.setVisibility(visibility);
+        noteTextView.setText(category.getNote());
 
         int color = subCheckList.get(groupPosition).get(childPosition) ? selectedColor : unselectedColor;
         nameTextView.setTextColor(color);

@@ -506,6 +506,8 @@
     <string name="error_network_not_unique">消费已被添加进另外的报告中</string>
     <string name="error_network_company_exists">公司已存在</string>
     <string name="error_network_proxy_error">被代理人不在你公司，无法进行该操作</string>
+    <string name="error_network_category_exceed_limit">本月内，你的%1$s已超过公司的限额</string>
+    <string name="error_network_report_exceed_limit">本月内，你不能再提交报告了</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">注册成功！请到邮箱中查收账号激活邮件。</string>

@@ -42,6 +42,7 @@ public class CategoryListViewAdapter extends BaseAdapter
 
         ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
         TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+        TextView noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
 
         Category category = categoryList.get(position);
 
@@ -55,6 +56,10 @@ public class CategoryListViewAdapter extends BaseAdapter
         {
             nameTextView.setText(category.getName());
         }
+
+        int visibility = category.getNote().isEmpty() ? View.GONE : View.VISIBLE;
+        noteTextView.setVisibility(visibility);
+        noteTextView.setText(category.getNote());
 
         if (check != null)
         {

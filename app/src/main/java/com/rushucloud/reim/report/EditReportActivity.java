@@ -46,6 +46,7 @@ import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
 import netUtils.common.SyncDataCallback;
 import netUtils.common.SyncUtils;
 import netUtils.request.common.UploadImageRequest;
@@ -95,6 +96,7 @@ public class EditReportActivity extends Activity
     private boolean newReport;
     private boolean hasInit = false;
     private int lastCommentCount = 0;
+    private List<Integer> idList = new ArrayList<>();
 
     private List<Image> imageSyncList = new ArrayList<>();
     private List<Item> itemSyncList = new ArrayList<>();
@@ -581,7 +583,7 @@ public class EditReportActivity extends Activity
             String vendor = item.getVendor().isEmpty() ? getString(R.string.vendor_not_available) : item.getVendor();
             vendorTextView.setText(vendor);
 
-            if (item.missingInfo())
+            if (item.missingInfo() || idList.contains(item.getCategory().getServerID()))
             {
                 warningImageView.setVisibility(View.VISIBLE);
             }
@@ -1276,7 +1278,22 @@ public class EditReportActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+                            if (response.getCode() == NetworkConstant.ERROR_CATEGORY_EXCEED_LIMIT)
+                            {
+                                idList.clear();
+                                idList.addAll(response.getErrorCategoryIDList());
+                                refreshView();
+
+                                String nameString = dbManager.getCategoriesNames(idList);
+                                String errorMessage = String.format(getString(R.string.error_network_category_exceed_limit), nameString);
+                                ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, errorMessage);
+                            }
+                            else
+                            {
+                                idList.clear();
+                                refreshView();
+                                ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+                            }
                         }
                     });
                 }

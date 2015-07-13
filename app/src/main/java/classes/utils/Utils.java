@@ -335,18 +335,6 @@ public class Utils
         void execute();
     }
 
-    public static int optInt(JSONObject object, String key, int defaultValue)
-    {
-        Integer result = object.getInteger(key);
-        return result == null ? defaultValue : result;
-    }
-
-    public static String optString(JSONObject object, String key, String defaultValue)
-    {
-        String result = object.getString(key);
-        return result == null ? defaultValue : result;
-    }
-
     public static void updateGroupInfo(Group currentGroup, User currentUser, List<SetOfBook> bookList,
                                    List<Category> categoryList, List<Tag> tagList,  List<User> userList,
                                        DBManager dbManager, AppPreference appPreference)

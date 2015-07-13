@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
-import classes.utils.Utils;
+import classes.utils.JSONUtils;
 
 public class DidiSignInResponse
 {
@@ -17,7 +17,7 @@ public class DidiSignInResponse
         {
             JSONObject jObject = JSON.parseObject((String) httpResponse);
             status = jObject.getInteger("errno") == 0;
-            token = Utils.optString(jObject, "token", "");
+            token = JSONUtils.optString(jObject, "token", "");
         }
         catch (JSONException e)
         {

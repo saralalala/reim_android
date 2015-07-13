@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import classes.utils.DBManager;
+import classes.utils.JSONUtils;
 import classes.utils.Utils;
 
 public class Item
@@ -88,7 +89,7 @@ public class Item
             setRelevantUsersID(jObject.getString("relates"));
 
             Currency currency = new Currency();
-            String currencyCode = Utils.optString(jObject, "currency", "").toUpperCase();
+            String currencyCode = JSONUtils.optString(jObject, "currency", "").toUpperCase();
             if (!currencyCode.isEmpty())
             {
                 currency.setCode(currencyCode);

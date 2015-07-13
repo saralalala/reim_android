@@ -16,6 +16,7 @@ import java.util.List;
 
 import classes.utils.CharacterParser;
 import classes.utils.DBManager;
+import classes.utils.JSONUtils;
 import classes.utils.Utils;
 
 public class User implements Serializable
@@ -79,18 +80,18 @@ public class User implements Serializable
         try
         {
             setServerID(Integer.valueOf(jObject.getString("id")));
-            setEmail(Utils.optString(jObject, "email", ""));
-            setPhone(Utils.optString(jObject, "phone", ""));
-            setWeChat(Utils.optString(jObject, "weixin_nickname", ""));
+            setEmail(JSONUtils.optString(jObject, "email", ""));
+            setPhone(JSONUtils.optString(jObject, "phone", ""));
+            setWeChat(JSONUtils.optString(jObject, "weixin_nickname", ""));
             setNickname(jObject.getString("nickname"));
-            setIsAdmin(Utils.intToBoolean(Utils.optInt(jObject, "admin", 0)));
-            setDefaultManagerID(Utils.optInt(jObject, "manager_id", 0));
+            setIsAdmin(Utils.intToBoolean(JSONUtils.optInt(jObject, "admin", 0)));
+            setDefaultManagerID(JSONUtils.optInt(jObject, "manager_id", 0));
             setGroupID(groupID);
-            setSobID(Utils.optInt(jObject, "sob_id", 0));
-            setAppliedCompany(Utils.optString(jObject, "apply", ""));
+            setSobID(JSONUtils.optInt(jObject, "sob_id", 0));
+            setAppliedCompany(JSONUtils.optString(jObject, "apply", ""));
             setAvatarServerPath(jObject.getString("apath"));
             setAvatarLocalPath("");
-            setIsActive(Utils.intToBoolean(Utils.optInt(jObject, "active", 0)));
+            setIsActive(Utils.intToBoolean(JSONUtils.optInt(jObject, "active", 0)));
             setLocalUpdatedDate(jObject.getInteger("dt"));
             setServerUpdatedDate(jObject.getInteger("dt"));
             String imageID = jObject.getString("avatar");
@@ -126,12 +127,12 @@ public class User implements Serializable
             setPhone(jObject.getString("phone"));
             setWeChat(jObject.getString("weixin_nickname"));
             setDefaultManagerID(jObject.getInteger("manager_id"));
-            setAvatarServerPath(Utils.optString(jObject, "apath", ""));
+            setAvatarServerPath(JSONUtils.optString(jObject, "apath", ""));
             setAvatarLocalPath("");
             setIsAdmin(Utils.intToBoolean(jObject.getInteger("admin")));
-            setIsActive(Utils.intToBoolean(Utils.optInt(jObject, "active", 0)));
+            setIsActive(Utils.intToBoolean(JSONUtils.optInt(jObject, "active", 0)));
             setGroupID(groupID);
-            setSobID(Utils.optInt(jObject, "sob_id", 0));
+            setSobID(JSONUtils.optInt(jObject, "sob_id", 0));
             setAppliedCompany(jObject.getString("apply"));
             setLocalUpdatedDate(jObject.getInteger("lastdt"));
             setServerUpdatedDate(jObject.getInteger("lastdt"));

@@ -3,6 +3,9 @@ package netUtils.response.report;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import netUtils.response.common.BaseResponse;
 
 public class ModifyReportResponse extends BaseResponse
@@ -19,7 +22,7 @@ public class ModifyReportResponse extends BaseResponse
         try
         {
             JSONObject jObject = getDataObject();
-            setReportID(Integer.valueOf(jObject.getString("id")));
+            reportID = Integer.valueOf(jObject.getString("id"));
         }
         catch (JSONException e)
         {
@@ -32,8 +35,18 @@ public class ModifyReportResponse extends BaseResponse
         return reportID;
     }
 
-    public void setReportID(int reportID)
+    public List<Integer> getErrorCategoryIDList()
     {
-        this.reportID = reportID;
+        List<Integer> idList = new ArrayList<>();
+        JSONObject quotaObject = getDataObject().getJSONObject("quota");
+        for (String key : quotaObject.keySet())
+        {
+            int value = quotaObject.getInteger(key);
+            if (value < 0)
+            {
+                idList.add(Integer.valueOf(key));
+            }
+        }
+        return idList;
     }
 }

@@ -10,8 +10,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.utils.JSONUtils;
 import classes.utils.PhoneUtils;
-import classes.utils.Utils;
 
 public class Category implements Serializable
 {
@@ -28,6 +28,7 @@ public class Category implements Serializable
     private int parentID = 0;
     private int setOfBookID = 0;
     private int iconID = -1;
+    private String note = "";
     private int type = TYPE_REIM;
     private int serverUpdatedDate = -1;
     private int localUpdatedDate = -1;
@@ -49,22 +50,24 @@ public class Category implements Serializable
         setServerUpdatedDate(category.getServerUpdatedDate());
         setType(category.getType());
         setIconID(category.getIconID());
+        setNote(category.getNote());
     }
 
     public Category(JSONObject jObject)
     {
         try
         {
-            setServerID(Utils.optInt(jObject, "id", -1));
+            setServerID(JSONUtils.optInt(jObject, "id", -1));
             setName(jObject.getString("category_name"));
-            setLimit(jObject.getDouble("max_limit"));
-            setGroupID(Utils.optInt(jObject, "gid", -1));
-            setParentID(Utils.optInt(jObject, "pid", -1));
-            setSetOfBookID(Utils.optInt(jObject, "sob_id", 0));
+            setLimit(JSONUtils.optDouble(jObject, "max_limit", 0));
+            setGroupID(JSONUtils.optInt(jObject, "gid", -1));
+            setParentID(JSONUtils.optInt(jObject, "pid", -1));
+            setSetOfBookID(JSONUtils.optInt(jObject, "sob_id", 0));
             setLocalUpdatedDate(jObject.getInteger("lastdt"));
             setServerUpdatedDate(jObject.getInteger("lastdt"));
-            setType(jObject.getInteger("prove_before"));
-            setIconID(Utils.optInt(jObject, "avatar", -1));
+            setType(JSONUtils.optInt(jObject, "prove_before", 0));
+            setIconID(JSONUtils.optInt(jObject, "avatar", -1));
+            setNote(JSONUtils.optString(jObject, "note", ""));
         }
         catch (JSONException e)
         {
@@ -146,6 +149,15 @@ public class Category implements Serializable
     public void setType(int type)
     {
         this.type = type;
+    }
+
+    public String getNote()
+    {
+        return note;
+    }
+    public void setNote(String note)
+    {
+        this.note = note;
     }
 
     public int getServerUpdatedDate()
