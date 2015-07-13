@@ -1,9 +1,8 @@
 package classes.model;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.Serializable;
 
@@ -31,60 +30,60 @@ public class Invite extends Message implements Serializable
     {
         try
         {
-            int invitorID = jObject.getInt("uid");
+            int invitorID = jObject.getInteger("uid");
             String invitor = jObject.getString("invitor");
             String groupName = jObject.getString("groupname");
-            String iName = jObject.optString("iname", "");
-            int activeType = jObject.getInt("actived");
+            String iName = Utils.optString(jObject, "iname", "");
+            int activeType = jObject.getInteger("actived");
 
-            setServerID(jObject.getInt("id"));
+            setServerID(jObject.getInteger("id"));
             setInviteCode(jObject.getString("code"));
             setTypeCode(activeType);
             setInvitor(invitor);
             setType(Message.TYPE_INVITE);
-            setHasBeenRead(Utils.intToBoolean(jObject.getInt("sread")));
+            setHasBeenRead(Utils.intToBoolean(jObject.getInteger("sread")));
 
             if (invitorID != currentUserID && activeType == Invite.TYPE_NEW)
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_others_new), invitor, groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("invitedt"));
+                setUpdateTime(jObject.getInteger("invitedt"));
             }
             else if (invitorID == currentUserID && activeType == Invite.TYPE_NEW)
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_new), iName, groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("invitedt"));
+                setUpdateTime(jObject.getInteger("invitedt"));
             }
             else if (invitorID != currentUserID && activeType == Invite.TYPE_REJECTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_others_rejected), groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("activedt"));
+                setUpdateTime(jObject.getInteger("activedt"));
             }
             else if (invitorID == currentUserID && activeType == Invite.TYPE_REJECTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_rejected), iName, groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("activedt"));
+                setUpdateTime(jObject.getInteger("activedt"));
             }
             else if (invitorID != currentUserID && activeType == Invite.TYPE_ACCEPTED)
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_others_accepted), groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("activedt"));
+                setUpdateTime(jObject.getInteger("activedt"));
             }
             else
             {
                 String message = String.format(ViewUtils.getString(R.string.invite_accepted), iName, groupName);
                 setTitle(message);
                 setContent(message);
-                setUpdateTime(jObject.getInt("activedt"));
+                setUpdateTime(jObject.getInteger("activedt"));
             }
         }
         catch (JSONException e)

@@ -1,7 +1,7 @@
 package classes.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;
@@ -31,13 +31,13 @@ public class DidiExpense implements Serializable
     {
         try
         {
-            setId(jObject.getInt("id"));
+            setId(jObject.getInteger("id"));
             setOrderID(jObject.getString("oid"));
             setTime(jObject.getString("setuptime"));
             setStart(jObject.getString("fromAddress"));
             setDestination(jObject.getString("toAddress"));
-            setType(jObject.optInt("product_type", 0));
-            setUsed(Utils.intToBoolean(jObject.getInt("used")));
+            setType(Utils.optInt(jObject, "product_type", 0));
+            setUsed(Utils.intToBoolean(jObject.getInteger("used")));
         }
         catch (JSONException e)
         {

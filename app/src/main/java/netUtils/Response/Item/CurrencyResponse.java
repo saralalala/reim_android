@@ -1,7 +1,7 @@
 package netUtils.response.item;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,10 +26,8 @@ public class CurrencyResponse extends BaseResponse
             JSONObject jObject = getDataObject();
 
             currencyList = new ArrayList<>();
-            Iterator iterator = jObject.keys();
-            while (iterator.hasNext())
+            for (String key : jObject.keySet())
             {
-                String key = (String) iterator.next();
                 double value = jObject.getDouble(key);
 
                 Currency currency = new Currency();

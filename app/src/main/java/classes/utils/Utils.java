@@ -2,6 +2,7 @@ package classes.utils;
 
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.R;
 
 import java.text.DecimalFormat;
@@ -12,6 +13,12 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import classes.model.Category;
+import classes.model.Group;
+import classes.model.SetOfBook;
+import classes.model.Tag;
+import classes.model.User;
 
 public class Utils
 {
@@ -224,6 +231,11 @@ public class Utils
         return resultList;
     }
 
+    public static String intListToString(List<Integer> integerList)
+    {
+        return TextUtils.join(",", integerList);
+    }
+
     public static double stringToDouble(String source)
     {
         double amount = Double.valueOf(source);
@@ -321,5 +333,71 @@ public class Utils
     public interface ExtraCallBack
     {
         void execute();
+    }
+
+    public static int optInt(JSONObject object, String key, int defaultValue)
+    {
+        Integer result = object.getInteger(key);
+        return result == null ? defaultValue : result;
+    }
+
+    public static String optString(JSONObject object, String key, String defaultValue)
+    {
+        String result = object.getString(key);
+        return result == null ? defaultValue : result;
+    }
+
+    public static void updateGroupInfo(Group currentGroup, User currentUser, List<SetOfBook> bookList,
+                                   List<Category> categoryList, List<Tag> tagList,  List<User> userList,
+                                       DBManager dbManager, AppPreference appPreference)
+    {
+        int currentGroupID = -1;
+
+        if (currentGroup != null)
+        {
+            currentGroupID = currentGroup.getServerID();
+
+            // update AppPreference
+            appPreference.setCurrentGroupID(currentGroupID);
+            appPreference.saveAppPreference();
+
+            // update members
+            User localUser = dbManager.getUser(currentUser.getServerID());
+            if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+            {
+                currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
+            }
+
+            dbManager.updateGroupUsers(userList, currentGroupID);
+
+            dbManager.updateUser(currentUser);
+
+            // update set of books
+            dbManager.updateUserSetOfBooks(bookList, appPreference.getCurrentUserID());
+
+            // update categories
+            dbManager.updateGroupCategories(categoryList, currentGroupID);
+
+            // update tags
+            dbManager.updateGroupTags(tagList, currentGroupID);
+
+            // update group info
+            dbManager.syncGroup(currentGroup);
+        }
+        else
+        {
+            // update AppPreference˙˙
+            appPreference.setCurrentGroupID(currentGroupID);
+            appPreference.saveAppPreference();
+
+            // update current user
+            dbManager.syncUser(currentUser);
+
+            // update set of books
+            dbManager.updateUserSetOfBooks(bookList, appPreference.getCurrentUserID());
+
+            // update categories
+            dbManager.updateGroupCategories(categoryList, currentGroupID);
+        }
     }
 }

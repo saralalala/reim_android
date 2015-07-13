@@ -1,7 +1,7 @@
 package netUtils.response.item;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class SearchItemsResponse extends BaseResponse
             JSONArray jsonArray = getDataArray();
 
             itemList = new ArrayList<>();
-            for (int i = 0; i < jsonArray.length(); i++)
+            for (int i = 0; i < jsonArray.size(); i++)
             {
                 Item item = new Item(jsonArray.getJSONObject(i));
                 itemList.add(item);

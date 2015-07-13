@@ -2,10 +2,9 @@ package classes.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.TextUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,12 +35,12 @@ public class Tag implements Serializable
     {
         try
         {
-            setServerID(jObject.optInt("id", -1));
+            setServerID(Utils.optInt(jObject, "id", -1));
             setName(jObject.getString("name"));
-            setGroupID(jObject.optInt("gid", -1));
-            setLocalUpdatedDate(jObject.getInt("lastdt"));
-            setServerUpdatedDate(jObject.getInt("lastdt"));
-            int iconID = jObject.optInt("avatar", -1);
+            setGroupID(Utils.optInt(jObject, "gid", -1));
+            setLocalUpdatedDate(jObject.getInteger("lastdt"));
+            setServerUpdatedDate(jObject.getInteger("lastdt"));
+            int iconID = Utils.optInt(jObject, "avatar", -1);
             setIconID(iconID);
             if (iconID != -1)
             {
@@ -157,13 +156,13 @@ public class Tag implements Serializable
             return "";
         }
 
-        Integer[] tagIDs = new Integer[tagList.size()];
+        List<Integer> tagIDs = new ArrayList<>();
         for (int i = 0; i < tagList.size(); i++)
         {
-            tagIDs[i] = tagList.get(i).getServerID();
+            tagIDs.add(tagList.get(i).getServerID());
         }
 
-        return TextUtils.join(",", tagIDs);
+        return Utils.intListToString(tagIDs);
     }
 
     public static List<Tag> idStringToTagList(String idString)

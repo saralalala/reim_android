@@ -2,10 +2,9 @@ package classes.model;
 
 import android.util.SparseArray;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -83,17 +82,17 @@ public class Report implements Serializable
     {
         try
         {
-            setServerID(jObject.getInt("id"));
+            setServerID(jObject.getInteger("id"));
             setTitle(jObject.getString("title"));
-            setCreatedDate(jObject.getInt("createdt"));
-            setStatus(jObject.getInt("status"));
-            setType(jObject.getInt("prove_ahead"));
-            setAaApproved(Utils.intToBoolean(jObject.getInt("pa_approval")));
-            setLocalUpdatedDate(jObject.getInt("lastdt"));
-            setServerUpdatedDate(jObject.getInt("lastdt"));
+            setCreatedDate(jObject.getInteger("createdt"));
+            setStatus(jObject.getInteger("status"));
+            setType(jObject.getInteger("prove_ahead"));
+            setAaApproved(Utils.intToBoolean(jObject.getInteger("pa_approval")));
+            setLocalUpdatedDate(jObject.getInteger("lastdt"));
+            setServerUpdatedDate(jObject.getInteger("lastdt"));
 
             User user = new User();
-            user.setServerID(jObject.getInt("uid"));
+            user.setServerID(jObject.getInteger("uid"));
             setSender(user);
         }
         catch (JSONException e)

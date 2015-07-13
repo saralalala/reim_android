@@ -29,6 +29,7 @@ import classes.model.Image;
 import classes.model.Item;
 import classes.model.ModifyHistory;
 import classes.model.Report;
+import classes.model.Tag;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;
@@ -40,12 +41,12 @@ import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
+import netUtils.request.common.CommonRequest;
 import netUtils.request.common.DownloadImageRequest;
-import netUtils.request.group.GetGroupRequest;
 import netUtils.request.item.GetItemRequest;
 import netUtils.request.item.ModifyHistoryRequest;
+import netUtils.response.common.CommonResponse;
 import netUtils.response.common.DownloadImageResponse;
-import netUtils.response.group.GetGroupResponse;
 import netUtils.response.item.GetItemResponse;
 import netUtils.response.item.ModifyHistoryResponse;
 
@@ -64,8 +65,8 @@ public class ShowItemActivity extends Activity
     private boolean myItem;
     private List<ModifyHistory> historyList = new ArrayList<>();
     private Report report;
-    private boolean fromPush;
-    private boolean myReport;
+    private boolean fromPush = false;
+    private boolean myReport = true;
 
     // View
     protected void onCreate(Bundle savedInstanceState)
@@ -85,7 +86,7 @@ public class ShowItemActivity extends Activity
         ReimProgressDialog.setContext(this);
         if (fromPush)
         {
-            sendGetGroupRequest();
+            sendGetItemRequest(item.getServerID());
         }
         else if (historyList.isEmpty())
         {
@@ -457,11 +458,11 @@ public class ShowItemActivity extends Activity
         dbManager = DBManager.getDBManager();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        if (bundle != null)
+        fromPush = bundle.getBoolean("fromPush", false);
+        if (fromPush)
         {
             report = (Report) bundle.getSerializable("report");
             report = dbManager.getReportByServerID(report.getServerID());
-            fromPush = bundle.getBoolean("fromPush", false);
             myReport = bundle.getBoolean("myReport", false);
             item.setServerID(bundle.getInt("itemID"));
             myItem = true;
@@ -605,6 +606,53 @@ public class ShowItemActivity extends Activity
         });
     }
 
+    private void sendGetItemRequest(final int itemID)
+    {
+        ReimProgressDialog.show();
+        GetItemRequest request = new GetItemRequest(itemID);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetItemResponse response = new GetItemResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    if (!response.getItem().hasUnsyncedAttributes())
+                    {
+                        dbManager.updateItemByServerID(response.getItem());
+                        item = dbManager.getItemByServerID(itemID);
+
+                        sendModifyHistoryRequest(itemID);
+
+                        runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                initView();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        sendCommonRequest();
+                    }
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(ShowItemActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            goBackToMainActivity();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     private void sendModifyHistoryRequest(int itemID)
     {
         ModifyHistoryRequest request = new ModifyHistoryRequest(itemID);
@@ -651,80 +699,82 @@ public class ShowItemActivity extends Activity
         });
     }
 
-    private void sendGetGroupRequest()
+    private void sendCommonRequest()
     {
-        ReimProgressDialog.show();
-        GetGroupRequest request = new GetGroupRequest();
+        CommonRequest request = new CommonRequest();
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
             {
-                final GetGroupResponse response = new GetGroupResponse(httpResponse);
+                final CommonResponse response = new CommonResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
+                    int currentGroupID = -1;
 
-                    // update members
-                    List<User> memberList = response.getMemberList();
-                    User currentUser = AppPreference.getAppPreference().getCurrentUser();
+                    DBManager dbManager = DBManager.getDBManager();
+                    AppPreference appPreference = AppPreference.getAppPreference();
+                    appPreference.setServerToken(response.getServerToken());
 
-                    for (int i = 0; i < memberList.size(); i++)
+                    if (response.getGroup() != null)
                     {
-                        User user = memberList.get(i);
-                        if (currentUser != null && user.equals(currentUser))
+                        currentGroupID = response.getGroup().getServerID();
+
+                        // update AppPreference
+                        appPreference.setCurrentGroupID(currentGroupID);
+                        appPreference.saveAppPreference();
+
+                        // update members
+                        User currentUser = response.getCurrentUser();
+                        User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
+                        if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
                         {
-                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
-                            {
-                                if (user.getAvatarID() == currentUser.getAvatarID())
-                                {
-                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
-                                }
-                            }
-                            else
-                            {
-                                memberList.set(i, currentUser);
-                            }
-                            break;
+                            currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
                         }
+
+                        dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
+
+                        dbManager.updateUser(currentUser);
+
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
+                        // update categories
+                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+
+                        // update tags
+                        dbManager.updateGroupTags(response.getTagList(), currentGroupID);
+
+                        // update group info
+                        dbManager.syncGroup(response.getGroup());
+                    }
+                    else
+                    {
+                        // update AppPreference
+                        appPreference.setCurrentGroupID(currentGroupID);
+                        appPreference.saveAppPreference();
+
+                        // update set of books
+                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
+
+                        // update current user
+                        dbManager.syncUser(response.getCurrentUser());
+
+                        // update categories
+                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
                     }
 
-                    dbManager.updateGroupUsers(memberList, currentGroupID);
+                    Category category = dbManager.getCategory(item.getCategory().getServerID());
+                    item.setCategory(category);
 
-                    // update group info
-                    dbManager.syncGroup(response.getGroup());
+                    List<Tag> tagList = Tag.idStringToTagList(item.getTagsID());
+                    item.setTags(tagList);
 
-                    sendGetItemRequest(item.getServerID());
-                }
-                else
-                {
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(ShowItemActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
-                            goBackToMainActivity();
-                        }
-                    });
-                }
-            }
-        });
-    }
+                    List<User> userList = User.idStringToUserList(item.getRelevantUsersID());
+                    item.setRelevantUsers(userList);
 
-    private void sendGetItemRequest(final int itemID)
-    {
-        GetItemRequest request = new GetItemRequest(itemID);
-        request.sendRequest(new HttpConnectionCallback()
-        {
-            public void execute(Object httpResponse)
-            {
-                final GetItemResponse response = new GetItemResponse(httpResponse);
-                if (response.getStatus())
-                {
-                    dbManager.updateItemByServerID(response.getItem());
-                    item = dbManager.getItemByServerID(itemID);
+                    dbManager.updateItemByServerID(item);
 
-                    sendModifyHistoryRequest(itemID);
+                    sendModifyHistoryRequest(item.getServerID());
 
                     runOnUiThread(new Runnable()
                     {

@@ -1,9 +1,8 @@
 package classes.model;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -37,13 +36,13 @@ public class Message implements Serializable
     {
         try
         {
-            setServerID(jObject.getInt("id"));
+            setServerID(jObject.getInteger("id"));
             setTitle(ViewUtils.getString(R.string.message_from_admin));
-            setUpdateTime(jObject.getInt("feedts"));
+            setUpdateTime(jObject.getInteger("feedts"));
             setType(TYPE_MESSAGE);
-            setHasBeenRead(Utils.intToBoolean(jObject.getInt("sread")));
+            setHasBeenRead(Utils.intToBoolean(jObject.getInteger("sread")));
 
-            String time = Utils.secondToStringUpToDay(jObject.getInt("createdts"));
+            String time = Utils.secondToStringUpToDay(jObject.getInteger("createdts"));
             content = jObject.getString("feedback") + String.format(ViewUtils.getString(R.string.message_reference), time) +
                     jObject.getString("content");
         }

@@ -1,8 +1,8 @@
 package classes.model;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 public class StatTag
 {
@@ -14,10 +14,10 @@ public class StatTag
     {
         try
         {
-            setTagID(jObject.getInt("id"));
+            setTagID(jObject.getInteger("id"));
             setAmount(jObject.getDouble("amount"));
-            JSONArray iids = jObject.optJSONArray("items");
-            int count = iids != null ? iids.length() : jObject.getInt("count");
+            JSONArray iids = jObject.getJSONArray("items");
+            int count = iids != null ? iids.size() : jObject.getInteger("count");
             setItemCount(count);
         }
         catch (JSONException e)

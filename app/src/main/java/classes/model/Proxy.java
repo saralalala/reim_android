@@ -2,9 +2,9 @@ package classes.model;
 
 import com.rushucloud.reim.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -73,10 +73,10 @@ public class Proxy implements Serializable
         List<Proxy> proxyList = new ArrayList<>();
         try
         {
-            for (int i = 0; i < jsonArray.length(); i++)
+            for (int i = 0; i < jsonArray.size(); i++)
             {
                 JSONObject object = jsonArray.getJSONObject(i);
-                int userID = isClientArray ? object.getInt("uid") : object.getInt("wingid");
+                int userID = isClientArray ? object.getInteger("uid") : object.getInteger("wingid");
                 User user = DBManager.getDBManager().getUser(userID);
                 if (user == null)
                 {
@@ -84,7 +84,7 @@ public class Proxy implements Serializable
                 }
                 Proxy proxy = new Proxy();
                 proxy.setUser(user);
-                proxy.setPermission(object.getInt("permission"));
+                proxy.setPermission(object.getInteger("permission"));
                 proxyList.add(proxy);
             }
         }

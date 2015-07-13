@@ -1,9 +1,11 @@
 package classes.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
+
+import classes.utils.Utils;
 
 public class StatDepartment
 {
@@ -16,7 +18,7 @@ public class StatDepartment
     {
         try
         {
-            setDepartmentID(jObject.optInt("id", -1));
+            setDepartmentID(Utils.optInt(jObject, "id", -1));
             setName(jObject.getString("name"));
             setAmount(jObject.getDouble("amount"));
             setIsDepartment(isDepartment);

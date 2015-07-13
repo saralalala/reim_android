@@ -31,6 +31,21 @@ public class Group
         }
     }
 
+    public Group(com.alibaba.fastjson.JSONObject jObject)
+    {
+        try
+        {
+            setServerID(jObject.getInteger("groupid"));
+            setName(jObject.getString("group_name"));
+            setLocalUpdatedDate(jObject.getInteger("lastdt"));
+            setServerUpdatedDate(jObject.getInteger("lastdt"));
+        }
+        catch (com.alibaba.fastjson.JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public int getServerID()
     {
         return serverID;

@@ -1,8 +1,8 @@
 package netUtils.response.user;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class SubordinatesInfoResponse extends BaseResponse
             JSONObject jObject = getDataObject();
             JSONArray jsonArray = jObject.getJSONArray("data");
             setTotal(Integer.valueOf(jObject.getString("total")));
-            for (int i = 0; i < jsonArray.length(); i++)
+            for (int i = 0; i < jsonArray.size(); i++)
             {
                 JSONObject object = jsonArray.getJSONObject(i);
                 User user = new User();

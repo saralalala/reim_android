@@ -1,6 +1,6 @@
 package netUtils.response.proxy;
 
-import org.json.JSONArray;
+import com.alibaba.fastjson.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;

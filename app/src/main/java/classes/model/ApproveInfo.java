@@ -2,8 +2,8 @@ package classes.model;
 
 import android.support.annotation.NonNull;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 public class ApproveInfo implements Comparable<ApproveInfo>
 {
@@ -24,12 +24,12 @@ public class ApproveInfo implements Comparable<ApproveInfo>
     {
         try
         {
-            setUserID(jObject.getInt("uid"));
-            setProxyUserID(jObject.getInt("wingman"));
-            setStatus(jObject.getInt("status"));
+            setUserID(jObject.getInteger("uid"));
+            setProxyUserID(jObject.getInteger("wingman"));
+            setStatus(jObject.getInteger("status"));
             setApproveTime(jObject.getString("approvaldt").substring(11, 16));
             setApproveDate(jObject.getString("approvaldt").substring(0, 10));
-            setStep(jObject.getInt("step"));
+            setStep(jObject.getInteger("step"));
         }
         catch (JSONException e)
         {

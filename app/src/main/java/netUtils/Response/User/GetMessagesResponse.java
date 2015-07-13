@@ -1,8 +1,8 @@
 package netUtils.response.user;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +30,11 @@ public class GetMessagesResponse extends BaseResponse
 
             JSONArray jsonArray = getDataArray();
             messageList = new ArrayList<>();
-            for (int i = 0; i < jsonArray.length(); i++)
+            for (int i = 0; i < jsonArray.size(); i++)
             {
                 JSONObject jObject = jsonArray.getJSONObject(i);
 
-                int type = jObject.getInt("type");
+                int type = jObject.getInteger("type");
                 if (type == Message.TYPE_MESSAGE)
                 {
                     messageList.add(new Message(jObject));

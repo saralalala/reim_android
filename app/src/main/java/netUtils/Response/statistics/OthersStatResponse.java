@@ -1,7 +1,7 @@
 package netUtils.response.statistics;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +36,7 @@ public class OthersStatResponse extends BaseResponse
 
             statCategoryList = new ArrayList<>();
             JSONArray categories = jObject.getJSONArray("categories");
-            for (int i = 0; i < categories.length(); i++)
+            for (int i = 0; i < categories.size(); i++)
             {
                 StatCategory category = new StatCategory(categories.getJSONObject(i));
                 statCategoryList.add(category);
@@ -44,10 +44,10 @@ public class OthersStatResponse extends BaseResponse
             }
 
             statusData = new HashMap<>();
-            JSONArray details = jObject.optJSONArray("detail");
+            JSONArray details = jObject.getJSONArray("detail");
             if (details != null)
             {
-                for (int i = 0; i < details.length(); i++)
+                for (int i = 0; i < details.size(); i++)
                 {
                     JSONObject object = details.getJSONObject(i);
                     statusData.put(object.getString("desc"), object.getDouble("val"));
@@ -55,10 +55,10 @@ public class OthersStatResponse extends BaseResponse
             }
 
             currencyData = new HashMap<>();
-            JSONArray currencies = jObject.optJSONArray("currencies");
+            JSONArray currencies = jObject.getJSONArray("currencies");
             if (currencies != null)
             {
-                for (int i = 0; i < currencies.length(); i++)
+                for (int i = 0; i < currencies.size(); i++)
                 {
                     JSONObject object = currencies.getJSONObject(i);
                     currencyData.put(object.getString("name").toUpperCase(), object.getDouble("amount"));
@@ -66,18 +66,18 @@ public class OthersStatResponse extends BaseResponse
             }
 
             statDepartmentList = new ArrayList<>();
-            JSONObject groupObject = jObject.optJSONObject("group");
+            JSONObject groupObject = jObject.getJSONObject("group");
             if (groupObject != null)
             {
-                JSONArray groups = groupObject.optJSONArray("groups");
-                for (int i = 0; i < groups.length(); i++)
+                JSONArray groups = groupObject.getJSONArray("groups");
+                for (int i = 0; i < groups.size(); i++)
                 {
                     JSONObject object = groups.getJSONObject(i);
                     statDepartmentList.add(new StatDepartment(object, true));
                 }
 
-                JSONArray members = groupObject.optJSONArray("members");
-                for (int i = 0; i < members.length(); i++)
+                JSONArray members = groupObject.getJSONArray("members");
+                for (int i = 0; i < members.size(); i++)
                 {
                     JSONObject object = members.getJSONObject(i);
                     statDepartmentList.add(new StatDepartment(object, false));
@@ -86,7 +86,7 @@ public class OthersStatResponse extends BaseResponse
 
             statTagList = new ArrayList<>();
             JSONArray tags = jObject.getJSONArray("tags");
-            for (int i = 0; i < tags.length(); i++)
+            for (int i = 0; i < tags.size(); i++)
             {
                 JSONObject object = tags.getJSONObject(i);
                 statTagList.add(new StatTag(object));
@@ -94,7 +94,7 @@ public class OthersStatResponse extends BaseResponse
 
             statUserList = new ArrayList<>();
             JSONArray members = jObject.getJSONArray("members");
-            for (int i = 0; i < members.length(); i++)
+            for (int i = 0; i < members.size(); i++)
             {
                 JSONObject object = members.getJSONObject(i);
                 statUserList.add(new StatUser(object));

@@ -1,7 +1,7 @@
 package netUtils.response.user;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import netUtils.response.common.BaseResponse;
 
@@ -20,7 +20,7 @@ public class InviteResponse extends BaseResponse
         {
             JSONObject jObject = getDataObject();
 
-            allInSameCompany = jObject.getInt("same_count") == jObject.getInt("total");
+            allInSameCompany = jObject.getInteger("same_count").equals(jObject.getInteger("total"));
         }
         catch (JSONException e)
         {

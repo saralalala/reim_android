@@ -1,8 +1,8 @@
 package netUtils.response.group;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +24,16 @@ public class SearchGroupResponse extends BaseResponse
         try
         {
             JSONArray jsonArray = getDataArray();
-            groupList = new ArrayList<Group>();
-            for (int i = 0; i < jsonArray.length(); i++)
+            groupList = new ArrayList<>();
+            for (int i = 0; i < jsonArray.size(); i++)
             {
                 JSONObject object = jsonArray.getJSONObject(i);
                 Group group = new Group();
-                group.setServerID(object.getInt("id"));
+                group.setServerID(object.getInteger("id"));
                 group.setName(object.getString("company_name"));
-                group.setCreatedDate(object.getInt("createdt"));
-                group.setLocalUpdatedDate(object.getInt("lastdt"));
-                group.setServerUpdatedDate(object.getInt("lastdt"));
+                group.setCreatedDate(object.getInteger("createdt"));
+                group.setLocalUpdatedDate(object.getInteger("lastdt"));
+                group.setServerUpdatedDate(object.getInteger("lastdt"));
                 groupList.add(group);
             }
         }

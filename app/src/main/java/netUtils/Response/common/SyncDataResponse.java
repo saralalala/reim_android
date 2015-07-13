@@ -1,8 +1,8 @@
 package netUtils.response.common;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class SyncDataResponse extends BaseResponse
 
             reportList = new ArrayList<>();
             JSONArray jsonArray = jObject.getJSONArray("reports");
-            for (int i = 0; i < jsonArray.length(); i++)
+            for (int i = 0; i < jsonArray.size(); i++)
             {
                 Report report = new Report(jsonArray.getJSONObject(i));
                 reportList.add(report);
@@ -36,7 +36,7 @@ public class SyncDataResponse extends BaseResponse
 
             itemList = new ArrayList<>();
             jsonArray = jObject.getJSONArray("items");
-            for (int i = 0; i < jsonArray.length(); i++)
+            for (int i = 0; i < jsonArray.size(); i++)
             {
                 Item item = new Item(jsonArray.getJSONObject(i));
                 itemList.add(item);

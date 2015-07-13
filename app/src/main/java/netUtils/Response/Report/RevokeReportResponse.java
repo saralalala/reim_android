@@ -1,8 +1,8 @@
 package netUtils.response.report;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +31,9 @@ public class RevokeReportResponse extends BaseResponse
         {
             JSONObject jObject = getDataObject();
             report = new Report(jObject);
-            report.setMyDecision(jObject.getInt("mdecision"));
-            report.setIsCC(Utils.intToBoolean(jObject.getInt("cc")));
-            report.setStep(jObject.getInt("step"));
+            report.setMyDecision(jObject.getInteger("mdecision"));
+            report.setIsCC(Utils.intToBoolean(jObject.getInteger("cc")));
+            report.setStep(jObject.getInteger("step"));
 
             DBManager dbManager = DBManager.getDBManager();
 
@@ -41,10 +41,10 @@ public class RevokeReportResponse extends BaseResponse
 
             JSONArray managerArray = receiverObject.getJSONArray("managers");
             List<User> managerList = new ArrayList<>();
-            for (int i = 0; i < managerArray.length(); i++)
+            for (int i = 0; i < managerArray.size(); i++)
             {
                 JSONObject object = managerArray.getJSONObject(i);
-                User user = dbManager.getUser(object.getInt("id"));
+                User user = dbManager.getUser(object.getInteger("id"));
                 if (user != null)
                 {
                     managerList.add(user);
@@ -54,10 +54,10 @@ public class RevokeReportResponse extends BaseResponse
 
             JSONArray ccArray = receiverObject.getJSONArray("cc");
             List<User> ccList = new ArrayList<>();
-            for (int i = 0; i < ccArray.length(); i++)
+            for (int i = 0; i < ccArray.size(); i++)
             {
                 JSONObject object = ccArray.getJSONObject(i);
-                User user = dbManager.getUser(object.getInt("id"));
+                User user = dbManager.getUser(object.getInteger("id"));
                 if (user != null)
                 {
                     ccList.add(user);
@@ -67,18 +67,18 @@ public class RevokeReportResponse extends BaseResponse
 
             JSONArray commentArray = jObject.getJSONObject("comments").getJSONArray("data");
             List<Comment> commentList = new ArrayList<>();
-            for (int i = 0; i < commentArray.length(); i++)
+            for (int i = 0; i < commentArray.size(); i++)
             {
                 JSONObject object = commentArray.getJSONObject(i);
                 Comment comment = new Comment();
-                comment.setServerID(object.getInt("cid"));
+                comment.setServerID(object.getInteger("cid"));
                 comment.setContent(object.getString("comment"));
-                comment.setCreatedDate(object.getInt("lastdt"));
-                comment.setLocalUpdatedDate(object.getInt("lastdt"));
-                comment.setServerUpdatedDate(object.getInt("lastdt"));
+                comment.setCreatedDate(object.getInteger("lastdt"));
+                comment.setLocalUpdatedDate(object.getInteger("lastdt"));
+                comment.setServerUpdatedDate(object.getInteger("lastdt"));
 
                 User reviewer = new User();
-                reviewer.setServerID(object.getInt("uid"));
+                reviewer.setServerID(object.getInteger("uid"));
                 comment.setReviewer(reviewer);
 
                 commentList.add(comment);
@@ -90,7 +90,7 @@ public class RevokeReportResponse extends BaseResponse
 
             itemList = new ArrayList<>();
             JSONArray itemArray = jObject.getJSONArray("items");
-            for (int i = 0; i < itemArray.length(); i++)
+            for (int i = 0; i < itemArray.size(); i++)
             {
                 Item item = new Item(itemArray.getJSONObject(i));
                 itemList.add(item);

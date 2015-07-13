@@ -1,8 +1,8 @@
 package netUtils.response.report;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,19 +36,19 @@ public class SubordinatesReportResponse extends BaseResponse
                     JSONObject object = jsonArray.getJSONObject(i);
                     Report report = new Report();
                     report.setTitle(object.getString("title"));
-                    report.setServerID(object.getInt("id"));
+                    report.setServerID(object.getInteger("id"));
                     report.setStatus(Integer.valueOf(object.getString("status")));
                     report.setMyDecision(Integer.valueOf(object.getString("mdecision")));
-                    report.setCreatedDate(object.getInt("createdt"));
-                    report.setServerUpdatedDate(object.getInt("lastdt"));
-                    report.setLocalUpdatedDate(object.getInt("lastdt"));
-                    report.setItemCount(object.getInt("item_count"));
+                    report.setCreatedDate(object.getInteger("createdt"));
+                    report.setServerUpdatedDate(object.getInteger("lastdt"));
+                    report.setLocalUpdatedDate(object.getInteger("lastdt"));
+                    report.setItemCount(object.getInteger("item_count"));
                     report.setAmount(object.getString("amount"));
-                    report.setIsCC(Utils.intToBoolean(object.getInt("cc_flag")));
-                    report.setStep(object.getInt("step"));
+                    report.setIsCC(Utils.intToBoolean(object.getInteger("cc_flag")));
+                    report.setStep(object.getInteger("step"));
 
                     User user = new User();
-                    user.setServerID(object.getInt("uid"));
+                    user.setServerID(object.getInteger("uid"));
                     report.setSender(user);
 
                     reportList.add(report);

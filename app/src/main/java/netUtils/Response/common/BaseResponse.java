@@ -2,10 +2,10 @@ package netUtils.response.common;
 
 import android.content.Intent;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.start.SignInActivity;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import classes.utils.AppPreference;
 import classes.utils.ReimApplication;
@@ -26,23 +26,27 @@ public abstract class BaseResponse
         try
         {
             String string = (String) httpResponse;
-            JSONObject object = new JSONObject(string);
-            status = object.getInt("status") > 0;
-            code = object.getInt("code");
+            JSONObject object = JSON.parseObject(string);
+            status = object.getInteger("status") > 0;
+            code = object.getInteger("code");
             serverToken = object.getString("server_token");
             if (status)
             {
-                dataObject = object.optJSONObject("data");
-                if (dataObject == null)
+                Object obj = object.get("data");
+                if (obj instanceof JSONObject)
                 {
-                    dataArray = object.getJSONArray("data");
+                    dataObject = (JSONObject) obj;
+                }
+                else
+                {
+                    dataArray = (JSONArray) obj;
                 }
                 hasPassword = object.getBoolean("wx");
                 constructData();
             }
             else
             {
-                dataObject = object.optJSONObject("data");
+                dataObject = object.getJSONObject("data");
                 if (dataObject == null)
                 {
                     dataArray = object.getJSONArray("data");

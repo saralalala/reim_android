@@ -1,13 +1,12 @@
 package netUtils.response.item;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.model.StatDepartment;
 import classes.model.Vendor;
 
 public class GetVendorsResponse
@@ -19,11 +18,11 @@ public class GetVendorsResponse
     {
         try
         {
-            JSONObject jObject = new JSONObject((String) httpResponse);
+            JSONObject jObject = JSON.parseObject((String) httpResponse);
             status = jObject.getString("status").equals("OK");
 
             JSONArray jsonArray = jObject.getJSONArray("businesses");
-            int count = jsonArray.length();
+            int count = jsonArray.size();
             for (int i = 0; i < count; i++)
             {
                 vendorList.add(new Vendor(jsonArray.getJSONObject(i)));

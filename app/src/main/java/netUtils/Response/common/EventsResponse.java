@@ -1,8 +1,8 @@
 package netUtils.response.common;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,37 +40,37 @@ public class EventsResponse extends BaseResponse
             JSONArray reportsArray = jObject.getJSONArray("reports");
             JSONArray membersArray = jObject.getJSONArray("members");
             JSONArray managersArray = jObject.getJSONArray("managers");
-            JSONArray categoriesArray = jObject.optJSONArray("categories");
-            JSONArray tagsArray = jObject.optJSONArray("tags");
-            boolean categoriesChanged = categoriesArray != null && categoriesArray.length() > 0;
-            boolean tagsChanged = tagsArray != null && tagsArray.length() > 0;
-            currentUserActived = Utils.intToBoolean(jObject.optInt("active", 0));
+            JSONArray categoriesArray = jObject.getJSONArray("categories");
+            JSONArray tagsArray = jObject.getJSONArray("tags");
+            boolean categoriesChanged = categoriesArray != null && categoriesArray.size() > 0;
+            boolean tagsChanged = tagsArray != null && tagsArray.size() > 0;
+            currentUserActived = Utils.intToBoolean(Utils.optInt(jObject, "active", 0));
 
             appliedCompany = jObject.getString("apply");
 
             int currentUserID = AppPreference.getAppPreference().getCurrentUserID();
             mineUnreadList = new ArrayList<>();
             othersUnreadList = new ArrayList<>();
-            for (int i = 0; i < reportsArray.length(); i++)
+            for (int i = 0; i < reportsArray.size(); i++)
             {
                 JSONObject object = reportsArray.getJSONObject(i);
-                if (object.getInt("uid") == currentUserID)
+                if (object.getInteger("uid") == currentUserID)
                 {
-                    mineUnreadList.add(object.getInt("fid"));
+                    mineUnreadList.add(object.getInteger("fid"));
                 }
                 else
                 {
-                    othersUnreadList.add(object.getInt("fid"));
+                    othersUnreadList.add(object.getInteger("fid"));
                 }
             }
 
-            unreadMessagesCount = appliesArray.length() + invitesArray.length() + systemMessagesArray.length() + adminMessagesArray.length();
+            unreadMessagesCount = appliesArray.size() + invitesArray.size() + systemMessagesArray.size() + adminMessagesArray.size();
             hasUnreadMessages = unreadMessagesCount > 0;
-            hasUnreadReports = reportsArray.length() > 0;
+            hasUnreadReports = reportsArray.size() > 0;
 
-            boolean groupChanged = jObject.getInt("gid") != AppPreference.getAppPreference().getCurrentGroupID();
-            needToRefresh = groupChanged || (membersArray.length() + managersArray.length()) > 0 || categoriesChanged || tagsChanged;
-        }
+            boolean groupChanged = jObject.getInteger("gid") != AppPreference.getAppPreference().getCurrentGroupID();
+            needToRefresh = groupChanged || (membersArray.size() + managersArray.size()) > 0 || categoriesChanged || tagsChanged;
+        }   
         catch (JSONException e)
         {
             e.printStackTrace();

@@ -794,7 +794,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         List<User> userList = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT user_id FROM tbl_item_user WHERE item_local_id = ?",
-                                              new String[]{Integer.toString(itemLocalID)});
+                                          new String[]{Integer.toString(itemLocalID)});
         try
         {
             while (cursor.moveToNext())
@@ -818,6 +818,33 @@ public class DBManager extends SQLiteOpenHelper
             }
         }
         return userList;
+    }
+
+    public boolean isAllUsersInDatabase(List<Integer> idList)
+    {
+        String idString = Utils.intListToString(idList);
+        if (idString.isEmpty())
+        {
+            return true;
+        }
+
+        try
+        {
+            String content = "SELECT COUNT(DISTINCT(server_id)) AS count FROM tbl_user WHERE server_id IN (" + idString + ")";
+            Cursor cursor = database.rawQuery(content, null);
+            int count = 0;
+            if (cursor.moveToNext())
+            {
+                count = getIntFromCursor(cursor, "count");
+            }
+            cursor.close();
+
+            return count == idList.size();
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
     // Item
@@ -939,7 +966,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            String idString = !remainingList.isEmpty() ? TextUtils.join(",", remainingList) + ", -1" : "-1";
+            String idString = !remainingList.isEmpty() ? Utils.intListToString(remainingList) + ",-1" : "-1";
             List<Integer> itemIDList = new ArrayList<>();
 
             String command = "SELECT id FROM tbl_item WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
@@ -1503,7 +1530,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            String idString = !remainingList.isEmpty() ? TextUtils.join(",", remainingList) + ",-1" : "-1";
+            String idString = !remainingList.isEmpty() ? Utils.intListToString(remainingList) + ",-1" : "-1";
             List<Integer> reportIDList = new ArrayList<>();
 
             String command = "SELECT id FROM tbl_report WHERE server_id NOT IN (" + idString + ") AND user_id = " + userServerID;
@@ -1744,7 +1771,7 @@ public class DBManager extends SQLiteOpenHelper
                 idList.add(getIntFromCursor(cursor, "server_id"));
             }
 
-            result = TextUtils.join(",", idList);
+            result = Utils.intListToString(idList);
         }
         catch (Exception e)
         {
@@ -2117,6 +2144,23 @@ public class DBManager extends SQLiteOpenHelper
         return getCategoryListFromCursorWithClose(cursor);
     }
 
+    public boolean isCategoryInDatabase(int categoryServerID)
+    {
+        try
+        {
+            Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE server_id = ?",
+                                              new String[]{Integer.toString(categoryServerID)});
+            boolean result = cursor.moveToNext();
+            cursor.close();
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
     // Tag
     public boolean insertTag(Tag tag)
     {
@@ -2319,7 +2363,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         List<Tag> tags = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT tag_id FROM tbl_item_tag WHERE item_local_id = ?",
-                                             new String[]{Integer.toString(itemLocalID)});
+                                          new String[]{Integer.toString(itemLocalID)});
         try
         {
             while (cursor.moveToNext())
@@ -2902,7 +2946,7 @@ public class DBManager extends SQLiteOpenHelper
                 cursor.close();
             }
         }
-        return TextUtils.join(",", setOfBookList);
+        return Utils.intListToString(setOfBookList);
     }
 
     // Auxiliaries

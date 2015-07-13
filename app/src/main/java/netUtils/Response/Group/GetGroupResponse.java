@@ -1,8 +1,8 @@
 package netUtils.response.group;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class GetGroupResponse extends BaseResponse
 
             int groupID = -1;
             JSONObject groupObject = jObject.getJSONObject("ginfo");
-            if (groupObject.getInt("groupid") != -1)
+            if (groupObject.getInteger("groupid") != -1)
             {
                 group = new Group(groupObject);
                 groupID = group.getServerID();
@@ -37,7 +37,7 @@ public class GetGroupResponse extends BaseResponse
 
             JSONArray memberArray = jObject.getJSONArray("gmember");
             memberList = new ArrayList<>();
-            for (int i = 0; i < memberArray.length(); i++)
+            for (int i = 0; i < memberArray.size(); i++)
             {
                 User user = new User(memberArray.getJSONObject(i), groupID);
                 memberList.add(user);
