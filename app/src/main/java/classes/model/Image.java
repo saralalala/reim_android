@@ -2,13 +2,15 @@ package classes.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+
+import classes.utils.Utils;
 
 public class Image
 {
@@ -92,13 +94,13 @@ public class Image
             return "";
         }
 
-        Integer[] imagesIDs = new Integer[imageList.size()];
+        List<Integer> imagesIDs = new ArrayList<>();
         for (int i = 0; i < imageList.size(); i++)
         {
-            imagesIDs[i] = imageList.get(i).getServerID();
+            imagesIDs.add(imageList.get(i).getServerID());
         }
 
-        return TextUtils.join(",", imagesIDs);
+        return Utils.intListToString(imagesIDs);
     }
 
     public Bitmap getBitmap()

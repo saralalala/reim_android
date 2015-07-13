@@ -14,7 +14,6 @@ import java.util.List;
 
 import classes.model.Comment;
 import classes.model.User;
-import classes.utils.DBManager;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
@@ -22,13 +21,11 @@ import classes.widget.CircleImageView;
 public class CommentListViewAdapter extends BaseAdapter
 {
     private LayoutInflater layoutInflater;
-    private DBManager dbManager;
     private List<Comment> commentList;
 
     public CommentListViewAdapter(Context context, List<Comment> comments)
     {
         this.layoutInflater = LayoutInflater.from(context);
-        this.dbManager = DBManager.getDBManager();
         this.commentList = new ArrayList<>(comments);
     }
 
@@ -46,7 +43,7 @@ public class CommentListViewAdapter extends BaseAdapter
 
         Comment comment = commentList.get(position);
 
-        User user = dbManager.getUser(comment.getReviewer().getServerID());
+        User user = comment.getReviewer();
         if (user != null)
         {
             ViewUtils.setImageViewBitmap(user, avatarImageView);

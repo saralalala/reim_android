@@ -79,12 +79,12 @@ public class User implements Serializable
         try
         {
             setServerID(Integer.valueOf(jObject.getString("id")));
-            setEmail(jObject.getString("email"));
-            setPhone(jObject.getString("phone"));
+            setEmail(Utils.optString(jObject, "email", ""));
+            setPhone(Utils.optString(jObject, "phone", ""));
             setWeChat(Utils.optString(jObject, "weixin_nickname", ""));
             setNickname(jObject.getString("nickname"));
-            setIsAdmin(Utils.intToBoolean(jObject.getInteger("admin")));
-            setDefaultManagerID(jObject.getInteger("manager_id"));
+            setIsAdmin(Utils.intToBoolean(Utils.optInt(jObject, "admin", 0)));
+            setDefaultManagerID(Utils.optInt(jObject, "manager_id", 0));
             setGroupID(groupID);
             setSobID(Utils.optInt(jObject, "sob_id", 0));
             setAppliedCompany(Utils.optString(jObject, "apply", ""));
@@ -448,13 +448,13 @@ public class User implements Serializable
             return "";
         }
 
-        Integer[] userIDs = new Integer[userList.size()];
+        List<Integer> userIDs = new ArrayList<>();
         for (int i = 0; i < userList.size(); i++)
         {
-            userIDs[i] = userList.get(i).getServerID();
+            userIDs.add(userList.get(i).getServerID());
         }
 
-        return TextUtils.join(",", userIDs);
+        return Utils.intListToString(userIDs);
     }
 
     public static List<User> idStringToUserList(String idString)

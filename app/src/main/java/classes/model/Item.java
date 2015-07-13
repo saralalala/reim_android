@@ -544,6 +544,13 @@ public class Item
         return false;
     }
 
+    public boolean hasUnsyncedAttributes()
+    {
+        return Utils.stringToIntList(getTagsID()).size() != getTags().size() ||
+                Utils.stringToIntList(getRelevantUsersID()).size() != getRelevantUsers().size() ||
+                !DBManager.getDBManager().isCategoryInDatabase(getCategory().getServerID());
+    }
+
     public static ArrayList<Integer> getItemsIDList(List<Item> items)
     {
         ArrayList<Integer> result = new ArrayList<>();

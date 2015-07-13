@@ -129,7 +129,7 @@ public class EditReportActivity extends Activity
         lastCommentCount = commentList.size();
         if (!hasInit && report.getServerID() != -1 && PhoneUtils.isNetworkConnected())
         {
-            sendGetGroupRequest();
+            sendGetReportRequest(report.getServerID());
         }
         else if (report.getLocalID() == -1 && report.getServerID() == -1 && fromPush)
         {
@@ -718,6 +718,49 @@ public class EditReportActivity extends Activity
         }
     }
 
+    private void updateReport(Report responseReport, List<Item> responseItemList)
+    {
+        if (fromPush)
+        {
+            report.setStatus(responseReport.getStatus());
+            report.setCommentList(responseReport.getCommentList());
+            dbManager.updateReportByLocalID(report);
+
+            dbManager.deleteReportComments(report.getLocalID());
+            for (Comment comment : report.getCommentList())
+            {
+                comment.setReportID(report.getLocalID());
+                dbManager.insertComment(comment);
+            }
+        }
+        else if (report.getLocalUpdatedDate() <= responseReport.getServerUpdatedDate())
+        {
+            report.setAaApproved(responseReport.isAaApproved());
+            report.setManagerList(responseReport.getManagerList());
+            report.setCCList(responseReport.getCCList());
+            report.setCommentList(responseReport.getCommentList());
+            if (report.getManagerList().isEmpty())
+            {
+                report.setManagerList(currentUser.buildBaseManagerList());
+            }
+            dbManager.updateReportByLocalID(report);
+
+            for (Item item : responseItemList)
+            {
+                item.setBelongReport(report);
+                dbManager.updateItemByServerID(item);
+            }
+            itemList = dbManager.getReportItems(report.getLocalID());
+
+            dbManager.deleteReportComments(report.getLocalID());
+            for (Comment comment : report.getCommentList())
+            {
+                comment.setReportID(report.getLocalID());
+                dbManager.insertComment(comment);
+            }
+        }
+    }
+
     private boolean saveReport()
     {
         Report localReport = dbManager.getReportByLocalID(report.getLocalID());
@@ -1024,6 +1067,7 @@ public class EditReportActivity extends Activity
 
     private void sendGetReportRequest(final int reportServerID)
     {
+        ReimProgressDialog.show();
         GetReportRequest request = new GetReportRequest(reportServerID);
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -1033,57 +1077,32 @@ public class EditReportActivity extends Activity
                 final GetReportResponse response = new GetReportResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    if (fromPush)
+                    if (!response.containsUnsyncedUser())
                     {
-                        report.setStatus(response.getReport().getStatus());
-                        report.setCommentList(response.getReport().getCommentList());
-                        dbManager.updateReportByLocalID(report);
-
-                        dbManager.deleteReportComments(report.getLocalID());
-                        for (Comment comment : report.getCommentList())
-                        {
-                            comment.setReportID(report.getLocalID());
-                            dbManager.insertComment(comment);
-                        }
+                        updateReport(response.getReport(), response.getItemList());
                     }
-                    else if (report.getLocalUpdatedDate() <= response.getReport().getServerUpdatedDate())
+                    else
                     {
-                        report.setAaApproved(response.getReport().isAaApproved());
-                        report.setManagerList(response.getReport().getManagerList());
-                        report.setCCList(response.getReport().getCCList());
-                        report.setCommentList(response.getReport().getCommentList());
-                        if (report.getManagerList().isEmpty())
-                        {
-                            report.setManagerList(currentUser.buildBaseManagerList());
-                        }
-                        dbManager.updateReportByLocalID(report);
-
-                        for (Item item : response.getItemList())
-                        {
-                            item.setBelongReport(report);
-                            dbManager.updateItemByServerID(item);
-                        }
-                        itemList = dbManager.getReportItems(report.getLocalID());
-
-                        dbManager.deleteReportComments(report.getLocalID());
-                        for (Comment comment : report.getCommentList())
-                        {
-                            comment.setReportID(report.getLocalID());
-                            dbManager.insertComment(comment);
-                        }
+                        Report report = response.getReport();
+                        report.setManagerList(response.getManagerList());
+                        report.setCCList(response.getCCList());
+                        sendGetGroupRequest(response.getReport(), response.getItemList());
                     }
 
                     runOnUiThread(new Runnable()
                     {
                         public void run()
                         {
-                            ReimProgressDialog.dismiss();
-                            refreshView();
-
-                            if (report.getCommentList().size() != lastCommentCount)
+                            if (!response.containsUnsyncedUser())
                             {
-                                commentTipImageView.setVisibility(View.VISIBLE);
-                                lastCommentCount = report.getCommentList().size();
+                                ReimProgressDialog.dismiss();
+                                refreshView();
+
+                                if (report.getCommentList().size() != lastCommentCount)
+                                {
+                                    commentTipImageView.setVisibility(View.VISIBLE);
+                                    lastCommentCount = report.getCommentList().size();
+                                }
                             }
                         }
                     });
@@ -1103,9 +1122,8 @@ public class EditReportActivity extends Activity
         });
     }
 
-    private void sendGetGroupRequest()
+    private void sendGetGroupRequest(final Report responseReport, final List<Item> responseItemList)
     {
-        ReimProgressDialog.show();
         GetGroupRequest request = new GetGroupRequest();
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -1144,7 +1162,24 @@ public class EditReportActivity extends Activity
                     // update group info
                     dbManager.syncGroup(response.getGroup());
 
-                    sendGetReportRequest(report.getServerID());
+                    // update report
+                    updateReport(responseReport, responseItemList);
+                    report = dbManager.getReportByServerID(responseReport.getServerID());
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            refreshView();
+
+                            if (report.getCommentList().size() != lastCommentCount)
+                            {
+                                commentTipImageView.setVisibility(View.VISIBLE);
+                                lastCommentCount = report.getCommentList().size();
+                            }
+                        }
+                    });
                 }
                 else
                 {

@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
+import com.rushucloud.reim.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -26,17 +27,21 @@ import classes.model.Image;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
 import netUtils.request.common.DownloadImageRequest;
+import netUtils.request.group.GetGroupRequest;
 import netUtils.request.report.GetReportRequest;
 import netUtils.request.report.ModifyReportRequest;
 import netUtils.response.common.DownloadImageResponse;
+import netUtils.response.group.GetGroupResponse;
 import netUtils.response.report.GetReportResponse;
 import netUtils.response.report.ModifyReportResponse;
 
@@ -226,6 +231,16 @@ public class CommentActivity extends Activity
         }
     }
 
+    private void goBackToMainActivity()
+    {
+        int reportTabIndex = myReport ? Constant.TAB_REPORT_MINE : Constant.TAB_REPORT_OTHERS;
+        ReimApplication.setTabIndex(Constant.TAB_REPORT);
+        ReimApplication.setReportTabIndex(reportTabIndex);
+        Intent intent = new Intent(CommentActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        ViewUtils.goBackWithIntent(this, intent);
+    }
+
     // Data
     private void initData()
     {
@@ -256,6 +271,44 @@ public class CommentActivity extends Activity
         }
     }
 
+    private void updateReport(Report responseReport)
+    {
+        report = new Report(responseReport);
+
+        for (Comment comment : report.getCommentList())
+        {
+            User user = dbManager.getUser(comment.getReviewer().getServerID());
+            comment.setReviewer(user);
+        }
+
+        commentList.clear();
+        commentList.addAll(report.getCommentList());
+
+        if (myReport)
+        {
+            Report localReport = dbManager.getReportByServerID(report.getServerID());
+            if (localReport != null)
+            {
+                int reportLocalID = localReport.getLocalID();
+                dbManager.deleteReportComments(reportLocalID);
+                for (Comment comment : report.getCommentList())
+                {
+                    comment.setReportID(reportLocalID);
+                    dbManager.insertComment(comment);
+                }
+            }
+        }
+        else
+        {
+            dbManager.deleteOthersReportComments(report.getServerID());
+            for (Comment comment : report.getCommentList())
+            {
+                comment.setReportID(report.getServerID());
+                dbManager.insertOthersComment(comment);
+            }
+        }
+    }
+
     // Network
     private void sendGetReportRequest(final int reportServerID)
     {
@@ -268,40 +321,27 @@ public class CommentActivity extends Activity
                 final GetReportResponse response = new GetReportResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    report = new Report(response.getReport());
-                    commentList.clear();
-                    commentList.addAll(report.getCommentList());
-
-                    if (myReport)
+                    if (!response.containsUnsyncedUser())
                     {
-                        Report localReport = dbManager.getReportByServerID(reportServerID);
-                        if (localReport != null)
-                        {
-                            int reportLocalID = localReport.getLocalID();
-                            dbManager.deleteReportComments(reportLocalID);
-                            for (Comment comment : report.getCommentList())
-                            {
-                                comment.setReportID(reportLocalID);
-                                dbManager.insertComment(comment);
-                            }
-                        }
+                        updateReport(response.getReport());
                     }
                     else
                     {
-                        dbManager.deleteOthersReportComments(reportServerID);
-                        for (Comment comment : report.getCommentList())
-                        {
-                            comment.setReportID(reportServerID);
-                            dbManager.insertOthersComment(comment);
-                        }
+                        Report report = response.getReport();
+                        report.setManagerList(response.getManagerList());
+                        report.setCCList(response.getCCList());
+                        sendGetGroupRequest(response.getReport());
                     }
 
                     runOnUiThread(new Runnable()
                     {
                         public void run()
                         {
-                            ReimProgressDialog.dismiss();
-                            refreshView();
+                            if (!response.containsUnsyncedUser())
+                            {
+                                ReimProgressDialog.dismiss();
+                                refreshView();
+                            }
                         }
                     });
                 }
@@ -406,6 +446,74 @@ public class CommentActivity extends Activity
                         {
                             ReimProgressDialog.dismiss();
                             ViewUtils.showToast(CommentActivity.this, R.string.failed_to_send_comment, response.getErrorMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void sendGetGroupRequest(final Report responseReport)
+    {
+        GetGroupRequest request = new GetGroupRequest();
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final GetGroupResponse response = new GetGroupResponse(httpResponse);
+                if (response.getStatus())
+                {
+                    int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
+
+                    // update members
+                    List<User> memberList = response.getMemberList();
+                    User currentUser = AppPreference.getAppPreference().getCurrentUser();
+
+                    for (int i = 0; i < memberList.size(); i++)
+                    {
+                        User user = memberList.get(i);
+                        if (currentUser != null && user.equals(currentUser))
+                        {
+                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+                            {
+                                if (user.getAvatarID() == currentUser.getAvatarID())
+                                {
+                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
+                                }
+                            }
+                            else
+                            {
+                                memberList.set(i, currentUser);
+                            }
+                        }
+                    }
+
+                    dbManager.updateGroupUsers(memberList, currentGroupID);
+
+                    // update group info
+                    dbManager.syncGroup(response.getGroup());
+
+                    // update report
+                    updateReport(responseReport);
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            refreshView();
+                        }
+                    });
+                }
+                else
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ReimProgressDialog.dismiss();
+                            ViewUtils.showToast(CommentActivity.this, R.string.failed_to_get_data, response.getErrorMessage());
+                            goBackToMainActivity();
                         }
                     });
                 }

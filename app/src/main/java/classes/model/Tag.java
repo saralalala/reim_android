@@ -2,7 +2,6 @@ package classes.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
@@ -157,13 +156,13 @@ public class Tag implements Serializable
             return "";
         }
 
-        Integer[] tagIDs = new Integer[tagList.size()];
+        List<Integer> tagIDs = new ArrayList<>();
         for (int i = 0; i < tagList.size(); i++)
         {
-            tagIDs[i] = tagList.get(i).getServerID();
+            tagIDs.add(tagList.get(i).getServerID());
         }
 
-        return TextUtils.join(",", tagIDs);
+        return Utils.intListToString(tagIDs);
     }
 
     public static List<Tag> idStringToTagList(String idString)

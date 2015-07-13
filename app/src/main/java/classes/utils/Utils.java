@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import classes.model.Category;
+
 public class Utils
 {
     public static int getCurrentTime()
@@ -223,6 +225,11 @@ public class Utils
             resultList.add(Integer.valueOf(resultString.trim()));
         }
         return resultList;
+    }
+
+    public static String intListToString(List<Integer> integerList)
+    {
+        return TextUtils.join(",", integerList);
     }
 
     public static double stringToDouble(String source)

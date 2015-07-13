@@ -32,10 +32,14 @@ public abstract class BaseResponse
             serverToken = object.getString("server_token");
             if (status)
             {
-                dataObject = object.getJSONObject("data");
-                if (dataObject == null)
+                Object obj = object.get("data");
+                if (obj instanceof JSONObject)
                 {
-                    dataArray = object.getJSONArray("data");
+                    dataObject = (JSONObject) obj;
+                }
+                else
+                {
+                    dataArray = (JSONArray) obj;
                 }
                 hasPassword = object.getBoolean("wx");
                 constructData();

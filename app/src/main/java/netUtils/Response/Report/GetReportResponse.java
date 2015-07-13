@@ -18,7 +18,10 @@ import netUtils.response.common.BaseResponse;
 public class GetReportResponse extends BaseResponse
 {
     private Report report;
+    private List<User> managerList;
+    private List<User> ccList;
     private List<Item> itemList;
+    private boolean containsUnsyncedUser;
 
     public GetReportResponse(Object httpResponse)
     {
@@ -40,32 +43,47 @@ public class GetReportResponse extends BaseResponse
             JSONObject receiverObject = jObject.getJSONObject("receivers");
 
             JSONArray managerArray = receiverObject.getJSONArray("managers");
-            List<User> managerList = new ArrayList<>();
+            managerList = new ArrayList<>();
+            List<User> localManagerList = new ArrayList<>();
             for (int i = 0; i < managerArray.size(); i++)
             {
                 JSONObject object = managerArray.getJSONObject(i);
-                User user = dbManager.getUser(object.getInteger("id"));
-                if (user != null)
+                int id = object.getInteger("id");
+
+                User user = new User();
+                user.setServerID(id);
+                managerList.add(user);
+
+                User localUser = dbManager.getUser(id);
+                if (localUser != null)
                 {
-                    managerList.add(user);
+                    localManagerList.add(localUser);
                 }
             }
-            report.setManagerList(managerList);
+            report.setManagerList(localManagerList);
 
             JSONArray ccArray = receiverObject.getJSONArray("cc");
-            List<User> ccList = new ArrayList<>();
+            ccList = new ArrayList<>();
+            List<User> localCCList = new ArrayList<>();
             for (int i = 0; i < ccArray.size(); i++)
             {
                 JSONObject object = ccArray.getJSONObject(i);
-                User user = dbManager.getUser(object.getInteger("id"));
-                if (user != null)
+                int id = object.getInteger("id");
+
+                User user = new User();
+                user.setServerID(id);
+                ccList.add(user);
+
+                User localUser = dbManager.getUser(id);
+                if (localUser != null)
                 {
-                    ccList.add(user);
+                    localCCList.add(localUser);
                 }
             }
-            report.setCCList(ccList);
+            report.setCCList(localCCList);
 
             JSONArray commentArray = jObject.getJSONObject("comments").getJSONArray("data");
+            List<Integer> idList = new ArrayList<>();
             List<Comment> commentList = new ArrayList<>();
             for (int i = 0; i < commentArray.size(); i++)
             {
@@ -77,8 +95,15 @@ public class GetReportResponse extends BaseResponse
                 comment.setLocalUpdatedDate(object.getInteger("lastdt"));
                 comment.setServerUpdatedDate(object.getInteger("lastdt"));
 
+                int id = object.getInteger("uid");
+
+                if (!idList.contains(id))
+                {
+                    idList.add(id);
+                }
+
                 User reviewer = new User();
-                reviewer.setServerID(object.getInteger("uid"));
+                reviewer.setServerID(id);
                 comment.setReviewer(reviewer);
 
                 commentList.add(comment);
@@ -100,6 +125,10 @@ public class GetReportResponse extends BaseResponse
 
             report.setAmount(Double.toString(amount));
             report.setItemCount(itemCount);
+
+            containsUnsyncedUser = managerList.size() != localManagerList.size() ||
+                                    ccList.size() != localCCList.size() ||
+                                    !dbManager.isAllUsersInDatabase(idList);
         }
         catch (JSONException e)
         {
@@ -112,9 +141,14 @@ public class GetReportResponse extends BaseResponse
         return report;
     }
 
-    public void setReport(Report report)
+    public List<User> getManagerList()
     {
-        this.report = report;
+        return managerList;
+    }
+
+    public List<User> getCCList()
+    {
+        return ccList;
     }
 
     public List<Item> getItemList()
@@ -122,8 +156,8 @@ public class GetReportResponse extends BaseResponse
         return itemList;
     }
 
-    public void setItemList(List<Item> itemList)
+    public boolean containsUnsyncedUser()
     {
-        this.itemList = itemList;
+        return containsUnsyncedUser;
     }
 }
