@@ -14,6 +14,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import classes.model.Category;
+import classes.model.Group;
+import classes.model.SetOfBook;
+import classes.model.Tag;
+import classes.model.User;
+import netUtils.response.common.BaseResponse;
+
 public class Utils
 {
     public static int getCurrentTime()
@@ -335,4 +342,58 @@ public class Utils
         String result = object.getString(key);
         return result == null ? defaultValue : result;
     }
+
+    public static void updateGroupInfo(Group currentGroup, User currentUser, List<SetOfBook> bookList,
+                                   List<Category> categoryList, List<Tag> tagList,  List<User> userList, DBManager dbManager, AppPreference appPreference)
+    {
+        int currentGroupID = -1;
+
+        if (currentGroup != null)
+        {
+            currentGroupID = currentGroup.getServerID();
+
+            // update AppPreference
+            appPreference.setCurrentGroupID(currentGroupID);
+            appPreference.saveAppPreference();
+
+            // update members
+            User localUser = dbManager.getUser(currentUser.getServerID());
+            if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+            {
+                currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
+            }
+
+            dbManager.updateGroupUsers(userList, currentGroupID);
+
+            dbManager.updateUser(currentUser);
+
+            // update set of books
+            dbManager.updateUserSetOfBooks(bookList, appPreference.getCurrentUserID());
+
+            // update categories
+            dbManager.updateGroupCategories(categoryList, currentGroupID);
+
+            // update tags
+            dbManager.updateGroupTags(tagList, currentGroupID);
+
+            // update group info
+            dbManager.syncGroup(currentGroup);
+        }
+        else
+        {
+            // update AppPreference˙˙
+            appPreference.setCurrentGroupID(currentGroupID);
+            appPreference.saveAppPreference();
+
+            // update current user
+            dbManager.syncUser(currentUser);
+
+            // update set of books
+            dbManager.updateUserSetOfBooks(bookList, appPreference.getCurrentUserID());
+
+            // update categories
+            dbManager.updateGroupCategories(categoryList, currentGroupID);
+        }
+    }
+
 }
