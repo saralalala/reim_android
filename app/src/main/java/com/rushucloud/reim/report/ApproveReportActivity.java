@@ -498,7 +498,7 @@ public class ApproveReportActivity extends Activity
     private void sendCheckPolicyRequest(int reportServerID)
     {
         ReimProgressDialog.show();
-        CheckPolicyRequest request = new CheckPolicyRequest(3);
+        CheckPolicyRequest request = new CheckPolicyRequest(reportServerID);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
