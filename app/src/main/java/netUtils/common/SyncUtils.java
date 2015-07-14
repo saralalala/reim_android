@@ -73,6 +73,7 @@ public abstract class SyncUtils
                     appPreference.saveAppPreference();
 
                     DBManager dbManager = DBManager.getDBManager();
+                    dbManager.beginTransaction();
                     List<Integer> remainingList = new ArrayList<>();
                     SparseIntArray reportIDArray = new SparseIntArray();
                     for (Report report : response.getReportList())
@@ -100,6 +101,8 @@ public abstract class SyncUtils
                     }
 
                     dbManager.deleteTrashItems(remainingList, appPreference.getCurrentUserID());
+
+                    dbManager.endTransaction();
 
                     if (callback != null)
                     {

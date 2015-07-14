@@ -449,6 +449,17 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
+    public void beginTransaction()
+    {
+        database.beginTransaction();
+    }
+
+    public void endTransaction()
+    {
+        database.setTransactionSuccessful();
+        database.endTransaction();
+    }
+
     // Group
     public boolean insertGroup(Group group)
     {
@@ -687,6 +698,7 @@ public class DBManager extends SQLiteOpenHelper
 
     public boolean updateGroupUsers(List<User> userList, int groupServerID)
     {
+        database.beginTransaction();
         try
         {
             List<User> userLocalList = getGroupUsers(AppPreference.getAppPreference().getCurrentGroupID());
@@ -707,11 +719,16 @@ public class DBManager extends SQLiteOpenHelper
             {
                 syncUser(user);
             }
+            database.setTransactionSuccessful();
             return true;
         }
         catch (Exception e)
         {
             return false;
+        }
+        finally
+        {
+            database.endTransaction();
         }
     }
 
@@ -794,16 +811,22 @@ public class DBManager extends SQLiteOpenHelper
 
     public boolean updateRelevantUsers(Item item)
     {
+        database.beginTransaction();
         try
         {
             deleteRelevantUsers(item.getLocalID());
             insertRelevantUsers(item);
+            database.setTransactionSuccessful();
             return true;
         }
         catch (Exception e)
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            database.endTransaction();
         }
     }
 
@@ -1364,16 +1387,22 @@ public class DBManager extends SQLiteOpenHelper
 
     public boolean updateReportItems(ArrayList<Integer> itemIDList, int reportLocalID)
     {
+        database.beginTransaction();
         try
         {
             deleteReportItems(reportLocalID);
             insertReportItems(itemIDList, reportLocalID);
+            database.setTransactionSuccessful();
             return true;
         }
         catch (Exception e)
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            database.endTransaction();
         }
     }
 
@@ -2122,15 +2151,21 @@ public class DBManager extends SQLiteOpenHelper
 
     public boolean updateGroupCategories(List<Category> categoryList, int groupServerID)
     {
+        database.beginTransaction();
         try
         {
             deleteGroupCategories(groupServerID);
             insertCategoryList(categoryList);
+            database.setTransactionSuccessful();
             return true;
         }
         catch (Exception e)
         {
             return false;
+        }
+        finally
+        {
+            database.endTransaction();
         }
     }
 
@@ -2337,15 +2372,21 @@ public class DBManager extends SQLiteOpenHelper
 
     public boolean updateGroupTags(List<Tag> tagList, int groupServerID)
     {
+        database.beginTransaction();
         try
         {
             deleteGroupTags(groupServerID);
             insertTagList(tagList);
+            database.setTransactionSuccessful();
             return true;
         }
         catch (Exception e)
         {
             return false;
+        }
+        finally
+        {
+            database.endTransaction();
         }
     }
 
@@ -2397,16 +2438,22 @@ public class DBManager extends SQLiteOpenHelper
 
     public boolean updateItemTags(Item item)
     {
+        database.beginTransaction();
         try
         {
             deleteItemTags(item.getLocalID());
             insertItemTags(item);
+            database.setTransactionSuccessful();
             return true;
         }
         catch (Exception e)
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            database.endTransaction();
         }
     }
 
@@ -2644,6 +2691,7 @@ public class DBManager extends SQLiteOpenHelper
             }
         }
 
+        database.beginTransaction();
         localImages = getItemImages(itemLocalID);
         for (Image image : images)
         {
@@ -2663,6 +2711,8 @@ public class DBManager extends SQLiteOpenHelper
                 insertImage(image);
             }
         }
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
     public void updateOthersItemImages(Item item)
@@ -2680,6 +2730,7 @@ public class DBManager extends SQLiteOpenHelper
             }
         }
 
+        database.beginTransaction();
         localImages = getOthersItemImages(itemServerID);
         for (Image image : images)
         {
@@ -2699,6 +2750,8 @@ public class DBManager extends SQLiteOpenHelper
                 insertOthersImage(image);
             }
         }
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
     public Image getImageByLocalID(int imageLocalID)
@@ -2805,18 +2858,24 @@ public class DBManager extends SQLiteOpenHelper
 
     public boolean updateCurrencyList(List<Currency> currencyList)
     {
+        database.beginTransaction();
         try
         {
             for (Currency currency : currencyList)
             {
                 updateCurrency(currency);
             }
+            database.setTransactionSuccessful();
             return true;
         }
         catch (Exception e)
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            database.endTransaction();
         }
     }
 
@@ -2950,6 +3009,7 @@ public class DBManager extends SQLiteOpenHelper
 
     public boolean updateUserSetOfBooks(List<SetOfBook> setOfBookList, int userID)
     {
+        database.beginTransaction();
         try
         {
             deleteUserSetOfBooks(userID);
@@ -2957,12 +3017,17 @@ public class DBManager extends SQLiteOpenHelper
             {
                 insertSetOfBook(setOfBook);
             }
+            database.setTransactionSuccessful();
             return true;
         }
         catch (Exception e)
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            database.endTransaction();
         }
     }
 

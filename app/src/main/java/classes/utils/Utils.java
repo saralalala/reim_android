@@ -379,7 +379,7 @@ public class Utils
         }
         else
         {
-            // update AppPreference˙˙
+            // update AppPreference
             appPreference.setCurrentGroupID(currentGroupID);
             appPreference.saveAppPreference();
 
