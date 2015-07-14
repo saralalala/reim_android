@@ -22,6 +22,7 @@ import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
+import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ClearEditText;
 import classes.widget.ReimProgressDialog;
@@ -205,37 +206,9 @@ public class EditCompanyActivity extends Activity
                     appPreference.setCurrentGroupID(group.getServerID());
                     appPreference.saveAppPreference();
 
-                    int currentGroupID = response.getGroup().getServerID();
-
-                    // update AppPreference
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    appPreference.setCurrentGroupID(currentGroupID);
-                    appPreference.saveAppPreference();
-
-                    // update members
-                    DBManager dbManager = DBManager.getDBManager();
-                    currentUser = response.getCurrentUser();
-                    User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-                    if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
-                    {
-                        currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
-                    }
-
-                    dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-
-                    dbManager.updateUser(currentUser);
-
-                    // update set of books
-                    dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
-
-                    // update categories
-                    dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-
-                    // update tags
-                    dbManager.updateGroupTags(response.getTagList(), currentGroupID);
-
-                    // update group info
-                    dbManager.syncGroup(response.getGroup());
+                    Utils.updateGroupInfo(group, currentUser, response.getSetOfBookList(),
+                                          response.getCategoryList(), response.getTagList(),
+                                          response.getMemberList(), dbManager, AppPreference.getAppPreference());
 
                     runOnUiThread(new Runnable()
                     {

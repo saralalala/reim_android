@@ -1153,6 +1153,11 @@ public class StatisticsFragment extends Fragment
                     appPreference.setLastGetOthersStatTime(Utils.getCurrentTime());
                     appPreference.saveAppPreference();
 
+                    if (getActivity() == null)
+                    {
+                        return;
+                    }
+
                     getActivity().runOnUiThread(new Runnable()
                     {
                         public void run()
@@ -1171,7 +1176,7 @@ public class StatisticsFragment extends Fragment
                         }
                     });
                 }
-                else
+                else if (getActivity() != null)
                 {
                     getActivity().runOnUiThread(new Runnable()
                     {

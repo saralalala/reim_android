@@ -27,7 +27,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     private DBManager(Context context)
     {
@@ -61,6 +61,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "didi TEXT DEFAULT(''),"
                     + "didi_token TEXT DEFAULT(''),"
                     + "nickname TEXT DEFAULT(''),"
+                    + "department TEXT DEFAULT(''),"
                     + "avatar_id INT DEFAULT(0),"
                     + "avatar_server_path TEXT DEFAULT(''),"
                     + "avatar_local_path TEXT DEFAULT(''),"
@@ -393,6 +394,12 @@ public class DBManager extends SQLiteOpenHelper
                 String command = "ALTER TABLE tbl_category ADD COLUMN note TEXT DEFAULT('')";
                 db.execSQL(command);
             }
+
+            if (oldVersion < 9)
+            {
+                String command = "ALTER TABLE tbl_user ADD COLUMN department TEXT DEFAULT('')";
+                db.execSQL(command);
+            }
         }
         onCreate(db);
     }
@@ -535,8 +542,9 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            String sqlString = "INSERT INTO tbl_user (server_id, email, phone, wechat, didi, didi_token, nickname, avatar_id, avatar_server_path, " +
-                    "avatar_local_path, privilege, manager_id, group_id, applied_company, admin, active, local_updatedt, server_updatedt) VALUES (" +
+            String sqlString = "INSERT INTO tbl_user (server_id, email, phone, wechat, didi, didi_token, " +
+                    "nickname, department, avatar_id, avatar_server_path, avatar_local_path, privilege, " +
+                    "manager_id, group_id, applied_company, admin, active, local_updatedt, server_updatedt) VALUES (" +
                     "'" + user.getServerID() + "'," +
                     "'" + user.getEmail() + "'," +
                     "'" + user.getPhone() + "'," +
@@ -544,6 +552,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + user.getDidi() + "'," +
                     "'" + user.getDidiToken() + "'," +
                     "'" + sqliteEscape(user.getNickname()) + "'," +
+                    "'" + sqliteEscape(user.getDepartment()) + "'," +
                     "'" + user.getAvatarID() + "'," +
                     "'" + user.getAvatarServerPath() + "'," +
                     "'" + user.getAvatarLocalPath() + "'," +
@@ -598,6 +607,7 @@ public class DBManager extends SQLiteOpenHelper
                     "didi = '" + user.getDidi() + "'," +
                     "didi_token = '" + user.getDidiToken() + "'," +
                     "nickname = '" + sqliteEscape(user.getNickname()) + "'," +
+                    "department = '" + sqliteEscape(user.getDepartment()) + "'," +
                     "avatar_id = '" + user.getAvatarID() + "'," +
                     "avatar_server_path = '" + user.getAvatarServerPath() + "'," +
                     "avatar_local_path = '" + user.getAvatarLocalPath() + "'," +
@@ -2002,7 +2012,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + category.getSetOfBookID() + "'," +
                     "'" + category.getIconID() + "'," +
                     "'" + category.getType() + "'," +
-                    "'" + category.getNote() + "'," +
+                    "'" + sqliteEscape(category.getNote()) + "'," +
                     "'" + category.getLocalUpdatedDate() + "'," +
                     "'" + category.getServerUpdatedDate() + "')";
             database.execSQL(sqlString);
@@ -2042,7 +2052,7 @@ public class DBManager extends SQLiteOpenHelper
                     "sob_id = '" + category.getSetOfBookID() + "'," +
                     "icon_id = '" + category.getIconID() + "'," +
                     "type = '" + category.getType() + "'," +
-                    "note = '" + category.getNote() + "'," +
+                    "note = '" + sqliteEscape(category.getNote()) + "'," +
                     "local_updatedt = '" + category.getLocalUpdatedDate() + "'," +
                     "server_updatedt = '" + category.getServerUpdatedDate() + "' " +
                     "WHERE server_id = '" + category.getServerID() + "'";
@@ -3072,6 +3082,7 @@ public class DBManager extends SQLiteOpenHelper
         user.setDidi(getStringFromCursor(cursor, "didi"));
         user.setDidiToken(getStringFromCursor(cursor, "didi_token"));
         user.setNickname(getStringFromCursor(cursor, "nickname"));
+        user.setDepartment(getStringFromCursor(cursor, "department"));
         user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
         user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));
         user.setAvatarLocalPath(getStringFromCursor(cursor, "avatar_local_path"));

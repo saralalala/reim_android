@@ -32,6 +32,7 @@ import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
+import classes.utils.Utils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
@@ -421,36 +422,7 @@ public class ShowReportActivity extends Activity
                 final GetGroupResponse response = new GetGroupResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    int currentGroupID = response.getGroup() == null ? -1 : response.getGroup().getServerID();
-
-                    // update members
-                    List<User> memberList = response.getMemberList();
-                    User currentUser = AppPreference.getAppPreference().getCurrentUser();
-
-                    for (int i = 0; i < memberList.size(); i++)
-                    {
-                        User user = memberList.get(i);
-                        if (currentUser != null && user.equals(currentUser))
-                        {
-                            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
-                            {
-                                if (user.getAvatarID() == currentUser.getAvatarID())
-                                {
-                                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
-                                }
-                            }
-                            else
-                            {
-                                memberList.set(i, currentUser);
-                            }
-                            break;
-                        }
-                    }
-
-                    dbManager.updateGroupUsers(memberList, currentGroupID);
-
-                    // update group info
-                    dbManager.syncGroup(response.getGroup());
+                    Utils.updateGroupMembers(response.getGroup(), response.getMemberList(), dbManager);
 
                     // update report
                     updateReport(responseReport, responseItemList);

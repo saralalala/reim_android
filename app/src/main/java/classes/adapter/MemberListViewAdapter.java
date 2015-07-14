@@ -65,6 +65,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
 
             CircleImageView imageView = (CircleImageView) view.findViewById(R.id.avatarImageView);
             TextView nicknameTextView = (TextView) view.findViewById(R.id.nicknameTextView);
+            TextView departmentTextView = (TextView) view.findViewById(R.id.departmentTextView);
 
             ViewUtils.setImageViewBitmap(user, imageView);
 
@@ -76,6 +77,10 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
             {
                 nicknameTextView.setText(user.getNickname());
             }
+
+            int visibility = user.getDepartment().isEmpty() ? View.GONE : View.VISIBLE;
+            departmentTextView.setVisibility(visibility);
+            departmentTextView.setText(user.getDepartment());
 
             color = isChosen ? selectedColor : unselectedColor;
             nicknameTextView.setTextColor(color);

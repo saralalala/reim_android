@@ -25,11 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.CompanyListViewAdapter;
-import classes.model.Category;
 import classes.model.Group;
 import classes.model.Invite;
-import classes.model.SetOfBook;
-import classes.model.Tag;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;
@@ -375,14 +372,6 @@ public class PickCompanyActivity extends Activity
                 final InviteReplyResponse response = new InviteReplyResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    Group currentGroup = response.getGroup();
-                    User currentUser = response.getCurrentUser();
-                    List<SetOfBook> bookList = response.getSetOfBookList();
-                    List<Category> categoryList = response.getCategoryList();
-                    List<User> userList = response.getMemberList();
-                    List<Tag> tagList = response.getTagList();
-
-                    final DBManager dbManager = DBManager.getDBManager();
                     final AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
@@ -390,7 +379,9 @@ public class PickCompanyActivity extends Activity
                     appPreference.setSyncOnlyWithWifi(true);
                     appPreference.setEnablePasswordProtection(true);
 
-                    Utils.updateGroupInfo(currentGroup, currentUser, bookList, categoryList, tagList, userList, dbManager, appPreference);
+                    Utils.updateGroupInfo(response.getGroup(), response.getCurrentUser(), response.getSetOfBookList(),
+                                          response.getCategoryList(), response.getTagList(), response.getMemberList(),
+                                          DBManager.getDBManager(), appPreference);
 
                     runOnUiThread(new Runnable()
                     {

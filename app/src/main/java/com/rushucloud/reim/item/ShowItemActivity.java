@@ -709,59 +709,9 @@ public class ShowItemActivity extends Activity
                 final CommonResponse response = new CommonResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    int currentGroupID = -1;
-
-                    DBManager dbManager = DBManager.getDBManager();
-                    AppPreference appPreference = AppPreference.getAppPreference();
-                    appPreference.setServerToken(response.getServerToken());
-
-                    if (response.getGroup() != null)
-                    {
-                        currentGroupID = response.getGroup().getServerID();
-
-                        // update AppPreference
-                        appPreference.setCurrentGroupID(currentGroupID);
-                        appPreference.saveAppPreference();
-
-                        // update members
-                        User currentUser = response.getCurrentUser();
-                        User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-                        if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
-                        {
-                            currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
-                        }
-
-                        dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-
-                        dbManager.updateUser(currentUser);
-
-                        // update set of books
-                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
-
-                        // update categories
-                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-
-                        // update tags
-                        dbManager.updateGroupTags(response.getTagList(), currentGroupID);
-
-                        // update group info
-                        dbManager.syncGroup(response.getGroup());
-                    }
-                    else
-                    {
-                        // update AppPreference
-                        appPreference.setCurrentGroupID(currentGroupID);
-                        appPreference.saveAppPreference();
-
-                        // update set of books
-                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
-
-                        // update current user
-                        dbManager.syncUser(response.getCurrentUser());
-
-                        // update categories
-                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-                    }
+                    Utils.updateGroupInfo(response.getGroup(), response.getCurrentUser(), response.getSetOfBookList(),
+                                          response.getCategoryList(), response.getTagList(),
+                                          response.getMemberList(), dbManager, AppPreference.getAppPreference());
 
                     Category category = dbManager.getCategory(item.getCategory().getServerID());
                     item.setCategory(category);

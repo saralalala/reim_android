@@ -659,17 +659,11 @@ public class ProfileActivity extends Activity
                 final CommonResponse response = new CommonResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    Group currentGroup = response.getGroup();
-                    User currentUser = response.getCurrentUser();
-                    List<SetOfBook> bookList = response.getSetOfBookList();
-                    List<Category> categoryList = response.getCategoryList();
-                    List<User> userList = response.getMemberList();
-                    List<Tag> tagList = response.getTagList();
-
-                    DBManager dbManager = DBManager.getDBManager();
                     appPreference.setServerToken(response.getServerToken());
 
-                    Utils.updateGroupInfo(currentGroup, currentUser, bookList, categoryList,tagList, userList,dbManager,appPreference);
+                    Utils.updateGroupInfo(response.getGroup(), response.getCurrentUser(), response.getSetOfBookList(),
+                                          response.getCategoryList(), response.getTagList(), response.getMemberList(),
+                                          DBManager.getDBManager(), appPreference);
 
                     runOnUiThread(new Runnable()
                     {

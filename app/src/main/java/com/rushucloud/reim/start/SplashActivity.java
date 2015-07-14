@@ -9,13 +9,6 @@ import com.rushucloud.reim.guide.GuideStartActivity;
 import com.rushucloud.reim.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.List;
-
-import classes.model.Category;
-import classes.model.Group;
-import classes.model.SetOfBook;
-import classes.model.Tag;
-import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -138,14 +131,6 @@ public class SplashActivity extends Activity
                 final SignInResponse response = new SignInResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    Group currentGroup = response.getGroup();
-                    User currentUser = response.getCurrentUser();
-                    List<SetOfBook> bookList = response.getSetOfBookList();
-                    List<Category> categoryList = response.getCategoryList();
-                    List<User> userList = response.getMemberList();
-                    List<Tag> tagList = response.getTagList();
-
-                    DBManager dbManager = DBManager.getDBManager();
                     final AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
@@ -153,7 +138,9 @@ public class SplashActivity extends Activity
                     appPreference.setSyncOnlyWithWifi(true);
                     appPreference.setEnablePasswordProtection(true);
 
-                    Utils.updateGroupInfo(currentGroup, currentUser, bookList, categoryList, tagList, userList, dbManager, appPreference);
+                    Utils.updateGroupInfo(response.getGroup(), response.getCurrentUser(), response.getSetOfBookList(),
+                                          response.getCategoryList(), response.getTagList(), response.getMemberList(),
+                                          DBManager.getDBManager(), appPreference);
 
                     runOnUiThread(new Runnable()
                     {
@@ -206,14 +193,6 @@ public class SplashActivity extends Activity
                 final SandboxOAuthResponse response = new SandboxOAuthResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    Group currentGroup = response.getGroup();
-                    User currentUser = response.getCurrentUser();
-                    List<SetOfBook> bookList = response.getSetOfBookList();
-                    List<Category> categoryList = response.getCategoryList();
-                    List<User> userList = response.getMemberList();
-                    List<Tag> tagList = response.getTagList();
-
-                    DBManager dbManager = DBManager.getDBManager();
                     final AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setUsername(response.getOpenID());
                     appPreference.setServerToken(response.getServerToken());
@@ -227,7 +206,9 @@ public class SplashActivity extends Activity
                     appPreference.setLastGetMineStatTime(0);
                     appPreference.setLastGetOthersStatTime(0);
 
-                    Utils.updateGroupInfo(currentGroup, currentUser, bookList, categoryList,tagList, userList,dbManager,appPreference);
+                    Utils.updateGroupInfo(response.getGroup(), response.getCurrentUser(), response.getSetOfBookList(),
+                                          response.getCategoryList(), response.getTagList(), response.getMemberList(),
+                                          DBManager.getDBManager(), appPreference);
 
                     runOnUiThread(new Runnable()
                     {

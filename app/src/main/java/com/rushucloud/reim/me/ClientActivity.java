@@ -18,12 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.adapter.ProxyListViewAdapter;
-import classes.model.Category;
-import classes.model.Group;
 import classes.model.Proxy;
-import classes.model.SetOfBook;
-import classes.model.Tag;
-import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
@@ -213,17 +208,11 @@ public class ClientActivity extends Activity
                 final CommonResponse response = new CommonResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    Group currentGroup = response.getGroup();
-                    User currentUser = response.getCurrentUser();
-                    List<SetOfBook> bookList = response.getSetOfBookList();
-                    List<Category> categoryList = response.getCategoryList();
-                    List<User> userList = response.getMemberList();
-                    List<Tag> tagList = response.getTagList();
-
-                    DBManager dbManager = DBManager.getDBManager();
                     appPreference.setServerToken(response.getServerToken());
 
-                    Utils.updateGroupInfo(currentGroup, currentUser, bookList, categoryList, tagList, userList, dbManager, appPreference);
+                    Utils.updateGroupInfo(response.getGroup(), response.getCurrentUser(), response.getSetOfBookList(),
+                                          response.getCategoryList(), response.getTagList(), response.getMemberList(),
+                                          DBManager.getDBManager(), appPreference);
 
                     runOnUiThread(new Runnable()
                     {

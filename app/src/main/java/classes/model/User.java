@@ -33,6 +33,7 @@ public class User implements Serializable
     private String nickname = "";
     private String nicknameInitLetter = "";
     private BankAccount bankAccount;
+    private String department = "";
     private int avatarID = -1;
     private String avatarServerPath = "";
     private String avatarLocalPath = "";
@@ -61,6 +62,7 @@ public class User implements Serializable
         didiToken = user.getDidiToken();
         password = user.getPassword();
         nickname = user.getNickname();
+        department = user.getDepartment();
         avatarID = user.getAvatarID();
         avatarServerPath = user.getAvatarServerPath();
         avatarLocalPath = user.getAvatarLocalPath();
@@ -84,6 +86,7 @@ public class User implements Serializable
             setPhone(JSONUtils.optString(jObject, "phone", ""));
             setWeChat(JSONUtils.optString(jObject, "weixin_nickname", ""));
             setNickname(jObject.getString("nickname"));
+            setDepartment(JSONUtils.optString(jObject, "d", ""));
             setIsAdmin(Utils.intToBoolean(JSONUtils.optInt(jObject, "admin", 0)));
             setDefaultManagerID(JSONUtils.optInt(jObject, "manager_id", 0));
             setGroupID(groupID);
@@ -127,6 +130,7 @@ public class User implements Serializable
             setPhone(jObject.getString("phone"));
             setWeChat(jObject.getString("weixin_nickname"));
             setDefaultManagerID(jObject.getInteger("manager_id"));
+            setDepartment(JSONUtils.optString(jObject, "d", ""));
             setAvatarServerPath(JSONUtils.optString(jObject, "apath", ""));
             setAvatarLocalPath("");
             setIsAdmin(Utils.intToBoolean(jObject.getInteger("admin")));
@@ -257,6 +261,15 @@ public class User implements Serializable
     public void setBankAccount(BankAccount bankAccount)
     {
         this.bankAccount = bankAccount;
+    }
+
+    public String getDepartment()
+    {
+        return department;
+    }
+    public void setDepartment(String department)
+    {
+        this.department = department;
     }
 
     public int getAvatarID()

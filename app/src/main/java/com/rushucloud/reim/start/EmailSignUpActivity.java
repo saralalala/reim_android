@@ -19,12 +19,6 @@ import com.rushucloud.reim.R;
 import com.rushucloud.reim.guide.GuideStartActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.List;
-
-import classes.model.Category;
-import classes.model.Group;
-import classes.model.SetOfBook;
-import classes.model.Tag;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.DBManager;
@@ -221,14 +215,6 @@ public class EmailSignUpActivity extends Activity
                 final RegisterResponse response = new RegisterResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    Group currentGroup = response.getGroup();
-                    User currentUser = response.getCurrentUser();
-                    List<SetOfBook> bookList = response.getSetOfBookList();
-                    List<Category> categoryList = response.getCategoryList();
-                    List<User> userList = response.getMemberList();
-                    List<Tag> tagList = response.getTagList();
-
-                    DBManager dbManager = DBManager.getDBManager();
                     AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setUsername(user.getEmail());
                     appPreference.setPassword(user.getPassword());
@@ -244,7 +230,9 @@ public class EmailSignUpActivity extends Activity
                     appPreference.setLastGetMineStatTime(0);
                     appPreference.setLastGetOthersStatTime(0);
 
-                    Utils.updateGroupInfo(currentGroup, currentUser, bookList, categoryList, tagList, userList, dbManager, appPreference);
+                    Utils.updateGroupInfo(response.getGroup(), response.getCurrentUser(), response.getSetOfBookList(),
+                                          response.getCategoryList(), response.getTagList(), response.getMemberList(),
+                                          DBManager.getDBManager(), appPreference);
 
                     // refresh UI
                     runOnUiThread(new Runnable()

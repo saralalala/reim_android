@@ -2,7 +2,6 @@ package classes.utils;
 
 import android.text.TextUtils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.R;
 
 import java.text.DecimalFormat;
@@ -356,6 +355,12 @@ public class Utils
                 currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
             }
 
+            int index = userList.indexOf(currentUser);
+            if (index >= 0)
+            {
+                currentUser.setDepartment(userList.get(index).getDepartment());
+            }
+
             dbManager.updateGroupUsers(userList, currentGroupID);
 
             dbManager.updateUser(currentUser);
@@ -387,5 +392,36 @@ public class Utils
             // update categories
             dbManager.updateGroupCategories(categoryList, currentGroupID);
         }
+    }
+
+    public static void updateGroupMembers(Group group, List<User> memberList, DBManager dbManager)
+    {
+        int currentGroupID = group == null ? -1 : group.getServerID();
+
+        // update members
+        User currentUser = AppPreference.getAppPreference().getCurrentUser();
+
+        int index = memberList.indexOf(currentUser);
+        if (index >= 0)
+        {
+            User user = memberList.get(index);
+            currentUser.setDepartment(user.getDepartment());
+            if (user.getServerUpdatedDate() > currentUser.getServerUpdatedDate())
+            {
+                if (user.getAvatarID() == currentUser.getAvatarID())
+                {
+                    user.setAvatarLocalPath(currentUser.getAvatarLocalPath());
+                }
+            }
+            else
+            {
+                memberList.set(index, currentUser);
+            }
+        }
+
+        dbManager.updateGroupUsers(memberList, currentGroupID);
+
+        // update group info
+        dbManager.syncGroup(group);
     }
 }

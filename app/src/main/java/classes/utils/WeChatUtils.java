@@ -15,13 +15,6 @@ import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-import java.util.List;
-
-import classes.model.Category;
-import classes.model.Group;
-import classes.model.SetOfBook;
-import classes.model.Tag;
-import classes.model.User;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.request.user.WeChatAccessTokenRequest;
@@ -164,14 +157,6 @@ public class WeChatUtils
                 final WeChatOAuthResponse response = new WeChatOAuthResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    Group currentGroup = response.getGroup();
-                    User currentUser = response.getCurrentUser();
-                    List<SetOfBook> bookList = response.getSetOfBookList();
-                    List<Category> categoryList = response.getCategoryList();
-                    List<User> userList = response.getMemberList();
-                    List<Tag> tagList = response.getTagList();
-
-                    DBManager dbManager = DBManager.getDBManager();
                     final AppPreference appPreference = AppPreference.getAppPreference();
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setUsername(unionID);
@@ -186,7 +171,9 @@ public class WeChatUtils
                     appPreference.setLastGetMineStatTime(0);
                     appPreference.setLastGetOthersStatTime(0);
 
-                    Utils.updateGroupInfo(currentGroup, currentUser, bookList, categoryList,tagList, userList,dbManager,appPreference);
+                    Utils.updateGroupInfo(response.getGroup(), response.getCurrentUser(), response.getSetOfBookList(),
+                                          response.getCategoryList(), response.getTagList(), response.getMemberList(),
+                                          DBManager.getDBManager(), appPreference);
 
                     // refresh UI
                     activity.runOnUiThread(new Runnable()

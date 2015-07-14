@@ -645,70 +645,23 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 final CommonResponse response = new CommonResponse(httpResponse);
                 if (response.getStatus())
                 {
-                    int currentGroupID = -1;
-
-                    DBManager dbManager = DBManager.getDBManager();
                     appPreference.setServerToken(response.getServerToken());
                     appPreference.setCurrentUserID(response.getCurrentUser().getServerID());
 
-                    if (response.getGroup() != null)
+                    Utils.updateGroupInfo(response.getGroup(), response.getCurrentUser(), response.getSetOfBookList(),
+                                          response.getCategoryList(), response.getTagList(), response.getMemberList(),
+                                          DBManager.getDBManager(), appPreference);
+
+                    if (response.getGroup() != null && viewPager.getCurrentItem() == Constant.TAB_ME)
                     {
-                        currentGroupID = response.getGroup().getServerID();
-
-                        // update AppPreference
-                        appPreference.setCurrentGroupID(currentGroupID);
-                        appPreference.saveAppPreference();
-
-                        // update members
-                        User currentUser = response.getCurrentUser();
-                        User localUser = dbManager.getUser(response.getCurrentUser().getServerID());
-                        if (localUser != null && currentUser.getAvatarID() == localUser.getAvatarID())
+                        runOnUiThread(new Runnable()
                         {
-                            currentUser.setAvatarLocalPath(localUser.getAvatarLocalPath());
-                        }
-
-                        dbManager.updateGroupUsers(response.getMemberList(), currentGroupID);
-
-                        dbManager.updateUser(currentUser);
-
-                        // update set of books
-                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
-
-                        // update categories
-                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
-
-                        // update tags
-                        dbManager.updateGroupTags(response.getTagList(), currentGroupID);
-
-                        // update group info
-                        dbManager.syncGroup(response.getGroup());
-
-                        if (viewPager.getCurrentItem() == Constant.TAB_ME)
-                        {
-                            runOnUiThread(new Runnable()
+                            public void run()
                             {
-                                public void run()
-                                {
-                                    MeFragment fragment = (MeFragment) fragmentList.get(Constant.TAB_ME);
-                                    fragment.loadProfileView();
-                                }
-                            });
-                        }
-                    }
-                    else
-                    {
-                        // update AppPreference
-                        appPreference.setCurrentGroupID(currentGroupID);
-                        appPreference.saveAppPreference();
-
-                        // update current user
-                        dbManager.syncUser(response.getCurrentUser());
-
-                        // update set of books
-                        dbManager.updateUserSetOfBooks(response.getSetOfBookList(), appPreference.getCurrentUserID());
-
-                        // update categories
-                        dbManager.updateGroupCategories(response.getCategoryList(), currentGroupID);
+                                MeFragment fragment = (MeFragment) fragmentList.get(Constant.TAB_ME);
+                                fragment.loadProfileView();
+                            }
+                        });
                     }
                 }
             }
