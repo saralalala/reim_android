@@ -41,6 +41,7 @@ public class FollowingActivity extends Activity
     private Report report;
     private List<User> managerList = new ArrayList<>();
     private List<User> ccList = new ArrayList<>();
+    private boolean canBeFinished;
 
     // View
     protected void onCreate(Bundle savedInstanceState)
@@ -160,6 +161,11 @@ public class FollowingActivity extends Activity
                 sendApproveReportRequest(false);
             }
         });
+
+        if (!canBeFinished)
+        {
+            finishButton.setVisibility(View.GONE);
+        }
     }
 
     private void goBackToApproveReportActivity()
@@ -185,14 +191,22 @@ public class FollowingActivity extends Activity
     private void initData()
     {
         report = (Report) getIntent().getSerializableExtra("report");
-        managerList.addAll(report.getManagerList());
-        ccList.addAll(report.getCCList());
-        User currentUser = AppPreference.getAppPreference().getCurrentUser();
-        List<User> managerList = new ArrayList<>();
-        if (report.getSender().getServerID() != currentUser.getDefaultManagerID())
+        canBeFinished = getIntent().getBooleanExtra("canBeFinished", true);
+        if (!canBeFinished)
         {
-            managerList.addAll(currentUser.buildBaseManagerList());
+            ArrayList<Integer> managerIDList = getIntent().getIntegerArrayListExtra("managerIDList");
+            managerList.addAll(DBManager.getDBManager().getUsers(managerIDList));
         }
+
+        if (managerList.isEmpty())
+        {
+            User currentUser = AppPreference.getAppPreference().getCurrentUser();
+            if (report.getSender().getServerID() != currentUser.getDefaultManagerID())
+            {
+                managerList.addAll(currentUser.buildBaseManagerList());
+            }
+        }
+
         report.setManagerList(managerList);
     }
 

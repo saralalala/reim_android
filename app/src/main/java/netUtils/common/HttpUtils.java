@@ -85,7 +85,7 @@ public class HttpUtils
         result += PhoneUtils.getAppVersion() + ",";
         result += AppPreference.getAppPreference().getUsername() + ",";
         result += PhoneUtils.getPhoneModel() + ",";
-        result += PhoneUtils.getSystemVersion() + ",";
+        result += PhoneUtils.getSystemVersion();
         return result;
     }
 

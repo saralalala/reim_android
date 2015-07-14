@@ -681,6 +681,27 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
+    public List<User> getUsers(ArrayList<Integer> idList)
+    {
+        List<User> userList = new ArrayList<>();
+        try
+        {
+            for (Integer id : idList)
+            {
+                User user = getUser(id);
+                if (user != null)
+                {
+                    userList.add(user);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return userList;
+    }
+
     public boolean deleteGroupUsers(int groupServerID)
     {
         try

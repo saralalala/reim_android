@@ -45,9 +45,11 @@ import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
 import netUtils.request.group.GetGroupRequest;
 import netUtils.request.report.ApproveReportRequest;
+import netUtils.request.report.CheckPolicyRequest;
 import netUtils.request.report.GetReportRequest;
 import netUtils.response.group.GetGroupResponse;
 import netUtils.response.report.ApproveReportResponse;
+import netUtils.response.report.CheckPolicyResponse;
 import netUtils.response.report.GetReportResponse;
 
 public class ApproveReportActivity extends Activity
@@ -144,31 +146,9 @@ public class ApproveReportActivity extends Activity
                 {
                     ViewUtils.showToast(ApproveReportActivity.this, R.string.error_approve_network_unavailable);
                 }
-                else if (appPreference.getCurrentUser().getDefaultManagerID() > 0)
-                {
-                    jumpToFollowingActivity();
-                }
                 else
                 {
-                    Builder builder = new Builder(ApproveReportActivity.this);
-                    builder.setTitle(R.string.tip);
-                    builder.setMessage(R.string.prompt_choose_or_finish);
-                    builder.setPositiveButton(R.string.continue_to_choose, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            jumpToFollowingActivity();
-                        }
-                    });
-                    builder.setNegativeButton(R.string.finish, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            report.setMyDecision(Report.STATUS_APPROVED);
-                            sendApproveReportRequest();
-                        }
-                    });
-                    builder.create().show();
+                    sendCheckPolicyRequest(reportServerID);
                 }
             }
         });
@@ -337,10 +317,15 @@ public class ApproveReportActivity extends Activity
         builder.create().show();
     }
 
-    private void jumpToFollowingActivity()
+    private void jumpToFollowingActivity(ArrayList<Integer> managerIDList)
     {
         Intent intent = new Intent(ApproveReportActivity.this, FollowingActivity.class);
         intent.putExtra("report", report);
+        if (managerIDList != null)
+        {
+            intent.putIntegerArrayListExtra("managerIDList", managerIDList);
+            intent.putExtra("canBeFinished", false);
+        }
         ViewUtils.goForwardAndFinish(this, intent);
     }
 
@@ -506,6 +491,60 @@ public class ApproveReportActivity extends Activity
                         }
                     });
                 }
+            }
+        });
+    }
+
+    private void sendCheckPolicyRequest(int reportServerID)
+    {
+        ReimProgressDialog.show();
+        CheckPolicyRequest request = new CheckPolicyRequest(3);
+        request.sendRequest(new HttpConnectionCallback()
+        {
+            public void execute(Object httpResponse)
+            {
+                final CheckPolicyResponse response = new CheckPolicyResponse(httpResponse);
+                runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        ReimProgressDialog.dismiss();
+                        if (response.getStatus())
+                        {
+                            if (response.isReportCanBeFinished())
+                            {
+                                Builder builder = new Builder(ApproveReportActivity.this);
+                                builder.setTitle(R.string.tip);
+                                builder.setMessage(R.string.prompt_choose_or_finish);
+                                builder.setPositiveButton(R.string.continue_to_choose, new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        jumpToFollowingActivity(null);
+                                    }
+                                });
+                                builder.setNegativeButton(R.string.finish, new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        report.setMyDecision(Report.STATUS_APPROVED);
+                                        sendApproveReportRequest();
+                                    }
+                                });
+                                builder.create().show();
+                            }
+                            else
+                            {
+                                jumpToFollowingActivity(response.getManagerIDList());
+                            }
+                        }
+                        else
+                        {
+                            ViewUtils.showToast(ApproveReportActivity.this, R.string.failed_to_get_data,
+                                                response.getErrorMessage());
+                        }
+                    }
+                });
             }
         });
     }

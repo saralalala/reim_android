@@ -25,6 +25,7 @@ public class URLDef
     public static final String URL_WECHAT = "https://api.weixin.qq.com/sns/oauth2/access_token";
     public static final String URL_OAUTH = "oauth";
     public static final String URL_SEARCH = "search";
+    public static final String URL_CHECK_POLICY = "check_approval_permission";
     public static final String URL_ALERT = "alert";
     public static final String URL_APPROVE_INFO = "report_flow";
     public static final String URL_MODIFY_HISTORY = "item_flow";

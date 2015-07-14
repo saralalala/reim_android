@@ -107,9 +107,10 @@ public class User implements Serializable
                 setAvatarID(Integer.valueOf(imageID));
             }
 
-            JSONObject didiObject = jObject.getJSONObject("didi");
-            if (didiObject != null)
+            Object object = jObject.get("didi");
+            if (object instanceof JSONObject)
             {
+                JSONObject didiObject = (JSONObject) object;
                 setDidi(didiObject.getString("phone"));
                 setDidiToken(didiObject.getString("token"));
             }
@@ -155,9 +156,10 @@ public class User implements Serializable
                 setAvatarID(Integer.valueOf(imageID));
             }
 
-            JSONObject didiObject = jObject.getJSONObject("didi");
-            if (didiObject != null)
+            Object object = jObject.get("didi");
+            if (object instanceof JSONObject)
             {
+                JSONObject didiObject = (JSONObject) object;
                 setDidi(didiObject.getString("phone"));
                 setDidiToken(didiObject.getString("token"));
             }
