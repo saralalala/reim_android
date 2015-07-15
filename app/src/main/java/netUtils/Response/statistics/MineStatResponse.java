@@ -54,9 +54,10 @@ public class MineStatResponse extends BaseResponse
             }
 
             monthsData = new HashMap<>();
-            JSONObject months = jObject.getJSONObject("ms");
-            if (months != null)
+            Object msObject = jObject.get("ms");
+            if (msObject instanceof JSONObject)
             {
+                JSONObject months = (JSONObject) msObject;
                 for (String key : months.keySet())
                 {
                     Double value = months.getDouble(key);

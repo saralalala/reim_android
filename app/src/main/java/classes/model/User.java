@@ -143,7 +143,7 @@ public class User implements Serializable
             setServerUpdatedDate(jObject.getInteger("lastdt"));
             String imageID = jObject.getString("avatar");
             JSONArray jsonArray = jObject.getJSONArray("banks");
-            if (jsonArray.size() > 0)
+            if (jsonArray != null && jsonArray.size() > 0)
             {
                 setBankAccount(new BankAccount(jsonArray.getJSONObject(0)));
             }
