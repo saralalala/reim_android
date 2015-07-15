@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -324,61 +325,69 @@ public class InviteListActivity extends Activity
                 ContentResolver resolver = getContentResolver();
                 Cursor cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, "sort_key_alt asc");
 
-                while (cursor.moveToNext())
+                if(cursor != null)
                 {
-                    String ID = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                    String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                    String phone;
-                    String email;
-                    int id = Integer.parseInt(ID);
-                    if (id > 0)
+                    while (cursor.moveToNext())
                     {
-                        Cursor c = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                                                  ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + ID, null, null);
-
-                        while (c.moveToNext())
+                        String ID = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                        String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        String phone;
+                        String email;
+                        int id = Integer.parseInt(ID);
+                        if (id > 0)
                         {
-                            phone = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            User user = new User();
-                            user.setNickname(name);
-                            user.setPhone(phone);
-                            contactList.add(user);
-                        }
-                        c.close();
+                            Cursor c = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                                      ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + ID, null, null);
 
-                        c = resolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
-                                           ContactsContract.CommonDataKinds.Email.CONTACT_ID + "=" + ID, null, null);
+                            while (c.moveToNext())
+                            {
+                                phone = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                User user = new User();
+                                user.setNickname(name);
+                                user.setPhone(phone);
+                                contactList.add(user);
+                            }
+                            c.close();
 
-                        while (c.moveToNext())
-                        {
-                            email = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
-                            User user = new User();
-                            user.setNickname(name);
-                            user.setEmail(email);
-                            contactList.add(user);
+                            c = resolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
+                                               ContactsContract.CommonDataKinds.Email.CONTACT_ID + "=" + ID, null, null);
+
+                            while (c.moveToNext())
+                            {
+                                email = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
+                                User user = new User();
+                                user.setNickname(name);
+                                user.setEmail(email);
+                                contactList.add(user);
+                            }
+                            c.close();
                         }
-                        c.close();
                     }
+                    cursor.close();
+
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            adapter.setContactList(contactList);
+                            adapter.setNoPermission(contactList.isEmpty());
+                            adapter.initIndex();
+                            adapter.notifyDataSetChanged();
+
+                            if (!contactList.isEmpty())
+                            {
+                                initIndexLayout();
+                            }
+
+                            ReimProgressDialog.dismiss();
+                        }
+                    });
                 }
-                cursor.close();
-
-                runOnUiThread(new Runnable()
+                else
                 {
-                    public void run()
-                    {
-                        adapter.setContactList(contactList);
-                        adapter.setNoPermission(contactList.isEmpty());
-                        adapter.initIndex();
-                        adapter.notifyDataSetChanged();
+                    ReimProgressDialog.dismiss();
+                }
 
-                        if (!contactList.isEmpty())
-                        {
-                            initIndexLayout();
-                        }
-
-                        ReimProgressDialog.dismiss();
-                    }
-                });
             }
         }).start();
     }
