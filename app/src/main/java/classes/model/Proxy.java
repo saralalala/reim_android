@@ -1,10 +1,9 @@
 package classes.model;
 
-import com.rushucloud.reim.R;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.rushucloud.reim.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;

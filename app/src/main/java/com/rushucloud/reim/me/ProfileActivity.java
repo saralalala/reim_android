@@ -25,13 +25,8 @@ import com.rushucloud.reim.common.SingleImageActivity;
 import com.rushucloud.reim.start.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.List;
-
-import classes.model.Category;
 import classes.model.Group;
 import classes.model.Image;
-import classes.model.SetOfBook;
-import classes.model.Tag;
 import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;

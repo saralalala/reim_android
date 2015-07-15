@@ -2,10 +2,12 @@ package netUtils.request.common;
 
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.rushucloud.reim.R;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -22,15 +24,14 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import classes.utils.AppPreference;
+import classes.utils.ViewUtils;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.HttpUtils;
 import netUtils.common.NetworkConstant;
@@ -145,13 +146,11 @@ public abstract class BaseRequest
         if (params != null)
         {
             List<String> paramsList = new ArrayList<>();
-            Iterator<NameValuePair> it = params.iterator();
-            while (it.hasNext())
+            for (NameValuePair param : params)
             {
                 try
                 {
-                    NameValuePair pair = it.next();
-                    String parameter = pair.getName() + "=" + URLEncoder.encode(pair.getValue(), "UTF-8");
+                    String parameter = param.getName() + "=" + URLEncoder.encode(param.getValue(), "UTF-8");
                     paramsList.add(parameter);
                 }
                 catch (UnsupportedEncodingException e)
@@ -172,13 +171,11 @@ public abstract class BaseRequest
         if (params != null)
         {
             List<String> paramsList = new ArrayList<>();
-            Iterator<NameValuePair> it = params.iterator();
-            while (it.hasNext())
+            for (NameValuePair param : params)
             {
                 try
                 {
-                    NameValuePair pair = it.next();
-                    String parameter = pair.getName() + "=" + URLEncoder.encode(pair.getValue(), "UTF-8");
+                    String parameter = param.getName() + "=" + URLEncoder.encode(param.getValue(), "UTF-8");
                     paramsList.add(parameter);
                 }
                 catch (UnsupportedEncodingException e)
@@ -213,14 +210,6 @@ public abstract class BaseRequest
                         inputStream = response.getEntity().getContent();
                     }
                 }
-                catch (ClientProtocolException e)
-                {
-                    e.printStackTrace();
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
                 catch (Exception e)
                 {
                     e.printStackTrace();
@@ -237,7 +226,7 @@ public abstract class BaseRequest
         {
             public void run()
             {
-                String resultString = null;
+                String resultString;
                 try
                 {
                     request.addHeader(NetworkConstant.X_REIM_JWT, HttpUtils.getJWTString());
@@ -249,19 +238,12 @@ public abstract class BaseRequest
                     }
                     else
                     {
-                        resultString = response.getStatusLine().getReasonPhrase();
+                        resultString = constructNetworkError();
                     }
-                }
-                catch (ClientProtocolException e)
-                {
-                    e.printStackTrace();
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
                 }
                 catch (Exception e)
                 {
+                    resultString = constructNetworkError();
                     e.printStackTrace();
                 }
 
@@ -271,5 +253,19 @@ public abstract class BaseRequest
                 }
             }
         }).start();
+    }
+
+    private String constructNetworkError()
+    {
+        JSONObject dataObject = new JSONObject();
+        dataObject.put("msg", ViewUtils.getString(R.string.error_network_internet_unavailable));
+
+        JSONObject object = new JSONObject();
+        object.put("status", 0);
+        object.put("code", -1);
+        object.put("server_token", "");
+        object.put("data", dataObject);
+
+        return object.toString();
     }
 }

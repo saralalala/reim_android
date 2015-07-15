@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import classes.utils.Utils;
 import netUtils.response.common.BaseResponse;

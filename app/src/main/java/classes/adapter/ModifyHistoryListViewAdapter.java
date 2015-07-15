@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -13,10 +12,7 @@ import com.rushucloud.reim.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.model.Category;
 import classes.model.ModifyHistory;
-import classes.model.User;
-import classes.utils.DBManager;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 

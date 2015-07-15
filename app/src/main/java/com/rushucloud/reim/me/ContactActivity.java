@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rushucloud.reim.R;
 import com.umeng.analytics.MobclickAgent;
@@ -217,30 +216,26 @@ public class ContactActivity extends Activity
                         }
                     }
                     cursor.close();
-
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            adapter.setContactList(contactList);
-                            adapter.setNoPermission(contactList.isEmpty());
-                            adapter.initIndex();
-                            adapter.notifyDataSetChanged();
-
-                            if (!contactList.isEmpty())
-                            {
-                                ViewUtils.initIndexLayout(ContactActivity.this, 50, adapter.getSelector(),
-                                                          contactListView, indexLayout, centralTextView);
-                            }
-
-                            ReimProgressDialog.dismiss();
-                        }
-                    });
                 }
-                else
+
+                runOnUiThread(new Runnable()
                 {
-                    ReimProgressDialog.dismiss();
-                }
+                    public void run()
+                    {
+                        adapter.setContactList(contactList);
+                        adapter.setNoPermission(contactList.isEmpty());
+                        adapter.initIndex();
+                        adapter.notifyDataSetChanged();
+
+                        if (!contactList.isEmpty())
+                        {
+                            ViewUtils.initIndexLayout(ContactActivity.this, 50, adapter.getSelector(),
+                                                      contactListView, indexLayout, centralTextView);
+                        }
+
+                        ReimProgressDialog.dismiss();
+                    }
+                });
              }
 
         }).start();
