@@ -2199,8 +2199,8 @@ public class DBManager extends SQLiteOpenHelper
 
     public List<Category> getSetOfBookCategories(int sobID)
     {
-        String command = "SELECT * FROM tbl_category WHERE sob_id IN (0," + sobID + ") AND parent_id = 0";
-        Cursor cursor = database.rawQuery(command, null);
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_category WHERE sob_id = ? AND parent_id = 0",
+                                          new String[]{Integer.toString(sobID)});
         return getCategoryListFromCursorWithClose(cursor);
     }
 
