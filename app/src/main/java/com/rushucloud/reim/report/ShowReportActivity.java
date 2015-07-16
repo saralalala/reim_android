@@ -426,7 +426,14 @@ public class ShowReportActivity extends Activity
 
                     // update report
                     updateReport(responseReport, responseItemList);
-                    report = dbManager.getReportByServerID(responseReport.getServerID());
+                    if (myReport)
+                    {
+                        report = dbManager.getReportByServerID(responseReport.getServerID());
+                    }
+                    else
+                    {
+                        report = dbManager.getOthersReport(responseReport.getServerID());
+                    }
 
                     runOnUiThread(new Runnable()
                     {
