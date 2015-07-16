@@ -145,6 +145,8 @@
     <string name="need_reimburse">需收款</string>
     <string name="does_not_need_reimburse">（不需收款）</string>
     <string name="actual_cost">实际消费</string>
+    <string name="modify_history">修改历史</string>
+    <string name="modify_history_hint">修改历史 ></string>
     <string name="type">Type</string>
     <string name="photo">Photo</string>
     <string name="category">Category</string>
@@ -472,7 +474,9 @@
     <string name="error_submit_report_no_permission">抱歉，你暂时没有提交报告的权限</string>
     <string name="error_change_avatar_no_permission">权限不足，你暂时无法更换头像</string>
     <string name="error_change_password_no_permission">权限不足，你暂时无法更改密码</string>
+    <string name="error_message_no_permission">权限不足，你暂时无法处理</string>
 
+    <string name="error_network_internet_unavailable">网络暂时无法连接，请稍后再试</string>
     <string name="error_network_system_error">系统错误，请稍后尝试</string>
     <string name="error_network_user_not_exists">用户不存在或密码错误</string>
     <string name="error_network_mail_send_error">邮件发送错误</string>
@@ -503,6 +507,8 @@
     <string name="error_network_not_unique">消费已被添加进另外的报告中</string>
     <string name="error_network_company_exists">公司已存在</string>
     <string name="error_network_proxy_error">被代理人不在你公司，无法进行该操作</string>
+    <string name="error_network_category_exceed_limit">本月内，你的%1$s已超过公司的限额</string>
+    <string name="error_network_report_exceed_limit">本月内，你不能再提交报告了</string>
 
     <string name="succeed_in_sign_up">注册成功！</string>
     <string name="succeed_in_sign_up_with_email">Register successful. Please</string> <!--?-->
@@ -622,6 +628,7 @@
     <string name="failed_to_set_admin">Failed to set administrator</string>
     <string name="failed_to_verify_code">Failed to verify code</string>
     <string name="failed_to_experience">Failed to open experience mode</string>
+    <string name="failed_to_get_modify_history">获取修改历史失败</string>
 
     <string name="no_pending_reports">There is no pending report</string>
     <string name="no_image">Cannot find image</string>
