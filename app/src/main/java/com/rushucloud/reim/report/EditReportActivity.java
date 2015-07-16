@@ -1207,7 +1207,22 @@ public class EditReportActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+                            if (response.getCode() == NetworkConstant.ERROR_CATEGORY_EXCEED_LIMIT)
+                            {
+                                idList.clear();
+                                idList.addAll(response.getErrorCategoryIDList());
+                                refreshView();
+
+                                String nameString = dbManager.getCategoriesNames(idList);
+                                String errorMessage = String.format(getString(R.string.error_network_category_exceed_limit), nameString);
+                                ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, errorMessage);
+                            }
+                            else
+                            {
+                                idList.clear();
+                                refreshView();
+                                ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, response.getErrorMessage());
+                            }
                         }
                     });
                 }
