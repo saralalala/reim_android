@@ -21,4 +21,9 @@ public class LogUtils
             Log.i(tag, object.toString());
         }
     }
+
+    public static void tempPrint(Object object)
+    {
+        System.out.println(object);
+    }
 }
