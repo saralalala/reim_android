@@ -271,6 +271,7 @@ public class ViewUtils
     {
         final int height = (getPhoneWindowHeight(context) - dpToPixel(margin) - getStatusBarHeight(context)) / indexLetters.length;
 
+        indexLayout.removeAllViews();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, height);
         for (String string : indexLetters)
         {

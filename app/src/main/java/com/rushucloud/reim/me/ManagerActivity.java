@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -50,6 +51,7 @@ public class ManagerActivity extends Activity
     private ClearEditText managerEditText;
     private CircleImageView avatarImageView;
     private TextView nicknameTextView;
+    private SwipeRefreshLayout refreshLayout;
     private PinnedSectionListView managerListView;
     private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
@@ -70,18 +72,8 @@ public class ManagerActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_me_manager);
+        initData();
         initView();
-        ReimProgressDialog.setContext(this);
-        if (PhoneUtils.isNetworkConnected())
-        {
-            sendGetGroupRequest();
-        }
-        else
-        {
-            initData();
-            refreshManagerView();
-            initListView();
-        }
     }
 
     protected void onResume()
@@ -89,6 +81,7 @@ public class ManagerActivity extends Activity
         super.onResume();
         MobclickAgent.onPageStart("ManagerActivity");
         MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
     }
 
     protected void onPause()
@@ -182,6 +175,25 @@ public class ManagerActivity extends Activity
         avatarImageView = (CircleImageView) findViewById(R.id.avatarImageView);
         nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
 
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
+        refreshLayout.setColorSchemeColors(ViewUtils.getColor(R.color.refresh_color_1),
+                                           ViewUtils.getColor(R.color.refresh_color_2));
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            public void onRefresh()
+            {
+                if (PhoneUtils.isNetworkConnected())
+                {
+                    sendGetGroupRequest();
+                }
+                else
+                {
+                    refreshLayout.setRefreshing(false);
+                    ViewUtils.showToast(ManagerActivity.this, R.string.error_get_data_network_unavailable);
+                }
+            }
+        });
+
         managerListView = (PinnedSectionListView) findViewById(R.id.userListView);
         managerListView.setOnItemClickListener(new OnItemClickListener()
         {
@@ -220,6 +232,9 @@ public class ManagerActivity extends Activity
 
             }
         });
+
+        initListView();
+        refreshManagerView();
     }
 
     private void initListView()
@@ -305,7 +320,6 @@ public class ManagerActivity extends Activity
     // Network
     private void sendGetGroupRequest()
     {
-        ReimProgressDialog.show();
         GetGroupRequest request = new GetGroupRequest();
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -329,7 +343,7 @@ public class ManagerActivity extends Activity
                     {
                         public void run()
                         {
-                            ReimProgressDialog.dismiss();
+                            refreshLayout.setRefreshing(false);
                             initData();
                             refreshManagerView();
                             initListView();

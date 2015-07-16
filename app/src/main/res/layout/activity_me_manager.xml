@@ -147,12 +147,19 @@
 
             </RelativeLayout>
 
-            <classes.widget.PinnedSectionListView
-                android:id="@+id/userListView"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/refreshLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:listSelector="@drawable/list_item_drawable"
-                android:cacheColorHint="@android:color/transparent"/>
+                android:layout_height="match_parent">
+
+                <classes.widget.PinnedSectionListView
+                    android:id="@+id/userListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:listSelector="@drawable/list_item_drawable"
+                    android:cacheColorHint="@android:color/transparent"/>
+
+            </android.support.v4.widget.SwipeRefreshLayout>
 
         </LinearLayout>
 

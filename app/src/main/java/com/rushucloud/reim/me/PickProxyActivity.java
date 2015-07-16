@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -46,6 +47,7 @@ public class PickProxyActivity extends Activity
     // Widgets
     private ClearEditText proxyEditText;
     private TextView noMemberTextView;
+    private SwipeRefreshLayout refreshLayout;
     private PinnedSectionListView proxyListView;
     private MemberListViewAdapter adapter;
     private LinearLayout indexLayout;
@@ -62,17 +64,8 @@ public class PickProxyActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_me_pick_proxy);
-        ReimProgressDialog.setContext(this);
+        initData();
         initView();
-        if (PhoneUtils.isNetworkConnected())
-        {
-            sendGetGroupRequest();
-        }
-        else
-        {
-            initData();
-            initListView();
-        }
     }
 
     protected void onResume()
@@ -80,6 +73,7 @@ public class PickProxyActivity extends Activity
         super.onResume();
         MobclickAgent.onPageStart("PickProxyActivity");
         MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
     }
 
     protected void onPause()
@@ -156,7 +150,27 @@ public class PickProxyActivity extends Activity
 
         noMemberTextView = (TextView) findViewById(R.id.noMemberTextView);
 
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
+        refreshLayout.setColorSchemeColors(ViewUtils.getColor(R.color.refresh_color_1),
+                                           ViewUtils.getColor(R.color.refresh_color_2));
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            public void onRefresh()
+            {
+                if (PhoneUtils.isNetworkConnected())
+                {
+                    sendGetGroupRequest();
+                }
+                else
+                {
+                    refreshLayout.setRefreshing(false);
+                    ViewUtils.showToast(PickProxyActivity.this, R.string.error_get_data_network_unavailable);
+                }
+            }
+        });
+
         proxyListView = (PinnedSectionListView) findViewById(R.id.proxyListView);
+        initListView();
     }
 
     private void initListView()
@@ -250,7 +264,6 @@ public class PickProxyActivity extends Activity
     // Network
     private void sendGetGroupRequest()
     {
-        ReimProgressDialog.show();
         GetGroupRequest request = new GetGroupRequest();
         request.sendRequest(new HttpConnectionCallback()
         {
@@ -274,7 +287,7 @@ public class PickProxyActivity extends Activity
                     {
                         public void run()
                         {
-                            ReimProgressDialog.dismiss();
+                            refreshLayout.setRefreshing(false);
                             initData();
                             initListView();
                         }

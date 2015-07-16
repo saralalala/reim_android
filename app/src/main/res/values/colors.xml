@@ -54,6 +54,9 @@
     <color name="index_prompt">#AA000000</color>
     <color name="index_layout_pressed">#AAE9E9EB</color>
 
+    <color name="refresh_color_1">#FFFE575C</color>
+    <color name="refresh_color_2">#FFEAD7D7</color>
+
     <color name="province_line_border">#C7C7C7</color>
 
     <color name="tag">#FFABABAB</color>
