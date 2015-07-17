@@ -393,13 +393,7 @@
         <!-- 推广渠道 -->
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="Official"/>
-        <!--<meta-data-->
-            <!--android:name="UMENG_CHANNEL"-->
-            <!--android:value="Wandoujia"/>-->
-        <!--<meta-data-->
-            <!--android:name="UMENG_CHANNEL"-->
-            <!--android:value="Yingyongbao"/>-->
+            android:value="${UMENG_CHANNEL}"/>
 
         <service
             android:name="com.umeng.update.net.DownloadingService"

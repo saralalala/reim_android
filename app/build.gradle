@@ -50,6 +50,20 @@ android {
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/LGPL2.1'
     }
+
+    productFlavors {
+        Official {
+            manifestPlaceholders = [UMENG_CHANNEL:"Official"]
+        }
+
+        Yingyongbao {
+            manifestPlaceholders = [UMENG_CHANNEL:"Yingyongbao"]
+        }
+
+        Wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL:"Wandoujia"]
+        }
+    }
 }
 
 dependencies {
