@@ -659,7 +659,10 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                             public void run()
                             {
                                 MeFragment fragment = (MeFragment) fragmentList.get(Constant.TAB_ME);
-                                fragment.loadProfileView();
+                                if (fragment.isAdded())
+                                {
+                                    fragment.loadProfileView();
+                                }
                             }
                         });
                     }
