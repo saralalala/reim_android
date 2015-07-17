@@ -151,8 +151,8 @@ public class PickProxyActivity extends Activity
         noMemberTextView = (TextView) findViewById(R.id.noMemberTextView);
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
-        refreshLayout.setColorSchemeColors(ViewUtils.getColor(R.color.refresh_color_1),
-                                           ViewUtils.getColor(R.color.refresh_color_2));
+        refreshLayout.setColorSchemeColors(ViewUtils.getColor(R.color.major_dark),
+                                           ViewUtils.getColor(R.color.major_dark));
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
             public void onRefresh()

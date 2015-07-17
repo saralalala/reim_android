@@ -176,8 +176,8 @@ public class ManagerActivity extends Activity
         nicknameTextView = (TextView) findViewById(R.id.nicknameTextView);
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
-        refreshLayout.setColorSchemeColors(ViewUtils.getColor(R.color.refresh_color_1),
-                                           ViewUtils.getColor(R.color.refresh_color_2));
+        refreshLayout.setColorSchemeColors(ViewUtils.getColor(R.color.major_dark),
+                                           ViewUtils.getColor(R.color.major_dark));
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
             public void onRefresh()
