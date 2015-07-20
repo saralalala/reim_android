@@ -583,14 +583,12 @@ public class EditReportActivity extends Activity
             String vendor = item.getVendor().isEmpty() ? getString(R.string.vendor_not_available) : item.getVendor();
             vendorTextView.setText(vendor);
 
+            Category category = item.getCategory();
+            ViewUtils.setImageViewBitmap(category, categoryImageView);
+
             if (item.missingInfo() || idList.contains(item.getCategory().getServerID()))
             {
                 warningImageView.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                Category category = item.getCategory();
-                ViewUtils.setImageViewBitmap(category, categoryImageView);
             }
 
             itemLayout.addView(view);
