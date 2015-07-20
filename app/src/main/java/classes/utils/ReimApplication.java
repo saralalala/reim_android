@@ -133,6 +133,7 @@ public class ReimApplication extends Application
         setStatTabIndex(Constant.TAB_STATISTICS_MINE);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createDirectories()
     {
         try
@@ -195,6 +196,7 @@ public class ReimApplication extends Application
         iconList.add(R.drawable.icon_operating);
         iconList.add(R.drawable.icon_entertainment);
         iconList.add(R.drawable.icon_others);
+        iconList.add(R.drawable.icon_phone);
 
         for (int i = 0; i < iconList.size(); i++)
         {
