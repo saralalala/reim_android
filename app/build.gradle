@@ -59,10 +59,6 @@ android {
         Yingyongbao {
             manifestPlaceholders = [UMENG_CHANNEL:"Yingyongbao"]
         }
-
-        Wandoujia {
-            manifestPlaceholders = [UMENG_CHANNEL:"Wandoujia"]
-        }
     }
 }
 
