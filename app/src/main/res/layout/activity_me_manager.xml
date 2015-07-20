@@ -45,15 +45,35 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/noMemberTextView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/memberRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/no_member"
-        android:textColor="@color/hint_light_grey"
-        android:textSize="16sp"
-        android:visibility="gone"/>
+        android:visibility="gone">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/no_member"
+                    android:textColor="@color/hint_light_grey"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

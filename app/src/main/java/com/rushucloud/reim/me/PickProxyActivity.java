@@ -45,8 +45,8 @@ import netUtils.response.group.GetGroupResponse;
 public class PickProxyActivity extends Activity
 {
     // Widgets
+    private SwipeRefreshLayout memberRefreshLayout;
     private ClearEditText proxyEditText;
-    private TextView noMemberTextView;
     private SwipeRefreshLayout refreshLayout;
     private PinnedSectionListView proxyListView;
     private MemberListViewAdapter adapter;
@@ -148,7 +148,23 @@ public class PickProxyActivity extends Activity
             }
         });
 
-        noMemberTextView = (TextView) findViewById(R.id.noMemberTextView);
+        memberRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.memberRefreshLayout);
+        memberRefreshLayout.setColorSchemeResources(R.color.major_dark);
+        memberRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            public void onRefresh()
+            {
+                if (PhoneUtils.isNetworkConnected())
+                {
+                    sendGetGroupRequest();
+                }
+                else
+                {
+                    memberRefreshLayout.setRefreshing(false);
+                    ViewUtils.showToast(PickProxyActivity.this, R.string.error_get_data_network_unavailable);
+                }
+            }
+        });
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
         refreshLayout.setColorSchemeResources(R.color.major_dark);
@@ -176,11 +192,11 @@ public class PickProxyActivity extends Activity
     {
         if (userList.isEmpty())
         {
-            noMemberTextView.setVisibility(View.VISIBLE);
+            memberRefreshLayout.setVisibility(View.VISIBLE);
         }
         else
         {
-            noMemberTextView.setVisibility(View.GONE);
+            memberRefreshLayout.setVisibility(View.GONE);
 
             adapter = new MemberListViewAdapter(this, userList, chosenList);
             proxyListView.setAdapter(adapter);
@@ -287,6 +303,7 @@ public class PickProxyActivity extends Activity
                         public void run()
                         {
                             refreshLayout.setRefreshing(false);
+                            memberRefreshLayout.setRefreshing(false);
                             initData();
                             initListView();
                         }

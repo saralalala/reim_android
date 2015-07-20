@@ -47,7 +47,7 @@ import netUtils.response.user.DefaultManagerResponse;
 public class ManagerActivity extends Activity
 {
     // Widgets
-    private TextView noMemberTextView;
+    private SwipeRefreshLayout memberRefreshLayout;
     private ClearEditText managerEditText;
     private CircleImageView avatarImageView;
     private TextView nicknameTextView;
@@ -146,7 +146,23 @@ public class ManagerActivity extends Activity
             }
         });
 
-        noMemberTextView = (TextView) findViewById(R.id.noMemberTextView);
+        memberRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.memberRefreshLayout);
+        memberRefreshLayout.setColorSchemeResources(R.color.major_dark);
+        memberRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            public void onRefresh()
+            {
+                if (PhoneUtils.isNetworkConnected())
+                {
+                    sendGetGroupRequest();
+                }
+                else
+                {
+                    memberRefreshLayout.setRefreshing(false);
+                    ViewUtils.showToast(ManagerActivity.this, R.string.error_get_data_network_unavailable);
+                }
+            }
+        });
 
         managerEditText = (ClearEditText) findViewById(R.id.managerEditText);
         managerEditText.addTextChangedListener(new TextWatcher()
@@ -240,11 +256,11 @@ public class ManagerActivity extends Activity
     {
         if (userList.isEmpty())
         {
-            noMemberTextView.setVisibility(View.VISIBLE);
+            memberRefreshLayout.setVisibility(View.VISIBLE);
         }
         else
         {
-            noMemberTextView.setVisibility(View.GONE);
+            memberRefreshLayout.setVisibility(View.GONE);
 
             adapter = new MemberListViewAdapter(this, userList, chosenList);
             managerListView.setAdapter(adapter);
@@ -343,6 +359,7 @@ public class ManagerActivity extends Activity
                         public void run()
                         {
                             refreshLayout.setRefreshing(false);
+                            memberRefreshLayout.setRefreshing(false);
                             initData();
                             refreshManagerView();
                             initListView();
