@@ -41,6 +41,11 @@ public class DidiExpense implements Serializable
             setType(JSONUtils.optInt(jObject, "product_type", 0));
             setUsed(Utils.intToBoolean(jObject.getInteger("used")));
             setClosed(jObject.getString("hisstatus").equals("已关闭"));
+
+            if (jObject.getString("product").equals("TXc9PQ==") && type == TYPE_TAXI)
+            {
+                setType(TYPE_LIFT);
+            }
         }
         catch (JSONException e)
         {
