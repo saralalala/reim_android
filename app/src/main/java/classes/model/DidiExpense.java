@@ -13,10 +13,10 @@ public class DidiExpense implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    public static final int TYPE_TAXI = 0;
+    public static final int TYPE_TAXI = -1;
     public static final int TYPE_ZHUAN_CHE = 2;
     public static final int TYPE_KUAI_CHE = 4;
-    public static final int TYPE_LIFT = -1;
+    public static final int TYPE_LIFT = 0;
 
     private int id;
     private String orderID = "";
@@ -27,6 +27,7 @@ public class DidiExpense implements Serializable
     private String city = "";
     private int type = TYPE_TAXI;
     private boolean isUsed = false;
+    private boolean isClosed = false;
 
     public DidiExpense(JSONObject jObject)
     {
@@ -39,6 +40,7 @@ public class DidiExpense implements Serializable
             setDestination(jObject.getString("toAddress"));
             setType(JSONUtils.optInt(jObject, "product_type", 0));
             setUsed(Utils.intToBoolean(jObject.getInteger("used")));
+            setClosed(jObject.getString("hisstatus").equals("已关闭"));
         }
         catch (JSONException e)
         {
@@ -139,4 +141,12 @@ public class DidiExpense implements Serializable
         this.isUsed = isUsed;
     }
 
+    public boolean isClosed()
+    {
+        return isClosed;
+    }
+    public void setClosed(boolean isClosed)
+    {
+        this.isClosed = isClosed;
+    }
 }

@@ -20,6 +20,7 @@ public class DidiExpenseListViewAdapter extends BaseAdapter
 {
     private LayoutInflater layoutInflater;
     private List<DidiExpense> expenseList;
+    private ArrayList<Integer> importedList = new ArrayList<>();
 
     public DidiExpenseListViewAdapter(Context context, List<DidiExpense> expenses)
     {
@@ -39,7 +40,7 @@ public class DidiExpenseListViewAdapter extends BaseAdapter
         TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
         timeTextView.setText(expense.getTime());
 
-        int visibility = expense.isUsed() ? View.VISIBLE : View.INVISIBLE;
+        int visibility = expense.isUsed() || importedList.contains(expense.getId()) ? View.VISIBLE : View.INVISIBLE;
         TextView usedTextView = (TextView) convertView.findViewById(R.id.usedTextView);
         usedTextView.setVisibility(visibility);
 
@@ -74,5 +75,11 @@ public class DidiExpenseListViewAdapter extends BaseAdapter
     {
         expenseList.clear();
         expenseList.addAll(expenses);
+    }
+
+    public void setImportedList(ArrayList<Integer> imports)
+    {
+        importedList.clear();
+        importedList.addAll(imports);
     }
 }

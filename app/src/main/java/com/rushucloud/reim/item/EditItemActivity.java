@@ -142,6 +142,7 @@ public class EditItemActivity extends Activity
     private boolean fromEditReport;
     private boolean fromPickItems;
     private boolean fromApproveReport;
+    private boolean fromDidi;
     private boolean newItem = false;
 
     private LocationClient locationClient = null;
@@ -334,11 +335,6 @@ public class EditItemActivity extends Activity
                     {
                         hideSoftKeyboard();
 
-                        item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
-                        item.setConsumer(appPreference.getCurrentUser());
-                        item.setNote(noteEditText.getText().toString());
-                        item.setLocalUpdatedDate(Utils.getCurrentTime());
-
                         if(!fromApproveReport)
                         {
                             item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
@@ -410,6 +406,21 @@ public class EditItemActivity extends Activity
                                 Intent intent = new Intent();
                                 intent.putExtra("itemID", item.getLocalID());
                                 intent.putExtra("type", item.getType());
+                                ViewUtils.goBackWithResult(EditItemActivity.this, intent);
+                            }
+                            else if (fromDidi)
+                            {
+                                Item localItem = dbManager.getItemByLocalID(item.getLocalID());
+                                if (localItem != null)
+                                {
+                                    item.setServerID(localItem.getServerID());
+                                }
+                                dbManager.syncItem(item);
+                                ReimApplication.setTabIndex(Constant.TAB_REIM);
+                                ViewUtils.showToast(EditItemActivity.this, R.string.succeed_in_saving_item);
+
+                                Intent intent = new Intent(EditItemActivity.this, DidiExpenseActivity.class);
+                                intent.putExtra("didiID", item.getDidiID());
                                 ViewUtils.goBackWithResult(EditItemActivity.this, intent);
                             }
                             else
@@ -1557,6 +1568,7 @@ public class EditItemActivity extends Activity
         fromEditReport = intent.getBooleanExtra("fromEditReport", false);
         fromPickItems = intent.getBooleanExtra("fromPickItems", false);
         fromApproveReport = intent.getBooleanExtra("fromApproveReport", false);
+        fromDidi = intent.getBooleanExtra("fromDidi", false);
 
         int itemServerID = intent.getIntExtra("itemServerID", -1);
         int itemLocalID = intent.getIntExtra("itemLocalID", -1);
@@ -1579,7 +1591,7 @@ public class EditItemActivity extends Activity
             relevantUsers.add(appPreference.getCurrentUser());
             item.setRelevantUsers(relevantUsers);
 
-            if (intent.getBooleanExtra("fromDidi", false))
+            if (fromDidi)
             {
                 DidiExpense expense = (DidiExpense) intent.getSerializableExtra("expense");
                 item.setAmount(expense.getAmount());

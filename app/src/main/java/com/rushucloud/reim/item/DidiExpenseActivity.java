@@ -24,6 +24,7 @@ import classes.adapter.DidiExpenseListViewAdapter;
 import classes.model.DidiExpense;
 import classes.model.User;
 import classes.utils.AppPreference;
+import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.Utils;
@@ -55,9 +56,9 @@ public class DidiExpenseActivity extends Activity
 
     // Local Data
     private List<DidiExpense> expenseList = new ArrayList<>();
+    private ArrayList<Integer> importedList = new ArrayList<>();
     private String token = "";
     private boolean needToGetData = true;
-    private int pageIndex = 0;
 
     // View
     protected void onCreate(Bundle savedInstanceState)
@@ -100,6 +101,30 @@ public class DidiExpenseActivity extends Activity
             goBack();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == Activity.RESULT_OK)
+        {
+            switch (requestCode)
+            {
+                case Constant.ACTIVITY_IMPORT_DIDI:
+                {
+                    int id = data.getIntExtra("didiID", -1);
+                    if (id > 0 && !importedList.contains(id))
+                    {
+                        importedList.add(id);
+                    }
+                    adapter.setImportedList(importedList);
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void initView()
@@ -159,7 +184,7 @@ public class DidiExpenseActivity extends Activity
                     Intent intent = new Intent(DidiExpenseActivity.this, EditItemActivity.class);
                     intent.putExtra("fromDidi", true);
                     intent.putExtra("expense", expenseList.get(position - 1));
-                    ViewUtils.goForward(DidiExpenseActivity.this, intent);
+                    ViewUtils.goForwardForResult(DidiExpenseActivity.this, intent, Constant.ACTIVITY_IMPORT_DIDI);
                 }
             }
         });

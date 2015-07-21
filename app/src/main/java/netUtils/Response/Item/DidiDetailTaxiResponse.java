@@ -27,7 +27,7 @@ public class DidiDetailTaxiResponse
                 city = city.substring(0, index);
             }
         }
-        catch (JSONException e)
+        catch (Exception e)
         {
             e.printStackTrace();
             status = false;

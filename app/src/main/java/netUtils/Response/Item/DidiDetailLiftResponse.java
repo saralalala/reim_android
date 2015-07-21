@@ -23,7 +23,7 @@ public class DidiDetailLiftResponse
             latitude = orderObject.getDouble("from_lat");
             longitude = orderObject.getDouble("from_lng");
         }
-        catch (JSONException e)
+        catch (Exception e)
         {
             e.printStackTrace();
             status = false;

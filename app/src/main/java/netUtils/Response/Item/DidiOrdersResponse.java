@@ -2,7 +2,6 @@ package netUtils.response.item;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +27,11 @@ public class DidiOrdersResponse extends BaseResponse
             didiExpenseList = new ArrayList<>();
             for (int i = 0; i < jsonArray.size(); i++)
             {
-                JSONObject object = jsonArray.getJSONObject(i);
-                didiExpenseList.add(new DidiExpense(object));
+                DidiExpense expense = new DidiExpense(jsonArray.getJSONObject(i));
+                if (!expense.isClosed())
+                {
+                    didiExpenseList.add(expense);
+                }
             }
 
         }
