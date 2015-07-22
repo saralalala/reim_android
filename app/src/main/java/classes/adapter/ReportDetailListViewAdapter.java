@@ -166,23 +166,34 @@ public class ReportDetailListViewAdapter extends BaseAdapter
         {
             View view = layoutInflater.inflate(R.layout.list_report_item_show, parent, false);
 
+            TextView dateTextView = (TextView) view.findViewById(R.id.dateTextView);
+            ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
+            TextView categoryTextView = (TextView) view.findViewById(R.id.categoryTextView);
             TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
             TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+            TextView noteTextView = (TextView) view.findViewById(R.id.noteTextView);
             TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
-            ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
 
             Item item = itemList.get(position - 1);
+
+            dateTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));
+
+            Category category = item.getCategory();
+            ViewUtils.setImageViewBitmap(category, categoryImageView);
+
+            String categoryName = category != null ? category.getName() : "";
+            categoryTextView.setText(categoryName);
 
             symbolTextView.setText(item.getCurrency().getSymbol());
 
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
             amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
+            String note = !item.getNote().isEmpty() ? item.getNote() : "";
+            noteTextView.setText(note);
+
             String vendor = item.getVendor().isEmpty() ? activity.getString(R.string.vendor_not_available) : item.getVendor();
             vendorTextView.setText(vendor);
-
-            Category category = item.getCategory();
-            ViewUtils.setImageViewBitmap(category, categoryImageView);
 
             return view;
         }

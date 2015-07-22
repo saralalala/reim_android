@@ -2,17 +2,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="@drawable/list_item_drawable"
-    android:baselineAligned="false">
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:layout_marginLeft="16dp"
-        android:layout_gravity="center_vertical"
+        android:layout_marginRight="16dp">
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/hint_light_grey"
+            android:textSize="14sp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical|right"
+            android:layout_marginLeft="6dp">
+
+            <ImageView
+                android:id="@+id/categoryImageView"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="6dp"
+                android:contentDescription="@string/tag"
+                android:src="@drawable/default_icon"/>
+
+            <TextView
+                android:id="@+id/categoryTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/hint_light_grey"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="bottom"
-        android:baselineAligned="true">
+        android:baselineAligned="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
 
         <TextView
             android:id="@+id/symbolTextView"
@@ -24,45 +71,39 @@
 
         <TextView
             android:id="@+id/amountTextView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
+            android:text="200.11"
             android:textColor="@color/font_major_dark"
             android:textSize="22sp"/>
 
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+        <TextView
+            android:id="@+id/noteTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="asdjfasjkdfajlksfjlaksdfj"
+            android:textColor="@color/hint_light_grey"
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/vendorTextView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:ellipsize="end"
+            android:layout_weight="2"
             android:gravity="right"
+            android:ellipsize="end"
             android:singleLine="true"
+            android:text="sdfkl"
             android:textColor="@color/font_minor_dark"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
 
-        <ImageView
-            android:id="@+id/categoryImageView"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_below="@+id/vendorTextView"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="6dp"
-            android:contentDescription="@string/tag"
-            android:src="@drawable/default_icon"/>
-        
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

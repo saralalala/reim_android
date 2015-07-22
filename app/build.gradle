@@ -8,8 +8,8 @@ android {
         applicationId "com.rushucloud.reim"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 18
-        versionName "1.2.5"
+        versionCode 19
+        versionName "1.2.6"
     }
 
     signingConfigs {
