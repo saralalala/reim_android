@@ -57,6 +57,7 @@
         android:orientation="horizontal"
         android:gravity="bottom"
         android:baselineAligned="true"
+        android:layout_marginTop="3dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp">
 
