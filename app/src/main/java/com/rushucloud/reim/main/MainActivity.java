@@ -612,6 +612,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                                 ReportFragment fragment = (ReportFragment) fragmentList.get(Constant.TAB_REPORT);
                                 fragment.showBadge();
                             }
+
+                            if (response.needToRefreshOthersReport())
+                            {
+                                appPreference.setLastGetOthersReportTime(0);
+                                appPreference.saveAppPreference();
+                            }
                         }
                     });
                 }

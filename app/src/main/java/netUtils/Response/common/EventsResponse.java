@@ -20,6 +20,7 @@ public class EventsResponse extends BaseResponse
     private boolean hasUnreadMessages;
     private boolean hasUnreadReports;
     private boolean needToRefresh;
+    private boolean needToRefreshOthersReport;
     private String appliedCompany;
     private boolean currentUserActived;
 
@@ -41,6 +42,7 @@ public class EventsResponse extends BaseResponse
             JSONArray reportsArray = jObject.getJSONArray("reports");
             JSONArray membersArray = jObject.getJSONArray("members");
             JSONArray managersArray = jObject.getJSONArray("managers");
+            JSONArray membersReportArray = jObject.getJSONArray("member_report");
             JSONArray categoriesArray = jObject.getJSONArray("categories");
             JSONArray tagsArray = jObject.getJSONArray("tags");
             boolean categoriesChanged = categoriesArray != null && categoriesArray.size() > 0;
@@ -65,12 +67,16 @@ public class EventsResponse extends BaseResponse
                 }
             }
 
-            unreadMessagesCount = appliesArray.size() + invitesArray.size() + systemMessagesArray.size() + adminMessagesArray.size();
+            unreadMessagesCount = appliesArray.size() + invitesArray.size() +
+                                    systemMessagesArray.size() + adminMessagesArray.size();
             hasUnreadMessages = unreadMessagesCount > 0;
             hasUnreadReports = reportsArray.size() > 0;
 
             boolean groupChanged = jObject.getInteger("gid") != AppPreference.getAppPreference().getCurrentGroupID();
-            needToRefresh = groupChanged || (membersArray.size() + managersArray.size()) > 0 || categoriesChanged || tagsChanged;
+            needToRefresh = groupChanged || categoriesChanged || tagsChanged ||
+                            (membersReportArray.size() + membersArray.size() + managersArray.size()) > 0;
+
+            needToRefreshOthersReport = membersReportArray.size() > 0;
         }   
         catch (JSONException e)
         {
@@ -106,6 +112,11 @@ public class EventsResponse extends BaseResponse
     public boolean needToRefresh()
     {
         return needToRefresh;
+    }
+
+    public boolean needToRefreshOthersReport()
+    {
+        return needToRefreshOthersReport;
     }
 
     public String getAppliedCompany()
