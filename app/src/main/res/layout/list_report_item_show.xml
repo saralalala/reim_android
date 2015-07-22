@@ -75,7 +75,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="200.11"
             android:textColor="@color/font_major_dark"
             android:textSize="22sp"/>
 
@@ -88,7 +87,6 @@
             android:layout_marginRight="3dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="asdjfasjkdfajlksfjlaksdfj"
             android:textColor="@color/hint_light_grey"
             android:textSize="14sp"/>
 
@@ -100,7 +98,6 @@
             android:gravity="right"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="sdfkl"
             android:textColor="@color/font_minor_dark"
             android:textSize="18sp"/>
 
