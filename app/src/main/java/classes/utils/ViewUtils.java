@@ -68,6 +68,204 @@ public class ViewUtils
         return ReimApplication.getContext().getResources().getColorStateList(colorResID);
     }
 
+    public static int getCategoryColorR(int iconID)
+    {
+        switch (iconID)
+        {
+            case 0:
+                return 56;
+            case 1:
+                return 60;
+            case 2:
+                return 181;
+            case 3:
+                return 232;
+            case 4:
+                return 181;
+            case 5:
+                return 141;
+            case 6:
+                return 62;
+            case 7:
+                return 255;
+            case 8:
+                return 138;
+            case 9:
+                return 238;
+            case 10:
+                return 125;
+            case 11:
+                return 242;
+            default:
+                return 56;
+        }
+    }
+
+    public static int getCategoryColorG(int iconID)
+    {
+        switch (iconID)
+        {
+            case 0:
+                return 56;
+            case 1:
+                return 183;
+            case 2:
+                return 112;
+            case 3:
+                return 140;
+            case 4:
+                return 184;
+            case 5:
+                return 192;
+            case 6:
+                return 119;
+            case 7:
+                return 196;
+            case 8:
+                return 118;
+            case 9:
+                return 149;
+            case 10:
+                return 173;
+            case 11:
+                return 137;
+            default:
+                return 56;
+        }
+    }
+
+    public static int getCategoryColorB(int iconID)
+    {
+        switch (iconID)
+        {
+            case 0:
+                return 56;
+            case 1:
+                return 152;
+            case 2:
+                return 178;
+            case 3:
+                return 192;
+            case 4:
+                return 69;
+            case 5:
+                return 219;
+            case 6:
+                return 219;
+            case 7:
+                return 0;
+            case 8:
+                return 203;
+            case 9:
+                return 50;
+            case 10:
+                return 165;
+            case 11:
+                return 92;
+            default:
+                return 56;
+        }
+    }
+
+    public static int getCategoryColorRDiff(int iconID)
+    {
+        switch (iconID)
+        {
+            case 0:
+                return 169;
+            case 1:
+                return 137;
+            case 2:
+                return 52;
+            case 3:
+                return 16;
+            case 4:
+                return 52;
+            case 5:
+                return 80;
+            case 6:
+                return 135;
+            case 7:
+                return 0;
+            case 8:
+                return 82;
+            case 9:
+                return 12;
+            case 10:
+                return 91;
+            case 11:
+                return 10;
+            default:
+                return 169;
+        }
+    }
+
+    public static int getCategoryColorGDiff(int iconID)
+    {
+        switch (iconID)
+        {
+            case 0:
+                return 169;
+            case 1:
+                return 51;
+            case 2:
+                return 100;
+            case 3:
+                return 81;
+            case 4:
+                return 50;
+            case 5:
+                return 44;
+            case 6:
+                return 95;
+            case 7:
+                return 41;
+            case 8:
+                return 96;
+            case 9:
+                return 74;
+            case 10:
+                return 58;
+            case 11:
+                return 94;
+            default:
+                return 169;
+        }
+    }
+
+    public static int getCategoryColorBDiff(int iconID)
+    {
+        switch (iconID)
+        {
+            case 0:
+                return 169;
+            case 1:
+                return 72;
+            case 2:
+                return 54;
+            case 3:
+                return 45;
+            case 4:
+                return 131;
+            case 5:
+                return 25;
+            case 6:
+                return 25;
+            case 7:
+                return 179;
+            case 8:
+                return 37;
+            case 9:
+                return 144;
+            case 10:
+                return 63;
+            case 11:
+                return 130;
+            default:
+                return 169;
+        }
+    }
+
     public static String getString(int stringResID)
     {
         return ReimApplication.getContext().getResources().getString(stringResID);

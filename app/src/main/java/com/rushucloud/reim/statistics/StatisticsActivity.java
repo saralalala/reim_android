@@ -81,13 +81,6 @@ public class StatisticsActivity extends Activity
 
     // Local Data
     private DBManager dbManager;
-
-    private int colorR[] = {60, 181, 232, 181, 141, 62, 255, 138, 238, 125, 56};
-    private int colorG[] = {183, 112, 140, 184, 192, 119, 196, 118, 149, 173, 56};
-    private int colorB[] = {152, 178, 191, 69, 219, 219, 0, 203, 50, 165, 56};
-    private int colorRDiff[] = {137, 52, 16, 52, 80, 135, 0, 82, 12, 91, 169};
-    private int colorGDiff[] = {51, 100, 81, 50, 44, 95, 41, 96, 74, 58, 169};
-    private int colorBDiff[] = {72, 54, 45, 131, 25, 25, 179, 37, 144, 63, 169};
     private boolean mineData;
     private int year;
     private int month;
@@ -114,6 +107,7 @@ public class StatisticsActivity extends Activity
         super.onResume();
         MobclickAgent.onPageStart("StatisticsActivity");
         MobclickAgent.onResume(this);
+        ReimProgressDialog.setContext(this);
 
         if (PhoneUtils.isNetworkConnected() && needToGetData())
         {
@@ -587,26 +581,31 @@ public class StatisticsActivity extends Activity
             int count = 0;
             for (int i = 0; i < categoryArray.size(); i++)
             {
-                int key = categoryArray.keyAt(i);
-                int colorIndex = key - 1;
-                List<StatCategory> categories = categoryArray.get(key);
-                int rDiff = categories.size() == 1 ? colorRDiff[colorIndex] : colorRDiff[colorIndex] / (categories.size() - 1);
-                int gDiff = categories.size() == 1 ? colorGDiff[colorIndex] : colorGDiff[colorIndex] / (categories.size() - 1);
-                int bDiff = categories.size() == 1 ? colorBDiff[colorIndex] : colorBDiff[colorIndex] / (categories.size() - 1);
+                int iconID = categoryArray.keyAt(i);
+                List<StatCategory> categories = categoryArray.get(iconID);
+                int rDiff = categories.size() == 1 ? ViewUtils.getCategoryColorRDiff(iconID) :
+                                                    ViewUtils.getCategoryColorRDiff(iconID) / (categories.size() - 1);
+                int gDiff = categories.size() == 1 ? ViewUtils.getCategoryColorGDiff(iconID) :
+                                                    ViewUtils.getCategoryColorGDiff(iconID) / (categories.size() - 1);
+                int bDiff = categories.size() == 1 ? ViewUtils.getCategoryColorBDiff(iconID) :
+                                                    ViewUtils.getCategoryColorBDiff(iconID) / (categories.size() - 1);
                 for (int j = 0; j < categories.size(); j++)
                 {
                     StatCategory category = categories.get(j);
-                    if (key != Constant.DEFAULT_ICON_ID)
+                    if (iconID != Constant.DEFAULT_ICON_ID) // light to dark
                     {
-                        category.setColor(Color.rgb(colorR[colorIndex] + j * rDiff,
-                                                    colorG[colorIndex] + j * gDiff,
-                                                    colorB[colorIndex] + j * bDiff));
+                        category.setColor(Color.rgb(ViewUtils.getCategoryColorR(iconID) + j * rDiff,
+                                                    ViewUtils.getCategoryColorG(iconID) + j * gDiff,
+                                                    ViewUtils.getCategoryColorB(iconID) + j * bDiff));
                     }
-                    else
+                    else // dark to light
                     {
-                        category.setColor(Color.rgb(colorR[colorIndex] + colorRDiff[colorIndex] - j * rDiff,
-                                                    colorG[colorIndex] + colorGDiff[colorIndex] - j * gDiff,
-                                                    colorB[colorIndex] + colorBDiff[colorIndex] - j * bDiff));
+                        category.setColor(Color.rgb(ViewUtils.getCategoryColorR(iconID) +
+                                                            ViewUtils.getCategoryColorRDiff(iconID) - j * rDiff,
+                                                    ViewUtils.getCategoryColorG(iconID) +
+                                                            ViewUtils.getCategoryColorGDiff(iconID) - j * gDiff,
+                                                    ViewUtils.getCategoryColorB(iconID) +
+                                                            ViewUtils.getCategoryColorBDiff(iconID) - j * bDiff));
                     }
 
                     float angle = i == categoryArray.size() - 1 && j == categories.size() - 1 ?

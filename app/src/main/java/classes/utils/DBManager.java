@@ -27,7 +27,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     private DBManager(Context context)
     {
@@ -43,6 +43,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "server_id INT DEFAULT(0),"
                     + "group_name TEXT DEFAULT(''),"
                     + "group_domain TEXT DEFAULT(''),"
+                    + "close_directly INT DEFAULT(0),"
                     + "creator_id INT DEFAULT(0),"
                     + "server_updatedt INT DEFAULT(0),"
                     + "local_updatedt INT DEFAULT(0),"
@@ -400,6 +401,12 @@ public class DBManager extends SQLiteOpenHelper
                 String command = "ALTER TABLE tbl_user ADD COLUMN department TEXT DEFAULT('')";
                 db.execSQL(command);
             }
+
+            if (oldVersion < 10)
+            {
+                String command = "ALTER TABLE tbl_group ADD COLUMN close_directly INT DEFAULT(0)";
+                db.execSQL(command);
+            }
         }
         onCreate(db);
     }
@@ -465,9 +472,11 @@ public class DBManager extends SQLiteOpenHelper
     {
         try
         {
-            String sqlString = "INSERT INTO tbl_group (server_id, group_name, local_updatedt, server_updatedt) VALUES (" +
+            String sqlString = "INSERT INTO tbl_group (server_id, group_name, close_directly, " +
+                                "local_updatedt, server_updatedt) VALUES (" +
                     "'" + group.getServerID() + "'," +
                     "'" + sqliteEscape(group.getName()) + "'," +
+                    "'" + Utils.booleanToInt(group.reportCanBeClosedDirectly()) + "'," +
                     "'" + group.getLocalUpdatedDate() + "'," +
                     "'" + group.getServerUpdatedDate() + "')";
             database.execSQL(sqlString);
@@ -501,6 +510,7 @@ public class DBManager extends SQLiteOpenHelper
         {
             String sqlString = "UPDATE tbl_group SET " +
                     "group_name = '" + sqliteEscape(group.getName()) + "'," +
+                    "close_directly = '" + Utils.booleanToInt(group.reportCanBeClosedDirectly()) + "'," +
                     "local_updatedt = '" + group.getLocalUpdatedDate() + "'," +
                     "server_updatedt = '" + group.getServerUpdatedDate() + "' " +
                     "WHERE server_id = '" + group.getServerID() + "'";
@@ -517,8 +527,7 @@ public class DBManager extends SQLiteOpenHelper
 
     public Group getGroup(int groupServerID)
     {
-        Cursor cursor = database.rawQuery("SELECT server_id, group_name, local_updatedt, server_updatedt" +
-                                                  " FROM tbl_group WHERE server_id = ?",
+        Cursor cursor = database.rawQuery("SELECT * FROM tbl_group WHERE server_id = ?",
                                           new String[]{Integer.toString(groupServerID)});
         return getGroupFromCursorWithClose(cursor);
     }
@@ -3127,6 +3136,7 @@ public class DBManager extends SQLiteOpenHelper
         Group group = new Group();
         group.setServerID(getIntFromCursor(cursor, "server_id"));
         group.setName(getStringFromCursor(cursor, "group_name"));
+        group.setReportCanBeClosedDirectly(getBooleanFromCursor(cursor, "close_directly"));
         group.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
         group.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 

@@ -30,6 +30,7 @@ import java.util.List;
 
 import classes.adapter.ReportDetailListViewAdapter;
 import classes.model.Comment;
+import classes.model.Group;
 import classes.model.Item;
 import classes.model.Report;
 import classes.model.User;
@@ -511,7 +512,13 @@ public class ApproveReportActivity extends Activity
                         ReimProgressDialog.dismiss();
                         if (response.getStatus())
                         {
-                            if (response.isReportCanBeFinished())
+                            Group group = appPreference.getCurrentGroup();
+                            if (response.isReportCanBeFinished() && group.reportCanBeClosedDirectly())
+                            {
+                                report.setMyDecision(Report.STATUS_APPROVED);
+                                sendApproveReportRequest();
+                            }
+                            else if (response.isReportCanBeFinished())
                             {
                                 Builder builder = new Builder(ApproveReportActivity.this);
                                 builder.setTitle(R.string.tip);
