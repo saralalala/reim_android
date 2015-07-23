@@ -58,7 +58,7 @@ import netUtils.response.common.EventsResponse;
 import netUtils.response.report.DeleteReportResponse;
 import netUtils.response.report.SubordinatesReportResponse;
 
-public class ReportFragment extends Fragment implements OnClickListener
+public class ReportFragment extends Fragment
 {
     // Widgets
     private View view;
@@ -170,12 +170,24 @@ public class ReportFragment extends Fragment implements OnClickListener
     private void initTitleView()
     {
         myTitleTextView = (TextView) getActivity().findViewById(R.id.myTitleTextView);
-        myTitleTextView.setOnClickListener(this);
+        myTitleTextView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                setListView(Constant.TAB_REPORT_MINE, false);
+            }
+        });
 
         myBadgeTextView = (TextView) view.findViewById(R.id.myBadgeTextView);
 
         othersTitleTextView = (TextView) getActivity().findViewById(R.id.othersTitleTextView);
-        othersTitleTextView.setOnClickListener(this);
+        othersTitleTextView.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                setListView(Constant.TAB_REPORT_OTHERS, false);
+            }
+        });
 
         othersBadgeTextView = (TextView) view.findViewById(R.id.othersBadgeTextView);
 
@@ -1004,18 +1016,6 @@ public class ReportFragment extends Fragment implements OnClickListener
             filterImageView.setImageResource(filterImage);
         }
         showBadge();
-    }
-
-    public void onClick(View v)
-    {
-        if (v.equals(myTitleTextView))
-        {
-            setListView(0, false);
-        }
-        else
-        {
-            setListView(1, false);
-        }
     }
 
     // Data
