@@ -1,12 +1,13 @@
 package classes.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 public class Group
 {
     private int serverID = -1;
     private String name = "";
+    private boolean reportCanBeClosedDirectly = false;
     private int createdDate = -1;
     private int serverUpdatedDate = -1;
     private int localUpdatedDate = -1;
@@ -20,25 +21,20 @@ public class Group
     {
         try
         {
-            setServerID(jObject.getInt("groupid"));
-            setName(jObject.getString("group_name"));
-            setLocalUpdatedDate(jObject.getInt("lastdt"));
-            setServerUpdatedDate(jObject.getInt("lastdt"));
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public Group(com.alibaba.fastjson.JSONObject jObject)
-    {
-        try
-        {
             setServerID(jObject.getInteger("groupid"));
             setName(jObject.getString("group_name"));
             setLocalUpdatedDate(jObject.getInteger("lastdt"));
             setServerUpdatedDate(jObject.getInteger("lastdt"));
+
+            String config = jObject.getString("config");
+            if (!config.isEmpty())
+            {
+                JSONObject object = JSON.parseObject(config);
+                if (object.containsKey("close_directly") && object.getInteger("close_directly") == 1)
+                {
+                    setReportCanBeClosedDirectly(true);
+                }
+            }
         }
         catch (com.alibaba.fastjson.JSONException e)
         {
@@ -62,6 +58,15 @@ public class Group
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public boolean reportCanBeClosedDirectly()
+    {
+        return reportCanBeClosedDirectly;
+    }
+    public void setReportCanBeClosedDirectly(boolean reportCanBeClosedDirectly)
+    {
+        this.reportCanBeClosedDirectly = reportCanBeClosedDirectly;
     }
 
     public int getCreatedDate()

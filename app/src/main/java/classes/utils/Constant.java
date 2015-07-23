@@ -4,7 +4,7 @@ public class Constant
 {
     public static final int GET_DATA_INTERVAL = 600;
 
-    public static final int DEFAULT_ICON_ID = 11;
+    public static final int DEFAULT_ICON_ID = 0;
 
     public static final int ACTIVITY_INPUT_CONTACT = 0;
     public static final int ACTIVITY_INPUT_LOCATION = 1;

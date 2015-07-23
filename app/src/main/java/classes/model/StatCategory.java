@@ -73,7 +73,7 @@ public class StatCategory
     }
     public String getIconPath()
     {
-        return iconID == -1 || iconID == 0 ? "" : PhoneUtils.getIconFilePath(iconID);
+        return iconID <= 0 ? "" : PhoneUtils.getIconFilePath(iconID);
     }
 
     public String getName()
