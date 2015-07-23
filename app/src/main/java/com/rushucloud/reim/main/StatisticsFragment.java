@@ -415,11 +415,13 @@ public class StatisticsFragment extends Fragment
         {
             mainAmountTextView.setText(Utils.formatDouble(totalAmount / 10000));
             mineUnitTextView.setText(R.string.ten_thousand);
+            mineUnitTextView.setVisibility(View.VISIBLE);
         }
         else
         {
             mainAmountTextView.setText(Utils.formatDouble(totalAmount / 100000000));
             mineUnitTextView.setText(R.string.one_hundred_million);
+            mineUnitTextView.setVisibility(View.VISIBLE);
         }
         ongoingPercentTextView.setText(Utils.formatDouble(ongoingRatio) + getString(R.string.percent));
         newPercentTextView.setText(Utils.formatDouble(newRatio) + getString(R.string.percent));
