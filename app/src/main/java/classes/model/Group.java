@@ -8,6 +8,10 @@ public class Group
     private int serverID = -1;
     private String name = "";
     private boolean reportCanBeClosedDirectly = false;
+    private boolean showStructure = true;
+    private boolean noAutoTime = false;
+    private boolean isTimeCompulsory = false;
+    private boolean isNoteCompulsory = false;
     private int createdDate = -1;
     private int serverUpdatedDate = -1;
     private int localUpdatedDate = -1;
@@ -33,6 +37,26 @@ public class Group
                 if (object.containsKey("close_directly") && object.getInteger("close_directly") == 1)
                 {
                     setReportCanBeClosedDirectly(true);
+                }
+
+                if (object.containsKey("private_structure") && object.getInteger("private_structure") == 1)
+                {
+                    setShowStructure(false);
+                }
+
+                if (object.containsKey("not_auto_time") && object.getInteger("not_auto_time") == 1)
+                {
+                    setNoAutoTime(true);
+                }
+
+                if (object.containsKey("not_auto_time") && object.getInteger("not_auto_time") == 1)
+                {
+                    setIsTimeCompulsory(true);
+                }
+
+                if (object.containsKey("note_compulsory") && object.getInteger("note_compulsory") == 1)
+                {
+                    setIsNoteCompulsory(true);
                 }
             }
         }
@@ -67,6 +91,42 @@ public class Group
     public void setReportCanBeClosedDirectly(boolean reportCanBeClosedDirectly)
     {
         this.reportCanBeClosedDirectly = reportCanBeClosedDirectly;
+    }
+
+    public boolean showStructure()
+    {
+        return showStructure;
+    }
+    public void setShowStructure(boolean showStructure)
+    {
+        this.showStructure = showStructure;
+    }
+
+    public boolean noAutoTime()
+    {
+        return noAutoTime;
+    }
+    public void setNoAutoTime(boolean noAutoTime)
+    {
+        this.noAutoTime = noAutoTime;
+    }
+
+    public boolean isTimeCompulsory()
+    {
+        return isTimeCompulsory;
+    }
+    public void setIsTimeCompulsory(boolean isTimeCompulsory)
+    {
+        this.isTimeCompulsory = isTimeCompulsory;
+    }
+
+    public boolean isNoteCompulsory()
+    {
+        return isNoteCompulsory;
+    }
+    public void setIsNoteCompulsory(boolean isNoteCompulsory)
+    {
+        this.isNoteCompulsory = isNoteCompulsory;
     }
 
     public int getCreatedDate()

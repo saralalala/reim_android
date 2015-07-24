@@ -55,6 +55,7 @@ public class MeFragment extends Fragment
     private ImageView tipImageView;
     private TextView managerTextView;
     private View adminDivider;
+    private RelativeLayout defaultManagerLayout;
     private RelativeLayout categoryLayout;
     private RelativeLayout tagLayout;
     private PopupWindow sharePopupWindow;
@@ -175,7 +176,7 @@ public class MeFragment extends Fragment
         // init manager
         managerTextView = (TextView) view.findViewById(R.id.managerTextView);
 
-        RelativeLayout defaultManagerLayout = (RelativeLayout) view.findViewById(R.id.defaultManagerLayout);
+        defaultManagerLayout = (RelativeLayout) view.findViewById(R.id.defaultManagerLayout);
         defaultManagerLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -335,14 +336,23 @@ public class MeFragment extends Fragment
                 companyTextView.setText(R.string.no_company);
             }
 
-            User manager = currentUser.getDefaultManager();
-            if (manager != null)
+            if (currentGroup != null && !currentGroup.showStructure())
             {
-                managerTextView.setText(manager.getNickname());
+                defaultManagerLayout.setVisibility(View.GONE);
             }
             else
             {
-                managerTextView.setText("");
+                defaultManagerLayout.setVisibility(View.VISIBLE);
+
+                User manager = currentUser.getDefaultManager();
+                if (manager != null)
+                {
+                    managerTextView.setText(manager.getNickname());
+                }
+                else
+                {
+                    managerTextView.setText("");
+                }
             }
 
             List<SetOfBook> setOfBookList = dbManager.getUserSetOfBooks(appPreference.getCurrentUserID());
