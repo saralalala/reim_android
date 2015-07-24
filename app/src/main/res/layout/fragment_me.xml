@@ -233,7 +233,7 @@
             <RelativeLayout
                 android:id="@+id/defaultManagerLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/layout_height"
+                android:layout_height="@dimen/layout_with_one_divider_height"
                 android:background="@drawable/me_item_drawable">
 
                 <TextView
@@ -270,12 +270,13 @@
                     android:contentDescription="@string/next"
                     android:src="@drawable/next"/>
 
-            </RelativeLayout>
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    layout="@layout/view_divider"/>
 
-            <include
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                layout="@layout/view_divider"/>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/invoiceTextView"

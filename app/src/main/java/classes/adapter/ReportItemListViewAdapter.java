@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.model.Category;
+import classes.model.Group;
 import classes.model.Item;
+import classes.utils.AppPreference;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
@@ -23,7 +25,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
 {
     private Context context;
     private LayoutInflater layoutInflater;
-
+    private Group currentGroup;
     private List<Item> itemList;
     private List<Integer> chosenIDList;
 
@@ -31,6 +33,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
     {
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
+        this.currentGroup = AppPreference.getAppPreference().getCurrentGroup();
         this.itemList = new ArrayList<>(items);
         this.chosenIDList = new ArrayList<>(chosenList);
     }
@@ -64,7 +67,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
             String vendor = item.getVendor().isEmpty() ? context.getString(R.string.vendor_not_available) : item.getVendor();
             vendorTextView.setText(vendor);
 
-            if (item.missingInfo())
+            if (item.missingInfo(currentGroup))
             {
                 warningImageView.setVisibility(View.VISIBLE);
             }
