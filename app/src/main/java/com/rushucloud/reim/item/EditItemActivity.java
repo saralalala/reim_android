@@ -58,6 +58,7 @@ import java.util.List;
 import classes.model.Category;
 import classes.model.Currency;
 import classes.model.DidiExpense;
+import classes.model.Group;
 import classes.model.Image;
 import classes.model.Item;
 import classes.model.Report;
@@ -130,6 +131,7 @@ public class EditItemActivity extends Activity
     private List<ImageView> removeList = null;
     boolean removeImageViewShown = false;
 
+    private Group currentGroup;
     private List<Currency> currencyList = new ArrayList<>();
     private List<Category> categoryList = new ArrayList<>();
     private List<Tag> tagList = new ArrayList<>();
@@ -328,7 +330,15 @@ public class EditItemActivity extends Activity
             {
                 MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_SAVE");
 
-                if (appPreference.hasProxyEditPermission())
+                if (item.getConsumedDate() == -1)
+                {
+                    ViewUtils.showToast(EditItemActivity.this, R.string.choose_consumed_date);
+                }
+                else if (!appPreference.hasProxyEditPermission())
+                {
+                    ViewUtils.showToast(EditItemActivity.this, R.string.error_modify_item_no_permission);
+                }
+                else
                 {
                     try
                     {
@@ -448,10 +458,6 @@ public class EditItemActivity extends Activity
                     {
                         e.printStackTrace();
                     }
-                }
-                else
-                {
-                    ViewUtils.showToast(EditItemActivity.this, R.string.error_modify_item_no_permission);
                 }
             }
         });
@@ -730,7 +736,6 @@ public class EditItemActivity extends Activity
     private void initTimeView()
     {
         // init time
-        int time = item.getConsumedDate() > 0 ? item.getConsumedDate() : Utils.getCurrentTime();
         timeTextView = (TextView) findViewById(R.id.timeTextView);
         timeTextView.setOnClickListener(new View.OnClickListener()
         {
@@ -740,7 +745,7 @@ public class EditItemActivity extends Activity
                 showTimeWindow();
             }
         });
-        timeTextView.setText(Utils.secondToStringUpToMinute(time));
+        timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
 
         // init time window
         View timeView = View.inflate(this, R.layout.window_reim_time, null);
@@ -1047,6 +1052,11 @@ public class EditItemActivity extends Activity
                 }
             }
         });
+
+        if (fromEditReport && currentGroup != null && currentGroup.isNoteCompulsory())
+        {
+            noteEditText.setHintTextColor(ViewUtils.getColor(R.color.major_dark));
+        }
     }
 
     private void refreshInvoiceView()
@@ -1548,6 +1558,7 @@ public class EditItemActivity extends Activity
         dbManager = DBManager.getDBManager();
         locationClient = new LocationClient(getApplicationContext());
 
+        currentGroup = appPreference.getCurrentGroup();
         currencyList.addAll(dbManager.getCurrencyList());
         categoryList.addAll(dbManager.getUserCategories(appPreference.getCurrentUserID(), appPreference.getCurrentGroupID()));
         tagList.addAll(dbManager.getGroupTags(appPreference.getCurrentGroupID()));
@@ -1565,16 +1576,27 @@ public class EditItemActivity extends Activity
             newItem = true;
             MobclickAgent.onEvent(this, "UMENG_NEW_ITEM");
             item = new Item();
+
+            // init category
             if (!categoryList.isEmpty())
             {
                 item.setCategory(categoryList.get(0));
             }
-            item.setConsumedDate(Utils.getCurrentTime());
+
+            // init consumed date
+            if (currentGroup == null || !currentGroup.noAutoTime())
+            {
+                item.setConsumedDate(Utils.getCurrentTime());
+            }
+
+            // init invoices
             item.setInvoices(new ArrayList<Image>());
             if (fromPickItems)
             {
                 item.setType(intent.getIntExtra("type", 0));
             }
+
+            // init relevant users
             List<User> relevantUsers = new ArrayList<>();
             relevantUsers.add(appPreference.getCurrentUser());
             item.setRelevantUsers(relevantUsers);
@@ -1602,6 +1624,7 @@ public class EditItemActivity extends Activity
         }
         else if(itemLocalID != -1 && itemServerID == -1)
         {
+            // read from database
             newItem = false;
             MobclickAgent.onEvent(this, "UMENG_EDIT_ITEM");
             item = dbManager.getItemByLocalID(itemLocalID);
@@ -1617,6 +1640,7 @@ public class EditItemActivity extends Activity
         }
         else
         {
+            // read from database
             newItem = false;
             item = dbManager.getOthersItem(itemServerID);
             if (item == null)

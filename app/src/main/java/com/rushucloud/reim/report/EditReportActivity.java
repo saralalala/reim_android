@@ -32,6 +32,7 @@ import java.util.List;
 
 import classes.model.Category;
 import classes.model.Comment;
+import classes.model.Group;
 import classes.model.Image;
 import classes.model.Item;
 import classes.model.Report;
@@ -89,6 +90,7 @@ public class EditReportActivity extends Activity
     private List<Item> itemList = new ArrayList<>();
     private ArrayList<Integer> chosenItemIDList = new ArrayList<>();
 
+    private Group currentGroup;
     private User currentUser;
 
     private int itemIndex;
@@ -432,7 +434,7 @@ public class EditReportActivity extends Activity
 
                     for (Item item : itemList)
                     {
-                        if (item.missingInfo())
+                        if (item.missingInfo(currentGroup))
                         {
                             ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_miss_info);
                             return;
@@ -586,7 +588,7 @@ public class EditReportActivity extends Activity
             Category category = item.getCategory();
             ViewUtils.setImageViewBitmap(category, categoryImageView);
 
-            if (item.missingInfo() || idList.contains(item.getCategory().getServerID()))
+            if (item.missingInfo(currentGroup) || idList.contains(item.getCategory().getServerID()))
             {
                 warningImageView.setVisibility(View.VISIBLE);
             }
@@ -694,6 +696,7 @@ public class EditReportActivity extends Activity
         appPreference = AppPreference.getAppPreference();
         dbManager = DBManager.getDBManager();
 
+        currentGroup = appPreference.getCurrentGroup();
         currentUser = appPreference.getCurrentUser();
 
         Bundle bundle = getIntent().getExtras();

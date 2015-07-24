@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.JSONUtils;
 import classes.utils.Utils;
@@ -471,9 +472,11 @@ public class Item
         }
     }
 
-    public boolean missingInfo()
+    public boolean missingInfo(Group group)
     {
-        return getCategory() == null || amount == 0;
+        boolean lackOfTime = group != null && group.isTimeCompulsory() && getConsumedDate() == -1;
+        boolean lackOfNote = group != null && group.isNoteCompulsory() && getNote().isEmpty();
+        return getCategory() == null || amount == 0 || lackOfTime || lackOfNote;
     }
 
     public boolean needToSync()

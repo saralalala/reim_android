@@ -8,8 +8,8 @@ android {
         applicationId "com.rushucloud.reim"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 20
-        versionName "1.2.7"
+        versionCode 21
+        versionName "1.2.8"
     }
 
     signingConfigs {
@@ -63,7 +63,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.android.support:appcompat-v7:22.2.1'
     compile files('libs/commons-codec-1.9.jar') // Apache
     compile files('libs/httpcore-4.3.2.jar') // HTTP core
     compile files('libs/httpmime-4.3.5.jar') // HTTP mime
