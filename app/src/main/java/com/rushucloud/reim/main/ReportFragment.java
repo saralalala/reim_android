@@ -721,7 +721,8 @@ public class ReportFragment extends Fragment implements OnClickListener
                 exportButton.setTextColor(ViewUtils.getColorStateList(R.color.button_text_dark_color));
             }
 
-            if (report.getStatus() == Report.STATUS_SUBMITTED || report.getStatus() == Report.STATUS_APPROVED)
+            if (report.getStatus() == Report.STATUS_SUBMITTED || report.getStatus() == Report.STATUS_APPROVED ||
+                    report.isFinished())
             {
                 deleteButton.setEnabled(false);
                 deleteButton.setBackgroundResource(R.drawable.window_button_pressed);
