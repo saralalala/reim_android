@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import classes.utils.AppPreference;
 import classes.utils.DBManager;
 import classes.utils.JSONUtils;
 import classes.utils.Utils;

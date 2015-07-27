@@ -331,13 +331,18 @@ public class EditItemActivity extends Activity
             {
                 MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_SAVE");
 
-                if (item.getConsumedDate() == -1)
+                String note = noteEditText.getText().toString();
+                if (!appPreference.hasProxyEditPermission())
+                {
+                    ViewUtils.showToast(EditItemActivity.this, R.string.error_modify_item_no_permission);
+                }
+                else if (item.getConsumedDate() == -1)
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.choose_consumed_date);
                 }
-                else if (!appPreference.hasProxyEditPermission())
+                else if (currentGroup != null && currentGroup.isNoteCompulsory() && note.isEmpty())
                 {
-                    ViewUtils.showToast(EditItemActivity.this, R.string.error_modify_item_no_permission);
+                    ViewUtils.showToast(EditItemActivity.this, R.string.input_note);
                 }
                 else
                 {
@@ -349,7 +354,7 @@ public class EditItemActivity extends Activity
                         {
                             item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
                             item.setConsumer(appPreference.getCurrentUser());
-                            item.setNote(noteEditText.getText().toString());
+                            item.setNote(note);
                             item.setLocalUpdatedDate(Utils.getCurrentTime());
 
                             if (newItem)
@@ -1064,7 +1069,7 @@ public class EditItemActivity extends Activity
             }
         });
 
-        if (fromEditReport && currentGroup != null && currentGroup.isNoteCompulsory())
+        if (currentGroup != null && currentGroup.isNoteCompulsory())
         {
             noteEditText.setHintTextColor(ViewUtils.getColor(R.color.major_dark));
         }
