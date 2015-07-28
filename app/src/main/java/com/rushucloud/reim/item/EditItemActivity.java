@@ -1111,7 +1111,7 @@ public class EditItemActivity extends Activity
             }
 
             final int index = i;
-            final Bitmap bitmap = item.getInvoices().get(index).getBitmap();
+            final Bitmap bitmap = item.getInvoices().get(index).getThumbnail();
 
             View view = View.inflate(this, R.layout.grid_invoice, null);
 

@@ -275,7 +275,7 @@ public class ShowItemActivity extends Activity
                 invoiceLayout.addView(layout);
             }
 
-            final Bitmap bitmap = item.getInvoices().get(i).getBitmap();
+            final Bitmap bitmap = item.getInvoices().get(i).getThumbnail();
 
             final int index = i;
             ImageView invoiceImageView = new ImageView(this);

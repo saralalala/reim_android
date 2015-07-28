@@ -103,7 +103,7 @@ public class Image
         return Utils.intListToString(imagesIDs);
     }
 
-    public Bitmap getBitmap()
+    public Bitmap getThumbnail()
     {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;
@@ -118,7 +118,7 @@ public class Image
 
     public boolean isNotDownloaded()
     {
-        return getLocalPath().isEmpty() || getBitmap() == null;
+        return getLocalPath().isEmpty() || getThumbnail() == null;
     }
 
     public boolean isNotUploaded()
