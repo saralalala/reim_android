@@ -8,8 +8,8 @@ android {
         applicationId "com.rushucloud.reim"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 21
-        versionName "1.2.8"
+        versionCode 22
+        versionName "1.2.9"
     }
 
     signingConfigs {
@@ -58,6 +58,14 @@ android {
 
         Yingyongbao {
             manifestPlaceholders = [UMENG_CHANNEL:"Yingyongbao"]
+        }
+
+        Wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL:"Wandoujia"]
+        }
+
+        Baidu {
+            manifestPlaceholders = [UMENG_CHANNEL:"Baidu"]
         }
     }
 }
