@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -19,6 +20,7 @@ import java.util.TreeMap;
 
 import classes.model.User;
 import classes.utils.CharacterParser;
+import classes.utils.Constant;
 import classes.utils.ViewUtils;
 import classes.widget.CircleImageView;
 import classes.widget.PinnedSectionListView;
@@ -49,43 +51,67 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
 
         if (indexList.contains(position))
         {
-            View view = layoutInflater.inflate(R.layout.list_header, parent, false);
-            TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
-            headerTextView.setText(user.getNickname());
-            return view;
-        }
-        else
-        {
-            View view = layoutInflater.inflate(R.layout.list_member, parent, false);
+            HeaderViewHolder headerViewHolder;
 
-            boolean isChosen = chosenList.contains(user);
-
-            int color = isChosen ? R.color.list_item_pressed : R.color.list_item_unpressed;
-            view.setBackgroundResource(color);
-
-            CircleImageView imageView = (CircleImageView) view.findViewById(R.id.avatarImageView);
-            TextView nicknameTextView = (TextView) view.findViewById(R.id.nicknameTextView);
-            TextView departmentTextView = (TextView) view.findViewById(R.id.departmentTextView);
-
-            ViewUtils.setImageViewBitmap(user, imageView);
-
-            if (user.getNickname().isEmpty())
+            if(convertView == null)
             {
-                nicknameTextView.setText(R.string.not_available);
+                convertView= layoutInflater.inflate(R.layout.list_header, parent, false);
+
+                headerViewHolder = new HeaderViewHolder();
+                headerViewHolder.headerTextView = (TextView) convertView.findViewById(R.id.headerTextView);
+
+                convertView.setTag(headerViewHolder);
             }
             else
             {
-                nicknameTextView.setText(user.getNickname());
+                headerViewHolder = (HeaderViewHolder) convertView.getTag();
+            }
+
+            headerViewHolder.headerTextView.setText(user.getNickname());
+        }
+        else
+        {
+            MemberViewHolder memberViewHolder;
+            if(convertView == null)
+            {
+                convertView = layoutInflater.inflate(R.layout.list_member, parent, false);
+
+                memberViewHolder = new MemberViewHolder();
+                memberViewHolder.imageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
+                memberViewHolder.nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
+                memberViewHolder.departmentTextView = (TextView) convertView.findViewById(R.id.departmentTextView);
+
+                convertView.setTag(memberViewHolder);
+            }
+            else
+            {
+                memberViewHolder = (MemberViewHolder) convertView.getTag();
+            }
+
+            boolean isChosen = chosenList.contains(user);
+            int color = isChosen ? R.color.list_item_pressed : R.color.list_item_unpressed;
+            convertView.setBackgroundResource(color);
+
+            ViewUtils.setImageViewBitmap(user, memberViewHolder.imageView);
+
+            if (user.getNickname().isEmpty())
+            {
+                memberViewHolder.nicknameTextView.setText(R.string.not_available);
+            }
+            else
+            {
+                memberViewHolder.nicknameTextView.setText(user.getNickname());
             }
 
             int visibility = user.getDepartment().isEmpty() ? View.GONE : View.VISIBLE;
-            departmentTextView.setVisibility(visibility);
-            departmentTextView.setText(user.getDepartment());
+            memberViewHolder.departmentTextView.setVisibility(visibility);
+            memberViewHolder.departmentTextView.setText(user.getDepartment());
 
             color = isChosen ? selectedColor : unselectedColor;
-            nicknameTextView.setTextColor(color);
-            return view;
+            memberViewHolder.nicknameTextView.setTextColor(color);
+
         }
+        return convertView;
     }
 
     public int getCount()
@@ -101,6 +127,21 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
     public long getItemId(int position)
     {
         return position;
+    }
+
+    public int getViewTypeCount()
+    {
+        return 2;
+    }
+
+    public int getItemViewType(int position)
+    {
+        return indexList.contains(position) ? Constant.TYPE_HEADER : Constant.TYPE_CONTENT;
+    }
+
+    public boolean isItemViewTypePinned(int viewType)
+    {
+        return viewType == 1;
     }
 
     private void initData()
@@ -208,18 +249,15 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
         return selector;
     }
 
-    public int getViewTypeCount()
+    static class HeaderViewHolder
     {
-        return 2;
+        TextView headerTextView;
     }
 
-    public int getItemViewType(int position)
+    static class MemberViewHolder
     {
-        return indexList.contains(position) ? 1 : 0;
-    }
-
-    public boolean isItemViewTypePinned(int viewType)
-    {
-        return viewType == 1;
+        CircleImageView imageView;
+        TextView nicknameTextView;
+        TextView departmentTextView;
     }
 }

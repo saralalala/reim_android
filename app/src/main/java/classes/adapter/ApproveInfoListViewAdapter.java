@@ -51,81 +51,90 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_approve_info, parent, false);
+            viewHolder = new ViewHolder();
+
+            viewHolder.pointImageView = (CircleImageView) convertView.findViewById(R.id.pointImageView);
+            viewHolder.upperLayout = (LinearLayout) convertView.findViewById(R.id.upperLayout);
+            viewHolder.lowerLayout = (LinearLayout) convertView.findViewById(R.id.lowerLayout);
+
+            viewHolder.avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
+            viewHolder.nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
+            viewHolder.statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
+            viewHolder.timeLayout = (LinearLayout) convertView.findViewById(R.id.timeLayout);
+            viewHolder.alarmImageView = (ImageView) convertView.findViewById(R.id.alarmImageView);
+            viewHolder.divider = (LinearLayout) convertView.findViewById(R.id.divider);
+
+            convertView.setTag(viewHolder);
         }
-
-        CircleImageView pointImageView = (CircleImageView) convertView.findViewById(R.id.pointImageView);
-        LinearLayout upperLayout = (LinearLayout) convertView.findViewById(R.id.upperLayout);
-        LinearLayout lowerLayout = (LinearLayout) convertView.findViewById(R.id.lowerLayout);
-
-        CircleImageView avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
-        TextView nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
-        TextView statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
-        LinearLayout timeLayout = (LinearLayout) convertView.findViewById(R.id.timeLayout);
-        ImageView alarmImageView = (ImageView) convertView.findViewById(R.id.alarmImageView);
-        LinearLayout divider = (LinearLayout) convertView.findViewById(R.id.divider);
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
 
         ApproveInfo info = getItem(position);
 
         // set point and line
         if (position == 0)
         {
-            pointImageView.setVisibility(View.VISIBLE);
-            upperLayout.setVisibility(View.GONE);
-            lowerLayout.setVisibility(View.VISIBLE);
+            viewHolder.pointImageView.setVisibility(View.VISIBLE);
+            viewHolder.upperLayout.setVisibility(View.GONE);
+            viewHolder.lowerLayout.setVisibility(View.VISIBLE);
 
             int point = info.hasApproved() ? R.drawable.point_approved : R.drawable.point_not_approved;
-            pointImageView.setImageResource(point);
+            viewHolder.pointImageView.setImageResource(point);
 
             int color = info.hasApproved() ? R.color.status_approved : R.color.background_grey;
-            lowerLayout.setBackgroundColor(ViewUtils.getColor(color));
+            viewHolder.lowerLayout.setBackgroundColor(ViewUtils.getColor(color));
         }
         else
         {
             if (stepStartList.contains(position))
             {
-                pointImageView.setVisibility(View.VISIBLE);
+                viewHolder.pointImageView.setVisibility(View.VISIBLE);
                 int point = info.hasApproved() ? R.drawable.point_approved : R.drawable.point_not_approved;
-                pointImageView.setImageResource(point);
+                viewHolder.pointImageView.setImageResource(point);
             }
             else
             {
-                pointImageView.setVisibility(View.GONE);
+                viewHolder.pointImageView.setVisibility(View.GONE);
             }
-            upperLayout.setVisibility(View.VISIBLE);
-            lowerLayout.setVisibility(View.VISIBLE);
+
+            viewHolder.upperLayout.setVisibility(View.VISIBLE);
+            viewHolder.lowerLayout.setVisibility(View.VISIBLE);
 
             ApproveInfo previousInfo = getItem(position - 1);
             int color = previousInfo.hasApproved() ? R.color.status_approved : R.color.background_grey;
-            upperLayout.setBackgroundColor(ViewUtils.getColor(color));
+            viewHolder.upperLayout.setBackgroundColor(ViewUtils.getColor(color));
 
             color = info.hasApproved() ? R.color.status_approved : R.color.background_grey;
-            lowerLayout.setBackgroundColor(ViewUtils.getColor(color));
+            viewHolder.lowerLayout.setBackgroundColor(ViewUtils.getColor(color));
         }
 
         if (position == infoList.size() - 1)
         {
-            lowerLayout.setVisibility(View.GONE);
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) divider.getLayoutParams();
+            viewHolder.lowerLayout.setVisibility(View.GONE);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) viewHolder.divider.getLayoutParams();
             params.setMargins(0, 0, 0, 0);
         }
         else
         {
             ApproveInfo nextInfo = infoList.get(position + 1);
             int margin = info.getStep() != nextInfo.getStep() ? 0 : 64;
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) divider.getLayoutParams();
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) viewHolder.divider.getLayoutParams();
             params.setMargins(ViewUtils.dpToPixel(margin), 0, 0, 0);
         }
 
-        nicknameTextView.setText(R.string.not_available);
+        viewHolder.nicknameTextView.setText(R.string.not_available);
 
         // set avatar and nickname
         final User user = dbManager.getUser(info.getUserID());
         if (user != null)
         {
-            ViewUtils.setImageViewBitmap(user, avatarImageView);
+            ViewUtils.setImageViewBitmap(user, viewHolder.avatarImageView);
 
             String nickname = user.getNickname();
             if (info.getProxyUserID() > 0)
@@ -136,25 +145,24 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
                     nickname += String.format(ViewUtils.getString(R.string.proxy_approved), proxyUser.getNickname());
                 }
             }
-            nicknameTextView.setText(nickname);
+            viewHolder.nicknameTextView.setText(nickname);
         }
         else
         {
-            statusTextView.setText(R.string.not_available);
-            alarmImageView.setVisibility(View.GONE);
-            timeLayout.setVisibility(View.GONE);
+            viewHolder.statusTextView.setText(R.string.not_available);
+            viewHolder.alarmImageView.setVisibility(View.GONE);
+            viewHolder.timeLayout.setVisibility(View.GONE);
 
             return convertView;
         }
-
         // set status, time and alarm
         if (info.isRevoked()) // revoked report
         {
-            statusTextView.setText(R.string.revoked);
-            statusTextView.setTextColor(ViewUtils.getColor(R.color.status_approved));
+            viewHolder.statusTextView.setText(R.string.revoked);
+            viewHolder.statusTextView.setTextColor(ViewUtils.getColor(R.color.status_approved));
 
-            alarmImageView.setVisibility(View.GONE);
-            timeLayout.setVisibility(View.VISIBLE);
+            viewHolder.alarmImageView.setVisibility(View.GONE);
+            viewHolder.timeLayout.setVisibility(View.VISIBLE);
 
             TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
             timeTextView.setText(info.getApproveTime());
@@ -164,11 +172,11 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
         }
         else if (info.getUserID() == info.getReportSenderID() && info.hasApproved()) // submitted report (step > 100)
         {
-            statusTextView.setText(R.string.submitted);
-            statusTextView.setTextColor(ViewUtils.getColor(R.color.status_approved));
+            viewHolder.statusTextView.setText(R.string.submitted);
+            viewHolder.statusTextView.setTextColor(ViewUtils.getColor(R.color.status_approved));
 
-            alarmImageView.setVisibility(View.GONE);
-            timeLayout.setVisibility(View.VISIBLE);
+            viewHolder.alarmImageView.setVisibility(View.GONE);
+            viewHolder.timeLayout.setVisibility(View.VISIBLE);
 
             TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
             timeTextView.setText(info.getApproveTime());
@@ -178,19 +186,19 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
         }
         else if (info.getUserID() == info.getReportSenderID()) // draft report (step < 100)
         {
-            statusTextView.setText(R.string.ready_to_submitted);
-            statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
+            viewHolder.statusTextView.setText(R.string.ready_to_submitted);
+            viewHolder.statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
 
-            alarmImageView.setVisibility(View.GONE);
-            timeLayout.setVisibility(View.GONE);
+            viewHolder.alarmImageView.setVisibility(View.GONE);
+            viewHolder.timeLayout.setVisibility(View.GONE);
         }
         else if (info.hasApproved() && info.getRealStatus() == Report.STATUS_APPROVED) // approved report (step > 100)
         {
-            statusTextView.setText(R.string.approved);
-            statusTextView.setTextColor(ViewUtils.getColor(R.color.status_approved));
+            viewHolder.statusTextView.setText(R.string.approved);
+            viewHolder.statusTextView.setTextColor(ViewUtils.getColor(R.color.status_approved));
 
-            alarmImageView.setVisibility(View.GONE);
-            timeLayout.setVisibility(View.VISIBLE);
+            viewHolder.alarmImageView.setVisibility(View.GONE);
+            viewHolder.timeLayout.setVisibility(View.VISIBLE);
 
             TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
             timeTextView.setText(info.getApproveTime());
@@ -200,11 +208,11 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
         }
         else if (info.hasApproved() && info.getRealStatus() == Report.STATUS_REJECTED) // rejected report (step > 100)
         {
-            statusTextView.setText(R.string.rejected);
-            statusTextView.setTextColor(ViewUtils.getColor(R.color.status_rejected));
+            viewHolder.statusTextView.setText(R.string.rejected);
+            viewHolder.statusTextView.setTextColor(ViewUtils.getColor(R.color.status_rejected));
 
-            alarmImageView.setVisibility(View.GONE);
-            timeLayout.setVisibility(View.VISIBLE);
+            viewHolder.alarmImageView.setVisibility(View.GONE);
+            viewHolder.timeLayout.setVisibility(View.VISIBLE);
 
             TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
             timeTextView.setText(info.getApproveTime());
@@ -214,22 +222,22 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
         }
         else if (info.hasApproved()) // report needs to be approved but already not available (step > 100, multiple approve)
         {
-            statusTextView.setText(R.string.ready_to_approve);
-            statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
+            viewHolder.statusTextView.setText(R.string.ready_to_approve);
+            viewHolder.statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
 
-            alarmImageView.setVisibility(View.GONE);
-            timeLayout.setVisibility(View.GONE);
+            viewHolder.alarmImageView.setVisibility(View.GONE);
+            viewHolder.timeLayout.setVisibility(View.GONE);
         }
         else  // report needs to be approved (step < 100)
         {
-            statusTextView.setText(R.string.ready_to_approve);
-            statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
+            viewHolder.statusTextView.setText(R.string.ready_to_approve);
+            viewHolder.statusTextView.setTextColor(ViewUtils.getColor(R.color.major_dark));
 
-            timeLayout.setVisibility(View.GONE);
+            viewHolder.timeLayout.setVisibility(View.GONE);
 
             int visibility = user.equals(currentUser) ? View.GONE : View.VISIBLE;
-            alarmImageView.setVisibility(visibility);
-            alarmImageView.setOnClickListener(new OnClickListener()
+            viewHolder.alarmImageView.setVisibility(visibility);
+            viewHolder.alarmImageView.setOnClickListener(new OnClickListener()
             {
                 public void onClick(View v)
                 {
@@ -268,7 +276,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
             });
 
             int alarmImage = report.getStatus() == Report.STATUS_SUBMITTED ? R.drawable.alarm_enabled_drawable : R.drawable.alarm_disabled_drawable;
-            alarmImageView.setImageResource(alarmImage);
+            viewHolder.alarmImageView.setImageResource(alarmImage);
         }
 
         return convertView;
@@ -310,5 +318,19 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
                 step = approveInfo.getStep();
             }
         }
+    }
+
+    static class ViewHolder
+    {
+        CircleImageView pointImageView ;
+        LinearLayout upperLayout ;
+        LinearLayout lowerLayout ;
+
+        CircleImageView avatarImageView ;
+        TextView nicknameTextView ;
+        TextView statusTextView ;
+        LinearLayout timeLayout ;
+        ImageView alarmImageView ;
+        LinearLayout divider ;
     }
 }

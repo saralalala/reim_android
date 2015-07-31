@@ -34,34 +34,41 @@ public class TagListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_tag, parent, false);
-        }
 
+            viewHolder = new ViewHolder();
+            viewHolder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+
+            convertView.setTag(viewHolder);
+        }
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
         if (check != null)
         {
             int color = check[position] ? R.color.list_item_pressed : R.color.list_item_unpressed;
             convertView.setBackgroundResource(color);
         }
 
-        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
-
         Tag tag = tagList.get(position);
 
         if (tag.getName().isEmpty())
         {
-            nameTextView.setText(R.string.not_available);
+            viewHolder.nameTextView.setText(R.string.not_available);
         }
         else
         {
-            nameTextView.setText(tag.getName());
+            viewHolder.nameTextView.setText(tag.getName());
         }
 
         if (check != null)
         {
             int color = check[position] ? selectedColor : unselectedColor;
-            nameTextView.setTextColor(color);
+            viewHolder.nameTextView.setTextColor(color);
         }
 
         return convertView;
@@ -91,5 +98,10 @@ public class TagListViewAdapter extends BaseAdapter
     public void setCheck(boolean[] checkList)
     {
         check = checkList;
+    }
+
+    static class ViewHolder
+    {
+        TextView nameTextView;
     }
 }

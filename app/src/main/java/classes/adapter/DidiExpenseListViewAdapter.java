@@ -30,28 +30,34 @@ public class DidiExpenseListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_didi_expense, parent, false);
+
+            viewHolder = new ViewHolder();
+            viewHolder.timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
+            viewHolder.usedTextView = (TextView) convertView.findViewById(R.id.usedTextView);
+            viewHolder.startTextView = (TextView) convertView.findViewById(R.id.startTextView);
+            viewHolder.destinationTextView = (TextView) convertView.findViewById(R.id.destinationTextView);
+            viewHolder.priceTextView = (TextView) convertView.findViewById(R.id.priceTextView);
+
+            convertView.setTag(viewHolder);
+        }
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         DidiExpense expense = expenseList.get(position);
 
-        TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
-        timeTextView.setText(expense.getTime());
-
+        viewHolder.timeTextView.setText(expense.getTime());
         int visibility = expense.isUsed() || importedList.contains(expense.getId()) ? View.VISIBLE : View.INVISIBLE;
-        TextView usedTextView = (TextView) convertView.findViewById(R.id.usedTextView);
-        usedTextView.setVisibility(visibility);
 
-        TextView startTextView = (TextView) convertView.findViewById(R.id.startTextView);
-        startTextView.setText(expense.getStart());
-
-        TextView destinationTextView = (TextView) convertView.findViewById(R.id.destinationTextView);
-        destinationTextView.setText(expense.getDestination());
-
-        TextView priceTextView = (TextView) convertView.findViewById(R.id.priceTextView);
-        priceTextView.setText(ViewUtils.getString(R.string.rmb_symbol) + Utils.formatAmount(expense.getAmount()));
+        viewHolder.usedTextView.setVisibility(visibility);
+        viewHolder.startTextView.setText(expense.getStart());
+        viewHolder.destinationTextView.setText(expense.getDestination());
+        viewHolder.priceTextView.setText(ViewUtils.getString(R.string.rmb_symbol) + Utils.formatAmount(expense.getAmount()));
 
         return convertView;
     }
@@ -81,5 +87,14 @@ public class DidiExpenseListViewAdapter extends BaseAdapter
     {
         importedList.clear();
         importedList.addAll(imports);
+    }
+
+    static class ViewHolder
+    {
+        TextView timeTextView;
+        TextView usedTextView;
+        TextView startTextView;
+        TextView destinationTextView;
+        TextView priceTextView;
     }
 }

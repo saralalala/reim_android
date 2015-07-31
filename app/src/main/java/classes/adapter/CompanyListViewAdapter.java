@@ -33,34 +33,42 @@ public class CompanyListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_company, parent, false);
+
+            viewHolder = new ViewHolder();
+            viewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
+            viewHolder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+            viewHolder.timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
+
+            convertView.setTag(viewHolder);
+        }
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         int color = company != null && !companyList.isEmpty() && companyList.get(position).equals(company) ?
                 R.color.list_item_pressed : R.color.list_item_unpressed;
         convertView.setBackgroundResource(color);
 
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
-        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
-        TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
-
         if (companyList.isEmpty())
         {
             convertView.setClickable(true);
-            iconImageView.setImageResource(R.drawable.info);
-            nameTextView.setText(R.string.search_result_empty);
-            timeTextView.setVisibility(View.GONE);
+            viewHolder.iconImageView.setImageResource(R.drawable.info);
+            viewHolder.nameTextView.setText(R.string.search_result_empty);
+            viewHolder.timeTextView.setVisibility(View.GONE);
         }
         else
         {
             convertView.setClickable(false);
             Group company = companyList.get(position);
-            iconImageView.setImageResource(R.drawable.default_company_icon);
-            nameTextView.setText(company.getName());
-            timeTextView.setText(Utils.secondToStringUpToDay(company.getCreatedDate()) + ViewUtils.getString(R.string.create));
-            timeTextView.setVisibility(View.VISIBLE);
+            viewHolder.iconImageView.setImageResource(R.drawable.default_company_icon);
+            viewHolder.nameTextView.setText(company.getName());
+            viewHolder.timeTextView.setText(Utils.secondToStringUpToDay(company.getCreatedDate()) + ViewUtils.getString(R.string.create));
+            viewHolder.timeTextView.setVisibility(View.VISIBLE);
         }
 
         return convertView;
@@ -106,5 +114,12 @@ public class CompanyListViewAdapter extends BaseAdapter
     public void setHasInit(boolean hasInit)
     {
         this.hasInit = hasInit;
+    }
+
+    static class ViewHolder
+    {
+        ImageView iconImageView ;
+        TextView nameTextView ;
+        TextView timeTextView ;
     }
 }

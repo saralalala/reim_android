@@ -19,6 +19,8 @@ import classes.model.Category;
 import classes.model.Item;
 import classes.model.Tag;
 import classes.model.User;
+import classes.utils.Constant;
+import classes.utils.LogUtils;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
@@ -42,88 +44,105 @@ public class ItemListViewAdapter extends BaseAdapter
     public View getView(int position, View convertView, ViewGroup parent)
     {
         Item item = this.getItem(position);
-        if (!item.getConsumedDateGroup().isEmpty())
+        int viewType = getItemViewType(position);
+        HeaderViewHolder headerViewHolder = null;
+        ItemViewHolder itemViewHolder = null;
+
+        if(viewType == 1)
         {
-            View view = layoutInflater.inflate(R.layout.list_header, parent, false);
-
-            String date = item.getConsumedDateGroup();
-            TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
-            headerTextView.setText(Utils.dateToWeekday(date) + " " + date);
-
-            return view;
-        }
-        else
-        {
-            View view = layoutInflater.inflate(R.layout.list_item, parent, false);
-
-            ImageView photoImageView = (ImageView) view.findViewById(R.id.photoImageView);
-            TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
-            TextView typeTextView = (TextView) view.findViewById(R.id.typeTextView);
-            TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
-            TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-            TextView reportTextView = (TextView) view.findViewById(R.id.reportTextView);
-            TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
-            ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
-
-            if (item.hasInvoice())
+            if(convertView == null)
             {
-                photoImageView.setVisibility(View.VISIBLE);
+                convertView = layoutInflater.inflate(R.layout.list_header, parent, false);
+
+                headerViewHolder = new HeaderViewHolder();
+                headerViewHolder.headerTextView = (TextView) convertView.findViewById(R.id.headerTextView);
+
+                convertView.setTag(headerViewHolder);
             }
             else
             {
-                photoImageView.setVisibility(View.GONE);
+                headerViewHolder = (HeaderViewHolder) convertView.getTag();
             }
 
-            statusTextView.setText(item.getStatusString());
-            statusTextView.setBackgroundResource(item.getStatusBackground());
+            String date = item.getConsumedDateGroup();
+            headerViewHolder.headerTextView.setText(Utils.dateToWeekday(date) + " " + date);
+        }
+        else
+        {
+            if(convertView == null)
+            {
+                convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 
-            int visibility = item.getType() == Item.TYPE_REIM ? View.GONE : View.VISIBLE;
-            typeTextView.setVisibility(visibility);
+                itemViewHolder = new ItemViewHolder();
+                itemViewHolder.photoImageView = (ImageView) convertView.findViewById(R.id.photoImageView);
+                itemViewHolder.statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
+                itemViewHolder.typeTextView = (TextView) convertView.findViewById(R.id.typeTextView);
+                itemViewHolder.symbolTextView = (TextView) convertView.findViewById(R.id.symbolTextView);
+                itemViewHolder.amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
+                itemViewHolder.reportTextView = (TextView) convertView.findViewById(R.id.reportTextView);
+                itemViewHolder.vendorTextView = (TextView) convertView.findViewById(R.id.vendorTextView);
+                itemViewHolder.categoryImageView = (ImageView) convertView.findViewById(R.id.categoryImageView);
+
+                convertView.setTag(itemViewHolder);
+            }
+            else
+            {
+                itemViewHolder = (ItemViewHolder)convertView.getTag();
+            }
+
+            int photoVisibility = item.hasInvoice() ? View.GONE : View.VISIBLE;
+            itemViewHolder.photoImageView.setVisibility(photoVisibility);
+
+            itemViewHolder.statusTextView.setText(item.getStatusString());
+            itemViewHolder.statusTextView.setBackgroundResource(item.getStatusBackground());
+
+            int typeVisibility = item.getType() == Item.TYPE_REIM ? View.GONE : View.VISIBLE;
+            itemViewHolder.typeTextView.setVisibility(typeVisibility);
 
             if (item.getType() == Item.TYPE_BUDGET && item.isAaApproved())
             {
-                typeTextView.setText(R.string.status_budget);
-                typeTextView.setBackgroundResource(R.drawable.status_item_approved);
+                itemViewHolder.typeTextView.setText(R.string.status_budget);
+                itemViewHolder.typeTextView.setBackgroundResource(R.drawable.status_item_approved);
             }
             else if (item.getType() == Item.TYPE_BUDGET)
             {
-                typeTextView.setText(R.string.status_budget);
-                typeTextView.setBackgroundResource(R.drawable.status_item_approve_ahead);
+                itemViewHolder.typeTextView.setText(R.string.status_budget);
+                itemViewHolder.typeTextView.setBackgroundResource(R.drawable.status_item_approve_ahead);
             }
             else if (item.getType() == Item.TYPE_BORROWING && item.isAaApproved())
             {
-                typeTextView.setText(R.string.status_borrowing);
-                typeTextView.setBackgroundResource(R.drawable.status_item_approved);
+                itemViewHolder.typeTextView.setText(R.string.status_borrowing);
+                itemViewHolder.typeTextView.setBackgroundResource(R.drawable.status_item_approved);
             }
             else if (item.getType() == Item.TYPE_BORROWING)
             {
-                typeTextView.setText(R.string.status_borrowing);
-                typeTextView.setBackgroundResource(R.drawable.status_item_approve_ahead);
+                itemViewHolder.typeTextView.setText(R.string.status_borrowing);
+                itemViewHolder.typeTextView.setBackgroundResource(R.drawable.status_item_approve_ahead);
             }
 
-            symbolTextView.setText(item.getCurrency().getSymbol());
+            itemViewHolder.symbolTextView.setText(item.getCurrency().getSymbol());
 
-            amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-            amountTextView.setText(Utils.formatDouble(item.getAmount()));
+            itemViewHolder.amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+            itemViewHolder.amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
             String vendor = item.getVendor().isEmpty() ? context.getString(R.string.vendor_not_available) : item.getVendor();
-            vendorTextView.setText(vendor);
+            itemViewHolder.vendorTextView.setText(vendor);
 
             String reportTitle = item.getBelongReport() == null ? context.getString(R.string.report_not_available) : item.getBelongReport().getTitle();
-            reportTextView.setText(reportTitle);
+            itemViewHolder.reportTextView.setText(reportTitle);
 
             Category category = item.getCategory();
             if (category != null)
             {
-                ViewUtils.setImageViewBitmap(category, categoryImageView);
+                ViewUtils.setImageViewBitmap(category, itemViewHolder.categoryImageView);
             }
             else
             {
-                categoryImageView.setVisibility(View.GONE);
+                itemViewHolder.categoryImageView.setVisibility(View.GONE);
             }
-
-            return view;
         }
+
+        return convertView;
     }
 
     public int getCount()
@@ -139,6 +158,15 @@ public class ItemListViewAdapter extends BaseAdapter
     public long getItemId(int position)
     {
         return position;
+    }
+
+    public int getItemViewType(int position)
+    {
+        return itemList.get(position).getConsumedDateGroup().isEmpty() ? Constant.TYPE_CONTENT : Constant.TYPE_HEADER; // Type 两种 0和1
+    }
+
+    public int getViewTypeCount() {
+        return 2;
     }
 
     public void setItemList(List<Item> items)
@@ -281,5 +309,21 @@ public class ItemListViewAdapter extends BaseAdapter
             }
         }
         return false;
+    }
+
+    static class HeaderViewHolder
+    {
+        TextView headerTextView;
+    }
+    static class ItemViewHolder
+    {
+        ImageView photoImageView ;
+        TextView statusTextView ;
+        TextView typeTextView ;
+        TextView symbolTextView ;
+        TextView amountTextView ;
+        TextView reportTextView ;
+        TextView vendorTextView ;
+        ImageView categoryImageView ;
     }
 }

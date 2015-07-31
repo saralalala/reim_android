@@ -119,39 +119,50 @@ public class ReportListViewAdapter extends BaseAdapter
             }
             else
             {
-                View view = layoutInflater.inflate(R.layout.list_report, parent, false);
+                ViewHolder viewHolder;
+                if(convertView == null || convertView.getTag() == null)
+                {
+                    convertView = layoutInflater.inflate(R.layout.list_report, parent, false);
 
-                TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
-                TextView ccTextView = (TextView) view.findViewById(R.id.ccTextView);
-                TextView senderTextView = (TextView) view.findViewById(R.id.senderTextView);
-                TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-                TextView dateTextView = (TextView) view.findViewById(R.id.dateTextView);
-                TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-                ImageView tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
+                    viewHolder = new ViewHolder();
+                    viewHolder.statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
+                    viewHolder.ccTextView = (TextView) convertView.findViewById(R.id.ccTextView);
+                    viewHolder.senderTextView = (TextView) convertView.findViewById(R.id.senderTextView);
+                    viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.titleTextView);
+                    viewHolder.dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+                    viewHolder.amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
+                    viewHolder.tipImageView = (ImageView) convertView.findViewById(R.id.tipImageView);
 
-                statusTextView.setText(report.getStatusString());
-                statusTextView.setBackgroundResource(report.getStatusBackground());
+                    convertView.setTag(viewHolder);
+                }
+                else
+                {
+                    viewHolder = (ViewHolder) convertView.getTag();
+                }
+
+                viewHolder.statusTextView.setText(report.getStatusString());
+                viewHolder.statusTextView.setBackgroundResource(report.getStatusBackground());
 
                 int visibility = report.isCC() ? View.VISIBLE : View.GONE;
-                ccTextView.setVisibility(visibility);
+                viewHolder.ccTextView.setVisibility(visibility);
 
                 String nickname = report.getSender() == null ? "" : report.getSender().getNickname();
-                senderTextView.setText(context.getString(R.string.prompt_sender) + nickname);
+                viewHolder.senderTextView.setText(context.getString(R.string.prompt_sender) + nickname);
 
                 String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
-                titleTextView.setText(title);
+                viewHolder.titleTextView.setText(title);
 
                 String date = Utils.secondToStringUpToDay(report.getCreatedDate());
-                dateTextView.setText(date.isEmpty() ? context.getString(R.string.not_available) : date);
+                viewHolder.dateTextView.setText(date.isEmpty() ? context.getString(R.string.not_available) : date);
 
                 double amount = Double.valueOf(report.getAmount());
-                amountTextView.setText(Utils.formatDouble(amount));
-                amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+                viewHolder.amountTextView.setText(Utils.formatDouble(amount));
+                viewHolder.amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 
                 visibility = unreadList.contains(report.getServerID()) ? View.VISIBLE : View.INVISIBLE;
-                tipImageView.setVisibility(visibility);
+                viewHolder.tipImageView.setVisibility(visibility);
 
-                return view;
+                return convertView;
             }
         }
     }
@@ -186,5 +197,16 @@ public class ReportListViewAdapter extends BaseAdapter
     public void setTabIndex(int tabIndex)
     {
         this.tabIndex = tabIndex;
+    }
+
+    static class ViewHolder
+    {
+        TextView statusTextView;
+        TextView ccTextView;
+        TextView senderTextView;
+        TextView titleTextView;
+        TextView dateTextView;
+        TextView amountTextView;
+        ImageView tipImageView;
     }
 }

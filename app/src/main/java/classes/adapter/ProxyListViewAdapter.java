@@ -33,9 +33,20 @@ public class ProxyListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_proxy, parent, false);
+
+            viewHolder = new ViewHolder();
+            viewHolder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+            viewHolder.scopeTextView = (TextView) convertView.findViewById(R.id.scopeTextView);
+
+            convertView.setTag(viewHolder);
+        }
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         Proxy proxy = this.getItem(position);
@@ -43,11 +54,8 @@ public class ProxyListViewAdapter extends BaseAdapter
         int color = chosenList.contains(proxy) ? R.color.list_item_pressed : R.color.list_item_unpressed;
         convertView.setBackgroundResource(color);
 
-        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
-        TextView scopeTextView = (TextView) convertView.findViewById(R.id.scopeTextView);
-
-        nameTextView.setText(proxy.getUser().getNickname());
-        scopeTextView.setText(proxy.getPermissionString());
+        viewHolder.nameTextView.setText(proxy.getUser().getNickname());
+        viewHolder.scopeTextView.setText(proxy.getPermissionString());
 
         return convertView;
     }
@@ -76,5 +84,11 @@ public class ProxyListViewAdapter extends BaseAdapter
     public void setChosenList(List<Proxy> chosenList)
     {
         this.chosenList = chosenList;
+    }
+
+    static class ViewHolder
+    {
+        TextView nameTextView;
+        TextView scopeTextView;
     }
 }

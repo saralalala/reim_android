@@ -29,22 +29,30 @@ public class MessageListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_message, parent, false);
-        }
 
-        TextView messageTextView = (TextView) convertView.findViewById(R.id.messageTextView);
-        TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
-        ImageView tipImageView = (ImageView) convertView.findViewById(R.id.tipImageView);
+            viewHolder = new ViewHolder();
+            viewHolder.messageTextView = (TextView) convertView.findViewById(R.id.messageTextView);
+            viewHolder.dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+            viewHolder.tipImageView = (ImageView) convertView.findViewById(R.id.tipImageView);
+
+            convertView.setTag(viewHolder);
+        }
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
 
         Message message = messageList.get(position);
 
-        messageTextView.setText(message.getTitle());
-        dateTextView.setText(Utils.secondToStringUpToDay(message.getUpdateTime()));
+        viewHolder.messageTextView.setText(message.getTitle());
+        viewHolder.dateTextView.setText(Utils.secondToStringUpToDay(message.getUpdateTime()));
 
         int visibility = message.hasBeenRead() ? View.GONE : View.VISIBLE;
-        tipImageView.setVisibility(visibility);
+        viewHolder.tipImageView.setVisibility(visibility);
 
         return convertView;
     }
@@ -68,5 +76,12 @@ public class MessageListViewAdapter extends BaseAdapter
     {
         messageList.clear();
         messageList.addAll(messages);
+    }
+
+    static class ViewHolder
+    {
+        TextView messageTextView ;
+        TextView dateTextView ;
+        ImageView tipImageView ;
     }
 }

@@ -75,69 +75,87 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
 
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
     {
+        GroupViewHolder groupViewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_category_expandable, parent, false);
-        }
-        convertView.setBackgroundResource(R.drawable.me_item_drawable);
 
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
-        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
-        TextView noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
+            groupViewHolder = new GroupViewHolder();
+            groupViewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
+            groupViewHolder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+            groupViewHolder.noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
 
-        Category category = categoryList.get(groupPosition);
-
-        ViewUtils.setImageViewBitmap(category, iconImageView);
-
-        if (category.getName().isEmpty())
-        {
-            nameTextView.setText(R.string.not_available);
+            convertView.setTag(groupViewHolder);
         }
         else
         {
-            nameTextView.setText(category.getName());
+            groupViewHolder = (GroupViewHolder) convertView.getTag();
+        }
+        convertView.setBackgroundResource(R.drawable.me_item_drawable);
+
+        Category category = categoryList.get(groupPosition);
+
+        ViewUtils.setImageViewBitmap(category, groupViewHolder.iconImageView);
+
+        if (category.getName().isEmpty())
+        {
+            groupViewHolder.nameTextView.setText(R.string.not_available);
+        }
+        else
+        {
+            groupViewHolder. nameTextView.setText(category.getName());
         }
 
         int visibility = category.getNote().isEmpty() ? View.GONE : View.VISIBLE;
-        noteTextView.setVisibility(visibility);
-        noteTextView.setText(category.getNote());
+        groupViewHolder.noteTextView.setVisibility(visibility);
+        groupViewHolder.noteTextView.setText(category.getNote());
 
         int color = checkList.get(groupPosition) ? selectedColor : unselectedColor;
-        nameTextView.setTextColor(color);
+        groupViewHolder.nameTextView.setTextColor(color);
 
         return convertView;
     }
 
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
     {
+        ChildViewHolder childViewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_category_expandable, parent, false);
-        }
 
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
-        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
-        TextView noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
+            childViewHolder = new ChildViewHolder();
+            childViewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
+            childViewHolder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+            childViewHolder.noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
 
-        Category category = subCategoryList.get(groupPosition).get(childPosition);
-
-        ViewUtils.setImageViewBitmap(category, iconImageView);
-
-        if (category.getName().isEmpty())
-        {
-            nameTextView.setText(R.string.not_available);
+            convertView.setTag(childViewHolder);
         }
         else
         {
-            nameTextView.setText(category.getName());
+            childViewHolder = (ChildViewHolder) convertView.getTag();
+        }
+
+        Category category = subCategoryList.get(groupPosition).get(childPosition);
+
+        ViewUtils.setImageViewBitmap(category, childViewHolder.iconImageView);
+
+        childViewHolder.nameTextView.setText(R.string.not_available);
+
+        if (category.getName().isEmpty())
+        {
+            childViewHolder.nameTextView.setText(R.string.not_available);
+        }
+        else
+        {
+            childViewHolder.nameTextView.setText(category.getName());
         }
 
         int visibility = category.getNote().isEmpty() ? View.GONE : View.VISIBLE;
-        noteTextView.setVisibility(visibility);
-        noteTextView.setText(category.getNote());
+        childViewHolder.noteTextView.setVisibility(visibility);
+        childViewHolder.noteTextView.setText(category.getNote());
 
         int color = subCheckList.get(groupPosition).get(childPosition) ? selectedColor : unselectedColor;
-        nameTextView.setTextColor(color);
+        childViewHolder.nameTextView.setTextColor(color);
 
         return convertView;
     }
@@ -161,5 +179,19 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
         checkList.addAll(check);
         subCheckList.clear();
         subCheckList.addAll(subCheck);
+    }
+
+    static class GroupViewHolder
+    {
+        ImageView iconImageView;
+        TextView nameTextView;
+        TextView noteTextView;
+    }
+
+    static class ChildViewHolder
+    {
+        ImageView iconImageView;
+        TextView nameTextView;
+        TextView noteTextView;
     }
 }

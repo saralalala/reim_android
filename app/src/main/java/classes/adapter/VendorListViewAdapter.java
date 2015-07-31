@@ -65,27 +65,36 @@ public class VendorListViewAdapter extends BaseAdapter
         }
         else
         {
-            View view = layoutInflater.inflate(R.layout.list_vendor, parent, false);
-
-            ImageView imageView = (ImageView) view.findViewById(R.id.avatarImageView);
-            if (vendor.getPhoto() != null)
+            ViewHolder viewHolder;
+            if(convertView == null || convertView.getTag() == null)
             {
-                imageView.setImageBitmap(vendor.getPhoto());
+                convertView = layoutInflater.inflate(R.layout.list_vendor, parent, false);
+
+                viewHolder = new ViewHolder();
+                viewHolder.imageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
+                viewHolder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+                viewHolder.addressTextView = (TextView) convertView.findViewById(R.id.locationTextView);
+                viewHolder.distanceTextView = (TextView) convertView.findViewById(R.id.distanceTextView);
+
+                convertView.setTag(viewHolder);
+            }
+            else
+            {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
-            nameTextView.setText(vendor.getName());
+            if (vendor.getPhoto() != null)
+            {
+                viewHolder.imageView.setImageBitmap(vendor.getPhoto());
+            }
 
-            TextView addressTextView = (TextView) view.findViewById(R.id.locationTextView);
-            addressTextView.setText(vendor.getAddress());
-
-            TextView distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);
-            distanceTextView.setText(Integer.toString(vendor.getDistance()) + "米");
-
+            viewHolder.nameTextView.setText(vendor.getName());
+            viewHolder.addressTextView.setText(vendor.getAddress());
+            viewHolder.distanceTextView.setText(Integer.toString(vendor.getDistance()) + "米");
             int visibility = showDistance ? View.VISIBLE : View.GONE;
-            distanceTextView.setVisibility(visibility);
+            viewHolder.distanceTextView.setVisibility(visibility);
 
-            return view;
+            return convertView;
         }
     }
 
@@ -114,5 +123,13 @@ public class VendorListViewAdapter extends BaseAdapter
     public void setShowDistance(boolean showDistance)
     {
         this.showDistance = showDistance;
+    }
+
+    static class ViewHolder
+    {
+        ImageView imageView;
+        TextView nameTextView;
+        TextView addressTextView;
+        TextView distanceTextView;
     }
 }

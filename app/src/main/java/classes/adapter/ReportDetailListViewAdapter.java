@@ -164,38 +164,49 @@ public class ReportDetailListViewAdapter extends BaseAdapter
         }
         else
         {
-            View view = layoutInflater.inflate(R.layout.list_report_item_show, parent, false);
+            ViewHolder viewHolder;
+            if(convertView == null || convertView.getTag() == null)
+            {
+                convertView = layoutInflater.inflate(R.layout.list_report_item_show, parent, false);
 
-            TextView dateTextView = (TextView) view.findViewById(R.id.dateTextView);
-            ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
-            TextView categoryTextView = (TextView) view.findViewById(R.id.categoryTextView);
-            TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
-            TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-            TextView noteTextView = (TextView) view.findViewById(R.id.noteTextView);
-            TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
+                viewHolder = new ViewHolder();
+                viewHolder.dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+                viewHolder.categoryImageView = (ImageView) convertView.findViewById(R.id.categoryImageView);
+                viewHolder.categoryTextView = (TextView) convertView.findViewById(R.id.categoryTextView);
+                viewHolder.symbolTextView = (TextView) convertView.findViewById(R.id.symbolTextView);
+                viewHolder.amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
+                viewHolder.noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
+                viewHolder.vendorTextView = (TextView) convertView.findViewById(R.id.vendorTextView);
+
+                convertView.setTag(viewHolder);
+            }
+            else
+            {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
 
             Item item = itemList.get(position - 1);
 
-            dateTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));
+            viewHolder.dateTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));
 
             Category category = item.getCategory();
-            ViewUtils.setImageViewBitmap(category, categoryImageView);
+            ViewUtils.setImageViewBitmap(category, viewHolder.categoryImageView);
 
             String categoryName = category != null ? category.getName() : "";
-            categoryTextView.setText(categoryName);
+            viewHolder.categoryTextView.setText(categoryName);
 
-            symbolTextView.setText(item.getCurrency().getSymbol());
+            viewHolder.symbolTextView.setText(item.getCurrency().getSymbol());
 
-            amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-            amountTextView.setText(Utils.formatDouble(item.getAmount()));
+            viewHolder.amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+            viewHolder.amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
             String note = !item.getNote().isEmpty() ? item.getNote() : "";
-            noteTextView.setText(note);
+            viewHolder.noteTextView.setText(note);
 
             String vendor = item.getVendor().isEmpty() ? activity.getString(R.string.vendor_not_available) : item.getVendor();
-            vendorTextView.setText(vendor);
+            viewHolder.vendorTextView.setText(vendor);
 
-            return view;
+            return convertView;
         }
     }
 
@@ -223,5 +234,16 @@ public class ReportDetailListViewAdapter extends BaseAdapter
     {
         itemList.clear();
         itemList.addAll(items);
+    }
+
+    static class ViewHolder
+    {
+        TextView dateTextView;
+        ImageView categoryImageView;
+        TextView categoryTextView;
+        TextView symbolTextView;
+        TextView amountTextView;
+        TextView noteTextView;
+        TextView vendorTextView;
     }
 }

@@ -35,18 +35,26 @@ public class ReportTagGridViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.grid_report_tag, parent, false);
+
+            viewHolder = new ViewHolder();
+            viewHolder.statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
+            viewHolder.coverLayout = (RelativeLayout) convertView.findViewById(R.id.coverLayout);
+
+            convertView.setTag(viewHolder);
         }
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        viewHolder.statusTextView.setText(Report.getStatusString(position));
+        viewHolder.statusTextView.setBackgroundResource(backgrounds[position]);
 
-        TextView statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
-        statusTextView.setText(Report.getStatusString(position));
-        statusTextView.setBackgroundResource(backgrounds[position]);
-
-        RelativeLayout coverLayout = (RelativeLayout) convertView.findViewById(R.id.coverLayout);
         int visibility = check[position] ? View.VISIBLE : View.INVISIBLE;
-        coverLayout.setVisibility(visibility);
+        viewHolder.coverLayout.setVisibility(visibility);
 
         return convertView;
     }
@@ -92,5 +100,11 @@ public class ReportTagGridViewAdapter extends BaseAdapter
     public boolean[] getCheckedTags()
     {
         return check;
+    }
+
+    static class ViewHolder
+    {
+        TextView statusTextView;
+        RelativeLayout coverLayout;
     }
 }

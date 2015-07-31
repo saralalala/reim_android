@@ -35,36 +35,44 @@ public class CategoryListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_category, parent, false);
-        }
 
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
-        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
-        TextView noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
+            viewHolder = new ViewHolder();
+            viewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
+            viewHolder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+            viewHolder.noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
 
-        Category category = categoryList.get(position);
-
-        ViewUtils.setImageViewBitmap(category, iconImageView);
-
-        if (category.getName().isEmpty())
-        {
-            nameTextView.setText(R.string.not_available);
+            convertView.setTag(viewHolder);
         }
         else
         {
-            nameTextView.setText(category.getName());
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        Category category = categoryList.get(position);
+
+        ViewUtils.setImageViewBitmap(category, viewHolder.iconImageView);
+
+        if (category.getName().isEmpty())
+        {
+            viewHolder.nameTextView.setText(R.string.not_available);
+        }
+        else
+        {
+            viewHolder.nameTextView.setText(category.getName());
         }
 
         int visibility = category.getNote().isEmpty() ? View.GONE : View.VISIBLE;
-        noteTextView.setVisibility(visibility);
-        noteTextView.setText(category.getNote());
+        viewHolder.noteTextView.setVisibility(visibility);
+        viewHolder.noteTextView.setText(category.getNote());
 
         if (check != null)
         {
             int color = check[position] ? selectedColor : unselectedColor;
-            nameTextView.setTextColor(color);
+            viewHolder.nameTextView.setTextColor(color);
         }
 
         return convertView;
@@ -94,5 +102,12 @@ public class CategoryListViewAdapter extends BaseAdapter
     public void setCheck(boolean[] checkList)
     {
         check = checkList;
+    }
+
+    static class ViewHolder
+    {
+        ImageView iconImageView ;
+        TextView nameTextView ;
+        TextView noteTextView ;
     }
 }

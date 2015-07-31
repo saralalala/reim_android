@@ -46,4 +46,7 @@ public class Constant
     public static final int TAB_STATISTICS_MINE = 0;
     public static final int TAB_STATISTICS_OTHERS = 1;
     public static final int TAB_ME = 3;
+
+    public static final int TYPE_CONTENT = 0;
+    public static final int TYPE_HEADER = 1;
 }

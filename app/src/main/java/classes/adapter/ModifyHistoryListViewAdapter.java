@@ -29,21 +29,28 @@ public class ModifyHistoryListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_modify_history, parent, false);
+
+            viewHolder = new ViewHolder();
+            viewHolder.avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
+            viewHolder.timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
+            viewHolder.contentTextView = (TextView) convertView.findViewById(R.id.contentTextView);
+
+            convertView.setTag(viewHolder);
+        }
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         ModifyHistory history = historyList.get(position);
 
-        CircleImageView avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
-        ViewUtils.setImageViewBitmap(history.getUser(), avatarImageView);
-
-        TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
-        timeTextView.setText(history.getTime());
-
-        TextView contentTextView = (TextView) convertView.findViewById(R.id.contentTextView);
-        contentTextView.setText(history.getContent());
+        ViewUtils.setImageViewBitmap(history.getUser(), viewHolder.avatarImageView);
+        viewHolder.timeTextView.setText(history.getTime());
+        viewHolder.contentTextView.setText(history.getContent());
 
         return convertView;
     }
@@ -67,5 +74,12 @@ public class ModifyHistoryListViewAdapter extends BaseAdapter
     {
         historyList.clear();
         historyList.addAll(histories);
+    }
+
+    static class ViewHolder
+    {
+        CircleImageView avatarImageView;
+        TextView timeTextView;
+        TextView contentTextView;
     }
 }

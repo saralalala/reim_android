@@ -31,35 +31,42 @@ public class CommentListViewAdapter extends BaseAdapter
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_comment, parent, false);
+
+            viewHolder = new ViewHolder();
+            viewHolder.avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
+            viewHolder.reviewerTextView = (TextView) convertView.findViewById(R.id.reviewerTextView);
+            viewHolder.commentTextView = (TextView) convertView.findViewById(R.id.commentTextView);
+            viewHolder.dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+
+            convertView.setTag(viewHolder);
         }
-
-        CircleImageView avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
-        TextView reviewerTextView = (TextView) convertView.findViewById(R.id.reviewerTextView);
-        TextView commentTextView = (TextView) convertView.findViewById(R.id.commentTextView);
-        TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
-
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
         Comment comment = commentList.get(position);
 
         User user = comment.getReviewer();
         if (user != null)
         {
-            ViewUtils.setImageViewBitmap(user, avatarImageView);
+            ViewUtils.setImageViewBitmap(user, viewHolder.avatarImageView);
 
             if (user.getNickname().isEmpty())
             {
-                reviewerTextView.setText(R.string.not_available);
+                viewHolder.reviewerTextView.setText(R.string.not_available);
             }
             else
             {
-                reviewerTextView.setText(user.getNickname());
+                viewHolder.reviewerTextView.setText(user.getNickname());
             }
         }
 
-        commentTextView.setText(comment.getContent());
-        dateTextView.setText(Utils.secondToStringUpToMinute(comment.getCreatedDate()));
+        viewHolder.commentTextView.setText(comment.getContent());
+        viewHolder.dateTextView.setText(Utils.secondToStringUpToMinute(comment.getCreatedDate()));
 
         return convertView;
     }
@@ -83,5 +90,13 @@ public class CommentListViewAdapter extends BaseAdapter
     {
         commentList.clear();
         commentList.addAll(comments);
+    }
+
+    static class ViewHolder
+    {
+        CircleImageView avatarImageView ;
+        TextView reviewerTextView ;
+        TextView commentTextView ;
+        TextView dateTextView ;
     }
 }

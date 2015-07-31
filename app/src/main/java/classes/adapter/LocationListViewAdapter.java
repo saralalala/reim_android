@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import classes.utils.CharacterParser;
+import classes.utils.Constant;
+import classes.utils.LogUtils;
 import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
 
@@ -38,6 +40,7 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
+
         if (position == 0)
         {
             View view = layoutInflater.inflate(R.layout.list_header, parent, false);
@@ -48,20 +51,42 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
         else if (position == 1)
         {
             return hotCityView;
+
         }
         else if (indexList.contains(position))
         {
-            View view = layoutInflater.inflate(R.layout.list_header, parent, false);
-            TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
-            headerTextView.setText(cityList.get(position - 2));
-            return view;
+            HeaderViewHolder headerViewHolder;
+            if(convertView == null || convertView.getTag() == null)
+            {
+                convertView = layoutInflater.inflate(R.layout.list_header, parent, false);
+                headerViewHolder = new HeaderViewHolder();
+
+                headerViewHolder.headerTextView = (TextView) convertView.findViewById(R.id.headerTextView);
+                convertView.setTag(headerViewHolder);
+            }
+            else
+            {
+                headerViewHolder = (HeaderViewHolder) convertView.getTag();
+            }
+            headerViewHolder.headerTextView.setText(cityList.get(position - 2));
+            return convertView;
         }
         else
         {
-            View view = layoutInflater.inflate(R.layout.list_location, parent, false);
-            TextView locationTextView = (TextView) view.findViewById(R.id.locationTextView);
-            locationTextView.setText(cityList.get(position - 2));
-            return view;
+            LocationViewHolder locationViewHolder;
+            if(convertView == null || convertView.getTag() == null)
+            {
+                convertView = layoutInflater.inflate(R.layout.list_location, parent, false);
+                locationViewHolder = new LocationViewHolder();
+                locationViewHolder.locationTextView = (TextView) convertView.findViewById(R.id.locationTextView);
+                convertView.setTag(locationViewHolder);
+            }
+            else
+            {
+                locationViewHolder = (LocationViewHolder) convertView.getTag();
+            }
+            locationViewHolder.locationTextView.setText(cityList.get(position - 2));
+            return convertView;
         }
     }
 
@@ -78,6 +103,21 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
     public long getItemId(int position)
     {
         return position;
+    }
+
+    public int getViewTypeCount()
+    {
+        return 2;
+    }
+
+    public int getItemViewType(int position)
+    {
+        return indexList.contains(position) ? Constant.TYPE_HEADER : Constant.TYPE_CONTENT;
+    }
+
+    public boolean isItemViewTypePinned(int viewType)
+    {
+        return viewType == 1;
     }
 
     private void initData()
@@ -155,18 +195,13 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
         return !indexList.contains(position);
     }
 
-    public int getViewTypeCount()
+    static class HeaderViewHolder
     {
-        return 2;
+        TextView headerTextView;
     }
 
-    public int getItemViewType(int position)
+    static class LocationViewHolder
     {
-        return indexList.contains(position) ? 1 : 0;
-    }
-
-    public boolean isItemViewTypePinned(int viewType)
-    {
-        return viewType == 1;
+        TextView locationTextView;
     }
 }

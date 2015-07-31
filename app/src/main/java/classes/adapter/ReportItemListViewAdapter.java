@@ -46,30 +46,40 @@ public class ReportItemListViewAdapter extends BaseAdapter
         }
         else
         {
-            View view = layoutInflater.inflate(R.layout.list_report_item_edit, parent, false);
+            ViewHolder viewHolder;
+            if(convertView == null || convertView.getTag() == null){
+                convertView = layoutInflater.inflate(R.layout.list_report_item_edit, parent, false);
 
-            TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
-            TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-            TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
-            ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
-            ImageView warningImageView = (ImageView) view.findViewById(R.id.warningImageView);
+                viewHolder = new ViewHolder();
+                viewHolder.symbolTextView = (TextView) convertView.findViewById(R.id.symbolTextView);
+                viewHolder.amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
+                viewHolder.vendorTextView = (TextView) convertView.findViewById(R.id.vendorTextView);
+                viewHolder.categoryImageView = (ImageView) convertView.findViewById(R.id.categoryImageView);
+                viewHolder.warningImageView = (ImageView) convertView.findViewById(R.id.warningImageView);
+
+                convertView.setTag(viewHolder);
+            }
+            else
+            {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
 
             Item item = itemList.get(position - 1);
 
             int color = chosenIDList.contains(item.getLocalID()) ? R.color.list_item_pressed : R.color.list_item_unpressed;
-            view.setBackgroundResource(color);
+            convertView.setBackgroundResource(color);
 
-            symbolTextView.setText(item.getCurrency().getSymbol());
+            viewHolder.symbolTextView.setText(item.getCurrency().getSymbol());
 
-            amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
-            amountTextView.setText(Utils.formatDouble(item.getAmount()));
+            viewHolder.amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+            viewHolder.amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
             String vendor = item.getVendor().isEmpty() ? context.getString(R.string.vendor_not_available) : item.getVendor();
-            vendorTextView.setText(vendor);
+            viewHolder.vendorTextView.setText(vendor);
 
             if (item.missingInfo(currentGroup))
             {
-                warningImageView.setVisibility(View.VISIBLE);
+                viewHolder.warningImageView.setVisibility(View.VISIBLE);
             }
             else
             {
@@ -77,15 +87,15 @@ public class ReportItemListViewAdapter extends BaseAdapter
 
                 if (category != null)
                 {
-                    ViewUtils.setImageViewBitmap(category, categoryImageView);
+                    ViewUtils.setImageViewBitmap(category, viewHolder.categoryImageView);
                 }
                 else
                 {
-                    categoryImageView.setVisibility(View.INVISIBLE);
+                    viewHolder.categoryImageView.setVisibility(View.INVISIBLE);
                 }
             }
 
-            return view;
+            return convertView;
         }
     }
 
@@ -117,5 +127,14 @@ public class ReportItemListViewAdapter extends BaseAdapter
     {
         chosenIDList.clear();
         chosenIDList.addAll(chosenList);
+    }
+
+    static class ViewHolder
+    {
+        TextView symbolTextView;
+        TextView amountTextView;
+        TextView vendorTextView;
+        ImageView categoryImageView;
+        ImageView warningImageView;
     }
 }

@@ -22,6 +22,8 @@ import java.util.TreeMap;
 
 import classes.model.User;
 import classes.utils.CharacterParser;
+import classes.utils.Constant;
+import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
@@ -78,33 +80,52 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
         }
         else if (indexList.contains(position))
         {
+            IndexViewHolder indexViewHolder;
+            if(convertView == null)
+            {
+                convertView = layoutInflater.inflate(R.layout.list_header, parent, false);
+                indexViewHolder = new IndexViewHolder();
+
+                indexViewHolder.headerTextView = (TextView) convertView.findViewById(R.id.headerTextView);
+                convertView.setTag(indexViewHolder);
+            }
+            else
+            {
+                indexViewHolder = (IndexViewHolder) convertView.getTag();
+            }
             User user = contactList.get(position);
+            indexViewHolder.headerTextView.setText(user.getNickname());
 
-            View view = layoutInflater.inflate(R.layout.list_header, parent, false);
-
-            TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
-            headerTextView.setText(user.getNickname());
-
-            return view;
+            return convertView;
         }
         else
         {
+            ContactViewHolder contactViewHolder;
+            if(convertView == null)
+            {
+                convertView = layoutInflater.inflate(R.layout.list_contact, parent, false);
+                contactViewHolder = new ContactViewHolder();
+
+                contactViewHolder.checkImageView = (ImageView) convertView.findViewById(R.id.checkImageView);
+                contactViewHolder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+                contactViewHolder.contactTextView = (TextView) convertView.findViewById(R.id.contactTextView);
+
+                convertView.setTag(contactViewHolder);
+            }
+            else
+            {
+                contactViewHolder = (ContactViewHolder) convertView.getTag();
+            }
+
             User user = contactList.get(position);
-
-            View view = layoutInflater.inflate(R.layout.list_contact, parent, false);
-
             int visibility = User.indexOfContactList(contactChosenList, user) > -1 ? View.VISIBLE : View.INVISIBLE;
-            ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
-            checkImageView.setVisibility(visibility);
 
-            TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
-            nameTextView.setText(user.getNickname());
-
+            contactViewHolder.checkImageView.setVisibility(visibility);
+            contactViewHolder.nameTextView.setText(user.getNickname());
             String contact = user.getPhone().isEmpty() ? user.getEmail() : user.getPhone();
-            TextView contactTextView = (TextView) view.findViewById(R.id.contactTextView);
-            contactTextView.setText(contact);
+            contactViewHolder.contactTextView.setText(contact);
 
-            return view;
+            return convertView;
         }
     }
 
@@ -121,6 +142,21 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
     public long getItemId(int position)
     {
         return position;
+    }
+
+    public int getViewTypeCount()
+    {
+        return 2;
+    }
+
+    public int getItemViewType(int position)
+    {
+        return indexList.contains(position) ? Constant.TYPE_HEADER : Constant.TYPE_CONTENT;
+    }
+
+    public boolean isItemViewTypePinned(int viewType)
+    {
+        return viewType == 1;
     }
 
     public void initIndex()
@@ -217,18 +253,15 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
         return !indexList.contains(position);
     }
 
-    public int getViewTypeCount()
+    static class IndexViewHolder
     {
-        return 2;
+        TextView headerTextView;
     }
 
-    public int getItemViewType(int position)
+    static class ContactViewHolder
     {
-        return indexList.contains(position) ? 1 : 0;
-    }
-
-    public boolean isItemViewTypePinned(int viewType)
-    {
-        return viewType == 1;
+        ImageView checkImageView;
+        TextView nameTextView;
+        TextView contactTextView;
     }
 }

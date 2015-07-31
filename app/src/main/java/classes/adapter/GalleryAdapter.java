@@ -49,6 +49,7 @@ public class GalleryAdapter extends BaseAdapter
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.grid_gallery, parent, false);
+
             holder = new ViewHolder();
             holder.imageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
             holder.checkLayout = (RelativeLayout) convertView.findViewById(R.id.checkLayout);
