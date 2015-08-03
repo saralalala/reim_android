@@ -68,33 +68,55 @@ public class InviteListViewAdapter extends BaseAdapter implements PinnedSectionL
         }
         else if (!contactList.isEmpty() && indexList.contains(position))
         {
+            IndexViewHolder indexViewHolder;
+            if(convertView == null)
+            {
+                convertView = layoutInflater.inflate(R.layout.list_header, parent, false);
+
+                indexViewHolder = new IndexViewHolder();
+                indexViewHolder.headerTextView = (TextView) convertView.findViewById(R.id.headerTextView);
+
+                convertView.setTag(indexViewHolder);
+            }
+            else
+            {
+                indexViewHolder = (IndexViewHolder) convertView.getTag();
+            }
+
             User user = contactList.get(position - inputList.size() - 1);
 
-            View view = layoutInflater.inflate(R.layout.list_header, parent, false);
+            indexViewHolder.headerTextView.setText(user.getNickname());
 
-            TextView headerTextView = (TextView) view.findViewById(R.id.headerTextView);
-            headerTextView.setText(user.getNickname());
-
-            return view;
+            return convertView;
         }
         else if (!contactList.isEmpty())
         {
+            ContactViewHolder contactViewHolder;
+            if(convertView == null || convertView.getTag() == null)
+            {
+                convertView = layoutInflater.inflate(R.layout.list_contact, parent, false);
+
+                contactViewHolder = new ContactViewHolder();
+                contactViewHolder.checkImageView = (ImageView) convertView.findViewById(R.id.checkImageView);
+                contactViewHolder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+                contactViewHolder.contactTextView = (TextView) convertView.findViewById(R.id.contactTextView);
+
+                convertView.setTag(contactViewHolder);
+            }
+            else
+            {
+                contactViewHolder = (ContactViewHolder) convertView.getTag();
+            }
+
             User user = contactList.get(position - inputList.size() - 1);
-
-            View view = layoutInflater.inflate(R.layout.list_contact, parent, false);
-
             int visibility = User.indexOfContactList(contactChosenList, user) > -1 ? View.VISIBLE : View.INVISIBLE;
-            ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
-            checkImageView.setVisibility(visibility);
 
-            TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
-            nameTextView.setText(user.getNickname());
-
+            contactViewHolder.checkImageView.setVisibility(visibility);
+            contactViewHolder.nameTextView.setText(user.getNickname());
             String contact = user.getPhone().isEmpty() ? user.getEmail() : user.getPhone();
-            TextView contactTextView = (TextView) view.findViewById(R.id.contactTextView);
-            contactTextView.setText(contact);
+            contactViewHolder.contactTextView.setText(contact);
 
-            return view;
+            return convertView;
         }
         else
         {
@@ -275,5 +297,17 @@ public class InviteListViewAdapter extends BaseAdapter implements PinnedSectionL
     public boolean isContact(int position)
     {
         return !indexList.contains(position);
+    }
+
+    private static class IndexViewHolder
+    {
+        TextView headerTextView;
+    }
+
+    private static class ContactViewHolder
+    {
+        ImageView checkImageView;
+        TextView nameTextView;
+        TextView contactTextView;
     }
 }
