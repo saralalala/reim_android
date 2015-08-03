@@ -50,6 +50,7 @@ public class ReportTagGridViewAdapter extends BaseAdapter
         {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
         viewHolder.statusTextView.setText(Report.getStatusString(position));
         viewHolder.statusTextView.setBackgroundResource(backgrounds[position]);
 
@@ -102,7 +103,7 @@ public class ReportTagGridViewAdapter extends BaseAdapter
         return check;
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
         TextView statusTextView;
         RelativeLayout coverLayout;

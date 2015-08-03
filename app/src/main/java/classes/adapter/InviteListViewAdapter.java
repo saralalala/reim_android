@@ -163,7 +163,7 @@ public class InviteListViewAdapter extends BaseAdapter implements PinnedSectionL
 
     public int getItemViewType(int position)
     {
-        return indexList.contains(position) ? Constant.TYPE_HEADER : Constant.TYPE_CONTENT;
+        return indexList.contains(position) ? Constant.VIEW_TYPE_HEADER : Constant.VIEW_TYPE_CONTENT;
     }
 
     public boolean isItemViewTypePinned(int viewType)

@@ -104,10 +104,10 @@ public class CategoryListViewAdapter extends BaseAdapter
         check = checkList;
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
-        ImageView iconImageView ;
-        TextView nameTextView ;
-        TextView noteTextView ;
+        ImageView iconImageView;
+        TextView nameTextView;
+        TextView noteTextView;
     }
 }

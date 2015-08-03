@@ -100,7 +100,7 @@ public class TagListViewAdapter extends BaseAdapter
         check = checkList;
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
         TextView nameTextView;
     }

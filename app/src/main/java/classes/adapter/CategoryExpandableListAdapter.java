@@ -181,14 +181,14 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter
         subCheckList.addAll(subCheck);
     }
 
-    static class GroupViewHolder
+    private static class GroupViewHolder
     {
         ImageView iconImageView;
         TextView nameTextView;
         TextView noteTextView;
     }
 
-    static class ChildViewHolder
+    private static class ChildViewHolder
     {
         ImageView iconImageView;
         TextView nameTextView;

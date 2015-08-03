@@ -87,7 +87,16 @@ public class PhoneUtils
     public static boolean isLocalisationEnabled()
     {
         LocationManager locationManager = (LocationManager) ReimApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
-        boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean gpsEnabled = false;
+        try
+        {
+            gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        }
+        catch (Exception e)
+        {
+            LogUtils.println("ACCESS_FINE_LOCATION permission missed");
+        }
+
         boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
         return gpsEnabled || networkEnabled;

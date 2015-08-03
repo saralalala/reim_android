@@ -20,7 +20,6 @@ import classes.model.Item;
 import classes.model.Tag;
 import classes.model.User;
 import classes.utils.Constant;
-import classes.utils.LogUtils;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
@@ -45,10 +44,10 @@ public class ItemListViewAdapter extends BaseAdapter
     {
         Item item = this.getItem(position);
         int viewType = getItemViewType(position);
-        HeaderViewHolder headerViewHolder = null;
-        ItemViewHolder itemViewHolder = null;
+        HeaderViewHolder headerViewHolder;
+        ItemViewHolder itemViewHolder;
 
-        if(viewType == 1)
+        if(viewType == Constant.VIEW_TYPE_HEADER)
         {
             if(convertView == null)
             {
@@ -162,7 +161,7 @@ public class ItemListViewAdapter extends BaseAdapter
 
     public int getItemViewType(int position)
     {
-        return itemList.get(position).getConsumedDateGroup().isEmpty() ? Constant.TYPE_CONTENT : Constant.TYPE_HEADER; // Type 两种 0和1
+        return itemList.get(position).getConsumedDateGroup().isEmpty() ? Constant.VIEW_TYPE_CONTENT : Constant.VIEW_TYPE_HEADER; // Type 两种 0和1
     }
 
     public int getViewTypeCount() {
@@ -311,11 +310,12 @@ public class ItemListViewAdapter extends BaseAdapter
         return false;
     }
 
-    static class HeaderViewHolder
+    private static class HeaderViewHolder
     {
         TextView headerTextView;
     }
-    static class ItemViewHolder
+
+    private static class ItemViewHolder
     {
         ImageView photoImageView ;
         TextView statusTextView ;

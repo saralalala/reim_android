@@ -76,7 +76,7 @@ public class ModifyHistoryListViewAdapter extends BaseAdapter
         historyList.addAll(histories);
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
         CircleImageView avatarImageView;
         TextView timeTextView;

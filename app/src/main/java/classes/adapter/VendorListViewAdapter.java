@@ -125,7 +125,7 @@ public class VendorListViewAdapter extends BaseAdapter
         this.showDistance = showDistance;
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
         ImageView imageView;
         TextView nameTextView;

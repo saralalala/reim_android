@@ -48,6 +48,7 @@ public class CommentListViewAdapter extends BaseAdapter
         {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
         Comment comment = commentList.get(position);
 
         User user = comment.getReviewer();
@@ -92,11 +93,11 @@ public class CommentListViewAdapter extends BaseAdapter
         commentList.addAll(comments);
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
-        CircleImageView avatarImageView ;
-        TextView reviewerTextView ;
-        TextView commentTextView ;
-        TextView dateTextView ;
+        CircleImageView avatarImageView;
+        TextView reviewerTextView;
+        TextView commentTextView;
+        TextView dateTextView;
     }
 }

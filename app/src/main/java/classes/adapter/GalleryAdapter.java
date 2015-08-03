@@ -45,29 +45,29 @@ public class GalleryAdapter extends BaseAdapter
 
     public View getView(final int position, View convertView, ViewGroup parent)
     {
-        final ViewHolder holder;
+        final ViewHolder viewHolder;
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.grid_gallery, parent, false);
 
-            holder = new ViewHolder();
-            holder.imageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
-            holder.checkLayout = (RelativeLayout) convertView.findViewById(R.id.checkLayout);
-            holder.checkImageView = (ImageView) convertView.findViewById(R.id.checkImageView);
+            viewHolder = new ViewHolder();
+            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
+            viewHolder.checkLayout = (RelativeLayout) convertView.findViewById(R.id.checkLayout);
+            viewHolder.checkImageView = (ImageView) convertView.findViewById(R.id.checkImageView);
 
-            LayoutParams params = (LayoutParams) holder.imageView.getLayoutParams();
+            LayoutParams params = (LayoutParams) viewHolder.imageView.getLayoutParams();
             params.height = height;
-            holder.imageView.setLayoutParams(params);
+            viewHolder.imageView.setLayoutParams(params);
 
-            convertView.setTag(holder);
+            convertView.setTag(viewHolder);
         }
         else
         {
-            holder = (ViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        holder.imageView.setTag(position);
-        holder.imageView.setOnClickListener(new View.OnClickListener()
+        viewHolder.imageView.setTag(position);
+        viewHolder.imageView.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
@@ -77,7 +77,7 @@ public class GalleryAdapter extends BaseAdapter
                 context.startActivity(intent);
             }
         });
-        holder.checkLayout.setOnClickListener(new OnClickListener()
+        viewHolder.checkLayout.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
@@ -85,12 +85,12 @@ public class GalleryAdapter extends BaseAdapter
                 {
                     String content = String.format(ViewUtils.getString(R.string.error_images_maximum), maxChosenCount);
                     Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
-                    holder.checkImageView.setSelected(false);
+                    viewHolder.checkImageView.setSelected(false);
                 }
                 else
                 {
                     checkList[position] = !checkList[position];
-                    holder.checkImageView.setSelected(checkList[position]);
+                    viewHolder.checkImageView.setSelected(checkList[position]);
                 }
                 callBack.execute();
             }
@@ -98,16 +98,16 @@ public class GalleryAdapter extends BaseAdapter
 
         try
         {
-            imageLoader.displayImage("file://" + pathList.get(position), holder.imageView, new SimpleImageLoadingListener()
+            imageLoader.displayImage("file://" + pathList.get(position), viewHolder.imageView, new SimpleImageLoadingListener()
             {
                 public void onLoadingStarted(String imageUri, View view)
                 {
-                    holder.imageView.setImageResource(R.drawable.no_media);
+                    viewHolder.imageView.setImageResource(R.drawable.no_media);
                     super.onLoadingStarted(imageUri, view);
                 }
             });
 
-            holder.checkImageView.setSelected(checkList[position]);
+            viewHolder.checkImageView.setSelected(checkList[position]);
         }
         catch (Exception e)
         {
@@ -196,7 +196,7 @@ public class GalleryAdapter extends BaseAdapter
         pathList.clear();
     }
 
-    public class ViewHolder
+    private static class ViewHolder
     {
         public ImageView imageView;
         public RelativeLayout checkLayout;

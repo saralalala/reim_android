@@ -116,10 +116,10 @@ public class CompanyListViewAdapter extends BaseAdapter
         this.hasInit = hasInit;
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
-        ImageView iconImageView ;
-        TextView nameTextView ;
-        TextView timeTextView ;
+        ImageView iconImageView;
+        TextView nameTextView;
+        TextView timeTextView;
     }
 }

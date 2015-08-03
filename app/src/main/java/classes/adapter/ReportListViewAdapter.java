@@ -41,49 +41,65 @@ public class ReportListViewAdapter extends BaseAdapter
     {
         if (tabIndex == Constant.TAB_REPORT_MINE)
         {
-            View view = layoutInflater.inflate(R.layout.list_report, parent, false);
-
-            TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
-            TextView confirmTextView = (TextView) view.findViewById(R.id.confirmTextView);
-            TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-            TextView dateTextView = (TextView) view.findViewById(R.id.dateTextView);
-            TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
-            ImageView tipImageView = (ImageView) view.findViewById(R.id.tipImageView);
-
-            Report report = reportList.get(position);
-
-            statusTextView.setText(report.getStatusString());
-            statusTextView.setBackgroundResource(report.getStatusBackground());
-
-            if (report.getStatus() == Report.STATUS_NEED_CONFIRM)
+            ViewHolder viewHolder;
+            if (convertView == null || convertView.getTag() == null)
             {
-                confirmTextView.setText(R.string.status_need_confirm);
-                confirmTextView.setVisibility(View.VISIBLE);
-            }
-            else if (report.getStatus() == Report.STATUS_CONFIRMED)
-            {
-                confirmTextView.setText(R.string.status_confirmed);
-                confirmTextView.setVisibility(View.VISIBLE);
+                convertView = layoutInflater.inflate(R.layout.list_report, parent, false);
+
+                viewHolder = new ViewHolder();
+                viewHolder.statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
+                viewHolder.ccTextView = (TextView) convertView.findViewById(R.id.ccTextView);
+                viewHolder.confirmTextView = (TextView) convertView.findViewById(R.id.confirmTextView);
+                viewHolder.senderTextView = (TextView) convertView.findViewById(R.id.senderTextView);
+                viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.titleTextView);
+                viewHolder.dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+                viewHolder.amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
+                viewHolder.tipImageView = (ImageView) convertView.findViewById(R.id.tipImageView);
+
+                convertView.setTag(viewHolder);
             }
             else
             {
-                confirmTextView.setVisibility(View.GONE);
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            Report report = reportList.get(position);
+
+            viewHolder.ccTextView.setVisibility(View.INVISIBLE);
+            viewHolder.senderTextView.setVisibility(View.INVISIBLE);
+
+            viewHolder.statusTextView.setText(report.getStatusString());
+            viewHolder.statusTextView.setBackgroundResource(report.getStatusBackground());
+
+            if (report.getStatus() == Report.STATUS_NEED_CONFIRM)
+            {
+                viewHolder.confirmTextView.setText(R.string.status_need_confirm);
+                viewHolder.confirmTextView.setVisibility(View.VISIBLE);
+            }
+            else if (report.getStatus() == Report.STATUS_CONFIRMED)
+            {
+                viewHolder.confirmTextView.setText(R.string.status_confirmed);
+                viewHolder.confirmTextView.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                viewHolder.confirmTextView.setVisibility(View.GONE);
             }
 
             String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
-            titleTextView.setText(title);
+            viewHolder.titleTextView.setText(title);
 
             String date = Utils.secondToStringUpToDay(report.getCreatedDate());
-            dateTextView.setText(date.isEmpty() ? context.getString(R.string.not_available) : date);
+            viewHolder.dateTextView.setText(date.isEmpty() ? context.getString(R.string.not_available) : date);
 
             double amount = dbManager.getReportAmount(report.getLocalID());
-            amountTextView.setText(Utils.formatDouble(amount));
-            amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
+            viewHolder.amountTextView.setText(Utils.formatDouble(amount));
+            viewHolder.amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
 
             int visibility = unreadList.contains(report.getServerID()) ? View.VISIBLE : View.INVISIBLE;
-            tipImageView.setVisibility(visibility);
+            viewHolder.tipImageView.setVisibility(visibility);
 
-            return view;
+            return convertView;
         }
         else
         {
@@ -120,13 +136,14 @@ public class ReportListViewAdapter extends BaseAdapter
             else
             {
                 ViewHolder viewHolder;
-                if(convertView == null || convertView.getTag() == null)
+                if (convertView == null || convertView.getTag() == null)
                 {
                     convertView = layoutInflater.inflate(R.layout.list_report, parent, false);
 
                     viewHolder = new ViewHolder();
                     viewHolder.statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
                     viewHolder.ccTextView = (TextView) convertView.findViewById(R.id.ccTextView);
+                    viewHolder.confirmTextView = (TextView) convertView.findViewById(R.id.confirmTextView);
                     viewHolder.senderTextView = (TextView) convertView.findViewById(R.id.senderTextView);
                     viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.titleTextView);
                     viewHolder.dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
@@ -140,6 +157,8 @@ public class ReportListViewAdapter extends BaseAdapter
                     viewHolder = (ViewHolder) convertView.getTag();
                 }
 
+                viewHolder.confirmTextView.setVisibility(View.GONE);
+
                 viewHolder.statusTextView.setText(report.getStatusString());
                 viewHolder.statusTextView.setBackgroundResource(report.getStatusBackground());
 
@@ -147,6 +166,7 @@ public class ReportListViewAdapter extends BaseAdapter
                 viewHolder.ccTextView.setVisibility(visibility);
 
                 String nickname = report.getSender() == null ? "" : report.getSender().getNickname();
+                viewHolder.senderTextView.setVisibility(View.VISIBLE);
                 viewHolder.senderTextView.setText(context.getString(R.string.prompt_sender) + nickname);
 
                 String title = report.getTitle().isEmpty() ? context.getString(R.string.report_no_name) : report.getTitle();
@@ -199,10 +219,11 @@ public class ReportListViewAdapter extends BaseAdapter
         this.tabIndex = tabIndex;
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
         TextView statusTextView;
         TextView ccTextView;
+        TextView confirmTextView;
         TextView senderTextView;
         TextView titleTextView;
         TextView dateTextView;

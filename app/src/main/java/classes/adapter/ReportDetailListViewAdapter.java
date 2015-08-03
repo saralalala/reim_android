@@ -236,7 +236,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
         itemList.addAll(items);
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
         TextView dateTextView;
         ImageView categoryImageView;

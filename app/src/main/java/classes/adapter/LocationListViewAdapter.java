@@ -18,7 +18,6 @@ import java.util.TreeMap;
 
 import classes.utils.CharacterParser;
 import classes.utils.Constant;
-import classes.utils.LogUtils;
 import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
 
@@ -40,7 +39,6 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
-
         if (position == 0)
         {
             View view = layoutInflater.inflate(R.layout.list_header, parent, false);
@@ -59,16 +57,19 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
             if(convertView == null || convertView.getTag() == null)
             {
                 convertView = layoutInflater.inflate(R.layout.list_header, parent, false);
-                headerViewHolder = new HeaderViewHolder();
 
+                headerViewHolder = new HeaderViewHolder();
                 headerViewHolder.headerTextView = (TextView) convertView.findViewById(R.id.headerTextView);
+
                 convertView.setTag(headerViewHolder);
             }
             else
             {
                 headerViewHolder = (HeaderViewHolder) convertView.getTag();
             }
+
             headerViewHolder.headerTextView.setText(cityList.get(position - 2));
+
             return convertView;
         }
         else
@@ -85,7 +86,9 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
             {
                 locationViewHolder = (LocationViewHolder) convertView.getTag();
             }
+
             locationViewHolder.locationTextView.setText(cityList.get(position - 2));
+
             return convertView;
         }
     }
@@ -112,7 +115,7 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
 
     public int getItemViewType(int position)
     {
-        return indexList.contains(position) ? Constant.TYPE_HEADER : Constant.TYPE_CONTENT;
+        return indexList.contains(position) ? Constant.VIEW_TYPE_HEADER : Constant.VIEW_TYPE_CONTENT;
     }
 
     public boolean isItemViewTypePinned(int viewType)
@@ -195,12 +198,12 @@ public class LocationListViewAdapter extends BaseAdapter implements PinnedSectio
         return !indexList.contains(position);
     }
 
-    static class HeaderViewHolder
+    private static class HeaderViewHolder
     {
         TextView headerTextView;
     }
 
-    static class LocationViewHolder
+    private static class LocationViewHolder
     {
         TextView locationTextView;
     }

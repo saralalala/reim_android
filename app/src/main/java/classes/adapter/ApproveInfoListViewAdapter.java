@@ -55,12 +55,11 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
         if (convertView == null)
         {
             convertView = layoutInflater.inflate(R.layout.list_approve_info, parent, false);
-            viewHolder = new ViewHolder();
 
+            viewHolder = new ViewHolder();
             viewHolder.pointImageView = (CircleImageView) convertView.findViewById(R.id.pointImageView);
             viewHolder.upperLayout = (LinearLayout) convertView.findViewById(R.id.upperLayout);
             viewHolder.lowerLayout = (LinearLayout) convertView.findViewById(R.id.lowerLayout);
-
             viewHolder.avatarImageView = (CircleImageView) convertView.findViewById(R.id.avatarImageView);
             viewHolder.nicknameTextView = (TextView) convertView.findViewById(R.id.nicknameTextView);
             viewHolder.statusTextView = (TextView) convertView.findViewById(R.id.statusTextView);
@@ -155,6 +154,7 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
 
             return convertView;
         }
+
         // set status, time and alarm
         if (info.isRevoked()) // revoked report
         {
@@ -320,17 +320,16 @@ public class ApproveInfoListViewAdapter extends BaseAdapter
         }
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
-        CircleImageView pointImageView ;
-        LinearLayout upperLayout ;
-        LinearLayout lowerLayout ;
-
-        CircleImageView avatarImageView ;
-        TextView nicknameTextView ;
-        TextView statusTextView ;
-        LinearLayout timeLayout ;
-        ImageView alarmImageView ;
-        LinearLayout divider ;
+        CircleImageView pointImageView;
+        LinearLayout upperLayout;
+        LinearLayout lowerLayout;
+        CircleImageView avatarImageView;
+        TextView nicknameTextView;
+        TextView statusTextView;
+        LinearLayout timeLayout;
+        ImageView alarmImageView;
+        LinearLayout divider;
     }
 }

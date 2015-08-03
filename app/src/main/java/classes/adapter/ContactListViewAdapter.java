@@ -23,7 +23,6 @@ import java.util.TreeMap;
 import classes.model.User;
 import classes.utils.CharacterParser;
 import classes.utils.Constant;
-import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.PinnedSectionListView;
@@ -84,16 +83,19 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
             if(convertView == null)
             {
                 convertView = layoutInflater.inflate(R.layout.list_header, parent, false);
-                indexViewHolder = new IndexViewHolder();
 
+                indexViewHolder = new IndexViewHolder();
                 indexViewHolder.headerTextView = (TextView) convertView.findViewById(R.id.headerTextView);
+
                 convertView.setTag(indexViewHolder);
             }
             else
             {
                 indexViewHolder = (IndexViewHolder) convertView.getTag();
             }
+
             User user = contactList.get(position);
+
             indexViewHolder.headerTextView.setText(user.getNickname());
 
             return convertView;
@@ -104,8 +106,8 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
             if(convertView == null)
             {
                 convertView = layoutInflater.inflate(R.layout.list_contact, parent, false);
-                contactViewHolder = new ContactViewHolder();
 
+                contactViewHolder = new ContactViewHolder();
                 contactViewHolder.checkImageView = (ImageView) convertView.findViewById(R.id.checkImageView);
                 contactViewHolder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
                 contactViewHolder.contactTextView = (TextView) convertView.findViewById(R.id.contactTextView);
@@ -151,7 +153,7 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
 
     public int getItemViewType(int position)
     {
-        return indexList.contains(position) ? Constant.TYPE_HEADER : Constant.TYPE_CONTENT;
+        return indexList.contains(position) ? Constant.VIEW_TYPE_HEADER : Constant.VIEW_TYPE_CONTENT;
     }
 
     public boolean isItemViewTypePinned(int viewType)
@@ -253,12 +255,12 @@ public class ContactListViewAdapter extends BaseAdapter implements PinnedSection
         return !indexList.contains(position);
     }
 
-    static class IndexViewHolder
+    private static class IndexViewHolder
     {
         TextView headerTextView;
     }
 
-    static class ContactViewHolder
+    private static class ContactViewHolder
     {
         ImageView checkImageView;
         TextView nameTextView;

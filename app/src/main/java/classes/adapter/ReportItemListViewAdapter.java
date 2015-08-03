@@ -47,7 +47,8 @@ public class ReportItemListViewAdapter extends BaseAdapter
         else
         {
             ViewHolder viewHolder;
-            if(convertView == null || convertView.getTag() == null){
+            if(convertView == null || convertView.getTag() == null)
+            {
                 convertView = layoutInflater.inflate(R.layout.list_report_item_edit, parent, false);
 
                 viewHolder = new ViewHolder();
@@ -129,7 +130,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
         chosenIDList.addAll(chosenList);
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
         TextView symbolTextView;
         TextView amountTextView;

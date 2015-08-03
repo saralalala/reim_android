@@ -89,7 +89,7 @@ public class DidiExpenseListViewAdapter extends BaseAdapter
         importedList.addAll(imports);
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
         TextView timeTextView;
         TextView usedTextView;

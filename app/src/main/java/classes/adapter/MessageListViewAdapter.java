@@ -78,7 +78,7 @@ public class MessageListViewAdapter extends BaseAdapter
         messageList.addAll(messages);
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
         TextView messageTextView ;
         TextView dateTextView ;

@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
@@ -109,7 +108,6 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
 
             color = isChosen ? selectedColor : unselectedColor;
             memberViewHolder.nicknameTextView.setTextColor(color);
-
         }
         return convertView;
     }
@@ -136,7 +134,7 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
 
     public int getItemViewType(int position)
     {
-        return indexList.contains(position) ? Constant.TYPE_HEADER : Constant.TYPE_CONTENT;
+        return indexList.contains(position) ? Constant.VIEW_TYPE_HEADER : Constant.VIEW_TYPE_CONTENT;
     }
 
     public boolean isItemViewTypePinned(int viewType)
@@ -249,12 +247,12 @@ public class MemberListViewAdapter extends BaseAdapter implements PinnedSectionL
         return selector;
     }
 
-    static class HeaderViewHolder
+    private static class HeaderViewHolder
     {
         TextView headerTextView;
     }
 
-    static class MemberViewHolder
+    private static class MemberViewHolder
     {
         CircleImageView imageView;
         TextView nicknameTextView;

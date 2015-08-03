@@ -86,7 +86,7 @@ public class ProxyListViewAdapter extends BaseAdapter
         this.chosenList = chosenList;
     }
 
-    static class ViewHolder
+    private static class ViewHolder
     {
         TextView nameTextView;
         TextView scopeTextView;
