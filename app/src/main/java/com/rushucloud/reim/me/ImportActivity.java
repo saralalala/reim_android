@@ -88,6 +88,15 @@ public class ImportActivity extends Activity
                 }
             }
         });
+
+        LinearLayout uberLayout = (LinearLayout) findViewById(R.id.uberLayout);
+        uberLayout.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                ViewUtils.goForward(ImportActivity.this, BindUberActivity.class);
+            }
+        });
     }
 
     private void refreshView()

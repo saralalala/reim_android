@@ -71,6 +71,7 @@
     <string name="wechat_session">微信好友</string>
     <string name="wechat_moments">朋友圈</string>
     <string name="didi">滴滴打车</string>
+    <string name="uber">Uber</string>
     
     <string name="sign_up">注册</string>
     <string name="quick_sign_up">快速注册</string>
@@ -266,6 +267,7 @@
     <string name="bind_phone">绑定手机</string>
     <string name="bind_wechat">绑定微信</string>
     <string name="bind_didi">绑定滴滴打车</string>
+    <string name="bind_uber">绑定Uber</string>
     <string name="change_email">更换绑定邮箱</string>
     <string name="change_phone">更换绑定手机</string>
     <string name="change_wechat">更换绑定微信</string>

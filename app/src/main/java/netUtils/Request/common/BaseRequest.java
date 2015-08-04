@@ -37,6 +37,7 @@ import netUtils.common.HttpUtils;
 import netUtils.common.NetworkConstant;
 import netUtils.common.URLDef;
 
+@SuppressWarnings("deprecation")
 public abstract class BaseRequest
 {
     private String url;

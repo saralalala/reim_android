@@ -2,10 +2,10 @@ package netUtils.common;
 
 public class URLDef
 {
-//    public static final String URL_PREFIX = "https://api.rushucloud.com/stage";
-	public static final String URL_PREFIX = "https://api.cloudbaoxiao.com/online";
-//    public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com/stage/msg";
-    public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com/online/msg";
+    public static final String URL_PREFIX = "https://api.rushucloud.com/stage";
+//	public static final String URL_PREFIX = "https://api.cloudbaoxiao.com/online";
+    public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com/stage/msg";
+//    public static final String WEBSOCKET_URI = "ws://api.cloudbaoxiao.com/online/msg";
 
     public static final String URL_PREFIX_SANDBOX = "https://api.cloudbaoxiao.com/sandbox";
 
@@ -61,6 +61,9 @@ public class URLDef
     public static final String URL_DIDI_KUAI_CHE_DETAIL = "http://api.udache.com/gulfstream/api/v1/passenger/pGetOrderDetail";
     public static final String URL_DIDI_ZHUAN_CHE_DETAIL = "http://api.udache.com/gulfstream/api/v1/passenger/pGetOrderDetail";
     public static final String URL_DIDI_LIFT_DETAIL = "http://api.didialift.com/beatles/api/passenger/order/getinfo";
+    public static final String URL_UBER_AUTH = "https://login.uber.com/oauth/authorize?response_type=code&client_id=oUIxdv1uRO4jBlG1jKW9rPr0GnBGjJ3f";
+    public static final String URL_UBER_HISTORY = "https://api.uber.com/v1.2/history";
+    public static final String URL_UBER_PRODUCT = "https://api.uber.com/v1/products";
 
     public static final String URL_SHARE_REDIRECT_URI_PREFIX = "https://admin.cloudbaoxiao.com/pub/oauth/";
     public static final String URL_SHARE = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx068349d5d3a73855&redirect_uri=%1$s" +
