@@ -273,6 +273,7 @@
     <string name="change_wechat">更换绑定微信</string>
     <string name="resend_active_email">重新发送激活邮件</string>
     <string name="import_didi_expenses">导入滴滴打车消费记录</string>
+    <string name="import_uber_expenses">导入Uber消费记录</string>
     <string name="has_imported">(已导入)</string>
     <string name="bank_info">银行账户</string>
     <string name="bank_account">银行账号</string>
@@ -620,6 +621,7 @@
     <string name="failed_to_get_didi_token">获取滴滴Token失败</string>
     <string name="failed_to_bind_didi">滴滴账号绑定失败</string>
     <string name="failed_to_get_didi_expenses">获取滴滴打车消费列表失败</string>
+    <string name="failed_to_get_uber_expenses">获取Uber消费列表失败</string>
     <string name="failed_to_delete">删除失败</string>
     <string name="failed_to_search_companies">搜索公司失败</string>
     <string name="failed_to_apply">申请加入公司失败</string>
