@@ -41,6 +41,7 @@ import netUtils.common.URLDef;
 public abstract class BaseRequest
 {
     private String url;
+    private List<NameValuePair> headers = new ArrayList<>();
     private List<NameValuePair> params = new ArrayList<>();
     private HttpClient httpClient;
 
@@ -74,6 +75,16 @@ public abstract class BaseRequest
     protected void appendUrl(long suffix)
     {
         this.url += "/" + suffix;
+    }
+
+    protected void addHeaders(String key, String value)
+    {
+        this.headers.add(new BasicNameValuePair(key, value));
+    }
+
+    protected void addHeaders(NameValuePair nameValuePair)
+    {
+        this.headers.add(nameValuePair);
     }
 
     protected void addParams(String key, String value)
@@ -231,6 +242,10 @@ public abstract class BaseRequest
                 try
                 {
                     request.addHeader(NetworkConstant.X_REIM_JWT, HttpUtils.getJWTString());
+                    for (NameValuePair header : headers)
+                    {
+                        request.addHeader(header.getName(), header.getValue());
+                    }
 
                     HttpResponse response = httpClient.execute(request);
                     if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)

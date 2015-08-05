@@ -8,6 +8,7 @@ import classes.utils.ViewUtils;
 
 public class UberProductResponse
 {
+    private boolean status = true;
     private double amount = 0;
 
     public UberProductResponse(Object httpResponse)
@@ -20,7 +21,13 @@ public class UberProductResponse
         catch (Exception e)
         {
             e.printStackTrace();
+            status = false;
         }
+    }
+
+    public boolean getStatus()
+    {
+        return status;
     }
 
     public double getAmount()

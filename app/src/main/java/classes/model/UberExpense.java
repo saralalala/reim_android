@@ -18,6 +18,7 @@ public class UberExpense implements Serializable
     private String city = "";
     private double startLatitude = 0;
     private double startLongitude = 0;
+    private String start = "";
     private String currencyCode = "CNY";
     private boolean isUsed = false;
     private boolean isCompleted = false;
@@ -104,6 +105,15 @@ public class UberExpense implements Serializable
     public void setStartLongitude(double startLongitude)
     {
         this.startLongitude = startLongitude;
+    }
+
+    public String getStart()
+    {
+        return start;
+    }
+    public void setStart(String start)
+    {
+        this.start = start;
     }
 
     public String getCurrencyCode()

@@ -23,6 +23,7 @@ public class Constant
     public static final int ACTIVITY_PICK_CC = 14;
     public static final int ACTIVITY_PICK_ITEMS = 15;
     public static final int ACTIVITY_IMPORT_DIDI = 16;
+    public static final int ACTIVITY_IMPORT_UBER = 17;
 
     public static final int FILTER_TYPE_ALL = 0;
     public static final int FILTER_TYPE_CONSUMED = 1;

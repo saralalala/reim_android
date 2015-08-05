@@ -104,6 +104,11 @@ public class HttpUtils
         }
     }
 
+    public static NameValuePair getUberTokenHeader(String token)
+    {
+        return new BasicNameValuePair("Authorization", "Bearer " + token);
+    }
+
     private static String getUserAgent()
     {
         String result = NetworkConstant.USER_AGENT + ",";
