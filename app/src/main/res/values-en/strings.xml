@@ -71,6 +71,7 @@
     <string name="wechat_session">Wechat contact</string>
     <string name="wechat_moments">Wechat Moments</string>
     <string name="didi">滴滴打车</string>
+    <string name="uber">Uber</string>
 
     <string name="sign_up">Signup</string>
     <string name="quick_sign_up">快速注册</string>
@@ -158,6 +159,7 @@
     <string name="currency">货　币</string>
     <string name="note">Note</string>
     <string name="transport">Transportation</string>
+    <string name="choose_consumed_date">请选择消费时间</string>
     <string name="choose_category">Choose category</string>
     <string name="choose_vendor">Choose vendor</string>
     <string name="choose_location">Choose location</string>
@@ -265,6 +267,7 @@
     <string name="bind_phone">绑定手机</string>
     <string name="bind_wechat">绑定微信</string>
     <string name="bind_didi">绑定滴滴打车</string>
+    <string name="bind_uber">绑定Uber</string>
     <string name="change_email">更换绑定邮箱</string>
     <string name="change_phone">更换绑定手机</string>
     <string name="change_wechat">更换绑定微信</string>
