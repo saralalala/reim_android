@@ -12,6 +12,7 @@ public class Group
     private boolean noAutoTime = false;
     private boolean isTimeCompulsory = false;
     private boolean isNoteCompulsory = false;
+    private boolean isBudgetDisabled = false;
     private int createdDate = -1;
     private int serverUpdatedDate = -1;
     private int localUpdatedDate = -1;

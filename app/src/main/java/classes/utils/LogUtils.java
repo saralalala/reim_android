@@ -22,6 +22,14 @@ public class LogUtils
         }
     }
 
+    public static void printError(Object object)
+    {
+        if (debugMode)
+        {
+            Log.e(Constant.LOG_TAG, object.toString());
+        }
+    }
+
     public static void tempPrint(Object object)
     {
         System.out.println(object);

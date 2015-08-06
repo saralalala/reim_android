@@ -50,4 +50,6 @@ public class Constant
 
     public static final int VIEW_TYPE_CONTENT = 0;
     public static final int VIEW_TYPE_HEADER = 1;
+
+    public static final String LOG_TAG = "reim";
 }

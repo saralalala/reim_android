@@ -77,11 +77,6 @@ public abstract class BaseRequest
         this.url += "/" + suffix;
     }
 
-    protected void addHeaders(String key, String value)
-    {
-        this.headers.add(new BasicNameValuePair(key, value));
-    }
-
     protected void addHeaders(NameValuePair nameValuePair)
     {
         this.headers.add(nameValuePair);
@@ -254,7 +249,7 @@ public abstract class BaseRequest
                     }
                     else
                     {
-                        resultString = constructNetworkError();
+                        resultString = response.getStatusLine().getReasonPhrase();
                     }
                 }
                 catch (Exception e)
