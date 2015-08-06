@@ -27,7 +27,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
 
     private DBManager(Context context)
     {
@@ -48,6 +48,8 @@ public class DBManager extends SQLiteOpenHelper
                     + "no_auto_time INT DEFAULT(0),"
                     + "time_compulsory INT DEFAULT(0),"
                     + "note_compulsory INT DEFAULT(0),"
+                    + "disable_budget INT DEFAULT(0),"
+                    + "disable_borrow INT DEFAULT(0),"
                     + "creator_id INT DEFAULT(0),"
                     + "server_updatedt INT DEFAULT(0),"
                     + "local_updatedt INT DEFAULT(0),"
@@ -426,6 +428,15 @@ public class DBManager extends SQLiteOpenHelper
                 command = "ALTER TABLE tbl_group ADD COLUMN note_compulsory INT DEFAULT(0)";
                 db.execSQL(command);
             }
+
+            if (oldVersion < 12)
+            {
+                String command = "ALTER TABLE tbl_group ADD COLUMN disable_budget INT DEFAULT(0)";
+                db.execSQL(command);
+
+                command = "ALTER TABLE tbl_group ADD COLUMN disable_borrow INT DEFAULT(0)";
+                db.execSQL(command);
+            }
         }
         onCreate(db);
     }
@@ -493,6 +504,7 @@ public class DBManager extends SQLiteOpenHelper
         {
             String sqlString = "INSERT INTO tbl_group (server_id, group_name, close_directly, " +
                                 "show_structure, no_auto_time, time_compulsory, note_compulsory, " +
+                                "disable_budget, disable_borrow, "+
                                 "local_updatedt, server_updatedt) VALUES (" +
                     "'" + group.getServerID() + "'," +
                     "'" + sqliteEscape(group.getName()) + "'," +
@@ -501,6 +513,8 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + Utils.booleanToInt(group.noAutoTime()) + "'," +
                     "'" + Utils.booleanToInt(group.isTimeCompulsory()) + "'," +
                     "'" + Utils.booleanToInt(group.isNoteCompulsory()) + "'," +
+                    "'" + Utils.booleanToInt(group.isBudgetDisabled()) + "'," +
+                    "'" + Utils.booleanToInt(group.isBorrowDisabled()) + "'," +
                     "'" + group.getLocalUpdatedDate() + "'," +
                     "'" + group.getServerUpdatedDate() + "')";
             database.execSQL(sqlString);
@@ -539,6 +553,8 @@ public class DBManager extends SQLiteOpenHelper
                     "no_auto_time = '" + Utils.booleanToInt(group.noAutoTime()) + "'," +
                     "time_compulsory = '" + Utils.booleanToInt(group.isTimeCompulsory()) + "'," +
                     "note_compulsory = '" + Utils.booleanToInt(group.isNoteCompulsory()) + "'," +
+                    "disable_budget = '" + Utils.booleanToInt(group.isBudgetDisabled()) + "'," +
+                    "disable_borrow = '" + Utils.booleanToInt(group.isBorrowDisabled()) + "'," +
                     "local_updatedt = '" + group.getLocalUpdatedDate() + "'," +
                     "server_updatedt = '" + group.getServerUpdatedDate() + "' " +
                     "WHERE server_id = '" + group.getServerID() + "'";
@@ -3169,6 +3185,8 @@ public class DBManager extends SQLiteOpenHelper
         group.setNoAutoTime(getBooleanFromCursor(cursor, "no_auto_time"));
         group.setIsTimeCompulsory(getBooleanFromCursor(cursor, "time_compulsory"));
         group.setIsNoteCompulsory(getBooleanFromCursor(cursor, "note_compulsory"));
+        group.setIsBudgetDisabled(getBooleanFromCursor(cursor, "disable_budget"));
+        group.setIsBorrowDisabled(getBooleanFromCursor(cursor, "disable_borrow"));
         group.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
         group.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 

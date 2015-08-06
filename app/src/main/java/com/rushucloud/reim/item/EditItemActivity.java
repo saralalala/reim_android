@@ -864,6 +864,7 @@ public class EditItemActivity extends Activity
         budgetImageView = (ImageView) typeView.findViewById(R.id.budgetImageView);
         borrowingImageView = (ImageView) typeView.findViewById(R.id.borrowingImageView);
         needReimLayout = (RelativeLayout) typeView.findViewById(R.id.needReimLayout);
+        needReimLayout.setVisibility(View.VISIBLE);
 
         ImageView disclosureImageView = (ImageView) typeView.findViewById(R.id.disclosureImageView);
         disclosureImageView.setOnClickListener(new View.OnClickListener()
@@ -893,7 +894,11 @@ public class EditItemActivity extends Activity
             }
         });
 
-        LinearLayout budgetLayout = (LinearLayout) typeView.findViewById(R.id.budgetLayout);
+        RelativeLayout budgetLayout = (RelativeLayout) typeView.findViewById(R.id.budgetLayout);
+        if(currentGroup != null && currentGroup.isBudgetDisabled())
+        {
+            budgetLayout.setVisibility(View.GONE);
+        }
         budgetLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
@@ -914,7 +919,11 @@ public class EditItemActivity extends Activity
             }
         });
 
-        LinearLayout borrowingLayout = (LinearLayout) typeView.findViewById(R.id.borrowingLayout);
+        RelativeLayout borrowingLayout = (RelativeLayout) typeView.findViewById(R.id.borrowingLayout);
+        if(currentGroup != null && currentGroup.isBorrowDisabled())
+        {
+            borrowingLayout.setVisibility(View.GONE);
+        }
         borrowingLayout.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)

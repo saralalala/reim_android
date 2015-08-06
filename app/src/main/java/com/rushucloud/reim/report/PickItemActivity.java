@@ -32,6 +32,7 @@ import java.util.List;
 
 import classes.adapter.ReportItemListViewAdapter;
 import classes.model.Category;
+import classes.model.Group;
 import classes.model.Item;
 import classes.model.Report;
 import classes.model.Tag;
@@ -65,6 +66,8 @@ public class PickItemActivity extends Activity implements OnClickListener
     // Local Data
     private AppPreference appPreference;
     private static DBManager dbManager;
+
+    private Group currentGroup;
 
     private Report report;
     private ArrayList<Integer> chosenItemIDList = null;
@@ -219,9 +222,19 @@ public class PickItemActivity extends Activity implements OnClickListener
 
         consumedTextView = (TextView) findViewById(R.id.consumedTextView);
         consumedTextView.setOnClickListener(this);
+
         budgetTextView = (TextView) findViewById(R.id.budgetTextView);
+        if(currentGroup != null && currentGroup.isBudgetDisabled())
+        {
+            budgetTextView.setVisibility(View.GONE);
+        }
         budgetTextView.setOnClickListener(this);
+
         borrowingTextView = (TextView) findViewById(R.id.borrowingTextView);
+        if(currentGroup != null && currentGroup.isBorrowDisabled())
+        {
+            borrowingTextView.setVisibility(View.GONE);
+        }
         borrowingTextView.setOnClickListener(this);
 
         itemCountTextView = (TextView) findViewById(R.id.itemCountTextView);
@@ -1062,6 +1075,8 @@ public class PickItemActivity extends Activity implements OnClickListener
 
         appPreference = AppPreference.getAppPreference();
         dbManager = DBManager.getDBManager();
+
+        currentGroup = appPreference.getCurrentGroup();
 
         tabIndex = report.getType();
         if (tabIndex == 0)

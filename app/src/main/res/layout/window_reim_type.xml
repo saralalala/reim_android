@@ -81,7 +81,7 @@
 	
 	</RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/budgetLayout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -92,29 +92,30 @@
             android:id="@+id/budgetImageView"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:contentDescription="@string/check"
             android:src="@drawable/check"/>
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/budgetImageView"
             android:layout_marginLeft="16dp"
             android:text="@string/budget"
             android:textColor="@color/font_major_dark"
             android:textSize="16sp"/>
 
-    </LinearLayout>
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            layout="@layout/view_divider"/>
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        layout="@layout/view_divider"/>
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/borrowingLayout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -125,27 +126,28 @@
             android:id="@+id/borrowingImageView"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:contentDescription="@string/check"
             android:src="@drawable/check"/>
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/borrowingImageView"
             android:layout_marginLeft="16dp"
             android:text="@string/borrowing"
             android:textColor="@color/font_major_dark"
             android:textSize="16sp"/>
 
-    </LinearLayout>
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            layout="@layout/view_divider"/>
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        layout="@layout/view_divider"/>
+    </RelativeLayout>
 
 	<TextView
 	    android:id="@+id/confirmTextView"

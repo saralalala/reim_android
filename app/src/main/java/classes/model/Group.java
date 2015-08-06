@@ -13,6 +13,7 @@ public class Group
     private boolean isTimeCompulsory = false;
     private boolean isNoteCompulsory = false;
     private boolean isBudgetDisabled = false;
+    private boolean isBorrowDisabled = false;
     private int createdDate = -1;
     private int serverUpdatedDate = -1;
     private int localUpdatedDate = -1;
@@ -58,6 +59,16 @@ public class Group
                 if (object.containsKey("note_compulsory") && object.getInteger("note_compulsory") == 1)
                 {
                     setIsNoteCompulsory(true);
+                }
+
+                if (object.containsKey("disable_budget") && object.getInteger("disable_budget") == 1)
+                {
+                    setIsBudgetDisabled(true);
+                }
+
+                if (object.containsKey("disable_borrow") && object.getInteger("disable_borrow") == 1)
+                {
+                    setIsBorrowDisabled(true);
                 }
             }
         }
@@ -128,6 +139,25 @@ public class Group
     public void setIsNoteCompulsory(boolean isNoteCompulsory)
     {
         this.isNoteCompulsory = isNoteCompulsory;
+    }
+
+    public boolean isBudgetDisabled()
+    {
+        boolean b = isBudgetDisabled;
+        return isBudgetDisabled;
+    }
+    public void setIsBudgetDisabled(boolean isBudgetDisabled)
+    {
+        this.isBudgetDisabled = isBudgetDisabled;
+    }
+
+    public boolean isBorrowDisabled()
+    {
+        return isBorrowDisabled;
+    }
+    public void setIsBorrowDisabled(boolean isBorrowDisabled)
+    {
+        this.isBorrowDisabled = isBorrowDisabled;
     }
 
     public int getCreatedDate()

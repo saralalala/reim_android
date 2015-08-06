@@ -40,6 +40,7 @@ public class SignInResponse extends BaseResponse
 
             int groupID = -1;
             JSONObject groupObject = profileObject.getJSONObject("group");
+            String s = groupObject.toString();
             if (groupObject.getInteger("groupid") != -1)
             {
                 group = new Group(groupObject);
