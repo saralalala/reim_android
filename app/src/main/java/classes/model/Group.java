@@ -3,6 +3,8 @@ package classes.model;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.List;
+
 public class Group
 {
     private int serverID = -1;
@@ -14,6 +16,8 @@ public class Group
     private boolean isNoteCompulsory = false;
     private boolean isBudgetDisabled = false;
     private boolean isBorrowDisabled = false;
+    private String itemAttributionString = "";
+    private List<ItemAttribution> itemAttributions = null;
     private int createdDate = -1;
     private int serverUpdatedDate = -1;
     private int localUpdatedDate = -1;
@@ -69,6 +73,11 @@ public class Group
                 if (object.containsKey("disable_borrow") && object.getInteger("disable_borrow") == 1)
                 {
                     setIsBorrowDisabled(true);
+                }
+
+                if (object.containsKey("item_config"))
+                {
+                    setItemAttributionString(object.getString("item_config"));
                 }
             }
         }
@@ -158,6 +167,24 @@ public class Group
     public void setIsBorrowDisabled(boolean isBorrowDisabled)
     {
         this.isBorrowDisabled = isBorrowDisabled;
+    }
+
+    public String getItemAttributionString()
+    {
+        return itemAttributionString;
+    }
+    public void setItemAttributionString(String itemAttributionString)
+    {
+        this.itemAttributionString = itemAttributionString;
+    }
+
+    public List<ItemAttribution> getItemAttributions()
+    {
+        return itemAttributions == null ? ItemAttribution.parseString(itemAttributionString) : itemAttributions;
+    }
+    public void setItemAttributions(List<ItemAttribution> itemAttributions)
+    {
+        this.itemAttributions = itemAttributions;
     }
 
     public int getCreatedDate()
