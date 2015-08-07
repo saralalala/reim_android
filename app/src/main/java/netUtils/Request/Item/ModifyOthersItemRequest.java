@@ -1,10 +1,11 @@
 package netUtils.request.item;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 
 import classes.model.Item;
+import classes.utils.JSONUtils;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.NetworkConstant;
 import netUtils.common.URLDef;
@@ -84,9 +85,9 @@ public class ModifyOthersItemRequest extends BaseRequest
                     default:
                         break;
                 }
-                if (object.optInt("type", -1) != -1)
+                if (JSONUtils.optInt(object, "type", -1) != -1)
                 {
-                    jsonArray.put(object);
+                    jsonArray.add(object);
                 }
             }
         }

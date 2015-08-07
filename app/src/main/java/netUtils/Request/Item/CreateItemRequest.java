@@ -1,7 +1,7 @@
 package netUtils.request.item;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import classes.model.Image;
 import classes.model.Item;
@@ -43,7 +43,7 @@ public class CreateItemRequest extends BaseRequest
             jObject.put("local_id", item.getLocalID());
             jObject.put("extra", item.getExtraString());
 
-            jsonArray.put(jObject);
+            jsonArray.add(jObject);
 
             addParams("items", jsonArray.toString());
 
