@@ -97,7 +97,8 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:orientation="horizontal"
-        android:background="@drawable/me_item_drawable">
+        android:background="@drawable/me_item_drawable"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="48dp"
@@ -143,6 +144,7 @@
     <include
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        layout="@layout/view_divider"/>
+        layout="@layout/view_divider"
+        android:visibility="gone"/>
 
 </LinearLayout>
