@@ -88,6 +88,7 @@ public class Item
             setTagsID(jObject.getString("tags"));
             setRelevantUsers(User.idStringToUserList(jObject.getString("relates")));
             setRelevantUsersID(jObject.getString("relates"));
+            setExtraString(JSONUtils.optString(jObject, "extra", "[]"));
 
             Currency currency = new Currency();
             String currencyCode = JSONUtils.optString(jObject, "currency", "").toUpperCase();
