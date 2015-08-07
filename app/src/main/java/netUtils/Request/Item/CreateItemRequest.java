@@ -41,6 +41,7 @@ public class CreateItemRequest extends BaseRequest
             jObject.put("note", item.getNote());
             jObject.put("reimbursed", Utils.booleanToString(item.needReimbursed()));
             jObject.put("local_id", item.getLocalID());
+            jObject.put("extra", item.getExtraString());
 
             jsonArray.put(jObject);
 

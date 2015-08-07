@@ -74,11 +74,11 @@ public class Group
                 {
                     setIsBorrowDisabled(true);
                 }
+            }
 
-                if (object.containsKey("item_config"))
-                {
-                    setItemAttributionString(object.getString("item_config"));
-                }
+            if (jObject.containsKey("item_config"))
+            {
+                setItemAttributionString(jObject.getString("item_config"));
             }
         }
         catch (com.alibaba.fastjson.JSONException e)

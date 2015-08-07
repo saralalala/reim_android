@@ -27,7 +27,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     private DBManager(Context context)
     {
@@ -50,13 +50,13 @@ public class DBManager extends SQLiteOpenHelper
                     + "note_compulsory INT DEFAULT(0),"
                     + "disable_budget INT DEFAULT(0),"
                     + "disable_borrow INT DEFAULT(0),"
+                    + "item_attrs TEXT DEFAULT(''),"
                     + "creator_id INT DEFAULT(0),"
                     + "server_updatedt INT DEFAULT(0),"
                     + "local_updatedt INT DEFAULT(0),"
                     + "backup1 INT DEFAULT(0),"
                     + "backup2 TEXT DEFAULT(''),"
-                    + "backup3 TEXT DEFAULT(''),"
-                    + "item_attrs TEXT DEFAULT('')"
+                    + "backup3 TEXT DEFAULT('')"
                     + ")";
             db.execSQL(createGroupTable);
 
@@ -106,6 +106,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "aa_approved INT DEFAULT(0),"
                     + "status INT DEFAULT(0),"
                     + "location TEXT DEFAULT(''),"
+                    + "extra TEXT DEFAULT(''),"
                     + "createdt INT DEFAULT(0),"
                     + "server_updatedt INT DEFAULT(0),"
                     + "local_updatedt INT DEFAULT(0),"
@@ -158,6 +159,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "aa_approved INT DEFAULT(0),"
                     + "status INT DEFAULT(0),"
                     + "location TEXT DEFAULT(''),"
+                    + "extra TEXT DEFAULT(''),"
                     + "createdt INT DEFAULT(0),"
                     + "server_updatedt INT DEFAULT(0),"
                     + "local_updatedt INT DEFAULT(0),"
@@ -443,6 +445,12 @@ public class DBManager extends SQLiteOpenHelper
             {
                 String command = "ALTER TABLE tbl_group ADD COLUMN item_attrs TEXT DEFAULT('')";
                 db.execSQL(command);
+
+                command = "ALTER TABLE tbl_item ADD COLUMN extra TEXT DEFAULT('')";
+                db.execSQL(command);
+
+                command = "ALTER TABLE tbl_others_item ADD COLUMN extra TEXT DEFAULT('')";
+                db.execSQL(command);
             }
         }
         onCreate(db);
@@ -511,8 +519,8 @@ public class DBManager extends SQLiteOpenHelper
         {
             String sqlString = "INSERT INTO tbl_group (server_id, group_name, close_directly, " +
                                 "show_structure, no_auto_time, time_compulsory, note_compulsory, " +
-                                "disable_budget, disable_borrow, "+
-                                "local_updatedt, server_updatedt, item_attrs) VALUES (" +
+                                "disable_budget, disable_borrow, item_attrs, "+
+                                "local_updatedt, server_updatedt) VALUES (" +
                     "'" + group.getServerID() + "'," +
                     "'" + sqliteEscape(group.getName()) + "'," +
                     "'" + Utils.booleanToInt(group.reportCanBeClosedDirectly()) + "'," +
@@ -522,9 +530,9 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + Utils.booleanToInt(group.isNoteCompulsory()) + "'," +
                     "'" + Utils.booleanToInt(group.isBudgetDisabled()) + "'," +
                     "'" + Utils.booleanToInt(group.isBorrowDisabled()) + "'," +
+                    "'" + sqliteEscape(group.getItemAttributionString()) + "'," +
                     "'" + group.getLocalUpdatedDate() + "'," +
-                    "'" + group.getServerUpdatedDate() + "'," +
-                    "'" + group.getItemAttributionString() + "')";
+                    "'" + group.getServerUpdatedDate() + "')";
             database.execSQL(sqlString);
             return true;
         }
@@ -563,9 +571,9 @@ public class DBManager extends SQLiteOpenHelper
                     "note_compulsory = '" + Utils.booleanToInt(group.isNoteCompulsory()) + "'," +
                     "disable_budget = '" + Utils.booleanToInt(group.isBudgetDisabled()) + "'," +
                     "disable_borrow = '" + Utils.booleanToInt(group.isBorrowDisabled()) + "'," +
+                    "item_attrs = '" + sqliteEscape(group.getItemAttributionString()) + "'," +
                     "local_updatedt = '" + group.getLocalUpdatedDate() + "'," +
                     "server_updatedt = '" + group.getServerUpdatedDate() + "' " +
-                    "item_attrs = '" + group.getItemAttributionString() + "' " +
                     "WHERE server_id = '" + group.getServerID() + "'";
 
             database.execSQL(sqlString);
@@ -980,8 +988,8 @@ public class DBManager extends SQLiteOpenHelper
             int categoryID = item.getCategory() == null ? -1 : item.getCategory().getServerID();
             String currencyCode = item.getCurrency() == null ? "CNY" : item.getCurrency().getCode();
             String sqlString = "INSERT INTO tbl_item (server_id, vendor, report_local_id, category_id, amount, " +
-                    "pa_amount, user_id, consumed_date, note, status, location, currency, rate, didi_id, createdt, " +
-                    "server_updatedt, local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
+                    "pa_amount, user_id, consumed_date, note, status, location, currency, rate, didi_id, extra, " +
+                    "createdt, server_updatedt, local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
                     "'" + item.getServerID() + "'," +
                     "'" + sqliteEscape(item.getVendor()) + "'," +
                     "'" + reportID + "'," +
@@ -996,6 +1004,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + currencyCode + "'," +
                     "'" + item.getRate() + "'," +
                     "'" + item.getDidiID() + "'," +
+                    "'" + sqliteEscape(item.getExtraString()) + "'," +
                     "'" + item.getCreatedDate() + "'," +
                     "'" + item.getServerUpdatedDate() + "'," +
                     "'" + item.getLocalUpdatedDate() + "'," +
@@ -1030,7 +1039,7 @@ public class DBManager extends SQLiteOpenHelper
             String currencyCode = item.getCurrency() == null ? "CNY" : item.getCurrency().getCode();
             String sqlString = "INSERT INTO tbl_others_item (server_id, vendor, report_server_id, category_id, tags_id, " +
                     "users_id, amount, pa_amount, user_id, consumed_date, note, status, location, currency, rate, didi_id, " +
-                    "createdt, server_updatedt, local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
+                    "extra, createdt, server_updatedt, local_updatedt, type, need_reimbursed, aa_approved) VALUES (" +
                     "'" + item.getServerID() + "'," +
                     "'" + sqliteEscape(item.getVendor()) + "'," +
                     "'" + item.getBelongReport().getServerID() + "'," +
@@ -1047,6 +1056,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + currencyCode + "'," +
                     "'" + item.getRate() + "'," +
                     "'" + item.getDidiID() + "'," +
+                    "'" + sqliteEscape(item.getExtraString()) + "'," +
                     "'" + item.getCreatedDate() + "'," +
                     "'" + item.getServerUpdatedDate() + "'," +
                     "'" + item.getLocalUpdatedDate() + "'," +
@@ -1150,6 +1160,7 @@ public class DBManager extends SQLiteOpenHelper
                     "currency = '" + currencyCode + "'," +
                     "rate = '" + item.getRate() + "'," +
                     "didi_id = '" + item.getDidiID() + "'," +
+                    "extra = '" + sqliteEscape(item.getExtraString()) + "'," +
                     "createdt = '" + item.getCreatedDate() + "'," +
                     "server_updatedt = '" + item.getServerUpdatedDate() + "'," +
                     "local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
@@ -1194,6 +1205,7 @@ public class DBManager extends SQLiteOpenHelper
                     "currency = '" + currencyCode + "'," +
                     "rate = '" + item.getRate() + "'," +
                     "didi_id = '" + item.getDidiID() + "'," +
+                    "extra = '" + sqliteEscape(item.getExtraString()) + "'," +
                     "createdt = '" + item.getCreatedDate() + "'," +
                     "server_updatedt = '" + item.getServerUpdatedDate() + "'," +
                     "local_updatedt = '" + item.getLocalUpdatedDate() + "'," +
@@ -1237,6 +1249,7 @@ public class DBManager extends SQLiteOpenHelper
                     "location = '" + sqliteEscape(item.getLocation()) + "'," +
                     "tags_id = '" + item.getTagsID() + "'," +
                     "users_id = '" + item.getRelevantUsersID() + "'," +
+                    "extra = '" + sqliteEscape(item.getExtraString()) + "'," +
                     "server_updatedt = '" + item.getServerUpdatedDate() + "'," +
                     "local_updatedt = '" + item.getLocalUpdatedDate() + "' " +
                     "WHERE server_id = '" + item.getServerID() + "'";
@@ -3126,12 +3139,18 @@ public class DBManager extends SQLiteOpenHelper
         Cursor cursor = database.rawQuery("SELECT * FROM tbl_sob WHERE user_id = ?",
                                           new String[]{Integer.toString(userID)});
         List<Integer> setOfBookList = new ArrayList<>();
-        setOfBookList.add(0);
         try
         {
+            boolean noSetOfBooks = true;
             while (cursor.moveToNext())
             {
                 setOfBookList.add(getIntFromCursor(cursor, "server_id"));
+                noSetOfBooks = false;
+            }
+
+            if (noSetOfBooks)
+            {
+                setOfBookList.add(0);
             }
         }
         catch (Exception e)
@@ -3160,6 +3179,20 @@ public class DBManager extends SQLiteOpenHelper
         keyWord = keyWord.replace("_", "/_");
         keyWord = keyWord.replace("(", "/(");
         keyWord = keyWord.replace(")", "/)");
+        return keyWord;
+    }
+
+    private String sqliteReverseEscape(String keyWord)
+    {
+        keyWord = keyWord.replace("//", "/");
+        keyWord = keyWord.replace("''", "'");
+        keyWord = keyWord.replace("/[", "[");
+        keyWord = keyWord.replace("/]", "]");
+        keyWord = keyWord.replace("/%", "%");
+        keyWord = keyWord.replace("/&", "&");
+        keyWord = keyWord.replace("/_", "_");
+        keyWord = keyWord.replace("/(", "(");
+        keyWord = keyWord.replace("/)", ")");
         return keyWord;
     }
 
@@ -3196,9 +3229,9 @@ public class DBManager extends SQLiteOpenHelper
         group.setIsNoteCompulsory(getBooleanFromCursor(cursor, "note_compulsory"));
         group.setIsBudgetDisabled(getBooleanFromCursor(cursor, "disable_budget"));
         group.setIsBorrowDisabled(getBooleanFromCursor(cursor, "disable_borrow"));
+        group.setItemAttributionString(sqliteReverseEscape(getStringFromCursor(cursor, "item_attrs")));
         group.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
         group.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
-        group.setItemAttributionString(getStringFromCursor(cursor, "item_attrs"));
 
         return group;
     }
@@ -3293,6 +3326,7 @@ public class DBManager extends SQLiteOpenHelper
         item.setCurrency(getCurrency(getStringFromCursor(cursor, "currency")));
         item.setRate(getDoubleFromCursor(cursor, "rate"));
         item.setDidiID(getIntFromCursor(cursor, "didi_id"));
+        item.setExtraString(getStringFromCursor(cursor, "extra"));
         item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
         item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
         item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
@@ -3372,6 +3406,7 @@ public class DBManager extends SQLiteOpenHelper
         item.setCurrency(getCurrency(getStringFromCursor(cursor, "currency")));
         item.setRate(getDoubleFromCursor(cursor, "rate"));
         item.setDidiID(getIntFromCursor(cursor, "didi_id"));
+        item.setExtraString(getStringFromCursor(cursor, "extra"));
         item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
         item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
         item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));

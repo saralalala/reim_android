@@ -419,6 +419,7 @@
     <string name="error_wrong_confirm_password">新密码两次输入不一致</string>
     <string name="error_wrong_set_password_confirm">密码两次输入不一致</string>
     <string name="error_email_or_phone_wrong_format">手机号或邮箱格式不正确</string>
+    <string name="error_earlier_end_time">截止日期不能早于起始日期，请重新选择</string>
     <string name="error_category_name_empty">请输入类别名称</string>
     <string name="error_tag_name_empty">请输入标签名称</string>
     <string name="error_comment_empty">请输入评论</string>

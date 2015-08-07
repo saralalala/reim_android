@@ -61,6 +61,7 @@ import classes.model.DidiExpense;
 import classes.model.Group;
 import classes.model.Image;
 import classes.model.Item;
+import classes.model.ItemAttribution;
 import classes.model.Report;
 import classes.model.Tag;
 import classes.model.User;
@@ -102,6 +103,8 @@ public class EditItemActivity extends Activity
     private PopupWindow picturePopupWindow;
 
     private TextView timeTextView;
+    private RelativeLayout endTimeLayout;
+    private TextView endTimeTextView;
     private PopupWindow timePopupWindow;
     private DatePicker datePicker;
     private TimePicker timePicker;
@@ -132,6 +135,7 @@ public class EditItemActivity extends Activity
     boolean removeImageViewShown = false;
 
     private Group currentGroup;
+    private ItemAttribution timeAttribution;
     private List<Currency> currencyList = new ArrayList<>();
     private List<Category> categoryList = new ArrayList<>();
     private List<Tag> tagList = new ArrayList<>();
@@ -146,6 +150,8 @@ public class EditItemActivity extends Activity
     private boolean fromApproveReport;
     private boolean fromDidi;
     private boolean newItem = false;
+    private boolean isEndTime = false;
+    private int endTime = -1;
 
     private LocationClient locationClient = null;
     private BDLocationListener listener = new ReimLocationListener();
@@ -289,7 +295,9 @@ public class EditItemActivity extends Activity
                 {
                     Category category = (Category) data.getSerializableExtra("category");
                     item.setCategory(category);
+                    endTime = item.getConsumedDate();
                     refreshCategoryView();
+                    refreshEndTimeView();
                     break;
                 }
                 case Constant.ACTIVITY_PICK_TAG:
@@ -758,10 +766,26 @@ public class EditItemActivity extends Activity
             public void onClick(View v)
             {
                 hideSoftKeyboard();
-                showTimeWindow();
+                isEndTime = false;
+                showTimeWindow(item.getConsumedDate());
             }
         });
         timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
+
+        endTimeLayout = (RelativeLayout) findViewById(R.id.endTimeLayout);
+
+        endTimeTextView = (TextView) findViewById(R.id.endTimeTextView);
+        endTimeTextView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                hideSoftKeyboard();
+                isEndTime = true;
+                showTimeWindow(endTime);
+            }
+        });
+
+        refreshEndTimeView();
 
         // init time window
         View timeView = View.inflate(this, R.layout.window_reim_time, null);
@@ -771,12 +795,35 @@ public class EditItemActivity extends Activity
         {
             public void onClick(View v)
             {
-                timePopupWindow.dismiss();
+                GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(),
+                                                                 datePicker.getMonth(),
+                                                                 datePicker.getDayOfMonth(),
+                                                                 timePicker.getCurrentHour(),
+                                                                 timePicker.getCurrentMinute());
 
-                GregorianCalendar greCal = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(),
-                                                                 datePicker.getDayOfMonth(), timePicker.getCurrentHour(), timePicker.getCurrentMinute());
-                item.setConsumedDate((int) (greCal.getTimeInMillis() / 1000));
-                timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
+                int date = (int) (greCal.getTimeInMillis() / 1000);
+                if (!isEndTime)
+                {
+                    item.setConsumedDate(date);
+                    timeTextView.setText(Utils.secondToStringUpToMinute(item.getConsumedDate()));
+
+                    if (item.getConsumedDate() > endTime)
+                    {
+                        endTime = item.getConsumedDate();
+                        refreshEndTimeView();
+                    }
+                    timePopupWindow.dismiss();
+                }
+                else if (date < item.getConsumedDate())
+                {
+                    ViewUtils.showToast(EditItemActivity.this, R.string.error_earlier_end_time);
+                }
+                else
+                {
+                    endTime = date;
+                    endTimeTextView.setText(Utils.secondToStringUpToMinute(endTime));
+                    timePopupWindow.dismiss();
+                }
             }
         });
 
@@ -899,41 +946,47 @@ public class EditItemActivity extends Activity
         {
             budgetLayout.setVisibility(View.GONE);
         }
-        budgetLayout.setOnClickListener(new View.OnClickListener()
+        else
         {
-            public void onClick(View view)
+            budgetLayout.setOnClickListener(new View.OnClickListener()
             {
-                if (newItem)
+                public void onClick(View view)
                 {
-                    MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_PROVEAHEAD");
-                }
-                else
-                {
-                    MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_PROVEAHEAD");
-                }
+                    if (newItem)
+                    {
+                        MobclickAgent.onEvent(EditItemActivity.this, "UMENG_NEW_PROVEAHEAD");
+                    }
+                    else
+                    {
+                        MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_PROVEAHEAD");
+                    }
 
-                consumedImageView.setVisibility(View.INVISIBLE);
-                budgetImageView.setVisibility(View.VISIBLE);
-                borrowingImageView.setVisibility(View.INVISIBLE);
-                needReimLayout.setVisibility(View.GONE);
-            }
-        });
+                    consumedImageView.setVisibility(View.INVISIBLE);
+                    budgetImageView.setVisibility(View.VISIBLE);
+                    borrowingImageView.setVisibility(View.INVISIBLE);
+                    needReimLayout.setVisibility(View.GONE);
+                }
+            });
+        }
 
         RelativeLayout borrowingLayout = (RelativeLayout) typeView.findViewById(R.id.borrowingLayout);
         if(currentGroup != null && currentGroup.isBorrowDisabled())
         {
             borrowingLayout.setVisibility(View.GONE);
         }
-        borrowingLayout.setOnClickListener(new View.OnClickListener()
+        else
         {
-            public void onClick(View view)
+            borrowingLayout.setOnClickListener(new View.OnClickListener()
             {
-                consumedImageView.setVisibility(View.INVISIBLE);
-                budgetImageView.setVisibility(View.INVISIBLE);
-                borrowingImageView.setVisibility(View.VISIBLE);
-                needReimLayout.setVisibility(View.GONE);
-            }
-        });
+                public void onClick(View view)
+                {
+                    consumedImageView.setVisibility(View.INVISIBLE);
+                    budgetImageView.setVisibility(View.INVISIBLE);
+                    borrowingImageView.setVisibility(View.VISIBLE);
+                    needReimLayout.setVisibility(View.GONE);
+                }
+            });
+        }
 
         needReimToggleButton = (ToggleButton) typeView.findViewById(R.id.needReimToggleButton);
         needReimToggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener()
@@ -1231,6 +1284,22 @@ public class EditItemActivity extends Activity
         }
     }
 
+    private void refreshEndTimeView()
+    {
+        boolean showEndTime = item.getCategory() != null && timeAttribution != null &&
+                timeAttribution.getRelevantCategoryIDs().contains(item.getCategory().getServerID());
+
+        if (showEndTime)
+        {
+            endTimeLayout.setVisibility(View.VISIBLE);
+            endTimeTextView.setText(Utils.secondToStringUpToMinute(endTime));
+        }
+        else
+        {
+            endTimeLayout.setVisibility(View.GONE);
+        }
+    }
+
     private void refreshTypeView()
     {
         String temp = getString(item.getTypeString());
@@ -1350,7 +1419,7 @@ public class EditItemActivity extends Activity
         ViewUtils.dimBackground(this);
     }
 
-    private void showTimeWindow()
+    private void showTimeWindow(int date)
     {
         if (newItem)
         {
@@ -1362,13 +1431,13 @@ public class EditItemActivity extends Activity
         }
 
         Calendar calendar = Calendar.getInstance();
-        if (item.getConsumedDate() <= 0)
+        if (date <= 0)
         {
             calendar.setTimeInMillis(System.currentTimeMillis());
         }
         else
         {
-            calendar.setTimeInMillis((long) item.getConsumedDate() * 1000);
+            calendar.setTimeInMillis((long) date * 1000);
         }
 
         datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
@@ -1584,6 +1653,14 @@ public class EditItemActivity extends Activity
         locationClient = new LocationClient(getApplicationContext());
 
         currentGroup = appPreference.getCurrentGroup();
+        List<ItemAttribution> attributionList = currentGroup.getItemAttributions();
+        for (ItemAttribution attribution : attributionList)
+        {
+            if (attribution.getType() == ItemAttribution.TYPE_TIME)
+            {
+                timeAttribution = attribution;
+            }
+        }
         currencyList.addAll(dbManager.getCurrencyList());
         categoryList.addAll(dbManager.getUserCategories(appPreference.getCurrentUserID(), appPreference.getCurrentGroupID()));
         tagList.addAll(dbManager.getGroupTags(appPreference.getCurrentGroupID()));
@@ -1613,6 +1690,7 @@ public class EditItemActivity extends Activity
             if (currentGroup == null || !currentGroup.noAutoTime())
             {
                 item.setConsumedDate(Utils.getCurrentTime());
+                endTime = Utils.getCurrentTime();
             }
 
             // init invoices

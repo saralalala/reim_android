@@ -54,6 +54,7 @@ public class Item
     private String note = "";
     private String relevantUsersID = "";
     private String tagsID = "";
+    private String extraString = "";
     private int consumedDate = -1;
     private int createdDate = -1;
     private int serverUpdatedDate = -1;
@@ -364,6 +365,15 @@ public class Item
     public void setTagsID(String tagsID)
     {
         this.tagsID = tagsID;
+    }
+
+    public String getExtraString()
+    {
+        return extraString;
+    }
+    public void setExtraString(String extraString)
+    {
+        this.extraString = extraString;
     }
 
     public int getConsumedDate()
