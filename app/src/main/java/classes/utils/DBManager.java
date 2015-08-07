@@ -3326,7 +3326,7 @@ public class DBManager extends SQLiteOpenHelper
         item.setCurrency(getCurrency(getStringFromCursor(cursor, "currency")));
         item.setRate(getDoubleFromCursor(cursor, "rate"));
         item.setDidiID(getIntFromCursor(cursor, "didi_id"));
-        item.setExtraString(getStringFromCursor(cursor, "extra"));
+        item.setExtraString(sqliteReverseEscape(getStringFromCursor(cursor, "extra")));
         item.setConsumedDate(getIntFromCursor(cursor, "consumed_date"));
         item.setCreatedDate(getIntFromCursor(cursor, "createdt"));
         item.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));

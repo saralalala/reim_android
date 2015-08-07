@@ -89,7 +89,7 @@ public class ItemListViewAdapter extends BaseAdapter
                 itemViewHolder = (ItemViewHolder)convertView.getTag();
             }
 
-            int photoVisibility = item.hasInvoice() ? View.GONE : View.VISIBLE;
+            int photoVisibility = item.hasInvoice() ? View.VISIBLE : View.GONE;
             itemViewHolder.photoImageView.setVisibility(photoVisibility);
 
             itemViewHolder.statusTextView.setText(item.getStatusString());

@@ -185,7 +185,6 @@ public class EditReportActivity extends Activity
                     Bundle bundle = data.getExtras();
                     chosenItemIDList.clear();
                     chosenItemIDList.addAll(bundle.getIntegerArrayList("chosenItemIDList"));
-                    System.out.println(chosenItemIDList);
                     itemList = dbManager.getItems(chosenItemIDList);
                     report.setType(bundle.getInt("type"));
                     refreshView();

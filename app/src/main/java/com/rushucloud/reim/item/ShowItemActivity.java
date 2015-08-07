@@ -12,8 +12,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.common.MultipleImageActivity;
 import com.rushucloud.reim.main.MainActivity;
@@ -25,8 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.model.Category;
+import classes.model.Group;
 import classes.model.Image;
 import classes.model.Item;
+import classes.model.ItemAttribution;
 import classes.model.ModifyHistory;
 import classes.model.Report;
 import classes.model.Tag;
@@ -61,8 +66,10 @@ public class ShowItemActivity extends Activity
 
     // Local Data
     private DBManager dbManager;
+    private ItemAttribution timeAttribution;
     private Item item = new Item();
     private boolean myItem;
+    private int endTime = -1;
     private List<ModifyHistory> historyList = new ArrayList<>();
     private Report report;
     private boolean fromPush = false;
@@ -210,6 +217,18 @@ public class ShowItemActivity extends Activity
         else
         {
             timeTextView.setText(R.string.not_available);
+        }
+
+        RelativeLayout endTimeLayout = (RelativeLayout) findViewById(R.id.endTimeLayout);
+        TextView endTimeTextView = (TextView) findViewById(R.id.endTimeTextView);
+        if (timeAttribution != null && timeAttribution.effectsOnCategory(item.getCategory()))
+        {
+            endTimeLayout.setVisibility(View.VISIBLE);
+            endTimeTextView.setText(Utils.secondToStringUpToMinute(endTime));
+        }
+        else
+        {
+            endTimeLayout.setVisibility(View.GONE);
         }
 
         // init currency
@@ -456,6 +475,16 @@ public class ShowItemActivity extends Activity
     private void initData()
     {
         dbManager = DBManager.getDBManager();
+        Group currentGroup = AppPreference.getAppPreference().getCurrentGroup();
+        List<ItemAttribution> attributionList = currentGroup.getItemAttributions();
+        for (ItemAttribution attribution : attributionList)
+        {
+            if (attribution.getType() == ItemAttribution.TYPE_TIME)
+            {
+                timeAttribution = attribution;
+            }
+        }
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         fromPush = bundle.getBoolean("fromPush", false);
@@ -479,6 +508,10 @@ public class ShowItemActivity extends Activity
                 {
                     item = new Item();
                 }
+                else
+                {
+                    parseExtras();
+                }
             }
             else
             {
@@ -487,6 +520,32 @@ public class ShowItemActivity extends Activity
                 if (item == null)
                 {
                     item = new Item();
+                }
+                else
+                {
+                    parseExtras();
+                }
+            }
+        }
+    }
+
+    private void parseExtras()
+    {
+        endTime = item.getConsumedDate();
+        if (!item.getExtraString().isEmpty())
+        {
+            JSONArray extraArray = JSON.parseArray(item.getExtraString());
+            if (extraArray != null)
+            {
+                for (int i = 0; i < extraArray.size(); i++)
+                {
+                    ItemAttribution attribution = new ItemAttribution();
+                    int value = attribution.parse(extraArray.getJSONObject(i));
+                    if (timeAttribution.equals(attribution))
+                    {
+                        endTime = value;
+                        break;
+                    }
                 }
             }
         }
@@ -621,6 +680,7 @@ public class ShowItemActivity extends Activity
                     {
                         dbManager.updateItemByServerID(response.getItem());
                         item = dbManager.getItemByServerID(itemID);
+                        parseExtras();
 
                         sendModifyHistoryRequest(itemID);
 

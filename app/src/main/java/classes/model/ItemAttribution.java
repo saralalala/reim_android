@@ -15,9 +15,9 @@ import classes.utils.Utils;
 public class ItemAttribution
 {
     public static final int TYPE_EDITTEXT = 0;
-    public static final int TYPE_SINGLE_CHOICE = 0;
-    public static final int TYPE_TIME = 0;
-    public static final int TYPE_TOGGLE = 0;
+    public static final int TYPE_SINGLE_CHOICE = 1;
+    public static final int TYPE_TIME = 2;
+    public static final int TYPE_TOGGLE = 3;
 
     private int id = -1;
     private String name = "";
@@ -57,6 +57,13 @@ public class ItemAttribution
         {
             e.printStackTrace();
         }
+    }
+
+    public int parse(JSONObject jObject)
+    {
+        setID(jObject.getInteger("id"));
+        setType(jObject.getInteger("type"));
+        return jObject.getInteger("value");
     }
 
     public int getID()
@@ -121,6 +128,10 @@ public class ItemAttribution
     {
         this.relevantCategoryIDs = relevantCategoryIDs;
     }
+    public boolean effectsOnCategory(Category category)
+    {
+        return category != null && relevantCategoryIDs.contains(category.getServerID());
+    }
 
     public static List<ItemAttribution> parseString(String text)
     {
@@ -131,5 +142,20 @@ public class ItemAttribution
             attributions.add(new ItemAttribution(attributionArray.getJSONObject(i)));
         }
         return attributions;
+    }
+
+    public boolean equals(Object o)
+    {
+        if (o == null)
+        {
+            return false;
+        }
+
+        if (o instanceof ItemAttribution)
+        {
+            ItemAttribution attribution = (ItemAttribution) o;
+            return attribution.getID() == this.getID();
+        }
+        return super.equals(o);
     }
 }

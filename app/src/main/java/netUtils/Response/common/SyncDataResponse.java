@@ -9,6 +9,7 @@ import java.util.List;
 
 import classes.model.Item;
 import classes.model.Report;
+import classes.utils.LogUtils;
 
 public class SyncDataResponse extends BaseResponse
 {
@@ -44,7 +45,7 @@ public class SyncDataResponse extends BaseResponse
         }
         catch (JSONException e)
         {
-            System.out.println(e.getLocalizedMessage());
+            LogUtils.printError(e.getLocalizedMessage());
             e.printStackTrace();
         }
     }

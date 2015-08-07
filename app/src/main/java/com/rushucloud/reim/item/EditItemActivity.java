@@ -37,6 +37,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -358,11 +361,13 @@ public class EditItemActivity extends Activity
                     {
                         hideSoftKeyboard();
 
+                        item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
+                        item.setNote(note);
+                        setExtras();
+
                         if(!fromApproveReport)
                         {
-                            item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
                             item.setConsumer(appPreference.getCurrentUser());
-                            item.setNote(note);
                             item.setLocalUpdatedDate(Utils.getCurrentTime());
 
                             if (newItem)
@@ -453,8 +458,6 @@ public class EditItemActivity extends Activity
                         }
                         else
                         {
-                            item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
-                            item.setNote(noteEditText.getText().toString());
                             item.setTagsID(Tag.getTagsIDString(item.getTags()));
                             item.setRelevantUsersID(User.getUsersIDString(item.getRelevantUsers()));
 
@@ -1286,10 +1289,7 @@ public class EditItemActivity extends Activity
 
     private void refreshEndTimeView()
     {
-        boolean showEndTime = item.getCategory() != null && timeAttribution != null &&
-                timeAttribution.getRelevantCategoryIDs().contains(item.getCategory().getServerID());
-
-        if (showEndTime)
+        if (timeAttribution != null && timeAttribution.effectsOnCategory(item.getCategory()))
         {
             endTimeLayout.setVisibility(View.VISIBLE);
             endTimeTextView.setText(Utils.secondToStringUpToMinute(endTime));
@@ -1740,6 +1740,7 @@ public class EditItemActivity extends Activity
             else
             {
                 originInvoiceList.addAll(item.getInvoices());
+                parseExtras();
             }
         }
         else
@@ -1756,6 +1757,48 @@ public class EditItemActivity extends Activity
             {
                 originItem = new Item(item);
                 originInvoiceList.addAll(item.getInvoices());
+                parseExtras();
+            }
+        }
+    }
+
+    private void setExtras()
+    {
+        if (timeAttribution != null && timeAttribution.effectsOnCategory(item.getCategory()))
+        {
+            JSONObject timeObject = new JSONObject();
+            timeObject.put("id", timeAttribution.getID());
+            timeObject.put("type", timeAttribution.getType());
+            timeObject.put("value", endTime);
+
+            JSONArray extraArray = new JSONArray();
+            extraArray.add(timeObject);
+
+            item.setExtraString(extraArray.toString());
+        }
+        else
+        {
+            item.setExtraString("");
+        }
+    }
+
+    private void parseExtras()
+    {
+        if (!item.getExtraString().isEmpty())
+        {
+            JSONArray extraArray = JSON.parseArray(item.getExtraString());
+            if (extraArray != null)
+            {
+                for (int i = 0; i < extraArray.size(); i++)
+                {
+                    ItemAttribution attribution = new ItemAttribution();
+                    int value = attribution.parse(extraArray.getJSONObject(i));
+                    if (timeAttribution.equals(attribution))
+                    {
+                        endTime = value;
+                        break;
+                    }
+                }
             }
         }
     }
