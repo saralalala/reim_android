@@ -55,7 +55,8 @@ public class DBManager extends SQLiteOpenHelper
                     + "local_updatedt INT DEFAULT(0),"
                     + "backup1 INT DEFAULT(0),"
                     + "backup2 TEXT DEFAULT(''),"
-                    + "backup3 TEXT DEFAULT('')"
+                    + "backup3 TEXT DEFAULT(''),"
+                    + "item_attrs TEXT DEFAULT('')"
                     + ")";
             db.execSQL(createGroupTable);
 
@@ -437,6 +438,12 @@ public class DBManager extends SQLiteOpenHelper
                 command = "ALTER TABLE tbl_group ADD COLUMN disable_borrow INT DEFAULT(0)";
                 db.execSQL(command);
             }
+
+            if (oldVersion < 13)
+            {
+                String command = "ALTER TABLE tbl_group ADD COLUMN item_attrs TEXT DEFAULT('')";
+                db.execSQL(command);
+            }
         }
         onCreate(db);
     }
@@ -505,7 +512,7 @@ public class DBManager extends SQLiteOpenHelper
             String sqlString = "INSERT INTO tbl_group (server_id, group_name, close_directly, " +
                                 "show_structure, no_auto_time, time_compulsory, note_compulsory, " +
                                 "disable_budget, disable_borrow, "+
-                                "local_updatedt, server_updatedt) VALUES (" +
+                                "local_updatedt, server_updatedt, item_attrs) VALUES (" +
                     "'" + group.getServerID() + "'," +
                     "'" + sqliteEscape(group.getName()) + "'," +
                     "'" + Utils.booleanToInt(group.reportCanBeClosedDirectly()) + "'," +
@@ -516,7 +523,8 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + Utils.booleanToInt(group.isBudgetDisabled()) + "'," +
                     "'" + Utils.booleanToInt(group.isBorrowDisabled()) + "'," +
                     "'" + group.getLocalUpdatedDate() + "'," +
-                    "'" + group.getServerUpdatedDate() + "')";
+                    "'" + group.getServerUpdatedDate() + "'," +
+                    "'" + group.getItemAttributionString() + "')";
             database.execSQL(sqlString);
             return true;
         }
@@ -557,6 +565,7 @@ public class DBManager extends SQLiteOpenHelper
                     "disable_borrow = '" + Utils.booleanToInt(group.isBorrowDisabled()) + "'," +
                     "local_updatedt = '" + group.getLocalUpdatedDate() + "'," +
                     "server_updatedt = '" + group.getServerUpdatedDate() + "' " +
+                    "item_attrs = '" + group.getItemAttributionString() + "' " +
                     "WHERE server_id = '" + group.getServerID() + "'";
 
             database.execSQL(sqlString);
@@ -3189,6 +3198,7 @@ public class DBManager extends SQLiteOpenHelper
         group.setIsBorrowDisabled(getBooleanFromCursor(cursor, "disable_borrow"));
         group.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
         group.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
+        group.setItemAttributionString(getStringFromCursor(cursor, "item_attrs"));
 
         return group;
     }
