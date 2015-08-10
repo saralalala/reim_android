@@ -61,8 +61,8 @@ public class ItemAttribution
 
     public int parse(JSONObject jObject)
     {
-        setID(jObject.getInteger("id"));
-        setType(jObject.getInteger("type"));
+        setID(jObject.getInteger("pid"));
+        setType(jObject.getInteger("extra_type"));
         return jObject.getInteger("value");
     }
 

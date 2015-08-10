@@ -351,6 +351,10 @@ public class EditItemActivity extends Activity
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.choose_consumed_date);
                 }
+                else if (timeAttribution.isCompulsory() && endTime == -1)
+                {
+                    ViewUtils.showToast(EditItemActivity.this, R.string.choose_end_time);
+                }
                 else if (currentGroup != null && currentGroup.isNoteCompulsory() && note.isEmpty())
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.input_note);
