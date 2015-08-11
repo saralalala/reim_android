@@ -73,6 +73,7 @@ import classes.utils.Constant;
 import classes.utils.DBManager;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
+import classes.utils.ReimBroadcastReceiver;
 import classes.utils.TextLengthFilter;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
@@ -351,7 +352,7 @@ public class EditItemActivity extends Activity
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.choose_consumed_date);
                 }
-                else if (timeAttribution.isCompulsory() && endTime == -1)
+                else if (timeAttribution != null && timeAttribution.isCompulsory() && endTime == -1)
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.choose_end_time);
                 }
@@ -513,6 +514,7 @@ public class EditItemActivity extends Activity
         initTagView();
         initMemberView();
         initNoteView();
+
     }
 
     private void initStatusView()
