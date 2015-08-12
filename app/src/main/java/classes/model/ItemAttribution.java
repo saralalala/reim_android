@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.utils.LogUtils;
 import classes.utils.Utils;
 
 public class ItemAttribution
@@ -137,9 +138,12 @@ public class ItemAttribution
     {
         List<ItemAttribution> attributions = new ArrayList<>();
         JSONArray attributionArray = JSON.parseArray(text);
-        for (int i = 0; i < attributionArray.size(); i++)
+        if (attributionArray != null)
         {
-            attributions.add(new ItemAttribution(attributionArray.getJSONObject(i)));
+            for (int i = 0; i < attributionArray.size(); i++)
+            {
+                attributions.add(new ItemAttribution(attributionArray.getJSONObject(i)));
+            }
         }
         return attributions;
     }

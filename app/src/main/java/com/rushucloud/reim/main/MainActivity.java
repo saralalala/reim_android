@@ -163,6 +163,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void initView()
     {
         ReimFragment reimFragment = new ReimFragment();
