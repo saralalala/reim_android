@@ -18,6 +18,7 @@ import classes.utils.PhoneUtils;
 import classes.utils.ViewUtils;
 import classes.widget.ReimProgressDialog;
 import netUtils.common.HttpConnectionCallback;
+import netUtils.common.NetworkConstant;
 import netUtils.request.proxy.CreateProxyRequest;
 import netUtils.request.proxy.ModifyProxyRequest;
 import netUtils.response.proxy.CreateProxyResponse;
@@ -200,15 +201,18 @@ public class ProxyScopeActivity extends Activity
                 {
                     public void run()
                     {
+                        ReimProgressDialog.dismiss();
                         if (response.getStatus())
                         {
-                            ReimProgressDialog.dismiss();
                             ViewUtils.showToast(ProxyScopeActivity.this, R.string.succeed_in_creating_proxy);
                             ViewUtils.goBackWithIntent(ProxyScopeActivity.this, ProxyActivity.class);
                         }
+                        else if (response.getCode() == NetworkConstant.ERROR_PROXY_EXISTS)
+                        {
+                            ViewUtils.showToast(ProxyScopeActivity.this, R.string.error_network_proxy_exists);
+                        }
                         else
                         {
-                            ReimProgressDialog.dismiss();
                             ViewUtils.showToast(ProxyScopeActivity.this, R.string.failed_to_create_proxy, response.getErrorMessage());
                         }
                     }

@@ -13,6 +13,11 @@
         <option name="ASSEMBLE_TASK_NAME" value="assembleOfficialDebug" />
         <option name="COMPILE_JAVA_TASK_NAME" value="compileOfficialDebugSources" />
         <option name="ASSEMBLE_TEST_TASK_NAME" value="assembleOfficialDebugAndroidTest" />
+        <option name="COMPILE_JAVA_TEST_TASK_NAME" value="compileOfficialDebugAndroidTestSources" />
+        <afterSyncTasks>
+          <task>generateOfficialDebugAndroidTestSources</task>
+          <task>generateOfficialDebugSources</task>
+        </afterSyncTasks>
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
@@ -126,4 +131,3 @@
     <orderEntry type="library" exported="" name="universal-image-loader-1.9.0" level="project" />
   </component>
 </module>
-
