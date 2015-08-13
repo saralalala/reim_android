@@ -62,9 +62,16 @@ public class ItemAttribution
 
     public int parse(JSONObject jObject)
     {
-        setID(jObject.getInteger("pid"));
-        setType(jObject.getInteger("extra_type"));
-        return jObject.getInteger("value");
+        try
+        {
+            setID(jObject.getInteger("pid"));
+            setType(jObject.getInteger("extra_type"));
+            return jObject.getInteger("value");
+        }
+        catch (Exception e)
+        {
+            return 0;
+        }
     }
 
     public int getID()
