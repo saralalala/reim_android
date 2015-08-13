@@ -2,6 +2,7 @@ package classes.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
     private DBManager dbManager;
     private Report report;
     private List<Item> itemList;
+    private SparseIntArray daysArray = new SparseIntArray();
 
     public ReportDetailListViewAdapter(Activity activity, Report report, List<Item> items)
     {
@@ -43,6 +45,10 @@ public class ReportDetailListViewAdapter extends BaseAdapter
         this.report = report;
         this.itemList = new ArrayList<>(items);
         this.dbManager = DBManager.getDBManager();
+        for (Item item : items)
+        {
+            daysArray.put(item.getServerID(), item.getDurationDays());
+        }
     }
 
     public View getView(int position, View convertView, ViewGroup parent)
@@ -201,6 +207,12 @@ public class ReportDetailListViewAdapter extends BaseAdapter
             viewHolder.amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
             String note = !item.getNote().isEmpty() ? item.getNote() : "";
+            int days = daysArray.get(item.getServerID());
+            if (days > 0)
+            {
+                note = item.getCurrency().getSymbol() + Utils.formatAmount(item.getAmount() / days) +
+                        "/" + ViewUtils.getString(R.string.day) + "*" + days + " " + note;
+            }
             viewHolder.noteTextView.setText(note);
 
             String vendor = item.getVendor().isEmpty() ? activity.getString(R.string.vendor_not_available) : item.getVendor();
@@ -234,6 +246,11 @@ public class ReportDetailListViewAdapter extends BaseAdapter
     {
         itemList.clear();
         itemList.addAll(items);
+        daysArray.clear();
+        for (Item item : items)
+        {
+            daysArray.put(item.getServerID(), item.getDurationDays());
+        }
     }
 
     private static class ViewHolder

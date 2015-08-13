@@ -71,6 +71,7 @@ import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;
 import classes.utils.DBManager;
+import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.ReimBroadcastReceiver;
@@ -1773,8 +1774,8 @@ public class EditItemActivity extends Activity
         if (timeAttribution != null && timeAttribution.effectsOnCategory(item.getCategory()))
         {
             JSONObject timeObject = new JSONObject();
-            timeObject.put("id", timeAttribution.getID());
-            timeObject.put("type", timeAttribution.getType());
+            timeObject.put("pid", timeAttribution.getID());
+            timeObject.put("extra_type", timeAttribution.getType());
             timeObject.put("value", endTime);
 
             JSONArray extraArray = new JSONArray();

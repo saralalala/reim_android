@@ -49,7 +49,6 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,40 +80,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:baselineAligned="false">
+        android:gravity="bottom">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/symbolTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="bottom">
+            android:text="@string/rmb_symbol"
+            android:textColor="@color/font_major_dark"
+            android:textSize="16sp"/>
 
-            <TextView
-                android:id="@+id/symbolTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="1dp"
-                android:text="@string/rmb_symbol"
-                android:textColor="@color/font_major_dark"
-                android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/amountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/font_major_dark"
+            android:textSize="28sp"/>
 
-            <TextView
-                android:id="@+id/amountTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/font_major_dark"
-                android:textSize="28sp"/>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/noteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/hint_light_grey"
+            android:textSize="14sp"/>
 
 	    <TextView
 	        android:id="@+id/vendorTextView"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1"	        
-	        android:gravity="right|center_vertical"
+	        android:layout_weight="1"
+            android:maxLength="15"
+	        android:gravity="right"
 	        android:ellipsize="end"
 	        android:singleLine="true"
 	        android:textColor="@color/font_major_dark"

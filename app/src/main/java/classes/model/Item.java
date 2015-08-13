@@ -1,13 +1,16 @@
 package classes.model;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.rushucloud.reim.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import classes.utils.DBManager;
@@ -375,6 +378,51 @@ public class Item
     public void setExtraString(String extraString)
     {
         this.extraString = extraString;
+    }
+    public int getDurationDays()
+    {
+        if (!getExtraString().isEmpty())
+        {
+            JSONArray extraArray = JSON.parseArray(getExtraString());
+            if (extraArray != null)
+            {
+                int endTime = 0;
+                for (int i = 0; i < extraArray.size(); i++)
+                {
+                    ItemAttribution attribution = new ItemAttribution();
+                    int value = attribution.parse(extraArray.getJSONObject(i));
+                    if (attribution.getType() == ItemAttribution.TYPE_TIME)
+                    {
+                        endTime = value;
+                        break;
+                    }
+                }
+                if (endTime != 0)
+                {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis((long) getConsumedDate() * 1000);
+                    GregorianCalendar greCal = new GregorianCalendar(calendar.get(Calendar.YEAR),
+                                                                     calendar.get(Calendar.MONTH),
+                                                                     calendar.get(Calendar.DAY_OF_MONTH), 0, 0);
+                    int startStandardTime = (int) greCal.getTimeInMillis() / 1000;
+                    boolean startAfternoon = calendar.get(Calendar.HOUR_OF_DAY) >= 12;
+
+                    calendar.setTimeInMillis((long) endTime * 1000);
+                    greCal.set(calendar.get(Calendar.YEAR),
+                               calendar.get(Calendar.MONTH),
+                               calendar.get(Calendar.DAY_OF_MONTH), 0, 0);
+                    int endStandardTime = (int) greCal.getTimeInMillis() / 1000;
+                    boolean endAfternoon = calendar.get(Calendar.HOUR_OF_DAY) >= 12;
+
+                    int days = (endStandardTime - startStandardTime) / 86400;
+                    days = days == 0 ? 1 : days;
+                    days += startAfternoon ? 0 : 1;
+                    days += endAfternoon ? 1 : 0;
+                    return days;
+                }
+            }
+        }
+        return 0;
     }
 
     public int getConsumedDate()

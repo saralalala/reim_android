@@ -1,6 +1,7 @@
 package classes.adapter;
 
 import android.content.Context;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class ItemListViewAdapter extends BaseAdapter
     private ItemFilter itemFilter;
     private List<Item> itemList;
     private List<Item> originalList;
+    private SparseIntArray daysArray = new SparseIntArray();
     private final Object mLock = new Object();
 
     public ItemListViewAdapter(Context context, List<Item> items)
@@ -38,6 +40,10 @@ public class ItemListViewAdapter extends BaseAdapter
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.itemList = new ArrayList<>(items);
+        for (Item item : items)
+        {
+            daysArray.put(item.getLocalID(), item.getDurationDays());
+        }
     }
 
     public View getView(int position, View convertView, ViewGroup parent)
@@ -78,6 +84,7 @@ public class ItemListViewAdapter extends BaseAdapter
                 itemViewHolder.typeTextView = (TextView) convertView.findViewById(R.id.typeTextView);
                 itemViewHolder.symbolTextView = (TextView) convertView.findViewById(R.id.symbolTextView);
                 itemViewHolder.amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
+                itemViewHolder.noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
                 itemViewHolder.reportTextView = (TextView) convertView.findViewById(R.id.reportTextView);
                 itemViewHolder.vendorTextView = (TextView) convertView.findViewById(R.id.vendorTextView);
                 itemViewHolder.categoryImageView = (ImageView) convertView.findViewById(R.id.categoryImageView);
@@ -123,6 +130,11 @@ public class ItemListViewAdapter extends BaseAdapter
 
             itemViewHolder.amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
             itemViewHolder.amountTextView.setText(Utils.formatDouble(item.getAmount()));
+
+            int days = daysArray.get(item.getLocalID());
+            String note = days > 0 ? item.getCurrency().getSymbol() + Utils.formatAmount(item.getAmount() / days) +
+                            "/" + ViewUtils.getString(R.string.day) + "*" + days : "";
+            itemViewHolder.noteTextView.setText(note);
 
             String vendor = item.getVendor().isEmpty() ? context.getString(R.string.vendor_not_available) : item.getVendor();
             itemViewHolder.vendorTextView.setText(vendor);
@@ -172,6 +184,11 @@ public class ItemListViewAdapter extends BaseAdapter
     {
         itemList.clear();
         itemList.addAll(items);
+        daysArray.clear();
+        for (Item item : items)
+        {
+            daysArray.put(item.getLocalID(), item.getDurationDays());
+        }
     }
 
     public Filter getFilter()
@@ -322,6 +339,7 @@ public class ItemListViewAdapter extends BaseAdapter
         TextView typeTextView ;
         TextView symbolTextView ;
         TextView amountTextView ;
+        TextView noteTextView;
         TextView reportTextView ;
         TextView vendorTextView ;
         ImageView categoryImageView ;
