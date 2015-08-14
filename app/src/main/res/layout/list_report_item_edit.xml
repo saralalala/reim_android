@@ -1,22 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="80.5dp"
-    android:orientation="vertical"
-    android:background="@drawable/list_item_drawable">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_item_drawable">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
 
-	    <LinearLayout
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:layout_marginLeft="16dp"
-	        android:layout_gravity="center_vertical"
-	        android:gravity="bottom">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/hint_light_grey"
+                android:textSize="14sp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical|right"
+                android:layout_marginLeft="6dp">
+
+                <ImageView
+                    android:id="@+id/categoryImageView"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginRight="6dp"
+                    android:contentDescription="@string/tag"
+                    android:src="@drawable/default_icon"/>
+
+                <TextView
+                    android:id="@+id/categoryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/hint_light_grey"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            android:baselineAligned="true"
+            android:layout_marginTop="3dp">
 
             <TextView
                 android:id="@+id/symbolTextView"
@@ -25,64 +70,58 @@
                 android:text="@string/rmb_symbol"
                 android:textColor="@color/font_major_dark"
                 android:textSize="14sp"/>
-	
-	        <TextView
-	            android:id="@+id/amountTextView"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:ellipsize="end"
-	            android:singleLine="true"
-	            android:textColor="@color/font_major_dark"
-	            android:textSize="22sp"/>
 
-	    </LinearLayout>
-	
-	    <ImageView
-	        android:id="@+id/warningImageView"
-	        android:layout_width="30dp"
-	        android:layout_height="30dp"
-			android:layout_gravity="center"
-			android:contentDescription="@string/warning"
-	        android:src="@drawable/warning"
-	        android:visibility="invisible"/>
-	    
-	    <RelativeLayout
-	        android:layout_width="0dp"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1"
-	        android:orientation="vertical"
-	        android:layout_marginRight="16dp">
-	
-	        <TextView
-	            android:id="@+id/vendorTextView"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="12dp"
-	            android:ellipsize="end"
-	            android:gravity="right"
-	            android:singleLine="true"
-	            android:textColor="@color/font_minor_dark"
-	            android:textSize="20sp"/>
-	
-	        <ImageView
-	            android:id="@+id/categoryImageView"
-	            android:layout_width="16dp"
-	            android:layout_height="16dp"
-	            android:layout_below="@+id/vendorTextView"
-	            android:layout_alignParentRight="true"
-	            android:layout_marginTop="6dp"
-	            android:contentDescription="@string/category"
-	            android:src="@drawable/default_icon"/>
-	        
-	    </RelativeLayout>
-	    
+            <TextView
+                android:id="@+id/amountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/font_major_dark"
+                android:textSize="22sp"/>
+
+            <TextView
+                android:id="@+id/noteTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/hint_light_grey"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/vendorTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/font_minor_dark"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
     </LinearLayout>
-            
-	<include                 
-		android:layout_width="match_parent"
-		android:layout_height="0.5dp"
-		android:layout_marginLeft="12dp"
-		android:layout_marginRight="12dp"
-	  	layout="@layout/view_divider"/>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/warningImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/warning"
+        android:src="@drawable/warning"
+        android:visibility="gone"/>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        layout="@layout/view_divider"/>
+
+</RelativeLayout>

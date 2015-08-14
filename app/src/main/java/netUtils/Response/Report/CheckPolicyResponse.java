@@ -6,12 +6,14 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 
+import classes.utils.JSONUtils;
 import classes.utils.Utils;
 import netUtils.response.common.BaseResponse;
 
 public class CheckPolicyResponse extends BaseResponse
 {
     private boolean isReportCanBeFinished;
+    private boolean isFixedProcess;
     private ArrayList<Integer> managerIDList;
 
     public CheckPolicyResponse(Object httpResponse)
@@ -26,6 +28,7 @@ public class CheckPolicyResponse extends BaseResponse
             JSONObject jObject = getDataObject();
 
             isReportCanBeFinished = Utils.intToBoolean(jObject.getInteger("complete"));
+            isFixedProcess = Utils.intToBoolean(JSONUtils.optInt(jObject, "fixed", 0));
 
             managerIDList = new ArrayList<>();
             JSONArray idArray = jObject.getJSONArray("suggestion");
@@ -44,6 +47,11 @@ public class CheckPolicyResponse extends BaseResponse
     public boolean isReportCanBeFinished()
     {
         return isReportCanBeFinished;
+    }
+
+    public boolean isFixedProcess()
+    {
+        return isFixedProcess;
     }
 
     public ArrayList<Integer> getManagerIDList()

@@ -1,6 +1,7 @@
 package classes.adapter;
 
 import android.content.Context;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class ReportItemListViewAdapter extends BaseAdapter
     private Group currentGroup;
     private List<Item> itemList;
     private List<Integer> chosenIDList;
+    private SparseIntArray daysArray = new SparseIntArray();
 
     public ReportItemListViewAdapter(Context context, List<Item> items, List<Integer> chosenList)
     {
@@ -36,6 +38,10 @@ public class ReportItemListViewAdapter extends BaseAdapter
         this.currentGroup = AppPreference.getAppPreference().getCurrentGroup();
         this.itemList = new ArrayList<>(items);
         this.chosenIDList = new ArrayList<>(chosenList);
+        for (Item item : items)
+        {
+            daysArray.put(item.getServerID(), item.getDurationDays());
+        }
     }
 
     public View getView(int position, View convertView, ViewGroup parent)
@@ -52,10 +58,13 @@ public class ReportItemListViewAdapter extends BaseAdapter
                 convertView = layoutInflater.inflate(R.layout.list_report_item_edit, parent, false);
 
                 viewHolder = new ViewHolder();
+                viewHolder.dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+                viewHolder.categoryImageView = (ImageView) convertView.findViewById(R.id.categoryImageView);
+                viewHolder.categoryTextView = (TextView) convertView.findViewById(R.id.categoryTextView);
                 viewHolder.symbolTextView = (TextView) convertView.findViewById(R.id.symbolTextView);
                 viewHolder.amountTextView = (TextView) convertView.findViewById(R.id.amountTextView);
+                viewHolder.noteTextView = (TextView) convertView.findViewById(R.id.noteTextView);
                 viewHolder.vendorTextView = (TextView) convertView.findViewById(R.id.vendorTextView);
-                viewHolder.categoryImageView = (ImageView) convertView.findViewById(R.id.categoryImageView);
                 viewHolder.warningImageView = (ImageView) convertView.findViewById(R.id.warningImageView);
 
                 convertView.setTag(viewHolder);
@@ -70,6 +79,8 @@ public class ReportItemListViewAdapter extends BaseAdapter
             int color = chosenIDList.contains(item.getLocalID()) ? R.color.list_item_pressed : R.color.list_item_unpressed;
             convertView.setBackgroundResource(color);
 
+            viewHolder.dateTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));
+
             viewHolder.symbolTextView.setText(item.getCurrency().getSymbol());
 
             viewHolder.amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
@@ -78,22 +89,24 @@ public class ReportItemListViewAdapter extends BaseAdapter
             String vendor = item.getVendor().isEmpty() ? context.getString(R.string.vendor_not_available) : item.getVendor();
             viewHolder.vendorTextView.setText(vendor);
 
+            String note = !item.getNote().isEmpty() ? item.getNote() : "";
+            int days = daysArray.get(item.getServerID());
+            if (days > 0)
+            {
+                note = item.getCurrency().getSymbol() + Utils.formatAmount(item.getAmount() / days) +
+                        "/" + ViewUtils.getString(R.string.day) + "*" + days + " " + note;
+            }
+            viewHolder.noteTextView.setText(note);
+
+            Category category = item.getCategory();
+            ViewUtils.setImageViewBitmap(category, viewHolder.categoryImageView);
+
+            String categoryName = category != null ? category.getName() : "";
+            viewHolder.categoryTextView.setText(categoryName);
+
             if (item.missingInfo(currentGroup))
             {
                 viewHolder.warningImageView.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                Category category = item.getCategory();
-
-                if (category != null)
-                {
-                    ViewUtils.setImageViewBitmap(category, viewHolder.categoryImageView);
-                }
-                else
-                {
-                    viewHolder.categoryImageView.setVisibility(View.INVISIBLE);
-                }
             }
 
             return convertView;
@@ -119,6 +132,11 @@ public class ReportItemListViewAdapter extends BaseAdapter
     {
         itemList.clear();
         itemList.addAll(items);
+        daysArray.clear();
+        for (Item item : items)
+        {
+            daysArray.put(item.getServerID(), item.getDurationDays());
+        }
 
         chosenIDList.clear();
         chosenIDList.addAll(chosenList);
@@ -132,10 +150,13 @@ public class ReportItemListViewAdapter extends BaseAdapter
 
     private static class ViewHolder
     {
+        TextView dateTextView;
+        ImageView categoryImageView;
+        TextView categoryTextView;
         TextView symbolTextView;
         TextView amountTextView;
+        TextView noteTextView;
         TextView vendorTextView;
-        ImageView categoryImageView;
         ImageView warningImageView;
     }
 }

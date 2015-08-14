@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.SparseIntArray;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -99,6 +100,7 @@ public class EditReportActivity extends Activity
     private boolean hasInit = false;
     private int lastCommentCount = 0;
     private List<Integer> idList = new ArrayList<>();
+    private SparseIntArray daysArray = new SparseIntArray();
 
     private List<Image> imageSyncList = new ArrayList<>();
     private List<Item> itemSyncList = new ArrayList<>();
@@ -185,8 +187,8 @@ public class EditReportActivity extends Activity
                     Bundle bundle = data.getExtras();
                     chosenItemIDList.clear();
                     chosenItemIDList.addAll(bundle.getIntegerArrayList("chosenItemIDList"));
-                    itemList = dbManager.getItems(chosenItemIDList);
                     report.setType(bundle.getInt("type"));
+                    refreshItemList(dbManager.getItems(chosenItemIDList));
                     refreshView();
                     break;
                 }
@@ -518,7 +520,7 @@ public class EditReportActivity extends Activity
         managerTextView.setText(report.getManagersName());
         ccTextView.setText(report.getCCsName());
 
-        itemList = dbManager.getItems(Item.getItemsIDList(itemList));
+        refreshItemList(dbManager.getItems(Item.getItemsIDList(itemList)));
 
         itemCountTextView.setText(String.format(getString(R.string.item_count_added), itemList.size()));
 
@@ -555,11 +557,16 @@ public class EditReportActivity extends Activity
                 }
             });
 
+            TextView dateTextView = (TextView) view.findViewById(R.id.dateTextView);
+            ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
+            TextView categoryTextView = (TextView) view.findViewById(R.id.categoryTextView);
             TextView symbolTextView = (TextView) view.findViewById(R.id.symbolTextView);
             TextView amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+            TextView noteTextView = (TextView) view.findViewById(R.id.noteTextView);
             TextView vendorTextView = (TextView) view.findViewById(R.id.vendorTextView);
-            ImageView categoryImageView = (ImageView) view.findViewById(R.id.categoryImageView);
             ImageView warningImageView = (ImageView) view.findViewById(R.id.warningImageView);
+
+            dateTextView.setText(Utils.secondToStringUpToDay(item.getConsumedDate()));
 
             symbolTextView.setText(item.getCurrency().getSymbol());
 
@@ -581,11 +588,23 @@ public class EditReportActivity extends Activity
             amountTextView.setTypeface(ReimApplication.TypeFaceAleoLight);
             amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
+            String note = !item.getNote().isEmpty() ? item.getNote() : "";
+            int days = daysArray.get(item.getServerID());
+            if (days > 0)
+            {
+                note = item.getCurrency().getSymbol() + Utils.formatAmount(item.getAmount() / days) +
+                        "/" + ViewUtils.getString(R.string.day) + "*" + days + " " + note;
+            }
+            noteTextView.setText(note);
+
             String vendor = item.getVendor().isEmpty() ? getString(R.string.vendor_not_available) : item.getVendor();
             vendorTextView.setText(vendor);
 
             Category category = item.getCategory();
             ViewUtils.setImageViewBitmap(category, categoryImageView);
+
+            String categoryName = category != null ? category.getName() : "";
+            categoryTextView.setText(categoryName);
 
             if (item.missingInfo(currentGroup) || idList.contains(item.getCategory().getServerID()))
             {
@@ -714,9 +733,21 @@ public class EditReportActivity extends Activity
             newReport = report.getLocalID() == -1;
             if (!newReport)
             {
-                itemList = dbManager.getReportItems(report.getLocalID());
+                refreshItemList(dbManager.getReportItems(report.getLocalID()));
                 chosenItemIDList = Item.getItemsIDList(itemList);
             }
+        }
+    }
+
+    private void refreshItemList(List<Item> items)
+    {
+        itemList.clear();
+        itemList.addAll(items);
+
+        daysArray.clear();
+        for (Item item : itemList)
+        {
+            daysArray.put(item.getServerID(), item.getDurationDays());
         }
     }
 
@@ -752,7 +783,7 @@ public class EditReportActivity extends Activity
                 item.setBelongReport(report);
                 dbManager.updateItemByServerID(item);
             }
-            itemList = dbManager.getReportItems(report.getLocalID());
+            refreshItemList(dbManager.getReportItems(report.getLocalID()));
 
             dbManager.deleteReportComments(report.getLocalID());
             for (Comment comment : report.getCommentList())
@@ -822,7 +853,7 @@ public class EditReportActivity extends Activity
 
     private void syncItems()
     {
-        itemList = dbManager.getItems(Item.getItemsIDList(itemList));
+        refreshItemList(dbManager.getItems(Item.getItemsIDList(itemList)));
         itemSyncList.clear();
 
         for (Item item : itemList)

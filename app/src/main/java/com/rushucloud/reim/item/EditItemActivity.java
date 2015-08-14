@@ -366,6 +366,11 @@ public class EditItemActivity extends Activity
                         hideSoftKeyboard();
 
                         item.setAmount(Utils.stringToDouble(amountEditText.getText().toString()));
+                        if (item.getAmount() == 0)
+                        {
+                            throw new NumberFormatException();
+                        }
+
                         item.setNote(note);
                         setExtras();
 
@@ -484,6 +489,7 @@ public class EditItemActivity extends Activity
                     {
                         ViewUtils.showToast(EditItemActivity.this, R.string.error_number_wrong_format);
                         ViewUtils.requestFocus(EditItemActivity.this, amountEditText);
+                        amountEditText.setText("");
                     }
                     catch (Exception e)
                     {

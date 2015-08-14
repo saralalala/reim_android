@@ -15,7 +15,6 @@ import java.util.List;
 
 import classes.utils.DBManager;
 import classes.utils.JSONUtils;
-import classes.utils.LogUtils;
 import classes.utils.Utils;
 
 public class Item
@@ -266,7 +265,7 @@ public class Item
 
     public String getLocation()
     {
-        return location;
+        return location.equals("0") ? "" : location;
     }
     public void setLocation(String location)
     {

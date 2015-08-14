@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
+import classes.utils.LogUtils;
 import classes.utils.Utils;
 import netUtils.response.common.BaseResponse;
 

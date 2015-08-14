@@ -42,6 +42,7 @@ public class FollowingActivity extends Activity
     private List<User> managerList = new ArrayList<>();
     private List<User> ccList = new ArrayList<>();
     private boolean canBeFinished;
+    private boolean isFixedProcess;
 
     // View
     protected void onCreate(Bundle savedInstanceState)
@@ -121,11 +122,18 @@ public class FollowingActivity extends Activity
             public void onClick(View v)
             {
                 MobclickAgent.onEvent(FollowingActivity.this, "UMENG_REPORT_NEXT_SEND");
-                Intent intent = new Intent(FollowingActivity.this, PickManagerActivity.class);
-                intent.putExtra("managers", (Serializable) report.getManagerList());
-                intent.putExtra("sender", report.getSender().getServerID());
-                intent.putExtra("fromFollowing", true);
-                ViewUtils.goForwardForResult(FollowingActivity.this, intent, Constant.ACTIVITY_PICK_MANAGER);
+                if (isFixedProcess)
+                {
+                    ViewUtils.showToast(FollowingActivity.this, R.string.prompt_fixed_process);
+                }
+                else
+                {
+                    Intent intent = new Intent(FollowingActivity.this, PickManagerActivity.class);
+                    intent.putExtra("managers", (Serializable) report.getManagerList());
+                    intent.putExtra("sender", report.getSender().getServerID());
+                    intent.putExtra("fromFollowing", true);
+                    ViewUtils.goForwardForResult(FollowingActivity.this, intent, Constant.ACTIVITY_PICK_MANAGER);
+                }
             }
         });
         managerTextView.setText(report.getManagersName());
@@ -192,6 +200,7 @@ public class FollowingActivity extends Activity
     {
         report = (Report) getIntent().getSerializableExtra("report");
         canBeFinished = getIntent().getBooleanExtra("canBeFinished", true);
+        isFixedProcess = getIntent().getBooleanExtra("isFixedProcess", false);
         if (!canBeFinished)
         {
             ArrayList<Integer> managerIDList = getIntent().getIntegerArrayListExtra("managerIDList");

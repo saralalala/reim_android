@@ -318,7 +318,7 @@ public class ApproveReportActivity extends Activity
         builder.create().show();
     }
 
-    private void jumpToFollowingActivity(ArrayList<Integer> managerIDList)
+    private void jumpToFollowingActivity(ArrayList<Integer> managerIDList, boolean isFixedProcess)
     {
         Intent intent = new Intent(ApproveReportActivity.this, FollowingActivity.class);
         intent.putExtra("report", report);
@@ -326,6 +326,7 @@ public class ApproveReportActivity extends Activity
         {
             intent.putIntegerArrayListExtra("managerIDList", managerIDList);
             intent.putExtra("canBeFinished", false);
+            intent.putExtra("isFixedProcess", isFixedProcess);
         }
         ViewUtils.goForwardAndFinish(this, intent);
     }
@@ -496,7 +497,7 @@ public class ApproveReportActivity extends Activity
         });
     }
 
-    private void sendCheckPolicyRequest(int reportServerID)
+    private void sendCheckPolicyRequest(final int reportServerID)
     {
         ReimProgressDialog.show();
         CheckPolicyRequest request = new CheckPolicyRequest(reportServerID);
@@ -527,7 +528,7 @@ public class ApproveReportActivity extends Activity
                                 {
                                     public void onClick(DialogInterface dialog, int which)
                                     {
-                                        jumpToFollowingActivity(null);
+                                        jumpToFollowingActivity(null, false);
                                     }
                                 });
                                 builder.setNegativeButton(R.string.finish, new DialogInterface.OnClickListener()
@@ -540,9 +541,15 @@ public class ApproveReportActivity extends Activity
                                 });
                                 builder.create().show();
                             }
+                            else if (response.isFixedProcess())
+                            {
+                                report.setMyDecision(Report.STATUS_APPROVED);
+                                report.setManagerList(dbManager.getUsers(response.getManagerIDList()));
+                                sendApproveReportRequest();
+                            }
                             else
                             {
-                                jumpToFollowingActivity(response.getManagerIDList());
+                                jumpToFollowingActivity(response.getManagerIDList(), response.isFixedProcess());
                             }
                         }
                         else

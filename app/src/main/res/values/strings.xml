@@ -389,6 +389,7 @@
     <string name="prompt_sender">创建人：</string>
     <string name="prompt_no_need_to_alarm">报告未在审核过程中，无需发送提醒</string>
     <string name="prompt_choose_or_finish">你希望直接通过，还是选择其他人继续审批这份报告？</string>
+    <string name="prompt_fixed_process">根据公司规则，你不能修改审批人</string>
     <string name="prompt_revoke_report">确定要撤回这份报告？</string>
     <string name="prompt_no_lastest_data">还没到下个月呢</string>
     <string name="prompt_join">管理员通过申请后你就可以使用「云报销」了。在此之前，你也可以记录自己的 消费 ，加入公司后记录可以迁移。</string>
