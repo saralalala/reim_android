@@ -391,8 +391,7 @@
         <!-- #######################  友盟Umeng  ####################### -->
 	    <meta-data
 	        android:name="UMENG_APPKEY" 
-	        android:value="543bf20efd98c544b9002d11">
-	    </meta-data>
+	        android:value="543bf20efd98c544b9002d11"/>
 
         <!-- 推广渠道 -->
         <meta-data
@@ -401,13 +400,11 @@
 
         <service
             android:name="com.umeng.update.net.DownloadingService"
-            android:process=":DownloadingService">
-        </service>
+            android:process=":DownloadingService"/>
 
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-        </activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <!-- ###################  微信  ###################### -->
 		<activity 
@@ -443,8 +440,7 @@
 
         <service
             android:name="com.mechat.mechatlibrary.MechatService"
-            android:label="MechatService">
-        </service>
+            android:label="MechatService"/>
 
 	</application>
 </manifest>

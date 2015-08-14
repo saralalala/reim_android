@@ -10,7 +10,6 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.utils.LogUtils;
 import classes.utils.Utils;
 
 public class ItemAttribution
