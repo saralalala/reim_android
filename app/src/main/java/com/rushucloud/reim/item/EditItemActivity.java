@@ -482,7 +482,24 @@ public class EditItemActivity extends Activity
                             attributesCheck[6] = !item.getLocation().equals(originItem.getLocation());
                             attributesCheck[7] = item.getConsumedDate() != originItem.getConsumedDate();
 
-                            sendModifyOthersItemRequest(item, attributesCheck);
+                            boolean itemIsModified = false;
+                            for (boolean b : attributesCheck)
+                            {
+                                if (b)
+                                {
+                                    itemIsModified = true;
+                                    break;
+                                }
+                            }
+
+                            if (itemIsModified)
+                            {
+                                sendModifyOthersItemRequest(item, attributesCheck);
+                            }
+                            else
+                            {
+                                goBack();
+                            }
                         }
                     }
                     catch (NumberFormatException e)
