@@ -458,7 +458,7 @@
     <string name="error_report_deleted">Report has been deleted</string>
     <string name="error_operation_failed">Failed…</string>
     <string name="error_submit_report_empty">Empty report cannot be submitted. Please insert expenses.</string>
-    <string name="error_submit_report_item_not_uploaded">消费未被上传，报告不可被提交</string>
+    <string name="error_submit_report_item_unsynced">消费未被上传，报告不可被提交</string>
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>
     <string name="error_images_maximum">最多只能选择%1$d张照片</string>
     <string name="error_contact_no_permission">未能读取到你的通讯录信息，可能是由于你未授权「云报销」读取你的通讯录所致。</string>

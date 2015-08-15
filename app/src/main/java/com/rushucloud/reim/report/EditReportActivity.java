@@ -920,7 +920,7 @@ public class EditReportActivity extends Activity
             {
                 public void run()
                 {
-                    ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_not_uploaded);
+                    ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_unsynced);
                 }
             });
         }
@@ -970,7 +970,7 @@ public class EditReportActivity extends Activity
                     {
                         public void run()
                         {
-                            ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_upload_invoice);
+                            ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_image_unsynced);
                             if (imageTaskCount == 0)
                             {
                                 ReimProgressDialog.dismiss();
@@ -1030,7 +1030,7 @@ public class EditReportActivity extends Activity
                     {
                         public void run()
                         {
-                            ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_create_item);
+                            ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_unsynced);
                             if (itemTaskCount == 0)
                             {
                                 ReimProgressDialog.dismiss();
@@ -1089,7 +1089,7 @@ public class EditReportActivity extends Activity
                     {
                         public void run()
                         {
-                            ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_modify_item);
+                            ViewUtils.showToast(EditReportActivity.this, R.string.error_submit_report_item_unsynced);
                             if (itemTaskCount == 0)
                             {
                                 ReimProgressDialog.dismiss();
