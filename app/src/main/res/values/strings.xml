@@ -462,6 +462,7 @@
     <string name="error_report_approved">报告已被审批</string>
     <string name="error_report_deleted">报告已被删除</string>
     <string name="error_operation_failed">操作失败</string>
+    <string name="error_no_items">报告里必须添加消费</string>
     <string name="error_submit_report_empty">请添加消费后再提交报告</string>
     <string name="error_submit_report_item_not_uploaded">消费未被上传，报告不可被提交</string>
     <string name="error_submit_report_item_miss_info">消费缺少信息，报告不可被提交</string>

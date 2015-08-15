@@ -215,7 +215,15 @@ public class EditReportActivity extends Activity
         {
             public void onClick(View v)
             {
-                if (appPreference.hasProxyEditPermission())
+                if (!appPreference.hasProxyEditPermission())
+                {
+                    ViewUtils.showToast(EditReportActivity.this, R.string.error_modify_report_no_permission);
+                }
+                else if (chosenItemIDList.isEmpty())
+                {
+                    ViewUtils.showToast(EditReportActivity.this, R.string.error_no_items);
+                }
+                else
                 {
                     if (newReport)
                     {
@@ -247,10 +255,6 @@ public class EditReportActivity extends Activity
                     {
                         ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_save_report);
                     }
-                }
-                else
-                {
-                    ViewUtils.showToast(EditReportActivity.this, R.string.error_modify_report_no_permission);
                 }
             }
         });
