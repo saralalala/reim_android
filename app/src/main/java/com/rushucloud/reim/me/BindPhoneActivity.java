@@ -233,7 +233,7 @@ public class BindPhoneActivity extends Activity
         thread.start();
 
         ReimProgressDialog.show();
-        VerifyCodeRequest request = new VerifyCodeRequest(phoneNumber);
+        VerifyCodeRequest request = new VerifyCodeRequest(phoneNumber, true);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)

@@ -259,7 +259,7 @@ public class PhoneSignUpActivity extends Activity
         thread.start();
 
         ReimProgressDialog.show();
-        VerifyCodeRequest request = new VerifyCodeRequest(phoneNumber);
+        VerifyCodeRequest request = new VerifyCodeRequest(phoneNumber, false);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
