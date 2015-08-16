@@ -3231,7 +3231,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         Group group = new Group();
         group.setServerID(getIntFromCursor(cursor, "server_id"));
-        group.setName(getStringFromCursor(cursor, "group_name"));
+        group.setName(sqliteReverseEscape(getStringFromCursor(cursor, "group_name")));
         group.setReportCanBeClosedDirectly(getBooleanFromCursor(cursor, "close_directly"));
         group.setShowStructure(getBooleanFromCursor(cursor, "show_structure"));
         group.setNoAutoTime(getBooleanFromCursor(cursor, "no_auto_time"));
@@ -3280,8 +3280,8 @@ public class DBManager extends SQLiteOpenHelper
         user.setWeChat(getStringFromCursor(cursor, "wechat"));
         user.setDidi(getStringFromCursor(cursor, "didi"));
         user.setDidiToken(getStringFromCursor(cursor, "didi_token"));
-        user.setNickname(getStringFromCursor(cursor, "nickname"));
-        user.setDepartment(getStringFromCursor(cursor, "department"));
+        user.setNickname(sqliteReverseEscape(getStringFromCursor(cursor, "nickname")));
+        user.setDepartment(sqliteReverseEscape(getStringFromCursor(cursor, "department")));
         user.setMemberCount(getIntFromCursor(cursor, "member_count"));
         user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
         user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));
@@ -3328,12 +3328,12 @@ public class DBManager extends SQLiteOpenHelper
         Item item = new Item();
         item.setLocalID(getIntFromCursor(cursor, "id"));
         item.setServerID(getIntFromCursor(cursor, "server_id"));
-        item.setVendor(getStringFromCursor(cursor, "vendor"));
+        item.setVendor(sqliteReverseEscape(getStringFromCursor(cursor, "vendor")));
         item.setAmount(getDoubleFromCursor(cursor, "amount"));
         item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
-        item.setNote(getStringFromCursor(cursor, "note"));
+        item.setNote(sqliteReverseEscape(getStringFromCursor(cursor, "note")));
         item.setStatus(getIntFromCursor(cursor, "status"));
-        item.setLocation(getStringFromCursor(cursor, "location"));
+        item.setLocation(sqliteReverseEscape(getStringFromCursor(cursor, "location")));
         item.setCurrency(getCurrency(getStringFromCursor(cursor, "currency")));
         item.setRate(getDoubleFromCursor(cursor, "rate"));
         item.setDidiID(getIntFromCursor(cursor, "didi_id"));
@@ -3408,12 +3408,12 @@ public class DBManager extends SQLiteOpenHelper
         Item item = new Item();
         item.setLocalID(getIntFromCursor(cursor, "id"));
         item.setServerID(getIntFromCursor(cursor, "server_id"));
-        item.setVendor(getStringFromCursor(cursor, "vendor"));
+        item.setVendor(sqliteReverseEscape(getStringFromCursor(cursor, "vendor")));
         item.setAmount(getDoubleFromCursor(cursor, "amount"));
         item.setAaAmount(getDoubleFromCursor(cursor, "pa_amount"));
-        item.setNote(getStringFromCursor(cursor, "note"));
+        item.setNote(sqliteReverseEscape(getStringFromCursor(cursor, "note")));
         item.setStatus(getIntFromCursor(cursor, "status"));
-        item.setLocation(getStringFromCursor(cursor, "location"));
+        item.setLocation(sqliteReverseEscape(getStringFromCursor(cursor, "location")));
         item.setCurrency(getCurrency(getStringFromCursor(cursor, "currency")));
         item.setRate(getDoubleFromCursor(cursor, "rate"));
         item.setDidiID(getIntFromCursor(cursor, "didi_id"));
@@ -3491,7 +3491,7 @@ public class DBManager extends SQLiteOpenHelper
         Report report = new Report();
         report.setLocalID(getIntFromCursor(cursor, "id"));
         report.setServerID(getIntFromCursor(cursor, "server_id"));
-        report.setTitle(getStringFromCursor(cursor, "title"));
+        report.setTitle(sqliteReverseEscape(getStringFromCursor(cursor, "title")));
         report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
         report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
         report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
@@ -3559,7 +3559,7 @@ public class DBManager extends SQLiteOpenHelper
         Report report = new Report();
         report.setLocalID(getIntFromCursor(cursor, "id"));
         report.setServerID(getIntFromCursor(cursor, "server_id"));
-        report.setTitle(getStringFromCursor(cursor, "title"));
+        report.setTitle(sqliteReverseEscape(getStringFromCursor(cursor, "title")));
         report.setSender(getUser(getIntFromCursor(cursor, "user_id")));
         report.setManagerList(User.idStringToUserList(getStringFromCursor(cursor, "manager_id")));
         report.setCCList(User.idStringToUserList(getStringFromCursor(cursor, "cc_id")));
@@ -3634,7 +3634,7 @@ public class DBManager extends SQLiteOpenHelper
         comment.setServerID(getIntFromCursor(cursor, "server_id"));
         comment.setReviewer(getUser(getIntFromCursor(cursor, "user_id")));
         comment.setReportID(getIntFromCursor(cursor, "report_local_id"));
-        comment.setContent(getStringFromCursor(cursor, "comment"));
+        comment.setContent(sqliteReverseEscape(getStringFromCursor(cursor, "comment")));
         comment.setCreatedDate(getIntFromCursor(cursor, "comment_date"));
         comment.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
         comment.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -3673,7 +3673,7 @@ public class DBManager extends SQLiteOpenHelper
         comment.setServerID(getIntFromCursor(cursor, "server_id"));
         comment.setReviewer(getUser(getIntFromCursor(cursor, "user_id")));
         comment.setReportID(getIntFromCursor(cursor, "report_server_id"));
-        comment.setContent(getStringFromCursor(cursor, "comment"));
+        comment.setContent(sqliteReverseEscape(getStringFromCursor(cursor, "comment")));
         comment.setCreatedDate(getIntFromCursor(cursor, "comment_date"));
         comment.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
         comment.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
@@ -3710,14 +3710,14 @@ public class DBManager extends SQLiteOpenHelper
     {
         Category category = new Category();
         category.setServerID(getIntFromCursor(cursor, "server_id"));
-        category.setName(getStringFromCursor(cursor, "category_name"));
+        category.setName(sqliteReverseEscape(getStringFromCursor(cursor, "category_name")));
         category.setLimit(getDoubleFromCursor(cursor, "max_limit"));
         category.setGroupID(getIntFromCursor(cursor, "group_id"));
         category.setParentID(getIntFromCursor(cursor, "parent_id"));
         category.setSetOfBookID(getIntFromCursor(cursor, "sob_id"));
         category.setIconID(getIntFromCursor(cursor, "icon_id"));
         category.setType(getIntFromCursor(cursor, "type"));
-        category.setNote(getStringFromCursor(cursor, "note"));
+        category.setNote(sqliteReverseEscape(getStringFromCursor(cursor, "note")));
         category.setLocalUpdatedDate(getIntFromCursor(cursor, "local_updatedt"));
         category.setServerUpdatedDate(getIntFromCursor(cursor, "server_updatedt"));
 
@@ -3777,7 +3777,7 @@ public class DBManager extends SQLiteOpenHelper
     {
         Tag tag = new Tag();
         tag.setServerID(getIntFromCursor(cursor, "server_id"));
-        tag.setName(getStringFromCursor(cursor, "tag_name"));
+        tag.setName(sqliteReverseEscape(getStringFromCursor(cursor, "tag_name")));
         tag.setGroupID(getIntFromCursor(cursor, "group_id"));
         tag.setIconID(getIntFromCursor(cursor, "icon_id"));
         tag.setIconPath(getStringFromCursor(cursor, "icon_path"));
@@ -4021,10 +4021,10 @@ public class DBManager extends SQLiteOpenHelper
         BankAccount bankAccount = new BankAccount();
         bankAccount.setLocalID(getIntFromCursor(cursor, "id"));
         bankAccount.setServerID(getIntFromCursor(cursor, "server_id"));
-        bankAccount.setName(getStringFromCursor(cursor, "name"));
-        bankAccount.setNumber(getStringFromCursor(cursor, "number"));
-        bankAccount.setBankName(getStringFromCursor(cursor, "bank_name"));
-        bankAccount.setLocation(getStringFromCursor(cursor, "location"));
+        bankAccount.setName(sqliteReverseEscape(getStringFromCursor(cursor, "name")));
+        bankAccount.setNumber(sqliteReverseEscape(getStringFromCursor(cursor, "number")));
+        bankAccount.setBankName(sqliteReverseEscape(getStringFromCursor(cursor, "bank_name")));
+        bankAccount.setLocation(sqliteReverseEscape(getStringFromCursor(cursor, "location")));
 
         return bankAccount;
     }
@@ -4059,7 +4059,7 @@ public class DBManager extends SQLiteOpenHelper
         SetOfBook setOfBook = new SetOfBook();
         setOfBook.setServerID(getIntFromCursor(cursor, "server_id"));
         setOfBook.setUserID(getIntFromCursor(cursor, "user_id"));
-        setOfBook.setName(getStringFromCursor(cursor, "name"));
+        setOfBook.setName(sqliteReverseEscape(getStringFromCursor(cursor, "name")));
 
         return setOfBook;
     }
