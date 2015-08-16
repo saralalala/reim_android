@@ -1249,14 +1249,18 @@ public class EditReportActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            if (response.getCode() == NetworkConstant.ERROR_CATEGORY_EXCEED_LIMIT)
+                            if (response.getCode() == NetworkConstant.ERROR_CATEGORY_COUNT_EXCEED_LIMIT ||
+                                    response.getCode() == NetworkConstant.ERROR_CATEGORY_AMOUNT_EXCEED_LIMIT)
                             {
                                 idList.clear();
                                 idList.addAll(response.getErrorCategoryIDList());
                                 refreshView();
 
                                 String nameString = dbManager.getCategoriesNames(idList);
-                                String errorMessage = String.format(getString(R.string.error_network_category_exceed_limit), nameString);
+                                int error = response.getCode() == NetworkConstant.ERROR_CATEGORY_COUNT_EXCEED_LIMIT ?
+                                        R.string.error_network_category_count_exceed_limit :
+                                        R.string.error_network_category_amount_exceed_limit;
+                                String errorMessage = String.format(getString(error), nameString);
                                 ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, errorMessage);
                             }
                             else
@@ -1307,14 +1311,18 @@ public class EditReportActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            if (response.getCode() == NetworkConstant.ERROR_CATEGORY_EXCEED_LIMIT)
+                            if (response.getCode() == NetworkConstant.ERROR_CATEGORY_COUNT_EXCEED_LIMIT ||
+                                    response.getCode() == NetworkConstant.ERROR_CATEGORY_AMOUNT_EXCEED_LIMIT)
                             {
                                 idList.clear();
                                 idList.addAll(response.getErrorCategoryIDList());
                                 refreshView();
 
                                 String nameString = dbManager.getCategoriesNames(idList);
-                                String errorMessage = String.format(getString(R.string.error_network_category_exceed_limit), nameString);
+                                int error = response.getCode() == NetworkConstant.ERROR_CATEGORY_COUNT_EXCEED_LIMIT ?
+                                        R.string.error_network_category_count_exceed_limit :
+                                        R.string.error_network_category_amount_exceed_limit;
+                                String errorMessage = String.format(getString(error), nameString);
                                 ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, errorMessage);
                             }
                             else

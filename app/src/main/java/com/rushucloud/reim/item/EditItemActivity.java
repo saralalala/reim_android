@@ -1822,7 +1822,6 @@ public class EditItemActivity extends Activity
             }
         }
         String extra = extraArray.isEmpty() ? "" : extraArray.toString();
-        LogUtils.tempPrint("extra:" + extra);
         item.setExtraString(extra);
     }
 
@@ -1981,6 +1980,7 @@ public class EditItemActivity extends Activity
         {
             public void execute(Object httpResponse)
             {
+                LogUtils.tempPrint(httpResponse);
                 final ModifyOthersItemResponse response = new ModifyOthersItemResponse(httpResponse);
                 if (response.getStatus())
                 {

@@ -84,9 +84,10 @@ public class NetworkConstant
     public static final int ERROR_NOT_UNIQUE = -42;
     public static final int ERROR_COMPANY_EXISTS = -49;
     public static final int ERROR_PROXY_ERROR = -58;
-    public static final int ERROR_CATEGORY_EXCEED_LIMIT = -63;
+    public static final int ERROR_CATEGORY_COUNT_EXCEED_LIMIT = -63;
     public static final int ERROR_REPORT_EXCEED_LIMIT = -64;
     public static final int ERROR_PROXY_EXISTS = -69;
+    public static final int ERROR_CATEGORY_AMOUNT_EXCEED_LIMIT = -71;
 
     public static String errorCodeToString(int code)
     {
