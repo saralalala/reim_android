@@ -37,6 +37,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
     private Report report;
     private List<Item> itemList;
     private SparseIntArray daysArray = new SparseIntArray();
+    private SparseIntArray countArray = new SparseIntArray();
 
     public ReportDetailListViewAdapter(Activity activity, Report report, List<Item> items)
     {
@@ -48,6 +49,7 @@ public class ReportDetailListViewAdapter extends BaseAdapter
         for (Item item : items)
         {
             daysArray.put(item.getServerID(), item.getDurationDays());
+            countArray.put(item.getServerID(), item.getMemberCount());
         }
     }
 
@@ -208,10 +210,14 @@ public class ReportDetailListViewAdapter extends BaseAdapter
 
             String note = !item.getNote().isEmpty() ? item.getNote() : "";
             int days = daysArray.get(item.getServerID());
+            int count = countArray.get(item.getServerID());
             if (days > 0)
             {
-                note = item.getCurrency().getSymbol() + Utils.formatAmount(item.getAmount() / days) +
-                        "/" + ViewUtils.getString(R.string.day) + "*" + days + " " + note;
+                note = item.getDailyAverage(days) + " " + note;
+            }
+            else if (count > 1)
+            {
+                note = item.getPerCapita(count) + " " + note;
             }
             viewHolder.noteTextView.setText(note);
 
@@ -247,9 +253,11 @@ public class ReportDetailListViewAdapter extends BaseAdapter
         itemList.clear();
         itemList.addAll(items);
         daysArray.clear();
+        countArray.clear();
         for (Item item : items)
         {
             daysArray.put(item.getServerID(), item.getDurationDays());
+            countArray.put(item.getServerID(), item.getMemberCount());
         }
     }
 

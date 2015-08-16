@@ -16,6 +16,7 @@ import java.util.List;
 import classes.utils.DBManager;
 import classes.utils.JSONUtils;
 import classes.utils.Utils;
+import classes.utils.ViewUtils;
 
 public class Item
 {
@@ -423,6 +424,37 @@ public class Item
             }
         }
         return 0;
+    }
+    public String getDailyAverage(int days)
+    {
+        return days > 0 ? getCurrency().getSymbol() + Utils.formatAmount(getAmount() / days) +
+                "/" + ViewUtils.getString(R.string.day) + "*" + days : "";
+    }
+    public int getMemberCount()
+    {
+        if (!getExtraString().isEmpty())
+        {
+            JSONArray extraArray = JSON.parseArray(getExtraString());
+            if (extraArray != null)
+            {
+                for (int i = 0; i < extraArray.size(); i++)
+                {
+                    ItemAttribution attribution = new ItemAttribution();
+                    int value = attribution.parse(extraArray.getJSONObject(i));
+                    if (attribution.getType() == ItemAttribution.TYPE_MEMBER_COUNT)
+                    {
+                        return value;
+                    }
+                }
+            }
+        }
+        return 1;
+    }
+    public String getPerCapita(int count)
+    {
+        String person = ViewUtils.getString(R.string.person);
+        return getCurrency().getSymbol() + Utils.formatAmount(getAmount() / count) + "/" +
+                 person + "*" + count + person;
     }
 
     public int getConsumedDate()

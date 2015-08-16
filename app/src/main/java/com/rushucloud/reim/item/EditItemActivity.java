@@ -71,6 +71,7 @@ import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;
 import classes.utils.DBManager;
+import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.TextLengthFilter;
@@ -139,6 +140,7 @@ public class EditItemActivity extends Activity
 
     private Group currentGroup;
     private ItemAttribution timeAttribution;
+    private ItemAttribution countAttribution;
     private List<Currency> currencyList = new ArrayList<>();
     private List<Category> categoryList = new ArrayList<>();
     private List<Tag> tagList = new ArrayList<>();
@@ -1688,6 +1690,10 @@ public class EditItemActivity extends Activity
             {
                 timeAttribution = attribution;
             }
+            else if (attribution.getType() == ItemAttribution.TYPE_MEMBER_COUNT)
+            {
+                countAttribution = attribution;
+            }
         }
         currencyList.addAll(dbManager.getCurrencyList());
         categoryList.addAll(dbManager.getUserCategories(appPreference.getCurrentUserID(), appPreference.getCurrentGroupID()));
@@ -1792,6 +1798,7 @@ public class EditItemActivity extends Activity
 
     private void setExtras()
     {
+        JSONArray extraArray = new JSONArray();
         if (timeAttribution != null && timeAttribution.effectsOnCategory(item.getCategory()))
         {
             JSONObject timeObject = new JSONObject();
@@ -1799,15 +1806,24 @@ public class EditItemActivity extends Activity
             timeObject.put("extra_type", timeAttribution.getType());
             timeObject.put("value", endTime);
 
-            JSONArray extraArray = new JSONArray();
             extraArray.add(timeObject);
-
-            item.setExtraString(extraArray.toString());
         }
-        else
+        if (countAttribution != null && countAttribution.effectsOnCategory(item.getCategory()))
         {
-            item.setExtraString("");
+            User currentUser = appPreference.getCurrentUser();
+            if (currentUser != null)
+            {
+                JSONObject timeObject = new JSONObject();
+                timeObject.put("pid", countAttribution.getID());
+                timeObject.put("extra_type", countAttribution.getType());
+                timeObject.put("value", currentUser.getMemberCount());
+
+                extraArray.add(timeObject);
+            }
         }
+        String extra = extraArray.isEmpty() ? "" : extraArray.toString();
+        LogUtils.tempPrint("extra:" + extra);
+        item.setExtraString(extra);
     }
 
     private void parseExtras()

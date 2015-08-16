@@ -18,6 +18,7 @@ public class ItemAttribution
     public static final int TYPE_SINGLE_CHOICE = 1;
     public static final int TYPE_TIME = 2;
     public static final int TYPE_TOGGLE = 3;
+    public static final int TYPE_MEMBER_COUNT = 5;
 
     private int id = -1;
     private String name = "";

@@ -27,7 +27,7 @@ public class DBManager extends SQLiteOpenHelper
     private static SQLiteDatabase database = null;
 
     private static final String DATABASE_NAME = "reim.db";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
 
     private DBManager(Context context)
     {
@@ -70,6 +70,7 @@ public class DBManager extends SQLiteOpenHelper
                     + "didi_token TEXT DEFAULT(''),"
                     + "nickname TEXT DEFAULT(''),"
                     + "department TEXT DEFAULT(''),"
+                    + "member_count INT DEFAULT(1),"
                     + "avatar_id INT DEFAULT(0),"
                     + "avatar_server_path TEXT DEFAULT(''),"
                     + "avatar_local_path TEXT DEFAULT(''),"
@@ -345,27 +346,28 @@ public class DBManager extends SQLiteOpenHelper
 
         if (newVersion > oldVersion)
         {
+            String command;
             if (oldVersion < 2)
             {
-                String command = "ALTER TABLE tbl_others_report ADD COLUMN step INT DEFAULT(0)";
+                command = "ALTER TABLE tbl_others_report ADD COLUMN step INT DEFAULT(0)";
                 db.execSQL(command);
             }
 
             if (oldVersion < 3)
             {
-                String command = "ALTER TABLE tbl_user ADD COLUMN wechat TEXT DEFAULT('')";
+                command = "ALTER TABLE tbl_user ADD COLUMN wechat TEXT DEFAULT('')";
                 db.execSQL(command);
             }
 
             if (oldVersion < 4)
             {
-                String command = "ALTER TABLE tbl_user ADD COLUMN active INT DEFAULT(0)";
+                command = "ALTER TABLE tbl_user ADD COLUMN active INT DEFAULT(0)";
                 db.execSQL(command);
             }
 
             if (oldVersion < 5)
             {
-                String command = "ALTER TABLE tbl_user ADD COLUMN didi TEXT DEFAULT('')";
+                command = "ALTER TABLE tbl_user ADD COLUMN didi TEXT DEFAULT('')";
                 db.execSQL(command);
 
                 command = "ALTER TABLE tbl_user ADD COLUMN didi_token TEXT DEFAULT('')";
@@ -386,7 +388,7 @@ public class DBManager extends SQLiteOpenHelper
 
             if (oldVersion < 6)
             {
-                String command = "ALTER TABLE tbl_item ADD COLUMN didi_id INT DEFAULT(0)";
+                command = "ALTER TABLE tbl_item ADD COLUMN didi_id INT DEFAULT(0)";
                 db.execSQL(command);
 
                 command = "ALTER TABLE tbl_others_item ADD COLUMN didi_id INT DEFAULT(0)";
@@ -395,31 +397,31 @@ public class DBManager extends SQLiteOpenHelper
 
             if (oldVersion < 7)
             {
-                String command = "ALTER TABLE tbl_category ADD COLUMN sob_id INT DEFAULT(0)";
+                command = "ALTER TABLE tbl_category ADD COLUMN sob_id INT DEFAULT(0)";
                 db.execSQL(command);
             }
 
             if (oldVersion < 8)
             {
-                String command = "ALTER TABLE tbl_category ADD COLUMN note TEXT DEFAULT('')";
+                command = "ALTER TABLE tbl_category ADD COLUMN note TEXT DEFAULT('')";
                 db.execSQL(command);
             }
 
             if (oldVersion < 9)
             {
-                String command = "ALTER TABLE tbl_user ADD COLUMN department TEXT DEFAULT('')";
+                command = "ALTER TABLE tbl_user ADD COLUMN department TEXT DEFAULT('')";
                 db.execSQL(command);
             }
 
             if (oldVersion < 10)
             {
-                String command = "ALTER TABLE tbl_group ADD COLUMN close_directly INT DEFAULT(0)";
+                command = "ALTER TABLE tbl_group ADD COLUMN close_directly INT DEFAULT(0)";
                 db.execSQL(command);
             }
 
             if (oldVersion < 11)
             {
-                String command = "ALTER TABLE tbl_group ADD COLUMN show_structure INT DEFAULT(1)";
+                command = "ALTER TABLE tbl_group ADD COLUMN show_structure INT DEFAULT(1)";
                 db.execSQL(command);
 
                 command = "ALTER TABLE tbl_group ADD COLUMN no_auto_time INT DEFAULT(0)";
@@ -434,7 +436,7 @@ public class DBManager extends SQLiteOpenHelper
 
             if (oldVersion < 12)
             {
-                String command = "ALTER TABLE tbl_group ADD COLUMN disable_budget INT DEFAULT(0)";
+                command = "ALTER TABLE tbl_group ADD COLUMN disable_budget INT DEFAULT(0)";
                 db.execSQL(command);
 
                 command = "ALTER TABLE tbl_group ADD COLUMN disable_borrow INT DEFAULT(0)";
@@ -443,13 +445,19 @@ public class DBManager extends SQLiteOpenHelper
 
             if (oldVersion < 13)
             {
-                String command = "ALTER TABLE tbl_group ADD COLUMN item_attrs TEXT DEFAULT('')";
+                command = "ALTER TABLE tbl_group ADD COLUMN item_attrs TEXT DEFAULT('')";
                 db.execSQL(command);
 
                 command = "ALTER TABLE tbl_item ADD COLUMN extra TEXT DEFAULT('')";
                 db.execSQL(command);
 
                 command = "ALTER TABLE tbl_others_item ADD COLUMN extra TEXT DEFAULT('')";
+                db.execSQL(command);
+            }
+
+            if (oldVersion < 14)
+            {
+                command = "ALTER TABLE tbl_user ADD COLUMN member_count INT DEFAULT(1)";
                 db.execSQL(command);
             }
         }
@@ -624,7 +632,7 @@ public class DBManager extends SQLiteOpenHelper
         try
         {
             String sqlString = "INSERT INTO tbl_user (server_id, email, phone, wechat, didi, didi_token, " +
-                    "nickname, department, avatar_id, avatar_server_path, avatar_local_path, privilege, " +
+                    "nickname, department, member_count, avatar_id, avatar_server_path, avatar_local_path, privilege, " +
                     "manager_id, group_id, applied_company, admin, active, local_updatedt, server_updatedt) VALUES (" +
                     "'" + user.getServerID() + "'," +
                     "'" + user.getEmail() + "'," +
@@ -634,6 +642,7 @@ public class DBManager extends SQLiteOpenHelper
                     "'" + user.getDidiToken() + "'," +
                     "'" + sqliteEscape(user.getNickname()) + "'," +
                     "'" + sqliteEscape(user.getDepartment()) + "'," +
+                    "'" + user.getMemberCount() + "'," +
                     "'" + user.getAvatarID() + "'," +
                     "'" + user.getAvatarServerPath() + "'," +
                     "'" + user.getAvatarLocalPath() + "'," +
@@ -689,6 +698,7 @@ public class DBManager extends SQLiteOpenHelper
                     "didi_token = '" + user.getDidiToken() + "'," +
                     "nickname = '" + sqliteEscape(user.getNickname()) + "'," +
                     "department = '" + sqliteEscape(user.getDepartment()) + "'," +
+                    "member_count = '" + user.getMemberCount() + "'," +
                     "avatar_id = '" + user.getAvatarID() + "'," +
                     "avatar_server_path = '" + user.getAvatarServerPath() + "'," +
                     "avatar_local_path = '" + user.getAvatarLocalPath() + "'," +
@@ -3272,6 +3282,7 @@ public class DBManager extends SQLiteOpenHelper
         user.setDidiToken(getStringFromCursor(cursor, "didi_token"));
         user.setNickname(getStringFromCursor(cursor, "nickname"));
         user.setDepartment(getStringFromCursor(cursor, "department"));
+        user.setMemberCount(getIntFromCursor(cursor, "member_count"));
         user.setAvatarID(getIntFromCursor(cursor, "avatar_id"));
         user.setAvatarServerPath(getStringFromCursor(cursor, "avatar_server_path"));
         user.setAvatarLocalPath(getStringFromCursor(cursor, "avatar_local_path"));

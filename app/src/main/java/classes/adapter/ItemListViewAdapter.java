@@ -33,6 +33,7 @@ public class ItemListViewAdapter extends BaseAdapter
     private List<Item> itemList;
     private List<Item> originalList;
     private SparseIntArray daysArray = new SparseIntArray();
+    private SparseIntArray countArray = new SparseIntArray();
     private final Object mLock = new Object();
 
     public ItemListViewAdapter(Context context, List<Item> items)
@@ -43,6 +44,7 @@ public class ItemListViewAdapter extends BaseAdapter
         for (Item item : items)
         {
             daysArray.put(item.getLocalID(), item.getDurationDays());
+            countArray.put(item.getLocalID(), item.getMemberCount());
         }
     }
 
@@ -132,8 +134,13 @@ public class ItemListViewAdapter extends BaseAdapter
             itemViewHolder.amountTextView.setText(Utils.formatDouble(item.getAmount()));
 
             int days = daysArray.get(item.getLocalID());
-            String note = days > 0 ? item.getCurrency().getSymbol() + Utils.formatAmount(item.getAmount() / days) +
-                            "/" + ViewUtils.getString(R.string.day) + "*" + days : "";
+            String note = item.getDailyAverage(days);
+
+            int count = countArray.get(item.getLocalID());
+            if (note.isEmpty() && count > 1)
+            {
+                note = item.getPerCapita(count);
+            }
             itemViewHolder.noteTextView.setText(note);
 
             String vendor = item.getVendor().isEmpty() ? context.getString(R.string.vendor_not_available) : item.getVendor();
@@ -185,9 +192,11 @@ public class ItemListViewAdapter extends BaseAdapter
         itemList.clear();
         itemList.addAll(items);
         daysArray.clear();
+        countArray.clear();
         for (Item item : items)
         {
             daysArray.put(item.getLocalID(), item.getDurationDays());
+            countArray.put(item.getLocalID(), item.getMemberCount());
         }
     }
 

@@ -101,6 +101,7 @@ public class EditReportActivity extends Activity
     private int lastCommentCount = 0;
     private List<Integer> idList = new ArrayList<>();
     private SparseIntArray daysArray = new SparseIntArray();
+    private SparseIntArray countArray = new SparseIntArray();
 
     private List<Image> imageSyncList = new ArrayList<>();
     private List<Item> itemSyncList = new ArrayList<>();
@@ -594,10 +595,14 @@ public class EditReportActivity extends Activity
 
             String note = !item.getNote().isEmpty() ? item.getNote() : "";
             int days = daysArray.get(item.getServerID());
+            int count = countArray.get(item.getLocalID());
             if (days > 0)
             {
-                note = item.getCurrency().getSymbol() + Utils.formatAmount(item.getAmount() / days) +
-                        "/" + ViewUtils.getString(R.string.day) + "*" + days + " " + note;
+                note = item.getDailyAverage(days) + " " + note;
+            }
+            else if (count > 1)
+            {
+                note = item.getPerCapita(count) + " " + note;
             }
             noteTextView.setText(note);
 
@@ -749,9 +754,11 @@ public class EditReportActivity extends Activity
         itemList.addAll(items);
 
         daysArray.clear();
+        countArray.clear();
         for (Item item : itemList)
         {
             daysArray.put(item.getServerID(), item.getDurationDays());
+            countArray.put(item.getLocalID(), item.getMemberCount());
         }
     }
 

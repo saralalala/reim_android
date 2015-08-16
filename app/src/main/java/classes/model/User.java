@@ -34,6 +34,7 @@ public class User implements Serializable
     private String nicknameInitLetter = "";
     private BankAccount bankAccount;
     private String department = "";
+    private int memberCount = 1;
     private int avatarID = -1;
     private String avatarServerPath = "";
     private String avatarLocalPath = "";
@@ -63,6 +64,7 @@ public class User implements Serializable
         password = user.getPassword();
         nickname = user.getNickname();
         department = user.getDepartment();
+        memberCount = user.getMemberCount();
         avatarID = user.getAvatarID();
         avatarServerPath = user.getAvatarServerPath();
         avatarLocalPath = user.getAvatarLocalPath();
@@ -87,6 +89,7 @@ public class User implements Serializable
             setWeChat(JSONUtils.optString(jObject, "weixin_nickname", ""));
             setNickname(jObject.getString("nickname"));
             setDepartment(JSONUtils.optString(jObject, "d", ""));
+            setMemberCount(JSONUtils.optInt(jObject, "subs", 1));
             setIsAdmin(Utils.intToBoolean(JSONUtils.optInt(jObject, "admin", 0)));
             setDefaultManagerID(JSONUtils.optInt(jObject, "manager_id", 0));
             setGroupID(groupID);
@@ -132,6 +135,7 @@ public class User implements Serializable
             setWeChat(jObject.getString("weixin_nickname"));
             setDefaultManagerID(jObject.getInteger("manager_id"));
             setDepartment(JSONUtils.optString(jObject, "d", ""));
+            setMemberCount(JSONUtils.optInt(jObject, "subs", 1));
             setAvatarServerPath(JSONUtils.optString(jObject, "apath", ""));
             setAvatarLocalPath("");
             setIsAdmin(Utils.intToBoolean(jObject.getInteger("admin")));
@@ -272,6 +276,15 @@ public class User implements Serializable
     public void setDepartment(String department)
     {
         this.department = department;
+    }
+
+    public int getMemberCount()
+    {
+        return memberCount;
+    }
+    public void setMemberCount(int memberCount)
+    {
+        this.memberCount = memberCount;
     }
 
     public int getAvatarID()
