@@ -351,7 +351,10 @@ public class EditItemActivity extends Activity
                 MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_SAVE");
 
                 String note = noteEditText.getText().toString();
-                count = (int)Utils.stringToDouble(countEditText.getText().toString());
+                if(countEditText.getText().toString() != null)
+                {
+                    count = (int)Utils.stringToDouble(countEditText.getText().toString());
+                }
                 int memberCount = appPreference.getCurrentUser().getMemberCount();
 
                 if (!appPreference.hasProxyEditPermission())
