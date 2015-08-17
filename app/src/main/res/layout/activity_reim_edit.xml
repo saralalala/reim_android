@@ -277,7 +277,6 @@
                     android:paddingBottom="16dp"
                     android:paddingRight="16dp"
                     android:background="@null"
-                    android:hint="@string/input_count"
                     android:textColor="@color/font_major_dark"
                     android:textSize="18sp"
                     android:inputType="number"
