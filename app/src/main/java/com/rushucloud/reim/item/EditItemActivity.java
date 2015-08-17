@@ -16,6 +16,7 @@ import android.text.InputFilter;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -113,6 +114,9 @@ public class EditItemActivity extends Activity
     private DatePicker datePicker;
     private TimePicker timePicker;
 
+    private RelativeLayout countLayout;
+    private EditText countEditText;
+
     private TextView vendorTextView;
 
     private TextView locationTextView;
@@ -157,6 +161,7 @@ public class EditItemActivity extends Activity
     private boolean newItem = false;
     private boolean isEndTime = false;
     private int endTime = -1;
+    private int count = -1;
 
     private LocationClient locationClient = null;
     private BDLocationListener listener = new ReimLocationListener();
@@ -302,6 +307,7 @@ public class EditItemActivity extends Activity
                     item.setCategory(category);
                     endTime = item.getConsumedDate();
                     refreshCategoryView();
+                    refreshCountView();
                     refreshEndTimeView();
                     break;
                 }
@@ -345,9 +351,16 @@ public class EditItemActivity extends Activity
                 MobclickAgent.onEvent(EditItemActivity.this, "UMENG_EDIT_ITEM_SAVE");
 
                 String note = noteEditText.getText().toString();
+                count = (int)Utils.stringToDouble(countEditText.getText().toString());
+                int memberCount = appPreference.getCurrentUser().getMemberCount();
+
                 if (!appPreference.hasProxyEditPermission())
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.error_modify_item_no_permission);
+                }
+                else if (countAttribution != null && (count == -1 || count == 0 || count > memberCount) )
+                {
+                    ViewUtils.showToast(EditItemActivity.this, R.string.input_correct_count);
                 }
                 else if (item.getConsumedDate() == -1)
                 {
@@ -530,6 +543,7 @@ public class EditItemActivity extends Activity
         initStatusView();
         initInvoiceView();
         initCategoryView();
+        initCountView();
         initVendorView();
         initLocationView();
         initTimeView();
@@ -538,7 +552,6 @@ public class EditItemActivity extends Activity
         initTagView();
         initMemberView();
         initNoteView();
-
     }
 
     private void initStatusView()
@@ -738,6 +751,14 @@ public class EditItemActivity extends Activity
         categoryWarningImageView = (ImageView) findViewById(R.id.categoryWarningImageView);
 
         refreshCategoryView();
+    }
+
+    private void initCountView()
+    {
+        countLayout = (RelativeLayout) findViewById(R.id.countLayout);
+        countEditText = (EditText) findViewById(R.id.countEditText);
+
+        refreshCountView();
     }
 
     private void initVendorView()
@@ -1330,6 +1351,19 @@ public class EditItemActivity extends Activity
         }
     }
 
+    private void refreshCountView()
+    {
+        if (countAttribution != null && countAttribution.effectsOnCategory(item.getCategory()))
+        {
+            countLayout.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            countLayout.setVisibility(View.VISIBLE);
+            //countLayout.setVisibility(View.GONE);
+        }
+    }
+
     private void refreshTypeView()
     {
         String temp = getString(item.getTypeString());
@@ -1810,16 +1844,12 @@ public class EditItemActivity extends Activity
         }
         if (countAttribution != null && countAttribution.effectsOnCategory(item.getCategory()))
         {
-            User currentUser = appPreference.getCurrentUser();
-            if (currentUser != null)
-            {
-                JSONObject timeObject = new JSONObject();
-                timeObject.put("pid", countAttribution.getID());
-                timeObject.put("extra_type", countAttribution.getType());
-                timeObject.put("value", currentUser.getMemberCount());
+            JSONObject timeObject = new JSONObject();
+            timeObject.put("pid", countAttribution.getID());
+            timeObject.put("extra_type", countAttribution.getType());
+            timeObject.put("value", count);
 
-                extraArray.add(timeObject);
-            }
+            extraArray.add(timeObject);
         }
         String extra = extraArray.isEmpty() ? "" : extraArray.toString();
         item.setExtraString(extra);

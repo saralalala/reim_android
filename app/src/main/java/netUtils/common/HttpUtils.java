@@ -51,6 +51,7 @@ public class HttpUtils
         HttpClientParams.setRedirecting(httpParams, true);
 
         HttpProtocolParams.setUserAgent(httpParams, getUserAgent());
+
         return wrapClient(httpParams);
     }
 

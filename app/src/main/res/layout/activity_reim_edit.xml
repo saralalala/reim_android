@@ -252,6 +252,46 @@
                 layout="@layout/view_divider"/>
 
             <RelativeLayout
+                android:id="@+id/countLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="19dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="@string/count"
+                    android:textColor="@color/hint_grey"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/countEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="80dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingRight="16dp"
+                    android:background="@null"
+                    android:hint="@string/input_count"
+                    android:textColor="@color/font_major_dark"
+                    android:textSize="18sp"
+                    android:inputType="number"
+                    android:textCursorDrawable="@null"/>
+
+            </RelativeLayout>
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="80dp"
+                layout="@layout/view_divider"/>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

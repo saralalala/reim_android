@@ -161,6 +161,7 @@
     <string name="time">时　间</string>
     <string name="currency">货　币</string>
     <string name="note">备　注</string>
+    <string name="count">人　数</string>
     <string name="transport">交通</string>
     <string name="choose_consumed_date">请选择消费时间</string>
     <string name="choose_end_time">请选择结束时间</string>
@@ -349,6 +350,8 @@
     <string name="input_code">请输入验证码</string>
     <string name="input_note">请输入备注</string>
     <string name="input_vendor">请输入商家</string>
+    <string name="input_count">请输入人数</string>
+    <string name="input_correct_count">请输入正确的人数</string>
     <string name="input_location">请输入城市</string>
     <string name="input_member">请输入参与者信息</string>
     <string name="input_report_title">请输入报告名称</string>
