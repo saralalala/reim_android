@@ -16,7 +16,6 @@ import android.text.InputFilter;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -143,6 +142,7 @@ public class EditItemActivity extends Activity
     boolean removeImageViewShown = false;
 
     private Group currentGroup;
+    private User currentUser;
     private ItemAttribution timeAttribution;
     private ItemAttribution countAttribution;
     private List<Currency> currencyList = new ArrayList<>();
@@ -353,17 +353,22 @@ public class EditItemActivity extends Activity
                 String note = noteEditText.getText().toString();
                 if(countEditText.getText().toString() != null)
                 {
-                    count = (int)Utils.stringToDouble(countEditText.getText().toString());
+                    count = Utils.stringToInt(countEditText.getText().toString());
                 }
-                int memberCount = appPreference.getCurrentUser().getMemberCount();
 
                 if (!appPreference.hasProxyEditPermission())
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.error_modify_item_no_permission);
                 }
-                else if (countAttribution != null && (count == -1 || count == 0 || count > memberCount) )
+                else if (countAttribution != null && count <= 0)
                 {
-                    ViewUtils.showToast(EditItemActivity.this, R.string.input_correct_count);
+                    ViewUtils.showToast(EditItemActivity.this, R.string.error_member_count_wrong_format);
+                    ViewUtils.requestFocus(EditItemActivity.this, countEditText);
+                }
+                else if (countAttribution != null && count > currentUser.getMemberCount())
+                {
+                    ViewUtils.showToast(EditItemActivity.this, R.string.error_member_count_exceed_limit);
+                    ViewUtils.requestFocus(EditItemActivity.this, countEditText);
                 }
                 else if (item.getConsumedDate() == -1)
                 {
@@ -376,6 +381,7 @@ public class EditItemActivity extends Activity
                 else if (currentGroup != null && currentGroup.isNoteCompulsory() && note.isEmpty())
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.input_note);
+                    ViewUtils.requestFocus(EditItemActivity.this, noteEditText);
                 }
                 else
                 {
@@ -394,7 +400,7 @@ public class EditItemActivity extends Activity
 
                         if(!fromApproveReport)
                         {
-                            item.setConsumer(appPreference.getCurrentUser());
+                            item.setConsumer(currentUser);
                             item.setLocalUpdatedDate(Utils.getCurrentTime());
 
                             if (newItem)
@@ -427,11 +433,11 @@ public class EditItemActivity extends Activity
                                             int title = item.getType() == Item.TYPE_BUDGET ? R.string.report_budget : R.string.report_borrowing;
                                             report = new Report();
                                             report.setTitle(getString(title));
-                                            report.setSender(appPreference.getCurrentUser());
+                                            report.setSender(currentUser);
                                             report.setCreatedDate(Utils.getCurrentTime());
                                             report.setLocalUpdatedDate(Utils.getCurrentTime());
                                             report.setType(item.getType());
-                                            report.setManagerList(appPreference.getCurrentUser().buildBaseManagerList());
+                                            report.setManagerList(currentUser.buildBaseManagerList());
                                             report.setLocalID(dbManager.insertReport(report));
 
                                             item.setBelongReport(report);
@@ -760,7 +766,10 @@ public class EditItemActivity extends Activity
     {
         countLayout = (RelativeLayout) findViewById(R.id.countLayout);
         countEditText = (EditText) findViewById(R.id.countEditText);
-
+        if (count > 0)
+        {
+            countEditText.setText(Integer.toString(count));
+        }
         refreshCountView();
     }
 
@@ -1359,11 +1368,14 @@ public class EditItemActivity extends Activity
         if (countAttribution != null && countAttribution.effectsOnCategory(item.getCategory()))
         {
             countLayout.setVisibility(View.VISIBLE);
+            if (countEditText.getText().toString().isEmpty() && currentUser != null)
+            {
+                countEditText.setText(Integer.toString(currentUser.getMemberCount()));
+            }
         }
         else
         {
-            countLayout.setVisibility(View.VISIBLE);
-            //countLayout.setVisibility(View.GONE);
+            countLayout.setVisibility(View.GONE);
         }
     }
 
@@ -1720,6 +1732,7 @@ public class EditItemActivity extends Activity
         locationClient = new LocationClient(getApplicationContext());
 
         currentGroup = appPreference.getCurrentGroup();
+        currentUser = appPreference.getCurrentUser();
         List<ItemAttribution> attributionList = currentGroup.getItemAttributions();
         for (ItemAttribution attribution : attributionList)
         {
@@ -1773,7 +1786,7 @@ public class EditItemActivity extends Activity
 
             // init relevant users
             List<User> relevantUsers = new ArrayList<>();
-            relevantUsers.add(appPreference.getCurrentUser());
+            relevantUsers.add(currentUser);
             item.setRelevantUsers(relevantUsers);
 
             if (fromDidi)
@@ -1865,14 +1878,21 @@ public class EditItemActivity extends Activity
             JSONArray extraArray = JSON.parseArray(item.getExtraString());
             if (extraArray != null)
             {
+                boolean timeParsed = false;
+                boolean countParsed = false;
                 for (int i = 0; i < extraArray.size(); i++)
                 {
                     ItemAttribution attribution = new ItemAttribution();
                     int value = attribution.parse(extraArray.getJSONObject(i));
-                    if (timeAttribution.equals(attribution))
+                    if (!timeParsed && timeAttribution.equals(attribution))
                     {
                         endTime = value;
-                        break;
+                        timeParsed = true;
+                    }
+                    else if (!countParsed && countAttribution.equals(attribution))
+                    {
+                        count = value;
+                        countParsed = true;
                     }
                 }
             }
@@ -2013,7 +2033,6 @@ public class EditItemActivity extends Activity
         {
             public void execute(Object httpResponse)
             {
-                LogUtils.tempPrint(httpResponse);
                 final ModifyOthersItemResponse response = new ModifyOthersItemResponse(httpResponse);
                 if (response.getStatus())
                 {

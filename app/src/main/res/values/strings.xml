@@ -351,7 +351,6 @@
     <string name="input_note">请输入备注</string>
     <string name="input_vendor">请输入商家</string>
     <string name="input_count">请输入人数</string>
-    <string name="input_correct_count">请输入正确的人数</string>
     <string name="input_location">请输入城市</string>
     <string name="input_member">请输入参与者信息</string>
     <string name="input_report_title">请输入报告名称</string>
@@ -393,6 +392,7 @@
     <string name="prompt_sender">创建人：</string>
     <string name="prompt_no_need_to_alarm">报告未在审核过程中，无需发送提醒</string>
     <string name="prompt_choose_or_finish">你希望直接通过，还是选择其他人继续审批这份报告？</string>
+    <string name="prompt_category_exceed_limit_choose">%1$s超出公司月度限额，是否仍要提交</string>
     <string name="prompt_fixed_process">根据公司规则，你不能修改审批人</string>
     <string name="prompt_revoke_report">确定要撤回这份报告？</string>
     <string name="prompt_no_lastest_data">还没到下个月呢</string>
@@ -419,6 +419,8 @@
     <string name="error_company_name_empty">请设置公司名称</string>
     <string name="error_search_company_name_empty">请输入搜索内容</string>
     <string name="error_number_wrong_format">请输入消费金额</string>
+    <string name="error_member_count_wrong_format">请输入正确的人数</string>
+    <string name="error_member_count_exceed_limit">人数超出限制，请重新输入</string>
     <string name="error_password_empty">请输入密码</string>
     <string name="error_old_password_empty">请输入旧密码</string>
     <string name="error_new_password_empty">请输入新密码</string>

@@ -237,8 +237,27 @@ public class Utils
 
     public static double stringToDouble(String source)
     {
-        double amount = Double.valueOf(source);
-        return Double.valueOf(formatDouble(amount));
+        try
+        {
+            double amount = Double.valueOf(source);
+            return Double.valueOf(formatDouble(amount));
+        }
+        catch (Exception e)
+        {
+            return -1;
+        }
+    }
+
+    public static int stringToInt(String source)
+    {
+        try
+        {
+            return Integer.valueOf(source);
+        }
+        catch (Exception e)
+        {
+            return -1;
+        }
     }
 
     public static boolean isIDStringEqual(String idString1, String idString2)

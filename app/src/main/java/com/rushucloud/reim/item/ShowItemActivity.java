@@ -67,9 +67,11 @@ public class ShowItemActivity extends Activity
     // Local Data
     private DBManager dbManager;
     private ItemAttribution timeAttribution;
+    private ItemAttribution countAttribution;
     private Item item = new Item();
     private boolean myItem;
     private int endTime = -1;
+    private int count = -1;
     private List<ModifyHistory> historyList = new ArrayList<>();
     private Report report;
     private boolean fromPush = false;
@@ -198,6 +200,19 @@ public class ShowItemActivity extends Activity
             {
                 sendDownloadCategoryIconRequest(item.getCategory());
             }
+        }
+
+        // init member count
+        RelativeLayout countLayout = (RelativeLayout) findViewById(R.id.countLayout);
+        TextView countTextView = (TextView) findViewById(R.id.countTextView);
+        if (countAttribution != null && countAttribution.effectsOnCategory(item.getCategory()))
+        {
+            countLayout.setVisibility(View.VISIBLE);
+            countTextView.setText(Integer.toString(count));
+        }
+        else
+        {
+            countLayout.setVisibility(View.GONE);
         }
 
         // init vendor
@@ -483,6 +498,10 @@ public class ShowItemActivity extends Activity
             {
                 timeAttribution = attribution;
             }
+            else if (attribution.getType() == ItemAttribution.TYPE_MEMBER_COUNT)
+            {
+                countAttribution = attribution;
+            }
         }
 
         Intent intent = getIntent();
@@ -537,14 +556,21 @@ public class ShowItemActivity extends Activity
             JSONArray extraArray = JSON.parseArray(item.getExtraString());
             if (extraArray != null)
             {
+                boolean timeParsed = false;
+                boolean countParsed = false;
                 for (int i = 0; i < extraArray.size(); i++)
                 {
                     ItemAttribution attribution = new ItemAttribution();
                     int value = attribution.parse(extraArray.getJSONObject(i));
-                    if (timeAttribution.equals(attribution))
+                    if (!timeParsed && timeAttribution.equals(attribution))
                     {
                         endTime = value;
-                        break;
+                        timeParsed = true;
+                    }
+                    else if (!countParsed && countAttribution.equals(attribution))
+                    {
+                        count = value;
+                        countParsed = true;
                     }
                 }
             }

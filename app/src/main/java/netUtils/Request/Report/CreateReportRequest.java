@@ -3,13 +3,14 @@ package netUtils.request.report;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.DBManager;
+import classes.utils.Utils;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.URLDef;
 import netUtils.request.common.BaseRequest;
 
 public class CreateReportRequest extends BaseRequest
 {
-    public CreateReportRequest(Report report)
+    public CreateReportRequest(Report report, boolean forceSubmit)
     {
         super();
 
@@ -23,6 +24,7 @@ public class CreateReportRequest extends BaseRequest
         addParams("cc", User.getUsersIDString(report.getCCList()));
         addParams("prove_ahead", Integer.toString(report.getType()));
         addParams("createdt", Integer.toString(report.getCreatedDate()));
+        addParams("force_submit", Utils.booleanToInt(forceSubmit));
 
         appendUrl(URLDef.URL_REPORT);
     }

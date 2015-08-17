@@ -901,24 +901,18 @@ public class EditReportActivity extends Activity
     private void syncReport()
     {
         int originalStatus = report.getStatus();
-        if (appPreference.getCurrentGroupID() == -1)
-        {
-            report.setStatus(Report.STATUS_FINISHED);
-        }
-        else
-        {
-            report.setStatus(Report.STATUS_SUBMITTED);
-        }
+        int status = appPreference.getCurrentGroupID() == -1 ? Report.STATUS_FINISHED : Report.STATUS_SUBMITTED;
+        report.setStatus(status);
 
         if (report.canBeSubmitted())
         {
             if (report.getServerID() == -1)
             {
-                sendCreateReportRequest();
+                sendCreateReportRequest(false);
             }
             else
             {
-                sendModifyReportRequest(originalStatus);
+                sendModifyReportRequest(originalStatus, false);
             }
         }
         else
@@ -1213,9 +1207,9 @@ public class EditReportActivity extends Activity
         });
     }
 
-    private void sendCreateReportRequest()
+    private void sendCreateReportRequest(boolean forceSubmit)
     {
-        CreateReportRequest request = new CreateReportRequest(report);
+        CreateReportRequest request = new CreateReportRequest(report, forceSubmit);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -1249,19 +1243,41 @@ public class EditReportActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            if (response.getCode() == NetworkConstant.ERROR_CATEGORY_COUNT_EXCEED_LIMIT ||
-                                    response.getCode() == NetworkConstant.ERROR_CATEGORY_AMOUNT_EXCEED_LIMIT)
+                            if (response.getCode() == NetworkConstant.ERROR_CATEGORY_COUNT_EXCEED_LIMIT)
                             {
                                 idList.clear();
                                 idList.addAll(response.getErrorCategoryIDList());
                                 refreshView();
 
-                                String nameString = dbManager.getCategoriesNames(idList);
-                                int error = response.getCode() == NetworkConstant.ERROR_CATEGORY_COUNT_EXCEED_LIMIT ?
-                                        R.string.error_network_category_count_exceed_limit :
-                                        R.string.error_network_category_amount_exceed_limit;
-                                String errorMessage = String.format(getString(error), nameString);
+                                String errorMessage = String.format(getString(R.string.error_network_category_count_exceed_limit),
+                                                                    dbManager.getCategoriesNames(idList));
                                 ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, errorMessage);
+                            }
+                            else if (response.getCode() == NetworkConstant.ERROR_CATEGORY_AMOUNT_EXCEED_LIMIT)
+                            {
+                                idList.clear();
+                                idList.addAll(response.getErrorCategoryIDList());
+                                refreshView();
+
+                                String errorMessage = String.format(getString(R.string.prompt_category_exceed_limit_choose),
+                                                                    dbManager.getCategoriesNames(idList));
+
+                                Builder builder = new Builder(EditReportActivity.this);
+                                builder.setTitle(R.string.warning);
+                                builder.setMessage(errorMessage);
+                                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        ReimProgressDialog.show();
+                                        int status = appPreference.getCurrentGroupID() == -1 ?
+                                                Report.STATUS_FINISHED : Report.STATUS_SUBMITTED;
+                                        report.setStatus(status);
+                                        sendCreateReportRequest(true);
+                                    }
+                                });
+                                builder.setNegativeButton(R.string.cancel, null);
+                                builder.create().show();
                             }
                             else
                             {
@@ -1276,9 +1292,9 @@ public class EditReportActivity extends Activity
         });
     }
 
-    private void sendModifyReportRequest(final int originalStatus)
+    private void sendModifyReportRequest(final int originalStatus, final boolean forceSubmit)
     {
-        ModifyReportRequest request = new ModifyReportRequest(report);
+        ModifyReportRequest request = new ModifyReportRequest(report, forceSubmit);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -1311,19 +1327,41 @@ public class EditReportActivity extends Activity
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            if (response.getCode() == NetworkConstant.ERROR_CATEGORY_COUNT_EXCEED_LIMIT ||
-                                    response.getCode() == NetworkConstant.ERROR_CATEGORY_AMOUNT_EXCEED_LIMIT)
+                            if (response.getCode() == NetworkConstant.ERROR_CATEGORY_COUNT_EXCEED_LIMIT)
                             {
                                 idList.clear();
                                 idList.addAll(response.getErrorCategoryIDList());
                                 refreshView();
 
-                                String nameString = dbManager.getCategoriesNames(idList);
-                                int error = response.getCode() == NetworkConstant.ERROR_CATEGORY_COUNT_EXCEED_LIMIT ?
-                                        R.string.error_network_category_count_exceed_limit :
-                                        R.string.error_network_category_amount_exceed_limit;
-                                String errorMessage = String.format(getString(error), nameString);
+                                String errorMessage = String.format(getString(R.string.error_network_category_count_exceed_limit),
+                                                                    dbManager.getCategoriesNames(idList));
                                 ViewUtils.showToast(EditReportActivity.this, R.string.failed_to_submit_report, errorMessage);
+                            }
+                            else if (response.getCode() == NetworkConstant.ERROR_CATEGORY_AMOUNT_EXCEED_LIMIT)
+                            {
+                                idList.clear();
+                                idList.addAll(response.getErrorCategoryIDList());
+                                refreshView();
+
+                                String errorMessage = String.format(getString(R.string.prompt_category_exceed_limit_choose),
+                                                                    dbManager.getCategoriesNames(idList));
+
+                                Builder builder = new Builder(EditReportActivity.this);
+                                builder.setTitle(R.string.warning);
+                                builder.setMessage(errorMessage);
+                                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        ReimProgressDialog.show();
+                                        int status = appPreference.getCurrentGroupID() == -1 ?
+                                                Report.STATUS_FINISHED : Report.STATUS_SUBMITTED;
+                                        report.setStatus(status);
+                                        sendModifyReportRequest(originalStatus, true);
+                                    }
+                                });
+                                builder.setNegativeButton(R.string.cancel, null);
+                                builder.create().show();
                             }
                             else
                             {

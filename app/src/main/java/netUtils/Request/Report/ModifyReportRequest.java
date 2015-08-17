@@ -3,13 +3,14 @@ package netUtils.request.report;
 import classes.model.Report;
 import classes.model.User;
 import classes.utils.DBManager;
+import classes.utils.Utils;
 import netUtils.common.HttpConnectionCallback;
 import netUtils.common.URLDef;
 import netUtils.request.common.BaseRequest;
 
 public class ModifyReportRequest extends BaseRequest
 {
-    public ModifyReportRequest(Report report)
+    public ModifyReportRequest(Report report, boolean forceSubmit)
     {
         super();
 
@@ -21,6 +22,7 @@ public class ModifyReportRequest extends BaseRequest
         addParams("status", Integer.toString(report.getStatus()));
         addParams("manager_id", User.getUsersIDString(report.getManagerList()));
         addParams("cc", User.getUsersIDString(report.getCCList()));
+        addParams("force_submit", Utils.booleanToInt(forceSubmit));
 
         appendUrl(URLDef.URL_REPORT);
         appendUrl(report.getServerID());

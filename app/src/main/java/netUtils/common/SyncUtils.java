@@ -320,7 +320,7 @@ public abstract class SyncUtils
     private static void sendCreateReportRequest(final Report report, final SyncDataCallback callback)
     {
         LogUtils.println("create report：local id " + report.getLocalID());
-        CreateReportRequest request = new CreateReportRequest(report);
+        CreateReportRequest request = new CreateReportRequest(report, false);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)
@@ -352,7 +352,7 @@ public abstract class SyncUtils
     private static void sendModifyReportRequest(final Report report, final SyncDataCallback callback)
     {
         LogUtils.println("modify report：local id " + report.getLocalID());
-        ModifyReportRequest request = new ModifyReportRequest(report);
+        ModifyReportRequest request = new ModifyReportRequest(report, false);
         request.sendRequest(new HttpConnectionCallback()
         {
             public void execute(Object httpResponse)

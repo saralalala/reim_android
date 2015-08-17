@@ -1078,7 +1078,7 @@ public class ReimFragment extends Fragment
                         public void run()
                         {
                             ReimProgressDialog.dismiss();
-                            ViewUtils.showToast(getActivity(), R.string.failed_to_delete);
+                            ViewUtils.showToast(getActivity(), R.string.failed_to_delete, response.getErrorMessage());
                         }
                     });
                 }
