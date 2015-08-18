@@ -360,12 +360,14 @@ public class EditItemActivity extends Activity
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.error_modify_item_no_permission);
                 }
-                else if (countAttribution != null && count <= 0)
+                else if (countAttribution != null && countAttribution.effectsOnCategory(item.getCategory()) &&
+                        count <= 0)
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.error_member_count_wrong_format);
                     ViewUtils.requestFocus(EditItemActivity.this, countEditText);
                 }
-                else if (countAttribution != null && count > currentUser.getMemberCount())
+                else if (countAttribution != null && countAttribution.effectsOnCategory(item.getCategory()) &&
+                        count > currentUser.getMemberCount())
                 {
                     ViewUtils.showToast(EditItemActivity.this, R.string.error_member_count_exceed_limit);
                     ViewUtils.requestFocus(EditItemActivity.this, countEditText);
