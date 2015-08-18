@@ -41,11 +41,7 @@ public class ModifyReportResponse extends BaseResponse
         JSONObject quotaObject = getDataObject().getJSONObject("quota");
         for (String key : quotaObject.keySet())
         {
-            int value = quotaObject.getInteger(key);
-            if (value < 0)
-            {
-                idList.add(Integer.valueOf(key));
-            }
+            idList.add(Integer.valueOf(key));
         }
         return idList;
     }

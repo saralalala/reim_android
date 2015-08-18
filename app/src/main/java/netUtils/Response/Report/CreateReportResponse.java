@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.utils.LogUtils;
 import netUtils.response.common.BaseResponse;
 
 public class CreateReportResponse extends BaseResponse
@@ -36,11 +37,7 @@ public class CreateReportResponse extends BaseResponse
         JSONObject quotaObject = getDataObject().getJSONObject("quota");
         for (String key : quotaObject.keySet())
         {
-            int value = quotaObject.getInteger(key);
-            if (value < 0)
-            {
-                idList.add(Integer.valueOf(key));
-            }
+            idList.add(Integer.valueOf(key));
         }
         return idList;
     }
