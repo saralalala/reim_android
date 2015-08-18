@@ -64,8 +64,8 @@ public class ItemAttribution
     {
         try
         {
-            setID(jObject.getInteger("pid"));
-            setType(jObject.getInteger("extra_type"));
+            setID(jObject.getInteger("id"));
+            setType(jObject.getInteger("type"));
             return jObject.getInteger("value");
         }
         catch (Exception e)

@@ -42,7 +42,7 @@ public class ModifyItemRequest extends BaseRequest
             jObject.put("note", item.getNote());
             jObject.put("reimbursed", Utils.booleanToString(item.needReimbursed()));
             jObject.put("local_id", item.getLocalID());
-            jObject.put("extra", item.getExtraString().replace("pid", "id").replace("extra_type", "type"));
+            jObject.put("extra", item.getExtraString());
 
             jsonArray.add(jObject);
 

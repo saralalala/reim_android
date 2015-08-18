@@ -400,6 +400,11 @@ public class Item
                 }
                 if (endTime != 0)
                 {
+                    if (endTime == getConsumedDate())
+                    {
+                        return 1;
+                    }
+
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeInMillis((long) getConsumedDate() * 1000);
                     GregorianCalendar greCal = new GregorianCalendar(calendar.get(Calendar.YEAR),

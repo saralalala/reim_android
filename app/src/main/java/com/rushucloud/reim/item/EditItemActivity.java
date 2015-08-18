@@ -1854,8 +1854,8 @@ public class EditItemActivity extends Activity
         if (timeAttribution != null && timeAttribution.effectsOnCategory(item.getCategory()))
         {
             JSONObject timeObject = new JSONObject();
-            timeObject.put("pid", timeAttribution.getID());
-            timeObject.put("extra_type", timeAttribution.getType());
+            timeObject.put("id", timeAttribution.getID());
+            timeObject.put("type", timeAttribution.getType());
             timeObject.put("value", endTime);
 
             extraArray.add(timeObject);
@@ -1863,8 +1863,8 @@ public class EditItemActivity extends Activity
         if (countAttribution != null && countAttribution.effectsOnCategory(item.getCategory()))
         {
             JSONObject timeObject = new JSONObject();
-            timeObject.put("pid", countAttribution.getID());
-            timeObject.put("extra_type", countAttribution.getType());
+            timeObject.put("id", countAttribution.getID());
+            timeObject.put("type", countAttribution.getType());
             timeObject.put("value", count);
 
             extraArray.add(timeObject);

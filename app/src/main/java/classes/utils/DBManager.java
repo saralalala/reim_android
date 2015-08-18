@@ -1422,37 +1422,26 @@ public class DBManager extends SQLiteOpenHelper
         }
     }
 
-    public boolean syncItemList(List<Item> itemList, int userServerID)
+    public boolean syncItemList(List<Item> itemList)
     {
+        database.beginTransaction();
         try
         {
-            List<Item> itemLocalList = getExistsUserItems(userServerID);
-            for (int i = 0; i < itemList.size(); i++)
+            for (Item item : itemList)
             {
-                Item item = itemList.get(i);
-                boolean itemExists = false;
-                for (int j = 0; j < itemLocalList.size(); j++)
-                {
-                    Item localItem = itemLocalList.get(j);
-                    if (item.getServerID() == localItem.getServerID())
-                    {
-                        item.setLocalID(localItem.getLocalID());
-                        updateItemByLocalID(item);
-                        itemExists = true;
-                        break;
-                    }
-                }
-                if (!itemExists)
-                {
-                    insertItem(item);
-                }
+                syncItem(item);
             }
+            database.setTransactionSuccessful();
             return true;
         }
         catch (Exception e)
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            database.endTransaction();
         }
     }
 
