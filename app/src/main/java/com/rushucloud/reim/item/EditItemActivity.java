@@ -71,7 +71,6 @@ import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;
 import classes.utils.DBManager;
-import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.TextLengthFilter;
@@ -497,16 +496,17 @@ public class EditItemActivity extends Activity
                             item.setRelevantUsersID(User.getUsersIDString(item.getRelevantUsers()));
 
                             // judge which attribute was modified
-                            boolean[] attributesCheck = new boolean[8];
+                            boolean[] attributesCheck = new boolean[9];
                             attributesCheck[0] = item.getCategory().getServerID() != originItem.getCategory().getServerID();
                             attributesCheck[1] = !item.getNote().equals(originItem.getNote());
                             attributesCheck[2] = !Utils.isIDStringEqual(item.getTagsID(), originItem.getTagsID());
                             attributesCheck[3] = !item.getVendor().equals(originItem.getVendor());
                             attributesCheck[4] = !Utils.isIDStringEqual(item.getRelevantUsersID(),
-                                                                       originItem.getRelevantUsersID());
+                                                                        originItem.getRelevantUsersID());
                             attributesCheck[5] = item.getAmount() != originItem.getAmount();
                             attributesCheck[6] = !item.getLocation().equals(originItem.getLocation());
                             attributesCheck[7] = item.getConsumedDate() != originItem.getConsumedDate();
+                            attributesCheck[8] = !item.isExtraEquals(originItem.getExtraString());
 
                             boolean itemIsModified = false;
                             for (boolean b : attributesCheck)
@@ -1888,13 +1888,13 @@ public class EditItemActivity extends Activity
                     int value = attribution.parse(extraArray.getJSONObject(i));
                     if (!timeParsed && timeAttribution.equals(attribution))
                     {
-                        endTime = value;
                         timeParsed = true;
+                        endTime = value;
                     }
                     else if (!countParsed && countAttribution.equals(attribution))
                     {
-                        count = value;
                         countParsed = true;
+                        count = value;
                     }
                 }
             }

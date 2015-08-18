@@ -15,6 +15,7 @@ import java.util.List;
 
 import classes.utils.DBManager;
 import classes.utils.JSONUtils;
+import classes.utils.LogUtils;
 import classes.utils.Utils;
 import classes.utils.ViewUtils;
 
@@ -140,6 +141,7 @@ public class Item
         amount = item.getAmount();
         location = item.getLocation();
         consumedDate = item.getConsumedDate();
+        extraString = item.getExtraString();
     }
 
     public int getLocalID()
@@ -380,6 +382,75 @@ public class Item
     {
         this.extraString = extraString;
     }
+    public boolean isExtraEquals(String extraString)
+    {
+        if (getExtraString().isEmpty() && extraString.isEmpty())
+        {
+            return true;
+        }
+        else if ((getExtraString().isEmpty() && !extraString.isEmpty()) ||
+                (!getExtraString().isEmpty() && extraString.isEmpty()))
+        {
+            return false;
+        }
+        else
+        {
+            JSONArray attributionArray1 = JSON.parseArray(getExtraString());
+            JSONArray attributionArray2 = JSON.parseArray(extraString);
+            if (attributionArray1.size() != attributionArray2.size())
+            {
+                return false;
+            }
+            else
+            {
+                boolean timeParsed = false;
+                boolean countParsed = false;
+                JSONObject timeObject1 = new JSONObject();
+                JSONObject countObject1 = new JSONObject();
+                for (int i = 0; i < attributionArray1.size(); i++)
+                {
+                    JSONObject object = attributionArray1.getJSONObject(i);
+                    if (!timeParsed && object.getIntValue("type") == ItemAttribution.TYPE_TIME)
+                    {
+                        timeParsed = true;
+                        timeObject1 = object;
+                    }
+                    else if (!countParsed && object.getIntValue("type") == ItemAttribution.TYPE_MEMBER_COUNT)
+                    {
+                        countParsed = true;
+                        countObject1 = object;
+                    }
+                }
+
+                timeParsed = false;
+                countParsed = false;
+                JSONObject timeObject2 = new JSONObject();
+                JSONObject countObject2 = new JSONObject();
+                for (int i = 0; i < attributionArray1.size(); i++)
+                {
+                    JSONObject object = attributionArray1.getJSONObject(i);
+                    if (!timeParsed && object.getIntValue("type") == ItemAttribution.TYPE_TIME)
+                    {
+                        timeParsed = true;
+                        timeObject2 = object;
+                    }
+                    else if (!countParsed && object.getIntValue("type") == ItemAttribution.TYPE_MEMBER_COUNT)
+                    {
+                        countParsed = true;
+                        countObject2 = object;
+                    }
+                }
+
+                return ((timeObject1 == null && timeObject2 == null) || (timeObject1 != null && timeObject2 != null &&
+                        timeObject1.getIntValue("id") == timeObject2.getIntValue("id") &&
+                        timeObject1.getIntValue("value") == timeObject2.getIntValue("value"))) &&
+                        ((countObject1 == null && timeObject2 == null) || (countObject1 != null && countObject2 != null &&
+                                countObject1.getIntValue("id") == countObject2.getIntValue("id") &&
+                                countObject1.getIntValue("value") == countObject2.getIntValue("value")));
+            }
+        }
+    }
+
     public int getDurationDays()
     {
         if (!getExtraString().isEmpty())

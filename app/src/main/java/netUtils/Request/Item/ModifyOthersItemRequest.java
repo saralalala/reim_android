@@ -82,6 +82,13 @@ public class ModifyOthersItemRequest extends BaseRequest
                             object.put("val", item.getConsumedDate());
                         }
                         break;
+                    case NetworkConstant.UPDATE_ITEM_TYPE_EXTRA:
+                        if (attributesCheck[i])
+                        {
+                            object.put("type", Integer.toString(NetworkConstant.UPDATE_ITEM_TYPE_EXTRA));
+                            object.put("val", item.getExtraString());
+                        }
+                        break;
                     default:
                         break;
                 }

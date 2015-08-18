@@ -37,6 +37,7 @@ import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;
 import classes.utils.DBManager;
+import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;

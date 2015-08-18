@@ -29,6 +29,7 @@ public class NetworkConstant
     public static final int UPDATE_ITEM_TYPE_AMOUNT = 6;
     public static final int UPDATE_ITEM_TYPE_LOCATION = 7;
     public static final int UPDATE_ITEM_TYPE_CONSUMED_DATE = 8;
+    public static final int UPDATE_ITEM_TYPE_EXTRA = 9;
 
     public static final int PUSH_TYPE_SYSTEM_MESSAGE = 1;
     public static final int PUSH_TYPE_REPORT = 2;

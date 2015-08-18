@@ -564,13 +564,13 @@ public class ShowItemActivity extends Activity
                     int value = attribution.parse(extraArray.getJSONObject(i));
                     if (!timeParsed && timeAttribution.equals(attribution))
                     {
-                        endTime = value;
                         timeParsed = true;
+                        endTime = value;
                     }
                     else if (!countParsed && countAttribution.equals(attribution))
                     {
-                        count = value;
                         countParsed = true;
+                        count = value;
                     }
                 }
             }
