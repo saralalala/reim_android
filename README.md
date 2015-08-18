@@ -1,0 +1,3 @@
+修改online和stage的方法：
+
+注释掉app/src/main/java/netUtils/common/URLDef.java中相应的URL_PREFIX以及WEBSOCKET_URI的定义
