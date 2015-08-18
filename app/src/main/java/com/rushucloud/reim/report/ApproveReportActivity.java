@@ -7,7 +7,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,12 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.rushucloud.reim.R;
 import com.rushucloud.reim.item.EditItemActivity;
-import com.rushucloud.reim.item.ShowItemActivity;
 import com.rushucloud.reim.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -37,7 +34,6 @@ import classes.model.User;
 import classes.utils.AppPreference;
 import classes.utils.Constant;
 import classes.utils.DBManager;
-import classes.utils.LogUtils;
 import classes.utils.PhoneUtils;
 import classes.utils.ReimApplication;
 import classes.utils.Utils;
@@ -58,7 +54,6 @@ public class ApproveReportActivity extends Activity
 {
     // Widgets
     private ImageView tipImageView;
-    private PopupWindow editPopupWindow;
     private ReportDetailListViewAdapter adapter;
 
     // Local Data
@@ -69,7 +64,6 @@ public class ApproveReportActivity extends Activity
     private Report report;
     private List<Item> itemList = new ArrayList<>();
     private int lastCommentCount;
-    private int itemIndex;
 
     private boolean fromPush;
 
@@ -179,58 +173,16 @@ public class ApproveReportActivity extends Activity
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                if (position > 0 && (editPopupWindow == null || !editPopupWindow.isShowing()))
+                if (position > 0)
                 {
-                    Intent intent = new Intent(ApproveReportActivity.this, ShowItemActivity.class);
-                    intent.putExtra("othersItemServerID", itemList.get(position - 1).getServerID());
+                    Item item = itemList.get(position - 1);
+                    Intent intent = new Intent(ApproveReportActivity.this, EditItemActivity.class);
+                    intent.putExtra("fromApproveReport", true);
+                    intent.putExtra("itemServerID", item.getServerID());
                     ViewUtils.goForward(ApproveReportActivity.this, intent);
                 }
             }
         });
-        detailListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-        {
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
-            {
-                if (i > 0)
-                {
-                    itemIndex = i - 1;
-                    showEditWindow();
-                }
-                return false;
-            }
-        });
-
-        initEditWindow();
-    }
-
-    private void initEditWindow()
-    {
-        View editView = View.inflate(this, R.layout.window_edit, null);
-
-        Button editButton = (Button) editView.findViewById(R.id.editButton);
-        editButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                Item item = itemList.get(itemIndex);
-                Intent intent = new Intent(ApproveReportActivity.this, EditItemActivity.class);
-                intent.putExtra("fromApproveReport", true);
-                intent.putExtra("itemServerID", item.getServerID());
-                ViewUtils.goForward(ApproveReportActivity.this, intent);
-                editPopupWindow.dismiss();
-            }
-        });
-
-        Button cancelButton = (Button) editView.findViewById(R.id.cancelButton);
-        cancelButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                editPopupWindow.dismiss();
-            }
-        });
-
-        editPopupWindow = ViewUtils.buildBottomPopupWindow(this, editView);
     }
 
     private void refreshView()
@@ -277,14 +229,6 @@ public class ApproveReportActivity extends Activity
                 goBackToMainActivity();
             }
         }
-    }
-
-    private void showEditWindow()
-    {
-        editPopupWindow.showAtLocation(findViewById(R.id.containerLayout), Gravity.BOTTOM, 0, 0);
-        editPopupWindow.update();
-
-        ViewUtils.dimBackground(this);
     }
 
     private void showRejectDialog()

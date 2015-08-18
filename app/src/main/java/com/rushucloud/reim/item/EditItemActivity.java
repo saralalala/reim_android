@@ -142,6 +142,8 @@ public class EditItemActivity extends Activity
 
     private Group currentGroup;
     private User currentUser;
+    private List<ItemAttribution> timeAttrList = new ArrayList<>();
+    private List<ItemAttribution> countAttrList = new ArrayList<>();
     private ItemAttribution timeAttribution;
     private ItemAttribution countAttribution;
     private List<Currency> currencyList = new ArrayList<>();
@@ -305,6 +307,7 @@ public class EditItemActivity extends Activity
                     Category category = (Category) data.getSerializableExtra("category");
                     item.setCategory(category);
                     endTime = item.getConsumedDate();
+                    findAttribution(category);
                     refreshCategoryView();
                     refreshCountView();
                     refreshEndTimeView();
@@ -1740,11 +1743,11 @@ public class EditItemActivity extends Activity
         {
             if (attribution.getType() == ItemAttribution.TYPE_TIME)
             {
-                timeAttribution = attribution;
+                timeAttrList.add(attribution);
             }
             else if (attribution.getType() == ItemAttribution.TYPE_MEMBER_COUNT)
             {
-                countAttribution = attribution;
+                countAttrList.add(attribution);
             }
         }
         currencyList.addAll(dbManager.getCurrencyList());
@@ -1848,6 +1851,33 @@ public class EditItemActivity extends Activity
         }
     }
 
+    private void findAttribution(Category category)
+    {
+        timeAttribution = null;
+        countAttribution = null;
+
+        boolean isTimeAttribution = false;
+        for (ItemAttribution attribution : timeAttrList)
+        {
+            if (attribution.effectsOnCategory(category))
+            {
+                timeAttribution = attribution;
+                isTimeAttribution = true;
+            }
+        }
+
+        if (!isTimeAttribution)
+        {
+            for (ItemAttribution attribution : countAttrList)
+            {
+                if (attribution.effectsOnCategory(category))
+                {
+                    countAttribution = attribution;
+                }
+            }
+        }
+    }
+
     private void setExtras()
     {
         JSONArray extraArray = new JSONArray();
@@ -1880,21 +1910,33 @@ public class EditItemActivity extends Activity
             JSONArray extraArray = JSON.parseArray(item.getExtraString());
             if (extraArray != null)
             {
-                boolean timeParsed = false;
-                boolean countParsed = false;
                 for (int i = 0; i < extraArray.size(); i++)
                 {
+                    boolean isTimeAttribution = false;
                     ItemAttribution attribution = new ItemAttribution();
                     int value = attribution.parse(extraArray.getJSONObject(i));
-                    if (!timeParsed && timeAttribution.equals(attribution))
+                    for (ItemAttribution timeAttr : timeAttrList)
                     {
-                        timeParsed = true;
-                        endTime = value;
+                        if (timeAttr.equals(attribution))
+                        {
+                            endTime = value;
+                            timeAttribution = timeAttr;
+                            isTimeAttribution = true;
+                            break;
+                        }
                     }
-                    else if (!countParsed && countAttribution.equals(attribution))
+
+                    if (!isTimeAttribution)
                     {
-                        countParsed = true;
-                        count = value;
+                        for (ItemAttribution countAttr : countAttrList)
+                        {
+                            if (countAttr.equals(attribution))
+                            {
+                                count = value;
+                                countAttribution = countAttr;
+                                break;
+                            }
+                        }
                     }
                 }
             }
