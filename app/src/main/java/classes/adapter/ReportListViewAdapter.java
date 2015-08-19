@@ -65,8 +65,8 @@ public class ReportListViewAdapter extends BaseAdapter
 
             Report report = reportList.get(position);
 
-            viewHolder.ccTextView.setVisibility(View.INVISIBLE);
-            viewHolder.senderTextView.setVisibility(View.INVISIBLE);
+            viewHolder.ccTextView.setVisibility(View.GONE);
+            viewHolder.senderTextView.setVisibility(View.GONE);
 
             viewHolder.statusTextView.setText(report.getStatusString());
             viewHolder.statusTextView.setBackgroundResource(report.getStatusBackground());

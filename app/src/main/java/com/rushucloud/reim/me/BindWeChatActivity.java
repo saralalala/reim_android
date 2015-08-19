@@ -136,8 +136,11 @@ public class BindWeChatActivity extends Activity
                 {
                     public void run()
                     {
-                        ReimProgressDialog.setContext(BindWeChatActivity.this);
-                        ReimProgressDialog.show();
+                        if (BindWeChatActivity.this != null)
+                        {
+                            ReimProgressDialog.setContext(BindWeChatActivity.this);
+                            ReimProgressDialog.show();
+                        }
                     }
                 });
 

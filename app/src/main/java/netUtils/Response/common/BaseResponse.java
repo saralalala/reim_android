@@ -82,6 +82,7 @@ public abstract class BaseResponse
         {
             e.printStackTrace();
             status = false;
+            code = NetworkConstant.ERROR_SYSTEM_ERROR;
             errorMessage = NetworkConstant.errorCodeToString(code);
         }
     }

@@ -1738,16 +1738,19 @@ public class EditItemActivity extends Activity
 
         currentGroup = appPreference.getCurrentGroup();
         currentUser = appPreference.getCurrentUser();
-        List<ItemAttribution> attributionList = currentGroup.getItemAttributions();
-        for (ItemAttribution attribution : attributionList)
+        if (currentGroup != null)
         {
-            if (attribution.getType() == ItemAttribution.TYPE_TIME)
+            List<ItemAttribution> attributionList = currentGroup.getItemAttributions();
+            for (ItemAttribution attribution : attributionList)
             {
-                timeAttrList.add(attribution);
-            }
-            else if (attribution.getType() == ItemAttribution.TYPE_MEMBER_COUNT)
-            {
-                countAttrList.add(attribution);
+                if (attribution.getType() == ItemAttribution.TYPE_TIME)
+                {
+                    timeAttrList.add(attribution);
+                }
+                else if (attribution.getType() == ItemAttribution.TYPE_MEMBER_COUNT)
+                {
+                    countAttrList.add(attribution);
+                }
             }
         }
         currencyList.addAll(dbManager.getCurrencyList());
